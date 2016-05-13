@@ -1,0 +1,37 @@
+{# begin {templatelocation} #}
+{navbar}
+{startblock}
+<form  name="frm_messages" action="{phpself}" method="post" style="margin:0px;">
+<input type="hidden" name="op" value="" />
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:25px; margin-bottom:15px;">
+    <tr>
+        <td>
+            <select name="forum" style="width:140px" onchange="document.frm_messages.submit();"><option selected="selected" value="-1">{LANG_select1}</option>{select_forum}</select>
+            <span style="padding-left:15px;"><select name="member" style="width:140px" onchange="document.frm_messages.submit();"><option selected="selected" value="-1">{LANG_select2}</option>{select_member}</select></span>
+            <span style="padding-left:15px;"><input type="checkbox" name="parentonly" value="1" onclick=' document.frm_messages.submit();' {chk_parentonly} />{LANG_Parent}</span>
+        </td>
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+    <tr>
+        <td class="pluginCellTitle" width="5%"><img src="{site_url}/forum/images/trash.gif" title="{LANG_deleteall}" alt="{LANG_deleteall}" border="0" onclick=' if(confirm("{LANG_DELALLCONFIRM}")) {document.frm_messages.op.value="delchecked"; document.frm_messages.submit();}' /></td>
+        <td class="pluginCellTitle" width="20%">{LANG_Author}</td>
+        <td class="pluginCellTitle" width="35%">{LANG_Subject}</td>
+        <td class="pluginCellTitle aligncenter" width="10%">{LANG_Views}</td>
+        <td class="pluginCellTitle aligncenter" width="10%">{LANG_Replies}</td>
+        <td class="pluginCellTitle aligncenter" width="20%">{LANG_Actions}</td>
+    </tr>
+    <tr style="display:{showalert};">
+        <td colspan="6" class="pluginAlert">{alertmessage}</td>
+    </tr>
+        {message_records}
+</table>
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:10px;">
+    <tr>
+        <td class="aligncenter">{pagenav}</td>
+    </tr>
+</table>
+</form>
+{endblock}
+{# end {templatelocation} #}
+

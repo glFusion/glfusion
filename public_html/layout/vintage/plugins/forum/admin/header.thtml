@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
+    <tr>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="index.php">{stats}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="settings.php">{settings}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="boards.php">{boardadmin}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="mods.php">{mods}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="migrate.php">{migrate}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a btn1" href="messages.php">{messages}</a></td>
+        <td style="width:16%;white-space:nowrap;" class="navbar"><a btn1" href="ips.php">{ipman}</a></td>
+    </tr>
+</table>
+{# end {templatelocation} #}

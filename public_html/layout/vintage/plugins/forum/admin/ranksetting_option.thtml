@@ -1,0 +1,14 @@
+{# begin {templatelocation} #}
+<tr style="vertical-align:middle;">
+<td class="pluginCellSubTitle" width="160">{LANG_level}</td>
+<td class="pluginCellText pluginCellFill">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td style="padding-right:15px;">{LANG_leveldscp}</td>
+      <td style="text-align:right;padding-right:15px;">{LANG_POSTS}:&nbsp;<input type="text" name="{parm1_name}" size="4" maxlength="4" value="{parm1_value}" />&nbsp;</td>
+      <td style="text-align:right;" width="26%">{LANG_NAME}&nbsp;<input type="text" name="{parm2_name}" size="12" maxlength="40" value="{parm2_value}" /></td>
+    </tr>
+  </table>
+</td>
+</tr>
+{# end {templatelocation} #}

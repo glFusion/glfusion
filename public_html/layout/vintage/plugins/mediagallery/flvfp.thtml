@@ -1,0 +1,17 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+	var flashvars = {};
+    var params = {
+    wmode: "transparent",
+    allowfullscreen: "true"
+    };
+	var attributes = {};
+	flashvars.config="{ showMenu: true, menuItems: [ true, true, true, true, true, true ], initialScale: 'scale', showLoopButton: false, autoRewind: false, loop: {loop}, autoBuffering: true, autoPlay: {play}, {streamingServerURL} {streamingServer} playList: [ {playButton} {  url: '{videoFile}' } ], progressBarColor1: 0xFFFFFF, progressBarColor2: 0xDDFFDD, bufferBarColor1: 0xFFFFFF, bufferBarColor2: 0xDDFFDD, showFullScreenButton: false }";
+    swfobject.embedSWF("{site_url}/players/FlowPlayer.swf", "{id}", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
+</script>
+<div id="{id}">
+	<a href="http://www.adobe.com/go/getflashplayer">
+		<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+	</a>
+</div>
+{# end {templatelocation} #}

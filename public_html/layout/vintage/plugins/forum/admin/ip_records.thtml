@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<tr class="pluginRow{csscode}">
+    <td style="padding:5px;">{ip}</td>
+    <td style="padding:5px;white-space:nowrap;">[&nbsp;<A HREF="{phpself}?op=unban&amp;ip={ip}">{unban}</a>&nbsp;]</td>
+</tr>
+{# end {templatelocation} #}

@@ -1,0 +1,174 @@
+{# begin {templatelocation} #}
+<noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
+<script type="text/javascript" src="{site_url}/js/memberalbums_editor.js"></script>
+<div id="pe_navbar" class="jsenabled_show" style="display:none">{navbar}</div>
+<div style="clear:both;"></div>
+<form enctype="multipart/form-data" method="post" action="{s_form_action}">
+<div id="pe_members">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th colspan="2" style="width:100%;">
+        {lang_member_albums}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_member_albums}</td>
+      <td class="mgAdminAlignLeft">
+        {member_albums}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_allow_remote}</td>
+      <td class="mgAdminAlignLeft">
+        {allow_remote}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_use_fullname}</td>
+      <td class="mgAdminAlignLeft">
+        {member_use_fullname}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_feature_member_album}</td>
+      <td class="mgAdminAlignLeft">
+        {feature_member_album}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_quota}</td>
+      <td class="mgAdminAlignLeft">
+        <input type="text" size="5" name="member_quota" value="{member_quota}" />&nbsp;Mb&nbsp;&nbsp;{lang_zero_unlimited}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_auto_create}</td>
+      <td class="mgAdminAlignLeft">
+        {auto_create}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_allow_create}</td>
+      <td class="mgAdminAlignLeft">
+        {allow_create}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_root}</td>
+      <td class="mgAdminAlignLeft">
+        {album_list_root}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_archive}</td>
+      <td class="mgAdminAlignLeft">
+        {member_archive}
+      </td>
+    </tr>
+  </table>
+</div>
+
+{valid_formats}
+
+<div id="pe_attributes" class="jsenabled_hide">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th colspan="2">
+        {lang_album_attributes}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_ri_enable}</td>
+      <td class="mgAdminAlignLeft">
+        {ri_select}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_image_width}</td>
+      <td class="mgAdminAlignLeft">
+        {width_input}&nbsp;{lang_zero_unlimited}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_image_height}</td>
+      <td class="mgAdminAlignLeft">
+        {height_input}&nbsp;{lang_zero_unlimited}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_filesize}</td>
+      <td class="mgAdminAlignLeft">
+        <input type="text" size="5" name="max_filesize" value="{max_filesize}" />&nbsp;Kb&nbsp;&nbsp;{lang_zero_unlimited}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="pe_useruploads" class="jsenabled_hide">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th colspan="2" style="width:100%;">
+        {lang_uploads}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_upload}</td>
+      <td class="mgAdminAlignLeft">
+        {uploads}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_moderate_album}</td>
+      <td class="mgAdminAlignLeft">
+        {moderate}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_mod_group}</td>
+      <td class="mgAdminAlignLeft">
+        {mod_dropdown}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td  style="width:50%;" class="mgAdminAlignRight">{lang_email_mods_on_submission}</td>
+      <td class="mgAdminAlignLeft">
+        {email_mod_select}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="pe_access" class="jsenabled_hide">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th colspan="2" style="width:100%;">
+        {lang_accessrights}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td  colspan="2" align="center">{lang_perm_key}</td>
+    </tr>
+    <tr class="pluginRow2">
+      <td colspan="2" align="center">{permissions_editor}</td>
+    </tr>
+  </table>
+</div>
+<div style="text-align:center;">
+  <input type="submit" value="{lang_save}" name="mode" /> <input type="submit" value="{lang_cancel}" name="mode" />
+</div>
+</form>
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
+<script type="text/javascript">
+//<![CDATA[
+var el;
+el=document.getElementsByTagName('div');
+for(i=0;i<el.length;i++){
+	if(el[i].className == 'jsenabled_show'){
+		el[i].style.display = '';
+	} else if(el[i].className == 'jsenabled_hide'){
+		el[i].style.display = 'none';
+	}
+}
+//]]>
+</script>
+{# end {templatelocation} #}

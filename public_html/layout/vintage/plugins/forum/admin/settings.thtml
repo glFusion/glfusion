@@ -1,0 +1,72 @@
+{# begin {templatelocation} #}
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <form action="{phpself}" method="post">
+
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="pluginCellTitle alignleft">{LANG_gensettings}</td>
+                            </tr>
+                        </table>
+            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                    {group1_options}
+            </table>
+            <br />
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="pluginCellTitle alignleft">{LANG_topicsettings}</td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                    {group2_options}
+            </table>
+            <br />
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="pluginCellTitle alignleft">{LANG_cbsettings}</td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                    {group3_options}
+                <tr>
+                    <td class="pluginCellSubTitle" width="160">{LANG_cbposition}</td>
+                    <td class="pluginCellText pluginCellFill">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td style="padding-right:15px;">{LANG_cbpositiondscp}</td>
+                                <td style="text-align:right;">{pos_selection}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="pluginCellTitle alignleft">{LANG_blocksettings}</td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                    {group4_options}
+            </table>
+            <br />
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="pluginCellTitle alignleft">{LANG_ranksettings}</td>
+               </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+                {ranking_options}
+            </table>
+            <br />
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="padding:10px;text-align:right;"><input type="hidden" name="savesettings" value="yes" /><input style="padding:3px;" type="submit" name="submit" value="{LANG_savesettings}" /></td>
+                </tr>
+            </table>
+        </form>
+     </td>
+   </tr>
+</table>
+{# end {templatelocation} #}

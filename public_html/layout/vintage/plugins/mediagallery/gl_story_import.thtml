@@ -1,0 +1,48 @@
+{# begin {templatelocation} #}
+<h1>glFusion Story Image Import to Media Gallery Wizard</h1>
+<form name="galselect" action="{form_action}" method="post">
+This will import images used in your glFusion stories into Media Gallery
+and replace the image with a Media Gallery auto tag.<br><br>
+<b>This will change all of your stories with embedded images, be sure you have a good backup!</b>
+<br>
+<p>
+<fieldset style="border: none; border-top: 1px solid #000000">
+	<br>
+	<legend>Import Options</legend>
+	<label for "autotag">Autotag&nbsp;&nbsp;</label>
+	    <select name="autotag">
+	    <option value="image">image:</option>
+	    <option value="media">media:</option>
+	    </select>
+		<br><br>
+	<label for "alignment">Alignment&nbsp;&nbsp;</label>
+	    <select name="alignment">
+	    <option value="none">None</option>
+	    <option value="left">Left</option>
+	    <option value="right">Right</option>
+	    <option value="auto">Auto</option>
+	    </select>
+		<br><br>
+	<label for "delete">Delete Reference&nbsp;&nbsp;</label>
+	    <select name="delete">
+	    <option value="0">No</option>
+	    <option value="1">Yes</option>
+	    </select>
+		<br><br>
+	<label for "destination">Destination Album&nbsp;&nbsp;</label>
+	    {dest_select}
+		<br><br>
+</fieldset>
+<fieldset style="border: none; border-top: 1px solid #000000">
+	<br>
+	<legend>glFusion Stories with embedded images</legend>
+    {picklist}
+</fieldset>
+
+The albums will be created immediately and all the media items will be placed into
+the batch import queue to be processed.
+<p>
+<input type="submit" name="mode" value="convert" />
+<input type="submit" name="mode" value="cancel">
+</form>
+{# end {templatelocation} #}

@@ -1,0 +1,81 @@
+{# begin {templatelocation} #}
+<fieldset>
+  <legend>{lang_playback_options}</legend>
+
+  <div style="float:left;width:20%;">
+    {lang_option}
+  </div>
+  <div style="float:left;width:10%;">
+    {lang_off}&nbsp;&nbsp;{lang_on}
+  </div>
+  <div style="float:left;width:70%;text-align:left;">
+    {lang_description}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_auto_start}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="autostart" value="0" {autostart_disabled}>
+    <input type="radio" name="autostart" value="1" {autostart_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_auto_start_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_enable_context_menu}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="enablecontextmenu" value="0" {enablecontextmenu_disabled}>
+    <input type="radio" name="enablecontextmenu" value="1" {enablecontextmenu_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_enable_context_menu_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_status_bar}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="showstatusbar" value="0" {showstatusbar_disabled}>
+    <input type="radio" name="showstatusbar" value="1" {showstatusbar_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_status_bar_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_loop}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="loop" value="0" {loop_disabled}>
+    <input type="radio" name="loop" value="1" {loop_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_loop_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_ui_mode}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    {uimode_select}
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_ui_mode_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+</fieldset>
+{# end {templatelocation} #}

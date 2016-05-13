@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<li>
+  <strong>{link_html}</strong> ({link_hits}) {edit_icon} {link_broken}<br />
+  {link_description}
+</li>
+{# end {templatelocation} #}

@@ -1,0 +1,50 @@
+{# begin {templatelocation} #}
+<div id="pe_forumprefs" class="jsenabled_hide">
+  <fieldset style="margin-top:10px;"><legend>{lang_forum_prefs}</legend>
+    <div class="notes" style="width:300px;">
+      <h4>{lang_forumprefs_help_title}</h4>
+      {lang_forumprefs_help}
+    </div>
+    <table class="inputTable">
+      <tr>
+        <td style="width:100px;"><label for="xtopicsperpage">{LANG_GF92[topicspp]}:</label></td>
+        <td><input type="text" id="xtopicsperpage" name="xtopicsperpage" size="3" maxlength="11" value="{topicsperpage}" /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="xpostsperpage">{LANG_GF92[postspp]}:</label></td>
+        <td><input type="text" id="xpostsperpage" name="xpostsperpage" size="3" maxlength="11" value="{postsperpage}" /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="xviewanonposts">{LANG_GF02[msg130]}</label></td>
+        <td><input type="checkbox" id="xviewanonposts" name="xviewanonposts" {viewanonposts_checked} /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="xalwaysnotify">{LANG_GF02[msg132]}</label></td>
+        <td><input type="checkbox" id="xalwaysnotify" name="xalwaysnotify" {alwaysnotify_checked} /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="xnotifyonce">{LANG_GF02[msg184]}:</label></td>
+        <td><input type="checkbox" id="xnotifyonce" name="xnotifyonce" {notifyonce_checked} /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="notifyfull">{lang_notify_full}:</label></td>
+        <td><input type="checkbox" id="notifyfull" name="notifyfull" {notifyfull_checked} /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="xshowiframe">{LANG_GF92[showiframe]}:</label></td>
+        <td><input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked} /></td>
+      </tr>
+      <tr>
+        <td style="width:100px;"><label for="topic_order">{lang_topic_order}:</label></td>
+        <td>{topic_order_select}</td>
+      </tr>
+      {!if lang_use_wysiwyg}
+      <tr>
+        <td style="width:100px;"><label for="use_wysiwyg_editor">{lang_use_wysiwyg}:</label></td>
+        <td>{wysiwyg_select}</td>
+      </tr>
+      {!endif}
+    </table>
+  </fieldset>
+</div>
+{# end {templatelocation} #}

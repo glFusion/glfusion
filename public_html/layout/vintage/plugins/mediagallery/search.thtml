@@ -1,0 +1,75 @@
+{# begin {templatelocation} #}
+<table cellspacing="0" cellpadding="5" style="width:100%;border:none;margin:0px auto;">
+  <tr>
+    <td class="pluginCellTitle" style="text-align:left;vertical-align:middle;">
+      <span style="font-weight:bold;">{lang_search_title}</span>
+    </td>
+    <td class="pluginCellTitle" style="text-align:right;vertical-align:middle;">
+	  {select_adminbox}
+    </td>
+  </tr>
+</table>
+<br />
+{msg}
+<br />
+<form name="mgsearch" action="{s_form_action}" method="post">
+<div>
+<input type="hidden" name="mode" value="search" />
+<table style="border:none;">
+<tr>
+  <td style="text-align:right;">
+    {lang_search_for}:
+  </td>
+  <td style="text-align:left;">
+    <input type="text" name="keywords" size="40" value="" />&nbsp;
+    {keytype_select}
+  </td>
+</tr>
+
+<tr>
+  <td style="text-align:right;">
+    {lang_search_in}:
+  </td>
+  <td style="text-align:left;">
+    {swhere_select}
+  </td>
+</tr>
+
+<tr>
+  <td style="text-align:right;">
+    {lang_category}:
+  </td>
+  <td style="text-align:left;">
+	{cat_select}
+  </td>
+</tr>
+
+<tr>
+  <td style="text-align:right;">
+    {lang_user}:
+  </td>
+  <td style="text-align:left;">
+	{user_select}
+  </td>
+</tr>
+
+
+<tr>
+  <td style="text-align:right;">
+    {lang_results}:
+  </td>
+  <td style="text-align:left;">
+    {nresults_select}&nbsp;{lang_per_page}
+  </td>
+</tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+<td colspan="2" style="text-align:center;">
+<input type="submit" name="mode" value="{lang_search}" />&nbsp;&nbsp;
+<input type="submit" name="mode" value="{lang_cancel}" />
+</td>
+</tr>
+</table>
+</div>
+</form>
+{# end {templatelocation} #}

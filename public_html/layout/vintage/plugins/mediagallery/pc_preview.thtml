@@ -1,0 +1,75 @@
+{# begin {templatelocation} #}
+<table border="1" cellspacing="10" cellpadding="10" align="center" width="100%">
+<tr>
+<th><span style="font-weight:bold;">{lang_postcard_preview}</span></th>
+</tr>
+<tr>
+<td>
+<table border="0" cellspacing="0" cellpadding="1" align="center" bgcolor="#eaeaea">
+  <tr>
+    <td>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td colspan="2" style="text-align:left;">
+              <div style="font-family: arial,'lucida console',sans-serif;font-size:x-large;color:green">
+              {lang_postcard_greet} {site_name}
+              </div>
+          </td>
+          <td style="text-align:right;vertical-align:top;" rowspan="4">
+            <div style="text-align:right;"><img src="{site_url}/images/stamp.gif" border="0" alt="" /></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div style="font-family: arial,'lucida console',sans-serif;font-size:small;">
+            <span style="font-weight:bold;">{lang_to}</span>
+            </div>
+          </td>
+          <td>
+            {to_name} ({to_email})
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <div style="font-family: arial,'lucida console',sans-serif;font-size:small;">
+            <span style="font-weight:bold;">{lang_from}</span>
+          </div>
+          </td>
+          <td>
+            {from_name} (<a href="mailto:{from_email}">{from_email}</a>)
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <div style="font-family: arial,'lucida console',sans-serif;font-size:small;">
+            <span style="font-weight:bold;">{lang_subject}</span>
+          </div>
+          </td>
+          <td>
+            {postcard_subject}
+          </td>
+        </tr>
+      </table>
+      <hr style="width:100%;" />
+        <div style="text-align:center;">
+           <a href="{media_url}">
+             <img src="{media_image}" alt="" style="border:1px solid;" /></a>
+             <br />
+             <div style="text-align:center;">
+               <div style="width: 500px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">{media_title}</div>
+             </div>
+        </div>
+      <hr style="width:100%;" />
+          {postcard_message}
+	  <hr style="width:100%;" />
+<p style="text-align:center;"><a href="{site_url}"><span style="font-weight:bold;">{lang_visit} {site_name} - {site_slogan}</span></a></p>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+{# end {templatelocation} #}

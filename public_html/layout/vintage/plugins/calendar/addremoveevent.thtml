@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+&nbsp;<font size="-2">[{lang_addremovefromcal}]</font>
+{# end {templatelocation} #}

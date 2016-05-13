@@ -1,0 +1,30 @@
+{# begin {templatelocation} #}
+<table cellpadding="0" cellspacing="0" style="width:100%;border:none;margin:0px auto;">
+<!-- BEGIN AlbumRow -->
+<tr>
+<!-- BEGIN AlbumColumn -->
+  <td style="width:{column_width};vertical-align:top;">
+    <div class="mgPluginMI">
+	<table cellspacing="2" cellpadding="3" style="width:100%;border:none;margin:0px auto;">
+	  <tr>
+		<td align="center" style="width:100%;vertical-align:top;">
+		  {media_item_thumbnail}
+		</td>
+	  </tr>
+	  <tr>
+		<td align="center" style="vertical-align:top;">
+          <div style="padding-top:5px;padding-bottom:5px;"><span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})</div>
+          <div style="padding-bottom:5px;"><span class="pluginSmallText">{album_desc}</span></div>
+          <div style="padding-bottom:5px;"><span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}</div>
+          <div style="padding-bottom:5px;">{subalbumlist}</div>
+        </td>
+      </tr>
+	</table>
+	</div>
+  </td>
+<!-- END AlbumColumn -->
+</tr>
+<!-- END AlbumRow -->
+</table>
+<div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
+{# end {templatelocation} #}

@@ -1,0 +1,10 @@
+{# begin {templatelocation} #}
+<div style="{float}padding:5px;{margin-right}width:{framewidth}px;border:1px solid silver;text-align:center;">
+  {autotag}
+  <br  />
+  <span style="clear:both;"></span>
+  <span style="width: {width}px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
+    {caption}
+  </span>
+</div>
+{# end {templatelocation} #}

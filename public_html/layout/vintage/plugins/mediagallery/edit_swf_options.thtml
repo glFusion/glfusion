@@ -1,0 +1,122 @@
+{# begin {templatelocation} #}
+<h2>{lang_playback_options}</h2>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <th style="width:20%;">{lang_option}</th>
+    <th style="width:10%;text-align:left;">{lang_off}&nbsp;&nbsp;&nbsp;&nbsp;{lang_on}</th>
+    <th>{lang_description}</th>
+  </tr>
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_auto_start}</td>
+    <td style="vertical-align:middle;">
+      <input type="radio" name="play" value="0" {play_disabled}>&nbsp;&nbsp;
+      <input type="radio" name="play" value="1" {play_enabled}>
+    </td>
+    <td style="text-align:left;">
+      {lang_auto_start_help}
+    </td>
+  </tr>
+
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_menu}</td>
+    <td style="vertical-align:middle;">
+      <input type="radio" name="menu" value="0" {menu_disabled}>&nbsp;&nbsp;
+      <input type="radio" name="menu" value="1" {menu_enabled}>
+    </td>
+    <td style="text-align:left;">
+      {lang_menu_help}
+    </td>
+  </tr>
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_scale}</td>
+    <td style="vertical-align:middle;">
+      {scale_select}
+    </td>
+    <td style="text-align:left;">
+      {lang_swf_scale_help}
+    </td>
+  </tr>
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_wmode}</td>
+    <td style="vertical-align:middle;">
+      {wmode_select}
+    </td>
+    <td style="text-align:left;">
+      {lang_wmode_help}
+    </td>
+  </tr>
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_asa}</td>
+    <td style="vertical-align:middle;">
+      {asa_select}
+    </td>
+    <td style="text-align:left;">
+      {lang_asa_help}
+    </td>
+  </tr>
+
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_quality}</td>
+    <td style="vertical-align:middle;">
+      {quality_select}
+    </td>
+    <td style="text-align:left;">
+      {lang_quality_help}
+    </td>
+  </tr>
+
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_loop}</td>
+    <td style="vertical-align:middle;">
+      <input type="radio" name="loop" value="0" {loop_disabled}>&nbsp;&nbsp;
+      <input type="radio" name="loop" value="1" {loop_enabled}>
+    </td>
+    <td style="text-align:left;">
+      {lang_loop_help}
+    </td>
+  </tr>
+
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_bgcolor}</td>
+    <td style="vertical-align:middle;">
+      <input type="text" name="bgcolor" value="{bgcolor}" size="8">
+    </td>
+    <td style="text-align:left;">
+      {lang_bgcolor_help}
+    </td>
+  </tr>
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_width}</td>
+    <td style="vertical-align:middle;">
+      <input type="text" name="width" value="{width}" size="3">
+    </td>
+    <td style="text-align:left;">
+      {lang_width_help}
+    </td>
+  </tr>
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_height}</td>
+    <td style="vertical-align:middle;">
+      <input type="text" name="height" value="{height}" size="3">
+    </td>
+    <td style="text-align:left;">
+      {lang_height_help}
+    </td>
+  </tr>
+  <tr class="pluginRow1">
+    <td class="mgAdminAlignRight">{lang_flash_vars}</td>
+    <td colspan="2">
+      <input type="text" name="flashvars" value="{flashvars}" size="100">
+    </td>
+  </tr>
+  <tr class="pluginRow2">
+    <td class="mgAdminAlignRight">{lang_codebase}</td>
+    <td colspan="1">
+      <input type="text" name="swf_version" value='{swf_version}' size="3">
+    </td>
+    <td style="vertical-align:middle;">
+      {lang_swf_version_help}
+    </td>
+  </tr>
+</table>
+{# end {templatelocation} #}

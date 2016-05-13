@@ -1,0 +1,350 @@
+{# begin {templatelocation} #}
+<noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
+<script type="text/javascript" src="{site_url}/js/defaults_editor.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function change(what) {
+    value = '{path_mg}/watermarks/' + what.options[what.selectedIndex].value;
+    if (value != '')
+        if (document.images)
+            document.images['myImage'].src = value;
+}
+//]]>
+</script>
+<div id="pe_navbar" class="jsenabled_show" style="display:none">{navbar}</div>
+<div style="clear:both;"></div>
+<form enctype="multipart/form-data" method="post" action="{s_form_action}">
+<div id="pe_attributes">
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_album_attributes}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_theme_select}</td>
+        <td class="mgAdminAlignLeft">
+          {album_theme_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_comments}</td>
+        <td class="mgAdminAlignLeft">
+          {comment_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_exif}</td>
+        <td class="mgAdminAlignLeft">
+          {exif_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_ratings}</td>
+        <td class="mgAdminAlignLeft">
+          {ranking_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_album_views}</td>
+        <td class="mgAdminAlignLeft">
+          {album_views_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_views}</td>
+        <td class="mgAdminAlignLeft">
+          {views_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_keywords}</td>
+        <td class="mgAdminAlignLeft">
+          {keywords_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_album_desc}</td>
+        <td class="mgAdminAlignLeft">
+          {display_album_desc_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_filename_title}</td>
+        <td class="mgAdminAlignLeft">
+          {filename_title_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_rss}</td>
+        <td class="mgAdminAlignLeft">
+          {rss_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_rsschildren}</td>
+        <td class="mgAdminAlignLeft">
+          {rsschildren_select}
+        </td>
+      </tr>
+
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_podcast}</td>
+        <td class="mgAdminAlignLeft">
+          {podcast_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_mp3ribbon}</td>
+        <td class="mgAdminAlignLeft">
+          {mp3ribbon_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_postcard}</td>
+        <td class="mgAdminAlignLeft">
+          {postcard_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_enable_sort}</td>
+        <td class="mgAdminAlignLeft">
+          {sort_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_sort}</td>
+        <td class="mgAdminAlignLeft">
+          {album_sort_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_av_play_options}</td>
+        <td class="mgAdminAlignLeft">
+          {playback_type}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_ss_enable}</td>
+        <td class="mgAdminAlignLeft">
+          {ss_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_ri_enable}</td>
+        <td class="mgAdminAlignLeft">
+          {ri_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_albums_first}</td>
+        <td class="mgAdminAlignLeft">
+          {afirst_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_sf_enable}</td>
+        <td class="mgAdminAlignLeft">
+          {sf_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_allow_download}</td>
+        <td class="mgAdminAlignLeft">
+          {allow_download_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_full_display}</td>
+        <td class="mgAdminAlignLeft">
+          {full_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tn_size}</td>
+        <td class="mgAdminAlignLeft">
+          {tn_size_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnwidth}</td>
+        <td class="mgAdminAlignLeft">
+          {tnwidth_input}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnheight}</td>
+        <td class="mgAdminAlignLeft">
+          {tnheight_input}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_image_width}</td>
+        <td class="mgAdminAlignLeft">
+          {width_input}&nbsp;{lang_zero_unlimited}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_image_height}</td>
+        <td class="mgAdminAlignLeft">
+          {height_input}&nbsp;{lang_zero_unlimited}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_max_filesize}</td>
+        <td class="mgAdminAlignLeft">
+          {max_size_input}&nbsp;{lang_zero_unlimited}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_image_size}</td>
+        <td class="mgAdminAlignLeft">
+          {display_image_size}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_rows}</td>
+        <td class="mgAdminAlignLeft">
+          {rows_input}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_columns}</td>
+        <td class="mgAdminAlignLeft">
+          {columns_input}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_image_skin}</td>
+        <td class="mgAdminAlignLeft">
+          {skin_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_skin}</td>
+        <td class="mgAdminAlignLeft">
+          {dskin_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_skin}</td>
+        <td class="mgAdminAlignLeft">
+          {askin_select}
+        </td>
+      </tr>
+    </table>
+</div>
+
+<div id="pe_watermark" class="jsenabled_hide">
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_watermark}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wm_auto}</td>
+        <td class="mgAdminAlignLeft">
+          {wm_auto_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wm_opacity}</td>
+        <td class="mgAdminAlignLeft">
+          {wm_opacity_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wm_location}</td>
+        <td class="mgAdminAlignLeft">
+          {wm_location_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wm_id}</td>
+        <td class="mgAdminAlignLeft">
+          {wm_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td style="white-space:nowrap;" colspan="2" align="center">
+          {wm_current}
+        </td>
+      </tr>
+    </table>
+</div>
+
+{valid_formats}
+
+<div id="pe_useruploads" class="jsenabled_hide">
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_uploads}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_member_upload}</td>
+        <td class="mgAdminAlignLeft">
+          {uploads}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_moderate_album}</td>
+        <td class="mgAdminAlignLeft">
+          {moderate}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_mod_group}</td>
+        <td class="mgAdminAlignLeft">
+          {mod_dropdown}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_email_mods_on_submission}</td>
+        <td class="mgAdminAlignLeft">
+          {email_mod_select}
+        </td>
+      </tr>
+    </table>
+</div>
+
+<div id="pe_access" class="jsenabled_hide">
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_accessrights}
+        </th>
+      </tr>
+      <tr class="pluginRow1" align="center">
+        <td  colspan="2">{lang_perm_key}</td>
+      </tr>
+      <tr class="pluginRow2" align="center">
+        <td colspan="2" style="white-space:nowrap;">
+          {permissions_editor}
+        </td>
+      </tr>
+    </table>
+</div>
+<p>&nbsp;</p>
+<div style="text-align:center;">
+<input type="submit" value="{lang_save}" name="mode" />
+<input type="submit" value="{lang_cancel}" name="mode" />
+</div>
+</form>
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
+<script type="text/javascript">
+//<![CDATA[
+var el;
+el=document.getElementsByTagName('div');
+for(i=0;i<el.length;i++){
+    if(el[i].className == 'jsenabled_show'){
+        el[i].style.display = '';
+    } else if(el[i].className == 'jsenabled_hide'){
+        el[i].style.display = 'none';
+    }
+}
+//]]>
+</script>
+{# end {templatelocation} #}

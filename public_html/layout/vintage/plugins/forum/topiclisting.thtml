@@ -1,0 +1,121 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+    var site_url = '{site_url}';
+</script>
+<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
+
+<div class="forumpost">
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
+    <tr>
+      <td>{navbreadcrumbsimg}</td>
+      <td class="alignleft" style="width:95%;white-space:nowrap;">&nbsp;<a href="{site_url}/forum/index.php">{forum_home}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></td>
+      <td class="alignright" style="width:100%;padding-right:10px;white-space:nowrap;">
+{!if newtopiclink}
+        <a href="{newtopiclink}" rel="nofollow">{newtopiclinkimg}</a>
+{!else}
+        &nbsp;
+{!endif}
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
+    <tr>
+      <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;white-space:nowrap;">
+        {pagenavigation}
+      </td>
+      <td class="pluginBreadCrumbs alignright" style="width:80%;padding-right:15px;white-space:nowrap;">
+        {!if markreadlink}
+        [{markreadlink}{LANG_markread}]</a>
+        {!endif}
+        &nbsp;
+        <a href="{subscribelink}" rel="nofollow">{subscribelinkimg}</a>
+        &nbsp;
+        {rssfeed}
+      </td>
+    </tr>
+  </table>
+{!if records_displayed}
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alignleft">
+    <tr>
+      <td>
+        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginSolidOutline">
+          <tr>
+            <td colspan="2" class="aligncenter">
+                {LANG_TOPIC}<br/>
+                <a href="index.php?forum={forum_id}&amp;order=0&amp;sort=1">{img_asc1}</a>
+                &nbsp;
+                <a href="index.php?forum={forum_id}&amp;order=1&amp;sort=1">{img_desc1}</a>
+            </td>
+            <td class="aligncenter">{LANG_VIEWS}<br/><a href="index.php?forum={forum_id}&amp;order=0&amp;sort=2">{img_asc2}</a>&nbsp;<a href="index.php?forum={forum_id}&amp;order=1&amp;sort=2">{img_desc2}</a></td>
+            <td class="aligncenter">{LANG_REPLIES}<br/><a href="index.php?forum={forum_id}&amp;order=0&amp;sort=3">{img_asc3}</a>&nbsp;<a href="index.php?forum={forum_id}&amp;order=1&amp;sort=3">{img_desc3}</a></td>
+            <td class="aligncenter">{LANG_AUTHOR}<br/><a href="index.php?forum={forum_id}&amp;order=0&amp;sort=4">{img_asc4}</a>&nbsp;<a href="index.php?forum={forum_id}&amp;order=1&amp;sort=4">{img_desc4}</a></td>
+            <td class="aligncenter">{LANG_LASTPOST}<br/><a href="index.php?forum={forum_id}&amp;order=0&amp;sort=5">{img_asc5}</a>&nbsp;<a href="index.php?forum={forum_id}&amp;order=1&amp;sort=5">{img_desc5}</a></td>
+          </tr>
+<!-- BEGIN topicrows -->
+          <tr class="pluginRollOut" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRollOut pluginLinks';">
+
+            <td class="aligncenter pluginCol" style="white-space:nowrap;">
+              {folderimg}&nbsp;
+              <span id="forumbookmark{topic_id}">
+                <a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">
+                  {bookmark_icon}
+                </a>
+              </span>
+            </td>
+
+            <td style="width:65%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}'">
+              <span style="float:left;">
+                {moved}
+                <a class="{tooltip_style}" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}" title="{topicinfo}">
+                {subject}
+                </a>
+              </span>
+              <span style="float:right;">
+                {gotomsg}&nbsp;{displaypageslink}
+              </span>
+            </td>
+
+            <td class="aligncenter pluginCol" style="width:45px;white-space:nowrap;">
+              {views}
+            </td>
+            <td class="aligncenter pluginCol" style="width:45px;white-space:nowrap;">
+              {replies}
+            </td>
+            <td class="aligncenter pluginCol" style="width:65px;white-space:nowrap;">
+              {author}
+            </td>
+            <td style="width:25%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'" title="{LANG_lastpost}">
+
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="white-space:nowrap;padding-left:2px;" class="pluginLinks">{LANG_BY}{lastposter}</td>
+                </tr>
+                <tr>
+                  <td style="padding-left:2px" class="pluginLinks">{lastdate}</td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+<!-- END topicrows -->
+        </table>
+
+      </td>
+    </tr>
+  </table>
+  <table cellspacing="0" cellpadding="2" width="100%">
+    <tr>
+      <td style="height:24px;white-space:nowrap;">{pagenavigation}</td>
+    </tr>
+  </table>
+{!else}
+  {no_topics_message}
+{!endif}
+
+{page_generated_time}
+
+</div>
+<br/>
+{# end {templatelocation} #}

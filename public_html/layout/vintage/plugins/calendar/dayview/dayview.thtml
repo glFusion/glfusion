@@ -1,0 +1,73 @@
+{# begin {templatelocation} #}
+<div id="cal-header">
+<div id="cal-day"><b>{lang_day}</b></div>
+<div id="cal-week"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a></div>
+<div id="cal-month"><a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a></div>
+</div>
+<br />
+<div id="cal-header1">
+<div id="cal-dayx-cur">
+<p><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a></p>
+</div>
+<div id="cal-dayx-subcur">{calendar_title}
+{calendar_toggle}</div>
+<div id="cal-dayx-weekevent">
+<p>{lang_week} {week_num}</p>
+</div>
+<div id="alldayevt">
+<p>{allday_events}</p>
+</div>
+</div>
+
+<div class="alignleft">{0_hour}</div>
+{0_cols}
+<div class="alignleft">{1_hour}</div>
+{1_cols}
+<div class="alignleft">{2_hour}</div>
+{2_cols}
+<div class="alignleft">{3_hour}</div>
+{3_cols}
+<div class="alignleft">{4_hour}</div>
+{4_cols}
+<div class="alignleft">{5_hour}</div>
+{5_cols}
+<div class="alignleft">{6_hour}</div>
+{6_cols}
+<div class="alignleft">{7_hour}</div>
+{7_cols}
+<div class="alignleft">{8_hour}</div>
+{8_cols}
+<div class="alignleft">{9_hour}</div>
+{9_cols}
+<div class="alignleft">{10_hour}</div>
+{10_cols}
+<div class="alignleft">{11_hour}</div>
+{11_cols}
+<div class="alignleft">{12_hour}</div>
+{12_cols}
+<div class="alignleft">{13_hour}</div>
+{13_cols}
+<div class="alignleft">{14_hour}</div>
+{14_cols}
+<div class="alignleft">{15_hour}</div>
+{15_cols}
+<div class="alignleft">{16_hour}</div>
+{16_cols}
+<div class="alignleft">{17_hour}</div>
+{17_cols}
+<div class="alignleft">{18_hour}</div>
+{18_cols}
+<div class="alignleft">{19_hour}</div>
+{19_cols}
+<div class="alignleft">{20_hour}</div>
+{20_cols}
+<div class="alignleft">{21_hour}</div>
+{21_cols}
+<div class="alignleft">{22_hour}</div>
+{22_cols}
+<div class="alignleft">{23_hour}</div>
+{23_cols}
+
+<br />
+{quickadd_form}
+{# end {templatelocation} #}

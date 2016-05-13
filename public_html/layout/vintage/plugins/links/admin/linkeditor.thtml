@@ -1,0 +1,94 @@
+{# begin {templatelocation} #}
+<p>{instructions}</p>
+
+<br style="clear:both" />
+
+                                <form action="{site_admin_url}/plugins/links/index.php" method="post">
+                                    <table class="linkeditor">
+
+                                        <tr>
+                                            <td class="alignright">{lang_linktitle}:</td>
+                                            <td>
+                                                <input type="text" size="48" maxlength="96" name="title" value="{link_title}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_linkid}:</td>
+                                            <td>
+                                                <input type="text" dir="ltr" size="40" maxlength="128" name="lid" value="{link_id}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_linkurl}:</td>
+                                            <td>
+                                                <input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{link_url}" /> {lang_includehttp}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_category}:</td>
+                                            <td>
+                                                <select name="categorydd">
+                                                    {category_options}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_linkhits}:</td>
+                                            <td>
+                                                <input type="text" size="11" name="hits" value="{link_hits}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="linkdescription">{lang_linkdescription}:</td>
+                                            <td>
+                                                <textarea name="description" cols="50" rows="8">{link_description}</textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><div class="horizontal-line"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><b>{lang_accessrights}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_owner}:</td>
+                                            <td>{owner_name}<input type="hidden" name="owner_id" value="{link_ownerid}" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="alignright">{lang_group}:</td>
+                                            <td>
+                                                {group_dropdown}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><b>{lang_permissions}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>{lang_permissionskey}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>{permissions_editor}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>{lang_lockmsg}</td>
+                                        </tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <input type="submit" value="{lang_save}" name="save" />
+                                                <input type="submit" value="{lang_cancel}" name="cancel" />
+                                                <input type="hidden" value="{link_id}" name="old_lid" />
+                                                {delete_option}
+                                                {submission_option}
+                                                <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+{# end {templatelocation} #}

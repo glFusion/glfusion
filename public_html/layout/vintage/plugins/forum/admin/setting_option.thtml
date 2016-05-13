@@ -1,0 +1,14 @@
+{# begin {templatelocation} #}
+<tr style="vertical-align:middle;">
+	<td class="pluginCellSubTitle"width="160">{LANG_title}</td>
+    <td class="pluginCellText pluginCellFill">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                            <td style="padding-right:15px;" style="padding-right:15px;">{LANG_description}</td>
+                            <td style="text-align:right;" nowrap><input type="radio" NAME="{parm_name}" VALUE="1" {option_yes}>{LANG_YES}&nbsp;</td>
+                            <td style="text-align:right;" nowrap width="5%"><input type="radio" NAME="{parm_name}" VALUE="0" {option_no}>{LANG_NO}</td>
+                    </tr>
+            </table>
+    </td>
+</tr>
+{# end {templatelocation} #}

@@ -1,0 +1,67 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+//<![CDATA[
+function popitup(url)
+{
+    newwindow=window.open(url,'name','height=600,width=640,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
+//]]>
+</script>
+<div style="width:99%;border:1px solid #CCC;margin:5px;">
+  <div class="pluginTitle" style="padding:10px;">
+    <img src="{site_url}/forum/images/alert_warning.gif" alt="" style="vertical-align:middle;padding-right:10px;" />
+    {$LANG_GF02[msg182]}
+  </div>
+  <div class="pluginCellText" style="padding-top:10px;margin-left:100px;">
+    {message}
+    <form action="{site_url}/forum/moderation.php" method="post" name="moderate" id="moderate">
+      <input type="hidden" name="modfunction" value="{mod_action}" />
+      <input type="hidden" name="topic_id" value="{topic_id}" />
+      <input type="hidden" name="forum_id" value="{forum_id}" />
+      <input type="hidden" name="topic_parent_id" value="{topic_parent_id}" />
+      {!if hostip}
+        <input type="hidden" name="hostip" value="{hostip}" />
+      {!endif}
+
+      {!if merge}
+        {$LANG_GF03[destination_topic]}&nbsp;
+        <input name="mergetopic" id="mergetopic" type="text" size="5" value="0" />
+        &nbsp;
+        <a onclick="return popitup('{site_url}/forum/gettopic.php?fid={forum_id}&amp;pid={topic_parent_id}&amp;query_limit=20')" href="#">
+        {$LANG_GF03[select_topic]}</a>
+      {!endif}
+
+      {!if destination_forum_select}
+        <table style="width:100%;border:none;">
+          <tr style="padding:10px;">
+            <td style="width:100px;">
+              {$LANG_GF03[selectforum]}
+            </td>
+            <td>
+              {destination_forum_select}
+            </td>
+          </tr>
+          <tr>
+            <td style="width:100px;">
+              {$LANG_GF02[msg186]}:
+            </td>
+            <td>
+              <input type="text" size="60" id="movetitle" name="movetitle" value="{subject}" />
+            </td>
+          </tr>
+        </table>
+      {!endif}
+      {!if split}
+        <input type="radio" name="splittype" value="remaining" checked="checked" />{$LANG_GF03[splitopt1]}<br />
+        <input type="radio" name="splittype" value="single" />{$LANG_GF03[splitopt2]}
+      {!endif}
+      <div style="padding-top:15px;">
+        <input type="submit" name="submit" value="{button_text}" />
+        <input type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" />
+      </div>
+    </form>
+  </div>
+</div>
+{# end {templatelocation} #}

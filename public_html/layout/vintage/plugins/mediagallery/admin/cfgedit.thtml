@@ -1,0 +1,516 @@
+{# begin {templatelocation} #}
+<noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
+<script type="text/javascript" src="{site_url}/js/admin_editor.js"></script>
+{configuration_check}
+{!if feedback}
+<span class="info">{feedback}</span>
+{!endif}
+<div id="pe_navbar" class="jsenabled_show" style="display:none">{navbar}</div>
+<div style="clear:both;"></div>
+<form method="post" action="{s_form_action}" name="mg_config_form" enctype="multipart/form-data" id="mg_config_form">
+
+<div id="pe_general">
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_general_options}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td style="width:50%;" class="mgAdminAlignRight">{lang_gallery_only}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="gallery_only" value="0" {gallery_only_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="gallery_only" value="1" {gallery_only_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+
+      <tr class="pluginRow2">
+        <td style="width:50%;" class="mgAdminAlignRight">{lang_index_all}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="index_all" value="0" {index_all_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="index_all" value="1" {index_all_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+
+      <tr class="pluginRow1">
+        <td style="width:50%;" class="mgAdminAlignRight">{lang_loginrequired}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="loginrequired" value="0" {lr_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="loginrequired" value="1" {lr_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_usage_tracking}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="usagetracking" value="0" {ut_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="usagetracking" value="1" {ut_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_whatsnew}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="whatsnew" value="0" {wn_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="whatsnew" value="1" {wn_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_length}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="2" size="2" name="wn_length" value="{wn_length}" />&nbsp;{lang_characters}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_wn_time}</td>
+        <td class="mgAdminAlignLeft">
+          {wn_time_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_preserve_filename}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="preserve_filename" value="0" {pf_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="preserve_filename" value="1" {pf_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_discard_originals}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="discard_originals" value="0" {do_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="discard_originals" value="1" {do_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_verbose}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="verbose" value="0" {verbose_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="verbose" value="1" {verbose_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_dwnc}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="dwnc" value="0" {dwnc_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="dwnc" value="1" {dwnc_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_profile_hook}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="profile_hook" value="0" {ph_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="profile_hook" value="1" {ph_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_postcard_retention}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="2" size="2" name="postcard_retention" value="{postcard_retention}" />
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          {lang_auto_tag_defaults}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_border}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="at_border" value="0" {at_border_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="at_border" value="1" {at_border_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_alignment}</td>
+        <td class="mgAdminAlignLeft">
+          {at_align_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_width}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" name="at_width" maxlength="3" size="3" value="{at_width}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_height}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" name="at_height" maxlength="3" size="3" value="{at_height}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_source}</td>
+        <td class="mgAdminAlignLeft">
+          {at_src_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_autoplay}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="at_autoplay" value="0" {at_autoplay_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="at_autoplay" value="1" {at_autoplay_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_link_to_media}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="at_enable_link" value="0" {at_enable_link_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="at_enable_link" value="1" {at_enable_link_yes_checked} />{lang_yes}&nbsp;&nbsp;
+          <input type="radio" name="at_enable_link" value="2" {at_enable_link_lb_checked} />{$LANG_MG01['lightbox']}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_ss_delay}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" name="at_delay" maxlength="2" size="2" value="{at_delay}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_show_titles}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="at_showtitle" value="0" {at_showtitle_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="at_showtitle" value="1" {at_showtitle_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+    </table>
+</div>
+
+<div id="pe_display"  class="jsenabled_hide">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_display_options}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_dfid}</td>
+        <td class="mgAdminAlignLeft">
+          {dfidselect}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_displayblock}</td>
+        <td class="mgAdminAlignLeft">
+          {displayblock}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_columns}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="1" size="2" name="albumdisplaycolumns" value="{album_display_columns}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_rows}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="albumdisplayrows" value="{album_display_rows}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_subalbum_select}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="subalbum_select" value="0" {sa_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="subalbum_select" value="1" {sa_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_theme_select}</td>
+        <td class="mgAdminAlignLeft">
+          {theme_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_album_skin}</td>
+        <td class="mgAdminAlignLeft">
+          {skin_select}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_orig_jpg_quality}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="orig_jpg_quality" value="{orig_jpg_quality}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_jpg_quality}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="jpg_quality" value="{jpg_quality}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tn_jpg_quality}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="tn_jpg_quality" value="{tn_jpg_quality}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_gallery_tn_size}</td>
+        <td class="mgAdminAlignLeft">
+          {gallery_tn_size_select}
+        </td>
+      </tr>
+
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnheight}</td>
+        <td class="mgAdminAlignLeft">
+          {gallery_tnheight_input}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_tnwidth}</td>
+        <td class="mgAdminAlignLeft">
+          {gallery_tnwidth_input}
+        </td>
+      </tr>
+
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_emid}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="emid" value="0" {emid_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="emid" value="1" {emid_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_fip}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="fip" value="0" {fip_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="fip" value="1" {fip_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_cmtbar}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="cmtbar" value="0" {cmtbar_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="cmtbar" value="1" {cmtbar_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_seperator}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="seperator" value="{seperator}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_flv}</td>
+        <td class="mgAdminAlignLeft">
+          {flv_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_custom_image_height}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="4" size="4" name="custom_image_height" value="{custom_image_height}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_custom_image_width}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="4" size="4" name="custom_image_width" value="{custom_image_width}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_popup_from_album}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="popupfromalbum" value="1" {popupfromalbum_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_autotag_caption}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="autotag_caption" value="1" {autotag_caption_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_random_size}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="random_width" value="{random_width}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_random_skin}</td>
+        <td class="mgAdminAlignLeft">
+          {rskin_select}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_truncate_breadcrumb}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="3" size="3" name="truncate_breadcrumb" value="{truncate_breadcrumb}" />
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          {lang_search_result_options}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_columns}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="2" size="2" name="search_columns" value="{search_columns}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_rows}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="2" size="2" name="search_rows" value="{search_rows}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_av_playback}</td>
+        <td class="mgAdminAlignLeft">
+          {search_playback_type}
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_views}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="search_enable_views" value="0" {search_enable_views_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="search_enable_views" value="1" {search_enable_views_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_search_rating}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="radio" name="search_enable_rating" value="0" {search_enable_rating_no_checked} />{lang_no}&nbsp;&nbsp;
+          <input type="radio" name="search_enable_rating" value="1" {search_enable_rating_yes_checked} />{lang_yes}
+        </td>
+      </tr>
+
+    </table>
+</div>
+
+<div id="pe_batch" class="jsenabled_hide">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_batch_options}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_refresh_rate}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="4" size="4" name="refresh_rate" value="{refresh_rate}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_item_limit}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="4" size="4" name="item_limit" value="{item_limit}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_time_limit}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" maxlength="4" size="4" name="time_limit" value="{time_limit}" />
+        </td>
+      </tr>
+    </table>
+
+</div>
+
+<div id="pe_userprefs"  class="jsenabled_hide">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_userpref_options}
+        </th>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_rows_enabled}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="up_display_rows_enabled" value="1" {up_dr_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_display_columns_enabled}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="up_display_columns_enabled" value="1" {up_dc_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_av_playback_enabled}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="up_av_playback_enabled" value="1" {up_playback_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:50%;" class="mgAdminAlignRight">{lang_thumbnail_size_enabled}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="up_thumbnail_size_enabled" value="1" {up_tn_size_selected} />
+        </td>
+      </tr>
+    </table>
+
+</div>
+
+<div id="pe_graphics" class="jsenabled_hide">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+      <tr>
+        <th colspan="2">
+          {lang_graphics_options}
+        </th>
+      </tr>
+
+      <tr class="pluginRow1">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ffmpeg_enable}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="enable_ffmpeg" value="1" {ffmpeg_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ffmpeg_path}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" dir="ltr" maxlength="255" size="50" name="ffmpeg_path" value="{ffmpeg_path}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_zip_enable}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="checkbox" name="enable_zip" value="1" {zip_selected} />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_zip_path}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" dir="ltr" maxlength="255" size="50" name="zip_path" value="{zip_path}" />
+        </td>
+      </tr>
+      <tr class="pluginRow1">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_tmp_path}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" dir="ltr" maxlength="255" size="50" name="tmp_path" value="{tmp_path}" />
+        </td>
+      </tr>
+      <tr class="pluginRow2">
+        <td  style="width:40%;" class="mgAdminAlignRight">{lang_ftp_path}</td>
+        <td class="mgAdminAlignLeft">
+          <input type="text" dir="ltr" maxlength="255" size="50" name="ftp_path" value="{ftp_path}" />
+        </td>
+      </tr>
+    </table>
+</div>
+
+<div style="text-align:center;">
+<input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+<input type="submit" value="{lang_save}" name="save" />
+<input type="submit" value="{lang_cancel}" name="cancel" />
+<input type="reset" value="{lang_reset}" name="mode" />
+</div>
+</form>
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
+<script type="text/javascript">
+//<![CDATA[
+var el;
+el=document.getElementsByTagName('div');
+for(i=0;i<el.length;i++){
+        if(el[i].className == 'jsenabled_show'){
+                el[i].style.display = '';
+        } else if(el[i].className == 'jsenabled_hide'){
+                el[i].style.display = 'none';
+        }
+}
+//]]>
+</script>
+{# end {templatelocation} #}

@@ -1,0 +1,30 @@
+{# begin {templatelocation} #}
+<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
+  codebase="http://www.apple.com/qtactivex/qtplugin.cab"
+        width="{width}" height="{height}">
+  <param name="src" value="{movie}" />
+  <param name="autoplay" value="{autoplay}" />
+  <param name="controller" value="{controller}" />
+  <param name="autoref" value="{autoref}" />
+  <param name="kioskmode" value="{kioskmode}" />
+  <param name="scale" value="{scale}" />
+  <param name="bgcolor" value="{bgcolor}" />
+  <param name="loop" value="{loop}" />
+  <param name="filename" value="{filename}" />
+  <!--[if gte IE 7]> <!-->
+  <object type="video/quicktime" data="{movie}" width="{width}" height="{height}">
+    <param name="autoplay" value="{autoplay}" />
+    <param name="controller" value="{controller}" />
+    <param name="autoref" value="{autoref}" />
+    <param name="kioskmode" value="{kioskmode}" />
+    <param name="scale" value="{scale}" />
+    <param name="bgcolor" value="{bgcolor}" />
+    <param name="loop" value="{loop}" />
+   alt : <a href="{movie}">Download</a>
+  </object>
+  <!--<![endif]-->
+  <!--[if lt IE 7]>
+   alt : <a href="{movie}">Download</a>
+  <![endif]-->
+</object>
+{# end {templatelocation} #}

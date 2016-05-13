@@ -1,0 +1,42 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<h1 style="padding-bottom:0px;margin-bottom:0px;">{media_title}</h1>
+<h2 style="padding-top:0px;padding-bottom:2px;margin-top:2px;margin-bottom:2px;">{musicalbum} {lang_hyphen} {artist}</h2>
+<div class="pluginSmallText">
+ {lang_published} {media_owner} {lang_on} {media_time}
+</div>
+{!if media_cell_keywords}
+<div class="pluginMediumText">{media_cell_keywords}</div>
+{!endif}
+<table style="border:none;">
+  <tr>
+    <td style="vertical-align:top;">
+     <div class="mgPluginMI" style="padding-right:3px;padding-top:5px;">{media_item_thumbnail}</div>
+     <div class="pluginItemFooter" style="clear:both;">
+
+      {!if media_comments}
+      <div class="pluginMediumText">{media_comments}</div>
+      {!endif}
+      {!if media_views}
+      <div class="pluginMediumText">{media_views}</div>
+      {!endif}
+      {!if rating_box}
+      {rating_box}
+      {!endif}
+      {!if alt_edit_link}
+      <div class="pluginSmallText">{alt_edit_link}</div>
+      {!endif}
+
+
+     </div>
+    </td>
+    <td style="vertical-align:top;">
+      <p>{media_description}</p>
+    </td>
+  </tr>
+</table>
+<div style="clear:both;"></div>
+{mp3_podcast}
+<hr />
+<div style="clear:both;"></div>
+{# end {templatelocation} #}

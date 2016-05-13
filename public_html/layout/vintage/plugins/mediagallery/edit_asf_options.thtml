@@ -1,0 +1,129 @@
+{# begin {templatelocation} #}
+<fieldset>
+  <legend>{lang_playback_options}</legend>
+
+  <div style="float:left;width:20%;">
+    {lang_option}
+  </div>
+  <div style="float:left;width:10%;">
+    {lang_off}&nbsp;&nbsp;{lang_on}
+  </div>
+  <div style="float:left;width:70%;text-align:left;">
+    {lang_description}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_auto_start}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="autostart" value="0" {autostart_disabled}>
+    <input type="radio" name="autostart" value="1" {autostart_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_auto_start_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_enable_context_menu}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="enablecontextmenu" value="0" {enablecontextmenu_disabled}>
+    <input type="radio" name="enablecontextmenu" value="1" {enablecontextmenu_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_enable_context_menu_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_stretch_to_fit}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="stretchtofit" value="0" {stretchtofit_disabled}>
+    <input type="radio" name="stretchtofit" value="1" {stretchtofit_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_stretch_to_fit_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_status_bar}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="radio" name="showstatusbar" value="0" {showstatusbar_disabled}>
+    <input type="radio" name="showstatusbar" value="1" {showstatusbar_enabled}>
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_status_bar_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_ui_mode}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    {uimode_select}
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_ui_mode_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_playcount}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="text" name="playcount" value="{playcount}" size="5">
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_playcount_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label>{lang_bgcolor}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="text" name="bgcolor" value="{bgcolor}" size="7">
+  </div>
+  <div style="float:left;width:70%;">
+    {lang_bgcolor_help}
+  </div>
+  <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label for="width">{lang_width}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="text" name="width" id="width" value="{width}" size="3">
+  </div>
+  <div style="float:left;width:70%;">
+      {lang_width_help}
+  </div>
+ <div style="clear:both;"></div>
+  <br />
+
+  <div style="height:25px;width:20%;float:left;white-space:nowrap;">
+    <label for="height">{lang_height}</label>
+  </div>
+  <div style="width:10%;float:left;white-space:nowrap;">
+    <input type="text" name="height" id="height" value="{height}" size="3">
+  </div>
+  <div style="float:left;width:70%;">
+      {lang_height_help}
+  </div>
+ <div style="clear:both;"></div>
+  <br />
+</fieldset>
+{# end {templatelocation} #}

@@ -1,0 +1,26 @@
+{# begin {templatelocation} #}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={charset}">
+{themeCSS}
+<title>{title}</title>
+</head>
+<body>
+<span style="text-align:center;">{u_pic}</span>
+<object id="MediaPlayer" width={width} height={height} classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6" type="application/x-oleobject" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,7,1112">
+<PARAM NAME="url" VALUE="{movie}">
+<PARAM NAME="autoStart" VALUE="{autostart}">
+<PARAM name="enablecontextmenu" value="{enablecontextmenu}">
+<param name="showstatusbar" value="{showstatusbar}">
+<param name="uimode" value="{uimode}">
+<PARAM NAME="playCount" value="{playcount}">
+<PARAM NAME="animationatStart" VALUE="true">
+<embed type="application/x-mplayer2"
+ pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"
+Name="MediaPlayer" src="{movie}"
+PlayCount="{playcount}" AutoStart={autostart} ShowStatusBar={showstatusbar} uimode="{uimode}" enablecontextmenu={enablecontextmenu}
+HEIGHT={height} WIDTH={width}>
+</EMBED></OBJECT>
+</body>
+</html>
+{# end {templatelocation} #}

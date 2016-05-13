@@ -1,0 +1,27 @@
+{# begin {templatelocation} #}
+{block_start}
+{admin_menu}
+<form action="{phpself}" method="post">
+<table width="100%" border="0" cellspacing="0" cellpadding="3" class="plugin" style="margin-top:10px;">
+    <tr>
+        <td class="pluginAlert pluginMediumText" style="padding:10px;">{deletenote1}</td>
+    </tr>
+    <tr>
+       <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
+            <input type="hidden" name="type" value="{type}" />
+            <input type="hidden" name="confirm" value="1" />
+            <input type="hidden" name="id" value="{id}" />
+            <input type="hidden" name="mode" value="delcat">
+            {deletenote2}
+       </td>
+     </tr>
+     <tr>
+       <td class="pluginCellText pluginCellFill" style="text-align:center;padding:10px;">
+            <input type="submit" name="delcatconfirm" value="{LANG_DELETE}" />&nbsp;
+            <input type="submit" name="cancel" value="{LANG_CANCEL}"/>
+       </td>
+    </tr>
+ </table>
+</form>
+{block_end}
+{# end {templatelocation} #}

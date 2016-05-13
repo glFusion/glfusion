@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<div class="pluginCellTitle" style="width:100%;">
+<h2 style="padding:2px;margin:0;">{lang_upload_media}</h2>
+</div>
+{# end {templatelocation} #}

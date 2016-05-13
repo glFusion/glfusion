@@ -1,0 +1,31 @@
+{# begin {templatelocation} #}
+<form method="post" action="{s_form_action}" name="mg_useredit_form" ENCTYPE="multipart/form-data">
+<input type="hidden" name="uid" value="{uid}">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th colspan="2" width="100%">
+        {lang_user_edit} - {username}
+      </th>
+    </tr>
+
+    <tr class="pluginRow1">
+      <td class="required" width="40%" class="mgAdminAlignRight">{lang_active}</td>
+      <td class="mgAdminAlignLeft">
+        {active}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td class="required" width="40%" class="mgAdminAlignRight">{lang_quota}</td>
+      <td class="mgAdminAlignLeft">
+        <input type="text" maxlength="4" size="4" name="quota" value="{quota}" align="right" />&nbsp;Mb&nbsp;&nbsp;{lang_unlimited}
+      </td>
+    </tr>
+  </table>
+<br />
+<div style="text-align:center;">
+<input type="submit" value="{lang_save}"   name="mode">
+<input type="submit" value="{lang_cancel}" name="mode">
+<input type="reset"  value="{lang_reset}"  name="mode">
+</div>
+</form>
+{# end {templatelocation} #}

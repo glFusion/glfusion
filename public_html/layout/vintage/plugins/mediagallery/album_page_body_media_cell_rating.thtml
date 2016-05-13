@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+{media_rating}
+{# end {templatelocation} #}

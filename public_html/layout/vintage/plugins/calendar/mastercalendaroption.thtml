@@ -1,0 +1,7 @@
+{# begin {templatelocation} #}
+                                            <form method="post" action="index.php">
+                                                <div>
+                                                    <input type="submit" name="action" value="{lang_mastercal}" />
+                                                </div>
+                                            </form>
+{# end {templatelocation} #}

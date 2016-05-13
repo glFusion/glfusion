@@ -1,0 +1,135 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+//<![CDATA[
+function dodisabled(){
+var gfxdriver = document.getElementById('gfxdriver');
+var imageset = document.getElementById('imageset');
+var gfxpath = document.getElementById('gfxpath');
+var gfxformat = document.getElementById('gfxformat');
+  if (gfxdriver.value == "0") {
+    imageset.disabled=true;
+    gfxpath.disabled=true;
+    gfxformat.disabled=false;
+  } else if ( gfxdriver.value == "1") {
+    imageset.disabled=true;
+    gfxpath.disabled=false;
+    gfxformat.disabled=false;
+  } else {
+    imageset.disabled=false;
+    gfxpath.disabled=true;
+    gfxformat.disabled=true;
+  }
+}
+//]]>
+</script>
+
+<h2>{lang_msg}</h2>
+<table width="100%" cellspacing="5" cellpadding="5">
+<tr>
+  <td colspan="2"valign="middle">
+	<table border="0" cellspacing="0" cellpadding="2" width="100%">
+	<tr>
+	  <td rowspan="2" align="left" style="width:60px">
+	    <a href="{site_admin_url}/plugins/captcha/index.php">
+	      <img src="{site_url}/captcha/captcha.png" style="border:none;" alt="" />
+	    </a>
+	  </td>
+	  <td style="text-align:left;"><span style="font-size:1.2em;font-weight:bold;">{lang_admin} - v{version}</span></td>
+	</tr>
+	</table>
+  </td>
+</tr>
+<tr>
+<td>
+{lang_overview}
+</td>
+</tr>
+<tr>
+  <td colspan="2">
+<p style="text-align:left;"><a href="{site_admin_url}/plugins/captcha/logview.php?action=View Log File&amp;log=captcha.log">{lang_view_logfile}</a></p>
+<h1>{lang_settings}</h1>
+<form name="admin" action="{s_form_action}" method="post">
+<fieldset style="border:1px solid #000000;padding:10px;">
+<legend>{lang_configuration}</legend>
+<br />
+{lang_gfx_driver}:&nbsp;&nbsp;
+<select name="gfxdriver" id="gfxdriver" onchange="dodisabled()">
+ <option value="0" {gdselected}>{lang_gd_libs}</option>
+ <option value="1" {imselected}>{lang_imagemagick}</option>
+ <option value="2" {noneselected}>{lang_static_images}</option>
+</select>
+<br /><br />
+{lang_imageset}:&nbsp;&nbsp;
+{selectImageSet}
+<br /><br />
+{lang_gfx_format}:&nbsp;&nbsp;
+<select name="gfxformat" id="gfxformat">
+ <option value="jpg" {jpgselected}>JPG</option>
+ <option value="png" {pngselected}>PNG</option>
+</select>
+<br /><br />
+{lang_convert_path}:&nbsp;&nbsp;
+<input type="text" name="gfxpath" id="gfxpath" value="{gfxpath}" size="60" />
+<br /><br />
+<label>{lang_debug}:</label>&nbsp;&nbsp;
+<input type="checkbox" name="debug" {debugchecked} />&nbsp;&nbsp;
+<br /><br />
+<label>{lang_logging}:</label>&nbsp;&nbsp;
+<input type="checkbox" name="logging" {loggingchecked} />&nbsp;&nbsp;
+<br /><br />
+</fieldset>
+<fieldset style="border:1px solid #000000;margin-top:10px;padding:10px;">
+<legend>{lang_integration}</legend>
+<br />
+<input type="checkbox" name="anononly" {anonchecked} />&nbsp;&nbsp;
+<label>{lang_anonymous_only}</label>
+<br /><br />
+<input type="checkbox" name="remoteusers" {remotechecked} />&nbsp;&nbsp;
+<label>{lang_remoteusers}</label>
+<br /><br />
+<input type="checkbox" name="comment" {commentchecked} />&nbsp;&nbsp;
+<label>{lang_enable_comment}</label>
+<br /><br />
+<input type="checkbox" name="story" {storychecked} />&nbsp;&nbsp;
+<label>{lang_enable_story}</label>
+<br /><br />
+<input type="checkbox" name="registration" {registrationchecked} />&nbsp;&nbsp;
+<label>{lang_enable_registration}</label>
+<br /><br />
+<input type="checkbox" name="contact" {contactchecked} />&nbsp;&nbsp;
+<label>{lang_enable_contact}</label>
+<br /><br />
+<input type="checkbox" name="emailstory" {emailstorychecked} />&nbsp;&nbsp;
+<label>{lang_enable_emailstory}</label>
+<br /><br />
+<input type="checkbox" name="forum" {forumchecked} />&nbsp;&nbsp;
+<label>{lang_enable_forum}</label>
+<br /><br />
+<input type="checkbox" name="mediagallery" {mediagallerychecked} />&nbsp;&nbsp;
+<label>{lang_enable_mediagallery}</label>
+<br /><br />
+<input type="checkbox" name="links" {linkschecked} />&nbsp;&nbsp;
+<label>{lang_enable_links}</label>
+<br /><br />
+<input type="checkbox" name="calendar" {calendarchecked} />&nbsp;&nbsp;
+<label>{lang_enable_calendar}</label>
+<br /><br />
+{#
+<input type="checkbox" name="rating" {ratingchecked} />&nbsp;&nbsp;
+<label><b>{lang_enable_rating}</b></label>
+<br /><br />
+#}
+</fieldset>
+<div style="text-align:center;padding-top:20px;padding-bottom:10px;">
+<input type="submit" name="mode" value="{lang_save}" />&nbsp;&nbsp;&nbsp;<input type="submit" name="mode" value="{lang_cancel}" />
+</div>
+</form>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+//<![CDATA[
+dodisabled();
+//]]>
+</script>
+{# end {templatelocation} #}

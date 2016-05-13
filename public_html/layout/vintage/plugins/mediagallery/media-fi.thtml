@@ -1,0 +1,33 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<table cellspacing="0" cellpadding="0" style="width:100%;border:none;margin:0px auto;">
+  <tr style="height:{row_height}px;">
+    <td class="mgPluginMI" align="center" style="vertical-align:middle;">
+    {media_item_thumbnail}
+    {mp3_podcast}
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <div class="pluginMediumText">
+        <b>{media_title}</b>
+        {!if musicalbum}
+        &nbsp;/&nbsp;{musicalbum}
+        {!endif}
+      </div>
+        {!if artist}
+        <div class="pluginMediumText">
+        {artist}
+        </div>
+        {!endif}
+      <div class="pluginSmallText">Album: <span style="font-weight:bold;">{album_name_link}</span></div>
+      <div class="pluginSmallText">Photograph &copy; <span style="font-weight:bold;">{owner_fullname}</span></div>
+      <div class="pluginSmallText">Posted {upload_time}</div>
+      <div class="pluginSmallText">{media_views} / {media_comments}</div>
+      {!if edit_link}
+      <div class="mgMediaEdit">{edit_link}</div>
+      {!endif}
+    </td>
+  </tr>
+</table>
+{# end {templatelocation} #}

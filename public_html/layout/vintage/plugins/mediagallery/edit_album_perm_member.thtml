@@ -1,0 +1,32 @@
+{# begin {templatelocation} #}
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th style="width:100%;" colspan="2">
+        {lang_accessrights}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td style="width:40%;" class="mgAdminAlignRight">{lang_owner}</td>
+      <td style="text-align:left;">
+        {owner_username}
+        <input type="hidden" name="owner_id" value="{owner_id}" />
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td nowrap="nowrap" colspan="2">
+        {lang_permissions}
+      </td>
+    </tr>
+    <tr class="pluginRow1">
+      <td colspan="2" style="text-align:center;">
+        {lang_perm_key} {permissions_editor}
+      </td>
+    </tr>
+    <tr class="pluginRow2">
+      <td style="width:40%;" class="mgAdminAlignRight">
+        {lang_force_child_update}
+      </td>
+      <td>{force_child_update}</td>
+    </tr>
+  </table>
+{# end {templatelocation} #}

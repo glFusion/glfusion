@@ -1,0 +1,97 @@
+
+<table width="100%" cellspacing="0" cellpadding="8" class="plugin">
+    <tr>
+        <td style="padding-top:10px;padding-left:50px;">
+            <ul>
+                <li>{lang_submitnotice}</b> </li>
+                <li>{lang_allpending}</li>
+                <li>{lang_dontabuse}</li>
+                <li>{lang_takedays}</li>
+                <li>{lang_required}</li>
+            </ul>
+            <form action="{site_url}/filemgmt/submit.php" method="post" enctype='multipart/form-data'>
+                <table width="80%">
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_filetitle}&nbsp;</b>
+                        </td>
+                        <td>
+                            <input type="text" name="title" size="50" maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_filename}&nbsp;</b>
+                        </td>
+                        <td>
+                            <input type="file" name="newfile" size="50" maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_category}</b>
+                        </td>
+                        <td>
+                            <select name="cid">
+                                {cat_select_options}
+                            </select>
+                            <span class="pluginTinyText" style="padding-left:5px;">{lang_approve}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_homepage} </b>
+                        </td>
+                        <td>
+                            <input type="text" name="homepage" size="50" maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_version} </b>
+                        </td>
+                        <td>
+                            <input type="text" name="version" size="10" maxlength="10" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" style="white-space:nowrap;">
+                            <b>{lang_desc}</b>
+                        </td>
+                        <td>
+                            <textarea name="description" cols="50" rows="6"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="white-space:nowrap;">
+                            <b>{lang_screenshot} </b>
+                        </td>
+                        <td>
+                            <input type="file" name="newfileshot" size="50" maxlength="60" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">
+                            <b>{lang_commentoption}</b>
+                        </td>
+                        <td>
+                            <input type="radio" name="commentoption" value="1" checked="checked" />&nbsp;{lang_yes}&nbsp;
+                            <input type="radio" name="commentoption" value="0" />&nbsp;{lang_no}&nbsp;
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <input type="hidden" name="submitter" value="{uid}" />
+                <center>
+                    <input type="submit" name="submit" class="button" value="{lang_submit}">
+                    &nbsp;<input type="button" value="{lang_cancel}" onclick="javascript:history.go(-1)" />
+                </center>
+                <input type="hidden" name="{token_name}" value="{security_token}"/>
+            </form>
+        </td>
+    </tr>
+</table>

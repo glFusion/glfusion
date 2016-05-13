@@ -1,0 +1,27 @@
+{# begin {templatelocation} #}
+<div class="block-box">
+  <h2>{title}</h2>
+  <div class="admin-menu">
+    <img src="{site_url}/images/mediagallery.png" class="admin-menu-icon" alt=""/>
+    <div class="admin-menu-items">
+      <a href="{true_site_admin_url}" class="admin-menu-item">{$LANG_ADMIN[admin_home]}</a>
+    </div>
+    <div class="admin-menu-text">
+      {$LANG_MG00[instructions]}
+    </div>
+    <div class="clearboth"></div>
+  </div>
+</div>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr>
+  <td style="vertical-align:top;width:75%;">
+     {admin_body}
+     <br />
+     <br />
+  </td>
+  <td class="plugin" style="vertical-align:top;">
+	{mg_navigation}
+  </td>
+  </tr>
+</table>
+{# end {templatelocation} #}

@@ -1,0 +1,12 @@
+{# begin {templatelocation} #}
+<form action="{site_url}/links/index.php" method="post">
+<table class="linkswidth100">
+  <tr>
+    <td class="alignleft">{breadcrumbs}</td>
+    <td class="alignright">
+        <select name="category" onchange="javascript:submit()">{link_dropdown}</select><input type="submit" value="{lang_go}" name="mode" />
+    </td>
+  </tr>
+</table>
+</form>
+{# end {templatelocation} #}

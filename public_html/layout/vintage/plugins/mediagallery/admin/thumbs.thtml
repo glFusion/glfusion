@@ -1,0 +1,17 @@
+{# begin {templatelocation} #}
+<form method="post" action="{s_form_action}">
+<table width="100%" cellpadding="3" cellspacing="1" border="0">
+<tr>
+  <td align="left">
+    {lang_details}
+  </td>
+</tr>
+<tr>
+  <td align="left">
+    <input type="submit" name="submit" value="{lang_next}" />&nbsp;
+    <input type="submit" name="submit" value="{lang_cancel}" />
+  </td>
+</tr>
+</table>
+</form>
+{# end {templatelocation} #}

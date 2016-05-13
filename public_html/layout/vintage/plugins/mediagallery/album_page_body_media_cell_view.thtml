@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+{lang_views} {media_views_count}
+{# end {templatelocation} #}

@@ -1,0 +1,20 @@
+{# begin {templatelocation} #}
+<form name="digibugc4p" id="digibugc4p" action="http://www.digibug.com/dapi/order.php" method="post">
+<div>
+<input type="hidden" name="digibug_api_version" value="100" />
+<input type="hidden" name="company_id" value="370" />
+<input type="hidden" name="event_id" value="1101" />
+<input type="hidden" name="cmd" value="addimg" />
+<input type="hidden" name="return_url" value="this-gets-set-by-javascript-in-onClick" />
+<input type="hidden" name="num_images" value="1" />
+<input type="hidden" name="image_1" value="{sf_picture}" />
+<input type="hidden" name="image_height_1" value="{sf_height}" />
+<input type="hidden" name="image_width_1" value="{sf_width}" />
+<input type="hidden" name="thumb_1" value="{sf_thumbnail}" />
+<input type="hidden" name="thumb_height_1" value="{sf_tn_height}" />
+<input type="hidden" name="thumb_width_1" value="{sf_tn_width}" />
+<input type="hidden" name="title_1" value="{sf_title}" />
+</div>
+</form>
+<a href="#" onclick="document.digibugc4p.return_url.value=document.location; document.digibugc4p.submit();return false;" onmouseover="window.status='Print this Picture at digibuy.com'; return true" onmouseout="window.status='';return true"><img src="{site_url}/images/digibug.gif" alt="{lang_print_digibug}" /></a>&nbsp;&nbsp;
+{# end {templatelocation} #}

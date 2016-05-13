@@ -1,0 +1,7 @@
+{# begin {templatelocation} #}
+{new_table_row}
+<td style="vertical-align:top;text-align:left;">
+    {subcategories}
+</td>
+{end_of_row}
+{# end {templatelocation} #}

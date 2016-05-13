@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<div class="cal-dayx-times2">{event_entry}</div>
+{# end {templatelocation} #}

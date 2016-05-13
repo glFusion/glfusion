@@ -1,0 +1,221 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+	var instance = window.opener.CKEDITOR.instances['{instance}'];
+
+	function dodisabled() {
+		var autotag = '';
+		if (document.mediabrowser.autotag != undefined) {
+			for (i = 0; i < document.mediabrowser.autotag.length; i++) {
+				if (document.mediabrowser.autotag[i].checked) {
+					autotag = document.mediabrowser.autotag[i].value
+				}
+			}
+			switch (autotag) {
+				case 'album':
+				case 'media':
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = false;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = false;
+				document.mediabrowser.link.disabled = false;
+				document.mediabrowser.caption.disabled = false;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = false;
+				break;
+				case 'slideshow':
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = false;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = false;
+				document.mediabrowser.link.disabled = false;
+				document.mediabrowser.caption.disabled = false;
+				document.mediabrowser.delay.disabled = false;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				case 'fslideshow':
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = true;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = false;
+				document.mediabrowser.link.disabled = false;
+				document.mediabrowser.caption.disabled = false;
+				document.mediabrowser.delay.disabled = false;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = false;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				case 'img':
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = true;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = false;
+				document.mediabrowser.link.disabled = false;
+				document.mediabrowser.caption.disabled = true;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = false;
+				break;
+				case 'mlink':
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = true;
+				document.mediabrowser.alignment.disabled = true;
+				document.mediabrowser.source.disabled = true;
+				document.mediabrowser.link.disabled = true;
+				document.mediabrowser.caption.disabled = false;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				case 'video':
+				document.mediabrowser.autoplay.disabled = false;
+				document.mediabrowser.border.disabled = false;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = true;
+				document.mediabrowser.link.disabled = true;
+				document.mediabrowser.caption.disabled = true;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				case 'audio':
+				document.mediabrowser.autoplay.disabled = false;
+				document.mediabrowser.border.disabled = false;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = true;
+				document.mediabrowser.link.disabled = true;
+				document.mediabrowser.caption.disabled = true;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = false;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				case 'playall':
+				document.mediabrowser.autoplay.disabled = false;
+				document.mediabrowser.border.disabled = true;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = true;
+				document.mediabrowser.link.disabled = true;
+				document.mediabrowser.caption.disabled = true;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break;
+				default:
+				document.mediabrowser.autoplay.disabled = true;
+				document.mediabrowser.border.disabled = false;
+				document.mediabrowser.alignment.disabled = false;
+				document.mediabrowser.source.disabled = false;
+				document.mediabrowser.link.disabled = false;
+				document.mediabrowser.caption.disabled = false;
+				document.mediabrowser.delay.disabled = true;
+				document.mediabrowser.ribbon.disabled = true;
+				document.mediabrowser.showtitle.disabled = true;
+				document.mediabrowser.link_src.disabled = true;
+				break
+			}
+		}
+	}
+</script>
+<form name="mediabrowser" method="post" action="{s_form_action}"><input type="hidden" name="i" value="{instance}"><input type="hidden" name="refresh" value="1">
+	<fieldset>
+		<legend>{lang_current_album}</legend>{jumpbox}
+	</fieldset>
+	<fieldset>
+		<legend>{lang_thumbnails}</legend>{album_body}
+	</fieldset>
+	<fieldset>
+		<legend>{lang_autotag_attr}</legend>
+		<table border="0">
+			<tr>
+				<td><input type="radio" name="autotag" value="album" onChange="dodisabled()" {albumon}>&nbsp;{lang_album}&nbsp;&nbsp;</td>
+				<td><input type="radio" name="autotag" value="slideshow" onChange="dodisabled()" {slideshowon}>&nbsp;{lang_slideshow}&nbsp;&nbsp;</td>
+				<td><input type="radio" name="autotag" value="fslideshow" onChange="dodisabled()" {fslideshowon}>&nbsp;{lang_fslideshow}&nbsp;&nbsp;</td>
+				<td><input type="radio" name="autotag" value="media" onChange="dodisabled()" {mediaon}>&nbsp;{lang_media}&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td><input type="radio" name="autotag" value="mlink" onChange="dodisabled()" {mlinkon}>&nbsp;{lang_mlink}</td>
+				<td><input type="radio" name="autotag" value="img" onChange="dodisabled()" {imgon}>&nbsp;{lang_img}</td>
+				<td><input type="radio" name="autotag" value="video" onChange="dodisabled()" {videoon}>&nbsp;{lang_video}</td>
+				<td><input type="radio" name="autotag" value="audio" onChange="dodisabled()" {audioon}>&nbsp;{lang_audio}</td>
+				<td><input type="radio" name="autotag" value="playall" onChange="dodisabled()" {playallon}>&nbsp;{lang_playall}</td>
+			</tr>
+		</table>
+		<hr noshade>
+		<table style="width:100%;" cellpadding="3" border="0">
+			<tr>
+				<td style="text-align:right;">{lang_width}</td>
+				<td><input type="text" name="width" size="3" maxlength="3" value="{width}">&nbsp;px</td>
+				<td style="text-align:right;">{lang_height}</td>
+				<td><input type="text" name="height" size="3" maxlength="3" value="{height}">&nbsp;px</td>
+				<td style="text-align:right;">{lang_border}</td>
+				<td><select name="border"><option value="0"{border_no}>{lang_no}</option><option value="1"{border_yes}>{lang_yes}</option></select></td>
+				<td style="text-align:right;">{lang_alignment}</td>
+				<td><select name="alignment"><option value="auto"{align_auto}>{lang_auto}</option><option value="none"{align_none}>{lang_none}</option><option value="left"{align_left}>{lang_left}</option><option value="right"{align_right}>{lang_right}</option></select></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">{lang_source}</td>
+				<td><select name="source"><option value="tn"{src_tn}>{lang_thumbnail}</option><option value="disp"{src_disp}>{lang_display}</option><option value="orig"{src_orig}>{lang_original}</option></select></td>
+				<td style="text-align:right;">{lang_link}</td>
+				<td><select name="link"><option value="0"{link_no}>{lang_no}</option><option value="1"{link_yes}>{lang_yes}</option><option value="2"{link_lb}>Lightbox</option></select></td>
+				<td style="text-align:right;">{lang_autoplay}</td>
+				<td><select name="autoplay"><option value="0"{autoplay_no}>{lang_no}</option><option value="1"{autoplay_yes}>{lang_yes}</option></select></td>
+				<td style="text-align:right;">{lang_delay}</td>
+				<td><input type="text" name="delay" size="3" maxlength="3" value="{delay}"></td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">{lang_link_src}</td>
+				<td>
+					<select name="link_src">
+						<option value="disp">{lang_display}</option>
+						<option value="orig">{lang_original}</option>
+						<option value="tn">{lang_thumbnail}</option>
+					</select>
+				</td>
+				<td style="text-align:right;">{lang_ribbon}</td>
+				<td>
+					<select name="ribbon">
+						<option value="0">{lang_no}</option>
+						<option value="1">{lang_yes}</option>
+					</select>
+				</td>
+				<td style="text-align:right;">{lang_showtitle}</td>
+				<td>
+					<select name="showtitle">
+						<option value="0">{lang_none}</option>
+						<option value="top">{lang_top}</option>
+						<option value="bottom">{lang_bottom}</option>
+					</select>
+				</td>
+
+				<td style="text-align:right;">{lang_class}</td>
+				<td>
+					<input type="text" name="classes" maxlength="120">
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">{lang_caption}</td>
+				<td colspan="7">
+					<input type="text" name="caption" size="80" maxlength="120" value="{caption}">
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+{!if bottom_pagination}
+	<fieldset>
+		<legend>{lang_navigation}</legend>{bottom_pagination}
+	</fieldset>
+{!endif}
+	<p>
+		<input type="button" name="button" value="{lang_insert}" onClick="return insertImage(this.form);">
+		<input type="button" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">
+	</p>
+</form>
+{# end {templatelocation} #}

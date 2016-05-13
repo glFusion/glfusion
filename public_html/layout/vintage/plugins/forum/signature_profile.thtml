@@ -1,0 +1,82 @@
+{# begin {templatelocation} #}
+</table>
+<div style="clear:both;"></div>
+<table class="inputTable">
+<tr><td style="text-align:right;">
+<script type="text/javascript">
+//<![CDATA[
+b_help = "{$LANG_GF01[b_help]}";
+i_help = "{$LANG_GF01[i_help]}";
+u_help = "{$LANG_GF01[u_help]}";
+q_help = "{$LANG_GF01[q_help]}";
+c_help = "{$LANG_GF01[c_help]}";
+l_help = "{$LANG_GF01[l_help]}";
+o_help = "{$LANG_GF01[o_help]}";
+p_help = "{$LANG_GF01[p_help]}";
+w_help = "{$LANG_GF01[w_help]}";
+a_help = "{$LANG_GF01[a_help]}";
+s_help = "{$LANG_GF01[s_help]}";
+f_help = "{$LANG_GF01[f_help]}";
+h_help = "{$LANG_GF01[h_help]}";
+t_help = "{$LANG_GF01[t_help]}";
+e_help = "{$LANG_GF01[e_help]}";
+site_url = "{site_url}";
+//]]>
+</script>
+<script type="text/javascript" src="{site_url}/forum/javascript/bbcode-signature.js"></script>
+<b>{$LANG_GF01[signature]}:</b></td><td>
+  <div id="forum" class="sig-edit">
+    <div id="format-buttons">
+      <input class="button2" type="button" title="{$LANG_GF01[b_help]}" onclick="bbstyle(0)" style="font-weight: bold; width: 30px;" value=" B " name="addbbcode0" accesskey="b"/>
+      <input class="button2" type="button" title="{$LANG_GF01[i_help]}" onclick="bbstyle(2)" style="font-style: italic; width: 30px;" value=" i " name="addbbcode2" accesskey="i"/>
+      <input class="button2" type="button" title="{$LANG_GF01[u_help]}" onclick="bbstyle(4)" style="text-decoration: underline; width: 30px;" value=" u " name="addbbcode4" accesskey="u"/>
+      <input class="button2" type="button" title="{$LANG_GF01[q_help]}" onclick="bbstyle(6)" style="width: 50px;" value="Quote" name="addbbcode6" accesskey="q"/>
+      <input class="button2" type="button" title="{$LANG_GF01[c_help]}" onclick="bbstyle(8)" style="width: 40px;" value="Code" name="addbbcode8" accesskey="c"/>
+      <input class="button2" type="button" title="{$LANG_GF01[l_help]}" onclick="bbstyle(10)" style="width: 40px;" value="List" name="addbbcode10" accesskey="l"/>
+      <input class="button2" type="button" title="Ordered list: [list=]text[/list]" onclick="bbstyle(12)" style="width: 40px;" value="List=" name="addbbcode12" accesskey="o"/>
+      <input class="button2" type="button" title="{$LANG_GF01[e_help]}" onclick="bbstyle(-1)" style="width: 40px;" value="[*]" name="addlitsitem" accesskey="t"/>
+      <input class="button2" type="button" title="{$LANG_GF01[p_help]}" onclick="bbstyle(15)" style="width: 40px;" value="Img" name="addbbcode15" accesskey="p"/>
+      <input class="button2" type="button" title="{$LANG_GF01[w_help]}" onclick="bbstyle(17)" style="width: 40px;" value="URL" name="addbbcode17" accesskey="w"/>
+      <div style="padding-top:8px;padding-left:5px;">{$LANG_GF01[FONTSIZE]}:&nbsp;
+        <select title="{$LANG_GF01[FONTSIZE]}:: [size=9]small text[/size]" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" name="addbbcode20">
+          <option value="7">{$LANG_GF01[TINY]}</option>
+          <option value="9">{$LANG_GF01[SMALL]}</option>
+          <option value="12" selected="selected">{$LANG_GF01[NORMAL]}</option>
+          <option value="18">{$LANG_GF01[LARGE]}</option>
+          <option  value="24">{$LANG_GF01[HUGE]}</option>
+        </select>
+        &nbsp;{$LANG_GF01[FONTCOLOR]}:
+        <select title="{LANG_fontcolor}::[color=orange]text[/color]" name="addbbcode18" onchange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]')">
+          <option style="color:black;" value="#">{$LANG_GF01[DEFAULT]}</option>
+          <option style="color:darkred;" value="darkred">{$LANG_GF01[DKRED]}</option>
+          <option style="color:red;" value="red">{$LANG_GF01[RED]}</option>
+          <option style="color:orange;" value="orange">{$LANG_GF01[ORANGE]}</option>
+          <option style="color:brown;" value="brown">{$LANG_GF01[BROWN]}</option>
+          <option style="color:yellow;" value="yellow">{$LANG_GF01[YELLOW]}</option>
+          <option style="color:green;" value="green">{$LANG_GF01[GREEN]}</option>
+          <option style="color:olive;" value="olive">{$LANG_GF01[OLIVE]}</option>
+          <option style="color:cyan;" value="cyan">{$LANG_GF01[CYAN]}</option>
+          <option style="color:blue;" value="blue">{$LANG_GF01[BLUE]}</option>
+          <option style="color:darkblue;" value="darkblue">{$LANG_GF01[DKBLUE]}</option>
+          <option style="color:indigo;" value="indigo">{$LANG_GF01[INDIGO]}</option>
+          <option style="color:violet;" value="violet">{$LANG_GF01[VIOLET]}</option>
+          <option style="color:white;" value="white">{$LANG_GF01[WHITE]}</option>
+          <option style="color:black;" value="black">{$LANG_GF01[BLACK]}</option>
+        </select>
+      </div>
+    </div>
+    <div id="message-box" style="padding-top:10px;">
+      <textarea tabindex="3" id="signature" name="signature" class="inputbox" style="width:100%;font-size: 1em;font-family: 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;" onkeyup="storeCaret(this);" onclick="storeCaret(this);" onselect="storeCaret(this);" cols="76" rows="10">{signature}</textarea>
+    </div>
+  </div>
+  <button type="button" name="preview" onclick="ajax_previewsig();return false;">{$LANG_GF01[PREVIEW]}</button>
+<div style="clear:both;"></div>
+  <div id="preview" style="padding-top:10px;">
+    <fieldset><legend>{$LANG_GF01[signature_preview]}</legend>
+    <div class="signature">
+      <hr />
+      <div id="sigpreview">{preview_signature}</div>
+    </div>
+    </fieldset>
+  </div>
+</td></tr>

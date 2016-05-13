@@ -1,0 +1,15 @@
+{# begin {templatelocation} #}
+{start_block_last10mediaitems}
+<div class="plugin">
+  <table border="0">
+    <tr>
+    <th style="width:125px;">{lang_thumbnail}</th>
+    <th style="width:35%;">{lang_title}</th>
+    <th style="width:30%;">{lang_album}</th>
+    <th style="width:15%;">{lang_upload_date}</th>
+    </tr>
+    {mediaitem_row}
+  </table>
+</div>
+{end_block}
+{# end {templatelocation} #}

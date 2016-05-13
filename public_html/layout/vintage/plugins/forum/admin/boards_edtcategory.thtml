@@ -1,0 +1,53 @@
+{# begin {templatelocation} #}
+{block_start}
+{admin_menu}
+{status_text}
+<form action="{phpself}" method="post">
+  <table width="100%" border="0" cellspacing="1" cellpadding="0" style="margin-top:10px;" class="plugin">
+    <tr>
+      <td class="pluginTitle" style="padding-left:10px;">{title}</td>
+    </tr>
+    <tr>
+      <td class="pluginCellSubTitle" style="padding:0px;">
+        <table width="100%" border="0" cellspacing="1" cellpadding="0">
+          <tr>
+            <td style="width:110px;" class="pluginCellSubTitle">{LANG_NAME}</td>
+            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
+              <input type="text" name="name" value="{catname}" size="70" />
+            </td>
+          </tr>
+          <tr>
+            <td class="pluginCellSubTitle" style="white-space:nowrap;">{LANG_ORDER}&nbsp;</td>
+            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;width:25px;">
+              <input type="text" name="catorder" value="{catorder}" size="5" />
+            </td>
+          </tr>
+          <tr>
+            <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
+            <td class="pluginCellText pluginCellFill">
+              <input type="text" name="dscp" value="{catdscp}" size="70" />
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td class="pluginCellSubTitle aligncenter">
+        <table width="100%" border="0" cellspacing="1" cellpadding="3">
+          <tr>
+            <td>
+              <input type="hidden" name="type" value="category" />
+              <input type="hidden" name="id" value="{id}" />
+              <input type="hidden" name="confirm" value="{confirm}" />
+              <input type="hidden" name="mode" value="{mode}" />
+              <input type="submit" name="submit" value="{LANG_SAVE}" />&nbsp;
+              <input type="submit" name="cancel" value="{LANG_CANCEL}"/>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</form>
+{block_end}
+{# end {templatelocation} #}

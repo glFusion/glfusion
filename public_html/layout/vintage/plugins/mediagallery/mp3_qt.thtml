@@ -1,0 +1,22 @@
+{# begin {templatelocation} #}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={charset}">
+{themeCSS}
+<title>{title}</title>
+</head>
+<body>
+<span style="text-align:center;">{u_pic}</span>
+<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" height="{height}" width="{width}">
+<param name="src" value="{movie}">
+<param name="autoplay" value="{autostart}">
+<param name="controller" value="true">
+<param name="autoref" value="true">
+<param name="kioskmode" value="{enablecontextmenu}">
+<param name="scale" value="aspect">
+<param name="loop" value="{loop}">
+<embed height="{height}" width="{width}" loop="{loop}" src="{movie}" pluginspage="http://www.apple.com/quicktime/download/" type="video/quicktime" controller="true" autoplay="{autostart}" autoref="true" kioskmode="{enablecontextmenu}" scale="aspect"></embed>
+</object>
+</body>
+</html>
+{# end {templatelocation} #}

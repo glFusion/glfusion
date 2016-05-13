@@ -1,0 +1,26 @@
+{# begin {templatelocation} #}
+<div class="forumpost">
+  <div>
+    {menu}
+  </div>
+  <table class="forum-navbar">
+    <tr>
+      <td style="padding-right:5px;">{navmenu}</td>
+	</tr>
+    <tr>
+      <td style="padding-right:5px;">
+        <table style="width:100%;padding:2px;">
+          <tr>
+            <td style="white-space:nowrap;">
+              {search_forum}
+            </td>
+            <td style="width:30%;white-space:nowrap;" class="alignright">
+              {select_forum}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+{# end {templatelocation} #}

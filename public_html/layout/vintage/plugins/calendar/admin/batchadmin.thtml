@@ -1,0 +1,15 @@
+{# begin {templatelocation} #}
+<form style="display:inline" action="{site_admin_url}/plugins/calendar/index.php?batchadmin=x" method="post">
+    <div>
+        <div>
+            <input type="hidden" name="batchadmin" value="x" />
+            <input type="hidden" name="usr_time" value="{usr_time}" />
+            {lang_text_start} <input class="aligncenter" type="text" name="usr_time" value="{usr_time}" size="3" />
+            {lang_text_end}
+        </div>
+        <div style="text-align:right;margin-top:-10px;">
+            <input type="submit" name="submit" value="{lang_updatelist}" />
+        </div>
+    </div>
+</form>
+{# end {templatelocation} #}

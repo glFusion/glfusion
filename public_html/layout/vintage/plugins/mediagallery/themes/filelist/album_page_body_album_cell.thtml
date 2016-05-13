@@ -1,0 +1,8 @@
+{# begin {templatelocation} #}
+  <tr>
+    <td>{media_item_thumbnail}</td>
+    <td>{media_link_start}{album_title}{media_link_end}</td>
+    <td colspan="3">{album_desc}&nbsp;</td>
+    <td>{album_last_update}</td>
+  </tr>
+{# end {templatelocation} #}

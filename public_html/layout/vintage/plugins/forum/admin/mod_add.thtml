@@ -1,0 +1,65 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+    function toggleModeratorMode(mode) {
+        if (mode == 'user') {
+            document.getElementById('lblusers').style.display="";
+            document.getElementById('lblgroup').style.display="none";
+            document.getElementById('selusers').style.display="";
+            document.getElementById('selgroup').style.display="none";
+        } else {
+            document.getElementById('lblusers').style.display="none";
+            document.getElementById('lblgroup').style.display="";
+            document.getElementById('selusers').style.display="none";
+            document.getElementById('selgroup').style.display="";
+        }
+    }
+</script>
+
+<form name="modform" action="{action_url}" method="post">
+<input type="hidden" name="recid" value="" />
+<input type="hidden" name="operation" value="addrecord" />
+<table width="100%" border="0" cellspacing="1" cellpadding="0" class="plugin">
+    <tr>
+        <td colspan="4" class="pluginCellTitle" style="padding:20px 5px 10px 10px;">{LANG_ADDMessage}</td>
+    </tr>
+    <tr style="text-align:left; vertical-align:top;">
+        <td class="pluginCellSubTitle" style="padding:10px 5px 5px 10px;">{LANG_filtertitle}</td>
+        <td class="pluginCellSubTitle" style="padding:10px 5px 5px 10px;">{LANG_forum}</td>
+        <td id="lblusers" class="pluginCellSubTitle" style="padding:10px 5px 5px 10px;display:;">{LANG_user}</td>
+        <td id="lblgroup" class="pluginCellSubTitle" style="padding:10px 5px 5px 10px;display:none;">{LANG_group}</td>
+        <td class="pluginCellSubTitle" style="padding:10px 5px 5px 5px">{LANG_functions}</td>
+    </tr>
+    <tr style="text-align:left; vertical-align:top;">
+        <td width="25%" class="pluginCellText pluginCellFill"style="padding:5px 5px 5px 20px;">
+            <input type="radio" name="modtype" value="user" checked="checked" onclick="toggleModeratorMode('user');" />{LANG_user}<br />
+            <input type="radio" name="modtype" value="group" onclick="toggleModeratorMode('group');" />{LANG_group}</td>
+        <td width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;"><select name="sel_forum[]" style="width:200px;" size="6" multiple="multiple">{sel_forums}</select></td>
+        <td id="selusers" width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;display:;"><select name="sel_user[]" style="width:100px;" size="6" multiple="multiple">{sel_users}</select></td>
+        <td id="selgroup" width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;display:none;"><select name="sel_group" style="width:100px;" >{sel_groups}</select></td>
+
+        <td width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><input type="checkbox" name="chk_delete" value="1" /></td><td>{LANG_DELETE}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="chk_ban" value="1" /></td><td>{LANG_BAN}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="chk_edit" value="1" /></td><td>{LANG_EDIT}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="chk_move" value="1" /></td><td>{LANG_MOVE}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="chk_stick" value="1" /></td><td>{LANG_STICK}</td>
+                </tr>
+             </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" class="pluginCellSubTitle" style="padding:5px;text-align:center;vertical-align:middle;"><input name="submit" type="submit" value="{LANG_addmod}" style="padding:3px;" /></td>
+    </tr>
+</table>
+</form>
+{# end {templatelocation} #}

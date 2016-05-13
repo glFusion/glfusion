@@ -1,0 +1,67 @@
+{# begin {templatelocation} #}
+  <table width="100%" border="0">
+    <tr>
+      <th>{lang_select}</th>
+      <th>{lang_item}</th>
+      <th>{lang_watermarked}</th>
+      <th>{lang_order}</th>
+      <th>{lang_cover}</th>
+      <th>{lang_include_ss}</th>
+      <th style="text-align:left;">{lang_title}/{lang_description}/{lang_keywords}</th>
+    </tr>
+    <tr class="pluginRow1">
+      <td colspan="7" style="text-align:center;">
+        <input type="radio" name="cover" value="-2" />&nbsp;&nbsp;{lang_reset_cover}
+      </td>
+    </tr>
+    <!-- BEGIN ImageRow -->
+    <!-- BEGIN ImageColumn -->
+    <tr class="pluginRow{row_class}">
+      <td style="vertical-align:middle;text-align:center;">
+        <input type="checkbox" name="sel[]" value="{mid}" />
+        <input type="hidden" name="mid[]" value="{mid}" />
+      </td>
+      <td style="vertical-align:middle;text-align:center;">
+        {media_zoom}<img src="{u_thumbnail}" height="{height}" width="{width}" border="1" alt="" /></a>
+        <br /><a href="{media_edit}">{lang_edit}</a>&nbsp;&nbsp;&nbsp;
+      </td>
+      <td style="vertical-align:middle;text-align:center;">
+        {watermarked}
+      </td>
+      <td style="vertical-align:middle;text-align:center;">
+        <input type="text" name="seq[]" value="{order}" size="3" />
+        <input type="hidden" name="oldseq[]" value="{order}" />
+      </td>
+      <td style="vertical-align:middle;text-align:center;">
+        {radio_box}
+      </td>
+      <td style="vertical-align:middle;text-align:center;">
+        {include_ss}
+      </td>
+      <td  style="vertical-align:middle;" >
+        <textarea name="mtitle[]"    cols="40" rows="2">{media_title}</textarea><br />
+        <textarea name="mdesc[]"     cols="40" rows="2">{media_desc}</textarea><br />
+        <textarea name="mkeywords[]" cols="40" rows="2">{media_keywords}</textarea><br />
+        {lang_category}&nbsp;{cat_select}
+      </td>
+   </tr>
+   <!-- END ImageColumn -->
+   <!-- END ImageRow -->
+   <tr>
+     <td colspan="7" style="text-align:left;">
+       <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}" />
+       <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}" />
+     </td>
+   </tr>
+   <tr>
+     <td colspan="7" style="vertical-align:middle;text-align:left;">
+       {lang_albumsel}&nbsp;&nbsp;{albumselect}&nbsp;<input type="submit" name="mode" value="{lang_move}" />
+     </td>
+   </tr>
+   <tr>
+    <td colspan="7" style="vertical-align:middle;text-align:left;">
+     {lang_batch_options}&nbsp;&nbsp;{batchoptionselect}&nbsp;<input type="submit" name="mode" value="{lang_batch}" />
+     </td>
+   </tr>
+ </table>
+{# end {templatelocation} #}

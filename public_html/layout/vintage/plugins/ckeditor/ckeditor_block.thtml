@@ -1,0 +1,25 @@
+<script type="text/javascript" src="{site_url}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" >
+    var site_url = "{site_url}";
+    var be_content;
+
+    function loadEditor(id) {
+        var instance = CKEDITOR.replace( id, {
+                toolbar: 'standard',
+                allowedContent: true,
+                contentsCss: '{css_url}',
+                extraPlugins: 'mediagallery,youtube2',
+                {styleset}
+                height: 300,
+                language: '{iso_lang}'
+         } );
+
+         return instance;
+    }
+    function won (id) {
+        be_content = loadEditor(id);
+    }
+    function woff (id) {
+        be_content.destroy();
+    }
+</script>

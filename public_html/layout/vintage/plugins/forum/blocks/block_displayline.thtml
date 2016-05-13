@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<table style="width:100%;" >
+  <tr>
+    <td style="width:100%;" class="pluginRow{css_id} pluginTinyText alignleft">
+      <img src="{img_dir}/icon_minipost.gif" alt="" /><b><a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;fromblock=yes" title="{fullsubject}">{topic_subject}</a></b><br />&nbsp;<span class="pluginTinyText"><b>{LANG_BY}</b>&nbsp;{profilelink}{user_name}</a></span><br />&nbsp;<span class="pluginTinyText"><b>{LANG_ON}</b>&nbsp;{date}</span><br />&nbsp;<span class="pluginTinyText"><b>{LANG_VIEWS}</b>&nbsp;{views}&nbsp;<b>{LANG_REPLIES}</b>&nbsp;{replies}<br /></span>
+    </td>
+  </tr>
+</table>
+{# end {templatelocation} #}

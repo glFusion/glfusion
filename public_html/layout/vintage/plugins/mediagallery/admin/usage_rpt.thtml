@@ -1,0 +1,35 @@
+{# begin {templatelocation} #}
+<form method="post" action="{s_form_action}">
+<table width="100%" cellpadding="3" cellspacing="1" border="0">
+  <tr>
+	  <td style="height:25px;white-space:nowrap;" colspan="7">{report_date}</td>
+  </tr>
+  <tr>
+	  <td align="center">{lang_time}</td>
+	  <td align="center">{lang_user_id}</td>
+	  <td align="center">{lang_application}</td>
+	  <td align="center">{lang_album_title}</td>
+	  <td align="center">{lang_media_title}</td>
+  </tr>
+  <!-- BEGIN usagerow -->
+  <tr>
+	  <td class="pluginRow{rowclass}" align="center">{usage_time}</td>
+	  <td class="pluginRow{rowclass}">{user_id}</td>
+	  <td class="pluginRow{rowclass}">{application}</td>
+	  <td class="pluginRow{rowclass}">{album_title}</td>
+	  <td class="pluginRow{rowclass}">
+		  {media_title}
+      </td>
+  </tr>
+  <!-- END usagerow -->
+  <tr>
+	  <th colspan="5">&nbsp;</th>
+  </tr>
+  <tr>
+	  <td colspan="5" align="center">
+		<input type="submit" name="return" value="{lang_new_report}" />
+	  </td>
+  </table>
+</form>
+<p>&nbsp;</p>
+{# end {templatelocation} #}

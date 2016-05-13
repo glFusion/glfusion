@@ -1,0 +1,31 @@
+{# begin {templatelocation} #}
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0" style="margin:0px auto;">
+  <tr style="vertical-align:middle;">
+    <td class="pluginCellTitle" style="width:42%;text-align:left;vertical-align:middle;padding-left:5px;padding-top:0px;padding-bottom:0px;padding-right:0px;">
+      <span style="font-weight:bold;">{lang_menulabel}</span>
+      {!if rsslink}
+      &nbsp;{rsslink}
+      {!endif}
+    </td>
+    <td class="pluginCellTitle" style="width:15%;text-align:right;vertical-align:middle;white-space:nowrap;padding-left:0px;padding-top:0px;padding-bottom:0px;padding-right:0px;">
+	  {select_adminbox}
+    </td>
+    <td class="pluginCellTitle" style="text-align:right;vertical-align:middle;white-space:nowrap;padding-left:0px;padding-top:0px;padding-bottom:0px;padding-right:5px;">
+    <form name="mgsearch" method="post" action="{site_url}/search.php">
+      <div>
+      <input type="text" name="keywords" value="{keywords}" />
+      <input type="hidden" name="mode" value="search" />
+      <input type="hidden" name="swhere" value="0" />
+      <input type="submit" value="{lang_search}" />
+      </div>
+     </form>
+    </td>
+  </tr>
+</table>
+
+{gallery_body}
+{gallery_noitems}
+
+
+{# end {templatelocation} #}

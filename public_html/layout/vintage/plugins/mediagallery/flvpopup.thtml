@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={charset}">
+{themeCSS}
+<script type="text/javascript" src="{site_url}/js/swfobject.js"></script>
+<script type="text/javascript">
+		// <![CDATA[
+		function divResize(id, nw, nh) {
+			var obj = document.getElementById(id);
+			obj.style.width = nw + "px";
+			obj.style.height = nh + "px";
+		}
+		function divColor(id,color) {
+		    var obj = document.getElementById(id);
+		    obj.style.backgroundColor = color;
+	    }
+		// ]]>
+</script>
+<title>{title}</title>
+</head>
+<body>
+<div style="text-align:center;">
+{flv_player}
+</div>
+</body>
+</html>
+{# end {templatelocation} #}

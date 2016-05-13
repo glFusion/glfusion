@@ -1,0 +1,54 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+    var allChecked;
+    function checkAll(field)
+    {
+    allChecked=true;
+    for (i = 0; i < field.length; i++)
+        field[i].checked = true ;
+    }
+    function uncheckAll(field)
+    {
+    allChecked=false;
+    for (i = 0; i < field.length; i++)
+        field[i].checked = false ;
+    }
+    function confirmSubmit(text) {
+      var yes = confirm(text);
+      if (yes) return true;
+      else return false;
+    }
+</script>
+<form name="storymigrate" action="{action_url}" method="post">
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:25px; margin-bottom:15px;">
+    <tr>
+        <td width="50%" style="padding-left:10px;">{filter_topic_selection}&nbsp;<input type="submit" value="{LANG_filterlist}" /></td>
+        <td style="text-align:right;"><select name="selforum"><option value="0">{LANG_selectforum}</option>{select_filter_options}</select></td>
+        <td>&nbsp;<input type="submit" name="migrate" value="{LANG_migrate}" /></td>
+        <td class="alignright" style="padding-right:10px;white-space:nowrap;">
+          <input type="checkbox" name="delPostMigrate" value="1" />&nbsp;{LANG_deleteafter}
+        </td>
+    </tr>
+</table>
+<table cellspacing="1" cellpadding="3" class="pluginSolidOutline" border="0" width="100%">
+    <tr style="display:{show_message};">
+        <td class="pluginAlert" colspan="5" style="padding:5px;white-space:nowrap;">{status_message}</td>
+    </tr>
+    <tr>
+        <td width="5%"  class="pluginCellTitle" style="white-space:nowrap;">
+          <input type="checkbox" name="cb_migrateall" value="y" onclick="if(!allChecked) checkAll(document.storymigrate.elements['cb_chkentry[]']); else uncheckAll(document.storymigrate.elements['cb_chkentry[]']);" />&nbsp;{LANG_all}
+        </td>
+        <td width="15%" class="pluginCellTitle aligncenter" style="padding-top:5px;">{LANG_topic}</td>
+        <td width="45%" class="pluginCellTitle" style="padding-top:5px;">{LANG_title}</td>
+        <td width="25%" class="pluginCellTitle" style="padding-top:5px;">{LANG_date}</td>
+        <td width="10%" class="pluginCellTitle" style="padding-top:5px;">{LANG_comments}</td>
+    </tr>
+    {story_record}
+</table>
+<table cellspacing="0" cellpadding="4" border="0" width="100%" style="margin-top:10px;">
+    <tr>
+        <td class="aligncenter">{page_navigation}</td>
+    </tr>
+</table>
+</form>
+{# end {templatelocation} #}

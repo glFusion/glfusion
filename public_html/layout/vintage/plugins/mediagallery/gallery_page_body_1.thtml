@@ -1,0 +1,42 @@
+{# begin {templatelocation} #}
+<table border="0" width="100%" cellspacing="0" cellpadding="0" style="margin:0px auto;">
+<!-- BEGIN AlbumRow -->
+<tr>
+<!-- BEGIN AlbumColumn -->
+  <td style="width:100%;">
+  <div class="mgPluginMI">
+    <table width="100%" border="0" cellspacing="5" cellpadding="0">
+      <tr>
+        <td align="center" style="width:{column_width2};vertical-align:top;">
+        {media_item_thumbnail}
+		</td>
+		{!if lang_subalbums}
+		<td style="width:40%;vertical-align:top;">
+		{!else}
+		<td colspan="2" style="vertical-align:top;">
+		{!endif}
+		  <br />
+          <div style="padding-top:5px;padding-bottom:5px;"><span style="font-weight:bold;">{album_title}</span> ({subalbum_media_count})</div>
+          <div style="padding-bottom:5px;">{album_desc}</div>
+          <div style="padding-bottom:5px;"><span style="font-weight:bold;">{updated_prompt}</span> {album_last_update}</div>
+          <div><span style="font-weight:bold;">{lang_views}</span> {views}</div>
+        </td>
+        {!if lang_subalbums}
+        <td style="text-align:left;vertical-align:top;">
+          <br />
+          <span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}&nbsp;
+          <div class="pluginSmallText">
+            {saulstart}{subalbumlist}{saulend}
+          </div>
+        </td>
+        {!endif}
+      </tr>
+    </table>
+    </div>
+  </td>
+<!-- END AlbumColumn -->
+</tr>
+<!-- END AlbumRow -->
+</table>
+<div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
+{# end {templatelocation} #}

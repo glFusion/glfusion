@@ -1,0 +1,118 @@
+{# begin {templatelocation} #}
+{lang_upload_help}
+<br /><br />
+<div>{lang_upload_size}</div>
+<br />
+<form method="post" enctype="multipart/form-data" name="mediaupload" action="{s_form_action}">
+<div>
+{max_file_size}
+<input type="hidden" name="action" value="{action}" />
+<span style="font-weight:bold;">{lang_destination_album}</span>&nbsp;{album_select}
+<br /><br />
+
+<fieldset style="border: none; border-top: 1px solid #000000"><legend style="font-size:1.2em;font-weight:bold;">{lang_file_number}1</legend>
+	<br />
+<label><span style="font-weight:bold;">{lang_file}</span></label><br />
+  <input type="file" dir="ltr" name="newmedia[]" size="60" />
+  <br /><input type="checkbox" name="dnc[]" /><span style="font-weight:bold;">{lang_do_not_convert_orig}</span>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_attached_tn}</span>&nbsp;&nbsp;</label>
+  <input type="checkbox" name="attachtn[]" />&nbsp;&nbsp;<br />
+  <input type="file" dir="ltr" name="thumbnail[]" size="60" />
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
+  {cat_select}
+  <br /><br />
+</fieldset>
+
+<fieldset style="border: none; border-top: 1px solid #000000"><legend style="font-size:1.2em;font-weight:bold;">{lang_file_number}2</legend>
+	<br />
+<label><span style="font-weight:bold;">{lang_file}</span></label><br />
+  <input type="file" dir="ltr" name="newmedia[]" size="60" />
+  <br /><input type="checkbox" name="dnc[]" value="1" /><span style="font-weight:bold;">{lang_do_not_convert_orig}</span>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_attached_tn}</span>&nbsp;&nbsp;</label>
+  <input type="checkbox" name="attachtn[]" />&nbsp;&nbsp;<br />
+  <input type="file" dir="ltr" name="thumbnail[]" size="60" />
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
+  {cat_select}
+  <br /><br />
+</fieldset>
+
+
+<fieldset style="border: none; border-top: 1px solid #000000"><legend style="font-size:1.2em;font-weight:bold;">{lang_file_number}3</legend>
+	<br />
+<label><span style="font-weight:bold;">{lang_file}</span></label><br />
+  <input type="file" dir="ltr" name="newmedia[]" size="60" />
+  <br /><input type="checkbox" name="dnc[]" value="1" /><span style="font-weight:bold;">{lang_do_not_convert_orig}</span>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_attached_tn}</span>&nbsp;&nbsp;</label>
+  <input type="checkbox" name="attachtn[]" />&nbsp;&nbsp;<br />
+  <input type="file" dir="ltr" name="thumbnail[]" size="60" />
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
+  {cat_select}
+  <br /><br />
+</fieldset>
+
+<fieldset style="border: none; border-top: 1px solid #000000"><legend style="font-size:1.2em;font-weight:bold;">{lang_file_number}4</legend>
+	<br />
+<label><span style="font-weight:bold;">{lang_file}</span></label><br />
+  <input type="file" dir="ltr" name="newmedia[]" size="60" />
+  <br /><input type="checkbox" name="dnc[]" value="1" /><span style="font-weight:bold;">{lang_do_not_convert_orig}</span>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_attached_tn}</span>&nbsp;&nbsp;</label>
+  <input type="checkbox" name="attachtn[]" />&nbsp;&nbsp;<br />
+  <input type="file" dir="ltr" name="thumbnail[]" size="60" />
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br />
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
+  <br /><br />
+<label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
+  {cat_select}
+  <br /><br />
+</fieldset>
+
+<br />
+<div style="text-align:center;">
+  <input type="submit" value="{lang_save}" name="mode" />
+  <input type="submit" value="{lang_cancel}" name="mode" />
+  <input type="hidden" name="{csrf_token}" value="{csrf_token_value}" />
+</div>
+</div>
+</form>
+{# end {templatelocation} #}

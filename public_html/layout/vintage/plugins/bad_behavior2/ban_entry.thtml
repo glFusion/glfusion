@@ -1,0 +1,19 @@
+{# begin {templatelocation} #}
+{!if msg}
+    <div>{msg}</div>
+{!endif}
+<form action="{s_form_action}" method="post">
+    <input type="hidden" name="mode" id="mode" value="{mode}">
+    <p>
+        <label>{lang_enter_ip}</label>
+        <input type="text" name="banips" value="">
+    </p>
+    <p>
+        <label>{lang_reason}</label>
+        <input type="text" size="80" name="ban_reason" value="">
+    </p>
+    <br>
+    <input type="submit" name="submit" id="submit" value="{lang_submit}">
+    <input type="submit" name="cancel" id="cancel" value="{lang_cancel}">
+</form>
+{# end {templatelocation} #}
