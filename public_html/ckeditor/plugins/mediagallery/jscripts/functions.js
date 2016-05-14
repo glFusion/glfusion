@@ -33,6 +33,7 @@ function makeHtmlForInsertion(obj) {
     var ribbon = '';
     var showtitle = '';
     var linksrc = '';
+    var alttext = '';
     var classes = '';
     for (i = 0; i < obj.autotag.length; i++) {
         if (obj.autotag[i].checked) {
@@ -75,6 +76,10 @@ function makeHtmlForInsertion(obj) {
     if (obj.link_src != undefined) {
         linksrc = obj.link_src.value
     }
+    if (obj.alttext != undefined ) {
+        var alttmp = obj.alttext.value;
+        alt = alttmp.replace(/ /g,'_');
+    }
     switch (autotag) {
         case 'album':
             if (aid == '') {
@@ -101,6 +106,9 @@ function makeHtmlForInsertion(obj) {
             }
             if (classes != '' ) {
                 tag += " class:" + classes
+            }
+            if (alt != '' ) {
+                tag += " tag:" + alt
             }
             if (caption != '') {
                 tag += " " + caption
@@ -204,6 +212,9 @@ function makeHtmlForInsertion(obj) {
             if (classes != '' ) {
                 tag += " class:" + classes
             }
+            if (alt != '' ) {
+                tag += " tag:" + alt
+            }
             if (caption != '') {
                 tag += " " + caption
             }
@@ -248,6 +259,9 @@ function makeHtmlForInsertion(obj) {
             if (classes != '' ) {
                 tag += " class:" + classes
             }
+            if (alt != '' ) {
+                tag += " tag:" + alt
+            }
             tag += "]";
             break;
         case 'video':
@@ -286,6 +300,9 @@ function makeHtmlForInsertion(obj) {
             }
             if (classes != '' ) {
                 tag += " class:" + classes
+            }
+            if (alt != '' ) {
+                tag += " tag:" + alt
             }
             if (caption != '') {
                 tag += " " + caption

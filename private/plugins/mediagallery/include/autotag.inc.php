@@ -96,6 +96,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
         $link_src       = 'disp';
         $classes        = '';
         $nosize         = 0;
+        $tag            = '';
 
         if ( $align != '' ) {
             $aSet = 1;
@@ -180,6 +181,10 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $a = explode (':', $part );
                     $nosize = $a[1];
                     $skip++;
+                } elseif ( substr($part,0,4) == 'tag:' ) {
+                    $a = explode (':', $part );
+                    $tag = str_replace('_',' ',$a[1]);
+                    $skip++;
                 } elseif ( substr($part,0,8) == 'linksrc:' ) {
                     $a = explode (':',$part);
                     $link_src = $a[1];
@@ -205,6 +210,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
         } else {
             $caption = trim ($autotag['parm2']);
         }
+
+        if ( $tag == '' ) $tag = $caption;
 
         if ( !is_numeric($autotag['parm1'][0]) ) {
             switch ($autotag['parm1'][0] ) {
@@ -1182,8 +1189,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 } else {
                     $T->set_file (array('tag'      => 'autotag.thtml'));
                 }
-                if ( $caption != '' ) {
-                    $alttag = ' alt="' . $caption . '" title="' . $caption . '"';
+                if ( $tag != '' ) {
+                    $alttag = ' alt="' . $tag . '" title="' . $tag . '"';
                 } else {
                     $alttag = ' alt=""';
                     if ( $_MG_CONF['autotag_caption'] ) {
@@ -1332,8 +1339,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 } else {
                     $T->set_file (array('tag'      => 'autotag.thtml'));
                 }
-                if ( $caption != '' ) {
-                    $alttag = ' alt="' . $caption . '" title="' . $caption . '"';
+                if ( $tag != '' ) {
+                    $alttag = ' alt="' . $tag . '" title="' . $tag . '"';
                 } else {
                     $alttag = ' alt=""';
                 }

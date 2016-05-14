@@ -308,7 +308,8 @@ if ( $refresh != 1 ) {	// initial call
 	    'videoon'				=> $_POST['autotag'] == 'video' ? ' checked=checked' : '',
 	    'audioon'				=> $_POST['autotag'] == 'audio' ? 'checked=checked' : '',
 	    'playallon'             => $_POST['autotag'] == 'playall' ? 'checked=checked' : '',
-	    'caption'				=> $_POST['caption']
+	    'caption'				=> $_POST['caption'],
+	    'alt'                   => $_POST['alt'],
 	));
 }
 
@@ -374,6 +375,7 @@ $T->set_var(array(
     'destination'           => ($_mgMB_CONF['enable_dest'] == 1 ? '<p>' . $LANG_mgMB['destination'] . '&nbsp;&nbsp;<select name="dest"><option value="story">' . $LANG_mgMB['story'] . '</option><option value="block">' . $LANG_mgMB['block'] . '</option></select>' : ''),
     'lang_select_album'     => $LANG_mgMB['select_album'],
     'lang_class'            => $LANG_mgMB['class'],
+    'lang_alt'              => $LANG_mgMB['alt'],
 ));
 
 if ( $total_media == 0 ) {

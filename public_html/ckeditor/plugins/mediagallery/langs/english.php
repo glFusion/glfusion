@@ -75,5 +75,6 @@ $LANG_mgMB = array (
     'playall'           => 'playall',
     'link_src'          => 'Link Src',
     'class'             => 'Class',
+    'alt'               => 'Alternate Text',
 );
 ?>

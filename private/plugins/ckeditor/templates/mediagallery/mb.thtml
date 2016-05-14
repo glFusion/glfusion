@@ -272,6 +272,7 @@
 								<input type="text" name="classes">
 							</td>
 						</tr>
+						<tr><td style="text-align:right;">{lang_alt}</td><td colspan="7"><input type="text" name="alttext" size="80" maxlength="120" value="{alttext}"></td></tr>
 						<tr><td style="text-align:right;">{lang_caption}</td><td colspan="7"><input type="text" name="caption" size="80" maxlength="120" value="{caption}"></td></tr>
 
 					</table>
