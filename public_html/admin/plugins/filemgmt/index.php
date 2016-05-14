@@ -960,7 +960,7 @@ function delNewDownload() {
 
 
 function modCatS() {
-    global $_CONF,$_TABLES,$myts,$eh, $filemgmt_SnapCat;
+    global $_CONF,$_TABLES,$myts,$eh, $filemgmt_SnapCat,$LANG24;
 
     $cid =  $_POST['cid'];
     $sid =  $_POST['pid'];
