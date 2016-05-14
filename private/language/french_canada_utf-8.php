@@ -305,7 +305,9 @@ $LANG03 = array(
     45 => 'Vous recevez cet email car vous avez choisi d`être prévenu lorsqu`un nouveau commentaire a été posté.',
     46 => 'Pour vous désabonner de ce flux de commentaires, s`il vous plaît cliquer sur ce lien: %s',
     47 => 'Avertissez-moi par email lorsque de nouveaux commentaires ou réponses sont publiées pour cet article.',
-    48 => 'Cliquez <a href="javascript:history.back()">ici</a> pour revenir'
+    48 => 'Cliquez <a href="javascript:history.back()">ici</a> pour revenir',
+    49 => 'Comments are closed',
+    50 => 'Login required to comment'
 );
 
 ###############################################################################

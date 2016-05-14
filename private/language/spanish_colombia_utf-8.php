@@ -302,7 +302,9 @@ $LANG03 = array(
     45 => 'Estas recibiendo este e-mail porque elegiste ser notificado cuando un nuevo comentario ha sido publicado.',
     46 => 'Para cancelar la subscripción a este comment feed, has clic en este enlace: %s',
     47 => 'Notifícame vía e-Mail cuando nuevos comentarios o respuestas sean publicadas pare este elemento.',
-    48 => 'Haz clic <a href="javascript:history.back()">aquí</a> para regresar'
+    48 => 'Haz clic <a href="javascript:history.back()">aquí</a> para regresar',
+    49 => 'Comments are closed',
+    50 => 'Login required to comment'
 );
 
 ###############################################################################
