@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Updated PHPMailer to latest upstream version (5.2.15)
   - Fixed blockquote issue with the vintage theme
   - Implemented $_SYSTEM['framework'] variable to identify UI framework (e.g. uikit, legacy, bootstrap, etc.)
   - Removed MooTools based Nouveau theme (available as download at glfusion.org)
