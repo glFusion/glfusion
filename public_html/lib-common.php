@@ -2522,7 +2522,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-    require $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
+    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
 
     $mail = new PHPMailer();
     $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
@@ -2642,7 +2642,7 @@ function COM_emailNotification( $msgData = array() )
     $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-    require $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
+    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
 
     $mail = new PHPMailer();
     $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
