@@ -1466,22 +1466,11 @@ a.tooltip:hover span {
 }
 
 blockquote {
-	background:transparent url(images/quote-l.png) no-repeat scroll left top;
-	color:#666;
-	font-size:1.2em;
-	font-style:italic;
-	line-height:1.5em;
-	padding-left:60px;
-	width:auto;
-	margin:0;
-	min-height:3.0em;
-}
-
-blockquote p {
-	background:transparent url(images/quote-r.png) no-repeat scroll right bottom;
-	padding-right:60px;
-	margin:10px;
-	min-height:3.0em;
+  padding-left: 15px;
+  border-left: 5px solid #ddd;
+  font-size: 1.2em;
+  line-height: 1.5em;
+  font-style: italic;
 }
 
 ul {
