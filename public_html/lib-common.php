@@ -5091,7 +5091,7 @@ function COM_makeClickableLinksCallback($http, $link) {
         $end = '';
     }
 
-    if ($_CONF['linktext_maxlen'] > 0) {
+    if (isset($_CONF['linktext_maxlen']) && $_CONF['linktext_maxlen'] > 0) {
         $text = COM_truncate($link, $_CONF['linktext_maxlen'], '...', 10);
     } else {
         $text = $link;
