@@ -6,22 +6,22 @@
 		<li>{start_storylink_anchortag}<strong>{story_title}</strong>{end_storylink_anchortag}</li>
 		<li>{num_comments} {lang_comments}</li>
 
-{!if subscribe}
+		{!if subscribe}
 		<li><a class="uk-form-small" href="{subscribe_url}">{subscribe_text}</a></li>
-{!endif}
+		{!endif}
 	</ul>
 </div>
 
-{!!if {reply_hidden_or_submit} == 'hidden' !!}
-<div class="uk-alert uk-alert-danger uk-text-center">Login Required to Comment</div>
+{!if comment_option_text}
+<div class="uk-alert uk-alert-danger uk-text-center">{comment_option_text}</div>
 {!endif}
 
 <nav class="uk-clearfix uk-navbar uk-hidden-small uk-margin">
 	<div class="uk-navbar-flip">
 		<div class="uk-navbar-content">
 			<form class="uk-form uk-margin-remove uk-display-inline-block" action="{parent_url}" method="post">
-  {hidden_field}
-  <input type="hidden" name="type" value="{comment_type}">
+				{hidden_field}
+				<input type="hidden" name="type" value="{comment_type}">
 
 {!if order_selector}
 				{order_selector}

@@ -304,6 +304,8 @@ $LANG03 = array(
     46 => 'To unsubscribe to this comment feed, please click this link: %s',
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
+    49 => 'Comments are closed',
+    50 => 'Login required to comment',
 );
 
 ###############################################################################

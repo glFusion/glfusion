@@ -144,7 +144,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
 */
 function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03;
 
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
     $page = array_pop( $parts );
@@ -177,11 +177,18 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $commentbar->unset_var('subscribe');
     }
 
-    if( $ccode == 0 &&
-     ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
+    if ( $ccode == 1 ) {
+        $commentbar->set_var( 'reply_hidden_or_submit', 'hidden');
+        $commentbar->set_var( 'comment_option_text', $LANG03[49]);
+    } elseif ( $ccode == -1 ) {
+        $commentbar->set_var( 'reply_hidden_or_submit', 'hidden');
+        $commentbar->set_var( 'comment_option_text', $LANG03[49]);
+    } elseif ( $ccode == 0 && ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
         $commentbar->set_var( 'reply_hidden_or_submit', 'submit' );
+        $commentbar->unset_var( 'comment_option_text');
     } else {
         $commentbar->set_var( 'reply_hidden_or_submit', 'hidden' );
+        $commentbar->set_var( 'comment_option_text', $LANG03[50] );
     }
     $commentbar->set_var( 'num_comments', COM_numberFormat( $nrows ));
     $commentbar->set_var( 'comment_type', $type );
