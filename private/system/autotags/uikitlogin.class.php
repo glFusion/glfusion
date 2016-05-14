@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014 by the following authors
+ * @copyright   Copyright (C) 2014-2016 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -41,10 +41,15 @@ class autotag_uikitlogin extends BaseAutotag {
             $retval .= '<div class="uk-modal-dialog uk-modal-dialog-medium"><a href="#" class="uk-modal-close uk-close"></a>';
             $retval .= SEC_loginForm($options);
             $retval .= '</div></div>';
+            $retval .= "
+            <script>
+            $('#modalOpen').on({ 'show.uk.modal': function(){ $('#loginname').focus(); }, });
+            </script>
+            ";
         } else {
             $retval .= '<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip uk-margin-right">';
             $retval .= '<li class="uk-parent uk-hidden-small" data-uk-dropdown>';
-            $retval .= '<a href="#">My Account&nbsp;<i class="uk-icon-caret-down"></i></a>';
+            $retval .= '<a href="#">'.$LANG01[47].'&nbsp;<i class="uk-icon-caret-down"></i></a>';
             $retval .= '<div class="uk-dropdown tm-dropdown uk-dropdown-navbar">';
             $retval .= '<ul class="uk-nav uk-nav-navbar tm-nav-navbar">';
             $userMenu = getUserMenu();

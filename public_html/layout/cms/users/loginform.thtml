@@ -16,7 +16,7 @@
 {!endif}
 			<form id="login" action="{form_action}" method="post" class="uk-panel uk-panel-box uk-form">
 				<div class="uk-form-row">
-					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_username}" name="loginname" value="{loginname}">
+					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_username}" id="loginname" name="loginname" value="{loginname}">
 				</div>
 				<div class="uk-form-row">
 					<input class="uk-width-1-1 uk-form-large" type="password" placeholder="{lang_password}" name="passwd">
