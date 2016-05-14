@@ -1601,11 +1601,11 @@ function INST_doPluginInstall()
             }
         }
         // update the site tailor menu to reflect the static pages content
-        if ( is_array($_MB_DEFAULT_DATA) ) {
-            foreach ($_MB_DEFAULT_DATA AS $sql) {
-                DB_query($sql,1);
-            }
-        }
+//        if ( is_array($_MB_DEFAULT_DATA) ) {
+//            foreach ($_MB_DEFAULT_DATA AS $sql) {
+//                DB_query($sql,1);
+//            }
+//        }
         // cycle through the rest of the installed plugins and add their data
         if ( is_array($installedPlugins) ) {
             foreach ($installedPlugins AS $plugin) {
