@@ -107,10 +107,8 @@ class captcha {
                 die();
             }
 
-            if (function_exists('imagettftext') == FALSE && $this->driver == 0) {
-                $errormgr->addError('');
-                $errormgr->displayError();
-                die();
+            if (function_exists('imagettftext') == FALSE && ( $this->driver == 0 || $this->driver == 6) ) {
+                $this->driver = 2;
             }
 
             $this->stringGen();
@@ -201,7 +199,7 @@ class captcha {
                     break;
             }
         }
-    } //StringGen
+    }
 
     function makeCaptcha () {
         global $cString, $_CONF, $_TABLES, $LANG_CP00;
