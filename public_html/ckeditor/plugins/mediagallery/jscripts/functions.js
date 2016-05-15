@@ -34,6 +34,7 @@ function makeHtmlForInsertion(obj) {
     var showtitle = '';
     var linksrc = '';
     var alttext = '';
+    var alt = '';
     var classes = '';
     for (i = 0; i < obj.autotag.length; i++) {
         if (obj.autotag[i].checked) {
