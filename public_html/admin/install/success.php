@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Page that is displayed upon a successful glFusion installation or upgrade|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -47,7 +47,9 @@ require_once( 'language/' . $language . '.php' );
 // enable detailed error reporting
 $_SYSTEM['rootdebug'] = true;
 
-$display  = COM_siteHeader( 'menu', $LANG_SUCCESS[0] );
+$display = '';
+$pageBody = '';
+
 
 $success_msg = $LANG_SUCCESS[1] . 'v' . GVERSION;
 if ( (PATCHLEVEL <> '') && (PATCHLEVEL <> '.pl0') ) {
@@ -55,38 +57,45 @@ if ( (PATCHLEVEL <> '') && (PATCHLEVEL <> '.pl0') ) {
 }
 $success_msg .= $LANG_SUCCESS[2];
 
-$display .= COM_startBlock( $success_msg );
+$pageBody .= COM_startBlock( $success_msg );
 
-$display .= '<p>' . $LANG_SUCCESS[3] . (($type == 'install') ? $LANG_SUCCESS[20] : $LANG_SUCCESS[21]) . $LANG_SUCCESS[4] . '</p>' ;
+$pageBody .= '<p>' . $LANG_SUCCESS[3] . (($type == 'install') ? $LANG_SUCCESS[20] : $LANG_SUCCESS[21]) . $LANG_SUCCESS[4] . '</p>' ;
 
 if ($type == 'install') {
-	$display .= '<p>' . $LANG_SUCCESS[5] . '</p>
+	$pageBody .= '<p>' . $LANG_SUCCESS[5] . '</p>
     <p>' . $LANG_SUCCESS[6] . ' <strong>' . $LANG_SUCCESS[7] . '</strong><br/>
     ' . $LANG_SUCCESS[8] . ' <strong>' . $LANG_SUCCESS[9] . '</strong></p> <br/>';
 }
 
-$display .= '<h2 style="color:red">' . $LANG_SUCCESS[10] . '</h2>
+$pageBody .= '<h2 style="color:red">' . $LANG_SUCCESS[10] . '</h2>
 <p>' . $LANG_SUCCESS[11] . ' <strong>' . (($type == 'upgrade') ? '2' : '3') . '</strong> ' . $LANG_SUCCESS[12] . ':</p>
 <ol>
 <li style="padding-bottom:3px">' . $LANG_SUCCESS[13] . ' <strong>' . $_CONF['path_html'] . 'admin/install</strong>.</li>';
 
 if ($type == 'install') {
-    $display .= "<li style=\"padding-bottom:3px\"><a href=\"{$_CONF['site_url']}/usersettings.php?mode=edit\">" . $LANG_SUCCESS[14] . ' <strong>' . $LANG_SUCCESS[7] . '</strong> ' . $LANG_SUCCESS[15] . '</a></li>';
+    $pageBody .= "<li style=\"padding-bottom:3px\"><a href=\"{$_CONF['site_url']}/usersettings.php?mode=edit\">" . $LANG_SUCCESS[14] . ' <strong>' . $LANG_SUCCESS[7] . '</strong> ' . $LANG_SUCCESS[15] . '</a></li>';
 }
 
-$display .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <strong>' . $_CONF['path'] . 'db-config.php</strong> ' . $LANG_SUCCESS[17] . ' <strong>' . $_CONF['path_html'] . 'siteconfig.php</strong> ' . $LANG_SUCCESS[18] . ' 755.</li>
+$pageBody .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <strong>' . $_CONF['path'] . 'db-config.php</strong> ' . $LANG_SUCCESS[17] . ' <strong>' . $_CONF['path_html'] . 'siteconfig.php</strong> ' . $LANG_SUCCESS[18] . ' 755.</li>
 </ol>';
 
-$display .= '<p><strong>'.$LANG_INSTALL['quick_start'].'</strong></p>';
-$display .= '<p>'.$LANG_INSTALL['quick_start_help'].'</p>';
-
+$pageBody .= '<p><strong>'.$LANG_INSTALL['quick_start'].'</strong></p>';
+$pageBody .= '<p>'.$LANG_INSTALL['quick_start_help'].'</p>';
 
 if ( $type == 'upgrade' ) {
-    $display .= '<br/><p><strong>'.$LANG_INSTALL['version_check'].'</strong></p>';
-    $display .= '<p>'.$LANG_INSTALL['check_for_updates'].'</p>';
-}
 
-$display .= COM_endBlock ();
+    if ( @file_exists($_CONF['path_html'].'admin/install/alert.html') ) {
+        $alertMsg = file_get_contents($_CONF['path_html'].'admin/install/alert.html');
+        if ( $alertMsg != '' ) $pageBody .= '<div class="uk-alert uk-alert-danger">'. $alertMsg  .'</div>';
+    }
+
+    $pageBody .= '<br/><p><strong>'.$LANG_INSTALL['version_check'].'</strong></p>';
+    $pageBody .= '<p>'.$LANG_INSTALL['check_for_updates'].'</p>';
+}
+$pageBody .= COM_endBlock ();
+
+$display  = COM_siteHeader( 'menu', $LANG_SUCCESS[0] );
+$display .= $pageBody;
 $display .= COM_siteFooter ();
 
 echo $display;
