@@ -141,6 +141,13 @@
 				{album_body}
 			</fieldset>
 
+			{!if bottom_pagination}
+			<fieldset>
+				<legend>{lang_navigation}</legend>
+				{bottom_pagination}
+			</fieldset>
+			{!endif}
+
 			<fieldset>
 				<legend>{lang_autotag_attr}</legend>
 
@@ -269,7 +276,7 @@
 							</td>
 							<td class="uk-text-right">{lang_class}</td>
 							<td>
-								<input type="text" name="classes">
+								<input type="text" name="classes" value="{classes}">
 							</td>
 						</tr>
 						<tr><td style="text-align:right;">{lang_alt}</td><td colspan="7"><input type="text" name="alttext" size="80" maxlength="120" value="{alttext}"></td></tr>
@@ -278,12 +285,7 @@
 					</table>
 				</div>
 			</fieldset>
-			{!if bottom_pagination}
-			<fieldset>
-				<legend>{lang_navigation}</legend>
-				{bottom_pagination}
-			</fieldset>
-			{!endif}
+
 			<div class="uk-margin">
 				<button class="uk-button uk-button-primary" name="button" value="{lang_insert}" onClick="return insertImage(this.form);">{lang_insert}</button>
 				<button class="uk-button uk-button-danger" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">{lang_cancel}</button>
