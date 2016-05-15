@@ -86,7 +86,7 @@ if ( $type == 'upgrade' ) {
 
     if ( @file_exists($_CONF['path_html'].'admin/install/alert.html') ) {
         $alertMsg = file_get_contents($_CONF['path_html'].'admin/install/alert.html');
-        if ( $alertMsg != '' ) $pageBody .= '<div class="uk-alert uk-alert-danger">'. $alertMsg  .'</div>';
+        if ( $alertMsg != '' ) $pageBody .= $alertMsg;
     }
 
     $pageBody .= '<br/><p><strong>'.$LANG_INSTALL['version_check'].'</strong></p>';

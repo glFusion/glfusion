@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,7 +32,7 @@ require_once '../../lib-common.php';
 // Only let admin users access this page
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the glFusion Development Code Upgrade Routine.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    COM_errorLog("Someone has tried to access the glFusion Development Code Upgrade Routine without proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG27[12]);
     $display .= $LANG27[12];
@@ -41,7 +41,6 @@ if (!SEC_inGroup('Root')) {
     echo $display;
     exit;
 }
-
 $retval = '';
 
 function glfusion_110() {
@@ -1757,11 +1756,6 @@ foreach ($stdPlugins AS $pi_name) {
 // need to clear the template cache so do it here
 CTL_clearCache();
 
-$retval .= 'Development Code upgrades complete - see error.log for details<br>';
-
-$display = COM_siteHeader();
-$display .= $retval;
-$display .= COM_siteFooter();
-echo $display;
+header('Location: success.php?type=upgrade&language=' . $language);
 exit;
 ?>
