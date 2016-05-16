@@ -114,6 +114,9 @@ if ($total_media > 0) {
     $maxheight          = 0;
     $maxwidth           = 0;
     $T->set_block('page', 'photo_url', 'purl');
+
+    $T->set_block('page', 'images','i');
+
     for ( $i=0; $i<$total_media; $i++ ) {
 
         if ( $full == 1 ) {
@@ -130,6 +133,7 @@ if ($total_media > 0) {
                     if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext) ) {
                         $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
                         $PhotoPath = $_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
+                        $PhotoThumb = $_MG_CONF['mediaobjects_url'] . '/tn/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
                         $imgsize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext);
                         break;
                     }
@@ -156,6 +160,19 @@ if ($total_media > 0) {
             'CAPTION' => 'photo_captions[' . $y . '] = "' . $PhotoCaption . '";',
         ));
         $T->parse('photo_info', 'photo_url', true);
+
+        $T->set_var(array(
+            'image_url' => $PhotoURL,
+            'image_caption' => $PhotoCaption,
+            'image_height' => $imgsize[1],
+            'image_width' => $imgsize[0],
+            'image_counter' => $photoCount,
+            'image_thumb_url' => $PhotoThumb,
+            'image_title' => $PhotoCaption,
+            'image_desc' => '',
+        ));
+        $T->parse('i', 'images', true);
+
         $y++;
         $photoCount++;
     }

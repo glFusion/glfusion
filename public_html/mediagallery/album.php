@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Displays the contents of a MG album                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -248,9 +248,9 @@ if ($MG_albums[$album_id]->albums_first == 1 ) {
     }
 }
 
-if ( $MG_albums[$album_id]->enable_slideshow == 2 && ($_MG_CONF['disable_lightbox'] == true || $_SYSTEM['disable_jquery_slimbox'] == true)) {
-    $MG_albums[$album_id]->enable_slideshow = 1;
-}
+//if ( $MG_albums[$album_id]->enable_slideshow == 2 && ($_MG_CONF['disable_lightbox'] == true || $_SYSTEM['disable_jquery_slimbox'] == true)) {
+//    $MG_albums[$album_id]->enable_slideshow = 1;
+//}
 
 if ( $MG_albums[$album_id]->enable_slideshow == 2 ) {
     $lbSlideShow = '<noscript><div class="pluginAlert">' . $LANG04[150] . '</div></noscript>' . LB;
@@ -667,6 +667,11 @@ if ($nFrame->name != $aFrame->name ) {
 if ( $fCSS != '' ) {
     $outputHandle->addStyle($fCSS);
 }
+
+if ( $MG_albums[$album_id]->enable_slideshow == 2 && ($_MG_CONF['disable_lightbox'] == true || $_SYSTEM['disable_jquery_slimbox'] == true)) {
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/slimbox/slimbox2.min.js');
+}
+
 
 $display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),'');
 

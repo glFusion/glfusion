@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Media objects class and handling routines                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -135,11 +135,25 @@ class Media {
 
         // --- set the default thumbnail
 
+        $data_type = '';
+
         switch( $this->type ) {
             case 0 :    // standard image
+                $data_type = 'image';
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext;
                 if ( !file_exists($_MG_CONF['path_mediaobjects'] . $default_thumbnail) ) {
                     $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
+                }
+                if ( $_MG_CONF['discard_original'] == 1 ) {
+                    $orig = 'disp';
+                } else {
+                    $orig = 'orig';
+                }
+                $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
+                    $url_orig = $_MG_CONF['site_url'].'/mediaobjects/'.$default_orig_file;
+                } else {
+                    $url_orig = '';
                 }
                 break;
             case 1 :    // video file
@@ -160,7 +174,6 @@ class Media {
                         } else {
                             $default_thumbnail = 'placeholder_flash.svg';
                         }
-//                        $default_thumbnail = 'placeholder_flash.svg';
                         break;
                     case 'video/mpeg' :
                     case 'video/x-mpeg' :
@@ -170,11 +183,18 @@ class Media {
                         } else {
                             $default_thumbnail = 'placeholder_video.svg';
                         }
+                        $orig = 'orig';
+                        $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
+                            $url_orig = $_MG_CONF['site_url'].'/mediaobject/'.$default_orig_file;
+                        } else {
+                            $url_orig = '';
+                        }
+                        $data_type='html5video';
 
-//        				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-//            				$default_thumbnail = 'placeholder_video.svg';
-//            				break;
-//            			}
+                        break;
+
+
                     case 'video/x-motion-jpeg' :
                     case 'video/quicktime' :
                     case 'video/x-qtc' :
@@ -185,8 +205,6 @@ class Media {
                         } else {
                             $default_thumbnail = 'placeholder_video.svg';
                         }
-
-//                        $default_thumbnail = 'placeholder_quicktime.svg';
                         break;
                     case 'asf' :
                     case 'video/x-ms-asf' :
@@ -206,8 +224,6 @@ class Media {
                         } else {
                             $default_thumbnail = 'placeholder_video.svg';
                         }
-
-//                        $default_thumbnail = 'placeholder_video.svg';
                         break;
                     default :
                         if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
@@ -215,7 +231,14 @@ class Media {
                         } else {
                             $default_thumbnail = 'placeholder_video.svg';
                         }
-//                        $default_thumbnail = 'placeholder_video.svg';
+                        $orig = 'orig';
+                        $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
+                            $url_orig = $_MG_CONF['site_url'].'/mediaobject/'.$default_orig_file;
+                        } else {
+                            $url_orig = '';
+                        }
+                        $data_type='html5video';
                         break;
                 }
                 break;
@@ -234,7 +257,6 @@ class Media {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-//                        $default_thumbnail = 'zip.png';
                         $default_thumbnail = 'placeholder_zip.svg';
                         break;
                     case 'pdf' :
@@ -270,10 +292,12 @@ class Media {
                 case 'embed' :
 					if (preg_match("/youtube/i", $this->remote_url)) {
 						$default_thumbnail = 'youtube.png';
+						$data_type = 'youtube';
 					} else if (preg_match("/google/i", $this->remote_url)) {
 						$default_thumbnail = 'googlevideo.png';
 					} else if (preg_match("/vimeo/i", $this->remote_url)) {
 					    $default_thumbnail = 'placeholder_viemo.svg';
+					    $data_type = 'vimeo';
 					} else {
 						$default_thumbnail = 'remote.png';
 					}
@@ -282,6 +306,8 @@ class Media {
                     } else {
                         $default_thumbnail = 'placeholder_video.svg';
                     }
+
+                    $url_orig = $this->remote_url;
 					break;
 
         }
@@ -662,8 +688,14 @@ class Media {
             'media_id'          => $this->id,
             'raw_media_thumbnail'   =>  $media_thumbnail,
             'display_url'       => $url_media_item,
-
+            'orig_url'          => $url_orig,
         ));
+
+        if ( $data_type != '' ) {
+            $T->set_var('data_type',$data_type);
+        } else {
+            $T->unset_var('data_type');
+        }
 
         // frame template variables
         $F->set_var(array(
@@ -853,7 +885,6 @@ class Media {
                 } else {
                     $default_thumbnail = 'placeholder_video.svg';
                 }
-//	            $default_thumbnail = 'remote.png';
 	            break;
 
         }
@@ -969,7 +1000,6 @@ class Media {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-//                        $default_thumbnail = 'zip.png';
                         $default_thumbnail = 'placeholder_zip.svg';
                         break;
                     case 'application/pdf' :
