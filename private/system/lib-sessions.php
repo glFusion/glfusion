@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion session library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -522,7 +522,7 @@ function SESS_completeLogin($uid)
     $userdata = SESS_getUserDataFromId($uid);
     $_USER = $userdata;
     // save old session data
-    $savedSessionData = $_SESSION;
+    $savedSessionData = json_encode($_SESSION);
 
     // create the session
     $sessid = SESS_newSession($_USER['uid'], $request_ip, $_CONF['session_cookie_timeout']);
@@ -536,7 +536,7 @@ function SESS_completeLogin($uid)
     session_id($sessid);
     session_start();
 
-    $_SESSION = $savedSessionData;
+    $_SESSION = json_decode($savedSessionData, true);
 
     // initialize session counter
     SESS_setVar('session.counter',1);

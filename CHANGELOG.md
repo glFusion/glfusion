@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Fixed a reauth error where session data was not properly restored
+  - Implemented an Alert feature when upgrading to communicate key upgrade tasks or actions
+  - Implemented UniteGallery into Media Gallery - provides an incredibly flexible method to display media items
+  - Fixed Lightbox slideshow (Media Gallery) on newer UIKIT based themes
   - Updated PHPMailer to latest upstream version (5.2.15)
   - Fixed blockquote issue with the vintage theme
   - Implemented $_SYSTEM['framework'] variable to identify UI framework (e.g. uikit, legacy, bootstrap, etc.)
@@ -17,7 +21,7 @@ v1.6.0 (Unreleased)
   - Updated Media Element to v2.21.2
   - Implemented About Author feature in full story display (required Contribution Line set to TRUE in config and user must have 'about' section of their user profile populated).
   - Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
-  - Pass PHP version in version check (if send stats enabled)
+  - Send PHP version in when checking for upgrades (if send stats enabled)
   - Added preview option to pages editor
   - Improved installation error reporting
   - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
