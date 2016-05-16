@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<a href="{u_viewalbum}">
+		<img alt="{media_title}"
+		     src="{media_item_thumbnail_raw}"
+				data-image="{media_item_thumbnail_raw}"
+	     data-description="{image_desc}"
+	     style="display:none">
+</a>
+{# end {templatelocation} #}

@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+{!!if {data_type} == 'image' !!}
+		<img alt="{media_title}"
+		     src="{raw_media_thumbnail}"
+				data-image="{orig_url}"
+	     data-description="{image_desc}"
+	     style="display:none">
+{!endif}
+{# end {templatelocation} #}
