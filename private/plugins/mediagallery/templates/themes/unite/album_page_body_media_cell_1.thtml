@@ -1,9 +1,29 @@
 {# begin {templatelocation} #}
-{!!if {data_type} == 'image' !!}
+{!!if {data_type} != 'image' !!}
+	<img alt="{media_title}"
+				 data-type="{data_type}"
+				 src="{raw_media_thumbnail}"
+				 data-image="{raw_media_thumbnail}"
+{!!if {data_type} == 'html5video' !!}
+				 data-videomp4="{orig_url}"
+{!else}
+				 data-videoid="{videoid}"
+{!endif}
+				 data-description="{image_desc}">
+{!else}
 		<img alt="{media_title}"
 		     src="{raw_media_thumbnail}"
+{!if videoid}
+{!else}
 				data-image="{orig_url}"
+{!endif}
 	     data-description="{image_desc}"
+{!if videoid}
+			data-videoid="{videoid}"
+{!endif}
+{!!if {data_type} != 'image' !!}
+			data-type="{data_type}"
+{!endif}
 	     style="display:none">
 {!endif}
 {# end {templatelocation} #}

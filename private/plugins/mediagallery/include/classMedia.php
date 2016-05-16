@@ -136,6 +136,7 @@ class Media {
         // --- set the default thumbnail
 
         $data_type = '';
+        $videoid   = '';
 
         switch( $this->type ) {
             case 0 :    // standard image
@@ -186,7 +187,7 @@ class Media {
                         $orig = 'orig';
                         $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
                         if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
-                            $url_orig = $_MG_CONF['site_url'].'/mediaobject/'.$default_orig_file;
+                            $url_orig = $_MG_CONF['site_url'].'/mediaobjects/'.$default_orig_file;
                         } else {
                             $url_orig = '';
                         }
@@ -234,7 +235,7 @@ class Media {
                         $orig = 'orig';
                         $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
                         if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
-                            $url_orig = $_MG_CONF['site_url'].'/mediaobject/'.$default_orig_file;
+                            $url_orig = $_MG_CONF['site_url'].'/mediaobjects/'.$default_orig_file;
                         } else {
                             $url_orig = '';
                         }
@@ -290,14 +291,17 @@ class Media {
                 break;
             case 5 :
                 case 'embed' :
+                require_once $_CONF['path'].'plugins/mediagallery/include/lib-remotemedia.php';
 					if (preg_match("/youtube/i", $this->remote_url)) {
 						$default_thumbnail = 'youtube.png';
 						$data_type = 'youtube';
+						$videoid = getYoutubeId($this->remote_url);
 					} else if (preg_match("/google/i", $this->remote_url)) {
 						$default_thumbnail = 'googlevideo.png';
 					} else if (preg_match("/vimeo/i", $this->remote_url)) {
 					    $default_thumbnail = 'placeholder_viemo.svg';
 					    $data_type = 'vimeo';
+					    $videoid = getVimeoId($this->remote_url);
 					} else {
 						$default_thumbnail = 'remote.png';
 					}
@@ -695,6 +699,12 @@ class Media {
             $T->set_var('data_type',$data_type);
         } else {
             $T->unset_var('data_type');
+        }
+
+        if ( $videoid != '' ) {
+            $T->set_var('videoid',$videoid);
+        } else {
+            $T->unset_var('videoid');
         }
 
         // frame template variables
