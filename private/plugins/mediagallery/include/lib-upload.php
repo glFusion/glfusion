@@ -360,6 +360,9 @@ function MG_processDir ($dir, $album_id, $purgefiles, $recurse ) {
                 case "avi":
                     $filetype="video/x-msvideo";
                     break;
+                case 'webm' :
+                    $filetype="video/webm";
+                    break;
                 default:
                     $filetype="application/force-download";
             }
@@ -917,6 +920,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'application/x-shockwave-flash' :
         case 'video/mp4' :
         case 'video/x-m4v' :
+        case 'video/webm' :
             $mimeType = $mimeInfo['mime_type'];
 
             if ($filetype == 'video/mp4' ) {

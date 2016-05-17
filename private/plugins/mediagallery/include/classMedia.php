@@ -179,6 +179,7 @@ class Media {
                     case 'video/mpeg' :
                     case 'video/x-mpeg' :
                     case 'video/x-mpeq2a' :
+                    case 'video/webm' :
                         if ( $MG_albums[$this->album_id]->tnWidth > $MG_albums[$this->album_id]->tnHeight ) {
                             $default_thumbnail = 'placeholder_video_w.svg';
                         } else {
