@@ -984,6 +984,10 @@ $LANG24 = array(
     92 => 'Enter the story information below and save.',
     93 => 'Display',
     94 => 'Published',
+    95 => 'Story Image',
+    96 => 'Set Image',
+    97 => 'Remove Image',
+    98 => 'Sub Title',
 );
 
 ###############################################################################

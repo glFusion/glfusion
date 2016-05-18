@@ -84,22 +84,22 @@
 
 					<div id="textbox">
 						<span class="uk-text-large">{lang_introtext}</span>
-{!if wysiwyg}
+						{!if wysiwyg}
 						<div class="uk-margin-small">
 							<button id="visual1" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 							<button id="std1" type="button" class="uk-button" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success')">{html_editor}</button>
 						</div>
-{!endif}
+						{!endif}
 						<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{story_introtext}</textarea>
 					</div>
 
 					<span class="uk-text-large">{lang_bodytext}</span>
-{!if wysiwyg}
+					{!if wysiwyg}
 					<div class="uk-margin-small">
 						<button id="visual2" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 						<button id="std2" type="button" class="uk-button" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success')">{html_editor}</button>
 					</div>
-{!endif}
+					{!endif}
 					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="40" style="width:100%;">{story_bodytext}</textarea>
 				</div>
 			</li>
@@ -109,6 +109,13 @@
 				<div id="se_publish">
 					<fieldset>
 						<legend>{lang_publishoptions}</legend>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="topic">{$LANG24[98]}</label>
+							<div class="uk-form-controls">
+								<input class="uk-width-1-1" id="subtitle" type="text" name="subtitle" value="{story_subtitle}">
+							</div>
+						</div>
 
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="topic">{lang_topic}</label>
@@ -262,11 +269,32 @@
 			{# image panel #}
 			<li>
 				<div id="se_images">
-					<fieldset>
-						<legend>{lang_images}</legend>
-						{saved_images}
-						{image_form_elements}
-					</fieldset>
+
+					<div class="uk-grid">
+						<div class="uk-width-medium-1-2">
+							<fieldset>
+								<legend>{lang_images}</legend>
+								{saved_images}
+								{image_form_elements}
+							</fieldset>
+						</div>
+						<div class="uk-width-medium-1-2">
+							<fieldset>
+								<legend>{$LANG24[95]}</legend>
+							</fieldset>
+							<a href="javascript:openStoryImage()">
+								<img class="uk-thumbnail" src="{story_image_url}" id="story_image_img">
+							</a>
+							<div class="uk-clearfix"></div>
+							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryImage();return false;" value="{$LANG24[96]}">{$LANG24[96]}</button>
+							<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryImage();return false;" value="{$LANG24[97]}">{$LANG24[97]}</button>
+							<input type="hidden" value="{story_image_url}" id="story_image" name="story_image">
+							<div id="storyImage" style="display: none;">
+								<iframe src="{site_url}/ckeditor/plugins/fileman/index.html?integration=custom&type=files&txtFieldId=story_image" style="width:100%;height:100%" frameborder="0">
+								</iframe>
+							</div>
+						</div>
+					</div>
 				</div>
 			</li>
 
@@ -400,9 +428,9 @@
 			<button class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
 			<button class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
 			<button class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
-			{!if delete_option}
+{!if delete_option}
 			<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>
-			{!endif}
+{!endif}
 			{submission_option}
 		</div>
 	</form>
@@ -427,6 +455,18 @@
 		document.frmstory.cmt_close_hour.disabled=true;
 		document.frmstory.cmt_close_minute.disabled=true;
 		document.frmstory.cmt_close_ampm.disabled=true;
+	}
+</script>
+<script>
+	function openStoryImage(){
+		$('#storyImage').dialog({modal:true, width:875,height:600});
+	}
+	function closeStoryImage(){
+		$('#storyImage').dialog('close');
+	}
+	function removeStoryImage() {
+		$(document).find('#story_image_img').attr('src', '');
+		$(document).find('#story_image').attr('value', '');
 	}
 </script>
 <script>

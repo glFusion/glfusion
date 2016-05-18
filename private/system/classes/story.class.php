@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Story Abstraction.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -149,6 +149,8 @@ class Story
     var $_topic;
     var $_alternate_topic;
     var $_imageurl;
+    var $_subtitle;
+    var $_story_image = '';
 
     /**
      * The original SID of the article, cached incase it's changed:
@@ -184,8 +186,10 @@ class Story
            'draft_flag' => 1,
            'tid' => 1,
            'alternate_tid' => 1,
+           'story_image' => 1,
            'date' => 1,
            'title' => 1,
+           'subtitle' => 1,
            'introtext' => 1,
            'bodytext' => 1,
            'hits' => 1,
@@ -354,7 +358,7 @@ class Story
               (
                 STORY_AL_NUMERIC,
                 '_trackbacks'
-              )
+              ),
          );
 
     //End Private
@@ -502,6 +506,7 @@ class Story
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_title = '';
+            $this->_subtitle = '';
             $this->_introtext = '';
             $this->_bodytext = '';
 
@@ -762,6 +767,7 @@ class Story
         $sql = 'REPLACE INTO ' . $_TABLES['stories'] . ' (';
         $values = ' VALUES (';
         $fields = '';
+
         reset($this->_dbFields);
 
         /* This uses the database field array to generate a SQL Statement. This
@@ -879,6 +885,7 @@ class Story
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
+
         $alternate_topic = '';
         if ( $this->_alternate_tid != NULL ) {
             $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid).'"');
@@ -888,12 +895,15 @@ class Story
          /* Then load the title, intro and body */
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
-
+            $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
+            $this->_story_image = htmlspecialchars($array['story_image']);
             if ($this->_postmode == 'adveditor') {
                 $this->_postmode = 'html';
             }
         } else {
             $this->_plainTextLoadStory($array['title'], $array['introtext'], $array['bodytext']);
+            $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
+            $this->_story_image = htmlspecialchars($array['story_image']);
         }
 
         if (empty($this->_title) || empty($this->_introtext)) {
@@ -1014,6 +1024,14 @@ class Story
             $this->_alternate_tid = '';
         }
 
+        if ( isset($array['subtitle'] ) ) {
+            $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
+        }
+
+        if ( isset($array['story_image'] ) ) {
+           $this->_story_image = htmlspecialchars($array['story_image']);
+        }
+
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
         }
@@ -1062,11 +1080,11 @@ class Story
         }
 
         $T = DB_fetchArray($result);
-
         if (($_CONF['storysubmission'] == 1) && !SEC_hasRights('story.submit')) {
             $this->_sid = DB_escapeString($this->_sid);
             $this->_tid = $tmptid;
             $this->_title = DB_escapeString($this->_title);
+//            $this->_subtitle = DB_escapeString($this->_subtitle);
             $this->_introtext = DB_escapeString($this->_introtext);
             $this->_bodytext = DB_escapeString($this->_bodytext);
             $this->_postmode = DB_escapeString($this->_postmode);
@@ -1283,7 +1301,6 @@ class Story
             $right_old = $lLinkPrefix . '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>'
                     . $lLinkSuffix;
 
-
             $text = str_replace($norm, $imageX, $text);
             $text = str_replace($left, $imageX_left, $text);
             $text = str_replace($left_old, $imageX_left, $text);
@@ -1461,7 +1478,12 @@ class Story
             case 'title':
                 $return = $this->_title;
                 break;
-
+            case 'subtitle' :
+                $return = $this->_subtitle;
+                break;
+            case 'story_image' :
+                $return = $this->_story_image;
+                break;
             case 'draft_flag':
                 if (isset($this->_draft_flag) && ($this->_draft_flag == 1)) {
                     $return = true;
@@ -1545,7 +1567,6 @@ class Story
 
             case 'title':
                 $return = $this->_displayEscape($this->_title);
-
                 break;
 
             case 'shortdate':
@@ -1581,6 +1602,14 @@ class Story
                 break;
             case 'alternate_topic':
                 $return = $filter->htmlspecialchars($this->_alternate_topic);
+                break;
+
+            case 'story_image' :
+                $return = $filter->htmlspecialchars($this->_story_image);
+                break;
+
+            case 'subtitle' :
+                $return = $this->_displayEscape($this->_subtitle);
                 break;
             case 'expire':
                 $return = $dtExpire->toUnix();
@@ -1934,7 +1963,6 @@ class Story
         } else {
             $this->_comment_expire = 0;
         }
-
 
         /* Then grab the permissions */
         if ( !isset($array['perm_anon']) ) {

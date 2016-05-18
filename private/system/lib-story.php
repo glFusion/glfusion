@@ -200,6 +200,14 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var('story_topic_name', $topicname);
         $article->set_var('story_alternate_topic_name',$alttopic);
 
+        $article->set_var('story_subtitle',$story->DisplayElements('subtitle'));
+
+        $story_image = $story->DisplayElements('story_image');
+        if ( $story_image != '' ) {
+            $story_image = $_CONF['site_url'].$story_image;
+        }
+        $article->set_var('story_image',$story_image);
+
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
         $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');
         if(( !isset( $_USER['noicons'] ) OR ( $_USER['noicons'] != 1 )) AND
@@ -1205,8 +1213,8 @@ function service_submit_story($args, &$output, &$svc_msg)
         $args['group_id'] = SEC_getFeatureGroup('story.edit', $_USER['uid']);
     }
 
-    if ( isset($args['alternate_id']) && $args['tid'] == $args['alternate_id']) {
-        $args['alternate_id'] = NULL;
+    if ( isset($args['alternate_tid']) && $args['tid'] == $args['alternate_tid']) {
+        $args['alternate_tid'] = NULL;
     }
 
     if (empty($args['postmode'])) {

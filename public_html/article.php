@@ -198,6 +198,7 @@ if ($A['count'] > 0) {
     } else {
         // Set page title
         $pagetitle = $story->DisplayElements('title');
+        $story_image = $story->DisplayElements('story_image');
 
         $outputHandle = outputHandler::getInstance();
 
@@ -240,10 +241,14 @@ if ($A['count'] > 0) {
         $outputHandle->addMeta('property','og:title',$pagetitle);
         $outputHandle->addMeta('property','og:type','article');
         $outputHandle->addMeta('property','og:url',$permalink);
-        if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
-        } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('bodytext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+        if ( $story_image != '' ) {
+            $outputHandle->addMeta('properly','og:image',$_CONF['site_url'].$story_image);
+        } else {
+            if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
+                $outputHandle->addMeta('property','og:image',$arrResult[2]);
+            } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('bodytext'), $arrResult)) {
+                $outputHandle->addMeta('property','og:image',$arrResult[2]);
+            }
         }
         $outputHandle->addMeta('property','og:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
 
@@ -269,6 +274,7 @@ if ($A['count'] > 0) {
         $story_template->set_var('site_admin_url', $_CONF['site_admin_url']);
         $story_template->set_var('story_id', $story->getSid());
         $story_template->set_var('story_title', $pagetitle);
+
         $story_options = array ();
         if (($_CONF['hideemailicon'] == 0) && (!COM_isAnonUser() ||
                 (($_CONF['loginrequired'] == 0) &&

@@ -680,6 +680,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_title', $LANG_ADMIN['title']);
 
     $story_templates->set_var('story_title', $story->EditElements('title'));
+    $story_templates->set_var('story_subtitle',$story->EditElements('subtitle'));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
     $story_templates->set_var('lang_alt_topic', $LANG_ADMIN['alt_topic']);
 
@@ -691,6 +692,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     } else {
         $story_templates->set_var('show_topic_icon_checked', '');
     }
+    $story_templates->set_var('story_image_url',$story->EditElements('story_image'));
+
     $story_templates->set_var('lang_draft', $LANG24[34]);
     if ($story->EditElements('draft_flag')) {
         $story_templates->set_var('is_checked', 'checked="checked"');
