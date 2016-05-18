@@ -137,6 +137,7 @@ class Media {
 
         $data_type = '';
         $videoid   = '';
+        $url_orig  = '';
 
         switch( $this->type ) {
             case 0 :    // standard image
