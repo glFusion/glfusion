@@ -15,5 +15,7 @@
 	</li>
 <!-- END datarow -->
 </ul>
+{!if next}
 <a href="{next_link}" class="infinite-more-link" style="display:none;">#</a>
+{!endif}
 {# end {templatelocation} #}
