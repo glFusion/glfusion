@@ -1758,6 +1758,6 @@ foreach ($stdPlugins AS $pi_name) {
 // need to clear the template cache so do it here
 CTL_clearCache();
 
-header('Location: success.php?type=upgrade&language=' . $language);
+header('Location: success.php?type=upgrade');
 exit;
 ?>
