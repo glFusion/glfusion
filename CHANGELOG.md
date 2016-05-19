@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Added infinite scroll to home page (required new template file, index.thtml)
   - Added story sub title ({story_subtitle}) and story image ({story_image}) to stories / articles
   - Fixed a reauth error where session data was not properly restored
   - Implemented an Alert feature when upgrading to communicate key upgrade tasks or actions
