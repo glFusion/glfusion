@@ -1189,7 +1189,7 @@ function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
         // They can't set the group then
         $groupdd .= DB_getItem ($_TABLES['groups'], 'grp_name',
                                 "grp_id = '".DB_escapeString($group_id)."'")
-                 . '<input type="hidden" name="group_id" value="' . $group_id
+                 . '<input type="hidden" name="' . $var_name . '" value="' . $group_id
                  . '"/>';
     }
 
