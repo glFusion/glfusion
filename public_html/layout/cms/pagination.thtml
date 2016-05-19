@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <ul class="uk-pagination">
 <!-- BEGIN datarow -->
 {!if active}
@@ -14,3 +15,5 @@
 	</li>
 <!-- END datarow -->
 </ul>
+<a href="{next_link}" class="infinite-more-link" style="display:none;">#</a>
+{# end {templatelocation} #}

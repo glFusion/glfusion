@@ -1,0 +1,35 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/waypoint/jquery.waypoints.min.js"></script>
+<script src="{site_url}/javascript/addons/waypoint/infinite.min.js"></script>
+
+<div class="infinite-container">
+{page_contents}
+</div>
+
+<div id="pagination" class="uk-text-center"})>
+{pagination}
+</div>
+
+
+<script>
+$(document).ready(function() {
+	var counter = 1;
+	var infinite = new Waypoint.Infinite({
+  	element: $('.infinite-container')[0],
+
+ 	  onAfterPageLoad: function() {
+ 	  	counter++;
+ 	  },
+ 	  onBeforePageLoad: function() {
+ 	  	if (counter > 3 ) {
+ 	  		counter++;
+ 	  		$('#pagination').html('<a class="uk-button uk-button-primary uk-width-1-1" href="{site_url}/index.php?page=' + counter +'">Load more stories</a>');
+ 	  		$('#pagination').show();
+ 	  		waypoint.disable();
+ 	  	}
+ 	  },
+ 	});
+	$('#pagination').hide();
+});
+</script>
+{# end {templatelocation} #}

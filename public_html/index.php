@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion homepage.                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -66,6 +66,11 @@ if (isset ($_GET['page'])) {
 
 $display = '';
 $pageBody = '';
+
+// get template
+$T = new Template($_CONF['path_layout']);
+$T->set_file('page','index.thtml');
+
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
@@ -307,7 +312,8 @@ if ( $A = DB_fetchArray( $result ) ) {
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
         }
-        $pageBody .= '<div class="aligncenter">'.COM_printPageNavigation ($base_url, $page, $num_pages).'</div>';
+        $pagination = COM_printPageNavigation ($base_url, $page, $num_pages);
+        $T->set_var('pagination',$pagination);
     }
 } else { // no stories to display
     $cbDisplay = '';
@@ -331,8 +337,11 @@ if ( $A = DB_fetchArray( $result ) ) {
     $pageBody .= $cbDisplay;
 }
 
+$T->set_var('page_contents',$pageBody);
+$T->parse( 'output', 'page' );
+
 $display = COM_siteHeader();
-$display .= $pageBody;
+$display .= $T->finish( $T->get_var('output'));
 $display .= COM_siteFooter (true); // The true value enables right hand blocks.
 
 // Output page

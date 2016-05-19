@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<div class="infinite-item">
 <article class="uk-article tm-article uk-margin-large-bottom">
 	<header>
 		<h2 class="uk-article-title tm-article-title">{story_title_link}</h2>
@@ -91,4 +92,5 @@
 {!endif}
 	</div>
 </article>
+</div>
 {# end {templatelocation} #}
