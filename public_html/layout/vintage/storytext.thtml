@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<div class="infinite-item">
 <div class="story">
     <span class="story-icons">
         {plugin_icon_vars}
@@ -46,4 +47,5 @@
     </div>
 </div>
 <div class="block-divider"> </div>
+</div>
 {# end {templatelocation} #}

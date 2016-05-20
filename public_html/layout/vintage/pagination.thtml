@@ -20,7 +20,7 @@
 {!endif}
 <!-- END datarow -->
 {!if next}
-&nbsp;|&nbsp;<a href="{next_link}">{$LANG05[5]}</a>&nbsp;|&nbsp;
+&nbsp;|&nbsp;<a class="infinite-more-link" href="{next_link}">{$LANG05[5]}</a>&nbsp;|&nbsp;
 {!else}
 &nbsp;|&nbsp;{$LANG05[5]}&nbsp;|&nbsp;
 {!endif}
