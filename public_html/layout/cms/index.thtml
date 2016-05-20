@@ -1,6 +1,8 @@
 {# begin {templatelocation} #}
+{!if enable_infinite_scroll}
 <script src="{site_url}/javascript/addons/waypoint/jquery.waypoints.min.js"></script>
 <script src="{site_url}/javascript/addons/waypoint/infinite.min.js"></script>
+{!endif}
 
 <div class="infinite-container">
 {page_contents}
@@ -10,7 +12,7 @@
 {pagination}
 </div>
 
-
+{!if enable_infinite_scroll}
 <script>
 $(document).ready(function() {
 	var counter = 1;
@@ -32,4 +34,5 @@ $(document).ready(function() {
 	$('#pagination').hide();
 });
 </script>
+{!endif}
 {# end {templatelocation} #}

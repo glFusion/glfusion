@@ -118,6 +118,7 @@ function install_config($site_url)
     $c->add('fs_story', NULL, 'fieldset', 1, 1, NULL, 0, TRUE);
     $c->add('maximagesperarticle',5,'text',1,1,NULL,10,TRUE);
     $c->add('limitnews',10,'text',1,1,NULL,20,TRUE);
+    $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
     $c->add('minnews',1,'text',1,1,NULL,30,TRUE);
     $c->add('contributedbyline',1,'select',1,1,0,40,TRUE);
     $c->add('hidestorydate',0,'select',1,1,0,50,TRUE);

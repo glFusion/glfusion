@@ -1197,6 +1197,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
 
             $current_fusion_version = '1.6.0';
 

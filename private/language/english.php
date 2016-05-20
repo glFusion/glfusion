@@ -2641,6 +2641,7 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'infinite_scroll' => 'Enable Infinite Scroll',
 );
 
 $LANG_configsubgroups['Core'] = array(

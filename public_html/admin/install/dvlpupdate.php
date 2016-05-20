@@ -1251,6 +1251,7 @@ function glfusion_160()
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
+    $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
 
     $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";

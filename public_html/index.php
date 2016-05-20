@@ -337,6 +337,10 @@ if ( $A = DB_fetchArray( $result ) ) {
     $pageBody .= $cbDisplay;
 }
 
+if (isset($_CONF['infinite_scroll']) && $_CONF['infinite_scroll'] == true ) {
+    $T->set_var('enable_infinite_scroll',true);
+}
+
 $T->set_var('page_contents',$pageBody);
 $T->parse( 'output', 'page' );
 
