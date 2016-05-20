@@ -1,0 +1,25 @@
+{# begin {templatelocation} #}
+{!!if {data_type} == 'image' !!}
+<img alt="{media_title}"
+	src="{raw_media_thumbnail}"
+	data-image="{orig_url}"
+	data-description="{media_description}"
+	style="display:none">
+{!endif}
+{!!if {data_type} == 'html5video' !!}
+<img alt="{media_title}"
+	data-type="{data_type}"
+	src="{raw_media_thumbnail}"
+	data-image="{raw_media_thumbnail}"
+	data-videomp4="{orig_url}"
+	data-description="{media_description}">
+{!endif}
+{!!if {data_type} == 'vimeo' || {data_type} == 'youtube' !!}
+<img alt="{media_title}"
+	data-type="{data_type}"
+	src="{raw_media_thumbnail}"
+	data-image="{raw_media_thumbnail}"
+	data-videoid="{videoid}"
+	data-description="{media_description}">
+{!endif}
+{# end {templatelocation} #}
