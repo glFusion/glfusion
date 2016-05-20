@@ -127,12 +127,12 @@ function IMG_getMediaMetaData( $filename ) {
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("IMG_getMediaMetaData: getID3 analyzing file: " . $filename);
         COM_errorLog("IMG_getMediaMetaData: getID3 found mime_type: " . $ThisFileInfo['mime_type']);
-    }
 
-    if ( isset($ThisFileInfo['error']) ) {
-        if ( is_array($ThisFileInfo['error']) ) {
-            foreach ($ThisFileInfo['error'] AS $error ) {
-                COM_errorLog("IMG_getMediaMetaData: " . $error);
+        if ( isset($ThisFileInfo['error']) ) {
+            if ( is_array($ThisFileInfo['error']) ) {
+                foreach ($ThisFileInfo['error'] AS $error ) {
+                    COM_errorLog("IMG_getMediaMetaData: " . $error);
+                }
             }
         }
     }
