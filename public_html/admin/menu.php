@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion CMS Menu Administration                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -605,6 +605,11 @@ function MB_createElement ( $menu_id ) {
     }
     $order_select .= '</select>' . LB;
 
+    $target_select = '<select id="urltarget" name="urltarget">' . LB;
+    $target_select .= '<option value="">' . $LANG_MB01['same_window'] . '</option>' . LB;
+    $target_select .= '<option value="_blank">' . $LANG_MB01['new_window'] . '</option>' . LB;
+    $target_select .= '</select>' . LB;
+
     // build group select
 
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
@@ -642,6 +647,7 @@ function MB_createElement ( $menu_id ) {
         'topic_select'      => $topic_select,
         'glfunction_select' => $glfunction_select,
         'group_select'      => $group_select,
+        'target_select'     => $target_select,
 // new
         'mode'              => 'save',
     ));
