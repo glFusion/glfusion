@@ -275,6 +275,12 @@ if ($A['count'] > 0) {
         $story_template->set_var('story_id', $story->getSid());
         $story_template->set_var('story_title', $pagetitle);
 
+        if ( $story_image != '' ) {
+            $story_template->set_var('story_image',$story_image);
+        } else {
+            $story_template->unset_var('story_image');
+        }
+
         $story_options = array ();
         if (($_CONF['hideemailicon'] == 0) && (!COM_isAnonUser() ||
                 (($_CONF['loginrequired'] == 0) &&
