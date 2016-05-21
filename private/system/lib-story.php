@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Story-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -651,6 +651,10 @@ function STORY_whatsRelated( $related, $uid, $tid )
 {
     global $_CONF, $_TABLES, $_USER, $LANG24;
 
+    if ( function_exists( 'CUSTOM_whatsRelated' )) {
+        return CUSTOM_whatsRelated( $related,$uid,$tid );
+    }
+
     // get the links from the story text
     if (!empty ($related)) {
         $rel = explode ("\n", $related);
@@ -671,9 +675,6 @@ function STORY_whatsRelated( $related, $uid, $tid )
         $rel[] = '<a href="' . $_CONF['site_url']
                . '/index.php?topic=' . $tid
                . '">' . $LANG24[38] . ' ' . $topic . '</a>';
-//        $rel[] = '<a href="' . $_CONF['site_url']
-//               . '/search.php?mode=search&amp;type=stories&amp;topic=' . $tid
-//               . '">' . $LANG24[38] . ' ' . $topic . '</a>';
     }
 
     $related = '';
