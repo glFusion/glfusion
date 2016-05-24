@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Make Admin Lists sticky - now remember last settings (sort order, filters, page, etc.) to allow admin to return to where they left off
+  - Improved redirection after login - take the user back to where they were when they selected login option
+  - Retired (removed) feature to allow page breaks within articles
+  - Implemented CUSTOM_whatsRelated() support
   - Enable target window for external URLs in the menu editor
   - Added infinite scroll to home page (required new template file, index.thtml)
   - Added story sub title ({story_subtitle}) and story image ({story_image}) to stories / articles
