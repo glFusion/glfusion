@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion topic administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -560,11 +560,11 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'tid':
-                $retval = COM_truncate($fieldvalue, 20, ' ...', true);
+                $retval = $fieldvalue;
                 break;
 
             case 'topic':
-                $retval = COM_truncate($fieldvalue, 28, ' ...', true);
+                $retval = $fieldvalue;
                 break;
 
             case 'sort_by':
