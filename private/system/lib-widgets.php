@@ -239,6 +239,8 @@ function WIDGET_UIKITslider( $dataArray )
 	    }
     }
 
+    $clearArray = array();
+
     if ( isset($dataArray['images']) ) {
         $T->set_block('widget', 'images', 'i');
         foreach ($dataArray['images'] as $images ) {
@@ -246,8 +248,15 @@ function WIDGET_UIKITslider( $dataArray )
             $T->unset_var('slidecounter');
             $T->unset_var('link');
             $T->unset_var('caption');
+            if (count($clearArray) > 0 ) $T->unset_var($clearArray);
+            $clearArray = array();
 
             $imageURL = str_replace( "%site_url%", $_CONF['site_url'], $images['image'] );
+
+            foreach($images AS $item => $value) {
+                $T->set_var($item,$value);
+                $clearArray[] = $item;
+            }
 
             $T->set_var('imageurl',$imageURL);
             $T->set_var('slidecounter',$slideCounter);
