@@ -279,6 +279,15 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'story_introtext', $introtext );
                 $article->set_var( 'story_text_no_br', $introtext );
             } else {
+// page break feature depreciated / removed in 1.6.0
+                $article_array = explode( '[page_break]', $bodytext );
+                $pbCount = count($article_array);
+                if ( $pbCount > 1 ) {
+                    $bodytext = '';
+                    for($x=0;$x < $pbCount; $x++) $bodytext .= $article_array[$x];
+                }
+                $_CONF['allow_page_breaks'] = 0;
+// end of page break removal
                 if(( $_CONF['allow_page_breaks'] == 1 ) and ( $index == 'n' )) {
                     $story_page = 1;
 
