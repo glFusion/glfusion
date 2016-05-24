@@ -704,7 +704,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 
 				            $V = new Template( MG_getTemplatePath(0) );
 				    		$V->set_file('video','view_flv_light.thtml');
-
+                            $playImage = MG_getImageFile('blank_blk.jpg');
 				            // now the player specific items.
 				    		$F = new Template( MG_getTemplatePath(0) );
 				           	$F->set_file(array('player' => 'flvfp.thtml'));
@@ -718,9 +718,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                             break;
                                         }
                                     }
-				                } else {
-				                	$playImage = MG_getImageFile('blank_blk.jpg');
-								}
+				                }
 								$playButton = "{ url: '" . $playImage . "', overlayId: 'play' },";
 							}
 				            if ( $row['remote_media'] == 1 ) {
