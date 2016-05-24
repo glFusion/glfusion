@@ -305,7 +305,7 @@ $LANG03 = array(
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
-    50 => 'Login required to comment',
+    50 => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to comment',
 );
 
 ###############################################################################
@@ -501,6 +501,9 @@ $LANG04 = array(
     192 => 'Merge Remote Account with Existing Local Account',
     193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
     194 => 'Sign in with ',
+    195 => 'No Account Yet?',
+    196 => 'Already Have an Account?',
+    197 => 'Connect for Easy Access!',
 );
 
 ###############################################################################
