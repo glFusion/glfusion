@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion story administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -223,8 +223,13 @@ function STORY_list()
     } elseif ( !empty($_GET['ptid'])) {
         $current_topic = COM_applyFilter($_GET['ptid']);
     } else {
-        $current_topic = $LANG09[9];
+        if ( SESS_isSet('story_admin_topic') ) {
+            $current_topic = SESS_getVar('story_admin_topic');
+        } else {
+            $current_topic = $LANG09[9];
+        }
     }
+    SESS_setVar('story_admin_topic',$current_topic);
 
     if ($current_topic == $LANG09[9]) {
         $excludetopics = '';
@@ -301,7 +306,8 @@ function STORY_list()
     ));
     $text_arr = array(
         'has_extras' => true,
-        'form_url'   => $_CONF['site_admin_url'] . '/story.php?ptid='.urlencode($current_topic)
+//        'form_url'   => $_CONF['site_admin_url'] . '/story.php?ptid='.urlencode($current_topic)
+        'form_url'   => $_CONF['site_admin_url'] . '/story.php'
     );
 
     $sql = "SELECT {$_TABLES['stories']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname, "

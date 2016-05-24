@@ -432,6 +432,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $query = strip_tags($_GET['q']);
     } else if (isset($_POST['q'])) {
         $query = strip_tags($_POST['q']);
+    } else if (SESS_isSet($component . '_q') ) {
+        $query = strip_tags(SESS_getVar($component . '_q'));
     } else {
         $query = '';
     }
@@ -441,6 +443,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $query_limit = COM_applyFilter ($_GET['query_limit'], true);
     } else if ( isset($_POST['query_limit']) ) {
         $query_limit = COM_applyFilter ($_POST['query_limit'], true);
+    } else if ( SESS_isSet($component.'_query_limit') ) {
+        $query_limit = COM_applyFilter(SESS_getVar($component.'_query_limit'),true);
     } else {
         $query_limit = 50;
     }
@@ -453,6 +457,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $curpage = $page;
     } else if ( isset($_POST[$component . 'listpage'])) {
         $page = COM_applyFilter ($_POST[$component . 'listpage'], true);
+        $curpage = $page;
+    } else if ( SESS_isSet($component.'listpage') ) {
+        $page = COM_applyFilter(SESS_getVar($component.'listpage'),true);
         $curpage = $page;
     } else {
         $page ='';
@@ -532,13 +539,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     $sql = $query_arr['sql']; // get sql from array that builds data
 
-    // setup list sort options
-    if (!isset($_GET['orderby'])) {
-        $orderby = $defsort_arr['field']; // not set - use default (this could be null)
-        $orderidx_link = '';
-        $orderbyidx = '';
-    } else {
-        $orderbyidx = COM_applyFilter($_GET['orderby'], true); // set - retrieve and clean
+    if ( isset($_GET['orderby']) || SESS_isSet($component.'_orderby') ) {
+        if ( isset($_GET['orderby'] ) ) {
+            $orderbyidx = COM_applyFilter($_GET['orderby'], true);
+        } else {
+            $orderbyidx = COM_applyFilter(SESS_getVar($component.'_orderby'), true);
+        }
         if ( isset($header_arr[$orderbyidx]['field']) && $header_arr[$orderbyidx]['sort'] != false ) {
             $orderidx_link = "&amp;orderby=$orderbyidx"; // preserve the value for paging
             $orderby = $header_arr[$orderbyidx]['field']; // get the field name to sort by
@@ -547,19 +553,38 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $orderidx_link = '';
             $orderbyidx = '';
         }
+    } else {
+        $orderby = $defsort_arr['field']; // not set - use default (this could be null)
+        $orderidx_link = '';
+        $orderbyidx = '';
     }
 
     // set sort direction.  defaults to ASC
-    $direction = (isset($_GET['direction'])) ? COM_applyFilter($_GET['direction']) : $defsort_arr['direction'];
+    if (isset($_GET['direction']) ) {
+        $direction = COM_applyFilter($_GET['direction']);
+    } else if (SESS_isSet($component . '_direction') ) {
+        $direction = SESS_getVar($component.'_direction');
+    } else {
+        $direction = $defsort_arr['direction'];
+    }
     $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
-
     // retrieve previous sort order field
-    $prevorder = (isset($_GET['prevorder'])) ? COM_applyFilter ($_GET['prevorder']) : '';
+    if ( isset($_GET['prevorder']) ) {
+        $prevorder = COM_applyFilter($_GET['prevorder']);
+    } else {
+        $prevorder = '';
+    }
 
     // reverse direction if previous order field was the same (this is a toggle)
     if ($orderby == $prevorder) { // reverse direction if prev. order was the same
         $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
     }
+
+    SESS_setVar($component.'listpage',$page);
+    SESS_setVar($component.'_q',$query);
+    SESS_setVar($component.'_query_limit',$query_limit);
+    SESS_setVar($component.'_direction',$direction);
+    SESS_setVar($component.'_orderby',$orderbyidx);
 
     // ok now let's build the order sql
     $orderbysql = (!empty($orderby)) ? "ORDER BY $orderby $direction" : '';

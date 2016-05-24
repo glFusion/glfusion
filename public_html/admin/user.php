@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -2500,7 +2500,10 @@ if (isset($_POST['grp_id'])) {
     $grp_id = COM_applyFilter($_POST['grp_id'], true);
 } elseif (isset($_GET['grp_id'])) {
     $grp_id = COM_applyFilter($_GET['grp_id'], true);
+} elseif (SESS_isSet('grp_id') ) {
+    $grp_id = SESS_getVar('grp_id');
 }
+SESS_setVar('grp_id',$grp_id);
 
 $msg = COM_getMessage();
 
