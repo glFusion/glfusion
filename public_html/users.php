@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User authentication module.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -1461,6 +1461,10 @@ switch ($mode) {
             COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....
+            if ( SESS_isSet('login_referer') ) {
+                $_SERVER['HTTP_REFERER'] = SESS_getVar('login_referer');
+                SESS_unSet('login_referer');
+            }
             if (!empty($_SERVER['HTTP_REFERER'])
                     && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
                     && (substr($_SERVER['HTTP_REFERER'], 0,
@@ -1473,11 +1477,7 @@ switch ($mode) {
                     if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
                     // if article - we need to ensure we have the story
                         if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
-                            if ( strstr($_SERVER['HTTP_REFERER'],'article.php') && !isset($_POST['story'])) {
-                                echo COM_refresh($_CONF['site_url'].'/index.php');
-                            } else {
-                                echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
-                            }
+                            echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
                         } else {
                             echo COM_refresh($_CONF['site_url'].'/index.php');
                         }
@@ -1507,6 +1507,13 @@ switch ($mode) {
                     $pageBody .= newuserform ();
                     break;
                 default:
+                    if (!empty($_SERVER['HTTP_REFERER'])
+                            && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
+                            && (substr($_SERVER['HTTP_REFERER'], 0,
+                                    strlen($_CONF['site_url'])) == $_CONF['site_url'])) {
+                            SESS_setVar('login_referer',$_SERVER['HTTP_REFERER']);
+                    }
+
                     // check to see if this was the last allowed attempt
                     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
                         displayLoginErrorAndAbort(82, $LANG04[113], $LANG04[112]);
