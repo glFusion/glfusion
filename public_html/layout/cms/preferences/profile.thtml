@@ -5,7 +5,7 @@
 <div id="pe_navbar" class="uk-margin" style="display:none">
     {navbar}
 </div>
-<div class="clearboth">
+<div class="uk-clearfix">
 
     <form class="uk-form uk-form-horizontal" id="profileform" name="profileform" action="{site_url}/usersettings.php" method="post" {enctype}>
         <div id="pe_preview" class="jsenabled_hide" style="display:none;">
@@ -123,7 +123,7 @@
         <input type="hidden" name="uid" value="{uid_value}" />
         <input type="hidden" name="mode" value="saveuser" />
         <input type="hidden" name="username" value="{username_value}" />
-        <div id="save_button" class="uk-margin-small">
+        <div id="save_button" class="uk-margin">
             <button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
             <button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
         </div>
