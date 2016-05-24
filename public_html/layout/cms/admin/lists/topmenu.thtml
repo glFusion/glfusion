@@ -1,9 +1,9 @@
 {# begin {templatelocation} #}
-<nav class="uk-navbar tm-admin-navbar">
+<nav class="uk-navbar tm-admin-navbar uk-margin">
     <ul class="uk-navbar-nav uk-hidden-small">
-      <!-- BEGIN menu_items -->
+<!-- BEGIN menu_items -->
       <li><a href="{menu_item_url}">{menu_item_text}</a></li>
-      <!-- END menu_items -->
+<!-- END menu_items -->
     </ul>
 
     <div class="uk-navbar-content uk-visible-small">{$LANG01[menu]}</div>
@@ -12,18 +12,18 @@
         <a class="uk-navbar-toggle"></a>
         <div class="uk-dropdown">
             <ul class="uk-nav uk-nav-dropdown">
-    <!-- BEGIN alt_menu_items -->
+<!-- BEGIN alt_menu_items -->
                 <li><a href="{menu_item_url}">{menu_item_text}</a></li>
-      <!-- END alt_menu_items -->
+<!-- END alt_menu_items -->
             </ul>
         </div>
     </div>
 
 </nav>
 {!if lang_instructions}
-<div class="uk-alert" data-uk-alert>
-  <a class="uk-alert-close uk-close"></a>
-  <p>{lang_instructions}</p>
-</div>
+	<div class="uk-alert" data-uk-alert>
+	  <a class="uk-alert-close uk-close"></a>
+	  <p>{lang_instructions}</p>
+	</div>
 {!endif}
 {# end {templatelocation} #}
