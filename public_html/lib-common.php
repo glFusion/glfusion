@@ -6594,17 +6594,21 @@ function _css_out()
 
     list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
 
+    // default css to support JS libraries
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css');
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css');
+
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom/style.css';
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css');
     } else {
-        $files[] = $_CONF['path_layout'] . 'style.css';
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css');
     }
 
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css');
     } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
-        $files[] = $_CONF['path_layout'] . 'style-colors.css';
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css');
     }
 
     // need to parse the outputhandler to see if there are any js scripts to load
@@ -6641,14 +6645,6 @@ function _css_out()
         }
     }
 
-    // default css to support JS libraries
-    $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css';
-    $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css';
-
-//  Custom CSS added by theme if it supports it...
-//    if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-//        $files[] = $_CONF['path_layout'] . 'custom.css';
-//    }
 
     // check cache age & handle conditional request
     if (css_cacheok($cacheFile,$files)){

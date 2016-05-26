@@ -113,28 +113,28 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js'
 
 $styleType = '.gradient.'; // almost-flat - gradient - blank
 
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/autocomplete'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/datepicker'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/dotnav'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-advanced'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-file'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-password'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-select'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/htmleditor'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/nestable'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/notify'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/placeholder'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/progress'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/search'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slidenav'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slider'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slideshow'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sortable'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sticky'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/tooltip'.$styleType.'min.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleType.'min.css');
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/autocomplete'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/datepicker'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/dotnav'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-advanced'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-file'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-password'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-select'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/htmleditor'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/nestable'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/notify'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/placeholder'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/progress'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/search'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slidenav'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slider'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slideshow'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sortable'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sticky'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/tooltip'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleType.'min.css',HEADER_PRIO_HIGH);
 
 // Load our JS specific to this theme
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/uikit.min.js');
@@ -162,12 +162,9 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/timepicker.min
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/tooltip.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js');
 
-
 // Load any additional JS/CSS for widgets / functionality
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-core-css.css');
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-cms.css');
-
-//$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/jssor/jssor.slider.mini.js');
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-core-css.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-cms.css',HEADER_PRIO_HIGH);
 
 // Media Player
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
@@ -176,10 +173,9 @@ $outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/me
 // must load the jquery ui library we want to use.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
 
-
-//  Custom CSS added by theme if it supports it...
+//  Custom CSS
 if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-    $outputHandle->addCSSFile($_CONF['path_layout'].'custom.css');
+    $outputHandle->addCSSFile($_CONF['path_layout'].'custom.css',HEADER_PRIO_VERYLOW); // last one to load
 }
 
 
