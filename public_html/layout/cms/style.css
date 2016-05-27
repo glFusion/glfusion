@@ -410,10 +410,10 @@ a {
 
 /* authentication buttons */
 .login-social-icon {
-    width: 50px;
-    line-height: 55px;
-    margin: 0;
-    padding: 4px;
+	width: 60px;
+	line-height: 40px !important;
+	margin: 0;
+	padding: 4px;
 }
 .login-social {
     width: 200px;

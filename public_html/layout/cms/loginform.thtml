@@ -37,7 +37,9 @@
 	</div>
 {!if oauth_login}
 	<div class="uk-form-row uk-text-center">
+  	<ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
 		{oauth_login}
+	  </ul>
 	</div>
 {!endif}
 </form>

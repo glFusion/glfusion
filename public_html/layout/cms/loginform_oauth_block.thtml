@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
-<div class="uk-align-left">
-<a href="{site_url}/users.php?oauth_login={oauth_service}" class="uk-button login-social-icon login-{oauth_service}" title="Login with {oauth_service_display}" rel="nofollow">
-  <i class="uk-icon-{oauth_service} uk-icon-large"></i>
-</a>
-</div>
+<li>
+  <a href="{site_url}/users.php?oauth_login={oauth_service}" class="uk-button login-social-icon login-{oauth_service}" title="Login with {oauth_service_display}" rel="nofollow">
+    <i class="uk-icon-{oauth_service} uk-icon-large"></i>
+  </a>
+</li>
 {# end {templatelocation} #}

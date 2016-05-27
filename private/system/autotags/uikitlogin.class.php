@@ -33,7 +33,7 @@ class autotag_uikitlogin extends BaseAutotag {
                 'form_action'        => $_CONF['site_url'].'/users.php',
             );
             $options['title']   = $LANG04[65]; // log in to {site_name}
-            $options['message'] = $LANG04[66]; // please enter your user name and password below
+            $options['message'] = ''; //$LANG04[66]; // please enter your user name and password below
 
             $retval .= '<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">';
             $retval .= '<button class="uk-button uk-button-success" type="button" data-uk-modal="{target:\'#modalOpen\'}">'.$LANG01[58].'</button></div>';
