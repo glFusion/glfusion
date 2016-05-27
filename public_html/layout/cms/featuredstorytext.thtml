@@ -1,6 +1,11 @@
+{# begin {templatelocation} #}
 <article class="tm-featured-article uk-article tm-article uk-margin-large-bottom">
 	<h1 class="uk-article-title tm-article-title">{story_title_link}</h1>
-	<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+        {!if story_subtitle}<a href="{readmore_url}"><h4 class="uk-margin-top-remove"><span class="tm-italic">{story_subtitle}</span></h4></a>{!endif}
+        {!if story_image}<a href="{readmore_url}"><div class="uk-margin-bottom"><img alt="" src="{story_image}" /></a></div>{!endif}
+	
+        <div class="uk-margin-large-bottom">
+            <ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
 		<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
 {!endif}
@@ -14,7 +19,6 @@
 {!endif}
 		</li>
 	</ul>
-
 	<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
 		<li><a href="{email_story_url}" class="uk-icon-small uk-icon-envelope"></a></li>
@@ -35,6 +39,8 @@
 		<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 	</ul>
+</div>
+<hr>
 	<div class="uk-clearfix"></div>
 
 	{story_text_no_br}
@@ -80,3 +86,4 @@
 {!endif}
 	</div>
 </article>
+{# end {templatelocation} #}
