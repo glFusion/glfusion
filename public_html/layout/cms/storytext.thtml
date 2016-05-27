@@ -1,100 +1,116 @@
 {# begin {templatelocation} #}
 <div class="infinite-item">
-<article class="uk-article tm-article uk-margin-large-bottom">
-	<header>
-		<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
-                {!if story_subtitle}<a href="{readmore_url}"><h4 class="uk-margin-top-remove"><span class="tm-italic">{story_subtitle}</span></h4></a>{!endif}
-                {!if story_image}<a href="{readmore_url}"><div class="uk-margin-bottom"><img alt="" src="{story_image}" /></a></div>{!endif}
-        
-                <div class="uk-margin-large-bottom">
-                   <ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+	<article class="uk-article tm-article uk-margin-large-bottom">
+		<header>
+			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
+{!if story_subtitle}
+			<a href="{readmore_url}">
+				<h4 class="uk-margin-top-remove">
+					<span class="tm-italic">{story_subtitle}</span>
+				</h4>
+			</a>
+{!endif}
+{!if story_image}
+{!if readmore_url}
+			<a href="{readmore_url}">
+{!endif}
+				<div class="uk-margin-bottom">
+					<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+				</div>
+{!if readmore_url}
+			</a>
+{!endif}
+{!endif}
+
+			<div class="uk-margin-large-bottom">
+				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
-			<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
+					<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
 {!endif}
 {!if story_date}
-			<li><time datetime="{story_date}">{story_date}</time></li>
+					<li><time datetime="{story_date}">{story_date}</time></li>
 {!endif}
-			<li>
-				{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
+					<li>
+						{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
 {!if story_alternate_topic_name}
-				, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
+						, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
 {!endif}
-			</li>
+					</li>
 {!if comments_url}
-			<li><a class="uk-text" href="{comments_url}">{comments_count} {lang_comments}</a></li>
+					<li><a class="uk-text" href="{comments_url}">{comments_count} {lang_comments}</a></li>
 {!endif}
-		</ul>
-		<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
+				</ul>
+				<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
-			<li><a href="{email_story_url}" class="uk-icon-small uk-icon-envelope"></a></li>
+					<li><a href="{email_story_url}" class="uk-icon-small uk-icon-envelope"></a></li>
 {!endif}
 {!if print_story_url}
-			<li><a href="{print_story_url}" target="_blank" class="uk-icon-small uk-icon-print"></a></li>
+					<li><a href="{print_story_url}" target="_blank" class="uk-icon-small uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
-			<li><a href="{edit_url}" class="uk-icon-small uk-icon-edit"></a></li>
+					<li><a href="{edit_url}" class="uk-icon-small uk-icon-edit"></a></li>
 {!endif}
 {!if plugin_meta_vars}
-			{plugin_meta_vars}
+					{plugin_meta_vars}
 {!endif}
 
-			{plugin_icon_vars}
+					{plugin_icon_vars}
 
 {!if feed_icon}
-			<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
+					<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
 {!endif}
-		</ul>
-</div>
-<hr>
-	</header>
+				</ul>
+			</div>
+			<hr>
+		</header>
 
-	<div class="uk-clearfix"></div>
-	{story_text_no_br}
+		<div class="uk-clearfix"></div>
+		{story_text_no_br}
 
 {!if plugin_body_vars}
-	{plugin_body_vars}
+		{plugin_body_vars}
 {!endif}
 
 {!if readmore_url}
-	<p class="tm-article-links">
-		<a class="uk-text" href="{readmore_url}">{lang_continue_reading} <i class="uk-icon-angle-double-right"></i></a>
-	</p>
+		<p class="tm-article-links">
+			<a class="uk-text" href="{readmore_url}">{lang_continue_reading} <i class="uk-icon-angle-double-right"></i></a>
+		</p>
 {!endif}
 
 {!!if {story_display} == 'article' !!}
-{!if author_about}
-<div class="uk-clearfix"></div>
-	<hr>
-	<article class="uk-comment tm-about-author">
-		<header class="uk-comment-header tm-about-author-header uk-margin-top">
-			<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
-			<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
-			<div class="tm-about-author-bio">
-				{author_about}
-			</div>
-		</header>
-	</article>
+	{!if author_about}
+		<div class="uk-clearfix"></div>
+		<hr>
+		<article class="uk-comment tm-about-author">
+			<header class="uk-comment-header tm-about-author-header uk-margin-top">
+				<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
+				<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
+				<div class="tm-about-author-bio">
+					{author_about}
+				</div>
+			</header>
+		</article>
+	{!endif}
 {!endif}
-{!endif}
 
-	<div class="uk-clearfix"></div>
+		<div class="uk-clearfix"></div>
 
-	{# social buttons would go here #}
+		{# social buttons would go here #}
 
-	<div class="tm-article-footer">
+		<div class="tm-article-footer">
 {!if page_selector}
-		<p>{page_selector}</p>
+			<p>{page_selector}</p>
 {!endif}
 {!if trackbacks_count}
-		{trackbacks_with_count}
+			{trackbacks_with_count}
 {!endif}
 {!if plugin_footer_vars}
-		<div>{plugin_footer_vars}</div>
+			<div>{plugin_footer_vars}</div>
 {!endif}
 {!if rating_bar}
-		{rating_bar}
+			{rating_bar}
 {!endif}
-	</div>
-</article>
+		</div>
+	</article>
 </div>
 {# end {templatelocation} #}
