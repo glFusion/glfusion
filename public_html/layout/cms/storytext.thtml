@@ -2,9 +2,12 @@
 <div class="infinite-item">
 <article class="uk-article tm-article uk-margin-large-bottom">
 	<header>
-		<h2 class="uk-article-title tm-article-title">{story_title_link}</h2>
-
-		<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+		<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
+                {!if story_subtitle}<a href="{readmore_url}"><h4 class="uk-margin-top-remove"><span class="tm-italic">{story_subtitle}</span></h4></a>{!endif}
+                {!if story_image}<a href="{readmore_url}"><div class="uk-margin-bottom"><img alt="" src="{story_image}" /></a></div>{!endif}
+        
+                <div class="uk-margin-large-bottom">
+                   <ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
 			<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
 {!endif}
@@ -41,7 +44,8 @@
 			<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 		</ul>
-
+</div>
+<hr>
 	</header>
 
 	<div class="uk-clearfix"></div>
