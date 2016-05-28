@@ -609,4 +609,24 @@ function phpblock_statsblock() {
 }
 ------ */
 
+
+/**
+* This function replaces the What's Related section 
+* at the end of articles with the headlines autotag and 
+* will display related stories within the same topic
+* in a responsive grid.
+*/
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+function CUSTOM_whatsRelated( $related, $uid, $tid )
+{
+    global $_CONF, $_TABLES, $_USER, $LANG24;
+
+    $at_text = '[headlines:'.$tid.' display:10 meta:1 titlelink:1 template:headlines.thtml]';
+    return PLG_replaceTags($at_text);
+
+}*/
+
+?>
+
 ?>
