@@ -1,7 +1,6 @@
 {# begin {templatelocation} #}
 <span class="uk-align-right">{edit_icon}</span>
-<h3>{poll_topic}</h3>
-<form class="uk-form uk-form-horizontal" action="{poll_vote_url}" id="Vote{poll_id}" method="post">
+<h3>{poll_topic}</h3><form class="uk-form uk-form-horizontal uk-width-1-1" action="{poll_vote_url}" id="Vote{poll_id}" method="post">
   <input type="hidden" name="pid" value="{poll_id}">
   {poll_questions}
   <span class="uk-text-small">{poll_notification}</span><br>
