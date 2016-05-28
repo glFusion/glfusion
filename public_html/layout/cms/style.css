@@ -100,7 +100,7 @@ set of styles.
 /* .tm-navbar */
 .tm-navbar-nav > li > a {
     border: medium none;
-    border-radius: 3px;
+    border-radius: 3px!important;
     font-size: 15px;
     height: 40px;
     margin: 0;
@@ -151,6 +151,7 @@ set of styles.
 .tm-navbar .sm-uikit ul a.highlighted {
   background: #39f;
   color: #fff;
+  border-radius: 3px!important;
 }
 
 uk-navbar-nav > li > a {
