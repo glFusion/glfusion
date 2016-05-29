@@ -91,6 +91,33 @@
 	{!endif}
 {!endif}
 
+{!if rating_bar}
+			{rating_bar}
+{!endif}
+<div class="uk-flex uk-flex-center uk-margin">
+   <ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
+      <li><a href="https://www.facebook.com/sharer/sharer.php?u={article_url}" class="" title="Share On Facebook" >
+         <i class="uk-icon-facebook uk-icon-button uk-icon-justify uk-icon-medium"></i></a>
+      </li>
+      <li><a href="http://twitter.com/home?status={article_url}" class="" title="Share On Twitter" >
+         <i class="uk-icon-twitter uk-icon-button uk-icon-justify uk-icon-medium"></i></a>
+      </li>
+      <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=&title=&summary={article_url}" class="" title="Share On Linkedin" >
+         <i class="uk-icon-linkedin uk-icon-button uk-icon-justify uk-icon-medium"></i></a>
+      </li>
+      <li><a href="https://plus.google.com/share?url={article_url}" class="" title="Share On Google+" >
+         <i class="uk-icon-google uk-icon-button uk-icon-justify uk-icon-medium"></i></a>
+      </li>
+   </ul>
+</div>
+<div class="uk-flex uk-flex-center">
+   <ul class="uk-grid uk-flex uk-flex-center uk-grid-medium">
+      <li>
+        (share)
+      </li>
+   </ul>
+</div>
+
 {!if comments_url}
 		<a class="uk-button" href="{comments_url}">{comments_count} Comments</a>
 {!endif}
@@ -102,9 +129,6 @@
 {!endif}
 {!if plugin_footer_vars}
 		<div>{plugin_footer_vars}</div>
-{!endif}
-{!if rating_bar}
-		{rating_bar}
 {!endif}
 	</div>
 </article>
