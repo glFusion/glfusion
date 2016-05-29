@@ -609,4 +609,50 @@ function phpblock_statsblock() {
 }
 ------ */
 
+
+/**
+* This function replaces the What's Related section 
+* at the end of articles with the headlines autotag and 
+* will display related stories within the same topic
+* in a responsive grid. 
+* 
+* If enabled file your_theme/article/article.thtml
+* will need to be adjusted. Below is a suggestion
+*
+* create a file in your_theme/article/custom/article.thtml 
+* and add the following
+*/
+
+/** do not copy this line
+
+{# begin {templatelocation} #}
+{formatted_article}
+<div class="uk-container uk-clearfix">
+	<div class="uk-grid uk-margin-large-bottom" data-uk-grid-margin>
+		<div class="uk-width-medium-1-1">
+			{story_options}
+		</div>
+		<div class="uk-width-medium-1-1">
+			{whats_related}
+		</div>
+	</div>
+</div>
+<div class="uk-clearfix">{trackback}</div>
+{commentbar}
+{# end {templatelocation} #}
+
+do not copy this line */
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+function CUSTOM_whatsRelated( $related, $uid, $tid )
+{
+    global $_CONF, $_TABLES, $_USER, $LANG24;
+
+    $at_text = '[headlines:'.$tid.' display:10 meta:1 titlelink:1 template:headlines.thtml]';
+    return PLG_replaceTags($at_text);
+
+}*/
+
+?>
+
 ?>
