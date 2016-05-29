@@ -105,13 +105,13 @@ set of styles.
     height: 40px;
     margin: 0;
     text-shadow: none;
-    color: #fff;
+    color: #fff!important;
 }
 
 .tm-dropdown {
     background: #325482  none repeat scroll 0 0;
     color:#000;
-    border-radius: 0;
+    border-radius: 0 0 5px 5px ;
     border: 0;
 }
 
@@ -121,7 +121,7 @@ set of styles.
 
 .tm-navbar::before,
 .tm-navbar::after {
-    margin-top: 7px;
+    margin-top: 7px!important;
 }
 
 /* nav overload */
@@ -2055,12 +2055,12 @@ padding-bottom:5px;
   }
   .sm-uikit a, .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
     padding: 0px 15px;
-    color: #555555;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    -ms-border-radius: 0;
-    -o-border-radius: 0;
-    border-radius: 0;
+    color: #fff;
+    -webkit-border-radius: 3px!important;
+    -moz-border-radius: 3px!important;
+    -ms-border-radius: 3px!important;
+    -o-border-radius: 3px!important;
+    border-radius: 3px!important;
   }
   .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
 /*    color: #d23600; */
@@ -2123,7 +2123,7 @@ padding-bottom:5px;
   .sm-uikit ul {
 /* uncomment if you want border around dropdown */
 /*    border: 1px solid #bbbbbb; */
-    padding: 5px 0;
+    padding: 7px 0 7px 0!important;
     background: transparent; /* white; */
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
