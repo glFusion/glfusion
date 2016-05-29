@@ -1,8 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
     <p class="uk-panel-title">{lang_question}{lang_question_number}{poll_question}</p>
-    <table class="uk-table uk-table-condensed">
         {poll_votes}
-    </table>
 </div>
 {# end {templatelocation} #}
