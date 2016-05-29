@@ -1,11 +1,4 @@
-.poll-divider {
-  border-bottom:1px solid #CCCCCC;
-  margin-bottom:10px;
-  margin-top:10px;
-  margin-left:30px;
-  margin-right:30px;
-}
-
+/* start public_html/polls/style.css */
 .poll-block-last {
   margin-bottom:5px;
   padding-bottom:5px;
@@ -23,17 +16,15 @@
 }
 
 .poll-autotag {
-  border: .1em solid black;
   padding: 5px;
   margin: 0 auto;
-  width: 350px;
+
 }
 
 .poll-autotag-left{
   border: .2em dotted black;
   padding: 5px;
   margin-right: auto;
-  width: 350px;
 }
 
 .poll-questions {
@@ -89,3 +80,4 @@
 .block-box-left .poll_answer_percent{
   text-align:right;
 }
+/* end public_html/polls/style.css */
