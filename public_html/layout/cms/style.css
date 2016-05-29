@@ -203,6 +203,14 @@ uk-navbar-nav > li > a {
 .tm-article-title {
     margin-bottom: 0px;
 }
+
+/* remove comment below to make story subtitle italic */
+/*
+.tm-italic{
+    font-style:italic;
+}
+*/
+
 .tm-article-footer {
 }
 .tm-featured-article { /* wrapper for featured story */
