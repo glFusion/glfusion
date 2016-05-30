@@ -1,16 +1,20 @@
 {# begin {templatelocation} #}
-<div class="uk-margin-bottom-small uk-width-1-1">
-<button class="uk-icon-button uk-margin-bottom" data-uk-offcanvas="{target:'#admin-side-config'}"><i class="uk-icon-bars"></i></button>
-</div>
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
-<script type="text/javascript" src="{layout_url}/js/config.js"></script>
+
+<div class="uk-margin-bottom-small uk-width-1-1">
+	<button class="uk-icon-button uk-margin-bottom uk-float-left" data-uk-offcanvas="{target:'#admin-side-config'}">
+		<i class="uk-icon-bars"></i>
+	</button>
+	<h2 class="uk-float-left uk-margin-left">{subgroup_active_name}</h2>
+</div>
+<div class="uk-clearfix"></div>
 
 <div id="admin-side-config" class="uk-offcanvas">
-<div class="uk-offcanvas-bar">
-<div class="uk-panel">
-{config_menu}
-</div>
-</div>
+	<div class="uk-offcanvas-bar">
+		<div class="uk-panel">
+			{config_menu}
+		</div>
+	</div>
 </div>
 
 <div id="configuration">
@@ -32,13 +36,16 @@
 				<input type="hidden" name="sub_group" value="{open_sg}">
 				<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 				<div id="ce_{subgroup_name}">
+
 					<div id="tabs">
-						<ul>
+						<ul class="uk-tab" data-uk-switcher="{connect:'#tabdata'}">
 	<!-- BEGIN tabs -->
 							<li><a href="#{index}">{tab}</a></li>
 	<!-- END tabs -->
 						</ul>
+						<ul id="tabdata" class="uk-switcher">
 	<!-- BEGIN fieldset -->
+						<li>
 						<div id="{index}" style="overflow:hidden;">
 							<fieldset style="margin-top:10px;">
 								<legend class="title">{fs_display}</legend>
@@ -54,6 +61,7 @@
 								</table>
 							</fieldset>
 						</div>
+					</li>
 	<!-- END fieldset -->
 					</div>
 				</div>
