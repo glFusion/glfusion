@@ -11,7 +11,7 @@
             allowedContent: true,
             extraPlugins: 'mediagallery,youtube2,vimeo',
             contentsCss : [ '{css_url}' ],
-            bodyClass: 'tm-container',
+            bodyClass: 'tm-container uk-article tm-article',
             height: height,
             {styleset}
             language: '{iso_lang}'
