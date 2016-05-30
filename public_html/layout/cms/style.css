@@ -73,12 +73,13 @@ set of styles.
 
 .tm-navbar-brand {
 	color: #eee;
+	text-shadow:none;
 }
 .tm-navbar-brand a {
 	text-shadow:none;
 	color: #fff;
 }
-.tm-navbar-brand a:hover {
+.tm-navbar-brand:hover {
 	color:#ababab;
 	text-decoration:none;
 }
@@ -345,8 +346,8 @@ a {
 /* used for text based editors */
 .texteditor {
 	width:100%;
-	font-family:courier new;
-	font-size:1.2em;
+	font-family:courier new !important;
+	font-size:1.2em !important;
 }
 
 /* scroll widget */
