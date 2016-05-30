@@ -787,7 +787,7 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
         $options['message'] = $LANG04[113]; // login attempt failed
     } else {
         $options['title']   = $LANG04[65]; // log in to {site_name}
-        $options['message'] = $LANG04[66]; // please enter your user name and password below
+        $options['message'] = ''; // $LANG04[66]; // please enter your user name and password below
     }
 
     return SEC_loginForm($options);

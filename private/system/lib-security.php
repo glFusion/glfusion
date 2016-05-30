@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion security library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1993,8 +1993,8 @@ function SEC_loginForm($use_options = array())
         'prefill_user'      => false,   // prefill username of current user
 
         // default texts
-        'title'             => $LANG04[65], // Try Logging in Again
-        'message'           => $LANG04[66], // You may have mistyped ...
+        'title'             => $LANG04[65], // Login to site
+        'message'           => '', // $LANG04[66], // Please enter username
         'footer_message'    => '',
         'button_text'       => $LANG04[80], // Login
 
