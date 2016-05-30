@@ -101,16 +101,16 @@
 
 	<div class="uk-flex uk-flex-center uk-margin">
 		<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
-			<li><a href="https://www.facebook.com/sharer/sharer.php?u={article_url}" class="" title="Share On Facebook" >
+			<li><a href="https://www.facebook.com/sharer/sharer.php?u={article_url}" target="_blank" title="Share On Facebook" >
 			<i class="uk-icon-facebook uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
 			</li>
-			<li><a href="http://twitter.com/home?status={article_url}" class="" title="Share On Twitter" >
+			<li><a href="http://twitter.com/home?status={article_url}" target="_blank" title="Share On Twitter" >
 			<i class="uk-icon-twitter uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
 			</li>
-			<li><a href="http://www.linkedin.com/shareArticle?mini=true&url=&title=&summary={article_url}" class="" title="Share On Linkedin" >
+			<li><a href="http://www.linkedin.com/shareArticle?mini=true&url=&title=&summary={article_url}" target="_blank" title="Share On Linkedin" >
 			<i class="uk-icon-linkedin uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
 			</li>
-			<li><a href="https://plus.google.com/share?url={article_url}" class="" title="Share On Google+" >
+			<li><a href="https://plus.google.com/share?url={article_url}" target="_blank" title="Share On Google+" >
 			<i class="uk-icon-google uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
 			</li>
 		</ul>
