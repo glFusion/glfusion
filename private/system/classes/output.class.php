@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Browser Output Handler                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -276,12 +276,12 @@ class outputHandler {
     }
 
 	/**
-	 * Add a JavaScript source to a page
+	 * Add a CSS source to a page
 	 *
-	 * This adds a javascript source file to a page - Physical path to the JS file
+	 * This adds a CSS source file to a page - Physical path to the CSS file
 	 * the <link> attribute.
 	 *
-	 * @param  string   $href       The URL to the javascript file
+	 * @param  string   $href       The URL to the CSS file
 	 * @param  int      $priority   Load priority
      *
 	 * @access public
