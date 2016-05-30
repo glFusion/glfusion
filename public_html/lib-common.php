@@ -6585,6 +6585,7 @@ function _css_out()
     $css            = '';
     $file_content   = '';
     $files          = array();
+    $counter        = 1;
 
     $outputHandle = outputHandler::getInstance();
 
@@ -6664,6 +6665,7 @@ function _css_out()
                 COM_errorLog("ERROR: Unable to retrieve CSS file: " . $file);
             } else {
                 $css .= $file_content;
+//              COM_errorLog("CSS: " . $counter++ . " - " . $file);
             }
             $css .= LB;
         }
