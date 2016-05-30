@@ -1,17 +1,25 @@
 {# begin {templatelocation} #}
+<div class="uk-margin-bottom-small uk-width-1-1">
+<button class="uk-icon-button uk-margin-bottom" data-uk-offcanvas="{target:'#admin-side-config'}"><i class="uk-icon-bars"></i></button>
+</div>
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
 <script type="text/javascript" src="{layout_url}/js/config.js"></script>
+
+<div id="admin-side-config" class="uk-offcanvas">
+<div class="uk-offcanvas-bar">
+<div class="uk-panel">
+{config_menu}
+</div>
+</div>
+</div>
+
 <div id="configuration">
 	<form class="uk-form" method="post" action="configuration.php" name="group">
 		<input type="hidden" value="{open_group}" name="conf_group">
 		<input type="hidden" value="" name="subgroup">
 		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 	</form>
-	<div class="uk-grid  uk-margin-large-bottom" data-uk-grid-margin>
-		<div class="uk-width-1-4">
-			<div class="uk-panel uk-panel-box">{config_menu}</div>
-		</div>
-		<div class="uk-width-3-4">
+		<div class="uk-width-1-1">
 {!if change_block}
 			<div class="uk-alert" data-uk-alert>
 				<a href="#" class="uk-alert-close uk-close"></a>
@@ -57,7 +65,6 @@
 			</form>
 		</div>
 	</div>
-</div>
 <script>
 	var ConfigDocUrl = '{confighelpurl}';
 	$(document).ready(function() {
