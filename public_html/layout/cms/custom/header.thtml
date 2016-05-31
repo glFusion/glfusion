@@ -1,0 +1,58 @@
+{# begin {templatelocation} #}
+{meta-header}
+{css-header}
+{js-header}
+{raw-header}
+</head>
+<body>
+
+{!!autotag menu:navigation_mobile !!}
+
+<nav class="uk-navbar tm-navbar">
+  <div class="uk-hidden-small">{logo_block}</div>
+
+  {!!autotag menu:navigation !!}
+
+  <div class="uk-navbar-flip">
+    <div class="uk-navbar-content uk-hidden-small">
+      <form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
+        <input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="query">
+        <input type="hidden" name="type" value="all">
+        <input type="hidden" name="mode" value="search">
+        <input type="hidden" name="results" value="{num_search_results}">
+        <div class="uk-dropdown tm-dropdown uk-dropdown-flip uk-dropdown-search"></div>
+      </form>
+    </div>
+  </div>
+
+  {!!autotag uikitlogin: !!}
+
+  <div class="uk-navbar-flip uk-navbar-flip uk-visible-small">
+    <a href="{site_url}/search.php" class="tm-navbar-toggle uk-navbar-toggle uk-navbar-toggle-alt"></a>
+  </div>
+  <a href="#offcanvas" class="tm-navbar-toggle uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+  <div class="uk-navbar-brand tm-navbar-brand-oc uk-navbar-center uk-visible-small">
+    <a href="{site_url}">{site_name}</a>
+  </div>
+</nav>
+
+{!!autotag staticpage_content:homepage-header where:home !!}
+
+<div class="tm-content">
+<?php 
+if (SEC_isAdmin()) {
+?>
+<button class="uk-icon-button" style="z-index:9999;position:fixed;bottom:10px;margin-left:10px;" data-uk-offcanvas="{target:'#tm-admin-only'}"><i class="uk-icon-dashboard"></i></button>
+<div id="tm-admin-only" class="uk-offcanvas">
+<div class="uk-offcanvas-bar">{!!autotag showblock:admin_block !!}
+</div>
+</div>
+
+<?php } ?>
+
+  <div class="uk-container tm-container uk-container-center uk-margin-large-bottom">
+    <div class="uk-grid uk-margin-top uk-margin-large-bottom" data-uk-grid-margin>
+      <div class="{centercolumn}">
+        {info_block}
+        {content}
+{# end {templatelocation} #}
