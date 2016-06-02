@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Modified the comment layout to ensure the comment text stands out better
   - Modified how CSS files are loaded to drive a better order
   - Make Admin Lists sticky - now remember last settings (sort order, filters, page, etc.) to allow admin to return to where they left off
   - Improved redirection after login - take the user back to where they were when they selected login option
