@@ -1,8 +1,11 @@
 {# begin {templatelocation} #}
+{!if preview_mode}
+<div class="uk-panel uk-panel-box uk-margin-bottom">
+{!endif}
 <div class="uk-flex uk-comment tm-comment uk-visible-hover" style="padding-left:{indent}px;">
-	<div class="uk-margin-right">
+	<div class="uk-margin-right uk-hidden-small">
 		<div class="user-avatar online">
-			<img alt="" src="{author_photo_raw}" width="32" height="32">
+			<img alt="" class="uk-thumbnail" src="{author_photo_raw}" width="72" height="72">
 		</div>
 	</div>
 	<div class="uk-flex-item-1">
@@ -10,14 +13,20 @@
 			<h4 class="uk-comment-title tm-comment-title">
 				{author_link}
 {!if ipaddress}
+  {!if iplookup_link}
 				<a href="{iplookup_link}">{ipaddress}</a>
+  {!else}
+  			{ipaddress}
+  {!endif}
 {!endif}
 			</h4>
 			<div class="uk-comment-meta tm-comment-meta">{date}</div>
 
+{!if preview_mode}
+{!else}
 			<div class="uk-position-top-right uk-hidden">
 {!if reply_link}
-				<a href="{reply_link}" title="{lang_reply}" data-uk-tooltip class="uk-button uk-button-mini uk-button-primary"><i class="uk-icon-comments"></i></a>
+				<a href="{reply_link}" title="{lang_reply}" data-uk-tooltip class="uk-button uk-button-mini uk-button-primary"><i class="uk-icon-mail-reply"></i></a>
 {!endif}
 {!if edit_link}
 				<a href="{edit_link}" title="{lang_edit}" data-uk-tooltip class="uk-button uk-button-mini uk-button-success"><i class="uk-icon-edit"></i></a>
@@ -26,11 +35,15 @@
 				<a href="{delete_link}" title="{lang_delete}" onclick="return confirm('{lang_delete_link_confirm}');" data-uk-tooltip class="uk-button uk-button-mini uk-button-danger"><i class="uk-icon-trash-o"></i></a>
 {!endif}
 			</div>
+{!endif}
 		</div>
 		<div class="uk-comment-body tm-comment-body uk-text-break">
 			{comments}
 		</div>
 	</div>
 </div>
+{!if preview_mode}
+</div>
+{!endif}
 <div class="uk-clearfix"></div>
 {# end {templatelocation} #}

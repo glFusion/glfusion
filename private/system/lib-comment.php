@@ -386,8 +386,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
         $A['name'] = $A['username'];
         $mode = 'flat';
+        $template->set_var('preview_mode',true);
     } else {
         $A = DB_fetchArray( $comments );
+        $template->unset_var('preview_mode');
     }
 
     if( empty( $A ) ) {
