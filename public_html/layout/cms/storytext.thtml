@@ -1,6 +1,10 @@
 {# begin {templatelocation} #}
 <div class="infinite-item">
+{!!if {story_display} == 'article' !!}
 	<article class="uk-article tm-article uk-margin-small-bottom">
+{!else}
+	<article class="uk-article tm-article uk-margin-large-bottom">
+{!endif}
 		<header>
 			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
 {!if story_subtitle}
