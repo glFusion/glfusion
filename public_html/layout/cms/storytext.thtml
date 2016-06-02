@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="infinite-item">
-	<article class="uk-article tm-article uk-margin-large-bottom">
+	<article class="uk-article tm-article uk-margin-small-bottom">
 		<header>
 			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
 {!if story_subtitle}
@@ -22,7 +22,7 @@
 	{!endif}
 {!endif}
 
-			<div class="uk-margin-large-bottom">
+
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
 					<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
@@ -42,13 +42,13 @@
 				</ul>
 				<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
-					<li><a href="{email_story_url}" class="uk-icon-small uk-icon-envelope"></a></li>
+					<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-envelope"></a></li>
 {!endif}
 {!if print_story_url}
-					<li><a href="{print_story_url}" target="_blank" class="uk-icon-small uk-icon-print"></a></li>
+					<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-small uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
-					<li><a href="{edit_url}" class="uk-icon-small uk-icon-edit"></a></li>
+					<li><a href="{edit_url}" class="tm-meta-icon uk-icon-small uk-icon-edit"></a></li>
 {!endif}
 {!if plugin_meta_vars}
 					{plugin_meta_vars}
@@ -60,8 +60,11 @@
 					<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 				</ul>
-			</div>
-			<hr>
+
+			<div class="uk-clearfix"></div>
+
+<hr>
+
 		</header>
 
 		<div class="uk-clearfix"></div>
@@ -81,7 +84,7 @@
 	{!if author_about}
 		<div class="uk-clearfix"></div>
 		<hr>
-		<article class="uk-comment tm-about-author">
+		<article class="uk-comment tm-about-author uk-margin-small">
 			<header class="uk-comment-header tm-about-author-header uk-margin-top">
 				<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
 				<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
@@ -98,23 +101,6 @@
 {!if rating_bar}
 		{rating_bar}
 {!endif}
-
-		<div class="uk-flex uk-flex-center uk-margin">
-			<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
-				<li><a href="https://www.facebook.com/sharer/sharer.php?u={article_url}" target="_blank" title="Share On Facebook" >
-				<i class="uk-icon-facebook uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
-				</li>
-				<li><a href="http://twitter.com/home?status={article_url}" target="_blank" title="Share On Twitter" >
-				<i class="uk-icon-twitter uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
-				</li>
-				<li><a href="http://www.linkedin.com/shareArticle?mini=true&url=&title=&summary={article_url}" target="_blank" title="Share On Linkedin" >
-				<i class="uk-icon-linkedin uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
-				</li>
-				<li><a href="https://plus.google.com/share?url={article_url}" target="_blank" title="Share On Google+" >
-				<i class="uk-icon-google uk-icon-button uk-icon-justify uk-icon-medium tm-follow"></i></a>
-				</li>
-			</ul>
-		</div>
 
 		<div class="tm-article-footer">
 {!if page_selector}
