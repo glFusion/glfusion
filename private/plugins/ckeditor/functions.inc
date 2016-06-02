@@ -182,21 +182,42 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
     } else {
         $uid = $_USER['uid'];
     }
-    if ( $inRoot ) {
-        $filePath = $fileroot . 'images/library';
+
+    $urlparts = parse_url($_CONF['site_url']);
+    if ( isset($urlparts['path']) ) {
+        $relRoot = $urlparts['path'];
+        $relRoot = trim($relRoot);
+        if ( $relRoot[strlen($relRoot)-1] != '/' ) {
+            $relRoot = $relRoot.'/';
+        }
     } else {
-        $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
-        if ( $_CK_CONF['filemanager_per_user_dir'] ) {
-            $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'] . $uid;
-            if ( !is_dir($_CONF['path_html'].$filePath) ) {
-                $rc = @mkdir($_CONF['path_html'].$filePath, 0755, true);
-                if ( $rc === false ) {
-                    $filePath = $fileroot . $_CK_CONF['filemanager_fileroot'];
-                }
+        $relRoot = '/';
+    }
+
+    // removes the leading '/'
+    $imagePath = substr($_CONF['path_images'],strlen($_CONF['path_html']));
+    $imagePath = rtrim($imagePath, '/\\');
+
+    if (SEC_inGroup('Root') ) {
+        $_SESSION['fileman_files_root'] = $relRoot . $imagePath;
+        return true;
+    }
+    $userImagePath = $imagePath . '/library/Image';
+    $_SESSION['fileman_files_root'] = $relRoot . $userImagePath;
+
+    if ( $_CK_CONF['filemanager_per_user_dir'] ) {
+        $filePath = $relRoot . $imagePath.'/library/userfiles/'.$uid;
+
+        $_SESSION['fileman_files_root'] = $filePath;
+
+        if ( !is_dir($_CONF['path_html'].$filePath) ) {
+            $rc = @mkdir($_CONF['path_html'].$filePath, 0755, true);
+            if ( $rc === false ) {
+                $_CK_CONF['filemanager_per_user_dir'] = false;
+                $_SESSION['fileman_files_root'] = $relRoot . $userImagePath;
             }
         }
     }
-    $_SESSION['fileroot'] = $filePath;
 
     $T = new Template($templatePath);
     $T->set_file('page', $templateFile);
