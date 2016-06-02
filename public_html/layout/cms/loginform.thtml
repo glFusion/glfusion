@@ -36,8 +36,8 @@
 		<i class="uk-icon-question">&nbsp;</i><a class="uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a>
 	</div>
 {!if oauth_login}
-	<div class="uk-form-row uk-text-center">
-  	<ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+	<div class="uk-flex uk-flex-center uk-margin">
+		<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
 		{oauth_login}
 	  </ul>
 	</div>
