@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion comment library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -331,7 +331,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
 
-
     $filter = sanitizer::getInstance();
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedelements($AllowedElements);
@@ -403,6 +402,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $row = 1;
 
     do {
+        $template->unset_var('delete_link');
+        $template->unset_var('ipaddress');
+        $template->unset_var('reply_link');
+        $template->unset_var('edit_link');
         //check for comment edit
         $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = ".(int) $A['cid']);
         $B = DB_fetchArray($commentedit);
@@ -1670,7 +1673,7 @@ function plugin_deletecomment_article($cid, $id)
                  . "/article.php?story=$id") . '#comments');
     } else {
         COM_errorLog ("User {$_USER['username']} "
-                    . "did not have permissions to delete comment $cid from $type $id");
+                    . "did not have permissions to delete comment $cid from $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 

@@ -9,7 +9,7 @@
 		<div class="uk-position-relative">
 			<h4 class="uk-comment-title tm-comment-title">
 				{author_link}
-	{!if ipaddress}
+{!if ipaddress}
 				<a href="{iplookup_link}">{ipaddress}</a>
 {!endif}
 			</h4>
