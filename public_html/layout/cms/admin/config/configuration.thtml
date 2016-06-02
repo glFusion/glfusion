@@ -1,13 +1,11 @@
 {# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
 
-<div class="uk-margin-bottom-small uk-width-1-1">
-	<button class="uk-icon-button uk-margin-bottom uk-float-left" data-uk-offcanvas="{target:'#admin-side-config'}">
-		<i class="uk-icon-bars"></i>
-	</button>
-	<h2 class="uk-float-left uk-margin-left">{subgroup_active_name}</h2>
-</div>
-<div class="uk-clearfix"></div>
+<nav class="uk-navbar uk-margin-bottom">
+	<a href="#" class="uk-navbar-toggle" data-uk-offcanvas="{target:'#admin-side-config'}">
+	</a>
+	<div class="uk-navbar-content">{group_name} :: {subgroup_active_name}</div>
+</nav>
 
 <div id="admin-side-config" class="uk-offcanvas">
 	<div class="uk-offcanvas-bar">

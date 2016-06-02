@@ -562,7 +562,7 @@ class config {
      */
     function get_ui($grp, $sg='0', $change_result=null)
     {
-        global $_CONF, $LANG_CONFIG, $LANG_configsubgroups;
+        global $_CONF, $LANG_CONFIG, $LANG_configsubgroups, $LANG_configsections;
 
         if(!array_key_exists($grp, $LANG_configsubgroups)) {
             $LANG_configsubgroups[$grp] = array();
@@ -605,6 +605,7 @@ class config {
                     foreach ($subgroups as $sgname => $sgroup) {
                         if ($grp == $group AND $sg == $sgroup) {
                             $t->set_var('group_active_name', ucwords($group));
+                            $t->set_var('group_name',$LANG_configsections[$group]['label']);
                             if (isset($LANG_configsubgroups[$group][$sgname])) {
                                 $t->set_var('subgroup_active_name',
                                         $LANG_configsubgroups[$group][$sgname]);
