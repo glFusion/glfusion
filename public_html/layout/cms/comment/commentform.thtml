@@ -64,20 +64,8 @@
 		{captcha}
 	</div>
 {!endif}
-	<hr>
 
-	<div class="uk-form-row uk-panel uk-panel-box">
-		<label class="uk-form-label">{lang_importantstuff}</label>
-		<div class="uk-form-controls">
-			<ul>
-				<li>{lang_instr_line1}</li>
-				<li>{lang_instr_line2}</li>
-				<li>{lang_instr_line3}</li>
-				<li>{lang_instr_line4}</li>
-				<li>{lang_instr_line5}</li>
-			</ul>
-		</div>
-	</div>
+	<hr>
 
 	<div class="uk-form-row">
 		<label class="uk-form-label"></label>
