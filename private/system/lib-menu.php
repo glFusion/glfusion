@@ -365,7 +365,7 @@ function getUserMenu()
 function getAdminMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
+           $LANG_AM, $LANG_SOCIAL, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
 
     $item_array = array();
 
@@ -373,7 +373,7 @@ function getAdminMenu()
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count( $plugin_options );
 
-        if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR' ) OR ( $num_plugins > 0 ) ) {
+        if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,social.admin', 'OR' ) OR ( $num_plugins > 0 ) ) {
             // what's our current URL?
             $elementUrl = COM_getCurrentURL();
 
@@ -491,6 +491,11 @@ function getAdminMenu()
 
                 $url = $_CONF['site_admin_url'] . '/group.php';
                 $label = $LANG01[96] . ' (' . COM_numberFormat($A['count']) . ')';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+            if ( SEC_hasRights( 'social.admin' )) {
+                $url = $_CONF['site_admin_url'] . '/social.php';
+                $label =  $LANG_SOCIAL['label'];
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 

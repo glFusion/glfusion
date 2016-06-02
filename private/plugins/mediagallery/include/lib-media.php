@@ -1595,6 +1595,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_MG04, $LANG_ACCESS, $LANG01, $album_jumpbox, $glversion, $_USER, $_MG_USERPREFS;
     global $_DB_dbms, $LANG04,$ratedIds;
 
+    USES_lib_social();
+
     $retval = '';
     $media_link_start = '';
     $media_link_end = '';
@@ -2093,6 +2095,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'lang_of'       =>  $LANG_MG03['of'],
         'album_link'    =>  $album_link,
     ));
+    $outputHandle->addMeta('property','og:image',$raw_image);
+    $social_icons = SOC_getShareIcons();
+    $T->set_var('social_share',$social_icons);
 
     $getid3link = '';
     $getid3linkend = '';

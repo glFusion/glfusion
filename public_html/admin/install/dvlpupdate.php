@@ -1257,9 +1257,68 @@ function glfusion_160()
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_image` VARCHAR(128) DEFAULT NULL AFTER `alternate_tid`;";
+    $_SQL[] = "
+    CREATE TABLE {$_TABLES['staticpage_category']}` (
+      cat_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+      cat_name varchar(128) NOT NULL default '',
+      cat_desc varchar(128) NOT NULL default '',
+      PRIMARY KEY (cat_id)
+    ) ENGINE=MyISAM;
+    ";
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} ADD `sp_catid` INT(10) sp_catid int(10) NOT NULL default '0' AFTER `sp_id`, ADD INDEX `cat_id` (`sp_catid`);";
+
+    // create social share table
+
+    $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
+      `id` varchar(128) NOT NULL DEFAULT '',
+      `name` varchar(128) NOT NULL DEFAULT '',
+      `display_name` varchar(128) NOT NULL DEFAULT '',
+      `icon` varchar(128) NOT NULL DEFAULT '',
+      `url` varchar(128) NOT NULL DEFAULT '',
+      `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+      PRIMARY KEY (id)
+    ) ENGINE=MyISAM;
+    ";
+
+    $_SQL[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES
+                ('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1),
+                ('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1),
+                ('li', 'linkedin', 'LinkedIn', 'linkedin', 'http://www.linkedin.com', 1),
+                ('lj', 'livejournal', 'Live Journal', 'pencil', 'http://www.livejournal.com', 1),
+                ('mr', 'mail-ru', 'Mail.ru', 'at', 'http://mail-ru.com', 1),
+                ('ok', 'odnoklassniki', 'Odnoklassniki', 'odnoklassniki', 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1', 1),
+                ('pt', 'pinterest', 'Pinterest', 'pinterest-p', 'http://www.pinterest.com', 1),
+                ('rd', 'reddit', 'reddit', 'reddit-alien', 'http://reddit.com/submit?url=%%u&title=%%t', 1),
+                ('tw', 'twitter', 'Twitter', 'twitter', 'http://www.twitter.com', 1),
+                ('vk', 'vk', 'vk', 'vk', 'http://www.vk.org', 1);";
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
+
+    // add new social features
+    $sis_admin_ft_id = 0;
+    $sis_group_id    = 0;
+
+    $tmp_admin_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = 'social.admin'");
+    if (empty ($tmp_admin_ft_id)) {
+        DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('social.admin','Ability to manage social features.',1)",1);
+        $sis_admin_ft_id  = DB_insertId();
+    }
+    // now check for the group
+    $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Social Admin'");
+    if ( DB_numRows($result) == 0 ) {
+        DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Social Admin','Has full access to manage social integrations.',1,0)");
+        $sis_group_id  = DB_insertId();
+    }
+    if ( $sis_admin_ft_id != 0 && $sis_group_id != 0 ) {
+        DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$sis_admin_ft_id.",".$sis_group_id.")");
+    }
+    if ( $sis_group_id != 0 ) {
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
+    }
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.0' WHERE name='glfusion'",1);

@@ -317,6 +317,17 @@ CREATE TABLE {$_TABLES['sessions']} (
 ) ENGINE=MyISAM
 ";
 
+$_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
+  `id` varchar(128) NOT NULL DEFAULT '',
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `display_name` varchar(128) NOT NULL DEFAULT '',
+  `icon` varchar(128) NOT NULL DEFAULT '',
+  `url` varchar(128) NOT NULL DEFAULT '',
+  `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM;
+";
+
 $_SQL[] = "
 CREATE TABLE {$_TABLES['sortcodes']} (
   code char(4) NOT NULL default '0',
@@ -804,6 +815,20 @@ $_DATA[] = "INSERT INTO {$_TABLES['pingservice']} (pid, name, site_url, ping_url
 
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('plaintext','Plain Old Text') ";
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTML Formatted') ";
+
+#
+# - social sharing sites
+#
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('li', 'linkedin', 'LinkedIn', 'linkedin', 'http://www.linkedin.com', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('lj', 'livejournal', 'Live Journal', 'pencil', 'http://www.livejournal.com', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('mr', 'mail-ru', 'Mail.ru', 'at', 'http://mail-ru.com', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('ok', 'odnoklassniki', 'Odnoklassniki', 'odnoklassniki', 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('pt', 'pinterest', 'Pinterest', 'pinterest-p', 'http://www.pinterest.com', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('rd', 'reddit', 'reddit', 'reddit-alien', 'http://reddit.com/submit?url=%%u&title=%%t', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('tw', 'twitter', 'Twitter', 'twitter', 'http://www.twitter.com', 1);";
+$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('vk', 'vk', 'vk', 'vk', 'http://www.vk.org', 1);";
 
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('ASC','Oldest First') ";
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('DESC','Newest First') ";

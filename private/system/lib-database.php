@@ -78,6 +78,7 @@ $_TABLES['postmodes']           = $_DB_table_prefix . 'postmodes';
 $_TABLES['rating']              = $_DB_table_prefix . 'rating';
 $_TABLES['rating_votes']        = $_DB_table_prefix . 'rating_votes';
 $_TABLES['sessions']            = $_DB_table_prefix . 'sessions';
+$_TABLES['social_share']        = $_DB_table_prefix . 'social_share';
 $_TABLES['sortcodes']           = $_DB_table_prefix . 'sortcodes';
 $_TABLES['speedlimit']          = $_DB_table_prefix . 'speedlimit';
 $_TABLES['statuscodes']         = $_DB_table_prefix . 'statuscodes';

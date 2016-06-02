@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2015 by Mark R. Evans - mark AT glfusion DOT org
+*  Copyright (C) 2014-2016 by Mark R. Evans - mark AT glfusion DOT org
 */
 
 require_once '../lib-common.php';
@@ -36,6 +36,9 @@ if (is_ajax()) {
                     $sp_idarray = $_POST['sp_idarray'];
                 }
                 SP_toggleStatus($enabledstaticpages,$sp_idarray);
+                break;
+            case 'sistoggle' :
+                sis_toggle();
                 break;
         }
     } else {
@@ -87,6 +90,48 @@ function block_toggle() {
             }
         }
         $retval['statusMessage'] = 'Block state has been toggled.';
+        $retval['errorCode'] = 0;
+    }
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+}
+
+/**
+* Enable and Disable block
+*/
+function sis_toggle() {
+    global $_CONF, $_TABLES, $LANG_SOCIAL;
+
+    // Make sure user has rights to access this page
+    if (!SEC_hasRights ('social.admin')) {
+        die();
+    }
+    if ( !_sec_checkToken(1) ) {
+        $retval['statusMessage'] = 'Invalid security token. Please refresh the page.';
+        $retval['errorCode'] = 1;
+    } else {
+        $enabledsis = array();
+        if (isset($_POST['enabledsis'])) {
+            $enabledsis = $_POST['enabledsis'];
+        }
+
+        $sisarray = array();
+        if ( isset($_POST['sisarray']) ) {
+            $sisarray = $_POST['sisarray'];
+        }
+
+        if (isset($sisarray) ) {
+            foreach ($sisarray AS $id => $junk ) {
+                if ( isset($enabledsis[$id]) ) {
+                    $sql = "UPDATE {$_TABLES['social_share']} SET enabled = '1' WHERE id='".DB_escapeString($id)."'";
+                    DB_query($sql);
+                } else {
+                   $sql = "UPDATE {$_TABLES['social_share']} SET enabled = '0' WHERE id='".DB_escapeString($id)."'";
+                    DB_query($sql);
+                }
+            }
+        }
+        $retval['statusMessage'] = $LANG_SOCIAL['state_toggled'];
         $retval['errorCode'] = 0;
     }
     $return["json"] = json_encode($retval);

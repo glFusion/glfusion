@@ -34,7 +34,8 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_ALL );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -7289,6 +7290,10 @@ function USES_class_story() {
 function USES_class_upload() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'classes/upload.class.php';
+}
+function USES_lib_social() {
+    global $_CONF;
+    require_once $_CONF['path_system'].'lib-social.php';
 }
 
 // Now include all plugin functions

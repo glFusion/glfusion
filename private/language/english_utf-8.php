@@ -1414,6 +1414,22 @@ $LANG_LOGVIEW = array(
 );
 
 ###############################################################################
+# admin/social.php
+
+$LANG_SOCIAL = array(
+    'label' => 'Social Integrations',
+    'social_share' => 'Social Share Sites',
+    'share_instructions' => 'You can configure which social sharing buttons are enabled',
+    'social_follow' => 'Follow Me Settings',
+    'id'    => 'ID',
+    'name'  => 'Name',
+    'enabled'   => 'Enabled',
+    'share_it_label'    => 'Share It!',
+    'state_toggled'     => 'Social Share state has been toggled.',
+);
+
+
+###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1450,7 +1466,7 @@ $MESSAGE = array(
     31 => 'Sorry, you do not have access to the story administration page.  Please note that all attempts to access unauthorized features are logged',
     32 => 'Sorry, you do not have access to the topic administration page.  Please note that all attempts to access unauthorized features are logged',
     33 => 'Sorry, you do not have access to the block administration page.  Please note that all attempts to access unauthorized features are logged',
-    34 => '',
+    34 => 'Sorry, you do not have access to this administration page.  Please note that all attempts to access unauthorized features are logged',
     35 => '',
     36 => 'The Autotag permissions have been successfully saved.',
     37 => 'Sorry, you do not have access to the user administration page.  Please note that all attempts to access unauthorized features are logged',
@@ -1548,7 +1564,6 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account',
-
 );
 
 ###############################################################################

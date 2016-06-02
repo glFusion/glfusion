@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Shows articles in various formats.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -48,6 +48,7 @@
 */
 require_once 'lib-common.php';
 USES_lib_story();
+USES_lib_social();
 
 if ($_CONF['trackback_enabled']) {
     USES_lib_trackback();
@@ -315,9 +316,14 @@ if ($A['count'] > 0) {
                                                         'class' => ''));
             }
         }
+
+        $social_icons = SOC_getShareIcons();
+        $story_template->set_var('social_share',$social_icons);
+
         $related = STORY_whatsRelated($story->displayElements('related'),
                                       $story->displayElements('uid'),
-                                      $story->displayElements('tid'));
+                                      $story->displayElements('tid'),
+                                      $story->displayElements('alternate_tid'));
         if (!empty ($related)) {
             $related = COM_startBlock ($LANG11[1], '',
                 COM_getBlockTemplate ('whats_related_block', 'header'), 'whats-related')

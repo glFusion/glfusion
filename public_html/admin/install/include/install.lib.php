@@ -1190,16 +1190,70 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.5.1' :
         case '1.5.2' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
+
+            $_SQL = array();
+
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_image` VARCHAR(128) DEFAULT NULL AFTER `alternate_tid`;";
             $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
             $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
+
+            $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
+              `id` varchar(128) NOT NULL DEFAULT '',
+              `name` varchar(128) NOT NULL DEFAULT '',
+              `display_name` varchar(128) NOT NULL DEFAULT '',
+              `icon` varchar(128) NOT NULL DEFAULT '',
+              `url` varchar(128) NOT NULL DEFAULT '',
+              `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+              PRIMARY KEY (id)
+            ) ENGINE=MyISAM;
+            ";
+
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
-            require_once $_CONF['path_system'].'classes/config.class.php';
-            $c = config::get_instance();
-            $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
+
+            $_DATA = array();
+
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('li', 'linkedin', 'LinkedIn', 'linkedin', 'http://www.linkedin.com', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('lj', 'livejournal', 'Live Journal', 'pencil', 'http://www.livejournal.com', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('mr', 'mail-ru', 'Mail.ru', 'at', 'http://mail-ru.com', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('ok', 'odnoklassniki', 'Odnoklassniki', 'odnoklassniki', 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('pt', 'pinterest', 'Pinterest', 'pinterest-p', 'http://www.pinterest.com', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('rd', 'reddit', 'reddit', 'reddit-alien', 'http://reddit.com/submit?url=%%u&title=%%t', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('tw', 'twitter', 'Twitter', 'twitter', 'http://www.twitter.com', 1);";
+            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('vk', 'vk', 'vk', 'vk', 'http://www.vk.org', 1);";
+
+            foreach ($_DATA as $sql) {
+                DB_query($sql,1);
+            }
+
+            // add new social features
+            $sis_admin_ft_id = 0;
+            $sis_group_id    = 0;
+
+            $tmp_admin_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = 'social.admin'");
+            if (empty ($tmp_admin_ft_id)) {
+                DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('social.admin','Ability to manage social features.',1)",1);
+                $sis_admin_ft_id  = DB_insertId();
+            }
+            // now check for the group
+            $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Social Admin'");
+            if ( DB_numRows($result) == 0 ) {
+                DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Social Admin','Has full access to manage social integrations.',1,0)");
+                $sis_group_id  = DB_insertId();
+            }
+            if ( $sis_admin_ft_id != 0 && $sis_group_id != 0 ) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (".$sis_admin_ft_id.",".$sis_group_id.")");
+            }
+            if ( $sis_group_id != 0 ) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
+            }
 
             $current_fusion_version = '1.6.0';
 

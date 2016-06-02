@@ -1,5 +1,10 @@
 {# begin {templatelocation} #}
 {formatted_article}
+
+<div class="uk-container uk-container-center">
+{social_share}
+</div>
+
 <div class="uk-container uk-clearfix">
 	<div class="uk-grid uk-margin-large-bottom" data-uk-grid-margin>
 		<div class="uk-width-medium-1-2">

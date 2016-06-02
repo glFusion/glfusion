@@ -1,0 +1,13 @@
+<h2 class="uk-text-center">{lang_share_it}</h2>
+
+<div class="uk-flex uk-flex-center uk-margin">
+	<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
+<!-- BEGIN social_buttons -->
+		<li>
+			<button class="uk-button uk-margin-small-bottom uk-button-{service_name}" data-action="share" data-type="{service_id}" data-uk-tooltip title="{service_display_name}">
+			<i class="uk-icon-justify uk-icon-{icon}"></i>
+			</button>
+		</li>
+<!-- END social_buttons -->
+	</ul>
+</div>

@@ -110,3 +110,32 @@ var toggleSP = function() {
     });
     return false;
 };
+
+// si toggle
+$(document).ready(function(){
+    $(".sis-clicker").removeAttr('onclick');
+    $(".sis-clicker").change(toggle);
+});
+var toggle = function() {
+    var dataS = {
+        "action" :  "sistoggle",
+    };
+    data = $("form").serialize() + "&" + $.param(dataS);
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: site_admin_url + "/ajax_controller.php",
+        data: data,
+        success: function(data) {
+            var result = $.parseJSON(data["json"]);
+
+            try {
+                $.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:'top-center'});
+            }
+            catch(err) {
+                alert(result.statusMessage);
+            }
+        }
+    });
+    return false;
+};

@@ -90,6 +90,13 @@
         </div>
     </div>
 </div>
+
+{!if social_share}
+<div class="uk-container uk-container-center">
+	{social_share}
+</div>
+{!endif}
+
 <hr>
 
 <div class="uk-align-right">

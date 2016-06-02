@@ -96,7 +96,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '')
 */
 function commandcontrol()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW,$_IMAGE_TYPE, $_DB_dbms;
+    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE, $_DB_dbms;
 
     $retval = '';
 
@@ -161,6 +161,9 @@ function commandcontrol()
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/sfs.php',
                         'lang' => 'SFS User Check', 'image' => '/images/icons/sfs.'),
+                  array('condition' => SEC_hasRights('social.admin'),
+                        'url' => $_CONF['site_admin_url'].'/social.php',
+                        'lang' => $LANG_SOCIAL['label'], 'image' => '/images/icons/social.'),
 
     );
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
