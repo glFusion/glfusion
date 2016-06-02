@@ -163,8 +163,8 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/tooltip.min.js
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js');
 
 // Load any additional JS/CSS for widgets / functionality
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-core-css.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-cms.css',HEADER_PRIO_HIGH);
+//$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-core-css.css',HEADER_PRIO_HIGH);
+//$outputHandle->addCSSFile($_CONF['path_layout'].'css/sm-cms.css',HEADER_PRIO_HIGH);
 
 // Media Player
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
