@@ -1,17 +1,36 @@
 {# begin {templatelocation} #}
-<article class="uk-comment tm-comment uk-margin-small" style="padding-left:{indent}px;">
-    <header class="uk-comment-header tm-comment-header">
-        <img class="uk-comment-avatar tm-comment-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
-        <h4 class="uk-comment-title tm-comment-title">{lang_authoredby} {author_link}</h4>
-        <div class="uk-comment-meta tm-comment-meta">
-            {date}
-            {reply_option}
-            {delete_option}
-        </div>
-    </header>
-    <div class="uk-comment-body tm-comment-body">
-        {comments}
-    </div>
-</article>
+<div class="uk-flex uk-comment tm-comment uk-visible-hover" style="padding-left:{indent}px;">
+	<div class="uk-margin-right">
+		<div class="user-avatar online">
+			<img alt="" src="{author_photo_raw}" width="32" height="32">
+		</div>
+	</div>
+	<div class="uk-flex-item-1">
+		<div class="uk-position-relative">
+			<h4 class="uk-comment-title tm-comment-title">
+				{author_link}
+	{!if ipaddress}
+				<a href="{iplookup_link}">{ipaddress}</a>
+{!endif}
+			</h4>
+			<div class="uk-comment-meta tm-comment-meta">{date}</div>
+
+			<div class="uk-position-top-right uk-hidden">
+{!if reply_link}
+				<a href="{reply_link}" title="{lang_reply}" data-uk-tooltip class="uk-button uk-button-mini uk-button-primary"><i class="uk-icon-comments"></i></a>
+{!endif}
+{!if edit_link}
+				<a href="{edit_link}" title="{lang_edit}" data-uk-tooltip class="uk-button uk-button-mini uk-button-success"><i class="uk-icon-edit"></i></a>
+{!endif}
+{!if delete_link}
+				<a href="{delete_link}" title="{lang_delete}" onclick="return confirm('{lang_delete_link_confirm}');" data-uk-tooltip class="uk-button uk-button-mini uk-button-danger"><i class="uk-icon-trash-o"></i></a>
+{!endif}
+			</div>
+		</div>
+		<div class="uk-comment-body tm-comment-body uk-text-break">
+			{comments}
+		</div>
+	</div>
+</div>
 <div class="uk-clearfix"></div>
 {# end {templatelocation} #}

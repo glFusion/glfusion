@@ -555,6 +555,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $editlink = $_CONF['site_url'] . '/comment.php?mode=edit&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token . '#comment_entry';
+            $template->set_var('edit_link',$editlink);
+            $template->set_var('lang_edit',$LANG01[4]);
             $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
         } else {
             $editlink = '';
@@ -568,8 +570,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 if( !empty( $A['ipaddress'] ) ) {
                     if( empty( $_CONF['ip_lookup'] )) {
                         $deloption = $A['ipaddress'] . '  | ';
+                        $template->set_var('ipaddress', $A['ipaddress']);
                     } else {
                         $iplookup = str_replace( '*', $A['ipaddress'], $_CONF['ip_lookup'] );
+                        $template->set_var('iplookup_link', $iplookup);
+                        $template->set_var('ipaddress', $A['ipaddress']);
                         $deloption = COM_createLink($A['ipaddress'], $iplookup) . ' | ';
                     }
                     //insert re-que link here
@@ -579,8 +584,12 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token;
             $delattr = array('onclick' => "return confirm('{$MESSAGE[76]}');");
-            $deloption .= COM_createLink( $LANG01[28], $dellink, $delattr) . ' | ';
 
+            $delete_link = $dellink;
+            $template->set_var('delete_link',$delete_link);
+            $template->set_var('lang_delete_link_confirm',$MESSAGE[76]);
+            $template->set_var('lang_delete',$LANG01[28]);
+            $deloption .= COM_createLink( $LANG01[28], $dellink, $delattr) . ' | ';
             $template->set_var( 'delete_option', $deloption . $edit);
         } else if ( $edit_option) {
             $template->set_var( 'delete_option', $edit );
@@ -591,6 +600,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     . '/comment.php?mode=report&amp;cid=' . $A['cid']
                     . '&amp;type=' . $type;
                 $report_attr = array('title' => $LANG01[110]);
+                $template->set_var('report_link',$reportthis_link);
+                $template->set_var('lang_report',$LANG01[109]);
                 $reportthis = COM_createLink($LANG01[109], $reportthis_link,
                                              $report_attr) . ' | ';
             }
@@ -632,6 +643,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
                         . urlencode($A['title']) . '&amp;type=' . $A['type']
                         . '#comment_entry';
+            $template->set_var('reply_link',$reply_link);
+            $template->set_var('lang_reply',$LANG01[43]);
             $reply_option = COM_createLink($LANG01[43], $reply_link,
                                            array('rel' => 'nofollow')) . ' | ';
             $template->set_var('reply_option', $reply_option);
