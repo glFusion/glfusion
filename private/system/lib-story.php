@@ -653,10 +653,11 @@ function STORY_extractLinks( $fulltext, $maxlength = 26 )
 * @param        string      $related    contents of gl_stories 'related' field
 * @param        int         $uid        user id of the author
 * @param        int         $tid        topic id
+* @param        int         $atid       alternate tid
 * @return       string      HTML-formatted list of links
 */
 
-function STORY_whatsRelated( $related, $uid, $tid )
+function STORY_whatsRelated( $related, $uid, $tid, $atid = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG24;
 
@@ -684,6 +685,12 @@ function STORY_whatsRelated( $related, $uid, $tid )
         $rel[] = '<a href="' . $_CONF['site_url']
                . '/index.php?topic=' . $tid
                . '">' . $LANG24[38] . ' ' . $topic . '</a>';
+        if ( $atid != '' ) {
+            $atopic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($atid)."'" );
+            $rel[] = '<a href="' . $_CONF['site_url']
+                   . '/index.php?topic=' . $atid
+                   . '">' . $LANG24[38] . ' ' . $atopic . '</a>';
+        }
     }
 
     $related = '';
