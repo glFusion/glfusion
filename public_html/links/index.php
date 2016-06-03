@@ -59,6 +59,8 @@ if (!in_array('links', $_PLUGINS)) {
     exit;
 }
 
+USES_lib_social();
+
 /**
 * Create the links list depending on the category given
 *
@@ -319,6 +321,13 @@ function links_list($message)
             $linklist->set_var ('page_navigation', '');
         }
     }
+
+    if ( $_LI_CONF['linksperpage'] == 1 ) {
+        $social_icons = SOC_getShareIcons();
+        $linklist->set_var('social_share',$social_icons);
+    }
+
+
     $linklist->set_var ('blockfooter',COM_endBlock());
     $linklist->parse ('output', 'linklist');
     $display .= $linklist->finish ($linklist->get_var ('output'));
@@ -336,7 +345,7 @@ function links_list($message)
 */
 function prepare_link_item ($A, &$template)
 {
-    global $_LI_CONF, $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE;
+    global $_LI_CONF, $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE, $LANG_LOCALE;
 
     $url = COM_buildUrl ($_CONF['site_url']
                  . '/links/portal.php?what=link&amp;item=' . $A['lid']);
@@ -344,8 +353,11 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_actual_url', $A['url']);
     $template->set_var ('link_name', $A['title']);
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
-    $template->set_var ('link_description',
-                        PLG_replaceTags(nl2br($A['description']),'links','description'));
+
+    $linkDesc = PLG_replaceTags(nl2br($A['description']),'links','description');
+
+    $template->set_var ('link_description',$linkDesc);
+//                        PLG_replaceTags(nl2br($A['description']),'links','description'));
     $content = $A['title'];
 
     if ( $_LI_CONF['target_blank'] == 1 ) {
@@ -385,6 +397,18 @@ function prepare_link_item ($A, &$template)
     } else {
         $template->set_var ('link_edit', '');
         $template->set_var ('edit_icon', '');
+    }
+
+    if ( $_LI_CONF['linksperpage'] == 1 ) {
+        $outputHandle = outputHandler::getInstance();
+        $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+        $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
+        $outputHandle->addMeta('property','og:title',$A['title']);
+        $outputHandle->addMeta('property','og:type','website');
+        $outputHandle->addMeta('property','og:url',$A['url']);
+        if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $linkDesc, $arrResult)) {
+            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+        }
     }
 }
 
