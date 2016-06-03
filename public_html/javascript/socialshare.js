@@ -9,8 +9,8 @@ $(function () {
       var self = Share,
           options = $.extend({
               type: 'vk',
-              url: location.href,
-              count_url: location.href,
+              url: param('url'),
+              count_url: param('url'),
               title: param('title'),
               image: param('image'),
               text: param('description'),
