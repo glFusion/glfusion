@@ -80,10 +80,16 @@
 
 	<div class="uk-clearfix"></div>
 {!if user_bio}
-
 	<div class="uk-panel uk-panel-box">
 		<div class="uk-panel-title">{lang_bio} {username}</div>
 		<div class="uk-text-left">{user_bio}</div>
+	</div>
+{!endif}
+
+{!if follow_me}
+	<div class="uk-panel uk-panel-box">
+		<div class="uk-panel-title">{$LANG04[202]}</div>
+		<div class="uk-text-left">{follow_me}</div>
 	</div>
 {!endif}
 

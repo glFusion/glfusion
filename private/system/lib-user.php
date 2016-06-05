@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User-related functions needed in more than one place.                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -105,6 +105,7 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['userindex'], 'uid', $uid);
     DB_delete ($_TABLES['usercomment'], 'uid', $uid);
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
+    DB_delete ($_TABLES['social_follow_user'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
     DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");

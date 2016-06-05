@@ -78,6 +78,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     static $storycounter = 0;
 
+    USES_lib_social();
+
     SESS_setContext(array('type' => 'article','sid' => $story->_sid));
 
     if( empty( $storytpl )) {
@@ -188,6 +190,13 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var ('camera_icon', '');
             }
             $article->set_var('author_about', $story->DisplayElements('about'));
+            $article->set_var('follow_me',SOC_getFollowMeIcons( $story->DisplayElements('uid') ));
+
+
+
+
+
+
         }
         $topicname = $story->DisplayElements('topic');
         if ( $story->DisplayElements('alternate_tid')  != NULL ) {

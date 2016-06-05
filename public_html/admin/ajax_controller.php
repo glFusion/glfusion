@@ -40,6 +40,9 @@ if (is_ajax()) {
             case 'sistoggle' :
                 sis_toggle();
                 break;
+            case 'sfmtoggle' :
+                sfm_toggle();
+                break;
         }
     } else {
         die();
@@ -97,7 +100,7 @@ function block_toggle() {
 }
 
 /**
-* Enable and Disable block
+* Enable and Disable social integration service
 */
 function sis_toggle() {
     global $_CONF, $_TABLES, $LANG_SOCIAL;
@@ -137,6 +140,49 @@ function sis_toggle() {
     $return["json"] = json_encode($retval);
     echo json_encode($return);
 }
+
+/**
+* Enable and Disable social follow service
+*/
+function sfm_toggle() {
+    global $_CONF, $_TABLES, $LANG_SOCIAL;
+
+    // Make sure user has rights to access this page
+    if (!SEC_hasRights ('social.admin')) {
+        die();
+    }
+    if ( !_sec_checkToken(1) ) {
+        $retval['statusMessage'] = 'Invalid security token. Please refresh the page.';
+        $retval['errorCode'] = 1;
+    } else {
+        $enabledsfm = array();
+        if (isset($_POST['enabledsfm'])) {
+            $enabledsfm = $_POST['enabledsfm'];
+        }
+
+        $sfmarray = array();
+        if ( isset($_POST['sfmarray']) ) {
+            $sfmarray = $_POST['sfmarray'];
+        }
+
+        if (isset($sfmarray) ) {
+            foreach ($sfmarray AS $id => $junk ) {
+                if ( isset($enabledsfm[$id]) ) {
+                    $sql = "UPDATE {$_TABLES['social_follow_services']} SET enabled = '1' WHERE ssid=".(int) $id;
+                    DB_query($sql);
+                } else {
+                    $sql = "UPDATE {$_TABLES['social_follow_services']} SET enabled = '0' WHERE ssid=".(int) $id;
+                    DB_query($sql);
+                }
+            }
+        }
+        $retval['statusMessage'] = $LANG_SOCIAL['state_toggled'];
+        $retval['errorCode'] = 0;
+    }
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+}
+
 
 function menu_element_toggle()
 {

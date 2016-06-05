@@ -1281,6 +1281,26 @@ function glfusion_160()
     ) ENGINE=MyISAM;
     ";
 
+    $_SQL[] = "CREATE TABLE {$_TABLES['social_follow_services']} (
+      `ssid` int(10) UNSIGNED NOT NULL auto_increment,
+      `url` varchar(128) NOT NULL DEFAULT '',
+      `enabled` tinyint(1) NOT NULL DEFAULT '1',
+      `icon` varchar(128) NOT NULL,
+      `service_name` varchar(128) NOT NULL,
+      `display_name` varchar(128) NOT NULL,
+      UNIQUE KEY `ssid` (`ssid`),
+      UNIQUE KEY `service_name` (`service_name`)
+    ) ENGINE=MyISAM;";
+
+    $_SQL[] = "CREATE TABLE {$_TABLES['social_follow_user']} (
+      `suid` int(10) NOT NULL AUTO_INCREMENT,
+      `ssid` int(11) NOT NULL DEFAULT '0',
+      `uid` int(11) NOT NULL,
+      `ss_username` varchar(128) NOT NULL DEFAULT '',
+      UNIQUE KEY `suid` (`suid`),
+      UNIQUE KEY `ssid` (`ssid`,`uid`)
+    ) ENGINE=MyISAM;";
+
     $_SQL[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES
                 ('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1),
                 ('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1),
@@ -1292,6 +1312,20 @@ function glfusion_160()
                 ('rd', 'reddit', 'reddit', 'reddit-alien', 'http://reddit.com/submit?url=%%u&title=%%t', 1),
                 ('tw', 'twitter', 'Twitter', 'twitter', 'http://www.twitter.com', 1),
                 ('vk', 'vk', 'vk', 'vk', 'http://www.vk.org', 1);";
+
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(1, 'https://twitter.com/%%u', 1, 'twitter', 'twitter', 'Twitter');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(2, 'http://facebook.com/%%u', 1, 'facebook', 'facebook', 'Facebook');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(3, 'http://pinterest.com/%%u', 1, 'pinterest-p', 'pinterest', 'Pinterest');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(4, 'http://youtube.com/%%u', 1, 'youtube', 'youtube', 'Youtube');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(5, 'http://plus.google.com/+%%u', 1, 'google-plus', 'google-plus', 'Google+');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(6, 'http://linkedin.com/in/%%u', 1, 'linkedin', 'linkedin', 'LinkedIn');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(7, 'http://github.com/%%u', 1, 'github', 'github', 'GitHub');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(8, 'http://instagram.com/%%u', 1, 'instagram', 'instagram', 'Instagram');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(9, 'http://vimeo.com/%%u', 1, 'vimeo', 'vimeo', 'Vimeo');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(10, 'http://flickr.com/photos/%%u', 1, 'flickr', 'flickr', 'Flickr');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(11, 'http://foursquare.com/%%u', 1, 'foursquare', 'foursquare', 'Foursquare');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
+    $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);

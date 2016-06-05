@@ -504,6 +504,10 @@ $LANG04 = array(
     195 => 'No Account Yet?',
     196 => 'Already Have an Account?',
     197 => 'Connect for Easy Access!',
+    198 => 'Social Memberships',
+    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    200 => 'Social Service',
+    201 => 'Username',
 );
 
 ###############################################################################
@@ -576,7 +580,6 @@ $LANG08 = array(
     35 => 'Sorry, this user prefers not to receive any eMails.',
     36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
     37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
-
 );
 
 ###############################################################################

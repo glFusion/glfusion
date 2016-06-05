@@ -53,8 +53,38 @@
       </div>
     </div>
 
-    {plugin_userinfo_personalinfo}
+
    </fieldset>
+
+{!if social_followme_enabled}
+						<fieldset data-uk-margin>
+							<legend>{lang_social_follow}</legend>
+							<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+						    {lang_social_info}
+							</div>
+							<div class="uk-panel uk-panel-box uk-margin-bottom">
+								<div class="uk-form-row uk-text-bold">
+							    <label class="uk-form-label">{lang_social_service}</label>
+							    <div class="uk-form-label">
+						        {lang_social_username}
+							    </div>
+								</div>
+<!-- BEGIN social_links -->
+								<div class="uk-form-row">
+							    <label class="uk-form-label" for="about">{service_display_name}</label>
+							    <div class="uk-form-controls">
+						        <input class="uk-form-width-medium" id="{service}_username" name="{service}_username" value="{service_username}" />
+							    </div>
+								</div>
+<!-- END social_links -->
+							</div>
+						</fieldset>
+{!endif}
+
+
+
+    {plugin_userinfo_personalinfo}
+
 
    {plugin_userinfo}
 

@@ -98,4 +98,93 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
 
     return $retval;
 }
+
+function SOC_getFollowMeIcons( $uid = -1 )
+{
+    global $_CONF, $_TABLES, $_USER, $LANG_SOCIAL;
+
+    $retval = '';
+
+    if ( $uid == -1 ) {
+        if ( COM_isAnonUser()) return;
+        $uid = $_USER['uid'];
+    }
+
+    $T = new Template( $_CONF['path_layout'].'social' );
+    $T->set_file('links','follow_user.thtml');
+
+    // build SQL to pull this user's active social integrations
+
+    $sql = "SELECT * FROM {$_TABLES['social_follow_services']} as ss LEFT JOIN
+            {$_TABLES['social_follow_user']} AS su ON ss.ssid = su.ssid
+            WHERE su.uid = " . (int) $uid . " AND ss.enabled = 1";
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+    if ( $numRows > 0 ) {
+
+        $T->set_block('links','social_buttons','sb');
+
+        for ( $x = 0; $x < $numRows; $x++ ) {
+            $row = DB_fetchArray($result);
+
+            $social_url = str_replace("%%u", $row['ss_username'],$row['url']);
+
+            $T->set_var(array(
+                'service_icon'  => $row['icon'],
+                'service_display_name' => $row['display_name'],
+                'social_url'   => $social_url,
+            ));
+            $T->set_var('lang_follow_us', 'Follow Me on');
+            $T->parse('sb','social_buttons',true);
+        }
+        $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
+        $T->set_var('lang_follow_us', 'Follow Us on ');
+        $retval = $T->finish ($T->parse('output','links'));
+    }
+    return $retval;
+}
+
+function SOC_followMeProfile( $uid )
+{
+    global $_CONF, $_TABLES, $_USER, $LANG_SOCIAL;
+
+    $retval = '';
+
+    $userFollowMe = array();
+
+    if ( COM_isAnonUser() ) return;
+
+    $socialServicesArray = array();
+    $userServicesArray = array();
+
+    $sql = "SELECT * FROM {$_TABLES['social_follow_services']} WHERE enabled=1";
+    $result = DB_query($sql);
+    while ( ($row = DB_fetchArray($result)) != NULL ) {
+        $id = $row['ssid'];
+        $socialServicesArray[$id] = $row;
+    }
+    $sql = "SELECT * FROM {$_TABLES['social_follow_user']} WHERE uid=". (int) $uid;
+    $result = DB_query($sql);
+    while ( ($row = DB_fetchArray($result)) != NULL ) {
+        $id = $row['ssid'];
+        $userServicesArray[$id] = $row;
+    }
+    foreach ($socialServicesArray AS $id => $data) {
+        if ( isset($userServicesArray[$id]) ) {
+            $socialServicesArray[$id]['ss_username'] = $userServicesArray[$id]['ss_username'];
+        } else {
+            $socialServicesArray[$id]['ss_username'] = '';
+        }
+        $userFollowMe[] = array(
+                    'service_id'           => $id,
+                    'service_display_name' => $socialServicesArray[$id]['display_name'],
+                    'service'              => $socialServicesArray[$id]['service_name'],
+                    'service_username'     => $socialServicesArray[$id]['ss_username']
+        );
+
+    }
+
+    return $userFollowMe;
+}
 ?>

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2105 by the following authors:                        |
+// | Copyright (C) 2008-2106 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -79,6 +79,8 @@ $_TABLES['rating']              = $_DB_table_prefix . 'rating';
 $_TABLES['rating_votes']        = $_DB_table_prefix . 'rating_votes';
 $_TABLES['sessions']            = $_DB_table_prefix . 'sessions';
 $_TABLES['social_share']        = $_DB_table_prefix . 'social_share';
+$_TABLES['social_follow_services'] = $_DB_table_prefix . 'social_follow_services';
+$_TABLES['social_follow_user']  = $_DB_table_prefix . 'social_follow_user';
 $_TABLES['sortcodes']           = $_DB_table_prefix . 'sortcodes';
 $_TABLES['speedlimit']          = $_DB_table_prefix . 'speedlimit';
 $_TABLES['statuscodes']         = $_DB_table_prefix . 'statuscodes';

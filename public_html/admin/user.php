@@ -42,6 +42,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 USES_lib_user();
+USES_lib_social();
 
 $display = '';
 
@@ -610,8 +611,26 @@ function USER_userinfoPanel($U, $newuser = 0)
         'lang_location'             => $LANG04[106],
         'lang_signature'            => $LANG04[32],
         'lang_about'                => $LANG04[7],
-        'lang_pgpkey'               => $LANG04[8]
+        'lang_pgpkey'               => $LANG04[8],
+        'lang_social_follow'        => $LANG04[198],
+        'lang_social_info'          => $LANG04[199],
+        'lang_social_service'       => $LANG04[200],
+        'lang_social_username'      => $LANG04[201],
     ));
+
+    $follow_me = SOC_followMeProfile( $uid );
+    if ( is_array($follow_me) && count($follow_me) > 0 ) {
+        $userform->set_block('user','social_links','sl');
+        $userform->set_var('social_followme_enabled',true);
+        foreach ( $follow_me AS $service ) {
+            $userform->set_var('service_display_name', $service['service_display_name']);
+            $userform->set_var('service',$service['service']);
+            $userform->set_var('service_username',$service['service_username']);
+            $userform->parse('sl','social_links',true);
+        }
+    } else {
+        $userform->unset_var('social_followme_enabled');
+    }
 
     if ( $_CONF['allow_user_photo'] == 1 ) {
         $userform->set_var('lang_userphoto',$LANG04[77]);
@@ -1504,6 +1523,12 @@ function USER_save($uid)
     $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim($_POST['remoteusername'] ) ): '';
     $remoteservice  = (isset($_POST['remoteservice'])) ? COM_applyFilter($_POST['remoteservice']) : '';
 
+    $social_services = SOC_followMeProfile( $uid );
+    foreach ( $social_services AS $service ) {
+        $service_input = $service['service'].'_username';
+        $_POST[$service_input] = strip_tags($_POST[$service_input]);
+    }
+
     if ( $uid == 1 ) {
         return USER_list();
     }
@@ -1843,6 +1868,20 @@ function USER_save($uid)
         if ( is_array($subscription_deletes) ) {
             foreach ( $subscription_deletes AS $subid ) {
                 DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+            }
+        }
+
+        foreach ( $social_services AS $service ) {
+            $service_input = $service['service'].'_username';
+            $_POST[$service_input] = DB_escapeString($_POST[$service_input]);
+
+            if ( $_POST[$service_input] != '' ) {
+                $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+                $sql .= " VALUES (" . (int) $service['service_id'] . ",".$uid.",'".$_POST[$service_input]."');";
+                DB_query($sql,1);
+            } else {
+                $sql = "DELETE FROM {$_TABLES['social_follow_user']} WHERE ssid = ".(int) $service['service_id']." AND uid=".(int) $uid;
+                DB_query($sql,1);
             }
         }
 

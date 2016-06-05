@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user settings page.                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -38,6 +38,7 @@
 require_once 'lib-common.php';
 
 USES_lib_user();
+USES_lib_social();
 
 // Set this to true to have this script generate various debug messages in
 // error.log
@@ -162,7 +163,6 @@ function edituser()
                            htmlspecialchars ($_USER['username']));
 
     if ( $A['account_type'] & LOCAL_USER ) {
-//    if ($A['remoteservice'] == '') {
         $preferences->set_var ('password_value', '');
         $preferences->parse ('current_password_option', 'current_password', true);
         $preferences->parse ('password_option', 'password', true);
@@ -272,6 +272,20 @@ function edituser()
     $preferences->set_var('plugin_panel',PLG_profileEdit($_USER['uid']));
 
     PLG_profileVariablesEdit ($_USER['uid'], $preferences);
+
+    $follow_me = SOC_followMeProfile( $_USER['uid'] );
+    if ( is_array($follow_me) && count($follow_me) > 0 ) {
+        $preferences->set_block('profile','social_links','sl');
+        $preferences->set_var('social_followme_enabled',true);
+        foreach ( $follow_me AS $service ) {
+            $preferences->set_var('service_display_name', $service['service_display_name']);
+            $preferences->set_var('service',$service['service']);
+            $preferences->set_var('service_username',$service['service_username']);
+            $preferences->parse('sl','social_links',true);
+        }
+    } else {
+        $preferences->unset_var('social_followme_enabled');
+    }
 
     $retval = $preferences->finish ($preferences->parse ('output', 'profile'));
     $retval .= PLG_profileBlocksEdit ($_USER['uid']);
@@ -1028,6 +1042,13 @@ function saveuser($A)
     $A['about'] = strip_tags ($A['about']);
     $A['pgpkey'] = strip_tags ($A['pgpkey']);
 
+    // filter / check social integrations here
+    $social_services = SOC_followMeProfile( $_USER['uid'] );
+    foreach ( $social_services AS $service ) {
+        $service_input = $service['service'].'_username';
+        $A[$service_input] = strip_tags($A[$service_input]);
+    }
+
     if (!COM_isEmail ($A['email'])) {
         return COM_refresh ($_CONF['site_url']
                 . '/usersettings.php?msg=52');
@@ -1134,6 +1155,19 @@ function saveuser($A)
 
         DB_query("UPDATE {$_TABLES['users']} SET fullname='{$A['fullname']}',email='{$A['email']}',homepage='{$A['homepage']}',sig='{$A['sig']}',cookietimeout=".(int) $A['cooktime'].",photo='".DB_escapeString($filename)."' WHERE uid=".(int)$_USER['uid']);
         DB_query("UPDATE {$_TABLES['userinfo']} SET pgpkey='{$A['pgpkey']}',about='{$A['about']}',location='{$A['location']}' WHERE uid=".(int)$_USER['uid']);
+
+        foreach ( $social_services AS $service ) {
+            $service_input = $service['service'].'_username';
+            $A[$service_input] = DB_escapeString($A[$service_input]);
+            if ( $A[$service_input] != '' ) {
+                $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+                $sql .= " VALUES (" . (int) $service['service_id'] . ",".$_USER['uid'].",'".$A[$service_input]."');";
+                DB_query($sql,1);
+            } else {
+                $sql = "DELETE FROM {$_TABLES['social_follow_user']} WHERE ssid = ".(int) $service['service_id']." AND uid=".(int) $_USER['uid'];
+                DB_query($sql,1);
+            }
+        }
 
         // Call custom registration save function if enabled and exists
         if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
@@ -1267,6 +1301,12 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('user_bio', nl2br ($A['about']));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
+
+    $followMeIcons = SOC_getFollowMeIcons( $A['uid'] );
+    if ( $followMeIcons != '' ) {
+        $user_templates->set_var('follow_me',$followMeIcons);
+    }
+
     $user_templates->set_var ('start_block_last10stories',
             COM_startBlock ($LANG04[82] . ' ' . $display_name));
     $user_templates->set_var ('start_block_last10comments',

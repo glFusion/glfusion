@@ -94,6 +94,9 @@
 				<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
 				<div class="tm-about-author-bio">
 					{author_about}
+					<div class="uk-container uk-container-center uk-text-center">
+					{follow_me}
+				  </div>
 				</div>
 			</header>
 		</article>

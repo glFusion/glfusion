@@ -6,7 +6,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2015 by the following authors:                        |
+// | Copyright (C) 2011-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -185,6 +185,7 @@ class OAuthConsumer {
             }
             // initial login - create account
             $loginname = $users['loginname'];
+
             $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
@@ -206,6 +207,16 @@ class OAuthConsumer {
             $status = DB_getItem($_TABLES['users'],'status','uid='.(int)$uid);
             $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
             DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
+
+            if ( isset($users['socialuser']) ) {
+                $social_result = DB_query("SELECT * FROM {$_TABLES['social_follow_services']} WHERE service_name='".DB_escapeString($users['socialservice'])."' AND enabled=1");
+                if (DB_numRows($social_result) > 0 ) {
+                    $social_row = DB_fetchArray($social_result);
+                    $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+                    $sql .= " VALUES (" . (int) $social_row['ssid'] . ",".$uid.",'".$users['socialuser']."');";
+                    DB_query($sql,1);
+                }
+            }
 
             if ( isset($users['email']) && $users['email'] != '' ) {
                 $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".LOCAL_USER." AND email='".DB_escapeString($users['email'])."' AND uid > 1";
@@ -303,9 +314,13 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.facebook',
                     'remotephoto'    => 'http://graph.facebook.com/'.$info->id.'/picture',
+                    'socialservice'  => 'facebook',
+                    'socialuser'     => 'app_scoped_user_id/'.$info->id,
                 );
                 break;
             case 'google' :
+                $homepage = $info->link;
+                $username = substr($homepage,strlen("https://plug.google.com/+"));
                 $users = array(
                     'loginname'      => (isset($info->given_name) ? $info->given_name : $info->id),
                     'email'          => $info->email,
@@ -316,6 +331,8 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.google',
                     'remotephoto'    => $info->picture,
+                    'socialservice'  => 'google-plus',
+                    'socialuser'     => $username,
                 );
                 break;
             case 'twitter' :
@@ -329,6 +346,9 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->screen_name),
                     'remoteservice'  => 'oauth.twitter',
                     'remotephoto'    => $info->profile_image_url,
+                    'socialservice'  => 'twitter',
+                    'socialuser'     => $info->screen_name,
+
                 );
                 break;
             case 'microsoft' :
@@ -368,6 +388,9 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.linkedin',
                     'remotephoto'    => $info->{'pictureUrl'},
+                    'socialservice'  => 'linkedin',
+                    'socialuser'     => $info->id,
+
                 );
                 break;
             case 'github' :
@@ -381,6 +404,9 @@ class OAuthConsumer {
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.github',
                     'remotephoto'    => $info->{'avatar_url'},
+                    'socialservice'  => 'github',
+                    'socialuser'     => $info->login,
+
                 );
                 break;
         }

@@ -38,6 +38,7 @@
 require_once 'lib-common.php';
 
 USES_lib_user();
+USES_lib_social();
 
 if ( !isset($_SYSTEM['verification_token_ttl']) ) {
     $_SYSTEM['verification_token_ttl'] = 86400;
@@ -218,6 +219,9 @@ function userprofile()
     $user_templates->set_var ('lang_online', $LANG04[160]);
     $user_templates->set_var ('lang_bio', $LANG04[7]);
     $user_templates->set_var ('user_bio', nl2br ($A['about']));
+
+    $user_templates->set_var('follow_me',SOC_getFollowMeIcons( $user ));
+
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
     $user_templates->set_var ('start_block_last10stories',
