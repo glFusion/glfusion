@@ -1094,15 +1094,11 @@ function SEC_setDefaultPermissions (&$A, $use_permissions = array ())
 */
 function SEC_buildAccessSql ($clause = 'AND', $field = 'grp_access')
 {
-    global $_TABLES, $_USER;
+    global $_GROUPS;
 
-    if (isset($_USER) AND $_USER['uid'] > 1) {
-        $uid = $_USER['uid'];
-    } else {
-        $uid = 1;
+    if (empty ($_GROUPS)) {
+        $_GROUPS = SEC_getUserGroups();
     }
-
-    $_GROUPS = SEC_getUserGroups($uid);
     $groupsql = '';
     if (count($_GROUPS) == 1) {
         $groupsql .= " $clause $field = '" . current($_GROUPS) ."'";
