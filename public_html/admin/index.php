@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the admin index page that does nothing more that login you in.   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Joe Mucchiello         joe AT throwingdice DOT com                       |
