@@ -499,7 +499,14 @@ $LANG04 = array(
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
     193 => 'Note: If you merge a remote account to an existing local account, the preferences for the local user will take priority.',
-    194 => 'Sign in with '
+    194 => 'Sign in with ',
+    195 => 'No Account Yet?',
+    196 => 'Already Have an Account?',
+    197 => 'Connect for Easy Access!',
+    198 => 'Social Memberships',
+    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    200 => 'Social Service',
+    201 => 'Username'
 );
 
 ###############################################################################
@@ -527,7 +534,8 @@ $LANG05 = array(
     5 => 'Successivo',
     6 => 'Precedente',
     7 => 'Primo',
-    8 => 'Ultimo'
+    8 => 'Ultimo',
+    9 => 'Load More Stories'
 );
 
 ###############################################################################
@@ -981,7 +989,11 @@ $LANG24 = array(
     91 => 'Moderate Draft Story',
     92 => 'Enter the story information below and save.',
     93 => 'Display',
-    94 => 'Published'
+    94 => 'Published',
+    95 => 'Story Image',
+    96 => 'Set Image',
+    97 => 'Remove Image',
+    98 => 'Sub Title'
 );
 
 ###############################################################################
@@ -1428,7 +1440,7 @@ $MESSAGE = array(
     31 => 'Spiacenti, non hai i permessi per accedere alla pagina amministrazione articoli.  Prego nota che tutti i tentativi di accesso non autorizzati vengono registrati.',
     32 => 'Spiacenti, non hai i permessi per accedere alla pagina amministrazione argomenti.  Prego nota che tutti i tentativi di accesso non autorizzati vengono registrati.',
     33 => 'Spiacenti, non hai i permessi per accedere alla pagina amminitrazione blocchi.  Prego nota che tutti i tentativi di accesso non autorizzati vengono registrati.',
-    34 => '',
+    34 => 'Sorry, you do not have access to this administration page.  Please note that all attempts to access unauthorized features are logged',
     35 => '',
     36 => 'The Autotag permissions have been successfully saved.',
     37 => 'Spiacenti, non hai i permessi per accedere alla pagina amministrazione utenti.  Prego nota che tutti i tentativi di accesso non autorizzati vengono registrati.',
@@ -1711,7 +1723,9 @@ $LANG_ACCESS = array(
 # admin/database.php
 
 $LANG_DB_BACKUP = array(
+    'database_admin' => 'Database Administration',
     'last_ten_backups' => 'Ultimi 10 Backup',
+    'create_backup' => 'Backup Database',
     'do_backup' => 'Esegui il Backup',
     'backup_successful' => 'Il Backup &egrave; stato eseguito correttamente.',
     'db_explanation' => 'Per creare un nuovo Backup del tuo sistema glFusion, fai clic sul bottone sottostante',
@@ -1723,7 +1737,23 @@ $LANG_DB_BACKUP = array(
     'size' => 'Dim.',
     'bytes' => 'Byte',
     'total_number' => 'Numero Totale di backup: %d',
-    'download' => 'Click to download this file'
+    'download' => 'Click to download this file',
+    'convert_menu' => 'Convert to InnoDB',
+    'convert_title' => 'Convert to InnoDB tables',
+    'convert_button' => 'Convert',
+    'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
+    'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
+    'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
+    'conversion_message' => 'Note: Conversion may take some time - please be patient.',
+    'innodb_success' => 'Successfully converted tables to InnoDB.',
+    'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
+    'optimize_menu' => 'Optimize Tables',
+    'optimize_title' => 'Optimize Tables',
+    'optimize_button' => 'Optimize',
+    'optimize_explain' => 'Optimizing tables may help to improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do no expect to see a huge difference in performance. The <a href="http://dev.mysql.com/doc/mysql/en/optimize-table.html" target="_blank">MySQL manual</a> states: <q>it is not likely that you need to do this more than once a week or month</q>.',
+    'last_optimization' => 'Last optimization',
+    'optimization_message' => 'Optimization may take some time - please be patient.',
+    'optimize_success' => 'Successfully optimized database tables.'
 );
 
 ###############################################################################
@@ -2233,6 +2263,24 @@ $LANG_AM = array(
 );
 
 ###############################################################################
+# social.php
+
+$LANG_SOCIAL = array(
+    'label' => 'Social Integrations',
+    'social_share' => 'Social Share Sites',
+    'share_instructions' => 'You can configure which social sharing buttons are enabled',
+    'follow_instructions' => 'You can configure which social follow me services are enabled',
+    'social_follow' => 'Follow Me Settings',
+    'id' => 'ID',
+    'name' => 'Name',
+    'enabled' => 'Enabled',
+    'share_it_label' => 'Share It!',
+    'state_toggled' => 'Social Share state has been toggled.',
+    'follow_us' => 'Follow Us on',
+    'follow_me' => 'Follow Me on'
+);
+
+###############################################################################
 # versioncheck.php
 
 $LANG_UPGRADE = array(
@@ -2652,7 +2700,8 @@ $LANG_confignames['Core'] = array(
     'bb2_httpbl_maxage' => 'http:BL Max Age',
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
-    'bb2_ban_timeout' => 'Number of hours to ban IP'
+    'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'infinite_scroll' => 'Enable Infinite Scroll'
 );
 
 $LANG_configsubgroups['Core'] = array(
