@@ -1423,16 +1423,18 @@ $LANG_LOGVIEW = array(
 # admin/social.php
 
 $LANG_SOCIAL = array(
-    'label' => 'Social Integrations',
-    'social_share' => 'Social Share Sites',
-    'share_instructions' => 'You can configure which social sharing buttons are enabled',
-    'follow_instructions' => 'You can configure which social follow me services are enabled',
-    'social_follow' => 'Follow Me Settings',
-    'id'    => 'ID',
-    'name'  => 'Name',
-    'enabled'   => 'Enabled',
-    'share_it_label'    => 'Share It!',
-    'state_toggled'     => 'Social Share state has been toggled.',
+    'label'                 => 'Social Integrations',
+    'social_share'          => 'Social Share Sites',
+    'share_instructions'    => 'You can configure which social sharing buttons are enabled',
+    'follow_instructions'   => 'You can configure which social follow me services are enabled',
+    'social_follow'         => 'Follow Me Settings',
+    'id'                    => 'ID',
+    'name'                  => 'Name',
+    'enabled'               => 'Enabled',
+    'share_it_label'        => 'Share It!',
+    'state_toggled'         => 'Social Share state has been toggled.',
+    'follow_us'             => 'Follow Us on',
+    'follow_me'             => 'Follow Me on',
 );
 
 

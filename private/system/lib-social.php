@@ -135,11 +135,11 @@ function SOC_getFollowMeIcons( $uid = -1 )
                 'service_display_name' => $row['display_name'],
                 'social_url'   => $social_url,
             ));
-            $T->set_var('lang_follow_us', 'Follow Me on');
+            $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
             $T->parse('sb','social_buttons',true);
         }
         $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
-        $T->set_var('lang_follow_us', 'Follow Us on ');
+        $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
         $retval = $T->finish ($T->parse('output','links'));
     }
     return $retval;
