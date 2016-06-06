@@ -29,6 +29,12 @@
 		f.elements["cmt_close_minute"].disabled=!disable;
 		f.elements["cmt_close_ampm"].disabled=!disable;
 	}
+
+function actionClick( $action ) {
+ $('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+ $('#frmstory').trigger('submit', [ { $action: true } ]);
+}
+
 </script>
 <div class="tm-admin">
 	{wysiwyg}
@@ -405,13 +411,13 @@
 		<div class="uk-margin-right-small uk-hidden-small tm-admin-save" data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:900}">
 			<ul>
 				<li>
-					<button class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
+					<button onclick="actionClick('save');" class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
 				</li>
 				<li>
-					<button class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					<button onclick="actionClick('previewstory');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 				<li>
-					<button class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
 {!if delete_option}
 				<li>
@@ -425,9 +431,9 @@
 		{# submission options #}
 
 		<div id="se_bottom" class="uk-margin-large">
-			<button class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
-			<button class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
-			<button class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+			<button onclick="actionClick('save');" class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
+			<button onclick="actionClick('previewstory');" class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
+			<button onclick="actionClick('cancel');" class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 			<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>
 {!endif}
