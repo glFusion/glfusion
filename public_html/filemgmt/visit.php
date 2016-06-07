@@ -100,13 +100,18 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 }
                 if ( file_exists($fullurl) ) {
                     if ($fd = fopen ($fullurl, "rb")) {
+                        ob_end_flush();
                         header('Content-Type: application/octet-stream; name="'.urldecode($url).'"');
                         header('Content-Disposition: attachment; filename="'.urldecode($url).'"');
                         header('Accept-Ranges: bytes');
-                        header('Pragma: no-cache');
+                        if (!$_CONF['cookiesecure']) {
+                            header('Pragma: no-cache');
+                        }
                         header('Expires: 0');
                         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                         header('Content-transfer-encoding: binary');
+                        session_write_close();
+                        ob_end_flush();
                         fpassthru($fd);
                         flush();
                     } else {
