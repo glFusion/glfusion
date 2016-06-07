@@ -56,7 +56,7 @@ class ErrorHandler {
             "0010" => "Could not move selected topic to selected forum. Please go back and try again.",
             "0011" => "Could not lock the selected topic. Please go back and try again.",
             "0012" => "Could not unlock the selected topic. Please go back and try again.",
-            "0013" => "Could not query the database. <BR>Error: ".mysql_error()."",
+            "0013" => "Could not query the database. <BR>Error: ".DB_error()."",
             "0014" => "No such user or post in the database.",
             "0015" => "Search Engine was unable to query the forums database.",
             "0016" => "That user does not exist. Please go back and search again.",
