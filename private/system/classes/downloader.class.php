@@ -194,7 +194,7 @@ class downloader
     */
     function _setAvailableExtensions($extensions = array())
     {
-        if (sizeof($extensions) == 0) {
+        if (count($extensions) == 0) {
             $this->_availableMimeTypes =
                 array(
                     'tgz' => 'application/x-gzip-compressed',
@@ -258,8 +258,8 @@ class downloader
     /**
     * Sets log file
     *
-    * @param        string      $fileName       fully qualified path to log files
-    * @return       boolean     true on success otherwise false
+    * @param        string      $logFile    fully qualified path to log files
+    * @return       boolean                 true on success otherwise false
     *
     */
     function setLogFile($logFile = '')
@@ -363,7 +363,7 @@ class downloader
     }
 
     /**
-    * This function will print any debmug messages out.
+    * This function will print any debug messages out.
     *
     */
     function printDebugMsgs()
@@ -396,7 +396,7 @@ class downloader
     /**
     * Sets allowed mime types for this instance
     *
-    * @param    array       $allowedMimeTypes   Array of allowed mime types
+    * @param  array  $validExtensions  Array of allowed extensions and mime types
     *
     */
     function setAllowedExtensions($validExtensions = array())
@@ -479,7 +479,7 @@ class downloader
     /**
     * Attempts to dowload a file
     *
-    * @param    $string     $fileName       file to download without path
+    * @param    string      $fileName       file to download without path
     * @return   boolean     true on success otherwise false
     *
     */
@@ -516,7 +516,7 @@ class downloader
         $fextension = substr($fileName, $pos);
 
         // If application has not set the allowedExtensions then initialize to the default
-        if(sizeof($this->_allowedExtensions) == 0) {
+        if(count($this->_allowedExtensions) == 0) {
             $this->_allowedExtensions = array_flip($this->_availableExtensions);
         }
 
@@ -525,8 +525,7 @@ class downloader
             // Display file inside browser.
             header('Content-Type: ' . $this->_availableMimeTypes[$fextension]);
             header('Content-Transfer-Encoding: binary');
-            header('Content-Length: '
-                   . filesize($this->_sourceDirectory . $fileName));
+            header('Content-Length: '.filesize($this->_sourceDirectory . $fileName));
 
             // send images as 'inline' everything else as 'attachment'
             if (substr($this->_availableMimeTypes[$fextension], 0, 6) == 'image/') {
@@ -534,18 +533,14 @@ class downloader
             } else {
                 header('Content-Disposition: attachment; filename="' . $fileName . '"');
             }
-
+            session_write_close();
+            ob_end_flush();
             // Send file contents.
             $fp = fopen($this->_sourceDirectory . $fileName, 'rb');
-            while (!feof($fp)) {
-                echo fread($fp, 1024);
-                ob_flush();
-            }
+            fpassthru($fp);
             fclose($fp);
         }
-
         return true;
     }
-
 }
 ?>
