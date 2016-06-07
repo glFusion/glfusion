@@ -62,8 +62,8 @@ function DBADMIN_compareBackupFiles($pFileA, $pFileB)
 {
     global $_CONF;
 
-    $lFiletimeA = filemtime($_CONF['backup_path'] . $pFileA);
-    $lFiletimeB = filemtime($_CONF['backup_path'] . $pFileB);
+    $lFiletimeA = @filemtime($_CONF['backup_path'] . $pFileA);
+    $lFiletimeB = @filemtime($_CONF['backup_path'] . $pFileB);
     if ($lFiletimeA == $lFiletimeB) {
        return 0;
     }
@@ -214,7 +214,7 @@ function DBADMIN_backup()
             $canExec = @file_exists($_DB_mysqldump_path);
         }
         if ($canExec) {
-            DBADMIN_execWrapper($command);
+            exec($command);
             if (file_exists($backupfile) && filesize($backupfile) > 1000) {
                 @chmod($backupfile, 0644);
                 $retval .= COM_showMessage(93);
@@ -239,6 +239,8 @@ function DBADMIN_backup()
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
         COM_errorLog("Backup directory '" . $_CONF['backup_path'] . "' does not exist or is not a directory", 1);
     }
+
+    $retval .= DBADMIN_list();
 
     return $retval;
 }
@@ -267,42 +269,6 @@ function DBADMIN_download($file)
     $dl->setAllowedExtensions(array('sql' =>  'application/x-gzip-compressed'));
 
     $dl->downloadFile($file);
-}
-
-function DBADMIN_exec($cmd) {
-    global $_CONF, $_DB_pass;
-
-    $debugfile = "";
-    $status="";
-    $results=array();
-
-    if (!empty($_DB_pass)) {
-        $log_command = str_replace($_DB_pass,'*****', $cmd);
-    }
-    COM_errorLog(sprintf("DBADMIN_exec: Executing: %s",$log_command));
-
-    $debugfile = $_CONF['path'] . 'logs/debug.log';
-
-    if (PHP_OS == "WINNT") {
-        $cmd .= " 2>&1";
-        exec('"' . $cmd . '"',$results,$status);
-    } else {
-        exec($cmd, $results, $status);
-    }
-
-    return array($results, $status);
-}
-
-function DBADMIN_execWrapper($cmd) {
-
-    list($results, $status) = DBADMIN_exec($cmd);
-
-    if ( $status == 0 ) {
-        return true;
-    } else {
-        COM_errorLog("DBADMIN_execWrapper: Failed Command: " . $cmd);
-        return false;
-    }
 }
 
 /**
@@ -696,6 +662,7 @@ switch ($action) {
             COM_accessLog("User {$_USER['username']} tried to delete database backup(s) and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
+        $page = DBADMIN_list();
         break;
 
     case 'innodb':
