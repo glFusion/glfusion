@@ -61,7 +61,7 @@
 					{plugin_icon_vars}
 
 {!if feed_icon}
-					<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
+					<li><a href="{feed_url}" class="tm-meta-icon uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 				</ul>
 
