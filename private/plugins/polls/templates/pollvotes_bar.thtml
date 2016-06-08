@@ -1,15 +1,17 @@
 {# begin {templatelocation} #}
-<tr>
-  <td class="poll_answer_text">{answer_text}</td>
-  <td class="poll_answer_bar">
-    <img src="{layout_url}/images/bar.gif" width="{bar_width}" height="10" style="height:10px;align:bottom;" alt="" /> {answer_num} ({answer_percent}%)
-  </td>
-</tr>
+<div class="uk-grid">
+	<div class="uk-width-small-1-4">
+		{answer_text}
+	</div>
+	<div class="uk-width-small-3-4">
+		<div class="uk-progress">
+			<div class="uk-progress-bar" style="width: {answer_percent}%;">{answer_percent}%</div>
+		</div>
 {!if remark_text}
-<tr>
-  <td class="uk-text-right" colspan="2">
-    {remark_text}
-  </td>
-</tr>
+		<div class="uk-text-right">
+			{remark_text}
+		</div>
 {!endif}
+	</div>
+</div>
 {# end {templatelocation} #}
