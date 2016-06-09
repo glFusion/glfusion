@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {!if lang_sendemail}
 <li>
-<a class="uk-icon-envelope-o uk-icon-small" href="{site_url}/profiles.php?uid={user_id}">
+<a class="tm-meta-icon uk-icon-envelope-o uk-icon-small" href="{site_url}/profiles.php?uid={user_id}">
 </a>
 </li>
 {!endif}
