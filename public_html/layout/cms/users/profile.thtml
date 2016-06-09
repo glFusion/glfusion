@@ -43,29 +43,29 @@
 		<ul class="uk-list">
 {!if user_edit}
 			<li>
-				<a class="uk-icon-edit uk-icon-small" href="{user_edit}" title="{$LANG_ADMIN[edit]}"></a>
+				<a class="tm-meta-icon uk-icon-edit uk-icon-small" href="{user_edit}" title="{$LANG_ADMIN[edit]}"></a>
 			</li>
 {!endif}
 			{email_option}
 {!if user_homepage}
 			<li>
-				<a class="uk-icon-home uk-icon-small" href="{user_homepage}" title="{lang_homepage}: {user_homepage}" target="_blank"></a>
+				<a class="tm-meta-icon uk-icon-home uk-icon-small" href="{user_homepage}" title="{lang_homepage}: {user_homepage}" target="_blank"></a>
 			</li>
 {!endif}
 {!if user_location}
 			<li>
-				<i class="uk-icon-globe uk-icon-small" title="{lang_location}: {user_location}"></i>
+				<i class="tm-meta-icon uk-icon-globe uk-icon-small" title="{lang_location}: {user_location}"></i>
 			</li>
 {!endif}
 {!if user_pgp}
 			<li>
-				<a class="uk-icon-key uk-icon-small" title="{lang_pgpkey}" href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
+				<a class="tm-meta-icon uk-icon-key uk-icon-small" title="{lang_pgpkey}" href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
 				</a>
 			</li>
 {!endif}
 {!if online}
 			<li>
-				<i class="uk-icon-wifi uk-icon-small" title="{lang_online}"></i>
+				<i class="tm-meta-icon uk-icon-wifi uk-icon-small" title="{lang_online}"></i>
 			</li>
 {!endif}
 			<!-- BEGIN profileicon -->
