@@ -1,13 +1,18 @@
 {# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
+<div id="configuration">
+	<form class="uk-form" method="post" action="configuration.php" name="group">
+		<input type="hidden" value="{open_group}" name="conf_group">
+		<input type="hidden" value="" name="subgroup">
+		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
+	</form>
 
-<nav class="uk-navbar uk-margin-bottom">
+<nav class="uk-navbar uk-margin-bottom uk-visible-small">
 	<a href="#" class="uk-navbar-toggle" data-uk-offcanvas="{target:'#admin-side-config'}">
 	</a>
 	<div class="uk-navbar-content">{group_name} :: {subgroup_active_name}</div>
 </nav>
-
-<div id="admin-side-config" class="uk-offcanvas">
+<div id="admin-side-config" class="uk-offcanvas uk-visible-small">
 	<div class="uk-offcanvas-bar">
 		<div class="uk-panel">
 			{config_menu}
@@ -15,13 +20,11 @@
 	</div>
 </div>
 
-<div id="configuration">
-	<form class="uk-form" method="post" action="configuration.php" name="group">
-		<input type="hidden" value="{open_group}" name="conf_group">
-		<input type="hidden" value="" name="subgroup">
-		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
-	</form>
-		<div class="uk-width-1-1">
+	<div class="uk-grid  uk-margin-large-bottom" data-uk-grid-margin>
+		<div class="uk-width-medium-1-4 uk-hidden-small">
+			<div class="uk-panel uk-panel-box">{config_menu}</div>
+		</div>
+		<div class="uk-width-medium-3-4 uk-width-small-1-1">
 {!if change_block}
 			<div class="uk-alert" data-uk-alert>
 				<a href="#" class="uk-alert-close uk-close"></a>
@@ -34,14 +37,14 @@
 				<input type="hidden" name="sub_group" value="{open_sg}">
 				<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 				<div id="ce_{subgroup_name}">
-
 					<div id="tabs">
 						<ul class="uk-tab" data-uk-switcher="{connect:'#tabdata'}">
 	<!-- BEGIN tabs -->
 							<li><a href="#{index}">{tab}</a></li>
 	<!-- END tabs -->
 						</ul>
-						<ul id="tabdata" class="uk-switcher">
+
+						<ul id="tabdata" class="uk-switcher uk-margin">
 	<!-- BEGIN fieldset -->
 						<li>
 						<div id="{index}" style="overflow:hidden;">
@@ -59,7 +62,7 @@
 								</table>
 							</fieldset>
 						</div>
-					</li>
+						</li>
 	<!-- END fieldset -->
 					</div>
 				</div>
@@ -71,6 +74,7 @@
 			</form>
 		</div>
 	</div>
+</div>
 <script>
 	var ConfigDocUrl = '{confighelpurl}';
 	$(document).ready(function() {
