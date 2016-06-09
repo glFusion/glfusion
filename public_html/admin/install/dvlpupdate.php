@@ -1133,7 +1133,7 @@ function glfusion_143()
 
 function glfusion_150()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1163,6 +1163,13 @@ function glfusion_150()
     $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `tid` `tid` VARCHAR(128) NOT NULL DEFAULT 'General';";
 
     $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} CHANGE `sp_tid` `sp_tid` VARCHAR(128) NOT NULL DEFAULT 'none';";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
@@ -1208,7 +1215,7 @@ function glfusion_150()
 
 function glfusion_151()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1219,6 +1226,13 @@ function glfusion_151()
     $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `sid` `sid` VARCHAR(128);";
     $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `topic` `topic` VARCHAR(128);";
     $_SQL[] = "ALTER TABLE {$_TABLES['trackback']} CHANGE `sid` `sid` VARCHAR(128);";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
@@ -1231,12 +1245,20 @@ function glfusion_151()
 
 function glfusion_152()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
     $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
@@ -1247,7 +1269,7 @@ function glfusion_152()
 
 function glfusion_160()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1326,6 +1348,13 @@ function glfusion_160()
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(11, 'http://foursquare.com/%%u', 1, 'foursquare', 'foursquare', 'Foursquare');";
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
@@ -1838,6 +1867,11 @@ function _forum_fix_watch() {
         $prevuid = $W['uid'];
     }
     return;
+}
+
+$use_innodb = false;
+if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+    $use_innodb = true;
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';
