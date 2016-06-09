@@ -163,11 +163,11 @@ function INSTALLER_install_table($step, &$vars)
     static $use_innodb = null;
     if ($use_innodb === null) {
         if (($_DB_dbms == 'mysql') &&
-
             (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
-        $use_innodb = true;
+            $use_innodb = true;
+        } else {
+            $use_innodb = false;
         }
-        $use_innodb = false;
     }
 
     $sql55 = str_replace("TYPE=MyISAM","ENGINE=MyISAM", $step['sql']);
