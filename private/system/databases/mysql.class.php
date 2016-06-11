@@ -184,6 +184,15 @@ class database {
     }
 
     /**
+    * @return     string     the version of the database application as integer
+    */
+    public function dbGetVersion()
+    {
+        return $this->_mysql_version;
+    }
+
+
+    /**
     * Turns debug mode on
     *
     * Set this to true to see debug messages

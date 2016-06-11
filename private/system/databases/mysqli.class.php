@@ -144,6 +144,14 @@ class database
     }
 
     /**
+    * @return     string     the version of the database application as integer
+    */
+    public function dbGetVersion()
+    {
+        return $this->_mysql_version;
+    }
+
+    /**
     * Turns debug mode on
     *
     * Set this to TRUE to see debug messages
@@ -152,7 +160,7 @@ class database
     */
     public function setVerbose($flag)
     {
-        $this->_verbose = (bool) $flag;
+        $this->_verbose = (boolean) $flag;
     }
 
     /**
@@ -167,7 +175,7 @@ class database
     */
     public function setDisplayError($flag)
     {
-        $this->_display_error = (bool) $flag;
+        $this->_display_error = (boolean) $flag;
     }
 
     /**
@@ -652,7 +660,28 @@ class database
     public function dbError($sql = '')
     {
         if ($this->_db->errno) {
-            $this->_errorlog($this->_db->errno . ': ' . $this->_db->error . ". SQL in question: ".$sql);
+            $fn = '';
+            $btr = debug_backtrace();
+            if (! empty($btr)) {
+                for ($i = 0; $i < 100; $i++) {
+                    if (isset($btr[$i])) {
+                        $b = $btr[$i];
+                        if ($b['function'] == 'DB_query') {
+                            if (!empty($b['file']) && !empty($b['line'])) {
+                                $fn = $b['file'] . ':' . $b['line'];
+                            }
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (empty($fn)) {
+                $this->_errorlog($this->_db->errno . ': ' . $this->_db->error . ". SQL in question: $sql");
+            } else {
+                $this->_errorlog($this->_db->errno . ': ' . $this->_db->error . " in $fn. SQL in question: $sql");
+            }
 
             if ($this->_display_error) {
                 return  $this->_db->errno . ': ' . $this->_db->error;
@@ -710,14 +739,6 @@ class database
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Leaving database->dbUnlockTable");
         }
-    }
-
-    /**
-    * @return     string     the version of the database application
-    */
-    public function dbGetVersion()
-    {
-        return $this->_db->server_info;
     }
 
     public function dbEscapeString($value, $is_numeric = FALSE)

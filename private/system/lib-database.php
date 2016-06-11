@@ -139,6 +139,18 @@ if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
 // | the code...do NOT use the $_DB methods directly
 // +---------------------------------------------------------------------------+
 
+
+/**
+* @return     string     the version of the database application as integer
+*/
+function DB_getVersion()
+{
+    global $_DB;
+
+    return $_DB->dbGetVersion();
+}
+
+
 /**
 * Turns debug mode on for the database library
 *

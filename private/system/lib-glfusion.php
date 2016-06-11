@@ -85,10 +85,10 @@ function glfusion_UpgradeCheck() {
 
     switch ($comparison) {
         case 1:
-            $msg .= sprintf($LANG01[504], $dbversion, GVERSION, $install_url ) . '<br />';
+            $msg .= sprintf($LANG01[504], $dbversion, GVERSION, $install_url ) . '<br>';
             break;
         case -1:
-            $msg .= sprintf($LANG01[505], $dbversion, GVERSION ) . '<br />';
+            $msg .= sprintf($LANG01[505], $dbversion, GVERSION ) . '<br>';
             break;
     }
 
@@ -108,16 +108,16 @@ function glfusion_SecurityCheck() {
     $retval = '';
     $msg = '';
     if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
-        $msg .= $LANG01[500].'<br />';
+        $msg .= $LANG01[500].'<br>';
     }
     if ( $_SYSTEM['rootdebug'] ) {
-        $msg .= $LANG01[501].'<br />';
+        $msg .= $LANG01[501].'<br>';
     }
     if ( $_SYSTEM['no_fail_sql'] ) {
-        $msg .= $LANG01[502].'<br />';
+        $msg .= $LANG01[502].'<br>';
     }
     if ( $_CONF['maintenance_mode'] ) {
-        $msg .= $LANG01[503].'<br />';
+        $msg .= $LANG01[503].'<br>';
     }
     if ( $msg != '' ) {
 
@@ -352,8 +352,9 @@ function _checkVersion()
     $error=$http->GetRequestArguments($url,$arguments);
     $arguments["RequestMethod"]="POST";
     $arguments["PostValues"]=array(
-        "v"=>"v".GVERSION.PATCHLEVEL,
-        "p"=>"v".PHP_VERSION
+        "v"=>GVERSION.PATCHLEVEL,
+        "p"=>PHP_VERSION,
+        "d"=>DB_getVersion()
     );
     if ( $_CONF['send_site_data'] ) {
         $arguments["PostValues"]['s'] = $_CONF['site_url'];
