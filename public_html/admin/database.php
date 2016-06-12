@@ -366,13 +366,13 @@ function DBADMIN_innodb()
 
     $retval .= '<div id="dbconfig">' . LB;
     $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<input type="submit" value="' . $LANG_DB_BACKUP['convert_button'] . '">' . LB;
+    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['convert_button'] . '</button>' . LB;
     $retval .= '<input type="hidden" name="doinnodb" value="doinnodb">' . LB;
     $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
     $retval .= '</form>' . LB;
     $retval .= '<form action="' . $_CONF['site_admin_url']
             . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<input type="submit" value="' . $LANG_ADMIN['cancel'] . '">' . LB;
+    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
     $retval .= '</form></div>' . LB;
 
     $retval .= COM_endBlock();
@@ -502,13 +502,13 @@ function DBADMIN_optimize()
 
     $retval .= '<div id="dboptimize">' . LB;
     $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<input type="submit" value="' . $LANG_DB_BACKUP['optimize_button'] . '">' . LB;
+    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['optimize_button'] . '</button>' . LB;
     $retval .= '<input type="hidden" name="dooptimize" value="dooptimize">' . LB;
     $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
     $retval .= '</form>' . LB;
     $retval .= '<form action="' . $_CONF['site_admin_url']
             . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<input type="submit" value="' . $LANG_ADMIN['cancel'] . '">' . LB;
+    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
     $retval .= '</form></div>' . LB;
 
     $retval .= COM_endBlock();
