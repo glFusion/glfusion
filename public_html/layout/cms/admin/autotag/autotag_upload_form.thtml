@@ -3,7 +3,10 @@
 	<form class="uk-form uk-form-horizontal" name="autotagupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
 		<input class="uk-button uk-button-small" type="hidden" name="action" value="processupload">
 		{lang_upload_plugin}
-		<input class="uk-form-file" type="file" name="autotagfile" id="autotagfile">
+		<div class="uk-form-file uk-margin-left">
+                <button class="uk-button uk-button-small">Choose File</button>
+                <input type="file" name="autotagfile" id="autotagfile">
+                </div>
 		<button class="uk-button uk-button-small" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
 	</form>
 </div>
