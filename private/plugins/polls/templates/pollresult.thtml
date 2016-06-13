@@ -1,7 +1,14 @@
 {# begin {templatelocation} #}
-<div class="uk-text-large">{poll_topic}<span class="uk-align-right">{edit_icon}</span></div>
+{!if edit_url}
+	<span class="uk-align-right"><a href="{edit_url}" class="uk-aling-right uk-icon uk-icon-edit tm-meta-icon"></a></span>
+{!endif}
+{!if poll_topic}
+	<h3>{poll_topic}</h3>
+{!elseif edit_icon}
+	<br />
+{!endif}
 {poll_questions}
 <div class="uk-text-small">
-    {notification} <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
+	{notification} <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
 </div>
 {# end {templatelocation} #}

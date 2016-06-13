@@ -1289,9 +1289,6 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 'comments' => 'pollcomments.thtml',
                 'votes_bar' => 'pollvotes_bar.thtml',
                 'votes_num' => 'pollvotes_num.thtml' ));
-            $poll->set_var('xhtml', XHTML);
-            $poll->set_var('site_url', $_CONF['site_url']);
-            $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
             $poll->set_var('layout_url', $_CONF['layout_url']);
             $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
 
@@ -1304,6 +1301,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
                     . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid );
                 $poll->set_var('edit_link', $editlink);
+                $poll->set_var('edit_url',$_CONF['site_admin_url'].'/plugins/polls/index.php?edit=x&amp;pid=' . $pid);
                 $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
                 $icon_attr = array('title' => $LANG25[27]);
                 $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);

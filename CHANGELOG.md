@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Allow inline (ajax based) voting for polls when embedded in other content via autotag
   - Added database administration capabilities (optimize tables, convert to innodb)
   - Implemented social sharing features into articles, media gallery and links
   - Modified the comment layout to ensure the comment text stands out better
