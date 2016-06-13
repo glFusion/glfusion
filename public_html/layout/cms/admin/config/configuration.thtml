@@ -10,7 +10,7 @@
 <nav class="uk-navbar uk-margin-bottom uk-visible-small">
 	<a href="#" class="uk-navbar-toggle" data-uk-offcanvas="{target:'#admin-side-config'}">
 	</a>
-	<div class="uk-navbar-content">{group_name} :: {subgroup_active_name}</div>
+	<div class="uk-navbar-content">{group_name} / {subgroup_active_name}</div>
 </nav>
 <div id="admin-side-config" class="uk-offcanvas uk-visible-small">
 	<div class="uk-offcanvas-bar">
@@ -38,7 +38,7 @@
 				<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 				<div id="ce_{subgroup_name}">
 					<div id="tabs">
-						<ul class="uk-tab" data-uk-switcher="{connect:'#tabdata'}">
+						<ul class="uk-subnav uk-subnav-pill" data-uk-switcher="{connect:'#tabdata'}">
 	<!-- BEGIN tabs -->
 							<li><a href="#{index}">{tab}</a></li>
 	<!-- END tabs -->
