@@ -5,7 +5,7 @@
 // | functions.inc                                                            |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -937,9 +937,18 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                                                 . '/polls/index.php');
                 if (($nquestions == 1) || $showall) {
                     $poll->set_var('lang_vote', $LANG_POLLS['vote']);
+                    $poll->set_var('showall',true);
+                    if ( $displaytype == 2 ) {
+                        $poll->set_var('autotag',true);
+                    } else {
+                        $poll->unset_var('autotag');
+                    }
                 } else {
                     $poll->set_var('lang_vote', $LANG_POLLS['start_poll']);
+                    $poll->unset_var('showall');
+                    $poll->unset_var('autotag');
                 }
+
                 $poll->set_var('lang_votes', $LANG_POLLS['votes']);
 
                 $results = '';
@@ -969,6 +978,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
                         . '/plugins/polls/index.php?edit=x&amp;pid=' . $pid);
                     $poll->set_var('edit_icon', $editlink);
+                    $poll->set_var('edit_url',  $_CONF['site_admin_url'].'/plugins/polls/index.php?edit=x&amp;pid=' . $pid);
                 }
 
                 if (array_key_exists('aid', $_POST)) {
