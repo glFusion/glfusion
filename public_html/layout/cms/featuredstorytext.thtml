@@ -63,7 +63,7 @@
 			{plugin_icon_vars}
 
 {!if feed_icon}
-			<li><a href="{feed_url}" class="uk-icon-small uk-icon-rss"></a></li>
+					<li><a href="{feed_url}" class="tm-meta-icon uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 		</ul>
 
@@ -93,14 +93,17 @@
 		<div class="uk-clearfix"></div>
 	<hr>
 		<article class="uk-comment tm-about-author uk-margin-small">
-		<header class="uk-comment-header tm-about-author-header uk-margin-top">
-			<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
-			<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
-			<div class="tm-about-author-bio">
-				{author_about}
-			</div>
-		</header>
-	</article>
+			<header class="uk-comment-header tm-about-author-header uk-margin-top">
+				<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
+				<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
+				<div class="tm-about-author-bio">
+					{author_about}
+					<div class="uk-container uk-container-center uk-text-center">
+					{follow_me}
+				  </div>
+				</div>
+			</header>
+		</article>
 	{!endif}
 {!endif}
 
