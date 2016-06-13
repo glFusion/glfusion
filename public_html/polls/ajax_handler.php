@@ -57,7 +57,20 @@ if ( $pid == '' || $aid == 0 ) {
     $retval['statusMessage'] = 'Error Processing Poll Vote';
     $retval['html'] = POLLS_showPoll('400', $pid, true, 2);
 } else {
-    $retval = POLLS_saveVote_AJAX($pid,$aid);
+    // get number of questions
+    $questions_sql = "SELECT question,qid FROM {$_TABLES['pollquestions']} "
+    . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
+    $questions = DB_query($questions_sql);
+    $nquestions = DB_numRows($questions);
+
+    if ((isset($_POST['aid']) && (count($_POST['aid']) == $nquestions)) && !isset ($_COOKIE['poll-'.$pid])) {
+        $retval = POLLS_saveVote_AJAX($pid,$aid);
+    } else {
+        $eMsg = $LANG_POLLS['answer_all'] . ' "'
+            . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'") . '"';
+        $retval['statusMessage'] = $eMsg;
+        $retval['html'] = POLLS_showPoll('400', $pid, true, 2);
+    }
 }
 
 CACHE_remove_instance('story_');

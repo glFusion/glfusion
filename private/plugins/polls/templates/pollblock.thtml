@@ -3,7 +3,7 @@
 <script>
 var site_url = "{site_url}";
 $(window).load(function() {
-	$( "#votebutton" ).click(function(event) {
+  $( "#pollautotag_{poll_id}" ).on( "click", "#votebutton", function(event) {
 		event.preventDefault();
 		var data = $("#Vote{poll_id}").serialize();
 		$.ajax({
