@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion log viewer.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -44,7 +44,6 @@ if ( isset($_GET['log']) ) {
 } else {
     $log = '';
 }
-
 $log = preg_replace('/[^a-z0-9\.\-_]/', '', $log);
 
 $pageBody = '';
@@ -57,11 +56,11 @@ $menu_arr = array (
 $pageBody  = COM_startBlock ($LANG_LOGVIEW['logview'],'', COM_getBlockTemplate ('_admin_block', 'header'));
 $pageBody .= ADMIN_createMenu( $menu_arr,
                              $LANG_LOGVIEW['info'],
-                             $_CONF['layout_url'] . '/images/icons/logview.'. $_IMAGE_TYPE
-);
+                             $_CONF['layout_url'] . '/images/icons/logview.'. $_IMAGE_TYPE);
 
-$pageBody .= '<form method="post" action="'.$_CONF['site_admin_url'].'/logview.php">';
-$pageBody .= $LANG_LOGVIEW['logs'].':&nbsp;&nbsp;&nbsp;';
+$T = new Template($_CONF['path_layout'] . 'admin');
+$T->set_file('page', 'logview.thtml');
+
 $files = array();
 if ($dir = @opendir($_CONF['path_log'])) {
     while(($file = readdir($dir)) !== false) {
@@ -72,24 +71,20 @@ if ($dir = @opendir($_CONF['path_log'])) {
     closedir($dir);
 }
 sort($files);
-$pageBody .= '<select name="log">';
 if (empty($log)) {
     $log = $files[0];
 }
 
+$logOption = '';
+
 for ($i = 0; $i < count($files); $i++) {
-    $pageBody .= '<option value="' . $files[$i] . '"';
+    $logOption .= '<option value="' . $files[$i] . '"';
     if ($log == $files[$i]) {
-        $pageBody .= ' selected="selected"';
+        $logOption .= ' selected="selected"';
     }
-    $pageBody .= '>' . $files[$i] . '</option>';
+    $logOption .= '>' . $files[$i] . '</option>';
     next($files);
 }
-$pageBody .= '</select>&nbsp;&nbsp;&nbsp;&nbsp;';
-$pageBody .= '<input type="submit" name="viewlog" value="'.$LANG_LOGVIEW['view'].'"/>';
-$pageBody .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-$pageBody .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"/>';
-$pageBody .= '</form>';
 
 if ( isset($_POST['clearlog']) ) {
     @unlink($_CONF['path_log'] . $log);
@@ -99,19 +94,22 @@ if ( isset($_POST['clearlog']) ) {
     fclose($fd);
     $_POST['viewlog'] = 1;
 }
-if ( isset($_POST['viewlog']) ) {
-    $pageBody .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p>';
-    $pageBody .= '<div style="margin:10px 0 5px;border-bottom:1px solid #cccccc;"></div>';
-    $pageBody .= '<div class="logview" style="overflow:scroll; height:500px;"><pre>';
-    $pageBody .= @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
-    $pageBody .= "</pre></div>";
-}
+$T->set_var('log_data', @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt()));
 
+$T->set_var(array(
+    'log_options'   => $logOption,
+    'lang_logs'     => $LANG_LOGVIEW['logs'],
+    'lang_view'     => $LANG_LOGVIEW['view'],
+    'lang_clear'    => $LANG_LOGVIEW['clear'],
+    'lang_logfile'  => $LANG_LOGVIEW['log_file'],
+    'log'           => $log,
+));
+
+$pageBody .= $T->finish ($T->parse ('output', 'page'));
 $pageBody .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
 $display = COM_siteHeader();
 $display .= $pageBody;
 $display .= COM_siteFooter();
 echo $display;
-exit;
 ?>
