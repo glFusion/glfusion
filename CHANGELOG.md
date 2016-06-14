@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Properly styled auto tag and plugin upload buttons
+  - Modified logview to use templates - allows styling to match site theme
   - Allow inline (ajax based) voting for polls when embedded in other content via autotag
   - Added database administration capabilities (optimize tables, convert to innodb)
   - Implemented social sharing features into articles, media gallery and links
