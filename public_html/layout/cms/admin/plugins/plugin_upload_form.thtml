@@ -1,10 +1,21 @@
 {# begin {templatelocation} #}
+<script>
+	$(window).load(function() {
+		$( "#pluginfile" ).change(function() {
+			$("#uploadFile").val(this.value)
+		});
+	});
+</script>
 <div class="uk-align-center uk-text-center uk-margin">
-  <form class="uk-form" name="pluginupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="action" value="processupload">
-    {lang_upload_plugin}
-    <input class="uk-button" type="file" dir="ltr" name="pluginfile" id="pluginfile">
-    <button class="uk-button uk-button-primary" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
-  </form>
+	<form class="uk-form" name="pluginupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="action" value="processupload">
+		<span class="uk-text-bold">{lang_upload_plugin}</span>
+		<input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+		<div class="tm-fileUpload uk-button uk-button-small uk-button-primary">
+			<span>{$LANG32[58]}</span>
+			<input type="file" name="pluginfile" id="pluginfile" class="tm-upload">
+		</div>
+		<button class="uk-button uk-button-success uk-button-small" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
+	</form>
 </div>
 {# end {templatelocation} #}

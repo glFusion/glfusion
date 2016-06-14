@@ -1,13 +1,21 @@
 {# begin {templatelocation} #}
+<script>
+	$(window).load(function() {
+		$( "#autotagfile" ).change(function() {
+			$("#uploadFile").val(this.value)
+		});
+	});
+</script>
 <div class="uk-align-center uk-text-center uk-margin">
 	<form class="uk-form uk-form-horizontal" name="autotagupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
 		<input class="uk-button uk-button-small" type="hidden" name="action" value="processupload">
-		{lang_upload_plugin}
-		<div class="uk-form-file uk-margin-left">
-                <button class="uk-button uk-button-small">Choose File</button>
-                <input type="file" name="autotagfile" id="autotagfile">
-                </div>
-		<button class="uk-button uk-button-small" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
+		<span class="uk-text-bold">{lang_upload_plugin}</span>
+		<input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+		<div class="tm-fileUpload uk-button uk-button-small uk-button-primary">
+			<span>{$LANG32[91]}</span>
+			<input type="file" name="autotagfile" id="autotagfile" class="tm-upload">
+		</div>
+		<button class="uk-button uk-button-success uk-button-small" type="submit" name="submit" value="{$LANG32[58]}">{$LANG32[58]}</button>
 	</form>
 </div>
 {# end {templatelocation} #}
