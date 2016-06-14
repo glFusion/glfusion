@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="uk-grid">
+<div class="uk-grid uk-margin-remove" style="padding-bottom:10px;">
 	<div class="uk-width-small-1-4">
 		{answer_text}
 	</div>
@@ -8,7 +8,7 @@
 			<div class="uk-progress-bar" style="width: {answer_percent}%;">{answer_percent}%</div>
 		</div>
 {!if remark_text}
-		<div class="uk-text-right">
+		<div class="uk-text-right uk-margin-small">
 			{remark_text}
 		</div>
 {!endif}

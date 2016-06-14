@@ -694,7 +694,7 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
         case 'poll_vote':
         case 'poll_result':
             if ($autotag['tag'] == 'poll_vote') {
-                $retval = POLLS_showPoll(0, $pid, $showall, 2);
+                $retval = POLLS_showPoll(400, $pid, $showall, 2);
             } else {
                 $retval = POLLS_pollResults($pid, 0,'', false, 2);
             }
