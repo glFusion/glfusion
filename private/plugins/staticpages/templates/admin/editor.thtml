@@ -1,4 +1,10 @@
 {# begin {templatelocation} #}
+<script>
+function actionClick( $action ) {
+$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+$('#frmstory').trigger('submit', [ { $action: true } ]);
+}
+</script>
 <div class="tm-admin">
 	{wysiwyg}
 	{start_block_editor}
@@ -31,9 +37,14 @@
 			</div>
 			<div class="uk-grid">
 				<div class="uk-width-medium-2-3">
-					{example_url}
-					&nbsp;&nbsp;&nbsp;
-					{lang_hits}: {sp_hits_formatted}
+					<strong>Category</strong>
+					<select id="sp_catid" name="sp_catid">
+						{category_options}
+					</select>
+
+{#					{example_url} #}
+{#					&nbsp;&nbsp;&nbsp; #}
+{#					{lang_hits}: {sp_hits_formatted} #}
 				</div>
 				<div class="uk-width-medium-1-3">
 
@@ -189,19 +200,19 @@
 		<div class="uk-margin-right-small uk-hidden-small tm-admin-save" data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:900}">
 			<ul>
 				<li>
-					<button class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" id="save" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
+					<button onclick="actionClick('save');" class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" id="save" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
 				</li>
 
 				<li>
-					<button class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="preview" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					<button onclick="actionClick('preview');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="preview" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 
 				<li>
-					<button class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');" class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
 {!if delete_option}
 				<li>
-					<button class="uk-button uk-button-danger tm-admin-save-button-width" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="delete" id="delete" value="{lang_delete}" data-uk-tooltip="{pos:'left'}" title="{lang_delete}"><i class="uk-icon-eraser"></i></button>
+					<button onclick="actionClick('delete');" class="uk-button uk-button-danger tm-admin-save-button-width" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="delete" id="delete" value="{lang_delete}" data-uk-tooltip="{pos:'left'}" title="{lang_delete}"><i class="uk-icon-eraser"></i></button>
 				</li>
 {!endif}
 			</ul>
@@ -209,11 +220,11 @@
 		{# end save side bar #}
 
 		<ul class="uk-grid uk-grid-small">
-			<li><button type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
-			<li><button class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button>
-				<li><button type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
+			<li><button onclick="actionClick('save');" type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
+			<li><button onclick="actionClick('preview');" class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button>
+				<li><button onclick="actionClick('cancel');" type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
 {!if delete_button}
-				<li><button type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
+				<li><button onclick="actionClick('delete');" type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
 {!endif}
 			</ul>
 		</form>
