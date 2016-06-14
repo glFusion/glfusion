@@ -10,7 +10,7 @@
 	<form class="uk-form uk-form-horizontal" name="autotagupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
 		<input class="uk-button uk-button-small" type="hidden" name="action" value="processupload">
 		<span class="uk-text-bold">{lang_upload_plugin}</span>
-		<input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+		<input id="uploadFile" placeholder="Selected File" disabled="disabled" />
 		<div class="tm-fileUpload uk-button uk-button-small uk-button-primary">
 			<span>{$LANG32[91]}</span>
 			<input type="file" name="autotagfile" id="autotagfile" class="tm-upload">
