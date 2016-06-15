@@ -581,8 +581,6 @@ $LANG08 = array(
     35 => 'Sorry, this user prefers not to receive any eMails.',
     36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
     37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
-
-
 );
 
 ###############################################################################
@@ -1346,6 +1344,7 @@ $LANG32 = array(
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
     90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
+    91 => 'Select File',
 );
 
 ###############################################################################
