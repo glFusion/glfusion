@@ -509,7 +509,8 @@ $LANG04 = array(
     198 => 'Social Memberships',
     199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
-    201 => 'Username'
+    201 => 'Username',
+    202 => 'Follow Me'
 );
 
 ###############################################################################
@@ -1344,7 +1345,8 @@ $LANG32 = array(
     87 => 'Balise automatique d`installation',
     88 => 'Etes-vous sûr de vouloir supprimer ce plugin?',
     89 => 'Êtes-vous absolument sûr de vouloir supprimer ce plugin? Cela se traduira par la suppression de tous les fichiers et répertoires liés à ce plugin, et de ré-installer ce plugin, vous devrez télécharger une autre copie.',
-    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.'
+    90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
+    91 => 'Select File'
 );
 
 ###############################################################################
@@ -2263,24 +2265,6 @@ $LANG_AM = array(
     'allowed' => 'Allowed',
     'namespace' => 'Namespace',
     'operation' => 'Operation'
-);
-
-###############################################################################
-# social.php
-
-$LANG_SOCIAL = array(
-    'label' => 'Social Integrations',
-    'social_share' => 'Social Share Sites',
-    'share_instructions' => 'You can configure which social sharing buttons are enabled',
-    'follow_instructions' => 'You can configure which social follow me services are enabled',
-    'social_follow' => 'Follow Me Settings',
-    'id' => 'ID',
-    'name' => 'Name',
-    'enabled' => 'Enabled',
-    'share_it_label' => 'Share It!',
-    'state_toggled' => 'Social Share state has been toggled.',
-    'follow_us' => 'Follow Us on',
-    'follow_me' => 'Follow Me on'
 );
 
 ###############################################################################
