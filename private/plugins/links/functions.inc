@@ -1188,25 +1188,37 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 
 function links_validateUrl($url)
 {
-    global $LANG_LINKS_STATUS;
+    global $_CONF, $LANG_LINKS_STATUS;
 
-    require_once 'HTTP/Request.php';
+    require_once $_CONF['path'].'lib/http/http.php';
 
     $retval = '';
 
-    $req = new HTTP_Request($url);
-    $req->setMethod(HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
-
-    $response = $req->sendRequest();
-    if (PEAR::isError($response)) {
-        $retval = $response->getMessage();
+	set_time_limit(0);
+	$req=new http_class;
+	$req->timeout=0;
+	$req->data_timeout=0;
+	$req->debug=0;
+	$req->html_debug=0;
+    $req->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
+    $error=$req->GetRequestArguments($url,$arguments);
+    $arguments["Headers"]["Pragma"]="nocache";
+    $error=$req->Open($arguments);
+    if ( $error != "" ) {
+        $retval = $error;
     } else {
-        $status_code = $req->getResponseCode();
-        if (isset($LANG_LINKS_STATUS[$status_code])) {
-            $retval = $status_code . ": " . $LANG_LINKS_STATUS[$status_code];
+        $headers=array();
+        $error=$req->SendRequest($arguments);
+        if ( $error != "" ) {
+            $retval = $error;
         } else {
-            $retval = $LANG_LINKS_STATUS[999];
+            $error=$req->ReadReplyHeaders($headers);
+            if ( $error != "") {
+                $retval = $error;
+            } else {
+                $status_code = $req->response_status;
+                $retval = $status_code . ": " . $LANG_LINKS_STATUS[$status_code];
+            }
         }
     }
 
