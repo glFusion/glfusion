@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Fixed error in configuration system that would prevent adding new items to array configuration items
   - Properly styled auto tag and plugin upload buttons
   - Modified logview to use templates - allows styling to match site theme
   - Allow inline (ajax based) voting for polls when embedded in other content via autotag

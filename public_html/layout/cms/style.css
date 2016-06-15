@@ -309,14 +309,6 @@ p.tm-article-meta {
 .tm-table {
 }
 
-/* Follow Us Button semantics
-========================================================================== */
-.tm-follow {
-	color:#555;
-}
-.tm-follow:hover {
-	color:#00AFF2;
-}
 
 /* block bottom in footer.thtml - right before rightblocks  - controls the large footer */
 #tm-block-bottom {
@@ -539,19 +531,22 @@ p.tm-article-meta {
 }
 
 /* social share */
-.uk-button.uk-button-facebook {
+.uk-button.uk-button-facebook,
+.uk-icon-button.uk-button-facebook {
 	background-color: #3b5998;
 	color: #fff;
 	background-image: none;
 	text-shadow: none;
 }
-.uk-button.uk-button-google-plus {
+.uk-button.uk-button-google-plus,
+.uk-icon-button.uk-button-google-plus {
 	background-color: #dd4b39;
 	color: #fff;
 	background-image: none;
 	text-shadow: none;
 }
-.uk-button.uk-button-twitter {
+.uk-button.uk-button-twitter,
+.uk-icon-button.uk-button-twitter {
 	background-color: #55acee;
 	color: #fff;
 	background-image: none;
@@ -581,13 +576,15 @@ p.tm-article-meta {
 	background-image: none;
 	text-shadow: none;
 }
-.uk-button.uk-button-linkedin {
+.uk-button.uk-button-linkedin,
+.uk-icon-button.uk-button-linkedin {
 	background-color: #0077b5;
 	color: #fff;
 	background-image: none;
 	text-shadow: none;
 }
-.uk-button.uk-button-reddit {
+.uk-button.uk-button-reddit,
+.uk-icon-button.uk-button-reddit {
 	background-color: #0077b5;
 	color: #fff;
 	background-image: none;
@@ -612,6 +609,30 @@ p.tm-article-meta {
 	background-image: none;
 	text-shadow: none;
 }
+.uk-button.uk-button-pinterest-p,
+.uk-icon-button.uk-button-pinterest-p {
+	background-color: #dd4b39;
+	color: #fff;
+	background-image: none;
+	text-shadow: none;
+}
+.uk-button.uk-button-youtube,
+.uk-icon-button.uk-button-youtube {
+	background-color: #000;
+	color: #fff;
+	background-image: none;
+	text-shadow: none;
+}
+
+/* Follow Us Button semantics
+========================================================================== */
+.tm-follow-icon {
+	border:none;
+}
+.tm-follow-icon:hover {
+
+}
+
 
 /* CMS theme uses SmartMenus for horizontal cascading menus */
 

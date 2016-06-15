@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {formatted_article}
 
-<div class="uk-container uk-container-center">
+<div class="uk-container uk-container-center uk-margin">
 {social_share}
 </div>
 

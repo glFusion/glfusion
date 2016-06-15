@@ -99,7 +99,7 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
     return $retval;
 }
 
-function SOC_getFollowMeIcons( $uid = -1 )
+function SOC_getFollowMeIcons( $uid = -1, $templateFile = 'follow_user.thtml' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG_SOCIAL;
 
@@ -111,7 +111,7 @@ function SOC_getFollowMeIcons( $uid = -1 )
     }
 
     $T = new Template( $_CONF['path_layout'].'social' );
-    $T->set_file('links','follow_user.thtml');
+    $T->set_file('links',$templateFile);
 
     // build SQL to pull this user's active social integrations
 
