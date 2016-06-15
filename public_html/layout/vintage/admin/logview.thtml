@@ -1,0 +1,28 @@
+<form id="logview" class="uk-form uk-form-horizontal" method="post" action="{site_admin_url}/logview.php">
+	<div class="uk-form-row">
+		<label class="uk-form-label uk-text-right">{lang_logs}</label>
+		<div class="uk-form-controls">
+			<select id="log" name="log">
+				{log_options}
+			</select>
+			<button class="uk-button uk-button-success" type="submit" name="viewlog" value="{lang_view}">{lang_view}</button>
+			<button class="uk-button uk-button-danger" type="submit" name="clearlog" value="{lang_clear}">{lang_clear}</button>
+		</div>
+	</div>
+</form>
+
+{!if log_data}
+<p>
+	<strong>{lang_logfile} : {log}</strong>
+</p>
+<pre class="uk-scrollable-text">
+	<code>
+		{log_data}
+	</code>
+</pre>
+{!endif}
+<script>
+	$( "#log" ).change(function() {
+   $( "#logview" ).submit();
+});
+</script>

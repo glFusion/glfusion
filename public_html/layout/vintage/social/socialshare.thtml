@@ -1,0 +1,7 @@
+<h2>{lang_share_it}</h2>
+<!-- BEGIN social_buttons -->
+<span class="tooltip fa-stack fa-lg" data-action="share" data-type="{service_id}" title="Share on::{service_display_name}">
+  <i class="fa fa-square fa-stack-2x"></i>
+  <i class="fa fa-{icon} fa-stack-1x fa-inverse tm-{icon}"></i>
+</span>
+<!-- END social_buttons -->

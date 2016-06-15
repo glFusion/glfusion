@@ -1,131 +1,137 @@
 {# begin {templatelocation} #}
 <script type="text/javascript">
-//<![CDATA[
-function popitup(url)
-{
-    newwindow=window.open(url,'name','height=500,width=550,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
-    if (window.focus) {newwindow.focus()}
-    return false;
-}
-//]]>
+	//<![CDATA[
+	function popitup(url)
+	{
+		newwindow=window.open(url,'name','height=500,width=550,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
+		if (window.focus) {newwindow.focus()}
+		return false;
+	}
+	//]]>
 </script>
 {start_block_userprofile}
-		<div class="profile-col1">
-            {!if user_photo}
-              <img class="{tooltip} profile-image" src="{user_photo}" alt="" title="
-              {!if user_fullname}
-                {username} - {user_fullname}
-              {!else}
-                {username}
-              {!endif}
-               :: {lang_membersince}<br />{user_regdate}
-               {!if user_lastlogin}
-                 <br /><br />{$LANG28[35]}<br />{user_lastlogin}
-               {!else}
-                 &nbsp;
-               {!endif}
-               " />
-            {!else}
-              <div class="profile-image"><span class="b">
-                {!if user_fullname}
-                  {username} - {user_fullname}
-                {!else}
-                  {username}
-                {!endif}
-                </span><br /><br />{lang_membersince}<br />{user_regdate}
-                {!if user_lastlogin}
-                  <br /><br />{$LANG28[35]}<br />{user_lastlogin}
-                {!else}
-                  &nbsp;
-                {!endif}
-               </div>
-            {!endif}
-            <div class="profile-meta">
-                <ul>
-                    {!if user_edit}
-                    <li>
-                        <a href="{user_edit}">
-                            <img src="{layout_url}/images/edit.png" alt="{$LANG_ADMIN[edit]}" title="{$LANG_ADMIN[edit]}" />
-                        </a>
-                    </li>
-                    {!endif}
-                    {email_option}
-                    {!if user_homepage}
-                    <li>
-                        <a href="{user_homepage}" target="_blank">
-                            <img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}" />
-                        </a>
-                    </li>
-                    {!endif}
-                    {!if user_location}
-                    <li>
-                        <img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}" />
-                    </li>
-                    {!endif}
-                    {!if user_pgp}
-                    <li>
-                        <a href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
-                          <img src="{layout_url}/images/pgpkey.png" alt="{lang_pgpkey}" title="{lang_pgpkey}" />
-                        </a>
-                    </li>
-                    {!endif}
-                    {!if online}
-                    <li>
-                        <img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}" />
-                    </li>
-                    {!endif}
-                    <!-- BEGIN profileicon -->
-                    <li>
-                        <a href="{profile_icon_url}">
-                        <img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}" />
-                        </a>
-                    </li>
-                    <!-- END profileicon -->
-                </ul>
-            </div> {# end profile-meta #}
-            {!if user_bio}
-            <div class="profile-bio">
-                <b>{lang_bio} {username}</b><br />
-                <p>{user_bio}</p>
-            </div>
-            {!endif}
-        </div> {# end profile-col1 #}
-        <div class="profile-col2">
-            <div class="profile-header">
-                <span>
-                    <a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
-                        {lang_number_stories} {number_stories}
-                    </a>
-                </span>
-                {headline_last10stories}
-            </div>
-            <table class="profile-data" style="padding:3px;">
-                {story_row}
-            </table>
-            <div class="profile-header">
-                <span>
-                    <a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
-                        {lang_number_comments} {number_comments}
-                    </a>
-                </span>
-                {headline_last10comments}
-            </div>
-            <table class="profile-data" style="padding:3px;">
-                {comment_row}
-            </table>
-            <div class="profile-header">
-                <span>
-                    <a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search" title="{lang_all_postings_by}">
-                        {lang_all_postings_by}
-                    </a>
-                </span>
-                {headline_postingstats}
-            </div>
-            <ul>
-                <li>{lang_number_stories} {number_stories}</li>
-                <li>{lang_number_comments} {number_comments}</li>
-            </ul>
-        </div> {# end profile-col2 #}
+<div class="profile-col1">
+{!if user_photo}
+	<img class="{tooltip} profile-image" src="{user_photo}" alt="" title="
+{!if user_fullname}
+	{username} - {user_fullname}
+{!else}
+	{username}
+{!endif}
+	:: {lang_membersince}<br />{user_regdate}
+	{!if user_lastlogin}
+	<br /><br />{$LANG28[35]}<br />{user_lastlogin}
+{!else}
+	&nbsp;
+{!endif}
+	" />
+{!else}
+	<div class="profile-image"><span class="b">
+{!if user_fullname}
+		{username} - {user_fullname}
+{!else}
+		{username}
+{!endif}
+	</span><br /><br />{lang_membersince}<br />{user_regdate}
+{!if user_lastlogin}
+	<br /><br />{$LANG28[35]}<br />{user_lastlogin}
+{!else}
+	&nbsp;
+{!endif}
+</div>
+{!endif}
+<div class="profile-meta">
+	<ul>
+{!if user_edit}
+		<li>
+			<a href="{user_edit}">
+				<img src="{layout_url}/images/edit.png" alt="{$LANG_ADMIN[edit]}" title="{$LANG_ADMIN[edit]}" />
+			</a>
+		</li>
+{!endif}
+		{email_option}
+{!if user_homepage}
+		<li>
+			<a href="{user_homepage}" target="_blank">
+				<img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}" />
+			</a>
+		</li>
+{!endif}
+{!if user_location}
+		<li>
+			<img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}" />
+		</li>
+{!endif}
+{!if user_pgp}
+		<li>
+			<a href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
+				<img src="{layout_url}/images/pgpkey.png" alt="{lang_pgpkey}" title="{lang_pgpkey}" />
+			</a>
+		</li>
+{!endif}
+{!if online}
+		<li>
+			<img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}" />
+		</li>
+{!endif}
+		<!-- BEGIN profileicon -->
+		<li>
+			<a href="{profile_icon_url}">
+				<img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}" />
+			</a>
+		</li>
+		<!-- END profileicon -->
+	</ul>
+</div> {# end profile-meta #}
+{!if user_bio}
+<div class="profile-bio">
+	<b>{lang_bio} {username}</b><br />
+	<p>{user_bio}</p>
+</div>
+{!endif}
+{!if follow_me}
+<div class="profile-bio" style="margin-top:10px;">
+	<b>{$LANG04[202]}</b>
+	<p>{follow_me}</p>
+</div>
+{!endif}
+</div> {# end profile-col1 #}
+<div class="profile-col2">
+	<div class="profile-header">
+		<span>
+			<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+				{lang_number_stories} {number_stories}
+			</a>
+		</span>
+		{headline_last10stories}
+	</div>
+	<table class="profile-data" style="padding:3px;">
+		{story_row}
+	</table>
+	<div class="profile-header">
+		<span>
+			<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+				{lang_number_comments} {number_comments}
+			</a>
+		</span>
+		{headline_last10comments}
+	</div>
+	<table class="profile-data" style="padding:3px;">
+		{comment_row}
+	</table>
+	<div class="profile-header">
+		<span>
+			<a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search" title="{lang_all_postings_by}">
+				{lang_all_postings_by}
+			</a>
+		</span>
+		{headline_postingstats}
+	</div>
+	<ul>
+		<li>{lang_number_stories} {number_stories}</li>
+		<li>{lang_number_comments} {number_comments}</li>
+	</ul>
+</div> {# end profile-col2 #}
 {end_block}
 <div style="clear:both;"></div>
 

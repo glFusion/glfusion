@@ -66,6 +66,9 @@ if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
 $outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
 
+$outputHandle->addLinkStyle($_CONF['layout_url'] . '/font-awesome/css/font-awesome.css');
+
+
 function theme_getToolTipStyle()
 {
     return('tooltip');
