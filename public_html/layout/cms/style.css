@@ -624,13 +624,22 @@ p.tm-article-meta {
 	text-shadow: none;
 }
 
-/* Follow Us Button semantics
+/* Follow Me Button semantics
 ========================================================================== */
 .tm-follow-icon {
 	border:none;
 }
 .tm-follow-icon:hover {
 
+}
+
+/* Follow Us Button semantics - used in footer block
+========================================================================== */
+.tm-follow {
+	color:#555;
+}
+.tm-follow:hover {
+	color:#00AFF2 !important;
 }
 
 
