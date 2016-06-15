@@ -7,11 +7,18 @@
 *
 */
 function handleAdd(self, array_type, array_name){
-	if(array_type.charAt(0) == "*"){
-		handleAddWithName(self, array_type, array_name, self.nextSibling.value);
-	}else{
-		handleAddWithName(self, array_type, array_name, self.parentNode.parentNode.parentNode.rows.length - 1);
-	}
+    var index = "#numeric#"; // numeric index
+    if (array_type.charAt(0) == "*") {
+        index = $(self).next("input").val(); // named index
+        index = index.replace(/^\s+|\s+$/g, ""); // trim space
+        if (index == "") return;
+    }
+    var char = array_type.charAt(0);
+    if (char == "*" || char == "%") {
+        handleAddWithName(self, array_type, array_name, index);
+    } else {
+        handleAddWithName(self, array_type, array_name, index);
+    }
 }
 
 function handleAddWithName(self, array_type, array_name, name){
