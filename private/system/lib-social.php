@@ -180,7 +180,8 @@ function SOC_followMeProfile( $uid )
                     'service_id'           => $id,
                     'service_display_name' => $socialServicesArray[$id]['display_name'],
                     'service'              => $socialServicesArray[$id]['service_name'],
-                    'service_username'     => $socialServicesArray[$id]['ss_username']
+                    'service_username'     => $socialServicesArray[$id]['ss_username'],
+                    'service_url'          => substr($socialServicesArray[$id]['url'],0,strpos($socialServicesArray[$id]['url'],"%%u")-1) . '/',
         );
 
     }

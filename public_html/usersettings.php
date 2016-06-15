@@ -281,6 +281,7 @@ function edituser()
             $preferences->set_var('service_display_name', $service['service_display_name']);
             $preferences->set_var('service',$service['service']);
             $preferences->set_var('service_username',$service['service_username']);
+            $preferences->set_var('service_url',$service['service_url']);
             $preferences->parse('sl','social_links',true);
         }
     } else {
