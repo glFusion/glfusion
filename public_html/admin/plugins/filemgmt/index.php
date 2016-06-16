@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Administrative Functions                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -241,8 +241,8 @@ function listNewDownloads(){
 
     $i = 1;
     if ($numrows > 0) {
-        $display .= '<table width="100%" border="0" class="plugin">';
-        $display .= '<tr><td width="100%" class="pluginHeader" style="padding:5px;">' . _MD_DLSWAITING. "&nbsp;($numrows)</td></tr>";
+        $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
+        $display .= '<tr><td class="uk-width-1-1" class="pluginHeader" style="padding:5px;">' . _MD_DLSWAITING. "&nbsp;($numrows)</td></tr>";
         while(list($lid, $cid, $title, $url, $homepage, $version, $size, $logourl, $submitter, $comments, $tmpnames) = DB_fetchArray($result)) {
             $result2 = DB_query("SELECT description FROM {$_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
             list($description) = DB_fetchArray($result2);
@@ -262,8 +262,8 @@ function listNewDownloads(){
                 $tempsnapurl = '';
             }
             $display .= '<tr><td>';
-            $display .= '<form action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
-            $display .= '<table width="100%" border="0" class="plugin">';
+            $display .= '<form class="uk-form" action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
+            $display .= '<table class="uk-width-1-1" border="0" class="plugin">';
             $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_SUBMITTER.'</td><td>';
             $display .= '<a href="'. $_CONF['site_url'] . '/users.php?mode=profile&amp;uid='. $submitter. '">'.COM_getDisplayName ($submitter).'</a>';
             $display .= '</td></tr>';
@@ -337,32 +337,35 @@ function categoryConfigAdmin(){
     $display = COM_siteHeader('menu');
 //    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav2']);
-    $display .= '<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="width:100%;">';
-    $display .= '<form action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
-    $display .= '<table width="100%" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDMAIN . '</td></tr>';
+    $display .= '<!-- Begin Category -->';
+    $display .= '<!-- Add MAIN Category-->';
+    $display .= '<table class="uk-width-1-1" cellpadding="0" cellspacing="0"><tr><td class="uk-width-1-1">';
+    $display .= '<form class="uk-form" action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
+    $display .= '<table class="uk-width-1-1" border="0" class="plugin">';
+    $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;"><legend>' . _MD_ADDMAIN . '</legend></td></tr>';
     $display .= '<tr><td>' . _MD_TITLEC. '</td><td><input type="text" name="title" size="30" maxlength="50" /></td></tr>';
     $display .= '<tr><td>' . _MD_CATSEC. '</td><td><select name="sel_access">';
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$liu_group) . '</select></td></tr>';
     $display .= '<tr><td>' . _MD_UPLOADSEC. '</td><td><select name="sel_uploadaccess"><option value="0">Select Access</option>';
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$fma_group) . '</select></td></tr>';
-    $display .= '<tr><td>'. _MD_ADDCATEGORYSNAP . '<br /><span style="text-size:-2">'. _MD_ADDIMAGENOTE .'</span></td>';
-    $display .= '<td><input type="file" name="uploadfile" size="50" maxlength="200" /></td></tr>';
+    $display .= '<tr><td>'. _MD_ADDCATEGORYSNAP . '<br /><h6>'. _MD_ADDIMAGENOTE .'</h6></td>';
+    $display .= '<td><div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file" /></div></td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= "<input type=\"hidden\" name=\"cid\" value=\"0\"" . XHTML . ">\n";
     $display .= "<input type=\"hidden\" name=\"op\" value=\"addCat\"" . XHTML . ">";
-    $display .= "<input type=\"submit\" value=\""._MD_ADD."\"" . XHTML . "></td></tr></table></form><br" . XHTML . ">";
+    $display .= "<button class=\"uk-button\" type=\"submit\">"._MD_ADD."</button></td></tr></table></form><br" . XHTML . ">";
 
     // Add a New Sub-Category
+        $display .= '<!-- Add a New Sub-Category-->';
     $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']}");
     $numrows = DB_numRows($result);
     if($numrows > 0) {
         $display .= '</td></tr><tr><td>';
-        $display .= '<form method="post" action="index.php" style="margin:0px;">';
-        $display .= '<table width="100%" border="0" class="plugin">';
-        $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDSUB . '</td></tr>';
+        $display .= '<form class="uk-form" method="post" action="index.php" style="margin:0px;">';
+        $display .= '<table class="uk-width-1-1" border="0" class="plugin">';
+        $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;"><legend>' . _MD_ADDSUB . '</legend></td></tr>';
 
-        $display .= '<tr><td style="width:20%;">'. _MD_TITLEC.'</td><td><input type="text" name="title" size="30" maxlength="50" />&nbsp;' ._MD_IN. '&nbsp;';
+        $display .= '<tr><td class="uk-width-2-10">'. _MD_TITLEC.'</td><td><input type="text" name="title" size="30" maxlength="50" />&nbsp;' ._MD_IN. '&nbsp;';
         $display .= $mytree->makeMySelBox('title', 'title') . '</td></tr>';
 
         $display .= '<tr><td>' . _MD_CATSEC. '</td><td><select name="sel_access">';
@@ -372,19 +375,21 @@ function categoryConfigAdmin(){
 
         $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
         $display .= '<input type="hidden" name="op" value="addCat" />';
-        $display .= "<input type=\"submit\" value=\""._MD_ADD."\"" . XHTML . "></td></tr></table></form><br" . XHTML . ">";
+        $display .= "<button class=\"uk-button\" type=\"submit\" >"._MD_ADD."</button></td></tr></table></form><br" . XHTML . ">";
         // Modify Category
+        $display .= '<!-- Modify Category-->';
         $display .= '</td></tr><tr><td>';
-        $display .= '<form method="post" action="index.php" style="margin:0px;">';
-        $display .= '<table width="100%" border="0" class="plugin">';
-        $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_MODCAT . '</td></tr>';
-        $display .= '<tr><td style="width:20%;">'. _MD_CATEGORYC .'</td><td>';
+        $display .= '<form class="uk-form" method="post" action="index.php" style="margin:0px;">';
+        $display .= '<table class="uk-width-1-1" border="0" class="plugin">';
+        $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;"><legend>' . _MD_MODCAT . '</legend></td></tr>';
+        $display .= '<tr><td class="uk-width-2-10">'. _MD_CATEGORYC .'</td><td>';
         $display .= $mytree->makeMySelBox('title', 'title') . '</td></tr>';
         $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
         $display .= '<input type="hidden" name="op" value="modCat" />';
-        $display .= "<input type=\"submit\" value=\""._MD_MODIFY."\"" . XHTML . "></td></tr></table></form><br" . XHTML . ">";
+        $display .= "<button class=\"uk-button\" type=\"submit\">"._MD_MODIFY."</button></td></tr></table></form><br" . XHTML . ">";
     }
     $display .= '</td></tr></table>';
+    $display .= '<!-- end Category -->';
 
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
@@ -402,14 +407,15 @@ function newfileConfigAdmin(){
 
     $display = COM_siteHeader('menu');
     $display .= filemgmt_navbar($LANG_FM02['nav3']);
-    $display .= '<form method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
-    $display .= '<table width="100%" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDNEWFILE ."&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
+    $display .= '<!--begin File Management Administration -->';
+    $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
+    $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
+    $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;">' . _MD_ADDNEWFILE ."&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
     $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
     $display .= '<input type="text" name="title" size="50" maxlength="100" />';
 
     $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
-    $display .= '<input type="file" name="newfile" size="50" maxlength="100" />';
+    $display .= '<div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file"/></div>';
     $display .= '</td></tr>';
 
     $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
@@ -427,7 +433,7 @@ function newfileConfigAdmin(){
     $display .= '<textarea name="description" cols="60" rows="5"></textarea>';
     $display .= '</td></tr>';
     $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_SHOTIMAGE.'</td><td>';
-    $display .= '<input type="file" name="newfileshot" size="50" maxlength="60" /></td></tr>';
+    $display .= '<div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file" name="newfileshot" size="50" maxlength="60" /></div></td></tr>';
     $display .= '<tr><td align="right"></td><td>';
     $display .= '</td></tr><tr><td align="right">'._MD_COMMENTOPTION.'</td><td>';
     $display .= '<input type="radio" name="commentoption" value="1" checked="checked" />&nbsp;' ._MD_YES.'&nbsp;';
@@ -435,9 +441,10 @@ function newfileConfigAdmin(){
     $display .= '</td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= '<input type="hidden" name="op" value="addDownload" />';
-    $display .= '<input type="submit" class="button" value="'._MD_ADD.'" />';
+    $display .= '<button class="uk-button" type="submit" class="button"/>'._MD_ADD.'</button>';
     $display .= '</td></tr></table>';
     $display .= '</form>';
+    $display .= '<!--end File Management Administration -->';
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
     echo $display;
@@ -461,10 +468,10 @@ function modDownload() {
 
     $display .= filemgmt_navbar();
 
-    $display .= '<form method="post" enctype="multipart/form-data" action="index.php">';
+    $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php">';
     $display .= '<input type="hidden" name="op" value="modDownloadS" />';
     $display .= '<input type="hidden" name="lid" value="'.$lid.'" />';
-    $display .= '<table width="100%" border="0" class="plugin">';
+    $display .= '<table class="uk-width-1-1" border="0" class="plugin">';
 
     list($cid, $title, $url, $homepage, $version, $size, $logourl,$comments,$submitter) = DB_fetchArray($result);
     $title = $myts->makeTboxData4Edit($title);
@@ -473,8 +480,8 @@ function modDownload() {
     $pathstring .= $nicepath;
     $pathstring .= "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">{$title}</a>";
 
-    $display .= '<tr><td colspan="3" width="100%" style="padding:5px;">' . $pathstring. '</td></tr>';
-    $display .= '<tr><td colspan="3" width="100%" class="pluginHeader" style="padding:5px;">' . _MD_MODDL. "&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
+    $display .= '<tr><td colspan="3"  class="uk-width-1-1" style="padding:5px;">' . $pathstring. '</td></tr>';
+    $display .= '<tr><td colspan="3" class="pluginHeader uk-width-1-1" style="padding:5px;">' . _MD_MODDL. "&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
 
     $url = rawurldecode($myts->makeTboxData4Edit($url));
     $homepage = $myts->makeTboxData4Edit($homepage);
@@ -487,7 +494,7 @@ function modDownload() {
     $display .= '<tr><td>'._MD_FILEID.'</td><td colspan="2"><b>'.$lid.'</b></td></tr>';
     $display .= '<tr><td>'._MD_FILETITLE.'</td><td colspan="2"><input type="text" name="title" value="'.$title.'" size="50" maxlength="200" /></td></tr>' .LB;
     $display .= '<tr><td>'._MD_DLFILENAME.'</td><td colspan="2"><input type="text" name="url" value="'.$url.'" size="50" maxlength="200" /></td></tr>' .LB;
-    $display .= '<tr><td width="25%">'._MD_REPLFILENAME.'</td><td colspan="2"><input type="file" name="newfile" size="50" maxlength="200" /></td></tr>' .LB;
+    $display .= '<tr><td class="uk-width-1-4">'._MD_REPLFILENAME.'</td><td colspan="2"><input type="file" name="newfile" size="50" maxlength="200" /></td></tr>' .LB;
     $display .= '<tr><td>'._MD_HOMEPAGEC.'</td><td colspan="2"><input type="text" name="homepage" value="'.$homepage.'" size="50" maxlength="150" /></td></tr>' .LB;
     $display .= '<tr><td>'._MD_VERSIONC.'</td><td colspan="2"><input type="text" name="version" value="'.$version.'" size="10" maxlength="10" /></td></tr>' .LB;
     $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" />'._MD_BYTES.'</td></tr>' .LB;
@@ -497,8 +504,8 @@ function modDownload() {
     $display .= '</td></tr>' .LB;
 
     if (!empty($logourl) AND file_exists($filemgmt_SnapStore.$logourl)) {
-        $display .= '<tr><td>'._MD_SHOTIMAGE.'</td><td width="5%"><img src="' .$filemgmt_FileSnapURL.$logourl. '" width="80"></td>' .LB;
-        $display .= '<td width="35%"><input type="file" size="40" name="newfileshot" /><br /><br /><input type="checkbox" name="deletesnap" />&nbsp;Delete</td></tr>' .LB;
+        $display .= '<tr><td>'._MD_SHOTIMAGE.'</td><td class="uk-width-1-10"><img src="' .$filemgmt_FileSnapURL.$logourl. '" width="80"></td>' .LB;
+        $display .= '<td class="uk-width-1-3"><input type="file" size="40" name="newfileshot" /><br /><br /><input type="checkbox" name="deletesnap" />&nbsp;Delete</td></tr>' .LB;
     } else {
         $display .= '<tr><td>'._MD_SHOTIMAGE.'</td>' .LB;
         $display .= '<td colspan="2"><input type="file" size="40" name="newfileshot" /></td></tr>' .LB;
@@ -527,16 +534,16 @@ function modDownload() {
     $display .= '<tr><td colspan="3" style="text-align:center;padding:10px;">';
     $display .= '<input type="submit" value="'._MD_SUBMIT.'" /><span style="padding-left:15px;padding-right:15px;">';
     $display .= '<input type="submit" value="'._MD_DELETE.'" onclick=\'if (confirm("Delete this file ?")) {this.form.op.value="delDownload";return true}; return false\' />';
-    $display .= "</span><input type=\"submit\" name=\"cancel\" value=\""._MD_CANCEL."\"" . XHTML . ">";
+    $display .= "</span><input class=\"uk-button\" type=\"submit\" name=\"cancel\" value=\""._MD_CANCEL."\"" . XHTML . ">";
     $display .= '</td></tr></table></form>' .LB;
 
 
     /* Display File Voting Information */
-    $display .= '<form method="post" action="index.php">';
+    $display .= '<form class="uk-form" method="post" action="index.php">';
     $display .= '<input type="hidden" name="op" value="" />';
     $display .= '<input type="hidden" name="rid" value="" />';
     $display .= '<input type="hidden" name="lid" value="'.$lid.'" />';
-    $display .= '<table style="vertical-align:top;" width="100%" class="pluginSubTable">';
+    $display .= '<table class="uk-table uk-width-1-1" style="vertical-align:top;" class="pluginSubTable">';
     $display .= '<tr><th colspan="7">';
     if ($totalvotes == '')
        $totalvotes = 0;
@@ -578,11 +585,11 @@ function modDownload() {
     $ratingData = RATING_getVoteData( 'filemgmt', $lid, 'ratingdate', 'desc', array('AND' => 'u.uid = 1' ) );
     $votes = count($ratingData);
 
-    $display .= '<form method="post" action="index.php" onsubmit="alert(this.form.op.value)">';
+    $display .= '<form class="uk-form" method="post" action="index.php" onsubmit="alert(this.form.op.value)">';
     $display .= '<input type="hidden" name="op" value="" />';
     $display .= '<input type="hidden" name="rid" value="" />';
     $display .= '<input type="hidden" name="lid" value="'.$lid.'" />';
-    $display .= '<table style="vertical-align:top;" width="100%" class="pluginSubTable">';
+    $display .= '<table class="uk-table uk-width-1-1" style="vertical-align:top;" class="pluginSubTable">';
     $display .= '<tr><th colspan="7">';
     $display .= sprintf(_MD_ANONUSERVOTES,$votes);
     $display .= '</th></tr>';
@@ -627,11 +634,11 @@ function listBrokenDownloads() {
     if ($totalbrokendownloads==0) {
         $display .= '<div style="padding:20px">' . _MD_NOBROKEN . '</div>';
     } else {
-        $display .= '<form method="post" action="index.php">';
+        $display .= '<form class="uk-form" method="post" action="index.php">';
         $display .= '<input type="hidden" name="op" value="">';
         $display .= '<input type="hidden" name="lid" value="">';
-        $display .= '<table width="100%" border="0" class="plugin">';
-        $display .= '<tr><td colspan="5" width="100%" class="pluginHeader" style="padding:5px;">' . _MD_BROKENREPORTS. "&nbsp;($totalbrokendownloads)</td></tr>";
+        $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
+        $display .= '<tr><td colspan="5" class="pluginHeader" style="padding:5px;">' . _MD_BROKENREPORTS. "&nbsp;($totalbrokendownloads)</td></tr>";
         $display .= '<tr><td colspan="5">' . _MD_IGNOREDESC . "<br" . XHTML . ">"._MD_DELETEDESC."</td></tr>";
         $display .= '<tr class="pluginHeader"><th>'._MD_FILETITLE.'</th><th>'._MD_REPORTER.'</th>';
         $display .= '<th>'._MD_FILESUBMITTER.'</th><th>'._MD_IGNORE.'</th><th>'._MD_DELETE.'</th></tr>';
@@ -895,18 +902,18 @@ function modCat() {
     $display = COM_siteHeader('menu');
 //    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav2']);
-    $display .= '<form action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
+    $display .= '<form class="uk-form" action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
     $display .= '<input type="hidden" name="op" value="modCatS">';
     $display .= '<input type="hidden" name="cid" value="'.$cid.'">';
-    $display .= '<table width="100%" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_MODCAT . '</td></tr>';
+    $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
+    $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;">' . _MD_MODCAT . '</td></tr>';
 
     $result = DB_query("SELECT pid, title, imgurl, grp_access,grp_writeaccess FROM {$_TABLES['filemgmt_cat']} WHERE cid='".DB_escapeString($cid)."'");
     list($pid,$title,$imgurl,$grp_access,$writeaccess) = DB_fetchArray($result);
     $title = $myts->makeTboxData4Edit($title);
     $imgurl = rawurldecode($myts->makeTboxData4Edit($imgurl));
 
-    $display .= '<form action="index.php" method="post" enctype="multipart/form-data">';
+    $display .= '<form  action="index.php" method="post" enctype="multipart/form-data">';
     $display .= '<tr><td>' . _MD_TITLEC. '</td><td><input type="text" name="title" value="'.$title.'" size="51" maxlength="50"></td></tr>';
     $display .= '<tr><td>' . _MD_CATSEC. '</td><td><select name="sel_access"><option value="0">Select Access</option>';
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$grp_access) . '</select></td></tr>';
@@ -917,9 +924,9 @@ function modCat() {
     $display .= $mytree->makeMySelBox("title", "title", $pid, 1, "pid",'',$cid);
     $display .= '</td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
-    $display .= '<input type="submit" value="'._MD_SAVE.'">';
-    $display .= '<input type="submit" value="'._MD_DELETE.'" onClick=\'if (confirm("Delete this file ?")) {this.form.op.value="delCat";return true}; return false\'>';
-    $display .= "&nbsp;<input type=\"submit\" value="._MD_CANCEL." name=\"cancel\" />";
+    $display .= '<input class="uk-button" type="submit" value="'._MD_SAVE.'">&nbsp;';
+    $display .= '<input class="uk-button" type="submit" value="'._MD_DELETE.'" onClick=\'if (confirm("Delete this file ?")) {this.form.op.value="delCat";return true}; return false\'>';
+    $display .= "&nbsp;<input class=\"uk-button\" type=\"submit\" value="._MD_CANCEL." name=\"cancel\" />";
     $display .= '</td></tr></table>';
     $display .= "</form>";
     $display .= COM_endBlock();
