@@ -1200,6 +1200,7 @@ function links_validateUrl($url)
 	$req->data_timeout=0;
 	$req->debug=0;
 	$req->html_debug=0;
+	$req->accept = "*/*";
     $req->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
     $error=$req->GetRequestArguments($url,$arguments);
     $arguments["Headers"]["Pragma"]="nocache";
