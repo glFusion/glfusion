@@ -8,7 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -79,7 +79,7 @@ $_FF_DEFAULT['use_sfs']                = true;
 $_FF_DEFAULT['show_centerblock']       = true;
 $_FF_DEFAULT['centerblock_homepage']   = true;
 $_FF_DEFAULT['centerblock_where']      = 2;
-$_FF_DEFAULT['cb_subject_size']        = 40;
+$_FF_DEFAULT['cb_subject_size']        = 120;
 $_FF_DEFAULT['centerblock_numposts']   = 10;
 $_FF_DEFAULT['sb_subject_size']        = 20;
 $_FF_DEFAULT['sb_latestpostonly']      = false;

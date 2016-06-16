@@ -54,7 +54,7 @@ function install_config($site_url)
     $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
     $c->add('site_disabled_msg','','text',0,0,NULL,50,TRUE);
     $c->add('maintenance_mode',0,'select',0,0,0,60,TRUE);
-    $c->add('copyrightyear','2013','text',0,0,NULL,70,FALSE);
+    $c->add('copyrightyear','2016','text',0,0,NULL,70,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
 
     $c->add('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
@@ -314,9 +314,9 @@ function install_config($site_url)
     $c->add('max_topicicon_size',65536,'text',5,4,NULL,30,TRUE);
 
     $c->add('fs_userphoto', NULL, 'fieldset', 5, 5, NULL, 0, TRUE);
-    $c->add('max_photo_width',170,'text',5,5,NULL,10,TRUE);
-    $c->add('max_photo_height',185,'text',5,5,NULL,20,TRUE);
-    $c->add('max_photo_size',65536,'text',5,5,NULL,30,TRUE);
+    $c->add('max_photo_width',300,'text',5,5,NULL,10,TRUE);
+    $c->add('max_photo_height',300,'text',5,5,NULL,20,TRUE);
+    $c->add('max_photo_size',8388608,'text',5,5,NULL,30,TRUE);
     $c->add('force_photo_width',75,'text',5,5,NULL,40,FALSE);
     $def_photo = urldecode($site_url) . '/images/userphotos/default.jpg';
     $c->add('default_photo',$def_photo,'text',5,5,NULL,50,TRUE);
@@ -327,7 +327,7 @@ function install_config($site_url)
 
     $c->add('fs_logo', NULL, 'fieldset', 5, 7, NULL, 0, TRUE);
     $c->add('max_logo_height',150,'text',5,7,NULL,10,TRUE);
-    $c->add('max_logo_width',500,'text',5,7,NULL,20,TRUE);
+    $c->add('max_logo_width',1024,'text',5,7,NULL,20,TRUE);
 
     // Subgroup: Languages and Locale
     $c->add('sg_locale', NULL, 'subgroup', 6, 0, NULL, 0, TRUE);
@@ -336,7 +336,7 @@ function install_config($site_url)
     $c->add('language','english','select',6,1,NULL,10,TRUE);
 
     $c->add('fs_locale', NULL, 'fieldset', 6, 2, NULL, 0, TRUE);
-    $c->add('locale','en_GB','text',6,2,NULL,10,TRUE);
+    $c->add('locale','en_US','text',6,2,NULL,10,TRUE);
     $c->add('date','l, F d Y @ h:i A T','text',6,2,NULL,20,TRUE);
     $c->add('daytime','m/d h:iA','text',6,2,NULL,30,TRUE);
     $c->add('shortdate','m/d/y','text',6,2,NULL,40,TRUE);
