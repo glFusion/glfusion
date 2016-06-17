@@ -7,14 +7,21 @@
 					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
 				</button>
 			</div>
+
 			<div class="uk-float-left">
-				<h2>{step_heading}</h2>
+				<h2>glFusion CMS</h2>
 			</div>
+
 		</div>
 	</div>
 	<hr>
 	<div class="uk-grid uk-grid-divider">
-		<div class="uk-width-medium-2-4">
+		<div class="uk-width-medium-4-4">
+
+   		<div class="uk-margin-bottom">
+     	 	{lang_welcome}
+    	</div>
+
 			<div class="uk-form-row">
 				<label class="uk-form-label">{lang_select_language}</label>
 				<div class="uk-form-controls">
@@ -31,14 +38,11 @@
 				</div>
 			</div>
 
-			<div class="uk-alert uk-alert-danger">
-				If you are upgrading, please select Upgrade from the option menu above, otherwise select New Installation.
-			</div>
-
-
 		</div>
+<!--
 		<div class="uk-width-medium-2-4">
 			{lang_welcome}
 		</div>
+-->
 	</div>
 </form>
