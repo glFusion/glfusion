@@ -2,7 +2,7 @@
 				</div>
 			</div>
 		</div> <!-- end of container -->
-		<div class="uk-width-1-1 uk-text-center uk-margin-bottom-remove" style="background: #252525;border-top: 1px solid #232425;margin-bottom:0;bottom:0;padding:10px;">
+		<div class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
 			<div>
 				{copyright}
 			</div>
