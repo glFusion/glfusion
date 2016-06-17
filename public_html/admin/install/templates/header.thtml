@@ -23,11 +23,6 @@
 				border-bottom-right-radius:0;
 				border-bottom-left-radius:0;
 			}
-
-			.tm-panel {
-				border-top-right-radius:0;
-				border-top-left-radius:0;
-			}
 			.tm-navbar-brand {
 				color: #fff;
 				text-shadow:none;
@@ -48,35 +43,43 @@
 				margin-top: 7px!important;
 			}
 
-.tm-navbar-nav > li > a {
-	border: medium none;
-	border-radius: 3px;
-	font-size: 15px;
-	height: 40px;
-	margin: 0;
-	text-shadow: none;
-	color: #fff !important;
-}
-.tm-nav-navbar > li > a {
-	color: #fff;
-}
+			.tm-navbar-nav > li > a {
+				border: medium none;
+				border-radius: 3px;
+				font-size: 15px;
+				height: 40px;
+				margin: 0;
+				text-shadow: none;
+				color: #fff !important;
+			}
+			.tm-nav-navbar > li > a {
+				color: #fff;
+			}
 
-.tm-navbar::before,
-.tm-navbar::after {
-	margin-top: 7px!important;
-}
+			.tm-navbar::before,
+			.tm-navbar::after {
+				margin-top: 7px!important;
+			}
 
-/* nav overload */
-.tm-navbar-nav > li:hover > a,
-.tm-navbar-nav > li > a:focus,
-.tm-navbar-nav > li.uk-open > a {
-	background-color: transparent;
-	color: #fff;
-	/* 3 */
-	outline: none;
-	background: #35B3EE  none repeat scroll 0 0;
-}
+			/* nav overload */
+			.tm-navbar-nav > li:hover > a,
+			.tm-navbar-nav > li > a:focus,
+			.tm-navbar-nav > li.uk-open > a {
+				background-color: transparent;
+				color: #fff;
+				/* 3 */
+				outline: none;
+				background: #35B3EE  none repeat scroll 0 0;
+			}
 
+			.tm-footer {
+				background: #252525;
+				border-top: 1px solid #232425;
+				margin-bottom:0;
+				bottom:0;
+				padding:10px;
+				color:#fff;
+			}
 
 			.uk-icon-check {
 				color:#84EF78;
@@ -95,6 +98,7 @@
 				border-right:0;
 				border-radius:0;
 				text-align:left;
+				font-weight:700;
 			}
 			.tm-step-complete {
 				text-align:left;
@@ -112,7 +116,6 @@
 				border-radius:0;
 				color: #999999 !important;
 			}
-
 		</style>
 		<meta name="robots" content="noindex,nofollow" />
 		<title>{page_title}</title>
@@ -125,19 +128,21 @@
 					<img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
 				</a>
 			</div>
+<!--
 			<ul class="uk-navbar-nav tm-navbar-nav">
 				<li><a class="uk-parent" href="https://github.com/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github"></i></a></li>
 				<li><a class="uk-parent" href="https://gitter.im/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github-alt"></i></a></li>
 				<li><a class="uk-parent" href="https://www.glfusion.org/forum/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-comments"></i></a></li>
 				<li><a class="uk-parent" href="https://www.glfusion.org/filemgmt/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-plug"></i></a></li>
 			</ul>
+-->
 			<div class="uk-navbar-flip ">
 				<div class="uk-navbar-content">
 					{wizard_version}
 				</div>
 
 				<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
-				<a href="fusionrescue.php" class="uk-button uk-button-danger" type="button">Rescue</a>
+					<a href="fusionrescue.php" class="uk-button uk-button-danger" type="button">Rescue</a>
 				</div>
 
 			</div>
@@ -152,6 +157,7 @@
 
 				<div class="uk-width-medium-1-4 uk-push-3-4 uk-hidden-small">
 
+					<!-- start of panel -->
 					<div class="uk-panel uk-panel-box" style="padding:0;">
 						<div class="uk-width-1-1 uk-text-center" style="background:#325482 none repeat scroll 0 0;padding-top:7px;padding-bottom:7px;color:white;">
 							{lang_step_title}
@@ -159,25 +165,85 @@
 						<div class="uk-flex uk-flex-center uk-margin-top">
 							<img  alt="list" src="layout/images/step_list.png">
 						</div>
-						<ul class="uk-width-1-1 uk-list">
+						<ul class="uk-width-1-1 uk-list uk-list-line" style="padding:15px;">
 <!-- BEGIN steps -->
 							<li>
-								<button class="uk-button uk-button-large uk-width-1-1 {state}">
-									{lang_step}
-								</button>
+								<div class="{state}" style="padding:5px;">{lang_step}  <i class="tm-icon-step uk-icon uk-icon-{step_class}"></i></div>
 							</li>
 <!-- END steps -->
-						</ul>
-						<div class="uk-grid uk-margin-bottom uk-grid-collapse" style="padding-right:1em;padding-left:1em;">
-							<div class="uk-width-1-3">
-								<a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:languagetask" target="_blank">
-									<img src="layout/help.png"  alt="Online Install Help" title="Online Install Help" />
+
+							<li class="uk-nav-header" style="padding-top:15px;">Support Resources</li>
+
+							<li>
+								<a href="https://www.glfusion.org/wiki/glfusion:start" target="_blank">
+									<div class="uk-grid">
+										<div class="uk-width-1-6">
+											<i class="uk-icon uk-icon-medkit uk-text-danger uk-icon-medium"></i>
+										</div>
+										<div class="uk-width-5-6">
+											{lang_online_help}
+										</div>
+									</div>
 								</a>
-							</div>
-							<div class="uk-width-2-3">Online install help at glFusion.org</div>
-						</div>
+							</li>
+							<li>
+								<a href="https://gitter.im/glFusion/glfusion" target="_blank">
+									<div class="uk-grid">
+										<div class="uk-width-1-6">
+											<i class="uk-icon uk-icon-github-alt uk-icon-medium"></i>
+										</div>
+										<div class="uk-width-5-6">
+											Community chat @ Gitter
+										</div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.glfusion.org/forum/index.php" target="_blank">
+									<div class="uk-grid">
+										<div class="uk-width-1-6">
+											<i class="uk-icon uk-icon-justify uk-icon-comments uk-icon-medium uk-text-primary"></i>
+										</div>
+										<div class="uk-width-5-6">
+											glFusion Support Forums
+										</div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="https://github.com/glfusion/glfusion" target="_blank">
+									<div class="uk-grid">
+										<div class="uk-width-1-6">
+											<i class="uk-icon uk-icon-justify uk-icon-github uk-icon-medium uk-text-primary"></i>
+										</div>
+										<div class="uk-width-5-6">
+											glFusion @ GitHub
+										</div>
+									</div>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://www.glfusion.org/filemgmt/index.php" target="_blank">
+									<div class="uk-grid">
+										<div class="uk-width-1-6">
+											<i class="uk-icon uk-icon-justify uk-icon-plug uk-icon-medium uk-text-primary"></i>
+										</div>
+										<div class="uk-width-5-6">
+											glFusion Plugins
+										</div>
+									</div>
+								</a>
+							</li>
+
+
+						</ul>
+
 					</div>
-				</div>
+					<!-- end of panel -->
+
+
+				</div> <!-- end of uk-width-medium-1-4 -->
 
 				<!-- wrapper for content -->
 
