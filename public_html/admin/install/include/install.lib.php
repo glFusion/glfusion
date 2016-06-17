@@ -73,7 +73,8 @@ if (!function_exists('INST_stripslashes') ) {
     }
 }
 
-function INST_header($currentAction='',$nextAction='',$prevAction='')
+//function INST_header($currentAction='',$nextAction='',$prevAction='')
+function INST_header($percent_complete)
 {
     global $_GLFUSION, $LANG_INSTALL, $LANG_CHARSET;
 
@@ -81,12 +82,16 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
 
     $header = new TemplateLite('templates/');
     $header->set_file('header','header.thtml');
+
+    $progress_bar = _buildProgressBar($currentStep,$header);
+
     $header->set_var(array(
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
         'language'          =>  $_GLFUSION['language'],
         'wizard_version'    =>  $LANG_INSTALL['wizard_version'],
-        'progress_bar'      =>  _buildProgressBar($currentStep),
+        'progress_bar'      =>  $progress_bar,
+        'percent_complete'  =>  $percent_complete,
     ));
 
     $header->parse('output','header');

@@ -1,53 +1,66 @@
-<form id="welcome" name="welcome" method="post" action="index.php">
-  <input type="hidden" name="task" value="" />
-  {hiddenfields}
-  <div class="step floatleft">
-    <div class="stepheading">
-      <span class="floatright buttons">
-        <button type="submit" name="prev" onclick="submitForm( welcome, '' );">
-          <img src="layout/arrow-back.gif" alt=""/>
-          {lang_prev}
-        </button>
-        <button type="submit" name="submit" onclick="submitForm( welcome, 'gotpathsetting' );">
-          {lang_next}
-          <img src="layout/arrow-next.gif" alt=""/>
-        </button>
-      </span>
-      {step_heading}
-    </div>
-    <div class="stepfields">
-      <span>
-        <label>{lang_path_prompt}:</label><br />
-        <input type="text" name="private_path" value="{dbconfig_path}" size="46" onkeypress="return check(event)"/>
-        {lang_sys_path_exp}
-      </span>
-      <h1 class="title moofx-toggler" title="Advanced">{lang_advanced_settings}</h1>
-      <div class="moofx-slider">
-        <div style="height:2px;"></div>
-        <span>
-          <label>{lang_log_path}:</label><br />
-          <input type="text" name="logpath" value="{log_path}" size="46" onkeypress="return check(event)"/>
-          {lang_log_path_exp}
-        </span>
-        <span>
-          <label>{lang_lang_path}:</label><br />
-          <input type="text" name="langpath" value="{lang_path}" size="46" onkeypress="return check(event)"/>
-          {lang_lang_path_exp}
-        </span>
-        <span>
-          <label>{lang_backup_path}:</label><br />
-          <input type="text" name="backuppath" value="{backup_path}" size="46" onkeypress="return check(event)"/>
-          {lang_backup_path_exp}
-        </span>
-        <span>
-          <label>{lang_data_path}:</label><br />
-          <input type="text" name="datapath" value="{data_path}" size="46" onkeypress="return check(event)"/>
-          {lang_data_path_exp}
-        </span>
-      </div>
-    </div>
-    <div class="stephelp">
-      {lang_sys_path_help}
-    </div>
-  </div>
+<form class="uk-form" id="pathsetting" name="pathsetting" method="post" action="index.php">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="languagetask"> <i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+				<button class="uk-button uk-button-success" type="submit" name="task" value="gotpathsetting">
+					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
+				</button>
+			</div>
+			<div class="uk-float-left">
+				<h2>{step_heading}</h2>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-2-4">
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_path_prompt}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="private_path" value="{dbconfig_path}">
+				</div>
+			</div>
+
+			<h2><a data-uk-toggle="{target: '#advanced_toggle', animation: 'uk-animation-fade'}"><i class="uk-icon-caret-right"></i></a> {lang_advanced_settings}</h2>
+
+			<div id="advanced_toggle" class="uk-hidden">
+				<div class="uk-form-row">
+					<label class="uk-form-label">{lang_log_path}</label>
+					<div class="uk-form-controls">
+						<input class="uk-width-1-1" type="text" name="logpath" value="{log_path}">
+						<span class="uk-form-help-inline">{lang_log_path_exp}</span>
+					</div>
+				</div>
+				<div class="uk-form-row">
+					<label class="uk-form-label">{lang_lang_path}</label>
+					<div class="uk-form-controls">
+						<input class="uk-width-1-1" type="text" name="langpath" value="{lang_path}">
+						<span class="uk-form-help-inline">{lang_lang_path_exp}</span>
+					</div>
+				</div>
+				<div class="uk-form-row">
+					<label class="uk-form-label">{lang_backup_path}</label>
+					<div class="uk-form-controls">
+						<input class="uk-width-1-1" type="text" name="backuppath" value="{backup_path}">
+						<span class="uk-form-help-inline">{lang_backup_path_exp}</span>
+					</div>
+				</div>
+				<div class="uk-form-row">
+					<label class="uk-form-label">{lang_data_path}</label>
+					<div class="uk-form-controls">
+						<input class="uk-width-1-1" type="text" name="datapath" value="{data_path}">
+						<span class="uk-form-help-inline">{lang_data_path_exp}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="uk-width-medium-2-4">
+			{lang_sys_path_help}
+		</div>
+	</div>
 </form>

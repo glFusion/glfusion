@@ -1,83 +1,117 @@
-<form name="sitedata" id="sitedata" action="index.php" method="post">
-  <input type="hidden" name="task" value="" />
-  {hiddenfields}
-  <div class="step floatleft">
-    <div class="stepheading">
-      <span class="floatright buttons">
-        <button type="submit" name="prev" onclick="submitForm( sitedata, 'checkenvironment' );">
-          <img src="layout/arrow-back.gif" alt=""/>
-          {lang_prev}
-        </button>
-        <button type="submit" name="submit" onclick="submitForm( sitedata, 'gotsiteinformation' );">
-          {lang_install}
-          <img src="layout/arrow-next.gif" alt=""/>
-        </button>
-      </span>
-      {lang_site_information}
-    </div>
-    <div class="stepfields">
-      <span>
-        <label>{lang_database_type}:</label><br />
-        <select name="dbtype">
-          <option value="mysql" {noinnodb_selected}>MySQL</option>
-          <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
-          <option value="mysqli" {mysqli_selected}>MySQLi</option>
-        </select>
-        <label style="font-weight:normal;">{lang_utf8}:</label>
-        <input type="checkbox" name="use_utf8" checked="checked" class="box"/>
-      </span>
-      <span>
-        <label>{lang_database_hostname}:</label><br />
-        <input type="text" name="dbhost" value="{db_host}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_database_name}:</label><br />
-        <input type="text" name="dbname" value="{db_name}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_database_user}:</label><br />
-        <input type="text" name="dbuser" value="{db_user}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_database_password}:</label><br />
-        <input type="password" name="dbpass" value="{db_pass}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_database_table_prefix}:</label><br />
-        <input type="text" name="dbprefix" value="{db_prefix}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_name}:</label><br />
-        <input type="text" name="sitename" value="{site_name}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_slogan}:</label><br />
-        <input type="text" name="siteslogan" value="{site_slogan}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_email}:</label><br />
-        <input type="text" name="sitemail" value="{site_mail}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_noreply_email}:</label><br />
-        <input type="text" name="noreplymail" value="{noreply_mail}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_url}:</label><br />
-        <input type="text" name="siteurl" value="{site_url}" size="46" onkeypress="return check(event)"/>
-      </span>
-      <span>
-        <label>{lang_site_admin_url}:</label><br />
-        <input type="text" name="siteadminurl" value="{site_admin_url}" size="46" onkeypress="return check(event)"/>
-      </span>
-    </div>
-    <div class="stephelp">
-      {lang_sitedata_help}
-      <div id="back-to-top">
-        <a href="#top">
-          {back_to_top}&nbsp;<img title="{back_to_top}" alt="{back_to_top}" src="layout/top.png"/>
-        </a>
-      </div>
-    </div>
-  </div>
+<form class="uk-form" name="sitedata" id="sitedata" action="index.php" method="post">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="checkenvironment"><i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+				<button class="uk-button uk-button-success" type="submit" name="task" value="gotsiteinformation">
+					INSTALL <i class="uk-icon uk-icon-arrow-right"></i>
+				</button>
+			</div>
+			<div class="uk-float-left">
+				<h2>{lang_site_information}</h2>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-2-4">
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_type}</label>
+				<div class="uk-form-controls">
+					<select name="dbtype">
+						<option value="mysql" {noinnodb_selected}>MySQL</option>
+						<option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
+						<option value="mysqli" {mysqli_selected}>MySQLi</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="use_utf8" checked="checked">
+					<label class="uk-form-label">{lang_utf8}</label>
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_hostname}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="dbhost" value="{db_host}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_name}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="dbname" value="{db_name}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_user}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="dbuser" value="{db_user}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_password}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="password" name="dbpass" value="{db_pass}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_database_table_prefix}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="dbprefix" value="{db_prefix}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_name}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="sitename" value="{site_name}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_slogan}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="siteslogan" value="{site_slogan}">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_email}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="sitemail" value="{site_mail}">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_noreply_email}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="noreplymail" value="{noreply_mail}">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_url}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="siteurl" value="{site_url}">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_site_admin_url}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="siteadminurl" value="{site_admin_url}">
+				</div>
+			</div>
+		</div>
+
+		<div class="uk-width-medium-2-4">
+			{lang_sitedata_help}
+		</div>
+
+	</div>
 </form>

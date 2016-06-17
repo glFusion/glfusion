@@ -1,54 +1,71 @@
-<form name="contentplugins" action="index.php" method="post">
-  <input type="hidden" name="task" value="" />
-  {hiddenfields}
-  <div class="step floatleft">
-    <div class="stepheading">
-      <span class="floatright buttons">
-        <button type="submit" name="submit" onclick="submitForm( contentplugins, 'installplugins' );">
-          {lang_next}
-          <img src="layout/arrow-next.gif" alt=""/>
-        </button>
-      </span>
-      {lang_content_plugins}
-    </div>
-    <div class="stepfields">
-      <span id="spacer0">
-        <input type="checkbox" name="installdefaultdata" checked="checked" class="floatright box"/>
-        <label>{lang_load_sample_content}</label>
-      </span>
-      <span id="spacer1">
-        <input type="checkbox" name="plugin[calendar]" checked="checked" class="floatright box"/>
-        <label>{lang_calendar}</label>
-      </span>
-      <span id="spacer2">
-        <input type="checkbox" name="plugin[filemgmt]" checked="checked" class="floatright box"/>
-        <label>{lang_filemgmt}</label>
-      </span>
-      <span id="spacer3">
-        <input type="checkbox" name="plugin[forum]" checked="checked" class="floatright box"/>
-        <label>{lang_forum}</label>
-      </span>
-      <span id="spacer4">
-        <input type="checkbox" name="plugin[links]" checked="checked" class="floatright box"/>
-        <label>{lang_links}</label>
-      </span>
-      <span id="spacer5">
-        <input type="checkbox" name="plugin[mediagallery]" checked="checked" class="floatright box"/>
-        <label>{lang_mediagallery}</label>
-      </span>
-      <span id="spacer6">
-        <input type="checkbox" name="plugin[polls]" checked="checked" class="floatright box"/>
-        <label>{lang_polls}</label>
-      </span>
-    </div>
-    <div class="stephelp">
-      {lang_samplecontent_desc}<br /><br />
-      {lang_calendar_desc}<br /><br />
-      {lang_filemgmt_desc}<br /><br />
-      {lang_forum_desc}<br /><br />
-      {lang_links_desc}<br /><br />
-      {lang_mediagallery_desc}<br /><br />
-      {lang_polls_desc}
-    </div>
-  </div>
+<form class="uk-form" name="contentplugins" action="index.php" method="post">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-success" type="submit" name="task" value="installplugins">
+					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
+				</button>
+			</div>
+			<div class="uk-float-left">
+				<h2>{lang_content_plugins}</h2>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-2-4">
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="installdefaultdata" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_load_sample_content}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[calendar]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_calendar}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[filemgmt]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_filemgmt}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[forum]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_forum}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[links]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_links}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[mediagallery]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_mediagallery}</div>
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+					<input type="checkbox" name="plugin[polls]" checked="checked">
+					<div class="uk-form-help-inline uk-text-large">{lang_polls}</div>
+				</div>
+			</div>
+		</div>
+		<div class="uk-width-medium-2-4">
+			<p>{lang_samplecontent_desc}</p>
+			<p>{lang_calendar_desc}</p>
+			<p>{lang_filemgmt_desc}</p>
+			<p>{lang_forum_desc}</p>
+			<p>{lang_links_desc}</p>
+			<p>{lang_mediagallery_desc}</p>
+			<p>{lang_polls_desc}</p>
+		</div>
+	</div>
 </form>

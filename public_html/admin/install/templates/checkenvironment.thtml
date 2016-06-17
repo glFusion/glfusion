@@ -1,65 +1,58 @@
-<form name="checkenv" action="index.php" method="post">
+<form class="uk-form" id="welcome" name="welcome" method="post" action="index.php">
   <input type="hidden" name="task" value="" />
   <input type="hidden" name="language" value="{language}" />
   <input type="hidden" name="dbconfig_path" value="{dbconfig_path}" />
   {hiddenfields}
-  <div class="step floatleft">
-    <div class="stepheading">
-      <span class="floatright buttons">
-        {recheck}
-        <button type="submit" name="prev"  onclick="submitForm( checkenv, '{previousaction}' );">
-          <img src="layout/arrow-back.gif" alt=""/>
-          {lang_previous}
-        </button>
-        <button type="submit" name="submit" onclick="submitForm( checkenv, '{nextaction}' );">
-          {button}
-          <img src="layout/arrow-next.gif" alt=""/>
-        </button>
-      </span>
-      {step_heading}
-    </div>
-    <div class="stepfields-envchk">
-      <h2 class="top">{lang_php_settings}</h2>
-      <p>
-        {lang_php_warning}
-      </p>
-      <table>
+
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="{previousaction}"><i class="uk-icon uk-icon-arrow-left"></i> {lang_previous}</button>
+				<button class="uk-button uk-button-success" type="submit" name="task" value="{nextaction}">
+					{button} <i class="uk-icon uk-icon-{icon}"></i>
+				</button>
+			</div>
+			<div class="uk-float-left"><h2>{step_heading}</h2></div>
+		</div>
+	</div>
+
+	<hr>
+
+	{error_message}
+
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-4-4">
+			<h3>{lang_php_settings}</h3>
+			<p>{lang_php_warning}</p>
+
+      <table class="uk-table uk-table-hover uk-table-condensed">
         <tr>
-          <td>
-            <table cellpadding="2">
-              <tr>
-                <th>{lang_setting}</th>
-                <th>{lang_current}</th>
-                <th>{lang_recommended}</th>
-                <th>{lang_notes}</th>
-              </tr>
-              <!-- BEGIN envs -->
-              <tr>
-                <td>{item}</td>
-                <td class="aligncenter">{status}</td>
-                <td class="aligncenter">{recommended}</td>
-                <td>{notes}</td>
-              </tr>
-              <!-- END envs -->
-            </table>
-          </td>
+          <th>{lang_setting}</th>
+          <th>{lang_current}</th>
+          <th>{lang_recommended}</th>
+          <th>{lang_notes}</th>
+				</tr>
+<!-- BEGIN envs -->
+        <tr>
+          <td>{item}</td>
+          <td class="uk-text-center">{status}</td>
+          <td class="uk-text-center">{recommended}</td>
+          <td>{notes}</td>
         </tr>
+<!-- END envs -->
       </table>
-      <h2>{lang_filesystem}</h2>
-      <div style="margin-bottom:5px;border-bottom:1px solid #cccccc;"></div>
-      <table style="width:714px;">
-        <!-- BEGIN perms -->
-        <tr class="Row{rowclass}">
+
+			<h3>{lang_filesystem}</h3>
+
+      <table class="uk-table uk-table-hover uk-table-condensed">
+<!-- BEGIN perms -->
+        <tr>
           <td class="pathtext">{location}</td>
           <td class="pathtext-status">{status}</td>
         </tr>
-        <!-- END perms -->
+<!-- END perms -->
       </table>
-      <div id="back-to-top">
-        <a href="#top">
-          {back_to_top}&nbsp;<img title="{back_to_top}" alt="{back_to_top}" src="layout/top.png"/>
-        </a>
-      </div>
+
     </div>
   </div>
 </form>

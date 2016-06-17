@@ -1,20 +1,19 @@
 <form name="error" action="index.php" method="post">
-	<input type="hidden" name="task" value="" />
 	{hiddenfields}
-	<div class="step floatleft">
-		<div class="stepheading">
-			<span class="floatright buttons">
-				<button type="submit" name="prev" onclick="submitForm( error, '{step}' );">
-					<img src="layout/arrow-back.gif" alt=""/>
-					{lang_prev}
-				</button>
-			</span>
-			{title}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="{step}"><i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+			</div>
+			<div class="uk-float-left">
+				<h2><i class="uk-icon uk-icon-exclamation-triangle uk-icon-medium uk-text-danger"></i> {title}</h2>
+			</div>
+			<div class="uk-clearfix"></div>
+			<hr>
+			<div class="uk-alert uk-alert-danger">
+				<p>{text}</p>
+				<p>{detailed_error}</p>
+			</div>
 		</div>
-		<div class="stepfields-error">
-			<img src="layout/error.png" alt=""/>
-			<p>{text}</p>
-		</div>
-		<p>{detailed_error}</p>
 	</div>
 </form>

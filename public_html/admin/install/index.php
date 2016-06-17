@@ -135,7 +135,7 @@ function _buildHiddenFields()
  * @return  string          HTML
  *
  */
-function _buildProgressBar($currentStep)
+function _buildProgressBar($currentStep, &$T)
 {
     global $_GLFUSION, $LANG_INSTALL;
 
@@ -153,51 +153,53 @@ function _buildProgressBar($currentStep)
     $first  = 0;
     $found  = 0;
 
-    $retval  = '<div class="steplist floatleft">' . LB;
-    $retval .= '<span class="steplist-top"></span>' . LB;
-    $retval .= '<div class="steplist-content">' . LB;
-    $retval .= '<ul>' . LB;
-    $retval .= '<li>' . LB;
     if ( $_GLFUSION['method'] == 'install' )  {
-        $retval .= '<span class="b larger">'.$LANG_INSTALL['install_steps'].'</span>' . LB;
+        $T->set_var('lang_step_title',$LANG_INSTALL['install_steps']);
     } else {
-        $retval .= '<span class="b larger">'.$LANG_INSTALL['upgrade_steps'].'</span>' . LB;
+        $T->set_var('lang_step_title',$LANG_INSTALL['upgrade_steps']);
     }
+    $T->set_var('lang_online_help',$LANG_INSTALL['online_help_text']);
     $retval .= '</li>' . LB;
+
+    $T->set_block('header','steps','st');
 
     switch ($_GLFUSION['method']) {
         case 'install' :
             foreach ($installSteps AS $step => $desc) {
+                $T->set_var('lang_step',$desc);
                 if ( $step == $currentStep ) {
                     $found++;
-                    $retval .= '<li class="current">'.$desc.'</li>';
+                    $T->set_var('step_class','arrow-left');
+                    $T->set_var('state','tm-step-current');
                 } else {
                     if ( $found ) {
-                        $retval .= '<li>'.$desc.'</li>';
+                        $T->set_var('step_class','');
+                        $T->set_var('state','tm-step-pending');
                     } else {
-                        $retval .= '<li class="complete">'.$desc.'</li>';
+                        $T->set_var('step_class','check');
+                        $T->set_var('state','tm-step-complete');
                     }
                 }
+                $T->parse('st','steps',true);
             }
             break;
         case 'upgrade' :
             foreach ($upgradeSteps AS $step => $desc) {
+                $T->set_var('lang_step',$desc);
                 if ( $step == $currentStep ) {
                     $found++;
-                    $retval .= '<li class="current">'.$desc.'</li>';
+                    $T->set_var('step_class','arrow-left');
                 } else {
                     if ( $found ) {
-                        $retval .= '<li>'.$desc.'</li>';
+                        $T->set_var('step_class','');
                     } else {
-                        $retval .= '<li class="complete">'.$desc.'</li>';
+                        $T->set_var('step_class','check');
                     }
                 }
+                $T->parse('st','steps',true);
             }
             break;
     }
-    $retval .= '</ul>' . LB;
-    $retval .= '<div class="steplist-help"><span><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:'.$currentStep.'" target="_blank"><img src="layout/help.png"  alt="'.$LANG_INSTALL['online_install_help'].'" title="'.$LANG_INSTALL['online_install_help'].'" /></a></span>'.$LANG_INSTALL['online_help_text'].'</div>' . LB;
-    $retval .= '</div><div class="steplist-bottom"></div></div>' . LB;
 
     return $retval;
 }
@@ -274,10 +276,10 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['no_innodb_support']);
             break;
         case SITE_DATA_MISSING :
-            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['sitedata_missing']);
             break;
         case SITE_DATA_ERROR :
-            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['sitedata_missing']);
             break;
         case LIBCUSTOM_NOT_WRITABLE :
             $T->set_var('text',$LANG_INSTALL['libcustom_not_writable']);
@@ -286,10 +288,10 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['libcustom_not_found']);
             break;
         case CORE_UPGRADE_ERROR :
-            $T->set_var('text',$LANG_INSTALL['core_upgrade_error'].'<br /><br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['core_upgrade_error']);
             break;
         case PLUGIN_UPGRADE_ERROR :
-            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc'].'<br /><br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc']);
             break;
         case DB_EXISTS :
             $T->set_var('text',$LANG_INSTALL['database_exists']);
@@ -373,6 +375,7 @@ function INST_getLanguageTask( )
         'lang_language_support' => $LANG_INSTALL['language_support'],
         'lang_language_pack'    => $LANG_INSTALL['language_pack'],
         'hiddenfields'          => _buildHiddenFields(),
+        'percent_complete'      => '10',
     ));
 
     $T->parse('output','page');
@@ -654,11 +657,11 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('item',$LANG_INSTALL['php_version']);
 
     if ( INST_phpOutOfDate() ) {
-        $T->set_var('status','<span class="no">'.phpversion().'</span>');
+        $T->set_var('status','<span class="uk-text-danger">'.phpversion().'</span>');
     } else {
-        $T->set_var('status','<span class="yes">'.phpversion().'</span>');
+        $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','5.3.0+');
+    $T->set_var('recommended','5.6.0+');
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 
@@ -668,14 +671,16 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? '<span class="no">'.$LANG_INSTALL['on'].'</span>' : '<span class="yes">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['register_globals']);
     $T->parse('env','envs',true);
 
     $sm = ini_get('safe_mode');
     $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? '<span class="no">'.$LANG_INSTALL['on'].'</span>' : '<span class="yes">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['safe_mode']);
     $T->parse('env','envs',true);
@@ -688,21 +693,23 @@ function INST_checkEnvironment($dbconfig_path='')
         $open_basedir_directories = $ob;
     }
     $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG_INSTALL['none'].'</span>' : '<span class="no">'.$LANG_INSTALL['enabled'].'</span>');
+    $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['enabled'].'</span>');
+
     $T->set_var('notes',$LANG_INSTALL['open_basedir']);
     $T->parse('env','envs',true);
 
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
-    $T->set_var('status',$memory_limit < 50331648 ? '<span class="no">'.$memory_limit_print.'M</span>' : '<span class="yes">'.$memory_limit_print.'M</span>');
-    $T->set_var('recommended','48M');
+    $T->set_var('status',$memory_limit < 50331648 ? '<span class="uk-text-danger">'.$memory_limit_print.'M</span>' : '<span class="uk-text-success">'.$memory_limit_print.'M</span>');
+
+    $T->set_var('recommended','64M');
     $T->set_var('notes',$LANG_INSTALL['memory_limit']);
     $T->parse('env','envs',true);
 
     $fu = ini_get('file_uploads');
     $T->set_var('item','file_uploads');
-    $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG_INSTALL['on'].'</span>' : '<span class="no">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$fu == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['off'].'</span>');
     $T->set_var('recommended',$LANG_INSTALL['on']);
     $T->set_var('notes',$LANG_INSTALL['file_uploads']);
     $T->parse('env','envs',true);
@@ -710,7 +717,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $upload_limit = INST_return_bytes(ini_get('upload_max_filesize'));
     $upload_limit_print = ($upload_limit / 1024) / 1024;
     $T->set_var('item','upload_max_filesize');
-    $T->set_var('status',$upload_limit < 8388608 ? '<span class="no">'.$upload_limit_print.'M</span>' : '<span class="yes">'.$upload_limit_print.'M</span>');
+    $T->set_var('status',$upload_limit < 8388608 ? '<span class="uk-text-danger">'.$upload_limit_print.'M</span>' : '<span class="uk-text-success">'.$upload_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['upload_max_filesize']);
     $T->parse('env','envs',true);
@@ -718,7 +725,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $post_limit = INST_return_bytes(ini_get('post_max_size'));
     $post_limit_print = ($post_limit / 1024) / 1024;
     $T->set_var('item','post_max_size');
-    $T->set_var('status',$post_limit < 8388608 ? '<span class="no">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
+    $T->set_var('status',$post_limit < 8388608 ? '<span class="uk-text-danger">'.$post_limit_print.'M</span>' : '<span class="uk-text-success">'.$post_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['post_max_size']);
     $T->parse('env','envs',true);
@@ -830,7 +837,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $ok = INST_isWritable($path);
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -853,7 +860,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $ok = INST_isWritable($_PATH['dbconfig_path'].'data/layout_cache/test/');
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -869,26 +876,22 @@ function INST_checkEnvironment($dbconfig_path='')
     if ( $rc > 0 ) {
         $permError = 1;
     }
-
+    $T->set_var('icon','arrow-right');
     if ( $permError ) {
-        $button = 'Recheck';
+$button = 'Recheck';
         $action = 'checkenvironment';
-        $T->set_var('error_message',$LANG_INSTALL['correct_perms']);
-
-        $recheck  = '<button type="submit" name="submit" onclick="submitForm( checkenv, \'checkenvironment\' );">' . LB;
-        $recheck .= 'Recheck' . LB;
-        $recheck .= '<img src="layout/arrow-recheck.gif" alt=""/>' . LB;
-        $recheck .= '</button>' . LB;
-
+        $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
+        $T->set_var('icon','repeat');
+        $recheck = '';
     } else {
         $recheck = '';
         $T->set_var('location',$LANG_INSTALL['directory_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
         $classCounter++;
         $T->parse('perm','perms',true);
 
         $T->set_var('location',$LANG_INSTALL['file_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
         $classCounter++;
         $T->parse('perm','perms',true);
 
@@ -896,21 +899,15 @@ function INST_checkEnvironment($dbconfig_path='')
 
         if ( $_GLFUSION['method'] == 'upgrade' ) {
             $action = 'doupgrade';
+$button = 'Upgrade';
             $previousaction = '';
         } else {
             $action = 'getsiteinformation';
             $previousaction = 'pathsetting';
+            $button = $LANG_INSTALL['next'];
         }
     }
-    $button = $LANG_INSTALL['next'];
 
-    if ( $_GLFUSION['method'] == 'upgrade' ) {
-        $action = 'doupgrade';
-        $previousaction = '';
-    } else {
-        $action = 'getsiteinformation';
-        $previousaction = 'pathsetting';
-    }
     $T->set_var(array(
         'previousaction'    => $previousaction,
         'nextaction'        => $action,
@@ -927,6 +924,7 @@ function INST_checkEnvironment($dbconfig_path='')
         'lang_php_settings' => $LANG_INSTALL['php_settings'],
         'lang_php_warning'  => $LANG_INSTALL['php_warning'],
         'hiddenfields'      => _buildHiddenFields(),
+        'percent_complete'      => '20',
     ));
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
@@ -1003,14 +1001,9 @@ function INST_getSiteInformation()
         $T->set_var('innodb_selected','');
         $T->set_var('noinnodb_selected','');
     } else {
-//        $T->set_var('noinnodb_selected', ($php55 ? '' : ' selected="selected"'));
-//        $T->set_var('innodb_selected','');
-//        $T->set_var('mysqli_selected',($php55 ? 'selected="selected"' : ''));
-
         $T->set_var('noinnodb_selected', '');
         $T->set_var('innodb_selected','');
         $T->set_var('mysqli_selected',' selected="selected"');
-
     }
 
     $T->set_var(array(
@@ -1600,12 +1593,6 @@ function INST_doPluginInstall()
                 DB_query($fsql,1);
             }
         }
-        // update the site tailor menu to reflect the static pages content
-//        if ( is_array($_MB_DEFAULT_DATA) ) {
-//            foreach ($_MB_DEFAULT_DATA AS $sql) {
-//                DB_query($sql,1);
-//            }
-//        }
         // cycle through the rest of the installed plugins and add their data
         if ( is_array($installedPlugins) ) {
             foreach ($installedPlugins AS $plugin) {
@@ -1671,7 +1658,7 @@ function INST_doSiteUpgrade()
         $display .= '<h2>' . $LANG_INSTALL['upgrade_error'] . '</h2>
             <p>' . $LANG_INSTALL['upgrade_error_text'] . '</p>' . LB;
         $display .= $errors;
-        return _displayError(CORE_UPGRADE_ERROR,'checkenvironment',$display);
+        return _displayError(CORE_UPGRADE_ERROR,'checkenvironment',$errors /*$display*/);
     }
     return;
 }
@@ -1826,6 +1813,7 @@ if ( isset($_POST['task']) ) {
     $mode = '';
 }
 
+
 if ( !isset($_GLFUSION['method'])) {
     $method = 'install';
 } else {
@@ -1855,21 +1843,27 @@ $_GLFUSION['method'] = $method;
 switch($mode) {
     case 'pathsetting' :
         $pageBody = INST_getPathSetting();
+$percent_complete = 30;
         break;
     case 'gotpathsetting':
         $pageBody =   INST_gotPathSetting();
+$percent_complete = 50;
         break;
     case 'checkenvironment' :
         $pageBody = INST_checkEnvironment();
+$percent_complete = 50;
         break;
     case 'getsiteinformation' :
         $pageBody = INST_getSiteInformation();
+$percent_complete = 70;
         break;
     case 'gotsiteinformation' :
         $pageBody = INST_gotSiteInformation();
+$percent_complete = 70;
         break;
     case 'contentplugins' :
         $pageBody = INST_installAndContentPlugins();
+$percent_complete = 90;
         break;
     case 'installplugins' :
         require '../../lib-common.php';
@@ -1878,7 +1872,9 @@ switch($mode) {
     case 'startupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
+$percent_complete = 50;
         } else {
+$percent_complete = 50;
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1900,7 +1896,9 @@ switch($mode) {
     case 'doupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
+$percent_complete = 50;
         } else {
+$percent_complete = 90;
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1928,13 +1926,14 @@ switch($mode) {
         header('Location: success.php?type='.$method.'&language=' . $language);
         exit;
     default:
+$percent_complete = 10;
         $_GLFUSION['language'] = $language;
         $_GLFUSION['method'] = $method;
         $pageBody = INST_getLanguageTask( );
         break;
 }
 
-echo INST_header();
+echo INST_header($percent_complete);
 echo $pageBody;
 echo INST_footer();
 exit;

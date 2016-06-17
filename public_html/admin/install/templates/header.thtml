@@ -1,60 +1,160 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html;charset={charset}" />
-<link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090304" />
-<script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
-<script type="text/javascript">
-	Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
-</script>
-<meta name="robots" content="noindex,nofollow" />
-<title>{page_title}</title>
-<!--[if lte IE 6]>
-<link rel="stylesheet" type="text/css" href="layout/ie6.css" />
-<script defer type="text/javascript" src="layout/gl_moopngfix.js"></script>
-<![endif]-->
-<!--[if IE 7]>
-<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
-<![endif]-->
-<!--[if IE 8]>
-<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
-<![endif]-->
-<script type="text/javascript">
-function submitForm( frm, task ) {
- 	frm.task.value = task;
-    frm.submit();
-}
-function check(e) {
-     var key;
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="uk-height-1-1">
+	<head>
+		<meta charset="{charset}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="uikit/css/uikit.almost-flat.css">
+		<link rel="stylesheet" type="text/css" href="uikit/css/components/progress.css">
+		<script type="text/javascript" src="../../javascript/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="uikit/js/uikit.min.js"></script>
 
-     if(window.event)
-          key = window.event.keyCode;     //IE
-     else
-          key = e.which;     //firefox
+		<style>
+			.uk-form label {
+				font-weight:700;
+			}
+			.tm-navbar {
+				padding: 1px 0px 6px;
+				border: medium none;
+				color:#fff;
+				background: #325482 none repeat scroll 0% 0%;
+				outline: none;
+				text-shadow:none;
+				border-bottom-right-radius:0;
+				border-bottom-left-radius:0;
+			}
+			.tm-navbar a:hover {
+				background:#BD6C01 !important;
+			}
+			.tm-panel {
+				border-top-right-radius:0;
+				border-top-left-radius:0;
+			}
+			.tm-navbar-brand {
+				color: #fff;
+				text-shadow:none;
+				font-weight:700;
+			}
+			.tm-navbar-brand a {
+				text-shadow:none;
+				color: #fff;
+			}
+			.tm-navbar-brand:hover,
+			.tm-navbar-brand a:active {
+				color:#fff;
+				text-decoration:none;
+			}
 
-     if(key == 13) {
-          return false;
-	 }
-     else
-          return true;
-}
-</script>
-</head>
-<body dir="ltr">
- <a name="top"></a>
-  <div id="container_fixed">
-    <div id="header">
-      <div class="toprcorner">
-        <div class="toplcorner">
-          <div class="floatright install-slogan">{wizard_version}</div>
-          <div class="floatleft">
-            <a href="http://www.glfusion.org" target="_blank">
-              <img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="moomenu"></div>
-    <div id="wrapper">
-        {progress_bar}
+			.tm-navbar::before,
+			.tm-navbar::after {
+				margin-top: 7px!important;
+			}
+
+			.uk-icon-check {
+				color:#84EF78;
+			}
+			.tm-icon-step.uk-icon-arrow-left {
+				color:#325482;
+			}
+			html {
+				/*				background:#000; */
+				height:100%;
+			}
+
+			.tm-step-current {
+				border-bottom:0;
+				border-left:0;
+				border-right:0;
+				border-radius:0;
+				text-align:left;
+			}
+			.tm-step-complete {
+				text-align:left;
+				border-bottom:0;
+				border-left:0;
+				border-right:0;
+				border-radius:0;
+				color: #999999 !important;
+			}
+			.tm-step-pending {
+				text-align:left;
+				border-bottom:0;
+				border-left:0;
+				border-right:0;
+				border-radius:0;
+				color: #999999 !important;
+			}
+
+		</style>
+		<meta name="robots" content="noindex,nofollow" />
+		<title>{page_title}</title>
+	</head>
+	<body class="uk-height-1-1">
+
+		<nav class="uk-navbar uk-navbar-attached tm-navbar">
+			<div class="uk-navbar-brand">
+				<a target="_blank" href="https://www.glfusion.org">
+					<img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
+				</a>
+			</div>
+			<ul class="uk-navbar-nav">
+				<li><a class="uk-parent" href="https://github.com/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github"></i></a></li>
+				<li><a class="uk-parent" href="https://gitter.im/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github-alt"></i></a></li>
+				<li><a class="uk-parent" href="https://www.glfusion.org/forum/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-comments"></i></a></li>
+				<li><a class="uk-parent" href="https://www.glfusion.org/filemgmt/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-plug"></i></a></li>
+			</ul>
+			<div class="uk-navbar-flip ">
+				<div class="uk-navbar-content">
+					{wizard_version}
+				</div>
+				<ul class="uk-navbar-nav">
+					<li>
+						<a target="_blank" href="fusionrescue.php">
+							<button class="uk-button uk-button-danger">Rescue</button>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="uk-progress uk-progress-striped uk-progress-mini uk-active uk-margin-remove" style="border-radius:0;">
+			<div class="uk-progress-bar" style="width: {percent_complete}%;"></div>
+		</div>
+
+		<div class="uk-container uk-container-center uk-margin-bottom">
+
+			<div class="uk-grid uk-margin-top" data-uk-grid-margin>
+
+				<div class="uk-width-medium-1-4 uk-push-3-4 uk-hidden-small">
+
+					<div class="uk-panel uk-panel-box" style="padding:0;">
+						<div class="uk-width-1-1 uk-text-center" style="background:#325482 none repeat scroll 0 0;padding-top:7px;padding-bottom:7px;color:white;">
+							{lang_step_title}
+						</div>
+						<div class="uk-flex uk-flex-center uk-margin-top">
+							<img  alt="list" src="layout/images/step_list.png">
+						</div>
+						<ul class="uk-width-1-1 uk-list">
+<!-- BEGIN steps -->
+							<li>
+								<button class="uk-button uk-button-large uk-width-1-1 {state}">
+									{lang_step}
+								</button>
+							</li>
+<!-- END steps -->
+						</ul>
+						<div class="uk-grid uk-margin-bottom uk-grid-collapse" style="padding-right:1em;padding-left:1em;">
+							<div class="uk-width-1-3">
+								<a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:languagetask" target="_blank">
+									<img src="layout/help.png"  alt="Online Install Help" title="Online Install Help" />
+								</a>
+							</div>
+							<div class="uk-width-2-3">Online install help at glFusion.org</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- wrapper for content -->
+
+				<div class="uk-width-medium-3-4 uk-pull-1-4">
+
+					<!-- content area -->
