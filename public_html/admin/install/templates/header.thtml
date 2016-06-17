@@ -23,9 +23,7 @@
 				border-bottom-right-radius:0;
 				border-bottom-left-radius:0;
 			}
-			.tm-navbar a:hover {
-				background:#BD6C01 !important;
-			}
+
 			.tm-panel {
 				border-top-right-radius:0;
 				border-top-left-radius:0;
@@ -49,6 +47,36 @@
 			.tm-navbar::after {
 				margin-top: 7px!important;
 			}
+
+.tm-navbar-nav > li > a {
+	border: medium none;
+	border-radius: 3px;
+	font-size: 15px;
+	height: 40px;
+	margin: 0;
+	text-shadow: none;
+	color: #fff !important;
+}
+.tm-nav-navbar > li > a {
+	color: #fff;
+}
+
+.tm-navbar::before,
+.tm-navbar::after {
+	margin-top: 7px!important;
+}
+
+/* nav overload */
+.tm-navbar-nav > li:hover > a,
+.tm-navbar-nav > li > a:focus,
+.tm-navbar-nav > li.uk-open > a {
+	background-color: transparent;
+	color: #fff;
+	/* 3 */
+	outline: none;
+	background: #35B3EE  none repeat scroll 0 0;
+}
+
 
 			.uk-icon-check {
 				color:#84EF78;
@@ -97,7 +125,7 @@
 					<img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
 				</a>
 			</div>
-			<ul class="uk-navbar-nav">
+			<ul class="uk-navbar-nav tm-navbar-nav">
 				<li><a class="uk-parent" href="https://github.com/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github"></i></a></li>
 				<li><a class="uk-parent" href="https://gitter.im/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github-alt"></i></a></li>
 				<li><a class="uk-parent" href="https://www.glfusion.org/forum/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-comments"></i></a></li>
@@ -107,13 +135,11 @@
 				<div class="uk-navbar-content">
 					{wizard_version}
 				</div>
-				<ul class="uk-navbar-nav">
-					<li>
-						<a target="_blank" href="fusionrescue.php">
-							<button class="uk-button uk-button-danger">Rescue</button>
-						</a>
-					</li>
-				</ul>
+
+				<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+				<a href="fusionrescue.php" class="uk-button uk-button-danger" type="button">Rescue</a>
+				</div>
+
 			</div>
 		</nav>
 		<div class="uk-progress uk-progress-striped uk-progress-mini uk-active uk-margin-remove" style="border-radius:0;">
