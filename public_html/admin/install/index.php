@@ -189,11 +189,14 @@ function _buildProgressBar($currentStep, &$T)
                 if ( $step == $currentStep ) {
                     $found++;
                     $T->set_var('step_class','arrow-left');
+                    $T->set_var('state','tm-step-current')
                 } else {
                     if ( $found ) {
                         $T->set_var('step_class','');
+                        $T->set_var('state','tm-step-pending');
                     } else {
                         $T->set_var('step_class','check');
+                        $T->set_var('state','tm-step-complete');
                     }
                 }
                 $T->parse('st','steps',true);
