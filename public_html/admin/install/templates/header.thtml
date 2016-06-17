@@ -116,12 +116,19 @@
 				border-radius:0;
 				color: #999999 !important;
 			}
+			.tm-wrapper {
+				min-height: 100%;
+				margin: 0 auto -50px !important; /* the bottom margin is the negative value of the footer's height */
+			}
+			footer, .tm-push {
+				height: 50px; /* '.push' must be the same height as 'footer' */
+			}
 		</style>
 		<meta name="robots" content="noindex,nofollow" />
 		<title>{page_title}</title>
 	</head>
 	<body class="uk-height-1-1">
-
+	<div class="tm-wrapper">
 		<nav class="uk-navbar uk-navbar-attached tm-navbar">
 			<div class="uk-navbar-brand">
 				<a target="_blank" href="https://www.glfusion.org">

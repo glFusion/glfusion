@@ -2,10 +2,13 @@
 				</div>
 			</div>
 		</div> <!-- end of container -->
-		<div class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="tm-push"></div>
+	</div>
+
+		<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
 			<div>
 				{copyright}
 			</div>
-		</div>
+		</footer>
 	</body>
 </html>
