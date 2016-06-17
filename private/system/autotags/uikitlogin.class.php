@@ -26,6 +26,12 @@ class autotag_uikitlogin extends BaseAutotag {
         global $_CONF, $LANG01, $LANG04;
 
         $retval = '';
+        $modal = 0;
+
+        if ( $p1 != 0 && $p1 != 1 ) $p1 = 1;
+
+        $modal = (int) $p1;
+        if ( $modal != 0 && $modal != 1) $modal = 0;
 
         if ( COM_isAnonUser() ) {
             $options = array(
@@ -36,16 +42,21 @@ class autotag_uikitlogin extends BaseAutotag {
             $options['message'] = ''; //$LANG04[66]; // please enter your user name and password below
 
             $retval .= '<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">';
-            $retval .= '<button class="uk-button uk-button-success" type="button" data-uk-modal="{target:\'#modalOpen\'}">'.$LANG01[58].'</button></div>';
-            $retval .= '<div id="modalOpen" class="uk-modal">';
-            $retval .= '<div class="uk-modal-dialog uk-modal-dialog-medium"><a href="#" class="uk-modal-close uk-close"></a>';
-            $retval .= SEC_loginForm($options);
-            $retval .= '</div></div>';
-            $retval .= "
-            <script>
-            $('#modalOpen').on({ 'show.uk.modal': function(){ $('#loginname').focus(); }, });
-            </script>
-            ";
+
+            if ( $modal == 0 ) {
+                $retval .= '<button class="uk-button uk-button-success" type="button" data-uk-modal="{target:\'#modalOpen\'}">'.$LANG01[58].'</button></div>';
+                $retval .= '<div id="modalOpen" class="uk-modal">';
+                $retval .= '<div class="uk-modal-dialog uk-modal-dialog-medium"><a href="#" class="uk-modal-close uk-close"></a>';
+                $retval .= SEC_loginForm($options);
+                $retval .= '</div></div>';
+                $retval .= "
+                <script>
+                $('#modalOpen').on({ 'show.uk.modal': function(){ $('#loginname').focus(); }, });
+                </script>
+                ";
+            } else {
+                $retval .= '<a href="'.$_CONF['site_url'].'/users.php" class="uk-button uk-button-success" type="button">'.$LANG01[58].'</a></div>';
+            }
         } else {
             $retval .= '<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip uk-margin-right">';
             $retval .= '<li class="uk-parent uk-hidden-small" data-uk-dropdown>';
