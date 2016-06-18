@@ -162,7 +162,8 @@
 
 			<div class="uk-grid uk-margin-top" data-uk-grid-margin>
 
-				<div class="uk-width-medium-1-4 uk-push-3-4 uk-hidden-small">
+  			<div class="uk-width-medium-1-4 uk-push-3-4 uk-hidden-small">
+<!--				<div class="uk-width-medium-1-4 uk-hidden-small"> -->
 
 					<!-- start of panel -->
 					<div class="uk-panel uk-panel-box" style="padding:0;">
@@ -184,10 +185,10 @@
 							<li>
 								<a href="https://www.glfusion.org/wiki/glfusion:start" target="_blank">
 									<div class="uk-grid">
-										<div class="uk-width-1-6">
+										<div class="uk-width-large-1-6">
 											<i class="uk-icon uk-icon-medkit uk-text-danger uk-icon-medium"></i>
 										</div>
-										<div class="uk-width-5-6">
+										<div class="uk-width-large-5-6">
 											{lang_online_help}
 										</div>
 									</div>
@@ -196,10 +197,10 @@
 							<li>
 								<a href="https://gitter.im/glFusion/glfusion" target="_blank">
 									<div class="uk-grid">
-										<div class="uk-width-1-6">
+										<div class="uk-width-large-1-6">
 											<i class="uk-icon uk-icon-github-alt uk-icon-medium"></i>
 										</div>
-										<div class="uk-width-5-6">
+										<div class="uk-width-large-5-6">
 											Community chat @ Gitter
 										</div>
 									</div>
@@ -208,10 +209,10 @@
 							<li>
 								<a href="https://www.glfusion.org/forum/index.php" target="_blank">
 									<div class="uk-grid">
-										<div class="uk-width-1-6">
+										<div class="uk-width-large-1-6">
 											<i class="uk-icon uk-icon-justify uk-icon-comments uk-icon-medium uk-text-primary"></i>
 										</div>
-										<div class="uk-width-5-6">
+										<div class="uk-width-large-5-6">
 											glFusion Support Forums
 										</div>
 									</div>
@@ -220,10 +221,10 @@
 							<li>
 								<a href="https://github.com/glfusion/glfusion" target="_blank">
 									<div class="uk-grid">
-										<div class="uk-width-1-6">
+										<div class="uk-width-large-1-6">
 											<i class="uk-icon uk-icon-justify uk-icon-github uk-icon-medium uk-text-primary"></i>
 										</div>
-										<div class="uk-width-5-6">
+										<div class="uk-width-large-5-6">
 											glFusion @ GitHub
 										</div>
 									</div>
@@ -233,10 +234,10 @@
 							<li>
 								<a href="https://www.glfusion.org/filemgmt/index.php" target="_blank">
 									<div class="uk-grid">
-										<div class="uk-width-1-6">
+										<div class="uk-width-large-1-6">
 											<i class="uk-icon uk-icon-justify uk-icon-plug uk-icon-medium uk-text-primary"></i>
 										</div>
-										<div class="uk-width-5-6">
+										<div class="uk-width-large-5-6">
 											glFusion Plugins
 										</div>
 									</div>
@@ -255,5 +256,6 @@
 				<!-- wrapper for content -->
 
 				<div class="uk-width-medium-3-4 uk-pull-1-4">
+<!--				<div class="uk-width-medium-3-4"> -->
 
 					<!-- content area -->
