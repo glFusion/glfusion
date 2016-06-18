@@ -200,14 +200,14 @@ function _buildProgressBar($currentStep, &$T)
     global $_GLFUSION, $LANG_INSTALL;
 
     $installSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
-                          'installalert'        => 'Instructions',
+                          'installalert'        => $LANG_INSTALL['instruction_step'],
                           'pathsetting'         => $LANG_INSTALL['path_settings'],
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'getsiteinformation'  => $LANG_INSTALL['site_info'],
                           'contentplugins'      => $LANG_INSTALL['content_plugins']);
 
     $upgradeSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
-                          'upgradealert'        => 'Instructions',
+                          'upgradealert'        => $LANG_INSTALL['instruction_step'],
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'upgrade'             => $LANG_INSTALL['perform_upgrade'],
                           );
@@ -1864,9 +1864,19 @@ function INST_installAlert( )
     $T->set_var(array(
         'nextaction'            => $nextAction,
         'prevaction'            => $prevAction,
-        'step_heading'          => 'Installation Information',
+        'step_heading'          => $LANG_INSTALL['install_stepheading'],
         'lang_next'             => $LANG_INSTALL['next'],
         'lang_prev'             => $LANG_INSTALL['previous'],
+        'lang_doc_alert'        => $LANG_INSTALL['install_doc_alert'],
+        'lang_doc_alert2'       => $LANG_INSTALL['install_doc_alert2'],
+        'lang_install_heading'  => $LANG_INSTALL['install_heading'],
+        'lang_install_bullet1'  => $LANG_INSTALL['install_bullet1'],
+        'lang_install_bullet2'  => $LANG_INSTALL['install_bullet2'],
+        'lang_install_bullet3'  => $LANG_INSTALL['install_bullet3'],
+        'lang_install_bullet4'  => $LANG_INSTALL['install_bullet4'],
+        'lang_install_bullet5'  => $LANG_INSTALL['install_bullet5'],
+        'lang_install_bullet6'  => $LANG_INSTALL['install_bullet6'],
+        'lang_install_bullet7'  => $LANG_INSTALL['install_bullet7'],
         'hiddenfields'          => _buildHiddenFields(),
     ));
 
@@ -1911,9 +1921,18 @@ function INST_upgradeAlert( )
     $T->set_var(array(
         'nextaction'            => $nextAction,
         'prevaction'            => $prevAction,
-        'step_heading'          => 'Upgrade Information',
+        'step_heading'          => $LANG_INSTALL['upgrade_heading'],
         'lang_next'             => $LANG_INSTALL['next'],
         'lang_prev'             => $LANG_INSTALL['previous'],
+        'lang_doc_alert'        => $LANG_INSTALL['doc_alert'],
+        'lang_doc_alert2'       => $LANG_INSTALL['doc_alert2'],
+        'lang_backup'           => $LANG_INSTALL['backup'],
+        'lang_backup_instructions' => $LANG_INSTALL['backup_instructions'],
+        'lang_bullet1'          => $LANG_INSTALL['upgrade_bullet1'],
+        'lang_bullet2'          => $LANG_INSTALL['upgrade_bullet2'],
+        'lang_bullet3'          => $LANG_INSTALL['upgrade_bullet3'],
+        'lang_bullet4'          => $LANG_INSTALL['upgrade_bullet4'],
+        'lang_bullet_title'     => $LANG_INSTALL['upgrade_bullet_title'],
         'hiddenfields'          => _buildHiddenFields(),
     ));
 

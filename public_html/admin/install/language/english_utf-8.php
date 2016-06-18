@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -49,7 +49,7 @@ $LANG_INSTALL = array(
     'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
     'connection_settings'       => 'Connection Settings',
     'content_plugins'           => 'Content & Plugins',
-    'copyright'                 => '<a href="http://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>',
+    'copyright'                 => '<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>',
     'core_upgrade_error'        => 'There was an error performing the core upgrade.',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'current'                   => 'Current',
@@ -178,6 +178,27 @@ $LANG_INSTALL = array(
     'support_resources'         => 'Support Resources',
     'plugins'                   => 'glFusion Plugins',
     'support_forums'            => 'glFusion Support Forums',
+    'instruction_step'          => 'Instructions',
+    'install_stepheading'       => 'New Install Tasks',
+    'install_doc_alert'         => 'To ensure a smooth installation, please read the <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">Insallation Documentation</a> before proceeding.',
+    'install_heading'           => 'Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.',
+    'install_bullet1'           => 'Site&nbsp;<abbr title="Uniform Resource Locator">URL</abbr>',
+    'install_bullet2'           => 'Database Server',
+    'install_bullet3'           => 'Database Name',
+    'install_bullet4'           => 'Database Login ID',
+    'install_bullet5'           => 'Database Password',
+    'install_bullet6'           => 'Path to glFusion Private Files. This is where the db-config.php.dist file is stored. <strong>these files should not be available via the Internet, so they go outside of your web root directory.</strong> If you must install them in the webroot, please refer to the <a href="https://www.glfusion.org/wiki/glfusion:installation:webroot" target="_blank">Installing Private Files in Webroot</a> instructions to learn how to properly secure these files.',
+    'install_doc_alert2'        => 'For more detailed upgrade instructions, please refer to the <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">glFusion Installation Documentation</a>.',
+    'upgrade_heading'           => 'Important Upgrade Information',
+    'doc_alert'                 => 'To ensure a smooth upgrade process, please read the <a href="https://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">Upgrade Documentation</a> before proceeding.',
+    'doc_alert2'                => 'For more detailed upgrade instructions, please refer to the <a href="https://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">glFusion Documentation on Upgrading</a>.',
+    'backup'                    => 'Backup, Backup, Backup!',
+    'backup_instructions'       => 'Take extreme care to back up any files from your current installation that have any custom code in them. Be sure to back up any modified themes and images from your current installation.',
+    'upgrade_bullet1'           => 'Back Up your current glFusion Database (Database Administration option under Command and Control).',
+    'upgrade_bullet2'           => 'If you are using a theme other than the default CMS, make sure your theme has been updated to support glFusion. There are several theme changes that must be made to custom themes to allow glFusion to work properly. Verify you have all the necessary template changes made by visiting the&nbsp;<a  target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;page.',
+    'upgrade_bullet3'           => 'If you have customized any of the theme templates, check the&nbsp;<a target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;for the current release to see if you need to make any updates to your customizations.',
+    'upgrade_bullet4'           => 'Check any third party plugins to ensure they are compatible or if they will need to be updated.',
+    'upgrade_bullet_title'      => 'It is recommended that yo do the following:',
 );
 
 // +---------------------------------------------------------------------------+
