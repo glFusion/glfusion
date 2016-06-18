@@ -1,6 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Updated and modernized the installation / upgrade system
+     - Moved UI over to uikit based classes
+     - Added ability to automatically update the siteconfig.php file with new options
+     - Provide more information to allow for smoother install / upgrade process
   - Fixed error in configuration system that would prevent adding new items to array configuration items
   - Properly styled auto tag and plugin upload buttons
   - Modified logview to use templates - allows styling to match site theme
