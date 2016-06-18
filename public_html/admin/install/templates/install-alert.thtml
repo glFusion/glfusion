@@ -1,0 +1,51 @@
+<form class="uk-form" id="welcome" name="welcome" method="post" action="index.php">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="languagetask"> <i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+				<button class="uk-button uk-button-success" type="submit" name="task" value="pathsetting">
+					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
+				</button>
+			</div>
+
+			<div class="uk-float-left">
+				<h2>New Install Tasks</h2>
+			</div>
+
+		</div>
+	</div>
+	<hr>
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-4-4">
+
+<p class="uk-text-justify">Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.</p>
+<ul>
+    <li>
+        <p>Site&nbsp;<abbr title="Uniform Resource Locator">URL</abbr>:</p>
+    </li>
+    <li>
+        <p>Database Server:</p>
+    </li>
+    <li>
+        <p class="uk-text-justify">Database Name:</p>
+    </li>
+    <li>
+        <p class="uk-text-justify">Database UserID:</p>
+    </li>
+    <li>
+        <p class="uk-text-justify">Database Password:</p>
+    </li>
+    <li>
+        <p class="uk-text-justify">Path to glFusion Private Files:&nbsp;<br />
+        (local/path/to/private/)&nbsp;<strong>these files should not be available via the Internet, so they go outside of your web root directory</strong></p>
+    </li>
+    <li>
+        <p class="uk-text-justify">Path to glFusion Public&nbsp;<abbr title="HyperText Markup Language">HTML</abbr>&nbsp;Files:&nbsp;<br />
+        (local/path/to/public_html/)</p>
+    </li>
+</ul>
+<p class="uk-text-justify">For more detailed installation instructions, you can view them on our <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">wiki</a>.</p>
+		</div>
+	</div>
+</form>

@@ -3,7 +3,7 @@
 	<div class="uk-grid">
 		<div class="uk-width-medium-4-4">
 			<div class="uk-float-right">
-				<button class="uk-button uk-button-danger" type="submit" name="task" value="languagetask"> <i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="installalert"> <i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
 				<button class="uk-button uk-button-success" type="submit" name="task" value="gotpathsetting">
 					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
 				</button>

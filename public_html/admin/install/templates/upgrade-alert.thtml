@@ -1,0 +1,64 @@
+<form class="uk-form" id="welcome" name="welcome" method="post" action="index.php">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+			<div class="uk-float-right">
+				<button class="uk-button uk-button-danger" type="submit" name="task" value="{prevaction}"> <i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
+				<button class="uk-button uk-button-success" type="submit" name="task" value="{nextaction}">
+					{lang_next} <i class="uk-icon uk-icon-arrow-right"></i>
+				</button>
+			</div>
+
+			<div class="uk-float-left">
+				<h2>Important Upgrade Information</h2>
+			</div>
+
+		</div>
+	</div>
+	<hr>
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-4-4">
+
+			<div class="uk-alert uk-alert-danger uk-text-justify">
+				To ensure a smooth upgrade process, please read the <a href="https://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">Upgrade Documentation</a> before proceeding.
+			</div>
+
+			<p class="uk-text-justify">
+				It is recommended that yo do the following:
+			</p>
+			<ul>
+				<li>
+					<p class="uk-text-justify">
+						Back Up your current glFusion Database (Database Administration option under Command and Control).
+					</p>
+				</li>
+				<li>
+					<p class="uk-text-justify">
+						If you are using a theme other than the default CMS, make sure your theme has been updated to support glFusion. There are several theme changes that must be made to custom themes to allow glFusion to work properly. Verify you have all the necessary template changes made by visiting the&nbsp;<a  target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;page.
+					</p>
+				</li>
+				<li>
+					<p class="uk-text-justify">
+						If you have customized any of the theme templates, check the&nbsp;<a target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;for the current release to see if you need to make any updates to your customizations.
+					</p>
+				</li>
+				<li>
+					<p class="uk-text-justify">
+						Check any third party plugins to ensure they are compatible or if they will need to be updated.
+					</p>
+				</li>
+			</ul>
+
+			<h2 class="uk-text-danger">Backup, Backup, Backup</h2>
+			<p class="uk-text-justify">
+				Take extreme care to back up any files from your current installation that have any custom code in them.
+				Be sure to back up any modified themes and images from your current installation.
+			</p>
+
+			<div class="uk-alert uk-alert-danger uk-text-justify">
+				For more detailed upgrade instructions, please refer to the <a href="https://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">glFusion Documentation on Upgrading</a>.
+			</div>
+
+		</div>
+	</div>
+</form>

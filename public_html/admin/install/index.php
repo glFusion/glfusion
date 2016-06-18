@@ -200,12 +200,14 @@ function _buildProgressBar($currentStep, &$T)
     global $_GLFUSION, $LANG_INSTALL;
 
     $installSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
+                          'installalert'        => 'Instructions',
                           'pathsetting'         => $LANG_INSTALL['path_settings'],
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'getsiteinformation'  => $LANG_INSTALL['site_info'],
                           'contentplugins'      => $LANG_INSTALL['content_plugins']);
 
     $upgradeSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
+                          'upgradealert'        => 'Instructions',
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'upgrade'             => $LANG_INSTALL['perform_upgrade'],
                           );
@@ -422,7 +424,8 @@ function INST_getLanguageTask( )
     $lang_select .= '</select>';
 
     $prevAction = '';
-    $nextAction = 'pathsetting';
+//    $nextAction = 'pathsetting';
+    $nextAction = 'installalert';
 
     $T->set_var(array(
         'language_select'       => $lang_select,
@@ -943,7 +946,7 @@ function INST_checkEnvironment($dbconfig_path='')
     }
     $T->set_var('icon','arrow-right');
     if ( $permError ) {
-$button = 'Recheck';
+        $button = 'Recheck';
         $action = 'checkenvironment';
         $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
         $T->set_var('icon','repeat');
@@ -965,7 +968,7 @@ $button = 'Recheck';
         if ( $_GLFUSION['method'] == 'upgrade' ) {
             $action = 'doupgrade';
             $button = $LANG_INSTALL['upgrade'];
-            $previousaction = '';
+            $previousaction = 'upgradealert';
         } else {
             $action = 'getsiteinformation';
             $previousaction = 'pathsetting';
@@ -1826,6 +1829,101 @@ function INST_doPluginUpgrade()
 }
 
 
+
+/**
+ * Display installation details
+ *
+ * Provide important details to user on what is needed for installation
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_installAlert( )
+{
+    global $_GLFUSION, $LANG_INSTALL;
+
+    // set the session expire time.
+    $_GLFUSION['expire'] = time() + 1800;
+
+    $_GLFUSION['currentstep'] = 'installalert';
+
+    if ( isset($_GLFUSION['language']) ) {
+        $language = $_GLFUSION['language'];
+    } else {
+        $language = 'english';
+    }
+
+    $retval = '';
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'install-alert.thtml');
+
+    $prevAction = 'languagetask';
+    $nextAction = 'pathsetting';
+
+    $T->set_var(array(
+        'nextaction'            => $nextAction,
+        'prevaction'            => $prevAction,
+        'step_heading'          => 'Installation Information',
+        'lang_next'             => $LANG_INSTALL['next'],
+        'lang_prev'             => $LANG_INSTALL['previous'],
+        'hiddenfields'          => _buildHiddenFields(),
+    ));
+
+    $T->parse('output','page');
+
+    $retval =  $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+/**
+ * Display upgrade details
+ *
+ * Displays important upgrade informaton to the user
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_upgradeAlert( )
+{
+    global $_GLFUSION, $LANG_INSTALL;
+
+    // set the session expire time.
+    $_GLFUSION['expire'] = time() + 1800;
+
+    $_GLFUSION['currentstep'] = 'upgradealert';
+
+    if ( isset($_GLFUSION['language']) ) {
+        $language = $_GLFUSION['language'];
+    } else {
+        $language = 'english';
+    }
+
+    $retval = '';
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'upgrade-alert.thtml');
+
+    $prevAction = 'languagetask';
+    $nextAction = 'startupgrade';
+
+    $T->set_var(array(
+        'nextaction'            => $nextAction,
+        'prevaction'            => $prevAction,
+        'step_heading'          => 'Upgrade Information',
+        'lang_next'             => $LANG_INSTALL['next'],
+        'lang_prev'             => $LANG_INSTALL['previous'],
+        'hiddenfields'          => _buildHiddenFields(),
+    ));
+
+    $T->parse('output','page');
+
+    $retval =  $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
 /*
  * Start of the main program
  */
@@ -1889,11 +1987,11 @@ if ( isset($_POST['type']) ) {
     switch($_POST['type']) {
         case 'install' :
             $method = 'install';
-            $mode   = 'pathsetting';
+            $mode   = 'installalert';
             break;
         case 'upgrade' :
             $method = 'upgrade';
-            $mode   = 'startupgrade';
+            $mode   = 'upgradealert';
             break;
         case 'migrate' :
             $method = 'upgrade';
@@ -1906,6 +2004,14 @@ if ( isset($_POST['type']) ) {
 $_GLFUSION['method'] = $method;
 
 switch($mode) {
+    case 'installalert' :
+        $pageBody = INST_installAlert();
+        $percent_complete = 20;
+        break;
+    case 'upgradealert' :
+        $percent_complete = 20;
+        $pageBody = INST_upgradeAlert();
+        break;
     case 'pathsetting' :
         $pageBody = INST_getPathSetting();
         $percent_complete = 30;
