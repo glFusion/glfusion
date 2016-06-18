@@ -4,8 +4,8 @@
 		<meta charset="{charset}">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
-		<link rel="stylesheet" type="text/css" href="uikit/css/uikit.almost-flat.css">
-		<link rel="stylesheet" type="text/css" href="uikit/css/components/progress.css">
+		<link rel="stylesheet" type="text/css" href="uikit/css/uikit.almost-flat.min.css">
+		<link rel="stylesheet" type="text/css" href="uikit/css/components/progress.almost-flat.min.css">
 		<script type="text/javascript" src="../../javascript/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="uikit/js/uikit.min.js"></script>
 
