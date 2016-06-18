@@ -14,8 +14,8 @@
 		</div>
 	</div>
 	<hr>
-	<div class="uk-grid uk-grid-divider">
-		<div class="uk-width-medium-2-4">
+	<div class="uk-grid">
+		<div class="uk-width-medium-2-4 uk-push-2-4" style="border-left: 1px solid #ddd;padding-left: 35px;padding-right: 35px;">
 
 			<div class="uk-form-row">
 				<label class="uk-form-label">{lang_database_type}</label>
@@ -109,7 +109,7 @@
 			</div>
 		</div>
 
-		<div class="uk-width-medium-2-4">
+		<div class="uk-width-medium-2-4 uk-pull-2-4" style="padding-left: 35px;padding-right: 35px;">
 			{lang_sitedata_help}
 		</div>
 
