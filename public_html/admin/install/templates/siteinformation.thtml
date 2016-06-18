@@ -5,7 +5,7 @@
 			<div class="uk-float-right">
 				<button class="uk-button uk-button-danger" type="submit" name="task" value="checkenvironment"><i class="uk-icon uk-icon-arrow-left"></i> {lang_prev}</button>
 				<button class="uk-button uk-button-success" type="submit" name="task" value="gotsiteinformation">
-					INSTALL <i class="uk-icon uk-icon-arrow-right"></i>
+					{lang_install} <i class="uk-icon uk-icon-arrow-right"></i>
 				</button>
 			</div>
 			<div class="uk-float-left">
@@ -15,7 +15,7 @@
 	</div>
 	<hr>
 	<div class="uk-grid">
-		<div class="uk-width-medium-2-4 uk-push-2-4" style="border-left: 1px solid #ddd;padding-left: 35px;padding-right: 35px;">
+		<div class="uk-width-medium-2-4 uk-push-2-4 tm-push-div">
 
 			<div class="uk-form-row">
 				<label class="uk-form-label">{lang_database_type}</label>
@@ -109,7 +109,7 @@
 			</div>
 		</div>
 
-		<div class="uk-width-medium-2-4 uk-pull-2-4" style="padding-left: 35px;padding-right: 35px;">
+		<div class="uk-width-medium-2-4 uk-pull-2-4 tm-pull-div">
 			{lang_sitedata_help}
 		</div>
 

@@ -14,7 +14,7 @@
 	</div>
 	<hr>
 	<div class="uk-grid">
-		<div class="uk-width-medium-2-4 uk-push-2-4" style="border-left: 1px solid #ddd;padding-left: 35px;padding-right: 35px;">
+		<div class="uk-width-medium-2-4 uk-push-2-4 tm-push-div">
 			<div class="uk-form-row">
 				<div class="uk-form-controls">
 					<input type="checkbox" name="installdefaultdata" checked="checked">
@@ -58,7 +58,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="uk-width-medium-2-4 uk-pull-2-4" style="padding-left: 35px;padding-right: 35px;">
+		<div class="uk-width-medium-2-4 uk-pull-2-4 tm-pull-div">
 			<p>{lang_samplecontent_desc}</p>
 			<p>{lang_calendar_desc}</p>
 			<p>{lang_filemgmt_desc}</p>

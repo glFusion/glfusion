@@ -159,7 +159,9 @@ function _buildProgressBar($currentStep, &$T)
         $T->set_var('lang_step_title',$LANG_INSTALL['upgrade_steps']);
     }
     $T->set_var('lang_online_help',$LANG_INSTALL['online_help_text']);
-    $retval .= '</li>' . LB;
+    $T->set_var('lang_support_resources',$LANG_INSTALL['support_resources']);
+    $T->set_var('lang_glfusion_plugins',$LANG_INSTALL['plugins']);
+    $T->set_var('lang_support_forums',$LANG_INSTALL['support_forums']);
 
     $T->set_block('header','steps','st');
 
@@ -902,7 +904,7 @@ $button = 'Recheck';
 
         if ( $_GLFUSION['method'] == 'upgrade' ) {
             $action = 'doupgrade';
-$button = 'Upgrade';
+            $button = $LANG_INSTALL['upgrade'];
             $previousaction = '';
         } else {
             $action = 'getsiteinformation';
@@ -1846,27 +1848,27 @@ $_GLFUSION['method'] = $method;
 switch($mode) {
     case 'pathsetting' :
         $pageBody = INST_getPathSetting();
-$percent_complete = 30;
+        $percent_complete = 30;
         break;
     case 'gotpathsetting':
         $pageBody =   INST_gotPathSetting();
-$percent_complete = 50;
+        $percent_complete = 50;
         break;
     case 'checkenvironment' :
         $pageBody = INST_checkEnvironment();
-$percent_complete = 50;
+        $percent_complete = 50;
         break;
     case 'getsiteinformation' :
         $pageBody = INST_getSiteInformation();
-$percent_complete = 70;
+        $percent_complete = 70;
         break;
     case 'gotsiteinformation' :
         $pageBody = INST_gotSiteInformation();
-$percent_complete = 70;
+        $percent_complete = 70;
         break;
     case 'contentplugins' :
         $pageBody = INST_installAndContentPlugins();
-$percent_complete = 90;
+        $percent_complete = 90;
         break;
     case 'installplugins' :
         require '../../lib-common.php';
@@ -1875,9 +1877,9 @@ $percent_complete = 90;
     case 'startupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
-$percent_complete = 50;
+            $percent_complete = 50;
         } else {
-$percent_complete = 50;
+            $percent_complete = 50;
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1899,9 +1901,9 @@ $percent_complete = 50;
     case 'doupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
-$percent_complete = 50;
+            $percent_complete = 50;
         } else {
-$percent_complete = 90;
+            $percent_complete = 90;
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1929,7 +1931,7 @@ $percent_complete = 90;
         header('Location: success.php?type='.$method.'&language=' . $language);
         exit;
     default:
-$percent_complete = 10;
+        $percent_complete = 10;
         $_GLFUSION['language'] = $language;
         $_GLFUSION['method'] = $method;
         $pageBody = INST_getLanguageTask( );
