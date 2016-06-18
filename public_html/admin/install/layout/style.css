@@ -1,129 +1,126 @@
+html {
+	background: #f9f9f9 none repeat;
+}
 .uk-form label {
-    font-weight:700;
+	font-weight:700;
 }
 .tm-navbar {
-    padding: 1px 0px 6px;
-    border: medium none;
-    color:#fff;
-    background: #325482 none repeat scroll 0% 0%;
-    outline: none;
-    text-shadow:none;
-    border-bottom-right-radius:0;
-    border-bottom-left-radius:0;
+	padding: 1px 0px 6px;
+	border: medium none;
+	color:#fff;
+	background: #325482 none repeat scroll 0% 0%;
+	outline: none;
+	text-shadow:none;
+	border-bottom-right-radius:0;
+	border-bottom-left-radius:0;
 }
 .tm-navbar-brand {
-    color: #fff;
-    text-shadow:none;
-    font-weight:700;
+	color: #fff;
+	text-shadow:none;
+	font-weight:700;
 }
 .tm-navbar-brand a {
-    text-shadow:none;
-    color: #fff;
+	text-shadow:none;
+	color: #fff;
 }
 .tm-navbar-brand:hover,
 .tm-navbar-brand a:active {
-    color:#fff;
-    text-decoration:none;
+	color:#fff;
+	text-decoration:none;
 }
-
 .tm-navbar::before,
 .tm-navbar::after {
-    margin-top: 7px!important;
+	margin-top: 7px!important;
 }
-
 .tm-navbar-nav > li > a {
-    border: medium none;
-    border-radius: 3px;
-    font-size: 15px;
-    height: 40px;
-    margin: 0;
-    text-shadow: none;
-    color: #fff !important;
+	border: medium none;
+	border-radius: 3px;
+	font-size: 15px;
+	height: 40px;
+	margin: 0;
+	text-shadow: none;
+	color: #fff !important;
 }
 .tm-nav-navbar > li > a {
-    color: #fff;
+	color: #fff;
 }
-
 .tm-navbar::before,
 .tm-navbar::after {
-    margin-top: 7px!important;
+	margin-top: 7px!important;
 }
-
 /* nav overload */
 .tm-navbar-nav > li:hover > a,
 .tm-navbar-nav > li > a:focus,
 .tm-navbar-nav > li.uk-open > a {
-    background-color: transparent;
-    color: #fff;
-    /* 3 */
-    outline: none;
-    background: #35B3EE  none repeat scroll 0 0;
+	background-color: transparent;
+	color: #fff;
+	/* 3 */
+	outline: none;
+	background: #35B3EE  none repeat scroll 0 0;
 }
-
 .tm-footer {
-    background: #252525;
-    border-top: 1px solid #232425;
-    margin-bottom:0;
-    bottom:0;
-    padding:10px;
-    color:#fff;
+	background: #252525;
+	border-top: 1px solid #232425;
+	margin-bottom:0;
+	bottom:0;
+	padding:10px;
+	color:#fff;
 }
-
 .uk-icon-check {
-    color:#84EF78;
+	color:#84EF78;
 }
 .tm-icon-step.uk-icon-arrow-left {
-    color:#325482;
+	color:#325482;
 }
 .tm-steps {
-    padding:5px;
+	padding:5px;
 }
 .tm-step-panel {
-    padding:0;
+	padding:0;
 }
 .tm-step-title {
-    background:#325482 none repeat scroll 0 0;
-    padding-top:7px;
-    padding-bottom:7px;
-    color:white;
+	background:#325482 none repeat scroll 0 0;
+	padding-top:7px;
+	padding-bottom:7px;
+	color:white;
 }
 .tm-step-current {
-    border-bottom:0;
-    border-left:0;
-    border-right:0;
-    border-radius:0;
-    text-align:left;
-    font-weight:700;
+	border-bottom:0;
+	border-left:0;
+	border-right:0;
+	border-radius:0;
+	text-align:left;
+	font-weight:700;
 }
 .tm-step-complete {
-    text-align:left;
-    border-bottom:0;
-    border-left:0;
-    border-right:0;
-    border-radius:0;
-    color: #999999 !important;
+	text-align:left;
+	border-bottom:0;
+	border-left:0;
+	border-right:0;
+	border-radius:0;
+	color: #999999 !important;
 }
 .tm-step-pending {
-    text-align:left;
-    border-bottom:0;
-    border-left:0;
-    border-right:0;
-    border-radius:0;
-    color: #999999 !important;
+	text-align:left;
+	border-bottom:0;
+	border-left:0;
+	border-right:0;
+	border-radius:0;
+	color: #999999 !important;
 }
 .tm-wrapper {
-    min-height: 100%;
-    margin: 0 auto -50px !important; /* the bottom margin is the negative value of the footer's height */
+	min-height: 100%;
+	margin: 0 auto -50px !important; /* the bottom margin is the negative value of the footer's height */
 }
 footer, .tm-push {
-    height: 50px; /* '.push' must be the same height as 'footer' */
+	height: 50px; /* '.push' must be the same height as 'footer' */
 }
 .tm-pull-div {
-    padding-left: 35px;
-    padding-right: 35px;
+	padding-left: 35px;
+	padding-right: 35px;
 }
 .tm-push-div {
-    border-left: 1px solid #ddd;
-    padding-left: 35px;
-    padding-right: 35px;
+	border-left: 1px solid #ddd;
+	padding-left: 35px;
+	padding-right: 35px;
 }
