@@ -117,7 +117,7 @@ class config {
         global $_TABLES, $_CONF, $_SYSTEM;
 
         // Reads from a cache file if there is one
-        if ( !$_SYSTEM['no_cache_config'] ) {
+        if ( isset($_SYSTEM['no_cache_config']) && !$_SYSTEM['no_cache_config'] ) {
             if ( function_exists('COM_isWritable') ) {
                 if ( COM_isWritable($_CONF['path'].'data/layout_cache/'.CONFIG_CACHE_FILE_NAME)) {
                     if ($this->_readFromCache()) {
