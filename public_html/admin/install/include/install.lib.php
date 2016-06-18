@@ -1836,39 +1836,42 @@ function INST_sanitizePath($path)
 }
 
 function INST_resyncConfig() {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_SYSTEM, $_TABLES;
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
-    $site_url = $_CONF['site_url'];
     $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('Core');
+
+    $site_url = $tcnf['site_url'];
 
     $c->sync('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
 
     $c->sync('fs_site', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
-    $c->sync('site_url','','text',0,0,NULL,20,TRUE);
-    $c->sync('site_admin_url','','text',0,0,NULL,30,TRUE);
-    $c->sync('site_name','','text',0,0,NULL,60,TRUE);
-    $c->sync('site_slogan','','text',0,0,NULL,70,TRUE);
+    $c->sync('site_url','','text',0,0,NULL,10,TRUE);
+    $c->sync('site_admin_url','','text',0,0,NULL,20,TRUE);
+    $c->sync('site_name','','text',0,0,NULL,30,TRUE);
+    $c->sync('site_slogan','','text',0,0,NULL,40,TRUE);
     $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
-    $c->sync('site_disabled_msg','','text',0,0,NULL,80,TRUE);
-    $c->sync('maintenance_mode',0,'select',0,0,0,90,TRUE);
-    $c->sync('copyrightyear','2013','text',0,0,NULL,100,FALSE);
-    $c->sync('url_rewrite',FALSE,'select',0,0,1,110,TRUE);
+    $c->sync('site_disabled_msg','','text',0,0,NULL,50,TRUE);
+    $c->sync('maintenance_mode',0,'select',0,0,0,60,TRUE);
+    $c->sync('copyrightyear','2016','text',0,0,NULL,70,FALSE);
+    $c->sync('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
 
     $c->sync('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
-    $c->sync('site_mail','','text',0,1,NULL,40,TRUE);
-    $c->sync('noreply_mail','','text',0,1,NULL,50,TRUE);
-    $c->sync('mail_backend','mail','select',0,1,20,60,TRUE);
-    $c->sync('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
-    $c->sync('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
-    $c->sync('mail_smtp_host','','text',0,1,NULL,90,TRUE);
-    $c->sync('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
-    $c->sync('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
-    $c->sync('mail_smtp_username','','text',0,1,NULL,120,TRUE);
-    $c->sync('mail_smtp_password','','passwd',0,1,NULL,130,TRUE);
-    $c->sync('mail_smtp_secure','none','select',0,1,21,140,TRUE);
-    $c->sync('use_from_site_mail',FALSE,'select',0,1,0,150,TRUE);
+    $c->sync('site_mail','','text',0,1,NULL,10,TRUE);
+    $c->sync('noreply_mail','','text',0,1,NULL,20,TRUE);
+    $c->sync('mail_backend','mail','select',0,1,20,30,TRUE);
+    $c->sync('mail_sendmail_path','','text',0,1,NULL,40,TRUE);
+    $c->sync('mail_sendmail_args','','text',0,1,NULL,50,TRUE);
+    $c->sync('mail_smtp_host','','text',0,1,NULL,60,TRUE);
+    $c->sync('mail_smtp_port','25','text',0,1,NULL,70,TRUE);
+    $c->sync('mail_smtp_auth',FALSE,'select',0,1,0,80,TRUE);
+    $c->sync('mail_smtp_username','','text',0,1,NULL,90,TRUE);
+    $c->sync('mail_smtp_password','','passwd',0,1,NULL,100,TRUE);
+    $c->sync('mail_smtp_secure','none','select',0,1,21,110,TRUE);
+    $c->sync('use_from_site_mail',FALSE,'select',0,1,0,120,TRUE);
 
     $c->sync('fs_syndication', NULL, 'fieldset', 0, 2, NULL, 0, TRUE);
     $c->sync('backend',1,'select',0,2,0,10,TRUE);
@@ -1917,6 +1920,7 @@ function INST_resyncConfig() {
     $c->sync('fs_story', NULL, 'fieldset', 1, 1, NULL, 0, TRUE);
     $c->sync('maximagesperarticle',5,'text',1,1,NULL,10,TRUE);
     $c->sync('limitnews',10,'text',1,1,NULL,20,TRUE);
+    $c->sync('infinite_scroll',1,'select',1,1,0,25,TRUE);
     $c->sync('minnews',1,'text',1,1,NULL,30,TRUE);
     $c->sync('contributedbyline',1,'select',1,1,0,40,TRUE);
     $c->sync('hidestorydate',0,'select',1,1,0,50,TRUE);
@@ -1954,11 +1958,10 @@ function INST_resyncConfig() {
 
     $c->sync('fs_theme', NULL, 'fieldset', 2, 1, NULL, 0, TRUE);
     $c->sync('theme','cms','select',2,1,NULL,10,TRUE);
-    $c->sync('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,1,NULL,20,TRUE);
-    $c->sync('path_themes','','text',2,1,NULL,30,TRUE);
+    $c->sync('path_themes','','text',2,1,NULL,20,TRUE);
 
     $c->sync('fs_theme_advanced', NULL, 'fieldset', 2, 2, NULL, 0, TRUE);
-    $c->sync('show_right_blocks',FALSE,'select',2,2,1,10,TRUE);
+    $c->sync('show_right_blocks',TRUE,'select',2,2,1,10,TRUE);
     $c->sync('showfirstasfeatured',0,'select',2,2,0,20,TRUE);
     $c->sync('compress_css',TRUE,'select',2,2,0,30,TRUE);
     $c->sync('template_comments',FALSE,'select',2,2,0,40,TRUE);
@@ -1995,7 +1998,7 @@ function INST_resyncConfig() {
     $c->sync('hidenewtrackbacks',0,'select',3,4,0,60,TRUE);
     $c->sync('hidenewplugins',0,'select',3,4,0,70,TRUE);
     $c->sync('hideemptyblock',0,'select',3,4,0,80,TRUE);
-    $c->sync('title_trim_length',20,'text',3,4,NULL,90,TRUE);
+    $c->sync('title_trim_length',200,'text',3,4,NULL,90,TRUE);
     $c->sync('whatsnew_cache_time',3600,'text',3,4,NULL,100,TRUE);
 
     // Subgroup: Users and Submissions
@@ -2058,15 +2061,16 @@ function INST_resyncConfig() {
     $c->sync('allow_domains','','text',4,4,NULL,30,TRUE);
     $c->sync('disallow_domains','','text',4,4,NULL,40,TRUE);
     $c->sync('user_reg_fullname',1,'select',4,4,25,50,TRUE);
+    $c->sync('min_username_length','4','text',4,4,NULL,60,TRUE);
 
     $c->sync('fs_submission', NULL, 'fieldset', 4, 5, NULL, 0, TRUE);
     $c->sync('storysubmission',1,'select',4,5,0,10,TRUE);
     $c->sync('story_submit_by_perm_only',0,'select',4,5,0,20,TRUE);
     $c->sync('listdraftstories',0,'select',4,5,0,30,TRUE);
     $c->sync('postmode','html','select',4,5,5,40,TRUE);
-    $c->sync('speedlimit',45,'text',4,5,NULL,50,TRUE);
-    $c->sync('skip_preview',0,'select',4,5,0,60,TRUE);
-    $c->sync('advanced_editor',TRUE,'select',4,5,1,70,TRUE);
+    $c->sync('mailuser_postmode','html','select',4,5,5,50,TRUE);
+    $c->sync('speedlimit',45,'text',4,5,NULL,60,TRUE);
+    $c->sync('skip_preview',0,'select',4,5,0,70,TRUE);
 
     $c->sync('fs_comments', NULL, 'fieldset', 4, 6, NULL, 0, TRUE);
     $c->sync('commentspeedlimit',45,'text',4,6,NULL,10,TRUE);
@@ -2076,7 +2080,6 @@ function INST_resyncConfig() {
     $c->sync('comment_edit',0,'select',4,6,0,50,TRUE);
     $c->sync('comment_edittime',1800,'text',4,6,NULL,60,TRUE);
     $c->sync('comment_postmode','plaintext','select',4,6,5,70,TRUE);
-    $c->sync('comment_editor',0,'select',4,6,28,80,TRUE);
     $c->sync('article_comment_close_enabled',0,'select',4,6,0,90,TRUE);
     $c->sync('article_comment_close_days',30,'text',4,6,NULL,100,TRUE);
     $c->sync('comment_close_rec_stories',0,'text',4,6,NULL,110,TRUE);
@@ -2113,9 +2116,9 @@ function INST_resyncConfig() {
     $c->sync('max_topicicon_size',65536,'text',5,4,NULL,30,TRUE);
 
     $c->sync('fs_userphoto', NULL, 'fieldset', 5, 5, NULL, 0, TRUE);
-    $c->sync('max_photo_width',170,'text',5,5,NULL,10,TRUE);
-    $c->sync('max_photo_height',185,'text',5,5,NULL,20,TRUE);
-    $c->sync('max_photo_size',65536,'text',5,5,NULL,30,TRUE);
+    $c->sync('max_photo_width',300,'text',5,5,NULL,10,TRUE);
+    $c->sync('max_photo_height',300,'text',5,5,NULL,20,TRUE);
+    $c->sync('max_photo_size',8388608,'text',5,5,NULL,30,TRUE);
     $c->sync('force_photo_width',75,'text',5,5,NULL,40,FALSE);
     $def_photo = urldecode($site_url) . '/images/userphotos/default.jpg';
     $c->sync('default_photo',$def_photo,'text',5,5,NULL,50,TRUE);
@@ -2126,7 +2129,7 @@ function INST_resyncConfig() {
 
     $c->sync('fs_logo', NULL, 'fieldset', 5, 7, NULL, 0, TRUE);
     $c->sync('max_logo_height',150,'text',5,7,NULL,10,TRUE);
-    $c->sync('max_logo_width',500,'text',5,7,NULL,20,TRUE);
+    $c->sync('max_logo_width',1024,'text',5,7,NULL,20,TRUE);
 
     // Subgroup: Languages and Locale
     $c->sync('sg_locale', NULL, 'subgroup', 6, 0, NULL, 0, TRUE);
@@ -2135,7 +2138,7 @@ function INST_resyncConfig() {
     $c->sync('language','english','select',6,1,NULL,10,TRUE);
 
     $c->sync('fs_locale', NULL, 'fieldset', 6, 2, NULL, 0, TRUE);
-    $c->sync('locale','en_GB','text',6,2,NULL,10,TRUE);
+    $c->sync('locale','en_US','text',6,2,NULL,10,TRUE);
     $c->sync('date','l, F d Y @ h:i A T','text',6,2,NULL,20,TRUE);
     $c->sync('daytime','m/d h:iA','text',6,2,NULL,30,TRUE);
     $c->sync('shortdate','m/d/y','text',6,2,NULL,40,TRUE);
@@ -2186,8 +2189,8 @@ function INST_resyncConfig() {
     $c->sync('skip_html_filter_for_root',0,'select',7,5,0,20,TRUE);
     $c->sync('htmlfilter_default','p,b,a,i,strong,em,br','text',7,5,NULL,30,true);
     $c->sync('htmlfilter_comment','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre','text',7,5,NULL,35,TRUE);
-    $c->sync('htmlfilter_story','p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre,blockquote,img','text',7,5,NULL,40,TRUE);
-    $c->sync('htmlfilter_root','div,span,table,tr,td,th','text',7,5,NULL,50,TRUE);
+    $c->sync('htmlfilter_story','div[class],h1,h2,h3,pre,br,p[style],b[style],s,strong[style],i[style],em[style],u[style],strike,a[style|href|title|target],ol[style|class],ul[style|class],li[style|class],hr[style],blockquote[style],img[style|alt|title|width|height|src|align],table[style|width|bgcolor|align|cellspacing|cellpadding|border],tr[style],td[style],th[style],tbody,thead,caption,col,colgroup,span[style|class],sup,sub','text',7,5,NULL,40,TRUE);
+    $c->sync('htmlfilter_root','div[style|class],span[style|class],table,tr,td,th,img[src|width|height|class|style]','text',7,5,NULL,50,TRUE);
 
     $c->sync('fs_censoring', NULL, 'fieldset', 7, 6, NULL, 0, TRUE);
     $c->sync('censormode',1,'select',7,6,23,10,TRUE);
@@ -2195,7 +2198,7 @@ function INST_resyncConfig() {
     $c->sync('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,6,NULL,30,TRUE);
 
     $c->sync('fs_iplookup', NULL, 'fieldset', 7, 7, NULL, 0, TRUE);
-    $c->sync('ip_lookup','/nettools/whois.php?domain=*','text',7,7,NULL,10,FALSE);
+    $c->sync('ip_lookup','/admin/plugins/nettools/whois.php?domain=*','text',7,7,NULL,10,FALSE);
 
     $c->sync('fs_perm_story', NULL, 'fieldset', 7, 8, NULL, 0, TRUE);
     $c->sync('default_permissions_story',array(3, 2, 2, 2),'@select',7,8,12,10,TRUE);
@@ -2211,5 +2214,92 @@ function INST_resyncConfig() {
     $c->sync('restrict_webservices',  0, 'select', 7, 11, 0, 20, TRUE);
     $c->sync('atom_max_stories',     10, 'text',   7, 11, 0, 30, TRUE);
 
+}
+
+function INST_doSiteConfigUpgrade() {
+    global $_SYSTEM, $_CONF;
+
+    $_SYSDEFAULT = array(
+        'use_direct_style_js'         => true,
+        'html_filter'                 => 'htmlpurifier',
+        'site_enabled'                => true,
+        'maintenance_mode'            => false,
+        'rootdebug'                   => false,
+        'debug_oauth'                 => false,
+        'debug_html_filter'           => false,
+        'no_fail_sql'                 => false,
+        'no_cache_config'             => false,
+        'disable_instance_caching'    => false,
+        'admin_session'               => 1200,
+        'swedish_date_hack'           => false,
+        'verification_token_ttl'      => 86400,
+        'token_ip'                    => false,
+        'max_captcha_atttempts'       => 4,
+    );
+
+    if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
+        $_NEWSYSTEM = array_merge($_SYSDEFAULT, $_SYSTEM);
+    }
+
+    $_CFDEFAULT['css_cache_filename']            = 'style.cache';
+    $_CFDEFAULT['js_cache_filename']             = 'js.cache';
+    $_CFDEFAULT['path']                          = '/path/to/glfusion/';
+    $_CFDEFAULT['path_system']                   = $_CONF['path'] . 'system/';
+    $_CFDEFAULT['default_charset']               = 'iso-8859-1';
+
+    if (!defined('CONFIG_CACHE_FILE_NAME')) {
+      define('CONFIG_CACHE_FILE_NAME',"'$$$config$$$.cache'");
+    }
+    $_CFDEFAULT['config_cache_file_name']       = CONFIG_CACHE_FILE_NAME;
+
+    $_NEWSYSCONF = array_merge($_CFDEFAULT,$_CONF);
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'siteconfig.thtml');
+
+    $T->set_var(array(
+        'use_direct_style_js'         => $_NEWSYSTEM['use_direct_style_js'] ? 'true' : 'false',
+        'html_filter'                 => $_NEWSYSTEM['html_filter'],
+        'site_enabled'                => $_NEWSYSTEM['site_enabled'] ? 'true' : 'false',
+        'maintenance_mode'            => $_NEWSYSTEM['maintenance_mode'] ? 'true' : 'false',
+        'rootdebug'                   => $_NEWSYSTEM['rootdebug'] ? 'true' : 'false',
+        'debug_oauth'                 => $_NEWSYSTEM['debug_oauth'] ? 'true' : 'false',
+        'debug_html_filter'           => $_NEWSYSTEM['debug_html_filter'] ? 'true' : 'false',
+        'no_fail_sql'                 => $_NEWSYSTEM['no_fail_sql'] ? 'true' : 'false',
+        'no_cache_config'             => $_NEWSYSTEM['no_cache_config'] ? 'true' : 'false',
+        'disable_instance_caching'    => $_NEWSYSTEM['disable_instance_caching'] ? 'true' : 'false',
+        'admin_session'               => $_NEWSYSTEM['admin_session'],
+        'swedish_date_hack'           => $_NEWSYSTEM['swedish_date_hack'] ? 'true' : 'false',
+        'verification_token_ttl'      => $_NEWSYSTEM['verification_token_ttl'],
+        'token_ip'                    => $_NEWSYSTEM['token_ip'] ? 'true' : 'false',
+        'max_captcha_atttempts'       => $_NEWSYSTEM['max_captcha_atttempts'],
+        'css_cache_filename'          => $_NEWSYSCONF['css_cache_filename'],
+        'js_cache_filename'           => $_NEWSYSCONF['js_cache_filename'],
+        'path'                        => $_NEWSYSCONF['path'],
+        'default_charset'             => $_NEWSYSCONF['default_charset'],
+        'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
+    ));
+
+    if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {
+        $T->set_var('path_system', "\$_CONF['path'] . 'system/'");
+    } else {
+        $T->set_var('path_system',$_NEWSYSTEM['path_system']);
+    }
+
+    $T->parse('output','page');
+    $siteconfig_data = $T->finish($T->get_var('output'));
+
+    $siteconfig_path = $_CONF['path_html'] . 'siteconfig.php';
+    if (is_writable($siteconfig_path)) {
+        $siteconfig_file = fopen($siteconfig_path, 'w');
+        if (!fwrite($siteconfig_file, $siteconfig_data)) {
+    //        return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
+        }
+        fclose ($siteconfig_file);
+        COM_errorLog("UPGRADE: Successfully updated siteconfig.php with latest options.");
+    } else {
+        COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
+    }
+    return;
 }
 ?>

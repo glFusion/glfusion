@@ -33,6 +33,7 @@
 // +--------------------------------------------------------------------------+
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
     define('GVERSION', '1.6.0');
@@ -105,6 +106,65 @@ function INST_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext=
 
     $_GLFUSION['errstr'] = $errstr;
 
+/* ------------------------------------------------------------------------
+    $title = 'An Error Occurred';
+    if (!empty($_CONF['site_name'])) {
+        $title = $_CONF['site_name'] . ' - ' . $title;
+    }
+    echo("<html><head><title>$title</title></head>\n<body>\n");
+
+    echo('<h1>An error has occurred:</h1>');
+        echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
+                in your glFusion siteconfig.php.</h2><p>If this is a production
+                website you <strong><em>should disable</em></strong> this
+                option once you have resolved any issues you are
+                troubleshooting.</p>');
+    echo("<p>$errno - $errstr @ $errfile line $errline</p>");
+
+    if (@ini_get('xdebug.default_enable') == 1) {
+        ob_start();
+        var_dump($errcontext);
+        $errcontext = ob_get_contents();
+        ob_end_clean();
+        echo "$errcontext</body></html>";
+    } else {
+        $btr = debug_backtrace();
+        if (count($btr) > 0) {
+            if ($btr[0]['function'] == 'COM_handleError') {
+                array_shift($btr);
+            }
+        }
+        if (count($btr) > 0) {
+            echo "<font size='1'><table class='xdebug-error' dir='ltr' border='1' cellspacing='0' cellpadding='1'>\n";
+            echo "<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>\n";
+            echo "<tr><th align='right' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>File</th><th align='right' bgcolor='#eeeeec'>Line</th></tr>\n";
+            $i = 1;
+            foreach ($btr as $b) {
+                $f = '';
+                if (! empty($b['file'])) {
+                    $f = $b['file'];
+                }
+                $l = '';
+                if (! empty($b['line'])) {
+                    $l = $b['line'];
+                }
+                echo "<tr><td bgcolor='#eeeeec' align='right'>$i</td><td bgcolor='#eeeeec'>{$b['function']}</td><td bgcolor='#eeeeec'>{$f}</td><td bgcolor='#eeeeec' align='right'>{$l}</td></tr>\n";
+                $i++;
+                if ($i > 100) {
+                    echo "<tr><td bgcolor='#eeeeec' align='left' colspan='4'>Possible recursion - aborting.</td></tr>\n";
+                    break;
+                }
+            }
+            echo "</table></font>\n";
+        }
+        echo '<pre>';
+        ob_start();
+        var_dump($errcontext);
+        $errcontext = htmlspecialchars(ob_get_contents());
+        ob_end_clean();
+        echo "$errcontext</pre></body></html>";
+    }
+---------------------------------------------------------------------- */
     return;
 }
 
@@ -1919,10 +1979,16 @@ switch($mode) {
         if ( $pageBody != '' ) {
             break;
         }
+        // fall through here on purpose and process the siteconfig upgrade...
+        // at this point we have a fully updated database and core environment
+    case 'dositeconfigupgrade' :
+        require '../../lib-common.php';
+        INST_doSiteConfigUpgrade();
+
         // fall through here on purpose and process the plugin upgrades.....
         // at this point we have a fully updated database and core environment
     case 'dopluginupgrade' :
-        require '../../lib-common.php';
+//        require '../../lib-common.php';
         $pageBody = INST_doPrePluginUpgrade();
         $pageBody .= INST_doPluginUpgrade();
         break;
