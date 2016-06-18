@@ -40,3 +40,9 @@
 		</div>
 	</div>
 </form>
+<script type="text/javascript">
+function reload(form){
+  var val=form.lang.value;
+  self.location='index.php?lang=' + val ;
+}
+</script>

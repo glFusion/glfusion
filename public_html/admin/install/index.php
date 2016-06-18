@@ -416,7 +416,7 @@ function INST_getLanguageTask( )
     $T->set_file('page', 'languagetask.thtml');
 
     // create language select
-    $lang_select = '<select name="lang" style="width:200px;" onchange="reload(this.form)">' . LB;
+    $lang_select = '<select name="lang" onchange="reload(this.form)">' . LB;
     foreach (glob('language/*.php') as $filename) {
         $filename = preg_replace('/.php/', '', preg_replace('/language\//', '', $filename));
         $lang_select .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . INST_prettifyLanguageName($filename) . '</option>' . LB;
@@ -424,7 +424,6 @@ function INST_getLanguageTask( )
     $lang_select .= '</select>';
 
     $prevAction = '';
-//    $nextAction = 'pathsetting';
     $nextAction = 'installalert';
 
     $T->set_var(array(
@@ -1869,7 +1868,7 @@ function INST_installAlert( )
         'lang_prev'             => $LANG_INSTALL['previous'],
         'lang_doc_alert'        => $LANG_INSTALL['install_doc_alert'],
         'lang_doc_alert2'       => $LANG_INSTALL['install_doc_alert2'],
-        'lang_install_heading'  => $LANG_INSTALL['install_heading'],
+        'lang_install_heading'  => $LANG_INSTALL['install_header'],
         'lang_install_bullet1'  => $LANG_INSTALL['install_bullet1'],
         'lang_install_bullet2'  => $LANG_INSTALL['install_bullet2'],
         'lang_install_bullet3'  => $LANG_INSTALL['install_bullet3'],
