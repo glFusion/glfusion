@@ -110,10 +110,10 @@ html {
 }
 .tm-wrapper {
 	min-height: 100%;
-	margin: 0 auto -50px !important; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -51px !important; /* the bottom margin is the negative value of the footer's height */
 }
 footer, .tm-push {
-	height: 50px; /* '.push' must be the same height as 'footer' */
+	height: 51px; /* '.push' must be the same height as 'footer' */
 }
 .tm-pull-div {
 	padding-left: 35px;

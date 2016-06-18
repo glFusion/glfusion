@@ -4,6 +4,7 @@
 			<div class="tm-push"></div>
 		</div>
 		<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+			<div class="uk-hidden-small" style="padding-top:5px;"></div>
 			<div>
 				{copyright}
 			</div>
