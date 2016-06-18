@@ -178,7 +178,10 @@ $_SYSTEM['max_captcha_atttempts'] = 4;
 // | to define unique cache file names per site can be beneficial.            |
 // +--------------------------------------------------------------------------+
 
-define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+if (!defined('CONFIG_CACHE_FILE_NAME')) {
+    define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+}
+
 $_CONF['css_cache_filename'] = 'style.cache';
 $_CONF['js_cache_filename'] = 'js.cache';
 
