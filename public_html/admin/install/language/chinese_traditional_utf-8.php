@@ -164,7 +164,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion允許您上傳插件、圖片和檔。您應設置至少8M的文件上傳許可權。',
     'use_utf8' => '使用UTF-8',
     'welcome_help' => '歡迎使用glFusion CMS安裝嚮導。',
-    'wizard_version' => 'v1.1.3.svn安裝嚮導工具',
+    'wizard_version' => 'v'.GVERSION.'安裝嚮導工具',
     'system_path_prompt' => '請輸入glFusion的<strong>private/</strong>目錄的完整絕對路徑。<br /><br />該路徑包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private<br /><br /><strong>提示：</strong> 您的public_html/的絕對路徑應該是：<br />%s<br /><br /><strong>高級設置</strong>允許您強制更改這些默認路徑，但一般情況下您不需要修改這些路徑，系統會自動為您設置。',
     'advanced_settings' => '高級設置',
     'log_path' => '日誌檔路徑',
@@ -178,7 +178,11 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.'
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'upgrade' => 'Upgrade',
+    'support_resources' => 'Support Resources',
+    'plugins' => 'glFusion Plugins',
+    'support_forums' => 'glFusion Support Forums'
 );
 
 // +---------------------------------------------------------------------------+

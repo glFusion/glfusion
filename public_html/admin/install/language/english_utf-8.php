@@ -104,7 +104,7 @@ $LANG_INSTALL = array(
     'off'                       => 'Off',
     'ok'                        => 'OK',
     'on'                        => 'On',
-    'online_help_text'          => 'Online install help<br /> at glFusion.org',
+    'online_help_text'          => 'Install Docs at glFusion.org',
     'online_install_help'       => 'Online Install Help',
     'open_basedir'				=> 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'path_info'					=> 'Path Information',
@@ -172,6 +172,12 @@ $LANG_INSTALL = array(
     'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check'             => 'Check For Updates',
     'check_for_updates'         => 'Goto the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
+    'quick_start'               => 'glFusion Quick Start Guide',
+    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'upgrade'                   => 'Upgrade',
+    'support_resources'         => 'Support Resources',
+    'plugins'                   => 'glFusion Plugins',
+    'support_forums'            => 'glFusion Support Forums',
 );
 
 // +---------------------------------------------------------------------------+

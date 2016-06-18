@@ -163,7 +163,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion �� ��������� �� ������� �������,�������,� ����� �������. ������ �� ��� ��������� ���� 8MB ���� ��������� ����� �� �������.',
     'use_utf8' => '����������� UTF-8',
     'welcome_help' => '����� ����� ��� ������������� ��������� �� glFusion CMS. ��� ������ �� ����������� ��� glFusion ����,�� �������� ���� ����������� ����, ��� �� ��������� �� ����������� Geekblog 1.4.1 ����.<br /><br />���� �������� ���� �� ����������� � ��������� <strong>������</strong>.',
-    'wizard_version' => 'v1.1.3.svn ������������� ���������',
+    'wizard_version' => 'v'.GVERSION.' ������������� ���������',
     'system_path_prompt' => '�������� ������ ��� ���  glFusion\ <strong>private/</strong> directory.<br /><br />���� ���������� ������� <strong>db-config.php.dist</strong> ��� <strong>db-config.php</strong> ����.<br /><br />�������: /home/www/glfusion/private ��� c:/www/glfusion/private.<br /><br /><strong>���������:</strong> ������ ��� ���  <strong>public_html/</strong> <i>(He <strong>private/</strong>)</i> ������������ �������� �� �:<br /><br />%s<br /><br /><strong>��� ���������</strong> �� ��������� �� ������� ����� �� ��������. �� � ����� �� �� ���������� ���� ������, ��������� �� �� �������� �����������.',
     'advanced_settings' => '��� ���������',
     'log_path' => '��� ��� logs',
@@ -177,7 +177,11 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.'
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'upgrade' => 'Upgrade',
+    'support_resources' => 'Support Resources',
+    'plugins' => 'glFusion Plugins',
+    'support_forums' => 'glFusion Support Forums'
 );
 
 // +---------------------------------------------------------------------------+

@@ -42,7 +42,7 @@ if (!defined ('GVERSION')) {
 
 // +---------------------------------------------------------------------------+
 
-$LANG_CHARSET = 'iso-8859-1';
+$LANG_CHARSET = 'ISO-8859-1';
 
 // +---------------------------------------------------------------------------+
 // install.php
@@ -163,7 +163,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion ermöglicht das Hochladen von Plugins, Bildern und Dateien. Es sollten mindestens 8MB für das Hochladen eingestellt sein.',
     'use_utf8' => '<br />Zeichensatz benutzen UTF-8 ',
     'welcome_help' => 'Willkommen beim glFusion-CMS Installations-Zauberer. Einen neuen glFusion-Auftritt installieren, auf den neusten Stand bringen.<br /><br />Bitte die Sprache für den Zauberer auswählen, die gestellte Aufgabe und dann <strong>nächstes</strong> drücken.',
-    'wizard_version' => 'v1.1.3.svn Installations-Zauberer',
+    'wizard_version' => 'v'.GVERSION.' Installations-Zauberer',
     'system_path_prompt' => 'Den vollen, absoluten Pfad auf dem Server zum glFusion <strong>private/</strong>-Verzeichnis.<br /><br />Dies Verzeichnis enthält die <strong>db-config.php.dist</strong> oder <strong>db-config.php</strong>-Datei.<br /><br />Beispiel: /home/www/glfusion/private oder c:/www/glfusion/private.<br /><br /><strong>Hinweis:</strong> Der absolute Pfad zum <strong>public_html/</strong> <i>(nicht <strong>private/</strong>)</i> -Verzeichnis scheint:<br /><br />%s zu sein.<br /><br /><strong>Bei weitere Einstellungen</strong> kann man einige der Standardpfade verändern.  Im allgemeinen muss man diese Pfade nicht angeben oder ändern. Das System legt sie automatsich fest.',
     'advanced_settings' => 'Weitere Einstellungen',
     'log_path' => 'Pfad zu Logs',
@@ -177,7 +177,11 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.'
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'upgrade' => 'Upgrade',
+    'support_resources' => 'Support Resources',
+    'plugins' => 'glFusion Plugins',
+    'support_forums' => 'glFusion Support Forums'
 );
 
 // +---------------------------------------------------------------------------+
