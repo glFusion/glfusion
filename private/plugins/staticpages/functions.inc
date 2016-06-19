@@ -310,6 +310,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
            $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF;
 
     $retval = '';
+    $displaypage = '';
     $headerOption = '';
     $footerOption = '';
 
@@ -333,7 +334,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     $spage = new Template( $_CONF['path'] . 'plugins/staticpages/templates/' );
     $spage->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $spage -> set_file( array('page'=>'staticpage.thtml',
+    $spage->set_file( array('page'=>'staticpage.thtml',
         'comments' => 'spcomments.thtml'));
 
     if ($A['sp_format'] <> 'blankpage') {
@@ -432,13 +433,13 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     }
 
     if ($A['sp_format'] <> 'blankpage') {
-        $page = COM_siteHeader($headerOption, $A['sp_title']);
+        $displaypage = COM_siteHeader($headerOption, $A['sp_title']);
     }
-    $page .= $retval;
+    $displaypage .= $retval;
     if ($A['sp_format'] <> 'blankpage') {
-        $page .= COM_siteFooter($footerOption);
+        $displaypage .= COM_siteFooter($footerOption);
     }
-    return $page;
+    return $displaypage;
 }
 
 /**
