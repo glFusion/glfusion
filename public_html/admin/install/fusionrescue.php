@@ -33,10 +33,10 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 define('GVERSION','1.6.0');
 
 require_once '../../siteconfig.php';
+$_SYSTEM['no_fail_sql'] = true;
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
 require_once $_CONF['path_system'].'lib-database.php';
-require_once $_CONF['path_system'].'lib-security.php';
 
 $self = basename(__FILE__);
 
@@ -244,9 +244,6 @@ function showPage($page)
         case 'passwordform' :
             $retval = page_passwordForm();
             break;
-        default :
-            $retval = 'not sure what to display now';
-            break;
     }
     return $retval;
 }
@@ -393,6 +390,7 @@ function processPlugins() {
     global $rescueFields, $_DB_table_prefix;
 
     $plugins = array();
+    $retval  = '';
 
     $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
     $result = DB_query($sql);
@@ -623,7 +621,7 @@ function getNewPaths( $group = 'Core') {
         $retval .= '
             <script>
                 jQuery(document).ready(function($) {
-                var welcome = "glFusion Rescue is a utility that allows you to directly modify glFusion configuration settings. Please consult the <a href=\"https://www.glfusion.org/wiki/glfusion:fusionrescue\" target=\"#_blank\">FusionRescue Documentation</a> for details on how to use this utility.";
+                var welcome = "glFusion Rescue is a utility that allows you to directly modify glFusion configuration settings. Please consult the <a href=\"https://www.glfusion.org/wiki/glfusion:fusionrescue\" target=\"#_blank\">glFusion Rescue Documentation</a> for details on how to use this utility.";
                     $.UIkit.modal.alert(welcome).show();
                 });
             </script>
@@ -691,6 +689,7 @@ function saveNewPaths( $group='Core' ) {
 // main processing
 
 $display = '';
+$page    = '';
 $authenticated = 0;
 
 session_start();
