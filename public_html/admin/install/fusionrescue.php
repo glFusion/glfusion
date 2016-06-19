@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Safely edit glFusion configuration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -27,6 +27,19 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 //
+
+error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+//error_reporting( E_ALL );
+
+define('GVERSION','1.6.0');
+
+require_once '../../siteconfig.php';
+require_once $_CONF['path'].'db-config.php';
+$dbpass = $_DB_pass;
+require_once $_CONF['path_system'].'lib-database.php';
+require_once $_CONF['path_system'].'lib-security.php';
+
+$self = basename(__FILE__);
 
 $rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration');
 
@@ -214,99 +227,267 @@ function validateInput( &$input_val ) {
     return $r;
 }
 
-function getDBLogin( ) {
-    echo '
-    <form method="post" action="fusionrescue.php">
-    <table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
-    <tr>
-      <td style="text-align:right;">Database Server</td><td><input type="text" name="dbserver" value="" /></td>
-    </tr>
-    <tr>
-      <td style="text-align:right;">Database User</td><td><input type="text" name="dbuser" value="" /></td>
-    </tr>
-    <tr>
-      <td style="text-align:right;">Database Password</td><td><input type="password" name="dbpass" value="" /></td>
-    </tr>
-    <tr>
-      <td style="text-align:right;">Database Name</td><td><input type="text" name="dbname" value="" /></td>
-    </tr>
-    <tr>
-      <td style="text-align:right;">Database Prefix</td><td><input type="text" name="dbprefix" value="" /></td>
-    </tr>
-    </table>
-    <br />
-    <center><input type="submit" value="submit" name="mode" /></center><br />
-    </form>
-    ';
+
+/*
+ * items to handle
+ *
+ * validate user - i.e.; login
+ * set configuration variables
+ * turn on / off plugins
+ *
+ **/
+
+function showPage($page)
+{
+    $retval = '';
+
+    switch ($page) {
+        case 'passwordform' :
+            $retval = page_passwordForm();
+            break;
+        default :
+            $retval = 'not sure what to display now';
+            break;
+    }
+    return $retval;
 }
 
-function processPlugins($dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 'Core')
+function page_passwordForm()
 {
+    $retval = '
+        <div class="uk-text-center uk-margin-large-top uk-margin-bottom">
+        Please enter the password for the database connected to this site
+        </div>
+        <div class="uk-vertical-align uk-text-center uk-height-1-1">
+        <div class="uk-vertical-align-middle" style="width: 250px;">
+        <form class="uk-panel uk-panel-box uk-form" method="post">
+            <div class="uk-form-row">
+                <input type="password" id="fusionpwd" name="fusionpwd" class="uk-width-1-1 uk-form-large" type="text" placeholder="Password">
+            </div>
+            <div class="uk-form-row">
+                <button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large">Login</button>
+            </div>
+        </form>
+        </div>
+        </div>
+    ';
+
+    return $retval;
+}
+
+
+function rescue_header( $authenticated ) {
+    $retval = '<!DOCTYPE html>
+        <html class="uk-height-1-1">
+        	<head>
+        		<meta charset="{charset}">
+        		<meta name="viewport" content="width=device-width, initial-scale=1">
+        		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+        		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/js/uikit.min.js"></script>
+        		<meta name="robots" content="noindex,nofollow" />
+        		<title>glFusion Rescue</title>
+                <style>
+                    html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}
+                </style>
+        	</head>
+        	<body class="uk-height-1-1">
+        	<div class="tm-wrapper">
+                <nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+        			<div class="uk-navbar-brand tm-navbar-brand">
+        				glFusion Rescue Utility
+        			</div>
+        ';
+
+    if ( $authenticated ) {
+        $retval .= '
+            <ul class="uk-navbar-nav tm-navbar-nav">
+            <li class="uk-parent" data-uk-dropdown="{remaintime:\'300\',delay:\'300\'}"">
+            <a href="">Configuration <i class="uk-icon-caret-down"></i></a>
+            <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom tm-dropdown">
+                <ul class="uk-nav uk-nav-navbar tm-nav-navbar">
+                    <li><a href="fusionrescue.php?mode=submit&groupmode=Core">glFusion Core</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=calendar">Calendar Plugin</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=captcha">CAPTCHA</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=filemgmt">FileMgmt</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=forum">Forum</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=links">Links</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=polls">Polls</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=spamx">Spamx</a></li>
+                    <li><a href="fusionrescue.php?mode=submit&group=staticpages">StaticPages</a></li>
+                </ul>
+            </div>
+            </li>
+            <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
+            <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
+            </ul>
+            <div class="uk-navbar-flip">
+            <div class="uk-navbar-content">
+            <a class="uk-button uk-button-danger" type="cancel" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
+            </div>
+            </div>
+        ';
+    }
+
+    $retval .= '
+        </nav>
+    	<div class="uk-container uk-container-center uk-margin-bottom">
+    ';
+
+    if ( $authenticated ) {
+        $retval .= '
+            <div class="uk-alert uk-alert-danger">
+            Please delete the fusionrescue.php file and the install directory once you are done! If other guess the password, they can seriously harm your glFusion installation!
+            </div>
+        ';
+    }
+
+    return $retval;
+}
+
+function rescue_footer()
+{
+    $retval = '
+        		</div> <!-- end of container -->
+        	    <div class="tm-push"></div>
+            </div>
+        	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+        		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+        	    <div>
+        			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+        		</div>
+        	</footer>
+            </body>
+        </html>
+    ';
+
+    return $retval;
+}
+
+function processPlugins() {
+    global $rescueFields, $_DB_table_prefix;
+
     $plugins = array();
 
-    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
-    @mysql_select_db($dbname) or die('error selecting database');
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
+    $result = DB_query($sql);
+    if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
 
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins";
+    $result = DB_query($sql);
+    while ($plugins[] = DB_fetchArray($result) ) { }
 
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
-    if ( @mysql_num_rows($result) < 1 ) die('Invalid glFusion Database');
-
-    $sql = "SELECT * FROM " . $dbprefix . "plugins";
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
-    while ($plugins[] = mysql_fetch_array($result,MYSQL_ASSOC) ) { }
-
-    echo '
-<form method="post" action="fusionrescue.php">
-
-<center>Group: <select name="group">
-<option value="Core"'.($group == 'Core' ? ' selected="selected"' : '') . '>Core</option>
-<option value="calendar"'.($group == 'calendar' ? ' selected="selected"' : '').'>Calendar</option>
-<option value="captcha"'.($group == 'captcha' ? ' selected="selected"' : '').'>CAPTCHA</option>
-<option value="filemgmt"'.($group == 'filemgmt' ? ' selected="selected"' : '').'>FileMgmt</option>
-<option value="forum"'.($group == 'forum' ? ' selected="selected"' : '').'>Forum</option>
-<option value="links"'.($group == 'links' ? ' selected="selected"' : '').'>Links</option>
-<option value="polls"'.($group == 'polls' ? ' selected="selected"' : '').'>Polls</option>
-<option value="spamx"'.($group == 'spamx' ? ' selected="selected"' : '').'>Spamx</option>
-<option value="staticpages"'.($group == 'staticpages' ? ' selected="selected"' : '').'>Staticpages</option>
-<option value="plugin"'.($group == 'plugin' ? ' selected="selected"' : '').'>Plugin Admin</option>
-</select>
-<input type="submit" value="submit" name="mode" />
-</center>
-<br />
-
-<input type="hidden" name="dbserver" value="' . $dbserver .'" />
-<input type="hidden" name="dbuser" value="' . $dbuser . '" />
-<input type="hidden" name="dbpass" value="' . $dbpass . '" />
-<input type="hidden" name="dbname" value="' . $dbname . '" />
-<input type="hidden" name="dbprefix" value="' . $dbprefix . '" />
-
-<table style="width:50%;border:none;padding:5px;text-align:center;" align="center" cellspacing="5" cellpadding="5">
-<tr><th style="text-align:right;">Plugin</th><th style="text-align:left;">Enabled</th></tr>
-';
+    $retval .= '
+        <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
+        <div class="uk-panel uk-panel-box uk-margin-bottom">
+        <table class="uk-table uk-table-hover">
+        <tr><th>Plugin</th><th class="uk-text-center">Enabled</th></tr>
+    ';
 
     foreach ($plugins as $row) {
         if ( $row['pi_name'] != '' ) {
-            echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;">' . $row['pi_name'] . '</td>';
-            echo '<td style="text-align:left;"><input type="checkbox" name="enabled[' . $row['pi_name'] . ']" value="1" '. ($row['pi_enabled'] ? ' checked="checked"' : '') .'/></td></tr>';
+            $retval .= '
+                <tr>
+                <td>'.$row['pi_name'].'</td>
+                <td class="uk-text-center"><input type="checkbox" name="enabled[' . $row['pi_name'] . ']" value="1" '. ($row['pi_enabled'] ? ' checked="checked"' : '') .'/></td>
+                </tr>
+            ';
         }
     }
+    $retval .= '
+        </table>
+        </div>
+        <div class="uk-text-center">
+        <button class="uk-button uk-button-success" type="submit" name="mode" value="saveplugins">Save</button>
+        </div>
+        </form>
+    ';
+    return $retval;
+}
 
-echo '
-</table>
-<center><input type="submit" name="mode" value="saveplugins" />&nbsp;&nbsp;<input type="submit" name="mode" value="cancel" /></center>
-</form>
-';
+function savePlugins(  ) {
+    global $rescueFields, $_DB_table_prefix;
+
+    $retval = '';
+
+    $sql = "UPDATE " . $_DB_table_prefix . "plugins SET pi_enabled=0";
+
+    $result = DB_query($sql);
+
+    $enabled = array();
+    $enabled = $_POST['enabled'];
+
+    $changed = 0;
+    foreach ($enabled as $plugin => $value) {
+        $sql = "UPDATE " . $_DB_table_prefix . "plugins SET pi_enabled=1 WHERE pi_name='".DB_escapeString($plugin)."'";
+        DB_query($sql);
+    }
+    $retval = 'Plugins have been updated';
+    return $retval;
+}
+
+function repairDatabase() {
+    global $rescueFields, $_TABLES, $_DB_table_prefix;
+
+    $retval = array();
+
+    $maxtime = @ini_get('max_execution_time');
+    if (empty($maxtime)) {
+        // unlimited or not allowed to query - assume 30 second default
+        $maxtime = 30;
+    }
+    $maxtime -= 5;
+
+    DB_displayError(true);
+
+    $result = DB_query("SHOW TABLES");
+    $numTables = DB_numRows($result);
+    for ($i = 0; $i < $numTables; $i++) {
+        $A = DB_fetchArray($result, true);
+        $table = $A[0];
+        if (in_array($table, $_TABLES)) {
+            if (! empty($startwith)) {
+                if ($table == $startwith) {
+                    $startwith = '';
+                } else {
+                    continue; // already handled - skip
+                }
+                if (!empty($lasttable) && ($lasttable == $table)) {
+                    continue; // skip
+                }
+            }
+/*
+            if (time() > $start + $maxtime) {
+                // this is taking too long - kick off another request
+                $startwith = $table;
+                $url = "fusionrescue.php?mode=repair";
+                header("Location: $url&startwith=$startwith&failures=$failures");
+                exit;
+            }
+*/
+            $repair = DB_query("REPAIR TABLE " . $table, 1);
+            if ($repair === false) {
+                $retval[] = 'Repair failed for ' . $able;
+            }
+        }
+    }
+    return $retval;
+}
+
+function rescue_authenticated()
+{
+    if ( isset($_SESSION['authenticated']) && $_SESSION['authenticated'] == 1 ) {
+        return true;
+    }
+    return false;
 }
 
 
+function getNewPaths( $group = 'Core') {
+    global $rescueFields, $_DB_table_prefix;
 
-function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 'Core') {
-    global $rescueFields;
-
-    if ( $group == 'plugin') {
-        return processPlugins($dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group );
-    }
+    $retval = '';
 
     if ( $group == 'Core' ) {
         $where = "group_name='".$group."' AND ";
@@ -314,16 +495,15 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 
         $where = '';
     }
 
-    $group = addslashes($group);
+    $group = DB_escapeString($group);
 
-    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
-    @mysql_select_db($dbname) or die('error selecting database');
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
-    if ( @mysql_num_rows($result) < 1 ) die('Invalid glFusion Database');
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
-    while ($row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
+    $result = DB_query($sql,1) or die('Cannot execute query');
+
+    if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
+    $result = DB_query($sql,1) or die('Cannot execute query');
+    while ($row = DB_fetchArray($result) ) {
         if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = $row['value'];
             $configDetail[$row['name']]['type'] = $row['type'];
@@ -334,90 +514,97 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 
         }
     }
 
-    echo '
-<form method="post" action="fusionrescue.php">
+    $retval .= '
+        <ul class="uk-breadcrumb">
+            <li><a href="">Configuration</a></li>
+            <li class="uk-active"><span>'.$group.'</span></li>
+        </ul>
+        <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
+        <input type="hidden" name="group" value="'.$group.'">
+        <div class="uk-form-row uk-alert">
+        <label class="uk-form-label">Option</label>
+        <div class="uk-form-controls uk-text-bold" style="margin-left:-5px;padding-top:5px;">
+        Reset&nbsp;&nbsp;
+        Setting
+        </div>
+        </div>
+        <div class="uk-panel uk-panel-box uk-margin-bottom">
+    ';
 
-<center>Group: <select name="group">
-<option value="Core"'.($group == 'Core' ? ' selected="selected"' : '') . '>Core</option>
-<option value="calendar"'.($group == 'calendar' ? ' selected="selected"' : '').'>Calendar</option>
-<option value="captcha"'.($group == 'captcha' ? ' selected="selected"' : '').'>CAPTCHA</option>
-<option value="filemgmt"'.($group == 'filemgmt' ? ' selected="selected"' : '').'>FileMgmt</option>
-<option value="forum"'.($group == 'forum' ? ' selected="selected"' : '').'>Forum</option>
-<option value="links"'.($group == 'links' ? ' selected="selected"' : '').'>Links</option>
-<option value="polls"'.($group == 'polls' ? ' selected="selected"' : '').'>Polls</option>
-<option value="spamx"'.($group == 'spamx' ? ' selected="selected"' : '').'>Spamx</option>
-<option value="staticpages"'.($group == 'staticpages' ? ' selected="selected"' : '').'>Staticpages</option>
-<option value="plugin"'.($group == 'plugin' ? ' selected="selected"' : '').'>Plugin Admin</option>
-</select>
-<input type="submit" value="submit" name="mode" />
-</center>
-<br />
-
-<input type="hidden" name="dbserver" value="' . $dbserver .'" />
-<input type="hidden" name="dbuser" value="' . $dbuser . '" />
-<input type="hidden" name="dbpass" value="' . $dbpass . '" />
-<input type="hidden" name="dbname" value="' . $dbname . '" />
-<input type="hidden" name="dbprefix" value="' . $dbprefix . '" />
-
-<div class="important">To Repair the Sessions Table - Select the repair button</div>
-
-<table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
-<tr><th style="text-align:right;width:20%;">Option</th><th style="text-align:middle; width:60%;">Value</th><th style="text-align:middle;width:20%;">Reset Default</th></tr>
-';
-foreach ($config as $option => $value) {
-    if ( is_bool(@unserialize($value)) ) {
-        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td>';
-        echo '<select name="cfgvalue[' . $option . ']">';
-        echo '<option ' .( @unserialize($value) == 0 ? ' selected="selected"' : '') . ' value="b:0">False</option>';
-        echo '<option ' . ( @unserialize($value) == 1 ? ' selected="selected"' : '') . ' value="b:1">True</option>';
-        echo '</select>';
-        echo '</td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
-    } elseif ( $configDetail[$option]['type'] == 'select' && ($configDetail[$option]['selectionArray'] == 0 || $configDetail[$option]['selectionArray'] == 1)) {
-        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td>';
-        echo '<select name="cfgvalue[' . $option . ']">';
-        echo '<option ' .( @unserialize($value) == 0 ? ' selected="selected"' : '') . ' value="b:0">False</option>';
-        echo '<option ' . ( @unserialize($value) == 1 ? ' selected="selected"' : '') . ' value="b:1">True</option>';
-        echo '</select>';
-        echo '</td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
-    } elseif ($configDetail[$option]['type'] != '@text' &&  $configDetail[$option]['type'] != '%text' && $configDetail[$option]['type'] != '@select' && $configDetail[$option]['type'] != '*text' && $configDetail[$option]['type'] != '**placeholder')  {
-        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
-    }  else {
-        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input disabled="disabled" type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
+    foreach ($config as $option => $value) {
+        if ( is_bool(@unserialize($value)) ) {
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <select name="cfgvalue[' . $option . ']">
+                <option ' . ( @unserialize($value) == 0 ? ' selected="selected"' : '') . ' value="b:0">False</option>
+                <option ' . ( @unserialize($value) == 1 ? ' selected="selected"' : '') . ' value="b:1">True</option>
+                </select>
+                </div>
+                </div>
+            ';
+        } elseif ( $configDetail[$option]['type'] == 'select' && ($configDetail[$option]['selectionArray'] == 0 || $configDetail[$option]['selectionArray'] == 1)) {
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <select name="cfgvalue[' . $option . ']">
+                <option ' . ( @unserialize($value) == 0 ? ' selected="selected"' : '') . ' value="b:0">False</option>
+                <option ' . ( @unserialize($value) == 1 ? ' selected="selected"' : '') . ' value="b:1">True</option>
+                </select>
+                </div>
+                </div>
+            ';
+        } elseif ($configDetail[$option]['type'] != '@text' &&  $configDetail[$option]['type'] != '%text' && $configDetail[$option]['type'] != '@select' && $configDetail[$option]['type'] != '*text' && $configDetail[$option]['type'] != '**placeholder')  {
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                </select>
+                </div>
+                </div>
+            ';
+        }  else {
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                </select>
+                </div>
+                </div>
+            ';
+        }
     }
+
+    $retval .= '
+        </div>
+        <div class="uk-text-center">
+        <button class="uk-button uk-button-success" type="submit" name="mode" value="save" />Save</button>
+        <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+        </div>
+        </form>
+    ';
+
+    return $retval;
 }
 
-echo '
-</table>
-<center><input type="submit" name="mode" value="save" />&nbsp;&nbsp;<input type="submit" name="mode" value="repair" />&nbsp;&nbsp;<input type="submit" name="mode" value="cancel" /></center>
-</form>
-';
-}
+function saveNewPaths( $group='Core' ) {
+    global $rescueFields, $_DB_table_prefix;
 
-function repairSessions( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
-    global $rescueFields;
+    $retval = array();
 
-    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
-    @mysql_select_db($dbname) or die('error selecting database');
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".DB_escapeString($group)."' AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
 
-    $result = @mysql_query("REPAIR TABLE " . $dbprefix . "_sessions");
+    $result = DB_query($sql);
 
-    echo '<br />Sessions table has been repaired.';
-    exit;
-}
-
-function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='Core' ) {
-    global $rescueFields;
-
-    $retval = '';
-
-    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
-    @mysql_select_db($dbname) or die('error selecting database');
-
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
-
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
-
-    while ($row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
+    while ($row = DB_fetchArray($result) ) {
         if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = @unserialize($row['value']);
             $default[$row['name']] = $row['default_value'];
@@ -431,9 +618,9 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
     $changed = 0;
     foreach ($cfgvalues as $option => $value) {
         if ( isset($reset[$option]) && $reset[$option] == 1 ) {
-            $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . $default[$option] . "' WHERE name='" . $option . "' AND group_name='".$group."'";
-            mysql_query($sql,$db);
-            $retval .= 'Resetting ' . $option . '<br />';
+            $sql = "UPDATE " . $_DB_table_prefix . "conf_values SET value='" . $default[$option] . "' WHERE name='" . $option . "' AND group_name='".$group."'";
+            DB_query($sql);
+            $retval[] = 'Resetting ' . $option;
             $changed++;
         } else {
             $sVal = validateInput($value);
@@ -442,15 +629,15 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
                 if (function_exists($fn)) {
                     $sVal = $fn($sVal);
                 }
-                $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . serialize($sVal) . "' WHERE name='" . $option . "' AND group_name='".$group."'";
-                mysql_query($sql,$db);
-                $retval .= 'Saving ' . $option . '<br />';
+                $sql = "UPDATE " . $_DB_table_prefix . "conf_values SET value='" . serialize($sVal) . "' WHERE name='" . $option . "' AND group_name='".$group."'";
+                DB_query($sql);
+                $retval[] = 'Saving ' . $option;
                 $changed++;
             }
         }
     }
     if ( $changed == 0 ) {
-        $retval .= 'No changes detected<br />';
+        $retval[] = 'No changes detected';
     } else {
         @unlink($cfgvalue['path_data'] .'$$$config$$$.cache');
         @unlink($config['path_data'] .'$$$config$$$.cache');
@@ -458,139 +645,104 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
         @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
     }
 
-    echo $retval;
-
-    getNewPaths($dbserver,$dbuser,$dbpass,$dbname,$dbprefix,$group);
-
+    return $retval;
 }
 
-function savePlugins( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='Core' ) {
+// main processing
 
-    $retval = '';
+$display = '';
+$authenticated = 0;
 
-    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
-    @mysql_select_db($dbname) or die('error selecting database');
+session_start();
 
-    $sql = "UPDATE " . $dbprefix . "plugins SET pi_enabled=0";
+if ( rescue_authenticated() ) {
+    $authenticated = 1;
+} else{
+    $authenticated = 0;
+}
 
-    $result = @mysql_query($sql,$db) or die('Cannot execute query');
+$group = 'Core';
 
-    $enabled = array();
-    $enabled = $_POST['enabled'];
-
-    $changed = 0;
-    foreach ($enabled as $plugin => $value) {
-        $sql = "UPDATE " . $dbprefix . "plugins SET pi_enabled=1 WHERE pi_name='".addslashes($plugin)."'";
-        mysql_query($sql,$db);
+if ( $authenticated == 0 && isset($_POST['fusionpwd']) ) {
+    $pwd = $_POST['fusionpwd'];
+    if ( $dbpass == $pwd ) {
+        $_SESSION['authenticated'] = 1;
+        $authenticated = 1;
+        $page = getNewPaths($group);
+    } else {
+        unset($_SESSION["authenticated"]);
+        $authenticated = 0;
+        $page = showPage('passwordform');
     }
-
-    echo '<center>Plugins have been updated<br /><br /></center>';
-
-    getNewPaths($dbserver,$dbuser,$dbpass,$dbname,$dbprefix,$group);
-
+} elseif ( $authenticated != 1 ) {
+    $page = showPage('passwordform');
+} else {
+    $mode = isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST['mode'] : '');
+    switch ( $mode ) {
+        case 'submit' :
+            $group = isset($_GET['group']) ? $_GET['group'] : (isset($_POST['group']) ? $_POST['group'] : 'Core');
+            $page = getNewPaths($group);
+            break;
+        case 'save' :
+            $group = isset($_GET['group']) ? $_GET['group'] : (isset($_POST['group']) ? $_POST['group'] : 'Core');
+            $results = saveNewPaths($group);
+            if ( is_array($results)) {
+                $page .= '<div class="uk-alert uk-alert-success" data-uk-alert>';
+                $page .= '<a href="" class="uk-alert-close uk-close"></a>';
+                $page .= '<ul>';
+                foreach ( $results AS $msg ) {
+                    $page .= '<li>'.$msg.'</li>';
+                }
+                $page .= '</ul>';
+                $page .= '</div>';
+            }
+            $page .= getNewPaths($group);
+            break;
+        case 'plugins' :
+            $page .= processPlugins();
+            break;
+        case 'repair' :
+            $results = repairDatabase();
+            if ( is_array($results)) {
+                $page .= '<div class="uk-alert uk-alert-success" data-uk-alert>';
+                $page .= '<a href="" class="uk-alert-close uk-close"></a>';
+                $page .= '<ul>';
+                if ( count($results) > 0 ) {
+                    foreach ( $results AS $msg ) {
+                        $page .= '<li>'.$msg.'</li>';
+                    }
+                } else {
+                    $page .= '<li>Database has been repaired</li>';
+                }
+                $page .= '</ul>';
+                $page .= '</div>';
+            }
+            $page .=  getNewPaths($group);
+            break;
+        case 'saveplugins' :
+            $results = savePlugins();
+            $page .= '<div class="uk-alert uk-alert-success" data-uk-alert>';
+            $page .= '<a href="" class="uk-alert-close uk-close"></a>';
+            $page .= $results;
+            $page .= '</div>';
+            $page .= processPlugins();
+            break;
+        case 'cancel' :
+            session_start();
+            session_unset();
+            session_destroy();
+            header("location:fusionrescue.php");
+            exit();
+            break;
+        default :
+            $page = getNewPaths($group);
+            break;
+    }
 }
 
-function printHeader() {
+$display = rescue_header($authenticated);
+$display .= $page;
+$display .= rescue_footer();
 
-echo '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta name="robots" content="noindex,nofollow" />
-<title>glFusion Rescue Configuration Editor</title>
-<style type="text/css">
-html {
-font: 14px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;
-color: #444;
-}
-.main {
-width: 960px;
-border: 1px solid #ccc;
-padding: 10px;
-text-align: left;
-margin:0 auto;
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
-}
-div.important {
-background: #5ba3e3;
-color:#000;
-font-weight:700l
-line-height:2em;
-text-align: center;
-padding:10px;
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
-}
-.hover {background:#ccc;}
-</style>
-</head>
-<body>
-<div class="main">
-<center>
-  <h1>glFusion Rescue Configuration Editor</h1></center>
-';
-}
-
-
-function printFooter() {
-echo '
-</div>
-</body>
-</html>';
-}
-
-/*
- * Main processing
- */
-
-printHeader();
-
-$mode = isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST['mode'] : '');
-switch ( $mode ) {
-    case 'submit' :
-        $dbserver = $_POST['dbserver'];
-        $dbuser   = $_POST['dbuser'];
-        $dbpasswd = $_POST['dbpass'];
-        $dbname   = $_POST['dbname'];
-        $dbprefix = $_POST['dbprefix'];
-        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
-        getNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
-        break;
-    case 'save' :
-        $dbserver = $_POST['dbserver'];
-        $dbuser   = $_POST['dbuser'];
-        $dbpasswd = $_POST['dbpass'];
-        $dbname   = $_POST['dbname'];
-        $dbprefix = $_POST['dbprefix'];
-        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
-        saveNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
-        break;
-    case 'repair' :
-        $dbserver = $_POST['dbserver'];
-        $dbuser   = $_POST['dbuser'];
-        $dbpasswd = $_POST['dbpass'];
-        $dbname   = $_POST['dbname'];
-        $dbprefix = $_POST['dbprefix'];
-        repairSessions($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
-        break;
-    case 'saveplugins' :
-        $dbserver = $_POST['dbserver'];
-        $dbuser   = $_POST['dbuser'];
-        $dbpasswd = $_POST['dbpass'];
-        $dbname   = $_POST['dbname'];
-        $dbprefix = $_POST['dbprefix'];
-        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
-        savePlugins($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
-        break;
-    case 'cancel' :
-        echo 'Goodbye...';
-        break;
-
-    default :
-        getDBLogin();
-        break;
-}
-
-printFooter();
+echo $display;
 ?>
