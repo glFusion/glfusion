@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Rewrote fusionrescue to support improved layout and full PHP 7 compatibility
   - Updated and modernized the installation / upgrade system
      - Moved UI over to uikit based classes
      - Added ability to automatically update the siteconfig.php file with new options
