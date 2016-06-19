@@ -29,7 +29,6 @@
 //
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
-//error_reporting( E_ALL );
 
 define('GVERSION','1.6.0');
 
@@ -295,6 +294,7 @@ function rescue_header( $authenticated ) {
         	<body class="uk-height-1-1">
         	<div class="tm-wrapper">
                 <nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+                    <a href="#ocnav" class="tm-navbar-toggle uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
         			<div class="uk-navbar-brand tm-navbar-brand">
         				glFusion Rescue Utility
         			</div>
@@ -302,7 +302,31 @@ function rescue_header( $authenticated ) {
 
     if ( $authenticated ) {
         $retval .= '
-            <ul class="uk-navbar-nav tm-navbar-nav">
+            <div id="ocnav" class="uk-offcanvas">
+                <div class="uk-offcanvas-bar">
+                    <ul class="uk-nav uk-nav-side uk-nav-parent-icon uk-width-medium-2-3 uk-nav-offcanvas" data-uk-nav>
+                       <li class="uk-parent">
+                             <a class="parent" href="#">Configuration</a>
+                                <ul class="uk-nav-sub">
+                                    <li><a href="fusionrescue.php?mode=submit&groupmode=Core">glFusion Core</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=calendar">Calendar Plugin</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=captcha">CAPTCHA</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=filemgmt">FileMgmt</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=forum">Forum</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=links">Links</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=polls">Polls</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=spamx">Spamx</a></li>
+                                    <li><a href="fusionrescue.php?mode=submit&group=staticpages">StaticPages</a></li>
+                                </ul>
+                        </li>
+                        <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
+                        <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
+                        <li><a  href="fusionrescue.php?mode=cancel">Logout</a></li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <ul class="uk-navbar-nav tm-navbar-nav uk-hidden-small">
             <li class="uk-parent" data-uk-dropdown="{remaintime:\'300\',delay:\'300\'}"">
             <a href="">Configuration <i class="uk-icon-caret-down"></i></a>
             <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom tm-dropdown">
@@ -322,7 +346,7 @@ function rescue_header( $authenticated ) {
             <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
             <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
             </ul>
-            <div class="uk-navbar-flip">
+            <div class="uk-navbar-flip uk-hidden-small">
             <div class="uk-navbar-content">
             <a class="uk-button uk-button-danger" type="cancel" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
             </div>
@@ -337,8 +361,8 @@ function rescue_header( $authenticated ) {
 
     if ( $authenticated ) {
         $retval .= '
-            <div class="uk-alert uk-alert-danger">
-            Please delete the fusionrescue.php file and the install directory once you are done! If other guess the password, they can seriously harm your glFusion installation!
+            <div class="uk-alert uk-alert-danger uk-text-large uk-text-center">
+            Please delete the fusionrescue.php file and the install directory once you are done!
             </div>
         ';
     }
@@ -379,6 +403,10 @@ function processPlugins() {
     while ($plugins[] = DB_fetchArray($result) ) { }
 
     $retval .= '
+        <ul class="uk-breadcrumb">
+            <li>Plugin Administration</li>
+        </ul>
+
         <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
         <div class="uk-panel uk-panel-box uk-margin-bottom">
         <table class="uk-table uk-table-hover">
@@ -459,7 +487,6 @@ function repairDatabase() {
             }
 /*
             if (time() > $start + $maxtime) {
-                // this is taking too long - kick off another request
                 $startwith = $table;
                 $url = "fusionrescue.php?mode=repair";
                 header("Location: $url&startwith=$startwith&failures=$failures");
@@ -516,7 +543,7 @@ function getNewPaths( $group = 'Core') {
 
     $retval .= '
         <ul class="uk-breadcrumb">
-            <li><a href="">Configuration</a></li>
+            <li>Configuration</li>
             <li class="uk-active"><span>'.$group.'</span></li>
         </ul>
         <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
@@ -591,6 +618,19 @@ function getNewPaths( $group = 'Core') {
         </div>
         </form>
     ';
+
+    if ( !isset($_SESSION['warning']) || $_SESSION['warning'] != 1 ) {
+        $retval .= '
+            <script>
+                jQuery(document).ready(function($) {
+                var welcome = "glFusion Rescue is a utility that allows you to directly modify glFusion configuration settings. Please consult the <a href=\"https://www.glfusion.org/wiki/glfusion:fusionrescue\" target=\"#_blank\">FusionRescue Documentation</a> for details on how to use this utility.";
+                    $.UIkit.modal.alert(welcome).show();
+                });
+            </script>
+        ';
+        $_SESSION['warning'] = 1;
+    }
+
 
     return $retval;
 }
@@ -667,10 +707,12 @@ if ( $authenticated == 0 && isset($_POST['fusionpwd']) ) {
     $pwd = $_POST['fusionpwd'];
     if ( $dbpass == $pwd ) {
         $_SESSION['authenticated'] = 1;
+        $_SESSION['warning'] = 0;
         $authenticated = 1;
         $page = getNewPaths($group);
     } else {
         unset($_SESSION["authenticated"]);
+        unset($_SESSION["warning"]);
         $authenticated = 0;
         $page = showPage('passwordform');
     }
