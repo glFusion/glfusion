@@ -2263,6 +2263,7 @@ $LANG_AM = array(
     'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
+    'desc_headlines' => 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
     'instructions_edit' => 'This screen allows you to create a custom autotag.',
     'allowed' => 'Allowed',
     'namespace' => 'Namespace',
