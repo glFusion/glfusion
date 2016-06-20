@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<div class="uk-flex uk-flex-center uk-margin">
+	<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
+<!-- BEGIN social_buttons -->
+		<li>
+			<a href="{social_url}" target="_blank" class="uk-icon-button uk-margin-small-bottom uk-margin-small-right" title="{lang_follow_me} {service_display_name}">
+				<i class="uk-icon-justify uk-icon-{service_icon} tm-follow"></i>
+			</a>
+		</li>
+<!-- END social_buttons -->
+	</ul>
+</div>
+{# end {templatelocation} #}
