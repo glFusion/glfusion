@@ -1275,20 +1275,13 @@ function glfusion_160()
     $c = config::get_instance();
     $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
 
-    $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_image` VARCHAR(128) DEFAULT NULL AFTER `alternate_tid`;";
-    $_SQL[] = "
-    CREATE TABLE {$_TABLES['staticpage_category']}` (
-      cat_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-      cat_name varchar(128) NOT NULL default '',
-      cat_desc varchar(128) NOT NULL default '',
-      PRIMARY KEY (cat_id)
-    ) ENGINE=MyISAM;
-    ";
-
-    $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} ADD `sp_catid` INT(10) sp_catid int(10) NOT NULL default '0' AFTER `sp_id`, ADD INDEX `cat_id` (`sp_catid`);";
+    $_SQL[] = "ALTER TABLE {$_TABLES['autotags']} CHANGE `description` `description` VARCHAR(250) NULL DEFAULT '';";
+    $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
+    $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('headlines', 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]', 1, 1, '');";
+    $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} DROP `sp_catid`;";
 
     // create social share table
 

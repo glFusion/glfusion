@@ -675,7 +675,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
 
 $_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
   tag varchar( 24 ) NOT NULL DEFAULT '',
-  description varchar( 128 ) DEFAULT '',
+  description varchar( 250 ) DEFAULT '',
   is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
   is_function tinyint( 1 ) NOT NULL DEFAULT '0',
   replacement text,
@@ -971,5 +971,5 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('youtube', 'Embed Youtube videos into content. Usage:[youtube:ID height:PX width:PX align:LEFT/RIGHT pad:PX]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('vimeo', 'Embed Vimeo videos into content. Usage:[vimeo:ID height:PX width:PX align:LEFT/RIGHT pad:PX responsive:0/1]', 1, 1, NULL)";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('uikitlogin', 'UIKIT Login Widget', 1, 1, NULL);";
-
+$_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('headlines', 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]', 1, 1, '');";
 ?>
