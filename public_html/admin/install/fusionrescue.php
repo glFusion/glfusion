@@ -227,6 +227,38 @@ function validateInput( &$input_val ) {
 }
 
 
+function rescue_innodbStatus()
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $retval = false;
+
+    $engine = DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'");
+    if (!empty($engine) && ($engine == 'InnoDB')) {
+        // need to look at all the tables
+        $result = DB_query("SHOW TABLES");
+        $numTables = DB_numRows($result);
+        for ($i = 0; $i < $numTables; $i++) {
+            $A = DB_fetchArray($result, true);
+            $table = $A[0];
+            if (in_array($table, $_TABLES)) {
+                $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+                $B = DB_fetchArray($result2);
+                if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
+                    break; // found a non-InnoDB table
+                }
+            }
+        }
+        if ($i == $numTables) {
+            // okay, all the tables are InnoDB already
+            $retval = true;
+        }
+    }
+
+    return $retval;
+}
+
+
 /*
  * items to handle
  *
@@ -341,7 +373,13 @@ function rescue_header( $authenticated ) {
             </div>
             </li>
             <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
-            <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
+        ';
+        if ( !rescue_innodbStatus() ) {
+            $retval .= '
+                <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
+            ';
+        }
+        $retval .= '
             </ul>
             <div class="uk-navbar-flip uk-hidden-small">
             <div class="uk-navbar-content">
