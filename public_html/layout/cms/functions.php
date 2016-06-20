@@ -56,7 +56,7 @@ $_BLOCK_TEMPLATE['rss_feeds'] = 'blockheader-rss.thtml,blockfooter-right.thtml';
 
 /*
  * Full_content - no left / right
- * left_contet  - left nav ONLY no RIGHT nav
+ * left_content  - left nav ONLY no RIGHT nav
  * left_content_right - both navs
  * content_right - right nav ONLY
 */
