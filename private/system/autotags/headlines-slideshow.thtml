@@ -1,0 +1,43 @@
+{# begin {templatelocation} #}
+<div class="uk-slidenav-position" data-uk-slideshow="{autoplay:true, animation: 'swipe'}">
+	<ul class="uk-slideshow">
+<!-- BEGIN headlines -->
+{!if story_image}
+		<li class="uk-vertical-align-top">
+			<figure class="uk-overlay uk-overlay-hover uk-width-1-1">
+				<a href="{url}">
+					<img class="uk-width-1-1" src="{story_image}">
+				</a>
+				<figcaption class="uk-overlay-panel uk-overlay-bottom uk-ignore uk-overlay-background">
+					<p>
+{!if titlelink}
+						<a class="uk-icon-hover" href="{url}">
+{!endif}
+							{title}
+							<br />
+							{subtitle}
+{!if titlelink}
+						</a>
+{!endif}
+					</p>
+{!if meta}
+					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-top-remove uk-margin-bottom">
+						<li>{lang_by} {author}</li>
+						<li><time datetime="{time}">{date}</time></li>
+						<li>{lang_posted_in} <a href="{story_topic_url}">{topic}</a></li>
+{!if comments_url}
+						<li><a class="" href="{comments_url}">{comments_count} {lang_comments}</a></li>
+{!endif}
+					</ul>
+{!endif}
+
+				</figcaption>
+			</figure>
+		</li>
+{!endif}
+<!-- END headlines -->
+	</ul>
+	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous" style="color: rgba(255,255,255,0.4)"></a>
+	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next" style="color: rgba(255,255,255,0.4)"></a>
+</div>
+{# end {templatelocation} #}
