@@ -21,7 +21,7 @@
 		<div class="uk-width-medium-4-4">
 {!endif}
 			<p class="uk-text-bold uk-text-large">{$LANG04[66]}</p>
-			<form id="login" action="{form_action}" method="post" class="uk-panel uk-panel-box uk-form">
+			<form id="login" action="{form_action}" method="post" class="uk-panel uk-panel-box uk-form uk-align-center" style="width:250px;">
 				<div class="uk-form-row">
 					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_username}" id="loginname" name="loginname" value="{loginname}" required autofocus>
 				</div>
