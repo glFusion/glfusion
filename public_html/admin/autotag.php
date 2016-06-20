@@ -296,14 +296,14 @@ function AT_adminList()
 
     $header_arr = array(      # dislay 'text' and use table field 'field'
         array('text' => $LANG_AM['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
-        array('text' => $LANG_AM['tag'], 'field' => 'tag', 'sort' => true, 'align' => 'center'),
+        array('text' => $LANG_AM['tag'], 'field' => 'tag', 'sort' => true, 'align' => 'left'),
         array('text' => $LANG_AM['function'], 'field' => 'is_function', 'sort' => true, 'align' => 'center', 'nowrap' => true),
         array('text' => $LANG_AM['description'], 'field' => 'description', 'sort' => true),
         array('text' => $LANG_AM['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG_AM['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
     );
 
-    $defsort_arr = array('field' => 'is_function', 'direction' => 'desc');
+    $defsort_arr = array('field' => 'tag', 'direction' => 'asc');
 
     $text_arr = array('has_extras'   => true, 'form_url' => $_CONF['site_admin_url'].'/autotag.php?list=x');
 
