@@ -1047,7 +1047,9 @@ function saveuser($A)
     $social_services = SOC_followMeProfile( $_USER['uid'] );
     foreach ( $social_services AS $service ) {
         $service_input = $service['service'].'_username';
-        $A[$service_input] = strip_tags($A[$service_input]);
+        if ( isset( $A['$service_input'])) {
+            $A[$service_input] = strip_tags($A[$service_input]);
+        }
     }
 
     if (!COM_isEmail ($A['email'])) {
@@ -1141,12 +1143,12 @@ function saveuser($A)
             $A['homepage'] = DB_escapeString ($A['homepage']);
         }
 
-        $A['fullname'] = DB_escapeString ($A['fullname']);
-        $A['email'] = DB_escapeString ($A['email']);
-        $A['location'] = DB_escapeString ($A['location']);
-        $A['sig'] = DB_escapeString ($A['sig']);
-        $A['about'] = DB_escapeString ($A['about']);
-        $A['pgpkey'] = DB_escapeString ($A['pgpkey']);
+        $A['fullname']  = DB_escapeString ($A['fullname']);
+        $A['email']     = DB_escapeString ($A['email']);
+        $A['location']  = DB_escapeString ($A['location']);
+        $A['sig']       = DB_escapeString ($A['sig']);
+        $A['about']     = DB_escapeString ($A['about']);
+        $A['pgpkey']    = DB_escapeString ($A['pgpkey']);
 
         if (!empty ($filename)) {
             if (!file_exists ($_CONF['path_images'] . 'userphotos/' . $filename)) {
