@@ -74,8 +74,8 @@ function checkAccess($action){
 
         $_SESSION['fileman_files_root'] = $filePath;
 
-        if ( !is_dir($_CONF['path_html'].$filePath) ) {
-            $rc = @mkdir($_CONF['path_html'].$filePath, 0755, true);
+        if ( !is_dir($_CONF['path_html'].$imagePath.'/library/userfiles/'.$uid) ) {
+            $rc = @mkdir($_CONF['path_html'].$imagePath.'/library/userfiles/'.$uid, 0755, true);
             if ( $rc === false ) {
                 $_CK_CONF['filemanager_per_user_dir'] = false;
                 $_SESSION['fileman_files_root'] = $relRoot . $userImagePath;
