@@ -37,14 +37,9 @@ $('#frmstory').trigger('submit', [ { $action: true } ]);
 			</div>
 			<div class="uk-grid">
 				<div class="uk-width-medium-2-3">
-					<strong>Category</strong>
-					<select id="sp_catid" name="sp_catid">
-						{category_options}
-					</select>
-
-{#					{example_url} #}
-{#					&nbsp;&nbsp;&nbsp; #}
-{#					{lang_hits}: {sp_hits_formatted} #}
+					{example_url}
+					&nbsp;&nbsp;&nbsp;
+					{lang_hits}: {sp_hits_formatted}
 				</div>
 				<div class="uk-width-medium-1-3">
 
