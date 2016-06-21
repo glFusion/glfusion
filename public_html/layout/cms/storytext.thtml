@@ -41,7 +41,7 @@
 {!endif}
 					</li>
 {!if comments_url}
-					<li><a class="uk-text" href="{comments_url}">{comments_count} {lang_comments}</a></li>
+					<li><a class="uk-text" href="{comments_url}">{comments_count}</a></li>
 {!endif}
 				</ul>
 				<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">

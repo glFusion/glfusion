@@ -388,11 +388,20 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             if(( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments )) {
                 $commentsUrl = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#comments';
-                $article->set_var( 'comments_url', $commentsUrl );
-                $article->set_var( 'comments_text',
-                        COM_numberFormat( $story->DisplayElements('comments') ) . ' ' . $LANG01[3] );
-                $article->set_var( 'comments_count',
-                        COM_numberFormat ( $story->DisplayElements('comments') ));
+
+
+$cmtLinkArray = CMT_getCommentLinkWithCount( 'article', $story->getSid(), $_CONF['site_url'].'/article.php?story=' . $story->getSid(),$story->DisplayElements('comments'),1);
+$article->set_var( 'comments_with_count_link', $cmtLinkArray['link_with_count'] );
+$article->set_var( 'comments_url',$cmtLinkArray['url']);
+$article->set_var( 'comments_text', $cmtLinkArray['comment_count']);
+$article->set_var( 'comments_count', $cmtLinkArray['comment_count']);
+
+//                $article->set_var( 'comments_url', $commentsUrl );
+//                $article->set_var( 'comments_text',
+//                        COM_numberFormat( $story->DisplayElements('comments') ) . ' ' . $LANG01[3] );
+//                $article->set_var( 'comments_count',
+//                        COM_numberFormat ( $story->DisplayElements('comments') ));
+
                 $article->set_var( 'lang_comments', $LANG01[3] );
                 $comments_with_count = sprintf( $LANG01[121], COM_numberFormat( $story->DisplayElements('comments') ));
 

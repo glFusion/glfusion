@@ -203,7 +203,7 @@ $LANG01 = array(
     'imagemagick'               => 'ImageMagick Programs',
     'im_not_found'              => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok'                     => 'The <strong>convert</strong> executable appears to be valid.',
-    'memory_limit'              => 'It is recommended that you have at least 48M of memory enabled on your site.',
+    'memory_limit'              => 'It is recommended that you have at least 64M of memory enabled on your site.',
     'not_writable'              => 'NOT WRITABLE',
     'notes'                     => 'Notes',
     'not_found'                 => 'Not Found',
@@ -2687,6 +2687,9 @@ $LANG_confignames['Core'] = array(
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
     'infinite_scroll' => 'Enable Infinite Scroll',
+    'comment_engine'    => 'Comment Engine',
+    'comment_disqus_shortname' => 'Disqus Shortname',
+    'comment_fb_appid' => 'Facebook App ID',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2782,6 +2785,7 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
 );
 
 ?>

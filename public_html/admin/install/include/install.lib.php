@@ -1851,7 +1851,6 @@ function INST_resyncConfig() {
     $site_url = $tcnf['site_url'];
 
     $c->sync('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
-
     $c->sync('fs_site', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
     $c->sync('site_url','','text',0,0,NULL,10,TRUE);
     $c->sync('site_admin_url','','text',0,0,NULL,20,TRUE);
@@ -1924,25 +1923,25 @@ function INST_resyncConfig() {
     $c->sync('fs_story', NULL, 'fieldset', 1, 1, NULL, 0, TRUE);
     $c->sync('maximagesperarticle',5,'text',1,1,NULL,10,TRUE);
     $c->sync('limitnews',10,'text',1,1,NULL,20,TRUE);
-    $c->sync('infinite_scroll',1,'select',1,1,0,25,TRUE);
-    $c->sync('minnews',1,'text',1,1,NULL,30,TRUE);
-    $c->sync('contributedbyline',1,'select',1,1,0,40,TRUE);
-    $c->sync('hidestorydate',0,'select',1,1,0,50,TRUE);
-    $c->sync('hideviewscount',0,'select',1,1,0,60,TRUE);
-    $c->sync('hideemailicon',0,'select',1,1,0,70,TRUE);
-    $c->sync('hideprintericon',0,'select',1,1,0,80,TRUE);
-    $c->sync('digg_enabled',0,'select',1,1,0,90,TRUE);
-    $c->sync('rating_enabled',1,'select',1,1,24,100,TRUE);
-    $c->sync('allow_page_breaks',1,'select',1,1,0,110,TRUE);
-    $c->sync('page_break_comments','last','select',1,1,7,120,TRUE);
-    $c->sync('article_image_align','right','select',1,1,8,130,TRUE);
-    $c->sync('show_topic_icon',1,'select',1,1,0,140,TRUE);
-    $c->sync('draft_flag',0,'select',1,1,0,150,TRUE);
-    $c->sync('frontpage',1,'select',1,1,0,160,TRUE);
-    $c->sync('hide_no_news_msg',0,'select',1,1,0,170,TRUE);
-    $c->sync('hide_main_page_navigation',0,'select',1,1,0,180,TRUE);
-    $c->sync('onlyrootfeatures',0,'select',1,1,0,190,TRUE);
-    $c->sync('aftersave_story','list','select',1,1,9,200,TRUE);
+    $c->sync('infinite_scroll',1,'select',1,1,0,30,TRUE);
+    $c->sync('minnews',1,'text',1,1,NULL,40,TRUE);
+    $c->sync('contributedbyline',1,'select',1,1,0,50,TRUE);
+    $c->sync('hidestorydate',0,'select',1,1,0,60,TRUE);
+    $c->sync('hideviewscount',0,'select',1,1,0,70,TRUE);
+    $c->sync('hideemailicon',0,'select',1,1,0,80,TRUE);
+    $c->sync('hideprintericon',0,'select',1,1,0,90,TRUE);
+    $c->sync('digg_enabled',0,'select',1,1,0,100,TRUE);
+    $c->sync('rating_enabled',1,'select',1,1,24,110,TRUE);
+    $c->sync('allow_page_breaks',1,'select',1,1,0,120,TRUE);
+    $c->sync('page_break_comments','last','select',1,1,7,130,TRUE);
+    $c->sync('article_image_align','right','select',1,1,8,140,TRUE);
+    $c->sync('show_topic_icon',1,'select',1,1,0,150,TRUE);
+    $c->sync('draft_flag',0,'select',1,1,0,160,TRUE);
+    $c->sync('frontpage',1,'select',1,1,0,170,TRUE);
+    $c->sync('hide_no_news_msg',0,'select',1,1,0,180,TRUE);
+    $c->sync('hide_main_page_navigation',0,'select',1,1,0,190,TRUE);
+    $c->sync('onlyrootfeatures',0,'select',1,1,0,200,TRUE);
+    $c->sync('aftersave_story','list','select',1,1,9,210,TRUE);
 
     $c->sync('fs_trackback', NULL, 'fieldset', 1, 2, NULL, 0, TRUE);
     $c->sync('trackback_enabled',TRUE,'select',1,2,1,10,TRUE);
@@ -2077,16 +2076,19 @@ function INST_resyncConfig() {
     $c->sync('skip_preview',0,'select',4,5,0,70,TRUE);
 
     $c->sync('fs_comments', NULL, 'fieldset', 4, 6, NULL, 0, TRUE);
-    $c->sync('commentspeedlimit',45,'text',4,6,NULL,10,TRUE);
-    $c->sync('comment_limit',100,'text',4,6,NULL,20,TRUE);
-    $c->sync('comment_mode','nested','select',4,6,11,30,TRUE);
-    $c->sync('comment_code',0,'select',4,6,17,40,TRUE);
-    $c->sync('comment_edit',0,'select',4,6,0,50,TRUE);
-    $c->sync('comment_edittime',1800,'text',4,6,NULL,60,TRUE);
-    $c->sync('comment_postmode','plaintext','select',4,6,5,70,TRUE);
-    $c->sync('article_comment_close_enabled',0,'select',4,6,0,90,TRUE);
-    $c->sync('article_comment_close_days',30,'text',4,6,NULL,100,TRUE);
-    $c->sync('comment_close_rec_stories',0,'text',4,6,NULL,110,TRUE);
+    $c->sync('comment_engine','internal','select',4,30,NULL,10,TRUE);
+    $c->sync('comment_disqus_shortname','','text',4,6,NULL,20,TRUE);
+    $c->sync('comment_fb_appid','','text',4,6,NULL,30,TRUE);
+    $c->sync('commentspeedlimit',45,'text',4,6,NULL,40,TRUE);
+    $c->sync('comment_limit',100,'text',4,6,NULL,50,TRUE);
+    $c->sync('comment_mode','nested','select',4,6,11,60,TRUE);
+    $c->sync('comment_code',0,'select',4,6,17,70,TRUE);
+    $c->sync('comment_edit',0,'select',4,6,0,80,TRUE);
+    $c->sync('comment_edittime',1800,'text',4,6,NULL,90,TRUE);
+    $c->sync('comment_postmode','plaintext','select',4,6,5,100,TRUE);
+    $c->sync('article_comment_close_enabled',0,'select',4,6,0,110,TRUE);
+    $c->sync('article_comment_close_days',30,'text',4,6,NULL,120,TRUE);
+    $c->sync('comment_close_rec_stories',0,'text',4,6,NULL,130,TRUE);
 
     $c->sync('fs_rating',NULL, 'fieldset', 4,7,NULL,0,TRUE);
     $c->sync('rating_speedlimit',15,'text',4,7,NULL,10,TRUE);
@@ -2173,7 +2175,7 @@ function INST_resyncConfig() {
     $c->sync('session_cookie_timeout',7200,'text',7,1,NULL,90,TRUE);
     $c->sync('cookie_path','/','text',7,1,NULL,100,TRUE);
     $c->sync('cookiedomain','','text',7,1,NULL,110,TRUE);
-    $c->sync('cookiesecure',FALSE,'select',7,1,1,120,TRUE);
+    $c->sync('cookiesecure',$cookiesecure,'select',7,1,1,120,TRUE);
 
     $c->sync('fs_misc', NULL, 'fieldset', 7, 2, NULL, 0, TRUE);
     $c->sync('notification',array(),'%text',7,2,NULL,10,TRUE);

@@ -853,11 +853,17 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
 */
 function PLG_doSearchComment($query, $datestart, $dateend, $topic, $type, $author, $keyType = 'all', $page = 1, $perpage = 10)
 {
-    global $_PLUGINS;
+    global $_PLUGINS, $_CONF;
     /*
         The new API does not use $page, $perpage
         $type is now only used in the core and should not be passed to the plugin
     */
+
+    if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] != 'internal' ) {
+
+        return array();
+    }
+
 
     $search_results = array();
 

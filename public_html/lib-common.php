@@ -1360,6 +1360,22 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     // grab header data from outputHandler
     $outputHandle = outputHandler::getInstance();
+
+    $jsFooter = '<script type="text/javascript" src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
+    if (isset($_CONF['comment_engine']) ) {
+        switch ($_CONF['comment_engine']) {
+            case 'disqus' :
+                $jsFooter .= '<script id="dsq-count-scr" src="//dev-glfusion.disqus.com/count.js" async></script>';
+                break;
+            case 'facebook' :
+                $theme->set_var('integrated_comments',
+                '<div id="fb-root"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6";fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));</script>');
+                $outputHandle->addRaw('<meta property="fb:app_id" content="{'.$_CONF['comment_fb_appid'].'}" />');
+                break;
+         }
+    }
+    $theme->set_var('js-footer',$jsFooter);
+
     $theme->set_var(array(
                 'meta-header'  => $outputHandle->renderHeader('meta'),
                 'css-header'   => $outputHandle->renderHeader('style'),

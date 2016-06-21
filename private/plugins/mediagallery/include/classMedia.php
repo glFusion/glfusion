@@ -774,15 +774,20 @@ class Media {
         }
 
         if ( $MG_albums[$this->album_id]->enable_comments) {
+            USES_lib_comment();
+            $cmtLinkArray = CMT_getCommentLinkWithCount( 'mediagallery', $this->id, $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id,$this->comments,0);
+
             if ( $this->type == 4 || ($this->type == 1 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 2 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 5 && $MG_albums[$this->album_id]->playback_type != 2)) {
-                $cmtLink  = '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
+                $cmtLink  = $cmtLinkArray['link_with_count']; // '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
                 $cmtLink_alt = '';
             }  else {
-                $cmtLink = $LANG_MG03['comments'];
-                $cmtLink_alt  = '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
+                $cmtLink = ''; //$LANG_MG03['comments'];
+                $cmtLink_alt  = $cmtLinkArray['link_with_count']; //'<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
             }
+
             $T->set_var(array(
-                'media_comments_count'  =>  $this->comments,
+                'comments_with_count'   =>  $cmtLinkArray['link_with_count'],
+                'media_comments_count'  =>  $cmtLinkArray['comment_count'],
                 'lang_comments'         =>  $cmtLink,
                 'lang_comments_hot'     =>  $cmtLink_alt,
             ));

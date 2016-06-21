@@ -901,6 +901,9 @@ function POLLS_countPollsAndVotes()
 function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 {
     global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
+
+    USES_lib_comments();
+
     $retval = '';
 
     $result = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
@@ -1029,8 +1032,16 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     $poll->set_var('num_comments',
                             COM_numberFormat($num_comments));
                     $poll->set_var('lang_comments', $LANG01[3]);
-                    $poll->set_var('poll_comments_url', $_CONF['site_url'] .
-                        '/polls/index.php?pid=' . $pid . '#comments');
+
+                    $comment_link = CMT_getCommentLinkWithCount(
+                            'polls',
+                            $pid,
+                            $_CONF['site_url'].'/polls/index.php?pid=' . $pid,
+                            $num_comments,
+                            0
+                        );
+
+                    $poll->set_var('poll_comments_url', $comment_link['link_with_count']);
                     $poll->parse('poll_comments', 'comments', true);
                 } else {
                     $poll->set_var('poll_comments', '');
@@ -1378,8 +1389,14 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 $poll->set_var('num_comments',
                         COM_numberFormat($num_comments));
                 $poll->set_var('lang_comments', $LANG01[3]);
-                $poll->set_var('poll_comments_url', $_CONF['site_url'] .
-                        '/polls/index.php?pid=' . $pid . '#comments');
+
+ $commentsUrl = $_CONF['site_url'].'/polls/index.php?pid=' . $pid . '#comments';
+if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'disqus') {
+    $commentsUrl = str_replace('#comments','#disqus_thread',$commentsUrl);
+}
+
+
+                $poll->set_var('poll_comments_url', $commentsurl);
                 $poll->parse('poll_comments', 'comments', true);
             } else {
                 $poll->set_var('poll_comments_url', '');

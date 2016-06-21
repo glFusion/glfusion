@@ -681,6 +681,71 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     return $retval;
 }
 
+/*
+ * new api to get comment links...
+ *
+ * $type = plugin, article, etc.
+ * $sid  = unique identifier for the item
+ * $cmtCount - if local, the comment count for the item
+ * $url - unique url (canonical) for the item
+ * $urlRewrite - if the item supports URL rewrite
+ *
+ *
+ *
+ */
+
+function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewrite = 0 ) {
+    global $_CONF, $LANG01;
+
+    $retval = '';
+
+    if ( !isset($_CONF['comment_engine']) ) $_CONF['comment_engine'] = 'internal';
+    switch ( $_CONF['comment_engine'] ) {
+        case 'disqus' :
+            if ( $urlRewrite ) {
+                $url = COM_buildURL($url.'#disqus_thread');
+            } else {
+                $url = $url.'#disqus_thread';
+            }
+            if( $type == 'filemgmt' ) $type = 'filemgmt_fileid';
+            $link = '<a href="'.$url.'" data-disqus-identifier='.$type.'_'.$sid.'>';
+            $retval['url']           = $url;
+            $retval['link']          = $link;
+            $retval['nonlink']       = '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'"></span>';
+            $retval['comment_count'] = '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'">0 '.$LANG01[83].'</span>';
+            $retval['comment_text']  = $LANG01[83];
+
+            $retval['link_with_count'] = $link.$cmtCount.' '.$LANG01[83].'</a>';
+            break;
+        case 'facebook' :
+            if ( $urlRewrite ) {
+                $url = COM_buildURL($url);
+            } else {
+                $url = $url;
+            }
+            $link = '<a href="'.$url.'">';
+
+            $retval['url']           = $url;
+            $retval['link']          = $link;
+            $retval['nonlink']       = '<span class="fb-comments-count" data-href="'.$url.'"></span>';
+            $retval['comment_count'] = '<span class="fb-comments-count" data-href="'.$url.'"></span> ' . $LANG01[83];
+            $retval['comment_text']  = $LANG01[83];
+            $retval['link_with_count'] = $link.'<span class="fb-comments-count" data-href="'.$url.'"></span>'.' '.$LANG01[83].'</a>';
+            break;
+        case 'internal' :
+        default :
+            $link = '<a href="'.$url.'#comments">';
+            $retval['url']           = $url;
+            $retval['link']          = $link;
+            $retval['nonlink']       = '';
+            $retval['comment_count'] = $cmtCount . ' '. $LANG01[83];
+            $retval['comment_text']  = $LANG01[83];
+            $retval['link_with_count'] = $link . ' ' . $cmtCount . ' ' . $LANG01[83].'</a>';
+            break;
+    }
+    return $retval;
+}
+
 /**
 * This function displays the comments in a high level format.
 *
@@ -706,172 +771,227 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $retval = '';
 
-    $valid_modes = array('threaded','nested','flat','nocomment');
-    if ( in_array($mode,$valid_modes) === false ) {
-        $mode = 'nested';
-    }
+    if ( !isset($_CONF['comment_engine'])) $_CONF['comment_engine'] = 'internal';
 
-    if ($mode == 'threaded') $mode = 'nested';
+    switch ( $_CONF['comment_engine'] ) {
+        case 'disqus' :
+            if( $type == 'article' ) {
+                $pageURL = COM_buildUrl( $_CONF['site_url']."/article.php?story=$sid" );
+                $pageIdentifier = 'article_'.$sid;
+            } else { // for a plugin
+                // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
+                list($pageURL, $plgid) = PLG_getCommentUrlId($type);
+                $pageIdentifier = $type.'_'.$sid;
+                $pageURL = PLG_getItemInfo($type, $sid, 'url');
+            }
+            $pageTitle = urlencode($title);
+            $pageURL = str_replace ( '&amp;', '&', $pageURL );
 
-    if (! COM_isAnonUser()) {
-        $result = DB_query( "SELECT commentorder,commentmode,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}" );
-        $U = DB_fetchArray( $result );
-        if( empty( $order ) ) {
-            $order = $U['commentorder'];
-        }
-        if( empty( $mode ) ) {
-            $mode = $U['commentmode'];
-        }
-        $limit = $U['commentlimit'];
-    }
+            $retval = '
+            <div id="disqus_thread"></div>
+            <script>
+                var disqus_config = function () {
+                    this.page.url = \''.$pageURL.'\';
+                    this.page.identifier = \''.$pageIdentifier.'\';
+                    this.page.title = \''.$pageTitle.'\';
+                };
+                (function() {
+                    var d = document, s = d.createElement(\'script\');
+                    s.src = \'//'.$_CONF['comment_disqus_shortname'].'.disqus.com/embed.js\';
+                    s.setAttribute(\'data-timestamp\', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+            ';
+            break;
 
-    if( $order != 'ASC' && $order != 'DESC' ) {
-        $order = 'ASC';
-    }
+        case 'facebook' :
+            if( $type == 'article' ) {
+                $pageURL = COM_buildUrl( $_CONF['site_url']."/article.php?story=$sid" );
+                $pageIdentifier = 'article_'.$sid;
+            } else { // for a plugin
+                // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
+                list($pageURL, $plgid) = PLG_getCommentUrlId($type);
+                $pageIdentifier = $type.'_'.$sid;
+                $pageURL = PLG_getItemInfo($type, $sid, 'url');
+            }
+            $pageTitle = urlencode($title);
+            $pageURL = str_replace ( '&amp;', '&', $pageURL );
 
-    $validmodes = array('flat','nested','nocomment','nobar');
-    if ( !in_array($mode,$validmodes) ) {
-        $mode = $_CONF['comment_mode'];
-    }
+            $retval = '<div class="fb-comments" data-href="'.$pageURL.'" data-numposts="20"></div>';
+            break;
 
-    if( empty( $mode )) {
-        $mode = $_CONF['comment_mode'];
-    }
+        case 'internal' :
+        default :
+            $valid_modes = array('threaded','nested','flat','nocomment');
+            if ( in_array($mode,$valid_modes) === false ) {
+                $mode = 'nested';
+            }
 
-    if( empty( $limit )) {
-        $limit = $_CONF['comment_limit'];
-    } else {
-        $limit = (int) $limit;
-    }
+            if ($mode == 'threaded') $mode = 'nested';
 
-    if( !is_numeric($page) || $page < 1 ) {
-        $page = 1;
-    } else {
-        $page = (int) $page;
-    }
-
-    $start = $limit * ( $page - 1 );
-
-    $template = new Template( $_CONF['path_layout'] . 'comment' );
-    $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
-    if ( $mode != 'nobar' ) {
-        $template->set_var( 'commentbar',
-                CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode ));
-    }
-    $template->set_var( 'sid', $sid );
-    $template->set_var( 'comment_type', $type );
-
-    if( $mode == 'nested' || $mode == 'threaded' || $mode == 'flat' ) {
-        // build query
-        switch( $mode ) {
-            case 'flat':
-                if( $cid ) {
-                    $count = 1;
-
-                    $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
-                       . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                       . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                       . "WHERE c.uid = u.uid AND c.cid = ".(int) $pid." AND type='".DB_escapeString($type)."'";
-                } else {
-                    $count = DB_count( $_TABLES['comments'],
-                                array( 'sid', 'type' ), array( DB_escapeString($sid), DB_escapeString($type) ));
-
-                    $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
-                       . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                       . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                       . "WHERE c.uid = u.uid AND c.sid = '".DB_escapeString($sid)."' AND type='".DB_escapeString($type)."' "
-                       . "ORDER BY date $order LIMIT $start, $limit";
+            if (! COM_isAnonUser()) {
+                $result = DB_query( "SELECT commentorder,commentmode,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}" );
+                $U = DB_fetchArray( $result );
+                if( empty( $order ) ) {
+                    $order = $U['commentorder'];
                 }
-                break;
+                if( empty( $mode ) ) {
+                    $mode = $U['commentmode'];
+                }
+                $limit = $U['commentlimit'];
+            }
 
-            case 'nested':
-            case 'threaded':
-            default:
-                if( $order == 'DESC' ) {
-                    $cOrder = 'c.rht DESC';
-                } else {
-                    $cOrder = 'c.lft ASC';
+            if( $order != 'ASC' && $order != 'DESC' ) {
+                $order = 'ASC';
+            }
+
+            $validmodes = array('flat','nested','nocomment','nobar');
+            if ( !in_array($mode,$validmodes) ) {
+                $mode = $_CONF['comment_mode'];
+            }
+
+            if( empty( $mode )) {
+                $mode = $_CONF['comment_mode'];
+            }
+
+            if( empty( $limit )) {
+                $limit = $_CONF['comment_limit'];
+            } else {
+                $limit = (int) $limit;
+            }
+
+            if( !is_numeric($page) || $page < 1 ) {
+                $page = 1;
+            } else {
+                $page = (int) $page;
+            }
+
+            $start = $limit * ( $page - 1 );
+
+            $template = new Template( $_CONF['path_layout'] . 'comment' );
+            $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
+            if ( $mode != 'nobar' ) {
+                $template->set_var( 'commentbar',
+                        CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode ));
+            }
+            $template->set_var( 'sid', $sid );
+            $template->set_var( 'comment_type', $type );
+
+            if( $mode == 'nested' || $mode == 'threaded' || $mode == 'flat' ) {
+                // build query
+                switch( $mode ) {
+                    case 'flat':
+                        if( $cid ) {
+                            $count = 1;
+
+                            $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
+                               . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
+                               . "WHERE c.uid = u.uid AND c.cid = ".(int) $pid." AND type='".DB_escapeString($type)."'";
+                        } else {
+                            $count = DB_count( $_TABLES['comments'],
+                                        array( 'sid', 'type' ), array( DB_escapeString($sid), DB_escapeString($type) ));
+
+                            $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
+                               . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
+                               . "WHERE c.uid = u.uid AND c.sid = '".DB_escapeString($sid)."' AND type='".DB_escapeString($type)."' "
+                               . "ORDER BY date $order LIMIT $start, $limit";
+                        }
+                        break;
+
+                    case 'nested':
+                    case 'threaded':
+                    default:
+                        if( $order == 'DESC' ) {
+                            $cOrder = 'c.rht DESC';
+                        } else {
+                            $cOrder = 'c.lft ASC';
+                        }
+
+                        // We can simplify the query, and hence increase performance
+                        // when pid = 0 (when fetching all the comments for a given sid)
+                        if( $cid ) {  // pid refers to commentid rather than parentid
+                            // count the total number of applicable comments
+                            $q2 = "SELECT COUNT(*) "
+                                . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
+                                . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
+                                . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
+                            $result = DB_query( $q2 );
+                            list( $count ) = DB_fetchArray( $result );
+
+                            $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent AS pindent, "
+                               . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
+                               . "{$_TABLES['users']} AS u "
+                               . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
+                               . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
+                               . "ORDER BY $cOrder LIMIT $start, $limit";
+                        } else {    // pid refers to parentid rather than commentid
+                            if( $pid == 0 ) {  // the simple, fast case
+                                // count the total number of applicable comments
+                                $count = DB_count( $_TABLES['comments'],
+                                        array( 'sid', 'type' ), array( DB_escapeString($sid), DB_escapeString($type) ));
+
+                                $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, 0 AS pindent, "
+                                   . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                                   . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
+                                   . "WHERE c.sid = '".DB_escapeString($sid)."' AND c.uid = u.uid  AND type='".DB_escapeString($type)."' "
+                                   . "ORDER BY $cOrder LIMIT $start, $limit";
+                            } else {
+                                // count the total number of applicable comments
+                                $q2 = "SELECT COUNT(*) "
+                                    . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
+                                    . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
+                                    . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
+                                $result = DB_query($q2);
+                                list($count) = DB_fetchArray($result);
+
+                                $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent + 1 AS pindent, "
+                                   . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                                   . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
+                                   . "{$_TABLES['users']} AS u "
+                                   . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
+                                   . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
+                                   . "ORDER BY $cOrder LIMIT $start, $limit";
+                            }
+                        }
+                        break;
                 }
 
-                // We can simplify the query, and hence increase performance
-                // when pid = 0 (when fetching all the comments for a given sid)
-                if( $cid ) {  // pid refers to commentid rather than parentid
-                    // count the total number of applicable comments
-                    $q2 = "SELECT COUNT(*) "
-                        . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
-                        . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                        . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
-                    $result = DB_query( $q2 );
-                    list( $count ) = DB_fetchArray( $result );
+                $thecomments = '';
+                $result = DB_query( $q );
 
-                    $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent AS pindent, "
-                       . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                       . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
-                       . "{$_TABLES['users']} AS u "
-                       . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                       . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
-                       . "ORDER BY $cOrder LIMIT $start, $limit";
-                } else {    // pid refers to parentid rather than commentid
-                    if( $pid == 0 ) {  // the simple, fast case
-                        // count the total number of applicable comments
-                        $count = DB_count( $_TABLES['comments'],
-                                array( 'sid', 'type' ), array( DB_escapeString($sid), DB_escapeString($type) ));
+                $thecomments .= CMT_getComment( $result, $mode, $type, $order,
+                                                $delete_option, false, $ccode, $sid_author_id );
 
-                        $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, 0 AS pindent, "
-                           . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                           . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                           . "WHERE c.sid = '".DB_escapeString($sid)."' AND c.uid = u.uid  AND type='".DB_escapeString($type)."' "
-                           . "ORDER BY $cOrder LIMIT $start, $limit";
+                // Pagination
+                $tot_pages =  ceil( $count / $limit );
+
+                if( $type == 'article' ) {
+                    $pLink = $_CONF['site_url'] . "/article.php?story=$sid&amp;type=$type&amp;order=$order&amp;mode=$mode";
+                    $pageStr = 'page=';
+                } else { // plugin
+                    // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
+                    list($plgurl, $plgid,$plg_page_str) = PLG_getCommentUrlId($type);
+                    $pLink = $plgurl.'?'.$plgid.'='.$sid."&amp;type=$type&amp;order=$order&amp;mode=$mode";
+                    if ( $plg_page_str != '' ) {
+                        $pageStr = $plg_page_str;
                     } else {
-                        // count the total number of applicable comments
-                        $q2 = "SELECT COUNT(*) "
-                            . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
-                            . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                            . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
-                        $result = DB_query($q2);
-                        list($count) = DB_fetchArray($result);
-
-                        $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent + 1 AS pindent, "
-                           . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                           . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
-                           . "{$_TABLES['users']} AS u "
-                           . "WHERE c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                           . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
-                           . "ORDER BY $cOrder LIMIT $start, $limit";
+                        $pageStr = 'page=';
                     }
                 }
-                break;
-        }
+                $template->set_var( 'pagenav',
+                                 COM_printPageNavigation($pLink, $page, $tot_pages,$pageStr,false,'','','#comments'));
 
-        $thecomments = '';
-        $result = DB_query( $q );
+                $template->set_var( 'comments', $thecomments );
 
-        $thecomments .= CMT_getComment( $result, $mode, $type, $order,
-                                        $delete_option, false, $ccode, $sid_author_id );
-
-        // Pagination
-        $tot_pages =  ceil( $count / $limit );
-
-        if( $type == 'article' ) {
-            $pLink = $_CONF['site_url'] . "/article.php?story=$sid&amp;type=$type&amp;order=$order&amp;mode=$mode";
-            $pageStr = 'page=';
-        } else { // plugin
-            // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
-            list($plgurl, $plgid,$plg_page_str) = PLG_getCommentUrlId($type);
-            $pLink = $plgurl.'?'.$plgid.'='.$sid."&amp;type=$type&amp;order=$order&amp;mode=$mode";
-            if ( $plg_page_str != '' ) {
-                $pageStr = $plg_page_str;
-            } else {
-                $pageStr = 'page=';
             }
-        }
-        $template->set_var( 'pagenav',
-                         COM_printPageNavigation($pLink, $page, $tot_pages,$pageStr,false,'','','#comments'));
-
-        $template->set_var( 'comments', $thecomments );
-
+            $retval = $template->finish($template->parse('output', 'commentarea'));
+            break;
     }
-    $retval = $template->finish($template->parse('output', 'commentarea'));
     return $retval;
 }
 

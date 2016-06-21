@@ -38,7 +38,9 @@
       <tr>
         <td style="width:35%;" style="text-align:center;" class="uk-text-center"><div style="text-align:center !important;" class="fm-rating">{rating_bar}</div></td>
         <td colspan="2" class="uk-text-right">
-          <span style="display:{show_comments};">{comment_link}&nbsp;|&nbsp;</span>
+{!if show_comments}
+          {comment_link}&nbsp;|&nbsp;
+{!endif}
           <a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow">{LANG_DOWNLOAD}</a>&nbsp;|&nbsp;
           <a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow">{LANG_FILELINK}</a>&nbsp;|&nbsp;
           <a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a>

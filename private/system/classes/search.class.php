@@ -293,7 +293,11 @@ class Search {
         $searchform->set_var ('key_any_selected', $any_selected);
 
         $options = '';
-        $plugintypes = array('all' => $LANG09[4], 'stories' => $LANG09[6], 'comments' => $LANG09[7]);
+        if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] != 'internal') {
+            $plugintypes = array('all' => $LANG09[4], 'stories' => $LANG09[6]);
+        } else {
+            $plugintypes = array('all' => $LANG09[4], 'stories' => $LANG09[6], 'comments' => $LANG09[7]);
+        }
         $plugintypes = array_merge($plugintypes, PLG_getSearchTypes());
 
         foreach ($plugintypes as $key => $val) {
@@ -500,6 +504,8 @@ class Search {
     {
         global $_CONF, $LANG01, $LANG09, $LANG31, $_TABLES, $_USER;
 
+        if ( !isset($_CONF['comment_engine'])) $_CONF['comment_engine'] = 'internal';
+
         $debug_info = '';
         $retval = '';
         $list_top = '';
@@ -598,7 +604,7 @@ class Search {
         // Add core searches
         if ($this->_type == 'all' || $this->_type == 'stories')
             $result_plugins[] = $this->_searchStories();
-        if ($this->_type == 'all' || $this->_type == 'comments')
+        if (($this->_type == 'all' || $this->_type == 'comments') && $_CONF['comment_engine'] == 'internal' )
             $result_plugins[] = $this->_searchComments();
 
         // Loop through all plugins separating the new API from the old

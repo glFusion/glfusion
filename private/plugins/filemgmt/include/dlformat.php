@@ -127,6 +127,7 @@ $p->set_var('LANG_HOMEPAGE',_MD_HOMEPAGE);
 $p->set_var('homepage',$homepage);
 
 if ($comments) {
+    USES_lib_comments();
     $commentCount=DB_count($_TABLES['comments'],'sid',"fileid_$lid");
     $recentPostMessage =_MD_COMMENTSWANTED;
     if ($commentCount > 0) {
@@ -134,14 +135,22 @@ if ($comments) {
         $C = DB_fetchArray($result4);
         $dt->setTimestamp($C['day']);
         $recentPostMessage = $LANG01[27].': '.$dt->format($_CONF['daytime'],true). ' ' . $LANG01[104] . ' ' . $C['username'];
-        $comment_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/index.php?id=' .$lid.'" title="'.$recentPostMessage.'">' .$commentCount.'&nbsp;' .$LANG01[3]. '</a>';
     } else {
-        $comment_link = '<a href="' .$_CONF['site_url'] . '/comment.php?type=filemgmt&amp;sid=fileid_' .$lid.'" title="'.$recentPostMessage.'">' . _MD_ENTERCOMMENT . '</a>';
+        $commentCount = 0;
     }
-    $p->set_var('comment_link',$comment_link);
-    $p->set_var('show_comments','');
+    $comment_link = CMT_getCommentLinkWithCount(
+            'filemgmt',
+            $lid,
+            $_CONF['site_url'] .'/filemgmt/index.php?id=' .$lid,
+            $commentCount,
+            1
+        );
+
+    $p->set_var('comment_link',$comment_link['link_with_count']);
+    $p->set_var('show_comments','true');
 } else {
     $p->set_var('show_comments','none');
+    $p->unset_var('show_comments');
 }
 
 $p->set_var('LANG_DOWNLOAD',_MD_DOWNLOAD);

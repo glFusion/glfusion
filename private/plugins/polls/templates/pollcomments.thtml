@@ -1,3 +1,3 @@
 {# begin {templatelocation} #}
- | <a href="{poll_comments_url}">{num_comments} {lang_comments}</a>
+ | {poll_comments_url}
 {# end {templatelocation} #}
