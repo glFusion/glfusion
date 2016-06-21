@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - New feature - integrated 3rd party comment engines. glFusion now supports Disqus and Facebook comments
   - New headlines auto tag
   - New newimage auto tag
   - Rewrote fusionrescue to support improved layout and full PHP 7 compatibility
