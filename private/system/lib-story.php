@@ -41,6 +41,7 @@ if (!defined ('GVERSION')) {
 }
 
 USES_class_story();
+USES_lib_comment();
 
 require_once $_CONF['path_system'] . '/lib-webservices.php';
 
