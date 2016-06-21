@@ -1275,9 +1275,11 @@ function glfusion_160()
     $c = config::get_instance();
     $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
 
-$c->add('comment_engine','internal','select',4,6,30,1,TRUE);
-$c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
-$c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
+    if ( !isset($_CONF['comment_engine'])) {
+        $c->add('comment_engine','internal','select',4,6,30,1,TRUE);
+        $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
+        $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
+    }
 
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
