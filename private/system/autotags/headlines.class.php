@@ -41,8 +41,6 @@ class autotag_headlines extends BaseAutotag {
         // cols - number of columns to show
         // template - the template name
 
-        // defaults:
-
         $topic = $p1;
         if ( $topic == 'all' ) $topic = '';
         $uniqueID = md5($p1.$p2);
