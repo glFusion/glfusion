@@ -709,13 +709,15 @@ function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewr
             }
             if( $type == 'filemgmt' ) $type = 'filemgmt_fileid';
             $link = '<a href="'.$url.'" data-disqus-identifier='.$type.'_'.$sid.'>';
-            $retval['url']           = $url;
-            $retval['link']          = $link;
-            $retval['nonlink']       = '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'"></span>';
-            $retval['comment_count'] = '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'">0 '.$LANG01[83].'</span>';
-            $retval['comment_text']  = $LANG01[83];
-
-            $retval['link_with_count'] = $link.$cmtCount.' '.$LANG01[83].'</a>';
+            $retval = array(
+                        'url'   => $url,
+                        'url_extra'=> ' data-disqus-identifier="'.$type.'_'.$sid.'"',
+                        'link'  => $link,
+                        'nonlink'   => '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'"></span>',
+                        'comment_count'=> '<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'">0 '.$LANG01[83].'</span>',
+                        'comment_text'=> $LANG01[83],
+                        'link_with_count' => $link.'<span class="disqus-comment-count" data-disqus-identifier="'.$type.'_'.$sid.'">'.$cmtCount.' '.$LANG01[83].'</span></a>',
+                    );
             break;
         case 'facebook' :
             if ( $urlRewrite ) {
@@ -725,22 +727,29 @@ function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewr
             }
             $link = '<a href="'.$url.'">';
 
-            $retval['url']           = $url;
-            $retval['link']          = $link;
-            $retval['nonlink']       = '<span class="fb-comments-count" data-href="'.$url.'"></span>';
-            $retval['comment_count'] = '<span class="fb-comments-count" data-href="'.$url.'"></span> ' . $LANG01[83];
-            $retval['comment_text']  = $LANG01[83];
-            $retval['link_with_count'] = $link.'<span class="fb-comments-count" data-href="'.$url.'"></span>'.' '.$LANG01[83].'</a>';
+            $retval = array(
+                        'url'           => $url,
+                        'url_extra'     => '',
+                        'link'          => $link,
+                        'nonlink'       => '<span class="fb-comments-count" data-href="'.$url.'"></span>',
+                        'comment_count' => '<span class="fb-comments-count" data-href="'.$url.'"></span> ' . $LANG01[83],
+                        'comment_text'  => $LANG01[83],
+                        'link_with_count' => $link.'<span class="fb-comments-count" data-href="'.$url.'"></span>'.' '.$LANG01[83].'</a>',
+                    );
             break;
         case 'internal' :
         default :
             $link = '<a href="'.$url.'#comments">';
-            $retval['url']           = $url;
-            $retval['link']          = $link;
-            $retval['nonlink']       = '';
-            $retval['comment_count'] = $cmtCount . ' '. $LANG01[83];
-            $retval['comment_text']  = $LANG01[83];
-            $retval['link_with_count'] = $link . ' ' . $cmtCount . ' ' . $LANG01[83].'</a>';
+
+            $retval = array(
+                        'url'           => $url,
+                        'url_extra'     => '',
+                        'link'          => $link,
+                        'nonlink'       => '',
+                        'comment_count' => $cmtCount . ' '. $LANG01[83],
+                        'comment_text'  => $LANG01[83],
+                        'link_with_count' => $link . ' ' . $cmtCount . ' ' . $LANG01[83].'</a>',
+                    );
             break;
     }
     return $retval;

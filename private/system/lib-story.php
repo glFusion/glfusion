@@ -389,12 +389,12 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $commentsUrl = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#comments';
 
-
-$cmtLinkArray = CMT_getCommentLinkWithCount( 'article', $story->getSid(), $_CONF['site_url'].'/article.php?story=' . $story->getSid(),$story->DisplayElements('comments'),1);
-$article->set_var( 'comments_with_count_link', $cmtLinkArray['link_with_count'] );
-$article->set_var( 'comments_url',$cmtLinkArray['url']);
-$article->set_var( 'comments_text', $cmtLinkArray['comment_count']);
-$article->set_var( 'comments_count', $cmtLinkArray['comment_count']);
+                $cmtLinkArray = CMT_getCommentLinkWithCount( 'article', $story->getSid(), $_CONF['site_url'].'/article.php?story=' . $story->getSid(),$story->DisplayElements('comments'),1);
+                $article->set_var( 'comments_with_count_link', $cmtLinkArray['link_with_count'] );
+                $article->set_var( 'comments_url',$cmtLinkArray['url']);
+                $article->set_var( 'comments_url_extra',$cmtLinkArray['url_extra']);
+                $article->set_var( 'comments_text', $cmtLinkArray['comment_count']);
+                $article->set_var( 'comments_count', $cmtLinkArray['comment_count']);
 
 //                $article->set_var( 'comments_url', $commentsUrl );
 //                $article->set_var( 'comments_text',

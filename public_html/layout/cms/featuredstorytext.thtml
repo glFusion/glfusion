@@ -84,7 +84,7 @@
 {!endif}
 
 {!if comments_url}
-		<a class="uk-button" href="{comments_url}">{comments_count}</a>
+		<a class="uk-button" href="{comments_url}" {comments_url_extra}>{comments_count}</a>
 {!endif}
 	</p>
 
