@@ -1365,7 +1365,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if (isset($_CONF['comment_engine']) ) {
         switch ($_CONF['comment_engine']) {
             case 'disqus' :
-                $jsFooter .= '<script id="dsq-count-scr" src="//dev-glfusion.disqus.com/count.js" async></script>';
+                $jsFooter .= '<script id="dsq-count-scr" src="//'.$_CONF['comment_disqus_shortname'].'.disqus.com/count.js" async></script>';
                 break;
             case 'facebook' :
                 $theme->set_var('integrated_comments',
