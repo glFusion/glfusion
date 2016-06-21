@@ -793,7 +793,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                 $pageIdentifier = $type.'_'.$sid;
                 $pageURL = PLG_getItemInfo($type, $sid, 'url');
             }
-            $pageTitle = urlencode($title);
+            $pageTitle = $title;
             $pageURL = str_replace ( '&amp;', '&', $pageURL );
 
             $retval = '
