@@ -217,11 +217,13 @@ class autotag_headlines extends BaseAutotag {
                         'lang_comments'     => '',
                         'comments_count'    => $cmtLinkArray['comment_count'],
                         'comments_url'      => $cmtLinkArray['url'],
+                        'comments_url_extra'=> $cmtLinkArray['url_extra'],
                     ));
                 } else {
                     $T->unset_var('lang_comments');
                     $T->unset_var('comments_count');
                     $T->unset_var('comments_url');
+                    $T->unset_var('comments_url_extra');
                 }
 
                 $T->set_var(array(
