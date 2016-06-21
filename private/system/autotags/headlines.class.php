@@ -25,6 +25,8 @@ class autotag_headlines extends BaseAutotag {
     {
         global $_CONF, $_TABLES, $_USER, $LANG01;
 
+        USES_lib_comments();
+
         $retval = '';
         $skip = 0;
 
@@ -38,7 +40,6 @@ class autotag_headlines extends BaseAutotag {
         // frontpage - 1 = show only items marked for frontpage - 0 = show all
         // cols - number of columns to show
         // template - the template name
-
 
         // defaults:
 
@@ -209,11 +210,18 @@ class autotag_headlines extends BaseAutotag {
                 $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
                 $dt->setTimestamp($A['unixdate']);
 
-                if ( $A['comments'] > 0 ) {
-                    $commentsUrl = COM_buildUrl( $_CONF['site_url']
-                        . '/article.php?story=' . $A['sid'] ) . '#comments';
+                if ( $A['commentcode'] >= 0 ) {
+                    $cmtLinkArray = CMT_getCommentLinkWithCount( 'article', $A['sid'], $_CONF['site_url'].'/article.php?story=' . $A['sid'],$A['comments'],1);
+
+                    $T->set_var(array(
+                        'lang_comments'     => '',
+                        'comments_count'    => $cmtLinkArray['comment_count'],
+                        'comments_url'      => $cmtLinkArray['url'],
+                    ));
                 } else {
-                    $commentsUrl = '';
+                    $T->unset_var('lang_comments');
+                    $T->unset_var('comments_count');
+                    $T->unset_var('comments_url');
                 }
 
                 $T->set_var(array(
@@ -221,7 +229,6 @@ class autotag_headlines extends BaseAutotag {
                     'meta'              => ($meta ? TRUE : ''),
                     'lang_by'           => $LANG01[95],
                     'lang_posted_in'    => $LANG01['posted_in'],
-                    'lang_comments'     => $LANG01[3],
                     'story_topic_url'   => $topicurl,
                     'title'             => $title,
                     'subtitle'          => $subtitle,
@@ -231,8 +238,6 @@ class autotag_headlines extends BaseAutotag {
                     'time'              => $dt->format('Y-m-d',true).'T'.$dt->format('H:i:s',true),
                     'topic'             => $A['topic'],
                     'tid'               => $A['tid'],
-                    'comments_count'    => $A['comments'],
-                    'comments_url'      => $commentsUrl,
                     'author'            => $A['username'],
                     'author_id'         => $A['uid'],
                     'sid'               => $A['sid'],

@@ -49,7 +49,7 @@
 				<li><time datetime="{time}">{date}</time></li>
 				<li>{lang_posted_in} <a href="{story_topic_url}">{topic}</a></li>
 {!if comments_url}
-				<li><a class="" href="{comments_url}">{comments_count} {lang_comments}</a></li>
+				<li><a class="" href="{comments_url}">{comments_count}</a></li>
 {!endif}
 			</ul>
 {!endif}
