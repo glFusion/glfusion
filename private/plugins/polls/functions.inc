@@ -1390,13 +1390,9 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                         COM_numberFormat($num_comments));
                 $poll->set_var('lang_comments', $LANG01[3]);
 
- $commentsUrl = $_CONF['site_url'].'/polls/index.php?pid=' . $pid . '#comments';
-if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'disqus') {
-    $commentsUrl = str_replace('#comments','#disqus_thread',$commentsUrl);
-}
-
-
-                $poll->set_var('poll_comments_url', $commentsurl);
+                $cmtLinkArray = CMT_getCommentLinkWithCount( 'polls',$pid, $_CONF['site_url'].'/polls/index.php?pid=' . $pid,$num_comments,0);
+                $commentsUrl = $cmtLinkArray['url'];
+                $poll->set_var('poll_comments_url', $commentsUrl);
                 $poll->parse('poll_comments', 'comments', true);
             } else {
                 $poll->set_var('poll_comments_url', '');
