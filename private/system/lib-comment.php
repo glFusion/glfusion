@@ -797,6 +797,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
             $pageURL = str_replace ( '&amp;', '&', $pageURL );
 
             $retval = '
+            <a name="comment_entry"></a>
             <div id="disqus_thread"></div>
             <script>
                 var disqus_config = function () {
@@ -828,7 +829,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
             $pageTitle = urlencode($title);
             $pageURL = str_replace ( '&amp;', '&', $pageURL );
 
-            $retval = '<div class="fb-comments" data-href="'.$pageURL.'" data-numposts="20"></div>';
+            $retval = '<a name="comment_entry"></a><div class="fb-comments" data-href="'.$pageURL.'" data-numposts="20"></div>';
             break;
 
         case 'internal' :
