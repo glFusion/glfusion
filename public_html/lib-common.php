@@ -860,7 +860,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_SYSTEM, $_VARS, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout, $blockInterface;
+           $LANG_LOCALE, $theme_headercode, $theme_layout, $blockInterface;
 
     if ( !isset($_USER['theme']) || $_USER['theme'] == '' ) {
         $_USER['theme'] = $_CONF['theme'];
@@ -905,6 +905,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $header = new Template( $_CONF['path_layout'] );
     $header->set_file('header','htmlheader.thtml');
+
+    $header->set_var('lang_locale',$LANG_LOCALE);
 
     $cacheID = SESS_getVar('cacheID');
     if ( empty($cacheID) || $cacheID == '' ) {
