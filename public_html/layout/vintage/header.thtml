@@ -5,6 +5,7 @@
 {raw-header}
 </head>
 <body dir="{direction}" style="background:#000000;">
+{integrated_comments}
 <div>
   <a id="top"></a>
   <a href="#content-start"> {# for screenreaders #}

@@ -16,7 +16,8 @@
             </div>
         </div>
     </div> {# end of gl_container #}
-<script type="text/javascript" src="{layout_url}/js/footer.js"></script>
+{js-footer}
+{raw-footer}
 </body>
 </html>
 {# end {templatelocation} #}

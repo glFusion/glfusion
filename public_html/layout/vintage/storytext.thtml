@@ -31,7 +31,7 @@
         {!endif}
         {plugin_itemdisplay}
         {!if comments_count}
-            {comments_with_count}
+            <a href="{comments_url}" {comments_url_extra}>{comments_count}</a>
         {!endif}
             &nbsp;&nbsp;{post_comment_link}
         {!if trackbacks_count}
