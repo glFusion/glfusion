@@ -2686,7 +2686,10 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
-    'infinite_scroll' => 'Enable Infinite Scroll'
+    'infinite_scroll' => 'Enable Infinite Scroll',
+    'comment_engine' => 'Comment Engine',
+    'comment_disqus_shortname' => 'Disqus Shortname',
+    'comment_fb_appid' => 'Facebook App ID'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2781,7 +2784,8 @@ $LANG_configselects['Core'] = array(
     26 => array('Ninguno' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
     27 => array('Generar Contraseña' => 0, 'Contraseña dada por el Usuario' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
-    29 => array('Diariamente' => 86400, 'Semanalmente' => 604800, 'Cada hora' => 3600, 'Siempre' => 0)
+    29 => array('Diariamente' => 86400, 'Semanalmente' => 604800, 'Cada hora' => 3600, 'Siempre' => 0),
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
 );
 
 ?>
