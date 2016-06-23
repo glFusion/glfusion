@@ -41,7 +41,7 @@ if (!defined ('CONFIG_CACHE_FILE_NAME')) {
 class config {
     var $dbconfig_file;
     var $config_array;
-    var $consumer_keys = array('facebook_consumer_key','facebook_consumer_secret','linkedin_consumer_key','linkedin_consumer_secret','twitter_consumer_key','twitter_consumer_secret','google_consumer_key','google_consumer_secret','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_key','github_consumer_secret');
+    var $consumer_keys = array('facebook_consumer_key','facebook_consumer_secret','linkedin_consumer_key','linkedin_consumer_secret','twitter_consumer_key','twitter_consumer_secret','google_consumer_key','google_consumer_secret','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_key','github_consumer_secret','comment_fb_appid');
 
     /**
      * This function will return an instance of the config class. If an
@@ -662,7 +662,7 @@ class config {
                 $fs_contents = '';
                 foreach ($params as $name => $e) {
                     if ( defined('DEMO_MODE') ) {
-                        if ( in_array($name,array('facebook_login','facebook_consumer_key','facebook_consumer_secret','linkedin_login','linkedin_consumer_key','linkedin_consumer_secret','twitter_login','twitter_consumer_key','twitter_consumer_secret','google_login','google_consumer_key','google_consumer_secret','microsoft_login','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_secret','github_consumer_key','path_html','path_log','path_language','backup_path','path_data','path_pear','mysqldump_path','path_themes','path_images','uploadpath','rdf_file','site_url','site_admin_url','FileStore','SnapStore','SnapCat','FileStoreURL','SnapCatURL','FileSnapURL','bb2_enabled','bb2_httpbl_key'))) {
+                        if ( in_array($name,array('facebook_login','facebook_consumer_key','facebook_consumer_secret','linkedin_login','linkedin_consumer_key','linkedin_consumer_secret','twitter_login','twitter_consumer_key','twitter_consumer_secret','google_login','google_consumer_key','google_consumer_secret','microsoft_login','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_secret','github_consumer_key','path_html','path_log','path_language','backup_path','path_data','path_pear','mysqldump_path','path_themes','path_images','uploadpath','rdf_file','site_url','site_admin_url','FileStore','SnapStore','SnapCat','FileStoreURL','SnapCatURL','FileSnapURL','bb2_enabled','bb2_httpbl_key','1203495882994835','comment_disqus_shortname'))) {
                             continue;
                         }
                     }
