@@ -611,15 +611,15 @@ function phpblock_statsblock() {
 
 
 /**
-* This function replaces the What's Related section 
-* at the end of articles with the headlines autotag and 
+* This function replaces the What's Related section
+* at the end of articles with the headlines autotag and
 * will display related stories within the same topic
-* in a responsive grid. 
-* 
+* in a responsive grid.
+*
 * If enabled file your_theme/article/article.thtml
 * will need to be adjusted. Below is a suggestion
 *
-* create a file in your_theme/article/custom/article.thtml 
+* create a file in your_theme/article/custom/article.thtml
 * and add the following
 */
 
@@ -652,7 +652,5 @@ function CUSTOM_whatsRelated( $related, $uid, $tid )
     return PLG_replaceTags($at_text);
 
 }*/
-
-?>
 
 ?>
