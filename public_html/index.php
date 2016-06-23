@@ -339,6 +339,12 @@ if ( $A = DB_fetchArray( $result ) ) {
 
 if (isset($_CONF['infinite_scroll']) && $_CONF['infinite_scroll'] == true ) {
     $T->set_var('enable_infinite_scroll',true);
+    if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'facebook') {
+        $T->set_var('fb_comment_engine',true);
+    }
+    if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'disqus') {
+        $T->set_var('comment_disqus_shortname',$_CONF['comment_disqus_shortname']);
+    }
 }
 
 $T->set_var('page_contents',$pageBody);
