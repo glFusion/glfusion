@@ -20,6 +20,15 @@ $(document).ready(function() {
   	element: $('.infinite-container')[0],
  	  onAfterPageLoad: function() {
  	  	counter++;
+{!if comment_disqus_shortname}
+			var disqus_shortname = "{comment_disqus_shortname}";
+			$(document).ready (function () {
+			$.getScript ("http://" + disqus_shortname + ".disqus.com/count.js");
+			});
+{!endif}
+{!if fb_comment_engine}
+ 	  	FB.XFBML.parse();
+{!endif}
  	  },
  	  onBeforePageLoad: function() {
  	  	if (counter > 3 ) {
@@ -30,19 +39,6 @@ $(document).ready(function() {
  	  		throw true;
  	  	}
  	  },
-{!if fb_comment_engine}
- 	  onAfterPageLoad: function() {
- 	  	FB.XFBML.parse();
- 	  },
-{!endif}
-{!if comment_disqus_shortname}
-		onAfterPageLoad: function() {
-			var disqus_shortname = "{comment_disqus_shortname}";
-			$(document).ready (function () {
-			$.getScript ("http://" + disqus_shortname + ".disqus.com/count.js");
-			});
-		},
-{!endif}
  	}); /* var infinite */
 	$('#pagination').hide();
 });
