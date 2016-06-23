@@ -109,7 +109,7 @@ $_SQL['mg_albums'] = "CREATE TABLE {$_TABLES['mg_albums']} (
 ";
 
 $_SQL['mg_config']="CREATE TABLE {$_TABLES['mg_config']} (
-  `config_name` varchar(255) NOT NULL default '',
+  `config_name` varchar(128) NOT NULL default '',
   `config_value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`config_name`)
 ) ENGINE=MyISAM
@@ -213,7 +213,7 @@ $_SQL['mg_media_album_queue']="CREATE TABLE {$_TABLES['mg_media_album_queue']} (
 
 $_SQL['mg_playback_options']="CREATE TABLE {$_TABLES['mg_playback_options']} (
   `media_id` varchar(40) NOT NULL default '',
-  `option_name` varchar(255) NOT NULL default '',
+  `option_name` varchar(128) NOT NULL default '',
   `option_value` varchar(255) NOT NULL default '',
   UNIQUE KEY `media_id_2` (`media_id`,`option_name`),
   KEY `media_id` (`media_id`)
@@ -361,7 +361,7 @@ $_SQL['mg_rating'] = "CREATE TABLE {$_TABLES['mg_rating']} (
 ";
 
 $_SQL['mg_exif_tags']="CREATE TABLE {$_TABLES['mg_exif_tags']} (
-  `name` varchar(255) NOT NULL default '',
+  `name` varchar(128) NOT NULL default '',
   `selected` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`name`)
 ) ENGINE=MyISAM

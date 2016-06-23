@@ -169,7 +169,7 @@ $_SQL['ff_userprefs'] = "CREATE TABLE {$_TABLES['ff_userprefs']} (
 # Table structure for table `forum_banned_ip`
 #
 $_SQL['ff_banned_ip'] = "CREATE TABLE {$_TABLES['ff_banned_ip']} (
-  host_ip varchar(255) default NULL,
+  host_ip varchar(128) default NULL,
   KEY index1 (host_ip)
 ) ENGINE=MyISAM;";
 
