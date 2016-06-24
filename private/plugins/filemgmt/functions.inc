@@ -975,7 +975,8 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
     foreach ($properties as $p) {
         switch ($p) {
             case 'date-modified':
-                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+            case 'date-created' :
+                $fields[] = 'date AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
@@ -1038,8 +1039,9 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date-created' :
                 case 'date-modified':
-                    $props['date-modified'] = $A['unixdate'];
+                    $props[$p] = $A['unixdate'];
                     break;
                 case 'description':
                 case 'excerpt':
