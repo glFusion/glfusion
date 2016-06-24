@@ -1290,6 +1290,12 @@ function glfusion_160()
     $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('newimage', 'HTML: embeds new images in flexible grid. usage: [newimage:<i>#</i> - How many images to display <i>truncate:0/1</i> - 1 = truncate number of images to keep square grid <i>caption:0/1</i> 1 = include title]', 1, 1, '');";
     $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} DROP `sp_catid`;";
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;";
+    $_SQL[] = "DROP INDEX `trackback_url` ON {$_TABLES['trackback']};";
+
     // create social share table
 
     $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
