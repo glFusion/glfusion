@@ -23,7 +23,7 @@ $(document).ready(function() {
 {!if comment_disqus_shortname}
 			var disqus_shortname = "{comment_disqus_shortname}";
 			$(document).ready (function () {
-			$.getScript ("http://" + disqus_shortname + ".disqus.com/count.js");
+			$.getScript ("//" + disqus_shortname + ".disqus.com/count.js");
 			});
 {!endif}
 {!if fb_comment_engine}
