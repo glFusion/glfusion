@@ -271,7 +271,7 @@ function install_config($site_url)
     $c->add('skip_preview',0,'select',4,5,0,70,TRUE);
 
     $c->add('fs_comments', NULL, 'fieldset', 4, 6, NULL, 0, TRUE);
-    $c->add('comment_engine','internal','select',4,30,NULL,10,TRUE);
+    $c->add('comment_engine','internal','select',4,6,30,10,TRUE);
     $c->add('comment_disqus_shortname','','text',4,6,NULL,20,TRUE);
     $c->add('comment_fb_appid','','text',4,6,NULL,30,TRUE);
     $c->add('commentspeedlimit',45,'text',4,6,NULL,40,TRUE);

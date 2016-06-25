@@ -1198,6 +1198,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
+            $c->add('comment_engine','internal','select',4,6,30,1,TRUE);
+            $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
+            $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
 
             $_SQL = array();
 
@@ -1239,9 +1242,17 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               UNIQUE KEY `ssid` (`ssid`,`uid`)
             ) ENGINE=MyISAM;";
 
-            foreach ($_SQL as $sql) {
-                DB_query($sql,1);
-            }
+            $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;";
+            $_SQL[] = "DROP INDEX `trackback_url` ON {$_TABLES['trackback']};";
+
+            list($rc,$errors) = INST_updateDB($_SQL);
+
+//            foreach ($_SQL as $sql) {
+//                DB_query($sql,1);
+//            }
 
             $_DATA = array();
 
@@ -2076,7 +2087,7 @@ function INST_resyncConfig() {
     $c->sync('skip_preview',0,'select',4,5,0,70,TRUE);
 
     $c->sync('fs_comments', NULL, 'fieldset', 4, 6, NULL, 0, TRUE);
-    $c->sync('comment_engine','internal','select',4,30,NULL,10,TRUE);
+    $c->sync('comment_engine','internal','select',4,6,30,10,TRUE);
     $c->sync('comment_disqus_shortname','','text',4,6,NULL,20,TRUE);
     $c->sync('comment_fb_appid','','text',4,6,NULL,30,TRUE);
     $c->sync('commentspeedlimit',45,'text',4,6,NULL,40,TRUE);
