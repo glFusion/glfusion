@@ -91,9 +91,7 @@
 				$.get(attrHref, function(data) {
 					var confVar = ajobj.attr('id');
 					if (data.indexOf(confVar) > 0) {
-						var a = $(data).find('a[name=desc_' + confVar + ']');
-						var tds = a.parent().parent().children("td");
-						var desc = tds.eq(1).html();
+						var desc = $(data).find('#desc_' + confVar + ' dd:first').text();
 						origin.tooltipster('content', desc);
 					} else {
 						origin.tooltipster('content', 'No Help Text Found');
