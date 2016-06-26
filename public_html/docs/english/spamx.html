@@ -1,618 +1,338 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-
-
-
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-
-
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-
-
-  <meta name="robots" content="noindex,nofollow" />
-
-
-  <title>Spam-X Plugin - glFusion CMS</title>
-</head>
-
-
-
-<body style="direction: ltr;">
-
-
-<div id="gl_container_fluid">
-<div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a name="spam-x" id="spam-x">Spam-X</a></h1>
-
-
-<div class="level1">
-<p>The glFusion Spam-X plugin was created to fight the problem of
-comment
-spam for glFusion systems. If you are unfamiliar with comment spam you
-might see the Comment Spam Manifesto.
-</p>
-
-
-<p>Spam protection in glFusion is mostly based on the Spam-X
-plugin,
-originally developed by Tom Willet. It has a modular architecture that
-allows it to be extended with new modules to fight the spammer's latest
-tricks, should the need arise.
-What is being checked for spam?
-</p>
-
-
-<p>
-glFusion and the Spam-X plugin will check the following for spam:
-</p>
-
-
-<ul>
-
-
-  <li class="level1">
-
-    <div class="li"> Story submissions</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Comments</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Trackbacks and Pingbacks</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Event submissions</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Link submissions</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Forum Posts</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> The text sent with the
-&ldquo;Email story to a friend&rdquo; option</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Emails sent to users via the
-&ldquo;send email&rdquo; form from their profile page</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> A user's profile</div>
-
-
-  </li>
-
-
-</ul>
-
-
-</div>
-
-
-<h1><a name="module_types" id="module_types">Module
-Types</a></h1>
-
-
-<div class="level1">
-<p>The Spam-X plugin was built to be expandable to easily adapt
-to
-changes the comment spammers might make. There are three types of
-modules: Examine, Action, and Admin. A new module is contained in a
-file and can simply be dropped in and it will be added to the plugin.
-Examine Modules
-</p>
-
-
-<p>
-glFusion ships with the following examine modules:
-</p>
-
-
-<ul>
-
-
-  <li class="level1">
-
-    <div class="li"> Spam Link Verification (SLV)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> Personal Blacklist</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> IP Filter</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> IP of <acronym title="Uniform Resource Locator">URL</acronym> Filter</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li"> <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
-Header Filter</div>
-
-
-  </li>
-
-
-</ul>
-
-
-</div>
-
-
-<h2><a name="spam_link_verification_slv" id="spam_link_verification_slv">Spam Link Verification (SLV)</a></h2>
-
-
-<div class="level2">
-<p>SLV is a centralized, server-based service that examines posts
-made
-on websites and detects when certain links show up in unusually high
-numbers. In other words, when a spammer starts spamming a lot of sites
-with the same URLs and those sites all report to SLV, the system will
-recognize this as a spam wave and will flag posts containing these URLs
-as spam.
-</p>
-
-
-<p>In other words still, it's a dynamic blacklist that
-automatically
-updates itself when a spammer starts spamming for their site. And it
-can only get better (in terms of accuracy and reaction speed) the more
-sites use it.
-</p>
-
-
-<p>
-SLV is a free service run by Russ Jones at <a href="http://www.linksleeve.org" class="urlextern" title="http://www.linksleeve.org" rel="nofollow">www.linksleeve.org</a>.
-</p>
-
-
-<p>Privacy Notice: It should be stressed that using SLV means
-that
-information from your site is being sent to a third party's site. In
-some legislations you may have to inform your users about this fact -
-please check with your local privacy laws.
-</p>
-
-
-<p>Sending information to an external site may also be
-undesirable on
-some setups, e.g. on a company intranet. You can disable SLV support by
-removing the four files SLV.Examine.class.php, SLVbase.class.php,
-SLVreport.Action.class.php, and SLVwhitelist.Admin.class.php from your
-Spam-X directory (/path/to/glfusion/plugins/spamx). Or you can simply
-disable the Spam-X plugin entirely (or uninstall it).
-</p>
-
-
-<p>The SLV Examine and Action modules will extract all URLs from
-a post
-and only send those to SLV (i.e. the rest of the post's content is not
-being sent). They also remove any links that contain your glFusion
-site's <acronym title="Uniform Resource Locator">URL</acronym>.
-In case a post does not contain any external links, the modules simply
-do not contact SLV at all.
-</p>
-
-
-</div>
-
-
-<h2><a name="personal_blacklist" id="personal_blacklist">Personal
-Blacklist</a></h2>
-
-
-<div class="level2">
-<p>The Personal Blacklist module lets you add keywords and URLs
-that
-typically exist in spam posts. When you're being hit by spam, make sure
-to add the URLs of those spam posts to your Personal Blacklist so that
-they can be filtered out automatically, should the spammer try to post
-them again.
-</p>
-
-
-<p>This will also help you get rid of spam that made it through,
-as you
-can then use the Mass Delete Comments and Mass Delete Trackbacks
-modules to easily remove large numbers of spam posts from your
-database.
-</p>
-
-
-<p>The Personal Blacklist also has an option to import the
-glFusion
-censor list and ban all comments which contain one of those words. This
-or an expanded list might be useful for a website that caters to
-children. Then no comments with offensive language could be posted.
-</p>
-
-
-</div>
-
-
-<h2><a name="ip_filter" id="ip_filter">IP
-Filter</a></h2>
-
-
-<div class="level2">
-<p>Sometimes you will encounter spam that is coming from one or
-only a
-few IP addresses. By simply adding those IP addresses to the IP Filter
-module, any posts from these IPs will be blocked automatically.
-</p>
-
-
-<p>
-In addition to single IP addresses, you can also add IP address ranges,
-either in CIDR notation or as simple from-to ranges.
-</p>
-
-
-<p>Please note that IP addresses aren't really a good filter
-criterion.
-While some ISPs and hosting services are known to host spammers, it
-won't help much to block an IP address by one of the well-known ISPs.
-Often, the spammer will get a new IP address the next time he connects
-to the internet, while the blocked IP address will be reused and may be
-used by some innocent user.
-</p>
-
-
-</div>
-
-
-<h2><a name="ip_of_url_filter" id="ip_of_url_filter">IP
-of URL Filter</a></h2>
-
-
-<div class="level2">
-<p>This module is only useful in a few special cases: Here you
-enter
-the IP address of a webserver that is used to host domains for which
-you may see spam. Some spammers have a lot of their sites on only a few
-webservers, so instead of adding lots of domains to your blacklist, you
-only add the IP addresses of those webservers. The Spam-X module will
-then check all the URLs in a post to see if any of these is hosted on
-one of those blacklisted webservers.
-</p>
-
-
-</div>
-
-
-<h2><a name="http_header_filter" id="http_header_filter">HTTP
-Header Filter</a></h2>
-
-
-<div class="level2">
-<p>This module lets you filter for certain <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
-headers. Every <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
-request sent to your site is accompanied by a series of headers
-identifying, for example, the browser that your visitors uses, their
-preferred language, and other information.
-</p>
-
-
-<p>
-With the Header filter module, you can block <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
-requests with certain headers. For example, some spammers are using <acronym title="Practical Extraction and Report Language">Perl</acronym>
-scripts to send their spam posts. The user agent (browser
-identification) sent by <acronym title="Practical Extraction and Report Language">Perl</acronym>
-scripts is usually something like
-&ldquo;libwww-perl/5.805&rdquo; (the version
-number may vary). So to block posts made by this user agent, you would
-enter:
-</p>
-
-
-<table class="inline">
-
-
-  <tbody>
-
-
-    <tr class="row0">
-
-
-      <td class="col0 leftalign">Header: </td>
-
-
-      <td class="col1 leftalign">User-Agent </td>
-
-
-    </tr>
-
-
-    <tr class="row1">
-
-
-      <td class="col0 leftalign">Content: </td>
-
-
-      <td class="col1 leftalign">^libwww-perl </td>
-
-
-    </tr>
-
-
-
-  </tbody>
-</table>
-
-
-<p>
-This would block all posts from user agents beginning with
-&ldquo;libwww-perl&rdquo;.
-</p>
-
-
-</div>
-
-
-<h2><a name="action_modules" id="action_modules">Action
-Modules</a></h2>
-
-
-<div class="level2">
-<p>Once one of the examine modules detects a spam post, the
-action
-modules will decide what to do with the spam. Most of the time, you
-will simply want to delete the post then, so this is what the Delete
-Action module does.
-</p>
-
-
-<p>As the name implies, the Mail Admin Action module sends an
-email to
-the site admin when a spam post is encountered. Since this can cause
-quite a lot of emails being sent, it is disabled by default.
-</p>
-
-
-<p>Action modules have to be enabled specifically before they are
-used
-(examine modules, on the other hand, are activated by simply dropping
-them into the Spam-X directory). For this, every action module has a
-unique number that needs to be added up with the number of the other
-action modules you want to enable and entered as the value for the
-spamx config variable in glFusion's main configuration.
-</p>
-
-
-</div>
-
-
-<h2><a name="example" id="example">Example</a></h2>
-
-
-<div class="level2">
-<p>The Delete Action module has the value 128, while the Mail
-Admin
-Action module has the value 8. So to activate both modules, add 128 + 8
-= 136 and enter that in the Configuration admin panel.
-</p>
-
-
-<p>The SLV Examine module is complemented by a SLV Action module
-that
-ensures that SLV is notified of spam posts caught by other examine
-modules. It &ldquo;piggybacks&rdquo; on the Delete Action
-module, i.e. when you
-activate the Delete Action module, you'll also enable the SLV Action
-module.
-</p>
-
-
-</div>
-
-
-<h2><a name="admin_modules" id="admin_modules">Admin
-Modules</a></h2>
-
-
-<div class="level2">
-<p>The Admin modules for the Personal Blacklist, IP Filter, IP of
-<acronym title="Uniform Resource Locator">URL</acronym>
-Filter, and <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
-Header Filter modules provide you with a form to add new entries. To
-delete an existing entry, simply click on it.
-</p>
-
-
-<p>With the SLV Whitelist admin module you can add URLs that you
-don't
-want to be reported to SLV. This is useful when posts on your site
-happen to contain certain URLs quite often but you don't want those to
-be considered spam by SLV.
-Note that your site's <acronym title="Uniform Resource Locator">URL</acronym>
-(i.e. $_CONF['site_url']) is automatically whitelisted, so you don't
-need to add it here.
-</p>
-
-
-<p>
-The Log View module lets you inspect and clear the Spam-X logfile. The
-logfile contains additional information about the spam posts, e.g.
-which IP address they came from, the user id (if posted by a logged-in
-user), and which of the examine modules caught the spam post.
-</p>
-
-
-<p>In case a large number of spam posts made it through without
-being
-caught, the Mass Delete Comments and Mass Delete Trackbacks modules
-will help you get rid of them easily. Before you use these modules,
-make sure to add the URLs or keywords from those spams to your Personal
-Blacklist.
-</p>
-
-
-</div>
-
-
-<h2><a name="trackback_spam" id="trackback_spam">Trackback
-Spam</a></h2>
-
-
-<p>Trackbacks are also run through Spam-X before they will be
-accepted
-by glFusion. There are also some additional checks that can be
-performed on trackbacks: glFusion can be configured to check if the
-site that supposedly sent the trackback actually contains a link back
-to your site. In addition, glFusion can also check if the IP address of
-the site in the trackback <acronym title="Uniform Resource Locator">URL</acronym>
-matches the IP address that sent the trackback. Trackbacks that fail
-any of these tests are usually spam. Please refer to the documentation
-for the configuration for more information.
-Configuration File
-</p>
-
-
-<p>
-The Spam-X plugin's configuration can be changed from the Configuration
-admin panel:
-Spam-X Main Settings</p>
-<h1><a id="spam-x_configuration_options" name="spam-x_configuration_options">Spam-X
-Configuration Options</a></h1>
-
-<div class="level1">
-<table class="inline">
-
-  <tbody>
-
-    <tr class="row0">
-
-      <th class="col0 leftalign">Option </th>
-
-      <th class="col1 leftalign">Description </th>
-    </tr>
-
-    <tr class="row1">
-
-      <td class="col0 leftalign"><a name="desc_logging"></a>Enable Logging </td>
-
-      <td class="col1 leftalign">Whether to log recognized spam posts in the spamx.log
-logfile (if set to True) or not (False). </td>
-    </tr>
-
-    <tr class="row2">
-
-      <td class="col0 leftalign"><a name="desc_admin_override"></a>Don't Filter Admin Posts </td>
-
-      <td class="col1 leftalign">The Spam-X plugin will filter posts by any user -
-even site admins. This can be a problem sometimes, e.g. when you want to post a
-note about spam that itself contains &ldquo;spammy&rdquo; URLs or keywords. When this option
-is set to True then posts made by users in the 'spamx Admin' group are not
-checked for spam. </td>
-    </tr>
-
-    <tr class="row3">
-
-      <td class="col0 leftalign"><a name="desc_timeout"></a>Timeout </td>
-
-      <td class="col1 leftalign">Timeout (in seconds) for contacting external services
-such as SLV. </td>
-    </tr>
-
-    <tr class="row4">
-
-      <td class="col0 leftalign"><a name="desc_notification_email"></a>Notification Email </td>
-
-      <td class="col1 leftalign">Email address to which spam notifications are sent
-when the Mail Admin action module is enabled. </td>
-    </tr>
-
-    <tr class="row5">
-
-      <td class="col0 leftalign"><a name="desc_action"></a>Spam-X Actions </td>
-
-      <td class="col1 leftalign">This only exists as a fallback in case
-$_CONF['spamx'] in glFusion's main configuration is not set. (i.e.
-$_CONF['spamx'] takes precedence). </td>
-    </tr>
-  </tbody>
-</table>
-</div>
-<!-- wikipage stop -->
-<p>
-</p>
-</div>
-
-
-</div>
-
-
-</div>
-
-
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Spam-X Configuration</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Spam-X Plugin
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+
+				<h1>Spam-X</h1>
+
+				<p>
+					The glFusion Spam-X plugin was created to fight the problem of comment spam for glFusion systems.
+					If you are unfamiliar with comment spam you might see the Comment Spam Manifesto.
+				</p>
+
+
+				<p>
+					Spam protection in glFusion is mostly based on the Spam-X plugin, originally developed by
+					Tom Willet. It has a modular architecture that allows it to be extended with new modules
+					to fight the spammer's latest tricks, should the need arise. What is being checked for spam?
+				</p>
+
+				<p>
+					glFusion and the Spam-X plugin will check the following for spam:
+				</p>
+
+				<ul>
+					<li>Story submissions</li>
+					<li>Comments</li>
+					<li>Trackbacks and Pingbacks</li>
+					<li>Event submissions</li>
+					<li>Link submissions</li>
+					<li>Forum Posts</li>
+					<li>The text sent with the &ldquo;Email story to a friend&rdquo; option</li>
+					<li>Emails sent to users via the &ldquo;send email&rdquo; form from their profile page</li>
+					<li>A user's profile</li>
+				</ul>
+
+
+			<h1>Module Types</a></h1>
+
+				<p>
+					The Spam-X plugin was built to be expandable to easily adapt to
+					changes the comment spammers might make. There are three types of
+					modules: Examine, Action, and Admin. A new module is contained in a
+					file and can simply be dropped in and it will be added to the plugin.
+					Examine Modules
+				</p>
+
+				<p>
+					glFusion ships with the following examine modules:
+				</p>
+
+				<ul>
+					<li>Stop Forum Spam (SFS)</li>
+					<li>Personal Blacklist</li>
+					<li>IP Filter</li>
+					<li>IP of URL Filter</li>
+					<li>HTTP Header Filter</li>
+				</ul>
+
+				<h2>Stop Forum Spam (SFS)</h2>
+
+				<p>
+					SFS is a centralized, server-based service that examines posts
+					made on websites and detects when certain links show up in unusually high
+					numbers. In other words, when a spammer starts spamming a lot of sites
+					with the same URLs and those sites all report to SFS, the system will
+					recognize this as a spam wave and will flag posts containing these URLs
+					as spam.
+				</p>
+
+
+				<p>In other words still, it's a dynamic blacklist that
+					automatically updates itself when a spammer starts spamming for their site. And it
+					can only get better (in terms of accuracy and reaction speed) the more
+					sites use it.
+				</p>
+
+
+				<p>
+					SFS is a free service run by Project HoneyPot at <a href="http://www.linksleeve.org" rel="nofollow">www.linksleeve.org</a>.
+				</p>
+
+
+				<p>Privacy Notice: It should be stressed that using SFS means
+					that information from your site is being sent to a third party's site. In
+					some legislations you may have to inform your users about this fact -
+					please check with your local privacy laws.
+				</p>
+
+				<p>Sending information to an external site may also be
+					undesirable on some setups, e.g. on a company intranet. You can disable SFS support by
+					removing the four files SFS.Examine.class.php, SFSbase.class.php,
+					SFSreport.Action.class.php, and SFSwhitelist.Admin.class.php from your
+					Spam-X directory (/path/to/glfusion/plugins/spamx/modules). Or you can simply
+					disable the Spam-X plugin entirely (or uninstall it).
+				</p>
+
+				<h2>Personal Blacklist</h2>
+
+				<p>
+					The Personal Blacklist module lets you add keywords and URLs that
+					typically exist in spam posts. When you're being hit by spam, make sure
+					to add the URLs of those spam posts to your Personal Blacklist so that
+					they can be filtered out automatically, should the spammer try to post
+					them again.
+				</p>
+
+				<p>
+					This will also help you get rid of spam that made it through, as you
+					can then use the Mass Delete Comments and Mass Delete Trackbacks
+					modules to easily remove large numbers of spam posts from your
+					database.
+				</p>
+
+				<p>
+					The Personal Blacklist also has an option to import the glFusion
+					censor list and ban all comments which contain one of those words. This
+					or an expanded list might be useful for a website that caters to
+					children. Then no comments with offensive language could be posted.
+				</p>
+
+				<h2>IP Filter</h2>
+
+				<p>
+					Sometimes you will encounter spam that is coming from one or only a
+					few IP addresses. By simply adding those IP addresses to the IP Filter
+					module, any posts from these IPs will be blocked automatically.
+				</p>
+
+				<p>
+					In addition to single IP addresses, you can also add IP address ranges,
+					either in CIDR notation or as simple from-to ranges.
+				</p>
+
+				<p>
+					Please note that IP addresses aren't really a good filter
+					criterion. While some ISPs and hosting services are known to host spammers, it
+					won't help much to block an IP address by one of the well-known ISPs.
+					Often, the spammer will get a new IP address the next time he connects
+					to the internet, while the blocked IP address will be reused and may be
+					used by some innocent user.
+				</p>
+
+				<h2>IP of URL Filter</h2>
+
+				<p>
+					This module is only useful in a few special cases: Here you enter
+					the IP address of a webserver that is used to host domains for which
+					you may see spam. Some spammers have a lot of their sites on only a few
+					webservers, so instead of adding lots of domains to your blacklist, you
+					only add the IP addresses of those webservers. The Spam-X module will
+					then check all the URLs in a post to see if any of these is hosted on
+					one of those blacklisted webservers.
+				</p>
+
+				<h2>HTTP Header Filter</h2>
+
+				<p>
+					This module lets you filter for certain HTTP headers. Every HTTP request sent
+					to your site is accompanied by a series of headers identifying, for example,
+					the browser that your visitors uses, their preferred language, and other information.
+				</p>
+
+				<p>
+					With the Header filter module, you can block HTTP requests with certain headers.
+					For example, some spammers are using Perl scripts to send their spam posts. The user agent (browser
+					identification) sent by Perl scripts is usually something like &ldquo;libwww-perl/5.805&rdquo;
+					(the version number may vary). So to block posts made by this user agent, you would
+					enter:
+				</p>
+
+				<table class="uk-table">
+					<tr>
+						<td>Header: </td>
+						<td>User-Agent </td>
+					</tr>
+					<tr>
+						<td>Content: </td>
+						<td>^libwww-perl </td>
+					</tr>
+				</table>
+
+				<p>
+					This would block all posts from user agents beginning with
+					&ldquo;libwww-perl&rdquo;.
+				</p>
+
+				<h2>Action Modules</h2>
+
+				<p>
+					Once one of the examine modules detects a spam post, the action
+					modules will decide what to do with the spam. Most of the time, you
+					will simply want to delete the post then, so this is what the Delete
+					Action module does.
+				</p>
+
+				<p>
+					As the name implies, the Mail Admin Action module sends an email to
+					the site admin when a spam post is encountered. Since this can cause
+					quite a lot of emails being sent, it is disabled by default.
+				</p>
+
+				<p>
+					Action modules have to be enabled specifically before they are used
+					(examine modules, on the other hand, are activated by simply dropping
+					them into the Spam-X directory). For this, every action module has a
+					unique number that needs to be added up with the number of the other
+					action modules you want to enable and entered as the value for the
+					spamx config variable in glFusion's main configuration.
+				</p>
+
+				<h2>Example</h2>
+
+				<p>
+					The Delete Action module has the value 128, while the Mail Admin
+					Action module has the value 8. So to activate both modules, add 128 + 8
+					= 136 and enter that in the Configuration admin panel.
+				</p>
+
+				<p>
+					The SLV Examine module is complemented by a SLV Action module that
+					ensures that SLV is notified of spam posts caught by other examine
+					modules. It &ldquo;piggybacks&rdquo; on the Delete Action
+					module, i.e. when you activate the Delete Action module, you'll also
+					enable the SLV Action module.
+				</p>
+
+				<h2>Admin Modules</h2>
+
+				<p>
+					The Admin modules for the Personal Blacklist, IP Filter, IP of URL
+					Filter, and HTTP Header Filter modules provide you with a form to add new entries. To
+					delete an existing entry, simply click on it.
+				</p>
+
+				<p>
+					With the SLV Whitelist admin module you can add URLs that you
+					don't want to be reported to SLV. This is useful when posts on your site
+					happen to contain certain URLs quite often but you don't want those to
+					be considered spam by SLV. Note that your site's URL
+					(i.e. $_CONF['site_url']) is automatically whitelisted, so you don't
+					need to add it here.
+				</p>
+
+				<p>
+					The Log View module lets you inspect and clear the Spam-X logfile. The
+					logfile contains additional information about the spam posts, e.g.
+					which IP address they came from, the user id (if posted by a logged-in
+					user), and which of the examine modules caught the spam post.
+				</p>
+
+				<p>
+					In case a large number of spam posts made it through without
+					being caught, the Mass Delete Comments and Mass Delete Trackbacks modules
+					will help you get rid of them easily. Before you use these modules,
+					make sure to add the URLs or keywords from those spams to your Personal
+					Blacklist.
+				</p>
+
+				<h2>Trackback Spam</h2>
+
+				<p>
+					Trackbacks are also run through Spam-X before they will be
+					accepted by glFusion. There are also some additional checks that can be
+					performed on trackbacks: glFusion can be configured to check if the
+					site that supposedly sent the trackback actually contains a link back
+					to your site. In addition, glFusion can also check if the IP address of
+					the site in the trackback URL matches the IP address that sent the trackback.
+					Trackbacks that fail any of these tests are usually spam. Please refer to
+					the documentation for the configuration for more information.
+				</p>
+
+				<p>
+					The Spam-X plugin's configuration can be changed from the Configuration
+					admin panel: Spam-X Main Settings
+				</p>
+
+				<h1>Spam-X Configuration Options</h1>
+
+				<dl id="desc_logging">
+					<dt>Enable Logging</dt>
+					<dd>Whether to log recognized spam posts in the spamx.log logfile (if set to True) or not (False).</dd>
+				</dl>
+
+				<dl id="desc_admin_override">
+					<dt>Don't Filter Admin Posts</dt>
+					<dd>The Spam-X plugin will filter posts by any user - even site admins. This can be a problem sometimes, e.g. when you want to post a note about spam that itself contains &ldquo;spammy&rdquo; URLs or keywords. When this option is set to True then posts made by users in the 'spamx Admin' group are not checked for spam. </dd>
+				</dl>
+
+				<dl id="desc_timeout">
+					<dt>Timeout </dt>
+					<dd>Timeout (in seconds) for contacting external services such as SFS.</dd>
+				</dl>
+
+				<dl id="desc_notification_email">
+					<dt>Notification Email</dt>
+					<dd>Email address to which spam notifications are sent when the Mail Admin action module is enabled. </dd>
+				</dl>
+
+				<dl id="desc_action">
+					<dt>Spam-X Actions</dt>
+					<dd>This only exists as a fallback in case $_CONF['spamx'] in glFusion's main configuration is not set. (i.e. $_CONF['spamx'] takes precedence). </dd>
+				</dl>
+
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
 </body>
 </html>

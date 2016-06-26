@@ -1,284 +1,145 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-  <meta name="robots" content="noindex,nofollow" />
-  <title>Calendar Plugin - glFusion CMS</title></head>
-<body style="direction: ltr;">
-
-<div id="gl_container_fluid">
-<div id="gl_header"><span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">
-glFusion Documentation Project
-</span><a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a name="calendar_plugin" id="calendar_plugin">Calendar
-Plugin</a></h1>
-
-
-<div class="level1">
-<p>The Calendar plugin is a great tool which allows users and
-administrators to create events which will appear in the calendars of
-users who have appropriate access. Events can include everything from
-the go-live of your latest application, to business meetings. </p>
-
-
-<p>
-When an event is added, it will be added to the site calendar where
-users can view all the events. Additionally, upcoming events will be
-displayed in a block on the page. There is also a 'Site Calendar' block
-which highlights dates with upcoming events. </p>
-
-
-<h1><a name="calendar_plugin_configuration_options" id="calendar_plugin_configuration_options">Calendar Plugin
-Configuration Options</a></h1>
-
-
-<table class="inline">
-
-
-  <tbody>
-
-
-    <tr class="row0">
-
-
-      <th class="col0 leftalign">Option </th>
-
-
-      <th class="col1 leftalign">Description </th>
-
-
-    </tr>
-
-
-    <tr class="row1">
-
-
-      <td class="col0 leftalign"><a name="desc_calendarloginrequired"></a>Calendar Login Required </td>
-
-
-      <td class="col1 leftalign">When set to True, only registered users can access the calendar. Please note that the Login Required setting in glFusion's main configuration takes precedence over this setting. So when Login Required is True, anonymous users can not access the calendar even when this setting is False. </td>
-
-
-    </tr>
-
-
-    <tr><td><a name="desc_only_admin_submit"></a>Only Allow Admins to Submit</td><td>When set to True, only site administrators can add events. This will disable the ability for users to submit events.</td></tr><tr class="row2">
-
-
-      <td class="col0 leftalign"><a name="desc_hidecalendarmenu"></a>Hide Calendar Menu Entry </td>
-
-
-      <td class="col1 leftalign">Whether to hide the “Calendar” entry from glFusion's menu bar (when set to True) or to show it (when set to False). </td>
-
-
-    </tr>
-
-
-    <tr class="row3">
-
-
-      <td class="col0 leftalign"><a name="desc_personalcalendars"></a>Enable Personal Calendars
-      </td>
-
-
-      <td class="col1 leftalign">Allow account holders to have a personal calendar. </td>
-
-
-    </tr>
-
-
-    <tr class="row4">
-
-
-      <td class="col0 leftalign"><a name="desc_eventsubmission"></a>Enable Submission Queue </td>
-
-
-      <td class="col1 leftalign">Whether events submitted by users will have to be approved by an admin first (when set to True) or show up immediately (when set to False). </td>
-
-
-    </tr>
-
-
-    <tr class="row5">
-
-
-      <td class="col0 leftalign"><a name="desc_showupcomingevents"></a>Show Upcoming Events </td>
-
-
-      <td class="col1 leftalign">Whether to show upcoming
-events in a separate block. </td>
-
-
-    </tr>
-
-
-    <tr class="row6">
-
-
-      <td class="col0 leftalign"><a name="desc_upcomingeventsrange"></a>Upcoming Events Range </td>
-
-
-      <td class="col1 leftalign">Number of days that the
-&#8220;Upcoming Events&#8221; block will look ahead. </td>
-
-
-    </tr>
-
-
-    <tr class="row7">
-
-
-      <td class="col0 leftalign"><a name="desc_hour_mode"></a>Hour Mode </td>
-
-
-      <td class="col1 leftalign">Which
-format to use when submitting or editing an event. Can be 12 (for the
-12 hour am/pm format) or 24 (for the 24 hour format). </td>
-
-
-    </tr>
-
-
-    <tr class="row8">
-
-
-      <td class="col0 leftalign"><a name="desc_event_types"></a>Event Types </td>
-
-
-      <td class="col1 leftalign">The set of event types
-that are used both on the public calendar and the user's personal
-calendar. </td>
-
-
-    </tr>
-
-
-    <tr class="row9">
-
-
-      <td class="col0 leftalign"><a name="desc_notification"></a>Notification Email </td>
-
-
-      <td class="col1 leftalign">Whether
-to send an email notification when a new event was submitted for the
-site's calendar (when set to True) or not (when set to False). No
-notification is ever sent for events in personal calendars. </td>
-
-
-    </tr>
-
-
-    <tr class="row10">
-
-
-      <td class="col0 leftalign"><a name="desc_delete_event"></a>Delete Events with Owner </td>
-
-
-      <td class="col1 leftalign">Defines what to do when a user is deleted that is the owner of an event. When set to False, all events owned by the deleted user will be assigned to a user of the “Root” group (i.e. the site admin). When set to True, the events are deleted. This only applies to site events - a user's personal events are always deleted. </td>
-
-
-    </tr>
-
-
-    <tr class="row11">
-
-
-      <td class="col0 leftalign"><a name="desc_aftersave"></a>After Saving Event </td>
-
-
-      <td class="col1 leftalign">Which page to go to after an event has been saved:<br />
-* 'item': display the event details <br />
-* 'list': show admin's list of events (default) <br />
-* 'plugin': display the calendar <br />
-* 'home': display the site's homepage <br />
-* 'admin': go to the “Admin Home” page, (i.e. Command & Control) <br />
-</td>
-
-
-    </tr>
-
-    <tr class="row12">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_0"></a>Calendar Default Permissions[0] </td>
-
-
-      <td class="col1 leftalign">The default Owner permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-    <tr class="row13">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_1"></a>Calendar Default Permissions[1]</td>
-
-
-      <td class="col1 leftalign">The default Group permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-        <tr class="row14">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_2"></a>Calendar Default Permissions[2] </td>
-
-
-      <td class="col1 leftalign">The default Member permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write.  </td>
-
-
-    </tr>
-        <tr class="row15">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_3"></a>Calendar Default Permissions[3] </td>
-
-
-      <td class="col1 leftalign">The default Anonymous permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-
-  </tbody>
-</table>
-
-
-<p></p>
-
-
-</div>
-
-
-<h2><a name="other_options" id="other_options">Other
-Options</a></h2>
-
-
-<div class="level2">
-<p>Please note that some of the options from glFusion&#8217;s
-main configuration are also relevant for the calendar plugin.
-</p>
-
-
-<p>
-Times and dates are formatted according to the current language and the
-locale settings from glFusion&#8217;s main configuration.
-</p>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</body></html>
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Calendar Configuration</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Calendar Configuration
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+				<h1>glFusion Calendar Plugin Configuration</h1>
+				<p>
+					The Calendar plugin is a great tool which allows users and
+					administrators to create events which will appear in the calendars of
+					users who have appropriate access. Events can include everything from
+					the go-live of your latest application, to business meetings.
+				</p>
+
+				<p>
+					When an event is added, it will be added to the site calendar where
+					users can view all the events. Additionally, upcoming events will be
+					displayed in a block on the page. There is also a 'Site Calendar' block
+					which highlights dates with upcoming events.
+				</p>
+
+
+				<h2>Calendar Plugin Configuration Options</h2>
+
+				<dl id="desc_calendarloginrequired">
+					<dt>Calendar Login Required </dt>
+					<dd>When set to True, only registered users can access the calendar. Please note that the Login Required setting in glFusion's main configuration takes precedence over this setting. So when Login Required is True, anonymous users can not access the calendar even when this setting is False. </dd>
+				</dl>
+
+				<dl id="desc_only_admin_submit">
+					<dt>Only Allow Admins to Submit</dt>
+					<dd>When set to True, only site administrators can add events. This will disable the ability for users to submit events.</dd>
+				</dl>
+
+				<dl id="desc_hidecalendarmenu">
+					<dt>Hide Calendar Menu Entry </dt>
+					<dd>Whether to hide the "Calendar" entry from glFusion's menu bar (when set to True) or to show it (when set to False). </dd>
+				</dl>
+
+				<dl id="desc_personalcalendars">
+					<dt>Enable Personal Calendars</dt>
+					<dd>Allow account holders to have a personal calendar. </dd>
+				</dl>
+
+				<dl id="desc_eventsubmission">
+					<dt>Enable Submission Queue </dt>
+					<dd>Whether events submitted by users will have to be approved by an admin first (when set to True) or show up immediately (when set to False). </dd>
+				</dl>
+
+				<dl id="desc_showupcomingevents">
+					<dt>Show Upcoming Events </dt>
+					<dd>Whether to show upcoming events in a separate block. </dd>
+				</dl>
+
+				<dl id="desc_upcomingeventsrange">
+					<dt>Upcoming Events Range </dt>
+					<dd>Number of days that the &#8220;Upcoming Events&#8221; block will look ahead. </dd>
+				</dl>
+
+				<dl id="desc_hour_mode">
+					<dt>Hour Mode</dt>
+					<dd>Which format to use when submitting or editing an event. Can be 12 (for the 12 hour am/pm format) or 24 (for the 24 hour format). </dd>
+				</dl>
+
+				<dl id="desc_event_types">
+					<dt>Event Types</dt>
+					<dd>The set of event types that are used both on the public calendar and the user's personal calendar. </dd>
+				</dl>
+
+				<dl id="desc_notification">
+					<dt>Notification Email</dt>
+					<dd>Whether to send an email notification when a new event was submitted for the site's calendar (when set to True) or not (when set to False). No notification is ever sent for events in personal calendars. </dd>
+				</dl>
+
+				<dl id="desc_delete_event">
+					<dt>Delete Events with Owner</dt>
+					<dd>Defines what to do when a user is deleted that is the owner of an event. When set to False, all events owned by the deleted user will be assigned to a user of the â€œRootâ€ group (i.e. the site admin). When set to True, the events are deleted. This only applies to site events - a user's personal events are always deleted. </dd>
+				</dl>
+
+				<dl id="desc_aftersave">
+					<dt>After Saving Event</dt>
+					<dd>Which page to go to after an event has been saved:<br/>* 'item': display the event details <br/>* 'list': show admin's list of events (default) <br/>* 'plugin': display the calendar <br/>* 'home': display the site's homepage <br/>* 'admin': go to the â€œAdmin Homeâ€ page, (i.e. Command & Control)</dd>
+				</dl>
+
+				<dl id="desc_default_permissions_0">
+					<dt>Calendar Default Permissions[0]</dt>
+					<dd>The default Owner permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+
+				<dl id="desc_default_permissions_1">
+					<dt>Calendar Default Permissions[1]</dt>
+					<dd>The default Group permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+
+				<dl id="desc_default_permissions_2">
+					<dt>Calendar Default Permissions[2]</dt>
+					<dd>The default Member permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write.  </dd>
+				</dl>
+
+				<dl id="desc_default_permissions_3">
+					<dt>Calendar Default Permissions[3]</dt>
+					<dd>The default Anonymous permissions for the Calendar editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Calendar editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+
+				<h2>Other Options</h2>
+				<p>
+					Please note that some of the options from glFusion&#8217;s
+					main configuration are also relevant for the calendar plugin.
+				</p>
+				<p>
+					Times and dates are formatted according to the current language and the
+					locale settings from glFusion&#8217;s main configuration.
+				</p>
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
+</body>
+</html>

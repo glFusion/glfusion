@@ -848,6 +848,25 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     return $retval;
 }
 
+
+function plugin_getconfigelementhelp_polls($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/polls.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/polls.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
+
 /**
 * Helper function: count number of polls and total number of votes
 *

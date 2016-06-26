@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin interface to glFusion                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1112,5 +1112,23 @@ function plugin_user_move_filemgmt($origUID,$destUID)
 
     $sql = "UPDATE {$_TABLES['filemgmt_filedetail']} SET submitter=".(int)$destUID." WHERE submitter=".(int)$origUID;
     DB_query($sql,1);
+}
+
+function plugin_getconfigelementhelp_filemgmt($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/filemgmt.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/filemgmt.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
 }
 ?>

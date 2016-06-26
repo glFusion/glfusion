@@ -385,6 +385,24 @@ function plugin_upgrade_captcha() {
     return captcha_upgrade();
 }
 
+function plugin_getconfigelementhelp_captcha($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/captcha.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/captcha.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
+
 /**
  * Create unique session id for CAPTCHA
  *

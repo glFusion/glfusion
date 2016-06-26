@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1467,6 +1467,24 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     }
 
     return $retval;
+}
+
+function plugin_getconfigelementhelp_forum($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/forum.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/forum.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
 }
 
 // +---------------------------------------------------------------------------+

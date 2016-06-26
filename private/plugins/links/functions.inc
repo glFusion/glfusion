@@ -1521,6 +1521,24 @@ function plugin_configmanager_root_links_validate($cid)
     return $cid;
 }
 
+function plugin_getconfigelementhelp_links($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/links.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/links.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
+
 // +--------------------------------------------------------------------------+
 // | PHP Block functions                                                      |
 // +--------------------------------------------------------------------------+

@@ -1802,6 +1802,24 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
     return $retval;
 }
 
+function plugin_getconfigelementhelp_calendar($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/calendar.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/calendar.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
+
 /**
 * Creates a dropdown list of all the event types
 *

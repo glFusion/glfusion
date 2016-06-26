@@ -375,4 +375,22 @@ function plugin_itemPreSave_spamx($type, $data)
     }
     return '';
 }
+
+function plugin_getconfigelementhelp_spamx($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/spamx.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/spamx.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
 ?>

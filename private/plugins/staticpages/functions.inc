@@ -1286,6 +1286,24 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
     return $retval;
 }
 
+function plugin_getconfigelementhelp_staticpages($type, $option, $doclang = 'english' )
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $baseUrl = $_CONF['site_url'];
+    $cfg = 'docs/' . $doclang . '/staticpages.html';
+    if (@file_exists($_CONF['path_html'] . $cfg)) {
+        $descUrl = $baseUrl . '/' . $cfg;
+    } else {
+        $descUrl = $baseUrl . '/docs/english/staticpages.html';
+    }
+    $retval = $descUrl;
+
+    return array($retval,0);
+}
+
 /**
 * Render the actual content of a static page (without any surrounding blocks)
 *

@@ -1,262 +1,239 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>Trackback, Pingback, Ping</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					Trackback, Pingback, Ping
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
 
-<head>
+			<div class="uk-container uk-container-center uk-margin-bottom">
 
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+				<h1>Trackback, Pingback, Ping</h1>
 
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
+				<p>
+					Trackbacks, Pingbacks, and Pings are mostly used in blog
+					communities to
+					inform other sites / blogs about updated blogs and comments made to
+					blog posts. These methods are supported by many blog / CMS
+					packages, so you can also send Trackbacks and Pingbacks to sites
+					running on software other than glFusion.
+				</p>
 
-  <meta name="robots" content="noindex,nofollow" />
-  <title>Trackbacks / Pings - glFusion CMS</title>
+				<ul>
+					<li>
+						Trackbacks are a means to connect a post you made on your blog to a
+						post on another blog. <br/> e.g. Mary posts something on her blog.
+						Peter reads that, makes a post about Mary's post on his own site
+						and then sends a trackback to Mary's site, so that Mary and
+						visitors of Mary's site will know about Peter's post.
+					</li>
+					<li>
+						Pingbacks are pretty much the same as Trackbacks, they only use a
+						different protocol.
+					</li>
+					<li>
+						Sending a Ping is meant to inform sites that keep track of updated
+						blogs that you've made a new post. These weblog directories or
+						aggregators usually offer a way to subscribe to this update
+						information, so that you don't have to visit several sites to find
+						the new posts.
+					</li>
+				</ul>
+
+				<p>
+					For more information, please consult Wikipedia on TrackBack and
+					Pingback. You can also spend some time reading up on Weblogs in general
+					there &hellip;
+				</p>
+
+				<h2>Usage</h2>
+
+				<p>
+					To pick up the above example, here's how trackback, etc. work:
+					Assume you're Peter and just read a post on Mary's blog about her
+					little lamb. Say that post has the URL
+					<code>http://www.example.com/article.php/little-lamb</code>.
+				</p>
+
+				<p>
+					Peter now goes and writes a new story, linking to Mary's post.
+					Something like:
+				</p>
+
+				<p>
+					I just read that Mary <code>http://www.example.com/article.php/little-lamb</code> has
+					a little lamb. Hope she posts some pictures soon!
+				</p>
+
+				<p>
+					After saving that story, there is an option &ldquo;send
+					ping&rdquo; in the Admin's
+					list of stories (last column). Clicking on the link presents you with a
+					list of options: Send Pingback, Send Ping, Send Trackback (some of
+					those may have been disabled and not show up - see below).
+				</p>
+
+				<h2>Pingback</h2>
+
+				<p>
+					Sending a Pingback is an automated process: After clicking on that
+					link, glFusion scans your story for links to other sites and tries to
+					send a Pingback to all those sites that accept Pingbacks. The Pingback
+					will automatically include a link back to your story.
+				</p>
+
+				<h2>Trackback</h2>
+
+				<p>
+					(We're skipping sending Pings for the moment - see below)
+				</p>
+
+				<p>
+					A Trackback can only be sent to one site, so you are now presented
+					with a list of all the links in your story and have to choose which
+					site should receive the trackback. glFusion will then check if the site
+					accepts trackbacks and try to determine the actual trackback URL
+					to send the Trackback to.
+				</p>
+
+				<p>
+					You will now get a form that includes information about your post
+					(title, URL, URL of your site and the text of your post). If glFusion
+					could determine the Trackback URL, that field will also be filled in.
+					If the Trackback URL is missing, then either glFusion could not find
+					the Trackback URL by itself (in which case you can add it manually)
+					or the target site (Mary's, in the above example) does not accept
+					Trackbacks.
+				</p>
+
+				<p>
+					You can - and should - now edit the excerpt from your post. Please note
+					that many sites will shorten the excerpt, typically to something like
+					255 characters. Also keep in mind that the excerpt will be displayed on
+					Mary's site, so it should contain a portion of your post that will make
+					it clear to a visitor of Mary's site why that post shows up there (i.e.
+					it should somehow refer to Mary's post).
+				</p>
+
+				<p>
+					You can then choose to see a preview of your post (but keep in mind
+					that it may not be displayed in the exact same way on Mary's site)
+					and / or send the Trackback.
+				</p>
+
+				<h1>Trackback vs. Pingback</h1>
+
+				<p>
+					Since, as mentioned above, Trackback and Pingback offer pretty much
+					the same functionality, you should really only send one of the two. So
+					if Mary's site offers both options, you should think about which of the
+					two makes more sense to you for that particular post.
+				</p>
+
+				<p>
+					Pingbacks provide less information (typically only a link back to
+					your site) but they are automated and therefore easier and faster to
+					send. Trackbacks allow you to send more information (e.g. an excerpt
+					from your post) but preparing that information takes more time.
+				</p>
+
+				<h1>Receiving Trackbacks and Pingbacks</h1>
+
+				<p>
+					Your glFusion site will, of course, be able to receive Trackbacks
+					and Pingbacks to your stories. They will show up in a dedicated section
+					below the story, similar to the section for comments. Once received,
+					glFusion will treat Trackbacks and Pingbacks the same, so you won't be
+					able to tell the difference.
+				</p>
+
+				<p>
+					When you disable Trackbacks and / or Pingbacks in the configuration,
+					you will also disable receiving them.
+				</p>
+
+				<h1>Ping</h1>
+
+				<p>
+					Pings are meant to be sent to certain websites that keep track of
+					blog posts. glFusion comes pre-configured for pinging Ping-o-Matic, a
+					service that in turn will ping other services (see their site for
+					details). You can easily add others or delete / disable the existing
+					entry (from the Admin's &ldquo;Trackback&rdquo; entry).
+				</p>
+
+				<p>
+					Weblog directory services will usually accept either a standard or
+					an extended ping. The difference is that the &ldquo;extended&rdquo;
+					Ping will also include a link to your site's feed (RSS, Atom, or
+					whatever you chose).
+				</p>
+
+				<p>
+					When you click on the &ldquo;Send Ping&rdquo; button for a
+					story, all currently enabled weblog directories will be notified
+					automatically.
+				</p>
+
+				<p>
+					Pinging a weblog directory service will also ensure that your site is
+					included in Google's blog search.
+				</p>
+
+				<h1>Disabling Trackbacks</h1>
+
+				<p>
+					Since these functions may not be needed on certain sites (e.g.
+					corporate sites), they can be switched off individually in the
+					configuration.
+				</p>
+
+				<p>
+					Note that &ldquo;Trackback&rdquo; is sometimes used as
+					a generic term for both
+					trackbacks and pingbacks. So when you disable trackbacks but leave
+					pingbacks enabled, you will still see references to
+					&ldquo;Trackback&rdquo; in a
+					few places.
+				</p>
+
+				<p>
+					Only when all three, i.e. trackbacks, pingbacks, and pings are
+					disabled will the &ldquo;Trackback&rdquo; entry vanish from the
+					Admins Only block.
+					At that point, the only reference to trackbacks that you'll still see
+					is the drop-down menu entry in the Admin's story editor (to
+					enable/disable trackbacks on a per-story basis). But its setting is
+					overridden by the configuration settings, so it can be ignored.
+				</p>
 
 
-</head>
-
-<body style="direction: ltr;">
-
-<div id="gl_container_fluid">
-<div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a name="trackback_pingback_ping" id="trackback_pingback_ping">Trackback, Pingback, Ping</a></h1>
-
-<div class="level1">
-<p>Trackbacks, Pingbacks, and Pings are mostly used in blog
-communities to
-inform other sites / blogs about updated blogs and comments made to
-blog posts. These methods are supported by many blog / <acronym title="Content Management System">CMS</acronym>
-packages, so you can also send Trackbacks and Pingbacks to sites
-running on software other than glFusion.
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> Trackbacks are a means to connect a
-post you made on your blog to a post on another blog. <br />
-
-E.g. Mary posts something on her blog. Peter reads that, makes a post
-about Mary's post on his own site and then sends a trackback to Mary's
-site, so that Mary and visitors of Mary's site will know about Peter's
-post.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Pingbacks are pretty much the same as
-Trackbacks, they only use a different protocol.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Sending a Ping is meant to inform
-sites that keep track of updated blogs that you've made a new post.
-These weblog directories or aggregators usually offer a way to
-subscribe to this update information, so that you don't have to visit
-several sites to find the new posts.</div>
-
-  </li>
-
-</ul>
-
-<p>
-For more information, please consult Wikipedia on TrackBack and
-Pingback. You can also spend some time reading up on Weblogs in general
-there &hellip;
-</p>
-
-</div>
-
-<h2><a name="usage" id="usage">Usage</a></h2>
-
-<div class="level2">
-<p>To pick up the above example, here's how trackback, etc. work:
-Assume you're Peter and just read a post on Mary's blog about her
-little lamb. Say that post has the <acronym title="Uniform Resource Locator">URL</acronym> <a href="http://www.example.com/article.php/little-lamb" class="urlextern" title="http://www.example.com/article.php/little-lamb" rel="nofollow">http://www.example.com/article.php/little-lamb</a>.
-</p>
-
-<p>
-Peter now goes and writes a new story, linking to Mary's post.
-Something like:
-</p>
-
-<p>
-I just read that Mary &lt;a href=&ldquo;<a href="http://www.example.com/article.php/little-lamb" class="urlextern" title="http://www.example.com/article.php/little-lamb" rel="nofollow">http://www.example.com/article.php/little-lamb</a>&rdquo;&gt;has
-a little lamb&lt;/a&gt;. Hope she posts some pictures soon!
-</p>
-
-<p>
-After saving that story, there is an option &ldquo;send
-ping&rdquo; in the Admin's
-list of stories (last column). Clicking on the link presents you with a
-list of options: Send Pingback, Send Ping, Send Trackback (some of
-those may have been disabled and not show up - see below).
-</p>
-
-</div>
-
-<h2><a name="pingback" id="pingback">Pingback</a></h2>
-
-<div class="level2">
-<p>Sending a Pingback is an automated process: After clicking on
-that
-link, glFusion scans your story for links to other sites and tries to
-send a Pingback to all those sites that accept Pingbacks. The Pingback
-will automatically include a link back to your story.
-</p>
-
-</div>
-
-<h2><a name="trackback" id="trackback">Trackback</a></h2>
-
-<div class="level2">
-<p>(We're skipping sending Pings for the moment - see below)
-</p>
-
-<p>A Trackback can only be sent to one site, so you are now
-presented
-with a list of all the links in your story and have to choose which
-site should receive the trackback. glFusion will then check if the site
-accepts trackbacks and try to determine the actual trackback <acronym title="Uniform Resource Locator">URL</acronym> to send
-the Trackback to.
-</p>
-
-<p>
-You will now get a form that includes information about your post
-(title, <acronym title="Uniform Resource Locator">URL</acronym>,
-<acronym title="Uniform Resource Locator">URL</acronym>
-of your site and the text of your post). If glFusion could determine
-the Trackback <acronym title="Uniform Resource Locator">URL</acronym>,
-that field will also be filled in. If the Trackback <acronym title="Uniform Resource Locator">URL</acronym> is
-missing, then either glFusion could not find the Trackback <acronym title="Uniform Resource Locator">URL</acronym> by
-itself (in which case you can add it manually) or the target site
-(Mary's, in the above example) does not accept Trackbacks.
-</p>
-
-<p>
-You can - and should - now edit the excerpt from your post. Please note
-that many sites will shorten the excerpt, typically to something like
-255 characters. Also keep in mind that the excerpt will be displayed on
-Mary's site, so it should contain a portion of your post that will make
-it clear to a visitor of Mary's site why that post shows up there (i.e.
-it should somehow refer to Mary's post).
-</p>
-
-<p>You can then choose to see a preview of your post (but keep in
-mind
-that it may not be displayed in the exact same way on Mary's site) and
-/ or send the Trackback.
-</p>
-
-</div>
-
-<h1><a name="trackback_vs._pingback" id="trackback_vs._pingback">Trackback vs. Pingback</a></h1>
-
-<div class="level1">
-<p>Since, as mentioned above, Trackback and Pingback offer pretty
-much
-the same functionality, you should really only send one of the two. So
-if Mary's site offers both options, you should think about which of the
-two makes more sense to you for that particular post.
-</p>
-
-<p>Pingbacks provide less information (typically only a link back
-to
-your site) but they are automated and therefore easier and faster to
-send. Trackbacks allow you to send more information (e.g. an excerpt
-from your post) but preparing that information takes more time.
-</p>
-
-</div>
-
-<h1><a name="receiving_trackbacks_and_pingbacks" id="receiving_trackbacks_and_pingbacks">Receiving Trackbacks
-and Pingbacks</a></h1>
-
-<div class="level1">
-<p>Your glFusion site will, of course, be able to receive
-Trackbacks
-and Pingbacks to your stories. They will show up in a dedicated section
-below the story, similar to the section for comments. Once received,
-glFusion will treat Trackbacks and Pingbacks the same, so you won't be
-able to tell the difference.
-</p>
-
-<p>
-When you disable Trackbacks and / or Pingbacks in the configuration,
-you will also disable receiving them.
-</p>
-
-</div>
-
-<h1><a name="ping" id="ping">Ping</a></h1>
-
-<div class="level1">
-<p>Pings are meant to be sent to certain websites that keep track
-of
-blog posts. glFusion comes pre-configured for pinging Ping-o-Matic, a
-service that in turn will ping other services (see their site for
-details). You can easily add others or delete / disable the existing
-entry (from the Admin's &ldquo;Trackback&rdquo; entry).
-</p>
-
-<p>Weblog directory services will usually accept either a
-standard or
-an extended ping. The difference is that the
-&ldquo;extended&rdquo; Ping will also
-include a link to your site's feed (<acronym title="Rich Site Summary">RSS</acronym>, Atom, or
-whatever you chose).
-</p>
-
-<p>
-When you click on the &ldquo;Send Ping&rdquo; button for a
-story, all currently enabled weblog directories will be notified
-automatically.
-</p>
-
-<p>
-Pinging a weblog directory service will also ensure that your site is
-included in Google's blog search.
-</p>
-
-</div>
-
-<h1><a name="disabling_trackbacks" id="disabling_trackbacks">Disabling Trackbacks</a></h1>
-
-<div class="level1">
-<p>Since these functions may not be needed on certain sites (e.g.
-corporate sites), they can be switched off individually in the
-configuration.
-</p>
-
-<p>Note that &ldquo;Trackback&rdquo; is sometimes used as
-a generic term for both
-trackbacks and pingbacks. So when you disable trackbacks but leave
-pingbacks enabled, you will still see references to
-&ldquo;Trackback&rdquo; in a
-few places.
-</p>
-
-<p>Only when all three, i.e. trackbacks, pingbacks, and pings are
-disabled will the &ldquo;Trackback&rdquo; entry vanish from the
-Admins Only block.
-At that point, the only reference to trackbacks that you'll still see
-is the drop-down menu entry in the Admin's story editor (to
-enable/disable trackbacks on a per-story basis). But its setting is
-overridden by the configuration settings, so it can be ignored.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
 </body>
-
 </html>

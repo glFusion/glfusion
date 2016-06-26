@@ -1,1315 +1,420 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
-
-
-
-
-
-  <meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type" />
-
-
-
-
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-
-
-
-
-  <meta content="noindex,nofollow" name="robots" />
-
-
-
-
-  <title>Forum Plugin - glFusion CMS</title></head>
-<body style="direction: ltr;">
-
-
-
-<div id="gl_container_fluid">
-<div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1>Forum Configuration</h1>
-
-
-
-<table class="inline">
-
-
-
-  <tbody>
-
-
-
-    <tr class="row0">
-
-
-
-      <th class="col0 leftalign" colspan="2">General
-Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr class="row1">
-
-
-
-      <td class="col0 leftalign"><a name="desc_registration_required"></a>Register - View </td>
-
-
-
-      <td class="col1 leftalign">Do you need to be
-registered to view posts? Specifies whether or not you will allow
-non-logged-in users to view the Forum. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row2">
-
-
-
-      <td class="col0 leftalign"><a name="desc_registered_to_post"></a>Login Required to
-Post </td>
-
-
-
-      <td class="col1 leftalign">Do you need to be
-registered to create posts? Specifies whether or not you will allow
-non-logged-in users to create new posts or reply to existing posts. Set
-to yes to only allow logged-in-users to create Forum posts. </td>
-
-
-
-    </tr>
-
-
-
-    <tr><td><a name="desc_enable_user_rating_system"></a>Enable User Rating System</td><td>If
-set to true, this enables the Community Moderation system which allows
-site users to 'rate' other users. &nbsp;The ability to read / post to
-the forums can be limited based on a users rating.</td></tr><tr>
-      <td><a name="desc_allow_memberlist"></a>Allow Site Member List</td>
-      <td>If set to true, allow logged-in users to view a list of all site member.</td>
-    </tr>
-    <tr class="row3">
-
-
-
-      <td class="col0 leftalign"><a name="desc_allow_notification"></a>Allow Email
-Notification </td>
-
-
-
-      <td class="col1 leftalign">Do you want to allow
-people to be notified? Set to yes to enable notification emails to
-Forum subscribers when new posts are created. </td>
-
-
-
-    </tr>
-
-
-
-    <tr><td><a name="desc_bbcode_signature"></a>Enable BBcode Signature</td><td>If
-set to true, uses will have the ability to define their own unique
-BBcode based signature. If set to false, the Forum will use the
-glFusion tag (signature) on the forum posts.</td></tr><tr class="row4">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_topicreview"></a>Show Topic Review
-when
-replying </td>
-
-
-
-      <td class="col1 leftalign">Show Topic Review
-(Iframe) at bottom when replying to a topic? If set to Yes, the
-existing Forum posts will be displayed in an IFrame at the bottom of
-the edit screen. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row5">
-
-
-
-      <td class="col0 leftalign"><a name="desc_allow_user_dateformat"></a>Allow user
-defined
-Date Formats </td>
-
-
-
-      <td class="col1 leftalign">Use the user defined
-preference for Date/Time format where required. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row6">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_pm_plugin"></a>Private
-Message Plugin installed? </td>
-
-
-
-      <td class="col1 leftalign">If you have the
-glMessenger Private Message Plugin installed, should the PM link be
-enabled? </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row7">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_autorefresh"></a>Refresh page after
-submission </td>
-
-
-
-      <td class="col1 leftalign">Automatically refresh
-page after a submission? </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row8">
-
-
-
-      <td class="col0 leftalign"><a name="desc_autorefresh_delay"></a>Pause Delay </td>
-
-
-
-      <td class="col1 leftalign">Pause delay in seconds if
-autorefresh mode used. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row9">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_topics_perpage"></a>Topics Per Page </td>
-
-
-
-      <td class="col1 leftalign">Number of topics to
-display when viewing the forum index </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row10">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_posts_perpage"></a>Posts Per Page </td>
-
-
-
-      <td class="col1 leftalign">Number of posts to show
-per page </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row11">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_messages_perpage"></a>Messages per
-Page </td>
-
-
-
-      <td class="col1 leftalign">Messages Admin screen -
-number of messages lines per page </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row12">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_searches_perpage"></a>Search Results </td>
-
-
-
-      <td class="col1 leftalign">Number of records to show
-per page when viewing search results </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_showblocks"></a>Show
-Blocks</td>
-
-
-
-      <td>Which navigation blocks (left / right) should be
-displayed when viewing the Forum.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_usermenu"></a>User
-Menu Type</td>
-
-
-
-      <td><strong>Block Menu</strong> - Display the
-Forum menu in the left navigation column using a block format. <br />
-
-
-
-      <strong>Nav Bar</strong> - Display the user menu as a
-set of tabs at the top of the Forum display.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_mysql4"></a>MySQL 4+
-Installed</td>
-
-
-
-      <td>If you have MySQL v4.1 or greater installed, set this
-to TRUE. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_silent_edit_default"></a>Silent
-Edit Default</td>
-
-
-
-      <td>When editing a post, if Silent Edit is checked, the
-post's date/time will not be modified. Set to TRUE if you want Silent
-Edit mode by default. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_avatar_width"></a>Avatar
-Width</td>
-
-
-
-      <td>Maximum width (in pixels) of the avatar graphic. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_allow_img_bbcode"></a>Allow
-IMG bbcode</td>
-
-
-
-      <td>If TRUE, allow the <strong>img</strong>
-bbcode. Set to FALSE to disable the <strong>img</strong>
-bbcode. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_show_moderators"></a>Show
-Moderators</td>
-
-
-
-      <td>Set to TRUE to display who the Forum moderators are for
-each forum. <br />
-
-
-
-      <strong>NOTE</strong> Displaying the moderators
-requires several additional database calls and can quickly slow down
-the display of the forum page. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_default_Datetime_format"></a>Default
-Date / Time Format</td>
-
-
-
-      <td>Date / Time Display Format. See <a class="urlextern" title="http://us.php.net/manual/en/function.date.php" href="http://us.php.net/manual/en/function.date.php" rel="nofollow">PHP Date Format Documentation</a> for
-details. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_default_Topic_Datetime_format"></a>Default
-Topic Date / Time Format</td>
-
-
-
-      <td>Date / Time Display Format for topic listings. See <a class="urlextern" title="http://us.php.net/manual/en/function.date.php" href="http://us.php.net/manual/en/function.date.php" rel="nofollow">PHP Date Format Documentation</a> for
-details</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_contentinfo_numchars"></a><a name="desc_linkinfo_width"></a>Pop-up
-number of chars / Popup Width</td>
-
-
-
-      <td>These 2 fields control the width and the number of characters shown in the tooltip. &nbsp;<span style="font-weight: bold;">NOTE: </span>With the Nouveau theme, the pop-up width is fixed and this setting is ignored.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_quoteformat"></a>Quote
-Format</td>
-
-
-
-      <td>Format for quoting text. </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_show_popular_perpage"></a>Number
-of popular posts to show</td>
-
-
-
-      <td>Number of Popular posts to show in the Popular Tab </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_show_last_post_count"></a>Number
-of last posts to show</td>
-
-
-
-      <td>Number of posts to show in the Latest Post Tab </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_grouptags"></a>Group
-Tags</td>
-
-
-
-      <td>Group tags allow you to associate 'badges' to users based on levels.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <th class="col0 leftalign" colspan="2">Attachment Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_maxattachments"></a>Maximum number of attachments</td>
-
-
-
-      <td>Maximum number of attachments allowed to a topic</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_uploadpath"></a>Upload Path </td>
-
-
-
-      <td>Full, absolute path to store uploaded attachments</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_downloadURL"></a>Download URL</td>
-
-
-
-      <td>Full URL to attachment download area.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_fileperms"></a>File Permissions</td>
-
-
-
-      <td>File permissions to set on each uploaded attachment.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_max_uploadimage_width"></a>Maximum Image Width</td>
-
-
-
-      <td>Maximum image width in pixels</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_max_uploadimage_height"></a>Maximum Image height</td>
-
-
-
-      <td>Maximum image height in pixels</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_max_uploadimage_size"></a>Maximum Image Size</td>
-
-
-
-      <td>Maximum image size in bytes</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_inlineimage_width"></a>Inline Image Width</td>
-
-
-
-      <td>Maximum size of an inline image.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_inlineimage_height"></a>Inline Image Height</td>
-
-
-
-      <td>Maximum height (px) of an inline image.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_allowablefiletypes"></a>Allowable File Types</td>
-
-
-
-      <td>Allowed file types for attachments.</td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td><a name="desc_inlineimageypes"></a>Allowable Image Types</td>
-
-
-
-      <td>Allowed image types for attachments.</td>
-
-
-
-    </tr>
-
-
-
-    <tr><td><a name="desc_enable_fm_integration"></a>Enable FileMgmt Integration for Attachments</td><td>If this is set to True, all forum attachments will be stored in the FileMgmt plugin.</td></tr><tr class="row13">
-
-
-
-      <th class="col0 leftalign" colspan="2">Topic
-Posting Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr class="row14">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_subject_length"></a>Title Length </td>
-
-
-
-      <td class="col1 leftalign">Maximum length
-(characters) for the topic subject </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row15">
-
-
-
-      <td class="col0 leftalign"><a name="desc_min_username_length"></a>Min Name Length </td>
-
-
-
-      <td class="col1 leftalign">Minimum length in
-characters requied for members name or anonymous name </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row16">
-
-
-
-      <td class="col0 leftalign"><a name="desc_min_subject_length"></a>Min Subject Length </td>
-
-
-
-      <td class="col1 leftalign">Minimum length in
-characters required for Topic Subject to post </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row17">
-
-
-
-      <td class="col0 leftalign"><a name="desc_min_comment_length"></a>Min Post Length </td>
-
-
-
-      <td class="col1 leftalign">Minimum length in
-characters contents of post must be </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row18">
-
-
-
-      <td class="col0 leftalign"><a name="desc_views_tobe_popular"></a>Popular Posts </td>
-
-
-
-      <td class="col1 leftalign">Number of views required
-for topic to have popular rating </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row19">
-
-
-
-      <td class="col0 leftalign"><a name="desc_post_speedlimit"></a>Posting Speedlimit </td>
-
-
-
-      <td class="col1 leftalign">Time in seconds required
-between posts - to prevent spamming </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row20">
-
-
-
-      <td class="col0 leftalign"><a name="desc_allowed_editwindow"></a>Allowed time to
-allow members to edit their posts </td>
-
-
-
-      <td class="col1 leftalign">Allowed time (min) to
-allow members to edit their posts. 0 means they can edit at any time
-after saving. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row21">
-
-
-
-      <td class="col0 leftalign"><a name="desc_allow_html"></a>Allow <acronym title="HyperText Markup Language">HTML in posts?</acronym>
-      </td>
-
-
-
-      <td class="col1 leftalign">Enable <acronym title="HyperText Markup Language">HTML</acronym> to be
-used in posts. If set to NO then users will only be able to post in
-TEXT Mode but still use bbcode </td>
-
-
-
-    </tr>
-
-
-
-    <tr><td><a name="desc_use_wysiwyg_editor"></a>Enable WYSIWYG Editor</td><td>If set to True, use the WYSIWYG editor for forum posts.<br /><br /><span style="font-weight: bold;">NOTE:</span> The following 3 configuration options must be set to true to enable the WYSIWYG editor:<br /><br />&nbsp; - Allow HTML in Posts<br />&nbsp; - Enable WYSIWYG Editor<br />&nbsp; - HTML Mode as Default Post Mode<span style="font-weight: bold;"></span></td></tr><tr class="row22">
-
-
-
-      <td class="col0 leftalign"><a name="desc_post_htmlmode"></a>HTML mode as default
-post mode? </td>
-
-
-
-      <td class="col1 leftalign">Enable <acronym title="HyperText Markup Language">HTML</acronym> Mode
-as default - set to True. <br />
-
-
-
-Enable Text mode as default (safest) - set to False </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row23">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_censor"></a>Use Cotent Filter </td>
-
-
-
-      <td class="col1 leftalign">Enable glFusion filtering
-of bad words </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row25">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_geshi"></a>Code Formatting </td>
-
-
-
-      <td class="col1 leftalign">Use the Geshi Code
-Formatting Feature </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row26">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_spamx_filter"></a>SpamX Plugin </td>
-
-
-
-      <td class="col1 leftalign">Enable the Spam-X Plugin
-to filter out possible spam on all posts before saving </td>
-
-
-
-    </tr>
-
-    <tr class="row26">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_sfs"></a>Use Stop Forum Spam </td>
-
-
-
-      <td class="col1 leftalign">Enable Stop Forum Spam
-to filter out possible spam on all posts before saving </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row27">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_moods"></a>Allow Moods </td>
-
-
-
-      <td class="col1 leftalign">Enable moods to be
-selected per post </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row28">
-
-
-
-      <td class="col0 leftalign"><a name="desc_allow_smilies"></a>Allow Smilies </td>
-
-
-
-      <td class="col1 leftalign">Enable smilies to be used
-      </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row29">
-
-
-
-      <td class="col0 leftalign"><a name="desc_use_smilies_plugin"></a>Smilies Plugin </td>
-
-
-
-      <td class="col1 leftalign">Smilies Plugin or
-external functions should be used for handling smilies </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row30">
-
-
-
-      <th class="col0" colspan="2">Centerblock
-Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr class="row31">
-
-
-
-      <td class="col0 leftalign"><a name="desc_show_centerblock"></a>Enable Centerblock </td>
-
-
-
-      <td class="col1 leftalign">If Centerblock is
-enabled, a summary of the latest Forum posts will appear on the main
-site index page. </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row32">
-
-
-
-      <td class="col0 leftalign"><a name="desc_centerblock_homepage"></a>Homepage Only </td>
-
-
-
-      <td class="col1 leftalign">Homepage Only </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row33">
-
-
-
-      <td class="col0 leftalign"><a name="desc_centerblock_numposts"></a>Number of posts </td>
-
-
-
-      <td class="col1 leftalign">Number of posts to show
-in Centerblock </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row34">
-
-
-
-      <td class="col0 leftalign"><a name="desc_cb_subject_size"></a>Title Length </td>
-
-
-
-      <td class="col1 leftalign">Number of characters
-allowed in displayed subject </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row35">
-
-
-
-      <td class="col0 leftalign"><a name="desc_centerblock_where"></a>Location </td>
-
-
-
-      <td class="col1">Placement on the page Top Of
-PageAfter Featured StoryBottom Of Page </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row36">
-
-
-
-      <th class="col0" colspan="2">Latest Posts
-Block Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr class="row37">
-
-
-
-      <td class="col0 leftalign"><a name="desc_sideblock_numposts"></a>Number of posts </td>
-
-
-
-      <td class="col1 leftalign">Number of posts to show
-in latestposts block </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row38">
-
-
-
-      <td class="col0 leftalign"><a name="desc_sb_subject_size"></a>Title Length </td>
-
-
-
-      <td class="col1 leftalign">Number of characters
-allowed in displayed subject </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row39">
-
-
-
-      <td class="col0 leftalign"><a name="desc_sb_latestpostonly"></a>Latest Posts </td>
-
-
-
-      <td class="col1 leftalign">Only show the latest post
-per topic </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row40">
-
-
-
-      <th class="col0" colspan="2"><a name="desc_level1"></a><a name="desc_level2"></a><a name="desc_level3"></a><a name="desc_level4"></a><a name="desc_level5"></a><a name="desc_level1name"></a><a name="desc_level2name"></a><a name="desc_level3name"></a><a name="desc_level4name"></a><a name="desc_level5name"></a>Rank Settings </th>
-
-
-
-    </tr>
-
-
-
-    <tr class="row41">
-
-
-
-      <td class="col0 leftalign">Level 1 </td>
-
-
-
-      <td class="col1 leftalign">Rank 1 - Desciption and
-post threshold </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row42">
-
-
-
-      <td class="col0 leftalign">Level 2 </td>
-
-
-
-      <td class="col1 leftalign">Rank 2 - Desciption and
-post threshold </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row43">
-
-
-
-      <td class="col0 leftalign">Level 3 </td>
-
-
-
-      <td class="col1 leftalign">Rank 3 - Desciption and
-post threshold </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row44">
-
-
-
-      <td class="col0 leftalign">Level 4 </td>
-
-
-
-      <td class="col1 leftalign">Rank 4 - Desciption and
-post threshold </td>
-
-
-
-    </tr>
-
-
-
-    <tr class="row45">
-
-
-
-      <td class="col0 leftalign">Level 5 </td>
-
-
-
-      <td class="col1 leftalign">Rank 5 - Desciption and
-post threshold </td>
-
-
-
-    </tr>
-
-
-
-
-
-  </tbody>
-</table>
-
-
-
-<h2><a name="general" id="general"></a></h2>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-</body></html>
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Configuration</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Forum Configuration
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+				<h1>glFusion Forum Plugin Configuration</h1>
+
+				<h2>General Settings</h2>
+
+				<dl id="desc_registration_required">
+					<dt>Register - View</dt>
+					<dd>Do you need to be registered to view posts? Specifies whether or not you will allow non-logged-in users to view the Forum. </dd>
+				</dl>
+
+				<dl id="desc_registered_to_post">
+					<dt>Login Required to	Post </dt>
+					<dd>Do you need to be registered to create posts? Specifies whether or not you will allow non-logged-in users to create new posts or reply to existing posts. Set to yes to only allow logged-in-users to create Forum posts. </dd>
+				</dl>
+
+				<dl id="desc_enable_user_rating_system">
+					<dt>Enable User Rating System</dt>
+					<dd>If set to true, this enables the Community Moderation system which allows site users to 'rate' other users. &nbsp;The ability to read / post to the forums can be limited based on a users rating.</dd>
+				</dl>
+
+				<dl id="desc_allow_memberlist">
+					<dt>Allow Site Member List</dt>
+					<dd>If set to true, allow logged-in users to view a list of all site member.</dd>
+				</dl>
+
+				<dl id="desc_allow_notification">
+					<dt>Allow Email Notification</dt>
+					<dd>Do you want to allow people to be notified? Set to yes to enable notification emails to Forum subscribers when new posts are created. </dd>
+				</dl>
+
+				<dl id="desc_bbcode_signature">
+					<dt>Enable BBcode Signature</dt>
+					<dd>If set to true, uses will have the ability to define their own unique BBcode based signature. If set to false, the Forum will use the glFusion tag (signature) on the forum posts.</dd>
+				</dl>
+
+				<dl id="desc_show_topicreview">
+					<dt>Show Topic Review when replying </dt>
+					<dd>Show Topic Review (Iframe) at bottom when replying to a topic? If set to Yes, the existing Forum posts will be displayed in an IFrame at the bottom of the edit screen. </dd>
+				</dl>
+
+				<dl id="desc_allow_user_dateformat">
+					<dt>Allow user definedDate Formats</dt>
+					<dd>Use the user defined preference for Date/Time format where required. </dd>
+				</dl>
+
+				<dl id="desc_use_pm_plugin">
+					<dt>Private Message Plugin installed?</dt>
+					<dd>If you have the Private Message Plugin installed, should the PM link be	enabled? </dd>
+				</dl>
+
+				<dl id="desc_use_autorefresh">
+					<dt>Refresh page after submission </dt>
+					<dd>Automatically refresh page after a submission? </dd>
+				</dl>
+
+				<dl id="desc_autorefresh_delay">
+					<dt>Pause Delay </dt>
+					<dd>Pause delay in seconds if autorefresh mode used. </dd>
+				</dl>
+
+				<dl id="desc_show_topics_perpage">
+					<dt>Topics Per Page </dt>
+					<dd>Number of topics to display when viewing the forum index </dd>
+				</dl>
+
+				<dl id="desc_show_posts_perpage">
+					<dt>Posts Per Page </dt>
+					<dd>Number of posts to show per page </dd>
+				</dl>
+
+				<dl id="desc_show_messages_perpage">
+					<dt>Messages per Page </dt>
+					<dd>Messages Admin screen - number of messages lines per page </dd>
+				</dl>
+
+				<dl id="desc_show_searches_perpage">
+					<dt>Search Results </dt>
+					<dd>Number of records to show per page when viewing search results </dd>
+				</dl>
+
+				<dl id="desc_showblocks">
+					<dt>Show Blocks</dt>
+					<dd>Which navigation blocks (left / right) should be displayed when viewing the Forum.</dd>
+				</dl>
+
+				<dl id="desc_usermenu">
+					<dt>User Menu Type</dt>
+					<dd><strong>Block Menu</strong> - Display the Forum menu in the left navigation column using a block format. <br/><strong>Nav Bar</strong> - Display the user menu as a set of tabs at the top of the Forum display.</dd>
+				</dl>
+
+				<dl id="desc_mysql4">
+					<dt>MySQL 4+ Installed</dt>
+					<dd>If you have MySQL v4.1 or greater installed, set this to TRUE. </dd>
+				</dl>
+
+				<dl id="desc_silent_edit_default">
+					<dt>Silent Edit Default</dt>
+					<dd>When editing a post, if Silent Edit is checked, the post's date/time will not be modified. Set to TRUE if you want Silent Edit mode by default. </dd>
+				</dl>
+
+				<dl id="desc_avatar_width">
+					<dt>Avatar Width</dt>
+					<dd>Maximum width (in pixels) of the avatar graphic. </dd>
+				</dl>
+
+				<dl id="desc_allow_img_bbcode">
+					<dt>Allow IMG bbcode</dt>
+					<dd>If TRUE, allow the <strong>img</strong> bbcode. Set to FALSE to disable the <strong>img</strong> bbcode. </dd>
+				</dl>
+
+				<dl id="desc_show_moderators">
+					<dt>Show Moderators</dt>
+					<dd>Set to TRUE to display who the Forum moderators are for each forum. <br/><strong>NOTE</strong> Displaying the moderators requires several additional database calls and can quickly slow down the display of the forum page. </dd>
+				</dl>
+
+				<dl id="desc_default_Datetime_format">
+					<dt>Default Date / Time Format</dt>
+					<dd>Date / Time Display Format. See <a class="urlextern" title="http://us.php.net/manual/en/function.date.php" href="http://us.php.net/manual/en/function.date.php" rel="nofollow">PHP Date Format Documentation</a> for details. </dd>
+				</dl>
+
+				<dl id="desc_default_Topic_Datetime_format">
+					<dt>Default Topic Date / Time Format</dt>
+					<dd>Date / Time Display Format for topic listings. See <a href="http://us.php.net/manual/en/function.date.php" rel="nofollow">PHP Date Format Documentation</a> for details</dd>
+				</dl>
+
+				<dl id="desc_contentinfo_numchars">
+					<dt>Pop-up number of chars / Popup Width</dt>
+					<dd>These 2 fields control the width and the number of characters shown in the tooltip. <span style="font-weight: bold;">NOTE: </span>With the CMS theme (all UIKIT based themes), the pop-up width is fixed and this setting is ignored.</dt>
+				</dl>
+
+				<dl id="desc_linkinfo_width">
+					<dt>Link Info Width</dt>
+					<dd>These field controls the width and the number of characters shown in the tooltip. <span style="font-weight: bold;">NOTE: </span>With the CMS theme (all UIKIT based themes), the pop-up width is fixed and this setting is ignored.</dt>
+				</dl>
+
+				<dl id="desc_quoteformat">
+					<dt>Quote Format</dt>
+					<dd>Format for quoting text. </dd>
+				</dl>
+
+				<dl id="desc_show_popular_perpage">
+					<dt>Number of popular posts to show</dt>
+					<dd>Number of Popular posts to show in the Popular Tab </dd>
+				</dl>
+
+				<dl id="desc_show_last_post_count">
+					<dt>Number of last posts to show</dt>
+					<dd>Number of posts to show in the Latest Post Tab </dd>
+				</dl>
+
+				<dl id="desc_grouptags">
+					<dt>Group Tags</dt>
+					<dd>Group tags allow you to associate 'badges' to users based on levels.</dd>
+				</dl>
+
+				<h2>Attachment Settings</h2>
+
+				<dl id="desc_maxattachments">
+					<dt>Maximum number of attachments</dt>
+					<dd>Maximum number of attachments allowed to a topic</dd>
+				</dl>
+
+				<dl id="desc_uploadpath">
+					<dt>Upload Path</dt>
+					<dd>Full, absolute path to store uploaded attachments</dd>
+				</dl>
+
+				<dl id="desc_downloadURL">
+					<dt>Download URL</dt>
+					<dd>Full URL to attachment download area.</dd>
+				</dl>
+
+				<dl id="desc_fileperms">
+					<dt>File Permissions</dt>
+					<dd>File permissions to set on each uploaded attachment.</dd>
+				</dl>
+
+				<dl id="desc_max_uploadimage_width">
+					<dt>Maximum Image Width</dt>
+					<dd>Maximum image width in pixels</dd>
+				</dl>
+
+				<dl id="desc_max_uploadimage_height">
+					<dt>Maximum Image height</dt>
+					<dd>Maximum image height in pixels</dd>
+				</dl>
+
+				<dl id="desc_max_uploadimage_size">
+					<dt>Maximum Image Size</dt>
+					<dd>Maximum image size in bytes. Anything larger than this will be rejected.</dd>
+				</dl>
+
+				<dl id="desc_inlineimage_width">
+					<dt>Inline Image Width</dt>
+					<dd>Maximum size of an inline image.</dd>
+				</dl>
+
+				<dl id="desc_inlineimage_height">
+					<dt>Inline Image Height</dt>
+					<dd>Maximum height (px) of an inline image.</dd>
+				</dl>
+
+				<dl id="desc_allowablefiletypes">
+					<dt>Allowable File Types</dt>
+					<dd>Allowed file types for attachments.</dd>
+				</dl>
+
+				<dl id="desc_inlineimageypes">
+					<dt>Allowable Image Types</dt>
+					<dd>Allowed image types for attachments.</dd>
+				</dl>
+
+				<dl id="desc_enable_fm_integration">
+					<dt>Enable FileMgmt Integration for Attachments</dt>
+					<dd>If this is set to True, all forum attachments will be stored in the FileMgmt plugin.</dd>
+				</dl>
+
+				<h2>Topic Posting Settings </h2>
+
+				<dl id="desc_show_subject_length">
+					<dt>Title Length </dt>
+					<dd>Maximum length (characters) for the topic subject </dd>
+				</dl>
+
+				<dl id="desc_min_username_length">
+					<dt>Min Name Length </dt>
+					<dd>Minimum length in characters requied for members name or anonymous name </dd>
+				</dl>
+
+				<dl id="desc_min_subject_length">
+					<dt>Min Subject Length </dt>
+					<dd>Minimum length in	characters required for Topic Subject to post </dd>
+				</dl>
+
+				<dl id="desc_min_comment_length">
+					<dt>Min Post Length </dt>
+					<dd>Minimum length in	characters contents of post must be before you are allowed to post. </dd>
+				</dl>
+
+				<dl id="desc_views_tobe_popular">
+					<dt>Popular Posts </dt>
+					<dd>Number of views required for topic to have popular rating </dd>
+				</dl>
+
+				<dl id="desc_post_speedlimit">
+					<dt>Posting Speedlimit </dt>
+					<dd>Time in seconds required between posts - to prevent spamming </dd>
+				</dl>
+
+				<dl id="desc_allowed_editwindow">
+					<dt>Allowed time to allow members to edit their posts </dt>
+					<dd>Allowed time (min) to	allow members to edit their posts. 0 means they can edit at any time after saving. </dd>
+				</dl>
+
+				<dl id="desc_allow_html">
+					<dt>Allow HTML in posts?</dt>
+					<dd>Enable HTML to be used in posts. If set to NO then users will only be able to post in TEXT Mode but still use bbcode </dd>
+				</dl>
+
+				<dl id="desc_use_wysiwyg_editor">
+					<dt>Enable WYSIWYG Editor</dt>
+					<dd>If set to True, use the WYSIWYG editor for forum posts.<br /><br /><span style="font-weight: bold;">NOTE:</span> The following 3 configuration options must be set to true to enable the WYSIWYG editor:<br /><br />&nbsp; - Allow HTML in Posts<br />&nbsp; - Enable WYSIWYG Editor<br />&nbsp; - HTML Mode as Default Post Mode<span style="font-weight: bold;"></span></dd>
+				</dl>
+
+				<dl id="desc_post_htmlmode">
+					<dt>HTML mode as default post mode? </dt>
+					<dd>Enable HTML Mode as default - set to True. <br/>Enable Text mode as default (safest) - set to False </dd>
+				</dl>
+
+				<dl id="desc_use_censor">
+					<dt>Use Cotent Filter </dt>
+					<dd>Enable glFusion filtering of bad words </dd>
+				</dl>
+
+				<dl id="desc_use_geshi">
+					<dt>Code Formatting</dt>
+					<dd>Use the Geshi Code Formatting Feature </dd>
+				</dl>
+
+				<dl id="desc_use_spamx_filter">
+					<dt>SpamX Plugin </dt>
+					<dd>Enable the Spam-X Plugin to filter out possible spam on all posts before saving </dd>
+				</dl>
+
+				<dl id="desc_use_sfs">
+					<dt>Use Stop Forum Spam </dt>
+					<dd>Enable Stop Forum Spam to filter out possible spam on all posts before saving </dd>
+				</dl>
+
+				<dl id="desc_show_moods">
+					<dt>Allow Moods</dt>
+					<dd>Enable moods to be selected per post </dd>
+				</dl>
+
+				<dl id="desc_allow_smilies">
+					<dt>Allow Smilies </dt>
+					<dd>Enable smilies to be used in forum posts</dd>
+				</dl>
+
+				<dl id="desc_use_smilies_plugin">
+					<dt>Smilies Plugin </dt>
+					<dd>If you have the Smilies Plugin installed, use it to provide the smilies for the forum posts.</dt>
+				</dl>
+
+				<h2>Centerblock Settings </h2>
+
+				<dl id="desc_show_centerblock">
+					<dt>Enable Centerblock </dt>
+					<dd>If Centerblock is enabled, a summary of the latest Forum posts will appear on the main site index page. </dd>
+				</dl>
+
+				<dl id="desc_centerblock_homepage">
+					<dt>Homepage Only </dt>
+					<dd>Only show the centerblock on the home page - do not show when viewing topics.</dd>
+				</dl>
+
+				<dl id="desc_centerblock_numposts">
+					<dt>Number of posts </dt>
+					<dd>Number of posts to show in Centerblock </dd>
+				</dl>
+
+				<dl id="desc_cb_subject_size">
+					<dt>Title Length </dt>
+					<dd>Number of characters allowed in displayed subject </dd>
+				</dl>
+
+				<dl id="desc_centerblock_where">
+					<dt>Centerblock Location</dt>
+					<dd>Placement on the page Top Of Page or After Featured Story or Bottom Of Page </dd>
+				</dl>
+
+				<h2>Latest Posts Block Settings </h2>
+
+				<dl id="desc_sideblock_numposts">
+					<dt>Number of posts</dt>
+					<dd>Number of posts to show in latestposts block </dd>
+				</dl>
+
+				<dl id="desc_sb_subject_size">
+					<dt>Title Length </dt>
+					<dd>Number of characters allowed in displayed subject </dd>
+				</dl>
+
+				<dl id="desc_sb_latestpostonly">
+					<dt>Latest Posts</dt>
+					<dd>Only show the latest post per topic </dd>
+				</dl>
+
+				<h2>Rank Settings</h2>
+
+				<a name="desc_level1name"></a>
+				<a name="desc_level2name"></a>
+				<a name="desc_level3name"></a>
+				<a name="desc_level4name"></a>
+				<a name="desc_level5name"></a>
+
+
+				<dl id="desc_level1">
+					<dt>Level 1 </td>
+					<dd>Rank 1 - Desciption and post threshold </td>
+				</dl>
+
+				<dl id="desc_level2">
+					<dt>Level 2 </td>
+					<dd>Rank 2 - Desciption and post threshold </td>
+				</dl>
+
+				<dl id="desc_level3">
+					<dt>Level 3 </td>
+					<dd>Rank 3 - Desciption and post threshold </td>
+				</dl>
+
+				<dl id="desc_level4">
+					<dt>Level 4 </td>
+					<dd>Rank 4 - Desciption and post threshold </td>
+				</dl>
+
+				<dl id="desc_level5">
+					<dt>Level 5 </td>
+					<dd>Rank 5 - Desciption and post threshold </td>
+				</dl>
+
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
+</body>
+</html>

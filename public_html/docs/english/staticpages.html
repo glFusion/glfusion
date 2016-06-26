@@ -1,734 +1,406 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-
-
-
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-
-
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-
-
-  <meta name="robots" content="noindex,nofollow" />
-
-
-  <title>Staticpages Plugin - glFusion CMS</title>
-</head>
-
-
-<body style="direction: ltr;">
-
-
-<div id="gl_container_fluid">
-<div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a id="static_pages_content" name="static_pages_content">Static Pages Content</a></h1>
-
-
-<div class="level1">
-<p>The Static Pages plugin was originally aimed at creating pages
-with static content (as opposed to the dynamic pages created by
-glFusion) - hence the name. Pages like an &ldquo;about
-us&rdquo; page, a mission statement, etc. would come to mind. </p>
-
-
-<p>Since then, people have used the static pages for all kinds of
-things and with the inclusion of <acronym title="Hypertext Preprocessor">PHP</acronym> into
-static pages, even the original name isn't quite right any more
-&hellip; Features </p>
-
-
-<ul>
-
-
-  <li class="level1">
-
-    <div class="li">supports use of <acronym title="Hypertext Preprocessor">PHP</acronym></div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">editable page ID to make more readable
-URLs</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Static pages can be displayed on
-glFusion's index and topic pages and can even replace it entirely
-(&ldquo;splash screen&rdquo;)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">&ldquo;cloning&rdquo; of
-existing pages</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Makes use of glFusion's <acronym title="Uniform Resource Locator">URL</acronym> rewrite
-feature</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Provides [staticpage:] and
-[staticpage_content:] autotags</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">proper support for glFusion permissions</div>
-
-
-  </li>
-
-
-</ul>
-
-
-</div>
-
-
-<h1><a name="php"></a><a id="use_of_php" name="use_of_php">Use
-of PHP</a></h1>
-
-
-<div class="level1">PHP &nbsp;in Staticpages is enabled by default on
-new install of glFusion. &nbsp;It is important to understand if you
-allow other users (members of the Static Page Admin group) to create
-staticpages, you may elect to disable the use of PHP in static pages.
-&nbsp;<br />
-<br />
-<h2><a id="activating_php" name="activating_php">De-Activating
-PHP</a></h2>
-To disaable <acronym title="Hypertext Preprocessor">PHP</acronym>
-use, you will have to remove the 'staticpages.<acronym title="Hypertext Preprocessor">PHP</acronym>'
-permission from the &ldquo;Static Page Admin&rdquo; group. To do
-this, log in as the Admin and from the Admin's Only block, select
-&ldquo;Groups&rdquo;. Find the &ldquo;Static Page
-Admin&rdquo; group and edit it by clicking on the name of the
-group. At the bottom of the page, you will find a list of
-&ldquo;Rights&rdquo; (permissions) that can be granted to all
-members of this group. Note that 'staticpages.delete' and
-'staticpages.edit' are also checked. To remove the ability for&nbsp; members of the Static Page Admin group to use <acronym title="Hypertext Preprocessor">PHP</acronym> in static
-pages, you will have to un-check the 'staticpages.<acronym title="Hypertext Preprocessor">PHP</acronym>' checkbox
-and save your changes.<br />
-<br />
-<p>In addition to the 'staticpages.<acronym title="Hypertext Preprocessor">PHP</acronym>'
-permission discussed above, there is also a global option to disable
-the use of <acronym title="Hypertext Preprocessor">PHP</acronym>
-in static pages entirely. That option &ldquo;Allow <acronym title="Hypertext Preprocessor">PHP</acronym>?&rdquo;
-can be found in the Configuration admin panel for the static pages
-plugin. When set to &ldquo;False&rdquo;, that option will
-override the 'staticpages.<acronym title="Hypertext Preprocessor">PHP</acronym>
-' permission and disable all use of <acronym title="Hypertext Preprocessor">PHP</acronym> in static
-pages.</p>
-
-
-
-
-</div>
-<h2><a id="usage" name="usage">Usage</a></h2>
-
-
-<div class="level2">
-<div class="noteclassic">The use of <acronym title="Hypertext Preprocessor">PHP</acronym> in static
-pages may result in security issues if not used properly. Use this
-feature with care! </div>
-
-
-<p>The use of <acronym title="Hypertext Preprocessor">PHP</acronym>
-has to be enabled for each individual static page. Below the content
-edit field, you will find a drop-down menu with the following options: </p>
-
-
-<table class="inline">
-
-
-  <tbody>
-
-
-    <tr class="row0">
-
-
-      <td class="col0 leftalign">do not execute <acronym title="Hypertext Preprocessor">PHP</acronym> </td>
-
-
-      <td class="col1">When you select this option, any <acronym title="Hypertext Preprocessor">PHP</acronym> code in
-the static page will not be executed but will instead be printed out
-as-is.</td>
-
-
-    </tr>
-
-
-    <tr class="row1">
-
-
-      <td class="col0 leftalign">execute <acronym title="Hypertext Preprocessor">PHP</acronym> (return) </td>
-
-
-      <td class="col1 leftalign">If you select this
-option, <acronym title="Hypertext Preprocessor">PHP</acronym>
-code in static pages will be executed. The 'return' indicates that the
-code should return any output it generates, using a <acronym title="Hypertext Preprocessor">PHP</acronym> return
-statement, instead of printing it out directly. </td>
-
-
-    </tr>
-
-
-    <tr class="row2">
-
-
-      <td class="col0 leftalign">execute <acronym title="Hypertext Preprocessor">PHP</acronym> </td>
-
-
-      <td class="col1 leftalign">Again, this option will
-enable execution of <acronym title="Hypertext Preprocessor">PHP</acronym>.
-Only this time, the <acronym title="Hypertext Preprocessor">PHP</acronym>
-code can actually use echo and print statements without having the
-output interfere with the page layout. </td>
-
-
-    </tr>
-
-
-
-  </tbody>
-</table>
-
-
-<p>Please note that when embedding <acronym title="Hypertext Preprocessor">PHP</acronym> code in a
-static page, your code should not be enclosed in the <acronym title="Hypertext Preprocessor">PHP</acronym>
-&lt;?php and ?&gt; tags. Instead, it is assumed that the static
-page contains the <acronym title="Hypertext Preprocessor">PHP</acronym>
-code that would normally go between those two tags. </p>
-
-
-<p>When selecting the third of the above <acronym title="Hypertext Preprocessor">PHP</acronym> execution
-options (&ldquo;execute <acronym title="Hypertext Preprocessor">PHP</acronym>&rdquo;)
-you can switch back and forth between <acronym title="Hypertext Preprocessor">PHP</acronym> and plain
-<acronym title="HyperText Markup Language">HTML</acronym>
-like this: </p>
-
-
-<pre class="code">echo "Hello"; ?&gt;, &lt;b&gt;world&lt;/b&gt;, &lt;?php echo "how are you?";</pre>
-
-
-<p>The above example would print out &ldquo;Hello, <b>world</b>, how
-are you?&rdquo;. </p>
-
-
-</div>
-
-
-<h1><a id="page_id" name="page_id">Page ID</a></h1>
-
-
-<div class="level1">
-<p>When creating a new static page, it will be assigned a page ID
-automatically. This ID consists of the date and time and up to three
-random digits. When you anticipate that the <acronym title="Uniform Resource Locator">URL</acronym> of this
-page may be used a lot, e.g. quoted in emails, it may make sense to use
-a more readable ID for the page. </p>
-
-
-<p>The static pages editor will let you change the page ID. For
-example, you may want to rename the ID for your
-&ldquo;about&rdquo; page from
-&ldquo;20030313100131123&rdquo; to &ldquo;about&rdquo;,
-thus creating a <acronym title="Uniform Resource Locator">URL</acronym>
-like </p>
-
-
-<pre class="code">http://yoursite/staticpages/index.php?page=about</pre>
-
-
-<p>which looks much nicer when quoted (and is easier to
-remember). You could further improve this by making use of glFusion's <acronym title="Uniform Resource Locator">URL</acronym> rewrite
-feature. </p>
-
-
-<p>Please note that you should only use letters and digits for
-the page ID. Avoid national special characters, most punctuation
-characters ('-' and '.' should be okay, though) and spaces. The static
-page editor will catch some illegal characters but not all of them
-&hellip; Using Static Pages on the index page </p>
-
-
-<p>glFusion's Center Blocks concept allows plugins to place
-blocks in the center area of a glFusion site, i.e. among the stories. </p>
-
-
-<p>When you check the &ldquo;Centerblock&rdquo; option
-for a static page, you can use the &ldquo;Position&rdquo; and
-&ldquo;Topic&rdquo; drop-downs to chose where this static page
-will be displayed. For &ldquo;Position&rdquo;, the options are
-&ldquo;Top Of Page&rdquo;, &ldquo;After Featured
-Story&rdquo;, &ldquo;Bottom Of Page&rdquo; (which should be
-self-explanatory) and &ldquo;Entire Page&rdquo;. That last
-option, &ldquo;Entire Page&rdquo;, will tell glFusion that this
-static page will replace the entire index page - it will not display
-any stories, but only the contents of this static page. This is useful
-e.g. for &ldquo;splash&rdquo; screens or Welcome pages. </p>
-
-
-<div class="notetip">When using a static page as a
-&ldquo;splash&rdquo; screen, you may need a link that takes
-your visitors to the normal index page, i.e. the list of current
-stories. To do this, create a link to index.php?display=all </div>
-
-
-<p>The second drop-down, &ldquo;Topic&rdquo;, lets you
-restrict the display of a static page to only a certain topic, the
-homepage only, or all pages (i.e. all topic pages and the homepage).
-This is the same as the options you have for blocks. </p>
-
-
-<div class="notetip">You can combine these options with
-the permission settings. This will let you, for example, create a
-&ldquo;welcome&rdquo; page that is only displayed to anonymous
-users. </div>
-
-
-</div>
-
-
-<h1><a id="sorting" name="sorting">Sorting</a></h1>
-
-
-<div class="level1">
-<p>Centerblocks: When you have more than one static page that
-would appear in the same section of the center area (e.g. two static
-pages that would be displayed at the top of the index page), you can
-choose the order in which they appear from the Configuration admin
-panel for the static pages plugin. Your options are: </p>
-
-
-<ul>
-
-
-  <li class="level1">
-
-    <div class="li">Date (sort by last changed date)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Page ID (sort by the page id; default)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Page Title (sort by the page title)</div>
-
-
-  </li>
-
-
-</ul>
-
-
-<p>Please note that this order will only apply to centerblocks
-from static pages. All other plugins creating centerblocks will not be
-in that order. Also note that the centerblock is not necessarily
-looking like a standard glFusion block. To achieve that, please check
-the field &ldquo;Wrapping Static Pages in a block&rdquo; below.
-</p>
-
-
-<p>Menu entries: It's also possible to sort the static pages that
-are displayed in the site's menu (if you're using a theme that uses the
-{plg_menu_elements} variables in its header.thtml). This sort order can
-also be changed in the Configuration admin panel for the static pages
-plugin: </p>
-
-
-<ul>
-
-
-  <li class="level1">
-
-    <div class="li">Date (sort by last changed date)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Label (sort by the menu label text;
-default)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Page ID (sort by the page id)</div>
-
-
-  </li>
-
-
-  <li class="level1">
-
-    <div class="li">Page Title (sort by the page title)</div>
-
-
-  </li>
-
-
-</ul>
-
-
-</div>
-
-
-<h1><a id="wrapping_static_pages_in_a_block" name="wrapping_static_pages_in_a_block">Wrapping Static
-Pages in a block</a></h1>
-
-
-<div class="level1">
-<p>You can chose to have a static page wrapped in a glFusion
-block-layout by checking the &ldquo;wrap static page in a
-block&rdquo; option in the static pages editor. If selected, the
-page's title will be used as the block title. Further, you can, as with
-normal blocks, enter a help <acronym title="Uniform Resource Locator">URL</acronym>. If
-this <acronym title="Uniform Resource Locator">URL</acronym>
-is entered, the block will display a help icon linking to that <acronym title="Uniform Resource Locator">URL</acronym>. </p>
-
-
-<p>The default for this option can be set in the Configuration
-admin panel for the static pages plugin. Cloning Static Pages </p>
-
-
-<p>When you have a lot of similar static pages you may want to
-make a copy of an existing page and then edit that copy. This can
-easily be done by clicking on the [C] from the list of static pages.
-Doing so will create a copy of that page with a new page ID. </p>
-
-
-</div>
-
-
-<h1><a id="url_rewriting" name="url_rewriting">URL
-rewriting</a></h1>
-
-
-<div class="level1">
-<p>Please note that this feature is considered experimental and
-is known not to work with <acronym title="Internet Information Services">IIS</acronym>. </p>
-
-
-<p>glFusion supports a form of <acronym title="Uniform Resource Locator">URL</acronym>
-rewriting, i.e. change the look of URLs such that they are more search
-engine friendly. For example, instead of </p>
-
-
-<pre class="code"> http://yoursite/staticpages/index.php?page=20030313100131123</pre>
-
-
-<p>the <acronym title="Uniform Resource Locator">URL</acronym>
-could look like this </p>
-
-
-<pre class="code"> http://yoursite/staticpages/index.php/20030313100131123</pre>
-
-
-<p>Some search engines are known not to index pages when the <acronym title="Uniform Resource Locator">URL</acronym>
-includes characters like '?' and '='. You could further improve the
-chances of this page being indexed by replacing the numeric page ID
-with a word or expression (preferrably something that corresponds to
-the page's content), e.g. </p>
-
-
-<pre class="code"> http://yoursite/staticpages/index.php/about</pre>
-
-
-<p>To make use of <acronym title="Uniform Resource Locator">URL</acronym>
-rewriting, you will need to set the option &ldquo;Enable <acronym title="Uniform Resource Locator">URL</acronym>
-Rewriting&rdquo; to True in glFusion's Configuration admin panel. </p>
-
-
-</div>
-
-
-<h1><a id="deleting_pages_with_their_owner" name="deleting_pages_with_their_owner">Deleting pages with
-their owner</a></h1>
-
-
-<div class="level1">
-<p>As all objects in glFusion, static pages have an owner (the
-user that created the static page). When that user's account is deleted
-for some reason, any static pages owned by that user can either be
-deleted as well or they can be assigned to another user in glFusion's
-Root group. </p>
-
-
-<p>In the Configuration admin panel for the static pages plugin,
-you can set the &ldquo;Delete Pages with Owner?&rdquo; option
-to either &ldquo;False&rdquo; (which is also the default),
-meaning that static pages will not be deleted withtheir owner, but
-assigned to a member of the Root group instead (the user withthe lowest
-user ID, most likely the Admin). Setting the option to
-&ldquo;True&rdquo; means that static pages will be deleted when
-their owner's account is deleted.</p>
-
-
-<h1><a id="static_pages_configuration_options" name="static_pages_configuration_options">Static Pages
-Configuration Options</a></h1>
-
-
-<div class="level1">
-<table style="width: 638px; height: 333px;" class="inline" border="1">
-
-
-  <tbody>
-
-
-    <tr class="row0">
-
-
-      <td class="col0 leftalign"><a name="desc_allow_php"></a>Allow <acronym title="Hypertext Preprocessor">PHP</acronym> </td>
-
-
-      <td class="col1 leftalign">Whether or not to allow <acronym title="Hypertext Preprocessor">PHP</acronym> to
-execute in static pages. </td>
-
-
-    </tr>
-
-
-    <tr class="row1">
-
-
-      <td class="col0 leftalign"><a name="desc_sort__by"></a>Sort
-Centerblocks By </td>
-
-
-      <td class="col1 leftalign">How to sort the center
-blocks. </td>
-
-
-    </tr>
-
-
-    <tr class="row2">
-
-
-      <td class="col0 leftalign"><a name="desc_sort_menu_by"></a>Sort Menu Entries By </td>
-
-
-      <td class="col1 leftalign">Order to sort menu
-entries. </td>
-
-
-    </tr>
-
-
-    <tr class="row3">
-
-
-      <td class="col0 leftalign"><a name="desc_delete_pages"></a>Delete Pages with Owner </td>
-
-
-      <td class="col1 leftalign">Defines what to do when a
-user is deleted that is the owner of a static page. When set to <strong>False</strong>,
-all static pages owned by the deleted user will be assigned to a user
-of the &ldquo;Root&rdquo; group (i.e. the site admin). When set
-to <strong>True</strong>, the static pages are deleted,
-including all the comments posted on that static page. </td>
-
-
-    </tr>
-
-
-    <tr class="row4">
-
-
-      <td class="col0 leftalign"><a name="desc_in_block"></a>Wrap
-Pages in Block </td>
-
-
-      <td class="col1">Default setting for Wrap Page in Block - When a
-page is wrapped in a block, the page title will be displayed above the
-page contents.</td>
-
-
-    </tr>
-
-
-    <tr class="row5">
-
-
-      <td class="col0 leftalign"><a name="desc_show_hits"></a>Show Hits </td>
-
-
-      <td class="col1">Default setting to determine if the page views will be displayed on the page.</td>
-
-
-    </tr>
-
-
-    <tr class="row6">
-
-
-      <td class="col0 leftalign"><a name="desc_show_date"></a>Show Date </td>
-
-
-      <td class="col1">Default setting to determine if the last modified date will be displayed on the page.</td>
-
-
-    </tr>
-
-
-    <tr class="row7">
-
-
-      <td class="col0 leftalign"><a name="desc_filter_html"></a>Filter <acronym title="HyperText Markup Language">HTML</acronym> </td>
-
-
-      <td class="col1">Should the contents of the static page be run through the glFusion HTML filter.</td>
-
-
-    </tr>
-
-
-    <tr class="row8">
-
-
-      <td class="col0 leftalign"><a name="desc_censor"></a>Censor
-Content </td>
-
-
-      <td class="col1">Should the contents of the static page be run through the glFusion content filter.</td>
-
-
-    </tr>
-
-
-    <tr class="row9">
-
-
-      <td class="col0 leftalign"><a name="desc_aftersave"></a>After Saving Page </td>
-
-
-      <td class="col1">Where to go after saving a static page.</td>
-
-
-    </tr>
-
-
-    <tr class="row10">
-
-
-      <td class="col0 leftalign"><a name="desc_atom_max_items"></a>Max. Pages in Web
-Services Feed </td>
-
-      <td> Maximum number of pages to include in Web Services feed.</td>
-
-
-    </tr>
-
-    <tr class="row11">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_0"></a>Pages Default Permissions[0] </td>
-
-
-      <td class="col1 leftalign">The default Owner permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-    <tr class="row12">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_1"></a>Pages Default Permissions[1]</td>
-
-
-      <td class="col1 leftalign">The default Group permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-        <tr class="row13">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_2"></a>Pages Default Permissions[2] </td>
-
-
-      <td class="col1 leftalign">The default Member permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write.  </td>
-
-
-    </tr>
-        <tr class="row14">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_3"></a>Pages Default Permissions[3] </td>
-
-
-      <td class="col1 leftalign">The default Anonymous permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-
-  </tbody>
-</table>
-
-
-</div>
-
-
-<p> </p>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Static Pages</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Static Pages Plugin
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+				<h1>Static Pages Content</h1>
+
+				<p>
+					The Static Pages plugin was originally aimed at creating pages
+					with static content (as opposed to the dynamic pages created by
+					glFusion) - hence the name. Pages like an &ldquo;about
+					us&rdquo; page, a mission statement, etc. would come to mind.
+				</p>
+
+				<p>
+					Since then, people have used the static pages for all kinds of
+					things and with the inclusion of PHP into
+					static pages, even the original name isn't quite right any more
+					&hellip; Features
+				</p>
+
+				<ul>
+					<li>supports use of PHP</li>
+					<li>editable page ID to make more readable URLs</li>
+					<li>Static pages can be displayed on glFusion's index and topic pages and can even replace it entirely (&ldquo;splash screen&rdquo;)</li>
+					<li>&ldquo;cloning&rdquo; of existing pages</li>
+					<li>Makes use of glFusion's URL rewrite feature</li>
+					<li>Provides [staticpage:] and [staticpage_content:] autotags</li>
+					<li>proper support for glFusion permissions</li>
+				</ul>
+
+				<h1>Use of PHP</h1>
+
+				<p>
+					PHP in Staticpages is enabled by default on new install of glFusion.
+					It is important to understand if you allow other users (members of the Static
+					Page Admin group) to create staticpages, you may elect to disable the use of PHP
+					in static pages.
+				</p>
+
+				<h2>De-Activating PHP</h2>
+
+				<p>
+					To disaable PHP use, you will have to remove the 'staticpages.PHP' permission from
+					the &ldquo;Static Page Admin&rdquo; group. To do this, log in as the Admin and from
+					the Admin's Only block, select &ldquo;Groups&rdquo;. Find the &ldquo;Static Page
+					Admin&rdquo; group and edit it by clicking on the name of the group. At the bottom
+					of the page, you will find a list of &ldquo;Rights&rdquo; (permissions) that can be
+					granted to all members of this group. Note that 'staticpages.delete' and 'staticpages.edit'
+					are also checked. To remove the ability for&nbsp; members of the Static Page Admin group to
+					use PHP in static pages, you will have to un-check the 'staticpages.PHP' checkbox and save
+					your changes.
+				</p>
+
+				<p>
+					In addition to the 'staticpages.PHP' permission discussed above, there is also a
+					global option to disable the use of PHP in static pages entirely. That option
+					&ldquo;Allow PHP?&rdquo; can be found in the Configuration admin panel for the
+					static pages plugin. When set to &ldquo;False&rdquo;, that option will override
+					the 'staticpages.PHP' permission and disable all use of PHP in static pages.
+				</p>
+
+				<h2>Usage</h2>
+
+				<div class="uk-alert uk-alert-danger">
+					The use of PHP in static pages may result in security issues if not used properly. Use this
+					feature with care!
+				</div>
+
+				<p>
+					The use of PHP as to be enabled for each individual static page.
+					Below the content edit field, you will find a drop-down menu with
+					the following options:
+				</p>
+
+				<dl>
+					<dt>do not execute PHP</dt>
+					<dd>When you select this option, any PHP code in the static page will not be executed but will instead be printed out as-is.</dd>
+				</dl>
+
+				<dl>
+					<dt>execute PHP (return)</dt>
+					<dd>If you select this option, PHP code in static pages will be executed. The 'return' indicates that the code should return any output it generates, using a PHP return statement, instead of printing it out directly. </dd>
+				</dl>
+
+				<dl>
+					<dt>execute PHP</dt>
+					<dd>Again, this option will enable execution of PHP. Only this time, the PHP code can actually use echo and print statements without having the output interfere with the page layout. </dd>
+				</dl>
+
+				<p>
+					Please note that when embedding PHP code in a static page, your code should not be enclosed
+					in the PHP &lt;?php and ?&gt; tags. Instead, it is assumed that the static page contains
+					the PHP code that would normally go between those two tags.
+				</p>
+
+				<p>
+					When selecting the third of the above PHP execution
+					options (&ldquo;execute PHP&rdquo;) you can switch back and forth between PHP and plain HTML like this:
+				</p>
+
+				<pre class="code">echo "Hello"; ?&gt;, &lt;b&gt;world&lt;/b&gt;, &lt;?php echo "how are you?";</pre>
+
+				<p>
+					The above example would print out &ldquo;Hello, <b>world</b>, how
+					are you?&rdquo;.
+				</p>
+
+				<h1>Page ID</h1>
+
+				<p>
+					When creating a new static page, it will be assigned a page ID
+					automatically. This ID consists of the date and time and up to three
+					random digits. When you anticipate that the URL of this page may be used
+					a lot, e.g. quoted in emails, it may make sense to use a more readable ID for the page.
+				</p>
+
+				<p>
+					The static pages editor will let you change the page ID. For
+					example, you may want to rename the ID for your
+					&ldquo;about&rdquo; page from
+					&ldquo;20030313100131123&rdquo; to &ldquo;about&rdquo;,
+					thus creating a URL
+					like
+				</p>
+
+				<pre class="code">http://yoursite/staticpages/index.php?page=about</pre>
+
+
+				<p>
+					which looks much nicer when quoted (and is easier to
+					remember). You could further improve this by making use of glFusion's URL rewrite
+					feature.
+				</p>
+
+				<p>
+					Please note that you should only use letters and digits for
+					the page ID. Avoid national special characters, most punctuation
+					characters ('-' and '.' should be okay, though) and spaces. The static
+					page editor will catch some illegal characters but not all of them
+					&hellip; Using Static Pages on the index page
+				</p>
+
+				<p>
+					glFusion's Center Blocks concept allows plugins to place
+					blocks in the center area of a glFusion site, i.e. among the stories.
+				</p>
+
+
+				<p>
+					When you check the &ldquo;Centerblock&rdquo; option
+					for a static page, you can use the &ldquo;Position&rdquo; and
+					&ldquo;Topic&rdquo; drop-downs to chose where this static page
+					will be displayed. For &ldquo;Position&rdquo;, the options are
+					&ldquo;Top Of Page&rdquo;, &ldquo;After Featured
+					Story&rdquo;, &ldquo;Bottom Of Page&rdquo; (which should be
+					self-explanatory) and &ldquo;Entire Page&rdquo;. That last
+					option, &ldquo;Entire Page&rdquo;, will tell glFusion that this
+					static page will replace the entire index page - it will not display
+					any stories, but only the contents of this static page. This is useful
+					e.g. for &ldquo;splash&rdquo; screens or Welcome pages.
+				</p>
+
+
+				<div class="uk-alert">
+					When using a static page as a
+					&ldquo;splash&rdquo; screen, you may need a link that takes
+					your visitors to the normal index page, i.e. the list of current
+					stories. To do this, create a link to index.php?display=all
+				</div>
+
+				<p>
+					The second drop-down, &ldquo;Topic&rdquo;, lets you
+					restrict the display of a static page to only a certain topic, the
+					homepage only, or all pages (i.e. all topic pages and the homepage).
+					This is the same as the options you have for blocks.
+				</p>
+
+
+				<div class="uk-alert">
+					You can combine these options with
+					the permission settings. This will let you, for example, create a
+					&ldquo;welcome&rdquo; page that is only displayed to anonymous
+					users.
+				</div>
+
+
+				<h1>Sorting</h1>
+
+
+				<p>
+					Centerblocks: When you have more than one static page that
+					would appear in the same section of the center area (e.g. two static
+					pages that would be displayed at the top of the index page), you can
+					choose the order in which they appear from the Configuration admin
+					panel for the static pages plugin. Your options are:
+				</p>
+
+				<ul>
+					<li>Date (sort by last changed date)</li>
+					<li>Page ID (sort by the page id; default)</li>
+					<li>Page Title (sort by the page title)</li>
+				</ul>
+
+				<p>
+					Please note that this order will only apply to centerblocks
+					from static pages. All other plugins creating centerblocks will not be
+					in that order. Also note that the centerblock is not necessarily
+					looking like a standard glFusion block. To achieve that, please check
+					the field &ldquo;Wrapping Static Pages in a block&rdquo; below.
+				</p>
+
+
+				<p>
+					Menu entries: It's also possible to sort the static pages that
+					are displayed in the site's menu (if you're using a theme that uses the
+					{plg_menu_elements} variables in its header.thtml). This sort order can
+					also be changed in the Configuration admin panel for the static pages
+					plugin:
+				</p>
+
+				<ul>
+					<li>Date (sort by last changed date)</li>
+					<li>Label (sort by the menu label text; default)</li>
+					<li>Page ID (sort by the page id)</li>
+					<li>Page Title (sort by the page title)</li>
+				</ul>
+
+				<h1>Wrapping Static Pages in a block</h1>
+
+				<p>
+					You can chose to have a static page wrapped in a glFusion
+					block-layout by checking the &ldquo;wrap static page in a
+					block&rdquo; option in the static pages editor. If selected, the
+					page's title will be used as the block title. Further, you can, as with
+					normal blocks, enter a help URL. If this URL is entered, the block will
+					display a help icon linking to that URL.
+				</p>
+
+				<p>
+					The default for this option can be set in the Configuration
+					admin panel for the static pages plugin. Cloning Static Pages
+				</p>
+
+				<p>
+					When you have a lot of similar static pages you may want to
+					make a copy of an existing page and then edit that copy. This can
+					easily be done by clicking on the [C] from the list of static pages.
+					Doing so will create a copy of that page with a new page ID.
+				</p>
+
+				<h1>URL rewriting</h1>
+
+				<p>
+					Please note that this feature is considered experimental and
+					is known not to work with IIS.
+				</p>
+
+				<p>
+					glFusion supports a form of URL
+					rewriting, i.e. change the look of URLs such that they are more search
+					engine friendly. For example, instead of
+				</p>
+
+
+				<pre class="code"> http://yoursite/staticpages/index.php?page=20030313100131123</pre>
+
+
+				<p>the URL
+				could look like this </p>
+
+
+				<pre class="code"> http://yoursite/staticpages/index.php/20030313100131123</pre>
+
+
+				<p>Some search engines are known not to index pages when the URL
+					includes characters like '?' and '='. You could further improve the
+					chances of this page being indexed by replacing the numeric page ID
+					with a word or expression (preferrably something that corresponds to
+				the page's content), e.g. </p>
+
+
+				<pre class="code"> http://yoursite/staticpages/index.php/about</pre>
+
+
+				<p>To make use of URL
+					rewriting, you will need to set the option &ldquo;Enable URL
+				Rewriting&rdquo; to True in glFusion's Configuration admin panel. </p>
+
+
+				<h1>Deleting pages with their owner</h1>
+
+
+				<p>As all objects in glFusion, static pages have an owner (the
+					user that created the static page). When that user's account is deleted
+					for some reason, any static pages owned by that user can either be
+					deleted as well or they can be assigned to another user in glFusion's
+				Root group. </p>
+
+
+				<p>In the Configuration admin panel for the static pages plugin,
+					you can set the &ldquo;Delete Pages with Owner?&rdquo; option
+					to either &ldquo;False&rdquo; (which is also the default),
+					meaning that static pages will not be deleted withtheir owner, but
+					assigned to a member of the Root group instead (the user withthe lowest
+					user ID, most likely the Admin). Setting the option to
+					&ldquo;True&rdquo; means that static pages will be deleted when
+				their owner's account is deleted.</p>
+
+
+				<h1>Static Pages Configuration Options</h1>
+
+				<dl id="desc_allow_php">
+					<dt>Allow PHP </dt>
+					<dd>Whether or not to allow PHP to execute in static pages. </dd>
+				</dl>
+				<dl id="desc_sort__by">
+					<dt>Sort Centerblocks By </dt>
+					<dd>How to sort the center blocks. </dd>
+				</dl>
+				<dl id="desc_sort_menu_by">
+					<dt>Sort Menu Entries By </dt>
+					<dd>Order to sort menu entries. </dd>
+				</dl>
+				<dl id="desc_delete_pages">
+					<dt>Delete Pages with Owner </dt>
+					<dd>Defines what to do when a user is deleted that is the owner of a static page. When set to <strong>False</strong>, all static pages owned by the deleted user will be assigned to a user of the &ldquo;Root&rdquo; group (i.e. the site admin). When set to <strong>True</strong>, the static pages are deleted, including all the comments posted on that static page. </dd>
+				</dl>
+				<dl id="desc_in_block">
+					<dt>Wrap Pages in Block </dt>
+					<dd>Default setting for Wrap Page in Block - When a page is wrapped in a block, the page title will be displayed above the page contents.</dd>
+				</dl>
+				<dl id="desc_show_hits">
+					<dt>Show Hits </dt>
+					<dd>Default setting to determine if the page views will be displayed on the page.</dd>
+				</dl>
+				<dl id="desc_show_date">
+					<dt>Show Date </dt>
+					<dd>Default setting to determine if the last modified date will be displayed on the page.</dd>
+				</dl>
+				<dl id="desc_filter_html">
+					<dt>Filter HTML </dt>
+					<dd>Should the contents of the static page be run through the glFusion HTML filter.</dd>
+				</dl>
+				<dl id="desc_censor">
+					<dt>Censor Content </dt>
+					<dd>Should the contents of the static page be run through the glFusion content filter.</dd>
+				</dl>
+				<dl id="desc_aftersave">
+					<dt>After Saving Page </dt>
+					<dd>Where to go after saving a static page.</dd>
+				</dl>
+				<dl id="desc_atom_max_items">
+					<dt>Max. Pages in Web Services Feed </dt>
+					<dd>Maximum number of pages to include in Web Services feed.</dd>
+				</dl>
+				<dl id="desc_default_permissions_0">
+					<dt>Pages Default Permissions[0] </dt>
+					<dd>The default Owner permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+				<dl id="desc_default_permissions_1">
+					<dt>Pages Default Permissions[1]</dt>
+					<dd>The default Group permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+				<dl id="desc_default_permissions_2">
+					<dt>Pages Default Permissions[2] </dt>
+					<dd>The default Member permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write.  </dd>
+				</dl>
+				<dl id="desc_default_permissions_3">
+					<dt>Pages Default Permissions[3] </dt>
+					<dd>The default Anonymous permissions for the Pages editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Pages editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
 </body>
 </html>

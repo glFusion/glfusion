@@ -1,253 +1,169 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-
-
-
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-
-
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-
-
-  <meta name="robots" content="noindex,nofollow" />
-
-
-  <title>FileMgmt Plugin - glFusion CMS</title></head>
-<body style="direction: ltr;">
-
-
-<div id="gl_container_fluid">
-<div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project </span> <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a id="filemgmt_configuration" name="filemgmt_configuration">FileMgmt
-Configuration</a></h1>
-
-<div class="level1">
-<table style="width: 640px; height: 902px;" class="inline">
-
-  <tbody>
-
-    <tr class="row0">
-
-      <th class="col0 leftalign">Setting </th>
-
-      <th class="col1 leftalign">Description </th>
-    </tr>
-
-    <tr class="row1">
-
-      <th class="col0 leftalign" colspan="2">Public FileMgmt Settings </th>
-
-    </tr>
-
-    <tr class="row2">
-
-      <td class="col0 leftalign"><a name="desc_perpage"></a>Displayed Downloads per Page </td>
-
-      <td class="col1 leftalign">Number of downloads to display per page. </td>
-    </tr>
-
-    <tr class="row3">
-
-      <td class="col0 leftalign"><a name="desc_popular_download"></a>Hits to be Popular </td>
-
-      <td class="col1 leftalign">Number of hits required to be marked popular.
-      </td>
-    </tr>
-
-    <tr class="row4">
-
-      <td class="col0 leftalign"><a name="desc_newdownloads"></a>Number of Downloads as New on Top Page </td>
-
-      <td class="col1 leftalign">Number of downloads to show as new on main page.
-      </td>
-    </tr>
-
-    <tr class="row5">
-
-      <td class="col0 leftalign"><a name="desc_dlreport"></a>Restrict Access to Download Report </td>
-
-      <td class="col1 leftalign">If TRUE, only allow users with the filemgmt.edit
-permission to view the detailed download report for a file. </td>
-    </tr>
-
-    <tr class="row6">
-
-      <td class="col0 leftalign"><a name="desc_trimdesc"></a>Trim File Descriptions in Lists </td>
-
-      <td class="col1 leftalign">If TRUE, trim the file descriptions at the first
-blank line. </td>
-    </tr>
-
-    <tr class="row7">
-
-      <td class="col0 leftalign"><a name="desc_whatsnew"></a>Enable What's New Listing </td>
-
-      <td class="col1 leftalign">If TRUE, include recently uploaded files in the
-glFusion What's New block. If FALSE, do not include in the What's New block.
-      </td>
-    </tr>
-
-    <tr class="row8">
-
-      <td class="col0 leftalign"><a name="desc_whatsnewperioddays"></a>What's New Days </td>
-
-      <td class="col1 leftalign">Number of days to consider a file new. </td>
-    </tr>
-
-    <tr class="row9">
-
-      <td class="col0 leftalign"><a name="desc_whatsnewtitlelength"></a>What's New Title Length </td>
-
-      <td class="col1 leftalign">Trim the title to XX characters in the What's New
-block. </td>
-    </tr>
-
-    <tr class="row10">
-
-      <td class="col0 leftalign"><a name="desc_showwhatsnewcomments"></a>Show Comments in What's New Block </td>
-
-      <td class="col1 leftalign">Include recent comments on files in the What's New
-Block. </td>
-    </tr>
-
-    <tr class="row11">
-
-      <td class="col0 leftalign"><a name="desc_numcategoriesperrow"></a>Categories per Row </td>
-
-      <td class="col1 leftalign">How many categories to display per row. </td>
-    </tr>
-
-    <tr class="row12">
-
-      <td class="col0 leftalign"><a name="desc_numsubcategories2show"></a>Sub Categories per Row </td>
-
-      <td class="col1 leftalign">How many sub-categories to display per row.
-      </td>
-    </tr>
-
-    <tr class="row13">
-
-      <th class="col0 leftalign" colspan="2">FileMgmt Access Control </th>
-    </tr>
-
-    <tr class="row14">
-
-      <td class="col0 leftalign"><a name="desc_selectpriv"></a>Restrict Access to Group 'Logged-In Users' Only </td>
-
-      <td class="col1 leftalign">Only allow logged-in users access to FileMgmt.
-      </td>
-    </tr>
-
-    <tr class="row15">
-
-      <td class="col0 leftalign"><a name="desc_uploadselect"></a>Allow Logged-In Uploads </td>
-
-      <td class="col1 leftalign">Allow logged-in users to submit files for download.
-      </td>
-    </tr>
-
-    <tr class="row16">
-
-      <td class="col0 leftalign"><a name="desc_uploadpublic"></a>Allow Anonymous Uploads </td>
-
-      <td class="col1 leftalign">Allow anonymous users to submit files for download.
-      </td>
-    </tr>
-
-    <tr class="row17">
-
-      <th class="col0 leftalign" colspan="2">FileMgmt General Settings </th>
-    </tr>
-
-    <tr class="row18">
-
-      <td class="col0 leftalign"><a name="desc_useshots"></a>Display Category Images </td>
-
-      <td class="col1 leftalign">Display category thumbnails (if available).
-      </td>
-    </tr>
-
-    <tr class="row19">
-
-      <td class="col0 leftalign"><a name="desc_shotwidth"></a>Thumbnail Img Width </td>
-
-      <td class="col1 leftalign">Maximum width of a category thumbnail. </td>
-    </tr>
-
-    <tr class="row20">
-
-      <td class="col0 leftalign"><a name="desc_Emailoption"></a>Email Submitter if File Approved </td>
-
-      <td class="col1 leftalign">Email submitter if file is approved. </td>
-    </tr>
-
-    <tr class="row21">
-
-      <td class="col0 leftalign"><a name="desc_FileStore"></a>Directory to Store Files </td>
-
-      <td class="col1 leftalign">Full, absolute path to the directory on your server
-where files should be stored. </td>
-    </tr>
-
-    <tr class="row22">
-
-      <td class="col0 leftalign"><a name="desc_SnapStore"></a>Directory to Store File Thumbnails </td>
-
-      <td class="col1 leftalign">Full, absolute path to the directory on your server
-where thumbnail images should be stored. </td>
-    </tr>
-
-    <tr class="row23">
-
-      <td class="col0 leftalign"><a name="desc_SnapCat"></a>Directory to Store Category Thumbnails </td>
-
-      <td class="col1 leftalign">Full, absolute path to the directory on your server
-where category thumbnail images should be stored. </td>
-    </tr>
-
-    <tr class="row24">
-
-      <td class="col0 leftalign"><acronym title="Uniform Resource Locator"><a name="desc_FileStoreURL"></a>URL</acronym> to Files </td>
-
-      <td class="col1 leftalign">Full <acronym title="Uniform Resource Locator">URL</acronym> to the directory where files are
-stored. </td>
-    </tr>
-
-    <tr class="row25">
-
-      <td class="col0 leftalign"><acronym title="Uniform Resource Locator"><a name="desc_FileSnapURL"></a>URL</acronym> to Thumbnails </td>
-
-      <td class="col1 leftalign">Full <acronym title="Uniform Resource Locator">URL</acronym> to the directory where thumbnails
-are stored. </td>
-    </tr>
-
-    <tr class="row26">
-
-      <td class="col0 leftalign"><acronym title="Uniform Resource Locator"><a name="desc_SnapCatURL"></a>URL</acronym> to Category Thumbnails </td>
-
-      <td class="col1 leftalign">Full <acronym title="Uniform Resource Locator">URL</acronym> to the directory where category
-thumbnails are stored. </td>
-    </tr><tr><td><a name="outside_webroot"></a>Store Files Outside Web Root</td><td>If this option is TRUE, you can move the filemgmt_data/files/ directory outside of the web root area. &nbsp;</td></tr>
-  </tbody>
-</table>
-</div>
-<br />
-<br />
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</body></html>
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion FileMgmt Configuration</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion FileMgmt Configuration
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+				<h1>FileMgmt Configuration</h1>
+
+				<h2>Public FileMgmt Settings </h2>
+
+				<dl id="desc_perpage">
+					<dt>Displayed Downloads per Page </dt>
+					<dd>Number of downloads to display per page. </dd>
+				</dl>
+
+				<dl id="desc_popular_download">
+					<dt>Hits to be Popular </dt>
+					<dd>Number of hits required to be marked popular.</dd>
+				</dl>
+
+				<dl id="desc_newdownloads">
+					<dt>Number of Downloads as New on Top Page </dt>
+					<dd>Number of downloads to show as new on main page.</dd>
+				</dl>
+
+				<dl id="desc_dlreport">
+					<dt>Restrict Access to Download Report </dt>
+					<dd>If TRUE, only allow users with the filemgmt.edit permission to view the detailed download report for a file. </dd>
+				</dl>
+
+				<dl id="desc_trimdesc">
+					<dt>Trim File Descriptions in Lists </dt>
+					<dd>If TRUE, trim the file descriptions at the first blank line. </dd>
+				</dl>
+
+				<dl id="desc_whatsnew">
+					<dt>Enable What's New Listing </dt>
+					<dd>If TRUE, include recently uploaded files in the glFusion What's New block. If FALSE, do not include in the What's New block.</dd>
+				</dl>
+
+				<dl id="desc_whatsnewperioddays">
+					<dt>What's New Days </dt>
+					<dd>Number of days to consider a file new. </dd>
+				</dl>
+
+				<dl id="desc_whatsnewtitlelength">
+					<dt>What's New Title Length </dt>
+					<dd>Trim the title to XX characters in the What's New block. </dd>
+				</dl>
+
+				<dl id="desc_showwhatsnewcomments">
+					<dt>Show Comments in What's New Block </dt>
+					<dd>Include recent comments on files in the What's New
+					Block. </dd>
+				</dl>
+
+				<dl id="desc_numcategoriesperrow">
+					<dt>Categories per Row </dt>
+					<dd>How many categories to display per row. </dd>
+				</dl>
+
+				<dl id="desc_numsubcategories2show">
+					<dt>Sub Categories per Row </dt>
+					<dd>How many sub-categories to display per row.
+					</dd>
+				</dl>
+
+				<h2>FileMgmt Access Control</h2>
+
+				<dl id="desc_selectpriv">
+					<dt>Restrict Access to Group 'Logged-In Users' Only</dt>
+					<dd>Only allow logged-in users access to FileMgmt.</dd>
+				</dl>
+
+				<dl id="desc_uploadselect">
+					<dt>Allow Logged-In Uploads </dt>
+					<dd>Allow logged-in users to submit files for download.</dd>
+				</dl>
+
+				<dl id="desc_uploadpublic">
+					<dt>Allow Anonymous Uploads </dt>
+					<dd>Allow anonymous users to submit files for download.</dd>
+				</dl>
+
+				<h2>FileMgmt General Settings</h2>
+
+				<dl id="desc_useshots">
+					<dt>Display Category Images </dt>
+					<dd>Display category thumbnails (if available).</dd>
+				</dl>
+
+				<dl id="desc_shotwidth">
+					<dt>Thumbnail Img Width </dt>
+					<dd>Maximum width of a category thumbnail. </dd>
+				</dl>
+
+				<dl id="desc_Emailoption">
+					<dt>Email Submitter if File Approved </dt>
+					<dd>Email submitter if file is approved. </dd>
+				</dl>
+
+				<dl id="desc_FileStore">
+					<dt>Directory to Store Files </dt>
+					<dd>Full, absolute path to the directory on your server where files should be stored. </dd>
+				</dl>
+
+				<dl id="desc_SnapStore">
+					<dt>Directory to Store File Thumbnails </dt>
+					<dd>Full, absolute path to the directory on your server where thumbnail images should be stored. </dd>
+				</dl>
+
+				<dl id="desc_SnapCat">
+					<dt>Directory to Store Category Thumbnails </dt>
+					<dd>Full, absolute path to the directory on your server where category thumbnail images should be stored. </dd>
+				</dl>
+
+				<dl id="desc_FileStoreURL">
+					<dt>URL to Files </dt>
+					<dd>Full URL to the directory where files are stored. </dd>
+				</dl>
+
+				<dl id="desc_FileSnapURL">
+					<dt>URL to Thumbnails </dt>
+				<dd>Full URL</acronym> to the directory where thumbnails are stored. </dd>
+				</dl>
+
+				<dl id="desc_SnapCatURL">
+					<dt>URL to Category Thumbnails </dt>
+					<dd>Full URL to the directory where category thumbnails are stored. </dd>
+				</dl>
+
+				<dl id="outside_webroot">
+					<dt>Store Files Outside Web Root</dt>
+					<dd>If this option is TRUE, you can move the filemgmt_data/files/ directory outside of the web root area. &nbsp;</dd>
+				</dl>
+
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
+</body>
+</html>

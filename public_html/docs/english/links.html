@@ -1,348 +1,147 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-
-
-
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-
-
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-
-
-  <meta name="robots" content="noindex,nofollow" />
-
-
-  <title>Links Plugin - glFusion CMS</title></head>
-
-<body style="direction: ltr;">
-
-
-<div id="gl_container_fluid">
-<div id="gl_header"><span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
-Documentation Project
-</span><a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-</div>
-
-
-<div id="gl_wrapper">
-<div class="body-container">
-<h1><a name="links_plugin" id="links_plugin">Links
-Plugin</a></h1>
-
-
-<div class="level1">
-<p>The Links Plugin allows you to maintain a set of links, like a
-blog
-roll, for your site. You can setup categories to help organize the
-links.
-</p>
-
-
-<p>
-Links can be setup to use the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:submission" class="wikilink1" title="glfusion:submission">Moderation
-Queue</a> allowing you the opportunity to review the link before
-it is live on your site.</p>
-
-
-<h1><a name="links_plugin_configuration_options" id="links_plugin_configuration_options">Links Plugin
-Configuration Options</a></h1>
-
-
-<table class="inline">
-
-
-  <tbody>
-
-
-    <tr class="row0">
-
-
-      <th class="col0 leftalign">Option </th>
-
-
-      <th class="col1 leftalign">Description </th>
-
-
-    </tr>
-
-
-    <tr class="row1">
-
-
-      <td class="col0 leftalign"><a name="desc_linksloginrequired"></a>Links Login Required </td>
-
-
-      <td class="col1 leftalign">When set to True, only
-registered users can access the links section. Please note that <span class="curid"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:configuration#login_settings" class="wikilink1" title="glfusion:configuration">Login
-Required</a></span>
-in glFusion's main configuration takes precedence over this setting. So
-when that is set to True, anonymous users can not access the
-links section even when <em>Links Login Required</em> is
-set to False. </td>
-
-
-    </tr>
-
-
-    <tr class="row2">
-
-
-      <td class="col0 leftalign"><a name="desc_linkcols"></a>Categories per Column </td>
-
-
-      <td class="col1 leftalign">The number of link
-categories to display per column. </td>
-
-
-    </tr>
-
-
-    <tr class="row3">
-
-
-      <td class="col0 leftalign"><a name="desc_linksperpage"></a>Links per Page </td>
-
-
-      <td class="col1 leftalign">The number of links to
-show per page. </td>
-
-
-    </tr>
-
-
-    <tr class="row4">
-
-
-      <td class="col0 leftalign"><a name="desc_show_top10"></a>Show Top 10 Links </td>
-
-
-      <td class="col1 leftalign">When both <em>Categories
-per Column</em> and <em>Links per Page</em>
-are not 0, the plugin will show a list of the 10 most clicked-on links
-on the Links plugin's index page automatically. If you do not want that
-&#8220;top 10&#8221; list there, set this option to False. </td>
-
-
-    </tr>
-
-
-    <tr class="row5">
-
-
-      <td class="col0 leftalign"><a name="desc_show_category_descriptions"></a>Show Category Description
-      </td>
-
-
-      <td class="col1 leftalign">Whether to show
-sub-category descriptions when viewing a category or not. </td>
-
-
-    </tr>
-
-
-    <tr class="row6">
-
-
-      <th class="col0 leftalign" colspan="2">Links
-Admin Settings </th>
-
-
-    </tr>
-
-
-    <tr><td><a name="desc_target_blank"></a>Open Links in New Window</td><td>If True, links will open in a new browser window. False will use the current browser window.</td></tr><tr class="row7">
-
-
-      <td class="col0 leftalign"><a name="desc_hidenewlinks"></a>Hide New Links </td>
-
-
-      <td class="col1 leftalign">Whether new links should
-be hidden from the &#8220;What's New&#8221; block (when set <strong>True</strong>)
-or whether to list them there (when set to <strong>False</strong>).
-      </td>
-
-
-    </tr>
-
-
-    <tr class="row8">
-
-
-      <td class="col0 leftalign"><a name="desc_newlinksinterval"></a>New Links Interval </td>
-
-
-      <td class="col1 leftalign">For
-how long a link should be considered &#8220;new&#8221; and show
-up in the &#8220;What's
-New&#8221; block on the site. The interval is given in seconds, so
-the
-default value equals 14 days. </td>
-
-
-    </tr>
-
-
-    <tr class="row9">
-
-
-      <td class="col0 leftalign"><a name="desc_hidelinksmenu"></a>Hide Links Menu Entry </td>
-
-
-      <td class="col1 leftalign">Whether to hide the
-&#8220;Links&#8221; entry from glFusion's menu bar (when set to
-      <strong>True</strong>) or to show it (when set to <strong>False</strong>).
-      </td>
-
-
-    </tr>
-
-
-    <tr class="row10">
-
-
-      <td class="col0 leftalign"><a name="desc_linksubmission"></a>Enable Link Submission
-Queue </td>
-
-
-      <td class="col1 leftalign">Whether links submitted
-by users will have to be approved by an admin first (when set <strong>True</strong>)
-or show up immediately (when set <strong>False</strong>). </td>
-
-
-    </tr>
-
-
-    <tr class="row11">
-
-
-      <td class="col0 leftalign"><a name="desc_notification"></a>Notification Email </td>
-
-
-      <td class="col1 leftalign">Whether to send an email
-notification when a new link was submitted (when set to <strong>True</strong>)
-or not (when set to <strong>False</strong>). </td>
-
-
-    </tr>
-
-
-    <tr class="row12">
-
-
-      <td class="col0 leftalign"><a name="desc_delete_links"></a>Delete Links with Owner </td>
-
-
-      <td class="col1 leftalign">Defines what to do when a
-user is deleted that is the owner of a link. When set to <strong>False</strong>,
-all links owned by the deleted user will be assigned to a user of the
-&#8220;Root&#8221; group (i.e. the site admin). When set to <strong>True</strong>,
-the links are deleted. </td>
-
-
-    </tr>
-
-
-    <tr class="row13">
-
-
-      <td class="col0 leftalign"><a name="desc_aftersave"></a>After Saving Link </td>
-
-
-      <td class="col1 leftalign">Which page to go to after
-a links has been saved: <br />
-
-
-* 'item': go to the linked site(!) <br />
-
-
-* 'list': show admin's list of links (default) <br />
-
-
-* 'plugin': display the public list of links <br />
-
-
-* 'home': display the site's homepage <br />
-
-
-* 'admin': go to the &#8220;Admin Home&#8221; page, (i.e.
-Command &amp; Control) </td>
-
-
-    </tr>
-
-
-    <tr class="row14">
-
-
-      <td class="col0 leftalign"><a name="desc_root"></a>ID of Root Category </td>
-
-
-      <td class="col1 leftalign">ID to use for the root of
-the link categories tree. </td>
-
-
-    </tr>
-
-    <tr class="row15">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_0"></a>Link Default Permissions[0] </td>
-
-
-      <td class="col1 leftalign">The default Owner permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-    <tr class="row16">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_1"></a>Link Default Permissions[1]</td>
-
-
-      <td class="col1 leftalign">The default Group permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-        <tr class="row17">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_2"></a>Link Default Permissions[2] </td>
-
-
-      <td class="col1 leftalign">The default Member permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write.  </td>
-
-
-    </tr>
-        <tr class="row18">
-
-
-      <td class="col0 leftalign"><a name="desc_default_permissions_3"></a>Link Default Permissions[3] </td>
-
-
-      <td class="col1 leftalign">The default Anonymous permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write. </td>
-
-
-    </tr>
-
-  </tbody>
-</table>
-
-
-<p></p>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</body></html>
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Links Configuration</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Links Configuration
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+				<h1>Links Plugin</h1>
+
+				<p>
+					The Links Plugin allows you to maintain a set of links, like a blog roll,
+					for your site. You can setup categories to help organize the links.
+				</p>
+
+
+				<p>
+					Links can be setup to use the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:submission" class="wikilink1" title="glfusion:submission">Moderation
+					Queue</a> allowing you the opportunity to review the link before
+					it is live on your site.
+				</p>
+
+				<h2>Links Plugin Configuration Options</h2>
+
+				<dl id="desc_linksloginrequired">
+					<dt>Links Login Required</dt>
+					<dd>When set to True, only registered users can access the links section. Please note that <span class="curid"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:configuration#login_settings" class="wikilink1" title="glfusion:configuration">Login Required</a></span> in glFusion's main configuration takes precedence over this setting. So when that is set to True, anonymous users can not access the links section even when <em>Links Login Required</em> is set to False.</dd>
+				</dl>
+
+				<dl id="desc_linkcols">
+					<dt>Categories per Column</dt>
+					<dd>The number of link categories to display per column.</dd>
+				</dl>
+
+				<dl id="desc_linksperpage">
+					<dt>Links per Page</dt>
+					<dd>The number of links to show per page.</dd>
+				</dl>
+
+				<dl id="desc_show_top10">
+					<dt>Show Top 10 Links</dt>
+					<dd>When both <em>Categories per Column</em> and <em>Links per Page</em> are not 0, the plugin will show a list of the 10 most clicked-on links on the Links plugin's index page automatically. If you do not want that &#8220;top 10&#8221; list there, set this option to False.</dd>
+				</dl>
+
+				<dl id="desc_show_category_descriptions">
+					<dt>Show Category Description</dt>
+					<dd>Whether to show sub-category descriptions when viewing a category or not.</dd>
+				</dl>
+
+				<h2>Links Admin Settings </h2>
+
+				<dl id="desc_target_blank">
+					<dt>Open Links in New Window</dt>
+					<dd>If True, links will open in a new browser window. False will use the current browser window.</dd>
+				</dl>
+
+				<dl id="desc_hidenewlinks">
+					<dt>Hide New Links</dt>
+					<dd>Whether new links should be hidden from the &#8220;What's New&#8221; block (when set <strong>True</strong>) or whether to list them there (when set to <strong>False</strong>).</dd>
+				</dl>
+
+				<dl id="desc_newlinksinterval">
+					<dt>New Links Interval</dt>
+					<dd>For how long a link should be considered &#8220;new&#8221; and show up in the &#8220;What's New&#8221; block on the site. The interval is given in seconds, so the default value equals 14 days.</dd>
+				</dl>
+
+				<dl id="desc_hidelinksmenu">
+					<dt>Hide Links Menu Entry</dt>
+					<dd>Whether to hide the &#8220;Links&#8221; entry from glFusion's menu bar (when set to <strong>True</strong>) or to show it (when set to <strong>False</strong>).</dd>
+				</dl>
+
+				<dl id="desc_linksubmission">
+					<dt>Enable Link Submission Queue</dt>
+					<dd>Whether links submitted by users will have to be approved by an admin first (when set <strong>True</strong>) or show up immediately (when set <strong>False</strong>).</dd>
+				</dl>
+
+				<dl id="desc_notification">
+					<dt>Notification Email</dt>
+					<dd>Whether to send an email notification when a new link was submitted (when set to <strong>True</strong>) or not (when set to <strong>False</strong>).</dd>
+				</dl>
+
+				<dl id="desc_delete_links">
+					<dt>Delete Links with Owner</dt>
+					<dd>Defines what to do when a user is deleted that is the owner of a link. When set to <strong>False</strong>, all links owned by the deleted user will be assigned to a user of the &#8220;Root&#8221; group (i.e. the site admin). When set to <strong>True</strong>, the links are deleted.</dd>
+				</dl>
+
+				<dl id="desc_aftersave">
+					<dt>After Saving Link</dt>
+					<dd>Which page to go to after a links has been saved: <br/>* 'item': go to the linked site(!) <br/>* 'list': show admin's list of links (default) <br/>* 'plugin': display the public list of links <br/>* 'home': display the site's homepage <br/>* 'admin': go to the &#8220;Admin Home&#8221; page, (i.e. Command &amp; Control)</dd>
+				</dl>
+
+				<dl id="desc_root">
+					<dt>ID of Root Category</dt>
+					<dd>ID to use for the root of the link categories tree.</dd>
+				</dl>
+
+				<dl id="desc_default_permissions_0">
+					<dt>Link Default Permissions[0]</dt>
+					<dd>The default Owner permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Owner box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write.</dd>
+				</dl>
+
+				<dl id="desc_default_permissions_1">
+					<dt>Link Default Permissions[1]</dt>
+					<dd>The default Group permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Group box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write.</dd>
+				</dl>
+
+				<dl id="desc_default_permissions_2">
+					<dt>Link Default Permissions[2]</dt>
+					<dd>The default Member permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Member box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write. </dd>
+				</dl>
+
+				<dl id="desc_default_permissions_3">
+					<dt>Link Default Permissions[3]</dt>
+					<dd>The default Anonymous permissions for the Link editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Link editor. Options are No access, Read only, or Read/Write.</dd>
+				</dl>
+
+			</div>
+			<div class="tm-push"></div>
+		</div>
+	</div>
+	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+		<div class="uk-hidden-small" style="padding-top:5px;"></div>
+		<div>
+			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+		</div>
+	</footer>
+</body>
+</html>

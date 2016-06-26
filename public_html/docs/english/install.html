@@ -1,996 +1,533 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
-
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-
-  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
-
-  <meta name="robots" content="noindex,nofollow" />
-
-  <title>glFusion - Content Management with Style</title></head>
-<body dir="ltr">
-
-
-<div id="gl_container_fluid">
-
-<div id="gl_header">
-      <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">
-      glFusion Documentation Project
-      </span>
-	  <a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
-	</div>
-
-
-<div id="gl_wrapper">
-
-<div class="body-container">
-<h1><a name="system_requirements" id="system_requirements">System Requirements</a></h1>
-
-<div class="level1">
-
-<p>To successfully install and use glFusion you must have a fully
-operational web server, a database, and the server side scripting
-language <acronym title="Hypertext Preprocessor">PHP</acronym>.
-glFusion is developed and tested primarily on the Apache web server
-version 2.x, but it should run on any modern web server. glFusion has
-been successfully installed and is running on other web servers such as
-Zeus, Lighttpd, and Microsoft <acronym title="Internet Information Services">IIS</acronym>.
-
-</p>
-
-
-<p>
-glFusion only supports <acronym title="Hypertext Preprocessor">PHP</acronym> v5.2.x and above.
-
-</p>
-
-
-<p>
-glFusion supports MySQL database engine using both the MySQL interface and the MySQLi interface.
-</p>
-
-
-<p>
-
-<strong>Minimum Requirements</strong>
-</p>
-
-<table class="inline">
-
-	<tbody>
-    <tr class="row0">
-
-		<th class="col0 leftalign">Software  </th>
-      <th class="col1 leftalign">Requirement  </th>
-      <th class="col2 leftalign">Minimum Recommended  </th>
-      <th class="col3 leftalign">Web Site  </th>
-
-
-	</tr>
-
-	<tr class="row1">
-
-		<td class="col0 leftalign"><acronym title="Hypertext Preprocessor">PHP</acronym>  </td>
-      <td class="col1 leftalign">5.2.0  </td>
-      <td class="col2 leftalign">5.2.17  </td>
-      <td class="col3 leftalign"><a href="http://www.php.net" class="urlextern" title="http://www.php.net" rel="nofollow">http://www.php.net</a>  </td>
-
-	</tr>
-
-	<tr class="row2">
-
-		<td class="col0 leftalign">MySQL  </td>
-      <td class="col1 leftalign">4.1.3.x  </td>
-      <td class="col2 leftalign">5.2.x  </td>
-      <td class="col3 leftalign"><a href="http://www.mysql.org" class="urlextern" title="http://www.mysql.org" rel="nofollow">http://www.mysql.org</a>  </td>
-
-
-	</tr>
-
-	<tr class="row3">
-
-		<td class="col0 leftalign">Apache  </td>
-      <td class="col1 leftalign">1.3.x  </td>
-      <td class="col2 leftalign">2.2 series  </td>
-      <td class="col3 leftalign"><a href="http://www.apache.org" class="urlextern" title="http://www.apache.org" rel="nofollow">http://www.apache.org</a>  </td>
-
-	</tr>
-
-  </tbody>
-</table>
-
-
-<p>
-
-Your server or hosting environment must have the following items available for you to install and run glFusion.
-
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> Web Server (Apache, Zeus, lighttpd, Microsoft <acronym title="Internet Information Services">IIS</acronym>, etc.)</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> v5.2.0 or higher</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> MySQL v4.1.3</div>
-
-
-  </li>
-
-</ul>
-
-
-</div>
-
-
-<h1><a name="new_installation_procedures" id="new_installation_procedures">Installation Procedures</a></h1>
-
-<div class="level1">
-
-<p>glFusion is designed where some of the files should reside outside
-of the web root, meaning they should not be directly accessible from
-the Internet. For most users this does not pose a problem, but some
-hosting services do not allow users to store files outside of the main
-web accessible directory. For these users, you can still install
-glFusion, but you will want to follow the directions in the installing
-glFusion in the web root section.
-</p>
-
-
-<p>
-Make sure you know where your web root is on your server.  This is different than your website's <acronym title="Uniform Resource Locator">URL</acronym>
-address. You may need to contact your hosting provider for assistance.
-It is important that you know this information prior to performing the
-installation.
-</p>
-
-
-<div class="noteclassic">If you are not sure how to determine your
-paths, contact your hosting provider&#8217;s Technical Support Staff,
-they can generally help you out.
-</div>
-
-
-</div>
-
-
-<h2><a name="pre_installation_tasks" id="pre_installation_tasks">Pre Installation Tasks</a></h2>
-
-<div class="level2">
-
-<p>Before we install glFusion, you will need to know a few key pieces
-of information. Write down the following information. If you are unsure
-what to put for each of the items below, please contact your system
-administrator or you hosting provider.
-</p>
-
-<ul>
-
-
-  <li class="level1">
-    <div class="li"> Site <acronym title="Uniform Resource Locator">URL</acronym>:</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Database Server:</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Database Name:</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Database UserID:</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Database Password:</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Path to glFusion Private Files: <br />
-
- (path/to/glfusion)  <strong>these files should not be available via the Internet, so they go outside of your web root directory</strong></div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Path to glFusion Public <acronym title="HyperText Markup Language">HTML</acronym> Files: <br />
-
-
- (path/to/public_html)</div>
-
-  </li>
-
-</ul>
-
-
-</div>
-
-
-<h2><a name="assumptions" id="assumptions">Assumptions</a></h2>
-
-<div class="level2">
-
-<p>These installation instructions assume that you will be running your
-glFusion site as the main site on your domain. If your installation
-will be a sub-domain or a set of sub-pages of an existing site, you
-will need to adjust some of the paths.
-</p>
-
-
-</div>
-
-
-<h2><a name="create_the_glfusion_database" id="create_the_glfusion_database">Create the glFusion Database</a></h2>
-
-<div class="level2">
-
-<p>glFusion requires a MySQL database. Depending on your hosting
-solution, you may need to create a new database for glFusion and also a
-database user account. Some hosting providers setup a single database
-for your account that should be used. If you already have a database
-created that you wish to use, you can skip this section.
-</p>
-
-
-</div>
-
-
-<h3><a name="create_the_database" id="create_the_database">Create the Database</a></h3>
-
-<div class="level3">
-
-<p>Depending on your hosting solution, you may be able to create a new
-empty database using online tools provided by your hosting provider.
-You can also use a tool like phpMyAdmin to create the database.
-</p>
-
-
-<p>
-Once you have created the database, record the name of the new database above in the Pre-Installation Tasks section.
-</p>
-
-
-</div>
-
-
-<h3><a name="create_the_database_user" id="create_the_database_user">Create the Database User</a></h3>
-
-<div class="level3">
-
-<p>It is always a good security practice to create a unique user
-account for each database. Create a new database user and add the
-following permissions to the user for the database you created in the
-previous step:
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> SELECT</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> INSERT</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> UPDATE</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> DELETE</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> INDEX</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> CREATE TEMPORARY TABLES</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> CREATE</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> ALTER</div>
-
-  </li>
-
-
-  <li class="level1">
-    <div class="li"> DROP </div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> LOCK TABLES</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> REFERENCES</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> CREATE ROUTINE</div>
-
-  </li>
-
-</ul>
-
-
-<p>
-
-Record the new userid and password in the worksheet in the Pre-Installation Tasks section.
-
-
-</p>
-
-
-</div>
-
-
-<h2><a name="ftp_installation" id="ftp_installation">FTP Installation</a></h2>
-
-<div class="level2">
-
-<p>
-
-If you do not have shell access to your server and can only use an <acronym title="File Transfer Protocol">FTP</acronym> client to access your server, follow these instructions.
-
-</p>
-
-
-<p>To install glFusion you will need to un-archive the distribution on
-your local computer. The glFusion distribution archive will
-automatically create all the proper directories when it is un-archived.
-</p>
-
-
-<p>
-To un-archive a .gz file, you can use recent versions of <a href="http://www.rarlab.com/" class="urlextern" title="http://www.rarlab.com/" rel="nofollow">WinRAR</a> or <a href="http://www.7-zip.org/" class="urlextern" title="http://www.7-zip.org/" rel="nofollow">7-Zip</a>.  If you are running <a href="http://www.apple.com/macosx/" class="urlextern" title="http://www.apple.com/macosx/" rel="nofollow">Mac OSX</a>, please ensure you have the latest version of <a href="http://my.smithmicro.com/mac/stuffitdeluxe/index.html" class="urlextern" title="http://my.smithmicro.com/mac/stuffitdeluxe/index.html" rel="nofollow">StuffIt</a> installed as previous versions have had difficulty properly un-archiving .gz files.  For Linux/Unix users, use the standard <code>tar</code> command to extract the distribution.
-
-
-</p>
-
-<ol>
-
-  <li class="level1">
-    <div class="li"> Create a temporary directory on your local hard
-drive to hold the glFusion distribution files. We will use C:\tmp for
-our example.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Open the glfusion-1.3.0.tar.gz file with WinRAR (or you choice of archive program).</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Select Extract All Files and point to the C:\tmp
-directory as the destination directory. You should now have a local
-copy of the glFusion distribution on your hard drive. <br />
-
- <br />
-
- This will create the two main glFusion directories; <strong>private/</strong> and <strong>public_html/</strong></div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Open up your <acronym title="File Transfer Protocol">FTP</acronym> client (our recommendation is to use <a href="http://filezilla-project.org/" class="urlextern" title="http://filezilla-project.org/" rel="nofollow">FileZilla</a>, it's available for multiple platforms, is easy to use, and best of all, it's free!)</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Connect to your remote server using your <acronym title="File Transfer Protocol">FTP</acronym> / Account login and password.</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Highlight all the files and folders in the <strong>private/</strong> directory.  These are all the glFusion files that should reside outside your web root.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Drag the highlighted files over to your remote
-host site. You will want to place these files in an area that is not
-accessible via the web.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Highlight all of the glFusion distribution folder and files in the <em>public_html</em> directory. These files will reside in your web root and must be accessible via the web.</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Drag the highlighted files over to your remote host site's web root that is accessible from the web.</div>
-
-  </li>
-
-
-
-  <li class="level1">
-    <div class="li"> You are now ready to perform the Online Installation.</div>
-
-  </li>
-
-</ol>
-
-
-</div>
-
-
-<h2><a name="shell_installation" id="shell_installation">Shell Installation</a></h2>
-
-
-<div class="level2">
-<ol>
-
-  <li class="level1">
-    <div class="li"> Download the current version of glFusion from <a href="http://www.glfusion.org" class="urlextern" title="http://www.glfusion.org" rel="nofollow">http://www.glfusion.org</a>.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Unpack the downloaded distribution file by running:  <br />
-
- <code>tar -zxvf glfusion-1.4.1.tar.gz</code> (for Unix systems) </div>
-
-  </li>
-
-
-  <li class="level1">
-    <div class="li"> Place the contents of glfusion/public_html/ into
-your web root directory on your web server. The web root directory is
-often named &#8220;public_html&#8221;, &#8220;htdocs&#8221;, or
-&#8220;www&#8221;. Then, place the remaining contents of glfusion/ into
-either the parent directory of your root web directory (recommended) or
-any other non public folder and the installation wizard will attempt to
-locate them automatically. If it cannot you will be asked to specify
-their paths during installation. This is done as an additional security
-measure to prevent access to glFusion system files by Internet users. </div>
-
-  </li>
-
-
-
-</ol>
-
-
-</div>
-
-
-<h2><a name="webroot_installation" id="webroot_installation">Webroot Installation</a></h2>
-
-<div class="level2">
-
-<p>If your hosting provider does not allow you to place files outside
-of your root web directory, you should follow these additional steps to
-ensure a secure installation of glFusion.
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> Create an inconspicuous directory (i.e. don't name
-it &#8220;glfusion&#8221; or
-&#8220;private&#8221;) in your root web directory. </div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Place these system files in that directory. </div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Password protect it using an .htaccess file or similar. </div>
-
-  </li>
-
-</ul>
-
-
-</div>
-
-
-<h2><a name="directory_permissions" id="directory_permissions">Directory Permissions</a></h2>
-
-<div class="level2">
-
-<p>glFusion requires that your web server have the ability to write to
-certain files and directories. The following list is the directories
-that you need to ensure the permissions are properly set.
-</p>
-
-<ul>
-
-  <li class="level1">path/to/glFusion/private/</li><li class="level1"><div class="li">path/to/glFusion/logs/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/data/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/data/layout_cache/</div></li><li class="level1">path/to/glFusion/data/tmp/</li>
-
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/backups/</div></li><li class="level1">path/to/glFusion/public_html/</li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/backend/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/topics/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/articles/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/userphotos/</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/library/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/library/File/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/library/Flash/</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/library/Image/</div>
-
-  </li>
-
-
-  <li class="level1">
-    <div class="li"> path/to/glFusion/public_html/images/library/Media/</div></li><li class="level1"> path/to/glFusion/public_html/images/library/userfiles/</li><li class="level1">path/to/glFusion/public_html/mediagallery/mediaobjects/</li><li class="level1">path/to/glFusion/public_html/mediagallery/rss/</li>
-
-</ul>
-
-
-<div class="noteclassic">
-Permissions are the top support issue.  Always check your permissions first if you run into installation problems.
-
-</div>
-
-
-</div>
-
-
-<h3><a name="how_to_set_permissions" id="how_to_set_permissions">How to Set Permissions</a></h3>
-
-<div class="level3">
-
-<p>Setting the permissions will vary from server to server, and depend
-on how you access your server. If you have shell access, changing
-permissions is as simple as running the following command from inside
-the path/to/glFusion directory:
-</p>
-
-<pre class="code">chmod -R 777 logs<br />chmod &#8211;R 777 data<br />chmod &#8211;R 777 backups<br />&#8230; do this for all the directories listed above&#8230;</pre>
-
-
-<p>
-
-If you use <acronym title="File Transfer Protocol">FTP</acronym> to upload files to your server, you can use your <acronym title="File Transfer Protocol">FTP</acronym> program to change the permissions. Below is an example of using FileZilla as the <acronym title="File Transfer Protocol">FTP</acronym> program to set permissions:
-
-
-</p>
-
-<ol>
-
-  <li class="level1">
-    <div class="li"> With your mouse, highlight the directory you wish to change permissions</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Right click and choose File Attributes</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> In the pop-up window, select the checkbox for Read / Write for owner, group and public permissions.</div>
-
-  </li>
-
-</ol>
-
-
-<p>
-
-You will need to repeat these steps for all the directories listed above.
-</p>
-
-
-</div>
-
-
-<h3><a name="assistance" id="assistance">Assistance</a></h3>
-
-<div class="level3">
-
-<p>If you need assistance getting the permission settings correct,
-check with your hosting provider&#8217;s technical support or post a
-support message at the <a href="http://www.glfusion.org">glFusion.org website</a>.
-</p>
-
-
-<p>
-It is important that you validate the directory and file permissions before proceeding to the final installation step.
-
-</p>
-
-
-</div>
-
-
-<h2><a name="performing_the_glfusion_installation_process" id="performing_the_glfusion_installation_process">Performing the glFusion Installation Process</a></h2>
-
-<div class="level2">
-
-<p>Now that you have all the files loaded onto your server, you are
-ready to begin the online installation. Let&#8217;s review the steps
-you have already completed:
-</p>
-
-<ol>
-
-  <li class="level1">
-    <div class="li"> Create Database Name</div>
-
-  </li>
-
-
-  <li class="level1">
-    <div class="li"> Database User ID</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Database Password</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Path to glFusion</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Uploaded all the glFusion distribution files</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Proper directory permissions</div>
-
-
-  </li>
-
-</ol>
-
-
-<p>Open your browser and navigate to the glFusion installation wizard
-at /admin/install/index.php. The path to this file will depend on where
-you chose to put the glFusion files on your web server. The default
-location is:
-</p>
-
-<pre class="code">http://Your_glFusion_Site/admin/install/index.php</pre><p>
-
-The glFusion installation wizard was designed to automate the install process. Simply follow the installation steps.
-</p>
-
-<p>
-You will be asked for the location of the <strong>private</strong> directory, this is the directory where the db-config.php or db-config.php.dist file resides. Type in the <strong>full path</strong> to this directory and press <em>Next</em>.  You will then need to enter your site specific information such as database server, database name, etc.
-</p>
-
-<p>
-Once you have completed the installation be sure to delete the
-admin/install directory. Also, pay attention to the success message to
-learn how to log in as the administrator and change the default
-password.
-</p><div class="notewarning">
-Be sure and delete the public_html/admin/install/ directory when you have successfully installed glFusion.
-
-</div>
-
-
-<p>
-You can log into glFusion using the default administrator's account.
-</p>
-
-
-<p>
-<strong>Username:</strong> admin<br />
-
-
-<strong>Password:</strong> password
-</p>
-
-
-<div class="notewarning">
-Make sure you change the default password IMMEDIATELY!
-
-</div>
-
-
-</div>
-
-
-<h1><a name="glfusion_upgrade_instructions" id="glfusion_upgrade_instructions">glFusion Upgrade Instructions</a></h1>
-
-<div class="level1">
-
-<p>The latest upgrade instructions, along with specific changes and
-enhancements of each version are available at the glFusion Wiki under <a href="http://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">Upgrading glFusion</a>.</p><p>Before you begin the upgrade process, make a good backup of your
-source files and your database. The upgrade process is generally very
-safe, however, there is always the possibility that something could go
-wrong and part of any good upgrade plan is a good back out plan.
-</p>
-
-
-<div class="notewarning">
-If you have made any customizations to glFusion's core files or the theme files, ensure you save a copy of your modifications.
-
-</div>
-
-
-<p>Most of the configuration options are now maintained with an
-online configuration editor and the configuration files are
-automatically updated during the upgrade process. There are a few
-configuration options that are still maintained in the db-config.php
-(database settings) and siteconfig.php (site specific options such as
-Character Set), but you should not have to edit these files directly.
-</p>
-
-
-<p>The upgrade process does not migrate your existing configuration
-options from the old config.php file. You will need to enter the Online
-Configuration section after the upgrade and set the options to meet
-your specific needs.
-</p>
-
-
-<div class="noteimportant">
-Be sure to check the Requirements list below to validate your site can be upgraded successfully.
-
-</div>
-
-
-</div>
-
-
-<h2><a name="pre-upgrade_checklist" id="pre-upgrade_checklist">Pre-Upgrade Checklist</a></h2>
-
-<div class="level2">
-
-<p>
-
-To ensure a smooth upgrade process and to prevent any problems after the upgrade, you will need to validate the following items:
-
-
-    </p><ul><li class="level1"><div class="li">Determine
-the current version of your glFusion installation. You can find the
-current version of glFusion installed on your site by visiting the
-Command and Control screen. The glFusion version number is included in
-the title.</div></li><li class="level1"><div class="li">If you are
-using a theme other than Nouveau, make sure your theme has been updated
-to support glFusion. There are several theme changes that must be made
-to custom themes to allow glFusion to work properly. Verify you have
-all the necessary template changes made by visiting the <a href="http://www.glfusion.org/wiki/glfusion:template_changes" target="_blank">Template Changes</a> page.</div></li><li class="level1"><div class="li">If you have customized any of the theme templates, check the <a href="http://www.glfusion.org/wiki/glfusion:template_changes" target="_blank">Template Changes</a> for the current release to see if you need to make any updates to your customizations.</div></li><li class="level1"><div class="li">Check any third party plugins to ensure they are compatible or if they will need to be updated.</div></li></ul>
-
-
-</div>
-
-
-<h2><a name="backup_backup_backup" id="backup_backup_backup">Backup, Backup, Backup</a></h2>
-
-
-<div class="level2">
-
-<p>Take extreme care to back up any files from your current
-installation that have any custom code in them, especially
-lib-custom.php (where all custom code should reside). Be sure to back
-up any modified themes and images from your current installation.
-</p>
-
-
-<div class="notewarning">
-ALWAYS PERFORM A GOOD BACKUP BEFORE ATTEMPTING AN UPGRADE.
-
-</div>
-
-
-</div>
-
-
-<h2><a name="uploading_glfusion" id="uploading_glfusion">Uploading glFusion</a></h2>
-
-<div class="level2">
-
-<p>
-
-Follow the instructions above in the <span class="curid"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install#ftp_installation" class="wikilink1" title="glfusion:install">FTP section</a></span> on how to upload the glFusion distribution.
-</p>
-
-
-</div>
-
-
-<h2><a name="upgrading_from_glfusion_v1.0.0" id="upgrading_from_glfusion_v1.0.0">Running the Upgrade Wizard</a></h2>
-
-<div class="level2">Once you have all the new glFusion release files on
-your site, you will need to run the Upgrade Wizard. There is no need to
-disable anything or make any site configuration changes before running
-the Upgrade Wizard.<br /><br />Navigate to http://Your_glFusion_Site/admin/install/index.php<br /><br />Select <span style="font-weight: bold;">Upgrade an Existing glFusion Site</span> as the installation option.<br /><br />glFusion's update process should now make all the necessary changes to your database tables and upgrade all bundled plugins.<br /><br /><div class="noteclassic">
-Be sure to <strong>Clear the Template Cache</strong>
-after uploading the new files. Also clear your browser's cache to
-ensure that it properly loads all the updated style sheets and
-JavaScript files.
-</div>
-
-
-</div><h2><a name="post_upgrade_checks" id="post_upgrade_checks">Post Upgrade Checks</a></h2>
-
-<div class="level2">
-
-<p>
-
-Once you have successfully upgraded your site, there are a few things you will want to double check.
-
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> Go into the online configuration system and validate your configuration settings</div>
-
-  </li>
-
-
-  <li class="level1">
-    <div class="li"> If you had the Forum plugin installed, you will need to go into the Forum administration screens and select <strong>Resync</strong>
-for each of your forums. This will build the necessary last post
-information and correctly set the new counters in the database.</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> <strong>REMOVE THE INSTALLATION DIRECTORY</strong> </div>
-
-  </li>
-
-</ul>
-
-
-</div>
-
-
-<h1><a name="pre-installed_plugins" id="pre-installed_plugins">Pre-Installed Plugins</a></h1>
-
-
-<div class="level1">
-
-<p>
-
-glFusion comes with the following plugins pre-installed,
-
-</p>
-
-<ul>
-
-  <li class="level1">
-    <div class="li"> Bad Behavior2</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> CAPTCHA</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> FileMgmt</div>
-
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Forum</div>
-
-  </li>
-
-  <li class="level1">
-    <div class="li"> Media Gallery</div>
-  </li>
-  <li class="level1">CommentFeeds</li><li class="level1">CKEditor</li>
-
-</ul>
-
-
-<p>
-
-If any of these plugins were already installed on your site, they were automatically updated during the upgrade process.
-</p>
-
-
-<p>If some of these plugins were not previously installed prior to the
-upgrade, they were not installed during the upgrade. The files are on
-your system and are ready to be installed, but you will need to go into
-the Plugin Editor to manually install them.
-</p>
-
-
-</div>
-
-
-      </div>
-
-    </div>
- <!-- end of gl_wrapper -->
-
-<div id="gl_footer">
-
-<p><a href="http://www.glfusion.org">glFusion Project</a> - Updated 2014-04-18</p>
-
-    </div>
- <!-- end of gl_footer-->
-  </div>
- <!-- end of gl_container -->
-</body></html>
+<html class="uk-height-1-1">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
+		<meta name="robots" content="noindex,nofollow" />
+		<title>glFusion Installation</title>
+		<style>
+			html{background:#f9f9f9}.tm-dropdown,.tm-navbar{background:#325482!important}.uk-form label{font-weight:700}.tm-navbar{border-radius:0!important;padding:1px 0 6px!important;border:none!important}.tm-navbar-brand{color:#eee!important}.tm-navbar-brand a{text-shadow:none;color:#fff}.tm-navbar-brand a:hover{color:#ababab;text-decoration:none}.tm-navbar-brand-oc a{text-shadow:none;color:#fff}.tm-navbar-brand-oc a:hover{color:#ababab;text-decoration:none}.tm-navbar-nav>li>a{border:none;border-radius:3px!important;font-size:15px!important;height:40px!important;margin:0!important}.tm-dropdown{color:#000;border-radius:0!important;border:0!important}.tm-nav-navbar>li>a{color:#fff!important}.tm-navbar::after,.tm-navbar::before{margin-top:7px!important}.tm-navbar-nav>li.uk-open>a,.tm-navbar-nav>li:hover>a,.tm-navbar-nav>li>a:focus{color:#fff;outline:0;background:#35B3EE!important}.tm-navbar-nav>li>a{color:#fff!important;text-shadow:none!important}.tm-navbar-toggle{color:#ccc!important;text-shadow:none!important}.tm-navbar-toggle:focus,.tm-navbar-toggle:hover{color:#fff!important}.tm-footer{background:#252525;border-top:1px solid #232425;margin-bottom:0;bottom:0;padding:10px;color:#fff}.tm-wrapper{min-height:100%;margin:0 auto -51px!important}.tm-push,footer{height:51px}.uk-navbar-content > a {color:#fff !important;}
+		</style>
+	</head>
+	<body class="uk-height-1-1">
+		<div class="tm-wrapper">
+			<nav class="uk-navbar uk-navbar-attached tm-navbar uk-margin-bottom">
+				<div class="uk-navbar-brand tm-navbar-brand">
+					glFusion Installation
+				</div>
+				<div class="uk-navbar-flip uk-hidden-small">
+					<div class="uk-navbar-content tm-navbar-content" style="text-shadow:none;">
+						<a href="https://www.glfusion.org/wiki/">glFusion Wiki</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="uk-container uk-container-center uk-margin-bottom">
+
+				<h1>System Requirements</h1>
+
+				<p>
+					To successfully install and use glFusion you must have a fully
+					operational web server, a database, and the server side scripting
+					language PHP
+					glFusion is developed and tested primarily on the Apache web server
+					version 2.x, but it should run on any modern web server. glFusion has
+					been successfully installed and is running on other web servers such as
+					Zeus, Lighttpd, and Microsoft IIS.
+				</p>
+
+				<p>
+					glFusion only supports PHP v5.3.x and above.
+				</p>
+
+				<p>
+					glFusion supports MySQL database engine using both the MySQL interface and the MySQLi interface.
+				</p>
+
+				<p>
+					<strong>Minimum Requirements</strong>
+				</p>
+
+				<table class="uk-table">
+					<tr>
+						<th>Software  </th>
+						<th>Requirement  </th>
+						<th>Minimum Recommended  </th>
+						<th>Web Site  </th>
+					</tr>
+					<tr>
+						<td>PHP  </td>
+						<td>5.3.0  </td>
+						<td>5.6  </td>
+						<td><a href="http://www.php.net" rel="nofollow">http://www.php.net</a></td>
+					</tr>
+					<tr>
+						<td>MySQL  </td>
+						<td>5.0.x  </td>
+						<td>5.2.x  </td>
+						<td><a href="http://www.mysql.org" title="http://www.mysql.org" rel="nofollow">http://www.mysql.org</a>  </td>
+					</tr>
+					<tr>
+						<td>Apache  </td>
+						<td>1.3.x  </td>
+						<td>2.2 series  </td>
+						<td><a href="http://www.apache.org" class="urlextern" title="http://www.apache.org" rel="nofollow">http://www.apache.org</a>  </td>
+					</tr>
+				</table>
+
+				<p>
+					Your server or hosting environment must have the following items available for you to install and run glFusion.
+				</p>
+
+				<ul>
+					<li>Web Server (Apache, Zeus, lighttpd, Microsoft IIS, etc.)</li>
+					<li> PHP v5.3.0 or higher</li>
+					<li>MySQL v5.0</li>
+				</ul>
+
+				<h1>Installation Procedures</h1>
+
+				<p>
+					glFusion is designed where some of the files should reside outside
+					of the web root, meaning they should not be directly accessible from
+					the Internet. For most users this does not pose a problem, but some
+					hosting services do not allow users to store files outside of the main
+					web accessible directory. For these users, you can still install
+					glFusion, but you will want to follow the directions in the installing
+					glFusion in the web root section.
+				</p>
+
+				<p>
+					Make sure you know where your web root is on your server.  This is different than your website's URL
+					address. You may need to contact your hosting provider for assistance.
+					It is important that you know this information prior to performing the
+					installation.
+				</p>
+
+				<div class="uk-alert">
+					If you are not sure how to determine your
+					paths, contact your hosting provider&#8217;s Technical Support Staff,
+					they can generally help you out.
+				</div>
+
+				<h2>Pre Installation Tasks</h2>
+
+				<p>
+					Before we install glFusion, you will need to know a few key pieces
+					of information. Write down the following information. If you are unsure
+					what to put for each of the items below, please contact your system
+					administrator or you hosting provider.
+				</p>
+
+				<ul>
+					<li>Site URL:</li>
+					<li>Database Server:</li>
+					<li>Database Name:</li>
+					<li>Database UserID:</li>
+					<li>Database Password:</li>
+					<li>Path to glFusion Private Files:<br/>(path/to/glfusion)  <strong>these files should not be available via the Internet, so they go outside of your web root directory</strong></li>
+					<li>Path to glFusion Public HTML Files: <br/>(path/to/public_html)</li>
+				</ul>
+
+				<h2>Assumptions</h2>
+
+				<p>
+					These installation instructions assume that you will be running your
+					glFusion site as the main site on your domain. If your installation
+					will be a sub-domain or a set of sub-pages of an existing site, you
+					will need to adjust some of the paths.
+				</p>
+
+				<h2>Create the glFusion Database</h2>
+
+				<p>
+					glFusion requires a MySQL database. Depending on your hosting
+					solution, you may need to create a new database for glFusion and also a
+					database user account. Some hosting providers setup a single database
+					for your account that should be used. If you already have a database
+					created that you wish to use, you can skip this section.
+				</p>
+
+				<h3>Create the Database</h3>
+
+				<p>
+					Depending on your hosting solution, you may be able to create a new
+					empty database using online tools provided by your hosting provider.
+					You can also use a tool like phpMyAdmin to create the database.
+				</p>
+
+				<p>
+					Once you have created the database, record the name of the new database above in the Pre-Installation Tasks section.
+				</p>
+
+				<h3>Create the Database User</h3>
+
+				<p>
+					It is always a good security practice to create a unique user
+					account for each database. Create a new database user and add the
+					following permissions to the user for the database you created in the
+					previous step:
+				</p>
+
+				<ul>
+					<li>SELECT</li>
+					<li>INSERT</li>
+					<li>UPDATE</li>
+					<li>DELETE</li>
+					<li>INDEX</li>
+					<li>CREATE TEMPORARY TABLES</li>
+					<li>CREATE</li>
+					<li>ALTER</li>
+					<li>DROP</li>
+					<li>LOCK TABLES</li>
+					<li>REFERENCES</li>
+					<li>CREATE ROUTINE</li>
+				</ul>
+
+				<p>
+					Record the new userid and password in the worksheet in the Pre-Installation Tasks section.
+				</p>
+
+				<h2>FTP Installation</h2>
+
+				<p>
+					If you do not have shell access to your server and can only use an FTP client to access your server, follow these instructions.
+				</p>
+
+				<p>
+					To install glFusion you will need to un-archive the distribution on
+					your local computer. The glFusion distribution archive will
+					automatically create all the proper directories when it is un-archived.
+				</p>
+
+				<p>
+					To un-archive a .gz file, you can use recent versions of <a href="http://www.rarlab.com/" class="urlextern" title="http://www.rarlab.com/" rel="nofollow">WinRAR</a> or <a href="http://www.7-zip.org/" class="urlextern" title="http://www.7-zip.org/" rel="nofollow">7-Zip</a>.  If you are running <a href="http://www.apple.com/macosx/" class="urlextern" title="http://www.apple.com/macosx/" rel="nofollow">Mac OSX</a>, please ensure you have the latest version of <a href="http://my.smithmicro.com/mac/stuffitdeluxe/index.html" class="urlextern" title="http://my.smithmicro.com/mac/stuffitdeluxe/index.html" rel="nofollow">StuffIt</a> installed as previous versions have had difficulty properly un-archiving .gz files.  For Linux/Unix users, use the standard <code>tar</code> command to extract the distribution.
+				</p>
+
+				<ol>
+					<li>Create a temporary directory on your local hard drive to hold the glFusion distribution files. We will use C:\tmp for our example.</li>
+					<li>Open the glfusion-1.3.0.tar.gz file with WinRAR (or you choice of archive program).</li>
+					<li>Select Extract All Files and point to the C:\tmp directory as the destination directory. You should now have a local copy of the glFusion distribution on your hard drive. <br /><br />This will create the two main glFusion directories; <strong>private/</strong> and <strong>public_html/</strong></li>
+					<li>Open up your FTP client (our recommendation is to use <a href="http://filezilla-project.org/" class="urlextern" title="http://filezilla-project.org/" rel="nofollow">FileZilla</a>, it's available for multiple platforms, is easy to use, and best of all, it's free!)</li>
+					<li>Connect to your remote server using your FTP / Account login and password.</li>
+					<li>Highlight all the files and folders in the <strong>private/</strong> directory.  These are all the glFusion files that should reside outside your web root.</li>
+					<li>Drag the highlighted files over to your remote host site. You will want to place these files in an area that is not accessible via the web.</li>
+					<li>Highlight all of the glFusion distribution folder and files in the <em>public_html</em> directory. These files will reside in your web root and must be accessible via the web.</li>
+					<li>Drag the highlighted files over to your remote host site's web root that is accessible from the web.</li>
+					<li>You are now ready to perform the Online Installation.</li>
+				</ol>
+
+				<h2>Shell Installation</h2>
+
+				<ol>
+					<li>Download the current version of glFusion from <a href="http://www.glfusion.org" class="urlextern" title="http://www.glfusion.org" rel="nofollow">http://www.glfusion.org</a>.</li>
+					<li>Unpack the downloaded distribution file by running:  <br /><code>tar -zxvf glfusion-1.4.1.tar.gz</code> (for Unix systems)</li>
+					<li>
+						Place the contents of glfusion/public_html/ into
+						your web root directory on your web server. The web root directory is
+						often named &#8220;public_html&#8221;, &#8220;htdocs&#8221;, or
+						&#8220;www&#8221;. Then, place the remaining contents of glfusion/ into
+						either the parent directory of your root web directory (recommended) or
+						any other non public folder and the installation wizard will attempt to
+						locate them automatically. If it cannot you will be asked to specify
+						their paths during installation. This is done as an additional security
+						measure to prevent access to glFusion system files by Internet users.
+					</li>
+				</ol>
+
+				<h2>Webroot Installation</h2>
+
+				<p>
+					If your hosting provider does not allow you to place files outside
+					of your root web directory, you should follow these additional steps to
+					ensure a secure installation of glFusion.
+				</p>
+
+				<ul>
+					<li>
+						Create an inconspicuous directory (i.e. don't name
+						it &#8220;glfusion&#8221; or
+						&#8220;private&#8221;) in your root web directory.
+					</li>
+					<li>
+						Place these system files in that directory.
+					</li>
+					<li>
+						Password protect it using an .htaccess file or similar.
+					</li>
+				</ul>
+
+				<h2>Directory Permissions</h2>
+
+				<p>
+					glFusion requires that your web server have the ability to write to
+					certain files and directories. The following list is the directories
+					that you need to ensure the permissions are properly set.
+				</p>
+
+				<ul>
+					<li>path/to/glFusion/private/</li>
+					<li>path/to/glFusion/logs/</li>
+					<li>path/to/glFusion/data/</li>
+					<li>path/to/glFusion/data/layout_cache/</li>
+					<li>path/to/glFusion/data/tmp/</li>
+					<li>path/to/glFusion/backups/</li>
+					<li>path/to/glFusion/public_html/</li>
+					<li>path/to/glFusion/public_html/backend/</li>
+					<li>path/to/glFusion/public_html/images/topics/</li>
+					<li>path/to/glFusion/public_html/images/articles/</li>
+					<li>path/to/glFusion/public_html/images/userphotos/</li>
+					<li>path/to/glFusion/public_html/images/library/</li>
+					<li>path/to/glFusion/public_html/images/library/File/</li>
+					<li>path/to/glFusion/public_html/images/library/Flash/</li>
+					<li>path/to/glFusion/public_html/images/library/Image/</li>
+					<li>path/to/glFusion/public_html/images/library/Media/</li>
+					<li> path/to/glFusion/public_html/images/library/userfiles/</li>
+					<li>path/to/glFusion/public_html/mediagallery/mediaobjects/</li>
+					<li>path/to/glFusion/public_html/mediagallery/rss/</li>
+				</ul>
+
+				<div class="uk-alert">
+					Permissions are the top support issue.  Always check your permissions first if you run into installation problems.
+				</div>
+
+				<h3>How to Set Permissions</h3>
+
+				<p>
+					Setting the permissions will vary from server to server, and depend
+					on how you access your server. If you have shell access, changing
+					permissions is as simple as running the following command from inside
+					the path/to/glFusion directory:
+				</p>
+
+				<pre class="code">chmod -R 777 logs<br />chmod &#8211;R 777 data<br />chmod &#8211;R 777 backups<br />&#8230; do this for all the directories listed above&#8230;</pre>
+
+				<p>
+					If you use FTP to upload files to your server, you can use your FTP program to change the permissions. Below is an example of using FileZilla as the FTP program to set permissions:
+				</p>
+
+				<ol>
+					<li>With your mouse, highlight the directory you wish to change permissions</li>
+					<li>Right click and choose File Attributes</li>
+					<li>In the pop-up window, select the checkbox for Read / Write for owner, group and public permissions.</li>
+				</ol>
+
+				<p>
+					You will need to repeat these steps for all the directories listed above.
+				</p>
+
+				<h3>Assistance</h3>
+
+				<p>
+					If you need assistance getting the permission settings correct,
+					check with your hosting provider&#8217;s technical support or post a
+					support message at the <a href="http://www.glfusion.org">glFusion.org website</a>.
+				</p>
+
+				<p>
+					It is important that you validate the directory and file permissions before proceeding to the final installation step.
+				</p>
+
+				<h2>Performing the glFusion Installation Process</h2>
+
+				<p>
+					Now that you have all the files loaded onto your server, you are
+					ready to begin the online installation. Let&#8217;s review the steps
+					you have already completed:
+				</p>
+
+				<ol>
+					<li>Create Database Name</li>
+					<li>Database User ID</li>
+					<li>Database Password</li>
+					<li>Path to glFusion</li>
+					<li>Uploaded all the glFusion distribution files</li>
+					<li>Proper directory permissions</li>
+				</ol>
+
+
+				<p>
+					Open your browser and navigate to the glFusion installation wizard
+					at /admin/install/index.php. The path to this file will depend on where
+					you chose to put the glFusion files on your web server. The default
+					location is:
+				</p>
+
+				<pre class="code">http://Your_glFusion_Site/admin/install/index.php</pre><p>
+
+					The glFusion installation wizard was designed to automate the install process. Simply follow the installation steps.
+				</p>
+
+				<p>
+					You will be asked for the location of the <strong>private</strong> directory, this is the directory where the db-config.php or db-config.php.dist file resides. Type in the <strong>full path</strong> to this directory and press <em>Next</em>.  You will then need to enter your site specific information such as database server, database name, etc.
+				</p>
+
+				<p>
+					Once you have completed the installation be sure to delete the
+					admin/install directory. Also, pay attention to the success message to
+					learn how to log in as the administrator and change the default
+					password.
+				</p>
+
+				<div class="uk-alert uk-alert-warning">
+					Be sure and delete the public_html/admin/install/ directory when you have successfully installed glFusion.
+				</div>
+
+				<p>
+					You can log into glFusion using the default administrator's account.
+				</p>
+
+				<p>
+					<strong>Username:</strong> admin<br />
+					<strong>Password:</strong> password
+				</p>
+
+				<div class="notewarning">
+					Make sure you change the default password IMMEDIATELY!
+				</div>
+
+				<h1>glFusion Upgrade Instructions</h1>
+
+				<p>
+					The latest upgrade instructions, along with specific changes and
+				enhancements of each version are available at the glFusion Wiki under <a href="http://www.glfusion.org/wiki/glfusion:upgrade" target="_blank">Upgrading glFusion</a>.</p><p>Before you begin the upgrade process, make a good backup of your
+					source files and your database. The upgrade process is generally very
+					safe, however, there is always the possibility that something could go
+					wrong and part of any good upgrade plan is a good back out plan.
+				</p>
+
+				<div class="notewarning">
+					If you have made any customizations to glFusion's core files or the theme files, ensure you save a copy of your modifications.
+				</div>
+
+				<p>
+					Most of the configuration options are now maintained with an
+					online configuration editor and the configuration files are
+					automatically updated during the upgrade process. There are a few
+					configuration options that are still maintained in the db-config.php
+					(database settings) and siteconfig.php (site specific options such as
+					Character Set), but you should not have to edit these files directly.
+				</p>
+
+				<p>The upgrade process does not migrate your existing configuration
+					options from the old config.php file. You will need to enter the Online
+					Configuration section after the upgrade and set the options to meet
+					your specific needs.
+				</p>
+
+				<div class="noteimportant">
+					Be sure to check the Requirements list below to validate your site can be upgraded successfully.
+				</div>
+
+				<h2>Pre-Upgrade Checklist</h2>
+
+				<p>
+					To ensure a smooth upgrade process and to prevent any problems after the upgrade, you will need to validate the following items:
+				</p>
+
+				<ul>
+					<li>
+						Determine
+						the current version of your glFusion installation. You can find the
+						current version of glFusion installed on your site by visiting the
+						Command and Control screen. The glFusion version number is included in
+						the title.
+					</li>
+					<li>
+						If you are
+						using a theme other than Nouveau, make sure your theme has been updated
+						to support glFusion. There are several theme changes that must be made
+						to custom themes to allow glFusion to work properly. Verify you have
+						all the necessary template changes made by visiting the
+						<a href="http://www.glfusion.org/wiki/glfusion:template_changes" target="_blank">Template Changes</a> page.
+					</li>
+					<li>If you have customized any of the theme templates, check the <a href="http://www.glfusion.org/wiki/glfusion:template_changes" target="_blank">Template Changes</a> for the current release to see if you need to make any updates to your customizations.
+					</li>
+					<li>
+						Check any third party plugins to ensure they are compatible or if they will need to be updated.
+					</li>
+				</ul>
+
+				<h2>Backup, Backup, Backup</h2>
+
+				<p>
+					Take extreme care to back up any files from your current
+					installation that have any custom code in them, especially
+					lib-custom.php (where all custom code should reside). Be sure to back
+					up any modified themes and images from your current installation.
+				</p>
+
+				<div class="notewarning">
+					ALWAYS PERFORM A GOOD BACKUP BEFORE ATTEMPTING AN UPGRADE.
+				</div>
+
+				<h2>Uploading glFusion</h2>
+
+				<p>
+					Follow the instructions above in the <span class="curid"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install#ftp_installation" class="wikilink1" title="glfusion:install">FTP section</a></span> on how to upload the glFusion distribution.
+				</p>
+
+				<h2>Running the Upgrade Wizard</h2>
+
+				<p>
+					Once you have all the new glFusion release files on
+					your site, you will need to run the Upgrade Wizard. There is no need to
+					disable anything or make any site configuration changes before running
+					the Upgrade Wizard.<br /><br />Navigate to http://Your_glFusion_Site/admin/install/index.php<br /><br />Select <span style="font-weight: bold;">Upgrade an Existing glFusion Site</span> as the installation option.<br /><br />glFusion's update process should now make all the necessary changes to your database tables and upgrade all bundled plugins.<br /><br /><div class="noteclassic">
+						Be sure to <strong>Clear the Template Cache</strong>
+						after uploading the new files. Also clear your browser's cache to
+						ensure that it properly loads all the updated style sheets and
+						JavaScript files.
+					</p>
+
+					<h2>Post Upgrade Checks</h2>
+
+					<p>
+						Once you have successfully upgraded your site, there are a few things you will want to double check.
+					</p>
+
+					<ul>
+						<li>Go into the online configuration system and validate your configuration settings</li>
+						<li>If you had the Forum plugin installed, you will need to go into the Forum administration screens and select <strong>Resync</strong> for each of your forums. This will build the necessary last post information and correctly set the new counters in the database.</li>
+						<li><strong>REMOVE THE INSTALLATION DIRECTORY</strong></li>
+					</ul>
+
+					<h1>Pre-Installed Plugins</h1>
+					<p>
+						glFusion comes with the following plugins pre-installed,
+					</p>
+
+					<ul>
+						<li>Bad Behavior2</li>
+						<li>CAPTCHA</li>
+						<li>FileMgmt</li>
+						<li>Forum</li>
+						<li>Media Gallery</li>
+						<li>CommentFeeds</li>
+						<li>CKEditor</li>
+					</ul>
+
+					<p>
+						If any of these plugins were already installed on your site, they were automatically updated during the upgrade process.
+					</p>
+
+					<p>
+						If some of these plugins were not previously installed prior to the
+						upgrade, they were not installed during the upgrade. The files are on
+						your system and are ready to be installed, but you will need to go into
+						the Plugin Editor to manually install them.
+					</p>
+
+				</div>
+				<div class="tm-push"></div>
+			</div>
+		</div>
+		<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+			<div class="uk-hidden-small" style="padding-top:5px;"></div>
+			<div>
+				<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+			</div>
+		</footer>
+	</body>
+</html>
