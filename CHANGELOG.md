@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Global story attribute editor
+  - Fixed download issues in FileMgmt where downloaded size of file was not always accurate
   - New feature - integrated 3rd party comment engines. glFusion now supports Disqus and Facebook comments
   - New headlines auto tag
   - New newimage auto tag
