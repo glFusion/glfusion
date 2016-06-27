@@ -119,13 +119,24 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                     }
                 }
             } else {
-
-                $fullurl = $filemgmt_FileStoreURL .$url;
+                $fullurl = $filemgmt_FileStore .$url;
                 $fullurl = $fullurl;
-                header("Cache-Control: private");
-                header("Location: $fullurl");
-                echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
-                exit();
+                ob_end_flush();
+                header('Content-Disposition: attachment; filename="' . $url . '"');
+                header('Content-Type: application/octet-stream');
+                header('Content-Description: File Transfer');
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                if (!$_CONF['cookiesecure']) {
+                    header('Pragma: no-cache');
+                }
+                header('Content-Length: ' . filesize($fullurl));
+                ob_clean();
+                ob_end_flush();
+                flush();
+                @readfile($fullurl);
+                flush();
             }
         } else {
             $protocol = utf8_substr( $url, 0, $pos + 1 );
