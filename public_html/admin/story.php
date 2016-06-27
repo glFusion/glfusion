@@ -203,6 +203,185 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     return $retval;
 }
 
+function STORY_global($errorMsg = '')
+{
+    global $_CONF, $_TABLES, $_IMAGE_TYPE,
+           $LANG09, $LANG_ADMIN, $LANG_ACCESS, $LANG24;
+
+    USES_lib_admin();
+
+    if ( !SEC_inGroup('Root')) COM_refresh($_CONF['site_url']);
+
+    $retval = '';
+
+    // Load HTML templates
+    $T = new Template($_CONF['path_layout'] . 'admin/story');
+    $T->set_file(array('page' => 'storyglobal.thtml'));
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/story.php',
+              'text' => $LANG_ADMIN['story_list']),
+        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']),
+    );
+
+    $T->set_var('block_start',COM_startBlock($LANG24[100], '',
+                              COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var ('admin_menu',
+        ADMIN_createMenu($menu_arr, $LANG24[99],$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE));
+
+    $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    if ( $errorMsg != '' ) {
+        $T->set_var('error_message',$errorMsg);
+    }
+
+    $current_topic = $LANG09[9];
+
+    $seltopics = COM_topicList ('tid,topic', '', 1, true);
+    $alltopics = '<option value="'.$LANG09[9].'"';
+    if ($current_topic == 'all') {
+        $alltopics .= ' selected="selected"';
+    }
+    $alltopics .= '>' .$LANG09[9]. '</option>' . LB;
+    $filter = $LANG_ADMIN['topic']
+        . ': <select name="tid">'
+        . $alltopics . $seltopics . '</select>';
+
+    $sec_token_name = CSRF_TOKEN;
+    $sec_token = SEC_createToken();
+
+    $T->set_var(array(
+                'topiclist' => $filter,
+                'owner_dropdown' => COM_buildOwnerList('owner_id',''),
+                'group_dropdown' => SEC_getGroupDropdown ('', 3),
+                'frontpage_options' => COM_optionList ($_TABLES['frontpagecodes'], 'code,name',''),
+                'comment_options' => COM_optionList ($_TABLES['commentcodes'], 'code,name',''),
+                'trackback_options' => COM_optionList ($_TABLES['trackbackcodes'], 'code,name',''),
+                'lang_show_topic_icon' => $LANG24[56],
+                'lang_group' => $LANG_ACCESS['group'],
+                'lang_topic' => $LANG_ADMIN['topic'],
+                'lang_owner' => $LANG_ACCESS['owner'],
+                'lang_comments' => $LANG24[19],
+                'lang_trackbacks' => $LANG24[29],
+                'lang_display' => $LANG24[93],
+                'lang_save' => $LANG_ADMIN['save'],
+                'lang_cancel' => $LANG_ADMIN['cancel'],
+                'security_token' => $sec_token,
+                'security_token_name' => $sec_token_name
+    ));
+
+    $T->parse('output','page');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+function STORY_global_save()
+{
+    global $_CONF, $_TABLES;
+
+    if ( !SEC_inGroup('Root')) COM_refresh($_CONF['site_url']);
+
+    $sql = '';
+
+    if (!SEC_checkToken()) {
+        COM_refresh($_CONF['site_url']);
+    }
+
+    $filter_topic = COM_applyFilter($_POST['tid'],true);
+    $on_frontpage = COM_applyFilter($_POST['frontpage'],true);
+    $comment      = COM_applyFilter($_POST['comment'],true);
+    $trackback    = COM_applyFilter($_POST['trackback'],true);
+    $owner_id     = COM_applyFilter($_POST['owner_id'],true);
+    $group_id     = COM_applyFilter($_POST['group_id'],true);
+    $show_topic_icon = isset($_POST['show_topic_icon']) ? 1 : 0;
+
+    if ( !isset($_POST['cb'])) return STORY_list();
+
+    $active = $_POST['cb'];
+
+    $comma = 0;
+
+    if ( isset($active['frontpage'])) {
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+        $sql .= "frontpage=".(int) $on_frontpage;
+        $comma = 1;
+    }
+
+    if ( isset($active['comment'])) {
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+
+        $sql .= "commentcode=".(int) $comment;
+        $comma = 1;
+    }
+
+    if ( isset($active['trackback'])) {
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+
+        $sql .= "trackbackcode=".(int) $trackback;
+        $comma = 1;
+    }
+
+    if ( isset($active['owner'])) {
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+
+        $sql .= "owner_id=".(int) $owner_id;
+        $comma = 1;
+    }
+
+    if ( isset($active['group'])){
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+        $sql .= "group_id=".(int) $group_id;
+        $comma = 1;
+    }
+
+    if ( isset($active['show_topic_icon'])) {
+        if ( $comma == 1 ) {
+            $sql .= ",";
+        } else {
+            $sql .= " SET ";
+        }
+        $sql .= "show_topic_icon=".(int) $show_topic_icon;
+        $comma = 1;
+    }
+
+    if ( $filter_topic != $LANG09[9] ) {
+        $sql .= " WHERE tid='".DB_escapeString($filter_topic)."'";
+    }
+
+    $global_sql = "UPDATE {$_TABLES['stories']} " . $sql;
+
+    DB_query($global_sql);
+
+    $_POST['tid'] = '';
+
+    return STORY_list();
+}
+
 function STORY_list()
 {
     global $_CONF, $_TABLES, $_IMAGE_TYPE,
@@ -237,8 +416,7 @@ function STORY_list()
         $topicsql = "SELECT tid,topic FROM {$_TABLES['topics']}" . COM_getPermSQL ();
         $tresult = DB_query( $topicsql );
         $trows = DB_numRows( $tresult );
-        if( $trows > 0 )
-        {
+        if( $trows > 0 ) {
             $excludetopics .= ' (';
             for( $i = 1; $i <= $trows; $i++ )  {
                 $T = DB_fetchArray ($tresult);
@@ -291,10 +469,13 @@ function STORY_list()
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home']),
-    );
+              'text' => $LANG_ADMIN['submissions']));
+        if ( SEC_inGroup('Root')) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
+                      'text' => 'Global Settings');
+        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']);
 
     $form->set_var('block_start',COM_startBlock($LANG24[22], '',
                               COM_getBlockTemplate('_admin_block', 'header')));
@@ -471,14 +652,15 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         array('url' => $_CONF['site_admin_url'] . '/story.php',
               'text' => $LANG_ADMIN['story_list']),
         array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home']),
-    );
+              'text' => $LANG_ADMIN['submissions']));
+        if ( SEC_inGroup('Root')) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
+                      'text' => 'Global Settings');
+        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']);
 
     require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-
-
 
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
@@ -952,7 +1134,7 @@ function STORY_submit($type='')
 $pageTitle = '';
 $pageBody = '';
 $action = '';
-$expected = array('edit','moderate','draft','clone','save','previewstory','deletestory','cancel');
+$expected = array('edit','moderate','draft','clone','save','previewstory','deletestory','global','globalsave','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -1062,6 +1244,14 @@ switch ($action) {
             COM_accessLog ("User {$_USER['username']} tried to a delete a story, sid=$sid and failed CSRF checks");
             $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
+        break;
+
+    case 'global' :
+        $pageBody .= STORY_global();
+        break;
+
+    case 'globalsave' :
+        $pageBody .= STORY_global_save();
         break;
 
     default:
