@@ -282,7 +282,7 @@ function STORY_global($errorMsg = '')
 
 function STORY_global_save()
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG09;
 
     if ( !SEC_inGroup('Root')) COM_refresh($_CONF['site_url']);
 
