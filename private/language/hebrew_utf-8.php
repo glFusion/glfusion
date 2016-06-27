@@ -995,7 +995,13 @@ $LANG24 = array(
     95 => 'Story Image',
     96 => 'Set Image',
     97 => 'Remove Image',
-    98 => 'Sub Title'
+    98 => 'Sub Title',
+    99 => 'Select the <b>Update</b> checkbox to update the attribute for all stories, or the stories in a specific topic if the topic filter is selected.',
+    100 => 'Global Story Attribute Editor',
+    101 => 'Filter By Topic',
+    102 => 'Attribute',
+    103 => 'Value',
+    104 => 'Update'
 );
 
 ###############################################################################
