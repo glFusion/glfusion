@@ -307,7 +307,7 @@ function processPluginUpload()
             $upload->setDebug (true);
         }
         $upload->setMaxFileUploads (1);
-        $upload->setMaxFileSize(8388608);
+        $upload->setMaxFileSize(25165824);
         $upload->setAllowedMimeTypes (array (
                 'application/x-gzip'=> '.gz,.gzip,tgz',
                 'application/zip'   => '.zip',
