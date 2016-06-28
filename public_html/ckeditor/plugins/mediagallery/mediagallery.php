@@ -175,7 +175,10 @@ if ($album_id == 0 ) {
 	if ( !empty($MG_albums[0]->children)) {
         $children = $MG_albums[0]->getChildren();
         foreach($children as $child) {
-	       if ($MG_albums[$child]->access > 0 ) {
+//	       if ($MG_albums[$child]->access > 0 ) {
+            if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
+                //nop
+            } else {
 		       $album_id = $MG_albums[$child]->id;
 		       break;
 	       }
@@ -187,7 +190,6 @@ if ( !isset($MG_albums[$album_id]->id) ) {
     $display = MG_popupHeader();
     COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
     $display .= COM_startBlock ($LANG_mgMB['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
-//    $T = new Template($_CONF['path'] . 'plugins/mediagallery/templates');
 	$T = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
     $T->set_file('error','error.thtml');
     $T->set_var('site_url', $_CONF['site_url']);
