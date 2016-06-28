@@ -55,6 +55,16 @@ CREATE TABLE {$_TABLES['article_images']} (
 ) ENGINE=MyISAM
 ";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
+  tag varchar( 24 ) NOT NULL DEFAULT '',
+  description varchar( 250 ) DEFAULT '',
+  is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
+  is_function tinyint( 1 ) NOT NULL DEFAULT '0',
+  replacement text,
+  PRIMARY KEY ( tag )
+) ENGINE=MyISAM;
+";
+
 $_SQL[] = "CREATE TABLE {$_TABLES['autotag_perm']} (
   autotag_id varchar(128) NOT NULL,
   autotag_namespace varchar(128) NOT NULL,
@@ -673,15 +683,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
 ) ENGINE=MyISAM;
 ";
 
-$_SQL[] = "CREATE TABLE {$_TABLES['autotags']} (
-  tag varchar( 24 ) NOT NULL DEFAULT '',
-  description varchar( 250 ) DEFAULT '',
-  is_enabled tinyint( 1 ) NOT NULL DEFAULT '0',
-  is_function tinyint( 1 ) NOT NULL DEFAULT '0',
-  replacement text,
-  PRIMARY KEY ( tag )
-) ENGINE=MYISAM;
-";
 
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";
