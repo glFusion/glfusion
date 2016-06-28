@@ -36,7 +36,7 @@ function toggleFields() {
             $('#phpdiv').css('display','none');
             $('#topic').css('display','none');
             break;
-        case '2' : // gl actioin
+        case '2' : // gfusion action
             $('#urldiv').css('display','none');
             $('#targetdiv').css('display','none');
             $('#glcorediv').css('display','none');
@@ -78,7 +78,7 @@ function toggleFields() {
             break;
         case '6' : // url
             $('#urldiv').css('display','');
-            $('#targetdiv').css('display','none');
+            $('#targetdiv').css('display','');
             $('#glcorediv').css('display','none');
             $('#plugin').css('display','none');
             $('#staticpage').css('display','none');

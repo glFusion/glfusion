@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{lang_locale}">
 <head>
 <title>{page_title}{page_site_splitter}{site_name}</title>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
