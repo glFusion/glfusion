@@ -1497,9 +1497,6 @@ function INST_doPrePluginUpgrade()
  */
 function INST_innodbSupported()
 {
-
-function DBADMIN_innodb_supported()
-{
     $retval = false;
 
     $result = DB_query("SHOW STORAGE ENGINES");
