@@ -86,11 +86,11 @@ $INSTALL_plugin['forum'] = array(
 
   array('type' => 'block', 'name' => 'forum_news', 'title' => 'Forum Posts',
           'phpblockfn' => 'phpblock_forum_newposts', 'block_type' => 'phpblock',
-          'group_id' => 'admin_group_id', 'is_enabled' => 0),
+          'group_id' => 'admin_group_id', 'onleft' => 1, 'is_enabled' => 0),
 
   array('type' => 'block', 'name' => 'forum_menu', 'title' => 'Forum Menu',
           'phpblockfn' => 'phpblock_forum_menu', 'block_type' => 'phpblock',
-          'group_id' => 'admin_group_id', 'is_enabled' => 0),
+          'group_id' => 'admin_group_id', 'onleft' => 1, 'is_enabled' => 0),
 
 );
 

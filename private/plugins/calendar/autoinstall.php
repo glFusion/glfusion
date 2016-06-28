@@ -79,7 +79,7 @@ $INSTALL_plugin['calendar'] = array(
         'log' => 'Adding feature to the admin group'),
 
   array('type' => 'block',  'name' => 'block_calevents', 'title' => 'Upcoming Events',
-          'phpblockfn' => 'phpblock_calendar', 'block_type' => 'phpblock',
+          'phpblockfn' => 'phpblock_calendar', 'block_type' => 'phpblock', 'onleft' => 1,
           'group_id' => 'admin_group_id'),
 
 );
