@@ -1,0 +1,28 @@
+{# begin {templatelocation} #}
+{start_block}
+{admin_menu}
+{end_block}
+<form class="uk-form" method="post" action="{form_action}">
+	<input type="hidden" name="{security_token_name}" value="{security_token}">
+
+	<table class="uk-table">
+		<tr>
+			<th>{lang_service_name}</th>
+			<th>{lang_service_url}</th>
+			<th>{lang_site_username}</th>
+		</tr>
+
+		<!-- BEGIN social_links -->
+		<tr>
+			<td>{service_display_name}</td>
+			<td>{service_url}</td>
+			<td><input name="{service}_username" id="{service}_username" value="{service_username}" class="uk-form-width-medium"></td>
+		</tr>
+		<!-- END social_links -->
+
+	</table>
+
+	<button class="uk-button uk-button-primary" type="submit" value="save" name="savesitememberships">{lang_save}</button>
+	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+</form>
+{# end {templatelocation} #}

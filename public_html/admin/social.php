@@ -45,6 +45,20 @@ if (!SEC_hasRights('social.admin')) {
 
 USES_lib_social();
 
+/**
+* Get List Field for social services
+*
+* This function builds the appropriate checkboxes and field formatting
+* for the social services list.
+*
+* @param    string  $fieldname  Name of field being process
+* @param    mixed   $fieldvalue Data value for fieldname
+* @param    array   $A          Full array of data
+* @param    array   $icon_arr
+* @param    string  $token      Security Token
+* @return   string              Formatted field
+*
+*/
 function SI_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_ADMIN, $_IMAGE_TYPE;
@@ -56,7 +70,6 @@ function SI_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     switch($fieldname) {
 
         case 'enabled':
-
             if ($enabled) {
                 $switch = ' checked="checked"';
                 $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
@@ -77,6 +90,20 @@ function SI_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     return $retval;
 }
 
+/**
+* Get List Field for social follow services
+*
+* This function builds the appropriate checkboxes and field formatting
+* for the social follow services list.
+*
+* @param    string  $fieldname  Name of field being process
+* @param    mixed   $fieldvalue Data value for fieldname
+* @param    array   $A          Full array of data
+* @param    array   $icon_arr
+* @param    string  $token      Security Token
+* @return   string              Formatted field
+*
+*/
 function SI_getListField_FM($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_ADMIN, $_IMAGE_TYPE;
@@ -109,9 +136,14 @@ function SI_getListField_FM($fieldname, $fieldvalue, $A, $icon_arr, $token)
     return $retval;
 }
 
-
-// generate a list of all social integrations
-
+/**
+* Display admin list of social services
+*
+* Builds admin list of all available social services
+*
+* @return   string              HTML to display
+*
+*/
 function SI_list()
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_SOCIAL;
@@ -125,6 +157,7 @@ function SI_list()
     if (SEC_hasRights('social.admin')) {
         $menu_arr = array (
             array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']),
+            array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']),
             array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
         );
     } else {
@@ -147,7 +180,7 @@ function SI_list()
     // render the list of share options
 
     $header_arr = array(
-        array('text' => $LANG_SOCIAL['id'], 'field' => 'id', 'sort' => false, 'align' => 'center'),
+//        array('text' => $LANG_SOCIAL['id'], 'field' => 'id', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_SOCIAL['name'], 'field' => 'display_name', 'sort' => true),
         array('text' => $LANG_SOCIAL['enabled'], 'field' => 'enabled', 'sort' => true, 'align' => 'center'),
     );
@@ -184,8 +217,14 @@ function SI_list()
     return $retval;
 }
 
-// generate a list of all social integrations
-
+/**
+* Display admin list of social follow me services
+*
+* Builds admin list of all available social follow me services
+*
+* @return   string              HTML to display
+*
+*/
 function SI_FollowMelist()
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_SOCIAL;
@@ -201,7 +240,8 @@ function SI_FollowMelist()
 
     if (SEC_hasRights('social.admin')) {
         $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => 'Social Share'),
+            array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']),
+            array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']),
             array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
         );
     } else {
@@ -210,7 +250,7 @@ function SI_FollowMelist()
 
     // display the header and instructions
 
-    $retval .= COM_startBlock($LANG_SOCIAL['social_share'], '', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= COM_startBlock($LANG_SOCIAL['social_follow'], '', COM_getBlockTemplate('_admin_block', 'header'));
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_SOCIAL['follow_instructions'],
                 $_CONF['layout_url'] . '/images/icons/share.png');
@@ -224,7 +264,7 @@ function SI_FollowMelist()
     // render the list of share options
 
     $header_arr = array(
-        array('text' => $LANG_SOCIAL['id'], 'field' => 'ssid', 'sort' => false, 'align' => 'center'),
+//        array('text' => $LANG_SOCIAL['id'], 'field' => 'ssid', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_SOCIAL['name'], 'field' => 'display_name', 'sort' => true),
         array('text' => $LANG_SOCIAL['enabled'], 'field' => 'enabled', 'sort' => true, 'align' => 'center'),
     );
@@ -304,6 +344,113 @@ function SI_SFM_toggleStatus($enabledsfm, $sfmarray)
     return;
 }
 
+/**
+* Display admin list of site memberships for social follow for the site
+*
+* Displays all available social services for the site
+*
+* @return   string              HTML to display
+*
+*/
+function SI_get_site()
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_SOCIAL;
+
+    USES_lib_admin();
+
+    $retval = '';
+
+    // if an social admin is using this page, offer navigation to the admin page(s)
+
+    if (SEC_hasRights('social.admin')) {
+        $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']),
+            array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']),
+            array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
+        );
+    } else {
+        $menu_arr = array();
+    }
+
+    $T = new Template($_CONF['path_layout'] . 'admin/social');
+    $T->set_file('page','site_social.thtml');
+
+    $T->set_var('start_block',COM_startBlock('Site Social Memberships', '', COM_getBlockTemplate('_admin_block', 'header')));
+    $T->set_var('admin_menu',
+                ADMIN_createMenu($menu_arr, 'Select sites this site belongs to.',
+                $_CONF['layout_url'] . '/images/icons/share.png'));
+
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->set_block('page','social_links','sl');
+
+    $follow_me = SOC_followMeProfile( -1 );
+    if ( is_array($follow_me) && count($follow_me) > 0 ) {
+        foreach ( $follow_me AS $service ) {
+            $T->set_var(array(
+                'service_display_name'  => $service['service_display_name'],
+                'service'               => $service['service'],
+                'service_username'      => $service['service_username'],
+                'service_url'           => $service['service_url']
+            ));
+            $T->parse('sl','social_links',true);
+        }
+    }
+
+    $T->set_var(array(
+        'security_token_name'   => CSRF_TOKEN,
+        'security_token'        => SEC_createToken(),
+        'lang_service_name'     => 'Service Name',
+        'lang_service_url'      => 'Service URL',
+        'lang_site_username'    => 'Site Username',
+        'lang_save'             => 'Save',
+        'lang_cancel'           => 'Cancel',
+        'form_action'           => $_CONF['site_admin_url'].'/social.php',
+    ));
+
+    $retval = $T->finish ($T->parse ('output', 'page'));
+    return $retval;
+}
+
+/**
+* Saves the site social memberships
+*
+* @return   none
+*
+*/
+function SI_save_site()
+{
+    global $_CONF, $_TABLES;
+
+    $retval = '';
+
+    $uid = -1; // use -1 for site items
+
+    // run through the POST vars to see which ones are set.
+
+    $social_services = SOC_followMeProfile( $uid );
+    foreach ( $social_services AS $service ) {
+        $service_input = $service['service'].'_username';
+        if ( isset( $_POST['$service_input'])) {
+            $_POST[$service_input] = strip_tags($_POST[$service_input]);
+        }
+    }
+
+    foreach ( $social_services AS $service ) {
+        $service_input = $service['service'].'_username';
+        $_POST[$service_input] = DB_escapeString($_POST[$service_input]);
+        if ( $_POST[$service_input] != '' ) {
+            $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+            $sql .= " VALUES (" . (int) $service['service_id'] . ",".$uid.",'".$_POST[$service_input]."');";
+            DB_query($sql,1);
+        } else {
+            $sql = "DELETE FROM {$_TABLES['social_follow_user']} WHERE ssid = ".(int) $service['service_id']." AND uid=".(int) $uid;
+            DB_query($sql,1);
+        }
+    }
+    return $retval;
+}
+
 $action = '';
 
 if (isset($_GET['list']) ) {
@@ -338,10 +485,20 @@ if (isset($_POST['sfmenabler']) && SEC_checkToken()) {
     $action = 'f';
 }
 
+if ( isset($_POST['savesitememberships']) && SEC_checkToken() ) {
+    SI_save_site();
+    $action = 's';
+}
+
 switch ($action) {
     case 'f' :
         $page = SI_FollowMelist();
         break;
+
+    case 's' :
+        $page = SI_get_site();
+        break;
+
     default :
         $page = SI_list();
         break;

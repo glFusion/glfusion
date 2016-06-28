@@ -1429,10 +1429,11 @@ $LANG_LOGVIEW = array(
 
 $LANG_SOCIAL = array(
     'label'                 => 'Social Integrations',
-    'social_share'          => 'Social Share Sites',
+    'social_share'          => 'Share Services',
     'share_instructions'    => 'You can configure which social sharing buttons are enabled',
     'follow_instructions'   => 'You can configure which social follow me services are enabled',
-    'social_follow'         => 'Follow Me Settings',
+    'social_follow'         => 'Follow Services',
+    'site_memberships'      => 'Site Social Memberships',
     'id'                    => 'ID',
     'name'                  => 'Name',
     'enabled'               => 'Enabled',

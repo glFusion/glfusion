@@ -99,13 +99,13 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
     return $retval;
 }
 
-function SOC_getFollowMeIcons( $uid = -1, $templateFile = 'follow_user.thtml' )
+function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG_SOCIAL;
 
     $retval = '';
 
-    if ( $uid == -1 ) {
+    if ( $uid == 0 ) {
         if ( COM_isAnonUser()) return;
         $uid = $_USER['uid'];
     }

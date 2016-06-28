@@ -34,7 +34,8 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_ALL );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -7050,6 +7051,19 @@ function js_cacheok($cache,$files)
         }
     }
     return true;
+}
+
+/**
+ * This block will display any social site memberships
+ *
+ */
+function phpblock_social()
+{
+    global $_CONF;
+
+    USES_lib_social();
+
+    return SOC_getFollowMeIcons( -1, 'follow_site.thtml' );
 }
 
 
