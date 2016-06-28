@@ -1697,7 +1697,7 @@ $LANG_DB_BACKUP = array(
     'optimize_menu'       => 'Optimize Tables',
     'optimize_title'      => 'Optimize Tables',
     'optimize_button'     => 'Optimize',
-    'optimize_explain'    => 'Optimizing tables may help to improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do no expect to see a huge difference in performance. The <a href="http://dev.mysql.com/doc/mysql/en/optimize-table.html" target="_blank">MySQL manual</a> states: <q>it is not likely that you need to do this more than once a week or month</q>.',
+    'optimize_explain'    => 'Optimizing tables may help to improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do not expect to see a huge difference in performance. The <a href="http://dev.mysql.com/doc/mysql/en/optimize-table.html" target="_blank">MySQL manual</a> states: <q>it is not likely that you need to do this more than once a week or month</q>.',
     'last_optimization'   => 'Last optimization',
     'optimization_message'=> 'Optimization may take some time - please be patient.',
     'optimize_success'    => 'Successfully optimized database tables.'
