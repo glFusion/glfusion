@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+<ul class="fa-ul">
+	<!-- BEGIN social_buttons -->
+	<li style="display:inline;padding:5px;disc:none;">
+		<a href="{social_url}" target="_blank" title="{lang_follow_me} {service_display_name}"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-{service_icon} fa-stack-1x"></i></span></a>
+	</li>
+	<!-- END social_buttons -->
+</ul>
+{# end {templatelocation} #}

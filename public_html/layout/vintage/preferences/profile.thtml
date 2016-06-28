@@ -109,7 +109,7 @@
 {!endif}
 
         {plugin_userinfo}
-    </div>
+		</div>
 
     {prefs}
 

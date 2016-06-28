@@ -23,6 +23,25 @@
           {plugin_body_vars}
         {!endif}
     </div>
+
+{!!if {story_display} == 'article' !!}
+	{!if author_about}
+		<div class="uk-clearfix"></div>
+		<hr>
+		<div style="border:1px solid grey;">
+				<img style="float:left;padding:5px;" src="{author_photo_raw}" width="50" height="50" alt="">
+				<b>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</b>
+				<br>
+				<div>
+					{author_about}
+					<div>
+					{follow_me}
+				  </div>
+				</div>
+		</div>
+	{!endif}
+{!endif}
+
     <div class="story-footer">
         <p>{page_selector}</p>
         <p>{readmore_link}</p>
