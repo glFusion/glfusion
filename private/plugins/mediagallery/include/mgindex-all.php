@@ -48,7 +48,7 @@ $tnSize         = $_MG_CONF['gallery_tn_size'] ;
 
 class mediaItem extends Media {
 
-    function displayThumb( $s, $sortOrder, $force = 0, $imageFrame ) {
+    function displayThumb( $s, $sortOrder, $force = 0, $imageFrame = '' ) {
         global $_USER, $_CONF, $_MG_CONF, $MG_albums, $_TABLES, $_MG_USERPREFS, $LANG_MG03, $LANG_MG01, $glversion,$ratedIds;
         global $tnSize;
 
