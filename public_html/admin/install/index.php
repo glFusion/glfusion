@@ -1290,9 +1290,20 @@ function INST_gotSiteInformation()
             return _displayError(DB_NO_DATABASE,'getsiteinformation');
         }
         if ( $innodb ) {
-            $res = @mysqli_query($db_handle, "SHOW VARIABLES LIKE 'have_innodb'");
-            $A = @mysqli_fetch_array($res);
-            if (strcasecmp ($A[1], 'yes') != 0) {
+            $foundInnoDB = false;
+            $res = @mysqli_query($db_handle, "SHOW STORAGE ENGINES");
+            $numEngines = @mysqli_num_rows($res);
+            for ($i = 0; $i < $numEngines; $i++) {
+                $A = @mysqli_fetch_array($res);
+                if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
+                    if ((strcasecmp($A['Support'], 'yes') == 0) ||
+                        (strcasecmp($A['Support'], 'default') == 0)) {
+                        $foundInnoDB = true;
+                    }
+                    break;
+                }
+            }
+            if ( $foundInnoDB === false ) {
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
@@ -1312,9 +1323,20 @@ function INST_gotSiteInformation()
             return _displayError(DB_NO_DATABASE,'getsiteinformation');
         }
         if ( $innodb ) {
-            $res = @mysql_query("SHOW VARIABLES LIKE 'have_innodb'");
-            $A = @mysql_fetch_array($res);
-            if (strcasecmp ($A[1], 'yes') != 0) {
+            $foundInnoDB = false;
+            $res = @mysql_query($db_handle, "SHOW STORAGE ENGINES");
+            $numEngines = @mysql_num_rows($res);
+            for ($i = 0; $i < $numEngines; $i++) {
+                $A = @mysql_fetch_array($res);
+                if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
+                    if ((strcasecmp($A['Support'], 'yes') == 0) ||
+                        (strcasecmp($A['Support'], 'default') == 0)) {
+                        $foundInnoDB = true;
+                    }
+                    break;
+                }
+            }
+            if ( $foundInnoDB === false ) {
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
@@ -2048,7 +2070,7 @@ switch($mode) {
         break;
     case 'gotsiteinformation' :
         $pageBody = INST_gotSiteInformation();
-        $percent_complete = 70;
+        $percent_complete = 80;
         break;
     case 'contentplugins' :
         $pageBody = INST_installAndContentPlugins();

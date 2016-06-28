@@ -1497,14 +1497,26 @@ function INST_doPrePluginUpgrade()
  */
 function INST_innodbSupported()
 {
-    $result = DB_query ("SHOW VARIABLES LIKE 'have_innodb'");
-    $A = DB_fetchArray ($result, true);
 
-    if (strcasecmp ($A[1], 'yes') == 0) {
-        return true;
-    } else {
-        return false;
+function DBADMIN_innodb_supported()
+{
+    $retval = false;
+
+    $result = DB_query("SHOW STORAGE ENGINES");
+    $numEngines = DB_numRows($result);
+    for ($i = 0; $i < $numEngines; $i++) {
+        $A = DB_fetchArray($result);
+
+        if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
+            if ((strcasecmp($A['Support'], 'yes') == 0) ||
+                (strcasecmp($A['Support'], 'default') == 0)) {
+                $retval = true;
+            }
+            break;
+        }
     }
+
+    return $retval;
 }
 
 
