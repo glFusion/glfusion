@@ -48,7 +48,7 @@ $tnSize         = $_MG_CONF['gallery_tn_size'] ;
 
 class mediaItem extends Media {
 
-    function displayThumb( $s, $sortOrder, $imageFrame ) {
+    function displayThumb( $s, $sortOrder, $force = 0, $imageFrame ) {
         global $_USER, $_CONF, $_MG_CONF, $MG_albums, $_TABLES, $_MG_USERPREFS, $LANG_MG03, $LANG_MG01, $glversion,$ratedIds;
         global $tnSize;
 
@@ -931,7 +931,7 @@ function MG_indexAll()
                 }
                 $z = $j+$start;
 
-                $celldisplay = $MG_media[$j]->displayThumb($z,0,$imageFrameTemplate);
+                $celldisplay = $MG_media[$j]->displayThumb($z,0,0,$imageFrameTemplate);
 
                 if ( $MG_media[$j]->type == 1 ) {
                     $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . '.jpg';

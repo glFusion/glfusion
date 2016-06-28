@@ -105,7 +105,7 @@ class Media {
         $this->access = $MG_albums[$this->album_id]->access;
     }
 
-    function displayThumb( $s, $sortOrder, $force=0 ) {
+    function displayThumb( $s, $sortOrder, $force=0, $imageFrame = '' ) {
         global $_USER, $_CONF, $_MG_CONF, $MG_albums, $_TABLES, $_MG_USERPREFS, $LANG_MG03, $LANG_MG01, $glversion,$ratedIds;
 
         $retval = '';
