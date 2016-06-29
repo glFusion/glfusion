@@ -289,7 +289,11 @@ function actionClick( $action ) {
 								<legend>{$LANG24[95]}</legend>
 							</fieldset>
 							<a href="javascript:openStoryImage()">
+{!if story_image_url}
 								<img class="uk-thumbnail" src="{story_image_url}" id="story_image_img">
+{!else}
+								<img class="uk-thumbnail" src="{site_url}/images/placeholder.png" id="story_image_img">
+{!endif}
 							</a>
 							<div class="uk-clearfix"></div>
 							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryImage();return false;" value="{$LANG24[96]}">{$LANG24[96]}</button>
@@ -471,7 +475,7 @@ function actionClick( $action ) {
 		$('#storyImage').dialog('close');
 	}
 	function removeStoryImage() {
-		$(document).find('#story_image_img').attr('src', '');
+		$(document).find('#story_image_img').attr('src', '{site_url}/images/placeholder.png');
 		$(document).find('#story_image').attr('value', '');
 	}
 </script>
