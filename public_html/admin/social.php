@@ -372,12 +372,20 @@ function SI_get_site()
         $menu_arr = array();
     }
 
+    $cfg =& config::get_instance();
+    $_SOCIAL = $cfg->get_config('social_internal');
+
+    $extra = '';
+    if ( isset($_SOCIAL['social_site_extra'])) {
+        $extra = $_SOCIAL['social_site_extra'];
+    }
+
     $T = new Template($_CONF['path_layout'] . 'admin/social');
     $T->set_file('page','site_social.thtml');
 
-    $T->set_var('start_block',COM_startBlock('Site Social Memberships', '', COM_getBlockTemplate('_admin_block', 'header')));
+    $T->set_var('start_block',COM_startBlock($LANG_SOCIAL['site_memberships'], '', COM_getBlockTemplate('_admin_block', 'header')));
     $T->set_var('admin_menu',
-                ADMIN_createMenu($menu_arr, 'Select sites this site belongs to.',
+                ADMIN_createMenu($menu_arr, $LANG_SOCIAL['membership_instructions'],
                 $_CONF['layout_url'] . '/images/icons/share.png'));
 
     $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
@@ -400,11 +408,13 @@ function SI_get_site()
     $T->set_var(array(
         'security_token_name'   => CSRF_TOKEN,
         'security_token'        => SEC_createToken(),
-        'lang_service_name'     => 'Service Name',
-        'lang_service_url'      => 'Service URL',
-        'lang_site_username'    => 'Site Username',
-        'lang_save'             => 'Save',
-        'lang_cancel'           => 'Cancel',
+        'extra'                 => $extra,
+        'lang_service_name'     => $LANG_SOCIAL['service_name'],
+        'lang_service_url'      => $LANG_SOCIAL['service_url'],
+        'lang_site_username'    => $LANG_SOCIAL['site_username'],
+        'lang_additional_html'  => $LANG_SOCIAL['additional_html'],
+        'lang_save'             => $LANG_ADMIN['save'],
+        'lang_cancel'           => $LANG_ADMIN['cancel'],
         'form_action'           => $_CONF['site_admin_url'].'/social.php',
     ));
 
@@ -425,6 +435,8 @@ function SI_save_site()
     $retval = '';
 
     $uid = -1; // use -1 for site items
+
+    $cfg =& config::get_instance();
 
     // run through the POST vars to see which ones are set.
 
@@ -448,6 +460,14 @@ function SI_save_site()
             DB_query($sql,1);
         }
     }
+
+    if ( isset($_POST['extra'])) {
+        $extra = $_POST['extra'];
+        $cfg->set('social_site_extra', $extra, 'social_internal');
+    }
+
+    CACHE_remove_instance('social_site');
+
     return $retval;
 }
 

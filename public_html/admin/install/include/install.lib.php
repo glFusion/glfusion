@@ -1201,6 +1201,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('comment_engine','internal','select',4,6,30,1,TRUE);
             $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
             $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
+            $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 
             $_SQL = array();
 
@@ -1282,6 +1283,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
 
             $_DATA[] = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('headlines', 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]', 1, 1, '');";
+
+            $_DATA[] = "REPLACE INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 0, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
+
 
             foreach ($_DATA as $sql) {
                 DB_query($sql,1);

@@ -1280,6 +1280,7 @@ function glfusion_160()
         $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
         $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
     }
+    $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
@@ -1354,6 +1355,8 @@ function glfusion_160()
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(11, 'http://foursquare.com/%%u', 1, 'foursquare', 'foursquare', 'Foursquare');";
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
+
+    $_SQL[] = "REPLACE INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 0, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
 
     if ($use_innodb) {
         $statements = count($_SQL);

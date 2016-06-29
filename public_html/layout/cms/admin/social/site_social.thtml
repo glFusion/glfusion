@@ -22,6 +22,13 @@
 
 	</table>
 
+	<div class="uk-form-row uk-margin-bottom">
+		<label class="uk-form-label">{lang_additional_html}</label>
+		<div class="uk-form-controls">
+			<textarea class="uk-form-large uk-form-width-large texteditor" rows="10" name="extra">{extra}</textarea>
+		</div>
+	</div>
+
 	<button class="uk-button uk-button-primary" type="submit" value="save" name="savesitememberships">{lang_save}</button>
 	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 </form>

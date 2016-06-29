@@ -110,6 +110,15 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
         $uid = $_USER['uid'];
     }
 
+    if ( $uid == -1 ) {
+        $hash = CACHE_security_hash();
+        $instance_id = 'social_site_'.$hash.'_'.$_USER['theme'];
+
+        if ( ($cache = CACHE_check_instance($instance_id, 0)) !== FALSE ) {
+            return $cache;
+        }
+    }
+
     $T = new Template( $_CONF['path_layout'].'social' );
     $T->set_file('links',$templateFile);
 
@@ -136,11 +145,24 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
                 'social_url'   => $social_url,
             ));
             $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
+            $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
             $T->parse('sb','social_buttons',true);
         }
         $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
         $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
+
+        if ( $uid == -1 ) {
+            $cfg =& config::get_instance();
+            $_SOCIAL = $cfg->get_config('social_internal');
+
+            if ( isset($_SOCIAL['social_site_extra'])) {
+                $T->set_var('extra',$_SOCIAL['social_site_extra']);
+            }
+        }
         $retval = $T->finish ($T->parse('output','links'));
+    }
+    if ( $uid == -1 ) {
+        CACHE_create_instance($instance_id, $retval, 0);
     }
     return $retval;
 }
