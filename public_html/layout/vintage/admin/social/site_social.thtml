@@ -22,6 +22,12 @@
 
 	</table>
 
+	<div>
+		<label>{lang_additional_html}</label>
+			<textarea class="texteditor" rows="10" cols="80" style="width:98%;" name="extra">{extra}</textarea>
+	</div>
+
+
 	<button class="uk-button uk-button-primary" type="submit" value="save" name="savesitememberships">{lang_save}</button>
 	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 </form>
