@@ -1570,6 +1570,7 @@ $LANG_SOCIAL = array(
     'social_share' => 'Share Services',
     'share_instructions' => 'You can configure which social sharing buttons are enabled',
     'follow_instructions' => 'You can configure which social follow me services are enabled',
+    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
     'social_follow' => 'Follow Services',
     'site_memberships' => 'Site Social Memberships',
     'id' => 'ID',
@@ -1578,7 +1579,11 @@ $LANG_SOCIAL = array(
     'share_it_label' => 'Share It!',
     'state_toggled' => 'Social Share state has been toggled.',
     'follow_us' => 'Follow Us on',
-    'follow_me' => 'Follow Me on'
+    'follow_me' => 'Follow Me on',
+    'service_name' => 'Service Name',
+    'service_url' => 'Service URL',
+    'site_username' => 'Site Username',
+    'additional_html' => 'Additional HTML for block - displays after follow buttons'
 );
 
 ###############################################################################
