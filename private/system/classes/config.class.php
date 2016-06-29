@@ -136,7 +136,6 @@ class config {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
-//                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
                     $row[1] = preg_replace_callback ( '!s:(\d+):"(.*?)";!',
                         function($match) {
                             return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
@@ -521,7 +520,7 @@ class config {
         for ($i = 0; $i < $num_groups; $i++) {
             $g = $groups[$i];
             if ($g != 'Core') {
-                $enabled = DB_getItem($_TABLES['plugins'], 'pi_enabled',
+                $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',
                                       "pi_name = '$g'");
                 if (isset($enabled) && ($enabled == 0)) {
                     unset($groups[$i]);
