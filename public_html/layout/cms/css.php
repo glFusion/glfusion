@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion CSS Parser                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -28,7 +28,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.5.2');
+    define('GVERSION', '1.6.0');
 }
 require_once '../../siteconfig.php';
 if ( !isset($_GET['t']) ) {
