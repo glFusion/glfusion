@@ -576,7 +576,7 @@
 
 				<dl id="desc_whosonline_photo">
 					<dt>Display User Photo Thumbnail</dt>
-					<dt>If enabled (i.e. set to 1), and a photo exists for the user, a thumbnail of that photo will be displayed, otherwise a photo icon will be displayed.</dd>
+					<dd>If enabled (i.e. set to 1), and a photo exists for the user, a thumbnail of that photo will be displayed, otherwise a photo icon will be displayed.</dd>
 				</dl>
 
 				<a name="blocks_what" id="what_s_new_block"></a><h2>What's New Block</h2>
@@ -614,6 +614,11 @@
 				<dl id="desc_hidenewplugins">
 					<dt>Hide New Plugin Entries</dt>
 					<dd>Set to TRUE to hide new entries by plugins from the What's New block. </dd>
+				</dl>
+
+				<dl id="desc_hideemptyblock">
+					<dt>Hide What's New Block when empty </dt>
+					<dd>Set to TRUE to hide the What's New block when there are no new items to display.</dd>
 				</dl>
 
 				<dl id="desc_title_trim_length">
@@ -819,7 +824,7 @@
 					<dd>Login is required to access any part of the site. When set to TRUE, this overrides the following settings. When you only want to block access to certain parts of the site, set this to FALSE and select from the following settings. </dd>
 				</dl>
 
-				<dl id=""desc_submitloginrequired">
+				<dl id="desc_submitloginrequired">
 					<dt>Submit Login Required</dt>
 					<dd>When set to TRUE, only registered users can submit stories and items handled by plugins, e.g. links and events </dd>
 				</dl>
@@ -928,6 +933,11 @@
 					<dd>Sets the default submission mode to 'html' or 'plaintext' </dd>
 				</dl>
 
+				<dl id="desc_mailuser_postmode">
+					<dt>HTML or Text mode when mailing users / stories</dt>
+					<dd>Sets the default mode to 'html' or 'plaintext' for emailing users or stories.</dd>
+				</dl>
+
 				<dl id="desc_speedlimit">
 					<dt>Post Speed Limit</dt>
 					<dd>Minimum delay between submissions in seconds. This helps prevent Denial of Service (DOS) attacks </dd>
@@ -988,6 +998,11 @@
 				<dl id="desc_comment_postmode">
 					<dt>Comment Post mode</dt>
 					<dd>Select the default postmode for comments.</dd>
+				</dl>
+
+				<dl id="desc_article_comment_close_enabled">
+					<dt>Automatically close comments (default) </dt>
+					<dd>Default setting for "Automatically Close Comments".</dd>
 				</dl>
 
 				<dl id="desc_article_comment_close_days">
@@ -1060,7 +1075,7 @@
 
 				<dl id="desc_jpg_orig_quality">
 					<dt>JPEG Quality Factor</dt>
-					<dd></dd>
+					<dd>When converting images, the JPEG quality setting to use.  Lower numbers provide lower resolution, but smaller file sizes.</dd>
 				</dl>
 
 				<dl id="desc_debug_image_upload">
@@ -1141,6 +1156,16 @@
 					<dd>Avatars submitted to gravatar.com are rated with the rating system used for movies (in the U.S.), i.e. the letters G, PG, R, or X. This option will let you chose the maximum allowed rating for an avatar. For example, a max. rating of R will make sure that no X-rated avatars will be displayed on your site (only G, PG, and R). </dd>
 				</dl>
 
+				<dl id="desc_max_logo_height">
+					<dt>Max logo height</dt>
+					<dd>Maximum height, in pixels, of the logo image. If a logo is larger than this setting, it will be rejected.</dd>
+				</dl>
+
+				<dl id="desc_max_logo_width">
+					<dt>Max logo width</dt>
+					<dd>Maximum width, in pixels, of the logo image. If a logo is larger than this setting, it will be rejected.</dd>
+				</dl>
+
 				<a name="languages" id="languages_and_locale"></a><h2>Languages and Locale</h2>
 
 				<a name="languages_language" id="language"></a><h2>Language</h2>
@@ -1197,7 +1222,7 @@
 					<dd>First day of the week in the calendar. Can be either 'Sun' (Sunday) or 'Mon' (Monday). </dd>
 				</dl>
 
-				<dl id="desc_hour_mode>
+				<dl id="desc_hour_mode">
 					<dt>Hour Mode</dt>
 					<dd>Which format to use when submitting or editing an object with a time setting (e.g. the publish time of a story). Can be 12 (for the 12 hour am/pm format) or 24 (for the 24 hour format). </dd>
 				</dl>
