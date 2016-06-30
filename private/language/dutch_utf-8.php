@@ -1418,6 +1418,43 @@ $LANG33 = array(
 );
 
 ###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Bekijk Logbestanden',
+    'info' => 'glFusion Logbestanden Beheer',
+    'logs' => 'Logbestanden',
+    'view' => 'Bekijk Logbestand',
+    'clear' => 'Maak Logbestand leeg',
+    'log_file' => 'Logbestand'
+);
+
+###############################################################################
+# admin/social.php
+
+$LANG_SOCIAL = array(
+    'label' => 'Social Integrations',
+    'social_share' => 'Share Services',
+    'share_instructions' => 'You can configure which social sharing buttons are enabled',
+    'follow_instructions' => 'You can configure which social follow me services are enabled',
+    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'social_follow' => 'Follow Services',
+    'site_memberships' => 'Site Social Memberships',
+    'id' => 'ID',
+    'name' => 'Name',
+    'enabled' => 'Enabled',
+    'share_it_label' => 'Share It!',
+    'state_toggled' => 'Social Share state has been toggled.',
+    'follow_us' => 'Follow Us on',
+    'follow_me' => 'Follow Me on',
+    'service_name' => 'Service Name',
+    'service_url' => 'Service URL',
+    'site_username' => 'Site Username',
+    'additional_html' => 'Additional HTML for block - displays after follow buttons',
+    'saved_msg' => 'Social Integrations successfully saved.'
+);
+
+###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1552,99 +1589,6 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account'
-);
-
-###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Bekijk Logbestanden',
-    'info' => 'glFusion Logbestanden Beheer',
-    'logs' => 'Logbestanden',
-    'view' => 'Bekijk Logbestand',
-    'clear' => 'Maak Logbestand leeg',
-    'log_file' => 'Logbestand'
-);
-
-###############################################################################
-# lib-bbcode.php
-
-$LANG_BBCODE = array(
-    'bold_label' => 'B',
-    'italic_label' => 'i',
-    'underline_label' => 'u',
-    'quote_label' => 'Quote',
-    'code_label' => 'Code',
-    'list_label' => 'List',
-    'olist_label' => 'List=',
-    'listitem_label' => '[*]',
-    'img_label' => 'Img',
-    'url_label' => 'URL',
-    'smiley_label' => 'Smileys',
-    'size_label' => 'Font Size',
-    'color_label' => 'Font Color',
-    'bold_help' => 'Bold text: [b]text[/b]',
-    'italic_help' => 'Italic text: [i]text[/i]',
-    'underline_help' => 'Underline text: [u]text[/u]',
-    'quote_help' => 'Quote text: [quote]text[/quote]',
-    'code_help' => 'Code display: [code]code[/code]',
-    'list_help' => 'List: [list]text[/list]',
-    'olist_help' => 'List: [list=]text[/list]',
-    'listitem_help' => 'List item: [*]text[/*]',
-    'img_help' => 'Insert image: [img]http://image_url[/img]',
-    'url_help' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
-    'smiley_help' => 'Open Smiley Window',
-    'size_help' => 'Font size: [size=9]small text[/size]',
-    'color_help' => 'Text Color: [color=red]red text[/color]',
-    'size_tiny' => 'Tiny',
-    'size_small' => 'Small',
-    'size_normal' => 'Normal',
-    'size_large' => 'Large',
-    'size_huge' => 'Huge',
-    'color_default' => 'Default',
-    'color_darkred' => 'Dark Red',
-    'color_red' => 'Red',
-    'color_orange' => 'Orange',
-    'color_brown' => 'Brown',
-    'color_yellow' => 'Yellow',
-    'color_green' => 'Green',
-    'color_olive' => 'Olive',
-    'color_cyan' => 'Cyan',
-    'color_blue' => 'Blue',
-    'color_darkblue' => 'Dark Blue',
-    'color_indigo' => 'Indigo',
-    'color_violet' => 'Violet',
-    'color_white' => 'White',
-    'color_black' => 'Black',
-    'formatted_code' => 'Formatted Code'
-);
-
-###############################################################################
-# filecheck.php
-
-$LANG_FILECHECK = array(
-    'filecheck' => 'File Integrity Check',
-    'recheck' => 'Recheck File Integrity',
-    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
-    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort' => 'Abort Scan',
-    'aborted' => 'The scan was aborted.',
-    'where' => 'Root',
-    'type' => 'Type',
-    'delta' => 'Change:',
-    'location' => 'Location',
-    'path' => 'Path',
-    'file' => 'File',
-    'dir' => 'Dir',
-    'plugin' => 'plugin',
-    'added' => 'added',
-    'missing' => 'missing',
-    'removed' => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
-    'working' => 'Scanning ...<br />',
-    'elapsed' => 'The scan completed in %s sec.'
 );
 
 ###############################################################################
@@ -2033,6 +1977,159 @@ $LANG_ADMIN = array(
 );
 
 ###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Laatste Nieuws',
+    'translate' => 'Klik op een vlag om de website automatisch te vertalen in de taal van het betreffende land',
+    'prev' => 'Vorige',
+    'next' => 'Volgende',
+    'playpause' => 'Afspelen/Pauze',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
+);
+
+# Localisation of the texts for the various drop-down menus that are actually
+# stored in the database. If these exist, they override the texts from the
+# database.
+
+$LANG_commentcodes = array(
+    0 => 'Reacties toegestaan',
+    -1 => 'Reacties niet toegestaan',
+    1 => 'Reacties Gesloten'
+);
+
+$LANG_commentmodes = array(
+    'flat' => 'Vlak',
+    'nested' => 'Genest',
+    'nocomment' => 'Geen Reacties'
+);
+
+$LANG_cookiecodes = array(
+    0 => '(geen)',
+    3600 => '1 uur',
+    7200 => '2 uren',
+    10800 => '3 uren',
+    28800 => '8 uren',
+    86400 => '1 Dag',
+    604800 => '1 Week',
+    2678400 => '1 Maand'
+);
+
+$LANG_dateformats = array(
+    0 => 'Standaard'
+);
+
+$LANG_featurecodes = array(
+    0 => 'Niet Featured',
+    1 => 'Featured'
+);
+
+$LANG_frontpagecodes = array(
+    0 => 'Alleen in rubriek laten zien',
+    1 => 'Laat op voorpagina zien'
+);
+
+$LANG_postmodes = array(
+    'plaintext' => 'ASCII tekst',
+    'html' => 'HTML-formaat'
+);
+
+$LANG_sortcodes = array(
+    'ASC' => 'Oudste eerst',
+    'DESC' => 'Nieuwste eerst'
+);
+
+$LANG_trackbackcodes = array(
+    0 => 'Trackback toegestaan',
+    -1 => 'Trackback niet toegestaan'
+);
+# Localisation of the texts for the BBCode Editor
+###############################################################################
+# lib-bbcode.php
+
+$LANG_BBCODE = array(
+    'bold_label' => 'B',
+    'italic_label' => 'i',
+    'underline_label' => 'u',
+    'quote_label' => 'Quote',
+    'code_label' => 'Code',
+    'list_label' => 'List',
+    'olist_label' => 'List=',
+    'listitem_label' => '[*]',
+    'img_label' => 'Img',
+    'url_label' => 'URL',
+    'smiley_label' => 'Smileys',
+    'size_label' => 'Font Size',
+    'color_label' => 'Font Color',
+    'bold_help' => 'Bold text: [b]text[/b]',
+    'italic_help' => 'Italic text: [i]text[/i]',
+    'underline_help' => 'Underline text: [u]text[/u]',
+    'quote_help' => 'Quote text: [quote]text[/quote]',
+    'code_help' => 'Code display: [code]code[/code]',
+    'list_help' => 'List: [list]text[/list]',
+    'olist_help' => 'List: [list=]text[/list]',
+    'listitem_help' => 'List item: [*]text[/*]',
+    'img_help' => 'Insert image: [img]http://image_url[/img]',
+    'url_help' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help' => 'Open Smiley Window',
+    'size_help' => 'Font size: [size=9]small text[/size]',
+    'color_help' => 'Text Color: [color=red]red text[/color]',
+    'size_tiny' => 'Tiny',
+    'size_small' => 'Small',
+    'size_normal' => 'Normal',
+    'size_large' => 'Large',
+    'size_huge' => 'Huge',
+    'color_default' => 'Default',
+    'color_darkred' => 'Dark Red',
+    'color_red' => 'Red',
+    'color_orange' => 'Orange',
+    'color_brown' => 'Brown',
+    'color_yellow' => 'Yellow',
+    'color_green' => 'Green',
+    'color_olive' => 'Olive',
+    'color_cyan' => 'Cyan',
+    'color_blue' => 'Blue',
+    'color_darkblue' => 'Dark Blue',
+    'color_indigo' => 'Indigo',
+    'color_violet' => 'Violet',
+    'color_white' => 'White',
+    'color_black' => 'Black',
+    'formatted_code' => 'Formatted Code'
+);
+
+# Localisation of the texts for the Admin file check
+###############################################################################
+# filecheck.php
+
+$LANG_FILECHECK = array(
+    'filecheck' => 'File Integrity Check',
+    'recheck' => 'Recheck File Integrity',
+    'confirm' => 'Are you sure you want to deleted the selected file(s)?',
+    'scan' => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
+    'results' => 'Your site\'s files and directories have been compared to the glFusion v%s distribtion, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
+    'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
+    'expiration2' => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
+    'abort' => 'Abort Scan',
+    'aborted' => 'The scan was aborted.',
+    'where' => 'Root',
+    'type' => 'Type',
+    'delta' => 'Change:',
+    'location' => 'Location',
+    'path' => 'Path',
+    'file' => 'File',
+    'dir' => 'Dir',
+    'plugin' => 'plugin',
+    'added' => 'added',
+    'missing' => 'missing',
+    'removed' => '%s %s deleted.  Your site\'s File Integrity has been rechecked, and the results are shown below.',
+    'working' => 'Scanning ...<br />',
+    'elapsed' => 'The scan completed in %s sec.'
+);
+
+# Localisation of the texts for Menu Builder
+###############################################################################
 # Menu Builder
 
 $LANG_MB01 = array(
@@ -2278,31 +2375,6 @@ $LANG_AM = array(
 );
 
 ###############################################################################
-# social.php
-
-$LANG_SOCIAL = array(
-    'label' => 'Social Integrations',
-    'social_share' => 'Share Services',
-    'share_instructions' => 'You can configure which social sharing buttons are enabled',
-    'follow_instructions' => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
-    'social_follow' => 'Follow Services',
-    'site_memberships' => 'Site Social Memberships',
-    'id' => 'ID',
-    'name' => 'Name',
-    'enabled' => 'Enabled',
-    'share_it_label' => 'Share It!',
-    'state_toggled' => 'Social Share state has been toggled.',
-    'follow_us' => 'Follow Us on',
-    'follow_me' => 'Follow Me on',
-    'service_name' => 'Service Name',
-    'service_url' => 'Service URL',
-    'site_username' => 'Site Username',
-    'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
-);
-
-###############################################################################
 # versioncheck.php
 
 $LANG_UPGRADE = array(
@@ -2355,75 +2427,6 @@ $LANG_SFS = array(
     'no_data' => 'No user\'s were found in the user database.'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Laatste Nieuws',
-    'translate' => 'Klik op een vlag om de website automatisch te vertalen in de taal van het betreffende land',
-    'prev' => 'Vorige',
-    'next' => 'Volgende',
-    'playpause' => 'Afspelen/Pauze',
-    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
-);
-
-# Localisation of the texts for the various drop-down menus that are actually
-# stored in the database. If these exist, they override the texts from the
-# database.
-
-$LANG_commentcodes = array(
-    0 => 'Reacties toegestaan',
-    -1 => 'Reacties niet toegestaan',
-    1 => 'Reacties Gesloten'
-);
-
-$LANG_commentmodes = array(
-    'flat' => 'Vlak',
-    'nested' => 'Genest',
-    'nocomment' => 'Geen Reacties'
-);
-
-$LANG_cookiecodes = array(
-    0 => '(geen)',
-    3600 => '1 uur',
-    7200 => '2 uren',
-    10800 => '3 uren',
-    28800 => '8 uren',
-    86400 => '1 Dag',
-    604800 => '1 Week',
-    2678400 => '1 Maand'
-);
-
-$LANG_dateformats = array(
-    0 => 'Standaard'
-);
-
-$LANG_featurecodes = array(
-    0 => 'Niet Featured',
-    1 => 'Featured'
-);
-
-$LANG_frontpagecodes = array(
-    0 => 'Alleen in rubriek laten zien',
-    1 => 'Laat op voorpagina zien'
-);
-
-$LANG_postmodes = array(
-    'plaintext' => 'ASCII tekst',
-    'html' => 'HTML-formaat'
-);
-
-$LANG_sortcodes = array(
-    'ASC' => 'Oudste eerst',
-    'DESC' => 'Nieuwste eerst'
-);
-
-$LANG_trackbackcodes = array(
-    0 => 'Trackback toegestaan',
-    -1 => 'Trackback niet toegestaan'
-);
 
 ###############################################################################
 # Localization of the Admin Configuration UI

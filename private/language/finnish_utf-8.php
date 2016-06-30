@@ -1414,6 +1414,43 @@ $LANG33 = array(
 );
 
 ###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logi N&auml;kym&auml;',
+    'info' => 'glFusion Logi Tiedoston Hallinta',
+    'logs' => 'Logit',
+    'view' => 'Katso Logi Tiedosto',
+    'clear' => 'Tyhjenn&auml; Logi Tiedosto',
+    'log_file' => 'Logi Tiedosto'
+);
+
+###############################################################################
+# admin/social.php
+
+$LANG_SOCIAL = array(
+    'label' => 'Social Integrations',
+    'social_share' => 'Share Services',
+    'share_instructions' => 'You can configure which social sharing buttons are enabled',
+    'follow_instructions' => 'You can configure which social follow me services are enabled',
+    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'social_follow' => 'Follow Services',
+    'site_memberships' => 'Site Social Memberships',
+    'id' => 'ID',
+    'name' => 'Name',
+    'enabled' => 'Enabled',
+    'share_it_label' => 'Share It!',
+    'state_toggled' => 'Social Share state has been toggled.',
+    'follow_us' => 'Follow Us on',
+    'follow_me' => 'Follow Me on',
+    'service_name' => 'Service Name',
+    'service_url' => 'Service URL',
+    'site_username' => 'Site Username',
+    'additional_html' => 'Additional HTML for block - displays after follow buttons',
+    'saved_msg' => 'Social Integrations successfully saved.'
+);
+
+###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1548,99 +1585,6 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account'
-);
-
-###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logi N&auml;kym&auml;',
-    'info' => 'glFusion Logi Tiedoston Hallinta',
-    'logs' => 'Logit',
-    'view' => 'Katso Logi Tiedosto',
-    'clear' => 'Tyhjenn&auml; Logi Tiedosto',
-    'log_file' => 'Logi Tiedosto'
-);
-
-###############################################################################
-# lib-bbcode.php
-
-$LANG_BBCODE = array(
-    'bold_label' => 'B',
-    'italic_label' => 'i',
-    'underline_label' => 'u',
-    'quote_label' => 'Lainaus',
-    'code_label' => 'Koodi',
-    'list_label' => 'Lista',
-    'olist_label' => 'List=',
-    'listitem_label' => '[*]',
-    'img_label' => 'Kuva',
-    'url_label' => 'URL',
-    'smiley_label' => 'Hymi&ouml;t',
-    'size_label' => 'Fontin koko',
-    'color_label' => 'Fontin v&auml;ri',
-    'bold_help' => 'Lihavoitu: [b]teksti[/b]',
-    'italic_help' => 'Kursivoitu: [i]teksti[/i]',
-    'underline_help' => 'Alleviivaus: [u]teksti[/u]',
-    'quote_help' => 'Lainaus teksti: [quote]teksti[/quote]',
-    'code_help' => 'Koodin lis&auml;&auml;minen: [code]koodi[/code]',
-    'list_help' => 'Lista: [list]teksti[/list]',
-    'olist_help' => 'Lista: [list=]teksti[/list]',
-    'listitem_help' => 'Listan kohde: [*]teksti[/*]',
-    'img_help' => 'Lis&auml;&auml; kuva: [img]http://kuva_url[/img]',
-    'url_help' => 'Lis&auml;&auml; URL: [url]http://url[/url] tai [url=http://url]URL teksti[/url]',
-    'smiley_help' => 'Avaa hymi&ouml; ikkuna',
-    'size_help' => 'Fontin koko: [size=9]pieni teksti[/size]',
-    'color_help' => 'Tekstin v&auml;ri: [color=red]punainen teksti[/color]',
-    'size_tiny' => 'Todella pieni',
-    'size_small' => 'Pieni',
-    'size_normal' => 'Normaali',
-    'size_large' => 'Suuri',
-    'size_huge' => 'Todella suuri',
-    'color_default' => 'Oletus',
-    'color_darkred' => 'Tummanpunainen',
-    'color_red' => 'Punainen',
-    'color_orange' => 'Oranssi',
-    'color_brown' => 'Ruskea',
-    'color_yellow' => 'Keltainen',
-    'color_green' => 'Vihre&auml;',
-    'color_olive' => 'Oliivi',
-    'color_cyan' => 'Cyan',
-    'color_blue' => 'Sininen',
-    'color_darkblue' => 'Tummansininen',
-    'color_indigo' => 'Indigo',
-    'color_violet' => 'Violetti',
-    'color_white' => 'Valkea',
-    'color_black' => 'Musta',
-    'formatted_code' => 'Formatted Code'
-);
-
-###############################################################################
-# filecheck.php
-
-$LANG_FILECHECK = array(
-    'filecheck' => 'Tiedoston Eheys Tarkistus',
-    'recheck' => 'Tarkista eheys uudestaan',
-    'confirm' => 'Oletko varma ett&auml; haluat poistaa valitut kohteet?',
-    'scan' => 'Sivustosi tiedosto eheytt&auml; tarkistetaan.  Ole k&auml;rsiv&auml;llinen, t&auml;m&auml; saattaa kest&auml;&auml; kauan. Suoritusnopeus riippuu palveluymp&auml;rist&ouml;st&auml;.  Jos t&auml;m&auml; scripti on saavuttamassa maksimia PHP scriptin suoritusaikaa %s sekunnissa, scannaus keskeytet&auml;&auml;n ja n&auml;ytet&auml;&auml;n virheilmoitus.',
-    'results' => 'Sivustosi tiedostot ja hakemistot on verrattu glFusion v%s jakeluun, ja tulokset n&auml;kyy alla.  Lis&auml;tyt tai puuttuvat tiedostot ja hakemistot on tunnistettu, ja tiedostot jotka on valittu on ehk&auml; valittu poistettavaksi.  Hakemistot jotka on lis&auml;tty, tunnistetaan, mutta n&auml;m&auml; t&auml;ytyy poistaa manuaalisesti.<br /><br />Lis&auml;/Ylim&auml;&auml;r&auml;iset tiedostot ja/tai hakemistot jotka tunnistettu saattavat liitty&auml; lis&auml;osaan tai muuhun scriptiin jonka olet asentanut, tai ovat muuten v&auml;ltt&auml;m&auml;tt&ouml;mi&auml; sivustosi toiminnalle, <b>t&auml;m&auml; ei tarkoita ett&auml; yksinkertaisesti poistaisit tiedostot!&nbsp;&nbsp;<span style="color:red">K&auml;yt&auml; t&auml;t&auml; ty&ouml;kalua harkiten!</span></b>',
-    'expiration1' => 'HUOM: Scannaus keskeytettiin koska j&auml;ljell&auml; oleva aika l&auml;hestyi sivustosi PHP max suoritus aika rajoitusta.  T&auml;m&auml; analyysi scripti k&auml;ytt&auml;&auml; tehokkasti CPU ja I/O:ta, ja siihen voi vaikuttaa useat asiat palveluymp&auml;rist&ouml;ss&auml;si.  harkitse seuraavia suosituksia ongelmien ratkaisemiseen:<br />',
-    'expiration2' => '<ol><li>Yrit&auml; nostaa \'max_execution_time\' aikaa php.ini tiedostossa.  Aika on asetettu nyt %s sekuntiin.</li><li>Manuaalisesti tutki sivustosi ja poista kaikki tarpeettomat tiedostot ja hakemistot.</li></ol>',
-    'abort' => 'Keskeyt&auml; Scannaus',
-    'aborted' => 'Scannaus keskeytettiin.',
-    'where' => 'Juuri',
-    'type' => 'Tyyppi',
-    'delta' => 'Muuta:',
-    'location' => 'Sijainti',
-    'path' => 'Polku',
-    'file' => 'Tiedosto',
-    'dir' => 'Dir',
-    'plugin' => 'lis&auml;osa',
-    'added' => 'lis&auml;tty',
-    'missing' => 'puuttuu',
-    'removed' => '%s %s poistettu.  Sivustosi Tiedosto Eheys on tarkistettu uudelleen, tulokset n&auml;kyy alla.',
-    'working' => 'Scannataan ...<br />',
-    'elapsed' => 'Scannaus suoritettiin %s sekunnissa.'
 );
 
 ###############################################################################
@@ -2029,6 +1973,159 @@ $LANG_ADMIN = array(
 );
 
 ###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Uusimmat uutiset',
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
+    'prev' => 'Edellinen',
+    'next' => 'Seuraava',
+    'playpause' => 'Play/Pause',
+    'noOpera' => 'T&auml;m&auml; scripti ei automaattisesti muuta iframe kokoa Opera selaimessa.'
+);
+
+# Localisation of the texts for the various drop-down menus that are actually
+# stored in the database. If these exist, they override the texts from the
+# database.
+
+$LANG_commentcodes = array(
+    0 => 'Kommentointi k&auml;yt&ouml;ss&auml;',
+    -1 => 'Kommentointi ei k&auml;yt&ouml;ss&auml;',
+    1 => 'Kommentointi suljettu'
+);
+
+$LANG_commentmodes = array(
+    'flat' => 'Flat',
+    'nested' => 'Sis&auml;kk&auml;inen',
+    'nocomment' => 'Ei kommentteja'
+);
+
+$LANG_cookiecodes = array(
+    0 => '(don\'t)',
+    3600 => '1 Tunti',
+    7200 => '2 Tuntia',
+    10800 => '3 Tuntia',
+    28800 => '8 Tuntia',
+    86400 => '1 P&auml;iv&auml;',
+    604800 => '1 Viikko',
+    2678400 => '1 Kuukausi'
+);
+
+$LANG_dateformats = array(
+    0 => 'Systeemi Oletus'
+);
+
+$LANG_featurecodes = array(
+    0 => 'Ei P&auml;&auml;juttu',
+    1 => 'P&auml;&auml;juttu'
+);
+
+$LANG_frontpagecodes = array(
+    0 => 'N&auml;yt&auml; Vain Aiheessa',
+    1 => 'N&auml;yt&auml; Etusivulla'
+);
+
+$LANG_postmodes = array(
+    'plaintext' => 'Tavallinen teksti',
+    'html' => 'HTML'
+);
+
+$LANG_sortcodes = array(
+    'ASC' => 'Vanhin ensin',
+    'DESC' => 'Uusin ensin'
+);
+
+$LANG_trackbackcodes = array(
+    0 => 'Paluuviite K&auml;yt&ouml;ss&auml;',
+    -1 => 'Paluuviite Ei k&auml;yt&ouml;ss&auml;'
+);
+# Localisation of the texts for the BBCode Editor
+###############################################################################
+# lib-bbcode.php
+
+$LANG_BBCODE = array(
+    'bold_label' => 'B',
+    'italic_label' => 'i',
+    'underline_label' => 'u',
+    'quote_label' => 'Lainaus',
+    'code_label' => 'Koodi',
+    'list_label' => 'Lista',
+    'olist_label' => 'List=',
+    'listitem_label' => '[*]',
+    'img_label' => 'Kuva',
+    'url_label' => 'URL',
+    'smiley_label' => 'Hymi&ouml;t',
+    'size_label' => 'Fontin koko',
+    'color_label' => 'Fontin v&auml;ri',
+    'bold_help' => 'Lihavoitu: [b]teksti[/b]',
+    'italic_help' => 'Kursivoitu: [i]teksti[/i]',
+    'underline_help' => 'Alleviivaus: [u]teksti[/u]',
+    'quote_help' => 'Lainaus teksti: [quote]teksti[/quote]',
+    'code_help' => 'Koodin lis&auml;&auml;minen: [code]koodi[/code]',
+    'list_help' => 'Lista: [list]teksti[/list]',
+    'olist_help' => 'Lista: [list=]teksti[/list]',
+    'listitem_help' => 'Listan kohde: [*]teksti[/*]',
+    'img_help' => 'Lis&auml;&auml; kuva: [img]http://kuva_url[/img]',
+    'url_help' => 'Lis&auml;&auml; URL: [url]http://url[/url] tai [url=http://url]URL teksti[/url]',
+    'smiley_help' => 'Avaa hymi&ouml; ikkuna',
+    'size_help' => 'Fontin koko: [size=9]pieni teksti[/size]',
+    'color_help' => 'Tekstin v&auml;ri: [color=red]punainen teksti[/color]',
+    'size_tiny' => 'Todella pieni',
+    'size_small' => 'Pieni',
+    'size_normal' => 'Normaali',
+    'size_large' => 'Suuri',
+    'size_huge' => 'Todella suuri',
+    'color_default' => 'Oletus',
+    'color_darkred' => 'Tummanpunainen',
+    'color_red' => 'Punainen',
+    'color_orange' => 'Oranssi',
+    'color_brown' => 'Ruskea',
+    'color_yellow' => 'Keltainen',
+    'color_green' => 'Vihre&auml;',
+    'color_olive' => 'Oliivi',
+    'color_cyan' => 'Cyan',
+    'color_blue' => 'Sininen',
+    'color_darkblue' => 'Tummansininen',
+    'color_indigo' => 'Indigo',
+    'color_violet' => 'Violetti',
+    'color_white' => 'Valkea',
+    'color_black' => 'Musta',
+    'formatted_code' => 'Formatted Code'
+);
+
+# Localisation of the texts for the Admin file check
+###############################################################################
+# filecheck.php
+
+$LANG_FILECHECK = array(
+    'filecheck' => 'Tiedoston Eheys Tarkistus',
+    'recheck' => 'Tarkista eheys uudestaan',
+    'confirm' => 'Oletko varma ett&auml; haluat poistaa valitut kohteet?',
+    'scan' => 'Sivustosi tiedosto eheytt&auml; tarkistetaan.  Ole k&auml;rsiv&auml;llinen, t&auml;m&auml; saattaa kest&auml;&auml; kauan. Suoritusnopeus riippuu palveluymp&auml;rist&ouml;st&auml;.  Jos t&auml;m&auml; scripti on saavuttamassa maksimia PHP scriptin suoritusaikaa %s sekunnissa, scannaus keskeytet&auml;&auml;n ja n&auml;ytet&auml;&auml;n virheilmoitus.',
+    'results' => 'Sivustosi tiedostot ja hakemistot on verrattu glFusion v%s jakeluun, ja tulokset n&auml;kyy alla.  Lis&auml;tyt tai puuttuvat tiedostot ja hakemistot on tunnistettu, ja tiedostot jotka on valittu on ehk&auml; valittu poistettavaksi.  Hakemistot jotka on lis&auml;tty, tunnistetaan, mutta n&auml;m&auml; t&auml;ytyy poistaa manuaalisesti.<br /><br />Lis&auml;/Ylim&auml;&auml;r&auml;iset tiedostot ja/tai hakemistot jotka tunnistettu saattavat liitty&auml; lis&auml;osaan tai muuhun scriptiin jonka olet asentanut, tai ovat muuten v&auml;ltt&auml;m&auml;tt&ouml;mi&auml; sivustosi toiminnalle, <b>t&auml;m&auml; ei tarkoita ett&auml; yksinkertaisesti poistaisit tiedostot!&nbsp;&nbsp;<span style="color:red">K&auml;yt&auml; t&auml;t&auml; ty&ouml;kalua harkiten!</span></b>',
+    'expiration1' => 'HUOM: Scannaus keskeytettiin koska j&auml;ljell&auml; oleva aika l&auml;hestyi sivustosi PHP max suoritus aika rajoitusta.  T&auml;m&auml; analyysi scripti k&auml;ytt&auml;&auml; tehokkasti CPU ja I/O:ta, ja siihen voi vaikuttaa useat asiat palveluymp&auml;rist&ouml;ss&auml;si.  harkitse seuraavia suosituksia ongelmien ratkaisemiseen:<br />',
+    'expiration2' => '<ol><li>Yrit&auml; nostaa \'max_execution_time\' aikaa php.ini tiedostossa.  Aika on asetettu nyt %s sekuntiin.</li><li>Manuaalisesti tutki sivustosi ja poista kaikki tarpeettomat tiedostot ja hakemistot.</li></ol>',
+    'abort' => 'Keskeyt&auml; Scannaus',
+    'aborted' => 'Scannaus keskeytettiin.',
+    'where' => 'Juuri',
+    'type' => 'Tyyppi',
+    'delta' => 'Muuta:',
+    'location' => 'Sijainti',
+    'path' => 'Polku',
+    'file' => 'Tiedosto',
+    'dir' => 'Dir',
+    'plugin' => 'lis&auml;osa',
+    'added' => 'lis&auml;tty',
+    'missing' => 'puuttuu',
+    'removed' => '%s %s poistettu.  Sivustosi Tiedosto Eheys on tarkistettu uudelleen, tulokset n&auml;kyy alla.',
+    'working' => 'Scannataan ...<br />',
+    'elapsed' => 'Scannaus suoritettiin %s sekunnissa.'
+);
+
+# Localisation of the texts for Menu Builder
+###############################################################################
 # Menu Builder
 
 $LANG_MB01 = array(
@@ -2274,31 +2371,6 @@ $LANG_AM = array(
 );
 
 ###############################################################################
-# social.php
-
-$LANG_SOCIAL = array(
-    'label' => 'Social Integrations',
-    'social_share' => 'Share Services',
-    'share_instructions' => 'You can configure which social sharing buttons are enabled',
-    'follow_instructions' => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
-    'social_follow' => 'Follow Services',
-    'site_memberships' => 'Site Social Memberships',
-    'id' => 'ID',
-    'name' => 'Name',
-    'enabled' => 'Enabled',
-    'share_it_label' => 'Share It!',
-    'state_toggled' => 'Social Share state has been toggled.',
-    'follow_us' => 'Follow Us on',
-    'follow_me' => 'Follow Me on',
-    'service_name' => 'Service Name',
-    'service_url' => 'Service URL',
-    'site_username' => 'Site Username',
-    'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
-);
-
-###############################################################################
 # versioncheck.php
 
 $LANG_UPGRADE = array(
@@ -2351,75 +2423,6 @@ $LANG_SFS = array(
     'no_data' => 'No user\'s were found in the user database.'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Uusimmat uutiset',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Edellinen',
-    'next' => 'Seuraava',
-    'playpause' => 'Play/Pause',
-    'noOpera' => 'T&auml;m&auml; scripti ei automaattisesti muuta iframe kokoa Opera selaimessa.'
-);
-
-# Localisation of the texts for the various drop-down menus that are actually
-# stored in the database. If these exist, they override the texts from the
-# database.
-
-$LANG_commentcodes = array(
-    0 => 'Kommentointi k&auml;yt&ouml;ss&auml;',
-    -1 => 'Kommentointi ei k&auml;yt&ouml;ss&auml;',
-    1 => 'Kommentointi suljettu'
-);
-
-$LANG_commentmodes = array(
-    'flat' => 'Flat',
-    'nested' => 'Sis&auml;kk&auml;inen',
-    'nocomment' => 'Ei kommentteja'
-);
-
-$LANG_cookiecodes = array(
-    0 => '(don\'t)',
-    3600 => '1 Tunti',
-    7200 => '2 Tuntia',
-    10800 => '3 Tuntia',
-    28800 => '8 Tuntia',
-    86400 => '1 P&auml;iv&auml;',
-    604800 => '1 Viikko',
-    2678400 => '1 Kuukausi'
-);
-
-$LANG_dateformats = array(
-    0 => 'Systeemi Oletus'
-);
-
-$LANG_featurecodes = array(
-    0 => 'Ei P&auml;&auml;juttu',
-    1 => 'P&auml;&auml;juttu'
-);
-
-$LANG_frontpagecodes = array(
-    0 => 'N&auml;yt&auml; Vain Aiheessa',
-    1 => 'N&auml;yt&auml; Etusivulla'
-);
-
-$LANG_postmodes = array(
-    'plaintext' => 'Tavallinen teksti',
-    'html' => 'HTML'
-);
-
-$LANG_sortcodes = array(
-    'ASC' => 'Vanhin ensin',
-    'DESC' => 'Uusin ensin'
-);
-
-$LANG_trackbackcodes = array(
-    0 => 'Paluuviite K&auml;yt&ouml;ss&auml;',
-    -1 => 'Paluuviite Ei k&auml;yt&ouml;ss&auml;'
-);
 
 ###############################################################################
 # Localization of the Admin Configuration UI
