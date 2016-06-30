@@ -111,7 +111,7 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
     }
 
     if ( $uid == -1 ) {
-        $hash = CACHE_security_hash();
+        $hash = CACHE_security_hash() . md5($templateFile);
         $instance_id = 'social_site_'.$hash.'_'.$_USER['theme'];
 
         if ( ($cache = CACHE_check_instance($instance_id, 0)) !== FALSE ) {
