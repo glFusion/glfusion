@@ -280,6 +280,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         $attr_array
                 )
             );
+            $article->set_var('story_url',$articleUrl);
         } else {
             $article->set_var('story_title_link', $story->DisplayElements('title'));
         }

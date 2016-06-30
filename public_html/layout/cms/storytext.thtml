@@ -8,24 +8,27 @@
 		<header>
 			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
 {!if story_subtitle}
-			<a href="{readmore_url}">
+  {!if story_url}
+			<a href="{story_url}">
+  {!endif}
 				<h4 class="uk-margin-top-remove">
 					<span class="tm-italic">{story_subtitle}</span>
 				</h4>
+  {!if story_url}
 			</a>
+  {!endif}
 {!endif}
 {!if story_image}
-	{!if readmore_url}
-			<a href="{readmore_url}">
+	{!if story_url}
+			<a href="{story_url}">
 	{!endif}
 				<div class="uk-margin-bottom">
 					<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
 				</div>
-	{!if readmore_url}
+	{!if story_url}
 			</a>
 	{!endif}
 {!endif}
-
 
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
