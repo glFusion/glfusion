@@ -472,6 +472,7 @@ function SI_save_site()
 }
 
 $action = '';
+$msg    = '';
 
 if (isset($_GET['list']) ) {
     $action = $_GET['list'];
@@ -506,7 +507,10 @@ if (isset($_POST['sfmenabler']) && SEC_checkToken()) {
 }
 
 if ( isset($_POST['savesitememberships']) && SEC_checkToken() ) {
-    SI_save_site();
+    $rc = SI_save_site();
+    if ( $rc == 0 ) {
+        $msg = $LANG_SOCIAL['saved_msg'];
+    }
     $action = 's';
 }
 
@@ -525,6 +529,9 @@ switch ($action) {
 }
 
 echo COM_siteHeader();
+if ( $msg != '' ) {
+    echo COM_showMessageText($msg, '',false, 'success');
+}
 echo $page;
 echo COM_siteFooter();
 ?>

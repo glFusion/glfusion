@@ -1446,6 +1446,7 @@ $LANG_SOCIAL = array(
     'service_url'           => 'Service URL',
     'site_username'         => 'Site Username',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
+    'saved_msg'             => 'Social Integrations successfully saved.',
 );
 
 
