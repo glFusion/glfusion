@@ -426,18 +426,31 @@ function FILECHECK_getListField($fieldname, $fieldvalue, $A, $icon_arr)
 }
 
 function FILECHECK_foldArrays() {
-    global $glfDir, $glfFile, $D, $F;
+    global $_CONF, $glfDir, $glfFile, $D, $F;
+
+    $fixAdminPath = 0;
+
+    $adminPath = substr($_CONF['site_admin_url'],strlen($_CONF['site_url'])+1);
+    if ( $adminPath != 'admin') {
+        $fixAdminPath = 1;
+    }
 
     $D = array();
     foreach($glfDir AS $dir) {
+        if ( $fixAdminPath ) {
+            $dir['path'] = str_replace('public_html/admin','public_html/'.$adminPath,$dir['path']);
+        }
         $D[$dir['path']] = $dir['test'];
     }
 
     $F = array();
     foreach($glfFile AS $file) {
+        if ( $fixAdminPath ) {
+            $file['path'] = str_replace('public_html/admin','public_html/'.$adminPath,$file['path']);
+        }
+
         $F[$file['path']] = $file['test'];
     }
-
 }
 
 function FILECHECK_scan()
