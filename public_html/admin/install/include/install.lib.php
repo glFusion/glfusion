@@ -1205,6 +1205,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $_SQL = array();
 
+            $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} CHANGE `md5_sess_id` `md5_sess_id` VARCHAR(128) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_image` VARCHAR(128) DEFAULT NULL AFTER `alternate_tid`;";
             $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
