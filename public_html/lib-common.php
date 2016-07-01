@@ -6451,7 +6451,7 @@ function COM_getEffectivePermission($owner, $group_id, $perm_owner,$perm_group, 
 
 function COM_getStyleCacheLocation()
 {
-    global $_CONF, $_USER, $_SYSTEM;
+    global $_CONF, $_USER, $_SYSTEM, $themeAPI;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
         $_CONF['css_cache_filename'] = 'style.cache';
@@ -6465,13 +6465,19 @@ function COM_getStyleCacheLocation()
         $cacheURL  = $_CONF['layout_url'].'/css.php?t='.$_USER['theme'];
     }
 
+    if ( !isset($themeAPI) || $themeAPI < 3) {
+        if ( !file_exists($_CONF['path_layout'].'css.php')) {
+            $cacheURL = $_CONF['site_url'].'/css.php?t='.$_USER['theme'];
+        }
+    }
+
     return array($cacheFile, $cacheURL);
 
 }
 
 function COM_getJSCacheLocation()
 {
-    global $_CONF, $_USER, $_SYSTEM;
+    global $_CONF, $_USER, $_SYSTEM, $themeAPI;
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'js.cache';
@@ -6483,6 +6489,11 @@ function COM_getJSCacheLocation()
     } else {
         $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].'_'.$_USER['theme'].'.js';
         $cacheURL  = $_CONF['layout_url'].'/js.php?t='.$_USER['theme'];
+    }
+    if ( !isset($themeAPI) || $themeAPI < 3) {
+        if ( !file_exists($_CONF['path_layout'].'js.php')) {
+            $cacheURL = $_CONF['site_url'].'/js.php?t='.$_USER['theme'];
+        }
     }
 
     return array($cacheFile, $cacheURL);
