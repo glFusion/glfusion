@@ -126,7 +126,7 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
 
     $sql = "SELECT * FROM {$_TABLES['social_follow_services']} as ss LEFT JOIN
             {$_TABLES['social_follow_user']} AS su ON ss.ssid = su.ssid
-            WHERE su.uid = " . (int) $uid . " AND ss.enabled = 1";
+            WHERE su.uid = " . (int) $uid . " AND ss.enabled = 1 ORDER BY service_name";
 
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
@@ -180,7 +180,7 @@ function SOC_followMeProfile( $uid )
     $socialServicesArray = array();
     $userServicesArray = array();
 
-    $sql = "SELECT * FROM {$_TABLES['social_follow_services']} WHERE enabled=1";
+    $sql = "SELECT * FROM {$_TABLES['social_follow_services']} WHERE enabled=1 ORDER BY service_name ASC";
     $result = DB_query($sql);
     while ( ($row = DB_fetchArray($result)) != NULL ) {
         $id = $row['ssid'];

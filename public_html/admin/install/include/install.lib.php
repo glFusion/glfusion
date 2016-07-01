@@ -1274,13 +1274,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(4, 'http://youtube.com/%%u', 1, 'youtube', 'youtube', 'Youtube');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(5, 'http://plus.google.com/+%%u', 1, 'google-plus', 'google-plus', 'Google+');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(6, 'http://linkedin.com/in/%%u', 1, 'linkedin', 'linkedin', 'LinkedIn');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(7, 'http://github.com/%%u', 1, 'github', 'github', 'GitHub');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(8, 'http://instagram.com/%%u', 1, 'instagram', 'instagram', 'Instagram');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(9, 'http://vimeo.com/%%u', 1, 'vimeo', 'vimeo', 'Vimeo');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(10, 'http://flickr.com/photos/%%u', 1, 'flickr', 'flickr', 'Flickr');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(11, 'http://foursquare.com/%%u', 1, 'foursquare', 'foursquare', 'Foursquare');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(7, 'http://linkedin.com/company/%%u', 1, 'linkedin-square', 'linkedin-co', 'LinkedIn (Company)');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(8, 'http://github.com/%%u', 1, 'github', 'github', 'GitHub');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(9, 'http://instagram.com/%%u', 1, 'instagram', 'instagram', 'Instagram');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(10, 'http://vimeo.com/%%u', 1, 'vimeo', 'vimeo', 'Vimeo');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(11, 'http://flickr.com/photos/%%u', 1, 'flickr', 'flickr', 'Flickr');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://foursquare.com/%%u', 1, 'foursquare', 'foursquare', 'Foursquare');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
+            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(14, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
 
             $_DATA[] = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('headlines', 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]', 1, 1, '');";
 

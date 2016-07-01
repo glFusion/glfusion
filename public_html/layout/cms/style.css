@@ -577,7 +577,9 @@ p.tm-article-meta {
 	text-shadow: none;
 }
 .uk-button.uk-button-linkedin,
-.uk-icon-button.uk-button-linkedin {
+.uk-icon-button.uk-button-linkedin,
+.uk-button.uk-button-linkedin-square,
+.uk-icon-button.uk-button-linkedin-square  {
 	background-color: #0077b5;
 	color: #fff;
 	background-image: none;
