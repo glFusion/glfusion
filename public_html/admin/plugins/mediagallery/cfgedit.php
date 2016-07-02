@@ -580,7 +580,7 @@ function MG_saveConfig( ) {
     $displayblocks          = COM_applyFilter($_POST['displayblocks']);
     $usage_tracking         = COM_applyFilter($_POST['usagetracking']);
     $dfid                   = COM_applyFilter($_POST['dfid'],true);
-    $htmlallowed            = COM_applyFilter($_POST['htmlallowed'],true);
+//    $htmlallowed            = COM_applyFilter($_POST['htmlallowed'],true);
     $whatsnew               = COM_applyFilter($_POST['whatsnew'],true);
     $orig_jpg_quality       = COM_applyFilter($_POST['orig_jpg_quality'],true);
     $jpg_quality            = COM_applyFilter($_POST['jpg_quality'],true);
