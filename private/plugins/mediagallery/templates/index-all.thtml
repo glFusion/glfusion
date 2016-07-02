@@ -35,6 +35,7 @@
     </div>
     {!endif}
 </nav>
+
 <div class="uk-grid uk-margin-remove">
     <div class="uk-width-medium-1-2">
 {!if url_slideshow}
@@ -89,7 +90,7 @@
 {!endif}
     <!-- BEGIN ImageRow -->
     <!-- BEGIN ImageColumn -->
-    <li >{CELL_DISPLAY_IMAGE}</li>
+    <li>{CELL_DISPLAY_IMAGE}</li>
     <!-- END ImageColumn -->
     <!-- END ImageRow -->
 </ul>
@@ -111,6 +112,7 @@
         </div>
     </div>
 </div>
+
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/javascript">
     //<![CDATA[
