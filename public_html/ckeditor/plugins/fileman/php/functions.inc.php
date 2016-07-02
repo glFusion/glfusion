@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -112,7 +112,7 @@ function listDirectory($path){
       closedir($d);
     }
   }
-
+  
   return $ret;
 }
 class RoxyFile{
@@ -257,7 +257,7 @@ class RoxyFile{
       $name = mb_substr($name, 0, 32);
     $str = str_replace('.php', '', $str);
     $str = mb_ereg_replace("[^\\w]", $sep, $name);
-
+    
     $str = mb_ereg_replace("$sep+", $sep, $str).($ext?'.'.$ext:'');
 
     return $str;
@@ -363,7 +363,8 @@ class RoxyFile{
 class RoxyImage{
   public static function GetImage($path){
     $img = null;
-    switch(RoxyFile::GetExtension(basename($path))){
+    $ext = RoxyFile::GetExtension(basename($path));
+    switch($ext){
       case 'png':
         $img = imagecreatefrompng($path);
         break;
@@ -373,6 +374,9 @@ class RoxyImage{
       default:
         $img = imagecreatefromjpeg($path);
     }
+    
+    
+    
     return $img;
   }
   public static function OutputImage($img, $type, $destination = '', $quality = 90){
@@ -389,6 +393,18 @@ class RoxyImage{
         imagejpeg($img, $destination, $quality);
     }
   }
+  
+  public static function SetAlpha($img, $path) {
+  	$ext = RoxyFile::GetExtension(basename($path));
+  	if($ext == "gif" || $ext == "png"){
+	    imagecolortransparent($img, imagecolorallocatealpha($img, 0, 0, 0, 127));
+	    imagealphablending($img, false);
+	    imagesavealpha($img, true);
+	  }
+	  
+	  return $img;
+  }
+  
   public static function Resize($source, $destination, $width = '150',$height = 0, $quality = 90) {
     $tmp = getimagesize($source);
     $w = $tmp[0];
@@ -400,7 +416,7 @@ class RoxyImage{
         self::OutputImage($source, RoxyFile::GetExtension(basename($source)), $destination, $quality);
       return;
     }
-
+    
     $newWidth = $width;
     $newHeight = floor($newWidth / $r);
     if(($height > 0 && $newHeight > $height) || !$width){
@@ -410,6 +426,9 @@ class RoxyImage{
 
     $thumbImg = imagecreatetruecolor($newWidth, $newHeight);
     $img = self::GetImage($source);
+    
+    $thumbImg = self::SetAlpha($thumbImg, $source);
+    
     imagecopyresampled($thumbImg, $img, 0, 0, 0, 0, $newWidth, $newHeight, $w, $h);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);
@@ -447,6 +466,9 @@ class RoxyImage{
   public static function Crop($source, $destination, $x, $y, $cropWidth, $cropHeight, $width, $height, $quality = 90) {
     $thumbImg = imagecreatetruecolor($width, $height);
     $img = self::GetImage($source);
+    
+    $thumbImg = self::SetAlpha($thumbImg, $source);
+    
     imagecopyresampled($thumbImg, $img, 0, 0, $x, $y, $width, $height, $cropWidth, $cropHeight);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);

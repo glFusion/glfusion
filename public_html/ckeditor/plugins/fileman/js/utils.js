@@ -1,5 +1,5 @@
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -281,11 +281,11 @@ RoxyUtils.SetCookie = function(key, val, hours, path) {
   if(hours){
     expires.setTime(expires.getTime() + (hours * 3600 * 1000));
   }
-
+  
   if(!path){
      path = '/';
   }
-
+  
   document.cookie = key + '=' + encodeURIComponent(val) + '; path=' + path + (hours?'; expires=' + expires.toGMTString():'');
 }
 RoxyUtils.ToBool = function(val){
@@ -293,11 +293,11 @@ RoxyUtils.ToBool = function(val){
   val = val.toString().toLowerCase();
   if(val == 'true' || val == 'on' || val == 'yes' || val == '1')
     ret = true;
-
+  
   return ret;
 }
 RoxyUtils.UnsetCookie = function(key) {
-  document.cookie = key + "=; expires=Thu, 01 Jan 1972 00:00:00 UTC";
+  document.cookie = key + "=; expires=Thu, 01 Jan 1972 00:00:00 UTC"; 
 }
 
 function t(tag){
