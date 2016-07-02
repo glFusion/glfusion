@@ -88,6 +88,7 @@ $LANG_INSTALL = array(
     'links'                     => 'Load Links Plugin?',
     'links_desc'                => 'A links management system. Provides links to other interesting sites, organized by category.',
     'load_sample_content'       => 'Load Sample Site Content?',
+    'mbstring_support'          => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery'              => 'Load Media Gallery Plugin?',
     'mediagallery_desc'         => 'A multi-media management system. Can be used as a simple photo gallery or a robust media management system supporting audio, video, and images.',
     'memory_limit'				=> 'It is recommended that you have at least 48M of memory enabled on your site.',

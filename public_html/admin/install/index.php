@@ -732,9 +732,9 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 
-    $rg = ini_get('register_globals');
-    $sm = ini_get('safe_mode');
-    $ob = ini_get('open_basedir');
+//    $rg = ini_get('register_globals');
+//    $sm = ini_get('safe_mode');
+//    $ob = ini_get('open_basedir');
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
@@ -763,6 +763,14 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['enabled'].'</span>');
 
     $T->set_var('notes',$LANG_INSTALL['open_basedir']);
+    $T->parse('env','envs',true);
+
+    $mbs = extension_loaded('mbstring');
+    $T->set_var('item','mbstring extension');
+    $T->set_var('status',$mbs == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['off'].'</span>');
+
+    $T->set_var('recommended',$LANG_INSTALL['on']);
+    $T->set_var('notes',$LANG_INSTALL['mbstring_support']);
     $T->parse('env','envs',true);
 
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
