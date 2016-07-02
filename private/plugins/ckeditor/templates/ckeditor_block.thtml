@@ -11,6 +11,10 @@
                 extraPlugins: 'mediagallery,youtube2',
                 {styleset}
                 height: 300,
+{!if mbmissing} {# check for mbstring extension in PHP #}
+								filebrowserBrowseUrl :  '',
+								filebrowserImageBrowseUrl : '',
+{!endif}
                 language: '{iso_lang}'
          } );
 

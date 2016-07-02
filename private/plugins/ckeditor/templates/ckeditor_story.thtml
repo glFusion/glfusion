@@ -14,6 +14,11 @@
             bodyClass: 'tm-container uk-article tm-article',
             height: height,
             {styleset}
+{!if mbmissing} {# check for mbstring extension in PHP #}
+						removePlugins: 'fileman',
+						filebrowserBrowseUrl :  '',
+						filebrowserImageBrowseUrl : '',
+{!endif}
             language: '{iso_lang}'
          } );
 

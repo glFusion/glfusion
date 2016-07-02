@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman - Lyubomir Arsov. All rights reserved.
@@ -20,6 +20,10 @@
 
   Contact: Lyubomir Arsov, liubo (at) web-lobby.com
 */
+if ( !extension_loaded('mbstring') ) {
+    echo json_encode(array());
+    exit;
+}
 error_reporting(0);
 ini_set('display_errors', 'off');
 // You DON'T have to make any changes to this file. For Roxy Fileman user configuration see conf.json file.

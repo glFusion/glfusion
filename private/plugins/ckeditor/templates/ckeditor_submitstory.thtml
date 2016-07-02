@@ -13,6 +13,10 @@
             {styleset}
             bodyClass: 'story-body',
             height: 500,
+{!if mbmissing} {# check for mbstring extension in PHP #}
+					filebrowserBrowseUrl :  '',
+					filebrowserImageBrowseUrl : '',
+{!endif}
             language: '{iso_lang}'
          } );
 

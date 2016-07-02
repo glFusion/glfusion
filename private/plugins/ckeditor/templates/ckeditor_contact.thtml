@@ -10,6 +10,10 @@ function loadEditor(id) {
         bodyClass: 'comment',
         removePlugins: 'elementspath',
         resize_enabled: false,
+{!if mbmissing} {# check for mbstring extension in PHP #}
+				filebrowserBrowseUrl :  '',
+				filebrowserImageBrowseUrl : '',
+{!endif}
         language: '{iso_lang}'
      } );
      return instance;

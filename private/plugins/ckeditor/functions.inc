@@ -219,6 +219,13 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
                 'path_html' => $_CONF['path_html'],
                 'css_url'   => $cacheURL,
                 ));
+    if ( !extension_loaded('mbstring') ) {
+        $T->set_var('mbmissing',true);
+        COM_errorLog("WARNING: mbstring extension not installed - disabling FileMan plugin in CKEditor");
+    } else {
+        $T->unset_var('mbmissing');
+    }
+
     PLG_templateSetVars('ckeditor',$T);
     $T->parse('output','page');
     $wysiwyg = $T->finish($T->get_var('output'));
@@ -227,6 +234,7 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
         'html_editor' => $LANG_CK00['html'],
         'visual_editor' => $LANG_CK00['visual'],
     ));
+
     return '';
 }
 
