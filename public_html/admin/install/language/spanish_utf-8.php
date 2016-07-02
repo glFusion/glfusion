@@ -38,7 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 // +---------------------------------------------------------------------------+
@@ -93,6 +93,7 @@ $LANG_INSTALL = array(
     'links' => '¿Cargar la Extensión Enlaces?',
     'links_desc' => 'Un sistema de administración de enlaces. proporciona enlaces a otros sitios interesantes, organizado por categoría.',
     'load_sample_content' => '¿Cargar Contenido de ejemplo para el sitio?',
+    'mbstring_support' => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery' => '¿Cargar Extensión Galería multimedia?',
     'mediagallery_desc' => 'Un sistema de administración de multimedia. Puede ser utilizado como una simple galería de fotografías o un robusto sistema de administración de multimedia capaz de soportar audio, vídeo e imágenes.',
     'memory_limit' => 'Se recomienda tener al menos 48M de memoria habilitada en su sitio.',
@@ -186,7 +187,7 @@ $LANG_INSTALL = array(
     'instruction_step' => 'Instructions',
     'install_stepheading' => 'New Install Tasks',
     'install_doc_alert' => 'To ensure a smooth installation, please read the <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">Insallation Documentation</a> before proceeding.',
-    'install_header'            => 'Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.',
+    'install_header' => 'Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.',
     'install_bullet1' => 'Site&nbsp;<abbr title="Uniform Resource Locator">URL</abbr>',
     'install_bullet2' => 'Database Server',
     'install_bullet3' => 'Database Name',

@@ -38,7 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 // +---------------------------------------------------------------------------+
@@ -93,6 +93,7 @@ $LANG_INSTALL = array(
     'links' => '加载友情链接插件？',
     'links_desc' => '<br />一个友情链接管理系统，提供按照目录分类的友情链接。',
     'load_sample_content' => '加载默认示例网站数据吗？',
+    'mbstring_support' => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery' => '加载多媒体管理插件？',
     'mediagallery_desc' => '<br />一个多媒体管理系统，不仅可以配置成一个简单的相册，还能支持音乐和电影。',
     'memory_limit' => '推荐您至少有48M的内存来运行您的网站。',
@@ -186,7 +187,7 @@ $LANG_INSTALL = array(
     'instruction_step' => 'Instructions',
     'install_stepheading' => 'New Install Tasks',
     'install_doc_alert' => 'To ensure a smooth installation, please read the <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">Insallation Documentation</a> before proceeding.',
-    'install_header'  => 'Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.',
+    'install_header' => 'Before installing glFusion, you will need to know a few key pieces of information. Write down the following information. If you are unsure what to put for each of the items below, please contact your system administrator or you hosting provider.',
     'install_bullet1' => 'Site&nbsp;<abbr title="Uniform Resource Locator">URL</abbr>',
     'install_bullet2' => 'Database Server',
     'install_bullet3' => 'Database Name',
