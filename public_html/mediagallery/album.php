@@ -361,7 +361,7 @@ $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home
 
 $birdseedUL = '<li><a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a></li>';
 $birdseedUL .= ($_MG_CONF['gallery_only'] == 1 ? '' : '<li><a href="' . $_MG_CONF['site_url'] . '/index.php?page=' . $aPage . '">' . $_MG_CONF['menulabel'] . '</a></li>');
-$birdseedUL .= $MG_albums[$album_id]->getPathUL(0,$sortOrder);
+$birdseedUL .= $MG_albums[$album_id]->getPath_ul(0,$sortOrder);
 
 switch ( $MG_albums[$album_id]->enable_slideshow ) {
     case 0 :
