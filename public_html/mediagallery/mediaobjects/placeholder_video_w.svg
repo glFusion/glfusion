@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,7 +41,7 @@
      showgrid="false"
      inkscape:snap-page="true"
      inkscape:zoom="2.36"
-     inkscape:cx="108.55955"
+     inkscape:cx="154.83507"
      inkscape:cy="74.908087"
      inkscape:window-x="307"
      inkscape:window-y="155"
@@ -185,21 +185,6 @@
      d="m 0.04884627,-0.25295498 300.23905373,0 0,201.16443498 -300.23905373,0 z"
      style="fill:url(#grad_dp_001);fill-rule:evenodd;stroke:none;stroke-width:0"
      inkscape:connector-curvature="0" />
-  <path
-     id="dp_path014"
-     d="m 146.39879,46.889534 c 25.80456,0 46.72268,19.876972 46.72268,44.397777 0,24.520809 -20.91812,44.398419 -46.72268,44.398419 -25.80455,0 -46.722018,-19.87761 -46.722018,-44.398419 0,-24.520805 20.917468,-44.397777 46.722018,-44.397777 z"
-     style="fill:url(#grad_dp_005);fill-rule:evenodd;stroke:#000091;stroke-width:2.80274224"
-     inkscape:connector-curvature="0" />
-  <path
-     id="dp_path015"
-     d="m 99.358082,90.359511 c -0.0692,8.46123 29.913838,-6.824065 43.356408,-6.681645 13.22711,0.14241 47.06479,16.533534 47.06479,5.19674 0,-15.66311 -14.98782,-40.292825 -44.72206,-40.45472 -29.73792,-0.167549 -45.543528,23.34524 -45.699138,41.939625 z"
-     inkscape:connector-curvature="0"
-     style="fill:#ffffff;fill-opacity:0.517647;stroke:none;stroke-width:0" />
-  <path
-     id="dp_path016"
-     d="m 134.86506,118.47844 0,-54.158144 37.08011,27.078015 z"
-     style="fill:url(#grad_dp_006);fill-rule:evenodd;stroke:none;stroke-width:0"
-     inkscape:connector-curvature="0" />
   <image
      style="display:inline;opacity:0.5"
      y="156.61018"
@@ -209,4 +194,22 @@
      preserveAspectRatio="none"
      height="29.999981"
      width="33.166668" />
+  <g
+     transform="matrix(0.17192867,0,0,0.17836026,104.38136,38.218378)"
+     id="g3-6"
+     style="fill:#007fb9;fill-opacity:1">
+    <g
+       id="g5"
+       style="fill:#007fb9;fill-opacity:1">
+      <path
+         inkscape:connector-curvature="0"
+         d="m 387.118,500.728 c 0,0 55.636,0 55.636,-55.637 l 0,-278.182 c 0,-55.637 -55.636,-55.637 -55.636,-55.637 l -331.482,0 c 0,0 -55.636,0 -55.636,55.637 l 0,278.182 c 0,55.637 55.636,55.637 55.636,55.637 l 331.482,0 z"
+         id="path7"
+         style="fill:#007fb9;fill-opacity:1" />
+      <polygon
+         points="475.162,219.958 475.162,393.043 612,500.728 612,111.272 "
+         id="polygon9"
+         style="fill:#007fb9;fill-opacity:1" />
+    </g>
+  </g>
 </svg>
