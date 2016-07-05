@@ -24,18 +24,14 @@ set of styles.
 
 /* Primary Styles
 ========================================================================== */
-/*
-* tm-content wraps the entire content area
-*/
+/* tm-content wraps the entire content area  */
 .tm-content {
 	background: #fff url(images/bg_content.jpg) repeat-x 0 0;
 }
 
-
-/*
-* tm-container is the primary wrapper for the content area. This excludes
-* the header / footer (see tm-nav* and tm-footer* styles)
-*/
+/* tm-container is the primary wrapper for the content area. This excludes
+ * the header / footer (see tm-nav* and tm-footer* styles)
+========================================================================== */
 
 .tm-container {
 }
@@ -66,30 +62,36 @@ set of styles.
 
 /* Navbar semantics
 ========================================================================== */
+
+/* sets background and attributes for the navbar */
 .tm-navbar {
 	border-radius:0;
-	padding: 1px 0px 6px;
+	padding: 6px 0px 6px;
 	border: medium none;
 	background: #325482 none repeat scroll 0% 0%;
+	color:#fff;
 	outline: none;
 	text-shadow:none;
 }
 
+/* Navbar brand
+========================================================================== */
 .tm-navbar-brand {
 	color: #eee;
 	text-shadow:none;
 	font-weight:700;
 }
-.tm-navbar-brand a {
-	text-shadow:none;
-	color: #fff;
-}
+
 .tm-navbar-brand:hover,
-.tm-navbar-brand a:active {
+.tm-navbar-brand a:active,
+.tm-navbar-brand a:visited,
+.tm-navbar-brand a:link {
 	color:#fff;
-	text-decoration:none;
+	text-shadow: none;
 }
 
+/* Navbar brand - Off Canvas
+========================================================================== */
 .tm-navbar-brand-oc  {
 	max-width:90%;
 }
@@ -103,45 +105,8 @@ set of styles.
 	text-decoration:none;
 }
 
-/* .tm-navbar */
-.tm-navbar-nav > li > a {
-	border: medium none;
-	border-radius: 3px;
-	font-size: 15px;
-	height: 40px;
-	margin: 0;
-	text-shadow: none;
-	color: #fff!important;
-}
-
-.tm-dropdown {
-	background: #325482  none repeat scroll 0 0;
-	color:#000;
-	border-radius: 0 0 5px 5px ;
-	border: 0;
-}
-
-.tm-nav-navbar > li > a {
-	color: #fff;
-}
-
-.tm-navbar::before,
-.tm-navbar::after {
-	margin-top: 7px!important;
-}
-
-/* nav overload */
-.tm-navbar-nav > li:hover > a,
-.tm-navbar-nav > li > a:focus,
-.tm-navbar-nav > li.uk-open > a {
-	background-color: transparent;
-	color: #fff;
-	/* 3 */
-	outline: none;
-	background: #35B3EE  none repeat scroll 0 0;
-}
-
-/* -- off canvas nav --- */
+/* Navbar toggle
+========================================================================== */
 .tm-navbar-toggle {
 	color: #ccc;
 	text-shadow: none;
@@ -151,22 +116,62 @@ set of styles.
 	color: #fff;
 }
 
-.tm-navbar .sm-uikit ul a:hover,
-.tm-navbar .sm-uikit ul a:focus,
-.tm-navbar .sm-uikit ul a:active,
-.tm-navbar .sm-uikit ul a.highlighted {
-	background: #39f;
+/* Navbar UIKIT navigation (used by Login button / My Account dropdown)
+========================================================================== */
+
+/* overrides to the uk-navbar-nav > li > a style found in uikit*.css */
+
+.tm-navbar-nav > li > a {
+	border: medium none;
+	border-radius: 3px;
+	font-size: 15px;
+	margin: 0;
+	text-shadow: none;
 	color: #fff;
+	text-decoration: none;
 }
 
-uk-navbar-nav > li > a {
-	text-shadow:none;
-	color:#fff;
+/* the uk-nav-navbar and tm-nav-navbar styles are used on dropdowns */
+
+.tm-nav-navbar > li > a {
+	color: #fff;
+	text-decoration: none;
+}
+
+/* sets hover color for 2nd level drop down */
+.tm-nav-navbar ul a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+/* sets color for first dropdown */
+.tm-dropdown {
+	background: #325482  none repeat scroll 0 0;
+	color:#000;
+	border-radius: 0 0 5px 5px ;
+	border: 0;
+}
+
+/* set color and background color fo top level hover */
+.tm-navbar-nav > li:hover > a,
+.tm-navbar-nav > li > a:focus,
+.tm-navbar-nav > li > a:active,
+.tm-navbar-nav > li.uk-open > a {
+	background-color: transparent;
+	color: #fff;
+	outline: none;
+	background: #35B3EE  none repeat scroll 0 0;
 }
 
 /* - set background on dropdown - */
 .tm-navbar ul li ul {
 	background: #325482;
+}
+
+/* set hover background for second level and below dropdown menus */
+.tm-nav-navbar > li > a:focus,
+.tm-nav-navbar > li > a:hover {
+	background:#35B3EE;
 }
 
 /* Right Block semantics
@@ -695,7 +700,6 @@ p.tm-article-meta {
 /* start sm-core-css.css */
 /* Mobile first layout SmartMenus Core CSS (it's not recommended editing these rules)
 -------------------------------------------------------------------------------------------*/
-
 .sm{position:relative;z-index:1000;}
 .sm,.sm ul,.sm li{display:block;list-style:none;margin:0;padding:0;line-height:normal;direction:ltr;text-align:left;-webkit-tap-highlight-color:rgba(0,0,0,0);}
 .sm-rtl,.sm-rtl ul,.sm-rtl li{direction:rtl;text-align:right;}
@@ -708,416 +712,191 @@ p.tm-article-meta {
 .sm,.sm *,.sm *:before,.sm *:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
 /* end sm-core-css.css */
 
-/* smart menus styles to integrate with uikit navbar */
 
+/* smart menus styles to integrate with uikit navbar */
+.sm-uikit ul {
+	position: absolute;
+	width: 12em;
+}
+.sm-uikit li {
+	float: left;
+}
+.sm-uikit.sm-rtl li {
+	float: right;
+}
+.sm-uikit ul li, .sm-uikit.sm-rtl ul li, .sm-uikit.sm-vertical li {
+	float: none;
+}
+.sm-uikit a {
+	white-space: nowrap;
+}
+.sm-uikit ul a, .sm-uikit.sm-vertical a {
+	white-space: normal;
+}
+.sm-uikit .sm-nowrap > li > a, .sm-uikit .sm-nowrap > li > :not(ul) a {
+	white-space: nowrap;
+}
 .sm-uikit {
+	padding: 0 10px;
 	background: transparent;
 }
-
-.sm-uikit a, .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active {
-	padding: 13px 20px;
-	/* make room for the toggle button (sub indicator) */
-	padding-right: 58px;
-	color: #555555;
-	text-decoration: none;
-
-}
-.sm-uikit a.current {
-	color: #444;
+.sm-uikit a, .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
+	padding: 0px 15px;
+	-webkit-border-radius: 3px!important;
+	-moz-border-radius: 3px!important;
+	-ms-border-radius: 3px!important;
+	-o-border-radius: 3px!important;
+	border-radius: 3px!important;
 }
 .sm-uikit a.disabled {
 	color: #bbbbbb;
 }
+.sm-uikit a.has-submenu {
+	padding-right: 24px;
+}
 .sm-uikit a span.sub-arrow {
 	position: absolute;
 	top: 50%;
-	margin-top: -17px;
 	left: auto;
-	right: 4px;
-	width: 34px;
-	height: 34px;
 	overflow: hidden;
 	font: bold 16px/34px monospace !important;
 	text-align: center;
 	text-shadow: none;
-	background: rgba(255, 255, 255, 0.5);
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-}
-.sm-uikit a.highlighted span.sub-arrow:before {
-	display: block;
-	content: '-';
-}
-.sm-uikit > li:first-child > a, .sm-uikit > li:first-child > :not(ul) a {
-	-webkit-border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
-	-ms-border-radius: 5px 5px 0 0;
-	-o-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
-}
-.sm-uikit > li:last-child > a, .sm-uikit > li:last-child > *:not(ul) a, .sm-uikit > li:last-child > ul,
-.sm-uikit > li:last-child > ul > li:last-child > a, .sm-uikit > li:last-child > ul > li:last-child > *:not(ul) a, .sm-uikit > li:last-child > ul > li:last-child > ul,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul {
-	-webkit-border-radius: 0 0 5px 5px;
-	-moz-border-radius: 0 0 5px 5px;
-	-ms-border-radius: 0 0 5px 5px;
-	-o-border-radius: 0 0 5px 5px;
-	border-radius: 0 0 5px 5px;
-}
-.sm-uikit > li:last-child > a.highlighted, .sm-uikit > li:last-child > *:not(ul) a.highlighted,
-.sm-uikit > li:last-child > ul > li:last-child > a.highlighted, .sm-uikit > li:last-child > ul > li:last-child > *:not(ul) a.highlighted,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > a.highlighted, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a.highlighted,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > a.highlighted, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a.highlighted,
-.sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > a.highlighted, .sm-uikit > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > ul > li:last-child > *:not(ul) a.highlighted {
+	margin-top: -2px;
+	right: 12px;
+	width: 0;
+	height: 0;
+	border-width: 4px;
+	border-style: solid dashed dashed dashed;
+	border-color: #fff transparent transparent transparent;
+	background: transparent;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	-ms-border-radius: 0;
 	-o-border-radius: 0;
 	border-radius: 0;
 }
-.sm-uikit li {
-	border-top: 1px solid rgba(0, 0, 0, 0.05);
+.sm-uikit a.highlighted span.sub-arrow:before {
+	display: none;
 }
-.sm-uikit > li:first-child {
+.sm-uikit li {
 	border-top: 0;
 }
+.sm-uikit > li > ul:after {
+	top: -16px;
+	left: 31px;
+	border-width: 8px;
+	border-color: transparent transparent #bbb transparent;
+}
 .sm-uikit ul {
-	background: rgba(162, 162, 162, 0.1);
-}
-.sm-uikit ul a, .sm-uikit ul a:hover, .sm-uikit ul a:focus, .sm-uikit ul a:active {
-/*  font-size: 16px; */
-	border-left: 8px solid transparent;
-}
-.sm-uikit ul ul a,
-.sm-uikit ul ul a:hover,
-.sm-uikit ul ul a:focus,
-.sm-uikit ul ul a:active {
-	border-left: 16px solid transparent;
-}
-.sm-uikit ul ul ul a,
-.sm-uikit ul ul ul a:hover,
-.sm-uikit ul ul ul a:focus,
-.sm-uikit ul ul ul a:active {
-	border-left: 24px solid transparent;
-}
-.sm-uikit ul ul ul ul a,
-.sm-uikit ul ul ul ul a:hover,
-.sm-uikit ul ul ul ul a:focus,
-.sm-uikit ul ul ul ul a:active {
-	border-left: 32px solid transparent;
-}
-.sm-uikit ul ul ul ul ul a,
-.sm-uikit ul ul ul ul ul a:hover,
-.sm-uikit ul ul ul ul ul a:focus,
-.sm-uikit ul ul ul ul ul a:active {
-	border-left: 40px solid transparent;
+	/* uncomment if you want border around dropdown */
+	/*    border: 1px solid #bbbbbb; */
+	padding: 5px 0;
+	background: transparent; /* white; */
+	-webkit-border-radius: 5px !important;
+	-moz-border-radius: 5px !important;
+	-ms-border-radius: 5px !important;
+	-o-border-radius: 5px !important;
+	border-radius: 5px !important;
+	-webkit-box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
 }
 
-@media (min-width: 768px) {
-	/* Switch to desktop layout
-	-----------------------------------------------
-		 These transform the menu tree from
-		 collapsible to desktop (navbar + dropdowns)
-	-----------------------------------------------*/
-	/* start... (it's not recommended editing these rules) */
-	.sm-uikit ul {
-		position: absolute;
-		width: 12em;
-	}
-
-	.sm-uikit li {
-		float: left;
-	}
-
-	.sm-uikit.sm-rtl li {
-		float: right;
-	}
-
-	.sm-uikit ul li, .sm-uikit.sm-rtl ul li, .sm-uikit.sm-vertical li {
-		float: none;
-	}
-
-	.sm-uikit a {
-		white-space: nowrap;
-	}
-
-	.sm-uikit ul a, .sm-uikit.sm-vertical a {
-		white-space: normal;
-	}
-
-	.sm-uikit .sm-nowrap > li > a, .sm-uikit .sm-nowrap > li > :not(ul) a {
-		white-space: nowrap;
-	}
-
-	/* ...end */
-	.sm-uikit {
-		padding: 0 10px;
-		background: transparent;
-	}
-	.sm-uikit a, .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
-		padding: 0px 15px;
-		color: #555555;
-		-webkit-border-radius: 3px!important;
-		-moz-border-radius: 3px!important;
-		-ms-border-radius: 3px!important;
-		-o-border-radius: 3px!important;
-		border-radius: 3px!important;
-	}
-	.sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
-		color: #444;
-	}
-	.sm-uikit a.current {
-		color: #444;
-	}
-	.sm-uikit a.disabled {
-		color: #bbbbbb;
-	}
-	.sm-uikit a.has-submenu {
-		padding-right: 24px;
-	}
-	.sm-uikit a span.sub-arrow {
-		top: 50%;
-		margin-top: -2px;
-		right: 12px;
-		width: 0;
-		height: 0;
-		border-width: 4px;
-		border-style: solid dashed dashed dashed;
-		border-color: #555555 transparent transparent transparent;
-		background: transparent;
-		-webkit-border-radius: 0;
-		-moz-border-radius: 0;
-		-ms-border-radius: 0;
-		-o-border-radius: 0;
-		border-radius: 0;
-	}
-	.sm-uikit a.highlighted span.sub-arrow:before {
-		display: none;
-	}
-	.sm-uikit li {
-		border-top: 0;
-	}
-	/*
-	.sm-uikit > li > ul:before,
-	.sm-uikit > li > ul:after {
-		content: '';
-		position: absolute;
-		top: -18px;
-		left: 30px;
-		width: 0;
-		height: 0;
-		overflow: hidden;
-		border-width: 9px;
-		border-style: dashed dashed solid dashed;
-		border-color: transparent transparent #bbbbbb transparent;
-	}
-*/
-	.sm-uikit > li > ul:after {
-		top: -16px;
-		left: 31px;
-		border-width: 8px;
-		border-color: transparent transparent #bbb transparent;
-	}
-
-	.sm-uikit ul {
-/* uncomment if you want border around dropdown */
-/*    border: 1px solid #bbbbbb; */
-		padding: 5px 0;
-		background: transparent; /* white; */
-		-webkit-border-radius: 5px !important;
-		-moz-border-radius: 5px !important;
-		-ms-border-radius: 5px !important;
-		-o-border-radius: 5px !important;
-		border-radius: 5px !important;
-		-webkit-box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
-		-moz-box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
-		box-shadow: 0 5px 9px rgba(0, 0, 0, 0.2);
-	}
-	.sm-uikit ul a, .sm-uikit ul a:hover, .sm-uikit ul a:focus, .sm-uikit ul a:active, .sm-uikit ul a.highlighted {
-		border: 0 !important;
-		padding: 10px 20px;
-		color: #555555;
-	}
-	.sm-uikit ul a:hover, .sm-uikit ul a:focus, .sm-uikit ul a:active, .sm-uikit ul a.highlighted {
-		background: #eeeeee;
-		color: #444;
-	}
-	.sm-uikit ul a.current {
-		color: #444;
-	}
-	.sm-uikit ul a.disabled {
-		background: transparent;
-		color: #cccccc;
-	}
-	.sm-uikit ul a.has-submenu {
-		padding-right: 20px;
-	}
-	.sm-uikit ul a span.sub-arrow {
-		right: 8px;
-		top: 50%;
-		margin-top: -5px;
-		border-width: 5px;
-		border-style: dashed dashed dashed solid;
-		border-color: transparent transparent transparent #555555;
-	}
-	.sm-uikit span.scroll-up,
-	.sm-uikit span.scroll-down {
-		position: absolute;
-		display: none;
-		visibility: hidden;
-		overflow: hidden;
-		background: white;
-		height: 20px;
-	}
-	.sm-uikit span.scroll-up:hover,
-	.sm-uikit span.scroll-down:hover {
-		background: #eeeeee;
-	}
-	.sm-uikit span.scroll-up:hover span.scroll-up-arrow, .sm-uikit span.scroll-up:hover span.scroll-down-arrow {
-		border-color: transparent transparent #444 transparent;
-	}
-	.sm-uikit span.scroll-down:hover span.scroll-down-arrow {
-		border-color: #444 transparent transparent transparent;
-	}
-	.sm-uikit span.scroll-up-arrow, .sm-uikit span.scroll-down-arrow {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		margin-left: -6px;
-		width: 0;
-		height: 0;
-		overflow: hidden;
-		border-width: 6px;
-		border-style: dashed dashed solid dashed;
-		border-color: transparent transparent #555555 transparent;
-	}
-	.sm-uikit span.scroll-down-arrow {
-		top: 8px;
-		border-style: solid dashed dashed dashed;
-		border-color: #555555 transparent transparent transparent;
-	}
-	.sm-uikit.sm-rtl a.has-submenu {
-		padding-right: 12px;
-		padding-left: 24px;
-	}
-	.sm-uikit.sm-rtl a span.sub-arrow {
-		right: auto;
-		left: 12px;
-	}
-	.sm-uikit.sm-rtl.sm-vertical a.has-submenu {
-		padding: 10px 20px;
-	}
-	.sm-uikit.sm-rtl.sm-vertical a span.sub-arrow {
-		right: auto;
-		left: 8px;
-		border-style: dashed solid dashed dashed;
-		border-color: transparent #555555 transparent transparent;
-	}
-	.sm-uikit.sm-rtl > li > ul:before {
-		left: auto;
-		right: 30px;
-	}
-	.sm-uikit.sm-rtl > li > ul:after {
-		left: auto;
-		right: 31px;
-	}
-	.sm-uikit.sm-rtl ul a.has-submenu {
-		padding: 10px 20px !important;
-	}
-	.sm-uikit.sm-rtl ul a span.sub-arrow {
-		right: auto;
-		left: 8px;
-		border-style: dashed solid dashed dashed;
-		border-color: transparent #555555 transparent transparent;
-	}
-	.sm-uikit.sm-vertical {
-		padding: 10px 0;
-		-webkit-border-radius: 5px;
-		-moz-border-radius: 5px;
-		-ms-border-radius: 5px;
-		-o-border-radius: 5px;
-		border-radius: 5px;
-	}
-	.sm-uikit.sm-vertical a {
-		padding: 10px 20px;
-	}
-	.sm-uikit.sm-vertical a:hover, .sm-uikit.sm-vertical a:focus, .sm-uikit.sm-vertical a:active, .sm-uikit.sm-vertical a.highlighted {
-		background: transparent; /* white; */
-	}
-	.sm-uikit.sm-vertical a.disabled {
-		background: #eeeeee;
-	}
-	.sm-uikit.sm-vertical a span.sub-arrow {
-		right: 8px;
-		top: 50%;
-		margin-top: -5px;
-		border-width: 5px;
-		border-style: dashed dashed dashed solid;
-		border-color: transparent transparent transparent #555555;
-	}
-	.sm-uikit.sm-vertical > li > ul:before,
-	.sm-uikit.sm-vertical > li > ul:after {
-		display: none;
-	}
-	.sm-uikit.sm-vertical ul a {
-		padding: 10px 20px;
-	}
-	.sm-uikit.sm-vertical ul a:hover, .sm-uikit.sm-vertical ul a:focus, .sm-uikit.sm-vertical ul a:active, .sm-uikit.sm-vertical ul a.highlighted {
-		background: #eeeeee;
-	}
-	.sm-uikit.sm-vertical ul a.disabled {
-		background: transparent; /* white; */
-	}
+/*attributes for the dropdown menus */
+.sm-uikit ul a, .sm-uikit ul a:hover, .sm-uikit ul a:focus, .sm-uikit ul a:active, .sm-uikit ul a.highlighted {
+	border: 0 !important;
+	padding: 10px 20px;
 }
-
-/* overrides */
-
-.tm-navbar .sm-uikit ul a:hover,
-.tm-navbar .sm-uikit ul a:focus,
-.tm-navbar .sm-uikit ul a:active,
-.tm-navbar .sm-uikit ul a.highlighted {
-	background: #39f;
-	color: #fff;
+.sm-uikit ul a.disabled {
+	background: transparent;
+	color: #cccccc;
 }
-
-.sm-uikit ul a,
-.sm-uikit ul a:hover,
-.sm-uikit ul a:focus,
-.sm-uikit ul a:active,
-.sm-uikit ul a.highlighted {
-		color:#fff !important;
+.sm-uikit ul a.has-submenu {
+	padding-right: 20px;
 }
-
-/* changes color of down arrow at first level */
-.sm-uikit a span.sub-arrow {
-	border-color: #fff transparent transparent transparent;
-}
-
-
-/* changes color of right arrow for sub-menus */
 .sm-uikit ul a span.sub-arrow {
+	right: 8px;
+	top: 50%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: dashed dashed dashed solid;
 	border-color: transparent transparent transparent #fff;
 }
-
-	/* disabled menu items */
-
-.sm-uikit ul a.disabled {
-	background: transparent !important;
-	color: #cccccc !important;
+.sm-uikit span.scroll-up,
+.sm-uikit span.scroll-down {
+	position: absolute;
+	display: none;
+	visibility: hidden;
+	overflow: hidden;
+	background: white;
+	height: 20px;
 }
-
-	/* mega menu */
+.sm-uikit span.scroll-up:hover,
+.sm-uikit span.scroll-down:hover {
+	background: #eeeeee;
+}
+.sm-uikit span.scroll-up:hover span.scroll-up-arrow, .sm-uikit span.scroll-up:hover span.scroll-down-arrow {
+	border-color: transparent transparent #444 transparent;
+}
+.sm-uikit span.scroll-down:hover span.scroll-down-arrow {
+	border-color: #444 transparent transparent transparent;
+}
+.sm-uikit span.scroll-up-arrow, .sm-uikit span.scroll-down-arrow {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -6px;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	border-width: 6px;
+	border-style: dashed dashed solid dashed;
+	border-color: transparent transparent #555555 transparent;
+}
+.sm-uikit span.scroll-down-arrow {
+	top: 8px;
+	border-style: solid dashed dashed dashed;
+	border-color: #555555 transparent transparent transparent;
+}
+.sm-uikit.sm-rtl a.has-submenu {
+	padding-right: 12px;
+	padding-left: 24px;
+}
+.sm-uikit.sm-rtl a span.sub-arrow {
+	right: auto;
+	left: 12px;
+}
+.sm-uikit.sm-rtl.sm-vertical a.has-submenu {
+	padding: 10px 20px;
+}
+.sm-uikit.sm-rtl.sm-vertical a span.sub-arrow {
+	right: auto;
+	left: 8px;
+	border-style: dashed solid dashed dashed;
+	border-color: transparent #fff transparent transparent;
+}
+.sm-uikit.sm-rtl > li > ul:before {
+	left: auto;
+	right: 30px;
+}
+.sm-uikit.sm-rtl > li > ul:after {
+	left: auto;
+	right: 31px;
+}
+.sm-uikit.sm-rtl ul a.has-submenu {
+	padding: 10px 20px !important;
+}
+.sm-uikit.sm-rtl ul a span.sub-arrow {
+	right: auto;
+	left: 8px;
+	border-style: dashed solid dashed dashed;
+	border-color: transparent #fff transparent transparent;
+}
 .mega-menu {
 	color:#fff;
 }
 /* end sm-cms.css */
-
-
 
 /* horizontal cascading menu CSS - left alignment is default */
 .menu-horizontal-cascading,
@@ -1708,7 +1487,6 @@ p.tm-article-meta {
 .profile-data {
 	padding: 0 .5em;
 	width: 100%;
-	/*width:auto in css/ie6.css file */
 }
 .stats-list-count {
 	padding-left: 5px;
@@ -1740,6 +1518,8 @@ p.tm-article-meta {
 	width: 40%;
 }
 
+/* List styles
+========================================================================== */
 ul.arrow li {
 	background: transparent url(images/arrow.png) no-repeat scroll 0 50%;
 }
@@ -1935,6 +1715,9 @@ li.num-8g,
 li.num-9g {
 	padding: 2px 0 2px 30px;
 }
+
+/* Old alert styles
+========================================================================== */
 span.alert {
 	background: #ffd6d6 url(images/alert.png) no-repeat scroll 5px 50%;
 	border: 3px solid #FE7B7A;
@@ -1976,7 +1759,10 @@ span.note {
 	margin: 15px 0;
 	padding: 10px 10px 10px 45px;
 }
-/* --- jQuery Tooltipster CSS --- */
+
+
+/* jQuery Tooltipster Styles
+========================================================================== */
 .tooltipster-default {
 	border-radius: 5px;
 	border: 2px solid #000;
@@ -2240,7 +2026,10 @@ span.note {
 	-ms-transform: scale(1.1, 1.1);
 	transform: scale(1.1, 1.1);
 }
-/* SLIMBOX */
+
+
+/* Slimbox (Lightbox) Styles
+========================================================================== */
 #lbOverlay {
 	position: fixed;
 	z-index: 9999;
@@ -2313,9 +2102,11 @@ span.note {
 #lbCaption {
 	font-weight: bold;
 }
+
+/* Labels / errors
+========================================================================== */
 label.error,
 label.error {
-	/* remove the next line when you have trouble in IE6 with labels in list */
 	color: red;
 	font-style: italic;
 }
@@ -2325,7 +2116,10 @@ div.error {
 input.error {
 	border: 2px dotted red;
 }
-/* Auto Translations css */
+
+
+/* Auto Translation Block Styles
+========================================================================== */
 .autotranslations {
 	list-style-image: none;
 	list-style-position: outside;
@@ -2448,6 +2242,9 @@ input.error {
 	height: 11px;
 	width: 16px;
 }
+
+/* General Legacy Styles
+========================================================================== */
 .floatleft {
 	float:left;
 	padding:0 10px 0 0;
@@ -2470,8 +2267,8 @@ input.error {
 	text-align:center;
 }
 
-/* adds styling for edit sticky side bar */
-
+/* Story / Static page editor sticky buttons
+========================================================================== */
 .tm-admin-save {
 	position:fixed;
 	z-index:999;
@@ -2491,12 +2288,15 @@ input.error {
 	padding-bottom:5px;
 }
 
+/* Headlines auto tag styles
+========================================================================== */
 /* headlines auto tag */
 .tm-headline > img {
 	width: 100%;
 }
 
-/* upload buttons */
+/* Upload Buttons
+========================================================================== */
 .tm-fileUpload {
 	position: relative;
 	overflow: hidden;
