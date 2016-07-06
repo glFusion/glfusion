@@ -2785,7 +2785,6 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/default_content.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/index.html'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/mysql_tableanddata.php'),
-    array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/updates/geeklog_mysql_1.4.1_to_1.5.0.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/updates/index.html'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/updates/mysql_1.0.1_to_1.1.0.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'private/sql/updates/mysql_1.1.2_to_1.1.3.php'),

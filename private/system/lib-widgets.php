@@ -737,8 +737,6 @@ EOS;
     return $display;
 }
 
-// A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
-//modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello
 function WIDGET_mootickerRSS($block = 'gl_mootickerRSS', $id = 'gl_mooticker') {
     global $_CONF, $_TABLES, $LANG_WIDGETS;
 
