@@ -83,6 +83,7 @@ set of styles.
 }
 
 .tm-navbar-brand:hover,
+.tm-navbar-brand:focus,
 .tm-navbar-brand a:active,
 .tm-navbar-brand a:visited,
 .tm-navbar-brand a:link {
@@ -172,6 +173,7 @@ set of styles.
 .tm-nav-navbar > li > a:focus,
 .tm-nav-navbar > li > a:hover {
 	background:#35B3EE;
+	text-shadow:none !important;
 }
 
 /* Right Block semantics
@@ -738,15 +740,9 @@ p.tm-article-meta {
 }
 .sm-uikit {
 	padding: 0 10px;
-	background: transparent;
 }
 .sm-uikit a, .sm-uikit a:hover, .sm-uikit a:focus, .sm-uikit a:active, .sm-uikit a.highlighted {
 	padding: 0px 15px;
-	-webkit-border-radius: 3px!important;
-	-moz-border-radius: 3px!important;
-	-ms-border-radius: 3px!important;
-	-o-border-radius: 3px!important;
-	border-radius: 3px!important;
 }
 .sm-uikit a.disabled {
 	color: #bbbbbb;
@@ -792,7 +788,6 @@ p.tm-article-meta {
 	/* uncomment if you want border around dropdown */
 	/*    border: 1px solid #bbbbbb; */
 	padding: 5px 0;
-	background: transparent; /* white; */
 	-webkit-border-radius: 5px !important;
 	-moz-border-radius: 5px !important;
 	-ms-border-radius: 5px !important;

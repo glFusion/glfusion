@@ -12,7 +12,7 @@
 			{label}
 		</a>
 {!if haschildren}
-		<ul class="uk-nav-navbar tm-nav-navbar">
+		<ul class="uk-nav uk-nav-navbar tm-nav-navbar uk-dropdown-navbar">
 			{children}
 		</ul>
 {!endif}
