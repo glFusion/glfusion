@@ -18,7 +18,7 @@ if (!defined ('GVERSION')) {
 }
 
 /**
-* Sends posts to SLV (linksleeve.org) for examination
+* Sends posts to SFS (http://www.stopforumspam.com) for examination
 *
 * @author Mark R. Evans     mark AT glfusion DOT org
 * based on the works of Tom Willet (Spam-X) and Lee Garner (SFS)

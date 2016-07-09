@@ -1,10 +1,10 @@
 <?php
 
 /**
-* File: SFS.Examine.class.php
-* This is the Stop Forum Spam Examine class for the glFusion Spam-X plugin
+* File: SLC.Examine.class.php
+* This is the Spam Link Counter Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2011 by the following authors:
+* Copyright (C) 2016 by the following authors:
 * Author        Mark R. Evans       mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -21,17 +21,17 @@ if (!defined ('GVERSION')) {
 * Include Base Classes
 */
 require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'BaseCommand.class.php';
-require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'SFSbase.class.php';
+require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'SLCbase.class.php';
 
 /**
-* Sends IP to SFS (stopforumspam.org) for examination
+* Check number of links in post
 *
 * @author Mark R. Evans     mark AT glfusion DOT org
 * based on the works of Tom Willet (Spam-X) and Lee Garner
 * @package Spam-X
 *
 */
-class SFS extends BaseCommand {
+class SLC extends BaseCommand {
     /**
      * No Constructor Use BaseCommand constructor
      */
@@ -41,9 +41,13 @@ class SFS extends BaseCommand {
      */
     function execute ($comment)
     {
-        global $_USER, $LANG_SX00;
+        global $_USER, $_SPX_CONF, $LANG_SX00;
 
-        $ans = 0;
+        if ( !isset($_SPX_CONF['max_links'])) {
+            $_SPX_CONF['max_links'] = 5;
+        }
+
+        $tooManyLinks = 0;
 
         if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             $uid = $_USER['uid'];
@@ -51,19 +55,20 @@ class SFS extends BaseCommand {
             $uid = 1;
         }
 
-        $sfs = new SFSbase();
-        if ($sfs->CheckForSpam ($comment)) {
-            $ans = 1;
-            SPAMX_log ($LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
+        $slc = new SLCbase();
+        $linkCount = $slc->CheckForSpam ($comment);
+        if ( $linkCount > $_SPX_CONF['max_links']) {
+            SPAMX_log ($LANG_SX00['foundspam'] . 'Spam Link Counter (SLC)'.
                        $LANG_SX00['foundspam2'] . $uid .
                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
-            SESS_setVar('spamx_msg','Failed Stop Forum Spam IP / username check');
+            $tooManyLinks = 1;
+            SESS_setVar('spamx_msg','Too many links in post');
         }
 
         // tell the Action module that we've already been triggered
-        $GLOBALS['sfs_triggered'] = true;
+        $GLOBALS['slc_triggered'] = true;
 
-        return $ans;
+        return $tooManyLinks;
     }
 }
 

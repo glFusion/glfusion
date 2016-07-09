@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Added new Spam-X module to reject posts based on number of links in the post
+  - Removed depreciated features (webservices and openid)
   - Fixed permission error in MG Browser for CKEditor
   - Global story attribute editor
   - Fixed download issues in FileMgmt where downloaded size of file was not always accurate

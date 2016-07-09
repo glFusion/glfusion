@@ -978,15 +978,31 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
 
+    $status = 0;
+    if ( isset($postData['disable_bbcode']) && $postData['disable_bbcode'] == 1 ) {
+        $status += DISABLE_BBCODE;
+    }
+    if ( isset($postData['disable_smilies']) && $postData['disable_smilies'] == 1 ) {
+        $status += DISABLE_SMILIES;
+    }
+    if ( isset($postData['disable_urlparse']) && $postData['disable_urlparse'] == 1 ) {
+        $status += DISABLE_URLPARSE;
+    }
+
     // spamx check
     if ($_FF_CONF['use_spamx_filter'] == 1 && $okToSave == true) {
+        SESS_unSet('spamx_msg'); // clear out the message.
         // Check for SPAM
-        $spamcheck = '<h1>' . $postData['subject'] . '</h1><p>' . $postData['comment'] . '</p>';
+        $spamcheck = '<h1>' . $postData['subject'] . '</h1><p>' . FF_formatTextBlock($postData['comment'],$postData['postmode'],'preview',$status) . '</p>';
         $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
         // Now check the result and redirect to index.php if spam action was taken
         if ($result > 0) {
             // then tell them to get lost ...
             $errorMessages .= $LANG_GF02['spam_detected'];
+            if ( SESS_isSet('spamx_msg')) {
+                $errorMessages .= '<br>'. SESS_getVar('spamx_msg'). '<br>';
+                SESS_unSet('spamx_msg');
+            }
             $okToSave = false;
         }
     }
@@ -1029,17 +1045,6 @@ function FF_saveTopic( $forumData, $postData, $action )
         $id         = COM_applyFilter($postData['id'],true);
         $forum      = COM_applyFilter($postData['forum'],true);
         $notify     = isset($postData['notify']) ? COM_applyFilter($postData['notify']) : '';
-
-        $status = 0;
-        if ( isset($postData['disable_bbcode']) && $postData['disable_bbcode'] == 1 ) {
-            $status += DISABLE_BBCODE;
-        }
-        if ( isset($postData['disable_smilies']) && $postData['disable_smilies'] == 1 ) {
-            $status += DISABLE_SMILIES;
-        }
-        if ( isset($postData['disable_urlparse']) && $postData['disable_urlparse'] == 1 ) {
-            $status += DISABLE_URLPARSE;
-        }
 
         // If user has moderator edit rights only
         $locked = 0;
