@@ -1004,14 +1004,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                         . $LANG01[117] . '"/>';
         }
     }
-/* ------- REMOVE ------------------------------------------------------
-    if (!$_CONF['disable_webservices']) {
-        $relLinks['service'] = '<link rel="service" '
-                    . 'type="application/atomsvc+xml" ' . 'href="'
-                    . $_CONF['site_url'] . '/webservices/atom/index.php?introspection" '
-                    . 'title="' . $LANG01[130] . '"/>' . LB;
-    }
--------------- */
+
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
 
     if ( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {

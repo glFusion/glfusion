@@ -695,11 +695,6 @@
 					<dd>Whether to allow normal logins into the site, i.e. with a user account that only exists in your site's database. </dd>
 				</dl>
 
-				<dl id="desc_user_login_method_openid">
-					<dt>User Login Method[openid]</dt>
-					<dd>Whether to allow logins using OpenID. This will display a special OpenID login below the normal login field. <br/><br/>Note: Currently only OpenID 1.1 is supported. </dd>
-				</dl>
-
 				<dl id="desc_user_login_method_3rdparty">
 					<dt>User Login Method[3rdparty]</dt>
 					<dd>Allow (when set to true) users who already have an account with some other service to log into your glFusion site with the login for that service. Currently supported: LDAP and LiveJournal. Please note that to enable login for a specific service, you need an authorization class in system/classes/authentication. If you only want to allow LDAP but not LiveJournal users (or vice versa), simply remove the class file for the unwanted service(s). See Remote Authentication in glFusion for more information. </dd>
@@ -1549,7 +1544,7 @@
 
 				<dl id="desc_bb2_offsite_forms">
 					<dt>Allow Offsite Forms</dt>
-					<dd>Bad Behavior normally prevents your site from receiving data posted from forms on other web sites. This prevents spammers from, e.g., using a Google cached version of your web site to send you spam. However, some web applications such as OpenID require that your site be able to receive form data in this way. If you are running OpenID, enable this option.</dd>
+					<dd>Bad Behavior normally prevents your site from receiving data posted from forms on other web sites. This prevents spammers from, e.g., using a Google cached version of your web site to send you spam. However, some web applications such as OpenID require that your site be able to receive form data in this way.</dd>
 				</dl>
 
 				<dl id="desc_bb2_eu_cookie">

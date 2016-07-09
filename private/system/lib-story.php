@@ -43,8 +43,6 @@ if (!defined ('GVERSION')) {
 USES_class_story();
 USES_lib_comment();
 
-require_once $_CONF['path_system'] . '/lib-webservices.php';
-
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
     USES_lib_user();
@@ -1311,7 +1309,7 @@ function service_submit_story($args, &$output, &$svc_msg)
     $args['sid'] = COM_sanitizeID($args['sid']);
     if (!$gl_edit) {
         if (strlen($args['sid']) > STORY_MAX_ID_LENGTH) {
-            $args['sid'] = WS_makeId($args['slug'], STORY_MAX_ID_LENGTH);
+            $args['sid'] = COM_makesid();
         }
     }
     $story = new Story();

@@ -123,11 +123,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     $args['sp_id'] = COM_sanitizeID($args['sp_id']);
     if (!$gl_edit) {
         if (strlen($args['sp_id']) > STATICPAGE_MAX_ID_LENGTH) {
-            if (function_exists('WS_makeId')) {
-                $args['sp_id'] = WS_makeId($slug, STATICPAGE_MAX_ID_LENGTH);
-            } else {
-                $args['sp_id'] = COM_makeSid();
-            }
+            $args['sp_id'] = COM_makeSid();
         }
     }
 
