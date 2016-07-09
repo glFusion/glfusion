@@ -11,6 +11,5 @@
 </form>
 <p>{lang_signup}<br />
 {lang_forgetpassword}</p>
-{openid_login}
 {oauth_login}
 {# end {templatelocation} #}
