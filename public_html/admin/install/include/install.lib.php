@@ -1012,12 +1012,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             // delete microsummary
             $c->del('microsummary_short', 'Core');
             $standard = ($_CONF['user_login_method']['standard']) ? true : false;
-            $openid = ($_CONF['user_login_method']['openid']) ? true : false;
             $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
 
             // OAuth configuration settings
             $oauth = false;
-            $c->add('user_login_method',array('standard' => $standard , 'openid' => $openid , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
+            $c->add('user_login_method',array('standard' => $standard , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,16,1,320,TRUE);
             $c->add('facebook_login',0,'select',4,16,1,330,TRUE);
             $c->add('facebook_consumer_key','not configured yet','text',4,16,NULL,335,TRUE);
             $c->add('facebook_consumer_secret','not configured yet','text',4,16,NULL,340,TRUE);
@@ -2045,7 +2044,7 @@ function INST_resyncConfig() {
     $c->sync('hide_exclude_content',1,'select',4,1,0,90,TRUE);
     $c->sync('show_servicename',TRUE,'select',4,1,1,100,TRUE);
     $c->sync('custom_registration',FALSE,'select',4,1,1,110,TRUE);
-    $c->sync('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false, 'oauth' => false),'@select',4,1,1,120,TRUE);
+    $c->sync('user_login_method',array('standard' => true, '3rdparty' => false, 'oauth' => false),'@select',4,1,1,120,TRUE);
     $c->sync('facebook_login',0,'select',4,1,1,130,TRUE);
     $c->sync('facebook_consumer_key','not configured yet','text',4,1,NULL,140,TRUE);
     $c->sync('facebook_consumer_secret','not configured yet','text',4,1,NULL,150,TRUE);

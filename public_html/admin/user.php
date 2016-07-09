@@ -390,8 +390,7 @@ function USER_accountPanel($U,$newuser = 0)
     $pwd_disabled = '';
     $remote_user_edit = 0;
 
-    if (($_CONF['user_login_method']['openid'] ||
-      $_CONF['user_login_method']['3rdparty'] ||
+    if (($_CONF['user_login_method']['3rdparty'] ||
       $_CONF['user_login_method']['oauth'] ) ) { // && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
         $modules = array();
 
@@ -415,9 +414,6 @@ function USER_accountPanel($U,$newuser = 0)
             foreach( $modules AS $service ) {
                 $service_select .= '<option value="' . $service . '"'.($U['remoteservice'] == $service ? ' selected="selected"' : '') . '>' . $service . '</option>' . LB;
             }
-        }
-        if ( $_CONF['user_login_method']['openid'] ) {
-            $service_select .= '<option value="openid"' . ($U['remoteservice'] == 'openid' ? ' selected="selected"' : '') .'>'.'OpenID'.'</option>'. LB;
         }
         if ( $_CONF['user_login_method']['oauth'] ) {
             $modules = SEC_collectRemoteOAuthModules();
@@ -1381,7 +1377,7 @@ function USER_list($grp_id)
                     array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '35px')
     );
 
-    if ($_CONF['user_login_method']['openid'] ||
+    if ($_CONF['user_login_method']['oauth'] ||
         $_CONF['user_login_method']['3rdparty']) {
         $header_arr[] = array('text' => $LANG04[121], 'field' => 'remoteservice', 'sort' => true);
     }
@@ -1429,7 +1425,7 @@ function USER_list($grp_id)
         $join_userinfo .= "LEFT JOIN {$_TABLES['userinfo']} ON {$_TABLES['users']}.uid={$_TABLES['userinfo']}.uid ";
         $select_userinfo .= ",lastlogin";
     }
-    if ($_CONF['user_login_method']['openid'] ||
+    if ($_CONF['user_login_method']['oauth'] ||
         $_CONF['user_login_method']['3rdparty']) {
         $select_userinfo .= ',remoteservice';
     }

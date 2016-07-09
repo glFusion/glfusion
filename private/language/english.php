@@ -174,7 +174,7 @@ $LANG01 = array(
     125 => 'Are you sure you want to delete the selected item(s)?',
     126 => 'Select or de-select all items',
     127 => 'Permalink',
-    128 => 'Login with OpenID:',
+    128 => '',
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remember to remove the admin/install/ directory after installing or upgrading your site!',
@@ -1539,12 +1539,12 @@ $MESSAGE = array(
     83 => 'To change your password, email address, or for how long to remember you, please enter your current password.',
     84 => 'To delete your account, please enter your current password.',
     85 => 'There was a problem sending the email.',
-    86 => 'The OpenID server invalidated your login attempt.',
-    87 => 'OpenID login operation cancelled by user.',
-    88 => 'The OpenID server returned an error.',
-    89 => 'Unable to find an OpenID server for the given identity URL.',
-    90 => 'OpenID identification cancelled.',
-    91 => 'You specified an invalid identity URL.',
+    86 => '',
+    87 => '',
+    88 => '',
+    89 => '',
+    90 => '',
+    91 => '',
     92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
@@ -2042,6 +2042,9 @@ $LANG_trackbackcodes = array(
     0 => 'Trackback Enabled',
     -1 => 'Trackback Disabled'
 );
+# Localisation of the texts for the BBCode Editor
+###############################################################################
+# lib-bbcode.php
 
 $LANG_BBCODE = array(
     'bold_label'        => 'B',
@@ -2093,6 +2096,7 @@ $LANG_BBCODE = array(
     'formatted_code'    => 'Formatted Code',
 );
 
+# Localisation of the texts for the Admin file check
 ###############################################################################
 # admin/filecheck.php - distribution integrity checker
 
@@ -2121,6 +2125,7 @@ $LANG_FILECHECK = array(
     'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
+# Localisation of the texts for Menu Builder
 ###############################################################################
 # admin/menu.php - menu builder
 
@@ -2213,12 +2218,18 @@ $LANG_MB01 = array (
     'menu_name_exists'      => 'Menu name must be unique, there is already a menu by this name',
 );
 
+###############################################################################
+# menu.php
+
 $LANG_MB_MENU_TYPES = array(
     1                   => 'Horizontal - Cascading',
     2                   => 'Horizontal - Simple',
     3                   => 'Vertical - Cascading',
     4                   => 'Vertical - Simple',
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_TYPES = array(
     1                   => 'Sub Menu',
@@ -2232,12 +2243,17 @@ $LANG_MB_TYPES = array(
     9                   => 'Topic',
 );
 
+###############################################################################
+# menu.php
 
 $LANG_MB_TARGET = array(
     1                   => 'Parent Window',
     2                   => 'New Window with navigation',
     3                   => 'New Window without navigation',
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_GLFUNCTION = array(
     0                   => 'Home',
@@ -2248,6 +2264,9 @@ $LANG_MB_GLFUNCTION = array(
     5                   => 'Site Stats',
 );
 
+###############################################################################
+# menu.php
+
 $LANG_MB_GLTYPES = array(
     1                   => 'User Menu',
     2                   => 'Admin Menu',
@@ -2256,6 +2275,9 @@ $LANG_MB_GLTYPES = array(
     5                   => 'Plugin Menu',
     6                   => 'Header Menu',
 );
+
+###############################################################################
+# menu.php
 
 $LANG_MB_ADMIN = array(
     1                   => 'Menu Builder allows you to create and edit menus for your site. To add a new menu, click the Create New Menu link above. To edit a menu\'s items, click the icon under the Elements column. To change the menu colors, click the icon under the Options column.',

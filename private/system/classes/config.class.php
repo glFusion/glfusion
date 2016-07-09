@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Controls the UI and database for configuration settings                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -494,7 +494,7 @@ class config {
             }
         }
 
-        $methods = array('standard', 'openid', '3rdparty');
+        $methods = array('standard', '3rdparty', 'oauth');
         $methods_disabled = 0;
         foreach ($methods as $m) {
             if (isset($this->config_array['Core']['user_login_method'][$m]) &&

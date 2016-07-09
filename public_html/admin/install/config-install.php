@@ -214,7 +214,7 @@ function install_config($site_url)
     $c->add('hide_exclude_content',1,'select',4,1,0,90,TRUE);
     $c->add('show_servicename',TRUE,'select',4,1,1,100,TRUE);
     $c->add('custom_registration',FALSE,'select',4,1,1,110,TRUE);
-    $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false, 'oauth' => false),'@select',4,1,1,120,TRUE);
+    $c->add('user_login_method',array('standard' => true, '3rdparty' => false, 'oauth' => false),'@select',4,1,1,120,TRUE);
     $c->add('facebook_login',0,'select',4,1,1,130,TRUE);
     $c->add('facebook_consumer_key','not configured yet','text',4,1,NULL,140,TRUE);
     $c->add('facebook_consumer_secret','not configured yet','text',4,1,NULL,150,TRUE);

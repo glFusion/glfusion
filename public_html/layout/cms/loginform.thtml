@@ -43,10 +43,4 @@
 	</div>
 {!endif}
 </form>
-{!if openid_login}
-<div class="uk-form-row uk-text-center">
-	{openid_login}
-</div>
-{!endif}
-
 {# end {templatelocation} #}

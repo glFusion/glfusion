@@ -1841,7 +1841,6 @@ function SEC_tokenreauthform($message = '',$destination = '')
     $options = array(
         'forgotpw_link'   => false,
         'newreg_link'     => false,
-        'openid_login'    => false,
         'oauth_login'     => false,
         'plugin_vars'     => false,
         '3rdparty_login'  => false,
@@ -1920,7 +1919,6 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
     $options = array(
         'forgotpw_link'   => false,
         'newreg_link'     => false,
-        'openid_login'    => false,
         'oauth_login'     => false,
         'plugin_vars'     => false,
         'prefill_user'    => COM_isAnonUser() ? false : true,
@@ -1959,7 +1957,7 @@ function SEC_loginRequiredForm()
 *
 * This is the version of the login form displayed in the content area of the
 * page (not the side bar). It will present all options (remote authentication
-* - including OpenID, new registration link, etc.) according to the current
+* - including new registration link, etc.) according to the current
 * configuration settings.
 *
 * @param    array   $use_options    options to override default settings
@@ -1982,7 +1980,6 @@ function SEC_loginForm($use_options = array())
         // options to locally override some specific $_CONF options
         'oauth_login'       => true,    // $_CONF['user_login_method']['oauth']
         '3rdparty_login'    => true,    // $_CONF['user_login_method']['3rdparty']
-        'openid_login'      => true,    // $_CONF['user_login_method']['openid']
         'newreg_link'       => true,    // $_CONF['disable_new_user_registration']
         'verification_link' => false,   // resend verification?
         'plugin_vars'       => true,    // call PLG_templateSetVars?
@@ -2066,26 +2063,6 @@ function SEC_loginForm($use_options = array())
         $loginform->set_var('hidden_fields',$options['hidden_fields']);
     }
     $loginform->set_var('services', $services);
-
-    // OpenID remote authentification.
-    if ($options['openid_login'] && $_CONF['user_login_method']['openid'] &&
-            ($_CONF['usersubmission'] == 0) &&
-            !$_CONF['disable_new_user_registration']) {
-        $loginform->set_file('openid_login', '../loginform_openid.thtml');
-        $loginform->set_var('lang_openid_login', $LANG01[128]);
-        $loginform->set_var('input_field_size', 40);
-/*---
-        // for backward compatibility - not used any more
-        $app_url = isset($_SERVER['SCRIPT_URI'])
-                 ? $_SERVER['SCRIPT_URI']
-                 : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-        $loginform->set_var('app_url', $app_url);
---- */
-        $loginform->parse('output', 'openid_login');
-        $loginform->set_var('openid_login',$loginform->finish($loginform->get_var('output')));
-    } else {
-        $loginform->set_var('openid_login', '');
-    }
 
     // OAuth remote authentication.
     if ($options['oauth_login'] && $_CONF['user_login_method']['oauth'] ) {

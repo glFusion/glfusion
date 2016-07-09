@@ -1004,12 +1004,14 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                         . $LANG01[117] . '"/>';
         }
     }
+/* ------- REMOVE ------------------------------------------------------
     if (!$_CONF['disable_webservices']) {
         $relLinks['service'] = '<link rel="service" '
                     . 'type="application/atomsvc+xml" ' . 'href="'
                     . $_CONF['site_url'] . '/webservices/atom/index.php?introspection" '
                     . 'title="' . $LANG01[130] . '"/>' . LB;
     }
+-------------- */
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
 
     if ( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
@@ -2155,20 +2157,6 @@ function COM_userMenu( $help='', $title='', $position='' )
         } else {
            $login->set_var('services', '');
         }
-
-        // OpenID remote authentication.
-        if ($_CONF['user_login_method']['openid'] && ($_CONF['usersubmission'] == 0) && !$_CONF['disable_new_user_registration']) {
-            $login->set_file('openid_login', 'loginform_openid.thtml');
-            $login->set_var('lang_openid_login', $LANG01[128]);
-            $login->set_var('input_field_size', 16);
-            $login->set_var('app_url', $_CONF['site_url'] . '/users.php');
-            $login->parse('output', 'openid_login');
-            $login->set_var('openid_login',
-                $login->finish($login->get_var('output')));
-        } else {
-            $login->set_var('openid_login', '');
-        }
-
         // OAuth remote authentication.
         if ($_CONF['user_login_method']['oauth'] ) {
             $modules = SEC_collectRemoteOAuthModules();
@@ -3319,7 +3307,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     $ret = $username;
     if (!empty($fullname) && ($_CONF['show_fullname'] == 1)) {
         $ret = $fullname;
-    } else if (($_CONF['user_login_method']['3rdparty'] || $_CONF['user_login_method']['openid']) && !empty($remoteusername)) {
+    } else if ($_CONF['user_login_method']['3rdparty'] && !empty($remoteusername)) {
         if (!empty($username)) {
             $remoteusername = $username;
         }
@@ -7189,7 +7177,8 @@ function phpblock_whosonline()
     if ( $_CONF['show_fullname'] == 1 ) {
         $byname .= ',fullname';
     }
-    if ( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] ) {
+
+    if ( $_CONF['user_login_method']['3rdparty'] ) {
         $byname .= ',remoteusername,remoteservice';
     }
 
@@ -7207,7 +7196,7 @@ function phpblock_whosonline()
             if ( $_CONF['show_fullname'] == 1 ) {
                 $fullname = $A['fullname'];
             }
-            if ( $_CONF['user_login_method']['openid'] || $_CONF['user_login_method']['3rdparty'] ) {
+            if ( $_CONF['user_login_method']['3rdparty'] ) {
                 $username = COM_getDisplayName( $A['uid'], $A['username'],
                         $fullname, $A['remoteusername'], $A['remoteservice'] );
             } else {

@@ -1392,6 +1392,20 @@ function glfusion_160()
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
     }
 
+    // remove openid
+    $methods = array('standard', '3rdparty', 'oauth');
+    $methods_disabled = 0;
+    foreach ($methods as $m) {
+        if ( !isset($_CONF['user_login_method'][$m])) {
+            $_CONF['user_login_method'][$m] = 0;
+        }
+        $_tmpConf['user_login_method'][$m] = $_CONF['user_login_method'][$m];
+    }
+    $newLoginConf = serialize($_tmpConf['user_login_method']);
+    // update the dataase
+    $sql = "UPDATE {$_TABLES['conf_values']} SET `value`='".DB_escapeString($newLoginConf)."' WHERE name='user_login_method'";
+    DB_query($sql,1);
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.0' WHERE name='glfusion'",1);
