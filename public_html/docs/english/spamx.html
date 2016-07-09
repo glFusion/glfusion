@@ -73,6 +73,7 @@
 
 				<ul>
 					<li>Stop Forum Spam (SFS)</li>
+					<li>Spam Link Counter (SLC)</li>
 					<li>Personal Blacklist</li>
 					<li>IP Filter</li>
 					<li>IP of URL Filter</li>
@@ -99,7 +100,7 @@
 
 
 				<p>
-					SFS is a free service run by Project HoneyPot at <a href="http://www.linksleeve.org" rel="nofollow">www.linksleeve.org</a>.
+					SFS is a free service run by Project Honey Pot at <a href="https://www.projecthoneypot.org/" rel="nofollow">https://www.projecthoneypot.org/</a>.
 				</p>
 
 
@@ -111,11 +112,20 @@
 
 				<p>Sending information to an external site may also be
 					undesirable on some setups, e.g. on a company intranet. You can disable SFS support by
-					removing the four files SFS.Examine.class.php, SFSbase.class.php,
-					SFSreport.Action.class.php, and SFSwhitelist.Admin.class.php from your
+					removing the four files SFS.Examine.class.php, SFSbase.class.php and
+					SFSreport.Action.class.php files from your
 					Spam-X directory (/path/to/glfusion/plugins/spamx/modules). Or you can simply
 					disable the Spam-X plugin entirely (or uninstall it).
 				</p>
+
+				<h2>Spam Link Counter (SLC)</h2>
+
+				<p>
+					SLC will examine a post and determine how many links to external sites are in the post.
+					Anything more than 5 (configurable via the Online configuration) will be flagged as
+					spam and rejected.
+				</p>
+
 
 				<h2>Personal Blacklist</h2>
 
