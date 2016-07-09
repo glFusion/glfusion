@@ -44,7 +44,6 @@
       </div>
       {!endif}
       <div style="clear:both;"></div>
-      <div>{openid_login}</div>
       {!if footer_message}
       <div style="margin-top:1.2em; padding-top:.5em; border-top:1px solid #ccc">
       <span class="warningxsmall" style="text-align:center;">{footer_message}</span>

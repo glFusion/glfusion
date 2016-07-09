@@ -1251,10 +1251,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             list($rc,$errors) = INST_updateDB($_SQL);
 
-//            foreach ($_SQL as $sql) {
-//                DB_query($sql,1);
-//            }
-
             $_DATA = array();
 
             $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1);";
@@ -1313,6 +1309,19 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             if ( $sis_group_id != 0 ) {
                 DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
             }
+            $methods = array('standard', '3rdparty', 'oauth');
+            $methods_disabled = 0;
+            foreach ($methods as $m) {
+                if ( !isset($_CONF['user_login_method'][$m])) {
+                    $_CONF['user_login_method'][$m] = false;
+                }
+                $_tmpConf['user_login_method'][$m] = $_CONF['user_login_method'][$m];
+            }
+            $_tmpConf['user_login_method']['standard'] = true;
+            $newLoginConf = serialize($_tmpConf['user_login_method']);
+            // update the dataase
+            $sql = "UPDATE {$_TABLES['conf_values']} SET `value`='".DB_escapeString($newLoginConf)."' WHERE name='user_login_method'";
+            DB_query($sql,1);
 
             $current_fusion_version = '1.6.0';
 

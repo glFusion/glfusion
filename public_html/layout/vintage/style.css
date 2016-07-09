@@ -2731,9 +2731,6 @@ pre {
 #login_github{left:0px;width:141px;}
 #login_github{background:url('images/oauth-login-with-sprite.png') no-repeat; background-position: 0 -132px;}
 
-#login_openid{left:0px;width:141px;}
-#login_openid{background:url('images/oauth-login-with-sprite.png') no-repeat; background-position: 0 -154px;}
-
 .loginbox {
 	padding:1em;
 	margin:auto;
