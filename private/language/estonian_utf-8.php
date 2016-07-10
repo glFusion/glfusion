@@ -25,7 +25,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -173,7 +173,7 @@ $LANG01 = array(
     125 => 'Kas oled kindel, et soovid kõiki neid kustutada?',
     126 => 'Märgi/eemalda märge kõigilt',
     127 => 'Püsilink',
-    128 => 'Logi sisse OpenID abiga:',
+    128 => '',
     129 => 'Seadistus',
     130 => 'Veebiteenused',
     500 => 'Please remove the admin/install/ directory!',
@@ -1537,12 +1537,12 @@ $MESSAGE = array(
     83 => 'Et muuta oma salasõna, E-postiaadressi või kui kaua peaks sait sind mäletama, pead sa sisestama oma kehtiva salasõna.',
     84 => 'Oma konto kustutamiseks sisesta oma kehtiv salasõna.',
     85 => 'E-kirja saatmisel oli tõrge.',
-    86 => 'OpenID server lükkas teie sisselogimiskatse tagasi.',
-    87 => 'OpenID sisselogimine tühistati kasutaja poolt.',
-    88 => 'OpenID server  andis veateate.',
-    89 => 'Ei suuda leida antud identiteedi URL-i OpenID serverit.',
-    90 => 'OpenID tuvastamine tühistatud.',
-    91 => 'Sa määrasid vigase identiteedi URL-i.',
+    86 => '',
+    87 => '',
+    88 => '',
+    89 => '',
+    90 => '',
+    91 => '',
     92 => "Palun <a href=\"{$_CONF['site_admin_url']}/sectest.php\">kontrolli enne oma lehe kasutama hakkamist selle turvalisust!</a>",
     93 => 'Andmebaasi varundamine oli edukas.',
     94 => 'Varundamine ebaõnnestus: faili suurus on alla 1kb',
@@ -1692,12 +1692,18 @@ $LANG_DB_BACKUP = array(
     'download' => 'Klõpsa selle faili allalaadimiseks',
     'convert_menu' => 'Convert to InnoDB',
     'convert_title' => 'Convert to InnoDB tables',
+    'convert_myisam_menu' => 'Convert to MyISAM',
+    'convert_myisam_title' => 'Convert to MyISAM tables',
     'convert_button' => 'Convert',
     'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
+    'no_myisam' => 'Your version of MySQL does not support MyISAM tables.',
     'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
     'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
+    'already_converted_myisam' => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message' => 'Note: Conversion may take some time - please be patient.',
     'innodb_success' => 'Successfully converted tables to InnoDB.',
+    'myisam_success' => 'Successfully converted tables to MyISAM.',
     'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
     'optimize_menu' => 'Optimize Tables',
     'optimize_title' => 'Optimize Tables',

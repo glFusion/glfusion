@@ -25,7 +25,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -174,7 +174,7 @@ $LANG01 = array(
     125 => 'האם הנכם בטוחים שאתם רוצים למחוק את כל הפריטים המסומנים',
     126 => 'ביחרו או הוציאו מהבחירה את כל הפריטים',
     127 => 'קישור קבוע',
-    128 => 'הזדהו בעזרת OpenID:',
+    128 => '',
     129 => 'כיוון הגדרות',
     130 => 'שירותי רשת',
     500 => 'Please remove the admin/install/ directory!',
@@ -1538,12 +1538,12 @@ $MESSAGE = array(
     83 => 'כדי לשנות את הסיסמה, כתובת האימייל או כמה זמן לזכור אתכם, אנא הכניסו את הסיסמה הנוכחית שלכם.',
     84 => 'כדי למחוק את חשבונכם, אנא הכניסו את הסיסמה הנוכחית שלכם.',
     85 => 'חלה תקלה בשליחת האימייל.',
-    86 => 'שרת ה-OpenID לא אישר את נסיון ההזדהות שלך.',
-    87 => 'ביצוע ההזדהות ב-OpenID בוטלה על ידי המשתמש.',
-    88 => 'שרת ה-OpenID החזיר שגיאה.',
-    89 => 'לא אותר שרת OpenID לקישור ההזדהות שצוין.',
-    90 => 'ההזדהות ב-OpenID בוטלה.',
-    91 => 'ציינת קישור הזדהות שאינו עובד.',
+    86 => '',
+    87 => '',
+    88 => '',
+    89 => '',
+    90 => '',
+    91 => '',
     92 => "אנא <a href=\"{$_CONF['site_admin_url']}/sectest.php\">בידקו את האבטחה באתרכם</a> לפני השימוש בו!",
     93 => 'גיבוי מאגר המידע עבר בהצלחה.',
     94 => 'הגיבוי נכשל. גודל הקובץ היה פחות מ-1kb',
@@ -1693,12 +1693,18 @@ $LANG_DB_BACKUP = array(
     'download' => 'ליחצו כדי להוריד קובץ זה',
     'convert_menu' => 'Convert to InnoDB',
     'convert_title' => 'Convert to InnoDB tables',
+    'convert_myisam_menu' => 'Convert to MyISAM',
+    'convert_myisam_title' => 'Convert to MyISAM tables',
     'convert_button' => 'Convert',
     'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
+    'no_myisam' => 'Your version of MySQL does not support MyISAM tables.',
     'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
     'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
+    'already_converted_myisam' => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message' => 'Note: Conversion may take some time - please be patient.',
     'innodb_success' => 'Successfully converted tables to InnoDB.',
+    'myisam_success' => 'Successfully converted tables to MyISAM.',
     'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
     'optimize_menu' => 'Optimize Tables',
     'optimize_title' => 'Optimize Tables',

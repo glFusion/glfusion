@@ -11,7 +11,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -160,7 +160,7 @@ $LANG01 = array(
     125 => 'Are you sure you want to Delete all checked items?',
     126 => 'Select or de-select all items',
     127 => 'Permalink',
-    128 => 'Login with OpenID:',
+    128 => '',
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
@@ -1524,12 +1524,12 @@ $MESSAGE = array(
     83 => 'To change your password, email address, or for how long to remember you, please enter your current password.',
     84 => 'To delete your account, please enter your current password.',
     85 => 'There was a problem sending the email.',
-    86 => 'The OpenID server invalidated your login attempt.',
-    87 => 'OpenID login operation cancelled by user.',
-    88 => 'The OpenID server returned an error.',
-    89 => 'Unable to find an OpenID server for the given identity URL.',
-    90 => 'OpenID identification cancelled.',
-    91 => 'You specified an invalid identity URL.',
+    86 => '',
+    87 => '',
+    88 => '',
+    89 => '',
+    90 => '',
+    91 => '',
     92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
@@ -1679,12 +1679,18 @@ $LANG_DB_BACKUP = array(
     'download' => 'Click to download this file',
     'convert_menu' => 'Convert to InnoDB',
     'convert_title' => 'Convert to InnoDB tables',
+    'convert_myisam_menu' => 'Convert to MyISAM',
+    'convert_myisam_title' => 'Convert to MyISAM tables',
     'convert_button' => 'Convert',
     'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
+    'no_myisam' => 'Your version of MySQL does not support MyISAM tables.',
     'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
     'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
+    'already_converted_myisam' => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message' => 'Note: Conversion may take some time - please be patient.',
     'innodb_success' => 'Successfully converted tables to InnoDB.',
+    'myisam_success' => 'Successfully converted tables to MyISAM.',
     'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
     'optimize_menu' => 'Optimize Tables',
     'optimize_title' => 'Optimize Tables',

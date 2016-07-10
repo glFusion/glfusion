@@ -31,7 +31,7 @@
 ################################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -179,7 +179,7 @@ $LANG01 = array(
     125 => '選択されたアイテムを削除してよいですか？',
     126 => 'すべて選択または選択を解除',
     127 => 'パーマネントリンク',
-    128 => 'OpenIDログイン:',
+    128 => '',
     129 => 'コンフィギュレーション',
     130 => 'Webサービス',
     500 => 'Please remove the admin/install/ directory!',
@@ -1543,12 +1543,12 @@ $MESSAGE = array(
     83 => 'パスワード，メールアドレス，認証の保存期間を変更するには，現在のパスワードを入力してください。',
     84 => 'アカウントを削除するには，現在のパスワードを入力してください。',
     85 => 'メール送信エラーです。',
-    86 => 'OpenIDサーバがログインを受け付けませんでした。',
-    87 => 'OpenIDログインをキャンセルしました。',
-    88 => 'OpenIDサーバがエラーを返しました。',
-    89 => 'OpenIDサーバのURLが見つかりません。',
-    90 => 'OpenID認識がキャンセルされました。',
-    91 => '無効なURLが指定されました。',
+    86 => '',
+    87 => '',
+    88 => '',
+    89 => '',
+    90 => '',
+    91 => '',
     92 => "使用する前に<a href=\"{$_CONF['site_admin_url']}/sectest.php\">セキュリティをチェックを確認</a>してください！",
     93 => 'データベースのバックアップに成功しました。',
     94 => 'バックアップ失敗: ファイルサイズが1KByte未満です。',
@@ -1698,12 +1698,18 @@ $LANG_DB_BACKUP = array(
     'download' => 'ファイルダウンロード',
     'convert_menu' => 'Convert to InnoDB',
     'convert_title' => 'Convert to InnoDB tables',
+    'convert_myisam_menu' => 'Convert to MyISAM',
+    'convert_myisam_title' => 'Convert to MyISAM tables',
     'convert_button' => 'Convert',
     'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
+    'no_myisam' => 'Your version of MySQL does not support MyISAM tables.',
     'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
     'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
+    'already_converted_myisam' => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message' => 'Note: Conversion may take some time - please be patient.',
     'innodb_success' => 'Successfully converted tables to InnoDB.',
+    'myisam_success' => 'Successfully converted tables to MyISAM.',
     'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
     'optimize_menu' => 'Optimize Tables',
     'optimize_title' => 'Optimize Tables',
