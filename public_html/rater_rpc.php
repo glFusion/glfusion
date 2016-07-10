@@ -115,7 +115,7 @@ if ( $status == 1 ) {
     // no permission to vote or your already own the item
     $message = "<script>alert('".$LANG13['own_rated']."');</script>";
 } else {
-    $message = '<span class="thanks">&nbsp;' . $LANG13['thanks_for_vote'] . '</span>';
+    $message = '<br><span class="thanks">&nbsp;' . $LANG13['thanks_for_vote'] . '</span>';
 }
 
 // $new_back is what gets 'drawn' on your page after a successful 'AJAX/Javascript' vote
