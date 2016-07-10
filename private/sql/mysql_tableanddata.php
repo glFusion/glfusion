@@ -454,7 +454,7 @@ CREATE TABLE {$_TABLES['subscriptions']} (
   type varchar(30) NOT NULL,
   category varchar(128) NOT NULL DEFAULT '',
   category_desc varchar(255) NOT NULL DEFAULT '',
-  id varchar(40) NOT NULL,
+  id varchar(128) NOT NULL DEFAULT '',
   id_desc varchar(255) NOT NULL DEFAULT '',
   uid int(11) NOT NULL,
   date_added datetime NOT NULL,

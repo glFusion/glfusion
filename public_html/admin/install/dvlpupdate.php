@@ -1305,6 +1305,7 @@ function glfusion_160()
     $_SQL[] = "DROP INDEX `trackback_url` ON {$_TABLES['trackback']};";
     $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
     $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
+    $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 
     // create social share table
 

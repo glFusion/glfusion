@@ -108,10 +108,10 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
     if ( $static ) {
         $static_rater = '';
-if ( $wrapper ) {
-    	$static_rater .= '<div class="ratingbar">';
-    	$static_rater .= '<div id="unit_long'.$id.'">';
-}
+        if ( $wrapper ) {
+    	    $static_rater .= '<div class="ratingbar">';
+        	$static_rater .= '<div id="unit_long'.$id.'">';
+        }
     	if ( $size == 'sm' ) {
     	    $static_rater .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	} else {
@@ -120,17 +120,17 @@ if ( $wrapper ) {
     	$static_rater .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
     	$static_rater .= '</ul>';
     	$static_rater .= '<span class="static">' . $LANG13['rating'] . ': <strong> '.$rating1.'</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'] . ')</span>';
-if ( $wrapper ) {
-    	$static_rater .= '</div>';
-    	$static_rater .= '</div>';
-}
+        if ( $wrapper ) {
+    	    $static_rater .= '</div>';
+        	$static_rater .= '</div>';
+        }
     	return $static_rater;
     } else {
         $rater ='';
-if ( $wrapper ) {
-        $rater.='<div class="ratingbar">';
-        $rater.='<div id="unit_long'.$id.'">';
-}
+        if ( $wrapper ) {
+            $rater.='<div class="ratingbar">';
+            $rater.='<div id="unit_long'.$id.'">';
+        }
         if ( $size == 'sm' ) {
             $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         } else {
@@ -152,10 +152,10 @@ if ( $wrapper ) {
         }
         $rater.='>' . $LANG13['rating'] . ': <strong> ' . $rating1 . '</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'].')';
         $rater.='  </span>';
-if ( $wrapper ) {
-        $rater.='</div>';
-        $rater.='</div>';
-}
+        if ( $wrapper ) {
+            $rater.='</div>';
+            $rater.='</div>';
+        }
         return $rater;
     }
 }
