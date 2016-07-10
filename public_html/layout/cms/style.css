@@ -60,6 +60,19 @@ set of styles.
 	text-align:center;
 }
 
+/* Modifier: `tm-icon-hover`
+ ========================================================================== */
+.tm-icon-hover {
+  color: #fff;
+}
+/*
+ * Hover
+ */
+.tm-icon-hover:hover {
+  color: #ccd6dd;
+}
+
+
 /* Navbar semantics
 ========================================================================== */
 
