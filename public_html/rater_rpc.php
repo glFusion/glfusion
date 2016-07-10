@@ -122,6 +122,6 @@ if ( $status == 1 ) {
 
 $new_back = array();
 
-$newBar = RATING_ratingBar( $plugin,$id_sent, $count,$current_rating, $voted,5,$voted,'sm',0);
+$newBar = RATING_ratingBar( $plugin,$id_sent, $count,$current_rating, $voted,5,$voted,$size,0);
 echo join("\n",array($newBar,$message));
 ?>
