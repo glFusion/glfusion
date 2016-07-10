@@ -1280,7 +1280,14 @@ function glfusion_160()
         $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
         $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
     }
-    $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+    $res = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE name='social_site_extra' AND group_name='social_internal'");
+    $num = DB_numRows($res);
+
+    if ( $num == 0 ) {
+        $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+    }
+
+    $c->del('atom_max_items', 'staticpages');
 
     $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;";
