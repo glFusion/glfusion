@@ -291,7 +291,7 @@ CREATE TABLE {$_TABLES['postmodes']} (
 $_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   type varchar(30) NOT NULL DEFAULT '',
-  item_id varchar(40) NOT NULL,
+  item_id varchar(128) NOT NULL,
   votes int(11) NOT NULL,
   rating decimal(4,2) NOT NULL,
   KEY id (id)
@@ -301,7 +301,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
 $_SQL[] = "CREATE TABLE {$_TABLES['rating_votes']} (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   type varchar(30) NOT NULL DEFAULT '',
-  item_id varchar(40) NOT NULL,
+  item_id varchar(128) NOT NULL,
   rating int(11) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) NOT NULL,
   ip_address varchar(45) NOT NULL,
