@@ -595,7 +595,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
         if (isset($args['offset'])) {
             $offset = COM_applyBasicFilter($args['offset'], true);
         }
-        $max_items = $_SP_CONF['atom_max_items'] + 1;
+        $max_items = 10 + 1;
 
         $limit = " LIMIT $offset, $max_items";
         $order = " ORDER BY sp_date DESC";
@@ -611,7 +611,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
             $count += 1;
             if ($count == $max_items) {
-                $svc_msg['offset'] = $offset + $_SP_CONF['atom_max_items'];
+                $svc_msg['offset'] = $offset + 10;
                 break;
             }
 
