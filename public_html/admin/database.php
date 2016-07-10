@@ -131,10 +131,15 @@ function DBADMIN_list()
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                             'text' => $LANG_DB_BACKUP['optimize_menu']);
 
-        if ( DBADMIN_innodb_supported() ) {
+        if ( DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_BACKUP['convert_menu']);
         }
+        if ( DBADMIN_supported_engine( 'MyISAM' ) ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                                'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
+        }
+
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
                             'text' => $LANG_ADMIN['admin_home']);
 
@@ -272,21 +277,25 @@ function DBADMIN_download($file)
 }
 
 /**
-* Check for InnoDB table support
+* Check for DB storage engine support
 *
-* @return   true = InnoDB tables supported, false = not supported
+* @return   true = if engine is supported, false = not supported
 *
 */
-function DBADMIN_innodb_supported()
+function DBADMIN_supported_engine( $type = 'MyISAM' )
 {
     $retval = false;
+
+    if ( $type != 'MyISAM' || $type != 'InnoDB' ) {
+        $type = 'MyISAM';
+    }
 
     $result = DB_query("SHOW STORAGE ENGINES");
     $numEngines = DB_numRows($result);
     for ($i = 0; $i < $numEngines; $i++) {
         $A = DB_fetchArray($result);
 
-        if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
+        if (strcasecmp($A['Engine'], $type ) == 0) {
             if ((strcasecmp($A['Support'], 'yes') == 0) ||
                 (strcasecmp($A['Support'], 'default') == 0)) {
                 $retval = true;
@@ -297,6 +306,8 @@ function DBADMIN_innodb_supported()
 
     return $retval;
 }
+
+
 
 function DBADMIN_innodbStatus()
 {
@@ -328,6 +339,35 @@ function DBADMIN_innodbStatus()
 
     return $retval;
 }
+
+function DBADMIN_myisamStatus()
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $retval = false;
+
+    // need to look at all the tables
+    $result = DB_query("SHOW TABLES");
+    $numTables = DB_numRows($result);
+    for ($i = 0; $i < $numTables; $i++) {
+        $A = DB_fetchArray($result, true);
+        $table = $A[0];
+        if (in_array($table, $_TABLES)) {
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $B = DB_fetchArray($result2);
+            if (strcasecmp($B['Engine'], 'MyISAM') != 0) {
+                break; // found a non-MyISAM table
+            }
+        }
+    }
+    if ($i == $numTables) {
+        // okay, all the tables are MyISAM already
+        $retval = true;
+    }
+
+    return $retval;
+}
+
 
 function DBADMIN_innodb()
 {
@@ -381,6 +421,60 @@ function DBADMIN_innodb()
 
     return $retval;
 }
+
+function DBADMIN_myisam()
+{
+    global $_CONF, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+
+    $retval = '';
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/database.php',
+              'text' => $LANG_DB_BACKUP['database_admin']),
+        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+              'text' => $LANG_DB_BACKUP['optimize_menu']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+    $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        "",
+        $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+    );
+
+    $retval .= COM_startBlock($LANG_DB_BACKUP['convert_myisam_title']);
+    $retval .= '<p>' . $LANG_DB_BACKUP['myisam_instructions'] . '</p>' . LB;
+
+    if (DBADMIN_myisamStatus()) {
+        $retval .= '<p>' . $LANG_DB_BACKUP['already_converted_myisam'] . '</p>' . LB;
+    } else {
+        $retval .= '<p>' . $LANG_DB_BACKUP['conversion_message'] . '</p>' . LB;
+    }
+
+    if (empty($token)) {
+        $token = SEC_createToken();
+    }
+
+    $retval .= '<div id="dbconfig">' . LB;
+    $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
+    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['convert_button'] . '</button>' . LB;
+    $retval .= '<input type="hidden" name="domyisam" value="domyisam">' . LB;
+    $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
+    $retval .= '</form>' . LB;
+    $retval .= '<form action="' . $_CONF['site_admin_url']
+            . '/database.php" method="post" style="display:inline;">' . LB;
+    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
+    $retval .= '</form></div>' . LB;
+
+    $retval .= COM_endBlock();
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+}
+
 
 /**
 * Convert to InnoDB tables
@@ -455,6 +549,81 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
     return $failures;
 }
 
+
+/**
+* Convert to MyISAM tables
+*
+* @param    string  $startwith  table to start with
+* @param    int     $failures   number of previous errors
+* @return   int                 number of errors during conversion
+*
+*/
+function DBADMIN_convert_myisam($startwith = '', $failures = 0)
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $retval = '';
+    $start = time();
+
+    DB_displayError(true);
+
+    $maxtime = @ini_get('max_execution_time');
+    if (empty($maxtime)) {
+        // unlimited or not allowed to query - assume 30 second default
+        $maxtime = 30;
+    }
+    $maxtime -= 5; // give us some leeway
+
+    $token = ''; // SEC_createToken();
+
+    $result = DB_query("SHOW TABLES");
+    $numTables = DB_numRows($result);
+    for ($i = 0; $i < $numTables; $i++) {
+        $A = DB_fetchArray($result, true);
+        $table = $A[0];
+        if (in_array($table, $_TABLES)) {
+            if (! empty($startwith)) {
+                if ($table == $startwith) {
+                    $startwith = '';
+                } else {
+                    continue; // handled - skip
+                }
+            }
+
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $B = DB_fetchArray($result2);
+            if (strcasecmp($B['Engine'], 'MyISAM') == 0) {
+                continue; // converted - skip
+            }
+
+            if (time() > $start + $maxtime) {
+                // this is taking too long - kick off another request
+                $startwith = $table;
+                $url = $_CONF['site_admin_url'] . '/database.php?domyisam=x';
+                if (! empty($token)) {
+                    $token = '&' . CSRF_TOKEN . '=' . $token;
+                }
+                header("Location: $url&startwith=$startwith&failures=$failures"
+                                  . $token);
+                exit;
+            }
+
+            $make_myisam = DB_query("ALTER TABLE $table ENGINE=MyISAM", 1);
+            if ($make_myisam === false) {
+                $failures++;
+                COM_errorLog('SQL error for table "' . $table . '" (ignored): '
+                             . DB_error());
+            }
+        }
+    }
+
+    DB_delete($_TABLES['vars'], 'name', 'database_engine');
+
+    return $failures;
+}
+
+
+
 /**
 * Prepare for optimizing tables
 *
@@ -476,7 +645,8 @@ function DBADMIN_optimize()
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin'])
     );
-    if ( DBADMIN_innodb_supported() ) {
+
+    if ( DBADMIN_supported_engine( 'InnoDB' ) ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                             'text' => $LANG_DB_BACKUP['convert_menu']);
     }
@@ -485,6 +655,7 @@ function DBADMIN_optimize()
 
     $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header'));
+
     $retval .= ADMIN_createMenu(
         $menu_arr,
         "",
@@ -614,7 +785,7 @@ function DBADMIN_dooptimize($startwith = '', $failures = 0)
 
 
 $action = '';
-$expected = array('backup','download','delete','innodb','doinnodb','optimize','dooptimize');
+$expected = array('backup','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -665,9 +836,18 @@ switch ($action) {
         $page = DBADMIN_list();
         break;
 
+    case 'myisam':
+        $pagetitle = $LANG_DB_BACKUP['convert_myisam_title'];
+        if (DBADMIN_supported_engine( 'MyISAM')) {
+            $page .= DBADMIN_myisam();
+        } else {
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_myisam']);
+        }
+        break;
+
     case 'innodb':
         $pagetitle = $LANG_DB_BACKUP['convert_title'];
-        if (DBADMIN_innodb_supported()) {
+        if (DBADMIN_supported_engine( 'InnoDB')) {
             $page .= DBADMIN_innodb();
         } else {
             $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
@@ -676,7 +856,7 @@ switch ($action) {
 
     case 'doinnodb':
         $pagetitle = $LANG_DB_BACKUP['convert_title'];
-        if (DBADMIN_innodb_supported()) {
+        if (DBADMIN_supported_engine( 'InnoDB')) {
             $startwith = '';
             if (isset($_GET['startwith'])) {
                 $startwith = COM_applyFilter($_GET['startwith']);
@@ -698,6 +878,32 @@ switch ($action) {
             $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
         }
         break;
+
+    case 'domyisam':
+        $pagetitle = $LANG_DB_BACKUP['convert_myisam_title'];
+        if (DBADMIN_supported_engine( 'MyISAM' )) {
+            $startwith = '';
+            if (isset($_GET['startwith'])) {
+                $startwith = COM_applyFilter($_GET['startwith']);
+            }
+            if (!empty($startwith) || SEC_checkToken()) {
+                $failures = 0;
+                if (isset($_GET['failures'])) {
+                    $failures = COM_applyFilter($_GET['failures'], true);
+                }
+                $num_errors = DBADMIN_convert_myisam($startwith, $failures);
+                if ($num_errors == 0) {
+                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success']);
+                } else {
+                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success'] . ' ' . $LANG_DB_BACKUP['table_issues']);
+                }
+                $page .= DBADMIN_list();
+            }
+        } else {
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
+        }
+        break;
+
 
     case 'optimize':
         $pagetitle = $LANG_DB_BACKUP['optimize_title'];
