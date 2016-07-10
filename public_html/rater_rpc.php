@@ -7,7 +7,7 @@
 // | This page handles the 'AJAX' type response if the user has               |
 // | Javascript enabled.                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -85,6 +85,7 @@ if ( $canRate ) {
        	if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
             list($new_rating,$added) = RATING_addVote( $plugin, $id_sent, $vote_sent, $uid, $ip );
             COM_updateSpeedlimit ('rate');
+$voted = 1;
     	}
     } else {
         $added = $current_votes;
@@ -95,6 +96,7 @@ if ( $canRate ) {
     $added = $count;
     $new_rating = $current_rating;
     $status = 3;
+    $voted = 1;
 }
 
 $count          = $added;
@@ -120,21 +122,6 @@ if ( $status == 1 ) {
 
 $new_back = array();
 
-if ( $size == 'sm' ) {
-    $new_back[] .= '<ul class="small-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
-} else {
-    $new_back[] .= '<ul class="rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
-}
-$new_back[] .= '<li class="current-rating" style="width:'.@number_format($current_rating,2)*$rating_unitwidth.'px;">'.$LANG13['currently']. '</li>';
-$new_back[] .= '</ul>';
-$new_back[] .= '<span class="voted">' . $LANG13['rating'] . ': <strong> ' . $current_rating . '</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'].')</span>';
-$new_back[] .= $message;
-
-$allnewback = join("\n", $new_back);
-
-// ========================
-
-//name of the div id to be updated | the html that needs to be changed
-$output = $allnewback;
-echo $output;
+$newBar = RATING_ratingBar( $plugin,$id_sent, $count,$current_rating, $voted,5,$voted,'sm',0);
+echo join("\n",array($newBar,$message));
 ?>

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Rating Interface                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,7 +70,7 @@ if (!defined ('GVERSION')) {
  *
  */
 
-function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='') {
+function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='',$wrapper = 1) {
     global $_USER, $_TABLES, $_CONF, $LANG13;
 
     if ( $size == 'sm') {
@@ -108,8 +108,10 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
     if ( $static ) {
         $static_rater = '';
+if ( $wrapper ) {
     	$static_rater .= '<div class="ratingbar">';
     	$static_rater .= '<div id="unit_long'.$id.'">';
+}
     	if ( $size == 'sm' ) {
     	    $static_rater .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	} else {
@@ -118,13 +120,17 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
     	$static_rater .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
     	$static_rater .= '</ul>';
     	$static_rater .= '<span class="static">' . $LANG13['rating'] . ': <strong> '.$rating1.'</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'] . ')</span>';
+if ( $wrapper ) {
     	$static_rater .= '</div>';
     	$static_rater .= '</div>';
+}
     	return $static_rater;
     } else {
         $rater ='';
+if ( $wrapper ) {
         $rater.='<div class="ratingbar">';
         $rater.='<div id="unit_long'.$id.'">';
+}
         if ( $size == 'sm' ) {
             $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         } else {
@@ -146,9 +152,10 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
         }
         $rater.='>' . $LANG13['rating'] . ': <strong> ' . $rating1 . '</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'].')';
         $rater.='  </span>';
-
+if ( $wrapper ) {
         $rater.='</div>';
         $rater.='</div>';
+}
         return $rater;
     }
 }
