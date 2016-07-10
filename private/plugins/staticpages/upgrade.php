@@ -67,6 +67,7 @@ function staticpages_upgrade()
             DB_query("ALTER TABLE {$_TABLES['staticpage']} CHANGE `sp_id` `sp_id` VARCHAR(128) NOT NULL DEFAULT '';",1);
 
         case '1.6.2' :
+            $c->del('atom_max_items', 'staticpages');
 
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");

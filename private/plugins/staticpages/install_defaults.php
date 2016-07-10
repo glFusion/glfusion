@@ -103,9 +103,6 @@ $_SP_DEFAULT['censor'] = 1;
 // (a value of 1, ie. write-only, does not make sense and is not allowed)
 $_SP_DEFAULT['default_permissions'] = array(3, 2, 2, 2);
 
-// The maximum number of items displayed when an Atom feed is requested
-$_SP_DEFAULT['atom_max_items'] = 10;
-
 // Include in system searh (1 = include, 0 = don't)
 $_SP_DEFAULT['include_search'] = 1;
 
@@ -166,8 +163,6 @@ function plugin_initconfig_staticpages()
                 0, 0, 13,120, true, 'staticpages');
         $c->add('aftersave', $_SP_DEFAULT['aftersave'], 'select',
                 0, 0, 9, 130, true, 'staticpages');
-        $c->add('atom_max_items', $_SP_DEFAULT['atom_max_items'], 'text',
-                0, 0, null, 140, true, 'staticpages');
 
         $c->add('fs_permissions', NULL, 'fieldset',
                 0, 1, NULL, 0, true, 'staticpages');
