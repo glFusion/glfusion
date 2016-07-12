@@ -1969,6 +1969,24 @@ function INST_doFileCleanUp()
         }
     }
 
+    // special handling of the theme files from 1.5.0 and 1.5.1
+
+    if ( $_GLFUSION['original_version'] == '1.5.0' || $_GLFUSION['original_version'] == '1.5.1' ) {
+
+        include 'deleted15.php';
+
+        if (isset($obsoletePublicFiles15) && is_array($obsoletePublicFiles15) && count($obsoletePublicFiles15) > 0 ) {
+            foreach ( $obsoletePublicFiles15 AS $file ) {
+                if ( file_exists( $_CONF['path_html'].$file )) {
+                    $rc = @unlink($_CONF['path_html'].$file);
+                    if ( $rc === false ) {
+                        $failure .= '<li>FILE: '.$_CONF['path_html'].$file.'</li>';
+                    }
+                }
+            }
+        }
+    }
+
 // test failure message
 //$failure = '<li>DIR: Test failure message</li><li>FILE: /www/www/www/www.txt</li>';
 
