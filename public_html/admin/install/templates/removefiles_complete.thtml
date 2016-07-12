@@ -1,0 +1,30 @@
+<form class="uk-form" id="welcome" name="welcome" method="post" action="index.php">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+
+			<div class="uk-float-left">
+				<h2>{step_heading}</h2>
+			</div>
+
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-4-4">
+
+			<h3>{confirm_heading}</h3>
+
+			{confirm_message}
+
+			<p>
+				{confirm_details}
+			</p>
+
+			<button class="uk-button uk-button-success" name="task" value="done">{lang_complete}</button>
+
+		</div>
+	</div>
+</form>

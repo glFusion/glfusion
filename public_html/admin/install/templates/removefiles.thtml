@@ -1,0 +1,40 @@
+<form class="uk-form" id="welcome" name="welcome" method="post" action="index.php">
+	{hiddenfields}
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+
+			<div class="uk-float-left">
+				<h2>{step_heading}</h2>
+			</div>
+
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="uk-grid uk-grid-divider">
+		<div class="uk-width-medium-4-4">
+
+			<p class="uk-text-justify"><h3>{lang_install_heading}</h3></p>
+
+			{lang_cleanup}
+
+			<p><button class="uk-button uk-button-primary" onclick="javascript:showfilestodelete('deleted.html','Delete');return false;">{lang_show_files}</button></p>
+
+			<p class="uk-text-justify">
+				{lang_doc_alert2}
+			</p>
+
+			<button class="uk-button uk-button-danger" name="task" value="dofilecleanup">{lang_delete_files}</button>
+			<button class="uk-button uk-button-success" name="task" value="done">{lang_cancel}</button>
+
+		</div>
+	</div>
+</form>
+<script>
+function showfilestodelete(url,windowName) {
+	newwindow=window.open(url,windowName,'height=600,width=600,scrollbars=yes');
+	if (window.focus) {newwindow.focus()}
+	return false;
+}
+</script>

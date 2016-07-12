@@ -59,9 +59,12 @@ define('PLUGIN_UPGRADE_ERROR',     17);
 define('NO_MIGRATE_GLFUSION',      19);
 define('FILE_INCLUDE_ERROR',       20);
 define('NO_DB_DRIVER',             21);
+define('FILE_CLEANUP_ERROR',       22);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
+
+require_once 'deleted.php';
 
 if( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('INST_handleError', error_reporting());
@@ -210,6 +213,8 @@ function _buildProgressBar($currentStep, &$T)
                           'upgradealert'        => $LANG_INSTALL['instruction_step'],
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'upgrade'             => $LANG_INSTALL['perform_upgrade'],
+                          'cleanup'             => $LANG_INSTALL['cleanup'],
+                          'complete'            => $LANG_INSTALL['complete'],
                           );
     $retval = '';
     $first  = 0;
@@ -1854,9 +1859,142 @@ function INST_doPluginUpgrade()
         return _displayError(PLUGIN_UPGRADE_ERROR,'done',$error);
     }
 
+// do not want to do redirect here - now we need to see if there is
+// any clean up we need to do...
+
+    global $obsoletePrivateDir,$obsoletePublicDir, $obsoletePrivateFiles, $obsoletePublicFiles;
+
+    if ( count ($obsoletePrivateDir) > 0 ||
+         count ($obsoletePublicDir) > 0 ||
+         count ($obsoletePrivateFiles) > 0 ||
+         count ($obsoletePublicFiles) > 0
+    ) {
+        return INST_FileCleanUp();
+    }
     header('Location: success.php?type=upgrade&language=' . $language);
 }
 
+
+/**
+ * Prompts use to see if they want to have glFusion automatically
+ * remove obsolete files.
+ *
+ * @return  HTML    Confirmation screen to delete files...
+ *
+ */
+function INST_FileCleanUp()
+{
+    global $_GLFUSION, $_CONF, $_TABLES, $LANG_INSTALL;
+    global $obsoletePrivateDir,$obsoletePublicDir, $obsoletePrivateFiles, $obsoletePublicFiles;
+
+    $language = $_GLFUSION['language'];
+    $_GLFUSION['currentstep'] = 'cleanup';
+
+    // show a screen to see if we need to remove stuff...
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'removefiles.thtml');
+
+    $T->set_var(array(
+        'step_heading'      => $LANG_INSTALL['cleanup'],
+        'lang_install_heading' => $LANG_INSTALL['remove_obsolete'],
+        'lang_cleanup'      => $LANG_INSTALL['remove_instructions'],
+        'lang_delete_files' => $LANG_INSTALL['delete_files'],
+        'lang_cancel'       => $LANG_INSTALL['cancel'],
+        'lang_show_files'   => $LANG_INSTALL['show_files_to_delete'],
+        'hiddenfields'      => _buildHiddenFields(),
+    ));
+
+    $T->parse('output','page');
+    return $T->finish($T->get_var('output'));
+}
+
+
+/**
+ * Removes unused / obsolete files from tree.
+ *
+ * @return  html    a list of files removed or errors if there were any...
+ *
+ */
+function INST_doFileCleanUp()
+{
+    global $_GLFUSION, $_CONF, $_TABLES, $LANG_INSTALL;
+    global $obsoletePrivateDir,$obsoletePublicDir, $obsoletePrivateFiles, $obsoletePublicFiles;
+
+    $language = $_GLFUSION['language'];
+        $_GLFUSION['currentstep'] = 'complete';
+
+    $retval       = '';
+    $failure      = '';
+
+    if (isset($obsoletePublicDir) && is_array($obsoletePublicDir) && count($obsoletePublicDir) > 0 ) {
+        foreach ( $obsoletePublicDir AS $directory ) {
+            if ( is_dir($_CONF['path_html'].$directory)) {
+                $rc = INST_deleteDir($_CONF['path_html'].$directory);
+                if ( $rc === false ) {
+                    $failure .= '<li>DIR: '.$_CONF['path_html'].$directory.'</li>';
+                }
+            }
+        }
+    }
+    if (isset($obsoletePrivateDir) && is_array($obsoletePrivateDir) && count($obsoletePrivateDir) > 0  ) {
+        foreach ( $obsoletePrivateDir AS $directory ) {
+            if ( is_dir($_CONF['path'].$directory)) {
+                $rc = INST_deleteDir($_CONF['path'].$directory);
+                if ( $rc === false ) {
+                    $failure .= '<li>DIR: '.$_CONF['path'].$directory.'</li>';
+                }
+            }
+        }
+    }
+    if (isset($obsoletePrivateFiles) && is_array($obsoletePrivateFiles) && count($obsoletePrivateFiles) > 0 ) {
+        foreach ( $obsoletePrivateFiles AS $file ) {
+            if ( file_exists( $_CONF['path'].$file )) {
+                $rc = @unlink($_CONF['path'].$file);
+                if ( $rc === false ) {
+                    $failure .= '<li>FILE: '.$_CONF['path'].$file.'</li>';
+                }
+            }
+        }
+    }
+
+    if (isset($obsoletePublicFiles) && is_array($obsoletePublicFiles) && count($obsoletePublicFiles) > 0 ) {
+        foreach ( $obsoletePublicFiles AS $file ) {
+            if ( file_exists( $_CONF['path_html'].$file )) {
+                $rc = @unlink($_CONF['path_html'].$file);
+                if ( $rc === false ) {
+                    $failure .= '<li>FILE: '.$_CONF['path_html'].$file.'</li>';
+                }
+            }
+        }
+    }
+
+// test failure message
+//$failure = '<li>DIR: Test failure message</li><li>FILE: /www/www/www/www.txt</li>';
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'removefiles_complete.thtml');
+
+    $T->set_var(array(
+        'step_heading'      => $LANG_INSTALL['obsolete_confirm'],
+        'lang_complete'     => $LANG_INSTALL['complete'],
+        'hiddenfields'      => _buildHiddenFields(),
+    ));
+    if ( $failure != '' ) {
+        $T->set_var(array(
+            'confirm_heading'   => $LANG_INSTALL['obsolete_confirm'],
+            'confirm_message'   => '<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['removal_fail_msg'].'</div>',
+            'confirm_details'   => '<ul class="uk-list uk-list-striped">'.$failure.'</ul>',
+        ));
+    } else {
+        $T->set_var(array(
+            'confirm_heading'   => $LANG_INSTALL['removal_success'],
+            'confirm_details'   => $LANG_INSTALL['removal_success_msg'],
+        ));
+    }
+    $T->parse('output','page');
+    return $T->finish($T->get_var('output'));
+}
 
 
 /**
@@ -2117,7 +2255,7 @@ switch($mode) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
             $percent_complete = 50;
         } else {
-            $percent_complete = 90;
+            $percent_complete = 80;
             require '../../siteconfig.php';
             if ( !file_exists($_CONF['path'].'db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -2142,10 +2280,16 @@ switch($mode) {
         // fall through here on purpose and process the plugin upgrades.....
         // at this point we have a fully updated database and core environment
     case 'dopluginupgrade' :
-//        require '../../lib-common.php';
         $pageBody = INST_doPrePluginUpgrade();
         $pageBody .= INST_doPluginUpgrade();
         break;
+    case 'dofilecleanup' :
+        $action = 'cleanup';
+        $percent_complete = 95;
+        require_once '../../lib-common.php';
+        $pageBody = INST_doFileCleanUp();
+        break;
+
     case 'done' :
         $method = $_GLFUSION['method'];
         header('Location: success.php?type='.$method.'&language=' . $language);

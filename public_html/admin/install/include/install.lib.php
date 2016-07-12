@@ -43,7 +43,7 @@ if (!defined('SUPPORTED_PHP_VER')) {
     define('SUPPORTED_PHP_VER', '5.3.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
-    define('SUPPORTED_MYSQL_VER', '5.0.3');
+    define('SUPPORTED_MYSQL_VER', '5.0.15');
 }
 
 if (empty($LANG_DIRECTION)) {
@@ -1213,6 +1213,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('newimage', 'HTML: embeds new images in flexible grid. usage: [newimage:<i>#</i> - How many images to display <i>truncate:0/1</i> - 1 = truncate number of images to keep square grid <i>caption:0/1</i> 1 = include title]', 1, 1, '');";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
+            $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX type;";
             $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 
             $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
@@ -2344,5 +2345,31 @@ function INST_doSiteConfigUpgrade() {
         COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
     }
     return;
+}
+
+/**
+* Deletes a directory (with recursive sub-directory support)
+*
+* @parm     string            Path of directory to remove
+* @return   bool              True on success, false on fail
+*
+*/
+function INST_deleteDir($path) {
+    if (!is_string($path) || $path == "") return false;
+    if ( function_exists('set_time_limit') ) {
+        @set_time_limit( 30 );
+    }
+    if (@is_dir($path)) {
+        if (!$dh = @opendir($path)) return false;
+        while (false !== ($f = readdir($dh))) {
+            if ($f == '..' || $f == '.') continue;
+            INST_deleteDir("$path/$f");
+        }
+        closedir($dh);
+        return @rmdir($path);
+    } else {
+        return @unlink($path);
+    }
+    return false;
 }
 ?>

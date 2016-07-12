@@ -459,7 +459,6 @@ CREATE TABLE {$_TABLES['subscriptions']} (
   uid int(11) NOT NULL,
   date_added datetime NOT NULL,
   PRIMARY KEY (`sub_id`),
-  UNIQUE KEY type (type,category,id,uid),
   KEY uid (uid)
 ) ENGINE=MyISAM
 ";

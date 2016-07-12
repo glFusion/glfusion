@@ -204,7 +204,19 @@ $LANG_INSTALL = array(
     'upgrade_bullet2' => 'If you are using a theme other than the default CMS, make sure your theme has been updated to support glFusion. There are several theme changes that must be made to custom themes to allow glFusion to work properly. Verify you have all the necessary template changes made by visiting the&nbsp;<a  target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;page.',
     'upgrade_bullet3' => 'If you have customized any of the theme templates, check the&nbsp;<a target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Template Changes</a>&nbsp;for the current release to see if you need to make any updates to your customizations.',
     'upgrade_bullet4' => 'Check any third party plugins to ensure they are compatible or if they will need to be updated.',
-    'upgrade_bullet_title' => 'It is recommended that yo do the following:'
+    'upgrade_bullet_title'      => 'It is recommended that yo do the following:',
+    'cleanup'                   => 'Obsolete File Removal',
+    'obsolete_confirm'          => 'File Cleanup Confirmation',
+    'removal_failure'           => 'Removal Failures',
+    'removal_fail_msg'          => 'You will need to manually delete the files below. See the <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">glFusion Wiki - Obsolete Files</a> for a detailed list of files to remove.',
+    'removal_success'           => 'Obsolete Files Deleted',
+    'removal_success_msg'       => 'All obsolete files have been successfully removed. Select <b>Complete</b> to finish the upgrade.',
+    'remove_obsolete'           => 'Remove Obsolete Files',
+    'remove_instructions'       => '<p>With each release of glFusion, there are files that are updated and in some cases removed from the glFusion system. From a security perspective, it is important to remove old, unused files. The Upgrade Wizard can remove the old files, if you wish, otherwise you will need to manually delete them.</p><p>If you wish to manually delete them - please check the <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">glFusion Wiki - Obsolete Files</a> to get a list of obsolete files to remove.</p><p>Select <span class="uk-text-bold">Cancel</span> below to complete the upgrade process.</p>',
+    'complete'                  => 'Complete',
+    'delete_files'              => 'Delete Files',
+    'cancel'                    => 'Cancel',
+    'show_files_to_delete'      => 'Show Files to Delete',
 );
 
 // +---------------------------------------------------------------------------+
