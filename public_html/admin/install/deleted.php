@@ -37,16 +37,36 @@ $obsoletePrivateDir = array(
     'system/pear/Console/',
     'system/pear/scripts/',
     'system/pear/Services/',
-
+    'system/classes/syndication/',
+    'plugins/mediagallery/templates/import/',
+    'system/pear/HTTP/OAuth/',
+    'system/pear/Net/DNS/',
+    'system/pear/Services/',
 );
 
 $obsoletePublicDir = array(
     'ckeditor/plugins/filemanager/',
     'fckeditor/',
     'webservices/',
+    'mediagallery/swfupload/',
+    'images/menu/',
+    'javascript/mootools/',
 );
 
 $obsoletePrivateFiles = array(
+
+    'lib/simplepie/README.txt',
+    'lib/simplepie/simplepie.php',
+    'plugins/mediagallery/templates/swfupload.thtml',
+    'plugins/staticpages/templates/admin/editor_advanced.thtml',
+    'system/classes/authentication/LiveJournal.auth.class.php',
+    'system/classes/sanitize.class.php',
+
+    'plugins/mediagallery/templates/xpcreate.thtml',
+    'plugins/mediagallery/templates/xplist.thtml',
+    'plugins/mediagallery/templates/xplogin.thtml',
+    'plugins/mediagallery/templates/xppublish.thtml',
+
     'lib/getid3/dependencies.txt',
     'lib/getid3/readme.txt',
     'lib/getid3/structure.txt',
@@ -95,6 +115,25 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+
+    'forum/javascript/forum_fckeditor.js',
+    'javascript/advanced_editor.js',
+    'javascript/blocks_fckeditor.js',
+    'javascript/staticpages_fckeditor.js',
+    'javascript/storyeditor_fckeditor.js',
+    'javascript/submitcomment_fckeditor.js',
+    'javascript/submitcontactuser_fckeditor.js',
+    'javascript/submitmailuser_fckeditor.js',
+    'javascript/submitstory_fckeditor.js',
+
+    'images/star_small.png',
+    'images/starrating.png',
+    'images/working.gif',
+    'javascript/fValidator.js',
+    'mediagallery/gallery_remote2.php',
+    'ckeditor/plugins/wsc/dialogs/tmp.html',
+    'ckeditor/skins/moono/dialog_opera.css',
+
     'admin/install/help.php',
     'admin/install/layout/arrow-back.gif',
     'admin/install/layout/arrow-next.gif',
