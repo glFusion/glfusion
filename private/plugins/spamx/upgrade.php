@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -62,6 +62,12 @@ function spamx_upgrade()
             $c->add('sfs_username_confidence', '99.00', 'text',0, 1, 1, 40, true, 'spamx');
             $c->add('sfs_email_confidence', '50.00', 'text',0, 1, 1, 50, true, 'spamx');
             $c->add('sfs_ip_confidence', '25.00', 'text',0, 1, 1, 60, true, 'spamx');
+
+        case '1.2.1' :
+            $c = config::get_instance();
+            $c->add('fs_slc', NULL, 'fieldset', 0, 2, NULL, 0, true, 'spamx');
+            $c->add('slc_max_links', 5, 'text',0, 2, 1, 10, true, 'spamx');
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
             break;

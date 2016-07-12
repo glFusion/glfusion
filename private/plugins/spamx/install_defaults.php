@@ -8,10 +8,15 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors      Tom Willett     tomw AT pigstye DOT net                     |
 // |              Dirk Haun       dirk AT haun-online DOT de                  |
+// |                                                                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -118,13 +123,8 @@ function plugin_initconfig_spamx()
         $c->add('sfs_email_confidence', $_SPX_DEFAULT['sfs_email_confidence'], 'text',0, 1, 1, 50, true, 'spamx');
         $c->add('sfs_ip_confidence', $_SPX_DEFAULT['sfs_ip_confidence'], 'text',0, 1, 1, 60, true, 'spamx');
 
-
-
-
-
-
-
-
+        $c->add('fs_slc', NULL, 'fieldset', 0, 2, NULL, 0, true, 'spamx');
+        $c->add('slc_max_links', 5, 'text',0, 1, 1, 10, true, 'spamx');
     }
 
     return true;

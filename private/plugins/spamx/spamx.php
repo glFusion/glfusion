@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 
 $_SPX_CONF['pi_name']            = 'spamx';
 $_SPX_CONF['pi_display_name']    = 'SpamX';
-$_SPX_CONF['pi_version']         = '1.2.1';
+$_SPX_CONF['pi_version']         = '1.2.2';
 $_SPX_CONF['gl_version']         = '1.6.0';
 $_SPX_CONF['pi_url']             = 'http://www.glfusion.org/';
 

@@ -310,6 +310,41 @@
 					<dd>This only exists as a fallback in case $_CONF['spamx'] in glFusion's main configuration is not set. (i.e. $_CONF['spamx'] takes precedence). </dd>
 				</dl>
 
+        <dl id="desc_sfs_username_check">
+					<dt>Username Check</dt>
+					<dd>True will pass, and check, the username against a list of known spammer usernames. Be careful with this one, as generic names lib 'Bob' will probably match.</dd>
+        </dl>
+
+        <dl id="desc_sfs_email_check">
+					<dt>Email Check</dt>
+					<dd>True will pass, and check, the email of the user against a list of known spammer emails.</dd>
+        </dl>
+
+        <dl id="desc_sfs_ip_check">
+					<dt>IP Address Check</dt>
+					<dd>True will pass, and check, the IP address of the user against a list of known spammer IP addresses.</dd>
+        </dl>
+
+        <dl id="desc_sfs_username_confidence">
+					<dt>Username Confidence</dt>
+					<dd>SFS will return a confidence indicator for each match. Setting this value to a higher number will allow post through that do not have a high confidence that the user is a spammer. Reommended value is 99.</dd>
+        </dl>
+
+        <dl id="desc_sfs_email_confidence">
+					<dt>Email Confidence</dt>
+					<dd>SFS will return a confidence indicator for each match. Setting this value to a lower number will block more posts. Reommended value is 50.</dd>
+        </dl>
+
+        <dl id="desc_sfs_ip_confidence">
+					<dt>Email Confidence</dt>
+					<dd>SFS will return a confidence indicator for each match. Setting this value to a lower number will block more posts. Reommended value is 25.</dd>
+        </dl>
+
+        <dl id="desc_slc_max_links">
+					<dt>Maximum Allowed Links</dt>
+					<dd>The maximum number of links allowed in a post. Anything above this number will be flagged as spam.</dd>
+        </dl>
+
 			</div>
 			<div class="tm-push"></div>
 		</div>

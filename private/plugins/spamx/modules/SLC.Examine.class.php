@@ -43,8 +43,8 @@ class SLC extends BaseCommand {
     {
         global $_USER, $_SPX_CONF, $LANG_SX00;
 
-        if ( !isset($_SPX_CONF['max_links'])) {
-            $_SPX_CONF['max_links'] = 5;
+        if ( !isset($_SPX_CONF['slc_max_links'])) {
+            $_SPX_CONF['slc_max_links'] = 5;
         }
 
         $tooManyLinks = 0;
@@ -57,7 +57,7 @@ class SLC extends BaseCommand {
 
         $slc = new SLCbase();
         $linkCount = $slc->CheckForSpam ($comment);
-        if ( $linkCount > $_SPX_CONF['max_links']) {
+        if ( $linkCount > $_SPX_CONF['slc_max_links']) {
             SPAMX_log ($LANG_SX00['foundspam'] . 'Spam Link Counter (SLC)'.
                        $LANG_SX00['foundspam2'] . $uid .
                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);

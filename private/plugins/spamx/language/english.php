@@ -59,7 +59,7 @@ $LANG_SX00 = array (
     'exmod' => 'Spam-X Examine Modules',
     'actmod' => 'Active Modules',
     'avmod' => 'Available Modules',
-    'coninst' => '<hr' . XHTML . '>Click on an Active module to remove it, click on an Available module to add it.<br' . XHTML . '>Modules are executed in order presented.',
+    'coninst' => '<hr>Click on an Active module to remove it, click on an Available module to add it.<br>Modules are executed in order presented.',
     'fsc' => 'Found Spam Post matching ',
     'fsc1' => ' posted by user ',
     'fsc2' => ' from IP ',
@@ -161,6 +161,7 @@ $LANG_confignames['spamx'] = array(
     'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
     'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
+    'slc_max_links' => 'Maximum Links allowed in post',
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -170,6 +171,7 @@ $LANG_configsubgroups['spamx'] = array(
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Main Settings',
     'fs_sfs'  => 'Stop Forum Spam Settings',
+    'fs_slc'  => 'Spam Link Counter',
 );
 
 $LANG_configselects['spamx'] = array(
