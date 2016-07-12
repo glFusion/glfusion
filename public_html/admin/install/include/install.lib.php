@@ -1202,6 +1202,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
             $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 
+            DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+
             $_SQL = array();
 
             $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} CHANGE `md5_sess_id` `md5_sess_id` VARCHAR(128) NOT NULL DEFAULT '';";
@@ -1213,7 +1215,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('newimage', 'HTML: embeds new images in flexible grid. usage: [newimage:<i>#</i> - How many images to display <i>truncate:0/1</i> - 1 = truncate number of images to keep square grid <i>caption:0/1</i> 1 = include title]', 1, 1, '');";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
-            $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX type;";
+//            $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 
             $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (

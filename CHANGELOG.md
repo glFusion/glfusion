@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - Added option to remove obsolete files during upgrade
   - Improved star rating speed limit handling
   - Added new Spam-X module to reject posts based on number of links in the post
   - Removed depreciated features (webservices and openid)
