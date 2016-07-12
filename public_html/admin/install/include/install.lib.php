@@ -2382,35 +2382,27 @@ function INST_deleteDir($path) {
 *
 */
 function INST_deleteDirIfEmpty($path) {
-
-    $counter = 0;
+    $hasFiles = 0;
     $rc = true;
 
     if (!is_string($path) || $path == "") return false;
-
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-
     if (@is_dir($path)) {
         if (!$dh = @opendir($path)) return false;
-
         while (false !== ($f = readdir($dh))) {
             if ($f == '..' || $f == '.') continue;
             $rc = INST_deleteDirIfEmpty("$path/$f");
-            if ( $rc === false )
-                return false;
+            if ( $rc === false ) $hasFiles++;
         }
-
         closedir($dh);
-
-        if ( $rc !== false ) {
+        if ( $hasFiles == 0 ) {
             return @rmdir($path);
         } else {
             return false;
         }
     } else {
-        $counter++;
         return false;       // found a file...
     }
     return true;
