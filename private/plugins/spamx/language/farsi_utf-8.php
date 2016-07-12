@@ -14,7 +14,7 @@
  */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -157,7 +157,8 @@ $LANG_confignames['spamx'] = array(
     'sfs_ip_check' => 'Enable IP address validation',
     'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
-    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block'
+    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
+    'slc_max_links' => 'Maximum Links allowed in post'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -166,7 +167,8 @@ $LANG_configsubgroups['spamx'] = array(
 
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Main Settings',
-    'fs_sfs' => 'Stop Forum Spam Settings'
+    'fs_sfs' => 'Stop Forum Spam Settings',
+    'fs_slc' => 'Spam Link Counter'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
