@@ -43,6 +43,7 @@ $obsoletePrivateDir = array(
 $obsoletePublicDir = array(
     'ckeditor/plugins/filemanager/',
     'fckeditor/',
+    'webservices/',
 );
 
 $obsoletePrivateFiles = array(
@@ -50,6 +51,11 @@ $obsoletePrivateFiles = array(
     'lib/getid3/readme.txt',
     'lib/getid3/structure.txt',
     'sql/updates/geeklog_mysql_1.4.1_to_1.5.0.php',
+
+    'system/lib-webservices.php',
+
+    'plugins/captcha/class/ayah.php',
+    'plugins/captcha/class/picatchalib.php',
 
     'system/pear/Date.php',
     'system/pear/pearcmd.php',
@@ -115,17 +121,13 @@ $obsoletePublicFiles = array(
     'docs/docstyle.css',
     'docs/images/background.gif',
     'docs/images/index.html',
-    'layout/vintage/admin/block/block_list.thtml',
+    'images/openid_login_icon.png',
+
     'layout/vintage/admin/menu/menulist.thtml',
     'layout/vintage/admin/menu/menutree.thtml',
     'layout/vintage/admin/plugins/plugin_upload_old_confirm.thtml',
     'layout/vintage/admin/user/edituser.thtml',
     'layout/vintage/admin/user/groupedit.thtml',
-    'layout/vintage/adminoption.thtml',
-    'layout/vintage/adminoption_off.thtml',
-    'layout/vintage/menuitem.thtml',
-    'layout/vintage/menuitem_last.thtml',
-    'layout/vintage/menuitem_none.thtml',
     'layout/vintage/search/headingcolumn.thtml',
     'layout/vintage/search/resultauthdatehits.thtml',
     'layout/vintage/search/resultcolumn.thtml',
@@ -141,6 +143,12 @@ $obsoletePublicFiles = array(
     'layout/vintage/stats/singlesummary.thtml',
     'layout/vintage/stats/sitestatistics.thtml',
     'layout/vintage/submit/submitloginrequired.thtml',
+    'layout/vintage/adminoption.thtml',
+    'layout/vintage/adminoption_off.thtml',
+    'layout/vintage/loginform_openid.thtml',
+    'layout/vintage/menuitem.thtml',
+    'layout/vintage/menuitem_last.thtml',
+    'layout/vintage/menuitem_none.thtml',
     'layout/vintage/useroption.thtml',
     'layout/vintage/useroption_off.thtml',
 );

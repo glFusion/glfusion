@@ -1970,18 +1970,29 @@ function INST_doFileCleanUp()
     }
 
     // special handling of the theme files from 1.5.0 and 1.5.1
-
     if ( $_GLFUSION['original_version'] == '1.5.0' || $_GLFUSION['original_version'] == '1.5.1' ) {
-
-        include 'deleted15.php';
-
-        if (isset($obsoletePublicFiles15) && is_array($obsoletePublicFiles15) && count($obsoletePublicFiles15) > 0 ) {
-            foreach ( $obsoletePublicFiles15 AS $file ) {
-                if ( file_exists( $_CONF['path_html'].$file )) {
-                    $rc = @unlink($_CONF['path_html'].$file);
-                    if ( $rc === false ) {
-                        $failure .= '<li>FILE: '.$_CONF['path_html'].$file.'</li>';
+        if (file_exists('deleted15.php')) {
+            include 'deleted15.php';
+            if (isset($obsoleteTemplateFiles) && is_array($obsoleteTemplateFiles) && count($obsoleteTemplateFiles) > 0 ) {
+                  foreach ( $obsoleteTemplateFiles AS $item ) {
+                    if ( file_exists( $_CONF['path_html'].$item['file'] )) {
+                        $sha = sha1_file($_CONF['path_html'].$item['file']);
+                        if ( $sha == $item['sha1'] ) {
+                            $rc = @unlink($_CONF['path_html'].$item['file']);
+                            if ( $rc === false ) {
+                                $failure .= '<li>FILE: '.$_CONF['path_html'].$item['file'].'</li>';
+                            }
+                        } else {
+                            COM_errorLog("UPGRADE: Keeping modified template file: " . $item['file']);
+                        }
                     }
+                }
+            }
+        }
+        if (isset($obsoleteTemplateDir) && is_array($obsoleteTemplateDir) && count($obsoleteTemplateDir) > 0  ) {
+            foreach ( $obsoleteTemplateDir AS $directory ) {
+                if ( is_dir($_CONF['path_html'].$directory)) {
+                    $rc = INST_deleteDirIfEmpty($_CONF['path_html'].$directory);
                 }
             }
         }

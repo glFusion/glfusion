@@ -1203,6 +1203,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 
             DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+            DB_query("DROP INDEX `trackback_url` ON {$_TABLES['trackback']};",1);
 
             $_SQL = array();
 
@@ -1215,7 +1216,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "REPLACE INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('newimage', 'HTML: embeds new images in flexible grid. usage: [newimage:<i>#</i> - How many images to display <i>truncate:0/1</i> - 1 = truncate number of images to keep square grid <i>caption:0/1</i> 1 = include title]', 1, 1, '');";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';";
-//            $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 
             $_SQL[] = "CREATE TABLE `{$_TABLES['social_share']}` (
@@ -1253,7 +1253,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['rating_votes']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['subscriptions']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';";
             $_SQL[] = "ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;";
-            $_SQL[] = "DROP INDEX `trackback_url` ON {$_TABLES['trackback']};";
 
             list($rc,$errors) = INST_updateDB($_SQL);
 
@@ -2373,5 +2372,47 @@ function INST_deleteDir($path) {
         return @unlink($path);
     }
     return false;
+}
+
+/**
+* Deletes a directory if empty (with recursive sub-directory support)
+*
+* @parm     string            Path of directory to remove
+* @return   bool              True on success, false on fail
+*
+*/
+function INST_deleteDirIfEmpty($path) {
+
+    $counter = 0;
+    $rc = true;
+
+    if (!is_string($path) || $path == "") return false;
+
+    if ( function_exists('set_time_limit') ) {
+        @set_time_limit( 30 );
+    }
+
+    if (@is_dir($path)) {
+        if (!$dh = @opendir($path)) return false;
+
+        while (false !== ($f = readdir($dh))) {
+            if ($f == '..' || $f == '.') continue;
+            $rc = INST_deleteDirIfEmpty("$path/$f");
+            if ( $rc === false )
+                return false;
+        }
+
+        closedir($dh);
+
+        if ( $rc !== false ) {
+            return @rmdir($path);
+        } else {
+            return false;
+        }
+    } else {
+        $counter++;
+        return false;       // found a file...
+    }
+    return true;
 }
 ?>
