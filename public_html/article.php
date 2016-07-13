@@ -147,6 +147,13 @@ if ($A['count'] > 0) {
         $story_template->set_var('page_title',
                 $_CONF['site_name'] . ': ' . $story->displayElements('title'));
         $story_template->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
+        $story_template->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
+        $story_image = $story->DisplayElements('story_image');
+        if ( $story_image != '' ) {
+            $story_template->set_var('story_image',$story_image);
+        } else {
+            $story_template->unset_var('story_image');
+        }
 
          if ( $_CONF['hidestorydate'] != 1 ) {
             $story_template->set_var ('story_date', $story->displayElements('date'));
