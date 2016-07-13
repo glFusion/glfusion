@@ -12,13 +12,13 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-class autotag_newmedia extends BaseAutotag {
+class autotag_newimage extends BaseAutotag {
 
     function __construct()
     {
         global $_AUTOTAGS;
 
-        $this->description = $_AUTOTAGS['newmedia']['description'];
+        $this->description = $_AUTOTAGS['newimage']['description'];
     }
 
     function parse($p1, $p2='', $fulltag)
