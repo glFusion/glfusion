@@ -66,7 +66,7 @@ v1.6.0 (Unreleased)
   - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
   - Media Gallery - fixed display error in search results for CMS theme
   - Added footer.js to the jQuery based themes
-  - Updated UIKIT to v2.26.3
+  - Updated UIKIT to v2.26.4
   - Several code modernization updates to better support PHP v7.
   - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
   - New Vimeo auto tag
