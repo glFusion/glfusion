@@ -1927,26 +1927,6 @@ function INST_doFileCleanUp()
     $retval       = '';
     $failure      = '';
 
-    if (isset($obsoletePublicDir) && is_array($obsoletePublicDir) && count($obsoletePublicDir) > 0 ) {
-        foreach ( $obsoletePublicDir AS $directory ) {
-            if ( is_dir($_CONF['path_html'].$directory)) {
-                $rc = INST_deleteDir($_CONF['path_html'].$directory);
-                if ( $rc === false ) {
-                    $failure .= '<li>DIR: '.$_CONF['path_html'].$directory.'</li>';
-                }
-            }
-        }
-    }
-    if (isset($obsoletePrivateDir) && is_array($obsoletePrivateDir) && count($obsoletePrivateDir) > 0  ) {
-        foreach ( $obsoletePrivateDir AS $directory ) {
-            if ( is_dir($_CONF['path'].$directory)) {
-                $rc = INST_deleteDir($_CONF['path'].$directory);
-                if ( $rc === false ) {
-                    $failure .= '<li>DIR: '.$_CONF['path'].$directory.'</li>';
-                }
-            }
-        }
-    }
     if (isset($obsoletePrivateFiles) && is_array($obsoletePrivateFiles) && count($obsoletePrivateFiles) > 0 ) {
         foreach ( $obsoletePrivateFiles AS $file ) {
             if ( file_exists( $_CONF['path'].$file )) {
@@ -1968,6 +1948,29 @@ function INST_doFileCleanUp()
             }
         }
     }
+
+    if (isset($obsoletePublicDir) && is_array($obsoletePublicDir) && count($obsoletePublicDir) > 0 ) {
+        foreach ( $obsoletePublicDir AS $directory ) {
+            if ( is_dir($_CONF['path_html'].$directory)) {
+                $rc = INST_deleteDir($_CONF['path_html'].$directory);
+                if ( $rc === false ) {
+                    $failure .= '<li>DIR: '.$_CONF['path_html'].$directory.'</li>';
+                }
+            }
+        }
+    }
+
+    if (isset($obsoletePrivateDir) && is_array($obsoletePrivateDir) && count($obsoletePrivateDir) > 0  ) {
+        foreach ( $obsoletePrivateDir AS $directory ) {
+            if ( is_dir($_CONF['path'].$directory)) {
+                $rc = INST_deleteDir($_CONF['path'].$directory);
+                if ( $rc === false ) {
+                    $failure .= '<li>DIR: '.$_CONF['path'].$directory.'</li>';
+                }
+            }
+        }
+    }
+
 
     // special handling of the theme files from 1.5.0 and 1.5.1
     if ( $_GLFUSION['original_version'] == '1.5.0' || $_GLFUSION['original_version'] == '1.5.1' ) {
