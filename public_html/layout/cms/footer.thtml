@@ -6,7 +6,7 @@
   </div>                                  {# end of uk-container #}
 </div>                                    {#end of tm-content #}
 
-<a href="#top" class="uk-button" data-uk-smooth-scroll>
+<a href="#top" data-uk-smooth-scroll>
   <p id="scroll-to-top" style="display:none;">
     <i class="uk-icon-chevron-up"></i>
   </p>
