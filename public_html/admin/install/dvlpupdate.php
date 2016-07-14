@@ -56,7 +56,7 @@ function glfusion_110() {
     ) ENGINE=MYISAM
     ";
     $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD name varchar(32) default NULL AFTER indent";
-    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD comment_expire datetime NOT NULL default '0000-00-00 00:00:00' AFTER comments";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD comment_expire datetime NOT NULL default '1000-01-01 00:00:00.000000' AFTER comments";
     $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('database_version', '1')";
     $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'";
     $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'glfusion'";
@@ -516,7 +516,7 @@ function glfusion_120()
     // registration
     $c->add('registration_type',0,'select',4,19,27,785,TRUE,'Core');
     DB_query("ALTER TABLE {$_TABLES['users']} ADD act_token VARCHAR(32) NOT NULL DEFAULT '' AFTER pwrequestid",1);
-    DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER act_token",1);
+    DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00.000000' AFTER act_token",1);
 
     // session handling
     $c->del('cookie_ip','Core');
@@ -1367,7 +1367,7 @@ function glfusion_160()
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(12, 'http://yelp.com/biz/%%u', 1, 'yelp', 'yelp', 'Yelp');";
     $_SQL[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(13, 'http://dribbble.com/%%u', 1, 'dribbble', 'dribbble', 'Dribbble');";
 
-    $_SQL[] = "REPLACE INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 0, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
+    $_SQL[] = "REPLACE INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 0, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
 
     if ($use_innodb) {
         $statements = count($_SQL);

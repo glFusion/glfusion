@@ -359,7 +359,7 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('lang_rdflimit', $LANG21[62]);
     $block_templates->set_var('block_rdflimit', $A['rdflimit']);
     $block_templates->set_var('lang_lastrdfupdate', $LANG21[15]);
-    if ($A['rdfupdated'] == '0000-00-00 00:00:00') {
+    if ($A['rdfupdated'] == '1000-01-01 00:00:00') {
         $block_templates->set_var ('block_rdfupdated', '');
     } else {
         $block_templates->set_var ('block_rdfupdated', $A['rdfupdated']);
@@ -775,7 +775,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             $rdfurl = DB_escapeString ($rdfurl);
         }
         if (empty ($rdfupdated)) {
-            $rdfupdated = '0000-00-00 00:00:00';
+            $rdfupdated = '1000-01-01 00:00:00';
         }
 
         $name = DB_escapeString($name);

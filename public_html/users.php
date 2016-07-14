@@ -1159,7 +1159,7 @@ function _userVerify()
             }
         }
         if ($valid == 1) {
-            DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='0000-00-00 00:00:00' WHERE uid=".$uid);
+            DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='1000-01-01 00:00:00' WHERE uid=".$uid);
             $retval .= COM_showMessage (515,'','',0,'success');
             $retval .= SEC_loginForm();
         } else { // request invalid or expired

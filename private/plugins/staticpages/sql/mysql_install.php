@@ -46,7 +46,7 @@ CREATE TABLE {$_TABLES['staticpage']} (
   sp_title varchar(128) NOT NULL default '',
   sp_content text NOT NULL,
   sp_hits mediumint(8) unsigned NOT NULL default '0',
-  sp_date datetime NOT NULL default '0000-00-00 00:00:00',
+  sp_date datetime NOT NULL default '1000-01-01 00:00:00.000000',
   sp_format varchar(20) NOT NULL default '',
   sp_onmenu tinyint(1) unsigned NOT NULL default '0',
   sp_label varchar(64) default NULL,

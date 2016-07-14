@@ -783,7 +783,7 @@ class Story
                     if (!empty($this->{$varname})) {
                         $values .= 'FROM_UNIXTIME(' . $this->{$varname} . '), ';
                     } else {
-                        $values .= "'0000-00-00 00:00:00', ";
+                        $values .= "'1000-01-01 00:00:00', ";
                     }
                 } else {
                     $values .= '\'' . DB_escapeString($this->{$varname}) . '\', ';

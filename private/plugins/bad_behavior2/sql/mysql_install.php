@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
 $_SQL['bad_behavior2'] = "CREATE TABLE {$_TABLES['bad_behavior2']} (
     `id` INT(11) NOT NULL auto_increment,
     `ip` TEXT NOT NULL,
-    `date` DATETIME NOT NULL default '0000-00-00 00:00:00',
+    `date` DATETIME NOT NULL default '1000-01-01 00:00:00.000000',
     `request_method` TEXT NOT NULL,
     `request_uri` TEXT NOT NULL,
     `server_protocol` TEXT NOT NULL,

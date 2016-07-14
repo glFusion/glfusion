@@ -94,7 +94,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   content text,
   allow_autotags tinyint(1) unsigned NOT NULL DEFAULT '0',
   rdfurl varchar(255) default NULL,
-  rdfupdated datetime NOT NULL default '0000-00-00 00:00:00',
+  rdfupdated datetime NOT NULL default '1000-01-01 00:00:00.000000',
   rdf_last_modified varchar(40) default NULL,
   rdf_etag varchar(40) default NULL,
   rdflimit smallint(5) unsigned NOT NULL default '0',
@@ -404,7 +404,7 @@ CREATE TABLE {$_TABLES['stories']} (
   votes int(11) NOT NULL DEFAULT '0',
   numemails mediumint(8) unsigned NOT NULL default '0',
   comments mediumint(8) unsigned NOT NULL default '0',
-  comment_expire datetime NOT NULL default '0000-00-00 00:00:00',
+  comment_expire datetime NOT NULL default '1000-01-01 00:00:00.000000',
   trackbacks mediumint(8) unsigned NOT NULL default '0',
   related text,
   featured tinyint(3) unsigned NOT NULL default '0',
@@ -412,7 +412,7 @@ CREATE TABLE {$_TABLES['stories']} (
   commentcode tinyint(4) NOT NULL default '0',
   trackbackcode tinyint(4) NOT NULL default '0',
   statuscode tinyint(4) NOT NULL default '0',
-  expire DATETIME NOT NULL default '0000-00-00 00:00:00',
+  expire DATETIME NOT NULL default '1000-01-01 00:00:00.000000',
   postmode varchar(10) NOT NULL default 'html',
   advanced_editor_mode tinyint(1) unsigned default '0',
   frontpage tinyint(3) unsigned default '1',
@@ -479,7 +479,7 @@ CREATE TABLE {$_TABLES['syndication']} (
   charset varchar(20) NOT NULL default 'UTF-8',
   language varchar(20) NOT NULL default 'en-gb',
   is_enabled tinyint(1) unsigned NOT NULL default '1',
-  updated datetime NOT NULL default '0000-00-00 00:00:00',
+  updated datetime NOT NULL default '1000-01-01 00:00:00.000000',
   update_info text,
   PRIMARY KEY (fid),
   INDEX syndication_type(type),
@@ -615,14 +615,14 @@ CREATE TABLE {$_TABLES['users']} (
   email varchar(96) default NULL,
   homepage varchar(96) default NULL,
   sig varchar(160) NOT NULL default '',
-  regdate datetime NOT NULL default '0000-00-00 00:00:00',
+  regdate datetime NOT NULL default '1000-01-01 00:00:00.000000',
   photo varchar(128) DEFAULT NULL,
   cookietimeout int(8) unsigned default '28800',
   theme varchar(64) default NULL,
   language varchar(64) default NULL,
   pwrequestid varchar(16) default NULL,
   act_token varchar(32) NOT NULL default '',
-  act_time datetime NOT NULL default '0000-00-00 00:00:00',
+  act_time datetime NOT NULL default '1000-01-01 00:00:00.000000',
   status smallint(5) unsigned NOT NULL default '1',
   account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
@@ -707,14 +707,14 @@ $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (20,
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (21,15) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (22,17) ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 10, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(1, 0, 'user_block', 'gldefault', 'My Account', 'all', 80, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(2, 0, 'admin_block', 'gldefault', 'Admins Only', 'all', 70, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(3, 1, 'section_block', 'gldefault', 'Topics', 'all', 40, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(4, 1, 'whats_new_block', 'gldefault', 'What''s New', 'all', 30, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(5, 1, 'whosonline_block', 'phpblock', 'Who''s Online', 'all', 50, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, 'phpblock_whosonline', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(6, 1, 'older_stories', 'gldefault', 'Older Stories', 'all', 90, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(7, 1, 'navigation_block', 'phpblock', 'Navigation', 'all', 10, '', 0, '', '0000-00-00 00:00:00', NULL, NULL, 0, 1, 'phpblock_getMenu(block)', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(56, 1, 'followusblock', 'phpblock', 'Follow Us', 'all', 10, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 0, 'phpblock_social', '', 4, 4, 3, 2, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(1, 0, 'user_block', 'gldefault', 'My Account', 'all', 80, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(2, 0, 'admin_block', 'gldefault', 'Admins Only', 'all', 70, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(3, 1, 'section_block', 'gldefault', 'Topics', 'all', 40, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(4, 1, 'whats_new_block', 'gldefault', 'What''s New', 'all', 30, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(5, 1, 'whosonline_block', 'phpblock', 'Who''s Online', 'all', 50, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, 'phpblock_whosonline', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(6, 1, 'older_stories', 'gldefault', 'Older Stories', 'all', 90, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, '', '', 2, 4, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (`bid`, `is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES(7, 1, 'navigation_block', 'phpblock', 'Navigation', 'all', 10, '', 0, '', '1000-01-01 00:00:00.000000', NULL, NULL, 0, 1, 'phpblock_getMenu(block)', '', 2, 4, 3, 3, 2, 2);";
 
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (0,'Comments Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (-1,'Comments Disabled') ";
@@ -877,7 +877,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refres
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (10,'Archive') ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'utf-8', 'en-gb', 1, '0000-00-00 00:00:00', NULL)";
+$_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'utf-8', 'en-gb', 1, '1000-01-01 00:00:00.000000', NULL)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, sort_by, sort_dir, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,0,'DESC',10,6,2,3,2,2,2)";
 
