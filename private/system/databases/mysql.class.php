@@ -149,6 +149,29 @@ class database {
             }
         }
 
+        if ($this->_mysql_version >= 50700) {
+            $result = @mysql_query("SELECT @@sql_mode", $this->_db);
+            $modeData = @mysql_fetch_array($result);
+            $updatedMode = '';
+            $first = 0;
+            $found = 0;
+            if ( isset($modeData["@@sql_mode"])) {
+                $modeArray = explode(",",$modeData["@@sql_mode"]);
+                foreach ($modeArray as $setting ) {
+                    if ( $setting == 'ONLY_FULL_GROUP_BY') {
+                        $found = 1;
+                        continue;
+                    }
+                    if ( $first != 0 ) $updatedMode .= ',';
+                    $updatedMode .= $setting;
+                    $first++;
+                }
+                if ( $found == 1 ) {
+                    @mysql_query("SET sql_mode = '".$updatedMode."'", $this->_db);
+                }
+            }
+        }
+
         if ($this->isVerbose()) {
             $this->_errorlog("\n***leaving database->_connect***");
         }

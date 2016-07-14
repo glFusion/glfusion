@@ -105,6 +105,28 @@ class database
                 }
             }
         }
+        if ($this->_mysql_version >= 50700) {
+            $result = $this->_db->query("SELECT @@sql_mode");
+            $modeData = $this->dbFetchArray($result);
+            $updatedMode = '';
+            $first = 0;
+            $found = 0;
+            if ( isset($modeData["@@sql_mode"])) {
+                $modeArray = explode(",",$modeData["@@sql_mode"]);
+                foreach ($modeArray as $setting ) {
+                    if ( $setting == 'ONLY_FULL_GROUP_BY') {
+                        $found = 1;
+                        continue;
+                    }
+                    if ( $first != 0 ) $updatedMode .= ',';
+                    $updatedMode .= $setting;
+                    $first++;
+                }
+                if ( $found == 1 ) {
+                    @$this->_db->query("SET sql_mode = '".$updatedMode."'");
+                }
+            }
+        }
 
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - leaving database->_connect");
