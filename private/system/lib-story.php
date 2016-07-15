@@ -212,7 +212,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $story_image = $story->DisplayElements('story_image');
         if ( $story_image != '' ) {
-            $story_image = $_CONF['site_url'].$story_image;
+//            $story_image = $_CONF['site_url'].$story_image;
         }
         $article->set_var('story_image',$story_image);
 
