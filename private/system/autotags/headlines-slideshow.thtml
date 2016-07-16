@@ -11,7 +11,7 @@
 				<figcaption class="uk-overlay-panel uk-overlay-bottom uk-ignore uk-overlay-background">
 					<p>
 {!if titlelink}
-						<a class="uk-icon-hover" href="{url}">
+						<a class="uk-text" href="{url}" style="color:#fff;text-decoration:none;">
 {!endif}
 							{title}
 							<br />
@@ -37,7 +37,8 @@
 {!endif}
 <!-- END headlines -->
 	</ul>
-	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous" style="color: rgba(255,255,255,0.4)"></a>
-	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next" style="color: rgba(255,255,255,0.4)"></a>
+	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"  style="color:#ababab;"></a>
+	<a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"  style="color:#ababab;"></a>
 </div>
+<div class="uk-margin-bottom uk-clearfix"></div>
 {# end {templatelocation} #}
