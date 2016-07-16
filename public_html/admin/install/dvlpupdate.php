@@ -1402,19 +1402,16 @@ function glfusion_160()
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
     }
 
-    // remove openid
-    $methods = array('standard', '3rdparty', 'oauth');
-    $methods_disabled = 0;
-    foreach ($methods as $m) {
-        if ( !isset($_CONF['user_login_method'][$m])) {
-            $_CONF['user_login_method'][$m] = 0;
-        }
-        $_tmpConf['user_login_method'][$m] = $_CONF['user_login_method'][$m];
+    $standard = ($_CONF['user_login_method']['standard']) ? true : false;
+    $thirdparty = ($_CONF['user_login_method']['3rdparty']) ? true: false;
+    $oauth = ($_CONF['user_login_method']['oauth']) ? true: false;
+
+    if ( $standard === false && $thirdparty === false && $oauth === false ) {
+        $standard = true;
     }
-    $newLoginConf = serialize($_tmpConf['user_login_method']);
-    // update the dataase
-    $sql = "UPDATE {$_TABLES['conf_values']} SET `value`='".DB_escapeString($newLoginConf)."' WHERE name='user_login_method'";
-    DB_query($sql,1);
+
+    $c->del('user_login_method', 'Core');
+    $c->add('user_login_method',array('standard' => $standard , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,1,1,120,TRUE);
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.0',name='glfusion'",1);

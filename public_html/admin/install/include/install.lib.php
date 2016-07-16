@@ -1194,6 +1194,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.5.1' :
         case '1.5.2' :
+
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('infinite_scroll',1,'select',1,1,0,25,TRUE);
@@ -1201,6 +1202,24 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
             $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
             $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+
+            // remove openid
+            $sql = "SELECT * FROM {$_TABLES['conf_values']} WHERE name='user_login_method' AND group_name='Core'";
+            $result = DB_query($sql,1);
+            if ( DB_numRows($result)  > 0 ) {
+                $row        = DB_fetchArray($result);
+                $methods    = @unserialize($row['value']);
+                $standard   = ($methods['standard']) ? true : false;
+                $thirdparty = ($methods['3rdparty']) ? true: false;
+                $oauth      = ($methods['oauth']) ? true: false;
+
+                if ( $standard === false && $thirdparty === false && $oauth === false ) {
+                    $standard = true;
+                }
+
+                $c->del('user_login_method', 'Core');
+                $c->add('user_login_method',array('standard' => $standard , '3rdparty' => $thirdparty , 'oauth' => $oauth),'@select',4,1,1,120,TRUE);
+            }
 
             DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
             DB_query("DROP INDEX `trackback_url` ON {$_TABLES['trackback']};",1);
@@ -1314,19 +1333,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             if ( $sis_group_id != 0 ) {
                 DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$sis_group_id.",1)");
             }
-            $methods = array('standard', '3rdparty', 'oauth');
-            $methods_disabled = 0;
-            foreach ($methods as $m) {
-                if ( !isset($_CONF['user_login_method'][$m])) {
-                    $_CONF['user_login_method'][$m] = false;
-                }
-                $_tmpConf['user_login_method'][$m] = $_CONF['user_login_method'][$m];
-            }
-            $_tmpConf['user_login_method']['standard'] = true;
-            $newLoginConf = serialize($_tmpConf['user_login_method']);
-            // update the dataase
-            $sql = "UPDATE {$_TABLES['conf_values']} SET `value`='".DB_escapeString($newLoginConf)."' WHERE name='user_login_method'";
-            DB_query($sql,1);
 
             $current_fusion_version = '1.6.0';
 
