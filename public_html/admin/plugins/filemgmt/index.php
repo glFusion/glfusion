@@ -349,11 +349,11 @@ function categoryConfigAdmin(){
     $display .= '<tr><td>' . _MD_UPLOADSEC. '</td><td><select name="sel_uploadaccess"><option value="0">Select Access</option>';
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$fma_group) . '</select></td></tr>';
     $display .= '<tr><td>'. _MD_ADDCATEGORYSNAP . '<br /><h6>'. _MD_ADDIMAGENOTE .'</h6></td>';
-    $display .= '<td><div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file" /></div></td></tr>';
+    $display .= '<td><input type="file" name="uploadfile" size="50" maxlength="200" /></td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= "<input type=\"hidden\" name=\"cid\" value=\"0\"" . XHTML . ">\n";
     $display .= "<input type=\"hidden\" name=\"op\" value=\"addCat\"" . XHTML . ">";
-    $display .= "<button class=\"uk-button\" type=\"submit\">"._MD_ADD."</button></td></tr></table></form><br" . XHTML . ">";
+    $display .= "<button class=\"uk-button\" type=\"submit\">"._MD_ADD."</button></td></tr></table></form><br>";
 
     // Add a New Sub-Category
     $display .= '<!-- Add a New Sub-Category-->';
@@ -415,9 +415,7 @@ function newfileConfigAdmin(){
     $display .= '<input type="text" name="title" size="50" maxlength="100" />';
 
     $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
-    $display .= '<div class="uk-form-file">';
-    $display .= '<button class="uk-button">Choose File</button><input type="file" name="newfile"/>';
-    $display .= '</div>';
+    $display .= '<input type="file" name="newfile" size="50" maxlength="100" />';
     $display .= '</td></tr>';
 
     $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
@@ -435,7 +433,7 @@ function newfileConfigAdmin(){
     $display .= '<textarea name="description" cols="60" rows="5"></textarea>';
     $display .= '</td></tr>';
     $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_SHOTIMAGE.'</td><td>';
-    $display .= '<div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file" name="newfileshot" size="50" maxlength="60" /></div></td></tr>';
+    $display .= '<input type="file" name="newfileshot" size="50" maxlength="60" /></td></tr>';
     $display .= '<tr><td align="right"></td><td>';
     $display .= '</td></tr><tr><td align="right">'._MD_COMMENTOPTION.'</td><td>';
     $display .= '<input type="radio" name="commentoption" value="1" checked="checked" />&nbsp;' ._MD_YES.'&nbsp;';
