@@ -356,7 +356,7 @@ function categoryConfigAdmin(){
     $display .= "<button class=\"uk-button\" type=\"submit\">"._MD_ADD."</button></td></tr></table></form><br" . XHTML . ">";
 
     // Add a New Sub-Category
-        $display .= '<!-- Add a New Sub-Category-->';
+    $display .= '<!-- Add a New Sub-Category-->';
     $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']}");
     $numrows = DB_numRows($result);
     if($numrows > 0) {
@@ -415,7 +415,9 @@ function newfileConfigAdmin(){
     $display .= '<input type="text" name="title" size="50" maxlength="100" />';
 
     $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
-    $display .= '<div class="uk-form-file"><button class="uk-button">Choose File</button><input type="file"/></div>';
+    $display .= '<div class="uk-form-file">';
+    $display .= '<button class="uk-button">Choose File</button><input type="file" name="newfile"/>';
+    $display .= '</div>';
     $display .= '</td></tr>';
 
     $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
@@ -1127,7 +1129,7 @@ function addCat() {
     }
     if ($title != '') {
         $title = $myts->makeTboxData4Save($title);
-        if ($_FILES["uploadfile"]["name"]!="") {
+        if (isset($_FILES['uploadfile']) && $_FILES["uploadfile"]["name"]!="") {
             $name = $_FILES["uploadfile"]['name'];        // this is the real name of your file
             $tmp  = $_FILES["uploadfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $imgurl = rawurlencode($myts->makeTboxData4Save($name));
