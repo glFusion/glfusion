@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
+  - CKEDITOR: Allow fileperm and dirperm to be configurable items
   - Added option to remove obsolete files during upgrade
   - Improved star rating speed limit handling
   - Added new Spam-X module to reject posts based on number of links in the post
