@@ -117,6 +117,9 @@ $LANG_fs['ckeditor'] = array(
 	'fs_filemanager_videos'     => 'Filemanager Paramètres Vidéo',
 	'fs_filemanager_audios'     => 'Paramètres Audio Filemanager',
 	'fs_filemanager_editor'     => 'Éditeur Filemanager intégré',
+    'filemanager_fileperm'     => 'Permission for new files',
+    'filemanager_dirperm'       => 'Permission for new directories',
+
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['ckeditor'] = array(

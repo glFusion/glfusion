@@ -103,6 +103,8 @@ $LANG_confignames['ckeditor'] = array(
     'filemanager_edit_linewrapping' => 'Line Wrapping',
     'filemanager_edit_codehighlight' => 'Code Highlighting',
     'filemanager_edit_editext' => 'Allowed Edit Extensions',
+    'filemanager_fileperm'     => 'Permission for new files',
+    'filemanager_dirperm'       => 'Permission for new directories',
 );
 $LANG_configsubgroups['ckeditor'] = array(
     'sg_main'               => 'Configuration Settings',

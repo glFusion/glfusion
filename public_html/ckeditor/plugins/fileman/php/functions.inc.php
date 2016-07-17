@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -112,7 +112,7 @@ function listDirectory($path){
       closedir($d);
     }
   }
-  
+
   return $ret;
 }
 class RoxyFile{
@@ -257,7 +257,7 @@ class RoxyFile{
       $name = mb_substr($name, 0, 32);
     $str = str_replace('.php', '', $str);
     $str = mb_ereg_replace("[^\\w]", $sep, $name);
-    
+
     $str = mb_ereg_replace("$sep+", $sep, $str).($ext?'.'.$ext:'');
 
     return $str;
@@ -374,9 +374,9 @@ class RoxyImage{
       default:
         $img = imagecreatefromjpeg($path);
     }
-    
-    
-    
+
+
+
     return $img;
   }
   public static function OutputImage($img, $type, $destination = '', $quality = 90){
@@ -393,7 +393,7 @@ class RoxyImage{
         imagejpeg($img, $destination, $quality);
     }
   }
-  
+
   public static function SetAlpha($img, $path) {
   	$ext = RoxyFile::GetExtension(basename($path));
   	if($ext == "gif" || $ext == "png"){
@@ -401,10 +401,10 @@ class RoxyImage{
 	    imagealphablending($img, false);
 	    imagesavealpha($img, true);
 	  }
-	  
+
 	  return $img;
   }
-  
+
   public static function Resize($source, $destination, $width = '150',$height = 0, $quality = 90) {
     $tmp = getimagesize($source);
     $w = $tmp[0];
@@ -416,7 +416,7 @@ class RoxyImage{
         self::OutputImage($source, RoxyFile::GetExtension(basename($source)), $destination, $quality);
       return;
     }
-    
+
     $newWidth = $width;
     $newHeight = floor($newWidth / $r);
     if(($height > 0 && $newHeight > $height) || !$width){
@@ -426,9 +426,9 @@ class RoxyImage{
 
     $thumbImg = imagecreatetruecolor($newWidth, $newHeight);
     $img = self::GetImage($source);
-    
+
     $thumbImg = self::SetAlpha($thumbImg, $source);
-    
+
     imagecopyresampled($thumbImg, $img, 0, 0, 0, 0, $newWidth, $newHeight, $w, $h);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);
@@ -466,9 +466,9 @@ class RoxyImage{
   public static function Crop($source, $destination, $x, $y, $cropWidth, $cropHeight, $width, $height, $quality = 90) {
     $thumbImg = imagecreatetruecolor($width, $height);
     $img = self::GetImage($source);
-    
+
     $thumbImg = self::SetAlpha($thumbImg, $source);
-    
+
     imagecopyresampled($thumbImg, $img, 0, 0, $x, $y, $width, $height, $cropWidth, $cropHeight);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);
@@ -534,6 +534,13 @@ function glFusionConf()
         $defaultView = "list";
     }
 
+    if ( !isset($_CK_CONF['filemanager_fileperm']) ) {
+        $_CK_CONF['filemanager_fileperm'] = '0664';
+    }
+    if ( !isset($_CK_CONF['filemanager_dirperm']) ) {
+        $_CK_CONF['filemanager_dirperm'] = '0775';
+    }
+
     $cfgarray = array(
         "FILES_ROOT" =>          "",
         "RETURN_URL_PREFIX" =>   "",
@@ -563,8 +570,8 @@ function glFusionConf()
         "DEFAULTVIEW" =>         $defaultView,
         "FORBIDDEN_UPLOADS" =>   "tar gz arj bz bz2 bzip 7z zip js jsp jsb html mhtml mht xhtml xht php phtml php3 php4 php5 phps shtml jhtml pl sh py cgi exe application gadget hta cpl msc jar vb jse ws wsf wsc wsh ps1 ps2 psc1 psc2 msh msh1 msh2 inf reg scf msp scr dll msi vbs bat com pif cmd vxd cpl htpasswd htaccess config",
         "ALLOWED_UPLOADS" =>     "",
-        "FILEPERMISSIONS" =>     "0664",
-        "DIRPERMISSIONS" =>      "0775",
+        "FILEPERMISSIONS" =>     $_CK_CONF['filemanager_fileperm'],
+        "DIRPERMISSIONS" =>      $_CK_CONF['filemanager_dirperm'],
         "LANG" =>                "auto",
         "DATEFORMAT" =>          "dd/MM/yyyy HH =>mm",
         "OPEN_LAST_DIR" =>       "yes"

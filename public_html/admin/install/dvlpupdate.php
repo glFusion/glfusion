@@ -1280,6 +1280,10 @@ function glfusion_160()
         $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
         $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
     }
+
+    $c->add('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 110, true, 'ckeditor');
+    $c->add('filemanager_dirperm', '0775', 'text', 0, 2, NULL, 120, true, 'ckeditor');
+
     $res = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE name='social_site_extra' AND group_name='social_internal'");
     $num = DB_numRows($res);
 

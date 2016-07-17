@@ -126,6 +126,28 @@ function ckeditor_upgrade()
             $c->del('filemanager_edit_codehighlight','ckeditor');
             $c->del('filemanager_edit_editext','ckeditor');
 
+            $c->add('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 110, true, 'ckeditor');
+            $c->add('filemanager_dirperm', '0775', 'text', 0, 2, NULL, 120, true, 'ckeditor');
+
+            $c->sync('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'ckeditor');
+            $c->sync('ck_public', NULL, 'fieldset', 0, 0, NULL, 0, true, 'ckeditor');
+            $c->sync('ck_integration', NULL, 'fieldset', 0, 1, NULL, 0, true,'ckeditor');
+            $c->sync('enable_comment', true,'select',0, 1, 0, 30, true, 'ckeditor');
+            $c->sync('enable_story', true,'select',0, 1, 0, 40, true, 'ckeditor');
+            $c->sync('enable_submitstory', true,'select',0, 1, 0, 50, true, 'ckeditor');
+            $c->sync('enable_contact', true,'select',0, 1, 0, 60, true, 'ckeditor');
+            $c->sync('enable_emailstory', true,'select',0, 1, 0, 70, true, 'ckeditor');
+            $c->sync('enable_sp', true,'select',0, 1, 0, 70, true, 'ckeditor');
+            $c->sync('enable_block', true,'select',0, 1, 0, 80, true, 'ckeditor');
+            $c->sync('fs_filemanager_general', NULL, 'fieldset', 0, 2, NULL, 0, true, 'ckeditor');
+            $c->sync('filemanager_per_user_dir', true, 'select', 0, 2, 1, 10, true, 'ckeditor');
+            $c->sync('filemanager_browse_only', false, 'select', 0, 2, 1, 20, true, 'ckeditor');
+            $c->sync('filemanager_default_view_mode', 'grid', 'select', 0, 2, 2, 30, true, 'ckeditor');
+            $c->sync('filemanager_date_format', 'Y-m-d H:i:s', 'text', 0, 2, NULL, 40, true, 'ckeditor');
+            $c->sync('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 50, true, 'ckeditor');
+            $c->sync('filemanager_dirperm', '0664', 'text', 0, 2, NULL, 60, true, 'ckeditor');
+
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CK_CONF['pi_version']."',pi_gl_version='".$_CK_CONF['gl_version']."' WHERE pi_name='ckeditor' LIMIT 1");
             break;

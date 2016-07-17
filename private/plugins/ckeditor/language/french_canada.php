@@ -104,6 +104,9 @@ $LANG_confignames['ckeditor'] = array(
     'filemanager_edit_linewrapping' => 'Retour à la ligne',
     'filemanager_edit_codehighlight' => 'Code surbrillance',
     'filemanager_edit_editext' => 'Autorisés Modifier Extensions',
+    'filemanager_fileperm'     => 'Permission for new files',
+    'filemanager_dirperm'       => 'Permission for new directories',
+
 );
 $LANG_configsubgroups['ckeditor'] = array(
     'sg_main'               => 'Paramètres de configuration',

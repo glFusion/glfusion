@@ -56,6 +56,13 @@ if ( $_CK_CONF['filemanager_default_view_mode'] == 'grid' ) {
 
 $defaultView = $_CK_CONF['filemanager_default_view_mode'];
 
+if ( !isset($_CK_CONF['filemanager_fileperm']) ) {
+    $_CK_CONF['filemanager_fileperm'] = '0664';
+}
+if ( !isset($_CK_CONF['filemanager_dirperm']) ) {
+    $_CK_CONF['filemanager_dirperm'] = '0775';
+}
+
 $cfgarray = array(
     "FILES_ROOT" =>          "",
     "RETURN_URL_PREFIX" =>   "",
@@ -85,8 +92,8 @@ $cfgarray = array(
     "DEFAULTVIEW" =>         $defaultView,
     "FORBIDDEN_UPLOADS" =>   "tar gz arj bz bz2 bzip 7z zip js jsp jsb html mhtml mht xhtml xht php phtml php3 php4 php5 phps shtml jhtml pl sh py cgi exe application gadget hta cpl msc jar vb jse ws wsf wsc wsh ps1 ps2 psc1 psc2 msh msh1 msh2 inf reg scf msp scr dll msi vbs bat com pif cmd vxd cpl htpasswd htaccess config",
     "ALLOWED_UPLOADS" =>     "",
-    "FILEPERMISSIONS" =>     "0664",
-    "DIRPERMISSIONS" =>      "0775",
+    "FILEPERMISSIONS" =>     $_CK_CONF['filemanager_fileperm'],
+    "DIRPERMISSIONS" =>      $_CK_CONF['filemanager_dirperm'],
     "LANG" =>                "auto",
     "DATEFORMAT" =>          "dd/MM/yyyy HH =>mm",
     "OPEN_LAST_DIR" =>       "yes"
