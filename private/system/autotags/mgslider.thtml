@@ -1,0 +1,23 @@
+<div class="uk-slidenav-position" data-uk-slideshow="{ {options} }">
+	<ul class="uk-slideshow uk-overlay uk-overlay-hover">
+<!-- BEGIN slides -->
+		<li>
+			<img src="{image_url}">
+			<div class="uk-overlay-panel {overlay_position} uk-overlay-background uk-overlay-fade">
+				<div>
+					<div class="uk-text-large">{image_title}</div>
+					<div class="uk-text-normal">{image_desc}</div>
+				</div>
+			</div>
+		</li>
+<!-- END slides -->
+	</ul>
+	<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>
+	<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>
+
+	<ul class="uk-dotnav uk-dotnav-contrast uk-position-bottom uk-flex-center">
+<!-- BEGIN dotnav -->
+		<li data-uk-slideshow-item="{image_counter}"><a href=""></a></li>
+<!-- END dotnav -->
+	</ul>
+</div>
