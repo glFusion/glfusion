@@ -525,7 +525,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $postData['subject'] = $LANG_GF01['RE'] . $postData['subject'];
         }
         $quoteid = isset($_GET['quoteid']) ? COM_applyFilter($_GET['quoteid'],true) : 0;
-        $postData['mood'] = '';
+        if ( !$viewMode) $postData['mood'] = '';
         if ($quoteid > 0 && !$viewMode ) {
             $quotesql = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $quoteid);
             $quotearray = DB_fetchArray($quotesql);
