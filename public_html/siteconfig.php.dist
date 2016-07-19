@@ -172,6 +172,15 @@ $_SYSTEM['token_ip'] = false;
 $_SYSTEM['max_captcha_atttempts'] = 4;
 
 // +--------------------------------------------------------------------------+
+// | Custom Story Templates by topic                                          |
+// |                                                                          |
+// | If set to true - glFusion will look in the custom/ directory for custom  |
+// | story templates by topic (i.e.; storytext_TOPICID.thtml)                 |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['custom_topic_templates'] = false;
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |

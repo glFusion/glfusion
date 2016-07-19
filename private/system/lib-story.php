@@ -84,6 +84,27 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     if( empty( $storytpl )) {
         $storytpl = 'storytext.thtml';
     }
+    $featuredstorytpl = 'featuredstorytext.thtml';
+    $archivestorytpl  = 'archivestorytext.thtml';
+
+    if ( isset($_SYSTEM['custom_topic_templates']) && $_SYSTEM['custom_topic_templates'] == true ) {
+        $storyTid = strtolower($story->DisplayElements('tid'));
+        $pos = strpos($storytpl,".");
+        if ( $pos !== false ) {
+            $base_template = substr($storytpl,0,$pos);
+        } else {
+            $base_template = 'storytext';
+        }
+        if ( file_exists($_CONF['path_layout'].'/custom/'.$base_template.'_'.$storyTid.'.thtml') !== false) {
+            $storytpl = $base_template.'_'.$storyTid.'.thtml';
+        }
+        if ( file_exists($_CONF['path_layout'].'/custom/featuredstorytext'.'_'.$storyTid.'.thtml') !== false) {
+            $featuredstorytpl = 'featuredstorytext'.'_'.$storyTid.'.thtml';
+        }
+        if ( file_exists($_CONF['path_layout'].'/custom/archivestorytext'.'_'.$storyTid.'.thtml') !== false) {
+            $archivestorytpl = 'archivestorytext'.'_'.$storyTid.'.thtml';
+        }
+    }
 
     $introtext = $story->displayElements('introtext');
     $bodytext  = $story->displayElements('bodytext');
@@ -96,8 +117,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $article = new Template( $_CONF['path_layout'] );
     $article->set_file( array(
             'article'          => $storytpl,
-            'featuredarticle'  => 'featuredstorytext.thtml',
-            'archivearticle'   => 'archivestorytext.thtml',
+            'featuredarticle'  => $featuredstorytpl,
+            'archivearticle'   => $archivestorytpl,
             ));
 
     if( $_CONF['hideviewscount'] != 1 ) {
