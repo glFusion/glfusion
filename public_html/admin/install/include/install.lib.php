@@ -2285,10 +2285,13 @@ function INST_doSiteConfigUpgrade() {
         'verification_token_ttl'      => 86400,
         'token_ip'                    => false,
         'max_captcha_atttempts'       => 4,
+        'custom_topic_templates'      => false,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
         $_NEWSYSTEM = array_merge($_SYSDEFAULT, $_SYSTEM);
+    } else {
+        $_NEWSYSTEM = $_SYSDEFAULT;
     }
 
     $_CFDEFAULT['css_cache_filename']            = 'style.cache';
@@ -2323,6 +2326,7 @@ function INST_doSiteConfigUpgrade() {
         'verification_token_ttl'      => $_NEWSYSTEM['verification_token_ttl'],
         'token_ip'                    => $_NEWSYSTEM['token_ip'] ? 'true' : 'false',
         'max_captcha_atttempts'       => $_NEWSYSTEM['max_captcha_atttempts'],
+        'custom_topic_templates'      => $_NEWSYSTEM['custom_topic_templates'] ? 'true' : 'false',
         'css_cache_filename'          => $_NEWSYSCONF['css_cache_filename'],
         'js_cache_filename'           => $_NEWSYSCONF['js_cache_filename'],
         'path'                        => $_NEWSYSCONF['path'],

@@ -172,7 +172,7 @@ $_SYSTEM['token_ip'] = {token_ip};
 $_SYSTEM['max_captcha_atttempts'] = {max_captcha_atttempts};
 
 // +--------------------------------------------------------------------------+
-// | Custom Story Templates by topic                                          |
+// | Custom Story Templates by topic (Experimental)                           |
 // |                                                                          |
 // | If set to true - glFusion will look in the custom/ directory for custom  |
 // | story templates by topic (i.e.; storytext_TOPICID.thtml)                 |

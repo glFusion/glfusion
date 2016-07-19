@@ -72,7 +72,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
  */
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
            $_IMAGE_TYPE, $mode, $_GROUPS, $ratedIds;
 
     static $storycounter = 0;
