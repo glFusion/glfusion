@@ -42,7 +42,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/staticpages/functions.inc';
 require_once $_CONF['path'].'plugins/staticpages/staticpages.php';
-require_once $_CONF['path'].'plugins/staticpages/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/staticpages/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

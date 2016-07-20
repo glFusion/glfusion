@@ -42,7 +42,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/polls/functions.inc';
 require_once $_CONF['path'].'plugins/polls/polls.php';
-require_once $_CONF['path'].'plugins/polls/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/polls/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

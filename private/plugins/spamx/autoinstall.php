@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,7 +40,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/spamx/functions.inc';
 require_once $_CONF['path'].'plugins/spamx/spamx.php';
-require_once $_CONF['path'].'plugins/spamx/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/spamx/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

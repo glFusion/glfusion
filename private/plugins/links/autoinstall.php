@@ -45,7 +45,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/links/functions.inc';
 require_once $_CONF['path'].'plugins/links/links.php';
-require_once $_CONF['path'].'plugins/links/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/links/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

@@ -35,7 +35,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/captcha/functions.inc';
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
-require_once $_CONF['path'].'plugins/captcha/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/captcha/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

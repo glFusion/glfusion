@@ -35,7 +35,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/bad_behavior2/functions.inc';
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';
-require_once $_CONF['path'].'plugins/bad_behavior2/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/bad_behavior2/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

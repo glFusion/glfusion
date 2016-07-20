@@ -42,7 +42,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/forum/functions.inc';
 require_once $_CONF['path'].'plugins/forum/forum.php';
-require_once $_CONF['path'].'plugins/forum/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/forum/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

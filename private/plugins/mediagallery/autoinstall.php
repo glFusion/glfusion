@@ -35,7 +35,7 @@ global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
 require_once $_CONF['path'].'plugins/mediagallery/config.php';
-require_once $_CONF['path'].'plugins/mediagallery/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/mediagallery/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |

@@ -40,7 +40,7 @@ global $_DB_dbms;
 require_once $_CONF['path'].'plugins/filemgmt/functions.inc';
 require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';
 require_once $_CONF['path'].'plugins/filemgmt/config.php';
-require_once $_CONF['path'].'plugins/filemgmt/sql/'.$_DB_dbms.'_install.php';
+require_once $_CONF['path'].'plugins/filemgmt/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
