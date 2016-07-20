@@ -64,7 +64,7 @@
 
 {!if story_image}
 {!else}
-				<div class="uk-text-truncate">
+				<div>
 					{text}
 				</div>
 {!endif}
