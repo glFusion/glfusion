@@ -2654,6 +2654,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'seznam cenzur',
     'ip_lookup' => 'IP Lookup',
     'url_rewrite' => 'Omogoèi URL prepisovanje (Rewrite)',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'Prednastavljena dovoljenja bloka',
     'default_permissions_story' => 'Prednastavljena dovoljenja èlanka',
     'default_permissions_topic' => 'Prednastavljena dovoljenja rubrike',

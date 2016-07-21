@@ -2658,6 +2658,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'Censuur Lijst',
     'ip_lookup' => 'IP Opzoeken',
     'url_rewrite' => 'URL Herschrijven Toestaan',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'Standaard Blokrechten',
     'default_permissions_story' => 'Standaard Artikelrechten',
     'default_permissions_topic' => 'Standaard Rubriekrechten',

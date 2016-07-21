@@ -2654,6 +2654,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => '檢查列',
     'ip_lookup' => 'IP 搜尋',
     'url_rewrite' => '啟動 URL Rewrite',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => '防礙默認許可設定',
     'default_permissions_story' => '文章默認許可設定',
     'default_permissions_topic' => '主題默認許可設定',

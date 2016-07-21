@@ -2658,6 +2658,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'バッドワード',
     'ip_lookup' => 'IP検索',
     'url_rewrite' => 'URLリライト',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'パーミッション',
     'default_permissions_story' => 'パーミッション',
     'default_permissions_topic' => 'パーミッション',

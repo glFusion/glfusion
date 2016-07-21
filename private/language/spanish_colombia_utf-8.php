@@ -2652,6 +2652,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'Palabras censuradas',
     'ip_lookup' => 'IP Lookup',
     'url_rewrite' => 'Permitir reescritura de URL',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'Permisos por defecto',
     'default_permissions_story' => 'Permisos por defecto',
     'default_permissions_topic' => 'Permisos por defecto',

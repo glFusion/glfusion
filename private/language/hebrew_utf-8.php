@@ -2653,6 +2653,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'רשימת צנזורה',
     'ip_lookup' => 'בדיקת IP',
     'url_rewrite' => 'איפשור URL Rewrite',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'הרשאות ברירת המחדל של קוביות מידע',
     'default_permissions_story' => 'הרשאות ברירת המחדל של מאמרים',
     'default_permissions_topic' => 'הרשאות ברירת המחדל של נושאים',

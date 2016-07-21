@@ -2652,6 +2652,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'Tsenseerimisloetelu',
     'ip_lookup' => 'IP otsing',
     'url_rewrite' => 'Luba URL-i ülekirjutamine',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'Bloki vaikimisi õigused',
     'default_permissions_story' => 'Lugude vaikimisi õigused',
     'default_permissions_topic' => 'Rubriigi vaikimisi õigused',

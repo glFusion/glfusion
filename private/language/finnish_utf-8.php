@@ -2654,6 +2654,7 @@ $LANG_confignames['Core'] = array(
     'censorlist' => 'Sensuuri Lista',
     'ip_lookup' => 'IP Tarkistus',
     'url_rewrite' => 'URL Rewrite K&auml;yt&ouml;ss&auml;',
+    'fb_appid' => 'Facebook App ID',
     'default_permissions_block' => 'Lohkon Oletusoikeudet',
     'default_permissions_story' => 'Jutun Oletusoikeudet',
     'default_permissions_topic' => 'Aiheen Oletusoikeudet',
