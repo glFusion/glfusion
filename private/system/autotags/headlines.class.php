@@ -207,7 +207,7 @@ class autotag_headlines extends BaseAutotag {
                         $A['introtext'] = $text;
                     }
                     // adds the read more link
-                    $T->set_var('readmore_url',$_CONF['site_url'].'/article.php?story='.$A['sid']);
+                    $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
                     $T->set_var('lang_readmore',$LANG01['continue_reading']);
                 }
 
