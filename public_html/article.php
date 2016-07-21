@@ -254,6 +254,17 @@ if ($A['count'] > 0) {
         $outputHandle->addMeta('property','og:url',$permalink);
         if ( $story_image != '' ) {
             $outputHandle->addMeta('property','og:image',$_CONF['site_url'].$story_image);
+            if ( $story_image[0] == '/') {
+                $siPath = substr($story_image,1);
+            } else {
+                $siPath = $story_image;
+            }
+            $siSize = @getimagesize ($_CONF['path_html'].$siPath  );
+            if ( $siSize !== FALSE ) {
+                $outputHandle->addMeta('property','og:image:width',$siSize[0]);
+                $outputHandle->addMeta('property','og:image:height',$siSize[1]);
+                $outputHandle->addMeta('property','og:image:type',$siSize['mime']);
+            }
         } else {
             if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
                 $outputHandle->addMeta('property','og:image',$arrResult[2]);
