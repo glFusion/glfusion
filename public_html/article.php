@@ -250,7 +250,7 @@ if ($A['count'] > 0) {
         $outputHandle->addMeta('property','og:type','article');
         $outputHandle->addMeta('property','og:url',$permalink);
         if ( $story_image != '' ) {
-            $outputHandle->addMeta('properly','og:image',$_CONF['site_url'].$story_image);
+            $outputHandle->addMeta('property','og:image',$_CONF['site_url'].$story_image);
         } else {
             if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
                 $outputHandle->addMeta('property','og:image',$arrResult[2]);
