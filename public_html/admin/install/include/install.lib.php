@@ -1202,6 +1202,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('comment_disqus_shortname','not defined','text',4,6,NULL,2,TRUE);
             $c->add('comment_fb_appid','not defined','text',4,6,NULL,3,TRUE);
             $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+            $c->add('fb_appid','','text',0,0,NULL,90,TRUE);
 
             // remove openid
             $sql = "SELECT * FROM {$_TABLES['conf_values']} WHERE name='user_login_method' AND group_name='Core'";
@@ -1905,6 +1906,7 @@ function INST_resyncConfig() {
     $c->sync('maintenance_mode',0,'select',0,0,0,60,TRUE);
     $c->sync('copyrightyear','2016','text',0,0,NULL,70,FALSE);
     $c->sync('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
+    $c->sync('fb_appid','','text',0,0,NULL,90,TRUE);
 
     $c->sync('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
     $c->sync('site_mail','','text',0,1,NULL,10,TRUE);

@@ -56,6 +56,7 @@ function install_config($site_url)
     $c->add('maintenance_mode',0,'select',0,0,0,60,TRUE);
     $c->add('copyrightyear','2016','text',0,0,NULL,70,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
+    $c->add('fb_appid','','text',0,0,NULL,90,TRUE);
 
     $c->add('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
     $c->add('site_mail','','text',0,1,NULL,10,TRUE);

@@ -244,6 +244,9 @@ if ($A['count'] > 0) {
         }
         $metaDesc = trim($shortComment).$tailString;
 
+        if ( isset($_CONF['fb_appid']) ) {
+            $outputHandle->addMeta('property','fb:app_id',$_CONF['fb_appid']);
+        }
         $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
         $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
         $outputHandle->addMeta('property','og:title',$pagetitle);
