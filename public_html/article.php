@@ -244,9 +244,6 @@ if ($A['count'] > 0) {
         }
         $metaDesc = trim($shortComment).$tailString;
 
-        if ( isset($_CONF['fb_appid']) ) {
-            $outputHandle->addMeta('property','fb:app_id',$_CONF['fb_appid']);
-        }
         $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
         $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
         $outputHandle->addMeta('property','og:title',$pagetitle);
@@ -272,7 +269,11 @@ if ($A['count'] > 0) {
                 $outputHandle->addMeta('property','og:image',$arrResult[2]);
             }
         }
-        $outputHandle->addMeta('property','og:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+        if ( $story->DisplayElements('subtitle') != "" ) {
+            $outputHandle->addMeta('property','og:description',@htmlspecialchars($story->DisplayElements('subtitle'),ENT_QUOTES,COM_getEncodingt()));
+        } else {
+            $outputHandle->addMeta('property','og:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+        }
 
         $outputHandle->addMeta('name','description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
 
