@@ -2,7 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.0 (Unreleased)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
-  - Fixed long standing bug in the Open Graph image property
+  - Fixed long standing bug in the Open Graph image property (property is now configured "properly")
   - Experiemental feature to allow custom story templates per topic
   - CKEDITOR: Allow fileperm and dirperm to be configurable items
   - Added option to remove obsolete files during upgrade
