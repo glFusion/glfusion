@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
-v1.6.0 (Unreleased)
+v1.6.1 (unreleased)
+
+
+v1.6.0 (July 22, 2016)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
   - Fixed long standing bug in the Open Graph image property (property is now configured "properly")
   - Experiemental feature to allow custom story templates per topic
