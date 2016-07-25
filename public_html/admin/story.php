@@ -292,7 +292,7 @@ function STORY_global_save()
         COM_refresh($_CONF['site_url']);
     }
 
-    $filter_topic = COM_applyFilter($_POST['tid'],true);
+    $filter_topic = COM_applyFilter($_POST['tid']);
     $on_frontpage = COM_applyFilter($_POST['frontpage'],true);
     $comment      = COM_applyFilter($_POST['comment'],true);
     $trackback    = COM_applyFilter($_POST['trackback'],true);
