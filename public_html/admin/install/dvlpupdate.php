@@ -1432,7 +1432,7 @@ function glfusion_160()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.0' WHERE name='glfusion'",1);
 }
 
-function glfusion_160()
+function glfusion_161()
 {
     global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
