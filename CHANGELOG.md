@@ -2,6 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
   - Fixed error where topic id was not used to filter global story attribute changes
+  - Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
 
 v1.6.0 (July 22, 2016)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
