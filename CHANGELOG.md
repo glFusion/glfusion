@@ -1,8 +1,10 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
-  - Fixed error where topic id was not used to filter global story attribute changes
+  - Updated DB administration (convert DB formats) to an interactive Ajax driven interface
   - Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
+  - Improved FB login to support more recent FB API version (v2.7 at this time)
+  - Fixed error where topic id was not used to filter global story attribute changes
 
 v1.6.0 (July 22, 2016)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook

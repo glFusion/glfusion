@@ -74,8 +74,8 @@ class OAuthConsumer {
 
         switch ( $this->client->server ) {
             case 'facebook' :
-                $api_url = 'https://graph.facebook.com/me';
-                $scope   = 'email,user_website,user_location,user_about_me,user_photos';
+                $api_url = 'https://graph.facebook.com/me?fields=name,email,link,id,first_name,last_name,about';
+                $scope   = 'email,public_profile,user_friends';
                 $q_api   = array();
                 break;
             case 'google' :

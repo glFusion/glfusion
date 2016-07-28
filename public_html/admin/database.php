@@ -375,6 +375,9 @@ function DBADMIN_innodb()
 
     $retval = '';
 
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbconvert.thtml');
+
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
@@ -383,41 +386,37 @@ function DBADMIN_innodb()
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
-    $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
-                        COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        "",
-        $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+
+    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $retval .= COM_startBlock($LANG_DB_BACKUP['convert_title']);
-    $retval .= '<p>' . $LANG_DB_BACKUP['innodb_instructions'] . '</p>' . LB;
-
+    $T->set_var('lang_title',$LANG_DB_BACKUP['convert_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['innodb_instructions']);
     if (DBADMIN_innodbStatus()) {
-        $retval .= '<p>' . $LANG_DB_BACKUP['already_converted'] . '</p>' . LB;
+        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['already_converted']);
     } else {
-        $retval .= '<p>' . $LANG_DB_BACKUP['conversion_message'] . '</p>' . LB;
+        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['conversion_message']);
     }
+    $T->set_var('security_token',SEC_createToken());
+    $T->set_var('security_token_name',CSRF_TOKEN);
+    $T->set_var(array(
+        'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
+        'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_converting'   => $LANG_DB_BACKUP['converting'],
+        'lang_success'      => $LANG_DB_BACKUP['innodb_success'],
+        'to_engine'         => 'InnoDB',
+        'action'            => "doinnodb",
+    ));
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
-    if (empty($token)) {
-        $token = SEC_createToken();
-    }
-
-    $retval .= '<div id="dbconfig">' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['convert_button'] . '</button>' . LB;
-    $retval .= '<input type="hidden" name="doinnodb" value="doinnodb">' . LB;
-    $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
-    $retval .= '</form>' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url']
-            . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
-    $retval .= '</form></div>' . LB;
-
-    $retval .= COM_endBlock();
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -428,6 +427,9 @@ function DBADMIN_myisam()
 
     $retval = '';
 
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbconvert.thtml');
+
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
@@ -436,41 +438,37 @@ function DBADMIN_myisam()
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
-    $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
-                        COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        "",
-        $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+
+    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $retval .= COM_startBlock($LANG_DB_BACKUP['convert_myisam_title']);
-    $retval .= '<p>' . $LANG_DB_BACKUP['myisam_instructions'] . '</p>' . LB;
-
+    $T->set_var('lang_title',$LANG_DB_BACKUP['convert_myisam_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['myisam_instructions']);
     if (DBADMIN_myisamStatus()) {
-        $retval .= '<p>' . $LANG_DB_BACKUP['already_converted_myisam'] . '</p>' . LB;
+        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['already_converted']);
     } else {
-        $retval .= '<p>' . $LANG_DB_BACKUP['conversion_message'] . '</p>' . LB;
+        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['conversion_message']);
     }
+    $T->set_var('security_token',SEC_createToken());
+    $T->set_var('security_token_name',CSRF_TOKEN);
+    $T->set_var(array(
+        'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
+        'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_converting'   => $LANG_DB_BACKUP['converting'],
+        'lang_success'      => $LANG_DB_BACKUP['myisam_success'],
+        'to_engine'         => 'MyISAM',
+        'action'            => "domyisam",
+    ));
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
-    if (empty($token)) {
-        $token = SEC_createToken();
-    }
-
-    $retval .= '<div id="dbconfig">' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['convert_button'] . '</button>' . LB;
-    $retval .= '<input type="hidden" name="domyisam" value="domyisam">' . LB;
-    $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
-    $retval .= '</form>' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url']
-            . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
-    $retval .= '</form></div>' . LB;
-
-    $retval .= COM_endBlock();
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -783,9 +781,80 @@ function DBADMIN_dooptimize($startwith = '', $failures = 0)
     return $failures;
 }
 
+function DBADMIN_alterEngine($table_name, $engine = 'MyISAM')
+{
+    global $_CONF;
+
+    $retval = true;
+
+    $convert_engine = DB_query("ALTER TABLE $table_name ENGINE=".$engine, 1);
+    if ($convert_engine === false) {
+        $retval = false;
+        COM_errorLog('SQL error converting table "' . $table_name . '" to '.$engine.' (ignored): '.DB_error());
+    }
+    return $retval;
+}
+
+function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
+{
+    if ( !COM_isAjax()) die();
+
+    $rc = DBADMIN_alterEngine($table,$engine);
+    if ( $rc === false ) {
+        $retval['errorCode'] = 1;
+        $retval['statusMessage'] = 'Failure: '.$table.' was not converted to '.$engine;
+    } else {
+        $retval['errorCode'] = 0;
+    }
+
+    $return["json"] = json_encode($retval);
+
+    echo json_encode($return);
+    exit;
+}
+
+function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $tableList = array();
+
+    if ( !COM_isAjax()) die();
+
+    $result = DB_query("SHOW TABLES");
+    $numTables = DB_numRows($result);
+    for ($i = 0; $i < $numTables; $i++) {
+        $A = DB_fetchArray($result, true);
+        $table = $A[0];
+        if (in_array($table, $_TABLES)) {
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $B = DB_fetchArray($result2);
+            if (strcasecmp($B['Engine'], $engine) == 0) {
+                continue;
+            }
+            $tableList[] = $table;
+        }
+    }
+    $retval['errorCode'] = 0;
+    $retval['tablelist'] = $tableList;
+
+    $return["json"] = json_encode($retval);
+
+    echo json_encode($return);
+    exit;
+}
+
+function DBADMIN_validateEngine( $engine )
+{
+    $validEngineTypes = array('MyISAM', 'InnoDB');
+
+    if ( in_array($engine,$validEngineTypes)) return true;
+    return false;
+}
+
 
 $action = '';
-$expected = array('backup','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize');
+$expected = array('backup','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -793,6 +862,8 @@ foreach($expected as $provided) {
 	    $action = $provided;
     }
 }
+
+if ( isset($_POST['dbcancelbutton'])) $action = '';
 
 switch ($action) {
 
@@ -932,6 +1003,31 @@ switch ($action) {
         }
         break;
 
+    case 'mode' :
+        $mode = COM_applyFilter($_POST['mode']);
+        switch ( $mode ) {
+            case 'dblist' :
+                $engine = COM_applyFilter($_POST['engine']);
+                DBADMIN_ajaxGetTableList($engine);
+                break;
+            case 'convertdb' :
+                $tbl = COM_applyFilter($_POST['table']);
+                $engine = COM_applyFilter($_POST['engine']);
+                $rc = DBADMIN_ajaxConvertTable( $tbl, $engine);
+                if ( $rc === false ) {
+                    $retval['errorCode'] = 1;
+                    $retval['statusMessage'] = 'Failed converting '.$tbl.' to '.$engine;
+                } else {
+                    $retval['statusMessage'] = 'Table '.$tbl.' successfully converted to '.$engine;
+                    $retval['errorCode'] = 0;
+                }
+                $retval['errorCode'] = 0;
+                $return["json"] = json_encode($retval);
+                echo json_encode($return);
+                exit;
+                break;
+        }
+        break;
     default :
         $page = DBADMIN_list();
         break;

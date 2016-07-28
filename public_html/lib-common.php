@@ -297,6 +297,10 @@ while ($A = DB_fetchArray($result)) {
 */
 
 require_once $_CONF['path_system'].'lib-security.php';
+if ( !isset($_CONF['token_ttl']) ) $_CONF['token_ttl'] = 1200;
+if (!defined ('TOKEN_TTL')) {
+    define('TOKEN_TTL', $_CONF['token_ttl']);
+}
 
 /**
 * Session management library
@@ -6492,6 +6496,14 @@ function COM_getJSCacheLocation()
 function COM_stripslashes($text)
 {
     return $text;
+}
+
+/*
+ * Determine if running via AJAX call - return true if AJAX or false otherwise
+ */
+
+function COM_isAjax() {
+	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
 function CMT_updateCommentcodes()

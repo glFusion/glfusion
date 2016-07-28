@@ -1,0 +1,42 @@
+<script>
+	var engine = "{to_engine}";
+	var lang_converting = "{lang_converting}";
+	var lang_convert = "{lang_convert}";
+	var lang_success = "{lang_success}";
+</script>
+<script src="{site_url}/javascript/dbadmin.js"></script>
+
+{start_block}
+
+{admin_menu}
+
+<h2>{lang_title}</h2>
+
+<p>{lang_conversion_instructions}</p>
+
+<p>{lang_conversion_status}</p>
+
+<div id="dbconfig">
+	<form id="dbcvtform" class="uk-form" action="{site_admin_url}/database.php" method="post" style="display:inline;">
+		<input type="hidden" name="{action}" value="{action}">
+		<input type="hidden" name="toengine" value="{to_engine}">
+		<input type="hidden" name="{security_token_name}" value="{security_token}">
+
+		<button id="dbconvertbutton" class="uk-button uk-button-primary" type="submit" >{lang_convert}</button>
+		<button id="dbcancelbutton" name="dbcancelbutton" class="uk-button uk-button-danger" type="submit" >{lang_cancel}</button>
+	</form>
+</div>
+
+<div id="dbadmin_batchprocesor" style="display:none;">
+	<hr>
+	<h3>Conversion Status</h3>
+
+	<div class="msg" id="batchinterface_msg">&nbsp;</div>
+
+	<div class="uk-progress">
+		<div id="progress-bar" class="uk-progress-bar" style="width: 0%;">0%</div>
+	</div>
+</div>
+</div>
+
+{end_block}

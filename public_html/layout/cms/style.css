@@ -1,4 +1,4 @@
-/*@ glFusion CMS Theme 1.6.0 | https://www.glfusion.org
+/*@ glFusion CMS Theme 1.6.1 | https://www.glfusion.org
 (c) 2016 glFusion | GNU GPLv2 License */
 /* ========================================================================
 This should contain site wide styles that augment the UIKIT styles
@@ -63,13 +63,13 @@ set of styles.
 /* Modifier: `tm-icon-hover`
  ========================================================================== */
 .tm-icon-hover {
-  color: #fff;
+	color: #fff;
 }
 /*
  * Hover
  */
 .tm-icon-hover:hover {
-  color: #ccd6dd;
+	color: #ccd6dd;
 }
 
 
@@ -2320,4 +2320,14 @@ input.error {
 	cursor: pointer;
 	opacity: 0;
 	filter: alpha(opacity=0);
+}
+
+/* Batch processing styles
+========================================================================== */
+.tm-updating {
+	background-image: url('../../images/throbber.gif');
+	background-repeat: no-repeat;
+	background-position: 5px 4px;
+	border-width: 1px;
+	padding: 3px;
 }

@@ -1697,6 +1697,7 @@ $LANG_DB_BACKUP = array(
     'convert_myisam_menu' => 'Convert to MyISAM',
     'convert_myisam_title'=> 'Convert to MyISAM tables',
     'convert_button'      => 'Convert',
+    'converting'          => 'Converting',
     'no_innodb'           => 'Your version of MySQL does not support InnoDB tables.',
     'no_myisam'           => 'Your version of MySQL does not support MyISAM tables.',
     'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
