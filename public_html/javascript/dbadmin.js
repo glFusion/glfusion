@@ -40,7 +40,7 @@ var glfusion_dbadminInterface = (function() {
         if (item) {
 
             var dataS = {
-                "mode" : "convertdb",
+                "mode" : mode,
                 "table" : item,
                 "engine" : engine,
             };
@@ -53,6 +53,7 @@ var glfusion_dbadminInterface = (function() {
                 dataType: "json",
                 url: url,
                 data: data,
+                timeout: 60000, // sets timeout to 1 minute
                 success: function(data) {
                     var wait = 250;
                     var result = $.parseJSON(data["json"]);
@@ -83,8 +84,25 @@ var glfusion_dbadminInterface = (function() {
         throbber_off();
         message(lang_success);
         window.setTimeout(function() {
-            $('#dbconvertbutton').prop("disabled",false);
-            $("#dbconvertbutton").html(lang_convert);
+            // ajax call to process item
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: url,
+                data: {"mode" : mode + "complete", "engine" : engine},
+                success: function(data) {
+                    var wait = 250;
+                    var result = $.parseJSON(data["json"]);
+                    try {
+                        $('#dbconvertbutton').prop("disabled",false);
+                        $("#dbconvertbutton").html(lang_convert);
+                    }
+                    catch(err) {
+                        alert(result.statusMessage);
+                    }
+                }
+            });
+
         }, 3000);
     };
 

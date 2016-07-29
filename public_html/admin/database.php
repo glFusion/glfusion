@@ -124,18 +124,23 @@ function DBADMIN_list()
 
         $menu_arr = array();
 
+        $allInnoDB = DBADMIN_innodbStatus();
+
         if ( $_CONF['allow_mysqldump'] != 0 ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backup=x&amp;'.CSRF_TOKEN.'='.$token,
                                 'text' => $LANG_DB_BACKUP['create_backup']);
         }
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-                            'text' => $LANG_DB_BACKUP['optimize_menu']);
 
-        if ( DBADMIN_supported_engine( 'InnoDB' ) ) {
+        if ( !$allInnoDB ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                                'text' => $LANG_DB_BACKUP['optimize_menu']);
+        }
+
+        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_BACKUP['convert_menu']);
         }
-        if ( DBADMIN_supported_engine( 'MyISAM' ) ) {
+        if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
         }
@@ -381,8 +386,8 @@ function DBADMIN_innodb()
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
-        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-              'text' => $LANG_DB_BACKUP['optimize_menu']),
+//        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+//              'text' => $LANG_DB_BACKUP['optimize_menu']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -410,8 +415,10 @@ function DBADMIN_innodb()
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_converting'   => $LANG_DB_BACKUP['converting'],
         'lang_success'      => $LANG_DB_BACKUP['innodb_success'],
+        'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
         'to_engine'         => 'InnoDB',
         'action'            => "doinnodb",
+        'mode'              => "convertdb",
     ));
     $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
@@ -433,8 +440,8 @@ function DBADMIN_myisam()
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
-        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-              'text' => $LANG_DB_BACKUP['optimize_menu']),
+//        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+//              'text' => $LANG_DB_BACKUP['optimize_menu']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -462,8 +469,10 @@ function DBADMIN_myisam()
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_converting'   => $LANG_DB_BACKUP['converting'],
         'lang_success'      => $LANG_DB_BACKUP['myisam_success'],
+        'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
         'to_engine'         => 'MyISAM',
         'action'            => "domyisam",
+        'mode'              => "convertdb",
     ));
     $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
@@ -545,6 +554,22 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
     DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_engine', 'InnoDB')");
 
     return $failures;
+}
+
+function DBADMIN_ajaxFinishCvt($engine)
+{
+    global $_CONF, $_TABLES;
+
+    switch ($engine) {
+        case 'InnoDB' :
+            DB_delete($_TABLES['vars'], 'name', 'database_engine');
+            DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_engine', 'InnoDB')");
+            break;
+       case 'MyISAM' :
+            DB_delete($_TABLES['vars'], 'name', 'database_engine');
+            break;
+    }
+    return true;
 }
 
 
@@ -634,55 +659,55 @@ function DBADMIN_optimize()
 
     $retval = '';
 
-    $token = SEC_createToken();
-
     $lastrun = DB_getItem($_TABLES['vars'], 'UNIX_TIMESTAMP(value)',
                           "name = 'lastoptimizeddb'");
 
+
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbconvert.thtml');
+
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_BACKUP['database_admin'])
+              'text' => $LANG_DB_BACKUP['database_admin']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
     );
 
-    if ( DBADMIN_supported_engine( 'InnoDB' ) ) {
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
-                            'text' => $LANG_DB_BACKUP['convert_menu']);
-    }
-    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
-                        'text' => $LANG_ADMIN['admin_home']);
+    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
 
-    $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
-                        COM_getBlockTemplate('_admin_block', 'header'));
-
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        "",
-        $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $retval .= COM_startBlock($LANG_DB_BACKUP['optimize_title']);
-    $retval .= '<p>' . $LANG_DB_BACKUP['optimize_explain'] . '</p>' . LB;
+    $T->set_var('lang_title',$LANG_DB_BACKUP['optimize_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['optimize_explain']);
+    $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['optimization_message']);
+
     if (!empty($lastrun)) {
         $last = COM_getUserDateTimeFormat($lastrun);
-        $retval .= '<p>' . $LANG_DB_BACKUP['last_optimization'] . ': '
-                . $last[0] . '</p>' . LB;
+        $T->set_var('lang_last_optimization',$LANG_DB_BACKUP['last_optimization']);
+        $T->set_var('last_optimization',$last[0]);
     }
-    $retval .= '<p>' . $LANG_DB_BACKUP['optimization_message'] . '</p>' . LB;
 
-    $retval .= '<div id="dboptimize">' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url'] . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-primary" type="submit" >' . $LANG_DB_BACKUP['optimize_button'] . '</button>' . LB;
-    $retval .= '<input type="hidden" name="dooptimize" value="dooptimize">' . LB;
-    $retval .= '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '">' . LB;
-    $retval .= '</form>' . LB;
-    $retval .= '<form action="' . $_CONF['site_admin_url']
-            . '/database.php" method="post" style="display:inline;">' . LB;
-    $retval .= '<button class="uk-button uk-button-danger" type="submit" >' . $LANG_ADMIN['cancel'] . '</button>' . LB;
-    $retval .= '</form></div>' . LB;
+    $T->set_var('security_token',SEC_createToken());
+    $T->set_var('security_token_name',CSRF_TOKEN);
+    $T->set_var(array(
+        'lang_convert'      => $LANG_DB_BACKUP['optimize_button'],
+        'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_converting'   => $LANG_DB_BACKUP['optimizing'],
+        'lang_success'      => $LANG_DB_BACKUP['optimize_success'],
+        'lang_ajax_status'  => $LANG_DB_BACKUP['optimization_status'],
+        'to_engine'         => 'InnoDB',
+        'action'            => "dooptimize",
+        'mode'              => "optimize",
+    ));
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
-    $retval .= COM_endBlock();
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -803,6 +828,24 @@ function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
     if ( $rc === false ) {
         $retval['errorCode'] = 1;
         $retval['statusMessage'] = 'Failure: '.$table.' was not converted to '.$engine;
+    } else {
+        $retval['errorCode'] = 0;
+    }
+
+    $return["json"] = json_encode($retval);
+
+    echo json_encode($return);
+    exit;
+}
+
+function DBADMIN_ajaxOptimizeTable( $table )
+{
+    if ( !COM_isAjax()) die();
+
+    $rc = DB_query("OPTIMIZE TABLE $table", 1);
+    if ( $rc === false ) {
+        $retval['errorCode'] = 1;
+        $retval['statusMessage'] = 'Failure: '.$table.' was not optimized.';
     } else {
         $retval['errorCode'] = 0;
     }
@@ -1006,6 +1049,32 @@ switch ($action) {
     case 'mode' :
         $mode = COM_applyFilter($_POST['mode']);
         switch ( $mode ) {
+            case 'optimize' :
+                $tbl = COM_applyFilter($_POST['table']);
+                $rc = DBADMIN_ajaxOptimizeTable($tbl);
+                if ( $rc === false ) {
+                    $retval['errorCode'] = 1;
+                    $retval['statusMessage'] = 'Failed optimizing '.$tbl;
+                } else {
+                    $retval['statusMessage'] = 'Table '.$tbl.' successfully optimized';
+                    $retval['errorCode'] = 0;
+                }
+                $retval['errorCode'] = 0;
+                $return["json"] = json_encode($retval);
+                echo json_encode($return);
+                exit;
+                break;
+
+            case 'optimizecomplete' :
+                DB_delete($_TABLES['vars'], 'name', 'lastoptimizedtable');
+                DB_delete($_TABLES['vars'], 'name', 'lastoptimizeddb');
+                DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastoptimizeddb', FROM_UNIXTIME(" . time() . "))");
+                $retval['errorCode'] = 0;
+                $return["json"] = json_encode($retval);
+                echo json_encode($return);
+                exit;
+                break;
+
             case 'dblist' :
                 $engine = COM_applyFilter($_POST['engine']);
                 DBADMIN_ajaxGetTableList($engine);
@@ -1021,6 +1090,15 @@ switch ($action) {
                     $retval['statusMessage'] = 'Table '.$tbl.' successfully converted to '.$engine;
                     $retval['errorCode'] = 0;
                 }
+                $retval['errorCode'] = 0;
+                $return["json"] = json_encode($retval);
+                echo json_encode($return);
+                exit;
+                break;
+
+            case 'convertdbcomplete' :
+                $engine = COM_applyFilter($_POST['engine']);
+                DBADMIN_ajaxFinishCvt($engine);
                 $retval['errorCode'] = 0;
                 $return["json"] = json_encode($retval);
                 echo json_encode($return);
