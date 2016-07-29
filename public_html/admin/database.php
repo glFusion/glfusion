@@ -131,10 +131,8 @@ function DBADMIN_list()
                                 'text' => $LANG_DB_BACKUP['create_backup']);
         }
 
-        if ( !$allInnoDB ) {
-            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-                                'text' => $LANG_DB_BACKUP['optimize_menu']);
-        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                            'text' => $LANG_DB_BACKUP['optimize_menu']);
 
         if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
@@ -386,8 +384,6 @@ function DBADMIN_innodb()
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
-//        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-//              'text' => $LANG_DB_BACKUP['optimize_menu']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -440,8 +436,6 @@ function DBADMIN_myisam()
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
               'text' => $LANG_DB_BACKUP['database_admin']),
-//        array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-//              'text' => $LANG_DB_BACKUP['optimize_menu']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -700,7 +694,7 @@ function DBADMIN_optimize()
         'lang_converting'   => $LANG_DB_BACKUP['optimizing'],
         'lang_success'      => $LANG_DB_BACKUP['optimize_success'],
         'lang_ajax_status'  => $LANG_DB_BACKUP['optimization_status'],
-        'to_engine'         => 'InnoDB',
+        'to_engine'         => 'all',
         'action'            => "dooptimize",
         'mode'              => "optimize",
     ));

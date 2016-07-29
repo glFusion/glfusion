@@ -17,6 +17,10 @@
 
 <p>{lang_conversion_status}</p>
 
+{!if lang_last_optimization}
+<p>{lang_last_optimization} : {last_optimization}</p>
+{!endif}
+
 <div id="dbconfig">
 	<form id="dbcvtform" class="uk-form" action="{site_admin_url}/database.php" method="post" style="display:inline;">
 		<input type="hidden" name="{action}" value="{action}">

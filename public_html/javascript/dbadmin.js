@@ -1,9 +1,9 @@
 /**
- * glFusion Database Administration Ajax Driver
- *
- * @author Mark R. Evans <mark AT glfusion DOT org>
- *
- */
+* glFusion Database Administration Ajax Driver
+*
+* @author Mark R. Evans <mark AT glfusion DOT org>
+*
+*/
 
 var glfusion_dbadminInterface = (function() {
 
@@ -12,17 +12,15 @@ var glfusion_dbadminInterface = (function() {
 
     // private vars
     var items = null,
-        item =  null,
-        url =  null,
-        done =  1,
-        count = 0,
-        $msg = null;
-
-    var url = site_admin_url + '/database.php';
+    item =  null,
+    url =  null,
+    done =  1,
+    count = 0,
+    $msg = null;
 
     /**
-     * initialize everything
-     */
+    * initialize everything
+    */
     pub.init = function() {
         // $msg is the status message area
         $msg = $('#batchinterface_msg');
@@ -36,7 +34,7 @@ var glfusion_dbadminInterface = (function() {
         $('#dbconvertbutton').click(pub.update);
     };
 
-    var index = function() {
+    var process = function() {
         if (item) {
 
             var dataS = {
@@ -64,7 +62,7 @@ var glfusion_dbadminInterface = (function() {
                         $('#progress-bar').html(percent + "%");
                         item = items.shift();
                         done++;
-                        window.setTimeout(index, wait);
+                        window.setTimeout(process, wait);
                     }
                     catch(err) {
                         alert(result.statusMessage);
@@ -108,9 +106,9 @@ var glfusion_dbadminInterface = (function() {
 
 
     /**
-     * Gives textual feedback
-     * updates the ID defined in the $msg variable
-     */
+    * Gives textual feedback
+    * updates the ID defined in the $msg variable
+    */
     var message = function(text) {
         if (text.charAt(0) !== '<') {
             text = '<p style="padding-left:20px;">' + text + '</p>'
@@ -121,9 +119,9 @@ var glfusion_dbadminInterface = (function() {
     // update process
     pub.update = function() {
         done = 1;
+        url = $( '#dbcvtform' ).attr( 'action' );
 
         $("#dbadmin_batchprocesor").show();
-
         $('#dbconvertbutton').prop("disabled",true);
         $("#dbconvertbutton").html(lang_converting);
 
@@ -142,7 +140,7 @@ var glfusion_dbadminInterface = (function() {
                 try {
                     item = items.shift();
                     message(lang_converting);
-                    window.setTimeout(index,1000);
+                    window.setTimeout(process,1000);
                 }
                 catch(err) {
                     alert(result.statusMessage);
@@ -153,15 +151,15 @@ var glfusion_dbadminInterface = (function() {
     };
 
     /**
-     * add a throbber image
-     */
+    * add a throbber image
+    */
     var throbber_on = function() {
         $msg.addClass('tm-updating');
     };
 
     /**
-     * Stop the throbber
-     */
+    * Stop the throbber
+    */
     var throbber_off = function() {
         $msg.removeClass('tm-updating');
     };
