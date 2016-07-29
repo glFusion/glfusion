@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Set alpha preserve for GD image library for all image function
   - Updated DB administration (convert DB formats) to an interactive Ajax driven interface
   - Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
   - Improved FB login to support more recent FB API version (v2.7 at this time)

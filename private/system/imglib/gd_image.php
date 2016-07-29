@@ -6,7 +6,7 @@
 // |                                                                          |
 // | GD Lib v2 Graphic Library interface                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -158,7 +158,12 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
 	$new_height = round($new_height);
 
 	$smaller_image = imagecreatetruecolor($new_width, $new_height);
+    imagealphablending( $smaller_image, false );
+    imagesavealpha( $smaller_image, true );
+
 	$square_image = imagecreatetruecolor($dSize, $dSize);
+    imagealphablending( $square_image, false );
+    imagesavealpha( $square_image, true );
 
 	imagecopyresampled($smaller_image, $image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
 
@@ -320,6 +325,8 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
     $imgheight = $imgsize[1];
 
     $newimage = imagecreatetruecolor($imgwidth, $imgheight);
+    imagealphablending( $newimage, false );
+    imagesavealpha( $newimage, true );
     imagecopyresampled($newimage, $image, 0,0,0,0,  $imgwidth, $imgheight, $imgwidth, $imgheight);
     imagedestroy($image);
 
