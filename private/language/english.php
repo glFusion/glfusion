@@ -1682,7 +1682,8 @@ $LANG_DB_BACKUP = array(
     'create_backup'       => 'Backup Database',
     'do_backup'           => 'Do Backup',
     'backup_successful'   => 'Database back up was successful.',
-    'db_explanation'      => 'To create a new backup of your site\'s database, click on "Create New" above. Click on a file name to download that backup.',
+    'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
+    'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
     'not_found'           => "Incorrect path, security restriction in effect or mysqldump utility not executable.<br/> Check <strong>mysqldump_path</strong> definition in the Configuration.<br/> Check <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> settings in PHP.",
     'zero_size'           => 'Backup Failed: Filesize was 0 bytes',
     'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
@@ -1718,6 +1719,22 @@ $LANG_DB_BACKUP = array(
     'optimize_success'    => 'Successfully optimized database tables.',
     'conversion_status'   => 'Conversion Status',
     'optimization_status' => 'Optimization Status',
+    'backup_status'       => 'Backup Status',
+    'backingup'           => 'Performing Backup',
+    'backup_title'        => 'Backup the glFusion Database',
+    'backup_warning'      => 'Note: The configuration is set to only backup database structures. No data will be backed up.',
+    'latest_backup'       => 'Latest Backup',
+    'tables_to_backup'    => 'Tables to Backup',
+    'include'             => 'Include',
+    'exclude'             => 'Exclude',
+    'options'             => 'Options',
+    'struct_only'         => 'Only Backup Table Structure (no data)',
+    'max_files'           => 'Maximum Backup Files to Keep',
+    'disable_purge'       => '("0" to disable purging.)',
+    'use_gzip'            => 'Use GZip if available',
+    'configure'           => 'Configure',
+    'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
+
 );
 
 ###############################################################################

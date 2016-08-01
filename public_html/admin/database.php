@@ -37,6 +37,8 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+require_once $_CONF['path'].'system/classes/dbbackup.class.php';
+
 $display = '';
 $page    = '';
 
@@ -89,7 +91,7 @@ function DBADMIN_list()
         $index = 0;
         while ((false !== ($file = @readdir($fd)))) {
             if ($file <> '.' && $file <> '..' && $file <> 'CVS' &&
-                    preg_match('/\.sql$/i', $file)) {
+                    preg_match('/\.sql(\.gz)?$/i', $file)) {
                 $index++;
                 clearstatcache();
                 $backups[] = $file;
@@ -126,10 +128,10 @@ function DBADMIN_list()
 
         $allInnoDB = DBADMIN_innodbStatus();
 
-        if ( $_CONF['allow_mysqldump'] != 0 ) {
-            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backup=x&amp;'.CSRF_TOKEN.'='.$token,
-                                'text' => $LANG_DB_BACKUP['create_backup']);
-        }
+
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                            'text' => $LANG_DB_BACKUP['create_backup']);
+
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                             'text' => $LANG_DB_BACKUP['optimize_menu']);
@@ -142,6 +144,9 @@ function DBADMIN_list()
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
         }
+
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                            'text' => $LANG_DB_BACKUP['configure']);
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
                             'text' => $LANG_ADMIN['admin_home']);
@@ -186,6 +191,192 @@ function DBADMIN_list()
     return $retval;
 }
 
+function DBADMIN_backupAjax()
+{
+    global $_CONF;
+
+    if ( !COM_isAjax()) die();
+
+    $retval = '';
+    $errorCode = 0;
+
+    $backup = new dbBackup();
+
+    $backup_filename = $backup->getBackupFilename();
+
+    $rc = $backup->initBackup();
+    if ( $rc === false ) {
+        COM_errorLog("DBADMIN error - unable to initialize backup");
+        $errorCode = 1;
+        $retval['statusMessage'] = 'Unable to initialize backup - see error.log for details';
+    }
+
+    $tableList = array();
+
+    $backup_tables = $backup->getTableList();
+    if ( is_array($backup_tables)) {
+        foreach ($backup_tables AS $index => $value) {
+            $tableList[] = $value;
+        }
+    }
+
+    $retval['errorCode'] = $errorCode;
+    $retval['backup_filename'] = $backup_filename;
+    $retval['tablelist'] = $tableList;
+    $retval['statusMessage'] = 'Initialization Successful';
+
+    $return["json"] = json_encode($retval);
+
+    echo json_encode($return);
+    exit;
+}
+
+function DBADMIN_backupCompleteAjax()
+{
+    if ( !COM_isAjax()) die();
+
+    $filename = '';
+
+    $filter = sanitizer::getInstance();
+
+    if (isset($_POST['backup_filename'])) {
+        $filename = $_POST['backup_filename'];
+        $filename = $filter->sanitizeFilename($filename,true);
+    }
+    $backup = new dbBackup();
+    $backup->setBackupFilename($filename);
+    $backup->completeBackup();
+    $backup->save_backup_time();
+    $backup->Purge();
+    $retval['errorCode'] = 0;
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+    exit;
+}
+
+function DBADMIN_backupTableAjax()
+{
+    global $_VARS;
+
+    if ( !COM_isAjax()) die();
+
+    if (!isset($_VARS['_dbback_allstructs'])) {
+        $_VARS['_dbback_allstructs'] = 0;
+    }
+
+    $filename = '';
+
+    $filter = sanitizer::getInstance();
+
+    if (isset($_POST['backup_filename'])) {
+        $filename = $_POST['backup_filename'];
+        $filename = $filter->sanitizeFilename($filename,true);
+    }
+
+    $table = COM_applyFilter($_POST['table']);
+
+    $backup = new dbBackup();
+    $backup->setBackupFilename($filename);
+    $backup->backupTable($table,$_VARS['_dbback_allstructs']);
+
+    $retval['errorCode'] = 0;
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+    exit;
+}
+
+
+/**
+* Prepare to backup
+*
+* @return   string  HTML form
+*
+*/
+function DBADMIN_backupPrompt()
+{
+    global $_CONF, $_TABLES, $_VARS, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
+
+    $retval = '';
+
+    if (is_writable($_CONF['backup_path'])) {
+
+        $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+        $T->set_file('page','dbbackup.thtml');
+
+        $lastrun = DB_getItem($_TABLES['vars'], 'UNIX_TIMESTAMP(value)',
+                                  "name = 'db_backup_lastrun'");
+
+        $menu_arr = array();
+
+        $allInnoDB = DBADMIN_innodbStatus();
+
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+                            'text' => $LANG_DB_BACKUP['database_admin']);
+
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                            'text' => $LANG_DB_BACKUP['optimize_menu']);
+
+        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
+                                'text' => $LANG_DB_BACKUP['convert_menu']);
+        }
+        if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                                'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
+        }
+
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                            'text' => $LANG_ADMIN['admin_home']);
+
+        $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                            COM_getBlockTemplate('_admin_block', 'header')));
+
+        $T->set_var('admin_menu',ADMIN_createMenu(
+            $menu_arr,
+            "",
+            $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+        ));
+
+
+        $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+        $T->set_var('security_token',SEC_createToken());
+        $T->set_var('security_token_name',CSRF_TOKEN);
+
+        if (!empty($lastrun)) {
+            $last = COM_getUserDateTimeFormat($lastrun);
+            $T->set_var('lang_last_backup',$LANG_DB_BACKUP['latest_backup']);
+            $T->set_var('last_backup',$last[0]);
+        }
+
+        if ( isset($_VARS['_dbback_allstructs']) && $_VARS['_dbback_allstructs'] ) {
+            $T->set_var('struct_warning',$LANG_DB_BACKUP['backup_warning']);
+        }
+
+        $T->set_var(array(
+            'action'            => 'backup',
+        	'lang_backingup'    => $LANG_DB_BACKUP['backingup'],
+        	'lang_backup'       => $LANG_DB_BACKUP['do_backup'],
+        	'lang_success'      => $LANG_DB_BACKUP['backup_successful'],
+            'lang_cancel'       => $LANG_ADMIN['cancel'],
+            'lang_ajax_status'  => $LANG_DB_BACKUP['backup_status'],
+            'lang_backup_instructions' => $LANG_DB_BACKUP['backup_instructions'],
+            'lang_title'        => $LANG_DB_BACKUP['backup_title'],
+        ));
+
+        $T->parse('output', 'page');
+        $retval .= $T->finish($T->get_var('output'));
+    } else {
+        $retval .= COM_startBlock($LANG08[06], '',
+                            COM_getBlockTemplate('_msg_block', 'header'));
+        $retval .= $LANG_DB_BACKUP['no_access'];
+        COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
+        $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+    }
+    return $retval;
+}
+
+
 /**
 * Perform database backup
 *
@@ -199,54 +390,9 @@ function DBADMIN_backup()
 
     $retval = '';
 
-    if (is_dir($_CONF['backup_path'])) {
-        $curdatetime = date('Y_m_d_H_i_s');
-        $backupfile = "{$_CONF['backup_path']}glfusion_db_backup_{$curdatetime}.sql";
-        $command = '"'.$_DB_mysqldump_path.'" ' . " -h$_DB_host -u$_DB_user";
-        if (!empty($_DB_pass)) {
-            $command .= " -p".escapeshellarg($_DB_pass);
-            $parg = " -p".escapeshellarg($_DB_pass);
-        }
-        if (!empty($_CONF['mysqldump_options'])) {
-            $command .= ' ' . $_CONF['mysqldump_options'];
-        }
-        $command .= " $_DB_name > \"$backupfile\"";
-        $log_command = $command;
-        if (!empty($_DB_pass)) {
-            $log_command = str_replace($parg, ' -p*****', $command);
-        }
-
-        if (function_exists('is_executable')) {
-            $canExec = @is_executable($_DB_mysqldump_path);
-        } else {
-            $canExec = @file_exists($_DB_mysqldump_path);
-        }
-        if ($canExec) {
-            exec($command);
-            if (file_exists($backupfile) && filesize($backupfile) > 1000) {
-                @chmod($backupfile, 0644);
-                $retval .= COM_showMessage(93);
-            } else {
-                $retval .= COM_showMessage(94);
-                COM_errorLog('Backup Filesize was less than 1kb', 1);
-                COM_errorLog("Command used for mysqldump: $log_command", 1);
-            }
-        } else {
-            $retval .= COM_startBlock($LANG08[06], '',
-                                COM_getBlockTemplate('_msg_block', 'header'));
-            $retval .= $LANG_DB_BACKUP['not_found'];
-            $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block',
-                                                         'footer'));
-            COM_errorLog('Backup Error: Bad path, mysqldump does not exist or open_basedir restriction in effect.', 1);
-            COM_errorLog("Command used for mysqldump: $log_command", 1);
-        }
-    } else {
-        $retval .= COM_startBlock($MESSAGE[30], '',
-                            COM_getBlockTemplate('_msg_block', 'header'));
-        $retval .= $LANG_DB_BACKUP['path_not_found'];
-        $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-        COM_errorLog("Backup directory '" . $_CONF['backup_path'] . "' does not exist or is not a directory", 1);
-    }
+    $backup = new dbBackup();
+    $backup->perform_backup();
+    $backup->Purge();
 
     $retval .= DBADMIN_list();
 
@@ -274,8 +420,10 @@ function DBADMIN_download($file)
     $dl->setDebug(true);
 
     $dl->setPath($_CONF['backup_path']);
-    $dl->setAllowedExtensions(array('sql' =>  'application/x-gzip-compressed'));
-
+    $dl->setAllowedExtensions(array(
+            'sql' =>  'application/x-gzip-compressed',
+            'gz'  =>  'application/x-gzip-compressed',
+    ));
     $dl->downloadFile($file);
 }
 
@@ -330,6 +478,7 @@ function DBADMIN_innodbStatus()
                 $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
                 $B = DB_fetchArray($result2);
                 if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
+                    return false;
                     break; // found a non-InnoDB table
                 }
             }
@@ -359,6 +508,7 @@ function DBADMIN_myisamStatus()
             $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
             $B = DB_fetchArray($result2);
             if (strcasecmp($B['Engine'], 'MyISAM') != 0) {
+                return false;
                 break; // found a non-MyISAM table
             }
         }
@@ -889,9 +1039,90 @@ function DBADMIN_validateEngine( $engine )
     return false;
 }
 
+/**
+*   Provide an interface to configure backups
+*
+*   @return string  HTML for configuration function
+*/
+function DBADMIN_configBackup()
+{
+    global $_CONF, $_TABLES, $_VARS, $LANG_DB_BACKUP, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    $tablenames = $_TABLES;
+    $included = '';
+    $excluded = '';
+    $retval   = '';
+
+    $exclude_tables = @unserialize($_VARS['_dbback_exclude']);
+    if (!is_array($exclude_tables)) {
+        $exclude_tables = array();
+    }
+
+    $chk_gzip = (isset($_VARS['_dbback_gzip']) &&
+            $_VARS['_dbback_gzip'] == 1) ? ' checked="checked" ' : '';
+
+    $chk_allstructs = (isset($_VARS['_dbback_allstructs']) &&
+            $_VARS['_dbback_allstructs'] == 1) ? ' checked="checked" ' : '';
+
+    $max_files = (isset($_VARS['_dbback_files']) ? (int)$_VARS['_dbback_files'] : 0);
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/database.php',
+              'text' => $LANG_DB_BACKUP['database_admin']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbbackupcfg.thtml');
+
+    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                $LANG_DB_BACKUP['config_instructions'],
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
+    );
+
+    $include_tables = array_diff($tablenames, $exclude_tables);
+
+    foreach ($include_tables as $key=>$name) {
+        $included .= "<option value=\"$name\">$name</option>\n";
+    }
+    foreach ($exclude_tables as $key=>$name) {
+        $excluded .= "<option value=\"$name\">$name</option>\n";
+    }
+
+    $T->set_var(array(
+        'lang_tables_to_backup' => $LANG_DB_BACKUP['tables_to_backup'],
+        'lang_include'          => $LANG_DB_BACKUP['include'],
+        'lang_exclude'          => $LANG_DB_BACKUP['exclude'],
+        'lang_options'          => $LANG_DB_BACKUP['options'],
+        'lang_struct_only'      => $LANG_DB_BACKUP['struct_only'],
+        'lang_max_files'        => $LANG_DB_BACKUP['max_files'],
+        'lang_disable_purge'    => $LANG_DB_BACKUP['disable_purge'],
+        'lang_use_gzip'         => $LANG_DB_BACKUP['use_gzip'],
+        'lang_save'             => $LANG_ADMIN['save'],
+        'included_tables'       => $included,
+        'excluded_tables'       => $excluded,
+        'max_files'             => $max_files,
+        'chk_gzip'              => $chk_gzip,
+        'chk_allstructs'        => $chk_allstructs,
+    ) );
+
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+
 
 $action = '';
-$expected = array('backup','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode');
+$expected = array('backup','backupdb','config','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode','saveconfig');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -904,6 +1135,10 @@ if ( isset($_POST['dbcancelbutton'])) $action = '';
 
 switch ($action) {
 
+    case 'config' :
+        $page = DBADMIN_configBackup();
+        break;
+
     case 'backup':
         if (SEC_checkToken()) {
             $page .= DBADMIN_backup();
@@ -913,6 +1148,10 @@ switch ($action) {
         }
         break;
 
+    case 'backupdb' :
+
+        $page .= DBADMIN_backupPrompt();
+        break;
     case 'download':
         $file = '';
         if (isset($_GET['file'])) {
@@ -1040,6 +1279,45 @@ switch ($action) {
         }
         break;
 
+    case 'saveconfig' :
+        $items = array();
+
+        // Get the excluded tables into a serialized string
+        $tables = explode('|', $_POST['groupmembers']);
+        $items['_dbback_exclude'] = DB_escapeString(@serialize($tables));
+
+        $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
+
+/* ---
+        if (isset($_POST['disable_cron'])) {
+            $str = '-1';
+        } else {
+            $str = (int)$_POST['db_backup_interval'];
+        }
+        $items['_dbback_cron'] = $str;
+--- */
+
+        $items['_dbback_gzip'] = isset($_POST['use_gzip']) ? 1 : 0;
+        $items['_dbback_allstructs'] = isset($_POST['allstructs']) ? 1 : 0;
+
+        foreach ($items as $name => $value) {
+            $sql = "INSERT INTO {$_TABLES['vars']} (name, value)
+                    VALUES ('$name', '$value')
+                    ON DUPLICATE KEY UPDATE value='$value'";
+            DB_query($sql);
+        }
+
+        $page = DBADMIN_list();
+
+        break;
+
+
+
+
+
+
+
+
     case 'mode' :
         $mode = COM_applyFilter($_POST['mode']);
         switch ( $mode ) {
@@ -1058,7 +1336,6 @@ switch ($action) {
                 echo json_encode($return);
                 exit;
                 break;
-
             case 'optimizecomplete' :
                 DB_delete($_TABLES['vars'], 'name', 'lastoptimizedtable');
                 DB_delete($_TABLES['vars'], 'name', 'lastoptimizeddb');
@@ -1068,7 +1345,6 @@ switch ($action) {
                 echo json_encode($return);
                 exit;
                 break;
-
             case 'dblist' :
                 $engine = COM_applyFilter($_POST['engine']);
                 DBADMIN_ajaxGetTableList($engine);
@@ -1089,7 +1365,6 @@ switch ($action) {
                 echo json_encode($return);
                 exit;
                 break;
-
             case 'convertdbcomplete' :
                 $engine = COM_applyFilter($_POST['engine']);
                 DBADMIN_ajaxFinishCvt($engine);
@@ -1098,6 +1373,16 @@ switch ($action) {
                 echo json_encode($return);
                 exit;
                 break;
+            case 'dbbackup_init' :
+                DBADMIN_backupAjax();
+                break;
+            case 'dbbackup_table' :
+                DBADMIN_backupTableAjax();
+                break;
+            case 'dbbackup_complete' :
+                DBADMIN_backupCompleteAjax();
+                break;
+
         }
         break;
     default :

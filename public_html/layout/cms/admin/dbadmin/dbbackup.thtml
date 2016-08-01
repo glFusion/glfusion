@@ -1,11 +1,9 @@
 <script>
-	var engine = "{to_engine}";
-	var mode   = "{mode}";
-	var lang_converting = "{lang_converting}";
-	var lang_convert = "{lang_convert}";
+	var lang_backingup = "{lang_backingup}";
+	var lang_backup = "{lang_backup}";
 	var lang_success = "{lang_success}";
 </script>
-<script src="{site_url}/javascript/dbadmin.js"></script>
+<script src="{site_url}/javascript/dbbackup.js"></script>
 
 {start_block}
 
@@ -13,36 +11,35 @@
 
 <h2>{lang_title}</h2>
 
-<p>{lang_conversion_instructions}</p>
+<p>{lang_backup_instructions}</p>
 
-<p>{lang_conversion_status}</p>
-
-{!if lang_last_optimization}
-<p>{lang_last_optimization} : {last_optimization}</p>
+{!if struct_warning}
+<div class="uk-alert uk-alert-danger uk-margin">{struct_warning}</div>
 {!endif}
 
-<div id="dbconfig">
-	<form id="dbcvtform" class="uk-form" action="{site_admin_url}/database.php" method="post" style="display:inline;">
-		<input type="hidden" name="{action}" value="{action}">
-		<input type="hidden" name="toengine" value="{to_engine}">
-		<input type="hidden" name="{security_token_name}" value="{security_token}">
+{!if lang_last_backup}
+<p>{lang_last_lastbackup} : {last_lastbackup}</p>
+{!endif}
 
-		<button id="dbconvertbutton" class="uk-button uk-button-primary" type="submit" >{lang_convert}</button>
+
+<div id="dbbackup">
+	<form id="dbbackupform" class="uk-form" action="{site_admin_url}/database.php" method="post" style="display:inline;">
+		<input type="hidden" name="{action}" value="{action}">
+		<input type="hidden" name="{security_token_name}" value="{security_token}">
+		<button id="dbbackupbutton" class="uk-button uk-button-primary" type="submit" >{lang_backup}</button>
 		<button id="dbcancelbutton" name="dbcancelbutton" class="uk-button uk-button-danger" type="submit" >{lang_cancel}</button>
 	</form>
 </div>
 
 <div style="height:400px;margin-top:15px;">
 	<div id="dbadmin_batchprocesor" style="display:none;">
-		<hr>
 		<h3 class="uk-margin-bottom uk-margin-remove-top">{lang_ajax_status}</h3>
-
-		<div class="msg" id="batchinterface_msg">&nbsp;</div>
-
+		<div class="msg" id="batchinterface_msg">Idle</div>
 		<div class="uk-progress">
 			<div id="progress-bar" class="uk-progress-bar" style="width: 0%;">0%</div>
 		</div>
 	</div>
 </div>
+
 
 {end_block}
