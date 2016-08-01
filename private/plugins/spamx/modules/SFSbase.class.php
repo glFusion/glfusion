@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+require_once $_CONF['path'] . 'lib/http/http.php';
+
 /**
 * Sends posts to SFS (http://www.stopforumspam.com) for examination
 *
@@ -54,7 +56,6 @@ class SFSbase {
     {
         global $_SPX_CONF, $REMOTE_ADDR;
 
-        require_once 'HTTP/Request2.php';
         $retval = false;
         $ip = $REMOTE_ADDR;
 
@@ -62,32 +63,40 @@ class SFSbase {
             return $retval;
         }
 
-        $request = new HTTP_Request2('http://www.stopforumspam.com/api',
-                                     HTTP_Request2::METHOD_GET, array('use_brackets' => true));
-        $url = $request->getUrl();
+        $arguments = array();
+        $response = '';
 
-        $checkData['f'] = 'serial';
+        $http=new http_class;
+        $http->timeout=0;
+        $http->data_timeout=0;
+        $http->debug=0;
+        $http->html_debug=0;
+        $http->user_agent = 'glFusion/' . GVERSION;
+        $url="http://www.stopforumspam.com/api";
+        $requestArgs = '?f=serial&';
+
         if ( $ip != '' ) {
-            $checkData['ip'] = $ip;
+            $requestArgs .= 'ip='.$ip.'&';
         }
-        $url->setQueryVariables($checkData);
-        $url->setQueryVariable('cmd', 'display');
+        $requestArgs .= 'cmd=display';
+        $url = $url . $requestArgs;
+        $error = $http->GetRequestArguments($url,$arguments);
+        $error=$http->Open($arguments);
+        $error=$http->SendRequest($arguments);
+        if ( $error == "" ) {
+            $error=$http->ReadReplyBody($body,1024);
+            if ( $error == "" || strlen($body) > 0 ) {
+                $response = $response . $body;
+                $result = @unserialize($response);
 
-        try {
-            $response = $request->send();
-        } catch (Exception $e) {
-            return 0;
+                if (!$result) return 0;     // invalid data, assume ok
+
+                if (isset($result['ip']) && $result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25) {
+                    $retval = true;
+                    SPAMX_log ("SFS: spam detected");
+                }
+            }
         }
-        $result = @unserialize($response->getBody());
-
-        if (!$result) return false;     // invalid data, assume ok
-        if ($result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25) {
-            $retval = true;
-            SPAMX_log ("SFS: spam detected");
-        } else if ($this->_verbose) {
-            SPAMX_log ("SFS: no spam detected");
-        }
-
         return $retval;
     }
 }
