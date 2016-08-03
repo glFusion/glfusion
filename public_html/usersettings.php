@@ -949,9 +949,8 @@ function saveuser($A)
     // we need the user's current password
     $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
     $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
-    if ($service == '') {
-        $current_password = DB_getItem($_TABLES['users'], 'passwd',
-                                       "uid = {$_USER['uid']}");
+    $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
+    if ( $current_password != '' && $current_password != NULL ) {
         if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) ||
                 ($A['cooktime'] != $_USER['cookietimeout'])) {
             if (empty($A['passwd']) ||
@@ -1062,7 +1061,7 @@ function saveuser($A)
         return COM_refresh ($_CONF['site_url']
                 . '/usersettings.php?msg=56');
     } else {
-        if ($service == '') {
+        if ( $current_password != '' ) {
             if (!empty($A['newp'])) {
                 $A['newp'] = trim($A['newp']);
                 $A['newp_conf'] = trim($A['newp_conf']);
