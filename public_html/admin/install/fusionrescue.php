@@ -30,10 +30,15 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.6.0');
+define('GVERSION','1.6.1');
+
+if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
 require_once '../../siteconfig.php';
 $_SYSTEM['no_fail_sql'] = true;
+
+if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
+
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
 require_once $_CONF['path_system'].'lib-database.php';
