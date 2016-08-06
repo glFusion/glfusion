@@ -6,6 +6,10 @@
 // |                                                                          |
 // | Admin functions handle Trackback, Pingback, and Ping                     |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
 // | Author: Dirk Haun - dirk AT haun-online DOT de                           |
@@ -847,7 +851,7 @@ function TRACKBACK_freshTrackback()
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     $retval .= sprintf($LANG_TRB['trackback_note'], $freshurl);
-    $retval .= COM_endBlock();
+    $retval .= COM_endBlock(COM_getBlockTemplate ('_admin_block', 'footer'));
 
     return $retval;
 }
@@ -866,10 +870,10 @@ function TRACKBACK_freshPingback()
 
     $retval .= COM_startBlock($LANG_TRB['pingback'],
                                $_CONF['site_url'] . '/docs/trackback.html',
-                               COM_getBlockTemplate('_admin_block', 'header'));
+                               COM_getBlockTemplate ('_admin_block', 'header'));
 
     $retval .= sprintf($LANG_TRB['pingback_note'], $freshurl);
-    $retval .= COM_endBlock();
+    $retval .= COM_endBlock(COM_getBlockTemplate ('_admin_block', 'footer'));
 
     return $retval;
 }
