@@ -526,14 +526,7 @@ function repairDatabase() {
                     continue; // skip
                 }
             }
-/*
-            if (time() > $start + $maxtime) {
-                $startwith = $table;
-                $url = "fusionrescue.php?mode=repair";
-                header("Location: $url&startwith=$startwith&failures=$failures");
-                exit;
-            }
-*/
+
             $repair = DB_query("REPAIR TABLE " . $table, 1);
             if ($repair === false) {
                 $retval[] = 'Repair failed for ' . $able;
