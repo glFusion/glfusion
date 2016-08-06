@@ -35,12 +35,13 @@ if (!SEC_inGroup ('Root')) {
     $display  = COM_siteHeader();
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the security check.");
+    COM_accessLog ("User {$_USER['username']} tried to access the security check without the necessary permissions.");
     echo $display;
     exit;
 }
 
-// ugh, global variable ...
+require_once $_CONF['path'] . 'lib/http/http.php';
+
 $failed_tests = 0;
 
 /**
@@ -53,17 +54,23 @@ $failed_tests = 0;
 */
 function doHeadRequest ($url, &$errmsg)
 {
-    require_once ('HTTP/Request.php');
+    $http = new http_class;
+    $http->timeout=0;
+    $http->data_timeout=0;
+    $http->debug=0;
+    $http->html_debug=0;
+    $http->user_agent = 'glFusion/' . GVERSION;
 
-    $req = new HTTP_Request ($url);
-    $req->setMethod (HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader ('User-Agent', 'glFusion/' . glFusion_VERSION);
-    $response = $req->sendRequest ();
-    if (PEAR::isError ($response)) {
-        $errmsg = $response->getMessage();
-        return 777;
+    $error = $http->GetRequestArguments($url,$arguments);
+    $error = $http->Open($arguments);
+    $error = $http->SendRequest($arguments);
+    if ( $error == "" ) {
+        $http->ReadReplyHeaders($headers);
+
+        return $http->response_status;
     } else {
-        return $req->getResponseCode ();
+        $errmsg = $error;
+        return 777;
     }
 }
 
@@ -122,7 +129,7 @@ function interpretResult ($retcode, $msg)
     $retval = '';
 
     if ($retcode == 200) {
-        $retval = 'Your <strong>' . $msg . '</strong> is reachable from the web.<br' . XHTML . '><em>This is a security risk and should be fixed!</em>';
+        $retval = 'Your <strong>' . $msg . '</strong> is reachable from the web.<br><em>This is a security risk and should be fixed!</em>';
         $failed_tests++;
     } elseif (($retcode == 401) || ($retcode == 403) || ($retcode == 404)) {
         $retval = 'Good! Your ' . $msg . ' is not reachable from the web.';
@@ -171,16 +178,15 @@ function doTest ($baseurl, $urltocheck, $what)
 
     $retval = '';
 
-    $retval .= '<li>';
 
     $retcode = doHeadRequest ($baseurl . $urltocheck, $errmsg);
     if ($retcode == 777) {
-        $retval .= $errmsg;
+        $retval .= '<li>'.$errmsg.'</li>';
         $failed_tests++;
     } else {
         $retval .= interpretResult ($retcode, $what);
     }
-    $retval .= '</li>' . LB;
+
 
     return $retval;
 }
@@ -272,6 +278,7 @@ $display .= '<div dir="ltr">' . LB;
 $display .= COM_startBlock ('Results of the Security Check');
 
 $url = urlToCheck ();
+
 if (!empty ($url)) {
 
     $display .= '<ol>';
@@ -334,6 +341,7 @@ if (!empty ($url)) {
     }
 
 }
+
 
 if ($failed_tests > 0) {
     $display .= '<p class="warningsmall"><strong>Please fix the above issues before using your site!</strong></p>';
