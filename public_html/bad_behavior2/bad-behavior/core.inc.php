@@ -63,7 +63,7 @@ function bb2_insert($settings, $package, $key)
 	if (!strcasecmp($request_method, "POST")) {
 	    if ( is_array($package['request_entity']) ) {
     		foreach ($package['request_entity'] as $h => $v) {
-    			$request_entity .= bb2_db_escape("$h: $v\n");
+    			$request_entity .= @bb2_db_escape("$h: $v\n");
     		}
     	}
 	}
