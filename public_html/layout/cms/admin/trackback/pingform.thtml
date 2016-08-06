@@ -19,9 +19,9 @@
 		</div>
 	</div>
 	<div class="uk-form-row">
-		<label class="uk-form-label">{traclback_button}</label>
+		<label class="uk-form-label">{trackback_button}</label>
 		<div class="uk-form-controls">
-			{lang_traclback_short}
+			{lang_trackback_short}
 		</div>
 	</div>
 
