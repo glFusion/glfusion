@@ -46,7 +46,7 @@ if (!SEC_hasRights ('story.ping')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[34],$MESSAGE[30],true);
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the trackback administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the trackback administration screen.");
     echo $display;
     exit;
 }
@@ -129,8 +129,7 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
     if (empty($url) || empty ($title)) {
         $template->set_var('lang_explain', $LANG_TRB['editor_intro_none']);
     } else {
-        $template->set_var('lang_explain',
-                            sprintf ($LANG_TRB['editor_intro'], $url, $title));
+        $template->set_var('lang_explain',sprintf ($LANG_TRB['editor_intro'], $url, $title));
     }
     $template->set_var('lang_trackback_url', $LANG_TRB['trackback_url']);
     $template->set_var('lang_entry_url', $LANG_TRB['entry_url']);
@@ -171,14 +170,17 @@ function TRACKBACK_delete($id)
     global $_TABLES;
 
     $cid = DB_escapeString($id);
-    $result = DB_query("SELECT sid,type FROM {$_TABLES['trackback']} WHERE cid = '$cid'");
-    list($sid, $type) = DB_fetchArray ($result);
+    $result = DB_query("SELECT sid,type FROM {$_TABLES['trackback']} WHERE cid = '".DB_escapeString($cid)."'");
+    $C = DB_fetchArray($result);
+    $sid = $C['sid'];
+    $type = $C['type'];
+
     $url = TRACKBACK_getItemInfo($type, $sid, 'url');
 
     if (TRB_allowDelete($sid, $type)) {
         TRB_deleteTrackbackComment($id);
         if ($type == 'article') {
-            DB_query("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks - 1 WHERE (sid = '$sid')");
+            DB_query("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks - 1 WHERE (sid = '".DB_escapeString($sid)."')");
             CACHE_remove_instance('story_'.$sid);
         }
         $msg = 62;
@@ -219,11 +221,12 @@ function TRACKBACK_sendPingbacks($type, $id)
 
     $retval = '';
 
-    list($url, $text) = TRACKBACK_getItemInfo($type, $id, 'url,description');
+    $itemInfo = TRACKBACK_getItemInfo($type, $id, 'url,description');
+    $url = $itemInfo['url'];
+    $text = $itemInfo['description'];
 
     // extract all links from the text
-    preg_match_all("/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i", $text,
-                    $matches);
+    preg_match_all("/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i", $text,$matches);
     $numlinks = count($matches[0]);
     if ($numlinks > 0) {
         $links = array();
@@ -235,7 +238,7 @@ function TRACKBACK_sendPingbacks($type, $id)
 
         $template = new Template($_CONF['path_layout'] . 'admin/trackback');
         $template->set_file(array ('list' => 'pingbacklist.thtml',
-                                    'item' => 'pingbackitem.thtml'));
+                                   'item' => 'pingbackitem.thtml'));
         $template->set_var('lang_resend', $LANG_TRB['resend']);
         $template->set_var('lang_results', $LANG_TRB['pingback_results']);
 
@@ -256,8 +259,7 @@ function TRACKBACK_sendPingbacks($type, $id)
             $template->set_var('host_name', $parts['host']);
             $template->set_var('pingback_result', $result);
             $template->set_var('resend', $resend);
-            $template->set_var('alternate_row',
-                    ($counter % 2) == 0 ? 'row-even' : 'row-odd');
+            $template->set_var('alternate_row', ($counter % 2) == 0 ? 'row-even' : 'row-odd');
             $template->set_var('cssid',($i % 2) + 1);
             $template->parse('pingback_results', 'item', true);
             $counter++;
@@ -295,7 +297,6 @@ function TRACKBACK_pingForm($targetUrl = '')
         $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
     );
 
-
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array('list' => 'pingbackform.thtml'));
 
@@ -331,7 +332,9 @@ function TRACKBACK_sendPings($type, $id)
 
     $retval = '';
 
-    list($itemurl,$feedurl) = TRACKBACK_getItemInfo($type, $id, 'url,feed');
+    $itemInfo = TRACKBACK_getItemInfo($type, $id, 'url,feed');
+    $itemurl = $itemInfo['url'];
+    $feedurl = $itemInfo['feed'];
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array ('list' => 'pinglist.thtml',
@@ -962,7 +965,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $url = COM_applyFilter ($_POST['url']);
     $title = $_POST['title'];
     $excerpt = $_POST['excerpt'];
-    $blog = $_POST['blog_name'];
+    $blog = $_POST['blog'];
 
     if (empty ($target)) {
         $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
@@ -1011,8 +1014,11 @@ if (($mode == 'delete') && SEC_checkToken()) {
 
     $id = COM_sanitizeID(COM_applyFilter($_REQUEST['id']));
     if (!empty ($id)) {
-        list ($url, $title, $excerpt) = TRACKBACK_getItemInfo($type, $id,
-                                                     'url,title,excerpt');
+        $itemInfo = TRACKBACK_getItemInfo($type, $id,'url,title,excerpt');
+        $url = $itemInfo['url'];
+        $title = $itemInfo['title'];
+        $excerpt = $itemInfo['excerpt'];
+
         $excerpt = trim(strip_tags ($excerpt));
         $blog = TRB_filterBlogname($_CONF['site_name']);
 
@@ -1186,8 +1192,11 @@ if (($mode == 'delete') && SEC_checkToken()) {
 
     $trackbackUrl = TRB_detectTrackbackUrl($url);
 
-    list ($url, $title, $excerpt) = TRACKBACK_getItemInfo($type, $id,
-                                                 'url,title,excerpt');
+    $itemInfo = TRACKBACK_getItemInfo($type, $id,'url,title,excerpt');
+    $url = $itemInfo['url'];
+    $title = $itemInfo['title'];
+    $excerpt = $itemInfo['excerpt'];
+
     $excerpt = trim(strip_tags($excerpt));
     $blog = TRB_filterBlogname($_CONF['site_name']);
 
@@ -1223,16 +1232,18 @@ if (($mode == 'delete') && SEC_checkToken()) {
         $excerpt = $_REQUEST['excerpt'];
     }
     $blog = '';
-    if (isset ($_REQUEST['blog_name'])) {
-        $blog = $_REQUEST['blog_name'];
+    if (isset ($_REQUEST['blog'])) {
+        $blog = $_REQUEST['blog'];
     }
 
     if (isset ($_REQUEST['id']) && isset ($_REQUEST['type'])) {
         $id = COM_applyFilter ($_REQUEST['id']);
         $type = COM_applyFilter ($_REQUEST['type']);
         if (!empty ($id) && !empty ($type)) {
-            list ($newurl, $newtitle, $newexcerpt) =
-                                TRACKBACK_getItemInfo($type, $id, 'url,title,excerpt');
+                        $itemInfo = TRACKBACK_getItemInfo($type, $id, 'url,title,excerpt');
+            $newurl = $itemInfo['url'];
+            $newtitle = $itemInfo['title'];
+            $newexcerpt = $itemInfo['excerpt'];
             $newexcerpt = trim(strip_tags($newexcerpt));
 
             if (empty ($url) && !empty ($newurl)) {
