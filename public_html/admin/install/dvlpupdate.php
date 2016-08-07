@@ -1269,7 +1269,7 @@ function glfusion_152()
 
 function glfusion_160()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_CK_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1284,8 +1284,10 @@ function glfusion_160()
         $c->add('fb_appid','','text',0,0,NULL,90,TRUE);
     }
 
-    $c->add('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 110, true, 'ckeditor');
-    $c->add('filemanager_dirperm', '0775', 'text', 0, 2, NULL, 120, true, 'ckeditor');
+    if ( !isset($_CK_CONF['filemanager_fileperm'] ) ) {
+        $c->add('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 110, true, 'ckeditor');
+        $c->add('filemanager_dirperm', '0775', 'text', 0, 2, NULL, 120, true, 'ckeditor');
+    }
 
     $res = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE name='social_site_extra' AND group_name='social_internal'");
     $num = DB_numRows($res);
