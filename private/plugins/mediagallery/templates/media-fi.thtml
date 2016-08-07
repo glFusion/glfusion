@@ -1,36 +1,36 @@
 {# begin {templatelocation} #}
 <a name="{media_id}"></a>
-<div class="uk-container uk-container-center">
-<table>
-    <tr class="uk-text-center" style="height:{row_height}px;">
-        <td class="uk-text-middle uk-text-center">
-            {media_item_thumbnail}
-            {mp3_podcast}
-        </td>
-  </tr>
-    <tr>
-        <td class="uk-text-center">
-            <div class="uk-text-medium">
-                {media_title}
+<table style="margin:0px auto;">
+	<tr class="uk-text-center" style="height:{row_height}px;">
+		<td class="uk-text-middle uk-text-center">
+			{media_item_thumbnail}
+			{mp3_podcast}
+		</td>
+	</tr>
+	<tr>
+		<td class="uk-text-center">
+			<div class="uk-text-medium">
+				{media_title}
 {!if musicalbum}
-                &nbsp;/&nbsp;{musicalbum}
+				&nbsp;/&nbsp;{musicalbum}
 {!endif}
-            </div>
+			</div>
 {!if artist}
-            <div class="uk-text-medium">
-                {artist}
-            </div>
+			<div class="uk-text-medium">
+				<strong>{lang_artist}</strong>: {artist}
+			</div>
 {!endif}
-            <div class="uk-text-small">Album: <span class="uk-text-bold">{album_name_link}</span></div>
-			      <div class="uk-text-small">Photograph &copy; <span class="uk-text-bold">{owner_fullname}</span></div>
-						<div class="uk-text-small">Posted {upload_time}</div>
-						<div class="uk-text-small">{media_views} / {media_comments}</div>
+			<div class="uk-text-small">{lang_album}: <span class="uk-text-bold">{album_name_link}</span></div>
+{!if copyright_name}
+			<div class="uk-text-small">&copy; <span class="uk-text-bold">{copyright_name}</span></div>
+{!endif}
+			<div class="uk-text-small">{lang_posted} {upload_time}</div>
+			<div class="uk-text-small">{media_views} / {media_comments}</div>
 {!if edit_link}
-            <div class="uk-text-center">{edit_link}</div>
+			<div class="uk-text-center">{edit_link}</div>
 {!endif}
-
-    </td>
-  </tr>
+		</td>
+	</tr>
 </table>
-</div>
+
 {# end {templatelocation} #}

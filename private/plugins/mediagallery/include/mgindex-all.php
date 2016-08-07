@@ -478,11 +478,15 @@ class mediaItem extends Media {
             'owner_fullname'	=> $fullname,
             'site_url'		    => $_MG_CONF['site_url'],
             'lang_published'	=> $LANG_MG03['published'],
+            'lang_album'        => $LANG_MG01['album'],
             'lang_on'		    => $LANG_MG03['on'],
+            'lang_posted'       => $LANG_MG01['posted'],
             'lang_hyphen'	    => $this->album == '' ? '' : '-',
+            'lang_artist'       => $LANG_MG01['artist'],
             'media_link_start'  => $media_start_link,
             'media_link_end'    => '</a>',
             'artist'		    => $this->artist,
+            'copyright_name'    => ($this->artist != "" ? $this->artist : $fullname),
             'musicalbum'	    => $this->album != '' ? $this->album : '',
             'genre'		        => $this->genre != '' ? $this->genre : '',
             'alt_edit_link'     => $edit_item,
@@ -521,7 +525,7 @@ class mediaItem extends Media {
         if ( $MG_albums[$this->album_id]->enable_comments) {
             if ( $this->type == 4 || ($this->type == 1 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 2 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 5 && $MG_albums[$this->album_id]->playback_type != 2)) {
                 $cmtLink  = '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
-                $cmtLink_alt = '';
+                $cmtLink_alt = $cmtLink;
             }  else {
                 $cmtLink = $LANG_MG03['comments'];
                 $cmtLink_alt  = '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
