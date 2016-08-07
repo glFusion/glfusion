@@ -871,6 +871,7 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['log_path'].'spamx.log',
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
+                        $_PATH['dbconfig_path'].'plugins/mediagallery/',
                         $_PATH['dbconfig_path'].'plugins/mediagallery/tmp/',
                         $_PATH['dbconfig_path'].'system/lib-custom.php',
 
@@ -1425,6 +1426,20 @@ function INST_installAndContentPlugins()
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
+
+    // check the mg config...
+    if (!@file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php') ) {
+        if ( @file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist') ) {
+            $rc = @copy($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist',$_PATH['dbconfig_path'].'plugins/mediagallery/config.php');
+            if ( $rc === false ) {
+                return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
+            }
+        } else {
+            // no config.php.dist found
+            return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
+        }
+    }
+
 
     // check and see if site config really exists...
     if (!@file_exists($_PATH['public_html'].'siteconfig.php') ) {
