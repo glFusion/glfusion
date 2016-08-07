@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,6 +40,6 @@ if (!defined ('GVERSION')) {
 $_CF_CONF['pi_name']            = 'commentfeeds';
 $_CF_CONF['pi_display_name']    = 'Comment Feeds';
 $_CF_CONF['pi_version']         = '1.1.0';
-$_CF_CONF['gl_version']         = '1.6.0';
+$_CF_CONF['gl_version']         = '1.6.1';
 $_CF_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

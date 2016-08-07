@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,7 +38,7 @@ $_BB2_CONF = array();
 $_BB2_CONF['pi_name']           = 'bad_behavior2';
 $_BB2_CONF['pi_display_name']   = 'Bad Behavior2';
 $_BB2_CONF['pi_version']        = '2.0.50';
-$_BB2_CONF['gl_version']        = '1.6.0';
+$_BB2_CONF['gl_version']        = '1.6.1';
 $_BB2_CONF['pi_url']            = 'https://www.glfusion.org/';
 
 $_TABLES['bad_behavior2']    	= $_DB_table_prefix . 'bad_behavior2';
