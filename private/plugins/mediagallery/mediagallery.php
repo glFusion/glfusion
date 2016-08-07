@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2009-2015 by the following authors:                       |
+// | Copyright (C)  2009-2016 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -39,7 +39,7 @@ $_MG_CONF = array();
 
 $_MG_CONF['pi_name']            = 'mediagallery';
 $_MG_CONF['pi_display_name']    = 'Media Gallery';
-$_MG_CONF['pi_version']         = '2.1.0';
+$_MG_CONF['pi_version']         = '2.1.1';
 $_MG_CONF['gl_version']         = '1.6.0';
 $_MG_CONF['pi_url']             = 'http://www.glfusion.org/';
 

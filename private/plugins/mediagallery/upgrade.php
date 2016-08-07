@@ -201,24 +201,25 @@ function mediagallery_upgrade()
             if ($_MG_CONF['htmlallowed'] == 1 ) {
                 DB_query("UPDATE {$_TABLES['mg_albums']} SET enable_html=1",1);
             }
+        case '2.1.0' :  //glFusion v1.6.0
+
 
         default :
-            if ( $_DB_dbms != 'mssql' ) {
-                // we missed media_keywords field somewhere along the way...
-                $result = DB_query("SHOW COLUMNS FROM {$_TABLES['mg_mediaqueue']}");
-                $numColumns = DB_numRows($result);
-                $x=0;
-                while ( $x < $numColumns ) {
-                    $colname = DB_fetchArray($result);
-                    $col[$colname[0]] = $colname[0];
-                    $x++;
-                }
-                if ( $col['media_category'] != 'media_category' ) {
-                    DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_category` int(11) NOT NULL default '0' AFTER `media_upload_time`");
-                }
-                if ( $col['media_keywords'] != 'media_keywords' ) {
-                    DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_keywords` varchar(255) NOT NULL default '' AFTER `media_desc`");
-                }
+
+            // we missed media_keywords field somewhere along the way...
+            $result = DB_query("SHOW COLUMNS FROM {$_TABLES['mg_mediaqueue']}");
+            $numColumns = DB_numRows($result);
+            $x=0;
+            while ( $x < $numColumns ) {
+                $colname = DB_fetchArray($result);
+                $col[$colname[0]] = $colname[0];
+                $x++;
+            }
+            if ( $col['media_category'] != 'media_category' ) {
+                DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_category` int(11) NOT NULL default '0' AFTER `media_upload_time`");
+            }
+            if ( $col['media_keywords'] != 'media_keywords' ) {
+                DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_keywords` varchar(255) NOT NULL default '' AFTER `media_desc`");
             }
 
             // now we do a little housekeeping...

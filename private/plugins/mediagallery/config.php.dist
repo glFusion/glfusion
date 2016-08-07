@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Configuration options for Media Gallery                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -79,7 +79,7 @@ $_MG_CONF['rating_speedlimit'] = 45;
  * To use the specified size instead, set this to 1
  */
 
-$_MG_CONF['thumbnail_actual_size'] = 0;
+$_MG_CONF['thumbnail_actual_size'] = 1;
 
 /*
  * By default, Media Gallery references its templates from the plugin
@@ -226,7 +226,7 @@ $_MG_CONF['dt']['zip'] = 'zip.png';
  * library, you can disable Media Gallery loading the library.
  */
 
-$_MG_CONF['load_mootools'] = true;
+$_MG_CONF['load_mootools'] = false;
 
 /*
  * The JavaScript used by the lightbox slideshow can cause
