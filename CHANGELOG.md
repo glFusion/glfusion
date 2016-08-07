@@ -1,9 +1,15 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Enhanced sectest to better detect non-standard named directories
+  - Fixed missing trackback button on story ping / trackback admin page (CMS theme)
+  - trackback preview failed due to interaction with BB2 plugin
+  - Removed the last use of HTTP and HTTP2 Pear calls
+  - Remote auth users with merged local accounts can now change their local password
+  - Fixed error in SP and Story editor where <i></i> tags could be appended to the output when switching between visual and html mode
+  - Fixed an error in SFS module - invalid break - needed to be return
   - Implemented the database backup class from lgLib (Lee Garner's Plugin) into the core
   - Ajax driven database backup
-  - Removed the last use of HTTP2 Pear call
   - Set alpha preserve for GD image library for all image function
   - Updated DB administration (convert DB formats) to an interactive Ajax driven interface
   - Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
