@@ -403,20 +403,22 @@ p.tm-article-meta {
 
 /* scroll widget */
 #scroll-to-top {
-	background : #009dd8;
-	box-shadow : 0 0 2px 0 rgba(255, 255, 255, 0.2);
-	border-radius : 3px;
-	bottom : 0px;
-	cursor : pointer;
-	display : block;
-	height : 45px;
-	line-height : 45px;
-	font-size : 16px;
-	position : fixed;
-	right : 10px;
-	text-align : center;
-	width : 45px;
-	z-index : 9999;
+	display: none;
+	position: fixed;
+	text-align: center;
+	right: 10px;
+	bottom: 0;
+	line-height: 35px;
+	width: 35px;
+	height: 35px;
+	z-index: 999999;
+	color: #fff;
+	background: #009dd8;
+	overflow: hidden;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0 0 1px rgba(255,255,255,0.05);
+	box-shadow: inset 0 0 1px rgba(255,255,255,0.05);
 }
 #scroll-to-top:hover {
 	background-color : #00aff2;
