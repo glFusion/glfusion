@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------|
@@ -357,7 +357,7 @@ $LANG_MG01 = array (
     'max_filesize'              => 'Maximum allowed filesize',
     'display_image_size'        => 'Display Image Size',
     'maint_title'               => 'Media Gallery Maintenance Options',
-    'rebuild_thumb'             => 'Rebuild Thumb',
+    'rebuild_thumb'             => 'Rebuild Thumbnails',
     'next'                      => 'Next',
     'rebuild_thumb_help'        => 'Rebuild all thumbnails in Media Gallery',
     'rebuild_thumb_details'     => 'This process will rebuild all thumbnails in Media Gallery.',

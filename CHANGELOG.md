@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Media Gallery: Ajax driven rebuild thumbnails / resize display images
+  - Media Gallery: removed config.php from distribution - rename .dist on install
   - Media Gallery: Use HTML5 playback for mp3 files
   - Media Gallery: Improved the summary index page layout - removed hard coded strings - fixed missing comment text
   - Tweak the scroll up widget - improved fade-in / fade-out on initial page load

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | traffic controller for maint/admin functions                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -116,7 +116,18 @@ if ( COM_isAnonUser() )  {
 $display = '';
 $retval  = '';
 
-if (($mode == 'edit') ) {
+if ( $mode == 'cancel' ) {
+    if (isset($_POST['admin_menu']) && $_POST['admin_menu'] == 1 ) {
+        echo COM_refresh($_MG_CONF['admin_url'] . '/index.php');
+        exit;
+    } else {
+        if ( isset($_POST['album_id']) && $_POST['album_id'] > 0 ) {
+            echo COM_refresh($_MG_CONF['site_url'] . '/album.php?aid=' . COM_applyFilter($_POST['album_id']));
+        }
+        echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
+        exit;
+    }
+} else if (($mode == 'edit') ) {
     $retval = '';
     if (!function_exists('MG_editAlbum')) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
@@ -523,7 +534,7 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
     exit;
-} else if ( $mode == $LANG_MG01['process'] && !empty($LANG_MG01['process']) ) {
+} else if ( $mode == 'process' ) {
     $retval = '';
     if ( isset($_POST['action'] )) {
         $action = $_POST['action'];
@@ -561,6 +572,52 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
     exit;
+
+} elseif ( $mode == 'ajaxrebuild') {
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
+    $ajmode = (isset($_POST['action']) ? COM_applyFilter($_POST['action']) : 0);
+    switch ($ajmode) {
+        case 'itemlist' :
+            if ( !COM_isAjax() )  {
+                die();
+            }
+            header('Content-Type: application/json');
+            MG_bpGetItemList();
+            exit;
+            break;
+        case 'rebuildthumb' :
+            if ( !COM_isAjax() )  {
+                die();
+            }
+            $media_id = $_POST['id'];
+            $aid      = $_POST['aid'];
+            MG_bpResizeThumbnail( $aid, $media_id );
+            $retval = array();
+            $retval['statusMessage'] = 'Got it.';
+            $retval['errorCode'] = 0;
+            $return["json"] = json_encode($retval);
+            header('Content-Type: application/json');
+            echo json_encode($return);
+            exit;
+            break;
+        case 'rebuilddisp' :
+            if ( !COM_isAjax() )  {
+                die();
+            }
+            $media_id = $_POST['id'];
+            $aid      = $_POST['aid'];
+            MG_bpResizeDisplay( $aid, $media_id );
+            $retval = array();
+            $retval['statusMessage'] = 'Got it.';
+            $retval['errorCode'] = 0;
+            $return["json"] = json_encode($retval);
+            header('Content-Type: application/json');
+            echo json_encode($return);
+            exit;
+            break;
+
+
+    }
 } else if ( $mode == 'dorebuild' ) {
     $retval = '';
     if ( isset($_POST['aid']) ) {
@@ -707,17 +764,7 @@ if (($mode == 'edit') ) {
     }
     $display .= MG_siteFooter();
     echo $display;
-} else if ( $mode == 'cancel' ) {
-    if (isset($_POST['admin_menu']) && $_POST['admin_menu'] == 1 ) {
-        echo COM_refresh($_MG_CONF['admin_url'] . '/index.php');
-        exit;
-    } else {
-        if ( isset($_POST['album_id']) && $_POST['album_id'] > 0 ) {
-            echo COM_refresh($_MG_CONF['site_url'] . '/album.php?aid=' . COM_applyFilter($_POST['album_id']));
-        }
-        echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
-        exit;
-    }
+
 } else {
     if ( isset($_POST['album_id']) && isset($_POST['action']) ) {
         $album_id = COM_applyFilter($_POST['album_id'],true);

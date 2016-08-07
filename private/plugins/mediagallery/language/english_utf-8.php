@@ -358,7 +358,7 @@ $LANG_MG01 = array (
     'max_filesize'              => 'Maximum allowed filesize',
     'display_image_size'        => 'Display Image Size',
     'maint_title'               => 'Media Gallery Maintenance Options',
-    'rebuild_thumb'             => 'Rebuild Thumb',
+    'rebuild_thumb'             => 'Rebuild Thumbnails',
     'next'                      => 'Next',
     'rebuild_thumb_help'        => 'Rebuild all thumbnails in Media Gallery',
     'rebuild_thumb_details'     => 'This process will rebuild all thumbnails in Media Gallery.',
@@ -697,6 +697,7 @@ $LANG_MG01 = array (
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id'    => 'Unable to determine destination album',
     'square'                    => 'Square',
+    'posted'                    => 'Posted',
 );
 
 // error messages
