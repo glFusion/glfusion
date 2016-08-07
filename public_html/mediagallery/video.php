@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Displays video in pop-up window                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -468,6 +468,9 @@ if ( $nRows > 0 ) {
                 'charset'       => $LANG_CHARSET,
                 'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
                 'mime_type'     => 'video/mp4',
+                'artist'        => $row['artist'],
+                'album'         => $row['album'],
+                'title'         => $row['media_title'],
             ));
             break;
 
@@ -656,6 +659,7 @@ if ( $nRows > 0 ) {
         case 'mp3' :
         case 'audio/mpeg' :
             $tfile = 'mp3_swf.thtml';
+            $tfile = 'mp4.thtml';
 
             $T->set_file (array ('video' => $tfile));
             $T->set_var('movie',$_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -686,11 +690,11 @@ if ( $nRows > 0 ) {
                 }
                 $border_width = $media_size_disp[0] + 15;
                 $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"></div></div>';
-                $playback_options['height'] = 45;
+                $playback_options['height'] = $media_size_disp[1] + 40;
                 $playback_options['width']  = 300;
             } else {
-                $u_pic='';
-                $playback_options['height'] = 45;
+                $u_pic = $u_tn = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $playback_options['height'] = 200;
                 $playback_options['width'] = 300;
             }
             if ( $tfile == 'mp3_swf.thtml' ) {
@@ -702,14 +706,15 @@ if ( $nRows > 0 ) {
             }
             $T->set_var(array(
                 'u_tn'              => $u_tn,
+                'thumbnail'         => $u_tn,
                 'u_pic'             => $u_pic,
                 'autostart'         => $playback_options['autostart'],
                 'enablecontextmenu' => $playback_options['enablecontextmenu'],
                 'stretchtofit'      => $playback_options['stretchtofit'],
                 'showstatusbar'     => $playback_options['showstatusbar'],
                 'uimode'            => $playback_options['uimode'],
-                'height'            => 365, // $playback_options['height'],
-                'width'             => 600, //$playback_options['width'],
+                'height'            => $playback_options['height'], // 365, //
+                'width'             => $playback_options['width'], // 600, //
                 'loop'              => ($playback_options['loop'] ? 'true' : 'false'),
                 'playcount'         => ($playback_options['loop'] ? '9999' : '1'),
                 'site_url'          => $_MG_CONF['site_url'],
@@ -723,8 +728,11 @@ if ( $nRows > 0 ) {
                 'lang_year'         => $LANG_MG03['year'],
                 'lang_download'     => $LANG_MG03['download'],
                 'lang_info'         => $LANG_MG03['info'],
-                'lang_noflash' => $LANG_MG03['no_flash'],
+                'lang_noflash'      => $LANG_MG03['no_flash'],
                 'charset'           => $LANG_CHARSET,
+                'title'             => $row['media_title'],
+                'artist'            => $row['artist'],
+                'album'             => $row['album'],
             ));
             break;
         default :

@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="uk-responsive-width uk-responsive-height" style="width:{width}px;margin:0 auto;">
+<div class="uk-responsive-width uk-responsive-height" style="width:{width}px;margin:0 auto;margin-top:20px;">
   <video class="uk-responsive-width" width="{width}" height="{height}"
 {!if thumbnail}
   poster="{thumbnail}"
@@ -19,4 +19,15 @@
       </object>
   </video>
 </div>
+
+{!if title}
+<div class="uk-container uk-margin-top">
+<div class="uk-panel uk-panel-box">
+	<div class="uk-text-center">{title}</div>
+{!if artist}
+	<div class="uk-text-center"><span class="uk-text-bold">{lang_artist}:</span> {artist}</div>
+{!endif}
+</div>
+</div>
+{!endif}
 {# end {templatelocation} #}

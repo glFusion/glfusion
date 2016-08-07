@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General purpose media display / manipulation interface                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1068,17 +1068,17 @@ function MG_displayMP3( $aid, $I, $full ) {
 
     switch ($playback_type) {
         case 0 :                    // Popup Window
-            $win_height = 320;
+            $win_height = 450;
             $win_width = 600;
-
-            $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
             if ( $I['media_tn_attached'] == 1 ) {
                 $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
+                $win_height = 320;
                 $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
+            $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
             break;
         case 1: // download
             $u_pic = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'];
@@ -1096,11 +1096,13 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
                 $border_width = $media_size_disp[0] + 15;
                 $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"/></div></div>';
-                $playback_options['height'] = 50;
+                $playback_options['height'] = $media_size_disp[1]; // 50;
                 $playback_options['width']  = 300;
             } else {
                 $u_pic='';
-                $playback_options['height'] = 50;
+                $u_tn     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
+                $playback_options['height'] = 200;
                 $playback_options['width']  = 300;
             }
             $win_width = $playback_options['width'];
@@ -1108,7 +1110,8 @@ function MG_displayMP3( $aid, $I, $full ) {
 
             $V = new Template( MG_getTemplatePath($aid) );
 
-            $tfile = 'view_mp3_swf.thtml';
+//            $tfile = 'view_mp3_swf.thtml';
+            $tfile = 'view_mp4.thtml';
             if ( $I['mime_type'] == 'audio/x-ms-wma' ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
@@ -1146,6 +1149,7 @@ function MG_displayMP3( $aid, $I, $full ) {
             $V->set_var(array(
                 'u_pic'             =>  $u_pic,
                 'u_tn'              =>  $u_tn,
+                'thumbnail'         => $u_tn,
                 'autostart'         => ($playback_options['autostart'] ? 'true' : 'false'),
                 'enablecontextmenu' => ($playback_options['enablecontextmenu'] ? 'true' : 'false'),
                 'stretchtofit'      => isset($playback_options['stretchtofit']) ? ($playback_options['stretchtofit'] ? 'true' : 'false') : 'false',

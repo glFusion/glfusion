@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main interface to Media Gallery                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -532,7 +532,7 @@ class mediaItem extends Media {
             }
             $T->set_var(array(
                 'media_comments_count'  =>  $this->comments,
-                'lang_comments'         =>  $cmtLink,
+                'lang_comments'         =>  $cmtLink_alt, // use $cmtLink for just text
                 'lang_comments_hot'     =>  $cmtLink_alt,
             ));
             $T->parse('media_comments','media_comments');
