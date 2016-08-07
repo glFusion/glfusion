@@ -1,45 +1,45 @@
 {# begin {templatelocation} #}
 <a name="{media_id}"></a>
-<table>
-    <tr class="uk-text-center" style="height:{row_height}px;">
-        <td class="uk-text-middle uk-text-center">
-            {media_item_thumbnail}
-            {mp3_podcast}
-        </td>
-    </tr>
-    <tr>
-        <td class="uk-text-center">
-            <div class="uk-text-medium">
-                {media_title}
+<table style="margin:0px auto;">
+	<tr class="uk-text-center" style="height:{row_height}px;">
+		<td class="uk-text-middle uk-text-center">
+			{media_item_thumbnail}
+			{mp3_podcast}
+		</td>
+	</tr>
+	<tr>
+		<td class="uk-text-center">
+			<div class="uk-text-medium">
+				{media_title}
 {!if musicalbum}
-                &nbsp;/&nbsp;{musicalbum}
+				&nbsp;/&nbsp;{musicalbum}
 {!endif}
-            </div>
+			</div>
 {!if artist}
-            <div class="uk-text-medium">
-                {artist}
-            </div>
+			<div class="uk-text-medium">
+				{artist}
+			</div>
 {!endif}
 {!if search_album}
-            <div class="uk-text-small">{search_album}</div>
+			<div class="uk-text-small">{search_album}</div>
 {!endif}
-            <div class="uk-text-small">{media_time}</div>
+			<div class="uk-text-small">{media_time}</div>
 {!if media_comments}
-            <div class="uk-text-small">{media_comments}</div>
+			<div class="uk-text-small">{media_comments}</div>
 {!endif}
 {!if media_views}
-            <div class="uk-text-small">{media_views}</div>
+			<div class="uk-text-small">{media_views}</div>
 {!endif}
 {!if rating_box}
-            {rating_box}
+			{rating_box}
 {!endif}
 {!if edit_link}
-            <div class="uk-text-center">{edit_link}</div>
+			<div class="uk-text-center">{edit_link}</div>
 {!endif}
 {!if media_cell_keywords}
-            <div class="uk-text-small">{media_cell_keywords}</div>
+			<div class="uk-text-small">{media_cell_keywords}</div>
 {!endif}
-        </td>
-    </tr>
+		</td>
+	</tr>
 </table>
 {# end {templatelocation} #}
