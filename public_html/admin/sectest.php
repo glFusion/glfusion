@@ -6,6 +6,10 @@
 // |                                                                          |
 // | Does a quick security check of the glFusion install                      |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun            - dirk AT haun-online DOT de               |
@@ -178,14 +182,15 @@ function doTest ($baseurl, $urltocheck, $what)
 
     $retval = '';
 
-
+    $retval .= '<li>';
     $retcode = doHeadRequest ($baseurl . $urltocheck, $errmsg);
     if ($retcode == 777) {
-        $retval .= '<li>'.$errmsg.'</li>';
+        $retval .= $errmsg;
         $failed_tests++;
     } else {
         $retval .= interpretResult ($retcode, $what);
     }
+    $retval .= '</li>';
 
 
     return $retval;
@@ -221,11 +226,11 @@ function checkInstallDir ()
     }
 
     if (is_dir ($installdir)) {
-        $retval .= '<li>You should really remove the install directory <b>' . $installdir .'</b> once you have your site up and running without any errors.';
-        $retval .= ' Keeping it around would allow malicious users the ability to destroy your current install, take over your site, or retrieve sensitive information.</li>';
+        $retval .= '<li>You should remove the install directory <b>' . $installdir .'</b> once you have your site up and running without any errors.';
+        $retval .= ' Keeping it around would allow malicious users the ability to modify your current install, take over your site, or retrieve sensitive information.</li>';
         $failed_tests++;
     } else {
-        $retval .= '<li>Good! You seem to have removed the install directory already.</li>';
+        $retval .= '<li>Good! You have removed the install directory.</li>';
     }
 
     return $retval;
@@ -266,7 +271,7 @@ function checkDefaultPassword ()
         $retval .= '<li>You still have not changed the <strong>default password</strong> from "password" on ' . $pwdRoot . ' Root user account(s).</li>';
         $failed_tests++;
     } else {
-        $retval .= '<li>Good! You seem to have changed the default account password already.</li>';
+        $retval .= '<li>Good! You have changed the default account password.</li>';
     }
 
     return $retval;
@@ -277,17 +282,36 @@ $display = COM_siteHeader ('menu', 'glFusion Security Check');
 $display .= '<div dir="ltr">' . LB;
 $display .= COM_startBlock ('Results of the Security Check');
 
+$privatePath = "";
+
 $url = urlToCheck ();
 
 if (!empty ($url)) {
+
+    // determine private path
+
+    $urlParts = parse_url ( $_CONF['site_url'] );
+    if ( isset($urlParts['path'])) {
+        $pos = strpos($_CONF['path_html'],$urlParts['path']);
+        if ( $pos !== false && $urlParts['path'] != '/' ) {
+            $rootPath = substr($_CONF['path_html'],0,$pos);
+            $pos = strpos($_CONF['path'],$rootPath);
+            if ( $pos !== false ) {
+                $privatePath = substr($_CONF['path'],strlen($rootPath));
+                if ( $privatePath[0] != '/') $privatePath = '/'.$privatePath;
+                if ( $privatePath[strlen($privatePath)-1] != '/') $privatePath = $privatePath.'/';
+            }
+        }
+    }
 
     $display .= '<ol>';
 
     if (strpos ($_SERVER['PHP_SELF'], 'public_html') !== false) {
         $display .= '<li>"public_html" should never be part of your site\'s URL.'
-            ." Please read the part about public_html in the "
-            . COM_createLink('installation instructions', "../docs/install.html#public_html")
-            . ' again and change your setup accordingly before you proceed.</li>';
+            ." You should have copied the files from the distribution archive's public_html/ directory to your web root directory on your host. "
+            ." Please see the "
+            . COM_createLink('installation instructions', "../docs/english/install.html")
+            . ' for additional details.</li>';
         $failed_tests++;
     }
 
@@ -295,10 +319,10 @@ if (!empty ($url)) {
 
     $urls = array
         (
-        array ('/private/db-config.php',                     'db-config.php'),
-        array ('/private/logs/error.log',                    'logs directory'),
-        array ('/private/plugins/staticpages/functions.inc', 'plugins directory'),
-        array ('/private/system/lib-security.php',           'system directory')
+        array ($privatePath.'db-config.php',                        'db-config.php'),
+        array ($privatePath.'logs/error.log',                       'logs directory'),
+        array ($privatePath.'plugins/staticpages/staticpages.php',  'plugins directory'),
+        array ($privatePath.'system/lib-security.php',              'system directory')
         );
 
     foreach ($urls as $tocheck) {
@@ -309,7 +333,7 @@ if (!empty ($url)) {
 
     if (($_CONF['allow_mysqldump'] == 1) && ($_DB_dbms == 'mysql')) {
         if (makeTempfile ($_CONF['backup_path'] . 'test.txt')) {
-            $display .= doTest ($url, 'backups/test.txt', 'backups directory');
+            $display .= doTest ($url, $privatePath.'backups/test.txt', 'backups directory');
             @unlink ($_CONF['backup_path'] . 'test.txt');
         } else {
             $display .= '<li>Failed to create a temporary file in your backups directory. Check your directory permissions!</li>';
@@ -317,7 +341,7 @@ if (!empty ($url)) {
     }
 
     if (makeTempfile ($_CONF['path_data'] . 'test.txt')) {
-        $display .= doTest ($url, 'data/test.txt', 'data directory');
+        $display .= doTest ($url, $privatePath.'data/test.txt', 'data directory');
         @unlink ($_CONF['path_data'] . 'test.txt');
     } else {
         $display .= '<li>Failed to create a temporary file in your data directory. Check your directory permissions!</li>';
@@ -342,7 +366,6 @@ if (!empty ($url)) {
 
 }
 
-
 if ($failed_tests > 0) {
     $display .= '<p class="warningsmall"><strong>Please fix the above issues before using your site!</strong></p>';
 
@@ -354,10 +377,10 @@ if ($failed_tests > 0) {
 }
 
 if (empty ($LANG_DIRECTION)) {
-    $versioncheck = '<strong>' . $LANG01[107] . '</strong>';
+    $versioncheck = '<strong><a href="vercheck.php">' . $LANG01[107] . '</a></strong>';
 } else {
-    $versioncheck = '<strong dir="' . $LANG_DIRECTION . '">' . $LANG01[107]
-                  . '</strong>';
+    $versioncheck = '<strong dir="' . $LANG_DIRECTION . '"><a href="vercheck.php">' . $LANG01[107]
+                  . '</a></strong>';
 }
 
 $display .= '<p>To stay informed about new glFusion releases and possible '
