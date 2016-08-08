@@ -320,7 +320,13 @@ class OAuthConsumer {
                 break;
             case 'google' :
                 $homepage = $info->link;
-                $username = substr($homepage,strlen("https://plug.google.com/+"));
+
+                $plusPos = strpos($homepage,"+");
+                if ( $plusPos !== false ) {
+                    $username = substr($homepage,strlen("https://plug.google.com/+"));
+                } else {
+                    $username = "";
+                }
                 $users = array(
                     'loginname'      => (isset($info->given_name) ? $info->given_name : $info->id),
                     'email'          => $info->email,
