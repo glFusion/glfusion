@@ -1622,7 +1622,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     }
     if ( $aOffset == -1 || $MG_albums[$aid]->access == 0 ) {
         $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
-        return array($LANG_MG00['access_denied_msg'],$retval);
+        return array($LANG_MG00['access_denied_msg'],$retval,'','');
     }
 
     $mid = $mediaObject;
@@ -1645,7 +1645,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $key = array_search($mid,$ids);
     if ( $key === false ) {
         $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
-        return array($LANG_MG00['access_denited_msg'], $retval);
+        return array($LANG_MG00['access_denited_msg'], $retval,'','');
     }
 
     $mediaObject = $key;
@@ -1710,7 +1710,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $ptitle = (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '';
 
-    $permalink = COM_buildUrl($_MG_CONF['site_url'] . '/media.php?s='.$srcID);
+    $permalink = $_MG_CONF['site_url'] . '/media.php?s='.$srcID;
     $outputHandle->addLink("canonical",$permalink);
     $outputHandle->addMeta('property','og:title',$ptitle);
     $outputHandle->addMeta('property','og:type',$ogType);

@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Media Gallery: Permalink URL was not built correctly
   - Improved detection of the Google+ username
   - Media Gallery: Ajax driven rebuild thumbnails / resize display images
   - Media Gallery: removed config.php from distribution - rename .dist on install
