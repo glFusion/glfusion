@@ -129,7 +129,7 @@
             </tr>
             {!if download}
             <tr>
-                <td>{$LANG_MG03[download}}</td>
+                <td>{$LANG_MG03[download]}</td>
                 <td>{download}</td>
             </tr>
             {!endif}
