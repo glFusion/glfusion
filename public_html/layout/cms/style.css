@@ -226,7 +226,9 @@ set of styles.
 .tm-article {   /* article wrapper */
 }
 .tm-article-title {
-	margin-bottom: 0px;
+	line-height:28px;
+	margin-bottom: 10px !important;
+	font-weight:700;
 }
 
 /* remove comment below to make story subtitle italic */
