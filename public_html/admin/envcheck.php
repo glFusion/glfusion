@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Environment Check                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -188,6 +188,41 @@ function _checkEnvironment()
     $classCounter++;
 
     $T->set_block('page','libs','lib');
+
+    if (extension_loaded('mbstring')) {
+        $T->set_var(array(
+            'item' => $LANG01['mbstring_library'],
+            'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
+            'notes' => $LANG01['mbstring_ok']
+        ));
+    } else {
+        $T->set_var(array(
+            'item' => $LANG01['mbstring_library'],
+            'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
+            'notes' => $LANG01['mbstring_not_found']
+        ));
+    }
+
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('lib','libs',true);
+    $classCounter++;
+
+    if (extension_loaded('openssl')) {
+        $T->set_var(array(
+            'item' => $LANG01['openssl_library'],
+            'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
+            'notes' => $LANG01['openssl_ok']
+        ));
+    } else {
+        $T->set_var(array(
+            'item' => $LANG01['openssl_library'],
+            'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
+            'notes' => $LANG01['openssl_not_found']
+        ));
+    }
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('lib','libs',true);
+    $classCounter++;
 
     if ( $sm != 1 && $open_basedir_restriction != 1 ) {
         switch ( $_CONF['image_lib'] ) {
@@ -483,12 +518,12 @@ function _checkEnvironment()
     }
 
     if ( $permError ) {
-        $button = 'Recheck';
+        $button = $LANG01['recheck'];
         $action = 'checkenvironment';
         $T->set_var('error_message',$LANG01['correct_perms']);
 
         $recheck  = '<button type="submit" name="submit" onclick="submitForm( checkenv, \'checkenvironment\' );">' . LB;
-        $recheck .= 'Recheck' . LB;
+        $recheck .= $LANG01['recheck'] . LB;
         $recheck .= '<img src="layout/arrow-recheck.gif" alt=""/>' . LB;
         $recheck .= '</button>' . LB;
 
@@ -521,6 +556,8 @@ function _checkEnvironment()
         'lang_show_phpinfo' => $LANG01['show_phpinfo'],
         'lang_hide_phpinfo' => $LANG01['hide_phpinfo'],
         'lang_graphics'     => $LANG01['graphics'],
+        'lang_extensions'   => $LANG01['extensions'],
+        'lang_recheck'      => $LANG01['recheck'],
         'phpinfo'           => _phpinfo(),
     ));
 

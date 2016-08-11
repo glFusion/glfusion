@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Expanded environment check to validate required PHP extensions are available
   - Changed article title spacing / better wrapping
   - Media Gallery: Fixed typo on lang_download tag in view_image, view_audio, and view_video templates
   - Media Gallery: Improved random image block layout

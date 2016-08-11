@@ -33,7 +33,7 @@
 			<!-- END envs -->
 			<tr>
 				<td colspan="4">
-					<h2>{lang_graphics}</h2>
+					<h2>{lang_extensions}</h2>
 				</td>
 			</tr>
 			<!-- BEGIN libs -->
