@@ -54,7 +54,10 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 1.6.1
+    'plugins/ckeditor/templates/filemanager.thtml',
 
+// 1.6.0
     'lib/simplepie/README.txt',
     'lib/simplepie/simplepie.php',
     'plugins/mediagallery/templates/swfupload.thtml',
