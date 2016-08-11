@@ -137,6 +137,16 @@ $_SYSTEM['admin_session'] = {admin_session};
 $_SYSTEM['swedish_date_hack'] = {swedish_date_hack};
 
 // +--------------------------------------------------------------------------+
+// |  Token Time to Live - the number of seconds a verification token         |
+// |  is valid.                                                               |
+// |                                                                          |
+// | The number of seconds that the standard security token is valid.         |
+// | The default is 20 minutes (1200 seconds).                                |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['token_ttl'] = {token_ttl};
+
+// +--------------------------------------------------------------------------+
 // | Verification Token Time to Live - the number of seconds a verification   |
 // |                 token is valid.                                          |
 // |                                                                          |

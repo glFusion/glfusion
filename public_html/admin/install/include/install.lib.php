@@ -2292,6 +2292,7 @@ function INST_doSiteConfigUpgrade() {
         'token_ip'                    => false,
         'max_captcha_atttempts'       => 4,
         'custom_topic_templates'      => false,
+        'token_ttl'                   => 1200,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -2338,6 +2339,7 @@ function INST_doSiteConfigUpgrade() {
         'path'                        => $_NEWSYSCONF['path'],
         'default_charset'             => $_NEWSYSCONF['default_charset'],
         'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
+        'token_ttl'                   => $_NEWSYSCONF['token_ttl'],
     ));
 
     if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {

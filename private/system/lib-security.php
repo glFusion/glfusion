@@ -39,6 +39,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+if ( !isset($_SYSTEM['token_ttl']) ) $_SYSTEM['token_ttl'] = 1200;
+if (!defined ('TOKEN_TTL')) {
+    define('TOKEN_TTL', $_SYSTEM['token_ttl']);
+}
+
 /**
 * This is the security library for glFusion.  This is used to implement glFusion's
 * *nix-style security system.
@@ -1219,7 +1224,7 @@ function SEC_encryptPassword($password)
   *
   * @return string  Generated token, it'll be an MD5 hash (32chars)
   */
-function SEC_createToken($ttl = 1200)
+function SEC_createToken($ttl = TOKEN_TTL)
 {
     global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
@@ -1423,7 +1428,7 @@ function _sec_checkToken($ajax=0)
   *
   * @return string  Generated token, it'll be an MD5 hash (32chars)
   */
-function SEC_createTokenGeneral($action='general',$ttl = 1200)
+function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
 {
     global $_USER, $_TABLES, $_DB_dbms;
 
