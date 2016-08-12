@@ -1,16 +1,49 @@
-private/data/
-private/db-config.php
-private/system/lib-custom.php
-public_html/siteconfig.php
-public_html/mediagallery/mediaobjects/
+# glFusion CMS repository ignore file
+#
+# git update-index --assume-unchanged private/logs/error.log
+# git update-index --assume-unchanged private/logs/captcha.log
+# git update-index --assume-unchanged private/logs/access.log
+# git update-index --assume-unchanged private/logs/spamx.log
+# git update-index --assume-unchanged public_html/backend/glfusion.rss
+# git ls-files -v | grep '^[[:lower:]]'
+#
+db-config.php
+siteconfig.php
+lib-custom.php
+
+public_html/.htaccess
 public_html/web.config
-public_html/backend/
-public_html/tinymce/
-public_html/admin/plugins/tinymce/
+aspnet_client/
+
+private/data/
+private/backups/
+private/logs/
+private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/**
+
 public_html/images/
-private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/
-public_html/forum/media/
+public_html/images/articles/
+public_html/images/userphotos/
+public_html/images/topics/
+public_html/backend/
+
 public_html/jscache_*.js
 public_html/stylecache_*.css
 style.cache.css
 js.cache.js
+
+# Media Gallery
+private/plugins/mediagallery/config.php
+public_html/mediagallery/mediaobjects/tn/
+public_html/mediagallery/mediaobjects/orig/
+public_html/mediagallery/mediaobjects/disp/
+
+# Forum
+public_html/forum/media/
+
+# ignore thumbnails created by Windows
+**/Thumbs.db
+
+# ignore thumbnails created by OSX
+.DS_Store
+
+# local items
