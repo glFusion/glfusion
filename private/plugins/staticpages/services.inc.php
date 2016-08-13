@@ -466,6 +466,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
     global $_CONF, $_TABLES, $LANG_ACCESS, $LANG12, $LANG_STATIC, $LANG_LOGIN, $_SP_CONF;
 
     $output = '';
+    $svc_msg = array();
 
     $svc_msg['output_fields'] = array(
                                     'sp_hits',
