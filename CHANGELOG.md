@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Implemented activity timer for story and static page editors to automatically refresh security tokens while editing
   - Allow token time to live to be configured in siteconfig.php
   - Expanded environment check to validate required PHP extensions are available
   - Changed article title spacing / better wrapping

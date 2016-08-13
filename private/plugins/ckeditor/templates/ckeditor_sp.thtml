@@ -24,8 +24,23 @@
 
 	function won (id) {
 		sp_content = loadEditor(id);
+		activityCheck('wysiwyg');
 	}
 	function woff (id) {
 		sp_content.destroy();
+
+		activityCheck('textarea');
 	}
+  function activityCheck( edtType ) {
+		lastActivity = new Date().getTime();
+		if ( edtType == 'wysiwyg' ) {
+  		sp_content.on( 'key', function(){
+	  		lastActivity = new Date().getTime();
+    	});
+  	} else {
+			$('#sp_content').keyup(function() {
+				lastActivity = new Date().getTime();
+			});
+		}
+  }
 </script>

@@ -1040,6 +1040,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_preview', $LANG_ADMIN['preview']);
     $story_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $story_templates->set_var('lang_delete', $LANG_ADMIN['delete']);
+    $story_templates->set_var('lang_timeout', $LANG_ADMIN['timeout_msg']);
     $story_templates->set_var('gltoken_name', CSRF_TOKEN);
     $story_templates->set_var('gltoken', $sec_token);
     $story_templates->set_var('security_token',$sec_token);

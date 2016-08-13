@@ -4,6 +4,7 @@
 	var site_url = "{site_url}";
 	var introtext;
 	var bodytext;
+	var lastActivity = 0;
 
 	function loadEditor(id,height) {
 		var instance = CKEDITOR.replace( id, {
@@ -28,23 +29,42 @@
 	}
 	window.onload = function() {
 		introtext = loadEditor('introtext',400);
+		activityCheckIntro();
 		bodytext  = loadEditor('bodytext',500 );
+		activityCheckBody();
 
 	};
 	function won (id) {
 		if (id == 'introtext') {
 			introtext = loadEditor(id,400);
-			introtext = CKEDITOR.replace('introtext');
+			activityCheckIntro();
 		}
 
 		if (id == 'bodytext')  {
 			bodytext = loadEditor(id,500);
-			bodytext = CKEDITOR.replace('bodytext');
+			activityCheckBody();
 		}
 	}
 	function woff (id) {
 		if ( id == 'introtext' ) introtext.destroy();
 		if ( id == 'bodytext' )  bodytext.destroy();
 	}
+  function activityCheckIntro() {
+		if ( typeof introtext != 'undefined') {
+  			lastActivity = new Date().getTime();
+  	  	introtext.on( 'key', function(){
+	  	  	lastActivity = new Date().getTime();
+    	});
+  	}
+  }
+  function activityCheckBody() {
+		if ( typeof bodytext != 'undefined') {
+  			lastActivity = new Date().getTime();
+  	  	bodytext.on( 'key', function(){
+  	  		lastActivity = new Date().getTime();
+    	});
+  	}
+  }
+
 </script>
 {# end {templatelocation} #}

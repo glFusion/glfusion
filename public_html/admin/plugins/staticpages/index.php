@@ -136,6 +136,7 @@ function PAGE_form($A, $error = false)
             'lang_preview'      => $LANG_ADMIN['preview'],
             'lang_editor'       => $LANG_STATIC['staticpageeditor'],
             'lang_attributes'   => $LANG_STATIC['attributes'],
+            'lang_timeout'      => $LANG_ADMIN['timeout_msg'],
         ));
 
         if (SEC_hasRights ('staticpages.delete') && ($action != 'clone') &&

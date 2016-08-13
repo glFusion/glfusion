@@ -2005,6 +2005,7 @@ $LANG_ADMIN = array(
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
 );
 
 ###############################################################################

@@ -1,7 +1,9 @@
 {# begin {templatelocation} #}
 <script>
+var editor_type = 'speditor';
+var lang_timer  = "{lang_timeout}";
 function actionClick( $action ) {
-$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
 $('#frmstory').trigger('submit', [ { $action: true } ]);
 }
 </script>
@@ -14,14 +16,14 @@ $('#frmstory').trigger('submit', [ { $action: true } ]);
 	<form class="uk-form uk-form-horizontal uk-margin" action="{site_admin_url}/plugins/staticpages/index.php" method="post">
 		<input type="hidden" name="sp_hits" value="{sp_hits}">
 		<input type="hidden" name="sp_old_id" value="{sp_old_id}">
-		<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+		<input type="hidden" id="sectoken" name="{gltoken_name}" value="{gltoken}">
 
 		<ul class="uk-tab" data-uk-tab="{connect:'#sp-form'}">
 			<li><a href="#">{lang_editor}</a></li>
 			<li><a href="#">{lang_attributes}</a></li>
 			<li><a href="#">{lang_centerblock}</a></li>
 			<li><a href="#">{lang_accessrights}</a></li>
-			<li {!if show_preview} class="uk-active" {!endif}><a href="#">Preview</a></li>
+			<li {!if show_preview} class="uk-active" {!endif}><a href="#">{lang_preview}</a></li>
 		</ul>
 
 		{# this shows on all screens #}
@@ -240,10 +242,11 @@ $('#frmstory').trigger('submit', [ { $action: true } ]);
 					$('#'+buttonClicked).addClass("uk-button-danger");
 					$("#status_yes_radio").prop('checked', false);
 					$("#status_no_radio").prop('checked', true);
-
 				}
 				e.stopPropagation();
 			});
+			activityCheck('textarea');
 		});
 	</script>
-	{# end {templatelocation} #}
+<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
+{# end {templatelocation} #}
