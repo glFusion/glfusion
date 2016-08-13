@@ -1,7 +1,8 @@
 {# horizontal cascading menu template #}
 {!if wrapper}
+<a href="#offcanvas" class="tm-navbar-toggle uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
 <div id="offcanvas" class="uk-offcanvas">
-    <div class="uk-offcanvas-bar">
+    <div class="uk-offcanvas-bar tm-navbar-oc">
 <ul class="uk-nav uk-nav-side uk-nav-parent-icon uk-width-medium-2-3 uk-nav-offcanvas" data-uk-nav>
 {!else}
 <ul class="uk-nav-sub">

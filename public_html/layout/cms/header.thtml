@@ -6,7 +6,6 @@
 </head>
 <body>
 {integrated_comments}
-{!!autotag menu:navigation_mobile !!}
 
 <nav class="uk-navbar tm-navbar">
   <div class="uk-hidden-small">{logo_block}</div>
@@ -26,10 +25,12 @@
 
   {!!autotag uikitlogin: !!}
 
+	{!!autotag menu:navigation_mobile !!}
+
   <div class="uk-navbar-flip uk-navbar-flip uk-visible-small">
     <a href="{site_url}/search.php" class="tm-navbar-toggle uk-navbar-toggle uk-navbar-toggle-alt"></a>
   </div>
-  <a href="#offcanvas" class="tm-navbar-toggle uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+
   <div class="uk-navbar-brand tm-navbar-brand-oc uk-navbar-center uk-visible-small">
     <a href="{site_url}">{site_name}</a>
   </div>

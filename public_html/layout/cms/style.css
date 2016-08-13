@@ -75,7 +75,6 @@ set of styles.
 
 /* Navbar semantics
 ========================================================================== */
-
 /* sets background and attributes for the navbar */
 .tm-navbar {
 	border-radius:0;
@@ -106,6 +105,10 @@ set of styles.
 
 /* Navbar brand - Off Canvas
 ========================================================================== */
+.tm-navbar-oc ul li ul {
+	background: transparent !important;
+}
+
 .tm-navbar-brand-oc  {
 	max-width:90%;
 }
