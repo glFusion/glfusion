@@ -166,7 +166,7 @@ function intel2Moto($intel) {
 
 	$cache[$intel] = '';
 	$len  = strlen($intel);
-	if ($len > 1000) {
+	if ($len > 2048) {
 		debugLogBacktrace('intel2Moto called with unreasonable data string: length='.$len);
 		trigger_error(sprintf('intel2Moto called with unreasonable data string: length=%s. See debug log for details. (Setting DEBUG_EXIF to true might help locate problem images.)',$len));
 	} else {
@@ -1069,8 +1069,8 @@ function get35mmEquivFocalLength(&$result) {
 	}
 
 	if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
-		$ccdwidth = ($width * $unitfactor) / $xres;
-		$equivfl = $fl / $ccdwidth*36+0.5;
+		$ccdwidth = (float) ( ( (float) $width *  $unitfactor) /  (float)$xres );
+		$equivfl = (float) $fl /  $ccdwidth * 36+0.5;
 		return $equivfl;
 	}
 	return null;

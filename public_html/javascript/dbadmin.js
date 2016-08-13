@@ -133,7 +133,6 @@ var glfusion_dbadminInterface = (function() {
             url: url,
             data: {"mode" : "dblist", "engine" : engine },
             success: function(data) {
-                console.log(data);
                 var result = $.parseJSON(data["json"]);
                 items = result.tablelist;
                 count = items.length;

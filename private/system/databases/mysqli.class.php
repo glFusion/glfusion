@@ -34,15 +34,54 @@ if (!defined('GVERSION')) {
 
 class database
 {
+    /**
+    * @var string
+    */
     private $_host = '';
+
+    /**
+    * @var string
+    */
     private $_name = '';
+
+    /**
+    * @var sring|string
+    */
     private $_user = '';
+
+    /**
+    * @var string
+    */
     private $_pass = '';
-    private $_db = '';
-    private $_verbose = FALSE;
-    private $_display_error = FALSE;
+
+    /**
+    * @var mysqli|false
+    */
+    private $_db = false;
+
+    /**
+    * @var bool
+    */
+    private $_verbose = false;
+
+    /**
+    * @var bool
+    */
+    private $_display_error = false;
+
+    /**
+    * @var string|callable
+    */
     private $_errorlog_fn = '';
+
+    /**
+    * @var string
+    */
     private $_charset = '';
+
+    /**
+    * @var int
+    */
     private $_mysql_version = 0;
 
     /**
@@ -50,7 +89,7 @@ class database
     *
     * Logs messages by calling the function held in $_errorlog_fn
     *
-    * @param    string      $msg        Message to log
+    * @param    string $msg Message to log
     * @access   private
     */
     private function _errorlog($msg)
@@ -77,7 +116,12 @@ class database
         }
 
         // Connect to MySQL server
-        $this->_db = new MySQLi($this->_host, $this->_user, $this->_pass) OR die('Cannot connect to DB server');
+        $this->_db = @new mysqli($this->_host, $this->_user, $this->_pass);
+
+        if ($this->_db->connect_errno) {
+            die('Connect Error: ' . $this->_db->connect_errno);
+        }
+
         $this->_mysql_version = $this->_db->server_version;
 
         // Set the database
@@ -92,19 +136,18 @@ class database
             $this->dbError();
         }
 
-        if ($this->_mysql_version >= 40100) {
-            if ($this->_charset === 'utf-8') {
-                $result = FALSE;
+        if ($this->_charset === 'utf-8') {
+            $result = false;
 
-                if (method_exists($this->_db, 'set_charset')) {
-                    $result = $this->_db->set_charset('utf8');
-                }
+            if (method_exists($this->_db, 'set_charset')) {
+                $result = $this->_db->set_charset('utf8');
+            }
 
-                if (!$result) {
-                    @$this->_db->query("SET NAMES 'utf8'");
-                }
+            if (!$result) {
+                @$this->_db->query("SET NAMES 'utf8'");
             }
         }
+
         if ($this->_mysql_version >= 50700) {
             $result = $this->_db->query("SELECT @@sql_mode");
             $modeData = $this->dbFetchArray($result);
@@ -151,7 +194,7 @@ class database
         $this->_name = $dbname;
         $this->_user = $dbuser;
         $this->_pass = $dbpass;
-        $this->_verbose = FALSE;
+        $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
         $this->_mysql_version = 0;
@@ -162,27 +205,18 @@ class database
     public function __destruct()
     {
         @$this->_db->close();
-        $this->_db = NULL;
-    }
-
-    /**
-    * @return     string     the version of the database application as integer
-    */
-    public function dbGetVersion()
-    {
-        return $this->_mysql_version;
+        $this->_db = null;
     }
 
     /**
     * Turns debug mode on
-    *
     * Set this to TRUE to see debug messages
     *
-    * @param    boolean     $flag
+    * @param    bool $flag
     */
     public function setVerbose($flag)
     {
-        $this->_verbose = (boolean) $flag;
+        $this->_verbose = (bool) $flag;
     }
 
     /**
@@ -193,11 +227,11 @@ class database
     * details. The complete error message (including the offending SQL request)
     * is always available from error.log.
     *
-    * @param    boolean     $flag
+    * @param    bool $flag
     */
     public function setDisplayError($flag)
     {
-        $this->_display_error = (boolean) $flag;
+        $this->_display_error = (bool) $flag;
     }
 
     /**
@@ -205,15 +239,15 @@ class database
     *
     * Returns value of $_verbose
     *
-    * @return   boolean     TRUE if in verbose mode otherwise FALSE
+    * @return   bool     TRUE if in verbose mode otherwise FALSE
     */
     public function isVerbose()
     {
         if ($this->_verbose
-         AND (empty($this->_errorlog_fn) OR !function_exists($this->_errorlog_fn))) {
+        && (empty($this->_errorlog_fn) || !function_exists($this->_errorlog_fn))) {
             echo "\n<br/><b>Cannot run mysqli.class.php in verbose mode because the errorlog "
-                . "function was not set or does not exist.</b><br/>\n";
-            return FALSE;
+            . "function was not set or does not exist.</b><br/>\n";
+            return false;
         }
 
         return $this->_verbose;
@@ -237,9 +271,9 @@ class database
     * This executes the passed SQL and returns the recordset or errors out
     *
     * @param    string      $sql            SQL to be executed
-    * @param    boolean     $ignore_error   If 1 this function supresses any
+    * @param    int         $ignore_errors  If 1 this function supresses any
     *                                       error messages
-    * @return   object      Returns results of query
+    * @return   mysqli_result|false         Returns results of query
     */
     public function dbQuery($sql, $ignore_errors=0)
     {
@@ -249,14 +283,14 @@ class database
         }
 
         // Run query
-        if ($ignore_errors == 1) {
+        if ($ignore_errors) {
             $result = @$this->_db->query($sql);
         } else {
             $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
         }
 
         // If OK, return otherwise echo error
-        if ($this->_db->errno == 0 AND ($result !== FALSE)) {
+        if ($this->_db->errno == 0 AND ($result !== false)) {
             if ($this->_verbose) {
                 $this->_errorlog("DEBUG: mysqli - SQL query ran without error");
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
@@ -264,15 +298,16 @@ class database
 
             return $result;
         } else {
-            // callee may want to supress printing of errors
-            if ($ignore_errors == 1) {
-                return FALSE;
+            // callee may want to suppress printing of errors
+            if ($ignore_errors) {
+                return false;
             }
 
             if ($this->_verbose) {
                 $this->_errorlog("DEBUG: mysqli - SQL caused an error");
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
             }
+            return false;
         }
     }
 
@@ -283,7 +318,7 @@ class database
     * database
     *
     * @param    string      $table      The table to save to
-    * @param    string      $fields     string  Comma demlimited list of fields to save
+    * @param    string      $fields     Comma-delimited list of fields to save
     * @param    string      $values     Values to save to the database table
     */
     public function dbSave($table, $fields, $values)
@@ -304,24 +339,24 @@ class database
     /**
     * Builds a pair of a column name and a value that can be used as a part of an SQL
     *
-    * @param   scalar/array  $id
-    * @param   scalar/array  $value
+    * @param   mixed|array $id
+    * @param   mixed|array $value
     * @return  mixed         string = column_name-value pair(s), FALSE = error
     */
     private function _buildIdValuePair($id, $value)
     {
         $retval = '';
 
-        if (is_array($id) OR is_array($value)) {
+        if (is_array($id) || is_array($value)) {
             $num_ids = count($id);
 
-            if (is_array($id) AND is_array($value) AND ($num_ids === count($value))) {
+            if (is_array($id) && is_array($value) && ($num_ids === count($value))) {
                 // they are arrays, traverse them and build sql
                 $retval .= ' WHERE ';
 
                 for ($i = 1; $i <= $num_ids; $i ++) {
                     $retval .= current($id) . " = '"
-                            .  $this->dbEscapeString(current($value)) . "'";
+                    .  $this->dbEscapeString(current($value)) . "'";
                     if ($i !== $num_ids) {
                         $retval .= " AND ";
                     }
@@ -331,11 +366,11 @@ class database
                 }
             } else {
                 // error, they both have to be arrays and of the same size
-                $retval = FALSE;
+                $retval = false;
             }
         } else {
             // just regular string values, build sql
-            if (!empty($id) AND (isset($value) OR ($value != ''))) {
+            if (!empty($id) && (isset($value) || ($value != ''))) {
                 $retval .= " WHERE $id = '$value'";
             }
         }
@@ -353,7 +388,7 @@ class database
     * @param    string          $table      Table to delete data from
     * @param    array|string    $id         field name(s) to include in where clause
     * @param    array|string    $value      field value(s) corresponding to field names
-    * @return   boolean     Returns TRUE on success otherwise FALSE
+    * @return   bool                        Returns TRUE on success otherwise FALSE
     */
     public function dbDelete($table, $id, $value)
     {
@@ -364,8 +399,8 @@ class database
         $sql = "DELETE FROM $table";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
-        if ($id_and_value === FALSE) {
-            return FALSE;
+        if ($id_and_value === false) {
+            return false;
         } else {
             $sql .= $id_and_value;
         }
@@ -390,16 +425,17 @@ class database
     * @param    string          $value_to_set   Value for id
     * @param    array|string    $id             additional field name used in where clause
     * @param    array|string    $value          additional values used in where clause
-    * @param    boolean         $supress_quotes if FALSE it will not use '<value>' in where clause
-    * @return   boolean     Returns TRUE on success otherwise FALSE
+    * @param    bool            $suppress_quotes if FALSE it will not use '<value>' in where clause
+    * @return   bool                            Returns TRUE on success otherwise FALSE
     */
-    public function dbChange($table, $item_to_set, $value_to_set, $id, $value, $supress_quotes = FALSE)
+    public function dbChange($table, $item_to_set, $value_to_set, $id, $value,
+    $suppress_quotes = false)
     {
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Inside dbChange");
         }
 
-        if ($supress_quotes) {
+        if ($suppress_quotes) {
             $sql = "UPDATE $table SET $item_to_set = $value_to_set";
         } else {
             $sql = "UPDATE $table SET $item_to_set = '$value_to_set'";
@@ -407,8 +443,8 @@ class database
 
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
-        if ($id_and_value === FALSE) {
-            return FALSE;
+        if ($id_and_value === false) {
+            return false;
         } else {
             $sql .= $id_and_value;
         }
@@ -417,11 +453,12 @@ class database
             $this->_errorlog("DEBUG: mysqli - dbChange sql = " . $sql);
         }
 
-        $this->dbQuery($sql);
+        $retval = $this->dbQuery($sql);
 
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Leaving database->dbChange");
         }
+        return $retval;
     }
 
     /**
@@ -433,7 +470,7 @@ class database
     * @param    string          $table  Table to perform count on
     * @param    array|string    $id     field name(s) of fields to use in where clause
     * @param    array|string    $value  Value(s) to use in where clause
-    * @return   boolean     returns count on success otherwise FALSE
+    * @return   bool     returns count on success otherwise FALSE
     *
     */
     public function dbCount($table, $id = '', $value = '')
@@ -445,8 +482,8 @@ class database
         $sql = "SELECT COUNT(*) FROM $table";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
-        if ($id_and_value === FALSE) {
-            return FALSE;
+        if ($id_and_value === false) {
+            return false;
         } else {
             $sql .= $id_and_value;
         }
@@ -476,7 +513,7 @@ class database
     * @param    string          $tablefrom  Table to get record from
     * @param    array|string    $id         field name(s) to use in where clause
     * @param    array|string    $value      Value(s) to use in where clause
-    * @return   boolean     Returns TRUE on success otherwise FALSE
+    * @return   bool     Returns TRUE on success otherwise FALSE
     */
     public function dbCopy($table, $fields, $values, $tablefrom, $id, $value)
     {
@@ -487,18 +524,19 @@ class database
         $sql = "REPLACE INTO $table ($fields) SELECT $values FROM $tablefrom";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
-        if ($id_and_value === FALSE) {
-            return FALSE;
+        if ($id_and_value === false) {
+            return false;
         } else {
             $sql .= $id_and_value;
         }
 
-        $this->dbQuery($sql);
-        $this->dbDelete($tablefrom,$id,$value);
+        $retval = $this->dbQuery($sql);
+        $retval = $retval && $this->dbDelete($tableFrom, $id, $value);
 
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Leaving database->dbCopy");
         }
+        return $retval;
     }
 
     /**
@@ -506,23 +544,23 @@ class database
     *
     * This returns the number of rows in a recordset
     *
-    * @param    object      $recordset      The recordset to operate one
-    * @return   int         Returns number of rows otherwise FALSE (0)
+    * @param    mysqli_result $recordSet The record set to operate one
+    * @return   int            Returns number of rows otherwise FALSE (0)
     */
-    public function dbNumRows($recordset)
+    public function dbNumRows($recordSet)
     {
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Inside database->dbNumRows");
         }
 
         // return only if recordset exists, otherwise 0
-        if (is_object($recordset) && strcasecmp(get_class($recordset), 'MySQLi_Result') === 0) {
+        if ($recordSet instanceof mysqli_result) {
             if ($this->_verbose) {
-                $this->_errorlog('DEBUG: mysqli - got ' . $recordset->num_rows . ' rows');
+                $this->_errorlog('DEBUG: mysqli - got ' . $recordSet->num_rows . ' rows');
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbNumRows");
             }
 
-            return $recordset->num_rows;
+            return $recordSet->num_rows;
         } else {
             if ($this->_verbose) {
                 $this->_errorlog("DEBUG: mysqli - Returned no rows");
@@ -535,10 +573,10 @@ class database
     /**
     * Returns the contents of one cell from a MySQL result set
     *
-    * @param    object      $recordset      The recordset to operate on
-    * @param    int         $row            row to get data from
-    * @param    string      $field          field to return
-    * @return   (depends on field content)
+    * @param    mysqli_result $recordSet The recordset to operate on
+    * @param    int         $row         row to get data from
+    * @param    mixed       $field       field to return
+    * @return   mixed (depends on field content)
     */
     public function dbResult($recordset, $row, $field = 0)
     {
@@ -561,7 +599,7 @@ class database
             } else {
                 $row = $recordset->fetch_assoc();
             }
-            if (($row !== NULL) AND isset($row[$field])) {
+            if (($row !== null) && isset($row[$field])) {
                 $retval = $row[$field];
             }
         }
@@ -574,7 +612,7 @@ class database
     *
     * This returns the number of fields in a recordset
     *
-    * @param   MySQLi_Result object   $recordset      The recordset to operate on
+    * @param   mysqli_result $recordSet The recordset to operate on
     * @return  int     Returns number of rows from query
     */
     public function dbNumFields($recordset)
@@ -587,16 +625,16 @@ class database
     *
     * Returns the field name for a given field number
     *
-    * @param    object      $recordset      The recordset to operate on
-    * @param    int         $fnumber        field number to return the name of
+    * @param    mysqli_result $recordSet   The recordset to operate on
+    * @param    int           $fieldNumber field number to return the name of
     * @return   string      Returns name of specified field
     *
     */
-    public function dbFieldName($recordset,$fnumber)
+    public function dbFieldName($recordSet, $fieldNumber)
     {
-        $result = $recordset->fetch_field_direct($fnumber);
+        $result = $recordSet->fetch_field_direct($fieldNumber);
 
-        return ($result === FALSE) ? '' : $result->name;
+        return ($result === false) ? '' : $result->name;
     }
 
     /**
@@ -604,7 +642,7 @@ class database
     *
     * Retrieves returns the number of effected rows for last query
     *
-    * @param    object      $recordset      The recordset to operate on
+    * @param    mysqli_result $recordSet The record set to operate on
     * @return   int     Number of rows affected by last query
     */
     public function dbAffectedRows($recordset)
@@ -617,22 +655,16 @@ class database
     *
     * Gets the next record in a recordset and returns in array
     *
-    * @param    object      $recordset  The recordset to operate on
-    * @param    boolean     $both       get both assoc and numeric indices
+    * @param    mysqli_result $recordSet The record set to operate on
+    * @param    bool          $both      get both assoc and numeric indices
     * @return   array       Returns data array of current row from recordset
     */
-    public function dbFetchArray($recordset, $both = FALSE)
+    public function dbFetchArray($recordSet, $both = false)
     {
-        if ($both) {
-            $result_type = MYSQLI_BOTH;
-        } else {
-            $result_type = MYSQLI_ASSOC;
-        }
+        $result_type = $both ? MYSQLI_BOTH : MYSQLI_ASSOC;
+        $result = $recordSet->fetch_array($result_type);
 
-        $return = $recordset->fetch_array($result_type);
-        if ( $return === NULL )
-            return FALSE;
-        return $return;
+        return ($result === null) ? false : $result;
     }
 
     /**
@@ -644,18 +676,12 @@ class database
     * @param    boolean     $both       get both assoc and numeric indices
     * @return   array       Returns data array of current row from recordset
     */
-    public function dbFetchAll($recordset, $both = FALSE)
+    public function dbFetchAll($recordset, $both = false)
     {
-        if ($both) {
-            $result_type = MYSQLI_BOTH;
-        } else {
-            $result_type = MYSQLI_ASSOC;
-        }
+        $result_type = $both ? MYSQLI_BOTH : MYSQLI_ASSOC;
 
-        $return = $recordset->fetch_all($result_type);
-        if ( $return === NULL )
-            return array();
-        return $return;
+        $result = $recordset->fetch_all($result_type);
+        return ($result === null) ? array() : $result;
     }
 
     /**
@@ -664,9 +690,10 @@ class database
     * Returns the last auto_increment ID generated
     *
     * @param    resource    $link_identifier    identifier for opened link
+    * @param    string      $sequence
     * @return   int                             Returns last auto-generated ID
     */
-    public function dbInsertId($link_identifier = '', $sequence = '')
+    public function dbInsertId($link_identifier = null, $sequence = '')
     {
         return $this->_db->insert_id;
     }
@@ -712,7 +739,7 @@ class database
             }
         }
 
-        return;
+        return '';
     }
 
     /**
@@ -763,15 +790,29 @@ class database
         }
     }
 
-    public function dbEscapeString($value, $is_numeric = FALSE)
+    /**
+     * Escapes a string so that it can be safely used in a query
+     *
+     * @param   string $str a string to be escaped
+     * @return  string
+     */
+    public function dbEscapeString($value, $is_numeric = false)
     {
         $value = $this->_db->real_escape_string($value);
         return $value;
     }
 
+    /**
+     * @return     string     the version of the database application
+     */
+    public function dbGetVersion()
+    {
+        return $this->_db->_mysql_version;
+    }
+
     public function dbStartTransaction()
     {
-        return $this->_db->autocommit(FALSE);
+        return $this->_db->autocommit(false);
     }
 
     public function dbCommit()

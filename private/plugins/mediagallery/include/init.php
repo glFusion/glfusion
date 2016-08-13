@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Startup and general purpose routines                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -324,19 +324,19 @@ function MG_get_size( $size )
 * @return   int                 the resultant value in bytes
 *
 */
-function MG_return_bytes($val) {
-   $val  = trim($val);
-   $last = strtolower($val{strlen($val)-1});
-   switch($last) {
-       // The 'G' modifier is available since PHP 5.1.0
-       case 'g':
-           $val *= 1024;
-       case 'm':
-           $val *= 1024;
-       case 'k':
-           $val *= 1024;
-   }
-   return $val;
+function MG_return_bytes($val)
+{
+    $val = trim($val);
+    $last = strtolower($val{strlen($val)-1});
+    switch($last) {
+        case 'g':
+            $val = (int) $val * pow(1024,2);
+        case 'm':
+            $val = (int) $val * pow(1024,1);
+        case 'k':
+            $val = (int) $val * 1024;
+    }
+    return $val;
 }
 
 /**

@@ -56,10 +56,10 @@ function lookup_Canon_tag($tag) {
 function formatCanonData($type,$tag,$intel,$data,$exif,&$result) {
 	$place = 0;
 
-
 	if($type=="ASCII") {
 		$result = $data = str_replace("\0", "", $data);
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
+
 		$data = bin2hex($data);
 		if($intel==1) $data = intel2Moto($data);
 		$top = hexdec(substr($data,8,8));
@@ -73,7 +73,7 @@ function formatCanonData($type,$tag,$intel,$data,$exif,&$result) {
 		}
 
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
-
+    	$result = array();
 		$data = bin2hex($data);
 		$result['RAWDATA'] = $data;
 

@@ -1615,6 +1615,7 @@ function service_get_story($args, &$output, &$svc_msg)
     global $_CONF, $_TABLES, $_USER;
 
     $output = array();
+    $svc_msg = array();
     $retval = '';
 
     if (!isset($_CONF['atom_max_stories'])) {

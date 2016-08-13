@@ -135,9 +135,10 @@ function _checkEnvironment()
     $classCounter++;
 
     $memory_limit = _return_bytes(ini_get('memory_limit'));
-    $memory_limit_print = ($memory_limit / 1024) / 1024;
+    $memory_limit_print = _bytes_to_mg($memory_limit); //  / 1024) / 1024;
     $T->set_var('item','memory_limit');
-    $T->set_var('status',$memory_limit < 50331648 ? '<span class="notok">'.$memory_limit_print.'M</span>' : '<span class="yes">'.$memory_limit_print.'M</span>');
+    // check for at least 48M
+    $T->set_var('status',$memory_limit < 50331648 ? '<span class="notok">'.$memory_limit_print.'</span>' : '<span class="yes">'.$memory_limit_print.'</span>');
     $T->set_var('recommended','64M');
     $T->set_var('notes',$LANG01['memory_limit']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -154,9 +155,10 @@ function _checkEnvironment()
     $classCounter++;
 
     $upload_limit = _return_bytes(ini_get('upload_max_filesize'));
-    $upload_limit_print = ($upload_limit / 1024) / 1024;
+    $upload_limit_print = _bytes_to_mg($upload_limit);
     $T->set_var('item','upload_max_filesize');
-    $T->set_var('status',$upload_limit < 8388608 ? '<span class="notok">'.$upload_limit_print.'M</span>' : '<span class="yes">'.$upload_limit_print.'M</span>');
+    // check for at least 8M
+    $T->set_var('status',$upload_limit < 8388608 ? '<span class="notok">'.$upload_limit_print.'</span>' : '<span class="yes">'.$upload_limit_print.'</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG01['upload_max_filesize']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -168,8 +170,8 @@ function _checkEnvironment()
         $post_limit_print = 'unlimited';
         $T->set_var('status','<span class="yes">'.$post_limit_print.'</span>');
     } else {
-        $post_limit_print = ($post_limit / 1024) / 1024;
-        $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
+        $post_limit_print = _bytes_to_mg($post_limit);
+        $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'</span>' : '<span class="yes">'.$post_limit_print.'</span>');
     }
     $T->set_var('item','post_max_size');
     $T->set_var('recommended','8M');
@@ -623,21 +625,26 @@ function _isWritable($path) {
     return true;
 }
 
-function _return_bytes($val) {
+function _return_bytes($val)
+{
     $val = trim($val);
     $last = strtolower($val{strlen($val)-1});
     switch($last) {
-        // The 'G' modifier is available since PHP 5.1.0
         case 'g':
-            $val *= 1024;
+            $val = (int) $val * pow(1024,2);
         case 'm':
-            $val *= 1024;
+            $val = (int) $val * pow(1024,1);
         case 'k':
-            $val *= 1024;
+            $val = (int) $val * 1024;
     }
-
     return $val;
 }
+
+function _bytes_to_mg($bytes, $precision = 2)
+{
+    return round ($bytes / pow(1024,2),$precision) . 'M';
+}
+
 
 
 function _checkCacheDir($path,$template,$classCounter)
@@ -647,7 +654,7 @@ function _checkCacheDir($path,$template,$classCounter)
     // special test to see if existing cache files exist and are writable...
     if ( $dh = @opendir($path) ) {
         while (($file = readdir($dh)) !== false ) {
-            if ( $file == '.' || $file == '..' || $file == '.svn') {
+            if ( $file == '.' || $file == '..' || $file == '.svn' || $file == '.git' ) {
                 continue;
             }
             if ( is_dir($path.$file) ) {

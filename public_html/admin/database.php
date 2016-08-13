@@ -197,7 +197,7 @@ function DBADMIN_backupAjax()
 
     if ( !COM_isAjax()) die();
 
-    $retval = '';
+    $retval = array();
     $errorCode = 0;
 
     $backup = new dbBackup();
@@ -236,6 +236,7 @@ function DBADMIN_backupCompleteAjax()
     if ( !COM_isAjax()) die();
 
     $filename = '';
+    $retval = array();
 
     $filter = sanitizer::getInstance();
 
@@ -259,6 +260,8 @@ function DBADMIN_backupTableAjax()
     global $_VARS;
 
     if ( !COM_isAjax()) die();
+
+    $retval = array();
 
     if (!isset($_VARS['_dbback_allstructs'])) {
         $_VARS['_dbback_allstructs'] = 0;
@@ -968,6 +971,9 @@ function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
 {
     if ( !COM_isAjax()) die();
 
+    $retval = array();
+    $return = array();
+
     $rc = DBADMIN_alterEngine($table,$engine);
     if ( $rc === false ) {
         $retval['errorCode'] = 1;
@@ -985,6 +991,9 @@ function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
 function DBADMIN_ajaxOptimizeTable( $table )
 {
     if ( !COM_isAjax()) die();
+
+    $retval = array();
+    $return = array();
 
     $rc = DB_query("OPTIMIZE TABLE $table", 1);
     if ( $rc === false ) {
@@ -1005,6 +1014,7 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
     global $_CONF, $_TABLES, $_DB_name;
 
     $tableList = array();
+    $retval = array();
 
     if ( !COM_isAjax()) die();
 
