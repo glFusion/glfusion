@@ -124,24 +124,35 @@ function WIDGET_autotranslations($header=0) {
                  'zh-TW' => 'Chinese Traditional',
             );
     asort($isoLang); //comment out this line to sort results by 2 digit language code instead of language names above
+
     $retval = '';
-    if ($header) {
-        $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
+
+    $T = new Template($_CONF['path_layout'].'/widgets');
+    $T->set_file('widget', 'translations.thtml');
+
+    if ( $header ) {
+        $T->set_var('lang_header',$LANG_WIDGETS['translate']);
     }
-    $retval .= '<ul class="autotranslations">';
+
+    $T->set_block('widget', 'flags', 'f');
 
     foreach ($isoLang AS $key => $language ) {
         $randID = rand();
         if ($key != $_CONF['iso_lang']) {
-            $retval .= '<li class="sprite-' . $key . '"><a href="http://translate.google.com/translate?';
-            $retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
-            $retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
-            $retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
-            $retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
-            $retval .= '"><img src="' . $_CONF['site_url'] . '/images/speck.gif" alt="'.$language.'" title="'.$language.'" /></a></li>';
+
+            $T->set_var(array(
+                'key'   => $key,
+                'src_lng' => $_CONF['rdf_language'],
+                'lang' => $language,
+                'rand' => $randID,
+            ));
+            $T->parse('f', 'flags',true);
         }
     }
-    $retval .= '</ul><div style="clear:left;"></div>';
+
+    $T->parse('output','widget');
+    $retval = $T->finish($T->get_var('output'));
+
     return $retval;
 }
 

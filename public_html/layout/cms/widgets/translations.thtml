@@ -1,0 +1,14 @@
+<div>
+<p>{lang_header}</p>
+
+<ul class="autotranslations">
+<!-- BEGIN flags -->
+<li class="sprite-{key}">
+<a href="http://translate.google.com/translate?hl={key}&amp;sl={src_lng}&amp;tl={key}&amp;u={site_url:u}%3Fr%3D{rand}">
+<img src="{site_url}/images/speck.gif" alt="{lang}" title="{lang}">
+</a>
+</li>
+<!-- END flags -->
+</ul>
+</div>
+</div class="uk-clearfix"></div>
