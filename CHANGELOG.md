@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Modified off-canvas menu to be completely self-contained in the menu template
+  - Modified auto translations block to use a template
+  - Media Gallery - improved gallery and album index page grid to better support small to xlarge viewports
   - Implemented activity timer for story and static page editors to automatically refresh security tokens while editing
   - Allow token time to live to be configured in siteconfig.php
   - Expanded environment check to validate required PHP extensions are available
