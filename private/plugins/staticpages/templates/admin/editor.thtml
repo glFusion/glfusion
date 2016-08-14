@@ -2,6 +2,7 @@
 <script>
 var editor_type = 'speditor';
 var lang_timer  = "{lang_timeout}";
+var lastActivity = 0;
 function actionClick( $action ) {
 $('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
 $('#frmstory').trigger('submit', [ { $action: true } ]);

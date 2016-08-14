@@ -4,7 +4,7 @@ v1.6.1 (unreleased)
   - Modified off-canvas menu to be completely self-contained in the menu template
   - Modified auto translations block to use a template
   - Media Gallery - improved gallery and album index page grid to better support small to xlarge viewports
-  - Implemented activity timer for story and static page editors to automatically refresh security tokens while editing
+  - Implemented activity timer for forum, story and static page editors to automatically refresh security tokens while editing
   - Allow token time to live to be configured in siteconfig.php
   - Expanded environment check to validate required PHP extensions are available
   - Changed article title spacing / better wrapping
@@ -19,7 +19,7 @@ v1.6.1 (unreleased)
   - Tweak the scroll up widget - improved fade-in / fade-out on initial page load
   - Enhanced sectest to better detect non-standard named directories
   - Fixed missing trackback button on story ping / trackback admin page (CMS theme)
-  - trackback preview failed due to interaction with BB2 plugin
+  - Trackback preview failed due to interaction with BB2 plugin
   - Removed the last use of HTTP and HTTP2 Pear calls
   - Remote auth users with merged local accounts can now change their local password
   - Fixed error in SP and Story editor where <i></i> tags could be appended to the output when switching between visual and html mode

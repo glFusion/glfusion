@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to create topics and posts in the forum                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -356,7 +356,7 @@ function _ff_accessError()
 function FF_postEditor( $postData, $forumData, $action, $viewMode )
 {
     global $_CONF, $_TABLES, $_FF_CONF, $FF_userprefs, $_USER,
-           $LANG_GF01, $LANG_GF02, $LANG_GF10,$REMOTE_ADDR;
+           $LANG_GF01, $LANG_GF02, $LANG_GF10,$REMOTE_ADDR, $LANG_ADMIN;
 
     $retval         = '';
     $editmoderator  = false;
@@ -736,6 +736,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         'LANG_attachments'  => $LANG_GF10['attachments'],
         'LANG_maxattachments'=>sprintf($LANG_GF10['maxattachments'],$_FF_CONF['maxattachments']),
         'postmode'          => $postData['postmode'],
+        'lang_timeout'      => $LANG_ADMIN['timeout_msg'],
     ));
 
     // Check and see if the filemgmt plugin is installed and enabled
