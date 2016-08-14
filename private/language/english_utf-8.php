@@ -1691,7 +1691,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful'   => 'Database back up was successful.',
     'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found'           => "Incorrect path, security restriction in effect or mysqldump utility not executable.<br/> Check <strong>mysqldump_path</strong> definition in the Configuration.<br/> Check <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> settings in PHP.",
     'zero_size'           => 'Backup Failed: Filesize was 0 bytes',
     'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
     'no_access'           => "ERROR: Directory {$_CONF['backup_path']} is not accessible.",
