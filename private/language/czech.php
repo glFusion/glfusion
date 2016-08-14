@@ -1687,7 +1687,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Database back up was successful.',
     'db_explanation' => 'To create a new backup of your glFusion system, hit the button below',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Incorrect path or mysqldump utility not executable.<br" . XHTML . ">Check <strong>\$_DB_mysqldump_path</strong> definition in config.php.<br" . XHTML . ">Variable currently defined as: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup Failed: Filesize was 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} does not exist or is not a directory",
     'no_access' => "Chyba: Directory {$_CONF['backup_path']} is not accessible.",
@@ -1998,7 +1997,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2491,9 +2491,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2776,7 +2773,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

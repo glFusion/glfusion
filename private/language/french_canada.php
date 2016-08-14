@@ -1691,7 +1691,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Sauvegarde de la base de donn&eacute;e effectu&eacute;e avec succ&egrave;s',
     'db_explanation' => 'Cliquez sur le bouton ci-dessous pour effectuer une sauvegarde de votre syst&egrave;me',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Chemin incorecte ou le fichier mysqldump n'est pas ex&eacute;cutable.<br" . XHTML . ">V&eacute;rifiez le param&egrave;tre <strong>\$_DB_mysqldump_path</strong> dans le fichier config.php.<br" . XHTML . ">Ce param&egrave;tre est actuellement positionn&eacute; &agrave; : <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Sauvegarde &eacute;chou&eacute;e: la taille du fichier &eacute;tait de 0 octets.',
     'path_not_found' => "{$_CONF['backup_path']} n'existe pas ou n'est pas un r&eacute;pertoire.",
     'no_access' => "Erreur: le r&eacute;pertoire {$_CONF['backup_path']} n'est pas accessible.",
@@ -2002,7 +2001,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2495,9 +2495,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2780,7 +2777,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

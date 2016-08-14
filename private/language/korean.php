@@ -1689,7 +1689,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => '데이터베이스 백업을 완료 하였습니다',
     'db_explanation' => 'glFusion를 백업하기 위해서는 다음의 단추를 클릭하시기 바랍니다.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "패스 지정에 잘못이 있으므로 mysqdump가 실행 가능해지지 않습니다.<br" . XHTML . "><strong>\$_DB_mysqldump_path</strong>의 설정을 config.php로 체크하시기 바랍니다.  <br" . XHTML . "> 현재의 설정은 \n<var>{$_DB_mysqldump_path}</var>입니다.",
     'zero_size' => '백업에 실패했습니다.  파일의 크기가 0 바이트(bytes) 입니다.',
     'path_not_found' => "{$_CONF['backup_path']} 는 존재하지 않으며 디랙토리는 아닙니다.",
     'no_access' => "에러 :{$_CONF['backup_path']}디렉토리에 접속 할 수 없습니다.",
@@ -2000,7 +1999,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2493,9 +2493,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2778,7 +2775,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

@@ -1695,7 +1695,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Database backup met succes uitgevoerd.',
     'db_explanation' => 'Om een nieuwe backup van het portaal te (laten) maken, klik op de knop hieronder',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Incorrect pad of mysqldump utility is niet uitvoerbaar.<br" . XHTML . ">Controleer de definitie voor <strong>\$_DB_mysqldump_path</strong> in config.php.<br" . XHTML . ">De variabele is momenteel opgenomen als: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup mislukt: bestandsgrootte was 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} bestaat niet of is geen directory",
     'no_access' => "FOUT: Directory {$_CONF['backup_path']} is niet benaderbaar.",
@@ -2006,7 +2005,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2499,9 +2499,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pad Pear',
     'have_pear' => 'Pear Aanwezig?',
     'mail_settings' => 'Email Instellingen',
-    'allow_mysqldump' => 'MySQL Dump Toestaan',
-    'mysqldump_path' => 'Pad naar Executable',
-    'mysqldump_options' => 'MySQL Dump Opties',
     'theme' => 'Thema',
     'menu_elements' => 'Menu Elementen',
     'path_themes' => 'Pad naar Thema\'s',
@@ -2784,7 +2781,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Thema\'s',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Gebruikers',
     'fs_misc' => 'Overig',
     'fs_spamx' => 'Spam-X',

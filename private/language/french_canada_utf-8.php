@@ -1692,7 +1692,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Base de données de sauvegarde a réussi.',
     'db_explanation' => 'Pour créer une nouvelle sauvegarde de la base de données de votre site, cliquez sur "Créer un nouveau" ci-dessus. Cliquez sur le nom d`un fichier à télécharger cette sauvegarde.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => 'Chemin d`accès incorrect, restriction de sécurité en vigueur ou mysqldump utilitaire pas exécutable. <br/> Vérifiez <strong> mysqldump_path </strong> définition de la configuration. <br/> Vérifiez <a href="http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir">open_basedir</a> open_basedir </a> paramètres en PHP.',
     'zero_size' => 'Échec de la sauvegarde: Taille du fichier était 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} n`existe pas ou n`est pas un répertoire",
     'no_access' => "ERREUR: la {$_CONF['backup_path']} n'est pas accessible.",
@@ -2003,7 +2002,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Liste des Sujets',
     'tb_list' => 'Liste Trackback',
     'custom_autotag' => 'Personnalisé Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2496,9 +2496,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear',
     'mail_settings' => 'Paramètres de Messagerie',
-    'allow_mysqldump' => 'Permettre à MySQL Dump',
-    'mysqldump_path' => 'Chemin de l`exécutable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Eléments du Menu',
     'path_themes' => 'Themes Path',
@@ -2781,7 +2778,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

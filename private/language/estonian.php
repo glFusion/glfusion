@@ -1689,7 +1689,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Andmebaasi varundamine oli edukas.',
     'db_explanation' => 'Sinu glFusionist uue varukoopia tegemiseks klõpsa allolevat nuppu',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Ebakorrektne tee programmini või mysqldump pole käivitatav.<brKontrolli seadistuses <strong>\$_DB_mysqldump_path</strong> definitsiooni.<brHetkel on muutuja väärtuseks: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varundamine ebaõnnestus, faili suurus on 0 baiti',
     'path_not_found' => "{$_CONF['backup_path']} pole olemas või pole kataloog.",
     'no_access' => "Viga: varunduskataloog, {$_CONF['backup_path']}, pole ligipääsetav.",
@@ -2000,7 +1999,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2493,9 +2493,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pear asukoht',
     'have_pear' => 'Pear olemas?',
     'mail_settings' => 'E-posti häälestus',
-    'allow_mysqldump' => 'Luba MySQL Dump',
-    'mysqldump_path' => 'programmi asukoht',
-    'mysqldump_options' => 'MySQL Dump valikud',
     'theme' => 'Skeem',
     'menu_elements' => 'Menüü elemendid',
     'path_themes' => 'Skeemide asukoht',
@@ -2778,7 +2775,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Skeem',
     'fs_mail' => 'E-post',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Kasutajad',
     'fs_misc' => 'Mitmesugust',
     'fs_spamx' => 'Spam-X',

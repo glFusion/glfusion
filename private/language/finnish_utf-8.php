@@ -1691,7 +1691,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Tietokannan varmistus onnistui.',
     'db_explanation' => 'Luodaksesi uuden varmuuskopion glFusionista, klikkaa alta l&ouml;ytyv&auml;&auml; nappia',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Viallinen polku tai mysqldump apuohjelma ei ole suoritettavissa.<br" . XHTML . ">Tarkista <strong>\$_DB_mysqldump_path</strong> m&auml;&auml;ritys config.php -tiedostossa.<br" . XHTML . ">Muuttujan nykyinen m&auml;&auml;rittely: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varmuuskopiointi ep&auml;onnistui: tiedoston koko 0 tavua',
     'path_not_found' => "{$_CONF['backup_path']} ei ole olemassa tai ei ole hakemisto",
     'no_access' => "VIRHE: Hakemisto {$_CONF['backup_path']} ei ole saatavilla.",
@@ -2002,7 +2001,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2495,9 +2495,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Polku P&auml;&auml;ryn&auml;&auml;n',
     'have_pear' => 'Onko sinulla p&auml;&auml;ryn&auml;?',
     'mail_settings' => 'Posti Asetukset',
-    'allow_mysqldump' => 'Salli MySQL Dump',
-    'mysqldump_path' => 'Suoritettavan Polku',
-    'mysqldump_options' => 'MySQL Dump Valinnat',
     'theme' => 'Ulkoasu',
     'menu_elements' => 'Valikko elementit',
     'path_themes' => 'Ulkoasu polku',
@@ -2780,7 +2777,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Ulkoasu',
     'fs_mail' => 'Posti',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'K&auml;ytt&auml;j&auml;t',
     'fs_misc' => 'Sekalaista',
     'fs_spamx' => 'Spam-X',

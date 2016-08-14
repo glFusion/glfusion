@@ -1695,7 +1695,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'データベースのバックアップが完了しました',
     'db_explanation' => 'glFusionをバックアップするには下のボタンをクリックしてください',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "パスの指定が間違っているか，mysqldumpが実行可能になっていません。<br' . XHTML . '><strong>mysqldump_path</strong>の設定をコンフィギュレーションでチェックしてください。<br' . XHTML . '>現在の設定は，\n<var>{$_DB_mysqldump_path}</var>です。",
     'zero_size' => 'バックアップが失敗しました。ファイルの大きさが0 bytesです。',
     'path_not_found' => "{$_CONF['backup_path']} は存在しないか，ディレクトリではありません。",
     'no_access' => "エラー： {$_CONF['backup_path']} ディレクトリにアクセスできません。",
@@ -2006,7 +2005,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2499,9 +2499,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'PEARのパス',
     'have_pear' => 'PEARをインストールしている',
     'mail_settings' => 'メール設定',
-    'allow_mysqldump' => 'MySQLのダンプを許可する',
-    'mysqldump_path' => 'mysqldump のパス',
-    'mysqldump_options' => 'mysqldump のオプション',
     'theme' => 'テーマ',
     'menu_elements' => 'メニュー項目',
     'path_themes' => 'テーマパス',
@@ -2784,7 +2781,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'テーマ',
     'fs_mail' => 'メール',
     'fs_pear' => 'PEAR',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'ユーザ',
     'fs_misc' => 'その他',
     'fs_spamx' => 'Spam-X',

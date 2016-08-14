@@ -1692,7 +1692,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Backup do banco de dados feito com sucesso.',
     'db_explanation' => 'Para criar um novo backup do seu sistema glFusion, clique o botão abaixo',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Path (caminho) incorreto ou utilitário chamado mysqldump não está executando.<br" . XHTML . ">Verifique <strong>\$_DB_mysqldump_path</strong> - definição que está no arquivo config.php.<br" . XHTML . ">Essa variável está no momento definida como: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup Falhou: tamanho do arquivo com 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} não existe ou não é um diretório",
     'no_access' => "ERRO: Diretório {$_CONF['backup_path']} não está acessível.",
@@ -2003,7 +2002,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2496,9 +2496,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2781,7 +2778,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

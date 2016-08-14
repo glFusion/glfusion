@@ -1692,7 +1692,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => '资料库备份完成。',
     'db_explanation' => '要做新的志乐备份，点击以下的按钮',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "不正确的路径或 mysqldump 程式不可执行。<br" . XHTML . ">检查<strong>\$_DB_mysqldump_path</strong>定义在 config.php.<br" . XHTML . ">变数现在被定义为︰<var>{$_DB_mysqldump_path}</var>",
     'zero_size' => '备份失败︰档案是 0 大小',
     'path_not_found' => "{$_CONF['backup_path']} 不存在或不是目录",
     'no_access' => "错误︰目录 {$_CONF['backup_path']} ，不能存取。",
@@ -2003,7 +2002,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2496,9 +2496,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pear 路径',
     'have_pear' => '有 Pear 吗?',
     'mail_settings' => '电邮设定',
-    'allow_mysqldump' => '允许 MySQL Dump',
-    'mysqldump_path' => 'Executable 路径',
-    'mysqldump_options' => 'MySQL Dump 选项',
     'theme' => '主题/皮肤',
     'menu_elements' => '才当成分',
     'path_themes' => '画面主题的路径',
@@ -2781,7 +2778,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => '版面主题',
     'fs_mail' => '电邮',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => '用户',
     'fs_misc' => '其他',
     'fs_spamx' => 'Spam-X',

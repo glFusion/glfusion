@@ -1688,7 +1688,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Veritabaný yedeklemesi baþarýyla sonuçlandý.',
     'db_explanation' => 'glFusion sisteminin yeni bir yedeðini almak için, aþaðýdaki butona basýn.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Hatalý adres veya mysqldump programý çalýþtýrýlýnamýyor.<br" . XHTML . ">config.php dosyanýzdaki <strong>\$_DB_mysqldump_path</strong> deðiþkenini kontrol edin.<br" . XHTML . ">Deðiþken þu anki deðeri: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Yedekleme baþarýsýz: Dosya boyutu 0 bayt idi.',
     'path_not_found' => "{$_CONF['backup_path']} adresi yok veya bir klasör deðil",
     'no_access' => "HATA: Kalsör {$_CONF['backup_path']} eriþilinemiyor.",
@@ -1999,7 +1998,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2492,9 +2492,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2777,7 +2774,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

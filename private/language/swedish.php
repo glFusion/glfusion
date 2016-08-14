@@ -1692,7 +1692,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Databasbackup genomförd.',
     'db_explanation' => 'Klicka nedan för att skapa en säkerhetskopia av ditt glFusion-system',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Felaktig sökväg eller så är inte mysqldump-programmet exekverbart.<BR>Kontrollera <strong>\$_DB_mysqldump_path</strong>-definitionen i config.php.<BR>Variabeln är för närvarande definierad som: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Säkerhetskopiering misslyckades:  filstorleken är noll',
     'path_not_found' => "{$_CONF['backup_path']} existerar inte eller är inte en katalog",
     'no_access' => "FEL: Katalogen {$_CONF['backup_path']} är inte tillgänglig.",
@@ -2003,7 +2002,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2496,9 +2496,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Path Pear',
     'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Allow MySQL Dump',
-    'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
     'path_themes' => 'Themes Path',
@@ -2781,7 +2778,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

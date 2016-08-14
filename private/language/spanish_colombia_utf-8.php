@@ -1689,7 +1689,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'La copia de seguridad de la base de datos se ha realizado satisfactoriamente.',
     'db_explanation' => 'Haz clic en: <b>Crear</b> para generar una copia de seguridad del sistema',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Ruta incorrecta o la utilidad mysqldump no se puede ejecutar.<br" . XHTML . ">Comprueba la definición de <strong>\$_DB_mysqldump_path</strong> en config.php.<br" . XHTML . ">La variable está definida actualmente como: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Fallo de la copia de seguridad: El tamaño era de 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} no existe o no es una ruta",
     'no_access' => "ERROR: No se puede acceder al directorio {$_CONF['backup_path']}.",
@@ -2000,7 +1999,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Temas',
     'tb_list' => 'Lista de Retroenlaces',
     'custom_autotag' => 'Personalizadas',
-    'alt_topic' => 'Tema Alterno'
+    'alt_topic' => 'Tema Alterno',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2493,9 +2493,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Ruta',
     'have_pear' => 'Instalado',
     'mail_settings' => 'Mail Settings',
-    'allow_mysqldump' => 'Permitir MySQL Dump',
-    'mysqldump_path' => 'Ruta del Ejecutable',
-    'mysqldump_options' => 'Opciones para MySQL Dump',
     'theme' => 'Plantilla',
     'menu_elements' => 'Opciones',
     'path_themes' => 'Ruta',
@@ -2778,7 +2775,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Diseño',
     'fs_mail' => 'Correo',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Usuarios',
     'fs_misc' => 'Varios',
     'fs_spamx' => 'Spam-X',

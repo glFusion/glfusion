@@ -1692,7 +1692,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Backup der Datenbank war erfolgreich.',
     'db_explanation' => 'Um ein neues Backup Deiner Datenbank anzulegen, bitte auf Neu anlegen (s.o.) klicken. Ein Klick auf einen Dateinamen lädt das Backup herunter.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Falscher Pfad oder mysqldump ist nicht ausführbar.<br' . XHTML . '>Bitte überprüfe die Einstellung <strong>mysqldump_path</strong> in der Konfiguration.<br' . XHTML . '>Aktuelle Einstellung: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup fehlgeschlagen: Datei ist 0 Bytes groß.',
     'path_not_found' => "{$_CONF['backup_path']} existiert nicht oder ist kein Verzeichnis.",
     'no_access' => "Fehler: Konnte nicht auf das Verzeichnis {$_CONF['backup_path']} zugreifen.",
@@ -2003,7 +2002,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2496,9 +2496,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pfad zu Pear',
     'have_pear' => 'Pear vorhanden?',
     'mail_settings' => 'Einstellungen ',
-    'allow_mysqldump' => 'MySQL Dump erlauben',
-    'mysqldump_path' => 'Pfad zu Executable',
-    'mysqldump_options' => 'MySQL Dump Optionen',
     'theme' => 'Theme',
     'menu_elements' => 'Elemente des Menüs',
     'path_themes' => 'Pfad zu Themes',
@@ -2781,7 +2778,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Benutzer',
     'fs_misc' => 'Vermischtes',
     'fs_spamx' => 'Spam-X',

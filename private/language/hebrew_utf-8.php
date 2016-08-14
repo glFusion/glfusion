@@ -1690,7 +1690,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'גיבוי מאגר המידע עבר בהצלחה.',
     'db_explanation' => 'כדי ליצור גיבוי חדש של המערכת, ליחצו על הכפתור שלעיל. ליחצו על שם הקובץ כדי להוריד את הגיבוי.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "מיקום שגוי או שה-mysqldump utility הוא לא executable.<br" . XHTML . ">בידקו את הגדרת ה-<strong>mysqldump_path</strong> בהגדרות.<br" . XHTML . "> הנתיב כרגע מוגדר כ: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'הגיבוי נכשל. גודל הקובץ היה 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} לא קיים או שזו לא ספרייה",
     'no_access' => "שגיאה: הספרייה {$_CONF['backup_path']} חסומה.",
@@ -2001,7 +2000,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2494,9 +2494,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'נתיב ל-Pear',
     'have_pear' => 'יש Pear?',
     'mail_settings' => 'הגדרות דואר',
-    'allow_mysqldump' => 'איפשור השלכת MySQL',
-    'mysqldump_path' => 'נתיב לקובץ המבצע',
-    'mysqldump_options' => 'אפשרויות השלכת MySQL',
     'theme' => 'נושא עיצובי',
     'menu_elements' => 'פריטי תפריט',
     'path_themes' => 'נתיב לנושאים עיצוביים',
@@ -2779,7 +2776,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'נושא עיצובי',
     'fs_mail' => 'דואר',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'משתמשים',
     'fs_misc' => 'שונות',
     'fs_spamx' => 'Spam-X',

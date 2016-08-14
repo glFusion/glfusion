@@ -1691,7 +1691,6 @@ $LANG_DB_BACKUP = array(
     'backup_successful' => 'Varnostno shranjevanje baze podatkov je bilo uspešno.',
     'db_explanation' => 'Če hočeš ustvariti novo varnostno kopijo baze podatkov sistema glFusion , klikni "Ustvari" zgoraj.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'not_found' => "Napačna pot ali pa orodje mysqldump ni izvršljivo.<br" . XHTML . ">Preveri definicijo <strong>\$_DB_mysqldump_path</strong> v config.php.<br" . XHTML . ">Spremenljivka je trenutno definirana kot: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varnostno kopiranje neuspešno: Velikost datoteke je 0 bajtov',
     'path_not_found' => "{$_CONF['backup_path']} ne obstaja ali pa ni direktorij",
     'no_access' => "NAPAKA: Direktorij {$_CONF['backup_path']} ni dosegljiv.",
@@ -2002,7 +2001,8 @@ $LANG_ADMIN = array(
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
-    'alt_topic' => 'Alternate Topic'
+    'alt_topic' => 'Alternate Topic',
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
 );
 
 ###############################################################################
@@ -2495,9 +2495,6 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pot do Pear-a',
     'have_pear' => 'Imaš Pear?',
     'mail_settings' => 'Nastavitve e-pošte',
-    'allow_mysqldump' => 'Dovoli MySQL Dump',
-    'mysqldump_path' => 'Pot do programov',
-    'mysqldump_options' => 'MySQL Dump možnosti',
     'theme' => 'Postavitev',
     'menu_elements' => 'Elementi menija',
     'path_themes' => 'Pot do tem',
@@ -2780,7 +2777,6 @@ $LANG_fs['Core'] = array(
     'fs_theme' => 'Postavitev',
     'fs_mail' => 'E-pošta',
     'fs_pear' => 'Pear',
-    'fs_mysql' => 'MySQL',
     'fs_users' => 'Uporabniki',
     'fs_misc' => 'Ostalo (misc)',
     'fs_spamx' => 'Spam-X',
