@@ -12,6 +12,8 @@ glFusion CMS is well organized and provides a very powerful system that is extre
 * Content integration using auto tags - easily integrate multi-media components into stories and other types of content.
 * Built in spam and bot protections right out of the box.
 * Submission queues - allows site admins to review and approve content (optional).
+* Social integration for sharing content
+* Support for external comment engines, Facebook comments and Disqus
 * Flexible Forum allows for collaboration - including content integration, flexible security controls, and attachment capabilities.
 * Create, Schedule, Post and Edit articles in multiple topics.
 * Save story drafts until they are ready for publishing.
@@ -28,7 +30,7 @@ glFusion CMS is well organized and provides a very powerful system that is extre
 ## Documentation
 
 Please head over to our documentation wiki at
-<a href="http://www.glfusion.org/wiki/glfusion:start">http://www.glfusion.org/wiki/glfusion:start</a> for all the details on how to
+<a href="https://www.glfusion.org/wiki/doku.php">https://www.glfusion.org/wiki/doku.php</a> for all the details on how to
 install, extend and use the glFusion CMS.
 
 ## Support
@@ -36,8 +38,8 @@ install, extend and use the glFusion CMS.
 The best support method for glFusion CMS is the glFusion Web Site located at
 <a href="http://www.glfusion.org" target="_blank">http://www.glfusion.org</a>.  There is an active community ready to help out.
 
-The glFusion CMS documentation is located at <a href="http://www.glfusion.org/wiki/glfusion:start" target="_blank">
-http://www.glfusion.org/wiki/glfusion:start</a>.
+The glFusion CMS documentation is located at <a href="https://www.glfusion.org/wiki/doku.php" target="_blank">
+https://www.glfusion.org/wiki/doku.php</a>.
 
 The mailing list for announcements is glfusion-announce@freelists.org. You can
 subscribe at <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">http://www.freelists.org/list/glfusion-announce</a>. This list is an
