@@ -1337,6 +1337,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.6.0';
 
         case '1.6.0' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->del('fs_mysql','Core');
+            $c->del('allow_mysqldump','Core');
+            $c->del('mysqldump_path','Core');
+            $c->del('mysqldump_options','Core');
 
             $current_fusion_version = '1.6.1';
 
@@ -1898,8 +1904,10 @@ function INST_resyncConfig() {
     $tcnf = $c->get_config('Core');
 
     $site_url = $tcnf['site_url'];
+    $cookiesecure = $tncf['cookiesecure'];
 
     $c->sync('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
+
     $c->sync('fs_site', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
     $c->sync('site_url','','text',0,0,NULL,10,TRUE);
     $c->sync('site_admin_url','','text',0,0,NULL,20,TRUE);
@@ -1946,26 +1954,21 @@ function INST_resyncConfig() {
     $c->sync('have_pear','','select',0,4,1,10,TRUE);
     $c->sync('path_pear','','text',0,4,NULL,20,TRUE);
 
-    $c->sync('fs_mysql', NULL, 'fieldset', 0, 5, NULL, 0, TRUE);
-    $c->sync('allow_mysqldump',1,'select',0,5,0,10,TRUE);
-    $c->sync('mysqldump_path','/usr/bin/mysqldump','text',0,5,NULL,20,TRUE);
-    $c->sync('mysqldump_options','-Q','text',0,5,NULL,30,TRUE);
+    $c->sync('fs_search', NULL, 'fieldset', 0, 5, NULL, 0, TRUE);
+    $c->sync('search_style','google','select',0,5,18,10,TRUE);
+    $c->sync('search_limits','10,25,50,100','text',0,5,NULL,20,TRUE);
+    $c->sync('num_search_results',10,'text',0,5,NULL,30,TRUE);
+    $c->sync('search_show_num',TRUE,'select',0,5,1,40,TRUE);
+    $c->sync('search_show_type',TRUE,'select',0,5,1,50,TRUE);
+    $c->sync('search_show_user',TRUE,'select',0,5,1,60,TRUE);
+    $c->sync('search_show_hits',TRUE,'select',0,5,1,70,TRUE);
+    $c->sync('search_no_data','<i>Not available...</i>','text',0,5,NULL,80,TRUE);
+    $c->sync('search_separator',' &gt; ','text',0,5,NULL,90,TRUE);
+    $c->sync('search_def_keytype','phrase','select',0,5,19,100,TRUE);
 
-    $c->sync('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
-    $c->sync('search_style','google','select',0,6,18,10,TRUE);
-    $c->sync('search_limits','10,25,50,100','text',0,6,NULL,20,TRUE);
-    $c->sync('num_search_results',10,'text',0,6,NULL,30,TRUE);
-    $c->sync('search_show_num',TRUE,'select',0,6,1,40,TRUE);
-    $c->sync('search_show_type',TRUE,'select',0,6,1,50,TRUE);
-    $c->sync('search_show_user',TRUE,'select',0,6,1,60,TRUE);
-    $c->sync('search_show_hits',TRUE,'select',0,6,1,70,TRUE);
-    $c->sync('search_no_data','<i>Not available...</i>','text',0,6,NULL,80,TRUE);
-    $c->sync('search_separator',' &gt; ','text',0,6,NULL,90,TRUE);
-    $c->sync('search_def_keytype','phrase','select',0,6,19,100,TRUE);
-
-    $c->sync('fs_update', NULL, 'fieldset', 0, 7, NULL, 0, TRUE);
-    $c->sync('update_check_interval','86400','select',0,7,29,10,TRUE);
-    $c->sync('send_site_data',TRUE,'select',0,7,1,20,TRUE);
+    $c->sync('fs_update', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
+    $c->sync('update_check_interval','86400','select',0,6,29,10,TRUE);
+    $c->sync('send_site_data',TRUE,'select',0,6,1,20,TRUE);
 
     // Subgroup: Stories and Trackback
     $c->sync('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
@@ -2269,7 +2272,7 @@ function INST_resyncConfig() {
     $c->sync('disable_webservices',   1, 'select', 7, 11, 0, 10, TRUE);
     $c->sync('restrict_webservices',  0, 'select', 7, 11, 0, 20, TRUE);
     $c->sync('atom_max_stories',     10, 'text',   7, 11, 0, 30, TRUE);
-
+    $c->sync('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 }
 
 function INST_doSiteConfigUpgrade() {

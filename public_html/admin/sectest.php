@@ -331,14 +331,14 @@ if (!empty ($url)) {
 
     // Note: We're not testing the 'sql' and 'language' directories.
 
-    if (($_CONF['allow_mysqldump'] == 1) && ($_DB_dbms == 'mysql')) {
-        if (makeTempfile ($_CONF['backup_path'] . 'test.txt')) {
-            $display .= doTest ($url, $privatePath.'backups/test.txt', 'backups directory');
-            @unlink ($_CONF['backup_path'] . 'test.txt');
-        } else {
-            $display .= '<li>Failed to create a temporary file in your backups directory. Check your directory permissions!</li>';
-        }
+
+    if (makeTempfile ($_CONF['backup_path'] . 'test.txt')) {
+        $display .= doTest ($url, $privatePath.'backups/test.txt', 'backups directory');
+        @unlink ($_CONF['backup_path'] . 'test.txt');
+    } else {
+        $display .= '<li>Failed to create a temporary file in your backups directory. Check your directory permissions!</li>';
     }
+
 
     if (makeTempfile ($_CONF['path_data'] . 'test.txt')) {
         $display .= doTest ($url, $privatePath.'data/test.txt', 'data directory');

@@ -550,7 +550,7 @@ function getAdminMenu()
                 next( $plugin_options );
             }
 
-            if (( $_CONF['allow_mysqldump'] == 1 ) AND ( $_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) AND SEC_inGroup( 'Root' )) {
+            if ( SEC_inGroup( 'Root' ) ) {
                 $url = $_CONF['site_admin_url'] . '/database.php';
                 $label = $LANG01[103] . '';
                 $item_array[] = array('label' => $label, 'url' => $url);

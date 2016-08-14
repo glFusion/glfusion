@@ -145,18 +145,7 @@ function rescue_path_pear_validate( $value ) {
     }
     return $value;
 }
-/**
-* Validate function: Validate input
-*
-* @return   string      validated ata
-*
-*/
 
-function rescue_mysqldump_path_validate( $value ) {
-    $value = trim($value);
-
-    return $value;
-}
 /**
 * Validate function: Validate input
 *

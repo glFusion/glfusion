@@ -389,7 +389,7 @@ function DBADMIN_backupPrompt()
 function DBADMIN_backup()
 {
     global $_CONF, $LANG08, $LANG_DB_BACKUP, $MESSAGE, $_IMAGE_TYPE,
-           $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_mysqldump_path;
+           $_DB_host, $_DB_name, $_DB_user, $_DB_pass;
 
     $retval = '';
 

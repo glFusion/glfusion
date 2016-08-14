@@ -197,7 +197,7 @@ function commandcontrol()
     }
 
     $cc_arr = array(
-        array('condition' => ($_CONF['allow_mysqldump'] == 1) && ($_DB_dbms == 'mysql') && SEC_inGroup ('Root'),
+        array('condition' => SEC_inGroup ('Root'),
             'url' => $_CONF['site_admin_url'] . '/database.php',
             'lang' => $LANG01[103], 'image' => '/images/icons/database.'),
         array('condition' => ($_CONF['link_documentation'] == 1),

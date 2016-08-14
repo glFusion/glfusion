@@ -92,26 +92,21 @@ function install_config($site_url)
     $c->add('have_pear','','select',0,4,1,10,TRUE);
     $c->add('path_pear','','text',0,4,NULL,20,TRUE);
 
-    $c->add('fs_mysql', NULL, 'fieldset', 0, 5, NULL, 0, TRUE);
-    $c->add('allow_mysqldump',1,'select',0,5,0,10,TRUE);
-    $c->add('mysqldump_path','/usr/bin/mysqldump','text',0,5,NULL,20,TRUE);
-    $c->add('mysqldump_options','-Q','text',0,5,NULL,30,TRUE);
+    $c->add('fs_search', NULL, 'fieldset', 0, 5, NULL, 0, TRUE);
+    $c->add('search_style','google','select',0,5,18,10,TRUE);
+    $c->add('search_limits','10,25,50,100','text',0,5,NULL,20,TRUE);
+    $c->add('num_search_results',10,'text',0,5,NULL,30,TRUE);
+    $c->add('search_show_num',TRUE,'select',0,5,1,40,TRUE);
+    $c->add('search_show_type',TRUE,'select',0,5,1,50,TRUE);
+    $c->add('search_show_user',TRUE,'select',0,5,1,60,TRUE);
+    $c->add('search_show_hits',TRUE,'select',0,5,1,70,TRUE);
+    $c->add('search_no_data','<i>Not available...</i>','text',0,5,NULL,80,TRUE);
+    $c->add('search_separator',' &gt; ','text',0,5,NULL,90,TRUE);
+    $c->add('search_def_keytype','phrase','select',0,5,19,100,TRUE);
 
-    $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
-    $c->add('search_style','google','select',0,6,18,10,TRUE);
-    $c->add('search_limits','10,25,50,100','text',0,6,NULL,20,TRUE);
-    $c->add('num_search_results',10,'text',0,6,NULL,30,TRUE);
-    $c->add('search_show_num',TRUE,'select',0,6,1,40,TRUE);
-    $c->add('search_show_type',TRUE,'select',0,6,1,50,TRUE);
-    $c->add('search_show_user',TRUE,'select',0,6,1,60,TRUE);
-    $c->add('search_show_hits',TRUE,'select',0,6,1,70,TRUE);
-    $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,80,TRUE);
-    $c->add('search_separator',' &gt; ','text',0,6,NULL,90,TRUE);
-    $c->add('search_def_keytype','phrase','select',0,6,19,100,TRUE);
-
-    $c->add('fs_update', NULL, 'fieldset', 0, 7, NULL, 0, TRUE);
-    $c->add('update_check_interval','86400','select',0,7,29,10,TRUE);
-    $c->add('send_site_data',TRUE,'select',0,7,1,20,TRUE);
+    $c->add('fs_update', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
+    $c->add('update_check_interval','86400','select',0,6,29,10,TRUE);
+    $c->add('send_site_data',TRUE,'select',0,6,1,20,TRUE);
 
     // Subgroup: Stories and Trackback
     $c->add('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
