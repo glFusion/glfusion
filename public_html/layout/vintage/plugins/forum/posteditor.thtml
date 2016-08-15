@@ -1,4 +1,9 @@
 {# begin {templatelocation} #}
+<script type="text/javascript">
+	var editor_type = 'forumeditor';
+	var lang_timer  = "{lang_timeout}";
+	var lastActivity = 0;
+</script>
 {!if show_htmleditor}
 {wysiwyg}
 {!endif}
@@ -92,7 +97,7 @@
     <input type="hidden" name="uniqueid" value="{uniqueid}"/>
     <input type="hidden" name="referer" value="{referer}"/>
     <input type="hidden" name="postmode" value="{postmode}" />
-    <input type="hidden" name="{token_name}" value="{token}"/>
+					<input type="hidden" id="sectoken" name="{token_name}" value="{token}">
 
 {!if anonymous_user}
     <table width="100%" border="0" cellspacing="1" cellpadding="4" class="pluginSolidOutline alignleft">
@@ -299,5 +304,14 @@
     </table>
   </form>
 </div>
-<br/>
+<br>
+<script>
+$(document).ready(function() {
+	lastActivity = new Date().getTime();
+	$('#comment').keyup(function() {
+		lastActivity = new Date().getTime();
+	});
+});
+</script>
+<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}
