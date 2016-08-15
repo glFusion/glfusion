@@ -2342,7 +2342,7 @@ function INST_doSiteConfigUpgrade() {
         'path'                        => $_NEWSYSCONF['path'],
         'default_charset'             => $_NEWSYSCONF['default_charset'],
         'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
-        'token_ttl'                   => $_NEWSYSCONF['token_ttl'],
+        'token_ttl'                   => $_NEWSYSTEM['token_ttl'],
     ));
 
     if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {
