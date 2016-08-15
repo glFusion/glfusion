@@ -120,14 +120,15 @@ $obsoletePrivateFiles = array(
 $obsoletePublicFiles = array(
 
 // removed in v1.6.1
-    'layout/nouveau/plugins/ckeditor/ckeditor.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_block.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_comment.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_contact.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_email.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_sp.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_story.thtml',
-    'layout/nouveau/plugins/ckeditor/ckeditor_submitstory.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_block.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_comment.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_contact.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_email.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_sp.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_story.thtml',
+    'layout/vintage/plugins/ckeditor/ckeditor_submitstory.thtml',
+    'layout/vintage/plugins/ckeditor/filemanager.thtml',
 
 // older releases
     'forum/javascript/forum_fckeditor.js',

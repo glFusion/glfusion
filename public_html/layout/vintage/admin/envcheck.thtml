@@ -33,7 +33,7 @@ $(window).load(function() {
       <!-- END envs -->
       <tr>
         <td colspan="3">
-          <h2>{lang_graphics}</h2>
+					<h2>{lang_extensions}</h2>
         </td>
       </tr>
       <!-- BEGIN libs -->

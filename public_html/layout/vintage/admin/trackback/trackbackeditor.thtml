@@ -11,7 +11,7 @@
         <tr>
             <td class="alignright">{lang_blog_name}:</td>
             <td>
-                <input type="text" size="50" maxlength="80" name="blog_name" value="{blog_name}" />
+                <input type="text" size="50" maxlength="80" name="blog" value="{blog_name}" />
             </td>
         </tr>
         <tr>

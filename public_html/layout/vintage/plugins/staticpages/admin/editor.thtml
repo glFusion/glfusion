@@ -1,4 +1,10 @@
 {# begin {templatelocation} #}
+<script>
+var editor_type = 'speditor';
+var lang_timer  = "{lang_timeout}";
+var lastActivity = 0;
+
+</script>
   {wysiwyg}
   {start_block_editor}
   {admin_menu}
@@ -154,10 +160,11 @@
                   <input type="submit" value="{lang_cancel}" name="cancel" />
                   {delete_option}
                   <input type="hidden" name="sp_old_id" value="{sp_old_id}" />
-                  <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+                  <input type="hidden" id="sectoken" name="{gltoken_name}" value="{gltoken}" />
               </td>
           </tr>
       </table>
   </form>
   {end_block}
+<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}

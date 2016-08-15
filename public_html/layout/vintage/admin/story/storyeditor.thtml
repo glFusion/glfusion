@@ -2,6 +2,8 @@
 <script src="{site_url}/javascript/resetrating.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+	var editor_type = 'storyeditor';
+	var lang_timer  = "{lang_timeout}";
    function enablearchive(obj) {
         var f = obj.form;               // all elements have their parent form in "form"
         var disable = obj.checked;      // Disable when checked
@@ -404,4 +406,5 @@ if (commentTest) {
 <script>
 $("#frmstory").validate();
 </script>
+<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}
