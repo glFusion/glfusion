@@ -19,22 +19,13 @@
 
 			{lang_cleanup}
 
-			<p><button class="uk-button uk-button-primary" onclick="javascript:showfilestodelete('deleted.html','Delete');return false;">{lang_show_files}</button></p>
-
 			<p class="uk-text-justify">
 				{lang_doc_alert2}
 			</p>
 
 			<button class="uk-button uk-button-danger" name="task" value="dofilecleanup">{lang_delete_files}</button>
-			<button class="uk-button uk-button-success" name="task" value="done">{lang_cancel}</button>
+			<button class="uk-button uk-button-success" name="task" value="done">{lang_skip}</button>
 
 		</div>
 	</div>
 </form>
-<script>
-function showfilestodelete(url,windowName) {
-	newwindow=window.open(url,windowName,'height=600,width=600,scrollbars=yes');
-	if (window.focus) {newwindow.focus()}
-	return false;
-}
-</script>

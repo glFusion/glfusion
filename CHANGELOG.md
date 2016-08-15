@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Modified upgrade wizard's obsolete file removal to remove the confirmation page if there are no errors
   - Modified off-canvas menu to be completely self-contained in the menu template
   - Modified auto translations block to use a template
   - Media Gallery - improved gallery and album index page grid to better support small to xlarge viewports

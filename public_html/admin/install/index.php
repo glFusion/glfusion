@@ -1916,6 +1916,7 @@ function INST_FileCleanUp()
         'lang_cleanup'      => $LANG_INSTALL['remove_instructions'],
         'lang_delete_files' => $LANG_INSTALL['delete_files'],
         'lang_cancel'       => $LANG_INSTALL['cancel'],
+        'lang_skip'         => $LANG_INSTALL['skip'],
         'lang_show_files'   => $LANG_INSTALL['show_files_to_delete'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
@@ -2018,6 +2019,12 @@ function INST_doFileCleanUp()
 
 // test failure message
 //$failure = '<li>DIR: Test failure message</li><li>FILE: /www/www/www/www.txt</li>';
+
+    if ( $failure == '') {
+        $method = $_GLFUSION['method'];
+        header('Location: success.php?type='.$method.'&language=' . $language);
+        exit;
+    }
 
     $T = new TemplateLite('templates/');
     $T->set_file('page', 'removefiles_complete.thtml');

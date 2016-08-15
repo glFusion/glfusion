@@ -215,11 +215,12 @@ $LANG_INSTALL = array(
     'removal_success'           => 'Obsolete Files Deleted',
     'removal_success_msg'       => 'All obsolete files have been successfully removed. Select <b>Complete</b> to finish the upgrade.',
     'remove_obsolete'           => 'Remove Obsolete Files',
-    'remove_instructions'       => '<p>With each release of glFusion, there are files that are updated and in some cases removed from the glFusion system. From a security perspective, it is important to remove old, unused files. The Upgrade Wizard can remove the old files, if you wish, otherwise you will need to manually delete them.</p><p>If you wish to manually delete them - please check the <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">glFusion Wiki - Obsolete Files</a> to get a list of obsolete files to remove.</p><p>Select <span class="uk-text-bold">Cancel</span> below to complete the upgrade process.</p>',
+    'remove_instructions'       => '<p>With each release of glFusion, there are files that are updated and in some cases removed from the glFusion system. From a security perspective, it is important to remove old, unused files. The Upgrade Wizard can remove the old files, if you wish, otherwise you will need to manually delete them.</p><p>If you wish to manually delete the files - please check the <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">glFusion Wiki - Obsolete Files</a> to get a list of obsolete files to remove. Select <span class="uk-text-bold">Skip</span> below to complete the upgrade process.</p><p>To have the Upgrade Wizard automatically delete the files, please select <b>Delete Files</b> below to complete the upgrade.',
     'complete'                  => 'Complete',
     'delete_files'              => 'Delete Files',
     'cancel'                    => 'Cancel',
     'show_files_to_delete'      => 'Show Files to Delete',
+    'skip'                      => 'Skip',
 );
 
 // +---------------------------------------------------------------------------+
