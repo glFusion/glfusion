@@ -12,12 +12,16 @@ var glfusion_dbadminInterface = (function() {
 
     // private vars
     var items = null,
-    item =  null,
-    url =  null,
-    done =  1,
-    count = 0,
-    dbFileName = null,
-    $msg = null;
+        item =  null,
+        url =  null,
+        done =  1,
+        count = 0,
+        startrecord = 0,
+        totalrows = 0,
+        totalrowsprocessed = 0,
+        dbFileName = null,
+        periods = '',
+        $msg = null;
 
     /**
     * initialize everything
@@ -38,10 +42,17 @@ var glfusion_dbadminInterface = (function() {
     var process = function() {
         if (item) {
 
+            if ( startrecord == 0 ) {
+                periods = '';
+            } else {
+                periods = periods + '.';
+            }
+
             var dataS = {
                 "mode" : 'dbbackup_table',
                 "table" : item,
                 "backup_filename" : dbFileName,
+                "start" : startrecord,
             };
 
             data = $.param(dataS);
@@ -52,25 +63,42 @@ var glfusion_dbadminInterface = (function() {
                 dataType: "json",
                 url: url,
                 data: data,
-                timeout: 60000, // sets timeout to 1 minute
-                success: function(data) {
-                    var wait = 250;
-                    var result = $.parseJSON(data["json"]);
-                    try {
-                        message('<p style="padding-left:20px;">' + lang_backingup + ' ' + done + '/' + count + ' - '+ item + '</p>');
-                        var percent = Math.round(( done / count ) * 100);
-                        $('#progress-bar').css('width', percent + "%");
-                        $('#progress-bar').html(percent + "%");
-                        item = items.shift();
-                        done++;
-                        window.setTimeout(process, wait);
-                    }
-                    catch(err) {
-                        alert(result.statusMessage);
-                    }
+                timeout: 60000,
+            }).done(function(data) {
+                var result = $.parseJSON(data["json"]);
+                var rowsthissession = result.processed;
+
+                if ( result.errorCode == 3 ) {
+                    alert("Database Backup Failed - unable to open backup file");
+                    window.location.href = "database.php";
+                }
+                if ( result.errorCode == 2 ) {
+                    console.log("DBadmin: Table backup incomplete - making another pass");
+                    startrecord = result.startrecord;
+                } else {
+                    item = items.shift();
+                    done++;
+                    startrecord = 0;
+                }
+                totalrowsprocessed = totalrowsprocessed + rowsthissession;
+
+                message('<p style="padding-left:20px;">' + lang_backingup + ' ' + done + '/' + count + ' - '+ item + periods + '</p>');
+//                message('<p style="padding-left:20px;">' + lang_backingup + ' ' + totalrowsprocessed + '/' + totalrows + ' - '+ item + periods + '</p>');
+
+                var percent = Math.round(( done / count ) * 100);
+                $('#progress-bar').css('width', percent + "%");
+                $('#progress-bar').html(percent + "%");
+
+                var wait = 250;
+                window.setTimeout(process, wait);
+
+            }).fail(function(jqXHR, textStatus ) {
+                if (textStatus === 'timeout') {
+                     console.log("DBadmin: JavaScript timeout - error backing up table " + item);
+                     alert("Error performing backup - timed out on table " + item);
+                     window.location.href = "database.php";
                 }
             });
-
         } else {
             finished();
         }
@@ -82,6 +110,9 @@ var glfusion_dbadminInterface = (function() {
         $('#progress-bar').html("100%");
         throbber_off();
         message(lang_success);
+        startrecord = 0;
+        totalrows = 0;
+        totalrowsprocessed = 0;
         window.setTimeout(function() {
             // ajax call to process item
             $.ajax({
@@ -89,22 +120,11 @@ var glfusion_dbadminInterface = (function() {
                 dataType: "json",
                 url: url,
                 data: {"mode" : 'dbbackup_complete', "backup_filename" : dbFileName},
-                success: function(data) {
-                    var wait = 250;
-                    var result = $.parseJSON(data["json"]);
-                    try {
-                        $('#dbbackupbutton').prop("disabled",false);
-                        $("#dbbackupbutton").html(lang_backup);
-                    }
-                    catch(err) {
-                        alert(result.statusMessage);
-                    }
-                }
+            }).done(function(data) {
+                $("#dbbackupbutton").html(lang_backup);
             });
-
-        }, 3000);
+        }, 2000);
     };
-
 
     /**
     * Gives textual feedback
@@ -133,30 +153,27 @@ var glfusion_dbadminInterface = (function() {
             dataType: "json",
             url: url,
             data: { "mode" : "dbbackup_init" },
-            success: function(data) {
-                var result = $.parseJSON(data["json"]);
-
-                items = result.tablelist;
-                dbFileName = result.backup_filename;
-                count = items.length;
-                if ( result.errorCode != 0 ) {
-                    throbber_off();
-                    message('Error');
-                    $('#dbbackupbutton').prop("disabled",false);
-                    $("#dbbackupbutton").html(lang_backup);
-                    return alert(result.statusMessage);
-                }
-                try {
-                    item = items.shift();
-                    message(lang_backingup);
-                    window.setTimeout(process,1000);
-                }
-                catch(err) {
-                    alert('Error: See error.log');
-                }
+        }).done(function(data) {
+            var result = $.parseJSON(data["json"]);
+            items = result.tablelist;
+            totalrows = result.totalrows;
+            dbFileName = result.backup_filename;
+            count = items.length;
+            if ( result.errorCode != 0 ) {
+                throbber_off();
+                message('Error');
+                $('#dbbackupbutton').prop("disabled",false);
+                $("#dbbackupbutton").html(lang_backup);
+                return alert(result.statusMessage);
             }
+            item = items.shift();
+            message(lang_backingup);
+            window.setTimeout(process,1000);
+        }).fail(function(jqXHR, textStatus ) {
+             alert("Error initializing the database backup");
+             window.location.href = "database.php";
         });
-        return false; // prevent from firing
+        return false;
     };
 
     /**

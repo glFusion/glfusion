@@ -193,7 +193,7 @@ function DBADMIN_list()
 
 function DBADMIN_backupAjax()
 {
-    global $_CONF;
+    global $_CONF, $_DB_name;
 
     if ( !COM_isAjax()) die();
 
@@ -213,16 +213,20 @@ function DBADMIN_backupAjax()
 
     $tableList = array();
 
+    $rowCount = 0;
+
     $backup_tables = $backup->getTableList();
     if ( is_array($backup_tables)) {
         foreach ($backup_tables AS $index => $value) {
             $tableList[] = $value;
+            $rowCount += DB_count($value);
         }
     }
 
     $retval['errorCode'] = $errorCode;
     $retval['backup_filename'] = $backup_filename;
     $retval['tablelist'] = $tableList;
+    $retval['totalrows'] = $rowCount;
     $retval['statusMessage'] = 'Initialization Successful';
 
     $return["json"] = json_encode($retval);
@@ -278,13 +282,37 @@ function DBADMIN_backupTableAjax()
 
     $table = COM_applyFilter($_POST['table']);
 
+    if ( isset($_POST['start']) ) {
+        $start = COM_applyFilter($_POST['start'],true);
+    } else {
+        $start = 0;
+    }
+
     $backup = new dbBackup();
     $backup->setBackupFilename($filename);
-    $backup->backupTable($table,$_VARS['_dbback_allstructs']);
+    list($rc,$sessionCounter,$recordCounter) = $backup->backupTable($table,$_VARS['_dbback_allstructs'],$start);
 
-    $retval['errorCode'] = 0;
-    $return["json"] = json_encode($retval);
-    echo json_encode($return);
+    switch ( $rc ) {
+        case 1 :
+            $retval['errorCode'] = 2;
+            $retval['startrecord'] = $recordCounter;
+            $retval['processed'] = $sessionCounter;
+            $return["json"] = json_encode($retval);
+            echo json_encode($return);
+            exit;
+        case -2 :
+            // serious error
+            $retval['errorCode'] = 3;
+            $return["json"] = json_encode($retval);
+            echo json_encode($return);
+            exit;
+        default :
+            $retval['errorCode'] = 0;
+            $retval['processed'] = $sessionCounter;
+            $return["json"] = json_encode($retval);
+            echo json_encode($return);
+            exit;
+    }
     exit;
 }
 
@@ -1032,6 +1060,7 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
             $tableList[] = $table;
         }
     }
+
     $retval['errorCode'] = 0;
     $retval['tablelist'] = $tableList;
 

@@ -51,23 +51,27 @@ var glfusion_dbadminInterface = (function() {
                 dataType: "json",
                 url: url,
                 data: data,
-                timeout: 60000, // sets timeout to 1 minute
-                success: function(data) {
-                    var wait = 250;
-                    var result = $.parseJSON(data["json"]);
-                    try {
-                        message('<p style="padding-left:20px;">' + lang_converting + ' ' + done + '/' + count + ' - '+ item + '</p>');
-                        var percent = Math.round(( done / count ) * 100);
-                        $('#progress-bar').css('width', percent + "%");
-                        $('#progress-bar').html(percent + "%");
-                        item = items.shift();
-                        done++;
-                        window.setTimeout(process, wait);
-                    }
-                    catch(err) {
-                        alert(result.statusMessage);
-                    }
+                timeout:60000
+            }).done(function(data) {
+                var result = $.parseJSON(data["json"]);
+                if ( result.errorCode != 0 ) {
+                    console.log("DBadmin: The table conversion did not complete");
                 }
+                message('<p style="padding-left:20px;">' + lang_converting + ' ' + done + '/' + count + ' - '+ item + '</p>');
+                var percent = Math.round(( done / count ) * 100);
+                $('#progress-bar').css('width', percent + "%");
+                $('#progress-bar').html(percent + "%");
+                item = items.shift();
+                done++;
+            }).fail(function(jqXHR, textStatus ) {
+                if (textStatus === 'timeout') {
+                     console.log("DBadmin: Error converting table " + item);
+                     alert("Error: Timeout converting table " + item);
+                     window.location.href = "database.php";
+                }
+            }).always(function( xhr, status ) {
+                var wait = 250;
+                window.setTimeout(process, wait);
             });
 
         } else {
@@ -88,19 +92,10 @@ var glfusion_dbadminInterface = (function() {
                 dataType: "json",
                 url: url,
                 data: {"mode" : mode + "complete", "engine" : engine},
-                success: function(data) {
-                    var wait = 250;
-                    var result = $.parseJSON(data["json"]);
-                    try {
-                        $('#dbconvertbutton').prop("disabled",false);
-                        $("#dbconvertbutton").html(lang_convert);
-                    }
-                    catch(err) {
-                        alert(result.statusMessage);
-                    }
-                }
+            }).done(function(data) {
+                $('#dbconvertbutton').prop("disabled",false);
+                $("#dbconvertbutton").html(lang_convert);
             });
-
         }, 3000);
     };
 
@@ -132,19 +127,14 @@ var glfusion_dbadminInterface = (function() {
             dataType: "json",
             url: url,
             data: {"mode" : "dblist", "engine" : engine },
-            success: function(data) {
-                var result = $.parseJSON(data["json"]);
-                items = result.tablelist;
-                count = items.length;
-                try {
-                    item = items.shift();
-                    message(lang_converting);
-                    window.setTimeout(process,1000);
-                }
-                catch(err) {
-                    alert(result.statusMessage);
-                }
-            }
+            timeout: 30000,
+        }).done(function(data) {
+            var result = $.parseJSON(data["json"]);
+            items = result.tablelist;
+            count = items.length;
+            item = items.shift();
+            message(lang_converting);
+            window.setTimeout(process,1000);
         });
         return false; // prevent from firing
     };

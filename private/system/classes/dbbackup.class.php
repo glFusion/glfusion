@@ -268,19 +268,27 @@ class dbBackup
      * @param string $table
      * @return void
      */
-    public function backupTable($table, $structonly=false)
+    public function backupTable($table, $structonly=false, $start = 0)
     {
         global $_TABLES;
 
+        $recordCounter = $start;
+        $timerStart    = time();
+        $sessionCounter = 0;
+        $timeout        = 30;
+
+        $maxExecutionTime = @ini_get("max_execution_time");
+        $timeout = min($maxExecutionTime,30);
+        $timeout -= -10; // buffer
+        if ( $timeout < 0 ) {
+            $timeout = min($maxExecutionTime,30);
+        }
+        if ( $timeout >= 60 ) $timeout = 50;
+
         // open the backup file in append mode
-        if ( $this->open($this->backup_filename,'a') === false ) return false;
-
-        if (!ini_get('safe_mode')) @set_time_limit(15*60);
-        // Create the SQL statements
-        $this->stow("# --------------------------------------------------------\n");
-        $this->stow("# Table: $table\n");
-        $this->stow("# --------------------------------------------------------\n");
-
+        if ( $this->open($this->backup_filename,'a') === false ) {
+            return array(-2,$sessionCounter, $recordCounter);
+        }
 
         // Save the backquoted table name, gets used a lot
         $db_tablename = $this->backquote($table);
@@ -293,50 +301,57 @@ class dbBackup
         }
         if (empty($table_structure)) {
             $this->error('Error getting table details: ' . $table);
-            return false;
+            return array(-2,$sessionCounter, $recordCounter);
         }
 
-        // Add SQL statement to drop existing table
-        $this->stow("\n\n");
-        $this->stow("#\n");
-        $this->stow("# Delete any existing table $db_tablename\n");
-        $this->stow("#\n");
-        $this->stow("\n");
-        $this->stow("DROP TABLE IF EXISTS $db_tablename;\n");
+        if ( $start == 0 ) {
+            // Create the SQL statements
+            $this->stow("# --------------------------------------------------------\n");
+            $this->stow("# Table: $table\n");
+            $this->stow("# --------------------------------------------------------\n");
 
-        // Table structure
-        // Comment in SQL-file
-        $this->stow("\n\n");
-        $this->stow("#\n");
-        $this->stow("# Table structure of table $db_tablename\n");
-        $this->stow("#\n");
-        $this->stow("\n");
-
-        $res = DB_query("SHOW CREATE TABLE $table");
-        if (!$res) {
-            $err_msg = 'Error with SHOW CREATE TABLE for ' . $table;
-            $this->error($err_msg);
-            $this->stow("#\n# $err_msg\n#\n");
-        }
-        $create_table = DB_fetchArray($res);
-
-        $create_table = str_replace('0000-00-00 00:00:00','1000-01-01 00:00:00.000000',$create_table);
-
-        $this->stow($create_table[1] . ' ;');
-
-        // If only backing up the structure, return now
-        if ($structonly) {
+            // Add SQL statement to drop existing table
+            $this->stow("\n\n");
+            $this->stow("#\n");
+            $this->stow("# Delete any existing table $db_tablename\n");
+            $this->stow("#\n");
             $this->stow("\n");
-            $this->stow("\n");
-            $this->close();
-            return;
-        }
+            $this->stow("DROP TABLE IF EXISTS $db_tablename;\n");
 
-        // Comment in SQL-file
-        $this->stow("\n");
-        $this->stow("#\n");
-        $this->stow("# Data contents of table $db_tablename\n");
-        $this->stow("#\n");
+            // Table structure
+            // Comment in SQL-file
+            $this->stow("\n\n");
+            $this->stow("#\n");
+            $this->stow("# Table structure of table $db_tablename\n");
+            $this->stow("#\n");
+            $this->stow("\n");
+
+            $res = DB_query("SHOW CREATE TABLE $table");
+            if (!$res) {
+                $err_msg = 'Error with SHOW CREATE TABLE for ' . $table;
+                $this->error($err_msg);
+                $this->stow("#\n# $err_msg\n#\n");
+            }
+
+            $create_table = DB_fetchArray($res);
+
+            $create_table = str_replace('0000-00-00 00:00:00','1000-01-01 00:00:00.000000',$create_table);
+
+            $this->stow($create_table[1] . ' ;');
+
+            // If only backing up the structure, return now
+            if ($structonly) {
+                $this->stow("\n");
+                $this->stow("\n");
+                $this->close();
+                return array(0,0,0);
+            }
+            // Comment in SQL-file
+            $this->stow("\n\n");
+            $this->stow("#\n");
+            $this->stow("# Data contents of table $db_tablename\n");
+            $this->stow("#\n");
+        }
 
         $defs = array();
         $ints = array();
@@ -353,8 +368,7 @@ class dbBackup
             }
         }
 
-        if (!ini_get('safe_mode')) @set_time_limit(15*60);
-        $sql = "SELECT * FROM $table";
+        $sql = "SELECT * FROM $table LIMIT 18446744073709551610 OFFSET " . $start;
         $res = DB_query($sql);
         $table_data = array();
         $insert = "INSERT INTO {$db_tablename} VALUES (";
@@ -376,6 +390,16 @@ class dbBackup
                 }
             }
             $this->stow(" \n" . $insert . implode(', ', $values) . ');');
+            $recordCounter++;
+            if ( ( $sessionCounter % 100 ) == 0 ) {
+                $checkTimer = time();
+                $elapsedTime = $checkTimer - $timerStart;
+                if ( $elapsedTime > $timeout) {
+                    $this->close();
+                    return array(1,$sessionCounter, $recordCounter);
+                }
+            }
+            $sessionCounter++;
         }
 
         // Create footer/closing comment in SQL-file
@@ -386,6 +410,8 @@ class dbBackup
         $this->stow("\n");
 
         $this->close();
+
+        return array(-1,$sessionCounter, $recordCounter);
 
     }   // end backupTable()
 
