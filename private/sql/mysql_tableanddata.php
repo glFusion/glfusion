@@ -88,7 +88,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   is_enabled tinyint(1) unsigned NOT NULL DEFAULT '1',
   name varchar(48) NOT NULL default '',
   type varchar(20) NOT NULL default 'normal',
-  title varchar(48) default NULL,
+  title varchar(255) default NULL,
   tid varchar(128) NOT NULL default 'All',
   blockorder smallint(5) unsigned NOT NULL default '1',
   content text,

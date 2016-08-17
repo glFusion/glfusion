@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion block administration.                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2015 by the following authors:                        |
+// | Copyright (C) 2010-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -447,7 +447,7 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'title':
-                $title =  COM_truncate($A['title'], 20, ' ...', true);
+                $title =  COM_truncate(strip_tags($A['title']), 20, ' ...', true);
                 $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
                 break;
 
@@ -667,7 +667,15 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $B['allow_autotags'] = $allow_autotags;
 
     $bid   = (int) $bid;
-    $title = DB_escapeString (strip_tags ($title));
+
+    $MenuElementAllowedHTML = "i[class|style],div[class|style],span[class|style],img[src|class|style],em,strong,del,ins,q,abbr,dfn,small";
+    $filter = sanitizer::getInstance();
+    $allowedElements = $filter->makeAllowedElements($MenuElementAllowedHTML);
+    $filter->setAllowedElements($allowedElements);
+    $filter->setPostmode('html');
+    $title = $filter->filterHTML($title);
+
+    $title = DB_escapeString ($title);
     $phpblockfn = DB_escapeString (trim ($phpblockfn));
 
     if (empty($title) || !BLOCK_validateName($name)) {

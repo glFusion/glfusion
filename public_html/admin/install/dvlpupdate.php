@@ -1446,6 +1446,19 @@ function glfusion_161()
     $c->del('mysqldump_path','Core');
     $c->del('mysqldump_options','Core');
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `title` `title` VARCHAR(255) NULL DEFAULT NULL;";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     _updateConfig();
 
     // update version number

@@ -1344,6 +1344,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('mysqldump_path','Core');
             $c->del('mysqldump_options','Core');
 
+            $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `title` `title` VARCHAR(255) NULL DEFAULT NULL;";
+
+            list($rc,$errors) = INST_updateDB($_SQL);
+
+
             $current_fusion_version = '1.6.1';
 
         default:
