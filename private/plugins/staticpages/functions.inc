@@ -521,6 +521,8 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
 
     if (PLG_invokeService('staticpages', 'get', $args, $retval, $svc_msg) == PLG_RET_OK) {
 
+        SESS_setContext(array('type' => 'staticpages','id' => $page, 'uid' => $retval['sp_uid']));
+
         if ($mode == 'print') {
             $retval = SP_printPage($page, $retval);
         } else if ($mode =='autotag') {
@@ -528,7 +530,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         } else {
             $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         }
-
+        SESS_clearContext();
         // increment hit counter for page
         DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
