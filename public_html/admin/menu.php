@@ -36,6 +36,8 @@ USES_lib_admin();
 $display = '';
 $content = '';
 
+$MenuElementAllowedHTML = "i[class|style],div[class|style],span[class|style],img[src|class|style],em,strong,del,ins,q,abbr,dfn,small";
+
 // Only let admin users access this page
 if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
@@ -601,7 +603,11 @@ function MB_createElement ( $menu_id ) {
 
     $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=0 ORDER BY element_order ASC");
     while ($row = DB_fetchArray($result)) {
-        $order_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;
+        $label = strip_tags($row['element_label']);
+        if ( trim($label) == "") {
+            $label = htmlspecialchars($row['element_label']);
+        }
+        $order_select .= '<option value="' . $row['id'] . '">' . $label . '</option>' . LB;
     }
     $order_select .= '</select>' . LB;
 
@@ -663,12 +669,17 @@ function MB_createElement ( $menu_id ) {
  */
 
 function MB_saveNewMenuElement ( ) {
-    global $_CONF, $_TABLES, $_GROUPS;
+    global $_CONF, $_TABLES, $_GROUPS, $MenuElementAllowedHTML;
+
+    $filter = sanitizer::getInstance();
+    $allowedElements = $filter->makeAllowedElements($MenuElementAllowedHTML);
+    $filter->setAllowedElements($allowedElements);
+    $filter->setPostmode('html');
 
     // build post vars
     $E['menu_id']           = COM_applyFilter($_POST['menu'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
-    $E['element_label']     = @htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
+    $E['element_label']     = $filter->filterHTML($_POST['menulabel']);
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
     $E['element_target']    = isset($_POST['urltarget']) ? COM_applyFilter($_POST['urltarget']) : '';
     $afterElementID         = COM_applyFilter($_POST['menuorder'],true);
@@ -680,19 +691,19 @@ function MB_saveNewMenuElement ( ) {
 
     switch($E['element_type']) {
         case 2 :
-            $E['element_subtype'] = COM_applyFilter($_POST['glfunction']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['glfunction']));
             break;
         case 3 :
             $E['element_subtype'] = COM_applyFilter($_POST['gltype'],true);
             break;
         case 4 :
-            $E['element_subtype'] = COM_applyFilter($_POST['pluginname']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['pluginname']));
             break;
         case 5 :
-            $E['element_subtype'] = COM_applyFilter($_POST['spname']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['spname']));
             break;
         case 6 :
-            $E['element_subtype'] = COM_applyFilter($_POST['menuurl']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['menuurl']));
             /*
              * check URL if it needs http:// appended...
              */
@@ -703,10 +714,10 @@ function MB_saveNewMenuElement ( ) {
             }
             break;
         case 7 :
-            $E['element_subtype'] = COM_applyFilter($_POST['phpfunction']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['phpfunction']));
             break;
         case 9 :
-            $E['element_subtype'] = COM_applyFilter($_POST['topicname']);
+            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['topicname']));
             break;
         default :
             $E['element_subtype'] = '';
@@ -904,8 +915,12 @@ function MB_editElement( $menu_id, $mid ) {
 
     while ($row = DB_fetchArray($result)) {
         if ( $menu->menu_elements[$mid]->order != $order ) {
+            $label = strip_tags($row['element_label']);
+            if ( trim($label) == "") {
+                $label = htmlspecialchars($row['element_label']);
+            }
             $test_order = $order + 10;
-            $order_select .= '<option value="' . $row['id'] . '"' . ($menu->menu_elements[$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+            $order_select .= '<option value="' . $row['id'] . '"' . ($menu->menu_elements[$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
         }
         $order += 10;
     }
@@ -917,7 +932,7 @@ function MB_editElement( $menu_id, $mid ) {
     $T->set_var(array(
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: '.$LANG_MB01['edit_element'],
-        'menulabel'         => $menu->menu_elements[$mid]->label,
+        'menulabel'         => htmlspecialchars($menu->menu_elements[$mid]->label),
         'menuorder'         => $menu->menu_elements[$mid]->order,
         'order_select'      => $order_select,
         'menuurl'           => $menu->menu_elements[$mid]->url,
@@ -948,12 +963,17 @@ function MB_editElement( $menu_id, $mid ) {
  */
 
 function MB_saveEditMenuElement ( ) {
-    global $_TABLES;
+    global $_CONF, $_TABLES, $MenuElementAllowedHTML;
+
+    $filter = sanitizer::getInstance();
+    $allowedElements = $filter->makeAllowedElements($MenuElementAllowedHTML);
+    $filter->setAllowedElements($allowedElements);
+    $filter->setPostmode('html');
 
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-    $label         = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel']))));
+    $label         = DB_escapeString($filter->filterHTML($_POST['menulabel']));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
 
@@ -1154,7 +1174,7 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch ($fieldname) {
         case 'label':
-            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . strip_tags($fieldvalue) . ($A['type'] == 1 ? '</b>' : '').'</span>';
+            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . $fieldvalue . ($A['type'] == 1 ? '</b>' : '').'</span>';
             break;
         case 'enabled' :
             $retval =  '<input class="menu-element-enabler" type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
@@ -1173,7 +1193,7 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a>&nbsp;' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a>';
             break;
         case 'info' :
-            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . $fieldvalue . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
+            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . htmlspecialchars($fieldvalue) . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
             break;
         default :
             $retval = $fieldvalue;

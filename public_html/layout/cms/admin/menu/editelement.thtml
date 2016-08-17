@@ -133,7 +133,7 @@ function toggleFields() {
   <div class="uk-form-row">
     <label class="uk-form-label" for="menulabel">{$LANG_MB01[elementlabel]}</label>
     <div class="uk-form-controls">
-      <input type="text" class="required" id="menulabel" name="menulabel" value="{menulabel}">
+      <input type="text" class="required uk-form-width-large" id="menulabel" name="menulabel" maxlength="254" value="{menulabel}">
     </div>
   </div>
   <div class="uk-form-row" id="displayafter">
