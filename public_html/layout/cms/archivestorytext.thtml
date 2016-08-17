@@ -75,6 +75,13 @@
 		</header>
 
 		<div class="uk-clearfix"></div>
+
+{!if story_topic_image_url}
+		<a href="{topic_url}">
+			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
+		</a>
+{!endif}
+
 		{story_text_no_br}
 
 {!if plugin_body_vars}

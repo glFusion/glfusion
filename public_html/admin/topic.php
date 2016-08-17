@@ -260,7 +260,9 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     $topic_templates->set_var('max_url_length', 255);
     $topic_templates->set_var('image_url', $A['imageurl']);
 
-    if ( @getimagesize($_CONF['path_html'].$A['imageurl']) !== false ) {
+    if ( strtolower(substr(strrchr($A['imageurl'],'.'),1)) == "svg" ) {
+        $topic_templates->set_var('topicimage',$_CONF['site_url'].$A['imageurl']);
+    } elseif ( @getimagesize($_CONF['path_html'].$A['imageurl']) !== false ) {
         $topic_templates->set_var('topicimage',$_CONF['site_url'].$A['imageurl']);
     }
 
@@ -774,7 +776,8 @@ function TOPIC_iconUpload($tid)
                                          'image/jpeg'  => '.jpg,.jpeg',
                                          'image/pjpeg' => '.jpg,.jpeg',
                                          'image/x-png' => '.png',
-                                         'image/png'   => '.png'
+                                         'image/png'   => '.png',
+                                         'image/svg+xml' => '.svg',
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'topics')) {
         $display  = COM_siteHeader ('menu', $LANG27[29]);

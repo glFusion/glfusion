@@ -25,7 +25,7 @@
 {!if topicimage}
     <div class="uk-form-row">
         <div class="uk-form-controls">
-            <img class="uk-thumbnail" src="{topicimage}" alt="">
+            <img class="uk-thumbnail" src="{topicimage}" alt="" height="48" width="48">
         </div>
     </div>
 {!endif}

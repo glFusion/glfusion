@@ -245,6 +245,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             if( !empty( $imageurl )) {
                 $imageurl = COM_getTopicImageUrl( $imageurl );
                 $article->set_var( 'story_topic_image_url', $imageurl );
+                $article->set_var( 'topic_url',$topicurl);
                 $topicimage = '<img src="' . $imageurl . '" class="float'
                             . $_CONF['article_image_align'] . '" alt="'
                             . $topicname . '" title="' . $topicname . '" />';

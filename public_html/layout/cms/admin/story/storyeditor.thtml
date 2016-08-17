@@ -152,7 +152,14 @@ function actionClick( $action ) {
 							</div>
 						</div>
 
-{!if featured_options_data}
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="show_topic_icon">{lang_show_topic_icon}</label>
+							<div class="uk-form-controls">
+								<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}>
+							</div>
+						</div>
+
+  {!if featured_options_data}
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="featured">{$LANG24[32]}</label>
 							<div class="uk-form-controls uk-width-medium">
