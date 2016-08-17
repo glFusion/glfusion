@@ -807,7 +807,9 @@ class database
      */
     public function dbGetVersion()
     {
-        return $this->_mysql_version;
+        return $this->_db->server_info;
+
+//        return $this->_mysql_version;
     }
 
     public function dbStartTransaction()

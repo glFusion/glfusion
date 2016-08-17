@@ -354,7 +354,7 @@ function _checkVersion()
     $arguments["PostValues"]=array(
         "v"=>GVERSION.PATCHLEVEL,
         "p"=>PHP_VERSION,
-        "d"=>DB_getVersion()
+        "d"=>urlencode(DB_getVersion())
     );
     if ( $_CONF['send_site_data'] ) {
         $arguments["PostValues"]['s'] = $_CONF['site_url'];

@@ -31,6 +31,14 @@
 				<td>{notes}</td>
 			</tr>
 			<!-- END envs -->
+
+			<tr>
+				<td>{mysql}</td>
+				<td colspan="3">
+					{mysql_version}
+				</td>
+			</tr>
+
 			<tr>
 				<td colspan="4">
 					<h2>{lang_extensions}</h2>

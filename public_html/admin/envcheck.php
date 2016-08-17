@@ -189,6 +189,12 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
+    $mysql_version = DB_getVersion();
+    $T->set_var('mysql', 'MySQL Version');
+    $T->set_var('mysql_version',$mysql_version);
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $classCounter++;
+
     $T->set_block('page','libs','lib');
 
     if (extension_loaded('mbstring')) {

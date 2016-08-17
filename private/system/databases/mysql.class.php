@@ -81,7 +81,7 @@ class database {
     /**
     * @access private
     */
-    var $_mysql_version = 0;
+    var $_mysql_version = '';
 
     // PRIVATE METHODS
 
@@ -123,9 +123,11 @@ class database {
 
         if ($this->_mysql_version == 0) {
             $v = mysql_get_server_info ();
+/* ---
             preg_match ('/^([0-9]+).([0-9]+).([0-9]+)/', $v, $match);
             $v = (intval ($match[1]) * 10000) + (intval ($match[2]) * 100)
                + intval ($match[3]);
+--- */
             $this->_mysql_version = $v;
         }
 
