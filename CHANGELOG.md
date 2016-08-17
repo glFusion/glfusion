@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed error where page URL was not properly set for staticpages when using 3rd party comment engines
+  - Allow some HTML in block titles
   - Allow some HTML in the menu labels
   - Modified upgrade wizard's obsolete file removal to remove the confirmation page if there are no errors
   - Modified off-canvas menu to be completely self-contained in the menu template

@@ -1282,7 +1282,8 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
     }
 
     if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
     }
 
     return $retval;
