@@ -31,8 +31,12 @@
 {!endif}
 
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+{!if attribution}
+{attribution}
+{!else}
 {!if lang_by}
 					<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
+{!endif}
 {!endif}
 {!if story_date}
 					<li><time datetime="{story_date}">{story_date}</time></li>
