@@ -126,6 +126,14 @@ function actionClick( $action ) {
 								<input class="uk-width-1-1" id="subtitle" type="text" name="subtitle" value="{story_subtitle}">
 							</div>
 						</div>
+						
+						{# attribution #}
+						<div class="uk-form-row">
+							<label class="uk-form-label">Attribution</label>
+							<div class="uk-form-controls">
+								<input class="uk-width-1-1" id="Attribution" type="text" name="Attribution" value="{attribution}">
+							</div>
+						</div>
 
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="topic">{lang_topic}</label>
