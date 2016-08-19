@@ -527,7 +527,8 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                       . "commentcode,sp_uid,owner_id,group_id,perm_owner,perm_group,"
                       . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
                       . "sp_inblock FROM {$_TABLES['staticpage']} "
-                      . "WHERE (sp_id = '$page') AND (sp_status = 1)" . $perms;
+                      . "WHERE (sp_id = '".DB_escapeString($page)."') AND (sp_status = 1)" . $perms;
+
         $result = DB_query ($sql);
         $count = DB_numRows ($result);
 
