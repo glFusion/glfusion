@@ -11,7 +11,7 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="title">{lang_blocktitle}</label>
 			<div class="uk-form-controls">
-				<input class="required uk-form-width-large" type="text" maxlength="48" id="title" name="title" value="{block_title}">
+				<input class="required uk-form-width-large" type="text" maxlength="254" id="title" name="title" value="{block_title}">
 			</div>
 		</div>
 
