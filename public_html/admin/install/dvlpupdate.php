@@ -1448,6 +1448,10 @@ function glfusion_161()
 
     $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `title` `title` VARCHAR(255) NULL DEFAULT NULL;";
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_url` VARCHAR(255) NOT NULL default '' AFTER `expire`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_name` VARCHAR(255) NOT NULL DEFAULT '' AFTER `attribution_url`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_author` VARCHAR(255) NOT NULL DEFAULT '' AFTER `attribution_name`;";
+
     if ($use_innodb) {
         $statements = count($_SQL);
         for ($i = 0; $i < $statements; $i++) {

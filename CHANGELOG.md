@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Allow stories to provide attribution to external sources
   - Fixed error where page URL was not properly set for staticpages when using 3rd party comment engines
   - Allow some HTML in block titles
   - Allow some HTML in the menu labels

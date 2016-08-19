@@ -189,6 +189,12 @@ class autotag_headlines extends BaseAutotag {
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
 
+                if ( $A['attribution_author'] != '' ){
+                    $author = $A['attribution_author'];
+                } else {
+                    $author = $A['username'];
+                }
+
                 $title = COM_undoSpecialChars( $A['title'] );
                 $title = str_replace('&nbsp;',' ',$title);
                 $subtitle = COM_undoSpecialChars($A['subtitle']);
@@ -248,13 +254,15 @@ class autotag_headlines extends BaseAutotag {
                     'time'              => $dt->format('Y-m-d',true).'T'.$dt->format('H:i:s',true),
                     'topic'             => $A['topic'],
                     'tid'               => $A['tid'],
-                    'author'            => $A['username'],
+                    'author'            => $author, // $A['username'],
                     'author_id'         => $A['uid'],
                     'sid'               => $A['sid'],
                     'short_date'        => $dt->format($_CONF['shortdate'],true),
                     'date_only'         => $dt->format($_CONF['dateonly'],true),
                     'date'              => $dt->format($dt->getUserFormat(),true),
                     'url'               => COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$A['sid']),
+                    'attribution_url'   => $A['attribution_url'],
+                    'attribution_name'  => $A['attribution_name'],
                 ));
                 $T->parse('hl','headlines',true);
             }
@@ -263,7 +271,6 @@ class autotag_headlines extends BaseAutotag {
         }
         return $retval;
     }
-
 
     // adapted from http://stackoverflow.com/questions/1193500/truncate-text-containing-html-ignoring-tags
     public static function truncateHTML($str, $len, $end = '&hellip;')

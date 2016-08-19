@@ -152,6 +152,10 @@ class Story
     var $_subtitle;
     var $_story_image = '';
 
+    var $_attribution_url = '';
+    var $_attribution_name = '';
+    var $_attribution_author = '';
+
     /**
      * The original SID of the article, cached incase it's changed:
      */
@@ -217,6 +221,9 @@ class Story
            'imageurl' => 0,
            'topic' => 0,
            'alternate_topic' => 0,
+           'attribution_url' => 1,
+           'attribution_name' =>1,
+           'attribution_author' => 1,
            'access' => 0,
            'photo' => 0,
            'about' => 0,
@@ -359,6 +366,22 @@ class Story
                 STORY_AL_NUMERIC,
                 '_trackbacks'
               ),
+           'attribution_url' => array
+              (
+                STORY_AL_ALPHANUM,
+                '_attribution_url'
+              ),
+           'attribution_name' => array
+              (
+                STORY_AL_ALPHANUM,
+                '_attribution_name'
+              ),
+           'attribution_author' => array
+              (
+                STORY_AL_ALPHANUM,
+                '_attribution_author'
+              ),
+
          );
 
     //End Private
@@ -509,6 +532,10 @@ class Story
             $this->_subtitle = '';
             $this->_introtext = '';
             $this->_bodytext = '';
+
+            $this->_attribution_url = '';
+            $this->_attribution_name = '';
+            $this->_attribution_author = '';
 
             if (isset($_CONF['frontpage'])) {
                 $this->_frontpage = $_CONF['frontpage'];
@@ -835,7 +862,6 @@ class Story
 
         /* Load the trivial stuff: */
         $this->_loadBasics($array);
-
         /* Check to see if we have permission to edit this sid, and that this
          * sid is not a duplicate or anything horrible like that. ewww.
          */
@@ -892,10 +918,11 @@ class Story
         }
         $this->_alternate_topic = $alternate_topic;
 
+        $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
+
          /* Then load the title, intro and body */
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
-            $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
             $this->_story_image = htmlspecialchars($array['story_image']);
             if ($this->_postmode == 'adveditor') {
                 $this->_postmode = 'html';
@@ -1604,6 +1631,18 @@ class Story
                 $return = $filter->htmlspecialchars($this->_alternate_topic);
                 break;
 
+            case 'attribution_url' :
+                $return = $filter->htmlspecialchars($this->_attribution_url);
+                break;
+
+            case 'attribution_name' :
+                $return = $filter->htmlspecialchars($this->_attribution_name);
+                break;
+
+            case 'attribution_author' :
+                $return = $filter->htmlspecialchars($this->_attribution_author);
+                break;
+
             case 'story_image' :
                 $return = $filter->htmlspecialchars($this->_story_image);
                 break;
@@ -1611,6 +1650,7 @@ class Story
             case 'subtitle' :
                 $return = $this->_displayEscape($this->_subtitle);
                 break;
+
             case 'expire':
                 $return = $dtExpire->toUnix();
                 break;

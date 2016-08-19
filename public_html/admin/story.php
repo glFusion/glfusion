@@ -1031,6 +1031,16 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var('rating',$rating);
         $story_templates->set_var('votes',$votes);
     }
+
+    $story_templates->set_var('attribution_url', $story->EditElements('attribution_url'));
+    $story_templates->set_var('attribution_name', $story->EditElements('attribution_name'));
+    $story_templates->set_var('attribution_author', $story->EditElements('attribution_author'));
+
+    $story_templates->set_var('lang_attribution_url', $LANG24[105]);
+    $story_templates->set_var('lang_attribution_name', $LANG24[106]);
+    $story_templates->set_var('lang_attribution_author', $LANG24[107]);
+    $story_templates->set_var('lang_attribution', $LANG24[108]);
+
     $sec_token_name = CSRF_TOKEN;
     $sec_token = SEC_createToken();
     $story_templates->set_var('story_id', $story->getSid());

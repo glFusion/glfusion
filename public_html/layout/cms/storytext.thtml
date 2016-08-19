@@ -32,7 +32,11 @@
 
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
+ {!if attribution_author}
+ 				<li>{lang_by} {attribution_author}</li>
+ {!else}
 					<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
+ {!endif}
 {!endif}
 {!if story_date}
 					<li><time datetime="{story_date}">{story_date}</time></li>
@@ -75,6 +79,15 @@
 		</header>
 
 		<div class="uk-clearfix"></div>
+
+{!if attribution_url}
+	<div class="uk-panel uk-margin-remove">
+		<span class="uk-badge uk-badge-success uk-text-medium">{lang_source}</span>&nbsp;
+		<span class=""><a href="{attribution_url}" target="_blank">{attribution_name}</a></span>
+	</div>
+{!endif}
+
+
 {!if story_topic_image_url}
 		<a href="{topic_url}">
 			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">

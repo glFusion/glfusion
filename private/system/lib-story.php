@@ -162,6 +162,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         if ($_CONF['contributedbyline'] == 1) {
             $article->set_var('lang_contributed_by', $LANG01[1]);
             $article->set_var('lang_by',$LANG01[95]);
+
             $article->set_var('contributedby_uid', $story->DisplayElements('uid'));
             $fullname = $story->DisplayElements('fullname');
             $username = $story->DisplayElements('username');
@@ -209,14 +210,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var ('author_photo', '');
                 $article->set_var ('camera_icon', '');
             }
-            $article->set_var('author_about', $story->DisplayElements('about'));
-            $article->set_var('follow_me',SOC_getFollowMeIcons( $story->DisplayElements('uid') ));
-
-
-
-
-
-
+            if ( $story->DisplayElements('attribution_author') == "" ) {
+                $article->set_var('author_about', $story->DisplayElements('about'));
+                $article->set_var('follow_me',SOC_getFollowMeIcons( $story->DisplayElements('uid') ));
+            }
         }
         $topicname = $story->DisplayElements('topic');
         if ( $story->DisplayElements('alternate_tid')  != NULL ) {
@@ -231,10 +228,24 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $article->set_var('story_subtitle',$story->DisplayElements('subtitle'));
 
-        $story_image = $story->DisplayElements('story_image');
-        if ( $story_image != '' ) {
-//            $story_image = $_CONF['site_url'].$story_image;
+        $attribution_url = $story->DisplayElements('attribution_url');
+        $attribution_name = $story->DisplayElements('attribution_name');
+        $attribution_author = $story->DisplayElements('attribution_author');
+
+        if ( $attribution_url != '' ) {
+            $article->set_var('attribution_url', $attribution_url);
         }
+        if ( $attribution_name != '' ) {
+            $article->set_var('attribution_name', $attribution_name);
+        }
+        if ( $attribution_author != '' ) {
+            $article->set_var('attribution_author', $attribution_author);
+        }
+
+        $article->set_var('lang_source',$LANG01['source']);
+
+        $story_image = $story->DisplayElements('story_image');
+
         $article->set_var('story_image',$story_image);
 
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
@@ -417,12 +428,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'comments_url_extra',$cmtLinkArray['url_extra']);
                 $article->set_var( 'comments_text', $cmtLinkArray['comment_count']);
                 $article->set_var( 'comments_count', $cmtLinkArray['comment_count']);
-
-//                $article->set_var( 'comments_url', $commentsUrl );
-//                $article->set_var( 'comments_text',
-//                        COM_numberFormat( $story->DisplayElements('comments') ) . ' ' . $LANG01[3] );
-//                $article->set_var( 'comments_count',
-//                        COM_numberFormat ( $story->DisplayElements('comments') ));
 
                 $article->set_var( 'lang_comments', $LANG01[3] );
                 $comments_with_count = sprintf( $LANG01[121], COM_numberFormat( $story->DisplayElements('comments') ));
