@@ -80,14 +80,6 @@
 
 		<div class="uk-clearfix"></div>
 
-{!if attribution_url}
-	<div class="uk-panel uk-margin-remove">
-		<span class="uk-badge uk-badge-success uk-text-medium">{lang_source}</span>&nbsp;
-		<span class=""><a href="{attribution_url}" target="_blank">{attribution_name}</a></span>
-	</div>
-{!endif}
-
-
 {!if story_topic_image_url}
 		<a href="{topic_url}">
 			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
@@ -105,9 +97,18 @@
 		</p>
 {!endif}
 
+<div class="uk-clearfix"></div>
+
 {!!if {story_display} == 'article' !!}
+
+  {!if attribution_url}
+	<div class="uk-panel uk-margin">
+		<span class="uk-badge uk-badge-success uk-text-medium">{lang_source}</span>&nbsp;
+		<span class=""><a href="{attribution_url}" target="_blank">{attribution_name}</a></span>
+	</div>
+  {!endif}
+
 	{!if author_about}
-		<div class="uk-clearfix"></div>
 		<hr>
 		<article class="uk-comment tm-about-author uk-margin-small">
 			<header class="uk-comment-header tm-about-author-header uk-margin-top">
@@ -122,6 +123,7 @@
 			</header>
 		</article>
 	{!endif}
+
 {!endif}
 
 		<div class="uk-clearfix"></div>
