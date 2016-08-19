@@ -254,7 +254,8 @@ $LANG01 = array(
     'show_allowed_content' => 'Show Allowed Content',
     'blocks_left_title' => 'Left Side',
     'blocks_right_title' => 'Right Side',
-    'blocks_footer_title' => 'Footer'
+    'blocks_footer_title' => 'Footer',
+    'source' => 'Source'
 );
 
 ###############################################################################
@@ -1006,7 +1007,11 @@ $LANG24 = array(
     101 => 'Filter By Topic',
     102 => 'Attribute',
     103 => 'Value',
-    104 => 'Update'
+    104 => 'Update',
+    105 => 'Attribution Source URL',
+    106 => 'Attribution Source Site Name',
+    107 => 'Attribution Author',
+    108 => 'Attribution'
 );
 
 ###############################################################################
