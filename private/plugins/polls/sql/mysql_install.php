@@ -66,6 +66,7 @@ CREATE TABLE {$_TABLES['polltopics']} (
   date datetime default NULL,
   display tinyint(4) NOT NULL default '0',
   is_open tinyint(1) NOT NULL default '1',
+  login_required tinyint(1) NOT NULL default '0',
   hideresults tinyint(1) NOT NULL default '0',
   commentcode tinyint(4) NOT NULL default '0',
   statuscode tinyint(4) NOT NULL default '0',
@@ -89,6 +90,7 @@ CREATE TABLE {$_TABLES['pollvoters']} (
   id int(10) unsigned NOT NULL auto_increment,
   pid varchar(20) NOT NULL default '',
   ipaddress varchar(15) NOT NULL default '',
+  uid mediumint(8) NOT NULL default 1,
   date int(10) unsigned default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=MyISAM

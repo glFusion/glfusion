@@ -126,6 +126,7 @@ function POLLS_edit($pid = '')
         $T['voters'] = 0;
         $T['display'] = 1;
         $T['is_open'] = 1;
+        $T['login_required'] = 0;
         $T['hideresults'] = 0;
         $T['owner_id'] = $_USER['uid'];
         if (isset ($_GROUPS['Polls Admin'])) {
@@ -151,6 +152,7 @@ function POLLS_edit($pid = '')
 
     $poll_templates->set_var('lang_appearsonhomepage', $LANG25[8]);
     $poll_templates->set_var('lang_openforvoting', $LANG25[33]);
+    $poll_templates->set_var('lang_login_required', $LANG25[43]);
     $poll_templates->set_var('lang_hideresults', $LANG25[37]);
     $poll_templates->set_var('poll_hideresults_explain', $LANG25[38]);
     $poll_templates->set_var('poll_topic_info', $LANG25[39]);
@@ -161,6 +163,9 @@ function POLLS_edit($pid = '')
 
     if ($T['is_open'] == 1) {
         $poll_templates->set_var('poll_open', 'checked="checked"');
+    }
+    if ( $T['login_required'] == 1 ) {
+        $poll_templates->set_var('poll_login_required', 'checked="checked"');
     }
     if ($T['hideresults'] == 1) {
         $poll_templates->set_var('poll_hideresults', 'checked="checked"');
@@ -260,6 +265,7 @@ function POLLS_edit($pid = '')
 * @param    string  $topic          The text for the topic
 * @param    int     $statuscode     (unused)
 * @param    string  $open           Checkbox: poll open for voting
+* @param    string  $login_required Checkbox: poll required login to vote
 * @param    string  $hideresults    Checkbox: hide results until closed
 * @param    int     $commentcode    Indicates if users can comment on poll
 * @param    array   $A              Array of possible answers
@@ -274,7 +280,7 @@ function POLLS_edit($pid = '')
 * @return   string                  HTML redirect or error message
 *
 */
-function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
+function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $login_required, $hideresults,
                   $commentcode, $A, $V, $R, $owner_id, $group_id, $perm_owner,
                   $perm_group, $perm_members, $perm_anon)
 
@@ -412,6 +418,11 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
     } else {
         $sql .= ",0";
     }
+    if ($login_required == 'on') {
+        $sql .= ",1";
+    } else {
+        $sql .= ",0";
+    }
     if ($hideresults == 'on') {
         $sql .= ",1";
     } else {
@@ -422,7 +433,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
 
     // Save poll topic
     DB_save($_TABLES['polltopics'],"pid, topic, voters, questions, date, display, "
-           . "is_open, hideresults, statuscode, commentcode, owner_id, group_id, "
+           . "is_open, login_required, hideresults, statuscode, commentcode, owner_id, group_id, "
            . "perm_owner, perm_group, perm_members, perm_anon",$sql);
 
     if (empty($old_pid) || ($old_pid == $pid)) {
@@ -589,9 +600,10 @@ switch ($action) {
               $statuscode = (isset($_POST['statuscode'])) ? COM_applyFilter($_POST['statuscode'], true) : 0;
               $mainpage = (isset($_POST['mainpage'])) ? COM_applyFilter($_POST['mainpage']) : '';
               $open = (isset($_POST['open'])) ? COM_applyFilter($_POST['open']) : '';
+              $login_required = (isset($_POST['login_required'])) ? COM_applyFilter($_POST['login_required']) : '';
               $hideresults = (isset($_POST['hideresults'])) ? COM_applyFilter($_POST['hideresults']) : '';
               $display .= POLLS_save($pid, $old_pid, $_POST['question'], $mainpage, $_POST['topic'],
-                              $statuscode, $open, $hideresults,
+                              $statuscode, $open, $login_required, $hideresults,
                               COM_applyFilter($_POST['commentcode'], true),
                               $_POST['answer'], $_POST['votes'], $_POST['remark'],
                               COM_applyFilter($_POST['owner_id'], true),

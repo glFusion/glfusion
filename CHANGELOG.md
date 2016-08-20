@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Record user id in poll vote history (to prevent dupliate votes)
+  - Add option for poll to only allow logged in users to vote
+  - Fixed issue with poll_votes auto tag interactive (ajax) voting did not work in forum post
   - Allow stories to provide attribution to external sources
   - Fixed error where page URL was not properly set for staticpages when using 3rd party comment engines
   - Allow some HTML in block titles
