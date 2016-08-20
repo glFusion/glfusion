@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -63,7 +63,8 @@ $LANG_POLLS = array(
     'pollclosed' => 'T&auml;m&auml; kysely on suljettu.',
     'pollhidden' => 'Tulokset saatavilla kyselyn suljettua.',
     'start_poll' => 'Aloita polli',
-    'deny_msg' => 'P&auml;&auml;sy ev&auml;tty.  Polli on joko poistettu tai sinulla ei ole tarvittavia oikeuksia siihen.'
+    'deny_msg' => 'P&auml;&auml;sy ev&auml;tty.  Polli on joko poistettu tai sinulla ei ole tarvittavia oikeuksia siihen.',
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
 );
 
 ###############################################################################
@@ -111,7 +112,8 @@ $LANG25 = array(
     39 => 'The topic will be only displayed if there are more than 1 questions.',
     40 => 'Katso kaikki vastaukset t&auml;h&auml;n kyselyyn',
     41 => 'Oletko varma ett&auml; haluat poistaa t&auml;m&auml;n pollin?',
-    42 => 'Oletko aivan varma ett&auml; haluat poistaa t&auml;m&auml;n pollin?  Kaikki kysymykset, vastaukset ja kommentit liittyen t&auml;h&auml;n polliin poistetaan tietokannasta pysyv&auml;sti.'
+    42 => 'Oletko aivan varma ett&auml; haluat poistaa t&auml;m&auml;n pollin?  Kaikki kysymykset, vastaukset ja kommentit liittyen t&auml;h&auml;n polliin poistetaan tietokannasta pysyv&auml;sti.',
+    43 => 'Login Required to Vote'
 );
 
 ###############################################################################

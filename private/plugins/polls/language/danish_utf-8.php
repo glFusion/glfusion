@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -63,7 +63,8 @@ $LANG_POLLS = array(
     'pollclosed' => 'This poll is closed for voting.',
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Afstemning',
-    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.'
+    'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
 );
 
 ###############################################################################
@@ -111,7 +112,8 @@ $LANG25 = array(
     39 => 'Emnet vil blive kun blivet vist, hvis der er mere end 1 spørgsmål.',
     40 => 'Se alle svar til denne afstemning',
     41 => 'Are you sure you want to delete this Poll?',
-    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
+    43 => 'Login Required to Vote'
 );
 
 ###############################################################################

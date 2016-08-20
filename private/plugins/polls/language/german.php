@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -63,7 +63,8 @@ $LANG_POLLS = array(
     'pollclosed' => 'Diese Umfrage ist für die Abstimmung geschlossen.',
     'pollhidden' => 'Du hast bereits abgestimmt. Diese Umfrage-Ergebnisse werden nur angezeigt, wenn eine Abstimmung abgegeben werden.',
     'start_poll' => 'Umfrage starten',
-    'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder du verfügst nicht über ausreichende Berechtigungen.'
+    'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder du verfügst nicht über ausreichende Berechtigungen.',
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
 );
 
 ###############################################################################
@@ -111,7 +112,8 @@ $LANG25 = array(
     39 => 'Die Kategorie wird nur angezeigt, wenn sie mehr als eine Frage enthält.',
     40 => 'Alle Antworten zu dieser Umfrage ansehen',
     41 => 'Are you sure you want to delete this Poll?',
-    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.'
+    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
+    43 => 'Login Required to Vote'
 );
 
 ###############################################################################
