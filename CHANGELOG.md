@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed issue with Media Gallery duplicating the Comments line
   - Record user id in poll vote history (to prevent dupliate votes)
   - Add option for poll to only allow logged in users to vote
   - Fixed issue with poll_votes auto tag interactive (ajax) voting did not work in forum post
