@@ -1,3 +1,12 @@
+{!!if {type}=='info' !!}
+<script>
+	jQuery(document).ready(function($) {
+		$.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;{message}");
+	});
+</script>
+{!else}
+
+
 {!!if {type}=='error' !!}
   {!!set class 'uk-alert-danger' !!}
 {!endif}
@@ -6,4 +15,4 @@
     <a href="" class="uk-alert-close uk-close"></a>
     <p>{message}</p>
 </div>
-
+{!endif}
