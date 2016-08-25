@@ -3794,6 +3794,11 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
     $T->parse ('output', 'block');
     $final = $T->finish($T->get_var('output'));
+
+    if ( $items_found == 0 && $_CONF['hideemptyblock']) {
+        $final = '';
+    }
+
     CACHE_create_instance($cacheInstance, $final, 0);
 
     return $final;
