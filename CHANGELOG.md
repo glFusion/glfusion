@@ -2,7 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
   - Fixed issue with Media Gallery duplicating the Comments line
-  - Record user id in poll vote history (to prevent dupliate votes)
+  - Record user id in poll vote history (to prevent duplicate votes)
   - Add option for poll to only allow logged in users to vote
   - Fixed issue with poll_votes auto tag interactive (ajax) voting did not work in forum post
   - Allow stories to provide attribution to external sources
@@ -44,7 +44,7 @@ v1.6.1 (unreleased)
 v1.6.0 (July 22, 2016)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
   - Fixed long standing bug in the Open Graph image property (property is now configured "properly")
-  - Experiemental feature to allow custom story templates per topic
+  - Experimental feature to allow custom story templates per topic
   - CKEDITOR: Allow fileperm and dirperm to be configurable items
   - Added option to remove obsolete files during upgrade
   - Improved star rating speed limit handling
