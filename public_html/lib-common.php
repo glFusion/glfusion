@@ -1383,12 +1383,25 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
     ));
+
+    $msgTxt = '';
+    $msg = COM_getMessage();
+    if ( $msg > 0 ) {
+        $plugin = '';
+        if (isset ($_GET['plugin'])) {
+            $plugin = COM_applyFilter ($_GET['plugin']);
+        }
+        $msgTxt = COM_showMessage ($msg, $plugin,'',0,'info');
+    }
+
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt = COM_showMessageText($msgArray['msg'], '', $persist = false, $msgArray['type']);
-        $theme->set_var('info_block',$msgTxt);
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $persist = false, $msgArray['type']);
+
         SESS_unSet('glfusion.infoblock');
     }
+    $theme->set_var('info_block',$msgTxt);
+
     // Call to plugins to set template variables in the footer
     PLG_templateSetVars( 'header', $theme );
     PLG_templateSetVars( 'footer', $theme );
@@ -3847,6 +3860,11 @@ function COM_setMsg( $msg, $type='info' )
 */
 function COM_getMessage()
 {
+    static $called = 0;
+
+    if ( $called ) {
+        return;
+    }
     $msg = 0;
     if ( isset($_POST['msg']) ) {
         $msg = COM_applyFilter($_POST['msg'],true);
@@ -3856,6 +3874,7 @@ function COM_getMessage()
         $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
         SESS_unSet('glfusion.infomessage');
     }
+    $called = 1;
     return $msg;
 }
 

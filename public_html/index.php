@@ -90,15 +90,6 @@ $pageBody .= glfusion_UpgradeCheck();
 
 $pageBody .= glfusion_SecurityCheck();
 
-$msg = COM_getMessage();
-if ( $msg > 0 ) {
-    $plugin = '';
-    if (isset ($_GET['plugin'])) {
-        $plugin = COM_applyFilter ($_GET['plugin']);
-    }
-    $pageBody .= COM_showMessage ($msg, $plugin,'',0,'info');
-}
-
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
 $displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks

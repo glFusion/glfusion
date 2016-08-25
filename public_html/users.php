@@ -88,14 +88,7 @@ function userprofile()
     } else {
         echo COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-    $msg = 0;
-    if (isset ($_GET['msg'])) {
-        $msg = COM_applyFilter ($_GET['msg'], true);
-    }
-    $plugin = '';
-    if (($msg > 0) && isset($_GET['plugin'])) {
-        $plugin = COM_applyFilter($_GET['plugin']);
-    }
+
     $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".(int) $user);
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
@@ -109,7 +102,12 @@ function userprofile()
 
     $display_name = @htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
 
+    $msg = COM_getMessage();
     if ($msg > 0) {
+        $plugin = '';
+        if (isset ($_GET['plugin'])) {
+            $plugin = COM_applyFilter ($_GET['plugin']);
+        }
         $retval .= COM_showMessage($msg, $plugin,'',0,'info');
     }
 
@@ -1461,13 +1459,7 @@ switch ($mode) {
                 echo COM_refresh ($_CONF['site_url'] . '/index.php');
             }
         } else {
-            if ( isset($_POST['msg']) ) {
-                $msg = COM_applyFilter($_POST['msg'],true);
-            } elseif (isset($_GET['msg']) ) {
-                $msg = COM_applyFilter($_GET['msg'],true);
-            } else {
-                $msg = 0;
-            }
+            $msg = COM_getMessage();
             if ($msg > 0) {
                 $pageBody .= COM_showMessage($msg,'','',0,'info');
             }
