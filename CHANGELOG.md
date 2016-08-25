@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed error where the What's New block would always display regardless of the Hide What's New when empty setting
   - Informational messages will now display as a modal (UIKIT based themes only)
   - Refactored outbound HTML emails - improvements for displaying across larger array of devices
   - Fixed issue with new activation form - extra closing div
