@@ -23,7 +23,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -119,7 +119,8 @@ $LANG_STATIC = array(
     'page_list' => 'Paginas',
     'instructions_edit' => 'Esta pantalla le permite crear/modificar/borrar una pagina. Las paginas puden contener tanto código PHP como HTML.',
     'attributes' => 'Atributos',
-    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display'
+    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
+    'page_saved' => 'Page has been successfully saved.'
 );
 ###############################################################################
 # autotag descriptions
