@@ -1067,9 +1067,9 @@ function _userGetpassword()
     $last = COM_checkSpeedlimit ('password',4);
     if ($last > 0) {
         $retval .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],false,'error');
-    } else {
-        $retval .= getpasswordform ();
     }
+    $retval .= getpasswordform ();
+
     return $retval;
 }
 
@@ -1149,6 +1149,7 @@ function _userEmailpassword()
     $last = COM_checkSpeedlimit ('password');
     if ($last > 0) {
         $retval .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error');
+$retval .= getpasswordform();
     } else {
         $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
