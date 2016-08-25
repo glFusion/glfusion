@@ -297,6 +297,19 @@ if ($A['count'] > 0) {
         $story_template->set_var('site_admin_url', $_CONF['site_admin_url']);
         $story_template->set_var('story_id', $story->getSid());
         $story_template->set_var('story_title', $pagetitle);
+        $story_template->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
+
+        if ( $_CONF['hidestorydate'] != 1 ) {
+            $story_template->set_var ('story_date', $story->displayElements('date'));
+        }
+
+        if ($_CONF['contributedbyline'] == 1) {
+            $story_template->set_var ('lang_contributedby', $LANG01[1]);
+            $authorname = COM_getDisplayName ($story->displayElements('uid'));
+            $story_template->set_var ('author', $authorname);
+            $story_template->set_var ('story_author', $authorname);
+            $story_template->set_var ('story_author_username', $story->DisplayElements('username'));
+        }
 
         if ( $story_image != '' ) {
             $story_template->set_var('story_image',$story_image);
@@ -342,6 +355,7 @@ if ($A['count'] > 0) {
         $social_icons = SOC_getShareIcons();
         $story_template->set_var('social_share',$social_icons);
 
+//        $related = STORY_whatsRelated($sid,$story->displayElements('keywords'), $story->displayElements('related'),
         $related = STORY_whatsRelated($story->displayElements('related'),
                                       $story->displayElements('uid'),
                                       $story->displayElements('tid'),
@@ -437,6 +451,12 @@ if ($A['count'] > 0) {
         } else {
             $story_template->set_var ('trackback', '');
         }
+
+       if (function_exists('CUSTOM_preContent')) {
+            $tvars = $story_template->get_vars();
+            CUSTOM_preContent('load','article', $tvars);
+        }
+
         $pageBody .= $story_template->finish ($story_template->parse ('output', 'article'));
     }
 } else {

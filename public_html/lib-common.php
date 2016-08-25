@@ -1406,6 +1406,18 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     PLG_templateSetVars( 'header', $theme );
     PLG_templateSetVars( 'footer', $theme );
 
+    if ( function_exists('CUSTOM_preContent')) {
+        $count = 0;
+        $tvars = CUSTOM_preContent('get');
+        foreach ($tvars AS $name => $value ) {
+            $theme->set_var($name, $value);
+            $count++;
+        }
+        if ( $count > 0 ) {
+            $theme->set_var('precontent',true);
+        }
+    }
+
     // Actually parse the template and make variable substitutions
     $theme->parse( 'index_footer', 'footer' );
 
