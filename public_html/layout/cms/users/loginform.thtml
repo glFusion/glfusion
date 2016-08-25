@@ -36,6 +36,10 @@
 				<div class="uk-form-row uk-text-small">
 					<a class="uk-float-right uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a><i class="uk-icon-user uk-float-right uk-margin-small-right"></i>
 				</div>
+       	<div class="uk-form-row uk-text-small">
+          <a href="{site_url}/users.php?mode=getnewtoken" rel="nofollow">{lang_verification}</a>
+        </div>
+
 			</form>
 		</div>
 	</div>
