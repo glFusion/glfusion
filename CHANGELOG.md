@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Informational messages will now display as a modal (UIKIT based themes only)
+  - Refactored outbound HTML emails - improvements for displaying across larger array of devices
+  - Fixed issue with new activation form - extra closing div
   - Fixed issue with Media Gallery duplicating the Comments line
   - Record user id in poll vote history (to prevent duplicate votes)
   - Add option for poll to only allow logged in users to vote
