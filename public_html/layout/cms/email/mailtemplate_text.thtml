@@ -1,0 +1,19 @@
+<!-- BEGIN contenttext -->
+{!if button_text}
+<a href="{url}">{button_text}</a>
+
+{!else}
+
+{content_text}
+
+{!endif}
+<!-- END contenttext -->
+
+
+{site_name}
+
+{site_url}
+
+
+
+{$LANG04[159]}

@@ -2553,11 +2553,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     }
     $mail->WordWrap = 76;
     $mail->IsHTML($html);
-    if ( $html ) {
-        $mail->Body = COM_filterHTML($message);
-    } else {
-        $mail->Body = $message;
-    }
+    $mail->Body = $message;
 
     if ( $altBody != '' ) {
         $mail->AltBody = $altBody;
@@ -2573,7 +2569,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
             $mail->From = $from[0];
         }
     } else {
-        $mail->From = $_CONF['site_mail'];
+        $mail->From = $_CONF['noreply_mail'];
     }
 
     if ( is_array($from) && isset($from[1]) && $from[1] != '' ) {
@@ -2730,8 +2726,10 @@ function COM_emailNotification( $msgData = array() )
     if ( $queued > 0 ) {
         if ( !@$mail->Send() ) {
             COM_errorLog("Email Error: " . $mail->ErrorInfo);
+            return false;
         }
     }
+    return true;
 }
 
 /**
@@ -5753,64 +5751,79 @@ function COM_switchLocaleSettings()
 * Truncates a string to a max. length and optionally adds a filler string,
 * i.e.; '...', to indicate the truncation.
 *
-* This function is multi-byte string aware. This function is based on a
-* code snippet by pitje at Snipplr.com.
+* adapted from http://stackoverflow.com/questions/1193500/truncate-text-containing-html-ignoring-tags
 *
-* NOTE: The truncated string may be shorter or longer than $maxlen characters.
+* NOTE: The truncated string may be shorter or longer than $len characters.
 * Currently any initial HTML tags in the truncated string are taken into account.
-* The $filler string is also taken into account but any HTML tags that are added
+* The $end string is also taken into account but any HTML tags that are added
 * by this function to close open HTML tags are not.
 *
-* @param    string  $htmltext   the text string which contains HTML tags to truncate
-* @param    int     $maxlen     max. number of characters in the truncated string
-* @param    string  $filler     optional filler string, e.g. '...'
+* @param    string  $str        the text string which contains HTML tags to truncate
+* @param    int     $len        max. number of characters in the truncated string
+* @param    string  $end        optional filler string, e.g. '...'
 * @param    int     $endchars   number of characters to show after the filler
 * @return   string              truncated string
 *
 */
-function COM_truncateHTML ( $htmltext, $maxlen, $filler = '', $endchars = 0 )
+function COM_truncateHTML ( $str, $len, $end = '&hellip;', $endchars = 0 )
 {
 
-    $newlen = $maxlen - utf8_strlen($filler);
-    $len = utf8_strlen($htmltext);
-    if ($len > $maxlen) {
-        $htmltext = utf8_substr($htmltext, 0, $newlen - $endchars);
+    if ( utf8_strlen($str) <= $len ) return $str;
 
-        // Strip any mangled tags off the end
-        if (utf8_strrpos($htmltext, '<' ) > utf8_strrpos($htmltext, '>')) {
-            $htmltext = utf8_substr($htmltext, 0, utf8_strrpos($htmltext, '<'));
+    $tagPattern = '/(<\/?)([\w]*)(\s*[^>]*)>?|&[\w#]+;/i';  //match html tags and entities
+    preg_match_all($tagPattern, $str, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
+
+    $i = 0;
+    $closeTagString = '';
+
+    while ( @$matches[$i][0][1] < $len && !empty($matches[$i]) ) {
+
+        $len = $len + strlen($matches[$i][0][0]);
+        if (utf8_substr($matches[$i][0][0],0,1) == '&' ) {
+            $len = $len-1;
         }
 
-        $htmltext = $htmltext . $filler . utf8_substr($htmltext, $len - $endchars, $endchars);
-
-        // put all opened tags into an array
-        preg_match_all ( "#<([a-z]+)( .*)?(?!/)>#iU", $htmltext, $result );
-        $openedtags = $result[1];
-        $openedtags = array_diff($openedtags, array("img", "hr", "br"));
-        $openedtags = array_values($openedtags);
-
-        // put all closed tags into an array
-        preg_match_all ("#</([a-z]+)>#iU", $htmltext, $result);
-        $closedtags = $result[1];
-        $len_opened = count($openedtags);
-
-        // all tags are closed
-        if (count( $closedtags ) == $len_opened) {
-            return $htmltext;
-        }
-        $openedtags = array_reverse ($openedtags);
-
-        // close tags
-        for($i = 0; $i < $len_opened; $i++) {
-            if (!in_array ($openedtags[$i], $closedtags )) {
-                $htmltext .= "</" . $openedtags[$i] . ">";
+        //if $matches[$i][2] is undefined then its an html entity, want to ignore those for tag counting
+        //ignore empty/singleton tags for tag counting
+        if (!empty($matches[$i][2][0]) && !in_array($matches[$i][2][0],array('br','img','hr', 'input', 'param', 'link'))) {
+            if ( utf8_substr($matches[$i][3][0],-1 ) !='/' && utf8_substr( $matches[$i][1][0],-1 ) != '/') {
+                $openTags[] = $matches[$i][2][0];
+            } elseif( end($openTags) == $matches[$i][2][0] ) {
+                array_pop($openTags);
             } else {
-                unset ($closedtags[array_search ($openedtags[$i], $closedtags)]);
+                $warnings[] = "html has some tags mismatched in it:  $str";
             }
+        }
+        $i++;
+    }
+
+    $closeTags = '';
+
+    if (!empty($openTags)) {
+        $openTags = array_reverse($openTags);
+        foreach ($openTags as $t){
+            $closeTagString .="</".$t . ">";
         }
     }
 
-    return $htmltext;
+    if (utf8_strlen($str)>$len ) {
+        $truncated_html = $str;
+        // Finds the last space from the string new length
+        $lastWord = utf8_strpos($str, ' ', $len);
+        if ($lastWord) {
+            //truncate with new len last word
+            $str = utf8_substr($str, 0, $lastWord);
+            //finds last character
+            $last_character = (utf8_substr($str, -1, 1));
+            //add the end text
+            $truncated_html = ($last_character == '.' ? $str : ($last_character == ',' ? utf8_substr($str, 0, -1) : $str) . $end);
+        }
+        //restore any open tags
+        $truncated_html .= $closeTagString;
+    } else {
+        $truncated_html = $str;
+    }
+    return $truncated_html;
 }
 
 /**

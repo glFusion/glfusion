@@ -195,53 +195,59 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         $template->parse ('output', 'mail');
         $mailtext = $template->get_var ('output');
     } else {
+        $T = new Template($_CONF['path_layout'].'email/');
+        $T->set_file(array(
+            'html_msg'   => 'newuser_template_html.thtml',
+            'text_msg'   => 'newuser_template_text.thtml'
+        ));
         if ( $userStatus == USER_ACCOUNT_AWAITING_VERIFICATION ) {
             $verification_id = USER_createActivationToken($uid,$username);
-            $activation_link = $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid;
-            $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
-            $mailtext .= $LANG04[170] . "\n\n";
-            $mailtext .= "----------------------------\n";
-            $mailtext .= $LANG04[2] . ': ' . $username ."\n";
-            $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
-            $mailtext .= "----------------------------\n\n";
-            $mailtext .= sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)) . "\n\n";
-            $mailtext .= $activation_link . "\n\n";
-            $mailtext .= $LANG04[173] . "\n\n";
-            $mailtext .= $LANG04[174] . "\n\n";
-            $mailtext .= "--\n";
-            $mailtext .= $_CONF['site_name'] . "\n";
-            $mailtext .= $_CONF['site_url'] . "\n";
+
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid,
+                'lang_site_or_password' => $LANG04[171],
+                'site_link_url'         => $_CONF['site_url'],
+                'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
+                'lang_button_text'      => $LANG04[203],
+            ));
         } else {
-            $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
-            $mailtext .= $LANG04[170] . "\n\n";
-            $mailtext .= "----------------------------\n";
-            $mailtext .= $LANG04[2] . ': ' . $username ."\n";
-            if ( $passwd != '' ) {
-                $mailtext .= $LANG04[4] . ": $passwd\n";
-            }
-            $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
-            $mailtext .= "----------------------------\n\n";
-            $mailtext .= $LANG04[14] . "\n\n";
-            $mailtext .= "--\n";
-            $mailtext .= $_CONF['site_name'] . "\n";
-            $mailtext .= $_CONF['site_url'] . "\n";
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/usersettings.php',
+                'lang_site_or_password' => $LANG04[4],
+                'site_link_url'         => '',
+                'lang_activation'       => $LANG04[14],
+                'lang_button_text'      => 'Change Password',
+                'passwd'                => $passwd,
+            ));
         }
+        $T->set_var(array(
+            'title'         =>  $_CONF['site_name'] . ': ' . $LANG04[16],
+            'site_name'     =>  $_CONF['site_name'],
+            'username'      =>  $username,
+        ));
+        $T->parse ('output', 'html_msg');
+        $mailhtml = $T->finish($T->get_var('output'));
+
+        $T->parse ('output', 'text_msg');
+        $mailtext = $T->finish($T->get_var('output'));
     }
-    $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
-    if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
-        $mailfrom = $_CONF['noreply_mail'];
-        global $LANG_LOGIN;
-        $mailtext .= LB . LB . $LANG04[159];
-    } else {
-        $mailfrom = $_CONF['site_mail'];
-    }
+    $msgData['htmlmessage'] = $mailhtml;
+    $msgData['textmessage'] = $mailtext;
+    $msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
     $to = array();
     $from = array();
-    $from = COM_formatEmailAddress($_CONF['site_name'],$mailfrom);
-    $to   = COM_formatEmailAddress( $username,$useremail );
-    $subject    = COM_undoSpecialChars(strip_tags($subject));
+    $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
+    $to = COM_formatEmailAddress('',$useremail);
 
-    return COM_mail ($to, $subject, $mailtext, $from, false);
+//    $msgData['from']['name'] = $_CONF['site_name'];
+//    $msgData['from']['email'] = $_CONF['noreply_mail'];
+//    $msgData['to']['email'] = $useremail;
+//    $msgData['to']['name'] = $username;
+//    return COM_emailNotification($msgData);
+
+    return COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, true, 0,'', $msgData['textmessage'] );
+
 }
 
 function USER_createActivationToken($uid,$username)
@@ -264,6 +270,7 @@ function USER_createActivationToken($uid,$username)
 * @return   boolean             true = success, false = an error occured
 *
 */
+//@DEPRECIATED - NO LONGER USER
 function USER_sendActivationEmail ($username, $useremail)
 {
     global $_CONF, $_TABLES, $LANG04;
@@ -464,13 +471,13 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
         $mailbody .= "$LANG29[4] {$_CONF['site_url']}/users.php?mode=profile&uid={$uid}\n\n";
     }
     $mailbody .= "\n------------------------------\n";
-    $mailbody .= "\n$LANG08[34]\n";
+    $mailbody .= "$LANG08[34]";
     $mailbody .= "\n------------------------------\n";
 
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG29[40];
 
     $to = array();
-    $to   = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    $to   = COM_formatEmailAddress( '',$_CONF['noreply_mail'] );
     COM_mail ($to, $mailsubject, $mailbody);
 }
 

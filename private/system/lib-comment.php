@@ -51,7 +51,7 @@ USES_lib_user();
 
 function plugin_subscription_email_format_comment($category,$track_id,$post_id,$uid)
 {
-    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG03;
+    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG03, $LANG04;
 
     $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';

@@ -459,32 +459,57 @@ function requestpassword ($username, $msg = 0)
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
         DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int) $A['uid']);
 
-        $mailtext = sprintf ($LANG04[88], $username);
-        $mailtext .= $_CONF['site_url'] . '/users.php?mode=newpwd&uid=' . $A['uid'] . '&rid=' . $reqid . "\n\n";
-        $mailtext .= $LANG04[89];
-        $mailtext .= "{$_CONF['site_name']}\n";
-        $mailtext .= "{$_CONF['site_url']}\n";
+        $T = new Template($_CONF['path_layout'].'email/');
+        $T->set_file(array(
+            'html_msg'   => 'mailtemplate_html.thtml',
+            'text_msg'   => 'mailtemplate_text.thtml'
+        ));
 
-        $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
-        if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
-            $mailfrom = $_CONF['noreply_mail'];
-            global $LANG_LOGIN;
-            $mailtext .= LB . LB . $LANG04[159];
-        } else {
-            $mailfrom = $_CONF['site_mail'];
-        }
-        $to = array();
-        $to = COM_formatEmailAddress('',$A['email']);
-        $from = array();
-        $from = COM_formatEmailAddress('',$mailfrom);
-        COM_mail ($to, $subject, $mailtext, $from);
+        $T->set_block('html_msg', 'content', 'contentblock');
+        $T->set_block('text_msg', 'contenttext', 'contenttextblock');
+
+        $T->set_var('content_text',sprintf ($LANG04[88], $username) );
+
+        $T->parse('contentblock', 'content',true);
+        $T->parse('contenttextblock', 'contenttext',true);
+
+        $T->set_var('url',$_CONF['site_url'] . '/users.php?mode=newpwd&uid=' . $A['uid'] . '&rid=' . $reqid);
+        $T->set_var('button_text',$LANG04[91]);
+        $T->parse('contentblock', 'content',true);
+        $T->parse('contenttextblock', 'contenttext',true);
+
+        $T->unset_var('button_text');
+        $T->set_var('content_text',$LANG04[89]);
+        $T->parse('contentblock', 'content',true);
+        $T->parse('contenttextblock', 'contenttext',true);
+
+        $T->set_var('site_url',$_CONF['site_url']);
+        $T->set_var('site_name',$_CONF['site_name']);
+        $T->set_var('title',$_CONF['site_name'] . ': ' . $LANG04[16]);
+        $T->parse ('output', 'html_msg');
+        $mailhtml = $T->finish($T->get_var('output'));
+
+        $T->parse ('textoutput', 'text_msg');
+        $mailtext = $T->finish($T->get_var('textoutput'));
+
+        $msgData['htmlmessage'] = $mailhtml;
+        $msgData['textmessage'] = $mailtext;
+        $msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
+        $msgData['from']['name'] = $_CONF['site_name'];
+        $msgData['from']['email'] = $_CONF['noreply_mail'];
+        $msgData['to']['email'] = $A['email'];
+        $msgData['to']['name'] = $username;
+
+        COM_emailNotification($msgData);
+
+        COM_updateSpeedlimit ('password');
 
         if ($msg) {
             echo COM_refresh ($_CONF['site_url'] . "/index.php?msg=$msg");
         } else {
             echo COM_refresh ($_CONF['site_url'] . '/index.php');
         }
-        COM_updateSpeedlimit ('password');
     } else {
         COM_updateSpeedlimit ('password');
         echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
@@ -552,33 +577,40 @@ function requesttoken ($uid, $msg = 0)
         }
         $verification_id = USER_createActivationToken($uid,$A['username']);
         $activation_link = $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid;
-        $mailtext  = $LANG04[168] . $_CONF['site_name'] . ".\n\n";
-        $mailtext .= $LANG04[170] . "\n\n";
-        $mailtext .= "----------------------------\n";
-        $mailtext .= $LANG04[2] . ': ' . $A['username'] ."\n";
-        $mailtext .= $LANG04[171] .': ' . $_CONF['site_url'] ."\n";
-        $mailtext .= "----------------------------\n\n";
-        $mailtext .= sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)) . "\n\n";
-        $mailtext .= $activation_link . "\n\n";
-        $mailtext .= $LANG04[173] . "\n\n";
-        $mailtext .= $LANG04[174] . "\n\n";
-        $mailtext .= "--\n";
-        $mailtext .= $_CONF['site_name'] . "\n";
-        $mailtext .= $_CONF['site_url'] . "\n";
 
-        $subject = $_CONF['site_name'] . ': ' . $LANG04[16];
-        if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
-            $mailfrom = $_CONF['noreply_mail'];
-            global $LANG_LOGIN;
-            $mailtext .= LB . LB . $LANG04[159];
-        } else {
-            $mailfrom = $_CONF['site_mail'];
-        }
+        $T = new Template($_CONF['path_layout'].'email/');
+        $T->set_file(array(
+            'html_msg'   => 'newuser_template_html.thtml',
+            'text_msg'   => 'newuser_template_text.thtml'
+        ));
+
+        $T->set_var(array(
+            'url'                   => $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid,
+            'lang_site_or_password' => $LANG04[171],
+            'site_link_url'         => $_CONF['site_url'],
+            'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
+            'lang_button_text'      => $LANG04[203],
+            'title'                 =>  $_CONF['site_name'] . ': ' . $LANG04[16],
+            'site_name'             =>  $_CONF['site_name'],
+            'username'              =>  $A['username'],
+        ));
+        $T->parse ('output', 'html_msg');
+        $mailhtml = $T->finish($T->get_var('output'));
+
+        $T->parse ('output', 'text_msg');
+        $mailtext = $T->finish($T->get_var('output'));
+
+        $msgData['htmlmessage'] = $mailhtml;
+        $msgData['textmessage'] = $mailtext;
+        $msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
         $to = array();
-        $to = COM_formatEmailAddress('',$A['email']);
         $from = array();
-        $from = COM_formatEmailAddress('',$mailfrom);
-        COM_mail ($to, $subject, $mailtext, $from);
+        $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
+        $to = COM_formatEmailAddress('',$A['email']);
+
+        COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, true, 0,'', $msgData['textmessage'] );
+
         COM_updateSpeedlimit ('verifytoken');
         if ($msg) {
             echo COM_refresh ($_CONF['site_url'] . "/index.php?msg=$msg");
@@ -601,7 +633,7 @@ function requesttoken ($uid, $msg = 0)
 */
 function newtokenform ($uid)
 {
-    global $_CONF, $_TABLES, $LANG04;
+    global $_CONF, $_TABLES, $LANG01, $LANG04;
 
     $tokenform = new Template ($_CONF['path_layout'] . 'users');
     $tokenform->set_file ('newtoken', 'newtoken.thtml');
@@ -609,7 +641,7 @@ function newtokenform ($uid)
             'user_id'       => $uid,
             'lang_explain'  => $LANG04[175],
             'lang_username' => $LANG04[2],
-            'lang_password' => $LANG04[4],
+            'lang_password' => $LANG01[57],
             'lang_submit'   => $LANG04[169]));
 
     $retval = COM_startBlock ($LANG04[169]);

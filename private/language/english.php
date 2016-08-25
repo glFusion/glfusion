@@ -246,7 +246,7 @@ $LANG01 = array(
     'autotag_perms'             => 'Autotag Permissions',
     'subscribe'                 => 'Subscribe',
     'unsubscribe'               => 'Unsubscribe',
-    'view_online'               => 'Click here %s to view online',
+    'view_online'               => 'Click <a href="%s">here</a> to view online',
     'no_new_items'              => 'No New Items',
     'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
     'allowed_html'              => 'Allowed HTML:',
@@ -517,6 +517,7 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
+    203 => 'Activate Account',
 );
 
 ###############################################################################
@@ -589,6 +590,8 @@ $LANG08 = array(
     35 => 'Sorry, this user prefers not to receive any emails.',
     36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
     37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
+    38 => 'sent you the following article...',
+    39 => 'Read Full Article',
 );
 
 ###############################################################################
@@ -1014,6 +1017,8 @@ $LANG24 = array(
     106 => 'Attribution Source Site Name',
     107 => 'Attribution Author',
     108 => 'Attribution',
+    109 => 'Keywords',
+    110 => 'Enter a comma separated list of keywords',
 );
 
 ###############################################################################
