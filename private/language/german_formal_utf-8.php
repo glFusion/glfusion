@@ -518,7 +518,8 @@ $LANG04 = array(
     199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
     201 => 'Username',
-    202 => 'Follow Me'
+    202 => 'Follow Me',
+    203 => 'Activate Account'
 );
 
 ###############################################################################
@@ -590,7 +591,9 @@ $LANG08 = array(
     34 => 'Ende dieser Nachricht',
     35 => 'Sorry, dieser Benutzer möchte keine E-Mails bekommen.',
     36 => 'Sie erhalten diese Nachricht, weil Sie den %s Daily-Digest abonniert haben. Um ihn zu entfernen oder ihre Präferenzen zu ändern, bearbeiten Sie die <strong>Daily-Digest</strong> Präferenzen in <a href="%s/usersettings.php?mode=edit">Mein Account</a> - Inhaltssektion.',
-    37 => 'Sie erhälten diese Nachricht, weil Sie den %s Daily-Digest abonniert haben. Um ihn zu entfernen oder ihre Präferenzen zu ändern, bearbeiten Sie bitte ihre Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.'
+    37 => 'Sie erhälten diese Nachricht, weil Sie den %s Daily-Digest abonniert haben. Um ihn zu entfernen oder ihre Präferenzen zu ändern, bearbeiten Sie bitte ihre Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.',
+    38 => 'sent you the following article...',
+    39 => 'Read Full Article'
 );
 
 ###############################################################################
@@ -1015,7 +1018,9 @@ $LANG24 = array(
     105 => 'Attribution Source URL',
     106 => 'Attribution Source Site Name',
     107 => 'Attribution Author',
-    108 => 'Attribution'
+    108 => 'Attribution',
+    109 => 'Keywords',
+    110 => 'Enter a comma separated list of keywords'
 );
 
 ###############################################################################

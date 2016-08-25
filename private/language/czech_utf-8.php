@@ -514,7 +514,8 @@ $LANG04 = array(
     199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
     201 => 'Username',
-    202 => 'Follow Me'
+    202 => 'Follow Me',
+    203 => 'Activate Account'
 );
 
 ###############################################################################
@@ -586,7 +587,9 @@ $LANG08 = array(
     34 => 'Konec zprávy',
     35 => 'Bohužel tento uživatel nepřijímá žádné emaily.',
     36 => 'Dostáváte tuto zprávu, protože máte na %s objednán Denní přehled. Odstranění nebo změnu těchto nastavení proveďte prosím ve svém  <strong>Daily Digest</strong> nastavení <a href="%s/usersettings.php?mode=edit">Můj účet</a> - Content section.',
-    37 => 'Dostáváte tuto zprávu, protože máte na %s objednán Denní přehled. Odstranění nebo změnu těchto nastavení proveďte prosím ve svém %s/usersettings.php?mode=edit Můj účet - Content section.'
+    37 => 'Dostáváte tuto zprávu, protože máte na %s objednán Denní přehled. Odstranění nebo změnu těchto nastavení proveďte prosím ve svém %s/usersettings.php?mode=edit Můj účet - Content section.',
+    38 => 'sent you the following article...',
+    39 => 'Read Full Article'
 );
 
 ###############################################################################
@@ -1011,7 +1014,9 @@ $LANG24 = array(
     105 => 'Attribution Source URL',
     106 => 'Attribution Source Site Name',
     107 => 'Attribution Author',
-    108 => 'Attribution'
+    108 => 'Attribution',
+    109 => 'Keywords',
+    110 => 'Enter a comma separated list of keywords'
 );
 
 ###############################################################################
