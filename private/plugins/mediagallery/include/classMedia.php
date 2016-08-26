@@ -778,8 +778,8 @@ class Media {
             $cmtLinkArray = CMT_getCommentLinkWithCount( 'mediagallery', $this->id, $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id,$this->comments,0);
 
             if ( $this->type == 4 || ($this->type == 1 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 2 && $MG_albums[$this->album_id]->playback_type != 2) || ($this->type == 5 && $MG_albums[$this->album_id]->playback_type != 2)) {
-                $cmtLink  = $cmtLinkArray['link_with_count']; // '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
-                $cmtLink_alt = '';
+                $cmtLink_alt  = $cmtLinkArray['link_with_count']; // '<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
+                $cmtLink = '';
             }  else {
                 $cmtLink = ''; //$LANG_MG03['comments'];
                 $cmtLink_alt  = $cmtLinkArray['link_with_count']; //'<a href="' . $_MG_CONF['site_url'] . '/media.php?f=0' . '&amp;sort=' . $sortOrder . '&amp;s=' . $this->id . '">' . $LANG_MG03['comments'] . '</a>';
