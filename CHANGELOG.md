@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Modified the Login / My Account menu handling - Login now shows on the main menu bar
   - Media Gallery: Fixed issue where the original filename was not always properly captured on upload
   - Media Gallery: Fixed error where the download option did not work properly if the site was configured to discard original images
   - Fixed error where the What's New block would always display regardless of the Hide What's New when empty setting
