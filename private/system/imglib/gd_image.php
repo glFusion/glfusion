@@ -475,10 +475,13 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     }
     return array(true,'');
 }
-
+/*
+ * future enhancement
+ *
 function image_fix_orientation(&$image, $filename) {
     if ( function_exists('exif_read_data')) {
         $image = imagerotate($image, array_values([0, 0, 0, 180, 0, 0, -90, 0, 90])[@exif_read_data($filename)['Orientation'] ?: 0], 0);
     }
 }
+*/
 ?>
