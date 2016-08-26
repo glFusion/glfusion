@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Media Gallery: Fixed issue where the original filename was not always properly captured on upload
+  - Media Gallery: Fixed error where the download option did not work properly if the site was configured to discard original images
   - Fixed error where the What's New block would always display regardless of the Hide What's New when empty setting
   - Informational messages will now display as a modal (UIKIT based themes only)
   - Refactored outbound HTML emails - improvements for displaying across larger array of devices
