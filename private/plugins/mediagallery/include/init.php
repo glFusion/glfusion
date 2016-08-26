@@ -212,7 +212,7 @@ function MG_genericError( $errorMessage ) {
 
 function MG_replace_accents($str) {
 //    $str = htmlentities($str, ENT_QUOTES, COM_getEncodingt());
-    $str = preg_replace("/[^a-z0-9-]/", "-", strtolower($str));
+    $str = preg_replace("/[^a-z0-9-.]/", "-", strtolower($str));
     return $str;
 }
 
