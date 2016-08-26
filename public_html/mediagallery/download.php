@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Download objects directly                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -94,6 +94,9 @@ if ( $numRows > 0 ) {
     $row = DB_fetchArray($result);
     if ( $row['media_original_filename'] != "" ) {
         $filename = $row['media_original_filename'];
+        if ( strpos($filename,".") === false ) {
+            $filename = $filename .'.'.$row['media_mime_ext'];
+        }
     } else {
         $filename = $row['media_filename'] . '.' . $row['media_mime_ext'];
     }
@@ -110,20 +113,51 @@ if ( $numRows > 0 ) {
     } else {
         $mime_type = $row['mime_type'];
     }
+
+    if ( $row['media_type'] == 0 ) {
+        if ( $_MG_CONF['discard_original'] == 1 ) {
+            foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext) ) {
+                    $download_file = $_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext;
+                    $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
+                    break;
+                }
+            }
+        } else {
+            foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext) ) {
+                    $download_file = $_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext;
+                    $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
+                    break;
+                }
+            }
+        }
+    } else {
+        $download_file = $_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+        if ( !file_exists($download_file)) {
+            $download_file = $_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+        }
+    }
+
     if (!$MG_albums[0]->owner_id) {
         $media_views = $row['media_views'] + 1;
         DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . DB_escapeString($mid) . "'");
     }
+
+    ob_end_flush();
     header("Pragma: public");
     header("Expires: 0");
     header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
+    if (!$_CONF['cookiesecure']) {
+        header('Pragma: no-cache');
+    }
     header("Cache-Control: private",false);
     header("Content-type:" . $mime_type);
     header("Content-Disposition: attachment; filename=\"" . $filename . "\";");
     header("Content-Transfer-Encoding: binary");
-    header("Content-Length: " . filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']));
+    header("Content-Length: " . filesize($download_file));
 
-    $fp = fopen($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],'r');
+    $fp = fopen($download_file,'r');
     if ( $fp != NULL ) {
         while (!feof($fp)) {
             $buf = fgets($fp, 8192);
