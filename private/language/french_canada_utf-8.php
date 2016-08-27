@@ -1602,7 +1602,8 @@ $MESSAGE = array(
     519 => 'Vous êtes déjà abonné à cette notification alimentation.',
     520 => 'Vous avez été abonné à cette notification alimentation.',
     521 => 'Vous avez été avec succès non souscrites à partir du flux de notification.',
-    522 => 'Remote account has been successfully merged with existing local account'
+    522 => 'Remote account has been successfully merged with existing local account',
+    600 => 'The Development Update has completed - Please validate if any plugins needs to be updated'
 );
 
 ###############################################################################
