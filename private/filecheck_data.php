@@ -534,6 +534,8 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/css/ui-uikit'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/css/ui-uikit/images'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/custom'),
+    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/email'),
+    array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/custom'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/fonts'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/images'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/layout/cms/images/admin'),
@@ -790,6 +792,7 @@ $glfDir = array(
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/polls/images'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/staticpages'),
     array( 'test' => 'R', 'preq' => 'R', 'path' => 'public_html/staticpages/images'),
+
 );
 
 // test: 'E'=must exist
@@ -4769,6 +4772,14 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/digest_story_text.thtml'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/digest_text.thtml'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/directory.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/custom/index.html'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/index.html'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/mailstory_html.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/mailstory_text.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/mailtemplate_html.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/mailtemplate_text.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/newuser_template_html.thtml'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/email/newuser_template_text.thtml'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/errormessage.html'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/featuredstorytext.thtml'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/layout/cms/fonts/fontawesome-webfont.ttf'),
