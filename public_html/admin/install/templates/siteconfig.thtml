@@ -191,6 +191,14 @@ $_SYSTEM['max_captcha_atttempts'] = {max_captcha_atttempts};
 $_SYSTEM['custom_topic_templates'] = {custom_topic_templates};
 
 // +--------------------------------------------------------------------------+
+// | Information Alert Timeout                                                |
+// |                                                                          |
+// | The number of milliseconds to display the informational alerts.          |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['alert_timeout'] = {alert_timeout};
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |

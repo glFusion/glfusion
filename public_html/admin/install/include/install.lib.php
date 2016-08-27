@@ -2303,6 +2303,7 @@ function INST_doSiteConfigUpgrade() {
         'max_captcha_atttempts'       => 4,
         'custom_topic_templates'      => false,
         'token_ttl'                   => 1200,
+        'alert_timeout'               => 4000,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -2350,6 +2351,7 @@ function INST_doSiteConfigUpgrade() {
         'default_charset'             => $_NEWSYSCONF['default_charset'],
         'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
         'token_ttl'                   => $_NEWSYSTEM['token_ttl'],
+        'alert_timeout'               => $_NEWSYSTEM['alert_timeout'],
     ));
 
     if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {
