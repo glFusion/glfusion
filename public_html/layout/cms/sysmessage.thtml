@@ -1,7 +1,7 @@
 {!!if {type}=='info' !!}
 <script>
 	jQuery(document).ready(function($) {
-		$.UIkit.notify("{message}",{status:'success', timeout: 3000});
+		$.UIkit.notify("{message}",{status:'success', timeout: {timeout}});
 	});
 </script>
 {!else}

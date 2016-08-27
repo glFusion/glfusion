@@ -3877,11 +3877,6 @@ function COM_setMsg( $msg, $type='info' )
 */
 function COM_getMessage()
 {
-    static $called = 0;
-
-    if ( $called ) {
-        return;
-    }
     $msg = 0;
     if ( isset($_POST['msg']) ) {
         $msg = COM_applyFilter($_POST['msg'],true);
@@ -3891,7 +3886,6 @@ function COM_getMessage()
         $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
         SESS_unSet('glfusion.infomessage');
     }
-    $called = 1;
     return $msg;
 }
 
@@ -3908,9 +3902,13 @@ function COM_getMessage()
 */
 function COM_showMessageText($message, $title = '', $persist = false, $type='')
 {
-    global $_CONF, $_USER, $MESSAGE, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_SYSTEM, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
+
+    if ( !isset($_SYSTEM['alert_timeout'])) {
+        $_SYSTEM['alert_timeout'] = 4000;
+    }
 
     $dt = new Date('now',$_USER['tzid']);
 
@@ -3956,6 +3954,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
                     'type'          => $type,
                     'persist'       => $persist,
                     'id'            => $id,
+                    'timeout'       => $_SYSTEM['alert_timeout'],
         ));
         $T->parse( 'final', 'message' );
         $retval = $T->finish( $T->get_var( 'final' ));
@@ -3999,6 +3998,7 @@ function COM_showMessage($msg, $plugin = '', $title = '', $persist = false,$type
             $retval .= COM_showMessageText($message, $title, $persist,$type);
         }
     }
+    unset($_GET['msg']);
 
     return $retval;
 }
