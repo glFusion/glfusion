@@ -1602,6 +1602,7 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account',
+    600 => 'The Development Update has completed - Please validate if any plugins needs to be updated',
 );
 
 ###############################################################################
