@@ -199,6 +199,21 @@ $_SYSTEM['custom_topic_templates'] = false;
 $_SYSTEM['alert_timeout'] = 4000;
 
 // +--------------------------------------------------------------------------+
+// | Information Alert Position                                               |
+// |                                                                          |
+// | Specifies where the information alert is displayed - valid values are:   |
+// |                                                                          |
+// | 'top-center'                                                             |
+// | 'top-left'                                                               |
+// | 'top-right'                                                              |
+// | 'bottom-center'                                                          |
+// | 'bottom-left'                                                            |
+// | 'bottom-right'                                                           |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['alert_position'] = 'top-right';
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |

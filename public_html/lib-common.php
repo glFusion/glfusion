@@ -3909,6 +3909,9 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
     if ( !isset($_SYSTEM['alert_timeout'])) {
         $_SYSTEM['alert_timeout'] = 4000;
     }
+    if ( !isset($_SYSTEM['alert_position'])) {
+        $_SYSTEM['alert_position'] = 'top-right';
+    }
 
     $dt = new Date('now',$_USER['tzid']);
 
@@ -3955,6 +3958,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='')
                     'persist'       => $persist,
                     'id'            => $id,
                     'timeout'       => $_SYSTEM['alert_timeout'],
+                    'position'      => $_SYSTEM['alert_position'],
         ));
         $T->parse( 'final', 'message' );
         $retval = $T->finish( $T->get_var( 'final' ));
