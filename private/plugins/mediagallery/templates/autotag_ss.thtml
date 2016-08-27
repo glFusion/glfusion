@@ -1,11 +1,18 @@
 {# begin {templatelocation} #}
-<div style="{float}padding:3px;{margin-right}width:{framewidth}px;{border}text-align:center;">
-  <div class="tcycle" style="float:left;text-align:center;vertical-align:middle;margin:5px;width:{maxwidth}px;height:{maxheight}px;position:relative;">
-    {pics}
-  </div>
-  <div style="clear:both;"></div>
-  <div style="width: {width}px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
-    {caption}
-  </div>
+<div class="uk-width-1-1" style="{float}max-width:{maxwidth}px;padding:3px;{margin-right};">
+	<div class="uk-slidenav-position" style="{!if border}border: 1px solid #ddd;{!endif}padding:3px;" data-uk-slideshow="{autoplay:true, animation: 'scale'}">
+		<ul class="uk-slideshow">
+<!-- BEGIN slides -->
+			<li class="uk-vertical-align-top">
+				<figure class="uk-width-1-1">
+					<img class="uk-width-1-1" src="{img_url}">
+				</figure>
+			</li>
+<!-- END slides -->
+		</ul>
+		<div style="text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
+			{caption}
+		</div>
+	</div>
 </div>
 {# end {templatelocation} #}

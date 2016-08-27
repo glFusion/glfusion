@@ -1036,6 +1036,9 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 $sql = "SELECT m.media_filename,m.media_mime_ext,m.remote_url FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
                        " ON ma.media_id=m.media_id WHERE ma.album_id='" . DB_escapeString($aid) . "' AND m.media_type=0 AND m.include_ss=1 ORDER BY ma.media_order DESC";
                 $result = DB_query($sql);
+
+                $T->set_block('tag','slides','ss');
+
                 while ($row = DB_fetchArray($result)) {
                     switch ( $src ) {
                         case 'orig' :
@@ -1118,6 +1121,14 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     } else {
                         $pics .= '<img class="slideshowThumbnail' . $ss_count . $active .  ' '.$classes.'". src="' . $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext . '" alt="" style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;position:absolute;left:0px;top:0px;" />' . LB;
                     }
+
+                    $T->set_var(array(
+                        'img_url'   => $_MG_CONF['mediaobjects_url'] . '/' . $src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $ext,
+                        'img_width' => $newwidth,
+                        'img_height' => $newheight,
+                    ));
+                    $T->parse('ss','slides',true);
+
                 }
                 if ( $delay <= 0 ) {
                     $delay = 10;
