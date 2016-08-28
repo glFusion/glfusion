@@ -24,7 +24,7 @@
 {!endif}
 
 	<div class="uk-form-row uk-text-center">
-		<button class="uk-button uk-button-primary uk-form-width-small" type="submit" value="{lang_login}" rel="nofollow">{lang_login}</button>
+		<button class="uk-button uk-button-primary uk-form-width-small" type="submit" value="{lang_login}">{lang_login}</button>
 	</div>
 
 	<div class="uk-form-row">
