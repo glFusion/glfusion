@@ -30,22 +30,19 @@
 
 		<figure class="uk-overlay uk-overlay-hover">
 			<a href="{url}">
-				<img class="uk-overlay-scale" src="{story_image}" class="min-height:200px;">
+				<img class="uk-overlay-scale" src="{story_image}" alt="">
 			</a>
-			<figcaption class="uk-overlay-panel uk-overlay-bottom uk-ignore uk-overlay-background">
-				<p>
+			<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
 {!if titlelink}
 					<a class="uk-hover" href="{url}" style="color:#fff;text-decoration:none;">
 {!endif}
-						{title}
+						<div>{title}</div>
 {!if subtitle}
-						<br />
-						{subtitle}
+						<div>{subtitle}</div>
 {!endif}
 {!if titlelink}
 					</a>
 {!endif}
-				</p>
 {!if meta}
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-top-remove uk-margin-bottom">
 					<li>{lang_by} {author}</li>

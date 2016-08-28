@@ -30,7 +30,7 @@
 			<article class="uk-article tm-headline">
 {!if story_image}
 				<a href="{url}">
-					<img src="{story_image}" class="uk-thumbnail uk-thumbnail-expand">
+					<img src="{story_image}" class="uk-thumbnail uk-thumbnail-expand" alt="">
 				</a>
 {!endif}
 				<header>
@@ -39,8 +39,9 @@
 						<a href="{url}">
 {!endif}
 							{title}
-
+{!if subtitle}
 							<h3>{subtitle}</h3>
+{!endif}
 {!if titlelink}
 						</a>
 {!endif}

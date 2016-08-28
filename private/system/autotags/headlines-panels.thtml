@@ -29,16 +29,18 @@
 		<div class="uk-panel uk-panel-box">
 {!if story_image}
 			<a href="{url}"><div class="uk-panel-teaser">
-				<img src="{story_image}" class="">
-			</a></div>
+				<img src="{story_image}" alt="">
+			</a>
 {!endif}
 			<p>
 {!if titlelink}
 				<a class="uk-text" href="{url}">
 {!endif}
 					{title}
+{!if subtitle}
 					<br />
 					{subtitle}
+{!endif}
 {!if titlelink}
 				</a>
 {!endif}

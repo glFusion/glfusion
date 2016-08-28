@@ -6,20 +6,19 @@
 		<li class="uk-vertical-align-top">
 			<figure class="uk-overlay uk-overlay-hover uk-width-1-1">
 				<a href="{url}">
-					<img class="uk-width-1-1" src="{story_image}">
+					<img class="uk-width-1-1" src="{story_image}" alt="">
 				</a>
-				<figcaption class="uk-overlay-panel uk-overlay-bottom uk-ignore uk-overlay-background">
-					<p>
+				<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
 {!if titlelink}
 						<a class="uk-text" href="{url}" style="color:#fff;text-decoration:none;">
 {!endif}
-							{title}
-							<br />
-							{subtitle}
+							<h1 class="tm-article-title">{title}</h1>
+{!if subtitle}
+							<h3>{subtitle}</h3>
+{!endif}
 {!if titlelink}
 						</a>
 {!endif}
-					</p>
 {!if meta}
 					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-top-remove uk-margin-bottom">
 						<li>{lang_by} {author}</li>
