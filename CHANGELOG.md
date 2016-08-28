@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - HTML 5 Validation updates
   - Media Gallery: Modified slideshow auto tag to be responsive with UIKIT based themes
   - Modified the Login / My Account menu handling - Login now shows on the main menu bar
   - Media Gallery: Fixed issue where the original filename was not always properly captured on upload
