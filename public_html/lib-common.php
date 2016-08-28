@@ -451,7 +451,11 @@ if (empty($LANG_DIRECTION)) {
 }
 
 if ( isset($LANG_LOCALE)) {
-    $_CONF['iso_lang'] = $LANG_LOCALE;
+    $localeArray = explode('_',$LANG_LOCALE);
+    $_CONF['iso_lang'] = $localeArray[0];
+    // special checks
+    if ( $LANG_LOCALE == 'zh_CN') $_CONF['iso_lang'] = 'zh-Hans';
+    if ( $LANG_LOCALE == 'zh_TW') $_CONF['iso_lang'] = 'zh-Hant';
 } else {
     // Set the ISO 2 digit code for language
     switch ($_CONF['language']) {
@@ -473,11 +477,11 @@ if ( isset($LANG_LOCALE)) {
             break;
            case 'chinese_traditional' :
            case 'chinese_traditional_utf-8' :
-               $_CONF['iso_lang'] = 'zh-tw';
+               $_CONF['iso_lang'] = 'zh-Hant';
                break;
            case 'chinese_simplified' :
            case 'chinese_simplified_utf-8' :
-               $_CONF['iso_lang'] = 'zh';
+               $_CONF['iso_lang'] = 'zh-Hans';
                break;
         case 'croatian' :
         case 'croatian_utf-8' :
@@ -906,7 +910,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header = new Template( $_CONF['path_layout'] );
     $header->set_file('header','htmlheader.thtml');
 
-    $header->set_var('lang_locale',$LANG_LOCALE);
+    $header->set_var('lang_locale',$_CONF['iso_lang']);
 
     $cacheID = SESS_getVar('cacheID');
     if ( empty($cacheID) || $cacheID == '' ) {
