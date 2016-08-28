@@ -283,7 +283,7 @@ class dbBackup
         if ( $timeout < 0 ) {
             $timeout = min($maxExecutionTime,30);
         }
-        if ( $timeout >= 60 ) $timeout = 50;
+        if ( $timeout > 10 ) $timeout = 10;
 
         // open the backup file in append mode
         if ( $this->open($this->backup_filename,'a') === false ) {
@@ -391,13 +391,11 @@ class dbBackup
             }
             $this->stow(" \n" . $insert . implode(', ', $values) . ');');
             $recordCounter++;
-            if ( ( $sessionCounter % 100 ) == 0 ) {
-                $checkTimer = time();
-                $elapsedTime = $checkTimer - $timerStart;
-                if ( $elapsedTime > $timeout) {
-                    $this->close();
-                    return array(1,$sessionCounter, $recordCounter);
-                }
+            $checkTimer = time();
+            $elapsedTime = $checkTimer - $timerStart;
+            if ( $elapsedTime > $timeout || $sessionCounter > 10000 ) {
+                $this->close();
+                return array(1,$sessionCounter, $recordCounter);
             }
             $sessionCounter++;
         }
