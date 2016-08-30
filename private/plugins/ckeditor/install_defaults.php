@@ -92,7 +92,7 @@ function plugin_initconfig_ckeditor()
         $c->add('filemanager_default_view_mode', 'grid', 'select', 0, 2, 2, 30, true, 'ckeditor');
         $c->add('filemanager_date_format', 'Y-m-d H:i:s', 'text', 0, 2, NULL, 40, true, 'ckeditor');
         $c->add('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 50, true, 'ckeditor');
-        $c->add('filemanager_dirperm', '0664', 'text', 0, 2, NULL, 60, true, 'ckeditor');
+        $c->add('filemanager_dirperm', '0775', 'text', 0, 2, NULL, 60, true, 'ckeditor');
     }
 
     return true;
