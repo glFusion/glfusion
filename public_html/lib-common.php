@@ -3904,7 +3904,7 @@ function COM_getMessage()
 * @return   string              HTML block with message
 *
 */
-function COM_showMessageText($message, $title = '', $persist = false, $type='')
+function COM_showMessageText($message, $title = '', $persist = false, $type='info')
 {
     global $_CONF, $_USER, $_SYSTEM, $MESSAGE, $_IMAGE_TYPE;
 
