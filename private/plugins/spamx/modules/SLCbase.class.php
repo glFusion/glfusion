@@ -57,7 +57,7 @@ class SLCbase {
         preg_match_all("/<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"/", $post, $matches);
         for ($i = 0; $i < count ($matches[0]); $i++) {
             $url = $matches[1][$i];
-            if (strpos($url, $_CONF['site_url']) !== false) {
+            if ($url === "" || strpos($url, $_CONF['site_url']) !== false) {
                 // do not process links from this site
                 continue;
             } else {
