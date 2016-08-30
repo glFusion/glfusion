@@ -1142,6 +1142,7 @@ function STORY_renderImages($sid, $text)
             $parsedText = str_replace($norm,  COM_createLink($img_noalign,   $lLink_url, $lLink_attr), $parsedText);
             $parsedText = str_replace($left,  COM_createLink($img_leftalgn,  $lLink_url, $lLink_attr), $parsedText);
             $parsedText = str_replace($right, COM_createLink($img_rightalgn, $lLink_url, $lLink_attr), $parsedText);
+            $parsedText = str_replace("a href","a data-uk-lightbox href",$parsedText);
         } else {
             // We aren't wrapping our image tags in hyperlinks, so
             // just replace the [imagex_mode] tags with the image:
@@ -1186,7 +1187,7 @@ function service_submit_story($args, &$output, &$svc_msg)
     global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS;
 
     if (!SEC_hasRights('story.edit')) {
-        $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30],true);
+        $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30],true,'error');
 
         return PLG_RET_AUTH_FAILED;
     }
@@ -1376,11 +1377,11 @@ function service_submit_story($args, &$output, &$svc_msg)
             return PLG_RET_ERROR;
 
         case STORY_EXISTING_NO_EDIT_PERMISSION:
-            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30]);
+            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30],true,'error');
             COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
             return PLG_RET_PERMISSION_DENIED;
         case STORY_NO_ACCESS_PARAMS:
-            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30]);
+            $output .= COM_showMessageText($MESSAGE[31], $MESSAGE[30],true,'error');
             COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
             return PLG_RET_PERMISSION_DENIED;
         case STORY_EMPTY_REQUIRED_FIELDS:
@@ -1440,7 +1441,7 @@ function service_submit_story($args, &$output, &$svc_msg)
 
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
                 $output = COM_siteHeader ('menu', $LANG24[30]);
-                $output .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
+                $output .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true,'error');
                 $output .= COM_siteFooter ();
                 echo $output;
                 exit;
@@ -1457,13 +1458,13 @@ function service_submit_story($args, &$output, &$svc_msg)
             $upload->setPerms('0644');
             $filenames = array();
 
-                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . DB_escapeString($sid) ."'";
-        	        $result = DB_query( $sql,1 );
-        	        $row = DB_fetchArray( $result );
-        	        $ai_img_num = $row['ai_img_num'];
-        	        if ( $ai_img_num < 1 ) {
-        	            $ai_img_num = 1;
-        	        }
+            $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . DB_escapeString($sid) ."'";
+	        $result = DB_query( $sql,1 );
+	        $row = DB_fetchArray( $result );
+	        $ai_img_num = $row['ai_img_num'];
+	        if ( $ai_img_num < 1 ) {
+	            $ai_img_num = 1;
+	        }
 
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
                 $curfile['name'] = '';
@@ -1485,7 +1486,7 @@ function service_submit_story($args, &$output, &$svc_msg)
 //@TODO - better error handling
             if ($upload->areErrors()) {
                 $retval = COM_siteHeader('menu', $LANG24[30]);
-                $retval .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true);
+                $retval .= COM_showMessageText($upload->printErrors(false),$LANG24[30],true,'error');
                 $retval .= STORY_edit($sid,'error');
                 $retval .= COM_siteFooter();
                 echo $retval;
@@ -1515,7 +1516,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                     next($errors);
                 }
 //@TODO - use return here...
-                $output .= COM_showMessageText($eMsg,$LANG24[54],true);
+                $output .= COM_showMessageText($eMsg,$LANG24[54],true,'error');
                 $output .= STORY_edit($sid,'error');
                 $output .= COM_siteFooter();
                 echo $output;
