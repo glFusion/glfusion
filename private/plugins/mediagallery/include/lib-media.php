@@ -1597,7 +1597,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
 function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sortID=0,$spage=0) {
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $LANG_MG04, $LANG_ACCESS, $LANG01, $album_jumpbox, $glversion, $_USER, $_MG_USERPREFS;
-    global $_DB_dbms, $LANG04,$ratedIds;
+    global $_DB_dbms, $LANG04,$ratedIds, $LANG_LOCALE;
 
     USES_lib_social();
 
@@ -1712,9 +1712,14 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $permalink = $_MG_CONF['site_url'] . '/media.php?s='.$srcID;
     $outputHandle->addLink("canonical",$permalink);
+
+    $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+    $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
+
     $outputHandle->addMeta('property','og:title',$ptitle);
     $outputHandle->addMeta('property','og:type',$ogType);
     $outputHandle->addMeta('property','og:url',$permalink);
+
     $T->set_var('permalink',$permalink);
     $T->set_file (array(
         'shutterfly'    => 'digibug.thtml',
@@ -2100,6 +2105,30 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         'album_link'    =>  $album_link,
     ));
     $outputHandle->addMeta('property','og:image',$raw_image);
+    $outputHandle->addMeta('property','og:image:width',$raw_image_width);
+    $outputHandle->addMeta('property','og:image:height',$raw_image_height);
+    $outputHandle->addMeta('property','og:image:type',$media[$mediaObject]['mime_type']);
+
+    // look for twitter social site config
+    if ( $media[$mediaObject]['media_type'] == 0 ) { // only for images
+        $twitterSiteUser = '';
+        $sql = "SELECT * FROM {$_TABLES['social_follow_services']} as ss LEFT JOIN
+                {$_TABLES['social_follow_user']} AS su ON ss.ssid = su.ssid
+                WHERE su.uid = -1 AND ss.enabled = 1 AND ss.service_name='twitter'";
+        $result = DB_query($sql);
+        $numRows = DB_numRows($result);
+        if ( $numRows > 0 ) {
+            $row = DB_fetchArray($result);
+            $twitterSiteUser = $row['ss_username'];
+            $outputHandle->addMeta('property','twitter:card','summary_large_image');
+            $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
+            $outputHandle->addMeta('property','twitter:title',$ptitle);
+            $imageDesc = (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '';
+            $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($imageDesc,ENT_QUOTES,COM_getEncodingt()));
+            $outputHandle->addMeta('property','twitter:image',$raw_image);
+        }
+    }
+
     $social_icons = SOC_getShareIcons();
     $T->set_var('social_share',$social_icons);
 
