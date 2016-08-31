@@ -66,7 +66,7 @@ $_CP_DEFAULT['logging'] = 0;
 $_CP_DEFAULT['gfxPath'] = '';
 $_CP_DEFAULT['publickey']  = '';
 $_CP_DEFAULT['privatekey'] = '';
-$_CP_DEFAULT['recaptcha_theme'] = 'white';
+$_CP_DEFAULT['recaptcha_theme'] = 'light';
 
 
 /**
@@ -113,13 +113,6 @@ function plugin_initconfig_captcha()
                 0, 0, 0, 44, true, 'captcha');
         $c->add('recaptcha_theme', $_CP_DEFAULT['recaptcha_theme'],'select',
                 0, 0, 6, 46, true, 'captcha');
-/*
-        $c->add('ay_publickey', $_CP_DEFAULT['publickey'],'text',
-                0, 0, 0, 50, true, 'captcha');
-        $c->add('ay_privatekey', $_CP_DEFAULT['privatekey'],'text',
-                0, 0, 0, 51, true, 'captcha');
-*/
-
         $c->add('debug', $_CP_DEFAULT['debug'], 'select',
                 0, 0, 0, 50, true, 'captcha');
         $c->add('logging', $_CP_DEFAULT['logging'],'select',

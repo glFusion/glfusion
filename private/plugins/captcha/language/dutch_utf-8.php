@@ -128,7 +128,7 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Statische Afbeeldingen' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Standaard' => 'default', 'Simpel' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('clean' => 'clean', 'red' => 'red', 'white' => 'white', 'blackglass' => 'blackglass')
+    6 => array('light' => 'light','dark' => 'dark'),
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update succesvol gereed.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';

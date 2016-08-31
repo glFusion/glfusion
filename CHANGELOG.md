@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - CAPTCHA - Fixed theme selection for reCaptcha
   - Updated UIKIT to v2.27.1
   - Fixed URL detection error in Spam-X link counter
   - HTML 5 Validation updates

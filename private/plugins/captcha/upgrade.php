@@ -6,8 +6,8 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
-// |                                           6                               |
+// | Copyright (C) 2005-2016 by the following authors:                        |
+// |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
@@ -121,6 +121,9 @@ function captcha_upgrade()
             if ( $_CP_CONF['gfxDriver'] == 5 ) {
                 $c->set('gfxDriver',6,'captcha');
             }
+        case '3.5.2' :
+            $c = config::get_instance();
+            $c->set('recaptcha_theme','light','captcha');
 
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");

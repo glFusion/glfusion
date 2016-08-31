@@ -542,7 +542,7 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         $T->set_var('lang_captcha_help', $LANG_CP00['captcha_help']);
     }
     if ( $_CP_CONF['gfxDriver'] == 3 ) {
-        $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], NULL));
+        $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], $_CP_CONF['recaptcha_theme']));
         $T->set_var('recaptcha_theme',$_CP_CONF['recaptcha_theme']);
     }
 
@@ -552,12 +552,13 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
     return $retval;
 }
 
-function recaptcha_get_html($pkey,$other)
+function recaptcha_get_html($pkey,$theme = 'light')
 {
     global $_CONF;
+
     $retval = '';
     $retval .= '<div class="g-recaptcha" data-sitekey="'
-             . $pkey . '" data-callback="cp_enable"></div>'
+             . $pkey . '" data-callback="cp_enable" data-theme="'.$theme.'"></div>'
              . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
              . '</script>'
              . '<br>';
