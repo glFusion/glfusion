@@ -19,8 +19,8 @@ Disallow: /forum/createtopic.php
 Disallow: /forum/images/
 Disallow: /forum/memberlist.php
 Disallow: /forum/print.php
-Disallow: /images/
-Disallow: /layout/nouveau/
+Disallow: /layout/vintage/
+Disallow: /layout/cms/
 Disallow: /webservices/
 Disallow: /rater.php
 Disallow: /rater_rpc.php
