@@ -1,5 +1,4 @@
 {# begin {templatelocation} #}
-<div class="infinite-item">
 {!!if {story_display} == 'article' !!}
 	<article class="uk-article tm-article uk-margin-small-bottom">
 {!else}
@@ -144,5 +143,4 @@
 {!endif}
 		</div>
 	</article>
-</div>
 {# end {templatelocation} #}
