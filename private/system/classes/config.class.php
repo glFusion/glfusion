@@ -552,7 +552,7 @@ class config {
      *                        configuration - if it is passed, it will display
      *                        the "Changes" message box.
      */
-    function get_ui($grp, $sg='0', $change_result=null)
+    function get_ui($grp, $sg='0', $activeTab = '', $change_result=null)
     {
         global $_CONF, $LANG_CONFIG, $LANG_configsubgroups, $LANG_configsections;
 
@@ -667,7 +667,7 @@ class config {
                                                    $e['selectionArray'], false,
                                                    $e['reset']);
                 }
-                $this->_UI_get_fs($grp, $sg, $fs_contents, $fset, $t);
+                $this->_UI_get_fs($grp, $sg, $activeTab, $fs_contents, $fset, $t);
             }
         }
 
@@ -707,7 +707,7 @@ class config {
         }
     }
 
-    function _UI_get_fs($group, $sg, $contents, $fs_id, &$t)
+    function _UI_get_fs($group, $sg, $activetab,$contents, $fs_id, &$t)
     {
         global $_TABLES, $LANG_fs;
 
@@ -728,6 +728,13 @@ class config {
             $t->set_var('tab',$fs_index);
         }
         $t->set_var('index',$fs_index);
+
+        if ( 'sg_'.$fs_index == $activetab ) {
+            $class = 'uk-active';
+        } else {
+            $class = '';
+        }
+        $t->set_var('class',$class);
         $t->set_var('fs_notes', '');
         $t->parse('sg_contents', 'fieldset', true);
         $t->parse('sg_tabs', 'tabs',true);

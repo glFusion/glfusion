@@ -57,9 +57,11 @@ if (array_key_exists('form_submit', $_POST) && SEC_checkToken()) {
         CTL_clearCache();
     }
     $sub_group = array_key_exists('sub_group', $_POST) ? COM_applyFilter($_POST['sub_group']) : null;
-    echo $config->get_ui($conf_group, $sub_group, $result);
+    $activeTab = array_key_exists('activetab',$_POST) ? COM_applyFilter($_POST['activetab']) : '';
+    echo $config->get_ui($conf_group, $sub_group, $activeTab,$result);
 } else {
     $sub_group = array_key_exists('subgroup', $_POST) ? COM_applyFilter($_POST['subgroup']) : null;
-    echo $config->get_ui($conf_group, $sub_group);
+    $activeTab = array_key_exists('activetab',$_POST) ? COM_applyFilter($_POST['activetab']) : '';
+    echo $config->get_ui($conf_group, $sub_group,$activeTab);
 }
 ?>
