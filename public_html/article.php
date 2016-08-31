@@ -244,33 +244,15 @@ if ($A['count'] > 0) {
         }
         $metaDesc = trim($shortComment).$tailString;
 
-        // look for twitter social site config
-
-        $twitterSiteUser = '';
-
-        $sql = "SELECT * FROM {$_TABLES['social_follow_services']} as ss LEFT JOIN
-                {$_TABLES['social_follow_user']} AS su ON ss.ssid = su.ssid
-                WHERE su.uid = -1 AND ss.enabled = 1 AND ss.service_name='twitter'";
-
-        $result = DB_query($sql);
-        $numRows = DB_numRows($result);
-        if ( $numRows > 0 ) {
-            $row = DB_fetchArray($result);
-            $twitterSiteUser = $row['ss_username'];
-            $outputHandle->addMeta('property','twitter:card','summary');
-            $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
-        }
-
         $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
         $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
         $outputHandle->addMeta('property','og:title',$pagetitle);
         $outputHandle->addMeta('property','og:type','article');
         $outputHandle->addMeta('property','og:url',$permalink);
+        $metaStoryImage = '';
         if ( $story_image != '' ) {
-            if ( $twitterSiteUser != "" ) {
-                $outputHandle->addMeta('property','twitter:image',$_CONF['site_url'].$story_image);
-            }
             $outputHandle->addMeta('property','og:image',$_CONF['site_url'].$story_image);
+            $metaStoryImage = $_CONF['site_url'].$story_image;
             if ( $story_image[0] == '/') {
                 $siPath = substr($story_image,1);
             } else {
@@ -285,8 +267,10 @@ if ($A['count'] > 0) {
         } else {
             if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('introtext'), $arrResult)) {
                 $outputHandle->addMeta('property','og:image',$arrResult[2]);
+                $metaStoryImage = $arrResult[2];
             } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->DisplayElements('bodytext'), $arrResult)) {
                 $outputHandle->addMeta('property','og:image',$arrResult[2]);
+                $metaStoryImage = $arrResult[2];
             }
         }
         if ( $story->DisplayElements('subtitle') != "" ) {
@@ -296,6 +280,35 @@ if ($A['count'] > 0) {
         }
 
         $outputHandle->addMeta('name','description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+
+        // look for twitter social site config
+
+        $twitterSiteUser = '';
+        $sql = "SELECT * FROM {$_TABLES['social_follow_services']} as ss LEFT JOIN
+                {$_TABLES['social_follow_user']} AS su ON ss.ssid = su.ssid
+                WHERE su.uid = -1 AND ss.enabled = 1 AND ss.service_name='twitter'";
+
+        $result = DB_query($sql);
+        $numRows = DB_numRows($result);
+        if ( $numRows > 0 ) {
+            $row = DB_fetchArray($result);
+            $twitterSiteUser = $row['ss_username'];
+            if ( $story_image != '' ) {
+                $outputHandle->addMeta('property','twitter:card','summary_large_image');
+            } else {
+                $outputHandle->addMeta('property','twitter:card','summary');
+            }
+            $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
+            $outputHandle->addMeta('property','twitter:title',$pagetitle);
+            if ( $story->DisplayElements('subtitle') != "" ) {
+                $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($story->DisplayElements('subtitle'),ENT_QUOTES,COM_getEncodingt()));
+            } else {
+                $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+            }
+            if ( $metaStoryImage != '' ) {
+                $outputHandle->addMeta('property','twitter:image',$metaStoryImage . '?' . rand());
+            }
+        }
 
         if (isset($_GET['msg'])) {
             $msg = (int) COM_applyFilter($_GET['msg'], true);
