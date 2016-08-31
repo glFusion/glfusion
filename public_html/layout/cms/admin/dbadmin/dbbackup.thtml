@@ -17,11 +17,6 @@
 <div class="uk-alert uk-alert-danger uk-margin">{struct_warning}</div>
 {!endif}
 
-{!if lang_last_backup}
-<p>{lang_last_lastbackup} : {last_lastbackup}</p>
-{!endif}
-
-
 <div id="dbbackup">
 	<form id="dbbackupform" class="uk-form" action="{site_admin_url}/database.php" method="post" style="display:inline;">
 		<input type="hidden" name="{action}" value="{action}">
