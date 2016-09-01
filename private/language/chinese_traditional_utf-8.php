@@ -2482,7 +2482,8 @@ $LANG_CONFIG = array(
     'changes_made' => '更改已成功地安置於',
     'title' => '設定管理',
     'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'enable' => 'Enable',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(

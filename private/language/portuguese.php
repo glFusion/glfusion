@@ -2478,7 +2478,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Changes were successfully made to',
     'title' => 'Configuration Manager',
     'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'enable' => 'Enable',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(

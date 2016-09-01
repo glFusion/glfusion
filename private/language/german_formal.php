@@ -2483,7 +2483,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Änderungen wurden erfolgreich übernommen',
     'title' => 'Konfiguration-Manager',
     'disable' => 'Funktion deaktivieren',
-    'enable' => 'Funktion aktivieren'
+    'enable' => 'Funktion aktivieren',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(

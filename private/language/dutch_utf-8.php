@@ -2486,7 +2486,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Wijzigingen zijn opgeslagen bij ',
     'title' => 'Instellingen',
     'disable' => 'Klik om deze optie uit te schakelen',
-    'enable' => 'Inschakelen'
+    'enable' => 'Inschakelen',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(

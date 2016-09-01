@@ -2482,7 +2482,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Spremembe so bile uspešno izvedene nad',
     'title' => 'Upravljavec nastavitev',
     'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'enable' => 'Enable',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(

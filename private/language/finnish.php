@@ -2482,7 +2482,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Muutokset tehtiin kohteeseen',
     'title' => 'Asetusten Hallinta',
     'disable' => 'Ota posi käytöstä klikkaamalla',
-    'enable' => 'Ota käyttöön'
+    'enable' => 'Ota käyttöön',
+    'search' => 'Search Configuration'
 );
 
 $LANG_configsections['Core'] = array(
