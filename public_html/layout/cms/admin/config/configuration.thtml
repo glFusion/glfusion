@@ -1,9 +1,11 @@
 {# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
+<script type="text/javascript" src="{site_url}/javascript/addons/autocomplete/jquery.autocomplete.min.js"></script>
 <div id="configuration">
-	<form class="uk-form" method="post" action="configuration.php" name="group">
+	<form id="config" class="uk-form" method="post" action="configuration.php" name="group">
 		<input type="hidden" value="{open_group}" name="conf_group">
 		<input type="hidden" value="" name="subgroup">
+		<input type="hidden" value="" name="activetab">
 		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 	</form>
 
@@ -11,6 +13,9 @@
 	<a href="#" class="uk-navbar-toggle" data-uk-offcanvas="{target:'#admin-side-config'}">
 	</a>
 	<div class="uk-navbar-content">{group_name} / {subgroup_active_name}</div>
+	<div class="uk-navbar-content uk-navbar-flip">
+		<input type="text" name="navconfigitem" id="navautocomplete">
+	</div>
 </nav>
 <div id="admin-side-config" class="uk-offcanvas uk-visible-small">
 	<div class="uk-offcanvas-bar">
@@ -22,7 +27,13 @@
 
 	<div class="uk-grid  uk-margin-large-bottom" data-uk-grid-margin>
 		<div class="uk-width-medium-1-4 uk-hidden-small">
-			<div class="uk-panel uk-panel-box">{config_menu}</div>
+
+			<div class="uk-panel uk-panel-box uk-margin-remove-bottom">
+				<div class="uk-panel-title">{lang_search}</div>
+				<input type="text" name="configitem" id="autocomplete"/>
+			</div>
+
+			<div class="uk-panel uk-panel-box uk-margin-small">{config_menu}</div>
 		</div>
 		<div class="uk-width-medium-3-4 uk-width-small-1-1">
 {!if change_block}
@@ -32,10 +43,11 @@
 				{change_block}
 			</div>
 {!endif}
-			<form class="uk-form uk-form-horizontal" action="{site_admin_url}/configuration.php" method="post" name="subgroup">
-				<input type="hidden" name="conf_group" value="{open_group}">
-				<input type="hidden" name="sub_group" value="{open_sg}">
-	  		<input type="hidden" value="" id="activetab" name="activetab">
+			<form id="formsubgroup" class="uk-form uk-form-horizontal" action="{site_admin_url}/configuration.php" method="post" name="subgroup">
+				<input type="hidden" id="conf_group" name="conf_group" value="{open_group}">
+				<input type="hidden" id="sub_group" name="sub_group" value="{open_sg}">
+	  		<input type="hidden" id="activetab" value="" id="activetab" name="activetab">
+	  		<input type="hidden" id="fieldname" value="" name="fieldname">
 				<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 				<div id="ce_{subgroup_name}">
 					<div id="tabs">
@@ -85,6 +97,10 @@
 	});
 
 	$(document).ready(function() {
+		var highlight = "{highlight}";
+		if ( highlight != "" ) {
+			$("#" + highlight).closest('tr').css('background-color','#FFFF00');
+		}
 		$('.tooltip_cfg').tooltipster({
 			contentAsHTML: true,
 			animation: 'fade',
@@ -107,6 +123,35 @@
 				});
 			}
 		});
+	});
+	var acdata = {autocomplete_data};
+	$('#autocomplete').devbridgeAutocomplete({
+    lookup: acdata,
+    groupBy: 'category',
+		formatResult: function (suggestion, currentValue) {
+			return suggestion.value;
+		},
+    onSelect: function (suggestion) {
+    	$('#conf_group').val(suggestion.data.group);
+			$('#sub_group').val(suggestion.data.sg);
+			$('#activetab').val(suggestion.data.tab);
+			$('#fieldname').val(suggestion.data.confvar);
+			$('#formsubgroup').submit();
+    }
+	});
+	$('#navautocomplete').devbridgeAutocomplete({
+    lookup: acdata,
+    groupBy: 'category',
+		formatResult: function (suggestion, currentValue) {
+			return suggestion.value;
+		},
+    onSelect: function (suggestion) {
+    	$('#conf_group').val(suggestion.data.group);
+			$('#sub_group').val(suggestion.data.sg);
+			$('#activetab').val(suggestion.data.tab);
+			$('#fieldname').val(suggestion.data.confvar);
+			$('#formsubgroup').submit();
+    }
 	});
 </script>
 {# end {templatelocation} #}

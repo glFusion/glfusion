@@ -1,6 +1,8 @@
 {# begin {templatelocation} #}
+<script>var activeTab = "{active_tab_index}";</script>
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
-<script type="text/javascript" src="{layout_url}/js/config.js"></script>
+{# <script type="text/javascript" src="{layout_url}/js/config.js"></script> #}
+<script type="text/javascript" src="{site_url}/javascript/addons/autocomplete/jquery.autocomplete.min.js"></script>
 <div id="configuration">
   <form method="post" action="configuration.php" name="group">
     <input type="hidden" value="{open_group}" name="conf_group" />
@@ -9,6 +11,12 @@
   </form>
   <table>
     <tr>
+			<td class="block-featured-left" style="vertical-align:top;padding-right:10px;">
+				<div>{lang_search}</div>
+				<input type="text" name="configitem" id="autocomplete"/>
+			</td>
+		</tr>
+		<tr>
       <td class="block-featured-left" style="vertical-align:top;padding-right:10px;">
         <div class="block-bg-left"> {config_menu} </div>
       </td>
@@ -17,15 +25,17 @@
           {lang_changes_made}:
           {change_block}
         </div>
-        <form action="{site_admin_url}/configuration.php" method="post" name="subgroup">
-          <input type="hidden" name="conf_group" value="{open_group}" />
-          <input type="hidden" name="sub_group" value="{open_sg}" />
+        <form id="formsubgroup" action="{site_admin_url}/configuration.php" method="post" name="subgroup">
+					<input type="hidden" id="conf_group" name="conf_group" value="{open_group}">
+					<input type="hidden" id="sub_group" name="sub_group" value="{open_sg}">
+		  		<input type="hidden" id="activetab" value="" id="activetab" name="activetab">
+		  		<input type="hidden" id="fieldname" value="" name="fieldname">
           <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
           <div id="ce_{subgroup_name}">
             <div id="tabs" style="background: none !important;">
               <ul>
 <!-- BEGIN tabs -->
-                <li><a href="#{index}">{tab}</a></li>
+                <li id="sg_{index}"><a href="#{index}">{tab}</a></li>
 <!-- END tabs -->
               </ul>
 <!-- BEGIN fieldset -->
@@ -59,8 +69,15 @@
   </table>
 </div>
 <script>
+var tabs = $("#tabs").tabs({
+  active: activeTab,
+});
 var ConfigDocUrl = '{confighelpurl}';
 $(document).ready(function() {
+	var highlight = "{highlight}";
+	if ( highlight != "" ) {
+		$("#" + highlight).closest('tr').css('background-color','#FFFF00');
+	}
   $('.tooltip_cfg').tooltipster({
     contentAsHTML: true,
     animation: 'fade',
@@ -84,5 +101,20 @@ $(document).ready(function() {
     }
   });
 });
+	var acdata = {autocomplete_data};
+	$('#autocomplete').devbridgeAutocomplete({
+    lookup: acdata,
+    groupBy: 'category',
+		formatResult: function (suggestion, currentValue) {
+			return suggestion.value;
+		},
+    onSelect: function (suggestion) {
+    	$('#conf_group').val(suggestion.data.group);
+			$('#sub_group').val(suggestion.data.sg);
+			$('#activetab').val(suggestion.data.tab);
+			$('#fieldname').val(suggestion.data.confvar);
+			$('#formsubgroup').submit();
+    }
+	});
 </script>
 {# end {templatelocation} #}

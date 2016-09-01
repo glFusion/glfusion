@@ -2482,7 +2482,8 @@ $LANG_CONFIG = array(
     'changes_made' => 'Changes were successfully made to',
     'title' => 'Configuration Manager',
     'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'enable' => 'Enable',
+    'search' => 'Search Configuration',
 );
 
 $LANG_configsections['Core'] = array(
@@ -2824,7 +2825,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_block' => 'Block Default Permission',
     'fs_webservices' => 'Webservices',
     'fs_caching' => 'Caching',
-    'fs_mulitlanguage' => 'Multiple Language Support - See <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
+    'fs_mulitlanguage' => 'Multiple Language Support',
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',

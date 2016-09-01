@@ -49,7 +49,7 @@ if (array_key_exists('set_action', $_POST) && SEC_checkToken()){
         }
     }
 }
-
+//var_dump($_POST);exit;
 if (array_key_exists('form_submit', $_POST) && SEC_checkToken()) {
     $result = null;
     if (! array_key_exists('form_reset', $_POST)) {

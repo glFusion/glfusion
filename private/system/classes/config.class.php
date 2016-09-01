@@ -576,6 +576,14 @@ class config {
         $t->set_var('lang_save_changes', $LANG_CONFIG['save_changes']);
         $t->set_var('lang_reset_form', $LANG_CONFIG['reset_form']);
         $t->set_var('lang_changes_made', $LANG_CONFIG['changes_made']);
+        $t->set_var('lang_search', $LANG_CONFIG['search']);
+
+        if ( isset($_POST['fieldname']) && $_POST['fieldname'] != '') {
+            $fieldname = COM_applyFilter($_POST['fieldname']);
+            $t->set_var('highlight',$fieldname);
+        } else {
+            $t->set_var('highlight','');
+        }
 
 // depreciated
         $t->set_var('gltoken_name', CSRF_TOKEN);
@@ -648,7 +656,7 @@ class config {
         } else {
             $t->unset_var('confighelpurl');
         }
-
+        $tabCounter = 0;
         if ( is_array($ext_info) ) {
             foreach ($ext_info as $fset => $params) {
                 $fs_contents = '';
@@ -667,7 +675,11 @@ class config {
                                                    $e['selectionArray'], false,
                                                    $e['reset']);
                 }
-                $this->_UI_get_fs($grp, $sg, $activeTab, $fs_contents, $fset, $t);
+                $rc = $this->_UI_get_fs($grp, $sg, $activeTab, $fs_contents, $fset, $t);
+                if ( $rc ) {
+                    $t->set_var('active_tab_index',$tabCounter);
+                }
+                $tabCounter++;
             }
         }
 
@@ -678,6 +690,10 @@ class config {
         } else {
             $t->set_var('show_changeblock','none');
         }
+
+        $t->set_var('autocomplete_data',$this->_get_autocompletedata());
+
+
         $display .= $t->finish($t->parse("OUTPUT", "main"));
         $display .= COM_siteFooter(false);
 
@@ -738,6 +754,8 @@ class config {
         $t->set_var('fs_notes', '');
         $t->parse('sg_contents', 'fieldset', true);
         $t->parse('sg_tabs', 'tabs',true);
+        if ( $class != "" ) return true;
+        return false;
     }
 
     function _UI_perm_denied()
@@ -1265,6 +1283,78 @@ class config {
             @unlink($cache_file);
         }
     }
+
+    function _get_autocompletedata()
+    {
+        global $_PLUGINS, $_TABLES, $_CONF, $LANG_CONFIG, $LANG_fs, $LANG_configsubgroups, $LANG_configsections,$LANG_confignames;
+
+        $listOfPlugins = implode(",",$_PLUGINS);
+        $listOfPlugins = 'Core,' . $listOfPlugins;
+        $itemArray = explode(",",$listOfPlugins);
+
+        $confArray = array();
+
+        foreach ($itemArray AS $item) {
+
+            $label = '';
+            $retval = '';
+            $fieldset = '';
+            $group = $item;
+
+            $sql = "SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='".$item."' ORDER BY subgroup, fieldset, sort_order ASC";
+            $result = DB_query($sql);
+
+            while (($row = DB_fetchArray($result))) {
+
+                $groupname = $LANG_configsections[$group]['label'];
+
+                if ( $row['type'] == 'subgroup' ) {
+                    if ( !isset($LANG_configsubgroups[$group][$row['name']])) continue;
+                    $subgroup = $LANG_configsubgroups[$group][$row['name']];
+                    $confname = "";
+                    $subgroup_id = $row['name'];
+                    $subgroup_num = $row['subgroup'];
+                    $fieldset_num = '';
+                    $fieldset_id = '';
+                    $tabID = '';
+
+                    $value = str_replace ( "\"", "&quot;", $subgroup ) ;
+                    $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
+
+                } elseif ( $row['type'] == 'fieldset') {
+                    if ( !isset($LANG_fs[$group][$row['name']])) continue;
+                    $confname = "";
+                    $fieldset = $LANG_fs[$group][$row['name']];
+                    $fieldset_id = $row['name'];
+                    $fieldset_num = $row['fieldset'];
+                    $tabID = '';
+
+                    $value = str_replace ( "\"", "&quot;", $fieldset ) ;
+                    $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
+
+                } else {
+                    if ( !isset($LANG_confignames[$group][$row['name']])) continue;
+
+                    $confname = $row['name'];
+                    $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
+                    $value = str_replace ( "\"", "&quot;", $LANG_confignames[$group][$row['name']] ) ;
+                    $tabID = 'sg_'.$fieldset_id;
+
+                }
+
+                $confArray[] = array('value' => htmlentities($value),
+                                     'data' => array( 'confvar' => $confname,
+                                                      'category' => $label,
+                                                      'group' => $group,
+                                                      'sg' => $subgroup_num,
+                                                      'fs' => $fieldset_id,
+                                                      'tab' => 'sg_'.$fieldset_id
+                ));
+            }
+        }
+        return json_encode($confArray);
+    }
+
 }
 
 /**

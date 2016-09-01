@@ -37,6 +37,7 @@ $(function() {
 	var dropDown = '';
 	// init tabs
 	var tabs = $("#tabs").tabs({
+        active: activeTab,
 		beforeActivate: function(e, ui) {
 			if (ui.newTab.children('a').attr('href') === '#tab-dropdown') {
 				var container = ui.newTab.parent();
@@ -221,6 +222,11 @@ $(function() {
 		var tab = '#' + window.location.search.substr(1);
 		var conf = window.location.hash;
 
+
+tab.tabs({
+  active: 1
+});
+
 		selectTab(tab, conf);
 		if ( selectedTab === undefined ) {
 			var idx = tabs.tabs('option', 'active');
@@ -296,9 +302,9 @@ $(function() {
 				}
 			}
 
-			if ( $('a[href=#tab-dropdown]', tabs).length ) {
-				glfusion.admin.configuration.removeTab(tabs, glfusion.admin.configuration.getTabLength(tabs) - 1);
-			}
+//			if ( $('a[href=#tab-dropdown]', tabs).length ) {
+//				glfusion.admin.configuration.removeTab(tabs, glfusion.admin.configuration.getTabLength(tabs) - 1);
+//			}
 
 			for ( tab in hiddenTabs ) {
 				dropDown = '<li style="clear:both;"><a href="' + tab + '">' +
