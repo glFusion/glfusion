@@ -1155,7 +1155,7 @@ class config {
             $retval = $descUrl;
         } else {
             list ($doc_url, $popuptype) = PLG_getConfigElementHelp($group, $option, $doclang );
-            $retval = $doc_url;
+            if ( $popuptype == 0 ) $retval = $doc_url;
         }
         return $retval;
     }
@@ -1318,7 +1318,8 @@ class config {
                     $fieldset_id = '';
                     $tabID = '';
 
-                    $value = str_replace ( "\"", "&quot;", $subgroup ) ;
+//                    $value = str_replace ( "\"", "&quot;", $subgroup ) ;
+                    $value = $subgroup;
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
 
                 } elseif ( $row['type'] == 'fieldset') {
@@ -1329,7 +1330,8 @@ class config {
                     $fieldset_num = $row['fieldset'];
                     $tabID = '';
 
-                    $value = str_replace ( "\"", "&quot;", $fieldset ) ;
+//                    $value = str_replace ( "\"", "&quot;", $fieldset ) ;
+                    $value = $fieldset;
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
 
                 } else {
@@ -1337,12 +1339,14 @@ class config {
 
                     $confname = $row['name'];
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
-                    $value = str_replace ( "\"", "&quot;", $LANG_confignames[$group][$row['name']] ) ;
+//                    $value = str_replace ( "\"", "&quot;", $LANG_confignames[$group][$row['name']] ) ;
+                    $value = $LANG_confignames[$group][$row['name']];
                     $tabID = 'sg_'.$fieldset_id;
 
                 }
 
-                $confArray[] = array('value' => htmlentities($value),
+//                $confArray[] = array('value' => htmlentities($value),
+                $confArray[] = array('value' => $value,
                                      'data' => array( 'confvar' => $confname,
                                                       'category' => $label,
                                                       'group' => $group,
