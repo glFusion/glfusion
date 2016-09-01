@@ -571,6 +571,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
             $storycounter++;
             $article->set_var( 'story_counter', $storycounter );
+            $article->set_var( 'adblock',PLG_displayAdBlock('story',$storycounter));
         }
         $article->set_var( 'article_url', $articleUrl );
         $article->set_var( 'recent_post_anchortag', $recent_post_anchortag );

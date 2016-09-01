@@ -291,12 +291,10 @@ if ( $A = DB_fetchArray( $result ) ) {
 
     // get remaining stories
     while ($A = DB_fetchArray ($result)) {
-        $pageBody .= '<div class="infinite-item">';
-        $pageBody .= PLG_displayAdBlock('story',$articleCounter);
+//        $pageBody .= PLG_displayAdBlock('story',$articleCounter);
         $story = new Story();
         $story->loadFromArray($A);
         $pageBody .= STORY_renderArticle ($story, 'y');
-        $pageBody .= '</div>';
         $articleCounter++;
     }
 
