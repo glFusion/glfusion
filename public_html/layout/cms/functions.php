@@ -106,7 +106,7 @@ $blockInterface = array(
 
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
-
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
 
 // Load our CSS specific to this theme

@@ -1,0 +1,1 @@
+function positionFooter() {var a=$(window).height();var c=$("#tm-footer").height();var b=$("#tm-footer").position().top+c;if (b<a) { $("#tm-footer").css("margin-top",(a-b)+"px")}};
