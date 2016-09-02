@@ -1,4 +1,6 @@
 /*! glFusion CMS v1.6.1 | https://www.glfusion.org | (c) 2016 glFusion | GNU GPL v2 License */
+$('[data-uk-switcher]').on('show.uk.switcher', function(event, area){positionFooter();});
+function positionFooter() {var a=$(window).height();var c=$("#tm-footer").height();var b=$("#tm-footer").position().top+c;if (b<a) { $("#tm-footer").css("margin-top",(a-b)+"px")}};
 $(window).load(function(){var a=$(window).height();var c=$("#tm-footer").height();var b=$("#tm-footer").position().top+c;if(b<a){$("#tm-footer").css("margin-top",50+(a-b)+"px")}});
 $(window).load(function(){
     if ($(window).scrollTop()>100){
