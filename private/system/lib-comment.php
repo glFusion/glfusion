@@ -803,7 +803,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                 var disqus_config = function () {
                     this.page.url = \''.$pageURL.'\';
                     this.page.identifier = \''.$pageIdentifier.'\';
-                    this.page.title = \''.$pageTitle.'\';
+                    this.page.title = \''.addslashes($pageTitle).'\';
                 };
                 (function() {
                     var d = document, s = d.createElement(\'script\');

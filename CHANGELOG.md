@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed issue where titles that contain quotes would cause a JS parse error with Disqus 3rd party comment engine
   - Implemented search option for online conifguration
   - Documentation - several spelling and gramar updates - navigation to main index page
   - CAPTCHA - Fixed theme selection for reCaptcha
