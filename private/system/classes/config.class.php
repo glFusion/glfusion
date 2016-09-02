@@ -38,10 +38,36 @@ if (!defined ('CONFIG_CACHE_FILE_NAME')) {
     define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
 }
 
-class config {
+class config
+{
+    /**
+     * Path to db-config.php file
+     *
+     * @var string
+     */
     var $dbconfig_file;
+
+    /**
+     * Array of configurations
+     *
+     * @var array
+     */
     var $config_array;
+
+    /**
+     * Array of oauth consumer keys
+     *
+     * @var array
+     */
     var $consumer_keys = array('facebook_consumer_key','facebook_consumer_secret','linkedin_consumer_key','linkedin_consumer_secret','twitter_consumer_key','twitter_consumer_secret','google_consumer_key','google_consumer_secret','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_key','github_consumer_secret','fb_appid','comment_fb_appid');
+
+    /**
+     * Constructor
+     */
+    private function __construct()
+    {
+        $this->config_array = array();
+    }
 
     /**
      * This function will return an instance of the config class. If an
@@ -66,11 +92,6 @@ class config {
         return $instance;
     }
 
-    public function __construct()
-    {
-        $this->config_array = array();
-    }
-
     /**
      * This function sets the secure configuration file (database related
      * settings) for the configuration class to read. This should only need to
@@ -90,7 +111,6 @@ class config {
      * lib-database.php. This needs to be called in the 'Core' group before
      * &init_config() can be used. It only needs to be called once
      */
-
     function load_baseconfig()
     {
         global $_DB, $_TABLES, $_CONF;
@@ -1284,9 +1304,14 @@ class config {
         }
     }
 
+    /**
+     * This function builds the JavaScript array of configuration items
+     * for the configuration search.
+s     */
     function _get_autocompletedata()
     {
-        global $_PLUGINS, $_TABLES, $_CONF, $LANG_CONFIG, $LANG_fs, $LANG_configsubgroups, $LANG_configsections,$LANG_confignames;
+        global $_PLUGINS, $_TABLES, $_CONF, $LANG_CONFIG,
+               $LANG_fs, $LANG_configsubgroups, $LANG_configsections,$LANG_confignames;
 
         $listOfPlugins = implode(",",$_PLUGINS);
         $listOfPlugins = 'Core,' . $listOfPlugins;
@@ -1317,8 +1342,6 @@ class config {
                     $fieldset_num = '';
                     $fieldset_id = '';
                     $tabID = '';
-
-//                    $value = str_replace ( "\"", "&quot;", $subgroup ) ;
                     $value = $subgroup;
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
 
@@ -1329,23 +1352,15 @@ class config {
                     $fieldset_id = $row['name'];
                     $fieldset_num = $row['fieldset'];
                     $tabID = '';
-
-//                    $value = str_replace ( "\"", "&quot;", $fieldset ) ;
                     $value = $fieldset;
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
-
                 } else {
                     if ( !isset($LANG_confignames[$group][$row['name']])) continue;
-
                     $confname = $row['name'];
                     $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
-//                    $value = str_replace ( "\"", "&quot;", $LANG_confignames[$group][$row['name']] ) ;
                     $value = $LANG_confignames[$group][$row['name']];
                     $tabID = 'sg_'.$fieldset_id;
-
                 }
-
-//                $confArray[] = array('value' => htmlentities($value),
                 $confArray[] = array('value' => $value,
                                      'data' => array( 'confvar' => $confname,
                                                       'category' => $label,
