@@ -4240,6 +4240,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/images/userphotos/index.html'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/index.php'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/activitytimer.js'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/ps.js'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/addons/accordion-image-menu/accordionImageMenu.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/addons/accordion-image-menu/jquery.accordionImageMenu.min.js'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/javascript/addons/bxslider/images/bx_loader.gif'),
