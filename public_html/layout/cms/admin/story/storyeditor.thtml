@@ -45,7 +45,7 @@ function actionClick( $action ) {
 
 	{block_start}
 	{admin_menu}
-	{block_end}
+	{end_block}
 
 {!if error_message}
 	<div class="uk-alert uk-alert-danger" data-uk-alert="">
