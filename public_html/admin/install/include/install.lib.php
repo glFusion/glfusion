@@ -1344,6 +1344,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('mysqldump_path','Core');
             $c->del('mysqldump_options','Core');
 
+            $_SQL = array();
+
             $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `title` `title` VARCHAR(255) NULL DEFAULT NULL;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_url` VARCHAR(255) NOT NULL default '' AFTER `expire`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_name` VARCHAR(255) NOT NULL DEFAULT '' AFTER `attribution_url`;";
