@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed issue with LinkedIn Oauth login
+  - Updated Oauth Library to latest release
+  - Updated headlines: auto tag to include storyimage: parameter - allows to select stories with or without attached story images
   - Fixed issue where titles that contain quotes would cause a JS parse error with Disqus 3rd party comment engine
   - Implemented search option for online conifguration
   - Documentation - several spelling and gramar updates - navigation to main index page
