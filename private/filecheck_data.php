@@ -6354,6 +6354,7 @@ $glfFile = array(
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/js/unitegallery/themes/video/skin-right-no-thumb.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/js/unitegallery/themes/video/skin-right-thumb.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/js/unitegallery/themes/video/skin-right-title-only.css'),
+    array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/js/unitegallery/themes/video/skin-bottom-text.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/js/unitegallery/themes/video/ug-theme-video.js'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/lightbox.css'),
     array( 'test' => 'E', 'preq' => 'R', 'path' => 'public_html/mediagallery/lightbox.php'),
