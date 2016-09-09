@@ -8,7 +8,7 @@ The Fork & Pull Model lets anyone fork the glFusion repository and push changes 
 
 ## Pull requests
 
-We welcome pull requests with fixes and improvements to glFusion's code. 
+We welcome pull requests with fixes and improvements to glFusion's code.
 
 Pull requests can be filed at [glFusion's Github Page](https://github.com/glFusion/glfusion/pulls).
 
@@ -16,7 +16,7 @@ Pull requests can be filed at [glFusion's Github Page](https://github.com/glFusi
 
 Please submit a pull request with the fix or improvements after you have fully tested your changes. The workflow for a pull request is as follows:
 
-1. Fork the glFUsion project on Github
+1. Fork the glFusion project on Github
 1. Create a feature branch
 1. Add your changes to the [ChangeLog](https://github.com/glFusion/glfusion/blob/master/CHANGELOG.md)
 1. If you have multiple commits please combine them into one commit by [squashing them](http://git-scm.com/book/en/Git-Tools-Rewriting-History#Squashing-Commits)
