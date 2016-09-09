@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
   - Fixed issue with LinkedIn Oauth login
   - Updated Oauth Library to latest release
   - Updated headlines: auto tag to include storyimage: parameter - allows to select stories with or without attached story images
