@@ -1840,7 +1840,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
              . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
              . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
              . "WHERE (sid = '".DB_escapeString($id)."') "
-             . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND',0,2, 's')
+             . 'AND (draft_flag = 0) AND (date <= NOW())' . COM_getPermSQL('AND',0,2, 's')
              . COM_getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
 
 
@@ -1857,7 +1857,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
     $sql = 'SELECT COUNT(*) AS count, commentcode, uid, owner_id, group_id, perm_owner, perm_group, '
          . "perm_members, perm_anon FROM {$_TABLES['stories']} "
          . "WHERE (sid = '".DB_escapeString($id)."') "
-         . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
+         . 'AND (draft_flag = 0) AND (date <= NOW())' . COM_getPermSQL('AND')
          . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
 
     $result = DB_query ($sql);

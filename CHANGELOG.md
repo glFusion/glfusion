@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.1 (unreleased)
+  - Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
   - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
   - Fixed issue with LinkedIn Oauth login
   - Updated Oauth Library to latest release

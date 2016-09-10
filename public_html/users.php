@@ -285,59 +285,34 @@ function userprofile()
                                   '<tr><td>' . $LANG01[37] . '</td></tr>');
     }
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
-        // list of last 10 comments by this user
-        $sidArray = array();
-        if (sizeof ($tids) > 0) {
-            // first, get a list of all stories the current visitor has access to
-            $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
-            $result = DB_query($sql);
-            $numsids = DB_numRows($result);
-            for ($i = 1; $i <= $numsids; $i++) {
-                $S = DB_fetchArray ($result);
-                $sidArray[] = $S['sid'];
-            }
-        }
-
-        $sidList = implode("', '",$sidArray);
-        $sidList = "'$sidList'";
-
-        // then, find all comments by the user in those stories
-        $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".(int) $user."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
-
-        // SQL NOTE:  Using a HAVING clause is usually faster than a where if the
-        // field is part of the select
-        // if (!empty ($sidList)) {
-        //     $sql .= " AND (sid in ($sidList))";
-        // }
-        if (!empty ($sidList)) {
-            $sql .= " HAVING sid in ($sidList)";
-        }
-        $sql .= " ORDER BY unixdate DESC LIMIT 10";
-
+        $commentCounter = 0;
+        $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " ORDER BY date DESC";
         $result = DB_query($sql);
-        $nrows = DB_numRows($result);
-        if ($nrows > 0) {
-            for ($i = 0; $i < $nrows; $i++) {
-                $C = DB_fetchArray ($result);
-                $user_templates->set_var ('cssid', ($i % 2) + 1);
-                $user_templates->set_var ('row_number', ($i + 1) . '.');
-                $C['title'] = str_replace ('$', '&#36;', $C['title']);
+        while ( ( $row = DB_fetchArray($result) ) ) {
+            if ( $commentCounter >= 10 ) break;
+                $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
+                if ( is_array($itemInfo) || $itemInfo == '' ) continue;
+                $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
+                $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
+                $row['title'] = str_replace ('$', '&#36;', $row['title']);
                 $comment_url = $_CONF['site_url'] .
-                        '/comment.php?mode=view&amp;cid=' . $C['cid'];
+                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
                 $user_templates->set_var ('comment_title',
                     COM_createLink(
-                        $C['title'],
+                        $row['title'],
                         $comment_url,
                         array ('class'=>''))
                 );
-                $commenttime = COM_getUserDateTimeFormat ($C['unixdate']);
+                $commenttime = COM_getUserDateTimeFormat ($row['date']);
                 $user_templates->set_var ('comment_date', $commenttime[0]);
                 $user_templates->parse ('comment_row', 'row', true);
-            }
-        } else {
+                $commentCounter++;
+        }
+        if ( $commentCounter == 0 ) {
             $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
         }
     }
+
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
     $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int) $user.") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
