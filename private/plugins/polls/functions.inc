@@ -1307,7 +1307,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         } else if ($displaytype == 1 ) {
             $retval = '';
         } else {
-            $retval = COM_showMessageText($LANG_POLLS['pollhidden'],'', true);
+            $retval = COM_showMessageText($LANG_POLLS['pollhidden'],'', true,'error');
+            $retval .= POLLS_pollList();
         }
 
         return $retval;
