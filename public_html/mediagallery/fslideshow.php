@@ -82,7 +82,7 @@ $T->set_var('plugin','mediagallery');
 
 if ($MG_albums[$album_id]->access == 0 ) {
     $display  = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
-    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true,'error');
     $display .= MG_siteFooter();
     echo $display;
     exit;

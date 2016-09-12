@@ -67,7 +67,7 @@ $T->set_var('site_url', $_MG_CONF['site_url']);
 
 if ($MG_albums[$album_id]->access == 0 ) {
     $display = MG_siteHeader();
-    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true);
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true,'error');
     $display .= MG_siteFooter();
     echo $display;
     exit;

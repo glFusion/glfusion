@@ -498,14 +498,14 @@ function plugin_savesubmission_calendar($A)
 
     // check for missing textfields
     if (empty ($A['title']) || empty ($A['start_month']) || empty ($A['start_day']) || empty ($A['start_year'])) {
-        $retval .= COM_showMessageText($LANG12[23],$LANG12[22],true)
+        $retval .= COM_showMessageText($LANG12[23],$LANG12[22],true,'error')
                 . plugin_submit_calendar ($A['calendar_type'],$A);
 
         return $retval;
     }
     $msg = PLG_itemPreSave('calendar',$A);
     if ( !empty($msg)) {
-        $retval .= COM_showMessageText($msg,$LANG12[22],true)
+        $retval .= COM_showMessageText($msg,$LANG12[22],true,'error')
                 . plugin_submit_calendar($A['calendar_type'],$A);
         return $retval;
     }

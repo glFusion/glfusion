@@ -43,7 +43,7 @@ $display = '';
 // Ensure user even has the rights to access this page
 if (!SEC_hasRights('calendar.edit')) {
     $display .= COM_siteHeader('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[35],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[35],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
 
     // Log attempt to error.log
@@ -126,7 +126,7 @@ function CALENDAR_edit($action, $A, $msg = '')
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 0 OR $access == 2) {
             // Uh, oh!  User doesn't have access to this object
-            $retval .= COM_showMessageText($LANG_CAL_ADMIN[17],$LANG_ACCESS['accessdenied'],true);
+            $retval .= COM_showMessageText($LANG_CAL_ADMIN[17],$LANG_ACCESS['accessdenied'],true,'error');
             COM_accessLog("User {$_USER['username']} tried to illegally submit or edit event $eid.");
             return $retval;
         }
@@ -446,7 +446,7 @@ function CALENDAR_save( $eid, $C )
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader('menu', $MESSAGE[30]);
-        $retval .= COM_showMessageText($MESSAGE[31],$MESSAGE[30],true);
+        $retval .= COM_showMessageText($MESSAGE[31],$MESSAGE[30],true,'error');
         $retval .= COM_siteFooter();
         COM_accessLog ("User {$_USER['username']} tried to illegally submit or edit event $eid.");
         return $retval;
@@ -490,7 +490,7 @@ function CALENDAR_save( $eid, $C )
         $timestart = $start_hour . ':' . $start_minute . ':00';
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[2]);
-        $retval .= COM_showMessageText($LANG_CAL_ADMIN[23],$LANG_CAL_ADMIN[2],true);
+        $retval .= COM_showMessageText($LANG_CAL_ADMIN[23],$LANG_CAL_ADMIN[2],true,'error');
         $retval .= CALENDAR_edit('edit',$C,'');
         $retval .= COM_siteFooter ();
         return $retval;
@@ -500,7 +500,7 @@ function CALENDAR_save( $eid, $C )
         $timeend = $end_hour . ':' . $end_minute . ':00';
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[2]);
-        $retval .= COM_showMessageText($LANG_CAL_ADMIN[24],$LANG_CAL_ADMIN[2],true);
+        $retval .= COM_showMessageText($LANG_CAL_ADMIN[24],$LANG_CAL_ADMIN[2],true,'error');
         $retval .= CALENDAR_edit('edit',$C,'');
         $retval .= COM_siteFooter ();
         return $retval;
@@ -508,7 +508,7 @@ function CALENDAR_save( $eid, $C )
     if ($allday == 0) {
         if ($dateend < $datestart) {
             $retval .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[2]);
-            $retval .= COM_showMessageText($LANG_CAL_ADMIN[25],$LANG_CAL_ADMIN[2],true);
+            $retval .= COM_showMessageText($LANG_CAL_ADMIN[25],$LANG_CAL_ADMIN[2],true,'error');
             $retval .= CALENDAR_edit('edit',$C,'');
             $retval .= COM_siteFooter ();
             return $retval;
@@ -605,7 +605,7 @@ function CALENDAR_save( $eid, $C )
         }
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[2]);
-        $retval .= COM_showMessageText($LANG_CAL_ADMIN[10],$LANG_CAL_ADMIN[2],true);
+        $retval .= COM_showMessageText($LANG_CAL_ADMIN[10],$LANG_CAL_ADMIN[2],true,'error');
         $retval .= CALENDAR_edit('edit',$C,'');
         $retval .= COM_siteFooter ();
         return $retval;

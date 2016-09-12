@@ -1058,7 +1058,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         }
 
         if ($last > 0) {
-            $retval .= COM_showMessageText($LANG03[7].$last.$LANG03[8],$LANG12[26],false);
+            $retval .= COM_showMessageText($LANG03[7].$last.$LANG03[8],$LANG12[26],false,'error');
         } else {
             if ( empty($postmode) ) {
                 $postmode = $_CONF['comment_postmode'];
@@ -1125,7 +1125,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                         . $start->finish( $start->parse( 'output', 'comment' ))
                         . COM_endBlock ();
             } else if ($mode == 'preview_new' || $mode == 'preview_edit') {
-                $retval .= COM_showMessageText($LANG03[12],$LANG03[17],true);
+                $retval .= COM_showMessageText($LANG03[12],$LANG03[17],true,'error');
                 $mode = 'error';
             }
 
@@ -1555,7 +1555,7 @@ function CMT_reportAbusiveComment ($cid, $type)
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     $last = COM_checkSpeedlimit ('mail');
     if ($last > 0) {
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false);
+        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false,'error');
         return $retval;
     }
 
@@ -1874,7 +1874,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
                         $B['commentcode'],$B['uid']);
 
     } else {
-        $retval .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true);
+        $retval .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true,'error');
     }
     return $retval;
 }

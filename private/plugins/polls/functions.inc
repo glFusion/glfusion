@@ -519,7 +519,7 @@ function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, 
                                      $cid, $page, $view, $delete_option,
                                      $A['commentcode'],$A['owner_id']);
     } else {
-        $retval .= COM_showMessageText($LANG_POLLS['deny_msg'],$LANG_ACCESS['accessdenied'],true);
+        $retval .= COM_showMessageText($LANG_POLLS['deny_msg'],$LANG_ACCESS['accessdenied'],true,'error');
     }
 
     return $retval;

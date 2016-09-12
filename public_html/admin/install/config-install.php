@@ -406,10 +406,10 @@ function install_config($site_url)
     $c->add('fs_perm_block', NULL, 'fieldset', 7, 10, NULL, 0, TRUE);
     $c->add('default_permissions_block',array(3, 2, 2, 2),'@select',7,10,12,10,TRUE);
 
-    $c->add('fs_webservices', NULL, 'fieldset', 7, 11, NULL, 0, TRUE);
-    $c->add('disable_webservices',   1, 'select', 7, 11, 0, 10, TRUE);
-    $c->add('restrict_webservices',  0, 'select', 7, 11, 0, 20, TRUE);
-    $c->add('atom_max_stories',     10, 'text',   7, 11, 0, 30, TRUE);
+//    $c->add('fs_webservices', NULL, 'fieldset', 7, 11, NULL, 0, TRUE);
+//    $c->add('disable_webservices',   1, 'select', 7, 11, 0, 10, TRUE);
+//    $c->add('restrict_webservices',  0, 'select', 7, 11, 0, 20, TRUE);
+//    $c->add('atom_max_stories',     10, 'text',   7, 11, 0, 30, TRUE);
 
     // hidden system configuration options
 
