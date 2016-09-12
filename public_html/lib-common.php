@@ -612,10 +612,11 @@ $TEMPLATE_OPTIONS['default_vars']['iso_lang'] = $_CONF['iso_lang'];
 */
 
 // Include theme functions file
+if (file_exists($_CONF['path_layout'] . 'functions.php')) {
+    require_once $_CONF['path_layout'] . 'functions.php';
+}
 if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
     require_once $_CONF['path_layout'] . 'custom/functions.php';
-} elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
-    require_once $_CONF['path_layout'] . 'functions.php';
 }
 
 if (!isset($_SYSTEM['framework']) ) $_SYSTEM['framework'] = 'legacy';
