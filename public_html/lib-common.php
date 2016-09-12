@@ -1401,7 +1401,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $persist = false, $msgArray['type']);
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', false, $msgArray['type']);
 
         SESS_unSet('glfusion.infoblock');
     }

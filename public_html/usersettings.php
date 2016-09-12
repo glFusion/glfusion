@@ -832,7 +832,7 @@ function handlePhotoUpload ($delete_photo = '')
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'userphotos')) {
         $display = COM_siteHeader ('menu', $LANG24[30]);
-        $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
+        $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
         $display .= COM_siteFooter ();
         echo $display;
         exit; // don't return
@@ -892,7 +892,7 @@ function handlePhotoUpload ($delete_photo = '')
 
         if ($upload->areErrors ()) {
             $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
+            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
             $display .= COM_siteFooter ();
             echo $display;
             exit; // don't return

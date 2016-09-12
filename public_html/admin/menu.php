@@ -41,7 +41,7 @@ $MenuElementAllowedHTML = "i[class|style],div[class|style],span[class|style],img
 // Only let admin users access this page
 if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} unauthorized user tried to access the menu editor screen.");
     echo $display;
@@ -1312,7 +1312,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
         case 'savenewmenu' :
             $rc = MB_saveNewMenu();
             if ( $rc != '' ) {
-                $content = COM_showMessageText($rc, '', true);
+                $content = COM_showMessageText($rc, '', true,'error');
                 $content .= MB_createMenu();
             } else {
                 $content = MB_displayMenuList( );
@@ -1325,7 +1325,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
         case 'saveeditmenu' :
             $rc = MB_saveEditMenu();
             if ( $rc != '' ) {
-                $content = COM_showMessageText($rc, '', true);
+                $content = COM_showMessageText($rc, '', true,'error');
                 $menu_id = COM_applyFilter($_POST['menu_id'],true);
                 $content .= MB_editMenu( $menu_id );
             } else {

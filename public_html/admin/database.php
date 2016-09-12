@@ -45,7 +45,7 @@ $page    = '';
 // If user isn't a root user, bail.
 if (!SEC_inGroup('Root') ) {
     $display = COM_siteHeader('menu', $LANG_DB_BACKUP['database_admin']);
-    $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
     COM_accessLog("User {$_USER['username']} tried to access the database administration system without proper permissions.");
     echo $display;
@@ -1227,7 +1227,7 @@ switch ($action) {
         if (DBADMIN_supported_engine( 'MyISAM')) {
             $page .= DBADMIN_myisam();
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_myisam']);
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_myisam'],'',true,'error');
         }
         break;
 
@@ -1236,7 +1236,7 @@ switch ($action) {
         if (DBADMIN_supported_engine( 'InnoDB')) {
             $page .= DBADMIN_innodb();
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
         }
         break;
 
@@ -1256,12 +1256,12 @@ switch ($action) {
                 if ($num_errors == 0) {
                     $page .= COM_showMessageText($LANG_DB_BACKUP['innodb_success']);
                 } else {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['innodb_success'] . ' ' . $LANG_DB_BACKUP['table_issues']);
+                    $page .= COM_showMessageText($LANG_DB_BACKUP['innodb_success'] . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
                 }
                 $page .= DBADMIN_list();
             }
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
         }
         break;
 
@@ -1281,12 +1281,12 @@ switch ($action) {
                 if ($num_errors == 0) {
                     $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success']);
                 } else {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success'] . ' ' . $LANG_DB_BACKUP['table_issues']);
+                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success'] . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
                 }
                 $page .= DBADMIN_list();
             }
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb']);
+            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
         }
         break;
 
@@ -1312,7 +1312,7 @@ switch ($action) {
                 $page .= COM_showMessageText($LANG_DB_BACKUP['optimize_success']);
             } else {
                 $page .= COM_showMessageText($LANG_DB_BACKUP['optimize_success']
-                                . ' ' . $LANG_DB_BACKUP['table_issues']);
+                                . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
             }
             $page .= DBADMIN_list();
         }

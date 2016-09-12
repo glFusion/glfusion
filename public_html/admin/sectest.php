@@ -37,7 +37,7 @@ require_once 'auth.inc.php';
 
 if (!SEC_inGroup ('Root')) {
     $display  = COM_siteHeader();
-    $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to access the security check without the necessary permissions.");
     echo $display;

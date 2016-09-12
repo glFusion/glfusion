@@ -41,9 +41,9 @@ USES_lib_story();
 
 if (!SEC_hasRights('topic.edit')) {
     $display = COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the topic administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the topic administration screen.");
     echo $display;
     exit;
 }
@@ -78,8 +78,8 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
         $A = DB_fetchArray($result);
         $access = (SEC_inGroup('Topic Admin')) ? 3 : SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 0 OR $access == 2) {
-            $retval .= COM_showMessageText($LANG27[13],$LANG27[12],true);
-            COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
+            $retval .= COM_showMessageText($LANG27[13],$LANG27[12],true,'error');
+            COM_accessLog("User {$_USER['username']} tried to create or edit topic $tid.");
             return $retval;
         }
 
@@ -477,9 +477,9 @@ function TOPIC_save($T)
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $retval .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true);
+        $retval .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true,'error');
         $retval .= COM_siteFooter ();
-        COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
+        COM_accessLog("User {$_USER['username']} tried to create or edit topic $tid.");
     } elseif (!empty($tid) && !empty($topic)) {
         if ($imageurl == '/images/topics/') {
             $imageurl = '';
@@ -712,7 +712,7 @@ function TOPIC_delete($tid)
                 $A['perm_group'], $A['perm_members'], $A['perm_anon']);
     }
     if ($access < 3) {
-        COM_accessLog ("User {$_USER['username']} tried to illegally delete topic $tid.");
+        COM_accessLog ("User {$_USER['username']} tried to delete topic $tid.");
         return COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
     }
 
@@ -913,7 +913,7 @@ switch ($action) {
         } elseif (SEC_checkToken()) {
             $display .= TOPIC_delete($tid);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete topic $tid and failed CSRF checks.");
+            COM_accessLog("User {$_USER['username']} tried to delete topic $tid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

@@ -45,7 +45,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_showMessageText($MESSAGE[33],$MESSAGE[30],true)
+        . COM_showMessageText($MESSAGE[33],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the block administration screen");
     echo $display;
@@ -204,7 +204,7 @@ function BLOCK_edit($bid = '', $B = array())
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 2 || $access == 0 || BLOCK_hasTopicAccess($A['tid']) < 3) {
-            $retval .= COM_showMessageText($LANG21[45],$LANG_ACCESS['accessdenied'],true);
+            $retval .= COM_showMessageText($LANG21[45],$LANG_ACCESS['accessdenied'],true,'error');
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit block ".$bid);
             return $retval;
         }
@@ -688,7 +688,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_siteHeader ('menu', $LANG21[63])
-                . COM_showMessageText($msg,$LANG21[63],true)
+                . COM_showMessageText($msg,$LANG21[63],true,'error')
                 . BLOCK_edit($bid,$B)
                 . COM_siteFooter ();
         return $retval;
@@ -710,7 +710,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     }
     if (($access < 3) || !BLOCK_hasTopicAccess($tid) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader('menu', $MESSAGE[30]);
-        $retval .= COM_showMessageText($MESSAGE[33],$MESSAGE[30],true);
+        $retval .= COM_showMessageText($MESSAGE[33],$MESSAGE[30],true,'error');
         $retval .= COM_siteFooter();
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
 
@@ -759,7 +759,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             // the arbitrary execution of code
             if (!(stristr($phpblockfn,'phpblock_'))) {
                 $retval .= COM_siteHeader ('menu', $LANG21[37])
-                        . COM_showMessageText($LANG21[38],$LANG21[37],true)
+                        . COM_showMessageText($LANG21[38],$LANG21[37],true,'error')
                         . BLOCK_edit($bid,$B)
                         . COM_siteFooter ();
                 return $retval;
@@ -826,7 +826,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             // Layout block missing content
             $msg = $LANG21[36];
         }
-        $retval .= COM_showMessageText($msg,$LANG21[32],true);
+        $retval .= COM_showMessageText($msg,$LANG21[32],true,'error');
         $retval .= BLOCK_edit($bid,$B);
         $retval .= COM_siteFooter ();
     }
