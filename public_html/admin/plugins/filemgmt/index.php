@@ -745,6 +745,8 @@ function modDownloadS() {
         $upload->setPath($filemgmt_FileStore);
         $upload->setAllowAnyMimeType(true);     // allow any file type
         $upload->setMaxFileSize(100000000);
+        $upload->setMaxDimensions(8192,8192);
+
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
@@ -1231,6 +1233,8 @@ function addDownload() {
     $upload->setPath($filemgmt_FileStore);
     $upload->setAllowAnyMimeType(true);     // allow any file type
     $upload->setMaxFileSize(100000000);
+    $upload->setMaxDimensions(8192,8192);
+
     if ( $upload->numFiles() > 0 ) {
         $upload->uploadFiles();
         if ($upload->areErrors()) {

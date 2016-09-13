@@ -832,7 +832,7 @@ function handlePhotoUpload ($delete_photo = '')
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'userphotos')) {
         $display = COM_siteHeader ('menu', $LANG24[30]);
-        $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
+        $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
         $display .= COM_siteFooter ();
         echo $display;
         exit; // don't return
@@ -892,7 +892,7 @@ function handlePhotoUpload ($delete_photo = '')
 
         if ($upload->areErrors ()) {
             $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true);
+            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
             $display .= COM_siteFooter ();
             echo $display;
             exit; // don't return
@@ -1368,6 +1368,38 @@ function userprofile ($user, $msg = 0)
     }
 
     // list of last 10 comments by this user
+
+    if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+        // list of last 10 comments by this user
+
+        $commentCounter = 0;
+        $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " ORDER BY date DESC";
+        $result = DB_query($sql);
+        while ( ( $row = DB_fetchArray($result) ) ) {
+            if ( $commentCounter >= 10 ) break;
+                $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
+                if ( is_array($itemInfo) || $itemInfo == '' ) continue;
+                $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
+                $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
+                $row['title'] = str_replace ('$', '&#36;', $row['title']);
+                $comment_url = $_CONF['site_url'] .
+                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
+                $user_templates->set_var ('comment_title',
+                    COM_createLink(
+                        $row['title'],
+                        $comment_url,
+                        array ('class'=>''))
+                );
+                $commenttime = COM_getUserDateTimeFormat ($row['date']);
+                $user_templates->set_var ('comment_date', $commenttime[0]);
+                $user_templates->parse ('comment_row', 'row', true);
+                $commentCounter++;
+        }
+        if ( $commentCounter == 0 ) {
+            $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
+        }
+    }
+/* -------------------------------------------
     $sidArray = array();
     if (sizeof ($tids) > 0) {
         // first, get a list of all stories the current visitor has access to
@@ -1421,7 +1453,7 @@ function userprofile ($user, $msg = 0)
     } else {
         $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
     }
-
+--------------------- */
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
     $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int)$user.") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');

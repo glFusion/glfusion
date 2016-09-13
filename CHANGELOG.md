@@ -1,6 +1,11 @@
 Please view this file on the master branch, on other branches it's out of date.
 
-v1.6.1 (unreleased)
+v1.6.1 (September 13, 2016)
+  - Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
+  - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
+  - Fixed issue with LinkedIn Oauth login
+  - Updated Oauth Library to latest release
+  - Updated headlines: auto tag to include storyimage: parameter - allows to select stories with or without attached story images
   - Fixed issue where titles that contain quotes would cause a JS parse error with Disqus 3rd party comment engine
   - Implemented search option for online conifguration
   - Documentation - several spelling and gramar updates - navigation to main index page

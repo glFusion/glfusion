@@ -1265,6 +1265,16 @@ class Template
         return false;
     }
 
+    function var_empty($val)
+    {
+        if ( !array_key_exists($val, $this->varvals)) return true;
+        if (array_key_exists($val, $this->varvals)) {
+            return (empty($this->varvals[$val]) ) ;
+        }
+        return false;
+    }
+
+
     function mod_echo($val, $modifier = '')
     {
         if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
@@ -1481,6 +1491,7 @@ class Template
             $tmplt = preg_replace(
                 array(
                       '/\{!(if|elseif|while) ([-\w\d_\[\]]+)\}/',
+                      '/\{!(if|elseif|while) !([-\w\d_\[\]]+)\}/',
                       '/\{!else(|!| !)\}/',
                       '/\{!end(if|while|for)(|!| !)\}/',                    // for is not yet supported but here for future use
                       '/\{!loop ([-\w\d_\[\]]+)(|!| !)\}/',
@@ -1492,11 +1503,12 @@ class Template
                      ),
                 array(
                       '<?php \1 ($this->var_notempty(\'\2\')): ?>',         // if exists and is non-zero
+                      '<?php \1 ($this->var_empty(\'\2\')): ?>',            // if exists and is non-zero
                       '<?php else: ?>',
                       '<?php end\1; ?>',
                       '<?php while ($this->loop(\'\1\')): ?>',              // !loop
                       '<?php endwhile; ?>',                                 // !endloop
-                      '<?php $this->\1(\'\2\'); ?>',                // !inc and !dec and +echo
+                      '<?php $this->\1(\'\2\'); ?>',                        // !inc and !dec and +echo
                       '<?php \3 $this->\1_echo(\'\4\'); ?>',                // !inc and !dec and +echo
                       '<?php \1\2; ?>',                                     // !break and !continue
                       '<?php $this->unset_var(\'\1\'); ?>',

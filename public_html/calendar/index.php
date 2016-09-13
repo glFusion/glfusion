@@ -363,7 +363,7 @@ if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
     $last = COM_checkSpeedlimit ('submit');
     if ($last > 0) {
-        $slerror .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],true);
+        $slerror .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],true,'error');
     }
 
     echo CALENDAR_siteHeader();

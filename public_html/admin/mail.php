@@ -41,7 +41,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasrights ('user.mail')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[39],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[39],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to access the mail administration screen.");
     echo $display;
@@ -218,7 +218,7 @@ function MAIL_sendMessages($vars)
             empty ($vars['subject']) OR empty ($message) OR
             ( empty ($vars['to_group']) && empty($vars['to_uid']) )) {
 
-        $retval .= COM_showMessageText($LANG31[26],$LANG31[1],true);
+        $retval .= COM_showMessageText($LANG31[26],$LANG31[1],true,'error');
 
         $msg = htmlspecialchars($vars['message'],ENT_COMPAT,COM_getEncodingt());
         $subject = htmlspecialchars($vars['subject'],ENT_COMPAT,COM_getEncodingt());

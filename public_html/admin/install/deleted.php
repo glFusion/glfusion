@@ -115,6 +115,22 @@ $obsoletePrivateFiles = array(
 
     'system/classes/openidhelper.class.php',
 
+    'plugins/captcha/class/recaptchalib.php',
+    'plugins/commentfeeds/license',
+    'plugins/forum/templates/admin/phpbb3_migrate_confirm.thtml',
+    'plugins/forum/templates/admin/phpbb3_migrate_db.thtml',
+    'plugins/links/README',
+    'system/classes/conversion.class.php',
+    'system/lib-compatibility.php',
+    'system/pear/HTTP/OAuth.php',
+    'system/pear/Net/DNS.php',
+    'system/pear/Net/SMTP.php',
+    'system/pear/PEAR/Dependency.php',
+    'system/pear/PEAR/Remote.php',
+    'system/pear/PEAR/RunTest.php',
+    'system/pear/README',
+    'system/pear/index.html',
+
 );
 
 $obsoletePublicFiles = array(
@@ -205,6 +221,9 @@ $obsoletePublicFiles = array(
     'layout/vintage/menuitem_none.thtml',
     'layout/vintage/useroption.thtml',
     'layout/vintage/useroption_off.thtml',
+
+    'admin/plugins/forum/phpbb3_migrate.php',
+    'admin/plugins/mediagallery/xppubwiz.php',
 );
 
 ?>

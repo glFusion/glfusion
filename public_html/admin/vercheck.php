@@ -35,7 +35,7 @@ $display = '';
 
 if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true)
+        . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to access the version check screen");
     echo $display;

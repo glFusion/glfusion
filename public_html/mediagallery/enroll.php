@@ -59,7 +59,7 @@ function MG_enroll( ) {
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
         $display = MG_siteHeader();
-        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true);
+        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true,'error');
         $display .= MG_siteFooter();
         echo $display;
         exit;
@@ -100,7 +100,7 @@ function MG_saveEnroll() {
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
         $display = MG_siteHeader();
-        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true);
+        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true,'error');
         $display .= MG_siteFooter();
         echo $display;
         exit;

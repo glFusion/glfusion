@@ -44,7 +44,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('group.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the group administration screen.");
     echo $display;
@@ -536,7 +536,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             if (empty ($grp_id) || ($grp_id != $g_id)) {
                 // there already is a group with that name - complain
                 $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
-                $retval .= COM_showMessageText($LANG_ACCESS['groupexistsmsg'],$LANG_ACCESS['groupexists'],true);
+                $retval .= COM_showMessageText($LANG_ACCESS['groupexistsmsg'],$LANG_ACCESS['groupexists'],true,'error');
                 $retval .= GROUP_edit($grp_id);
                 $retval .= COM_siteFooter ();
 
@@ -656,7 +656,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         echo COM_refresh($url);
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
-        $retval .= COM_showMessageText($LANG_ACCESS['missingfieldmsg'],$LANG_ACCESS['missingfields'],true);
+        $retval .= COM_showMessageText($LANG_ACCESS['missingfieldmsg'],$LANG_ACCESS['missingfields'],true,'error');
         $retval .= GROUP_edit($grp_id);
         $retval .= COM_siteFooter ();
 

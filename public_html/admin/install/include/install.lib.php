@@ -1344,6 +1344,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('mysqldump_path','Core');
             $c->del('mysqldump_options','Core');
 
+            $c->del('atom_max_stories','Core');
+            $c->del('restrict_webservices','Core');
+            $c->del('disable_webservices','Core');
+            $c->del('fs_webservices','Core');
+
+            $_SQL = array();
+
             $_SQL[] = "ALTER TABLE {$_TABLES['blocks']} CHANGE `title` `title` VARCHAR(255) NULL DEFAULT NULL;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_url` VARCHAR(255) NOT NULL default '' AFTER `expire`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `attribution_name` VARCHAR(255) NOT NULL DEFAULT '' AFTER `attribution_url`;";
@@ -2274,12 +2281,6 @@ function INST_resyncConfig() {
 
     $c->sync('fs_perm_block', NULL, 'fieldset', 7, 10, NULL, 0, TRUE);
     $c->sync('default_permissions_block',array(3, 2, 2, 2),'@select',7,10,12,10,TRUE);
-
-    $c->sync('fs_webservices', NULL, 'fieldset', 7, 11, NULL, 0, TRUE);
-    $c->sync('disable_webservices',   1, 'select', 7, 11, 0, 10, TRUE);
-    $c->sync('restrict_webservices',  0, 'select', 7, 11, 0, 20, TRUE);
-    $c->sync('atom_max_stories',     10, 'text',   7, 11, 0, 30, TRUE);
-    $c->sync('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
 }
 
 function INST_doSiteConfigUpgrade() {

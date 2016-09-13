@@ -612,10 +612,11 @@ $TEMPLATE_OPTIONS['default_vars']['iso_lang'] = $_CONF['iso_lang'];
 */
 
 // Include theme functions file
+if (file_exists($_CONF['path_layout'] . 'functions.php')) {
+    require_once $_CONF['path_layout'] . 'functions.php';
+}
 if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
     require_once $_CONF['path_layout'] . 'custom/functions.php';
-} elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
-    require_once $_CONF['path_layout'] . 'functions.php';
 }
 
 if (!isset($_SYSTEM['framework']) ) $_SYSTEM['framework'] = 'legacy';
@@ -1400,7 +1401,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $persist = false, $msgArray['type']);
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', false, $msgArray['type']);
 
         SESS_unSet('glfusion.infoblock');
     }

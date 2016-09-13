@@ -1807,6 +1807,7 @@ function service_get_story($args, &$output, &$svc_msg)
     return PLG_RET_OK;
 }
 
+
 /**
  * Get all the topics available
  *

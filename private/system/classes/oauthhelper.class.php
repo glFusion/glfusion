@@ -100,7 +100,7 @@ class OAuthConsumer {
                 break;
             case 'linkedin' :
                 $api_url = 'http://api.linkedin.com/v1/people/~:(id,first-name,last-name,location,summary,email-address,picture-url,public-profile-url)';
-                $scope   = 'r_fullprofile r_emailaddress';
+                $scope   = 'r_basicprofile r_emailaddress';
                 $q_api   = array('format'=>'json');
                 break;
             case 'github' :

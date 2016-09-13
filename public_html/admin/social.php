@@ -37,7 +37,7 @@ require_once 'auth.inc.php';
 if (!SEC_hasRights('social.admin')) {
     COM_accessLog ("User {$_USER['username']} tried to access the Social Integrations administration screen without the proper permissions.");
     $display = COM_siteHeader('menu')
-        . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true)
+        . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true,'error')
         . COM_siteFooter();
     echo $display;
     exit;

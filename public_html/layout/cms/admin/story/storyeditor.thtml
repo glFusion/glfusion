@@ -45,7 +45,7 @@ function actionClick( $action ) {
 
 	{block_start}
 	{admin_menu}
-	{block_end}
+	{end_block}
 
 {!if error_message}
 	<div class="uk-alert uk-alert-danger" data-uk-alert="">
@@ -69,7 +69,7 @@ function actionClick( $action ) {
 			<li><a href="#">{$LANG24[82]}</a></li>
 			<li><a href="#">{$LANG24[83]}</a></li>
 			<li><a href="#">{$LANG24[84]}</a></li>
-			<li  {!if show_preview}{!else} class="uk-active" {!endif}><a href="#">{$LANG24[79]}</a></li>
+			<li  {!if !show_preview} class="uk-active" {!endif}><a href="#">{$LANG24[79]}</a></li>
 		</ul>
 
 		{# top part - will always show #}

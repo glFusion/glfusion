@@ -41,7 +41,7 @@ $display = '';
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('syndication.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true)
+        . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the content syndication administration screen.");
     echo $display;
@@ -578,7 +578,7 @@ function FEED_save($A)
     if (empty ($A['title']) || empty ($A['description']) ||
             empty ($A['filename'])) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_showMessageText($LANG33[39],$LANG33[38],true)
+                . COM_showMessageText($LANG33[39],$LANG33[38],true,'error')
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;
@@ -588,7 +588,7 @@ function FEED_save($A)
     $C = DB_fetchArray($result);
     if ($C['count'] > 0) {
         $retval = COM_siteHeader ('menu', $LANG33[52])
-                . COM_showMessageText($LANG33[51],$LANG33[52],true)
+                . COM_showMessageText($LANG33[51],$LANG33[52],true,'error')
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;
@@ -596,7 +596,7 @@ function FEED_save($A)
 
     if ($A['limits'] <= 0) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_showMessageText($LANG33[40],$LANG33[38],true)
+                . COM_showMessageText($LANG33[40],$LANG33[38],true,'error')
                 . FEED_edit($A['fid'], $A['type'])
                 . COM_siteFooter ();
         return $retval;

@@ -197,7 +197,7 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
 
     if ( $ret > 0 ) { // failure
         if ( SESS_isSet('glfusion.commentpresave.error') ) {
-            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true);
+            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true,'error');
             SESS_unSet('glfusion.commentpresave.error');
         }
         $retval .= CMT_commentform ($title, $comment, $id, $pid,'filemgmt', $LANG03[14], $postmode);

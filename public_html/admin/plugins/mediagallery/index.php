@@ -43,7 +43,7 @@ if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
     COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
     $display  = COM_siteHeader();
-    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true);
+    $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true,'error');
     $display .= COM_siteFooter(true);
     echo $display;
     exit;
