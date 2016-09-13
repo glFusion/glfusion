@@ -52,6 +52,10 @@ class autotag_headlines extends BaseAutotag {
         $frontpage  = 0;        // only show items marked for frontpage
         $cols       = 3;        // number of columns
         $truncate   = 0;        // maximum number of characters to include in story text
+        $storyimage = 2;        // display stories with / without story images
+                                // 0 = display those without
+                                // 1 = display those with
+                                // 2 - don't care - just pull all stories
         $template   = 'headlines.thtml';
 
         $px = explode (' ', trim ($p2));
@@ -89,6 +93,11 @@ class autotag_headlines extends BaseAutotag {
                     $a = explode(':', $part);
                     $truncate = (int) $a[1];
                     $skip++;
+                } elseif (substr ($part,0, 11) == 'storyimage:') {
+                    $a = explode(':', $part);
+                    $storyimage = $a[1];
+                    $skip++;
+
                 } else {
                     break;
                 }
@@ -108,6 +117,8 @@ class autotag_headlines extends BaseAutotag {
             $caption = trim ($p2);
         }
         if ( $display < 0 ) $display = 3;
+
+        if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) $storyimage = 2;
 
         $hash = CACHE_security_hash();
         $instance_id = 'whatsnew_headlines_'.$uniqueID.'_'.$hash.'_'.$_USER['theme'];
@@ -135,6 +146,14 @@ class autotag_headlines extends BaseAutotag {
 
         if ( $frontpage == 1 ) {
             $sql .= " AND frontpage = 1 ";
+        }
+
+        if ( $storyimage != 2 ) {
+            if ( $storyimage == 0 ) {
+                $sql .= " AND story_image = '' ";
+            } else {
+                $sql .= " AND story_image != '' ";
+            }
         }
 
         if ($topic != $archivetid) {

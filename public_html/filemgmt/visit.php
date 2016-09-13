@@ -96,13 +96,13 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 if ( $tempFile == 1 ) {
                     $fullurl = $tempfilepath;
                 } else {
-                    $fullurl = $filemgmt_FileStore . urldecode($url);
+                    $fullurl = $filemgmt_FileStore . rawurldecode($url);
                 }
                 if ( file_exists($fullurl) ) {
                     if ($fd = fopen ($fullurl, "rb")) {
                         ob_end_flush();
-                        header('Content-Type: application/octet-stream; name="'.urldecode($url).'"');
-                        header('Content-Disposition: attachment; filename="'.urldecode($url).'"');
+                        header('Content-Type: application/octet-stream; name="'.rawurldecode($url).'"');
+                        header('Content-Disposition: attachment; filename="'.rawurldecode($url).'"');
                         header('Accept-Ranges: bytes');
                         if (!$_CONF['cookiesecure']) {
                             header('Pragma: no-cache');
@@ -119,7 +119,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                     }
                 }
             } else {
-                $fullurl = $filemgmt_FileStore .$url;
+                $fullurl = $filemgmt_FileStore . rawurldecode($url);
                 $fullurl = $fullurl;
                 ob_end_flush();
                 header('Content-Disposition: attachment; filename="' . $url . '"');

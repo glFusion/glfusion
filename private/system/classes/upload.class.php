@@ -1185,10 +1185,11 @@ class upload
                 }
                 if (!empty($this->_currentFile['name'])) {
                     // Verify file meets size limitations
+
                     if (!$this->_fileSizeOk()) {
                         $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
                     }
-
+// this is where we check the image size.
                     // If all systems check, do the upload
                     if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
                         if ($this->_copyFile()) {

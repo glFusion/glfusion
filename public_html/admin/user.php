@@ -49,9 +49,9 @@ $display = '';
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true);
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the user administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the user administration screen.");
     echo $display;
     exit;
 }
@@ -156,7 +156,7 @@ function USER_edit($uid = '', $msg = '')
         if (SEC_inGroup('Root',$uid) AND !SEC_inGroup('Root')) {
             // the current admin user isn't Root but is trying to change
             // a root account.  Deny them and log it.
-            $retval .= COM_showMessageText($LANG_ACCESS['editrootmsg'], $LANG28[1], true);
+            $retval .= COM_showMessageText($LANG_ACCESS['editrootmsg'], $LANG28[1], true,'error');
             COM_accessLog("User {$_USER['username']} tried to edit a Root account with insufficient privileges.");
             return $retval;
         }
@@ -2302,7 +2302,7 @@ function USER_importExec()
     } else {
         // A problem occurred, print debug information
         $retval  = COM_siteHeader ('menu', $LANG28[22]);
-        $retval .= COM_showMessageText($upload->printErrors(false),$LANG27[24],true);
+        $retval .= COM_showMessageText($upload->printErrors(false),$LANG27[24],true,'error');
         $retval .= COM_siteFooter();
         return $retval;
     }

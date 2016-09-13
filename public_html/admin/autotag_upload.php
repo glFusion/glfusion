@@ -34,7 +34,7 @@ $display = '';
 
 if (!SEC_hasrights ('autotag.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[38], $MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[38], $MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} attempted to access the autotag administration screen.");
     echo $display;

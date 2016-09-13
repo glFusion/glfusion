@@ -32,16 +32,14 @@
         <td class="uk-text-center">
           <input name="perm_group[]" type="radio" value="2"
 {!if group_r_checked}
-  {!if group_e_checked}
-  {!else}
+  {!if !group_e_checked}
    checked="checked"
   {!endif}
 {!endif}
         </td>
         <td class="uk-text-center">
           <input name="perm_group[]" type="radio" value="0"
-{!if group_r_checked}
-{!else}
+{!if !group_r_checked}
  checked="checked"
 {!endif}
         </td>
@@ -57,7 +55,7 @@
         </td>
         <td class="uk-text-center">
           <input name="perm_members[]" type="radio" value="0"
-          {!if members_checked} {!else}  checked="checked" {!endif} >
+          {!if !members_checked} checked="checked" {!endif} >
         </td>
       </tr>
       <tr>
@@ -71,7 +69,7 @@
         </td>
         <td class="uk-text-center">
           <input name="perm_anon[]" type="radio" value="0"
-          {!if anon_checked} {!else} checked="checked" {!endif} >
+          {!if !anon_checked} checked="checked" {!endif} >
         </td>
       </tr>
     </table>

@@ -33,7 +33,7 @@ $display = '';
 
 if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu');
-    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true);
+    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true,'error');
     $display .= COM_siteFooter ();
     echo $display;
     exit;

@@ -139,7 +139,7 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
     if ( $ret > 0 ) {
         $retval = '';
         if ( SESS_isSet('glfusion.commentpresave.error') ) {
-            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true);
+            $retval = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'), '', true,'error');
             SESS_unSet('glfusion.commentpresave.error');
         }
         $retval .= CMT_commentform ($title, $comment, $id, $pid, 'mediagallery', $LANG03[14], $postmode);

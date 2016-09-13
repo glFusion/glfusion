@@ -35,7 +35,7 @@ $display = '';
 // Only let admin users access this page
 if (!SEC_hasRights('logo.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog("User {$_USER['username']} tried to illegally access the logo administration screen.");
     echo $display;

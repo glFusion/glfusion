@@ -169,7 +169,7 @@ if (empty($pid)) {
     if (isset($_POST['aid'])) {
         $eMsg = $LANG_POLLS['answer_all'] . ' "'
             . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'") . '"';
-        $display .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true);
+        $display .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
     }
     if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".DB_escapeString($pid)."'") != 1) {
         $aid = -1; // poll closed - show result

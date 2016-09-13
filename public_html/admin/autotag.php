@@ -47,7 +47,7 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 if (!SEC_hasRights('autotag.admin')) {
     COM_accessLog ("User {$_USER['username']} tried to access the Autotag Manager administration screen without the proper permissions.");
     $display = COM_siteHeader('menu')
-        . COM_showMessageText($LANG_AM['access_denied_msg'],$LANG_AM['access_denied'],true)
+        . COM_showMessageText($LANG_AM['access_denied_msg'],$LANG_AM['access_denied'],true,'error')
         . COM_siteFooter();
     echo $display;
     exit;

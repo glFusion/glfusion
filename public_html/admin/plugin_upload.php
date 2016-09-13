@@ -34,7 +34,7 @@ $display = '';
 
 if (!SEC_hasrights ('plugin.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_showMessageText($MESSAGE[38],$MESSAGE[30],true);
+    $display .= COM_showMessageText($MESSAGE[38],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the plugin administration screen.");
     echo $display;
@@ -791,7 +791,7 @@ function pi_update ($pi_name)
     $retval = '';
 
     if (strlen ($pi_name) == 0) {
-        $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true);
+        $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true,'error');
         COM_errorLog ($LANG32[12]);
         return $retval;
     }

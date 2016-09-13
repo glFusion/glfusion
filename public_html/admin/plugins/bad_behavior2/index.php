@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2015 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,7 +41,7 @@ $display = '';
 
 if (!SEC_inGroup ('Bad Behavior2 Admin')) {
     $display .= COM_siteHeader ('menu');
-    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true);
+    $display .= COM_showMessageText($LANG20[6],$LANG20[1],true,'error');
     $display .= COM_siteFooter ();
     echo $display;
     exit;
