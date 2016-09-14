@@ -82,7 +82,7 @@ echo json_encode($return);
 
 function POLLS_saveVote_AJAX($pid, $aid)
 {
-    global $_CONF, $_PO_CONF, $_TABLES, $LANG_POLLS;
+    global $_USER, $_CONF, $_PO_CONF, $_TABLES, $LANG_POLLS;
 
     $retval = array('html' => '','statusMessage' => '');
 
@@ -108,7 +108,12 @@ function POLLS_saveVote_AJAX($pid, $aid)
                 true
             );
         }
-        DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," . time() . ",'".DB_escapeString($pid)."'");
+        if ( COM_isAnonUser() ) {
+            $userid = 1;
+        } else {
+            $userid = $_USER['uid'];
+        }
+        DB_save($_TABLES['pollvoters'],'ipaddress,uid,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".$userid."," . time() . ",'".DB_escapeString($pid)."'");
     }
 
     $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
