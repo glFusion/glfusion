@@ -412,8 +412,13 @@ function _checkVersion()
                 if ($currentRev > $latestRev ) {
                     $glFusionUpToDate = 2;
                 } else if ( $currentExtra != '' || $latestExtra != '' ) {
-                    if ( strcmp($currentExtra,$latestExtra) == 0 ) {
+                    $rc = strcmp($currentExtra,$latestExtra);
+                    if ( $rc == 0 ) {
                         $glFusionUpToDate = 1;
+                    } elseif ( $rc < 0 ) {
+                        $glFusionUpToDate = 0;
+                    } else {
+                        $glFusionUpToDate = 2;
                     }
                 } else {
                     $glFusionUpToDate = 1;
