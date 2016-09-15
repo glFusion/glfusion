@@ -81,7 +81,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     SESS_setContext(array('type' => 'article','sid' => $story->_sid));
 
-    if( empty( $storytpl )) {
+    if ( empty( $storytpl )) {
         $storytpl = 'storytext.thtml';
     }
     $featuredstorytpl = 'featuredstorytext.thtml';
@@ -109,7 +109,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $introtext = $story->displayElements('introtext');
     $bodytext  = $story->displayElements('bodytext');
 
-    if( !empty( $query )) {
+    if ( !empty( $query )) {
         $introtext = COM_highlightQuery( $introtext, $query );
         $bodytext  = COM_highlightQuery( $bodytext, $query );
     }
@@ -121,7 +121,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             'archivearticle'   => $archivestorytpl,
             ));
 
-    if( $_CONF['hideviewscount'] != 1 ) {
+    if ( $_CONF['hideviewscount'] != 1 ) {
         $article->set_var( 'lang_views', $LANG01[106] );
         $article->set_var( 'story_hits', $story->DisplayElements('hits'),false,true );
     }
@@ -136,9 +136,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $article->set_var('story_title', $story->DisplayElements('title'));
 
     // begin instance caching...
-    if( $story->DisplayElements('featured') == 1 ) {
+    if ( $story->DisplayElements('featured') == 1 ) {
         $article_filevar = 'featuredarticle';
-    } elseif( $story->DisplayElements('statuscode') == STORY_ARCHIVE_ON_EXPIRE AND $story->DisplayElements('expire') <= time() ) {
+    } elseif ( $story->DisplayElements('statuscode') == STORY_ARCHIVE_ON_EXPIRE AND $story->DisplayElements('expire') <= time() ) {
         $article_filevar = 'archivearticle';
     } else {
         $article_filevar = 'article';
@@ -178,7 +178,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $profileUrl = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
                 . $story->DisplayElements('uid');
 
-            if( $story->DisplayElements('uid') > 1 ) {
+            if ( $story->DisplayElements('uid') > 1 ) {
                 $article->set_var( 'contributedby_url', $profileUrl );
                 $authorname = COM_createLink($authorname, $profileUrl, array('class' => 'storybyline'));
             }
@@ -250,10 +250,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
         $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');
-        if(( !isset( $_USER['noicons'] ) OR ( $_USER['noicons'] != 1 )) AND
+        if (( !isset( $_USER['noicons'] ) OR ( $_USER['noicons'] != 1 )) AND
                 $story->DisplayElements('show_topic_icon') == 1 ) {
             $imageurl = $story->DisplayElements('imageurl');
-            if( !empty( $imageurl )) {
+            if ( !empty( $imageurl )) {
                 $imageurl = COM_getTopicImageUrl( $imageurl );
                 $article->set_var( 'story_topic_image_url', $imageurl );
                 $article->set_var( 'topic_url',$topicurl);
@@ -316,64 +316,19 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var('story_title_link', $story->DisplayElements('title'));
         }
 
-        if(( $index == 'n' ) || ( $index == 'p' )) {
-            if( empty( $bodytext )) {
-                $article->set_var( 'story_introtext', $introtext );
-                $article->set_var( 'story_text_no_br', $introtext );
+        if (( $index == 'n' ) || ( $index == 'p' )) {
+            if ( empty( $bodytext )) {
+                $article->set_var( 'story_introtext', $introtext,false,true );
+                $article->set_var( 'story_text_no_br', $introtext,false,true );
             } else {
-// page break feature depreciated / removed in 1.6.0
-                $article_array = explode( '[page_break]', $bodytext );
-                $pbCount = count($article_array);
-                if ( $pbCount > 1 ) {
-                    $bodytext = '';
-                    for($x=0;$x < $pbCount; $x++) $bodytext .= $article_array[$x];
-                }
-                $_CONF['allow_page_breaks'] = 0;
-// end of page break removal
-                if(( $_CONF['allow_page_breaks'] == 1 ) and ( $index == 'n' )) {
-                    $story_page = 1;
-
-                    // page selector
-                    if( is_numeric( $mode )) {
-                        $story_page = $mode;
-                        if( $story_page <= 0 ) {
-                            $story_page = 1;
-                            $mode = 0;
-                        } elseif( $story_page > 1 ) {
-                            $introtext = '';
-                        }
-                    }
-                    $article_array = explode( '[page_break]', $bodytext );
-
-                    $pagelinks = COM_printPageNavigation(
-                        $articleUrl, $story_page, count( $article_array ),
-                        'mode=', $_CONF['url_rewrite'], $LANG01[118]);
-                    if( count( $article_array ) > 1 ) {
-                        $bodytext = $article_array[$story_page - 1];
-                    }
-                    $article->set_var( 'page_selector', $pagelinks );
-
-                    if (
-                         ( ($_CONF['page_break_comments'] == 'last')  and
-                           ($story_page < count($article_array)) )
-                        or
-                         ( ($_CONF['page_break_comments'] == 'first')  and
-                           ($story_page != 1) )
-                       )
-                    {
-                        $show_comments = false;
-                    }
-                    $article->set_var( 'story_page', $story_page );
-                }
-
                 $article->set_var( 'story_introtext', $introtext . '<br />'
-                                   . $bodytext );
-                $article->set_var( 'story_text_no_br', $introtext . $bodytext );
+                                   . $bodytext,false,true );
+                $article->set_var( 'story_text_no_br', $introtext . $bodytext,false,true );
             }
-            $article->set_var( 'story_introtext_only', $introtext );
-            $article->set_var( 'story_bodytext_only', $bodytext );
+            $article->set_var( 'story_introtext_only', $introtext,false,true );
+            $article->set_var( 'story_bodytext_only', $bodytext,false,true );
 
-            if(( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ) &&
+            if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ) &&
                     SEC_hasRights( 'story.ping' )) {
                 $url = $_CONF['site_admin_url']
                      . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
@@ -394,11 +349,11 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                ( $index == 'p' ) ? 'preview' : 'article' );
             $article->set_var( 'story_counter', 0 );
         } else {
-            $article->set_var( 'story_introtext', $introtext );
-            $article->set_var( 'story_text_no_br', $introtext );
-            $article->set_var( 'story_introtext_only', $introtext );
+            $article->set_var( 'story_introtext', $introtext,false,true );
+            $article->set_var( 'story_text_no_br', $introtext,false,true );
+            $article->set_var( 'story_introtext_only', $introtext,false,true );
 
-            if( !empty( $bodytext )) {
+            if ( !empty( $bodytext )) {
                 $article->set_var( 'lang_readmore', $LANG01[2] );
                 $article->set_var( 'lang_readmore_words', $LANG01[62] );
                 $numwords = COM_numberFormat (sizeof( explode( ' ', strip_tags( $bodytext ))));
@@ -418,7 +373,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var('readmore_url',$articleUrl);
             }
 
-            if(( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments )) {
+            if ( ( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments ) ) {
                 $commentsUrl = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#comments';
 
@@ -452,7 +407,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         $_CONF['site_url'] . '/comment.php?sid=' . $story->getsid() . '#comment_entry'
                             . '&amp;pid=0&amp;type=article');
                 }
-                if( $story->DisplayElements( 'commentcode' ) == 0 &&
+                if ( $story->DisplayElements( 'commentcode' ) == 0 &&
                  ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
                     $postCommentUrl = $_CONF['site_url'] . '/comment.php?sid='
                                 . $story->getSid() . '&amp;pid=0&amp;type=article#comment_entry';
@@ -468,7 +423,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 }
             }
 
-            if(( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ) &&
+            if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ) &&
                     ( $story->DisplayElements('trackbackcode') >= 0 ) && ( $show_comments )) {
                 $num_trackbacks = COM_numberFormat( $story->DisplayElements('trackbacks') );
                 $trackbacksUrl = COM_buildUrl( $_CONF['site_url']
@@ -485,7 +440,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     )
                 );
 
-                if(SEC_hasRights( 'story.ping' )) {
+                if (SEC_hasRights( 'story.ping' )) {
                     $pingurl = $_CONF['site_admin_url']
                         . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
                     $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
@@ -496,7 +451,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     );
                 }
 
-                if( $story->DisplayElements('trackbacks') > 0 ) {
+                if ( $story->DisplayElements('trackbacks') > 0 ) {
                     $article->set_var( 'trackbacks_with_count',
                         COM_createLink(
                             sprintf( $LANG01[122], $num_trackbacks ),
@@ -510,7 +465,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 }
             }
 
-            if(( $_CONF['hideemailicon'] == 1 ) ||
+            if (( $_CONF['hideemailicon'] == 1 ) ||
                ( COM_isAnonUser() &&
                     (( $_CONF['loginrequired'] == 1 ) ||
                      ( $_CONF['emailstoryloginrequired'] == 1 )))) {
@@ -530,7 +485,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
             $printUrl = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                                       . $story->getSid() . '&amp;mode=print' );
-            if( $_CONF['hideprintericon'] == 1 ) {
+            if ( $_CONF['hideprintericon'] == 1 ) {
                 $article->set_var( 'print_icon', '' );
             } else {
                 $printicon = '<img src="' . $_CONF['layout_url']
@@ -626,6 +581,22 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
     } else {
         PLG_templateSetVars($article_filevar,$article);
+        if ( ( $index == 'n' ) || ( $index == 'p' ) ) {
+            if ( empty( $bodytext )) {
+                $article->set_var( 'story_introtext', $introtext,false,true );
+                $article->set_var( 'story_text_no_br', $introtext,false,true );
+            } else {
+                $article->set_var( 'story_introtext', $introtext . '<br />'
+                                   . $bodytext,false,true );
+                $article->set_var( 'story_text_no_br', $introtext . $bodytext,false,true );
+            }
+            $article->set_var( 'story_introtext_only', $introtext,false,true );
+            $article->set_var( 'story_bodytext_only', $bodytext,false,true );
+        } else {
+            $article->set_var( 'story_introtext', $introtext,false,true );
+            $article->set_var( 'story_text_no_br', $introtext,false,true );
+            $article->set_var( 'story_introtext_only', $introtext,false,true );
+        }
 
         if ( $_CONF['rating_enabled'] != 0 ) {
             if ( @in_array($story->getSid(),$ratedIds)) {
@@ -718,10 +689,10 @@ function STORY_whatsRelated( $related, $uid, $tid, $atid = '' )
         $rel = array ();
     }
 
-    if( !COM_isAnonUser() || (( $_CONF['loginrequired'] == 0 ) &&
+    if ( !COM_isAnonUser() || (( $_CONF['loginrequired'] == 0 ) &&
            ( $_CONF['searchloginrequired'] == 0 ))) {
         // add a link to "search by author"
-        if( $_CONF['contributedbyline'] == 1 ) {
+        if ( $_CONF['contributedbyline'] == 1 ) {
             $author = COM_getDisplayName( $uid );
             $rel[] = "<a href=\"{$_CONF['site_url']}/search.php?mode=search&amp;type=stories&amp;author=$uid\">{$LANG24[37]} $author</a>";
         }
@@ -740,7 +711,7 @@ function STORY_whatsRelated( $related, $uid, $tid, $atid = '' )
     }
 
     $related = '';
-    if( sizeof( $rel ) > 0 ) {
+    if ( sizeof( $rel ) > 0 ) {
         $related = COM_checkWords( COM_makeList( $rel, 'list-whats-related' ));
     }
 
@@ -1269,7 +1240,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
 
-    if(empty($args['owner_id'])) {
+    if (empty($args['owner_id'])) {
         $args['owner_id'] = $_USER['uid'];
     }
 
