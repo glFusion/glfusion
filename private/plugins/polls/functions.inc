@@ -1243,15 +1243,14 @@ function POLLS_saveVote($pid, $aid)
             true
         );
     }
-
-    // This always does an insert so no need to provide key_field and key_value args
     if ( COM_isAnonUser() ) {
         $userid = 1;
     } else {
         $userid = $_USER['uid'];
     }
-
-    DB_save($_TABLES['pollvoters'],'ipaddress,uid,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".$userid."," . time() . ",'".DB_escapeString($pid)."'");
+    // This always does an insert so no need to provide key_field and key_value args
+    $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
+    $result = DB_query($sql);
     $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
         . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'").'"';
     $retval .= COM_showMessageText($eMsg,$LANG_POLLS['savedvotetitle'],false)
