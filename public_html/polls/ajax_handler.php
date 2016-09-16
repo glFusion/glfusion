@@ -125,3 +125,4 @@ function POLLS_saveVote_AJAX($pid, $aid)
 
     return $retval;
 }
+?>

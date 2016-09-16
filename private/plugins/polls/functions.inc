@@ -934,7 +934,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
         return $retval;
     }
     $P = DB_fetchArray($result);
-    if ((!isset($_COOKIE[$pid]) && !POLLS_ipAlreadyVoted($pid)) or ($P['is_open'] == 1)) {
+    if ((!isset($_COOKIE[$pid]) && !POLLS_ipAlreadyVoted($pid)) && ($P['is_open'] == 1)) {
         if ($ntopics == 1) {
             $questions_sql = "SELECT question,qid "
                 . "FROM {$_TABLES['pollquestions']} "
@@ -1137,10 +1137,18 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
     $retval = '';
     $is_open = 0;
 
-    DB_query("DELETE FROM {$_TABLES['pollvoters']} WHERE date < unix_timestamp() - {$_PO_CONF['polladdresstime']}");
+    // housekeeping - delete old anonymous voting data
+    if ( !isset($_PO_CONF['polladdresstime']) ) {
+        $polladdresstime = 86400; // 24 hours
+    } else {
+        $polladdresstime = $_PO_CONF['polladdresstime'];
+    }
+    $checkTime = time() - $polladdresstime;
+    $sql = "DELETE FROM {$_TABLES['pollvoters']} WHERE uid = 1 && date < " . $checkTime . "";
+    DB_query($sql,1);
 
     if(!empty($pid)) {
-        $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".$pid."'";
+        $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'";
         $result = DB_query($sql);
         if ( DB_numRows($result) > 0 ) {
             $row = DB_fetchArray($result);
@@ -1221,7 +1229,7 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
 */
 function POLLS_saveVote($pid, $aid)
 {
-    global $_USER, $_TABLES, $LANG_POLLS;
+    global $_PO_CONF, $_USER, $_TABLES, $LANG_POLLS;
 
     $retval = '';
 
@@ -1251,8 +1259,10 @@ function POLLS_saveVote($pid, $aid)
     // This always does an insert so no need to provide key_field and key_value args
     $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
     $result = DB_query($sql);
+
     $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
         . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'").'"';
+
     $retval .= COM_showMessageText($eMsg,$LANG_POLLS['savedvotetitle'],false)
             . POLLS_pollResults($pid);
 
@@ -1487,17 +1497,18 @@ function POLLS_ipAlreadyVoted($pid, $ip = '' )
         $ip = $_SERVER['REMOTE_ADDR'];
     }
 
-    if(DB_count($_TABLES['pollvoters'],
+    if ( !COM_isAnonUser() ) {
+        if (DB_count($_TABLES['pollvoters'],
+                 array('uid', 'pid'),
+                 array( (int) $_USER['uid'], DB_escapeString($pid))) > 0) {
+            $retval = true;
+        } else {
+            $retval = false;
+        }
+    } elseif ($ip != '' && DB_count($_TABLES['pollvoters'],
                  array('ipaddress', 'pid'),
                  array(DB_escapeString($ip), DB_escapeString($pid))) > 0) {
         $retval = true;
-    }
-    if ( !COM_isAnonUser()) {
-        if(DB_count($_TABLES['pollvoters'],
-                     array('uid', 'pid'),
-                     array(DB_escapeString($_USER['uid']), DB_escapeString($pid))) > 0) {
-            $retval = true;
-        }
     }
 
     return $retval;

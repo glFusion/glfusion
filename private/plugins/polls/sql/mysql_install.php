@@ -88,7 +88,7 @@ CREATE TABLE {$_TABLES['polltopics']} (
 $_SQL['pollvoters'] = "
 CREATE TABLE {$_TABLES['pollvoters']} (
   id int(10) unsigned NOT NULL auto_increment,
-  pid varchar(20) NOT NULL default '',
+  pid varchar(128) NOT NULL default '',
   ipaddress varchar(15) NOT NULL default '',
   uid mediumint(8) NOT NULL default 1,
   date int(10) unsigned default NULL,
