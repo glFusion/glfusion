@@ -3885,8 +3885,10 @@ function COM_getMessage()
     $msg = 0;
     if ( isset($_POST['msg']) ) {
         $msg = COM_applyFilter($_POST['msg'],true);
+        unset($_POST['msg']);
     } elseif ( isset($_GET['msg']) ) {
         $msg = COM_applyFilter($_GET['msg'],true);
+        unset($_GET['msg']);
     } elseif ( SESS_isSet('glfusion.infomessage') ) {
         $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
         SESS_unSet('glfusion.infomessage');
