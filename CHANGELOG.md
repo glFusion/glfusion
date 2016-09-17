@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Fixed issue with message handling (i.e.; ... saved successfully) interaction with plugins
+  - Media Gallery - MP3 playblack - fallback to flash player would fail
   - Polls Plugin - Update to v2.2.1
     - Fixed issue where poll voter data could be overwritten
     - Fixed issue where poll voter data was being purged incorrectly
