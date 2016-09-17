@@ -1173,6 +1173,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 'lang_download'     => $LANG_MG03['download'],
                 'lang_info'         => $LANG_MG03['info'],
                 'lang_noflash' 		=> $LANG_MG03['no_flash'],
+                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
                 'swf_version'   	=> '9',
             ));
             $V->parse('output','video');
