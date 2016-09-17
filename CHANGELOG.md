@@ -1,10 +1,12 @@
 Please view this file on the master branch, on other branches it's out of date.
 
-v1.6.1.pl1 (unreleased)
+v1.6.2 (unreleased)
+  - Polls Plugin - Update to v2.2.1
+    - Fixed issue where poll voter data could be overwritten
+    - Fixed issue where poll voter data was being purged incorrectly
+    - Fixed issue where deleting a poll did not delete the corresponding voter data
   - headlines auto tag - panel template was missing a closing </div>
   - Story instance - dynamic auto tags would get cached and no longer be dynamic
-  - Polls - fixed issue where poll voter data could be overwritten and lost
-  - Polls - Fixed issue where deleting a poll did not remove the poll vote data
   - Fixed issue in version check where it did not properly detect pl versions
 
 v1.6.1 (September 13, 2016)

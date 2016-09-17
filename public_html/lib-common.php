@@ -60,10 +60,10 @@ if (version_compare(PHP_VERSION,'5.3.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.1');
+    define('GVERSION', '1.6.2');
 }
 
-define('PATCHLEVEL','.pl1');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
