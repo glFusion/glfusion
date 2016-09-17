@@ -1421,7 +1421,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 $poll->clear_var('poll_votes');
                 if (($scale < 100) && ($j < 1)) {
                     $url = $_CONF['site_url'] . "/polls/index.php?pid=$pid";
-                    $poll->set_var('notification', COM_createLink($LANG25[40], $url). "<br" . XHTML . ">");
+                    $poll->set_var('notification', COM_createLink($LANG25[40], $url). "<br>");
                     break;
                 }
             }

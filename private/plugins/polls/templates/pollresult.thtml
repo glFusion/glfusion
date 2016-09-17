@@ -8,7 +8,7 @@
 	<br />
 {!endif}
 {poll_questions}
-<div class="uk-text-small">
+<div class="uk-panel uk-text-small uk-text-truncate uk-margin-bottom">
 	{notification} <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
 </div>
 {# end {templatelocation} #}
