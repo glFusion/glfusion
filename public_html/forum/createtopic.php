@@ -694,7 +694,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var('bbcodeeditor',true);
     }
 
-    $postData['subject'] = str_replace('"', '&quot;',$postData['subject']);
+    $postData['subject'] = str_replace('&quot;','"', $postData['subject']);
 
     if(!$_FF_CONF['allow_smilies']) {
         $smilies = '';
@@ -731,7 +731,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         'edit_prompt'       => $edit_prompt,
         'LANG_SUBMIT'       => $LANG_GF01['SUBMIT'],
         'LANG_PREVIEW'      => $LANG_GF01['PREVIEW'],
-        'subject'           => $postData['subject'],
+        'subject'           => @htmlspecialchars($postData['subject'],ENT_QUOTES, COM_getEncodingt()),
         'smilies'           => $smilies,
         'LANG_attachments'  => $LANG_GF10['attachments'],
         'LANG_maxattachments'=>sprintf($LANG_GF10['maxattachments'],$_FF_CONF['maxattachments']),
