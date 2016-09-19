@@ -1157,6 +1157,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
             }
             if (($A['grp_name'] == 'All Users') ||
                 ($A['grp_name'] == 'Logged-in Users') ||
+                ($A['grp_name'] == 'Non-Logged-in Users') ||
                 ($A['grp_name'] == 'Remote Users')) {
                 $retval = '<input type="checkbox" disabled="disabled"'
                         . $checked . '/>'

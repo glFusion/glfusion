@@ -72,19 +72,13 @@ function MB_displayMenuList( ) {
         $menuArray[$menu['id']]['menu_type']   = $menu['menu_type'];
         $menuArray[$menu['id']]['group_id']    = $menu['group_id'];
 
+        $menuArray[$menu['id']]['menu_perm'] =  0;
+
         if ($mbadmin || $root) {
             $menuArray[$menu['id']]['menu_perm'] = 3;
         } else {
-            if ( $menuArray['group_id'] == 998 ) {
-                if( COM_isAnonUser() ) {
-                    $menuArray[$menu['id']]['menu_perm'] = 3;
-                } else {
-                    $menuArray[$menu['id']]['menu_perm'] =  0;
-                }
-            } else {
-                if ( in_array( $menu['group_id'], $_GROUPS ) ) {
-                    $menuArray[$menu['id']]['menu_perm'] =  3;
-                }
+            if ( in_array( $menu['group_id'], $_GROUPS ) ) {
+                $menuArray[$menu['id']]['menu_perm'] =  3;
             }
         }
     }
@@ -274,7 +268,6 @@ function MB_createMenu( ) {
 
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
     $usergroups = SEC_getUserGroups($rootUser);
-    $usergroups[$LANG_MB01['non-logged-in']] = 998;
     uksort($usergroups, "strnatcasecmp");
     $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
@@ -621,7 +614,6 @@ function MB_createElement ( $menu_id ) {
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
 
     $usergroups = SEC_getUserGroups($rootUser);
-    $usergroups[$LANG_MB01['non-logged-in']] = 998;
     uksort($usergroups, "strnatcasecmp");
     $group_select .= '<select id="group" name="group">' . LB;
 
@@ -882,7 +874,6 @@ function MB_editElement( $menu_id, $mid ) {
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
 
     $usergroups = SEC_getUserGroups($rootUser);
-    $usergroups[$LANG_MB01['non-logged-in']] = 998;
 
     uksort($usergroups, "strnatcasecmp");
     $group_select = '<select id="group" name="group">' . LB;
@@ -1124,7 +1115,6 @@ function MB_editMenu( $mid ) {
 
     $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
     $usergroups = SEC_getUserGroups($rootUser);
-    $usergroups[$LANG_MB01['non-logged-in']] = 998;
     uksort($usergroups, "strnatcasecmp");
 
     $group_select = '<select id="group" name="group">' . LB;

@@ -4909,7 +4909,9 @@ function COM_getPermSQL( $type = 'WHERE', $u_id = 0, $access = 2, $table = '' )
              . ")) AND ({$table}perm_group >= $access)) OR ";
         $sql .= "({$table}perm_members >= $access)";
     } else {
-        $sql .= "{$table}perm_anon >= $access";
+        $sql .= "(({$table}group_id IN (" . implode( ',', $UserGroups )
+             . ")) AND ({$table}perm_group >= $access)) OR ";
+        $sql .= "({$table}perm_anon >= $access)";
     }
 
     $sql .= ')';

@@ -249,20 +249,12 @@ class menuElement {
     function setAccessRights( $meadmin, $root, $groups ) {
         global $_USER;
 
-        if ( $this->group_id == 998 ) {
-            if ( COM_isAnonUser() ) {
-                $this->access = 3;
-            } else {
-                $this->access = 0;
-            }
+        if ($meadmin || $root) {
+            $this->access = 3;
+        } else if ( in_array( $this->group_id, $groups ) ) {
+            $this->access = 3;
         } else {
-            if ($meadmin || $root) {
-                $this->access = 3;
-            } else if ( in_array( $this->group_id, $groups ) ) {
-                $this->access = 3;
-            } else {
-                $this->access = 0;
-            }
+            $this->access = 0;
         }
     }
 
@@ -393,7 +385,10 @@ class menuElement {
         if ( $this->active != 1 && $this->id != 0 ) {
             return NULL;
         }
-        if ( $this->group_id == 998 && !COM_isAnonUser()) return NULL;
+
+        $nonloggedinusergroup = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Non-Logged-in Users"');
+
+        if ( $this->group_id == $nonloggedinusergroup && !COM_isAnonUser()) return NULL;
 
         if (isset($_REQUEST['topic']) ){
             $topic = COM_applyFilter($_REQUEST['topic']);
@@ -408,7 +403,7 @@ class menuElement {
         }
         $allowed = true;
 
-        if ( $this->group_id != 998 && $this->id != 0 && !SEC_inGroup($this->group_id) ) {
+        if ( $this->id != 0 && !SEC_inGroup($this->group_id) ) {
             return NULL;
         }
 
@@ -571,9 +566,6 @@ class menuElement {
                 break;
             default :
                 break;
-        }
-        if ( $this->id != 0 && $this->group_id == 998 && (SEC_inGroup('Root') ) ) {
-            return NULL;
         }
         if ( $allowed == 0 || $this->access == 0 ) {
             return NULL;
