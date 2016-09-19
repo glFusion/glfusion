@@ -1,6 +1,9 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Forum - fixed issue where quotes in forum post subject where replaced with &quote;
+  - Implemented Non-Logged-in User group support - allows groups to now include non-logged-in users
+  - Media Gallery - Fixed issue in album edit - unable to set group ownership due to wrong template var name being used
   - Fixed issue with message handling (i.e.; ... saved successfully) interaction with plugins
   - Media Gallery - MP3 playblack - fallback to flash player would fail
   - Polls Plugin - Update to v2.2.1
