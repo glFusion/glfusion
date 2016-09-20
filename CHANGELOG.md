@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Media Gallery - did not honor the album configured sort order
+  - Media Gallery - long titles would push the admin menu down off navbar
   - Forum - fixed issue where quotes in forum post subject where replaced with &quote;
   - Implemented Non-Logged-in User group support - allows groups to now include non-logged-in users
   - Media Gallery - Fixed issue in album edit - unable to set group ownership due to wrong template var name being used
