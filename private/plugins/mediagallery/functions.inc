@@ -1968,9 +1968,39 @@ function MG_getFeedUrl( $feedfile = '' )
 function MG_getSortOrder( $aid, $sortOrder ) {
     global $MG_albums;
 
-    if ($MG_albums[$aid]->enable_sort == 0 ) {
-        return " ORDER BY ma.media_order DESC";
+    // translate global album option to client option
+    switch ( $MG_albums[$aid]->album_sort_order ) {
+        case 0 :
+            $album_sort_order = 1;
+            break;
+        case 1 :
+            $album_sort_order = 5;
+            break;
+        case 2 :
+            $album_sort_order = 4;
+            break;
+        case 3 :
+            $album_sort_order = 3;
+            break;
+        case 4 :
+            $album_sort_order = 2;
+            break;
+        case 5 :
+            $album_sort_order = 10;
+            break;
+        case 6 :
+            $album_sort_order = 11;
+            break;
+        default :
+            $album_sort_order = 0;
+            break;
     }
+
+    if ($MG_albums[$aid]->enable_sort == 0 ) {
+        $sortOrder = 0;
+    }
+
+    if ( $sortOrder == 0 ) $sortOrder = $album_sort_order;
 
     switch ( $sortOrder ) {
         case 0 :    // default
