@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Tweaked tm-block-footer style to provide better color combination for copyright
+  - Added Driven by glFusion link in footer template
   - Media Gallery - did not honor the album configured sort order
   - Media Gallery - long titles would push the admin menu down off navbar
   - Forum - fixed issue where quotes in forum post subject where replaced with &quote;

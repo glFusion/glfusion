@@ -349,10 +349,10 @@ p.tm-article-meta {
 }
 
 #tm-block-bottom a:hover {
-	color:#CCC
+	color:#CCC;
 }
 #tm-block-bottom .module-title {
-	color:#CCC
+	color:#CCC;
 }
 #tm-block-bottom .uk-panel-title {
 	color: #ccc;
@@ -364,8 +364,12 @@ p.tm-article-meta {
 
 /* bottom footer that holds navigation menu or copyright */
 #tm-block-footer {
+	color:#777;
 	background: #252525;
 	border-top:1px solid #232425
+}
+#tm-block-footer a:hover {
+	color:#07D;
 }
 
 /* admin nav bar */
