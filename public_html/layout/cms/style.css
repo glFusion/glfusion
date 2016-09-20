@@ -30,7 +30,7 @@ set of styles.
 }
 
 /* tm-container is the primary wrapper for the content area. This excludes
- * the header / footer (see tm-nav* and tm-footer* styles)
+* the header / footer (see tm-nav* and tm-footer* styles)
 ========================================================================== */
 
 .tm-container {
@@ -61,13 +61,13 @@ set of styles.
 }
 
 /* Modifier: `tm-icon-hover`
- ========================================================================== */
+========================================================================== */
 .tm-icon-hover {
 	color: #fff;
 }
 /*
- * Hover
- */
+* Hover
+*/
 .tm-icon-hover:hover {
 	color: #ccd6dd;
 }
@@ -368,6 +368,7 @@ p.tm-article-meta {
 	background: #252525;
 	border-top:1px solid #232425
 }
+
 #tm-block-footer a:hover {
 	color:#07D;
 }
@@ -2346,11 +2347,11 @@ input.error {
 /* Envcheck styles
 ========================================================================== */
 .yes {
-  color: #659f13;
+	color: #659f13;
 }
 .notok {
-  color: #d85030;
-  font-weight:700;
+	color: #d85030;
+	font-weight:700;
 }
 
 /* Configuration Search styles
