@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.6.1');
+define('GVERSION','1.6.2');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
@@ -46,6 +46,18 @@ require_once $_CONF['path_system'].'lib-database.php';
 $self = basename(__FILE__);
 
 $rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration');
+
+/* Constants for account stats */
+define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
+define('USER_ACCOUNT_AWAITING_ACTIVATION', 1); // Account awaiting user to login.
+define('USER_ACCOUNT_AWAITING_APPROVAL', 2); // Account awaiting moderator approval
+define('USER_ACCOUNT_ACTIVE', 3); // active account
+define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to complete verification
+
+/* Constants for account types */
+define('LOCAL_USER',1);
+define('REMOTE_USER',2);
+
 
 function FR_stripslashes( $text ) {
     if( get_magic_quotes_gpc() == 1 ) {
@@ -344,6 +356,7 @@ function rescue_header( $authenticated ) {
                         </li>
                         <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
                         <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
+                        <li><a href="fusionrescue.php?mode=resetpassword">Reset Password</a></li>
                         <li><a  href="fusionrescue.php?mode=cancel">Logout</a></li>
                         </ul>
                     </ul>
@@ -373,6 +386,7 @@ function rescue_header( $authenticated ) {
                 <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
             ';
         }
+        $retval .= '<li><a href="fusionrescue.php?mode=resetpassword">Reset Password</a></li>';
         $retval .= '
             </ul>
             <div class="uk-navbar-flip uk-hidden-small">
@@ -615,18 +629,38 @@ function getNewPaths( $group = 'Core') {
                 <div class="uk-form-controls">
                 &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
                 <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
-                </select>
                 </div>
                 </div>
             ';
-        }  else {
+        } elseif ( $configDetail[$option]['type'] == '@select' ) {
             $retval .= '
                 <div class="uk-form-row">
                 <label class="uk-form-label">'.$option.'</label>
                 <div class="uk-form-controls">
                 &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+            ';
+//                <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+            $retval .= '
                 </select>
+                </div>
+                </div>
+            ';
+
+        }  else {
+            $item = @unserialize($value);
+
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+            ';
+            if (!is_array($item)) {
+                $retval .= '
+                    <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                ';
+            }
+            $retval .= '
                 </div>
                 </div>
             ';
@@ -653,7 +687,6 @@ function getNewPaths( $group = 'Core') {
         ';
         $_SESSION['warning'] = 1;
     }
-
 
     return $retval;
 }
@@ -709,6 +742,295 @@ function saveNewPaths( $group='Core' ) {
     }
 
     return $retval;
+}
+
+// returns a form to request a new password
+function requestNewPassword($errorMsg = '')
+{
+    global $rescueFields, $_DB_table_prefix;
+
+    $form = '
+        <ul class="uk-breadcrumb">
+            <li>Reset Password</li>
+        </ul>';
+
+    if ( $errorMsg != '' ) {
+        $form .= '
+            <div class="uk-alert uk-alert-danger">
+            <p>' . $errorMsg . '</p></div>';
+    }
+    $form .= '
+        <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
+          <div class="uk-panel uk-panel-box uk-margin-bottom">
+            <div class="uk-form-row">
+                <label class="uk-form-label">Username</label>
+                <div class="uk-form-controls">
+                    <input type="text" id="username" name="username">
+                </div>
+            </div>
+            <div class="uk-form-row">
+                <label class="uk-form-label">Email</label>
+                <div class="uk-form-controls">
+                    <input type="text" id="email" name="email">
+                </div>
+            </div>
+            <div class="uk-form-row">
+                <label class="uk-form-label">Password</label>
+                <div class="uk-form-controls">
+                    <input type="password" id="passwd" name="passwd">
+                </div>
+            </div>
+            <div class="uk-form-row">
+                <label class="uk-form-label">Confirm Password</label>
+                <div class="uk-form-controls">
+                    <input type="password" id="passwd2" name="passwd2">
+                </div>
+            </div>
+          </div>
+          <div class="uk-text-center">
+            <button class="uk-button uk-button-success" type="submit" name="mode" value="reset" />Reset Password</button>
+            <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+          </div>
+        </form>
+    ';
+
+    return $form;
+}
+
+function resetPassword()
+{
+    global $rescueFields, $_DB_table_prefix;
+
+    // check if passwd and passwd2 match
+
+    $passwd = '';
+    $passwd2 = '';
+    $username = '';
+
+    if ( isset($_POST['passwd']) ) {
+        $passwd = $_POST['passwd'];
+    }
+    if ( isset($_POST['passwd2']) ) {
+        $passwd2 = $_POST['passwd2'];
+    }
+    if ( empty($passwd) || empty($passwd2) || $passwd != $passwd2 ) {
+        return requestNewPassword('Password blank or does not match confirmation');
+    }
+
+    if ( !isset($_POST['username']) || !isset($_POST['email'])) {
+        return requestNewPassword('Please provide both username and email address.');
+    }
+
+    $username = $_POST['username'];
+    $email    = $_POST['email'];
+
+    $result = DB_query ("SELECT uid,email,passwd,status FROM ".$_DB_table_prefix . "users" . "
+                WHERE username = '".DB_escapeString($username)."'
+                AND email = '". DB_escapeString($email)."' AND (account_type & ".LOCAL_USER.")");
+    $nrows = DB_numRows ($result);
+    if ($nrows == 1) {
+        $U = DB_fetchArray ($result);
+        $encrypted_password = SEC_hash($passwd);
+        DB_change ($_DB_table_prefix . "users" , 'passwd', "$encrypted_password",'uid', (int) $U['uid']);
+    } else {
+        return requestNewPassword('Username or email incorrect - requires both');
+    }
+
+    $retval = '<div class="uk-alert uk-alert-success" data-uk-alert>';
+    $retval .= '<a href="" class="uk-alert-close uk-close"></a>';
+    $retval .= 'Password has been reset.';
+    $retval .= '</div>';
+    $retval .= requestNewPassword();
+
+    return $retval;
+}
+
+
+/**
+*
+* Borrowed from the phpBB3 project
+*
+* Portable PHP password hashing framework.
+*
+* Written by Solar Designer <solar at openwall.com> in 2004-2006 and placed in
+* the public domain.
+*
+* There's absolutely no warranty.
+*
+* The homepage URL for this framework is:
+*
+*   http://www.openwall.com/phpass/
+*
+* Please be sure to update the Version line if you edit this file in any way.
+* It is suggested that you leave the main version number intact, but indicate
+* your project name (after the slash) and add your own revision information.
+*
+* Please do not change the "private" password hashing method implemented in
+* here, thereby making your hashes incompatible.  However, if you must, please
+* change the hash type identifier (the "$P$") to something different.
+*
+* Obviously, since this code is in the public domain, the above are not
+* requirements (there can be none), but merely suggestions.
+*
+*
+* Hash the password
+*/
+function SEC_hash($password)
+{
+    $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+    $random_state = _unique_id();
+    $random = '';
+    $count = 6;
+
+    if (($fh = @fopen('/dev/urandom', 'rb'))) {
+        $random = fread($fh, $count);
+        fclose($fh);
+    }
+
+    if (strlen($random) < $count) {
+        $random = '';
+
+        for ($i = 0; $i < $count; $i += 16) {
+            $random_state = md5(_unique_id() . $random_state);
+            $random .= pack('H*', md5($random_state));
+        }
+        $random = substr($random, 0, $count);
+    }
+
+    $hash = _hash_crypt_private($password, _hash_gensalt_private($random, $itoa64), $itoa64);
+
+    if (strlen($hash) == 34) {
+        return $hash;
+    }
+
+    return md5($password);
+}
+
+
+/**
+* Generate salt for hash generation
+*/
+function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
+{
+    if ($iteration_count_log2 < 4 || $iteration_count_log2 > 31) {
+        $iteration_count_log2 = 8;
+    }
+
+    $output = '$H$';
+    $output .= $itoa64[min($iteration_count_log2 + 5, 30)];
+    $output .= _hash_encode64($input, 6, $itoa64);
+
+    return $output;
+}
+
+/**
+* Encode hash
+*/
+function _hash_encode64($input, $count, &$itoa64)
+{
+    $output = '';
+    $i = 0;
+
+    do {
+        $value = ord($input[$i++]);
+        $output .= $itoa64[$value & 0x3f];
+
+        if ($i < $count) {
+            $value |= ord($input[$i]) << 8;
+        }
+
+        $output .= $itoa64[($value >> 6) & 0x3f];
+
+        if ($i++ >= $count) {
+            break;
+        }
+
+        if ($i < $count) {
+            $value |= ord($input[$i]) << 16;
+        }
+
+        $output .= $itoa64[($value >> 12) & 0x3f];
+
+        if ($i++ >= $count) {
+            break;
+        }
+
+        $output .= $itoa64[($value >> 18) & 0x3f];
+    } while ($i < $count);
+
+    return $output;
+}
+
+/**
+* The crypt function/replacement
+*/
+function _hash_crypt_private($password, $setting, &$itoa64)
+{
+    $output = '*';
+
+    // Check for correct hash
+    if (substr($setting, 0, 3) != '$H$') {
+        return $output;
+    }
+
+    $count_log2 = strpos($itoa64, $setting[3]);
+
+    if ($count_log2 < 7 || $count_log2 > 30) {
+        return $output;
+    }
+
+    $count = 1 << $count_log2;
+    $salt = substr($setting, 4, 8);
+
+    if (strlen($salt) != 8) {
+        return $output;
+    }
+
+    /**
+    * We're kind of forced to use MD5 here since it's the only
+    * cryptographic primitive available in all versions of PHP
+    * currently in use.  To implement our own low-level crypto
+    * in PHP would result in much worse performance and
+    * consequently in lower iteration counts and hashes that are
+    * quicker to crack (by non-PHP code).
+    */
+    $hash = md5($salt . $password, true);
+    do {
+        $hash = md5($hash . $password, true);
+    }
+    while (--$count);
+
+    $output = substr($setting, 0, 12);
+    $output .= _hash_encode64($hash, 16, $itoa64);
+
+    return $output;
+}
+
+/**
+* Return unique id
+* @param string $extra additional entropy
+*/
+function _unique_id($extra = 'c')
+{
+    static $dss_seeded = false;
+    global $_SYSTEM;
+
+    $rand_seed = COM_makesid();
+
+    $val = $rand_seed . microtime();
+    $val = md5($val);
+    $rand_seed = md5($rand_seed . $val . $extra);
+
+    return substr($val, 4, 16);
+}
+
+function COM_makesid()
+{
+    $sid = date( 'YmdHis' );
+    $sid .= mt_rand( 0, 999 );
+
+    return $sid;
 }
 
 // main processing
@@ -793,6 +1115,13 @@ if ( $authenticated == 0 && isset($_POST['fusionpwd']) ) {
             $page .= '</div>';
             $page .= processPlugins();
             break;
+        case 'resetpassword' :
+            $page = requestNewPassword();
+            break;
+        case 'reset' :
+            $page = resetPassword();
+            break;
+
         case 'cancel' :
             session_start();
             session_unset();

@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Added reset password option to fusionrescue.php
   - Tweaked tm-block-footer style to provide better color combination for copyright
   - Added Driven by glFusion link in footer template
   - Media Gallery - did not honor the album configured sort order
