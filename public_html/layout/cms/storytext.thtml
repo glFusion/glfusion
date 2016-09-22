@@ -6,7 +6,7 @@
 	<article class="uk-article tm-article uk-margin-large-bottom">
 {!endif}
 		<header>
-			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h2>
+			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h1>
 {!if story_subtitle}
   {!if story_url}
 			<a href="{story_url}">
