@@ -1,7 +1,11 @@
 {# begin {templatelocation} #}
 {!if hrefdirect}
-  <a href="{hrefdirect}" data-uk-lightbox="{group:'album'}" title="{caption}">
+  <a href="{hrefdirect}" data-uk-lightbox="{group:'album'}" {!if iframe} data-lightbox-type="iframe" {!endif} title="{caption}">
 {!else}
-<a href="{href}" data-uk-lightbox="{group:'album'}">
+  {!if hrefdirect_popup}
+    <a href="{hrefdirect_popup}">
+  {!else}
+	  <a href="{href}" data-uk-lightbox="{group:'album'}">
+  {!endif}
 {!endif}
 {# end {templatelocation} #}
