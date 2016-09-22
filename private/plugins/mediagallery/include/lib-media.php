@@ -2317,6 +2317,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         if ( ($MG_albums[$aid]->enable_postcard == 1 && !COM_isAnonUser() ) || ($MG_albums[$aid]->enable_postcard == 2)  ) {
             if ( $media[$mediaObject]['media_type'] == 0 ) {
                 $postcard_link = '<a href="' . $_MG_CONF['site_url'] . '/postcard.php?mode=edit&amp;mid=' . $media[$mediaObject]['media_id'] . '"><img src="' . MG_getImageFile('icon_envelopeSmall.gif') . '" alt="' . $LANG_MG03['send_postcard'] . '" style="border:none;"/></a>';
+                $postcard_url = $_MG_CONF['site_url'] . '/postcard.php?mode=edit&amp;mid=' . $media[$mediaObject]['media_id'];
+                $T->set_var('postcard_url', $postcard_url);
                 $T->set_var('postcard_link', $postcard_link);
             }
         }
