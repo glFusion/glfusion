@@ -1,10 +1,11 @@
 {# begin {templatelocation} #}
 <a name="{media_id}"></a>
 <div class="uk-panel uk-panel-box">
-	<div class="uk-grid uk-text-left">
-
+	<div class="uk-grid uk-width-1-1">
 	<div class="uk-width-medium-1-3">
-		{media_item_thumbnail}
+		<a href="{url_media_item}">
+			<img class="uk-thumbnail uk-align-center" src="{media_thumbnail}" {media_size}>
+		</a>
 {!if rating_box}
 		{rating_box}
 {!endif}
@@ -26,7 +27,7 @@
 		<div class="uk-text-left">
 			<p>{media_description}</p>
 		</div>
-		<div class="uk-position-bottom uk-text-left">
+		<div class="uk-position-bottom">
 			{mp3_podcast}
 		</div>
 	</div>

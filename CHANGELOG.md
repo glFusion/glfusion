@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Media Gallery themes converted to UIKIT based styles
+  - Media Gallery - minor improvements to album view / media view templates
   - Added reset password option to fusionrescue.php
   - Tweaked tm-block-footer style to provide better color combination for copyright
   - Added Driven by glFusion link in footer template

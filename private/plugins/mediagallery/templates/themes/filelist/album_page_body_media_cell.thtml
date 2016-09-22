@@ -1,6 +1,5 @@
 {# begin {templatelocation} #}
   <tr>
-    <td>{media_item_thumbnail}</td>
     <td>{media_link_start}{media_title}{media_link_end}</td>
     <td>{media_description}&nbsp;</td>
     <td>{filesize}</td>

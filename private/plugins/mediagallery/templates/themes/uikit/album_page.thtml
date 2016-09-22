@@ -105,7 +105,7 @@
 {!endif}
 	<!-- BEGIN ImageRow -->
 	<!-- BEGIN ImageColumn -->
-		<li class="uk-vertical-align">{CELL_DISPLAY_IMAGE}</li>
+		<li>{CELL_DISPLAY_IMAGE}</li>
 	<!-- END ImageColumn -->
 	<!-- END ImageRow -->
 	</ul>

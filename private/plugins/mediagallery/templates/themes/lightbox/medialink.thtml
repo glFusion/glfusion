@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {!if hrefdirect}
-  <a href="{hrefdirect}" rel="lightbox[album]" title="{caption}">
+  <a href="{hrefdirect}" data-uk-lightbox="{group:'album'}" title="{caption}">
 {!else}
-<a href="{href}">
+<a href="{href}" data-uk-lightbox="{group:'album'}">
 {!endif}
 {# end {templatelocation} #}

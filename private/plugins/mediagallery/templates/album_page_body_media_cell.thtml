@@ -4,7 +4,7 @@
 	<tr class="uk-text-center" style="height:{row_height}px;">
 		<td class="uk-text-middle uk-text-center">
 			{media_item_thumbnail}
-			{mp3_podcast}
+			<div class="uk-margin-small">{mp3_podcast}</div>
 		</td>
 	</tr>
 	<tr>
