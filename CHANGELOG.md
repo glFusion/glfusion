@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Added missing #comments component to URLs in story templates
+  - Fixed incorrect column header in global story attribute editor
   - Media Gallery themes converted to UIKIT based styles
   - Media Gallery - minor improvements to album view / media view templates
   - Added reset password option to fusionrescue.php
