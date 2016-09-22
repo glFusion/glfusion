@@ -1078,6 +1078,8 @@ class mgAlbum {
         $C->set_var(array(
             'media_item_thumbnail' => $media_item_thumbnail,
             'media_item_thumbnail_raw' => $album_last_image,
+            'media_link_start'		=> '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $this->id .'&amp;page=1' . '">',
+            'media_link_end'		=> '</a>',
             'u_viewalbum'       => $_MG_CONF['site_url'] . '/album.php?aid=' . $this->id .'&amp;page=1',
             'album_last_image'  => $album_last_image,
             'album_title'       => $this->title,
