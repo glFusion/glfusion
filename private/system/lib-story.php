@@ -73,7 +73,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
-           $_IMAGE_TYPE, $mode, $_GROUPS, $ratedIds;
+           $_IMAGE_TYPE, $mode, $_GROUPS, $ratedIds, $topic;
 
     static $storycounter = 0;
 
@@ -88,7 +88,11 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $archivestorytpl  = 'archivestorytext.thtml';
 
     if ( isset($_SYSTEM['custom_topic_templates']) && $_SYSTEM['custom_topic_templates'] == true ) {
-        $storyTid = strtolower($story->DisplayElements('tid'));
+        if ( $topic != "" ) {
+            $storyTid = COM_sanitizeFilename(strtolower($topic));
+        } else {
+            $storyTid = strtolower($story->DisplayElements('tid'));
+        }
         $pos = strpos($storytpl,".");
         if ( $pos !== false ) {
             $base_template = substr($storytpl,0,$pos);
