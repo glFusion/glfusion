@@ -1287,7 +1287,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'current_year', $year );
     $theme->set_var( 'lang_copyright', $LANG01[93] );
     $theme->set_var( 'trademark_msg', $LANG01[94] );
-    $theme->set_var( 'powered_by', $LANG01[95]);
+    $theme->set_var( 'powered_by', $LANG01[93]);
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', GVERSION );
     $theme->set_var( 'direction',(empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION));
