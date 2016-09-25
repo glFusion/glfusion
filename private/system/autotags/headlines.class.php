@@ -262,7 +262,7 @@ class autotag_headlines extends BaseAutotag {
                 $T->set_var(array(
                     'titlelink'         => ($titleLink ? TRUE : ''),
                     'meta'              => ($meta ? TRUE : ''),
-                    'lang_by'           => $LANG01[95],
+                    'lang_by'           => $LANG01[1],
                     'lang_posted_in'    => $LANG01['posted_in'],
                     'story_topic_url'   => $topicurl,
                     'title'             => $title,
