@@ -48,7 +48,7 @@ $LANG_LOCALE  = 'en_US';
 # lib-common.php
 
 $LANG01 = array(
-    1 => 'Contributed by:',
+    1 => 'by',
     2 => 'Read more',
     3 => 'comments',
     4 => 'Edit',
@@ -140,15 +140,15 @@ $LANG01 = array(
     90 => 'Home',
     91 => 'Page created in',
     92 => 'seconds',
-    93 => 'Driven By',
+    93 => 'Copyright',
     94 => "<a href=\"{$_CONF['site_url']}/page.php?page=terms-of-use\">Terms of Use</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/page.php?page=privacy-policy\">Privacy Policy</a>",
-    95 => 'by',
+    95 => 'Driven By',
     96 => 'Groups',
     97 => 'Word List',
     98 => 'Plugins',
     99 => 'Stories',
     100 => 'No new stories',
-    101 => '',
+    101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     102 => '',
     103 => 'Database Administration',
     104 => 'by',

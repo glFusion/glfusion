@@ -165,7 +165,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         if ($_CONF['contributedbyline'] == 1) {
             $article->set_var('lang_contributed_by', $LANG01[1]);
-            $article->set_var('lang_by',$LANG01[95]);
+            $article->set_var('lang_by',$LANG01[1]);
 
             $article->set_var('contributedby_uid', $story->DisplayElements('uid'));
             $fullname = $story->DisplayElements('fullname');
