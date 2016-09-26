@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  = Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
   - Updated tar / zip processing for PHP 7 compatibility
   - Plugin Upload - now allows for plugin archives directly from Git repositories
   - Story templates by topic was not checking ?topic in URL

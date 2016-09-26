@@ -20,6 +20,22 @@ $(document).ready(function() {
   	element: $('.infinite-container')[0],
  	  onAfterPageLoad: function() {
  	  	counter++;
+ 	  	$("iframe.uk-responsive-width").each(function(i,el) {
+ 	  		var ele = $( el );
+            if (!ele.is(':visible')) return;
+            if (ele.attr('width') && ele.attr('height')) {
+                ele.data({
+                    'width' : ele.attr('width'),
+                    'height': ele.attr('height')
+	              });
+            }
+            var width  = ele.parent().width(),
+                iwidth = ele.data('width'),
+                ratio  = (width / iwidth),
+                height = Math.floor(ratio * ele.data('height'));
+                var newheight= (width < iwidth) ? height : ele.data('height');
+            ele.css({'height': (width < iwidth) ? height : ele.data('height')});
+ 	  	});
 {!if comment_disqus_shortname}
 			var disqus_shortname = "{comment_disqus_shortname}";
 			$(document).ready (function () {
