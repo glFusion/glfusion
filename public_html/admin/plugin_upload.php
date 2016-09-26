@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Automated plugin installer                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -162,7 +162,7 @@ function processOldPluginInstall(  )
     }
 
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
-        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/nouveau/');
+        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/cms/');
         if ( $rc > 0 ) {
             $permError = 1;
             foreach($failed AS $filename) {
@@ -242,7 +242,7 @@ function processOldPluginInstall(  )
         }
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/nouveau/');
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/cms/');
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -250,7 +250,7 @@ function processOldPluginInstall(  )
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path_html'].'layout/nouveau/');
+                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path_html'].'layout/cms/');
                 }
             }
         }
@@ -343,7 +343,6 @@ function processPluginUpload()
     if (!($tmp = _io_mktmpdir())) {
         return _pi_errorBox($LANG32[47]);
     }
-
     if ( !COM_decompress($Finalfilename,$_CONF['path_data'].$tmp) ) {
         _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox($LANG32[48]);
@@ -428,22 +427,43 @@ function processPluginUpload()
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
+
+    // check for directory with plugin.xml
+    $pluginTmpDir = '';
+    if ( is_dir($_CONF['path_data'].$tmp.'/'.$pluginData['id'])) {
+        $pluginTmpDir = $_CONF['path_data'].$tmp.'/'.$pluginData['id'] . '/';
+    } else {
+        foreach (glob($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'*') as $filename) {
+            if ( is_dir($filename)) {
+                if ( file_exists($filename.'/plugin.xml')) {
+                    $pluginTmpDir = $filename . '/';
+                }
+            }
+        }
+    }
+    if ( $pluginTmpDir == '' ) {
+        $permError = 1;
+        $permErrorLisg .= 'Unable to locate temporary plugin directory';
+        _pi_deleteDir($_CONF['path_data'].$tmp);
+        return _pi_errorBox($errorMessage);
+    }
+
     // test copy to proper directories
-    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -543,7 +563,27 @@ function post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
+
+    $pluginTmpDir = '';
+    if ( is_dir($tmp.'/'.$pluginData['id'])) {
+        $pluginTmpDir = $tmp.'/'.$pluginData['id'] . '/';
+    } else {
+        foreach (glob($tmp.'/'.$pluginData['id'].'*') as $filename) {
+            if ( is_dir($filename)) {
+                if ( file_exists($filename.'/plugin.xml')) {
+                    $pluginTmpDir = $filename . '/';
+                }
+            }
+        }
+    }
+    if ( $pluginTmpDir == '' ) {
+        $permError = 1;
+        $permErrorLisg .= 'Unable to locate temporary plugin directory';
+        _pi_deleteDir($_CONF['path_data'].$tmp);
+        return _pi_errorBox($errorMessage);
+    }
+
+    $rc = _pi_dir_copy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);
     if ( $failed > 0 ) {
         $permError++;
@@ -558,8 +598,8 @@ function post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-    if ( file_exists($tmp.'/'.$pluginData['id'].'/admin/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+    if ( file_exists($pluginTmpDir.'admin/') ) {
+        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -576,8 +616,8 @@ function post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-    if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
+    if ( file_exists($pluginTmpDir.'public_html/') ) {
+        $rc = _pi_dir_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -594,15 +634,15 @@ function post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-    if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
+    if ( file_exists($pluginTmpDir.'themefiles/') ) {
         // determine where to copy them, first check to see if layout was defined in xml
         if ( isset($pluginData['layout']) && $pluginData['layout'] != '') {
             $destinationDir = $_CONF['path_html'] . 'layout/' . $pluginData['layout'] .'/';
             fusion_io_mkdir_p($destinationDir);
         } else {
-            $destinationDir = $_CONF['path_html'] . 'layout/nouveau/'.$pluginData['id'].'/';
+            $destinationDir = $_CONF['path_html'] . 'layout/cms/'.$pluginData['id'].'/';
         }
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $destinationDir);
+        $rc = _pi_dir_copy($pluginTmpDir.'themefiles/', $destinationDir);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -627,7 +667,7 @@ function post_uploadProcess() {
 
     if ( isset($pluginData['dataproxydriver']) && $pluginData['dataproxydriver'] != '' ) {
         if ( file_exists($_CONF['path'].'plugins/dataproxy/drivers/') ) {
-            $src  = $tmp.'/'.$pluginData['id'].'/dataproxy/'.$pluginData['dataproxydriver'];
+            $src  = $pluginTmpDir.'dataproxy/'.$pluginData['dataproxydriver'];
             $dest = $_CONF['path'].'plugins/dataproxy/drivers/'.$pluginData['dataproxydriver'];
             @copy($src,$dest);
         }
