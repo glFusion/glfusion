@@ -54,6 +54,8 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 1.6.2
+    'lib/ZipLib.class.php',
 // 1.6.1
     'plugins/ckeditor/templates/filemanager.thtml',
 
