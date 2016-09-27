@@ -215,7 +215,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var ('camera_icon', '');
             }
             if ( $story->DisplayElements('attribution_author') == "" ) {
-                $article->set_var('author_about', $story->DisplayElements('about'));
+                $article->set_var('author_about', PLG_replaceTags( nl2br($story->DisplayElements('about')),'glfusion','about_user'));
                 $article->set_var('follow_me',SOC_getFollowMeIcons( $story->DisplayElements('uid') ));
             }
         }

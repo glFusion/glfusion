@@ -1300,7 +1300,7 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('lang_location', $LANG04[106]);
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
     $user_templates->set_var ('lang_bio', $LANG04[7]);
-    $user_templates->set_var ('user_bio', nl2br ($A['about']));
+    $user_templates->set_var ('user_bio', PLG_replaceTags( nl2br ($A['about']), 'glfusion','about_user' ));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
 
