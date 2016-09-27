@@ -62,7 +62,7 @@
 	<div class="uk-form-row uk-margin-bottom">
 		<label class="uk-form-label" for="replacement">{lang_replacement}<br>{html_allowed}</label>
 		<div class="uk-form-controls">
-			<textarea class="uk-form-width-large" rows="5" id="replacement" name="replacement">{replacement}</textarea>
+			<textarea class="uk-form-width-medium texteditor" rows="8" id="replacement" name="replacement">{replacement}</textarea>
 			<div id="replacement-help" class="uk-margin-top uk-panel-box uk-panel-box-primary">{lang_replace_explain}</div>
 		</div>
 	</div>
