@@ -3246,7 +3246,8 @@ function COM_allowedAutotags( $permissions = 'story.edit', $list_only = false, $
     $allow_page_break = false;
     if ( $_CONF['allow_page_breaks'] && $operation == 'story')
         $allow_page_break = true;
-
+    // disabled as of 1.6.1
+    $allow_page_break = false;
     if ( !$list_only ) {
         $retval .= '<span class="warningsmall"><strong>' . $LANG01[31] . '</strong> ';
     }
@@ -6392,16 +6393,17 @@ function COM_isWritable($path)
 
 function COM_recursiveDelete($path)
 {
-    if(is_file($path)){
-        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
+    global $_COM_VERBOSE;
+
+    if (is_file($path)){
+        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
         return @unlink($path);
-    }
-    elseif(is_dir($path)){
+    } elseif (is_dir($path)){
         $scan = glob(rtrim($path,'/').'/*');
         foreach($scan as $index => $file){
             COM_recursiveDelete($file);
         }
-        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
+        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
         return @rmdir($path);
     }
 }
