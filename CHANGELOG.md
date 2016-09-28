@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - New auto tag permission editor - allows editing permissions by content area
+  - Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
   - User about entry - Fixed inconsistent formatting issue where line breaks were removed in some areas and not in others
   - Added ability to use auto tags in user about
   - Fixed layout issue in admin user information edit - increased size of about, tag line and pgp entry fields

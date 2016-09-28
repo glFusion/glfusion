@@ -1,0 +1,49 @@
+{# begin {templatelocation} #}
+{start_block_editor}
+{admin_menu}
+{end_block}
+<form class="uk-form uk-form-horizontal uk-margin" id="autotagperm" action="{site_admin_url}/autotag.php" method="post">
+	<input type="hidden" name="namespace" value="{namespace}">
+	<input type="hidden" name="usage" value="{usage}">
+	<input type="hidden" name="perm" value="x">
+	<input type="hidden" name="{sec_token_name}" value="{sec_token}">
+
+	<div class="uk-form-row uk-margin uk-form-success">
+		<label class="uk-form-label uk-text-bold uk-text-large">{$LANG_AM[content_area]}</label>
+		<div class="uk-form-controls">
+			{selectbox}
+			<div class="uk-form-controls-text uk-align-right uk-margin-right">
+				{$LANG_AM[check_all]}&nbsp;<input type="checkbox" id="checkall"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="uk-panel uk-panel-box uk-panel-box-secondary uk-margin-top">
+
+		<div class="uk-panel-title">
+			{$LANG_AM[autotag_allowed]} {namespace} :: {usage}
+		</div>
+
+		<ul class="uk-margin-left uk-list uk-list-striped uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3">
+<!-- BEGIN permItem -->
+			<li class="uk-form-controls-text" style="padding-top:10px;padding-bottom:10px;">
+				<input value="1" name="{tag_namespace}.{tag_name}" type="checkbox" {tag_checked}> <span class="uk-text-bold">{tag_name}</span> ({tag_namespace})
+			</li>
+<!-- END permItem -->
+		</ul>
+
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<button class="uk-button uk-button-success" type="submit" name="permsave" value="save">{$LANG_ADMIN[save]}</button>
+		<button class="uk-button uk-button-primary" type="reset" name="reset" value="reset">{$LANG_ADMIN[reset]}</button>
+		<button class="uk-button uk-button-danger" type="cancel" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
+	</div>
+
+</form>
+<script>
+	$("#checkall").change(function () {
+		$("input:checkbox").prop('checked', $(this).prop("checked"));
+	});
+</script>
+{# end {templatelocation} #}

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Autotag management console                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -342,6 +342,7 @@ function AT_list()
     if (SEC_hasRights('autotag.admin')) {
         $menu_arr = array (
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
             array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
         );
     } else {
@@ -568,8 +569,8 @@ function ATP_edit($autotag_id = '')
     $admin_list->set_file('admin', 'autotag_perm.thtml');
 
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/autotag.php',
-              'text' => 'Autotag List'),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php','text' => $LANG_AM['public_title']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
         array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -595,7 +596,7 @@ function ATP_edit($autotag_id = '')
                       'title'     => $LANG_AM['autotag'].':&nbsp;'.$autotag_id,
                       'help_url'  => '',
                       'no_data'   => 'No data to display',
-                      'form_url'  => ''
+                      'form_url'  => $_CONF['site_admin_url'].'/autotag.php?pedit=x&amp;autotag_id='.$autotag_id,
     );
 
     $defsort_arr = array('field' => 'usage_namespace', 'direction' => 'asc');
@@ -714,6 +715,161 @@ function ATP_save($autotag_id, $perms)
     exit;
 }
 
+/**
+* Permission editor by content area
+*
+* @return   string                  HTML - permission edit form
+*
+*/
+function ATP_permEdit()
+{
+    global $_TABLES, $_CONF, $_USER, $LANG01, $LANG_ACCESS, $LANG_ADMIN, $LANG_AM, $MESSAGE,
+           $LANG28, $VERBOSE;
+
+    USES_lib_admin();
+
+    $tagUsage = PLG_collectAutotagUsage();
+
+    $autoTags = PLG_collectTags();
+    ksort($autoTags);
+
+    $retval = '';
+    $autotagPermissions = array();
+    $permission = '';
+
+    // check to see if a permission pair has been passed
+
+    if ( isset($_POST['perm'])) {
+        $permission = COM_applyFilter($_POST['perm']);
+    } else {
+        $permission = '';
+    }
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
+        array('url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home']),
+    );
+
+    $selectBox = '<select onchange="this.form.submit()" name="perm">';
+    foreach ($tagUsage AS $perm ) {
+        $indexIdentifier = $perm['namespace'].'.'.$perm['usage'];
+        if ( $permission == '' ) $permission = $indexIdentifier;
+        $selectBox .= '<option value="'.$indexIdentifier.'"';
+        if ( $permission == $indexIdentifier ) $selectBox .= ' selected="selected"';
+        $selectBox .= '>'.$indexIdentifier.'</option>';
+    }
+    $selectBox .= '</select>';
+
+    // now pull everything for the permission we are processing
+    $sqlSet = explode(".",$permission);
+
+    $T = new Template($_CONF['path_layout'] .'admin/autotag/');
+    $T->set_file('form', 'autotag_namespace_perm.thtml');
+
+    $T->set_var(array(
+        'namespace'         => $sqlSet[0],
+        'usage'             => $sqlSet[1],
+        'selectbox'         => $selectBox,
+        'start_block_editor'=> COM_startBlock($LANG_AM['perm_header'], '', COM_getBlockTemplate('_admin_block', 'header')),
+        'end_block'         => COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')),
+        'admin_menu'        => ADMIN_createMenu($menu_arr, $LANG_AM['perm_instructions'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
+        'sec_token_name'    => CSRF_TOKEN,
+        'sec_token'         => SEC_createToken(),
+    ));
+
+    // now build our data array for this specific item
+
+    $sql  = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON ";
+    $sql .= "{$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id ";
+    $sql .= "WHERE usage_namespace='".DB_escapeString($sqlSet[0])."' AND usage_operation='".DB_escapeString($sqlSet[1])."' ORDER BY usage_namespace ASC";
+
+    $result = DB_query($sql);
+    while ($row = DB_fetchArray($result) ) {
+        $identifier = $row['autotag_namespace'].'.'.$row['autotag_name'].'.'.$permission;
+        $autotagPermissions[$identifier] = $row['autotag_allowed'];
+    }
+    // loop through all the auto tags - assigning permissions for the ones we have
+    foreach ($autoTags AS $tag => $namespace) {
+        $pIdentifier = $namespace .'.'.$tag.'.'.$permission;
+        if ( isset($autotagPermissions[$pIdentifier]) ) {
+            $enabled = $autotagPermissions[$pIdentifier];
+        } else {
+            $enabled = 1;
+        }
+        $tagarray = array(
+            'permnamespace' => $perm['namespace'],
+            'permusage' => $perm['usage'],
+            'tagname' => $tag,
+            'tagnamespace' => $namespace,
+            'enabled' => $enabled,
+        );
+        $permissionMatrix[$permission][] = $tagarray;
+    }
+
+    // set template vars for auto tags
+
+    $T->set_block('form', 'permItem', 'pi');
+    foreach ( $permissionMatrix[$permission] AS $tags ) {
+        $T->set_var(array(
+            'tag_namespace' => $tags['tagnamespace'],
+            'tag_name' => $tags['tagname'],
+            'tag_checked' => ( $tags['enabled'] == 1 ) ? ' checked="checked"' : '',
+        ));
+        $T->parse('pi','permItem',true);
+    }
+
+    // render the page
+    $T->parse ('output', 'form');
+    $retval .= $T->finish($T->get_var('output'));
+    return $retval;
+}
+
+function ATP_permSave()
+{
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_AM, $VERBOSE;
+
+    $retval = '';
+
+    $autoTags = PLG_collectTags();
+
+    if ( isset($_POST['namespace'] ) && isset($_POST['usage'] ) ) {
+
+         if ( !SEC_checkToken() ) {
+            $page .= COM_showMessageText($MESSAGE[501],'',false,'info');
+         } else {
+
+            $usage_namespace = COM_applyFilter($_POST['namespace']);
+            $usage_operation = COM_applyFilter($_POST['usage']);
+
+            // remove all entries for this usage type first,
+            // then we insert in the new ones
+            $sql = "DELETE FROM {$_TABLES['autotag_usage']} WHERE usage_namespace='".
+                    DB_escapeString($usage_namespace)."'";
+            $sql .= " AND usage_operation='".DB_escapeString($usage_operation)."'";
+            DB_query($sql);
+
+            foreach ($autoTags AS $tag => $namespace) {
+                $postIdentifier = $namespace.'_'.$tag;
+                if ( !isset($_POST[$postIdentifier])) {
+
+                    $sqlPermTable = "REPLACE INTO {$_TABLES['autotag_perm']} (autotag_id,autotag_namespace,autotag_name) VALUES ";
+                    $sqlPermTable .= "('".DB_escapeString($tag)."','".DB_escapeString($namespace)."','".DB_escapeString($tag)."')";
+                    DB_query($sqlPermTable,1);
+
+                    $sqlUpdate = "INSERT INTO {$_TABLES['autotag_usage']} (autotag_id,autotag_allowed,usage_namespace,usage_operation) VALUES (";
+                    $sqlUpdate .= "'".DB_escapeString($tag)."',0,'".DB_escapeString($usage_namespace)."','".DB_escapeString($usage_operation)."')";
+                    DB_query($sqlUpdate);
+                }
+            }
+            $retval .= COM_showMessageText($LANG_AM['perm_saved'],'',false,'info');
+        }
+    } else {
+        $retval .= COM_showMessageText('Error saving permissions','',false,'error');
+    }
+    return $retval;
+}
+
 // MAIN ========================================================================
 
 // setup the various URL's we will use
@@ -738,12 +894,12 @@ if (isset($_GET['msg'])) {
 // process the command line
 
 $action = '';
-$expected = array('edit','pedit','save','psave','delete','list','cancel');
+$expected = array('edit','pedit','perm','save','psave','permsave','delete','list','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
-	$action = $provided;
+	    $action = $provided;
     }
 }
 
@@ -787,6 +943,16 @@ switch ($action) {
     case 'pedit':
         $pageContent .= ATP_edit($autotag_id);
         $pageTitle    = $LANG01['autotag_perms'];
+        break;
+
+    case 'perm' :
+        $pageContent .= ATP_permEdit();
+        $pageTitle    = $LANG01['autotag_perms'];
+        break;
+
+    case 'permsave' :
+        $pageContent .= ATP_permSave();
+        $pageContent .= ATP_permEdit();
         break;
 
     case 'save':
