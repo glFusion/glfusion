@@ -501,7 +501,7 @@ function processPluginUpload()
         'pi_gl_version'     => $pluginData['glfusionversion'],
         'pi_desc'           => $pluginData['description'],
         'pi_author'         => $pluginData['author'],
-        'plugin_old_version' => $P['pi_version'],
+        'plugin_old_version' => isset($P['pi_version']) ? $P['pi_version'] : '',
         'upgrade'           => $upgrade,
         'temp_dir'          => $tmp,
     ));
@@ -675,7 +675,7 @@ function post_uploadProcess() {
 
     _pi_deleteDir($tmp);
 
-    if ( is_array($pluginData['renamedist']) ) {
+    if ( isset($pluginData['renamedist']) && is_array($pluginData['renamedist']) ) {
         foreach ($pluginData['renamedist'] AS $fileToRename) {
             $rc = true;
             if (strncmp($fileToRename,'admin',5) == 0 ) {
