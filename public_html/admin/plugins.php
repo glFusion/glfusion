@@ -396,10 +396,6 @@ function PLUGINS_unInstall($pi_name)
         }
     }
 
-    if ( !function_exists('plugin_autouninstall_'.$pi_name) && file_exists($_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php') ) {
-        require_once $_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php';
-    }
-
     $msg = '';
     if (PLG_uninstall ($pi_name)) {
         $msg = 45;
@@ -747,10 +743,14 @@ switch ($action) {
 
     case 'delete':
         if (SEC_checkToken()) {
-            $display .= COM_siteHeader ('menu', $LANG32[30]);
-            $display .= PLUGINS_unInstall($pi_name);
+            if ( !function_exists('plugin_autouninstall_'.$pi_name) && file_exists($_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php') ) {
+                require_once $_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php';
+            }
+            $page  = PLUGINS_unInstall($pi_name);
             $token = SEC_createToken();
-            $display .= PLUGINS_list($token);
+            $page .= PLUGINS_list($token);
+            $display .= COM_siteHeader ('menu', $LANG32[30]);
+            $display .= $page;
             $display .= COM_siteFooter ();
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete plugin $pi_name and failed CSRF checks.");
