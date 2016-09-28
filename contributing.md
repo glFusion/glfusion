@@ -18,10 +18,10 @@ Please submit a pull request with the fix or improvements after you have fully t
 
 1. Fork the glFusion project on Github
 1. Create a feature branch
-1. Add your changes to the [ChangeLog](https://github.com/glFusion/glfusion/blob/master/CHANGELOG.md)
+1. Add your changes to the [ChangeLog](https://github.com/glFusion/glfusion/blob/develop/CHANGELOG.md)
 1. If you have multiple commits please combine them into one commit by [squashing them](http://git-scm.com/book/en/Git-Tools-Rewriting-History#Squashing-Commits)
 1. Push the commit to your fork
-1. Submit a pull request (PR) to the master branch
+1. Submit a pull request (PR) to the develop branch
 1. The PR title should describes the change you want to make
 1. The PR description should give a reason for your change and the method you used to achieve it
 1. If the PR changes the UI it should include before and after screenshots
