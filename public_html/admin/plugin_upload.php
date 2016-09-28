@@ -379,7 +379,12 @@ function processPluginUpload()
     $errors = '';
     if ( isset($pluginData['requires']) && is_array($pluginData['requires']) ) {
         foreach ($pluginData['requires'] AS $reqPlugin ) {
-            list($reqPlugin, $required_ver) = explode(',', $reqPlugin);
+            if ( strstr($reqPlugin,",") !== false ) {
+                list($reqPlugin, $required_ver) = @explode(',', $reqPlugin);
+            } else {
+                $reqPlugin = $reqPlugin;
+                $required_ver = '';
+            }
             if (!isset($_PLUGIN_INFO[$reqPlugin])) {
                 // required plugin not installed
                 $errors .= sprintf($LANG32[51],$pluginData['id'],$reqPlugin,$reqPlugin);
