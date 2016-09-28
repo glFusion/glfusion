@@ -2012,7 +2012,8 @@ $LANG_ADMIN = array(
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
-    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
+    'reset' => 'Reset'
 );
 
 ###############################################################################
@@ -2410,7 +2411,14 @@ $LANG_AM = array(
     'instructions_edit' => 'This screen allows you to create a custom autotag.',
     'allowed' => 'Allowed',
     'namespace' => 'Namespace',
-    'operation' => 'Operation'
+    'operation' => 'Operation',
+    'content_area' => 'Content Area',
+    'check_all' => 'Check All',
+    'autotag_allowed' => 'Auto tags allowed for ',
+    'perm_saved' => 'Permissions have been saved',
+    'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
+    'perm_header' => 'Auto Tag Permissions by Content Area',
+    'perm_editor' => 'Permission Editor'
 );
 
 ###############################################################################

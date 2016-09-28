@@ -2011,7 +2011,8 @@ $LANG_ADMIN = array(
     'tb_list' => 'Lista de Retroenlaces',
     'custom_autotag' => 'Personalizadas',
     'alt_topic' => 'Tema Alterno',
-    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
+    'reset' => 'Reset'
 );
 
 ###############################################################################
@@ -2409,7 +2410,14 @@ $LANG_AM = array(
     'instructions_edit' => 'Esta pantalla te permite crear una autoetiqueta personalizada.',
     'allowed' => 'Permitido',
     'namespace' => 'E. Nombres',
-    'operation' => 'Operación'
+    'operation' => 'Operación',
+    'content_area' => 'Content Area',
+    'check_all' => 'Check All',
+    'autotag_allowed' => 'Auto tags allowed for ',
+    'perm_saved' => 'Permissions have been saved',
+    'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
+    'perm_header' => 'Auto Tag Permissions by Content Area',
+    'perm_editor' => 'Permission Editor'
 );
 
 ###############################################################################
