@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Improved plugin install / uninstall error tracking
+  - Fixed incorrect variable reference when recursively removing directories
   - Fixed issue where temp directory would not be removed when plugin upload is cancelled
   - New auto tag permission editor - allows editing permissions by content area
   - Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
