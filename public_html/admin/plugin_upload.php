@@ -897,11 +897,13 @@ if ( isset($_POST['submit']) ) {
     }
 } else if ( isset($_POST['cancel']) ) {
     if ( isset($_POST['temp_dir']) ) {
-        $tmpDir = COM_applyFilter($_POST['temp_dir']);
+        $tmpDir = COM_sanitizeFilename(COM_applyFilter($_POST['temp_dir']));
 
         $len = strlen($_CONF['path_data']);
-        if ( strncmp($_CONF['path_data'],$tmpDir,$len-1) == 0 ) {
-            _pi_deleteDir($tmpDir);
+
+        $tDir = $_CONF['path_data'] . $tmpDir;
+        if ( is_dir($tDir)) {
+            _pi_deleteDir($tDir);
         } else {
             COM_errorLog("PLG-Install: Directory mismatch after cancel operatio - Temp directory not deleted");
         }
