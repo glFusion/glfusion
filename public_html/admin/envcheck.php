@@ -93,7 +93,12 @@ function _checkEnvironment()
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
     $T->set_var('recommended','5.6.0+');
-    $T->set_var('notes',$LANG01['php_req_version']);
+
+    $phpnotes = $LANG01['php_req_version'];
+    if ( !_phpUpToDate() ) {
+        $phpnotes .= '<br><span class="notok">'.$LANG01['phpendoflife'].'</span>';
+    }
+    $T->set_var('notes',$phpnotes);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
