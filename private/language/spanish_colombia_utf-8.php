@@ -256,7 +256,8 @@ $LANG01 = array(
     'blocks_left_title' => 'Izquierda',
     'blocks_right_title' => 'Derecha',
     'blocks_footer_title' => 'Pie de Pagina',
-    'source' => 'Source'
+    'source' => 'Source',
+    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.'
 );
 
 ###############################################################################
@@ -2444,7 +2445,8 @@ $LANG_UPGRADE = array(
     'plugin' => 'Extensión',
     'installed_version' => 'Versión Instalada',
     'latest_version' => 'Última Versión',
-    'notes' => 'Notas'
+    'notes' => 'Notas',
+    'phpeol' => 'PHP Version is out-of-date'
 );
 
 ###############################################################################
