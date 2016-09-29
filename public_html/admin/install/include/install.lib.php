@@ -1377,6 +1377,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
                 DB_query($sql);
             }
+            $atSQL = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
+            DB_query($atSQL,1);
 
             $current_fusion_version = '1.6.2';
 

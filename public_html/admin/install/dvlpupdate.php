@@ -1513,6 +1513,10 @@ function glfusion_162()
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
+    // add the URL auto tag
+    $atSQL = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
+    DB_query($atSQL,1);
+
 
     _updateConfig();
 
