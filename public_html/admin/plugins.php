@@ -37,7 +37,6 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path'] . 'filecheck_data.php';
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -60,6 +59,23 @@ if (!SEC_hasrights ('plugin.edit')) {
     echo $display;
     exit;
 }
+
+$glfIgnore = array('.','..','.svn','.git','CVS','cgi-bin','.htaccess','robots.txt');
+
+$glfPlugins = array(
+    'bad_behavior2',
+    'calendar',
+    'captcha',
+    'ckeditor',
+    'commentfeeds',
+    'filemgmt',
+    'forum',
+    'links',
+    'mediagallery',
+    'polls',
+    'spamx',
+    'staticpages'
+);
 
 /**
 * XML startElement callback
@@ -266,7 +282,7 @@ function PLUGINS_loadPlugins(&$data_arr)
         $P['phpversion'] = (is_array($pluginData)) ? $pluginData['phpversion'] : '';
         $P['glfusionversion'] = (is_array($pluginData)) ? $pluginData['glfusionversion'] : '';
         $P['update'] = (($P['pi_enabled'] == 1) AND ($P['pi_version'] <> $P['pi_code_version'])) ? 1 : 0;
-        $P['bundled'] = (in_array($P['pi_name'], $glfPlugins)) ? 1 : 0;
+        $P['bundled'] = (isset($P['pi_name']) && in_array($P['pi_name'], $glfPlugins)) ? 1 : 0;
         $data_arr[] = $P;
     }
     return;
