@@ -59,8 +59,8 @@ function _checkEnvironment()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['recheck']),
-        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
-              'text' => $LANG_FILECHECK['filecheck']),
+//        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
+//              'text' => $LANG_FILECHECK['filecheck']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );

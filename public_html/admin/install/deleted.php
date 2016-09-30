@@ -56,6 +56,7 @@ $obsoletePublicDir = array(
 $obsoletePrivateFiles = array(
 // 1.6.2
     'lib/ZipLib.class.php',
+    'filecheck_data.php',
 // 1.6.1
     'plugins/ckeditor/templates/filemanager.thtml',
 
@@ -136,7 +137,8 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
-
+// removed in v1.6.2
+    'admin/filecheck.php',
 // removed in v1.6.1
     'layout/vintage/plugins/ckeditor/ckeditor.thtml',
     'layout/vintage/plugins/ckeditor/ckeditor_block.thtml',
