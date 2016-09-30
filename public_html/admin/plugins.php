@@ -59,7 +59,7 @@ if (!SEC_hasrights ('plugin.edit')) {
     echo $display;
     exit;
 }
-
+// list of directories to ignore
 $glfIgnore = array('.','..','.svn','.git','CVS','cgi-bin','.htaccess','robots.txt');
 
 $glfPlugins = array(
