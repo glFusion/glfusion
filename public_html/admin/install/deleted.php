@@ -139,6 +139,7 @@ $obsoletePrivateFiles = array(
 $obsoletePublicFiles = array(
 // removed in v1.6.2
     'admin/filecheck.php',
+    'admin/plugin_upload.php',
 // removed in v1.6.1
     'layout/vintage/plugins/ckeditor/ckeditor.thtml',
     'layout/vintage/plugins/ckeditor/ckeditor_block.thtml',
