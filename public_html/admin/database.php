@@ -325,7 +325,7 @@ function DBADMIN_backupTableAjax()
 */
 function DBADMIN_backupPrompt()
 {
-    global $_CONF, $_TABLES, $_VARS, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
+    global $_CONF, $_TABLES, $_VARS, $_IMAGE_TYPE, $LANG01, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
 
     $retval = '';
 
@@ -393,6 +393,7 @@ function DBADMIN_backupPrompt()
             'lang_ajax_status'  => $LANG_DB_BACKUP['backup_status'],
             'lang_backup_instructions' => $LANG_DB_BACKUP['backup_instructions'],
             'lang_title'        => $LANG_DB_BACKUP['backup_title'],
+            'lang_ok'           => $LANG01['ok'],
         ));
 
         $T->parse('output', 'page');
@@ -555,7 +556,7 @@ function DBADMIN_myisamStatus()
 
 function DBADMIN_innodb()
 {
-    global $_CONF, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -590,6 +591,7 @@ function DBADMIN_innodb()
     $T->set_var(array(
         'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_ok'           => $LANG01['ok'],
         'lang_converting'   => $LANG_DB_BACKUP['converting'],
         'lang_success'      => $LANG_DB_BACKUP['innodb_success'],
         'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
@@ -607,7 +609,7 @@ function DBADMIN_innodb()
 
 function DBADMIN_myisam()
 {
-    global $_CONF, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -642,6 +644,7 @@ function DBADMIN_myisam()
     $T->set_var(array(
         'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_ok'           => $LANG01['ok'],
         'lang_converting'   => $LANG_DB_BACKUP['converting'],
         'lang_success'      => $LANG_DB_BACKUP['myisam_success'],
         'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
@@ -830,7 +833,7 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
 */
 function DBADMIN_optimize()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -872,6 +875,7 @@ function DBADMIN_optimize()
     $T->set_var(array(
         'lang_convert'      => $LANG_DB_BACKUP['optimize_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_ok'           => $LANG01['ok'],
         'lang_converting'   => $LANG_DB_BACKUP['optimizing'],
         'lang_success'      => $LANG_DB_BACKUP['optimize_success'],
         'lang_ajax_status'  => $LANG_DB_BACKUP['optimization_status'],

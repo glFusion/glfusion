@@ -4,6 +4,8 @@
 	var lang_converting = "{lang_converting}";
 	var lang_convert = "{lang_convert}";
 	var lang_success = "{lang_success}";
+	var lang_ok = "{lang_ok}";
+	var lang_cancel = "{lang_cancel}";
 </script>
 <script src="{site_url}/javascript/dbadmin.js"></script>
 

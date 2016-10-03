@@ -1,6 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Improved DB admin completion notifications
   - Improved error handling on plugin uploads
   - Improved auto tag handling in search results
   - Added check / warning if PHP version past end-of-life for environment check and upgrade check pages

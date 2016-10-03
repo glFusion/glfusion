@@ -83,7 +83,6 @@ var glfusion_dbadminInterface = (function() {
                 totalrowsprocessed = totalrowsprocessed + rowsthissession;
 
                 message('<p style="padding-left:20px;">' + lang_backingup + ' ' + done + '/' + count + ' - '+ item + periods + '</p>');
-//                message('<p style="padding-left:20px;">' + lang_backingup + ' ' + totalrowsprocessed + '/' + totalrows + ' - '+ item + periods + '</p>');
 
                 var percent = Math.round(( done / count ) * 100);
                 $('#progress-bar').css('width', percent + "%");
@@ -122,6 +121,9 @@ var glfusion_dbadminInterface = (function() {
                 data: {"mode" : 'dbbackup_complete', "backup_filename" : dbFileName},
             }).done(function(data) {
                 $("#dbbackupbutton").html(lang_backup);
+                UIkit.modal.confirm(lang_success, function(){
+                    $(location).attr('href', 'database.php');
+                }, function(){}, {labels:{'Ok': lang_ok,'Cancel': lang_cancel } });
             });
         }, 2000);
     };

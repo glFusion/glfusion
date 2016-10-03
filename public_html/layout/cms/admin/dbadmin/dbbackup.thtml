@@ -2,6 +2,8 @@
 	var lang_backingup = "{lang_backingup}";
 	var lang_backup = "{lang_backup}";
 	var lang_success = "{lang_success}";
+	var lang_ok = "{lang_ok}";
+	var lang_cancel = "{lang_cancel}";
 </script>
 <script src="{site_url}/javascript/dbbackup.js"></script>
 
