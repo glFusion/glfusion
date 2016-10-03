@@ -681,7 +681,11 @@ class Media {
         } elseif ( $this->type == 5 ) {
             if ( stristr($this->remote_url,'iframe') !== 0 ) {
                 preg_match('/src="([^"]+)"/', $this->remote_url, $match);
-                $url = $match[1];
+                if ( isset($match[1]) ) {
+                    $url = $match[1];
+                } else {
+                    $url = $this->remote_url;
+                }
                 $L->set_var('hrefdirect',$url);
                 $L->set_var('iframe',true);
             } else {
