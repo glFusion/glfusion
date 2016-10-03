@@ -24,7 +24,7 @@
 			</p>
 
 			<button class="uk-button uk-button-danger" name="task" value="dofilecleanup">{lang_delete_files}</button>
-			<button class="uk-button uk-button-success" onclick="UIkit.modal.confirm('{lang_skip_warning}', function(){ actionClick('task'); });return false;" name="task" value="done">{lang_skip}</button>
+			<button class="uk-button uk-button-success" onclick="UIkit.modal.confirm('{lang_skip_warning}', function(){ actionClick('task'); },function(){},{labels:{'Ok': '{lang_skip}','Cancel': '{lang_delete_files}'} });return false;" name="task" value="done">{lang_skip}</button>
 
 		</div>
 	</div>
