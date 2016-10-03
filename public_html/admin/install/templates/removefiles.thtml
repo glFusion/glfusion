@@ -24,8 +24,15 @@
 			</p>
 
 			<button class="uk-button uk-button-danger" name="task" value="dofilecleanup">{lang_delete_files}</button>
-			<button class="uk-button uk-button-success" name="task" value="done">{lang_skip}</button>
+			<button class="uk-button uk-button-success" onclick="UIkit.modal.confirm('{lang_skip_warning}', function(){ actionClick('task'); });return false;" name="task" value="done">{lang_skip}</button>
 
 		</div>
 	</div>
 </form>
+<script>
+function actionClick( $action ) {
+ $('#welcome').append("<input type='hidden' name='task' value='done'>");
+ $('#welcome').trigger('submit', [ { $action: true } ]);
+}
+
+</script>

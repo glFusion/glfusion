@@ -1918,6 +1918,7 @@ function INST_FileCleanUp()
         'lang_cancel'       => $LANG_INSTALL['cancel'],
         'lang_skip'         => $LANG_INSTALL['skip'],
         'lang_show_files'   => $LANG_INSTALL['show_files_to_delete'],
+        'lang_skip_warning' => $LANG_INSTALL['remove_skip_warning'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
 
