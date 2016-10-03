@@ -46,11 +46,10 @@
   <input type="hidden" name="pi_gl_version" value="{pi_gl_version}" />
   <input type="hidden" name="upgrade" value="{upgrade}" />
   <input type="hidden" name="temp_dir" value="{temp_dir}" />
-   <input type="hidden" name="action" value="installplugin" />
    {!if upgrade}
-    <input type="submit" name="submit" value="{$LANG32[61]}" />
+    <input type="submit" name="installplugin" value="{$LANG32[61]}" />
    {!else}
-    <input type="submit" name="submit" value="{$LANG32[60]}" />
+    <input type="submit" name="installplugin" value="{$LANG32[60]}" />
    {!endif}
    <input type="submit" name="cancel" value="{$LANG32[59]}" />
 </form>
