@@ -485,4 +485,36 @@ function _checkVersion()
 
     return array($glFusionUpToDate,$pluginsUpToDate,$pluginData);
 }
+
+/**
+ * Check if the user's PHP version is supported
+ *
+ * @return bool True if supported, falsed if not supported
+ *
+ */
+function _phpUpToDate()
+{
+    // supported version is 5.6 or greater
+
+    $uptodate = false;
+
+    $phpv = explode('.', phpversion());
+
+    switch ( $phpv[0] ) {
+        case 5 :
+            if ( $phpv[1] >= 6 ) {
+                $uptodate = true;
+            }
+            break;
+        case '7' :
+            $uptodate = true;
+            break;
+
+        default :
+            $uptodate = false;
+            break;
+    }
+
+    return $uptodate;
+}
 ?>

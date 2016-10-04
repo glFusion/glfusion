@@ -1020,12 +1020,11 @@ function saveuser($A)
 
     // a quick spam check with the unfiltered field contents
     $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1><p>';
-    // this is a hack, for some reason remoteservice links made SPAMX SLV check barf
     if (empty($service)) {
         $profile .= COM_createLink($A['homepage'], $A['homepage']) . '<br />';
     }
     $profile .= $A['location'] . '<br />' . $A['sig'] . '<br />'
-                . $A['about'] . '<br />' . $A['pgpkey'] . '</p>';
+                . PLG_replaceTags($A['about']) . '<br />' . $A['pgpkey'] . '</p>';
     $result = PLG_checkforSpam ($profile, $_CONF['spamx']);
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -1300,7 +1299,7 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('lang_location', $LANG04[106]);
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
     $user_templates->set_var ('lang_bio', $LANG04[7]);
-    $user_templates->set_var ('user_bio', nl2br ($A['about']));
+    $user_templates->set_var ('user_bio', PLG_replaceTags( nl2br ($A['about']), 'glfusion','about_user' ));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
 

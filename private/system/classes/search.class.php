@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion search class.                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -793,6 +793,8 @@ class Search {
             } else {
                 $row['description'] = $row['description'];
             }
+
+            $row['description'] = PLG_replaceTags($row['description']);
 
             if ($row['description'] != $_CONF['search_no_data']) {
                 $row['description'] = $this->_shortenText($this->_query, $row['description'], $this->_wordlength);

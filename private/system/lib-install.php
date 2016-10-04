@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Install/Uninstall library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2015 by the following authors:                        |
+// | Copyright (C) 2010-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -800,6 +800,11 @@ function _pi_dir_copy($srcdir, $dstdir )
     $sizetotal = 0;
     $fifail = '';
     $verbose = 0;
+    $ret ='0,0,0,';
+    $failedFiles = array();
+    $success = 1;
+
+
     if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
     if ($curdir = @opendir($srcdir)) {
         while (false !== ($file = readdir($curdir))) {
@@ -815,14 +820,16 @@ function _pi_dir_copy($srcdir, $dstdir )
                         COM_errorLog("PLG-INSTALL: File '$srcfile' could not be copied!");
                         $fail++;
                         $fifail = $fifail.$srcfile.'|';
+                        $success = 0;
                     }
                 }
                 else if (@is_dir($srcfile)) {
-                    $res = explode(',',$ret);
                     $ret = _pi_dir_copy($srcfile, $dstfile, $verbose);
-                    $mod = explode(',',$ret);
-                    $imp = array($res[0] + $mod[0],$mod[1] + $res[1],$mod[2] + $res[2],$mod[3].$res[3]);
-                    $ret = implode(',',$imp);
+                    list($dcsuccess,$dcfailed,$dcsize,$dcfaillist) = explode(',',$ret);
+                    $success = $dcsuccess;
+                    $fail += $dcfailed;
+                    $sizetotal += $dcsize;
+                    $fifail .= $fifail.$dcfaillist;
                 }
             }
         }
@@ -832,9 +839,8 @@ function _pi_dir_copy($srcdir, $dstdir )
         $ret ='0,1,0,Unable to open temp. directory';
         return $ret;
     }
-    $red = explode(',',$ret);
-    $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
-    return $ret;
+    $retval = $success . ',' . $fail . ',' . $sizetotal . ',' . $fifail;
+    return $retval;
 }
 
 
@@ -872,7 +878,6 @@ function _pi_test_copy($srcdir, $dstdir)
     $num        = 0;
     $fail       = 0;
     $sizetotal  = 0;
-    $fifail     = '';
     $createdDst = 0;
     $ret        = '';
     $verbose    = 0;
@@ -889,25 +894,22 @@ function _pi_test_copy($srcdir, $dstdir)
         $createdDst = 1;
     }
 
-    if($curdir = @opendir($srcdir)) {
-        while(false !== ($file = readdir($curdir))) {
-            if($file != '.' && $file != '..') {
+    if ($curdir = @opendir($srcdir)) {
+        while (false !== ($file = readdir($curdir))) {
+            if ($file != '.' && $file != '..') {
                 $srcfile = $srcdir . '/' . $file;
                 $dstfile = $dstdir . '/' . $file;
-                if(is_file($srcfile)) {
+                if (is_file($srcfile)) {
                     if ( !COM_isWritable($dstfile) ) {
                         $failedFiles[] = $dstfile;
                         COM_errorLog("PLG-INSTALL: Error: File '$dstfile' cannot be written");
                         $fail++;
-                        $fifail = $fifail.$srcfile.'|';
                     }
-                } else if(@is_dir($srcfile)) {
+                } else if (@is_dir($srcfile)) {
                     $res = explode(',',$ret);
                     list($ret,$failed) = _pi_test_copy($srcfile, $dstfile, $verbose);
                     $failedFiles = array_merge($failedFiles,$failed);
-                    $mod = explode(',',$ret);
-                    $imp = array($res[0] + $mod[0],$mod[1] + $res[1],$mod[2] + $res[2],$mod[3].$res[3]);
-                    $ret = implode(',',$imp);
+                    if ( $ret != 0 ) $fail++;
                 }
             }
         }
@@ -915,11 +917,6 @@ function _pi_test_copy($srcdir, $dstdir)
     }
     if ($createdDst == 1) {
         @rmdir($dstdir);
-    }
-
-    $red = explode(',',$ret);
-    if ( count($red) > 1 ) {
-        $ret = ($num + $red[0]).','.($fail + $red[1]).','.($sizetotal + $red[2]).','.$fifail.$red[3];
     }
     return array($fail,$failedFiles);
 }
@@ -930,27 +927,8 @@ function _pi_errorBox( $errMsg )
     global $_CONF,$LANG32;
 
     $retval = '';
-/*
-    $retval .= '<h1>'.$LANG32[56].'</h1>';
-    $retval .= $errMsg;
-    $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
-    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="Continue" />';
-    $retval .= '</form>';
-    return $retval;
-*/
-    $retval .= '<div id="msgbox" style="width:95%;margin:10px;border:1px solid black;">';
-    $retval .= '<div style="padding:5px;font-weight:bold;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
-    $retval .= $LANG32[56];
-    $retval .= '</div>';
-    $retval .= '<div style="padding:5px 15px 15px 15px;border-top:3px solid black;background:#E7E7E7;">';
-    $retval .= $errMsg;
-    $retval .= '</div>';
-    $retval .= '</div>';
-    $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
-    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="'.$LANG32[71].'" />';
-    $retval .= '</form>';
 
-    return $retval;
+    return COM_showMessageText($errMsg, $LANG32[56], true, 'error');
 }
 
 

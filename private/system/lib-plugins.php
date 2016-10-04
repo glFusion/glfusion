@@ -1825,6 +1825,7 @@ function PLG_collectAutotagUsage()
         array('namespace' => 'glfusion', 'usage'    => 'contact_user'),
         array('namespace' => 'glfusion', 'usage'    => 'mail_story'),
         array('namespace' => 'glfusion', 'usage'    => 'block'),
+        array('namespace' => 'glfusion', 'usage'    => 'about_user'),
     );
 
     foreach ($_PLUGINS as $pi_name) {

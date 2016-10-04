@@ -1,7 +1,21 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
-  = Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
+  - Improved DB admin completion notifications
+  - Improved error handling on plugin uploads
+  - Improved auto tag handling in search results
+  - Added check / warning if PHP version past end-of-life for environment check and upgrade check pages
+  - New [url:] auto tag
+  - Improved plugin install / uninstall error tracking
+  - Fixed incorrect variable reference when recursively removing directories
+  - Fixed issue where temp directory would not be removed when plugin upload is cancelled
+  - New auto tag permission editor - allows editing permissions by content area
+  - Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
+  - User about entry - Fixed inconsistent formatting issue where line breaks were removed in some areas and not in others
+  - Added ability to use auto tags in user about
+  - Fixed layout issue in admin user information edit - increased size of about, tag line and pgp entry fields
+  - Upgraded MediaElement to v2.23.1
+  - Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
   - Updated tar / zip processing for PHP 7 compatibility
   - Plugin Upload - now allows for plugin archives directly from Git repositories
   - Story templates by topic was not checking ?topic in URL

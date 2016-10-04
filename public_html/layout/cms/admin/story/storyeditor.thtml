@@ -112,6 +112,12 @@ function actionClick( $action ) {
 					{!endif}
 					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="40" style="width:100%;">{story_bodytext}</textarea>
 				</div>
+				<div class="uk-form-row uk-margin-small">
+						<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
+							{$LANG01[show_allowed_content]}
+						</button>
+						<div id="allowed_html" class="uk-hidden">{lang_allowed_html}</div>
+				</div>
 			</li>
 
 			{# publish options panel #}

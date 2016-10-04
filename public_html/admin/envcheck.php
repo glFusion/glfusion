@@ -59,8 +59,8 @@ function _checkEnvironment()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['recheck']),
-        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
-              'text' => $LANG_FILECHECK['filecheck']),
+//        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
+//              'text' => $LANG_FILECHECK['filecheck']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -93,7 +93,12 @@ function _checkEnvironment()
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
     $T->set_var('recommended','5.6.0+');
-    $T->set_var('notes',$LANG01['php_req_version']);
+
+    $phpnotes = $LANG01['php_req_version'];
+    if ( !_phpUpToDate() ) {
+        $phpnotes .= '<br><span class="notok">'.$LANG01['phpendoflife'].'</span>';
+    }
+    $T->set_var('notes',$phpnotes);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
