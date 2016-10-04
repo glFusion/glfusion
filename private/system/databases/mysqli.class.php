@@ -531,7 +531,7 @@ class database
         }
 
         $retval = $this->dbQuery($sql);
-        $retval = $retval && $this->dbDelete($tableFrom, $id, $value);
+        $retval = $retval && $this->dbDelete($tablefrom, $id, $value);
 
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysqli - Leaving database->dbCopy");
