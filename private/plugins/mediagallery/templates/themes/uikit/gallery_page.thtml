@@ -1,0 +1,40 @@
+{# begin {templatelocation} #}
+<nav class="uk-navbar uk-margin-bottom">
+	<div class="uk-navbar-content">
+		{lang_menulabel}
+{!if rsslink_url}
+		<a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
+{!endif}
+	</div>
+	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+		<form name="mg-search" method="post" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block">
+			<input type="text" name="keywords" value="{keywords}">
+			<input type="hidden" name="mode" value="search">
+			<input type="hidden" name="swhere" value="0">
+		</form>
+	</div>
+{!if select_box_items}
+	<div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
+		<form name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get" class="uk-form uk-margin-remove uk-display-inline-block">
+			<select onchange="javascript:forms['adminbox'].submit();" name="mode">
+				{select_box_items}
+			</select>
+			<input type="hidden" name="album_id" value="0">
+		</form>
+	</div>
+	{# This is the menu shown when using a small screen #}
+	<div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
+		<a class="uk-navbar-toggle"></a>
+		<div class="uk-dropdown">
+			<ul class="uk-nav uk-nav-dropdown">
+				{admin_menu}
+			</ul>
+		</div>
+	</div>
+{!endif}
+</nav>
+<div class="uk-text-center">
+	{gallery_body}
+	{gallery_noitems}
+</div>
+{# end {templatelocation} #}

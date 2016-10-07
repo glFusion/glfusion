@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<a class="uk-thumbnail" href="{u_viewalbum}">
+	<figure class="uk-overlay uk-overlay-hover uk-vertical-align-middle">
+		<img class="" src="{media_item_thumbnail_raw}" height="{img_height}" width="{img_width}" alt="">
+{!if album_title}
+		<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
+			{lang_album} {album_title}
+		</figcaption>
+{!endif}
+	</figure>
+</a>
+{# end {templatelocation} #}

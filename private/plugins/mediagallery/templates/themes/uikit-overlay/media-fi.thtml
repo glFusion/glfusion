@@ -1,0 +1,32 @@
+{# begin {templatelocation} #}
+<figure class="uk-overlay uk-overlay-hover uk-thumbnail">
+	<a href="{url_display_item}">
+		<img src="{media_thumbnail}" alt="">
+	</a>
+	<figcaption>{media_title}</figcaption>
+	<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
+		<div style="display:none;">
+			{media_title}
+{!if musicalbum}
+			&nbsp;/&nbsp;{musicalbum}
+{!endif}
+		</div>
+{!if artist}
+		<div class="uk-text-medium uk-text-truncate">
+			<span class="uk-text-bold">{lang_artist}</span>: {artist}
+		</div>
+{!endif}
+		<div class="uk-text-small">{lang_album}: <span class="uk-text-bold">{album_name_link}</span></div>
+{!if copyright_name}
+		<div class="uk-text-small uk-hidden-small">&copy; <span class="uk-text-bold">{copyright_name}</span></div>
+{!endif}
+		<div class="uk-text-small uk-hidden-small">{lang_posted} {upload_time}</div>
+{!if DO_NOT_DISPLAY_THIS}
+		<div class="uk-text-small uk-hidden-small">{media_views} / {media_comments}</div>
+{!endif}
+{!if edit_link}
+		<div class="uk-text-center uk-hidden-small">{edit_link}</div>
+{!endif}
+	</figcaption>
+</figure>
+{# end {templatelocation} #}
