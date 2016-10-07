@@ -737,6 +737,7 @@ class Media {
             'raw_media_thumbnail'   =>  $media_thumbnail,
             'display_url'       => $url_media_item,
             'orig_url'          => $url_orig,
+            'url_display_item'  =>  $url_display_item,
         ));
 
         if ( $data_type != '' ) {
