@@ -1,6 +1,8 @@
 Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.2 (unreleased)
+  - Updated Exifer library bundled with Media Gallery
+  - Updated getID3 library to latest upstream release
   - Modified Admin menu layout to hide instruction block by default - new ? icon to toggle view
   - Improved DB admin completion notifications
   - Improved error handling on plugin uploads

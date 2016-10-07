@@ -399,7 +399,7 @@ class Image_XMP
 	*
 	* @param string - Name of the image file to access and extract XMP information from.
 	*/
-	public function _construct($sFilename)
+	public function __construct($sFilename)
 	{
 		$this->_sFilename = $sFilename;
 
