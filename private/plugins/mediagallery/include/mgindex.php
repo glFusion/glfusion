@@ -516,7 +516,7 @@ function MG_index() {
                     'media_tag'             => strip_tags($MG_albums[$achild[$indexCounter]]->title),
                     'frWidth'               =>  $newwidth  - $MG_albums[0]->afrWidth,
                     'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
-
+                    'url_media_item'        => $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1',
                 ));
                 $T->parse('AColumn', 'AlbumColumn',true);
                 $indexCounter++;
