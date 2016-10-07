@@ -395,7 +395,7 @@ function install_config($site_url)
     $c->add('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,6,NULL,30,TRUE);
 
     $c->add('fs_iplookup', NULL, 'fieldset', 7, 7, NULL, 0, TRUE);
-    $c->add('ip_lookup','/admin/plugins/nettools/whois.php?domain=*','text',7,7,NULL,10,FALSE);
+    $c->add('ip_lookup','https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=*','text',7,7,NULL,10,FALSE);
 
     $c->add('fs_perm_story', NULL, 'fieldset', 7, 8, NULL, 0, TRUE);
     $c->add('default_permissions_story',array(3, 2, 2, 2),'@select',7,8,12,10,TRUE);
