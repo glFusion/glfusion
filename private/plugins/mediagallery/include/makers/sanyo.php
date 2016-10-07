@@ -56,31 +56,22 @@ function formatSanyoData($type,$tag,$intel,$data) {
 
 
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$top = hexdec(substr($data,8,8));
-		$bottom = hexdec(substr($data,0,8));
-		if($bottom!=0) $data=$top/$bottom;
-		else if($top==0) $data = 0;
-		else $data=$top."/".$bottom;
-
+		$data = unRational($data,$type,$intel);
 
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$data=hexdec($data);
+		$data = rational($data,$type,$intel);
 
 		if($tag=="0200") { //SpecialMode
-			if($data == 0) $data = gettext_glf("Normal");
-			else $data = gettext_glf("Unknown").": ".$data;
+			if($data == 0) $data = gettext("Normal");
+			else $data = gettext("Unknown").": ".$data;
 		}
 		if($tag=="0201") { //Quality
-			if($data == 2) $data = gettext_glf("High");
-			else $data = gettext_glf("Unknown").": ".$data;
+			if($data == 2) $data = gettext("High");
+			else $data = gettext("Unknown").": ".$data;
 		}
 		if($tag=="0202") { //Macro
-			if($data == 0) $data = gettext_glf("Normal");
-			else $data = gettext_glf("Unknown").": ".$data;
+			if($data == 0) $data = gettext("Normal");
+			else $data = gettext("Unknown").": ".$data;
 		}
 	} else if($type=="UNDEFINED") {
 
@@ -130,19 +121,18 @@ function parseSanyo($block,&$result,$seek, $globalOffset) {
 			//4 byte count of number of data units
 		$count = bin2hex(substr($block,$place,4));$place+=4;
 		if($intel==1) $count = intel2Moto($count);
-		$bytesofdata = $size*hexdec($count);
-
+		$bytesofdata = validSize($size*hexdec($count));
 			//4 byte value of data or pointer to data
 		$value = substr($block,$place,4);$place+=4;
 
 
 		if($bytesofdata<=4) {
-			$data = $value;
+			$data = substr($value,0,$bytesofdata);
 		} else {
 			$value = bin2hex($value);
 			if($intel==1) $value = intel2Moto($value);
 			$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-			if($v==0 && $bytesofdata > 0) {
+			if($tag!=0) {
 				$data = fread($seek, $bytesofdata);
 			} else if($v==-1) {
 				$result['Errors'] = $result['Errors']++;
