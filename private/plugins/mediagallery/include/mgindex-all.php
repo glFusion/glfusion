@@ -53,7 +53,8 @@ class mediaItem extends Media {
         global $tnSize;
 
         $retval = '';
-        $T = new Template( $_MG_CONF['template_path'] );
+        $T = new Template( MG_getTemplatePath(0) );
+
         $T->set_file (array(
             'media_cell_image'      => 'media-fi.thtml',
             'media_comments'        => 'album_page_body_media_cell_comment.thtml',
@@ -61,6 +62,7 @@ class mediaItem extends Media {
             'mp3_podcast'			=> 'mp3_podcast.thtml',
         ));
         $F = new Template($_MG_CONF['template_path']);
+
         $F->set_var('media_frame',$imageFrame);
 
         // --- set the default thumbnail
@@ -493,6 +495,8 @@ class mediaItem extends Media {
             'filesize'          => $fileSize,
             'media_id'          => $this->id,
             'album_name_link'   => '<a href="'.$_MG_CONF['site_url'].'/album.php?aid='.$this->album_id.'">'.$MG_albums[$this->album_id]->title.'</a>',
+            'media_thumbnail'   => $media_thumbnail,
+            'url_display_item'  => $url_display_item,
         ));
 
         // frame template variables
@@ -843,7 +847,7 @@ function MG_indexAll()
     $ownername = DB_getItem ($_TABLES['users'],'username', "uid=".(int) $owner_id);
     $album_last_update = MG_getUserDateTimeFormat($MG_albums[$album_id]->last_update);
 
-    $T = new Template( $_MG_CONF['template_path'] );
+    $T = new Template( MG_getTemplatePath(0) );
 
     $T->set_file (array(
         'page'      => 'index-all.thtml',
@@ -966,7 +970,7 @@ function MG_indexAll()
         $outputHandle->addStyle($fCSS);
     }
 
-    $display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title));
+    $display = MG_siteHeader($LANG_MG00['plugin']);
     $display .= $T->finish($T->get_var('output'));
     $display .= MG_siteFooter();
     echo $display;
