@@ -29,7 +29,7 @@
 	<li>
 		<div class="uk-panel uk-margin-small">
 			<a class="uk-thumbnail" href="{url_media_item}">
-			  <img class="" src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
+			  <img src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
 			</a>
 		</div>
 		<div class="">

@@ -4,7 +4,7 @@
 		<a name="{media_id}"></a>
 		<div class="uk-panel uk-margin-small">
 			<a class="uk-thumbnail" href="{url_display_item}">
-				<img class="" src="{media_thumbnail}" alt="">
+				<img class="" src="{media_thumbnail}"  height="{media_height}" width="{media_width}" alt="">
 			</a>
 		</div>
 		<div class="">

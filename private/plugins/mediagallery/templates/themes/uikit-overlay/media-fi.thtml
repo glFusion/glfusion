@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <figure class="uk-overlay uk-overlay-hover uk-thumbnail">
 	<a href="{url_display_item}">
-		<img src="{media_thumbnail}" alt="">
+		<img src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
 	</a>
 	<figcaption>{media_title}</figcaption>
 	<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
