@@ -2114,9 +2114,11 @@ function USER_batchAdmin()
 
     $display .= ADMIN_createMenu(
         $menu_arr,
-        $desc,
+        '', //$desc,
         $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE
     );
+
+    $display .= '<div class="batch-admin_filter">'.$desc.'</div>';
 
     $token = SEC_createToken();
     $form_arr['bottom'] = "<input type=\"hidden\" name=\"" . CSRF_TOKEN
