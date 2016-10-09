@@ -865,6 +865,9 @@ function INST_checkEnvironment($dbconfig_path='')
     $file_list = array( /*$_PATH['dbconfig_path'],*/
                         $_PATH['dbconfig_path'].'db-config.php',
                         $_PATH['data_path'],
+                        $_PATH['data_path'].'glfusion.lck',
+                        $_PATH['data_path'].'glfusion_css.lck',
+                        $_PATH['data_path'].'glfusion_js.lck',
                         $_PATH['log_path'].'error.log',
                         $_PATH['log_path'].'access.log',
                         $_PATH['log_path'].'captcha.log',

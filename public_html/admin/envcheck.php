@@ -373,6 +373,9 @@ function _checkEnvironment()
     $feedPath = substr( $feedpath, 0, $pos + 1 );
 
     $file_list = array( $_CONF['path_data'],
+                        $_CONF['data_path'].'glfusion.lck',
+                        $_CONF['data_path'].'glfusion_css.lck',
+                        $_CONF['data_path'].'glfusion_js.lck',
                         $_CONF['path_log'].'error.log',
                         $_CONF['path_log'].'access.log',
                         $_CONF['path_log'].'captcha.log',
