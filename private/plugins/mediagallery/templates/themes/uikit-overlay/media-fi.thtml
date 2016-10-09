@@ -1,31 +1,25 @@
 {# begin {templatelocation} #}
-<figure class="uk-overlay uk-overlay-hover uk-thumbnail">
+<figure class="uk-overlay uk-overlay-hover">
 	<a href="{url_display_item}">
-		<img src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
+		<img class="uk-thumbnail" src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
 	</a>
 	<figcaption>{media_title}</figcaption>
 	<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
-		<div style="display:none;">
-			{media_title}
-{!if musicalbum}
-			&nbsp;/&nbsp;{musicalbum}
-{!endif}
-		</div>
 {!if artist}
-		<div class="uk-text-medium uk-text-truncate">
+		<span class="uk-text-small uk-text-truncate">
 			<span class="uk-text-bold">{lang_artist}</span>: {artist}
-		</div>
+		</span>
 {!endif}
-		<div class="uk-text-small">{lang_album}: <span class="uk-text-bold">{album_name_link}</span></div>
+		<span class="uk-text-small">{lang_album}: <span class="uk-text-bold">{album_name_link}</span></span>
 {!if copyright_name}
-		<div class="uk-text-small uk-hidden-small">&copy; <span class="uk-text-bold">{copyright_name}</span></div>
+		<span class="uk-text-small">&copy; <span class="uk-text-bold">{copyright_name}</span></span>
 {!endif}
-		<div class="uk-text-small uk-hidden-small">{lang_posted} {upload_time}</div>
+		<br><span class="uk-text-small uk-hidden-small">{lang_posted} {upload_time}</span>
 {!if DO_NOT_DISPLAY_THIS}
 		<div class="uk-text-small uk-hidden-small">{media_views} / {media_comments}</div>
 {!endif}
 {!if edit_link}
-		<div class="uk-text-center uk-hidden-small">{edit_link}</div>
+		<span class="uk-text-center uk-hidden-small">{edit_link}</span>
 {!endif}
 	</figcaption>
 </figure>
