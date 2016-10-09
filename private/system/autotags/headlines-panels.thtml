@@ -28,9 +28,11 @@
 	<li class="uk-vertical-align-top">
 		<div class="uk-panel uk-panel-box">
 {!if story_image}
-			<a href="{url}"><div class="uk-panel-teaser">
-				<img src="{story_image}" alt="">
-			</a>
+			<div class="uk-panel-teaser">
+				<a href="{url}">
+					<img src="{story_image}" alt="">
+				</a>
+			</div>
 {!endif}
 			<p>
 {!if titlelink}

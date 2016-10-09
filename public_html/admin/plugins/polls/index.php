@@ -483,6 +483,7 @@ function POLLS_delete($pid)
     DB_delete($_TABLES['polltopics'], 'pid', $pid);
     DB_delete($_TABLES['pollanswers'], 'pid', $pid);
     DB_delete($_TABLES['pollquestions'], 'pid', $pid);
+    DB_delete($_TABLES['pollvoters'],'pid',$pid);
     DB_delete($_TABLES['comments'], array('sid', 'type'),
                                     array($pid,  'polls'));
 

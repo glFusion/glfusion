@@ -1,0 +1,36 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<div class="uk-panel uk-panel-box">
+	<div class="uk-grid uk-width-1-1">
+	<div class="uk-width-medium-1-3">
+		<a href="{url_media_item}">
+			<img class="uk-thumbnail uk-align-center" src="{media_thumbnail}" {media_size}>
+		</a>
+{!if rating_box}
+		{rating_box}
+{!endif}
+		<div class="uk-text-center">
+			{lang_comments} {media_comments_count}&nbsp;{edit_link}
+		</div>
+	</div>
+	<div class="uk-width-medium-2-3">
+		<h3 class="uk-article-title tm-article-title uk-margin-bottom-remove">{media_title}</h3>
+		<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+			<li>{lang_published} {media_owner} {lang_on} {media_time}</li>
+		</ul>
+		<div class="uk-text-left">
+			{media_cell_keywords}
+		</div>
+
+		<div class="uk-clearfix"></div>
+
+		<div class="uk-text-left">
+			<p>{media_description}</p>
+		</div>
+		<div class="uk-position-bottom">
+			{mp3_podcast}
+		</div>
+	</div>
+</div>
+</div>
+{# end {templatelocation} #}

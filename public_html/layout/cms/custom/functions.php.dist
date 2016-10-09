@@ -1,0 +1,136 @@
+<?php
+/**
+* @package  glFusion CMS
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2010-2016 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+* Custom theme functions.php file - here you can override certain theme
+* options - see https://www.glfusion.org/wiki/glfusion:styling:custom_theme_function
+* for full details.
+*
+*/
+
+// this file can't be used on its own
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
+// | *************************************************************************
+// | Override the UIKIT grid styles used to control the columner layout of
+// | the site.
+// |
+// | full_content       - Only content area visible - no left or right blocks
+// | left_contet        - Left blocks and content area visible
+// | left_content_right - Left blocks, content area, right blocks visible
+// | content_right      - Content area and right blocks visible
+// |
+// | This theme displays the "left blocks" on the right hand side of the page
+// | Displays the "right blocks" in the footer area
+// |
+// | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme_function
+// |   for details on customiznig the grid layout
+// | *************************************************************************
+
+// This example moves the navigation blocks from the right of the content
+// area to the left of the content area
+
+/* --- uncomment to use....
+
+$uiStyles = array(
+    'full_content' => array(       'left_class'     => '',
+                                   'content_class'  => 'uk-width-medium-4-4',
+                                   'right_class'    => ''
+                           ),
+
+    'left_content' => array(       'left_class'     => 'uk-width-medium-1-4 uk-pull-3-4',
+                                   'content_class'  => 'uk-width-medium-3-4 uk-push-1-4',
+                                   'right_class'    => ''
+                           ),
+
+    'left_content_right' => array( 'left_class'     => 'uk-width-medium-1-4 uk-pull-3-4',
+                                   'content_class'  => 'uk-width-medium-3-4 uk-push-1-4',
+                                   'right_class'    => ''
+                           ),
+
+    'content_right' => array(      'left_class'     => '',
+                                   'content_class'  => 'uk-width-medium-4-4',
+                                   'right_class'    => ''
+                            )
+);
+
+---- end of comment --- */
+
+
+// | *************************************************************************
+// | Custom Block templates
+// |
+// | Each block can have a distinct and different header / footer template
+// | There are several internal glFusion blocks that can be uniquely styled:
+// |
+// | _admin_block
+// | _staticpages_block
+// | _staticpages_centerblock
+// | _msg_block
+// | _submit_story - user submitted story - block wraps the form
+// | configmanager_block
+// | configmanager_subblock
+// | whats_related_block
+// | story_options_block
+// | user_block
+// | login_block
+// | whats_new_block
+// |
+// | You can also style other blocks by using the format of:
+// |
+// | $_BLOCK_TEMPLATE['##BLOCK_NAME##'] - where ##BLOCK_NAME## is the name
+// | of the block as seutp in the Command & Control Block Administration
+// | screen.
+// |
+// | Format is:
+// |
+// | $_BLOCK_TEMPLATE['##BLOCK_NAME##']
+// |           = 'name_of_header_template.thtml, name_of_footer_template.thtml';
+// |
+// | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme_function
+// |    for details on customiznig block templates
+// | *************************************************************************
+
+/* ---- examples on how to set custom block header / footer ---- */
+
+/* -- uncomment to use
+$_BLOCK_TEMPLATE['story_options_block'] = 'blockheader-related.thtml,blockfooter-related.thtml';
+--- */
+
+
+// | *************************************************************************
+// | Add your own JavaScript or CSS files
+// |
+// | Ability to add your own JS/CSS files or include JS/CSS files from your
+// | favorite jQuery plugin, etc.
+// |
+// | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme_function
+// |    for details on configuring new JS / CSS
+// | *************************************************************************
+
+// required line - do not remove - get the output handler instance so we can
+// use it to add new JS or CSS files.
+$outputHandle = outputHandler::getInstance();
+
+
+// add your own javascript
+
+/* -- examples - uncomment and edit...
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
+---- */
+
+// add your own style sheets
+
+/* --- examples - uncomment and edit....
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
+--- */
+?>

@@ -69,6 +69,9 @@ function polls_upgrade()
             DB_query("ALTER TABLE {$_TABLES['pollvoters']} ADD `uid` MEDIUMINT NOT NULL DEFAULT '1' AFTER `ipaddress`;",1);
             DB_query("ALTER TABLE {$_TABLES['polltopics']} ADD `login_required` TINYINT NOT NULL DEFAULT '0' AFTER `is_open`;",1);
 
+        case '2.2.0' :
+            DB_query("ALTER TABLE {$_TABLES['pollvoters']} CHANGE `pid` `pid` VARCHAR(128) NOT NULL DEFAULT '';",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_PO_CONF['pi_version']."',pi_gl_version='".$_PO_CONF['gl_version']."' WHERE pi_name='polls' LIMIT 1");
             break;

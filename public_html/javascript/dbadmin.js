@@ -95,6 +95,9 @@ var glfusion_dbadminInterface = (function() {
             }).done(function(data) {
                 $('#dbconvertbutton').prop("disabled",false);
                 $("#dbconvertbutton").html(lang_convert);
+               UIkit.modal.confirm(lang_success, function(){
+                    $(location).attr('href', 'database.php');
+                }, function(){}, {labels:{'Ok': lang_ok,'Cancel': lang_cancel } });
             });
         }, 3000);
     };

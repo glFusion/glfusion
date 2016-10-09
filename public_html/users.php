@@ -218,7 +218,7 @@ function userprofile()
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
     $user_templates->set_var ('lang_online', $LANG04[160]);
     $user_templates->set_var ('lang_bio', $LANG04[7]);
-    $user_templates->set_var ('user_bio', nl2br ($A['about']));
+    $user_templates->set_var ('user_bio', PLG_replaceTags(nl2br ($A['about']),'glfusion','about_user'));
 
     $user_templates->set_var('follow_me',SOC_getFollowMeIcons( $user, 'follow_user_profile.thtml' ));
 

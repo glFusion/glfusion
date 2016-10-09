@@ -44,7 +44,7 @@ if (!SEC_inGroup ('Root')) {
 
 function _displayVersionData()
 {
-    global $_CONF, $_USER, $LANG_UPGRADE, $LANG01, $LANG_FILECHECK, $LANG_ADMIN, $_PLUGIN_INFO;
+    global $_CONF, $_USER, $LANG01, $LANG_UPGRADE, $LANG01, $LANG_FILECHECK, $LANG_ADMIN, $_PLUGIN_INFO;
 
     $retval = '';
     $upToDate = 0;
@@ -101,6 +101,14 @@ function _displayVersionData()
         'statusmsg' => $statusMsg,
         'statustext' => $statusText,
     ));
+
+    if ( !_phpUpToDate() ) {
+        $T->set_var(array(
+            'phpendoflife' => true,
+            'phpeol_statusmsg' => $LANG_UPGRADE['phpeol'],
+            'phpeol_statustext' => $LANG01['phpendoflife'],
+        ));
+    }
 
     if ( $pluginsUpToDate != -1 ) {
         $pluginInfo .= '<div style="margin-top:10px;"><h3>'.$LANG_UPGRADE['plugin_title'].'</h3>';

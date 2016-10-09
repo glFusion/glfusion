@@ -19,7 +19,8 @@
 
   <div id="tm-block-footer" class="uk-clearfix uk-text-center uk-align-center uk-margin-bottom-remove">
     <div class="uk-margin-top uk-margin-bottom">
-      {copyright_msg}
+      &copy; {site_name}
+      <br>{powered_by} <a href="{glfusion_url}" target="_blank">glFusion CMS</a>
     </div>
   </div>
 </div>

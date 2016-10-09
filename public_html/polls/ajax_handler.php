@@ -113,7 +113,8 @@ function POLLS_saveVote_AJAX($pid, $aid)
         } else {
             $userid = $_USER['uid'];
         }
-        DB_save($_TABLES['pollvoters'],'ipaddress,uid,date,pid',"'".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".$userid."," . time() . ",'".DB_escapeString($pid)."'");
+        $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
+        $result = DB_query($sql);
     }
 
     $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
@@ -124,3 +125,4 @@ function POLLS_saveVote_AJAX($pid, $aid)
 
     return $retval;
 }
+?>

@@ -140,7 +140,7 @@ $LANG01 = array(
     90 => 'Poèetna stranica',
     91 => 'Ova stranica je napravljena u',
     92 => 'sekundi',
-    93 => '',
+    93 => 'Copyright',
     94 => 'Svi za¹titni znakovi i autorska prava su vlasni¹tvo njihovih navedenih vlasnika',
     95 => 'Kori¹teni software',
     96 => 'Korisnièke grupe',
@@ -148,7 +148,7 @@ $LANG01 = array(
     98 => 'Dodatni software',
     99 => 'TEKSTOVI',
     100 => 'Nema novih tekstova',
-    101 => '',
+    101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     102 => '',
     103 => 'DB Backups',
     104 => 'od',
@@ -257,7 +257,8 @@ $LANG01 = array(
     'blocks_left_title' => 'Left Side',
     'blocks_right_title' => 'Right Side',
     'blocks_footer_title' => 'Footer',
-    'source' => 'Source'
+    'source' => 'Source',
+    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.'
 );
 
 ###############################################################################
@@ -2012,7 +2013,8 @@ $LANG_ADMIN = array(
     'tb_list' => 'Trackback List',
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
-    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.'
+    'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
+    'reset' => 'Reset'
 );
 
 ###############################################################################
@@ -2410,7 +2412,14 @@ $LANG_AM = array(
     'instructions_edit' => 'This screen allows you to create a custom autotag.',
     'allowed' => 'Allowed',
     'namespace' => 'Namespace',
-    'operation' => 'Operation'
+    'operation' => 'Operation',
+    'content_area' => 'Content Area',
+    'check_all' => 'Check All',
+    'autotag_allowed' => 'Auto tags allowed for ',
+    'perm_saved' => 'Permissions have been saved',
+    'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
+    'perm_header' => 'Auto Tag Permissions by Content Area',
+    'perm_editor' => 'Permission Editor'
 );
 
 ###############################################################################
@@ -2437,7 +2446,8 @@ $LANG_UPGRADE = array(
     'plugin' => 'Plugin',
     'installed_version' => 'Installed Version',
     'latest_version' => 'Latest Version',
-    'notes' => 'Notes'
+    'notes' => 'Notes',
+    'phpeol' => 'PHP Version is out-of-date'
 );
 
 ###############################################################################

@@ -1,3 +1,3 @@
 {# begin {templatelocation} #}
- | {poll_comments_url}
+ | <span class="uk-text-truncate">{poll_comments_url}</span>
 {# end {templatelocation} #}

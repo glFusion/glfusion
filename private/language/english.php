@@ -48,7 +48,7 @@ $LANG_LOCALE  = 'en_US';
 # lib-common.php
 
 $LANG01 = array(
-    1 => 'Contributed by:',
+    1 => 'by',
     2 => 'Read more',
     3 => 'comments',
     4 => 'Edit',
@@ -140,15 +140,15 @@ $LANG01 = array(
     90 => 'Home',
     91 => 'Page created in',
     92 => 'seconds',
-    93 => '',
+    93 => 'Copyright',
     94 => "<a href=\"{$_CONF['site_url']}/page.php?page=terms-of-use\">Terms of Use</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/page.php?page=privacy-policy\">Privacy Policy</a>",
-    95 => 'by',
+    95 => 'Driven By',
     96 => 'Groups',
     97 => 'Word List',
     98 => 'Plugins',
     99 => 'Stories',
     100 => 'No new stories',
-    101 => '',
+    101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     102 => '',
     103 => 'Database Administration',
     104 => 'by',
@@ -258,6 +258,7 @@ $LANG01 = array(
     'blocks_right_title'        => 'Right Side',
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
+    'phpendoflife'              => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
 );
 
 ###############################################################################
@@ -1316,7 +1317,7 @@ $LANG32 = array(
     37 => 'Data',
     38 => 'Update',
     39 => 'Unable to open temporary upload directory.',
-    40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer. You will need to manually install this plugin.',
+    40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer or the archive could be corrupt. You will need to manually install this plugin.',
     41 => 'Permission error on file: %s<br />',
     42 => 'File / Directory Permission Errors',
     43 => 'glFusion could not copy all the files to the proper directories due to permission errors. The plugin installation has been aborted.<br />Below is a list of all permission errors encountered.<br /><br />',
@@ -2016,6 +2017,7 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
+    'reset' => 'Reset',
 );
 
 ###############################################################################
@@ -2415,6 +2417,13 @@ $LANG_AM = array (
     'allowed'                   => 'Allowed',
     'namespace'                 => 'Namespace',
     'operation'                 => 'Operation',
+    'content_area'              => 'Content Area',
+    'check_all'                 => 'Check All',
+    'autotag_allowed'           => 'Auto tags allowed for ',
+    'perm_saved'                => 'Permissions have been saved',
+    'perm_instructions'         => 'Check the auto tags you will allow for the specified content area',
+    'perm_header'               => 'Auto Tag Permissions by Content Area',
+    'perm_editor'               => 'Permission Editor',
 );
 
 ###############################################################################
@@ -2441,6 +2450,7 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Installed Version',
     'latest_version' => 'Latest Version',
     'notes'         => 'Notes',
+    'phpeol'        => 'PHP Version is out-of-date',
 );
 
 ###############################################################################

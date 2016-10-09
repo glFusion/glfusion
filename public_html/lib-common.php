@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.1');
+    define('GVERSION', '1.6.2');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -206,6 +206,8 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
+
+require_once($_CONF['path'].'vendor/autoload.php');
 
 /**
 * If needed, add our PEAR path to the list of include paths
@@ -1286,7 +1288,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             . $copyrightyear . ' ' . $_CONF['site_name'] );
     $theme->set_var( 'current_year', $year );
     $theme->set_var( 'lang_copyright', $LANG01[93] );
-    $theme->set_var( 'trademark_msg', $LANG01[94] );
+    $theme->set_var( 'trademark_msg', $LANG01[101] );
     $theme->set_var( 'powered_by', $LANG01[95]);
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', GVERSION );
@@ -3244,7 +3246,8 @@ function COM_allowedAutotags( $permissions = 'story.edit', $list_only = false, $
     $allow_page_break = false;
     if ( $_CONF['allow_page_breaks'] && $operation == 'story')
         $allow_page_break = true;
-
+    // disabled as of 1.6.1
+    $allow_page_break = false;
     if ( !$list_only ) {
         $retval .= '<span class="warningsmall"><strong>' . $LANG01[31] . '</strong> ';
     }
@@ -3885,8 +3888,10 @@ function COM_getMessage()
     $msg = 0;
     if ( isset($_POST['msg']) ) {
         $msg = COM_applyFilter($_POST['msg'],true);
+        unset($_POST['msg']);
     } elseif ( isset($_GET['msg']) ) {
         $msg = COM_applyFilter($_GET['msg'],true);
+        unset($_GET['msg']);
     } elseif ( SESS_isSet('glfusion.infomessage') ) {
         $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
         SESS_unSet('glfusion.infomessage');
@@ -4907,7 +4912,9 @@ function COM_getPermSQL( $type = 'WHERE', $u_id = 0, $access = 2, $table = '' )
              . ")) AND ({$table}perm_group >= $access)) OR ";
         $sql .= "({$table}perm_members >= $access)";
     } else {
-        $sql .= "{$table}perm_anon >= $access";
+        $sql .= "(({$table}group_id IN (" . implode( ',', $UserGroups )
+             . ")) AND ({$table}perm_group >= $access)) OR ";
+        $sql .= "({$table}perm_anon >= $access)";
     }
 
     $sql .= ')';
@@ -6342,26 +6349,23 @@ function COM_decompress($file, $target)
 
     // .tar, .tar.bz, .tar.gz, .tgz
     if (in_array($ext, array('tar','bz','bz2','gz','tgz'))) {
-
-        require_once 'Archive/Tar.php';
-
-        $tar = new Archive_Tar($file);
-
-        $ok = $tar->extract($target);
-        if ( $ok ) {
-            $ok = 1;
+        try {
+            $tar = new \splitbrain\PHPArchive\Tar();
+            $tar->open($file);
+            $tar->extract($target);
+        } catch (\splitbrain\PHPArchive\ArchiveIOException $e) {
+            return false;
         }
-        return ($ok<1?false:true);
-
+        return true;
     } else if ($ext == 'zip') {
-
-      require_once $_CONF['path'].'/lib/ZipLib.class.php';
-
-      $zip = new ZipLib();
-      $ok = $zip->Extract($file, $target);
-
-      return ($ok==-1?false:true);
-
+        try {
+            $zip = new \splitbrain\PHPArchive\Zip();
+            $zip->open($file);
+            $zip->extract($target);
+        } catch (\splitbrain\PHPArchive\ArchiveIOException $e) {
+            return false;
+        }
+        return true;
     }
 
     // unsupported file type
@@ -6389,16 +6393,17 @@ function COM_isWritable($path)
 
 function COM_recursiveDelete($path)
 {
-    if(is_file($path)){
-        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
+    global $_COM_VERBOSE;
+
+    if (is_file($path)){
+        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
         return @unlink($path);
-    }
-    elseif(is_dir($path)){
+    } elseif (is_dir($path)){
         $scan = glob(rtrim($path,'/').'/*');
         foreach($scan as $index => $file){
             COM_recursiveDelete($file);
         }
-        if ($COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
+        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
         return @rmdir($path);
     }
 }

@@ -144,9 +144,9 @@ if ( $nRows > 0 ) {
                 $playback_options[$poRow['option_name']] = $poRow['option_value'];
             }
 
-            if ( $row['resolution_x'] > 0 ) {
-                $resolution_x = $row['resolution_x'];
-                $resolution_y = $row['resolution_y'];
+            if ( $row['media_resolution_x'] > 0 ) {
+                $resolution_x = $row['media_resolution_x'];
+                $resolution_y = $row['media_resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
                     require_once $_CONF['path'] . '/lib/getid3/getid3.php';
@@ -207,7 +207,7 @@ if ( $nRows > 0 ) {
 			$i = 0;
 			$T->set_block('video','flashvars','flashvar');
             foreach( $flasharray as $var ) {
-                $temp = split("=",$var);
+                $temp = explode("=",$var);
                 $variable = $temp[0];
                 $value = implode("=",array_slice($temp,1));
                 $T->set_var('fv','flashvars.' . $variable . '="' . $value . '";' .  LB);

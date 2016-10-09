@@ -1476,6 +1476,56 @@ function glfusion_161()
 
 }
 
+function glfusion_162()
+{
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // put config updates here
+
+    // check if Non-Logged-in Users exists
+    $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Non-Logged-in Users'");
+    if ( DB_numRows($result) < 1 ) {
+        DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Non-Logged-in Users','Non Logged-in Users (anonymous users)',1,0)",1);
+        $nonloggedin_group_id  = DB_insertId();
+        // assign all anonymous users to the group
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",1,NULL) ",1);
+        // assign root group
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",NULL,1) ",1);
+        $sql = "UPDATE {$_TABLES['menu']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+        DB_query($sql);
+        $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+        DB_query($sql);
+    }
+    $_SQL = array();
+
+    // put SQL updates here
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+    // add the URL auto tag
+    $atSQL = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
+    DB_query($atSQL,1);
+
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.2' WHERE name='glfusion'",1);
+
+}
+
 function _updateConfig() {
     global $_CONF, $_TABLES;
 
@@ -1967,7 +2017,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_161();
+glfusion_162();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

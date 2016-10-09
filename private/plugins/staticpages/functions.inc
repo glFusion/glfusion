@@ -780,7 +780,8 @@ function SP_getPerms ($table = '', $access = '2', $u_id = '')
         $sql .= "((group_id IN (" . implode (',', $GROUPS) . ")) "
              . "AND (perm_group >= $access)) OR (perm_members >= $access)";
     } else {
-        $sql .= "perm_anon >= $access";
+        $sql .= "((group_id IN (" . implode (',', $GROUPS) . ")) "
+             . "AND (perm_group >= $access)) OR (perm_anon >= $access)";
     }
 
     $sql .= ')';

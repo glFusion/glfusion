@@ -36,7 +36,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.6.1');
+    define('GVERSION', '1.6.2');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -865,6 +865,9 @@ function INST_checkEnvironment($dbconfig_path='')
     $file_list = array( /*$_PATH['dbconfig_path'],*/
                         $_PATH['dbconfig_path'].'db-config.php',
                         $_PATH['data_path'],
+                        $_PATH['data_path'].'glfusion.lck',
+                        $_PATH['data_path'].'glfusion_css.lck',
+                        $_PATH['data_path'].'glfusion_js.lck',
                         $_PATH['log_path'].'error.log',
                         $_PATH['log_path'].'access.log',
                         $_PATH['log_path'].'captcha.log',
@@ -1918,6 +1921,7 @@ function INST_FileCleanUp()
         'lang_cancel'       => $LANG_INSTALL['cancel'],
         'lang_skip'         => $LANG_INSTALL['skip'],
         'lang_show_files'   => $LANG_INSTALL['show_files_to_delete'],
+        'lang_skip_warning' => $LANG_INSTALL['remove_skip_warning'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
 

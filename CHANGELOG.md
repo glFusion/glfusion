@@ -1,5 +1,52 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v1.6.2 (October 9, 2016)
+  - Updated Exifer library bundled with Media Gallery
+  - Updated getID3 library to latest upstream release
+  - Modified Admin menu layout to hide instruction block by default - new ? icon to toggle view
+  - Improved DB admin completion notifications
+  - Improved error handling on plugin uploads
+  - Improved auto tag handling in search results
+  - Added check / warning if PHP version past end-of-life for environment check and upgrade check pages
+  - New [url:] auto tag
+  - Improved plugin install / uninstall error tracking
+  - Fixed incorrect variable reference when recursively removing directories
+  - Fixed issue where temp directory would not be removed when plugin upload is cancelled
+  - New auto tag permission editor - allows editing permissions by content area
+  - Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
+  - User about entry - Fixed inconsistent formatting issue where line breaks were removed in some areas and not in others
+  - Added ability to use auto tags in user about
+  - Fixed layout issue in admin user information edit - increased size of about, tag line and pgp entry fields
+  - Upgraded MediaElement to v2.23.1
+  - Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
+  - Updated tar / zip processing for PHP 7 compatibility
+  - Plugin Upload - now allows for plugin archives directly from Git repositories
+  - Story templates by topic was not checking ?topic in URL
+  - Media Gallery - Improved handling of video / audio playback for lightbox album theme
+  - Set Auto Translation block to disabled on new installs
+  - Removed tab slider example from home page on new installs
+  - Added missing #comments component to URLs in story templates
+  - Fixed incorrect column header in global story attribute editor
+  - Media Gallery themes converted to UIKIT based styles
+  - Media Gallery - minor improvements to album view / media view templates
+  - Added reset password option to fusionrescue.php
+  - Tweaked tm-block-footer style to provide better color combination for copyright
+  - Added Driven by glFusion link in footer template
+  - Media Gallery - did not honor the album configured sort order
+  - Media Gallery - long titles would push the admin menu down off navbar
+  - Forum - fixed issue where quotes in forum post subject where replaced with &quote;
+  - Implemented Non-Logged-in User group support - allows groups to now include non-logged-in users
+  - Media Gallery - Fixed issue in album edit - unable to set group ownership due to wrong template var name being used
+  - Fixed issue with message handling (i.e.; ... saved successfully) interaction with plugins
+  - Media Gallery - MP3 playblack - fallback to flash player would fail
+  - Polls Plugin - Update to v2.2.1
+    - Fixed issue where poll voter data could be overwritten
+    - Fixed issue where poll voter data was being purged incorrectly
+    - Fixed issue where deleting a poll did not delete the corresponding voter data
+  - headlines auto tag - panel template was missing a closing </div>
+  - Story instance - dynamic auto tags would get cached and no longer be dynamic
+  - Fixed issue in version check where it did not properly detect pl versions
+
 v1.6.1 (September 13, 2016)
   - Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
   - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly

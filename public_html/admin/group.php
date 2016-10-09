@@ -119,7 +119,7 @@ function GROUP_edit($grp_id = '')
         $A['grp_name'] = '';
     }
 
-    if ( $A['grp_name'] == 'Logged-in Users' || $A['grp_name'] == 'All Users' || $A['grp_name'] == 'Root' ) {
+    if ( $A['grp_name'] == 'Non-Logged-in Users' || $A['grp_name'] == 'Logged-in Users' || $A['grp_name'] == 'All Users' || $A['grp_name'] == 'Root' ) {
         $disable_edits = 1;
     } else {
         $disable_edit = 0;
@@ -174,6 +174,7 @@ function GROUP_edit($grp_id = '')
         switch ($A['grp_name']) {
             case 'All Users':
             case 'Logged-in Users':
+            case 'Non-Logged-in Users' :
             case 'Remote Users':
             case 'Root':
                 $group_templates->set_var('hide_defaultoption',' style="display:none;"');
@@ -750,7 +751,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'grp_admin':
-            $retval = (( $A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') ? $icon_arr['check'] : '';
+            $retval = (( $A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users' && $A['grp_name'] != 'Non-Logged-in Users') ? $icon_arr['check'] : '';
             break;
 
         case 'sendemail':
@@ -768,7 +769,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'editusers':
             $retval = '';
-            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users')) {
+            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
                 $url = $_CONF['site_admin_url'] . '/group.php?editusers=x&amp;grp_id=' . $A['grp_id'];
                 $url .= ($showall) ? '&amp;chk_showall=1' : '';
                 $attr['title'] = $LANG_ACCESS['editusers'];
@@ -926,7 +927,7 @@ function GROUP_list($show_all_groups = false)
         $filter .= '<label for="chk_showall">&nbsp;<input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . '>';
         $query_arr = array(
             'table' => 'groups',
-            'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users'))",
+            'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users','Non-Logged-in Users'))",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     }
@@ -1018,6 +1019,7 @@ function GROUP_editUsers($grp_id)
                 !in_array($grp_id, $thisUsersGroups) &&
                 !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups))
             || (($grp_name == 'All Users') ||
+                ($grp_name == 'Non-Logged-in Users') ||
                 ($grp_name == 'Logged-in Users'))) {
         if (!SEC_inGroup('Root') && ($grp_name == 'Root')) {
             $eMsg = $LANG_ACCESS['canteditroot'];

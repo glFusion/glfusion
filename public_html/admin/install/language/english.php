@@ -202,6 +202,7 @@ $LANG_INSTALL = array(
     'upgrade_bullet_title'      => 'It is recommended that yo do the following:',
     'cleanup'                   => 'Obsolete File Removal',
     'obsolete_confirm'          => 'File Cleanup Confirmation',
+    'remove_skip_warning'       => 'Are you sure you want to skip removing the obsolete files? These files are no longer needed and should be removed for security reasons. If you choose to skip the automatic removal, please consider removing them manually.',
     'removal_failure'           => 'Removal Failures',
     'removal_fail_msg'          => 'You will need to manually delete the files below. See the <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">glFusion Wiki - Obsolete Files</a> for a detailed list of files to remove.',
     'removal_success'           => 'Obsolete Files Deleted',

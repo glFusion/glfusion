@@ -21,7 +21,7 @@
 			<tr>
 				<th>{$LANG24[102]}</th>
 				<th>{$LANG24[103]}</th>
-				<th class="uk-text-center">{$LANG24[103]}</th>
+				<th class="uk-text-center">{$LANG24[104]}</th>
 			</tr>
 			<tr>
 				<td>{lang_display}</td>

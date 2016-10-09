@@ -1,27 +1,25 @@
 {# begin {templatelocation} #}
-
-	<div class="uk-grid">
-		<div class="uk-width-medium-1-3 uk-vertical-align">
+<div class="uk-panel uk-panel-box">
+	<div class="uk-grid uk-text-left">
+		<div class="uk-width-medium-1-3">
 			<a href="{u_viewalbum}">
-			<img class="uk-thumbnail" src="{media_item_thumbnail_raw}" {s_media_size}">
-		    </a>
+				<img class="uk-thumbnail uk-align-center" src="{media_item_thumbnail_raw}" {s_media_size}>
+			</a>
 		</div>
 		<div class="uk-width-medium-2-3">
-
-	        <div class="uk-text-left">
-	           <h2>{lang_album} {album_title}</h2>
-	        </div>
-	        <div class="uk-text-left">
-	           {album_desc}
-	        </div>
 			<div class="uk-text-left">
-        		{updated} {album_last_update}
+				<h2>{lang_album} {album_title}</h2>
 			</div>
 			<div class="uk-text-left">
-				<span style="font-weight:bold;">{lang_subalbums}</span> {subalbumcount}
+				{album_desc}
+			</div>
+			<div class="uk-text-left">
+				{updated} {album_last_update}
+			</div>
+			<div class="uk-text-left">
+				<span class="uk-text-bold">{lang_subalbums}</span> {subalbumcount}
 			</div>
 		</div>
-
 	</div>
-
+</div>
 {# end {templatelocation} #}

@@ -399,7 +399,7 @@ class Media {
 		                $resolution_x = $this->resolution_x;
 		                $resolution_y = $this->resolution_y;
 		            } else {
-		                if ( $this->media_resolution_x == 0 && $this->remote_media != 1) {
+		                if ( $this->resolution_x == 0 && $this->remote != 1) {
                             $size = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
                             // skip files over 8M in size..
                             if ( $size < 8388608 ) {
@@ -650,7 +650,49 @@ class Media {
     	$L = new Template( MG_getTemplatePath($this->album_id) );
     	$L->set_file('media_link','medialink.thtml');
     	$L->set_var('href',$url_media_item);
-    	if ( $this->type == 0 ) {
+
+        if ( $this->type == 1) { // local media
+            switch ($this->mime_type ) {
+                case 'audio/mpeg' :
+                case 'audio/x-mpeg' :
+                case 'audio/mpeg3' :
+                case 'audio/x-mpeg-3' :
+                case 'video/mp4' :
+                case 'video/mpeg' :
+                case 'video/x-mpeg' :
+                case 'video/x-mpeq2a' :
+                case 'video/x-motion-jpeg' :
+                case 'video/quicktime' :
+                case 'video/x-qtc' :
+                case 'video/x-m4v' :
+                    $hrefdirect = $_MG_CONF['site_url'] . '/mediaobjects/orig/'.$this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext;
+                    $L->set_var('hrefdirect',$hrefdirect);
+                    break;
+                default :
+                    $hrefdirect = "javascript:showVideo('" . $_MG_CONF['site_url'] . '/video.php?n=' . $this->id . "'," . $resolution_y . ',' . $resolution_x . ')';
+                    $L->set_var('hrefdirect_popup',$hrefdirect);
+                    $L->unset_var('iframe');
+                    break;
+            }
+        } elseif ( $this->type == 2 ) {
+            $hrefdirect = "javascript:showVideo('" . $_MG_CONF['site_url'] . '/video.php?n=' . $this->id . "'," . $resolution_y . ',' . $resolution_x . ')';
+            $L->set_var('hrefdirect_popup',$hrefdirect);
+            $L->set_var('iframe',true);
+        } elseif ( $this->type == 5 ) {
+            if ( stristr($this->remote_url,'iframe') !== 0 ) {
+                preg_match('/src="([^"]+)"/', $this->remote_url, $match);
+                if ( isset($match[1]) ) {
+                    $url = $match[1];
+                } else {
+                    $url = $this->remote_url;
+                }
+                $L->set_var('hrefdirect',$url);
+                $L->set_var('iframe',true);
+            } else {
+                $L->set_var('hrefdirect',$this->remote_url);
+                $L->set_var('iframe',true);
+            }
+        } elseif ( $this->type == 0 ) {
     	    if ( $this->remote == 1 ) {
         	    $L->set_var('hrefdirect',$this->remote_url);
         	} else {
@@ -695,6 +737,7 @@ class Media {
             'raw_media_thumbnail'   =>  $media_thumbnail,
             'display_url'       => $url_media_item,
             'orig_url'          => $url_orig,
+            'url_display_item'  =>  $url_display_item,
         ));
 
         if ( $data_type != '' ) {

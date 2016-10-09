@@ -1,0 +1,32 @@
+{# begin {templatelocation} #}
+<li>
+	<div class="uk-panel">
+		<a name="{media_id}"></a>
+		<div class="uk-panel uk-margin-small">
+			<a class="uk-thumbnail" href="{url_display_item}">
+				<img class="" src="{media_thumbnail}"  height="{media_height}" width="{media_width}" alt="">
+			</a>
+		</div>
+		<div class="">
+			{media_title}
+{!if musicalbum}
+			&nbsp;/&nbsp;{musicalbum}
+{!endif}
+		</div>
+{!if artist}
+		<div class="uk-text-medium">
+			<strong>{lang_artist}</strong>: {artist}
+		</div>
+{!endif}
+		<div class="uk-text-small">{lang_album}: <span class="uk-text-bold">{album_name_link}</span></div>
+{!if copyright_name}
+		<div class="uk-text-small">&copy; <span class="uk-text-bold">{copyright_name}</span></div>
+{!endif}
+		<div class="uk-text-small">{lang_posted} {upload_time}</div>
+		<div class="uk-text-small">{media_views} / {media_comments}</div>
+{!if edit_link}
+		<div class="uk-text-center">{edit_link}</div>
+{!endif}
+	</div>
+</li>
+{# end {templatelocation} #}

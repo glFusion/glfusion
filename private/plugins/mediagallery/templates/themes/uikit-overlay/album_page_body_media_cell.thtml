@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<a name="{media_id}"></a>
+<a class="uk-thumbnail" href="{display_url}">
+	<figure class="uk-overlay uk-overlay-hover uk-vertical-align-middle">
+		<img class="" src="{raw_media_thumbnail}" alt="">
+{!if media_title}
+		<figcaption class="uk-overlay-panel uk-overlay-bottom uk-overlay-slide-bottom uk-ignore uk-overlay-background">
+			{media_title}
+		</figcaption>
+{!endif}
+	</figure>
+</a>
+{# end {templatelocation} #}

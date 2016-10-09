@@ -7,10 +7,12 @@
 	<li><div class="uk-panel uk-panel-box">
 		<div class="uk-grid uk-text-left">
 			<div class="uk-width-medium-2-6 uk-text-left">
-				{media_item_thumbnail}
+					<a class="uk-thumbnail uk-responsive-width" href="{url_media_item}">
+						<img class="" src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
+					</a>
 			</div>
 {!if lang_subalbums}
-			<div class="uk-width-medium-3-6">
+			<div class="uk-width-medium-2-6">
 {!else}
 			<div class="uk-width-medium-4-6">
 {!endif}
@@ -30,7 +32,7 @@
 			</div>
 
 {!if lang_subalbums}
-			<div class="uk-width-medium-1-6 uk-text-left">
+			<div class="uk-width-medium-2-6 uk-text-left">
 				<h3>{lang_subalbums} {subalbumcount}</h3>
 				<ul class="uk-list uk-text-truncate">
 					{subalbumlist}

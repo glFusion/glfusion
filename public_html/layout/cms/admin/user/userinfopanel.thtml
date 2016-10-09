@@ -37,19 +37,19 @@
     <div class="uk-form-row">
       <label class="uk-form-label" for="sig">{lang_signature}</label>
       <div class="uk-form-controls">
-        <textarea class="uk-form-large" id="sig" name="sig">{signature_value}</textarea>
+        <textarea class="uk-form-width-medium texteditor" id="sig" name="sig" rows="10">{signature_value}</textarea>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="about">{lang_about}</label>
       <div class="uk-form-controls">
-        <textarea class="uk-form-large" id="about" name="about">{about_value}</textarea>
+        <textarea class="uk-form-width-medium texteditor" id="about" name="about" rows="10">{about_value}</textarea>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="pgpkey">{lang_pgpkey}</label>
       <div class="uk-form-controls">
-        <textarea class="uk-form-large" id="pgpkey" name="pgpkey">{pgpkey_value}</textarea>
+        <textarea class="uk-form-width-medium texteditor" id="pgpkey" name="pgpkey" rows="10">{pgpkey_value}</textarea>
       </div>
     </div>
 
