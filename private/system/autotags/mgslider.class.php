@@ -32,7 +32,8 @@ class autotag_mgslider extends BaseAutotag {
         $overlayPosition = 'top'; // top, bottom, left, right, center
         $kenBurns        = false;
         $autoPlay        = false;
-
+        $height          = 'auto';
+        
         $px = explode (' ', trim ($p2));
         if (is_array ($px)) {
             foreach ($px as $part) {
@@ -51,6 +52,10 @@ class autotag_mgslider extends BaseAutotag {
                 } elseif (substr ($part,0, 9) == 'template:') {
                     $a = explode(':', $part);
                     $template = $a[1];
+                    $skip++;
+                } elseif (substr ($part,0, 7) == 'height:') {
+                    $a = explode(':', $part);
+                    $height = $a[1];
                     $skip++;
                 } else {
                     break;
@@ -87,7 +92,7 @@ class autotag_mgslider extends BaseAutotag {
                 break;
         }
 
-        $options = '';
+        $options = 'height:' . $height . ',';
         $T->set_var('overlay_position',$overlay_position);
         if ( $kenBurns == true ) {
             $options .= 'kenburns:true,';
