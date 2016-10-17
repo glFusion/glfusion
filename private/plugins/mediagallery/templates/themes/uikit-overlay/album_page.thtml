@@ -51,7 +51,7 @@
 {!if url_slideshow}
 			<div id="mgslideshow" class="uk-vertical-align-middle">
 				<a class="uk-button" href="{url_slideshow}">
-					<span class="uk-text-bold">{lang_slideshow}</span>
+					{lang_slideshow}
 				</a>
 			</div>
 {!endif}
