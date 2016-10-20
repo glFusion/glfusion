@@ -195,8 +195,11 @@ function getMenuTemplate($menutype, $menuname) {
     //see if custom template exists
     $tFile = $template_file . '_'.$noSpaceName.'.thtml';
     $sFile = $template_file . '.thtml';
-    $rc = file_exists($_CONF['path_layout'].'menu/custom/'.$tFile);
-    if ($rc) return $tFile;
+    if ( file_exists($_CONF['path_layout'].'menu/custom/'.$tFile) ) {
+        return $tFile;
+    } elseif ( file_exists($_CONF['path_layout'].'menu/'.$tFile) ) {
+        return $tFile;
+    }
     return $sFile;
 }
 

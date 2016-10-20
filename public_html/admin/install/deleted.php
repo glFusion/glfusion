@@ -137,6 +137,9 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// removed in v1.6.3
+    'layout/cms/menu/custom/menu_horizontal_cascading_navigation_mobile.thtml',
+
 // removed in v1.6.2
     'admin/filecheck.php',
     'admin/plugin_upload.php',
