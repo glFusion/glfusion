@@ -2,6 +2,7 @@ Please view this file on the master branch, on other branches it's out of date.
 
 v1.6.3 (unreleased)
   - Moved off-canvas menu template out of custom/ directory to menu/ directory
+  - Links auto tag did not honor link / category permissions
 
 v1.6.2 (October 9, 2016)
   - Updated Exifer library bundled with Media Gallery
