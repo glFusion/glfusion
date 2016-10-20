@@ -583,7 +583,7 @@ class FeedCreator extends HtmlDescribable {
 	 * Specifies the generator of the feed.
 	 * @since 1.7.3
 	 **/
-	var $generator = 'glFusion v1.6.2';
+	var $generator = 'glFusion v1.6.3';
 
     var $cssStyleSheet = '';
 

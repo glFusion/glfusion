@@ -1,5 +1,7 @@
 Please view this file on the master branch, on other branches it's out of date.
 
+v1.6.3 (unreleased)
+
 v1.6.2 (October 9, 2016)
   - Updated Exifer library bundled with Media Gallery
   - Updated getID3 library to latest upstream release
