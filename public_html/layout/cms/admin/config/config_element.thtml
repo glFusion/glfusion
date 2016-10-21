@@ -110,7 +110,7 @@
 <tr>
 	<td colspan="2">
 		<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')">
-		<input classs="uk-width-1-1">
+		<input class="uk-form-width-small">
 	</td>
 </tr>
 <!-- END keyed-add-button -->
