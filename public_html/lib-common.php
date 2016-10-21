@@ -6834,6 +6834,7 @@ function css_cacheok($cache,$files)
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  */
+
 function _css_compress($css){
     //strip comments through a callback
     $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','_css_comment_cb',$css);
@@ -6869,9 +6870,12 @@ function _css_compress($css){
  * Keeps short comments (< 5 chars) to maintain typical browser hacks
  *
  * @author Andreas Gohr <andi@splitbrain.org>
+ *
+ * @param array $matches
+ * @return string
  */
 function _css_comment_cb($matches){
-    if(strlen($matches[2]) > 4 && $matches[2][0] != '@') return '';
+    if(strlen($matches[2]) > 4) return '';
     return $matches[0];
 }
 
@@ -6880,7 +6884,7 @@ function _css_comment_cb($matches){
  *
  * Strips one line comments but makes sure it will not destroy url() constructs with slashes
  *
- * @param $matches
+ * @param array $matches
  * @return string
  */
 function _css_onelinecomment_cb($matches) {
@@ -6928,7 +6932,6 @@ function _css_onelinecomment_cb($matches) {
 
     return substr($line, 0, $i);
 }
-
 
 function _js_out()
 {
@@ -7118,6 +7121,7 @@ function js_cacheok($cache,$files)
     }
     return true;
 }
+
 
 /**
  * This block will display any social site memberships
