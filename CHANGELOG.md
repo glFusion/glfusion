@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Update UIKIT to v2.27.2
+  - View count was not displaying when configured to do so
   - Fixed error with adding new keyed configuration items in the online configuration manager
   - Fixed incorrect path in environment check for lck files
   - Fixed issue where system messages with double quotes would not properly display
