@@ -49,7 +49,7 @@
 		<div class="uk-width-1-2 uk-margin-remove uk-vertical-align">
 {!if url_slideshow}
 			<div id="mgslideshow" class="uk-vertical-align-middle">
-				<a class="uk-button" href="{url_slideshow}">
+				<a class="uk-button uk-button-primary" href="{url_slideshow}">
 					{lang_slideshow}
 				</a>
 			</div>

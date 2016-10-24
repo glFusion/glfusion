@@ -29,7 +29,6 @@
 			</a>
 	{!endif}
 {!endif}
-
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
  {!if attribution_author}
@@ -40,6 +39,9 @@
 {!endif}
 {!if story_date}
 					<li><time datetime="{story_date}">{story_date}</time></li>
+{!endif}
+{!if lang_views}
+        <li>{lang_views} {story_hits}</li>
 {!endif}
 					<li>
 						{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>

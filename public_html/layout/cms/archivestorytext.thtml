@@ -41,6 +41,9 @@
 {!if story_date}
 					<li><time datetime="{story_date}">{story_date}</time></li>
 {!endif}
+{!if lang_views}
+        <li>{lang_views} {story_hits}</li>
+{!endif}
 					<li>
 						{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
 {!if story_alternate_topic_name}
