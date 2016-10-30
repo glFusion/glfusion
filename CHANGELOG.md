@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - RSS feeds did not use attribution author when available
   - Update UIKIT to v2.27.2
   - View count was not displaying when configured to do so
   - Fixed error with adding new keyed configuration items in the online configuration manager
