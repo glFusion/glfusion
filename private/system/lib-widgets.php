@@ -696,10 +696,9 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
          * the syndication file. Now we will sort out our display, and update
          * the block.
          */
-        if ($maxheadlines == 0) {
-            if (!empty($_CONF['syndication_max_headlines'])) {
-                $maxheadlines = $_CONF['syndication_max_headlines'];
-            }
+        $maxheadlines = 50;
+        if (!empty($_CONF['syndication_max_headlines'])) {
+            $maxheadlines = $_CONF['syndication_max_headlines'];
         }
 
         if ( $maxheadlines == 0 ) {
@@ -737,7 +736,7 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
 
         $retval = str_replace('<ul class="','<ul class="ticker-feed ' , $content);
 
-        $optionText .= 'speed : ' . $optionsArray['speed'] . ','.LB;
+        $optionText  = 'speed : ' . $optionsArray['speed'] . ','.LB;
         $optionText .= 'moving : ' . $optionsArray['moving'] . ','.LB;
         $optionText .= 'startEmpty : '. $optionsArray['startEmpty'] . ','.LB;
         $optionText .= 'hoverpause : ' . $optionsArray['hoverpause'] .  ','.LB;
