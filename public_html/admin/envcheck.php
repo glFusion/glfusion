@@ -38,7 +38,7 @@ if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the hosting environment check screen");
+    COM_accessLog ("User {$_USER['username']} tried to access the hosting environment check screen");
     echo $display;
     exit;
 }
@@ -59,8 +59,6 @@ function _checkEnvironment()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['recheck']),
-//        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
-//              'text' => $LANG_FILECHECK['filecheck']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -102,10 +100,6 @@ function _checkEnvironment()
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
-
-    $rg = ini_get('register_globals');
-    $sm = ini_get('safe_mode');
-    $ob = ini_get('open_basedir');
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
@@ -659,8 +653,6 @@ function _bytes_to_mg($bytes, $precision = 2)
     return round ($bytes / pow(1024,2),$precision) . 'M';
 }
 
-
-
 function _checkCacheDir($path,$template,$classCounter)
 {
     $permError = 0;
@@ -741,7 +733,6 @@ function gdVersion($user_ver = 0) {
     $gd_ver = $match[0];
     return $match[0];
 }
-
 
 function _phpinfo()
 {
