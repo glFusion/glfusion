@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
   - Added RSS Ticker widget
   - RSS feeds did not use attribution author when available
   - Update UIKIT to v2.27.2
