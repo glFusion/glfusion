@@ -651,6 +651,118 @@ function WIDGET_tabslide( $dataArray )
     return $retval;
 }
 
+function WIDGET_tickerRSS($feedurl, $options = array() ) {
+    global $_CONF, $LANG21, $LANG_WIDGETS;
+
+// styles:
+//  .ticker-feed > li {
+//  	font-size:20px !important;
+//  }
+//  .ticker-feed > li > a:hover {
+//	    text-decoration:none !important;
+//  }
+//  .ticker-feed {
+//	    background:#000 !important;
+//  }
+
+    $defaultOptions = array(
+        'speed'	            => 50,      // The movement speed in pixels per second
+        'moving'	        => true,    // Defines if the WebTicker should start in moving state or a paused state
+        'startEmpty'	    => true,    // Defines whether the elemtents should start outside of the visible area
+        'hoverpause'	    => true,    // Pauses the animation if the user hovers over the ticker
+        'transition'	    => 'linear', // The easing function used throughout for transitions 'linear' or 'ease'
+        'height'	        => '30px'   // The height of the ticker element. The string value needs to include the unit
+    );
+
+    $optionsArray = array_merge($defaultOptions, $options);
+
+    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
+
+    $outputHandle = outputHandler::getInstance();
+
+    $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/webticker/jquery.webticker.min.js');
+
+    $retval = '';
+
+    // Load the actual feed handlers:
+    $feed = new SimplePie();
+    $feed->set_useragent('glFusion/' . GVERSION.' '.SIMPLEPIE_USERAGENT);
+    $feed->set_feed_url($feedurl);
+    $feed->set_cache_location($_CONF['path'].'/data/layout_cache');
+    $rc = $feed->init();
+    if ( $rc == true ) {
+        $feed->handle_content_type();
+        /* We have located a reader, and populated it with the information from
+         * the syndication file. Now we will sort out our display, and update
+         * the block.
+         */
+        if ($maxheadlines == 0) {
+            if (!empty($_CONF['syndication_max_headlines'])) {
+                $maxheadlines = $_CONF['syndication_max_headlines'];
+            }
+        }
+
+        if ( $maxheadlines == 0 ) {
+            $number_of_items = $feed->get_item_quantity();
+        } else{
+            $number_of_items = $feed->get_item_quantity($maxheadlines);
+        }
+        $etag = '';
+        $update = date('Y-m-d H:i:s');
+        $last_modified = $update;
+        $last_modified = DB_escapeString($last_modified);
+
+        for ( $i = 0; $i < $number_of_items; $i++ ) {
+            $item = $feed->get_item($i);
+            $title = $item->get_title();
+            if (empty($title)) {
+                $title = $LANG21[61];
+            }
+            $link      = $item->get_permalink();
+            $enclosure = $item->get_enclosure();
+
+            if ($link != '') {
+                $content = COM_createLink($title, $link, $attr = array('target' => '_blank'));
+            } elseif ($enclosure != '') {
+                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank'));
+            } else {
+                $content = $title;
+            }
+            $articles[] = $content;
+        }
+
+        // build a list
+        $content = COM_makeList($articles, 'ticker-feed');
+        $content = str_replace(array("\015", "\012"), '', $content);
+
+        $retval = str_replace('<ul class="','<ul class="ticker-feed ' , $content);
+
+        $optionText .= 'speed : ' . $optionsArray['speed'] . ','.LB;
+        $optionText .= 'moving : ' . $optionsArray['moving'] . ','.LB;
+        $optionText .= 'startEmpty : '. $optionsArray['startEmpty'] . ','.LB;
+        $optionText .= 'hoverpause : ' . $optionsArray['hoverpause'] .  ','.LB;
+        $optionText .= 'transition : "' . $optionsArray['transition'] . '"'.  ','.LB;
+        $optionText .= 'height : "' . $optionsArray['height'] . '"'. LB;
+
+        $retval .= <<<EOT
+<script type="text/javascript">
+         $(document).ready(function(){
+                 $('.ticker-feed').webTicker({
+                    duplicate : true,
+                    $optionText
+                });
+         });
+</script>
+EOT;
+
+    } else {
+        $err = $feed->error();
+        COM_errorLog($err);
+        $retval = $err;
+    }
+    return $retval;
+}
+
 
 // OLD MooTools Widgets - depreciated
 function WIDGET_mooslide($page_ids, $width = 550, $height = 160, $id = 'gl_', $slide_interval = 0)
@@ -917,4 +1029,140 @@ EOW;
     $display = str_replace('{noOpera}',$LANG_WIDGETS['noOpera'] , $display);
     return $display;
 }
+
+
+
+Class ul
+{
+    private $level = -1;
+    private $ul_array = array();
+    private $last_value;
+    private $parent;
+    private $parents = array();
+    private $li_array = array();
+    private $counter = 0;
+    private $tree = array();
+    private $id = 1;
+
+    function __construct($list)
+    {
+        /**
+        * Initialization of XML Parser
+        *
+        * @var Resource $xml_parser XML Parser
+        */
+        $xml_parser = xml_parser_create();
+        /**
+        * The method that will take care of the XML data
+        */
+        xml_set_character_data_handler($xml_parser, "character_data");
+        /**
+        * The method that will take care of the XML data elements
+        */
+        xml_set_element_handler($xml_parser, "start_element", "end_element");
+        /**
+        * We set the parse to be used inside an object
+        */
+        xml_set_object ( $xml_parser, $this );
+
+        xml_parse($xml_parser, $list);
+
+        xml_parser_free($xml_parser);
+    }
+    private function start_element($parser, $name, $attrs)
+    {
+        if($name=="UL")
+        {
+            $this->level++;
+            if($this->level > 0)
+            {
+                $this->parent = $this->last_value;
+                if(strlen($this->parent))
+                {
+                    $this->ul_array[$this->level][]=$this->parent;
+                }
+            }
+            $this->counter++;
+        }
+    }
+    private function end_element($parser, $name)
+    {
+        if($name=="UL")
+        {
+            if(strlen($this->parent))
+            {
+                foreach($this->li_array[$this->level] as $key=>$li)
+                {
+                    if(is_array($li))
+                    {
+                        foreach($li as $key1=>$kid)
+                        {
+                            $this->tree[$this->counter][$this->level][] = $kid;
+                        }
+                        unset($this->li_array[$this->level][$key]);
+                    }
+                }
+            }
+            else
+            {
+                foreach($this->li_array[$this->level] as $key=>$li)
+                {
+                    if(is_array($li))
+                    {
+                        foreach($li as $key1=>$kid)
+                        {
+                            $this->tree[$this->counter][$this->level][] = $kid;
+                        }
+                        unset($this->li_array[$this->level][$key]);
+                    }
+                }
+            }
+
+            $this->level--;
+            $this->counter++;
+            $this->parent="";
+        }
+    }
+    private function character_data($parser = NULL, $data = NULL)
+    {
+        if(strlen(trim($data)))
+        {
+            $data = trim($data);
+//            $data = $data."-|".$this->id++."|";
+            $this->li_array[$this->level][$this->counter][]=$data;
+            $this->last_value = $data;
+        }
+    }
+    public function levels()
+    {
+        $parents = array();
+
+        foreach($this->tree as $key=>&$lis)
+        {
+            if(is_array($lis))
+            {
+                foreach($lis as $key_1=>$lis_item)
+                {
+                    $parent="";
+                    if(isset($this->ul_array[$key_1]))
+                    {
+                        $parent = array_shift($this->ul_array[$key_1]);
+                    }
+                    if(strlen($parent))
+                    {
+                        $lis[$key_1]['parent'] = $parent;
+                        $parents[] = $parent;
+                    }
+                }
+            }
+        }
+
+        //print_r($this->ul_array);
+        //print_r($this->li_array);
+        //print_r($this->counter);
+        //print_r($this->tree);
+		return $this->tree;
+    }
+}
+
 ?>

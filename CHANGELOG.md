@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - Added RSS Ticker widget
   - RSS feeds did not use attribution author when available
   - Update UIKIT to v2.27.2
   - View count was not displaying when configured to do so
