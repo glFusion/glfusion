@@ -45,7 +45,7 @@ var glfusion_dbadminInterface = (function() {
             if ( startrecord == 0 ) {
                 periods = '';
             } else {
-                periods = periods + '.';
+                periods = periods + '&bull;';
             }
 
             var dataS = {
