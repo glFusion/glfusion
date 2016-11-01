@@ -1,10 +1,10 @@
 /**
-* glFusion Database Administration Ajax Driver
-*
-* @author Mark R. Evans <mark AT glfusion DOT org>
-*
+ * glFusion CMS
+ *
+ * @license    GPL v2 or later (http://www.gnu.org/licenses/gpl.html)
+ * @author     Mark R. Evans - mark AT glFusion DOT org
+ * @copyright  2016
 */
-
 var glfusion_dbadminInterface = (function() {
 
     // public methods/properties
@@ -20,7 +20,8 @@ var glfusion_dbadminInterface = (function() {
         totalrows = 0,
         totalrowsprocessed = 0,
         dbFileName = null,
-        periods = '',
+        periods = '&nbsp;',
+        periodCounter = 0,
         $msg = null;
 
     /**
@@ -43,9 +44,15 @@ var glfusion_dbadminInterface = (function() {
         if (item) {
 
             if ( startrecord == 0 ) {
-                periods = '';
+                periods = '&nbsp;';
+                periodCounter = 0;
             } else {
                 periods = periods + '&bull;';
+                periodCounter++;
+                if ( periodCounter > 20 ) {
+                    periodCounter = 0;
+                    periods = '&bull;';
+                }
             }
 
             var dataS = {
@@ -79,6 +86,8 @@ var glfusion_dbadminInterface = (function() {
                     item = items.shift();
                     done++;
                     startrecord = 0;
+                    periods = '&nbsp;';
+                    periodCounter = 0;
                 }
                 totalrowsprocessed = totalrowsprocessed + rowsthissession;
 
