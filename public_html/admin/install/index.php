@@ -1554,8 +1554,9 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
     }
     require_once $_CONF['path_system'].'classes/config.class.php';
+    require_once $_CONF['path'].'sql/core_config_data.php';
     require_once 'config-install.php';
-    install_config($site_url);
+    install_config($site_url,$coreConfigData);
 
     $gl_path    = $_GLFUSION['dbconfig_path'];
     $html_path  = $_PATH['public_html'];

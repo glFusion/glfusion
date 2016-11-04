@@ -270,12 +270,14 @@ class dbBackup
      */
     public function backupTable($table, $structonly=false, $start = 0)
     {
-        global $_TABLES;
+        global $_TABLES, $_SYSTEM;
 
         $recordCounter = $start;
         $timerStart    = time();
         $sessionCounter = 0;
         $timeout        = 30;
+
+        if (!isset($_SYSTEM['db_backup_rows'])) $_SYSTEM['db_backup_rows'] = 10000;
 
         $maxExecutionTime = @ini_get("max_execution_time");
         $timeout = min($maxExecutionTime,30);
@@ -361,14 +363,22 @@ class dbBackup
                     (0 === strpos(strtolower($struct['Type']), 'mediumint')) ||
                     (0 === strpos(strtolower($struct['Type']), 'int')) ||
                     (0 === strpos(strtolower($struct['Type']), 'timestamp')) ||
-                    (0 === strpos(strtolower($struct['Type']), 'time')) ||
                     (0 === strpos(strtolower($struct['Type']), 'bigint')) ) {
                 $defs[strtolower($struct['Field'])] = (null === $struct['Default']) ? 'NULL' : $struct['Default'];
                 $ints[strtolower($struct['Field'])] = "1";
             }
         }
 
-        $sql = "SELECT * FROM $table LIMIT 18446744073709551610 OFFSET " . $start;
+        $result = DB_query("SELECT COUNT(*) FROM {$db_tablename}");
+        $row = DB_fetchArray($result);
+        $tableRows = $row[0];
+
+        if ( $tableRows > $_SYSTEM['db_backup_rows'] ) {
+            $tableRows =  (int) $_SYSTEM['db_backup_rows'] + 100;
+        }
+
+        $sql = "SELECT * FROM $table LIMIT " . $tableRows . " OFFSET " . $start;
+
         $res = DB_query($sql);
         $table_data = array();
         $insert = "INSERT INTO {$db_tablename} VALUES (";
@@ -393,7 +403,7 @@ class dbBackup
             $recordCounter++;
             $checkTimer = time();
             $elapsedTime = $checkTimer - $timerStart;
-            if ( $elapsedTime > $timeout || $sessionCounter > 10000 ) {
+            if ( $elapsedTime > $timeout || $sessionCounter > $_SYSTEM['db_backup_rows'] ) {
                 $this->close();
                 return array(1,$sessionCounter, $recordCounter);
             }

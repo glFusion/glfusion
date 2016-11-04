@@ -638,8 +638,9 @@ function getNewPaths( $group = 'Core') {
                 <label class="uk-form-label">'.$option.'</label>
                 <div class="uk-form-controls">
                 &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+
             ';
-//                <input class="uk-form-width-large" type="text" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
             $retval .= '
                 </select>
                 </div>

@@ -1550,6 +1550,49 @@ function _updateConfig() {
     $cookiesecure = $_CONF['cookiesecure'];
     $c = config::get_instance();
 
+    require_once $_CONF['path'].'sql/core_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='Core'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$coreConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='Core'");
+        } else {
+            $coreConfigData[$key]['indb'] = 1;
+        }
+    }
+    foreach ($coreConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('Core');
+
+    $site_url = $tcnf['site_url'];
+    $cookiesecure = $tcnf['cookiesecure'];
+    $def_photo = urldecode($_CONF['site_url']) . '/images/userphotos/default.jpg';
+
+    foreach ( $coreConfigData AS $cfgItem ) {
+        if ( $cfgItem['name'] == 'default_photo' )
+            $cfgItem['default_value'] = $def_photo;
+
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+/* ---
+    // Subgroup: Site
     $c->sync('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
 
     $c->sync('fs_site', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
@@ -1558,7 +1601,7 @@ function _updateConfig() {
     $c->sync('site_name','','text',0,0,NULL,30,TRUE);
     $c->sync('site_slogan','','text',0,0,NULL,40,TRUE);
     $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
-    $c->sync('site_disabled_msg','','text',0,0,NULL,50,TRUE);
+    $c->sync('site_disabled_msg',$site_disabled_msg,'text',0,0,NULL,50,TRUE);
     $c->sync('maintenance_mode',0,'select',0,0,0,60,TRUE);
     $c->sync('copyrightyear','2016','text',0,0,NULL,70,FALSE);
     $c->sync('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
@@ -1901,7 +1944,7 @@ function _updateConfig() {
     $c->sync('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,6,NULL,30,TRUE);
 
     $c->sync('fs_iplookup', NULL, 'fieldset', 7, 7, NULL, 0, TRUE);
-    $c->sync('ip_lookup','/admin/plugins/nettools/whois.php?domain=*','text',7,7,NULL,10,FALSE);
+    $c->sync('ip_lookup','https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=*','text',7,7,NULL,10,FALSE);
 
     $c->sync('fs_perm_story', NULL, 'fieldset', 7, 8, NULL, 0, TRUE);
     $c->sync('default_permissions_story',array(3, 2, 2, 2),'@select',7,8,12,10,TRUE);
@@ -1911,6 +1954,11 @@ function _updateConfig() {
 
     $c->sync('fs_perm_block', NULL, 'fieldset', 7, 10, NULL, 0, TRUE);
     $c->sync('default_permissions_block',array(3, 2, 2, 2),'@select',7,10,12,10,TRUE);
+
+    // hidden system configuration options
+
+    $c->sync('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+-- */
 }
 
 
@@ -2025,6 +2073,58 @@ function _forum_fix_watch() {
         $prevuid = $W['uid'];
     }
     return;
+}
+
+function _searchForId($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $array[$key];
+       }
+   }
+   return null;
+}
+
+function _searchForIdKey($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $key;
+       }
+   }
+   return null;
+}
+
+function _addConfigItem($data = array() )
+{
+    global $_TABLES;
+
+    $Qargs = array(
+                   $data['name'],
+                   $data['set'] ? serialize($data['default_value']) : 'unset',
+                   $data['type'],
+                   $data['subgroup'],
+                   $data['group'],
+                   $data['fieldset'],
+                   ($data['selection_array'] === null) ?
+                    -1 : $data['selection_array'],
+                   $data['sort'],
+                   $data['set'],
+                   serialize($data['default_value']));
+    $Qargs = array_map('DB_escapeString', $Qargs);
+
+    $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+        "subgroup, group_name, selectionArray, sort_order,".
+        " fieldset, default_value) VALUES ("
+        ."'{$Qargs[0]}',"   // name
+        ."'{$Qargs[1]}',"   // value
+        ."'{$Qargs[2]}',"   // type
+        ."{$Qargs[3]},"     // subgroup
+        ."'{$Qargs[4]}',"   // groupname
+        ."{$Qargs[6]},"     // selection array
+        ."{$Qargs[7]},"     // sort order
+        ."{$Qargs[5]},"     // fieldset
+        ."'{$Qargs[9]}')";  // default value
+
+    DB_query($sql);
 }
 
 $use_innodb = false;

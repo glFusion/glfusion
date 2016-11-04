@@ -31,7 +31,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-function install_config($site_url)
+function install_config($site_url, $coreConfigData)
 {
     global $_CONF, $_TABLES;
 
@@ -42,6 +42,29 @@ function install_config($site_url)
     }
 
     $c = config::get_instance();
+
+    foreach ( $coreConfigData AS $cfgItem ) {
+        // set default values...
+        if ( $cfgItem['name'] == 'default_photo' )
+            $cfgItem['default_value'] = $def_photo;
+        if ( $cfgItem['name'] == 'site_disabled_msg'])
+            $cfgItem['default_value'] = urldecode($site_url) . '/sitedown.html';
+        if ( $cfgItem['name'] == 'cookiesecure')
+            $cfgItem['default_value'] = $cookiesecure;
+
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+/* --------------------
 
     // Subgroup: Site
     $c->add('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
@@ -405,7 +428,7 @@ function install_config($site_url)
 
     $c->add('fs_perm_block', NULL, 'fieldset', 7, 10, NULL, 0, TRUE);
     $c->add('default_permissions_block',array(3, 2, 2, 2),'@select',7,10,12,10,TRUE);
-
+-------- */
     // hidden system configuration options
 
     $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');

@@ -1,4 +1,7 @@
 ## v1.6.3 (unreleased)
+  - Created master core configuration data file - reference it as a single source for maintenance during upgrades
+  - Updated fusionrescue to allow resetting login methods field
+  - Improved the visual cues when backing up large tables
   - Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
   - Added RSS Ticker widget
   - RSS feeds did not use attribution author when available

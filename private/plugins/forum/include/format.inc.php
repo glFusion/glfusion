@@ -574,8 +574,9 @@ function _ff_preparefordb($message,$postmode) {
     if ($_FF_CONF['use_censor']) {
         $message = COM_checkWords($message);
     }
+    $filter = sanitizer::getInstance();
+    $message = $filter->prepareForDB($message);
 
-    $message = DB_escapeString($message);
     return $message;
 }
 

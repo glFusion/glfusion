@@ -214,6 +214,14 @@ $_SYSTEM['alert_timeout'] = {alert_timeout};
 $_SYSTEM['alert_position'] = '{alert_position}';
 
 // +--------------------------------------------------------------------------+
+// | Database Backup Max Rows                                                 |
+// |                                                                          |
+// | Defines the maximum number of rows to process in one iteration           |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['db_backup_rows'] = {db_backup_rows};
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |
