@@ -1337,10 +1337,11 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     }
 
     if (!empty ($title) && !empty ($comment)) {
+        $filter = sanitizer::getInstance();
         COM_updateSpeedlimit ('comment');
-        $title = DB_escapeString ($title);
-        $comment = DB_escapeString ($comment);
-        $type = DB_escapeString($type);
+        $title = $filter->prepareForDB($title);
+        $comment = $filter->prepareForDB($comment);
+        $type = $filter->prepareForDB($type);
 
         // Insert the comment into the comment table
         DB_lockTable ($_TABLES['comments']);
