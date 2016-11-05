@@ -2,8 +2,8 @@
     <id>forum</id>
     <name>Forum</name>
     <description>Collaboration System</description>
-    <version>3.3.1</version>
-    <glfusionversion>1.6.2</glfusionversion>
+    <version>3.3.2</version>
+    <glfusionversion>1.6.3</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
