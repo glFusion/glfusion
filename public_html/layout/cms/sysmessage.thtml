@@ -7,6 +7,8 @@
 {!else}
 {!!if {type}=='error' !!}
   {!!set class 'uk-alert-danger' !!}
+{!else}
+  {!!set class 'uk-alert-success' !!}
 {!endif}
 <div class="uk-alert {class}" data-uk-alert>
     <a href="" class="uk-alert-close uk-close"></a>
