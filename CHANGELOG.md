@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Plugin upload did not properly validate plugin.xml file was located - assumed to be in first directory found
+  - Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
   - Created master core configuration data file - reference it as a single source for maintenance during upgrades
   - Updated fusionrescue to allow resetting login methods field
   - Improved the visual cues when backing up large tables
@@ -6,7 +8,7 @@
   - Added RSS Ticker widget
   - RSS feeds did not use attribution author when available
   - Update UIKIT to v2.27.2
-  - View count was not displaying when configured to do so
+  - Story view count was not displaying when configured to do so
   - Fixed error with adding new keyed configuration items in the online configuration manager
   - Fixed incorrect path in environment check for lck files
   - Fixed issue where system messages with double quotes would not properly display
