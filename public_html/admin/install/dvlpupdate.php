@@ -1535,6 +1535,9 @@ function glfusion_163()
 
     // put config updates here
 
+    // sql updates here
+    DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+
     _updateConfig();
 
     // update version number

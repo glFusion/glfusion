@@ -245,6 +245,8 @@ $_CONF['path_system'] = {path_system};
 
 $_CONF['default_charset'] = '{default_charset}';
 
+$_CONF['db_charset'] = '{db_charset}';
+
 if (!defined('LB')) {
   define('LB',"\n");
 }

@@ -1384,6 +1384,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.6.2' :
 
+            DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+
             $current_fusion_version = '1.6.3';
 
         default:
@@ -2019,6 +2021,18 @@ function INST_doSiteConfigUpgrade() {
     $_CFDEFAULT['path_system']                   = $_CONF['path'] . 'system/';
     $_CFDEFAULT['default_charset']               = 'iso-8859-1';
 
+    if ( empty($_CONF['db_charset'])) {
+        $result = DB_query("SELECT @@character_set_database",1);
+        $collation = DB_fetchArray($result);
+
+        $_CFDEFAULT['db_charset'] = $collation["@@character_set_database"];
+        if ( empty($_CFDEFAULT['db_charset'])) {
+            $_CFDEFAULT['db_charset'] = '';
+        } else {
+            $_CONF['db_charset'] = $_CFDEFAULT['db_charset'];
+        }
+    }
+
     if (!defined('CONFIG_CACHE_FILE_NAME')) {
       define('CONFIG_CACHE_FILE_NAME',"'$$$config$$$.cache'");
     }
@@ -2050,6 +2064,7 @@ function INST_doSiteConfigUpgrade() {
         'js_cache_filename'           => $_NEWSYSCONF['js_cache_filename'],
         'path'                        => $_NEWSYSCONF['path'],
         'default_charset'             => $_NEWSYSCONF['default_charset'],
+        'db_charset'                  => $_NEWSYSCONF['db_charset'],
         'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
         'token_ttl'                   => $_NEWSYSTEM['token_ttl'],
         'alert_timeout'               => $_NEWSYSTEM['alert_timeout'],
