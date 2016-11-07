@@ -219,7 +219,9 @@ $LANG_INSTALL = array(
     'delete_files' => 'Delete Files',
     'cancel' => 'Cancel',
     'show_files_to_delete' => 'Show Files to Delete',
-    'skip' => 'Skip'
+    'skip' => 'Skip',
+    'no_utf8' => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.'
 );
 
 // +---------------------------------------------------------------------------+
