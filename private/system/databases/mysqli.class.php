@@ -6,6 +6,10 @@
 // |                                                                          |
 // | mysqli database class                                                    |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2000-2011 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
@@ -80,9 +84,19 @@ class database
     private $_charset = '';
 
     /**
+    * @var string
+    */
+    private $_character_set_database = '';
+
+    /**
     * @var int
     */
     private $_mysql_version = 0;
+
+    /**
+    * @var int
+    */
+    private $_filter = 1;
 
     /**
     * Logs messages
@@ -131,20 +145,42 @@ class database
             if ($this->_verbose) {
                 $this->_errorlog("DEUBG: mysqli - error in database->_connect");
             }
-
-            // damn, got an error.
             $this->dbError();
         }
 
         if ($this->_charset === 'utf-8') {
             $result = false;
 
-            if (method_exists($this->_db, 'set_charset')) {
-                $result = $this->_db->set_charset('utf8');
+            if ( $this->_character_set_database == '' ) {
+                $result = $this->_db->query("SELECT @@character_set_database");
+                $collation = $this->dbFetchArray($result);
+                $this->_character_set_database = $collation["@@character_set_database"];
             }
+            if ( $this->_mysql_version >= 50503 ) {
+                if ( $this->_character_set_database == "utf8mb4" ) {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8mb4');
+                    }
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8mb4'");
+                    }
+                    $this->_filter = 0;
+                } else {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8');
+                    }
 
-            if (!$result) {
-                @$this->_db->query("SET NAMES 'utf8'");
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8'");
+                    }
+                }
+            } else {
+                if (method_exists($this->_db, 'set_charset')) {
+                    $result = $this->_db->set_charset('utf8');
+                }
+                if (!$result) {
+                    @$this->_db->query("SET NAMES 'utf8'");
+                }
             }
         }
 
@@ -188,7 +224,7 @@ class database
     * @param        string      $errorlogfn Name of the errorlog function
     * @param        string      $charset    character set to use
     */
-    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '')
+    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '', $db_charset = '' )
     {
         $this->_host = $dbhost;
         $this->_name = $dbname;
@@ -197,6 +233,7 @@ class database
         $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
+        $this->_character_set_database = strtolower($db_charset);
         $this->_mysql_version = 0;
 
         $this->_connect();
@@ -826,6 +863,22 @@ class database
     {
         return $this->_db->rollback();
     }
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
+
+    public function dbGetClientVersion()
+    {
+        return $this->_db->client_version;
+    }
+
+    public function dbGetServerVersion()
+    {
+        return $this->_mysql_version;
+    }
+
 }
 
 ?>
