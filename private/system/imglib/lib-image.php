@@ -63,16 +63,8 @@ function UTL_exec($cmd) {
     if ($_CONF['debug_image_upload'] ) {
         COM_errorLog(sprintf("UTL_exec: Executing: %s",$cmd));
     }
-
     $debugfile = $_CONF['path'] . 'logs/debug.log';
-
-    if (PHP_OS == "WINNT") {
-        $cmd .= ">NUL 2>&1";
-        exec('"' . $cmd . '"',$results,$status);
-    } else {
-        exec($cmd, $results, $status);
-    }
-
+    exec($cmd, $results, $status);
     return array($results, $status);
 }
 
@@ -213,10 +205,22 @@ function IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mi
         return array(true,'Original is smaller than target, original copied to target image.');
     }
 
+    if ( $_CONF['jhead_enabled'] == 1 ) {
+        // save a copy of the original image
+        $rc = copy($srcImage, $srcImage.'.bu');
+    }
+
     list($rc,$msg) = _img_resizeImage($srcImage, $destImage, $imgheight, $imgwidth, $newheight, $newwidth, $mimeType);
     if ( $rc == false ) {
         return array($rc,$msg);
     }
+
+    if ( $_CONF['jhead_enabled'] == 1 ) {
+        $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage.'.bu' . " " . $destImage);
+        @unlink($srcImage.'.bu');
+        COM_errorLog("IMG_resizeImage: jhead returned " . $rc );
+    }
+
     return array(true,'Image successfully resized');
 }
 
@@ -262,7 +266,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
             return array(false,'IMG Rotate: Error rotating image');
         }
         if ( $_CONF['jhead_enabled'] == 1 ) {
-            $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
             COM_errorLog("IMG_rotateImage: jhead returned " . $rc );
         }
         $rc = @copy($tmpImage, $srcImage);
