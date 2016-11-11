@@ -51,7 +51,7 @@ var glfusion_dbadminInterface = (function() {
                 periodCounter++;
                 if ( periodCounter > 20 ) {
                     periodCounter = 0;
-                    periods = '&bull;';
+                    periods = '&nbsp;&bull;';
                 }
             }
 
