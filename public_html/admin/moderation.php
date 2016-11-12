@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion main administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -437,7 +437,7 @@ function MODERATE_itemList($type='', $token)
                                      'chkfield' => 'uid',
                                      'chkname' => 'selitem',
                                      'chkminimum' => 0,
-                                     'chkall' => false,
+                                     'chkall' => true,
                                      'chkactions' => $actions
                                      );
 
@@ -502,7 +502,7 @@ function MODERATE_itemList($type='', $token)
                                      'chkfield' => 'id',
                                      'chkname' => 'selitem',
                                      'chkminimum' => 0,
-                                     'chkall' => false,
+                                     'chkall' => true,
                                      'chkactions' => $actions,
                                      );
 
@@ -626,7 +626,7 @@ function MODERATE_itemList($type='', $token)
                                      'chkfield' => 'id',
                                      'chkname' => 'selitem',
                                      'chkminimum' => 0,
-                                     'chkall' => false,
+                                     'chkall' => true,
                                      'chkactions' => $actions,
                                      );
 
@@ -724,7 +724,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $display .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete submission(s) and failed CSRF checks.');
+            COM_accessLog('User ' . $_USER['username'] . ' tried to delete submission(s) and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -734,7 +734,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $display .= ($action == 'approve') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('approve', $type);
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally approve submission(s) and failed CSRF checks.');
+            COM_accessLog('User ' . $_USER['username'] . ' tried to approve submission(s) and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

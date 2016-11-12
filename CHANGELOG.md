@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - Moderation System - enabled check all capability for submission lists
   - Media Gallery: Alternate URL support did not function properly on auto tags
   - Media Gallery: Info icon would not open modal on mobile devices
   - Media Gallery: jhead support was broken
