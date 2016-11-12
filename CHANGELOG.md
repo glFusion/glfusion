@@ -1,4 +1,7 @@
 ## v1.6.3 (unreleased)
+  - Media Gallery: Alternate URL support did not function properly on auto tags
+  - Media Gallery: Info icon would not open modal on mobile devices
+  - Media Gallery: jhead support was broken
   - Plugin upload did not properly validate plugin.xml file was located - assumed to be in first directory found
   - Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
   - Created master core configuration data file - reference it as a single source for maintenance during upgrades
