@@ -49,8 +49,8 @@ class database
     private $_name = '';
 
     /**
-    * @var sring|string
-    */
+     * @var string
+     */
     private $_user = '';
 
     /**
@@ -99,6 +99,11 @@ class database
     private $_filter = 1;
 
     /**
+    * @var int
+    */
+    private $_errno = 0;
+
+    /**
     * Logs messages
     *
     * Logs messages by calling the function held in $_errorlog_fn
@@ -116,13 +121,11 @@ class database
     }
 
     /**
-    * Connects to the MySQL database server
-    *
-    * This function connects to the MySQL server and returns the connection object
-    *
-    * @return   object      Returns connection object
-    * @access   private
-    */
+     * Connects to the MySQL database server
+     * This function connects to the MySQL server and returns the connection object
+     *
+     * @return   bool Returns connection object
+     */
     private function _connect()
     {
         if ($this->_verbose) {
@@ -219,10 +222,11 @@ class database
     *
     * @param        string      $dbhost     Database host
     * @param        string      $dbname     Name of database
-    * @param        sring       $dbuser     User to make connection as
-    * @param        string      $pass       Password for dbuser
+     * @param       string      $dbuser     User to make connection as
+    * @param        string      $dbpass     Password for dbuser
     * @param        string      $errorlogfn Name of the errorlog function
-    * @param        string      $charset    character set to use
+    * @param        string      $charset    character set of site
+    * @param        string      $db_charset character of db
     */
     public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '', $db_charset = '' )
     {
@@ -246,38 +250,36 @@ class database
     }
 
     /**
-    * Turns debug mode on
-    * Set this to TRUE to see debug messages
-    *
-    * @param    bool $flag
-    */
+     * Turns debug mode on
+     * Set this to TRUE to see debug messages
+     *
+     * @param    bool $flag
+     */
     public function setVerbose($flag)
     {
         $this->_verbose = (bool) $flag;
     }
 
     /**
-    * Turns detailed error reporting on
-    *
-    * If set to TRUE, this will display detailed error messages on the site.
-    * Otherwise, it will only that state an error occurred without going into
-    * details. The complete error message (including the offending SQL request)
-    * is always available from error.log.
-    *
-    * @param    bool $flag
-    */
+     * Turns detailed error reporting on
+     * If set to TRUE, this will display detailed error messages on the site.
+     * Otherwise, it will only that state an error occurred without going into
+     * details. The complete error message (including the offending SQL request)
+     * is always available from error.log.
+     *
+     * @param    bool $flag
+     */
     public function setDisplayError($flag)
     {
         $this->_display_error = (bool) $flag;
     }
 
     /**
-    * Checks to see if debug mode is on
-    *
-    * Returns value of $_verbose
-    *
-    * @return   bool     TRUE if in verbose mode otherwise FALSE
-    */
+     * Checks to see if debug mode is on
+     * Returns value of $_verbose
+     *
+     * @return   bool     TRUE if in verbose mode otherwise FALSE
+     */
     public function isVerbose()
     {
         if ($this->_verbose
@@ -326,8 +328,10 @@ class database
             $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
         }
 
+        $this->_errno = $this->_db->errno;
+
         // If OK, return otherwise echo error
-        if ($this->_db->errno == 0 AND ($result !== false)) {
+        if ($this->_db->errno == 0 && ($result !== false)) {
             if ($this->_verbose) {
                 $this->_errorlog("DEBUG: mysqli - SQL query ran without error");
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
@@ -845,8 +849,6 @@ class database
     public function dbGetVersion()
     {
         return $this->_db->server_info;
-
-//        return $this->_mysql_version;
     }
 
     public function dbStartTransaction()
@@ -869,6 +871,11 @@ class database
         return $this->_filter;
     }
 
+    public function getErrno()
+    {
+        return $this->_errno;
+    }
+
     public function dbGetClientVersion()
     {
         return $this->_db->client_version;
@@ -878,7 +885,6 @@ class database
     {
         return $this->_mysql_version;
     }
-
 }
 
 ?>

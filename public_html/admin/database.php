@@ -42,9 +42,8 @@ require_once $_CONF['path'].'system/classes/dbbackup.class.php';
 $display = '';
 $page    = '';
 
-// If user isn't a root user, bail.
 if (!SEC_inGroup('Root') ) {
-    $display = COM_siteHeader('menu', $LANG_DB_BACKUP['database_admin']);
+    $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
     COM_accessLog("User {$_USER['username']} tried to access the database administration system without proper permissions.");
@@ -81,7 +80,7 @@ function DBADMIN_compareBackupFiles($pFileA, $pFileB)
 */
 function DBADMIN_list()
 {
-    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
+    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_ADMIN;
 
     $retval = '';
 
@@ -103,8 +102,8 @@ function DBADMIN_list()
         $data_arr = array();
         $thisUrl = $_CONF['site_admin_url'] . '/database.php';
         $diskIconUrl = $_CONF['layout_url'] . '/images/admin/disk.' . $_IMAGE_TYPE;
-        $attr['title'] = $LANG_DB_BACKUP['download'];
-        $alt = $LANG_DB_BACKUP['download'];
+        $attr['title'] = $LANG_DB_ADMIN['download'];
+        $alt = $LANG_DB_ADMIN['download'];
         $num_backups = count($backups);
         for ($i = 0; $i < $num_backups; $i++) {
             $downloadUrl = $thisUrl . '?download=x&amp;file='
@@ -116,7 +115,7 @@ function DBADMIN_list()
             $downloadLink .= COM_createLink($backups[$i], $downloadUrl, $attr);
             $backupfile = $_CONF['backup_path'] . $backups[$i];
             $backupfilesize = COM_numberFormat(filesize($backupfile))
-                            . ' <b>' . $LANG_DB_BACKUP['bytes'] . '</b>';
+                            . ' <b>' . $LANG_DB_ADMIN['bytes'] . '</b>';
             $data_arr[$i] = array('file' => $downloadLink,
                                   'size' => $backupfilesize,
                                   'filename' => $backups[$i]);
@@ -128,42 +127,41 @@ function DBADMIN_list()
 
         $allInnoDB = DBADMIN_innodbStatus();
 
-
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
-                            'text' => $LANG_DB_BACKUP['create_backup']);
-
+                            'text' => $LANG_DB_ADMIN['create_backup']);
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-                            'text' => $LANG_DB_BACKUP['optimize_menu']);
+                            'text' => $LANG_DB_ADMIN['optimize_menu']);
 
         if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
-                                'text' => $LANG_DB_BACKUP['convert_menu']);
+                                'text' => $LANG_DB_ADMIN['convert_menu']);
         }
         if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
-                                'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
+                                'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
-
+        if ( DBADMIN_supportUtf8mb() ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                                'text' => $LANG_DB_ADMIN['utf8_title']);
+        }
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
-                            'text' => $LANG_DB_BACKUP['configure']);
-
+                            'text' => $LANG_DB_ADMIN['configure']);
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
                             'text' => $LANG_ADMIN['admin_home']);
 
-
-        $retval .= COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+        $retval .= COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                             COM_getBlockTemplate('_admin_block', 'header'));
         $retval .= ADMIN_createMenu(
             $menu_arr,
-            "<p>{$LANG_DB_BACKUP['db_explanation']}</p>" .
-            '<p>' . sprintf($LANG_DB_BACKUP['total_number'], $index) . '</p>',
+            "<p>{$LANG_DB_ADMIN['db_explanation']}</p>" .
+            '<p>' . sprintf($LANG_DB_ADMIN['total_number'], $index) . '</p>',
             $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
         );
 
         $header_arr = array(      // display 'text' and use table field 'field'
-            array('text' => $LANG_DB_BACKUP['backup_file'], 'field' => 'file'),
-            array('text' => $LANG_DB_BACKUP['size'],        'field' => 'size')
+            array('text' => $LANG_DB_ADMIN['backup_file'], 'field' => 'file'),
+            array('text' => $LANG_DB_ADMIN['size'],        'field' => 'size')
         );
 
         $text_arr = array(
@@ -183,7 +181,7 @@ function DBADMIN_list()
     } else {
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
-        $retval .= $LANG_DB_BACKUP['no_access'];
+        $retval .= $LANG_DB_ADMIN['no_access'];
         COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
@@ -325,7 +323,7 @@ function DBADMIN_backupTableAjax()
 */
 function DBADMIN_backupPrompt()
 {
-    global $_CONF, $_TABLES, $_VARS, $_IMAGE_TYPE, $LANG01, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
+    global $_CONF, $_TABLES, $_VARS, $_IMAGE_TYPE, $LANG01, $LANG08, $LANG_ADMIN, $LANG_DB_ADMIN;
 
     $retval = '';
 
@@ -342,24 +340,24 @@ function DBADMIN_backupPrompt()
         $allInnoDB = DBADMIN_innodbStatus();
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
-                            'text' => $LANG_DB_BACKUP['database_admin']);
+                            'text' => $LANG_DB_ADMIN['database_admin']);
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-                            'text' => $LANG_DB_BACKUP['optimize_menu']);
+                            'text' => $LANG_DB_ADMIN['optimize_menu']);
 
         if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
-                                'text' => $LANG_DB_BACKUP['convert_menu']);
+                                'text' => $LANG_DB_ADMIN['convert_menu']);
         }
         if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
-                                'text' => $LANG_DB_BACKUP['convert_myisam_menu']);
+                                'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
                             'text' => $LANG_ADMIN['admin_home']);
 
-        $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+        $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                             COM_getBlockTemplate('_admin_block', 'header')));
 
         $T->set_var('admin_menu',ADMIN_createMenu(
@@ -376,23 +374,23 @@ function DBADMIN_backupPrompt()
 
         if (!empty($lastrun)) {
             $last = COM_getUserDateTimeFormat($lastrun);
-            $T->set_var('lang_last_backup',$LANG_DB_BACKUP['latest_backup']);
+            $T->set_var('lang_last_backup',$LANG_DB_ADMIN['latest_backup']);
             $T->set_var('last_backup',$last[0]);
         }
 
         if ( isset($_VARS['_dbback_allstructs']) && $_VARS['_dbback_allstructs'] ) {
-            $T->set_var('struct_warning',$LANG_DB_BACKUP['backup_warning']);
+            $T->set_var('struct_warning',$LANG_DB_ADMIN['backup_warning']);
         }
 
         $T->set_var(array(
             'action'            => 'backup',
-        	'lang_backingup'    => $LANG_DB_BACKUP['backingup'],
-        	'lang_backup'       => $LANG_DB_BACKUP['do_backup'],
-        	'lang_success'      => $LANG_DB_BACKUP['backup_successful'],
+        	'lang_backingup'    => $LANG_DB_ADMIN['backingup'],
+        	'lang_backup'       => $LANG_DB_ADMIN['do_backup'],
+        	'lang_success'      => $LANG_DB_ADMIN['backup_successful'],
             'lang_cancel'       => $LANG_ADMIN['cancel'],
-            'lang_ajax_status'  => $LANG_DB_BACKUP['backup_status'],
-            'lang_backup_instructions' => $LANG_DB_BACKUP['backup_instructions'],
-            'lang_title'        => $LANG_DB_BACKUP['backup_title'],
+            'lang_ajax_status'  => $LANG_DB_ADMIN['backup_status'],
+            'lang_backup_instructions' => $LANG_DB_ADMIN['backup_instructions'],
+            'lang_title'        => $LANG_DB_ADMIN['backup_title'],
             'lang_ok'           => $LANG01['ok'],
         ));
 
@@ -401,7 +399,7 @@ function DBADMIN_backupPrompt()
     } else {
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
-        $retval .= $LANG_DB_BACKUP['no_access'];
+        $retval .= $LANG_DB_ADMIN['no_access'];
         COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
@@ -417,7 +415,7 @@ function DBADMIN_backupPrompt()
 */
 function DBADMIN_backup()
 {
-    global $_CONF, $LANG08, $LANG_DB_BACKUP, $MESSAGE, $_IMAGE_TYPE,
+    global $_CONF, $LANG08, $LANG_DB_ADMIN, $MESSAGE, $_IMAGE_TYPE,
            $_DB_host, $_DB_name, $_DB_user, $_DB_pass;
 
     $retval = '';
@@ -556,7 +554,7 @@ function DBADMIN_myisamStatus()
 
 function DBADMIN_innodb()
 {
-    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -565,12 +563,12 @@ function DBADMIN_innodb()
 
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_BACKUP['database_admin']),
+              'text' => $LANG_DB_ADMIN['database_admin']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
 
     $T->set_var('admin_menu',ADMIN_createMenu(
@@ -579,22 +577,22 @@ function DBADMIN_innodb()
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $T->set_var('lang_title',$LANG_DB_BACKUP['convert_title']);
-    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['innodb_instructions']);
+    $T->set_var('lang_title',$LANG_DB_ADMIN['convert_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['innodb_instructions']);
     if (DBADMIN_innodbStatus()) {
-        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['already_converted']);
+        $T->set_var('lang_conversion_status',$LANG_DB_ADMIN['already_converted']);
     } else {
-        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['conversion_message']);
+        $T->set_var('lang_conversion_status',$LANG_DB_ADMIN['conversion_message']);
     }
     $T->set_var('security_token',SEC_createToken());
     $T->set_var('security_token_name',CSRF_TOKEN);
     $T->set_var(array(
-        'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
+        'lang_convert'      => $LANG_DB_ADMIN['convert_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_ok'           => $LANG01['ok'],
-        'lang_converting'   => $LANG_DB_BACKUP['converting'],
-        'lang_success'      => $LANG_DB_BACKUP['innodb_success'],
-        'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
+        'lang_converting'   => $LANG_DB_ADMIN['converting'],
+        'lang_success'      => $LANG_DB_ADMIN['innodb_success'],
+        'lang_ajax_status'  => $LANG_DB_ADMIN['conversion_status'],
         'to_engine'         => 'InnoDB',
         'action'            => "doinnodb",
         'mode'              => "convertdb",
@@ -609,7 +607,7 @@ function DBADMIN_innodb()
 
 function DBADMIN_myisam()
 {
-    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -618,12 +616,12 @@ function DBADMIN_myisam()
 
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_BACKUP['database_admin']),
+              'text' => $LANG_DB_ADMIN['database_admin']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
 
     $T->set_var('admin_menu',ADMIN_createMenu(
@@ -632,22 +630,22 @@ function DBADMIN_myisam()
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $T->set_var('lang_title',$LANG_DB_BACKUP['convert_myisam_title']);
-    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['myisam_instructions']);
+    $T->set_var('lang_title',$LANG_DB_ADMIN['convert_myisam_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['myisam_instructions']);
     if (DBADMIN_myisamStatus()) {
-        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['already_converted']);
+        $T->set_var('lang_conversion_status',$LANG_DB_ADMIN['already_converted']);
     } else {
-        $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['conversion_message']);
+        $T->set_var('lang_conversion_status',$LANG_DB_ADMIN['conversion_message']);
     }
     $T->set_var('security_token',SEC_createToken());
     $T->set_var('security_token_name',CSRF_TOKEN);
     $T->set_var(array(
-        'lang_convert'      => $LANG_DB_BACKUP['convert_button'],
+        'lang_convert'      => $LANG_DB_ADMIN['convert_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_ok'           => $LANG01['ok'],
-        'lang_converting'   => $LANG_DB_BACKUP['converting'],
-        'lang_success'      => $LANG_DB_BACKUP['myisam_success'],
-        'lang_ajax_status'  => $LANG_DB_BACKUP['conversion_status'],
+        'lang_converting'   => $LANG_DB_ADMIN['converting'],
+        'lang_success'      => $LANG_DB_ADMIN['myisam_success'],
+        'lang_ajax_status'  => $LANG_DB_ADMIN['conversion_status'],
         'to_engine'         => 'MyISAM',
         'action'            => "domyisam",
         'mode'              => "convertdb",
@@ -833,7 +831,7 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
 */
 function DBADMIN_optimize()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_DB_BACKUP, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -846,12 +844,12 @@ function DBADMIN_optimize()
 
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_BACKUP['database_admin']),
+              'text' => $LANG_DB_ADMIN['database_admin']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
 
     $T->set_var('admin_menu',ADMIN_createMenu(
@@ -860,25 +858,25 @@ function DBADMIN_optimize()
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
-    $T->set_var('lang_title',$LANG_DB_BACKUP['optimize_title']);
-    $T->set_var('lang_conversion_instructions',$LANG_DB_BACKUP['optimize_explain']);
-    $T->set_var('lang_conversion_status',$LANG_DB_BACKUP['optimization_message']);
+    $T->set_var('lang_title',$LANG_DB_ADMIN['optimize_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['optimize_explain']);
+    $T->set_var('lang_conversion_status',$LANG_DB_ADMIN['optimization_message']);
 
     if (!empty($lastrun)) {
         $last = COM_getUserDateTimeFormat($lastrun);
-        $T->set_var('lang_last_optimization',$LANG_DB_BACKUP['last_optimization']);
+        $T->set_var('lang_last_optimization',$LANG_DB_ADMIN['last_optimization']);
         $T->set_var('last_optimization',$last[0]);
     }
 
     $T->set_var('security_token',SEC_createToken());
     $T->set_var('security_token_name',CSRF_TOKEN);
     $T->set_var(array(
-        'lang_convert'      => $LANG_DB_BACKUP['optimize_button'],
+        'lang_convert'      => $LANG_DB_ADMIN['optimize_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_ok'           => $LANG01['ok'],
-        'lang_converting'   => $LANG_DB_BACKUP['optimizing'],
-        'lang_success'      => $LANG_DB_BACKUP['optimize_success'],
-        'lang_ajax_status'  => $LANG_DB_BACKUP['optimization_status'],
+        'lang_converting'   => $LANG_DB_ADMIN['optimizing'],
+        'lang_success'      => $LANG_DB_ADMIN['optimize_success'],
+        'lang_ajax_status'  => $LANG_DB_ADMIN['optimization_status'],
         'to_engine'         => 'all',
         'action'            => "dooptimize",
         'mode'              => "optimize",
@@ -1074,6 +1072,8 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
     exit;
 }
 
+
+
 function DBADMIN_validateEngine( $engine )
 {
     $validEngineTypes = array('MyISAM', 'InnoDB');
@@ -1089,7 +1089,7 @@ function DBADMIN_validateEngine( $engine )
 */
 function DBADMIN_configBackup()
 {
-    global $_CONF, $_TABLES, $_VARS, $LANG_DB_BACKUP, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $_VARS, $LANG_DB_ADMIN, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $tablenames = $_TABLES;
     $included = '';
@@ -1111,7 +1111,7 @@ function DBADMIN_configBackup()
 
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_BACKUP['database_admin']),
+              'text' => $LANG_DB_ADMIN['database_admin']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -1119,12 +1119,12 @@ function DBADMIN_configBackup()
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbbackupcfg.thtml');
 
-    $T->set_var('start_block', COM_startBlock($LANG_DB_BACKUP['database_admin'], '',
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
 
     $T->set_var('admin_menu',ADMIN_createMenu(
                 $menu_arr,
-                $LANG_DB_BACKUP['config_instructions'],
+                $LANG_DB_ADMIN['config_instructions'],
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
@@ -1138,14 +1138,14 @@ function DBADMIN_configBackup()
     }
 
     $T->set_var(array(
-        'lang_tables_to_backup' => $LANG_DB_BACKUP['tables_to_backup'],
-        'lang_include'          => $LANG_DB_BACKUP['include'],
-        'lang_exclude'          => $LANG_DB_BACKUP['exclude'],
-        'lang_options'          => $LANG_DB_BACKUP['options'],
-        'lang_struct_only'      => $LANG_DB_BACKUP['struct_only'],
-        'lang_max_files'        => $LANG_DB_BACKUP['max_files'],
-        'lang_disable_purge'    => $LANG_DB_BACKUP['disable_purge'],
-        'lang_use_gzip'         => $LANG_DB_BACKUP['use_gzip'],
+        'lang_tables_to_backup' => $LANG_DB_ADMIN['tables_to_backup'],
+        'lang_include'          => $LANG_DB_ADMIN['include'],
+        'lang_exclude'          => $LANG_DB_ADMIN['exclude'],
+        'lang_options'          => $LANG_DB_ADMIN['options'],
+        'lang_struct_only'      => $LANG_DB_ADMIN['struct_only'],
+        'lang_max_files'        => $LANG_DB_ADMIN['max_files'],
+        'lang_disable_purge'    => $LANG_DB_ADMIN['disable_purge'],
+        'lang_use_gzip'         => $LANG_DB_ADMIN['use_gzip'],
         'lang_save'             => $LANG_ADMIN['save'],
         'included_tables'       => $included,
         'excluded_tables'       => $excluded,
@@ -1162,10 +1162,102 @@ function DBADMIN_configBackup()
     return $retval;
 }
 
+function DBADMIN_utf8mb4()
+{
+    global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
+    $retval = '';
+
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbconvert-utf.thtml');
+
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/database.php',
+              'text' => $LANG_DB_ADMIN['database_admin']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
+    );
+
+    $T->set_var('lang_title',$LANG_DB_ADMIN['utf8_title']);
+    $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['utf8_instructions']);
+
+    $T->set_var('security_token',SEC_createToken());
+    $T->set_var('security_token_name',CSRF_TOKEN);
+    $T->set_var(array(
+        'form_action'       => $_CONF['site_admin_url'].'/dbutf.php',
+        'lang_convert'      => $LANG_DB_ADMIN['convert_button'],
+        'lang_cancel'       => $LANG_ADMIN['cancel'],
+        'lang_ok'           => $LANG01['ok'],
+        'lang_converting'   => $LANG_DB_ADMIN['converting'],
+        'lang_success'      => $LANG_DB_ADMIN['utf8_success'],
+        'lang_ajax_status'  => $LANG_DB_ADMIN['conversion_status'],
+        'lang_error_gettable' => $LANG_DB_ADMIN['retrieve_tables'],
+        'lang_error_header' => $LANG_DB_ADMIN['error_heading'],
+        'lang_no_errors'    => $LANG_DB_ADMIN['no_errors'],
+        'lang_error_db'     => $LANG_DB_ADMIN['error_db_utf'],
+        'lang_error_table'  => $LANG_DB_ADMIN['error_table_utf'],
+        'lang_error_getcolumn' => $LANG_DB_ADMIN['error_column_utf'],
+        'lang_sc_error'     => $LANG_DB_ADMIN['error_sc'],
+        'lang_current_progress' => $LANG_DB_ADMIN['current_progress'],
+        'lang_overall_progress' => $LANG_DB_ADMIN['overall_progress'],
+    ));
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+
+function DBADMIN_supportUtf8mb()
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $collation_database = '';
+
+    $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
+    if ( $result ) {
+        $collation = DB_fetchArray($result);
+        $collation_database = substr($collation["@@collation_database"],0,4);
+    }
+
+    if ( $collation_database != "utf8" ) {
+        COM_errorLog('DBADMIN: Unable to convert to utf8mb4 - database is not a UTF-8 database');
+        return false;
+    }
+    $serverVersion = DB_getServerVersion();
+    if ( $serverVersion < 50503 ) {
+        COM_errorLog("DBADMIN: MySQL Server must be v5.5.3 or higher to convert to utf8mb4");
+        return false;
+    }
+    $clientVersion = DB_getClientVersion();
+    if (function_exists('mysqli_get_client_stats')) {
+        // mysqlnd
+        if ( $clientVersion < 50009 ) {
+            COM_errorLog('DBADMIN: mysqlnd driver does not support utf8mb4 :: ' . $clientVersion);
+            return false;
+        }
+    } else {
+        if ( $clientVersion < 50503) {
+            COM_errorLog('DBADMIN: libmysqlclient driver does not support utf8mb4 :: ' . $clientVersion );
+            return false;
+        }
+    }
+    return true;
+}
 
 $action = '';
-$expected = array('backup','backupdb','config','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode','saveconfig');
+$expected = array('backup','backupdb','config','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode','saveconfig','doutf8','utf8mb4');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -1227,25 +1319,25 @@ switch ($action) {
         break;
 
     case 'myisam':
-        $pagetitle = $LANG_DB_BACKUP['convert_myisam_title'];
+        $pagetitle = $LANG_DB_ADMIN['convert_myisam_title'];
         if (DBADMIN_supported_engine( 'MyISAM')) {
             $page .= DBADMIN_myisam();
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_myisam'],'',true,'error');
+            $page .= COM_showMessageText($LANG_DB_ADMIN['no_myisam'],'',true,'error');
         }
         break;
 
     case 'innodb':
-        $pagetitle = $LANG_DB_BACKUP['convert_title'];
+        $pagetitle = $LANG_DB_ADMIN['convert_title'];
         if (DBADMIN_supported_engine( 'InnoDB')) {
             $page .= DBADMIN_innodb();
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
+            $page .= COM_showMessageText($LANG_DB_ADMIN['no_innodb'],'',true,'error');
         }
         break;
 
     case 'doinnodb':
-        $pagetitle = $LANG_DB_BACKUP['convert_title'];
+        $pagetitle = $LANG_DB_ADMIN['convert_title'];
         if (DBADMIN_supported_engine( 'InnoDB')) {
             $startwith = '';
             if (isset($_GET['startwith'])) {
@@ -1258,19 +1350,19 @@ switch ($action) {
                 }
                 $num_errors = DBADMIN_convert_innodb($startwith, $failures);
                 if ($num_errors == 0) {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['innodb_success']);
+                    $page .= COM_showMessageText($LANG_DB_ADMIN['innodb_success']);
                 } else {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['innodb_success'] . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
+                    $page .= COM_showMessageText($LANG_DB_ADMIN['innodb_success'] . ' ' . $LANG_DB_ADMIN['table_issues'],'',true,'error');
                 }
                 $page .= DBADMIN_list();
             }
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
+            $page .= COM_showMessageText($LANG_DB_ADMIN['no_innodb'],'',true,'error');
         }
         break;
 
     case 'domyisam':
-        $pagetitle = $LANG_DB_BACKUP['convert_myisam_title'];
+        $pagetitle = $LANG_DB_ADMIN['convert_myisam_title'];
         if (DBADMIN_supported_engine( 'MyISAM' )) {
             $startwith = '';
             if (isset($_GET['startwith'])) {
@@ -1283,20 +1375,29 @@ switch ($action) {
                 }
                 $num_errors = DBADMIN_convert_myisam($startwith, $failures);
                 if ($num_errors == 0) {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success']);
+                    $page .= COM_showMessageText($LANG_DB_ADMIN['myisam_success']);
                 } else {
-                    $page .= COM_showMessageText($LANG_DB_BACKUP['myisam_success'] . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
+                    $page .= COM_showMessageText($LANG_DB_ADMIN['myisam_success'] . ' ' . $LANG_DB_ADMIN['table_issues'],'',true,'error');
                 }
                 $page .= DBADMIN_list();
             }
         } else {
-            $page .= COM_showMessageText($LANG_DB_BACKUP['no_innodb'],'',true,'error');
+            $page .= COM_showMessageText($LANG_DB_ADMIN['no_innodb'],'',true,'error');
         }
         break;
 
+    case 'utf8mb4':
+        $pagetitle = $LANG_DB_ADMIN['utf8_title'];
+        if ( DBADMIN_supportUtf8mb() ) {
+            $page .= DBADMIN_utf8mb4();
+        } else {
+            $page .= COM_showMessageText('Server does not support utf8mb4 - see error.log for details.','',true,'error');
+            $page .= DBADMIN_list();
+        }
+        break;
 
     case 'optimize':
-        $pagetitle = $LANG_DB_BACKUP['optimize_title'];
+        $pagetitle = $LANG_DB_ADMIN['optimize_title'];
         $page .= DBADMIN_optimize();
         break;
 
@@ -1305,7 +1406,7 @@ switch ($action) {
         if (isset($_GET['startwith'])) {
             $startwith = COM_applyFilter($_GET['startwith']);
         }
-        $pagetitle = $LANG_DB_BACKUP['optimize_title'];
+        $pagetitle = $LANG_DB_ADMIN['optimize_title'];
         if (!empty($startwith) || SEC_checkToken()) {
             $failures = 0;
             if (isset($_GET['failures'])) {
@@ -1313,10 +1414,10 @@ switch ($action) {
             }
             $num_errors = DBADMIN_dooptimize($startwith, $failures);
             if ($num_errors == 0) {
-                $page .= COM_showMessageText($LANG_DB_BACKUP['optimize_success']);
+                $page .= COM_showMessageText($LANG_DB_ADMIN['optimize_success']);
             } else {
-                $page .= COM_showMessageText($LANG_DB_BACKUP['optimize_success']
-                                . ' ' . $LANG_DB_BACKUP['table_issues'],'',true,'error');
+                $page .= COM_showMessageText($LANG_DB_ADMIN['optimize_success']
+                                . ' ' . $LANG_DB_ADMIN['table_issues'],'',true,'error');
             }
             $page .= DBADMIN_list();
         }
@@ -1331,15 +1432,6 @@ switch ($action) {
 
         $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
 
-/* ---
-        if (isset($_POST['disable_cron'])) {
-            $str = '-1';
-        } else {
-            $str = (int)$_POST['db_backup_interval'];
-        }
-        $items['_dbback_cron'] = $str;
---- */
-
         $items['_dbback_gzip'] = isset($_POST['use_gzip']) ? 1 : 0;
         $items['_dbback_allstructs'] = isset($_POST['allstructs']) ? 1 : 0;
 
@@ -1353,13 +1445,6 @@ switch ($action) {
         $page = DBADMIN_list();
 
         break;
-
-
-
-
-
-
-
 
     case 'mode' :
         $mode = COM_applyFilter($_POST['mode']);
@@ -1434,7 +1519,7 @@ switch ($action) {
 
 }
 
-$display  = COM_siteHeader('menu', $LANG_DB_BACKUP['database_admin']);
+$display  = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
 $display .= $page;
 $display .= COM_siteFooter();
 echo $display;

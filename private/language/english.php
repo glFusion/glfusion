@@ -1695,7 +1695,7 @@ $LANG_ACCESS = array(
 ###############################################################################
 # admin/database.php
 
-$LANG_DB_BACKUP = array(
+$LANG_DB_ADMIN = array(
     'database_admin'      => 'Database Administration',
     'last_ten_backups'    => 'Database Backups',
     'create_backup'       => 'Backup Database',
@@ -1719,19 +1719,19 @@ $LANG_DB_BACKUP = array(
     'converting'          => 'Converting',
     'no_innodb'           => 'Your version of MySQL does not support InnoDB tables.',
     'no_myisam'           => 'Your version of MySQL does not support MyISAM tables.',
-    'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
-    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
+    'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. For sites that have significant or frequent contributors to content such as forum posts, comments or stories, InnoDB may provide a small performance boost.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases. For sites with low contributor traffic such as forums and comments, MyISAM may provide better performance.',
     'already_converted'   => 'It appears that all of the tables have already been converted to InnoDB.',
     'already_converted_myisam'   => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message'  => 'Note: Conversion may take some time - please be patient.',
     'innodb_success'      => 'Successfully converted tables to InnoDB.',
     'myisam_success'      => 'Successfully converted tables to MyISAM.',
-    'table_issues'        => 'There may have been problems with some tables, though. Please check error.log for details.',
+    'table_issues'        => 'There may have been problems with some tables. Please see the error.log for details.',
     'optimize_menu'       => 'Optimize Tables',
     'optimize_title'      => 'Optimize Tables',
     'optimize_button'     => 'Optimize',
     'optimizing'          => 'Optimizing',
-    'optimize_explain'    => 'Optimizing tables may help to improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do not expect to see a huge difference in performance. The <a href="http://dev.mysql.com/doc/mysql/en/optimize-table.html" target="_blank">MySQL manual</a> states: <q>it is not likely that you need to do this more than once a week or month</q>.',
+    'optimize_explain'    => 'Optimizing tables will help improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do not expect to see a huge difference in performance. You should not need optimize tables more than once or twice a month.',
     'last_optimization'   => 'Last optimization',
     'optimization_message'=> 'Optimization may take some time - please be patient.',
     'optimize_success'    => 'Successfully optimized database tables.',
@@ -1752,7 +1752,18 @@ $LANG_DB_BACKUP = array(
     'use_gzip'            => 'Use GZip if available',
     'configure'           => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
-
+    'utf8_title'          => 'UTF8MB4 Upgrade',
+    'utf8_instructions'   => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.',
+    'utf8_success'        => 'UTF8 Upgrade has completed successfully',
+    'retrieve_tables'     => 'Retrieving Table List',
+    'error_heading'       => 'Errors',
+    'no_errors'           => 'No errors encountered',
+    'error_db_utf'        => 'Error converting database to UTF8MB4',
+    'error_table_utf'     => 'Error converting table to UTF8MB4',
+    'error_column_utf'    => 'Error converting column to UTF8MB4',
+    'error_sc'            => 'Error updating siteconfig.php - please update db_charset manually',
+    'current_progress'    => 'Current Progress',
+    'overall_progress'    => 'Overall Progress',
 );
 
 ###############################################################################
