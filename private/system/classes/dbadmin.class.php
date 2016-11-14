@@ -21,7 +21,6 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-
 class dbAdmin
 {
     protected $dbHandle;
@@ -51,7 +50,7 @@ class dbAdmin
     public function returnResult()
     {
         if ( $this->isAjax ) {
-            $this->ajaxHandler->setErrorCode = $this->errorCode;
+            $this->ajaxHandler->setErrorCode($this->errorCode);
             $this->ajaxHandler->setMessage($this->lastError);
             if ( is_array($this->returnItem) && count($this->returnItem) > 0) {
                 list($name, $value) = $this->returnItem;
