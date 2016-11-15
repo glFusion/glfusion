@@ -47,6 +47,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.format_tags = 'p;h1;h2;h3;pre';
 	config.extraPlugins = 'youtube2,vimeo';
 	config.autoParagraph = false;
+	config.entities_latin = false;
 
     // FileMan
 	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/fileman/index.html?type=file';
