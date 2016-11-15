@@ -1187,13 +1187,25 @@ function DBADMIN_utf8mb4()
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
 
+    $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
+    if ( $result ) {
+        $row = DB_fetchArray($result);
+        $collation_database = $row["@@collation_database"];
+        $charset_database = $row["@@character_set_database"];
+    }
+
     $T->set_var('lang_title',$LANG_DB_ADMIN['utf8_title']);
-    $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['utf8_instructions']);
+
+    $cnv_instr = sprintf($LANG_DB_ADMIN['utf8_instructions'],$collation_database, $charset_database);
+
+    $T->set_var('lang_conversion_instructions', $cnv_instr);
 
     $T->set_var('security_token',SEC_createToken());
     $T->set_var('security_token_name',CSRF_TOKEN);
     $T->set_var(array(
         'form_action'       => $_CONF['site_admin_url'].'/dbutf.php',
+        'current_char_set'  => $charset_database,
+        'current_collation' => $collation_database,
         'lang_convert'      => $LANG_DB_ADMIN['convert_button'],
         'lang_cancel'       => $LANG_ADMIN['cancel'],
         'lang_ok'           => $LANG01['ok'],

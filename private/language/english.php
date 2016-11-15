@@ -1752,7 +1752,18 @@ $LANG_DB_ADMIN = array(
     'use_gzip'            => 'Use GZip if available',
     'configure'           => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
-
+    'utf8_title'          => 'UTF8MB4 Upgrade',
+    'utf8_instructions'   => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_success'        => 'UTF8 Upgrade has completed successfully',
+    'retrieve_tables'     => 'Retrieving Table List',
+    'error_heading'       => 'Errors',
+    'no_errors'           => 'No errors encountered',
+    'error_db_utf'        => 'Error converting database to UTF8MB4',
+    'error_table_utf'     => 'Error converting table to UTF8MB4',
+    'error_column_utf'    => 'Error converting column to UTF8MB4',
+    'error_sc'            => 'Error updating siteconfig.php - please update db_charset manually',
+    'current_progress'    => 'Current Progress',
+    'overall_progress'    => 'Overall Progress',
 );
 
 ###############################################################################
