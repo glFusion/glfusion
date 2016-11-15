@@ -896,7 +896,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     if ( isset($blockInterface['left'] )) {
         $currentURL = COM_getCurrentURL();
-        if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
+        if ( @strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
             if ( $blockInterface['left']['location'] == 'right' ||
                  $blockInterface['left']['location'] == 'left' ) {
                 $theme_what = 'none';
