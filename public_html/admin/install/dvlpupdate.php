@@ -1487,17 +1487,23 @@ function glfusion_162()
 
     // check if Non-Logged-in Users exists
     $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Non-Logged-in Users'");
-    if ( DB_numRows($result) < 1 ) {
+    if ( DB_numRows($result) == 0 ) {
         DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Non-Logged-in Users','Non Logged-in Users (anonymous users)',1,0)",1);
-        $nonloggedin_group_id  = DB_insertId();
-        // assign all anonymous users to the group
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",1,NULL) ",1);
-        // assign root group
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",NULL,1) ",1);
-        $sql = "UPDATE {$_TABLES['menu']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
-        DB_query($sql);
-        $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
-        DB_query($sql);
+        $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Non-Logged-in Users'");
+        if ( $result !== false ) {
+            $row = DB_fetchArray($result);
+            $nonloggedin_group_id = $row['grp_id'];
+            // assign all anonymous users to the group
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",1,NULL) ",1);
+            // assign root group
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",NULL,1) ",1);
+            $sql = "UPDATE {$_TABLES['menu']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+            DB_query($sql);
+            $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+            DB_query($sql);
+        } else {
+            COM_errorLog("dvlpupdate: Error retrieving non-loggedin-user group id");
+        }
     }
     $_SQL = array();
 
@@ -1537,6 +1543,7 @@ function glfusion_163()
 
     // sql updates here
     DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+    DB_query("REPLACE INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL)",1);
 
     _updateConfig();
 
