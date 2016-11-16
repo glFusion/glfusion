@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - Added database info to environment check report
   - Update Unite Gallery to v1.7.37
   - Update Media Element to v2.23.4
   - Update CKeditor to v4.5.11
@@ -10,6 +11,7 @@
   - Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
   - Created master core configuration data file - reference it as a single source for maintenance during upgrades
   - Updated fusionrescue to allow resetting login methods field
+  - Installation validates database charset
   - Improved the visual cues when backing up large tables
   - Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
   - Added RSS Ticker widget

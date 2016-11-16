@@ -46,7 +46,7 @@ if (!SEC_inGroup ('Root')) {
 
 function _checkEnvironment()
 {
-    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,
+    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,$LANG28,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
            $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
 
@@ -388,6 +388,7 @@ function _checkEnvironment()
     }
 
     $T->set_var(array(
+        'lang_status'       => $LANG28['105'],
         'lang_db_header'    => $LANG01['db_header'],
         'lang_db_driver'    => $LANG01['db_driver'],
         'lang_db_version'   => $LANG01['db_version'],
