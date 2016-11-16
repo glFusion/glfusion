@@ -19,6 +19,7 @@
  */
 
 require_once '../lib-common.php';
+require_once 'auth.inc.php';
 
 if (!SEC_inGroup('Root') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);

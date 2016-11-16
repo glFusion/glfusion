@@ -48,7 +48,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
 
     $retval = '';
     $permError = 0;
@@ -360,6 +360,41 @@ function _checkEnvironment()
             'notes'  => $LANG01['bypass_note'],
         ));
     }
+
+    if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
+        $dbInfo['db_driver'] = 'mysqli';
+    } else {
+        $dbInfo['db_driver'] = 'mysql';
+    }
+    $dbInfo['db_version'] = DB_getVersion();
+    $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
+    if ( $result ) {
+        $row = DB_fetchArray($result);
+        $dbInfo['db_collation'] = $row["@@collation_database"];
+        $dbInfo['db_charset'] = $row["@@character_set_database"];
+    } else {
+        $dbInfo['db_collation'] = 'Unknown';
+        $dbInfo['db_charset']   = 'Unknown';
+    }
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_engine'");
+    if ( DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        $dbInfo['db_engine'] = $row['value'];
+    } else {
+        $dbInfo['db_engine'] = 'MyISAM';
+    }
+    foreach ($dbInfo AS $name => $value ) {
+        $T->set_var($name,$value);
+    }
+
+    $T->set_var(array(
+        'lang_db_header'    => $LANG01['db_header'],
+        'lang_db_driver'    => $LANG01['db_driver'],
+        'lang_db_version'   => $LANG01['db_version'],
+        'lang_db_engine'    => $LANG01['db_engine'],
+        'lang_db_charset'   => $LANG01['db_charset'],
+        'lang_db_collation' => $LANG01['db_collation'],
+    ));
 
     // extract syndication storage path
     $feedpath = $_CONF['rdf_file'];

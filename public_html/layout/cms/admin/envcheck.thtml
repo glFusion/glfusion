@@ -31,19 +31,11 @@
 				<td>{notes}</td>
 			</tr>
 			<!-- END envs -->
+		</table>
 
-			<tr>
-				<td>{mysql}</td>
-				<td colspan="3">
-					{mysql_version}
-				</td>
-			</tr>
-
-			<tr>
-				<td colspan="4">
-					<h2>{lang_extensions}</h2>
-				</td>
-			</tr>
+		<h2>{lang_extensions}</h2>
+		<hr>
+		<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
 			<!-- BEGIN libs -->
 			<tr>
 				<td>{item}</td>
@@ -51,6 +43,41 @@
 				<td>{notes}</td>
 			</tr>
 			<!-- END libs -->
+		</table>
+
+		<h2>{lang_db_header}</h2>
+		<hr>
+			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+				<tr>
+					<td>{lang_db_driver}</td>
+					<td colspan="3">
+						{db_driver}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_version}</td>
+					<td colspan="3">
+						{db_version}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_engine}</td>
+					<td colspan="3">
+						{db_engine}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_collation}</td>
+					<td colspan="3">
+						{db_collation}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_charset}</td>
+					<td colspan="3">
+						{db_charset}
+					</td>
+				</tr>
 		</table>
 
 		<h2>{lang_filesystem}</h2>

@@ -259,6 +259,12 @@ $LANG01 = array(
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
     'phpendoflife'              => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
+    'db_header'                 => 'Database Info',
+    'db_driver'                 => 'Database Driver',
+    'db_version'                => 'Database Version',
+    'db_engine'                 => 'Database Engine',
+    'db_charset'                => 'Database Character Set',
+    'db_collation'              => 'Database Collation',
 );
 
 ###############################################################################
