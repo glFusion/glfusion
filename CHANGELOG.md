@@ -2,7 +2,7 @@
   - Added database info to environment check report
   - Update Unite Gallery to v1.7.37
   - Update Media Element to v2.23.4
-  - Update CKeditor to v4.5.11
+  - Update CKeditor to v4.6.0
   - Moderation System - enabled check all capability for submission lists
   - Media Gallery: Alternate URL support did not function properly on auto tags
   - Media Gallery: Info icon would not open modal on mobile devices
