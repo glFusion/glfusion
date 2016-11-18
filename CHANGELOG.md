@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Forum Plugin - improved WYSIWYG editor integration - better support for site styles
+  - New feature to allow cidr blocks with BB2
   - Added database info to environment check report
   - Update Unite Gallery to v1.7.37
   - Update Media Element to v2.23.4
