@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Updated tooltip JS to properly parse titles
+  - Styled the tool-tip title
   - Forum Plugin - improved WYSIWYG editor integration - better support for site styles
   - New feature to allow cidr blocks with BB2
   - Added database info to environment check report
