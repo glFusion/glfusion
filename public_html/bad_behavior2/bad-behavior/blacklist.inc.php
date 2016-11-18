@@ -2,6 +2,8 @@
 
 function bb2_blacklist($settings,$package) {
 
+    global $_CONF;
+
 	// Blacklisted user agents
 	// These user agent strings occur at the beginning of the line.
 	$bb2_spambots_0 = array(
@@ -165,11 +167,21 @@ function bb2_blacklist($settings,$package) {
 	    "gamesthelife.tr.gg",
     );
 
+    if ( @file_exists($_CONF['path_data'].'bb2_ip_ban.php')) {
+        require_once $_CONF['path_data'].'bb2_ip_ban.php';
+    } else {
+        $bb2_blacklist_cidrs = array();
+    }
+
 	// Do not edit below this line.
 
 	@$ua = $package['headers_mixed']['User-Agent'];
 	@$uri = $package['request_uri'];
 	@$refer = $package['Referer'];
+
+    if ( bb2_check_bl_cidr($package['ip'],$bb2_blacklist_cidrs) ) {
+        return "96c0bd30";
+    }
 
 	foreach ($bb2_spambots_0 as $spambot) {
 		$pos = strpos($ua, $spambot);
@@ -213,4 +225,21 @@ function bb2_blacklist($settings,$package) {
 	return FALSE;
 }
 
+function bb2_check_bl_cidr($user_ip, $cidrs) {
+    $ipu = explode('.', $user_ip);
+    foreach ($ipu as &$v)
+    $v = str_pad(decbin($v), 8, '0', STR_PAD_LEFT);
+    $ipu = join('', $ipu);
+    $res = false;
+    foreach ($cidrs as $cidr) {
+        $parts = explode('/', $cidr);
+        $ipc = explode('.', $parts[0]);
+        foreach ($ipc as &$v) $v = str_pad(decbin($v), 8, '0', STR_PAD_LEFT);
+        $ipc = substr(join('', $ipc), 0, $parts[1]);
+        $ipux = substr($ipu, 0, $parts[1]);
+        $res = ($ipc === $ipux);
+        if ($res) break;
+    }
+    return $res;
+}
 ?>
