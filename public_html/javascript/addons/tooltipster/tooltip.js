@@ -5,7 +5,7 @@ $(document).ready(function() {
     delay: 100,
     functionInit: function(origin, content) {
       tipParts = content.split('::');
-      if ( tipParts[0] === '' ) {
+      if ( typeof(tipParts[1]) === 'undefined' ) {
           return content;
       }
       tipTitle = tipParts[0];

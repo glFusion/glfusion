@@ -2047,6 +2047,15 @@ span.note {
 	transform: scale(1.1, 1.1);
 }
 
+.tool-title {
+	font-weight:700;
+	font-size:13px;
+	color:#679EF1;
+	margin:0;
+	padding-top:8px;
+	padding-bottom:8px;
+}
+
 
 /* Slimbox (Lightbox) Styles
 ========================================================================== */
