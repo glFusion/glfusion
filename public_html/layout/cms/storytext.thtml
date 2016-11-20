@@ -38,7 +38,7 @@
  {!endif}
 {!endif}
 {!if story_date}
-					<li><time datetime="{story_date}">{story_date}</time></li>
+					<li>{story_date}</li>
 {!endif}
 {!if lang_views}
         <li>{lang_views} {story_hits}</li>
