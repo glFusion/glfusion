@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.3 or greater
-if (version_compare(PHP_VERSION,'5.3.0','<')) {
-    die('Sorry, glFusion requires PHP version 5.3.0 or greater.');
+if (version_compare(PHP_VERSION,'5.3.3','<')) {
+    die('Sorry, glFusion requires PHP version 5.3.3 or greater.');
 }
 
 /**
@@ -7034,8 +7034,8 @@ function _js_out()
     /*
      * Let the plugins add any global JS variables
      */
+    $pluginJSvars['gl'] = 'log';
     if (is_array($_PLUGINS) ) {
-        $pluginJSvars['gl'] = 'EdCICTd8idbqXnyfQ02FsQqD';
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
                 $function = 'plugin_getglobaljs_'.$pi_name;
@@ -7067,7 +7067,6 @@ function _js_out()
     $js .= "var glfusionFileRoot = '".$fileroot ."';". LB;
     $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
     $js .= "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
-//$js .= "var Dqf02 = 'EdCICTd8idbqXnyfQ02FsQqD';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
