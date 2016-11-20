@@ -227,7 +227,7 @@ function DBADMIN_backupAjax()
     $retval['totalrows'] = $rowCount;
     $retval['statusMessage'] = 'Initialization Successful';
 
-    $return["json"] = json_encode($retval);
+    $return["js"] = json_encode($retval);
 
     echo json_encode($return);
     exit;
@@ -252,7 +252,7 @@ function DBADMIN_backupCompleteAjax()
     $backup->save_backup_time();
     $backup->Purge();
     $retval['errorCode'] = 0;
-    $return["json"] = json_encode($retval);
+    $return["js"] = json_encode($retval);
     echo json_encode($return);
     exit;
 }
@@ -295,19 +295,19 @@ function DBADMIN_backupTableAjax()
             $retval['errorCode'] = 2;
             $retval['startrecord'] = $recordCounter;
             $retval['processed'] = $sessionCounter;
-            $return["json"] = json_encode($retval);
+            $return["js"] = json_encode($retval);
             echo json_encode($return);
             exit;
         case -2 :
             // serious error
             $retval['errorCode'] = 3;
-            $return["json"] = json_encode($retval);
+            $return["js"] = json_encode($retval);
             echo json_encode($return);
             exit;
         default :
             $retval['errorCode'] = 0;
             $retval['processed'] = $sessionCounter;
-            $return["json"] = json_encode($retval);
+            $return["js"] = json_encode($retval);
             echo json_encode($return);
             exit;
     }
@@ -499,26 +499,16 @@ function DBADMIN_innodbStatus()
     $engine = DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'");
     if (!empty($engine) && ($engine == 'InnoDB')) {
         // need to look at all the tables
-        $result = DB_query("SHOW TABLES");
-        $numTables = DB_numRows($result);
-        for ($i = 0; $i < $numTables; $i++) {
-            $A = DB_fetchArray($result, true);
-            $table = $A[0];
-            if (in_array($table, $_TABLES)) {
-                $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
-                $B = DB_fetchArray($result2);
-                if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
-                    return false;
-                    break; // found a non-InnoDB table
-                }
+        $tableList = DBADMIN_getTableList();
+        foreach ( $tableList AS $table ) {
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $B = DB_fetchArray($result2);
+            if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
+                return false;
             }
         }
-        if ($i == $numTables) {
-            // okay, all the tables are InnoDB already
-            $retval = true;
-        }
+        $retval = true;
     }
-
     return $retval;
 }
 
@@ -528,27 +518,15 @@ function DBADMIN_myisamStatus()
 
     $retval = false;
 
-    // need to look at all the tables
-    $result = DB_query("SHOW TABLES");
-    $numTables = DB_numRows($result);
-    for ($i = 0; $i < $numTables; $i++) {
-        $A = DB_fetchArray($result, true);
-        $table = $A[0];
-        if (in_array($table, $_TABLES)) {
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
-            $B = DB_fetchArray($result2);
-            if (strcasecmp($B['Engine'], 'MyISAM') != 0) {
-                return false;
-                break; // found a non-MyISAM table
-            }
+    $tableList = DBADMIN_getTableList();
+    foreach ( $tableList AS $table ) {
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $B = DB_fetchArray($result2);
+        if (strcasecmp($B['Engine'], 'MyISAM') != 0) {
+            return false;
         }
     }
-    if ($i == $numTables) {
-        // okay, all the tables are MyISAM already
-        $retval = true;
-    }
-
-    return $retval;
+    return true;
 }
 
 
@@ -685,44 +663,39 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
 
     $token = ''; // SEC_createToken();
 
-    $result = DB_query("SHOW TABLES");
-    $numTables = DB_numRows($result);
-    for ($i = 0; $i < $numTables; $i++) {
-        $A = DB_fetchArray($result, true);
-        $table = $A[0];
-        if (in_array($table, $_TABLES)) {
-            if (! empty($startwith)) {
-                if ($table == $startwith) {
-                    $startwith = '';
-                } else {
-                    continue; // handled - skip
-                }
+    $tableList = DBADMIN_getTableList();
+    foreach ( $tableList AS $table ) {
+        if (! empty($startwith)) {
+            if ($table == $startwith) {
+                $startwith = '';
+            } else {
+                continue; // handled - skip
             }
+        }
 
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
-            $B = DB_fetchArray($result2);
-            if (strcasecmp($B['Engine'], 'InnoDB') == 0) {
-                continue; // converted - skip
-            }
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $B = DB_fetchArray($result2);
+        if (strcasecmp($B['Engine'], 'InnoDB') == 0) {
+            continue; // converted - skip
+        }
 
-            if (time() > $start + $maxtime) {
-                // this is taking too long - kick off another request
-                $startwith = $table;
-                $url = $_CONF['site_admin_url'] . '/database.php?doinnodb=x';
-                if (! empty($token)) {
-                    $token = '&' . CSRF_TOKEN . '=' . $token;
-                }
-                header("Location: $url&startwith=$startwith&failures=$failures"
-                                  . $token);
-                exit;
+        if (time() > $start + $maxtime) {
+            // this is taking too long - kick off another request
+            $startwith = $table;
+            $url = $_CONF['site_admin_url'] . '/database.php?doinnodb=x';
+            if (! empty($token)) {
+                $token = '&' . CSRF_TOKEN . '=' . $token;
             }
+            header("Location: $url&startwith=$startwith&failures=$failures"
+                              . $token);
+            exit;
+        }
 
-            $make_innodb = DB_query("ALTER TABLE $table ENGINE=InnoDB", 1);
-            if ($make_innodb === false) {
-                $failures++;
-                COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                             . DB_error());
-            }
+        $make_innodb = DB_query("ALTER TABLE $table ENGINE=InnoDB", 1);
+        if ($make_innodb === false) {
+            $failures++;
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
+                         . DB_error());
         }
     }
 
@@ -775,44 +748,39 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
 
     $token = ''; // SEC_createToken();
 
-    $result = DB_query("SHOW TABLES");
-    $numTables = DB_numRows($result);
-    for ($i = 0; $i < $numTables; $i++) {
-        $A = DB_fetchArray($result, true);
-        $table = $A[0];
-        if (in_array($table, $_TABLES)) {
-            if (! empty($startwith)) {
-                if ($table == $startwith) {
-                    $startwith = '';
-                } else {
-                    continue; // handled - skip
-                }
+    $tableList = DBADMIN_getTableList();
+    foreach ( $tableList AS $table ) {
+        if (! empty($startwith)) {
+            if ($table == $startwith) {
+                $startwith = '';
+            } else {
+                continue; // handled - skip
             }
+        }
 
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
-            $B = DB_fetchArray($result2);
-            if (strcasecmp($B['Engine'], 'MyISAM') == 0) {
-                continue; // converted - skip
-            }
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $B = DB_fetchArray($result2);
+        if (strcasecmp($B['Engine'], 'MyISAM') == 0) {
+            continue; // converted - skip
+        }
 
-            if (time() > $start + $maxtime) {
-                // this is taking too long - kick off another request
-                $startwith = $table;
-                $url = $_CONF['site_admin_url'] . '/database.php?domyisam=x';
-                if (! empty($token)) {
-                    $token = '&' . CSRF_TOKEN . '=' . $token;
-                }
-                header("Location: $url&startwith=$startwith&failures=$failures"
-                                  . $token);
-                exit;
+        if (time() > $start + $maxtime) {
+            // this is taking too long - kick off another request
+            $startwith = $table;
+            $url = $_CONF['site_admin_url'] . '/database.php?domyisam=x';
+            if (! empty($token)) {
+                $token = '&' . CSRF_TOKEN . '=' . $token;
             }
+            header("Location: $url&startwith=$startwith&failures=$failures"
+                              . $token);
+            exit;
+        }
 
-            $make_myisam = DB_query("ALTER TABLE $table ENGINE=MyISAM", 1);
-            if ($make_myisam === false) {
-                $failures++;
-                COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                             . DB_error());
-            }
+        $make_myisam = DB_query("ALTER TABLE $table ENGINE=MyISAM", 1);
+        if ($make_myisam === false) {
+            $failures++;
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
+                         . DB_error());
         }
     }
 
@@ -921,58 +889,53 @@ function DBADMIN_dooptimize($startwith = '', $failures = 0)
 
     $token = ''; // SEC_createToken();
 
-    $result = DB_query("SHOW TABLES");
-    $numTables = DB_numRows($result);
-    for ($i = 0; $i < $numTables; $i++) {
-        $A = DB_fetchArray($result, true);
-        $table = $A[0];
-        if (in_array($table, $_TABLES)) {
-            if (! empty($startwith)) {
-                if ($table == $startwith) {
-                    $startwith = '';
-                } else {
-                    continue; // already handled - skip
-                }
-                if (!empty($lasttable) && ($lasttable == $table)) {
-                    continue; // skip
-                }
-            }
-
-            if (time() > $start + $maxtime) {
-                // this is taking too long - kick off another request
-                $startwith = $table;
-                $url = $_CONF['site_admin_url']
-                     . '/database.php?dooptimize=x';
-                if (! empty($token)) {
-                    $token = '&' . CSRF_TOKEN . '=' . $token;
-                }
-                header("Location: $url&startwith=$startwith&failures=$failures"
-                                  . $token);
-                exit;
-            }
-
-            if (empty($lasttable)) {
-                DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastoptimizedtable', '$table')");
-                $lasttable = $table;
+    $tableList = DBADMIN_getTableList();
+    foreach ( $tableList AS $table ) {
+        if (! empty($startwith)) {
+            if ($table == $startwith) {
+                $startwith = '';
             } else {
-                DB_query("UPDATE {$_TABLES['vars']} SET value = '$table' WHERE name = 'lastoptimizedtable'");
+                continue; // already handled - skip
             }
-            $optimize = DB_query("OPTIMIZE TABLE $table", 1);
-            if ($optimize === false) {
-                $failures++;
-                COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                             . DB_error());
+            if (!empty($lasttable) && ($lasttable == $table)) {
+                continue; // skip
+            }
+        }
 
-                $startwith = $table;
-                $url = $_CONF['site_admin_url']
-                     . '/database.php?dooptimize=x';
-                if (! empty($token)) {
-                    $token = '&' . CSRF_TOKEN . '=' . $token;
-                }
-                header("Location: $url&startwith=$startwith&failures=$failures"
-                                  . $token);
-                exit;
+        if (time() > $start + $maxtime) {
+            // this is taking too long - kick off another request
+            $startwith = $table;
+            $url = $_CONF['site_admin_url']
+                 . '/database.php?dooptimize=x';
+            if (! empty($token)) {
+                $token = '&' . CSRF_TOKEN . '=' . $token;
             }
+            header("Location: $url&startwith=$startwith&failures=$failures"
+                              . $token);
+            exit;
+        }
+
+        if (empty($lasttable)) {
+            DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastoptimizedtable', '$table')");
+            $lasttable = $table;
+        } else {
+            DB_query("UPDATE {$_TABLES['vars']} SET value = '$table' WHERE name = 'lastoptimizedtable'");
+        }
+        $optimize = DB_query("OPTIMIZE TABLE $table", 1);
+        if ($optimize === false) {
+            $failures++;
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
+                         . DB_error());
+
+            $startwith = $table;
+            $url = $_CONF['site_admin_url']
+                 . '/database.php?dooptimize=x';
+            if (! empty($token)) {
+                $token = '&' . CSRF_TOKEN . '=' . $token;
+            }
+            header("Location: $url&startwith=$startwith&failures=$failures"
+                              . $token);
+            exit;
         }
     }
 
@@ -1012,7 +975,7 @@ function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
         $retval['errorCode'] = 0;
     }
 
-    $return["json"] = json_encode($retval);
+    $return["js"] = json_encode($retval);
 
     echo json_encode($return);
     exit;
@@ -1033,7 +996,7 @@ function DBADMIN_ajaxOptimizeTable( $table )
         $retval['errorCode'] = 0;
     }
 
-    $return["json"] = json_encode($retval);
+    $return["js"] = json_encode($retval);
 
     echo json_encode($return);
     exit;
@@ -1041,7 +1004,7 @@ function DBADMIN_ajaxOptimizeTable( $table )
 
 function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
 {
-    global $_CONF, $_TABLES, $_DB_name;
+    global $_CONF, $_TABLES, $_DB_name, $_DB_table_prefix;
 
     $tableList = array();
     $retval = array();
@@ -1053,7 +1016,8 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
     for ($i = 0; $i < $numTables; $i++) {
         $A = DB_fetchArray($result, true);
         $table = $A[0];
-        if (in_array($table, $_TABLES)) {
+        $tblPrefix = substr($table,0,strlen($_DB_table_prefix));
+        if ($tblPrefix == $_DB_table_prefix ) { // in_array($table, $_TABLES)) {
             $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
             $B = DB_fetchArray($result2);
             if (strcasecmp($B['Engine'], $engine) == 0) {
@@ -1066,7 +1030,7 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
     $retval['errorCode'] = 0;
     $retval['tablelist'] = $tableList;
 
-    $return["json"] = json_encode($retval);
+    $return["js"] = json_encode($retval);
 
     echo json_encode($return);
     exit;
@@ -1091,7 +1055,7 @@ function DBADMIN_configBackup()
 {
     global $_CONF, $_TABLES, $_VARS, $LANG_DB_ADMIN, $LANG_ADMIN, $_IMAGE_TYPE;
 
-    $tablenames = $_TABLES;
+    $tablenames = DBADMIN_getTableList();
     $included = '';
     $excluded = '';
     $retval   = '';
@@ -1160,6 +1124,33 @@ function DBADMIN_configBackup()
     $retval .= $T->finish($T->get_var('output'));
 
     return $retval;
+}
+
+function DBADMIN_getTableList($engine = '')
+{
+    global $_CONF, $_TABLES, $_DB_name, $_DB_table_prefix;
+
+    $tableList = array();
+
+    $result = DB_query("SHOW TABLES");
+    $numTables = DB_numRows($result);
+    for ($i = 0; $i < $numTables; $i++) {
+        $A = DB_fetchArray($result, true);
+        $table = $A[0];
+        $tblPrefix = substr($table,0,strlen($_DB_table_prefix));
+        if ($tblPrefix == $_DB_table_prefix ) {
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $B = DB_fetchArray($result2);
+            if ( $engine != '' ) {
+                if (strcasecmp($B['Engine'], $engine) == 0) {
+                    continue;
+                }
+            }
+            $tableList[] = $table;
+        }
+    }
+    return $tableList;
+
 }
 
 function DBADMIN_utf8mb4()
@@ -1472,7 +1463,7 @@ switch ($action) {
                     $retval['errorCode'] = 0;
                 }
                 $retval['errorCode'] = 0;
-                $return["json"] = json_encode($retval);
+                $return["js"] = json_encode($retval);
                 echo json_encode($return);
                 exit;
                 break;
@@ -1481,7 +1472,7 @@ switch ($action) {
                 DB_delete($_TABLES['vars'], 'name', 'lastoptimizeddb');
                 DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastoptimizeddb', FROM_UNIXTIME(" . time() . "))");
                 $retval['errorCode'] = 0;
-                $return["json"] = json_encode($retval);
+                $return["js"] = json_encode($retval);
                 echo json_encode($return);
                 exit;
                 break;
@@ -1501,7 +1492,7 @@ switch ($action) {
                     $retval['errorCode'] = 0;
                 }
                 $retval['errorCode'] = 0;
-                $return["json"] = json_encode($retval);
+                $return["js"] = json_encode($retval);
                 echo json_encode($return);
                 exit;
                 break;
@@ -1509,7 +1500,7 @@ switch ($action) {
                 $engine = COM_applyFilter($_POST['engine']);
                 DBADMIN_ajaxFinishCvt($engine);
                 $retval['errorCode'] = 0;
-                $return["json"] = json_encode($retval);
+                $return["js"] = json_encode($retval);
                 echo json_encode($return);
                 exit;
                 break;

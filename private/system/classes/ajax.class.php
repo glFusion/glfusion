@@ -65,7 +65,7 @@ class ajaxHandler
             $retval[$name] = $value;
         }
         $retval['message'] = $this->msg;
-        $return["json"] = json_encode($retval);
+        $return["js"] = json_encode($retval);
         echo json_encode($return);
         exit;
     }

@@ -64,7 +64,7 @@ if ( isset($_POST['column'])) {
     $column = $filter->prepareForDB($_POST['column']);
 }
 
-$conversion = new dbConvertUTF8($_DB_name, $_DB, $_TABLES, true);
+$conversion = new dbConvertUTF8($_DB_name, $_DB, $_DB_table_prefix, $_TABLES, true);
 
 switch ($action) {
 

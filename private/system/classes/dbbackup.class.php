@@ -42,6 +42,7 @@ class dbBackup
 
     private $tablenames;
     private $exclusions;
+    private $prefix;
 
 
     /**
@@ -51,11 +52,12 @@ class dbBackup
     */
     public function __construct($fromCron = false)
     {
-        global $_VARS, $_CONF, $_TABLES;
+        global $_VARS, $_CONF, $_TABLES,$_DB_table_prefix;
 
         $this->setGZip(true);
         $this->fromCron = $fromCron ? true : false;
         $this->backup_dir = $_CONF['backup_path'];
+        $this->prefix = $_DB_table_prefix;
 
     }   // dbBackup()
 
@@ -103,25 +105,28 @@ class dbBackup
     */
     public function getTableList()
     {
-        global $_TABLES, $_VARS;
+        global $_TABLES, $_VARS, $_DB_table_prefix;
 
         // Get all tables in the database
         $mysql_tables = array();
         $res = DB_query('SHOW TABLES');
+        $pfLength = strlen($this->prefix);
         while ($A = DB_fetchArray($res)) {
-            $mysql_tables[] = $A[0];
+            if ( strlen($_DB_table_prefix) > 0 ) {
+                $prefix = substr($A[0],0,$pfLength);
+                if ( $prefix == $_DB_table_prefix )
+                    $mysql_tables[] = $A[0];
+            } else {
+                $mysql_tables[] = $A[0];
+            }
         }
-        // Get only tables that exist and are listed in $_TABLES
-        $this->tablenames = array_intersect($mysql_tables, $_TABLES);
-
+        $this->tablenames = $mysql_tables;
         // Get exclusions and remove from backup list
         $this->exclusions = @unserialize($_VARS['_dbback_exclude']);
         if (!is_array($this->exclusions))
             $this->exclusions = array($this->exclusions);
         $this->tablenames = array_diff($this->tablenames, $this->exclusions);
-
         return $this->tablenames;
-
     }
 
 

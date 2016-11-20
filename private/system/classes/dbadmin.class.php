@@ -31,8 +31,9 @@ class dbAdmin
     protected $lastError = '';
     protected $errorCode = 0;
     protected $returnItem = array();
+    protected $prefix = '';
 
-    public function __construct( $database, $dbHandle, $activeTables = array(), $isAjax = 0 )
+    public function __construct( $database, $dbHandle, $prefix, $activeTables = array(), $isAjax = 0 )
     {
         $this->dbHandle = $dbHandle;
         $this->dbName = $database;
@@ -80,7 +81,8 @@ class dbAdmin
         for ($i = 0; $i < $numTables; $i++) {
             $row = $this->dbHandle->dbFetchArray($queryShowTables,true);
             $table = $row[0];
-            if (in_array($table, $this->activeTables)) {
+            $tblPrefix = substr($table,0,strlen($this->prefix));
+            if ( $tblPrefix == $this->prefix ) {
                 $queryTableStatus = $this->dbHandle->dbQuery("SHOW TABLE STATUS FROM {$this->dbName} LIKE '$table'",true);
                 $statusRow = $this->dbHandle->dbFetchArray($queryTableStatus,true);
                 if ( $engine != '' ) {
