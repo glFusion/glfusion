@@ -47,6 +47,8 @@ $obsoletePrivateDir = array(
 $obsoletePublicDir = array(
 // 1.6.3
     'ckeditor/skins/moono/',
+    'layout/cms/css/ui-lightness/',
+    'layout/cms/css/ui-uikit/',
 // older
     'ckeditor/plugins/filemanager/',
     'fckeditor/',
