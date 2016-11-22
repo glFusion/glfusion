@@ -35,6 +35,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+@ini_set('opcache.enable','0');
+
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
@@ -1243,7 +1245,7 @@ function PLUGINS_post_uploadProcess() {
         }
     } else {
         // upgrade - force refresh to load new functions.inc
-        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?upgradeplugin=x&amp;pi=' .$pluginData['id']);
+        header("Location:" . $_CONF['site_admin_url'] . '/plugins.php?upgradeplugin=x&pi=' .$pluginData['id']);
         exit;
     }
 
