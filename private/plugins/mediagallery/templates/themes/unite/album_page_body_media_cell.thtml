@@ -3,7 +3,7 @@
 <img alt="{media_title}"
 	src="{raw_media_thumbnail}"
 	data-image="{orig_url}"
-	data-description="{media_description}"
+	data-description="{media_description:u}"
 	style="display:none">
 {!endif}
 {!!if {data_type} == 'html5video' !!}
@@ -12,7 +12,7 @@
 	src="{raw_media_thumbnail}"
 	data-image="{raw_media_thumbnail}"
 	data-videomp4="{orig_url}"
-	data-description="{media_description}"
+	data-description="{media_description:u}"
 	style="display:none">
 {!endif}
 {!!if {data_type} == 'vimeo' || {data_type} == 'youtube' !!}
@@ -21,7 +21,7 @@
 	src="{raw_media_thumbnail}"
 	data-image="{raw_media_thumbnail}"
 	data-videoid="{videoid}"
-	data-description="{media_description}"
+	data-description="{media_description:u}"
 	style="display:none">
 {!endif}
 {# end {templatelocation} #}
