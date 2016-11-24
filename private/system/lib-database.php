@@ -284,8 +284,14 @@ function DB_getItem($table,$what,$selection='')
     } else {
         $result = DB_query("SELECT $what FROM $table");
     }
-    $ITEM = DB_fetchArray($result, true);
-    return $ITEM[0];
+	if ($result === NULL || DB_error() ) {
+		return NULL;
+	} else if (DB_numRows($result) == 0) {
+		return NULL;
+	} else {
+		$ITEM = DB_fetcharray($result);
+		return $ITEM[0];
+	}
 }
 
 /**
