@@ -551,12 +551,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         } else {
             $orderby = $defsort_arr['field']; // not set - use default (this could be null)
             $orderidx_link = '';
-            $orderbyidx = '';
+            $orderbyidx = -1;
         }
     } else {
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
         $orderidx_link = '';
-        $orderbyidx = '';
+        $orderbyidx = -1;
     }
 
     // set sort direction.  defaults to ASC
@@ -675,6 +675,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
         // set the default sql filter (if any)
         $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
+        $groupbysql = (isset($query_arr['group_by']) && !empty($query_arr['group_by'])) ? " GROUP BY {$query_arr['group_by']} " : '';
         // now add the query fields
         if (!empty($query)) { # add query fields with search term
             $filtersql .= " AND (";
@@ -687,7 +688,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             }
             $filtersql .= ")";
         }
-        $num_pagessql = $sql . $filtersql;
+
+        $num_pagessql = $sql . $filtersql . $groupbysql;
         $num_pagesresult = DB_query($num_pagessql);
         $num_rows = DB_numRows($num_pagesresult);
         $num_pages = ceil ($num_rows / $limit);
@@ -709,13 +711,17 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if ( !isset($filtersql) ) {
         $filtersql = '';
     }
+    if ( !isset($groupbysql) ) {
+        $groupbysql = '';
+    }
     if ( !isset($orderbysql) ) {
         $orderbysql = '';
     }
     if ( !isset($limitsql) ) {
         $limitsql = '';
     }
-    $sql .= "$filtersql $orderbysql $limitsql;";
+    $sql .= "$filtersql $groupbysql $orderbysql $limitsql;";
+
     $result = DB_query($sql);
 
     // number of rows/records to display
