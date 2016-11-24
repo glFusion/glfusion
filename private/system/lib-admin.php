@@ -471,6 +471,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $title = (is_array($text_arr) AND !empty($text_arr['title'])) ? $text_arr['title'] : '';
     $help_url = (is_array($text_arr) AND !empty($text_arr['help_url'])) ? $text_arr['help_url'] : '';
     $form_url = (is_array($text_arr) AND !empty($text_arr['form_url'])) ? $text_arr['form_url'] : '';
+    $no_data = (is_array($text_arr) AND !empty($text_arr['no_data'])) ? $text_arr['no_data'] : '';
 
     // determine what extra options we should use (search, limit, paging)
     if (isset($text_arr['has_extras']) && $text_arr['has_extras']) { # old option, denotes all
