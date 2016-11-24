@@ -1,0 +1,2 @@
+/*! glFusion CMS v1.6.3 | https://www.glfusion.org | (c) 2016 glFusion | GNU GPL v2 License */
+function pf(){var t=$(window).height(),o=$("#tm-footer").height(),i=$(".tm-content"),e=i.position().top+i.outerHeight(!0),n=0;t>e+o&&(n=t-(e+o-0),0>n&&(n=0),$("#tm-footer").css("margin-top",n+"px"))}

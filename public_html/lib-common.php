@@ -6953,6 +6953,7 @@ function _js_out()
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
+        $files[] = $_CONF['path_layout'].'/js/header.js';
         $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
