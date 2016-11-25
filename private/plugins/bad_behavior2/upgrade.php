@@ -97,8 +97,8 @@ function bad_behavior2_upgrade ()
             $c->add('bb2_eu_cookie',0,'select',8,1,0,120,TRUE);
 
         case '2.0.50' :
-            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} DROP ` id `;",1);
-            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']}` ADD `id` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);",1);
+            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} DROP `id`;",1);
+            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} ADD `id` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);",1);
 
         default:
             break;
