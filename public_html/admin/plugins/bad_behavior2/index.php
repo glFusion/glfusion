@@ -335,7 +335,7 @@ function _bb_viewEntry ($id, $page = 1)
         $iplookup = str_replace ('*', $A['ip'], $_CONF['ip_lookup']);
         $templates->set_var ('start_ip_lookup_anchortag', '<a href="'
                 . $iplookup . '" title="'
-                . $LANG_BAD_BEHAVIOR['title_lookup_ip'] . '">');
+                . $LANG_BAD_BEHAVIOR['title_lookup_ip'] . '" target="_blank">');
         $templates->set_var ('end_ip_lookup_anchortag', '</a>');
     } else {
         $templates->set_var ('start_ip_lookup_anchortag', '');
