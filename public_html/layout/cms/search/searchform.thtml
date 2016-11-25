@@ -7,7 +7,7 @@
 	<button type="button" class="uk-button uk-button-primary uk-margin-small" data-uk-toggle="{target:'#advanced'}">
 		{$LANG09[2]}
 	</button>
-	<div id="advanced" class="uk-hidden uk-margin-top">
+	<div id="advanced" class="uk-hidden uk-margin-top  uk-animation-fade">
 		<div class="uk-grid uk-margin-bottom">
 			<div class="uk-width-medium-1-5">
 				<label class="uk-form-label">
