@@ -1,4 +1,5 @@
 ## v1.6.3 (unreleased)
+  - Fixed issue in Bad Behavior plugin where log ids were not properly created
   - Resolved issue where plugins updates would upload but not update automatically
   - Updated tooltip JS to properly parse titles
   - Styled the tool-tip title

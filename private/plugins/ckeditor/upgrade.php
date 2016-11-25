@@ -147,6 +147,7 @@ function ckeditor_upgrade()
             $c->sync('filemanager_fileperm', '0664', 'text', 0, 2, NULL, 50, true, 'ckeditor');
             $c->sync('filemanager_dirperm', '0664', 'text', 0, 2, NULL, 60, true, 'ckeditor');
 
+        case '1.0.5' :
 
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CK_CONF['pi_version']."',pi_gl_version='".$_CK_CONF['gl_version']."' WHERE pi_name='ckeditor' LIMIT 1");
