@@ -792,11 +792,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     if ($nrows==0) { # there is no data. return notification message.
-        $message = (isset($no_data)) ? $text_arr['no_data'] : $LANG_ADMIN['no_results'];
+        $message = (isset($no_data)) ? $no_data : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
-    } else {
-//        $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
-//        $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
