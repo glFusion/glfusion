@@ -391,21 +391,21 @@ if ($A['count'] > 0) {
 
         $story_template->set_var('social_share',$social_icons);
 
-    // build what's related section
+        // build what's related section
 
-    $relItems = PLG_getWhatsRelated('article',$story->getSid());
-    if ( count( $relItems)  > 0 ) {
-        $rel = array();
-        foreach ($relItems AS $item ) {
-           $rel[] = '<a href="' . $item['url'] . '">'.$item['title'].'</a>';
+        $relItems = PLG_getWhatsRelated('article',$story->getSid());
+        if ( count( $relItems)  > 0 ) {
+            $rel = array();
+            foreach ($relItems AS $item ) {
+               $rel[] = '<a href="' . $item['url'] . '">'.$item['title'].'</a>';
+            }
+            $related = COM_makeList( $rel, 'list-whats-related' );
+        } else {
+            $related = STORY_whatsRelated($story->displayElements('related'),
+                                          $story->displayElements('uid'),
+                                          $story->displayElements('tid'),
+                                          $story->displayElements('alternate_tid'));
         }
-        $related = COM_makeList( $rel, 'list-whats-related' );
-    } else {
-        $related = STORY_whatsRelated($story->displayElements('related'),
-                                      $story->displayElements('uid'),
-                                      $story->displayElements('tid'),
-                                      $story->displayElements('alternate_tid'));
-    }
 
         if (!empty ($related)) {
             $related = COM_startBlock ($LANG11[1], '',
