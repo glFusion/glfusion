@@ -1,4 +1,7 @@
 ## v1.6.3 (unreleased)
+  - Moved story options in full article view to the header area - same as short index view
+  - Implemented new plugin API for whatsrelated
+  - Fixed some minor errors in lib-admin
   - Fixed issue in Bad Behavior plugin where log ids were not properly created
   - Resolved issue where plugins updates would upload but not update automatically
   - Updated tooltip JS to properly parse titles
