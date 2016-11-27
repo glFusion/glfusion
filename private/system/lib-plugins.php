@@ -2608,6 +2608,32 @@ function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
 }
 
 /**
+* Allow plugins to provide what's related information on the current content
+*
+* @param    string  $type       type of the current content
+* @param    string  $id         id of the current content
+* @return   array               array of arrays of ('title' => $title, 'url' => $url, 'date => $date_created)
+*
+*/
+function PLG_getWhatsRelated( $type, $id )
+{
+    global $_CONF, $_PLUGINS;
+
+    $res = array();
+    $retval = array();
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_getwhatsrelated_' . $pi_name;
+        if (function_exists($function)) {
+            $res = $function($type, $id);
+            $retval = array_merge($retval,$res);
+
+        }
+    }
+    return $retval;
+}
+
+/**
 * glFusion is about to perform an operation on a trackback or pingback comment
 * to one of the items under the plugin's control and asks for the plugin's
 * permission to continue.
