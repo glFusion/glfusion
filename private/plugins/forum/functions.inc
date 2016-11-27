@@ -1367,7 +1367,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     if ($id == '*') {
         $where = '';
-        $permOp = '';
+        $permOp = ' WHERE ';
     } else {
         $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
@@ -1387,6 +1387,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
+
     }
 
     $result = DB_query($sql);
