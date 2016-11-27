@@ -62,13 +62,13 @@ $LANG01 = array(
     8 => 'Stimmen',
     9 => 'Admin-Funktionen:',
     10 => 'Einsendungen',
-    11 => 'Artikel',
+    11 => 'Artikel Verwaltung',
     12 => 'Blöcke',
     13 => 'Kategorien',
     14 => '',
     15 => '',
     16 => '',
-    17 => 'Benutzer',
+    17 => 'Benutzer Verwaltung',
     18 => 'SQL-Abfrage',
     19 => 'Abmelden',
     20 => 'Benutzerinformation:',
@@ -158,7 +158,7 @@ $LANG01 = array(
     104 => 'von',
     105 => 'Mail an Benutzer',
     106 => 'Aufrufe:',
-    107 => 'Update verfügbar?',
+    107 => 'Aktualisierung verfügbar?',
     108 => 'Cache löschen',
     109 => 'Beitrag melden',
     110 => 'Diesen Beitrag einem Admin melden',
@@ -262,7 +262,13 @@ $LANG01 = array(
     'blocks_right_title'		=> 'Rechte Seite',
     'blocks_footer_title'		=> 'Fußzeile',
     'source'					=> 'Quelle',
-    'phpendoflife'				=> 'Deine PHP-Version, einschließlich Sicherheitsupdates, ist veraltet und wird nicht mehr unterstützt. Wie wär es mit einem Update auf <a href="http://php.net/supported-versions.php" target="_blank">Unterstützte PHP-Version</a>.'
+    'phpendoflife'				=> 'Deine PHP-Version, einschließlich Sicherheitsupdates, ist veraltet und wird nicht mehr unterstützt. Wie wär es mit einer Aktualisierung auf eine <a href="http://php.net/supported-versions.php" target="_blank">Unterstützte PHP-Version</a>.',
+	'db_header'					=> 'Datenbank-Info', 
+	'db_driver'					=> 'Datenbank-Treiber', 
+	'db_version'				=> 'Datenbank-Version', 
+	'db_engine'					=> 'Datenbank-System', 
+	'db_charset'				=> 'Datenbank-Zeichensatz', 
+	'db_collation'				=> 'Datenbank-Sortierung' 
 );
 
 ###############################################################################
@@ -593,8 +599,8 @@ $LANG08 = array(
     33 => 'Kompletter Artikel unter',
     34 => 'Ende dieser Nachricht',
     35 => 'Sorry, dieser Benutzer möchte keine E-Mails bekommen.',
-    36 => 'Du erhältst diese Nachricht von %s, da du bestimmte Themen abonniert hast. Um Deine Themen zu ändern oder zu entfernen, bearbeite die <b>Abonnements</b> in <a href="%s/usersettings.php?mode=edit">Konto Einstellungen</a> - Abonnements.',
-    37 => 'Du erhältst diese Nachricht von %s, da du bestimmte Themen abonniert hast. Um Deine Themen zu ändern oder zu entfernen, bearbeite die <b>Abonnements</b> in %s/usersettings.php?mode=edit - Konto Einstellungen - Abonnements.',
+    36 => 'Du erhältst diese Nachricht von %s, da Du bestimmte Themen abonniert hast. Um Deine Themen zu ändern oder zu entfernen, bearbeite die <b>Abonnements</b> in <a href="%s/usersettings.php?mode=edit">Konto Einstellungen</a> - Abonnements.',
+    37 => 'Du erhältst diese Nachricht von %s, da Du bestimmte Themen abonniert hast. Um Deine Themen zu ändern oder zu entfernen, bearbeite die <b>Abonnements</b> in %s/usersettings.php?mode=edit - Konto Einstellungen - Abonnements.',
     38 => 'sendete Dir den folgenden Artikel...',
     39 => 'Lies den ganzen Artikel'
 );
@@ -850,7 +856,7 @@ $LANG21 = array(
     12 => 'Normaler-Block',
     13 => 'Portal-Block-Optionen',
     14 => 'RSS-URL',
-    15 => 'Letztes Update',
+    15 => 'Letzte Aktualisierung',
     16 => 'Normaler-Block-Optionen',
     17 => 'Inhalt',
     18 => 'Bitte Block-Titel und Inhalt ausfüllen.',
@@ -865,7 +871,7 @@ $LANG21 = array(
     27 => 'PHP-Block',
     28 => 'PHP-Block-Optionen',
     29 => 'Block-Funktion',
-    30 => 'Wenn Du möchtest, dass einer Deiner Blöcke PHP-Code verwendet, dann gib oben den Namen der Funktion ein. Dein Funktionsname muss mit dem Präfix "phpblock_" beginnen (z. B. phpblock_getweather). Wird dieses Präfix nicht verwendet, wird Deine Funktion aus Sicherheitsgründen NICHT aufgerufen. Wenn Du nach Deinem Funktionsnamen eine Klammer "()" eingibst, wird die Funktion mit zwei Parametern aufgerufen. Parameter 1 ist ein Array, das die Datenzeile für diesen Block in der Tabelle gl_blocks enthält. Parameter 2 ist eine Zeichenfolge, die jeden Text enthält, den Du zwischen den beiden Klammern platzierst. Ferner wird empfohlen, jeglichen PHP-Block-Code in /path/to/glfusion/system/lib-custom.php abzulegen. So kann der Code auch bei einem Update auf eine neuere Version von glFusion weiterverwendet werden.',
+    30 => 'Wenn Du möchtest, dass einer Deiner Blöcke PHP-Code verwendet, dann gib oben den Namen der Funktion ein. Dein Funktionsname muss mit dem Präfix "phpblock_" beginnen (z. B. phpblock_getweather). Wird dieses Präfix nicht verwendet, wird Deine Funktion aus Sicherheitsgründen NICHT aufgerufen. Wenn Du nach Deinem Funktionsnamen eine Klammer "()" eingibst, wird die Funktion mit zwei Parametern aufgerufen. Parameter 1 ist ein Array, das die Datenzeile für diesen Block in der Tabelle gl_blocks enthält. Parameter 2 ist eine Zeichenfolge, die jeden Text enthält, den Du zwischen den beiden Klammern platzierst. Ferner wird empfohlen, jeglichen PHP-Block-Code in /path/to/glfusion/system/lib-custom.php abzulegen. So kann der Code auch bei einer Aktualisierung auf eine neuere Version von glFusion weiterverwendet werden.',
     31 => 'Fehler im PHP-Block: Funktion %s existiert nicht.',
     32 => 'Fehler: Nicht alle Felder ausgefüllt',
     33 => 'Für Portal-Blöcke muss ein Titel und eine URL zur RSS-Datei angegeben werden.',
@@ -935,7 +941,7 @@ $LANG24 = array(
     19 => 'Kommentare',
     20 => 'Ping',
     21 => 'Ping senden',
-    22 => 'Artikelverwaltung',
+    22 => 'Artikel-Verwaltung',
     23 => '<ul><li>Um einen Artikel zu bearbeiten oder zu löschen, klicke unten auf das entsprechende Symbol.</li><li>Um einen Artikel anzuzeigen, klicke auf den Titel des Artikels.</li><li>Um einen neuen Artikel zu erstellen, klicke oben auf "Neu Anlegen".</li></ul>',
     24 => 'Diese ID wird bereits für einen anderen Artikel benutzt. Bitte wähle eine andere ID.',
     25 => 'Fehler beim Speichern des Artikels',
@@ -954,8 +960,8 @@ $LANG24 = array(
     38 => 'Mehr aus',
     39 => 'E-Mails',
     40 => '',
-    41 => "Du hast keine Zugriffsrechte für diesen Artikel. Dieser Zugriffsversuch wurde protokolliert. Du kannst Dir den Artikel aber ansehen. (Ändern nicht möglich). <a href=\"{$_CONF['site_admin_url']}/story.php\">Zurück zur Artikelverwaltung</a>.",
-    42 => "Du hast keine Zugriffsrechte für diesen Artikel. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/story.php\">Zurück zur Artikelverwaltung</a>.",
+    41 => "Du hast keine Zugriffsrechte für diesen Artikel. Dieser Zugriffsversuch wurde protokolliert. Du kannst Dir den Artikel aber ansehen. (Ändern nicht möglich). <a href=\"{$_CONF['site_admin_url']}/story.php\">Zurück zur Artikel-Verwaltung</a>.",
+    42 => "Du hast keine Zugriffsrechte für diesen Artikel. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/story.php\">Zurück zur Artikel-Verwaltung</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -971,7 +977,7 @@ $LANG24 = array(
     55 => 'Folgende Fehler traten beim Versuch, den Artikel zu speichern, auf. Bitte diese Fehler beheben und den Artikel noch einmal speichern.',
     56 => 'Mit Kategorie-Icon',
     57 => 'Bild in Originalgröße',
-    58 => 'Artikelverwaltung',
+    58 => 'Artikel-Verwaltung',
     59 => 'Option',
     60 => '',
     61 => 'Automatisch archivieren',
@@ -1201,8 +1207,8 @@ $LANG28 = array(
     106 => 'Warteschlange',
     107 => 'Überprüfung',
     108 => 'Ansicht Profile',
-    109 => 'Bist du absolut sicher, dass du diesen Benutzer löschen willst?  Das Löschen dieses Benutzers löscht einige der Inhalte, die von diesem Benutzer erstellt wurden. Der Rest wird dem anonymen Benutzer oder Seiten-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
-    110 => 'Bist du absolut sicher, dass du alle markierten Benutzer löschen willst?  Das Löschen aller dieser Benutzers löscht einige der Inhalte, die von diesen Benutzern erstellt wurden. Der Rest wird dem anonymen Benutzer oder Site-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
+    109 => 'Bist Du absolut sicher, dass Du diesen Benutzer löschen willst?  Das Löschen dieses Benutzers löscht einige der Inhalte, die von diesem Benutzer erstellt wurden. Der Rest wird dem anonymen Benutzer oder Seiten-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
+    110 => 'Bist Du absolut sicher, dass Du alle markierten Benutzer löschen willst?  Das Löschen aller dieser Benutzers löscht einige der Inhalte, die von diesen Benutzern erstellt wurden. Der Rest wird dem anonymen Benutzer oder Site-Administrator zugewiesen werden! Um Details dieses Benutzerprofil zu sehen, drücke auf Abbrechen und dann auf den Benutzernamen.',
     111 => 'E-Mail senden (Local)'
 );
 
@@ -1290,9 +1296,9 @@ $LANG32 = array(
     6 => 'Warnung: Plugin schon installiert!',
     7 => 'Das Plugin, das Du installieren willst, ist bereits vorhanden. Bitte lösche es, bevor Du noch einmal versuchst, es zu installieren',
     8 => 'Plugin-Kompatibilitätstest fehlgeschlagen',
-    9 => 'Dieses Plugin benötigt eine neuere Version von glFusion. Abhilfe schafft ein Update von <a href="http://www.glfusion.org/">glFusion</a> oder eine andere Version dieses Plugins.',
+    9 => 'Dieses Plugin benötigt eine neuere Version von glFusion. Abhilfe schafft eine Aktualisierung von <a href="http://www.glfusion.org/">glFusion</a> oder eine andere Version dieses Plugins.',
     10 => '<br /><b>Es sind derzeit keine Plugins installiert.</b><br /><br />',
-    11 => '<ul><li>Um installierte Plugins zu aktivieren oder zu deaktivieren, klicke in der Spalte "Aktivieren Installieren" auf das zugehörige Kontrollkästchen.</li><li>Plugins, die auf Deinem System hochgeladen wurden, können durch Klicken auf das Symbol Installieren in der Spalte "Aktivieren Installieren" installiert werden.</li><li>Klicke zum Aktualisieren eines Plugins auf das Symbol Aktualisieren, das in der Spalte "Version" angezeigt wird.</li><li>Klicke zum Deinstallieren eines Plugins auf das Symbol in der Spalte "Deinstallieren Löschen".</li></ul>',
+    11 => '<ul><li>Um installierte Plugins zu aktivieren oder zu deaktivieren, klicke in der Spalte "Aktivieren Installieren" auf das zugehörige Kontrollkästchen.</li><li>Plugins, die auf Deinem System hochgeladen wurden, können durch Klicken auf das Symbol Installieren in der Spalte "Aktivieren Installieren" installiert werden.</li><li>Klicke zum Aktualisieren eines Plugins auf das Symbol "Aktualisieren", das in der Spalte "Version" angezeigt wird.</li><li>Klicke zum Deinstallieren eines Plugins auf das Symbol in der Spalte "Deinstallieren Löschen".</li></ul>',
     12 => '(kein Name angegeben)',
     13 => 'Plugin-Editor',
     14 => 'Neues Plugin',
@@ -1342,13 +1348,13 @@ $LANG32 = array(
     58 => 'Hochladen',
     59 => 'Abbrechen',
     60 => 'Installieren',
-    61 => 'Update',
+    61 => 'Aktualisieren',
     62 => 'wurde erfolgreich hochgeladen und ist jetzt bereit zur Weiterverarbeitung.',
     63 => 'Beschreibung',
     64 => 'Das Plugin scheint zu sein',
     65 => 'Dieses Plugin wurde schon installiert.',
     66 => 'Die gegenwärtig installierte Version ist',
-    67 => 'Wenn die Version, die hochgeladen wurde, nicht neuer ist als die installierte Version, dann <b>Abbrechen</b> wählen um das Update zu unterbrechen.',
+    67 => 'Wenn die Version, die hochgeladen wurde, nicht neuer ist als die installierte Version, dann <b>Abbrechen</b> wählen um die Aktualisierung zu unterbrechen.',
     68 => 'Das Plugin scheint ein älteres Plugin zu sein welches den glFusions Auto-Installer nicht unterstützt. Sollte es dennoch hochgeladen werden muss es anschließend manuell installiert werden.',
     69 => 'WICHTIG',
     70 => 'Der Auto-Installer konnte nicht feststellen ob dieses Plugin mit der gegenwärtigen Version von glFusion funktionieren wird. Sollte es dennoch kopiert werden muss es anschließend manuell installiert werden.',
@@ -1371,7 +1377,7 @@ $LANG32 = array(
     87 => 'Autotag Installer',
     88 => 'Bist Du sicher, dass Du dieses Plugin entfernen willst?',
     89 => 'Bist Du absolut sicher, dass Du dieses Plugin entfernen möchtest? Dies führt zum Löschen aller Dateien und Verzeichnisse, die sich auf dieses Plugin beziehen, und um dieses Plugin erneut zu installieren, müsst Du eine weitere Kopie hochladen.',
-    90 => 'Version <b>%s</b> des <b>%s</b> Plugin wird benötigt, aber Version <b>%s</b> ist installiert. Bitte update das %s Plugin.',
+    90 => 'Version <b>%s</b> des <b>%s</b> Plugin wird benötigt, aber Version <b>%s</b> ist installiert. Bitte aktualisiere das %s Plugin.',
     91 => 'Datei wählen'
 );
 
@@ -1391,7 +1397,7 @@ $LANG33 = array(
     15 => 'Art',
     16 => 'Dateiname',
     17 => 'Format',
-    18 => 'Letztes Update',
+    18 => 'Letzte Aktualisierung',
     19 => 'Aktiv',
     20 => 'Ja',
     21 => 'Nein',
@@ -1403,7 +1409,7 @@ $LANG33 = array(
     27 => 'Länge der Einträge',
     28 => '(0 = ohne Text, 1 = kompletter Text, anderer Wert = nur so viele Zeichen)',
     29 => 'Beschreibung',
-    30 => 'Letztes Update',
+    30 => 'Letzte Aktualisierung',
     31 => 'Zeichensatz',
     32 => 'Sprache',
     33 => 'Inhalt',
@@ -1440,7 +1446,7 @@ $LANG33 = array(
 $LANG_LOGVIEW = array(
     'logview' => 'Protokolle',
     'info' => 'glFusion Protokoll Verwaltung:<ul><li>access.log - Unerlaubten Zugriffe</li><li>captcha.log - Falsche Captcha abfragen</li><li>error.log - Server und Datenbankfehler</li><li>spamx.log - Erkannte Spameinträge</li></ul>',
-    'logs' => 'Logs',
+    'logs' => 'Protokolle',
     'view' => 'Protokoll anzeigen',
     'clear' => 'Protokoll löschen',
     'log_file' => 'Protokolldatei'
@@ -1698,7 +1704,7 @@ $LANG_ACCESS = array(
 ###############################################################################
 # admin/database.php
 
-$LANG_DB_BACKUP = array(
+$LANG_DB_ADMIN = array(
     'database_admin'		=> 'Datenbank-Administration',
     'last_ten_backups'		=> 'Die 10 letzten Backups',
     'create_backup'			=> 'Datenbank sichern',
@@ -1754,7 +1760,19 @@ $LANG_DB_BACKUP = array(
     'disable_purge'			=> '("0" für unbegrenzt.)',
     'use_gzip'				=> 'Benutze GZip wenn verfügbar',
     'configure'				=> 'Konfigurieren',
-    'config_instructions'	=> 'Wähle alle Tabellen aus, die Du aus der Sicherung ausschließen möchtest. Du kannst auch festlegen, wie viele Backups beibehalten werden, ältere Backups werden automatisch gelöscht.'
+    'config_instructions'	=> '<ul><li>Wähle alle Tabellen aus, die Du aus der Sicherung ausschließen möchtest.</li><li>Du kannst auch festlegen, wie viele Backups beibehalten werden.</li><li>Ältere Backups werden automatisch gelöscht.</li></ul>',
+	'utf8_title'			=> 'UTF8MB4 Aktualisierung',
+	'utf8_instructions'		=> 'Eine Aktualsierung Deiner Seite von UTF-8 zu UTF8MB4 - bietet Dir volle Unterstützung für alle Unicode-Zeichen.<br /><br />Die aktuelle Datenbank-Sortierung ist <b>%s</b> und der aktuelle Datenbank-Zeichensatz ist <b>%s</b>.', 
+    'utf8_success'			=> 'UTF8 Aktualisierung wurde erfolgreich abgeschlossen',
+    'retrieve_tables'		=> 'Tabellen abrufen',
+    'error_heading'			=> 'Fehler',
+    'no_errors'				=> 'Es sind keine Fehler aufgetreten',
+    'error_db_utf'			=> 'Fehler beim Konvertieren der Datenbank in UTF8MB4',
+    'error_table_utf'		=> 'Fehler beim Konvertieren der Tabellen in UTF8MB4',
+    'error_column_utf'		=> 'Fehler beim Konvertieren der Spalten in UTF8MB4',
+    'error_sc'				=> 'Fehler beim Aktualisieren von siteconfig.php - Bitte aktualisieren Sie db_charset manuell',
+    'current_progress'		=> 'Aktueller-Fortschritt',
+    'overall_progress'		=> 'Gesamt-Fortschritt',
 );
 
 ###############################################################################
@@ -2154,7 +2172,7 @@ $LANG_FILECHECK = array(
     'recheck'			=> 'Überprüfen der Datei-Integrität',
     'confirm'			=> 'Sollen die ausgewähleten Dateien wirklich gelöscht werden?',
     'scan'				=> 'Die Datei-Integrität dieser Webseite wird analysiert. Bitte habe etwas Geduld. Dieser Vorgang kann eine Weile dauern. Die Ausführungsgeschwindigkeit hängt von der Hosting-Umgebung ab. Wenn das Skript sich der maximalen PHP-Skript-Ausführungszeit von %s Sekunden nähert, wird das Scannen unterbrochen und eine Fehlermeldung angezeigt.',
-    'results'			=> 'Die Dateien und Verzeichnisse dieser Webseite sind mit glFusion Version v%s verglichen worden. Die Ergebnisse sind unten dargestellt. Hinzugefügt oder fehlende Dateien und Verzeichnisse sind identifiziert worden. Dateien, die hinzugefügt wurden, können ausgewählt und gelöscht werden. Neu erkannte Verzeichnisse müssen gegenwärtig manuell entfert werden. <br /><br /> Zusätzliche erkannte Dateien/Verzeichnisse, die du hinzugefügt hast, die mit Plugins oder anderen Skripts in Verbindung gebracht werden sind kritisch für den Betrieb dieser Webseite. <b>Das bedeutet: Du solltest diese Dateien nicht einfach löschen!&nbsp;&nbsp;<span style="color:red">Bitte benutze dieses Tool unbedingt mit Vorsicht!</span></b>',
+    'results'			=> 'Die Dateien und Verzeichnisse dieser Webseite sind mit glFusion Version v%s verglichen worden. Die Ergebnisse sind unten dargestellt. Hinzugefügt oder fehlende Dateien und Verzeichnisse sind identifiziert worden. Dateien, die hinzugefügt wurden, können ausgewählt und gelöscht werden. Neu erkannte Verzeichnisse müssen gegenwärtig manuell entfert werden. <br /><br /> Zusätzliche erkannte Dateien/Verzeichnisse, die Du hinzugefügt hast, die mit Plugins oder anderen Skripts in Verbindung gebracht werden sind kritisch für den Betrieb dieser Webseite. <b>Das bedeutet: Du solltest diese Dateien nicht einfach löschen!&nbsp;&nbsp;<span style="color:red">Bitte benutze dieses Tool unbedingt mit Vorsicht!</span></b>',
     'expiration1'		=> 'HINWEIS: Der Scan wurde abgebrochen, weil die PHP Ausführungszeit überschritten wurde. Dieses Analyseskript ist CPU- und Transfer-intensiv und kann durch eine Reihe von Faktoren in Ihrer Web-Hosting-Umgebung beeinflusst werden. Bitte beachte folgenden Empfehlungen zur Behebung dieses Problems:<br />',
     'expiration2'		=> '<ol><li>Erhöhe den Wert der \'max_execution_time\' in der Datei php.ini. Derzeit sind %s Sekunden eingestellt.</li><li>Überprüfe deine Website manuell und entferne alle nicht benötigten Dateien und Verzeichnisse.</li></ol>',
     'abort'				=> 'Scan abbrechen',
@@ -2432,21 +2450,21 @@ $LANG_AM = array(
 
 $LANG_UPGRADE = array(
     'recheck'			=> 'Version überprüfen',
-    'desc'				=> 'Stelle sicher, dass Deine installierte glFusion-Version und die installierten Plugins auf dem neuesten Stand sind. Der Update-Prüfer fragt die glFusion.org-Website ab, um die neueste Software Version abzurufen und mit der installierten Version zu vergleichen.',
-    'title'				=> 'glFusion Update-Prüfer',
+    'desc'				=> '<ul><li>Stelle sicher, dass Deine installierte glFusion-Version und die installierten Plugins auf dem neuesten Stand sind.</li><li>Der "Aktualisierungs-Manager" fragt die <b>glFusion.org</b>-Website ab, um die neuesten Versionen abzurufen und diese mit den installierten Versionen zu vergleichen.</li></ul>',
+    'title'				=> 'Aktualisierungs-Manager',
     'upgrade_title'		=> 'Aktualisierung empfohlen',
-    'upgrade'			=> 'Deine aktuell Version %s von glFusion ist veraltet.<span class="b">Wir empfehlen Dir, so bald wie möglich ein Update auf die aktuelle Version %s durchzuführen.</span> Die neueste Version von glFusion findest Du unter <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">glFusion Support Site</a>.',
+    'upgrade'			=> 'Deine aktuell Version %s von glFusion ist veraltet.<span class="b">Wir empfehlen Dir, so bald wie möglich eine Aktualisierung auf die aktuelle Version %s durchzuführen.</span> Die neueste Version von glFusion findest Du unter <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">glFusion Support Site</a>.',
     'uptodate_title'	=> 'Herzlichen Glückwunsch, Deine glFusion-Installation ist auf dem neuesten Stand.',
-    'uptodate'			=> 'Deine aktuelle glFusion-Installation führt die neueste Version aus. Wir empfehlen, dass Du Dich für die <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> anmeldest, um sofortige Informationen über Updates und Sicherheitsfragen zu erhalten.',
+    'uptodate'			=> 'Deine aktuelle glFusion-Installation führt die neueste Version aus. Wir empfehlen, dass Du Dich für die <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> anmeldest, um sofortige Informationen über Aktualisierungen und Sicherheitsfragen zu erhalten.',
     'unknown_title'		=> 'Der Status der glFusion-Version konnte nicht ermittelt werden',
     'unknown'			=> 'Wir konnten Deine aktuelle glFusion-Version %s keiner freigegebenen Versionen zuordnen. Wenn Du eine Entwickler-Version ausführst, empfehlen wir Dir ein Abonnement der <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. Wenn Du keine Entwickler-Version verwendest, wenden Dich bitte an das <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forum</a> für Hilfe.',
     'error_title'		=> 'Bei der Verarbeitung Deiner Anfrage ist ein Fehler aufgetreten.',
     'error'				=> 'Wir konnten die Versionsdaten von glFusion.org nicht abrufen. Wenn dieses Problem weiterhin besteht, besuche bitte das <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forum</a> um zu erfahren, wie Du Unterstützung erhalten können.',
     'was_released'		=> 'Version %s wurde veröffentlicht am %s.',
-    'plugin_uptodate' 	=> 'Up To Date',
+    'plugin_uptodate' 	=> 'Aktuell',
     'plugin_newer'		=> 'Du führst eine neuere Version des Plugins aus.',
     'no_data'			=> 'Keine Daten verfügbar.',
-    'updates_available' => "Es sind Updates verfügbar - Bitte benutze den <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Update-Prüfer</a> um verfügbare Updates zu sehen.",
+    'updates_available' => "Es sind Aktualisierungen verfügbar - Bitte benutze den <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Aktualisierungs-Manager</a> um verfügbare Aktualisierungen zu sehen.",
     'plugin_title'		=> 'Plugin Versionen überprüfen',
     'plugin'			=> 'Plugin',
     'installed_version' => 'Installierte Version',
@@ -2636,7 +2654,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => 'Pingback-Auszug erzeugen',
     'link_documentation' => 'Link zur Dokumentation',
     'link_versionchecker' => 'Link zum Versions-Checker',
-    'hide_adminmenu' => 'Admin Menü nur im Adminbereich',
+    'hide_adminmenu' => 'Admin-Menü nur im Adminbereich',
     'maximagesperarticle' => 'Max. Bilder pro Artikel',
     'limitnews' => 'Artikel pro Seite',
     'minnews' => 'Min. Artikel pro Seite',
@@ -2756,7 +2774,7 @@ $LANG_confignames['Core'] = array(
     'max_logo_height' => 'Max. Logo-Höhe',
     'whatsnew_cache_time' => 'Wartezeit für "Was ist neu"',
     'hideemptyblock' => '"Was ist neu" ausblenden wenn leer',
-    'update_check_interval' => 'Update Check Interval',
+    'update_check_interval' => 'Aktualisierungs-Interval',
     'send_site_data' => 'Seiten Info senden',
     'rating_speedlimit' => 'Bewertung Wartezeit in Sek.',
     'htmlfilter_default' => 'Standard zulässiges HTML',
@@ -2837,7 +2855,7 @@ $LANG_fs['Core'] = array(
     'fs_caching' => 'Caching',
     'fs_mulitlanguage' => 'Unterstützung mehrerer Sprachen - Siehe: <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
     'fs_logo' => 'Logo-Optionen',
-    'fs_update' => 'Update-Prüfer',
+    'fs_update' => 'Aktualisierungs-Manager',
     'fs_rating' => 'Bewertungs-Optionen',
     'fs_spam_config' => 'Konfiguration'
 );
@@ -2875,5 +2893,4 @@ $LANG_configselects['Core'] = array(
     29 => array('Täglich' => 86400, 'Wöchentlich' => 604800, 'Stündlich' => 3600, 'Immer' => 0),
     30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
 );
-
 ?>
