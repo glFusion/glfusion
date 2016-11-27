@@ -2612,7 +2612,7 @@ function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
 *
 * @param    string  $type       type of the current content
 * @param    string  $id         id of the current content
-* @return   array               array of arrays of ('title' => $title, 'url' => $url, 'date => $date_created)
+* @return   array               array of arrays of ('title' => $title, 'url' => $url)
 *
 */
 function PLG_getWhatsRelated( $type, $id )

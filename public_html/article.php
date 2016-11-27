@@ -351,6 +351,7 @@ if ($A['count'] > 0) {
         }
 
         $story_options = array ();
+
         if (($_CONF['hideemailicon'] == 0) && (!COM_isAnonUser() ||
                 (($_CONF['loginrequired'] == 0) &&
                  ($_CONF['emailstoryloginrequired'] == 0)))) {
@@ -361,6 +362,7 @@ if ($A['count'] > 0) {
             $story_template->set_var ('lang_email_story', $LANG11[2]);
             $story_template->set_var ('lang_email_story_alt', $LANG01[64]);
         }
+
         $printUrl = COM_buildUrl ($_CONF['site_url']
                 . '/article.php?story=' . $story->getSid() . '&amp;mode=print');
         if ($_CONF['hideprintericon'] == 0) {
@@ -386,13 +388,25 @@ if ($A['count'] > 0) {
         }
 
         $social_icons = SOC_getShareIcons();
+
         $story_template->set_var('social_share',$social_icons);
 
-//        $related = STORY_whatsRelated($sid,$story->displayElements('keywords'), $story->displayElements('related'),
+    // build what's related section
+
+    $relItems = PLG_getWhatsRelated('article',$story->getSid());
+    if ( count( $relItems)  > 0 ) {
+        $rel = array();
+        foreach ($relItems AS $item ) {
+           $rel[] = '<a href="' . $item['url'] . '">'.$item['title'].'</a>';
+        }
+        $related = COM_makeList( $rel, 'list-whats-related' );
+    } else {
         $related = STORY_whatsRelated($story->displayElements('related'),
                                       $story->displayElements('uid'),
                                       $story->displayElements('tid'),
                                       $story->displayElements('alternate_tid'));
+    }
+
         if (!empty ($related)) {
             $related = COM_startBlock ($LANG11[1], '',
                 COM_getBlockTemplate ('whats_related_block', 'header'), 'whats-related')
@@ -404,8 +418,7 @@ if ($A['count'] > 0) {
             $optionsblock = COM_startBlock ($LANG11[4], '',
                     COM_getBlockTemplate ('story_options_block', 'header'), 'story-options')
                 . COM_makeList ($story_options, 'list-story-options')
-                . COM_endBlock (COM_getBlockTemplate ('story_options_block',
-                    'footer'));
+                . COM_endBlock (COM_getBlockTemplate ('story_options_block','footer'));
         } else {
             $optionsblock = '';
         }
