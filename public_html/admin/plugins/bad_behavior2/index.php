@@ -99,9 +99,9 @@ function _bb_listEntries ($page = 1, $msg = '')
     // writing the menu on top
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php',
-              'text' => 'List Banned IPs'),
+              'text' => $LANG_BAD_BEHAVIOR['list_ips']),
         array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php?mode=add',
-              'text' => 'Ban IPs'),
+              'text' => $LANG_BAD_BEHAVIOR['ban_ip']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
