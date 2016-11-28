@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Fixed missing translations in story editor and bad behavior menu
+  - Automatic URL parsing now adds nofollow attribute
   - Moved story options in full article view to the header area - same as short index view
   - Implemented new plugin API for whatsrelated
   - Fixed some minor errors in lib-admin
