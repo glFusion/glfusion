@@ -4,8 +4,9 @@
 // +--------------------------------------------------------------------------+
 // | german_utf-8.php                                                         |
 // |                                                                          |
-// | German language file                                                     |
+// | German language file, addressing the user as "Du"                        |
 // | Modifiziert: August 09 Tony Kluever                                      |
+// | Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>   |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
@@ -35,91 +36,91 @@ if (!defined ('GVERSION')) {
 ###############################################################################
 
 $LANG_CP00 = array(
-    'menulabel' => 'CAPTCHA',
-    'plugin' => 'CAPTCHA',
-    'access_denied' => 'Zugriff verweigert',
-    'access_denied_msg' => 'Du besitzt nicht die nötigen Berechtigungen, um auf diese Seite zuzugreifen.  Dein Benutzername und IP wurden aufgezeichnet.',
-    'admin' => 'CAPTCHA-Administration',
-    'install_header' => 'CAPTCHA-Plugin - Installation/Deinstallation',
-    'installed' => 'CAPTCHA ist installiert',
-    'uninstalled' => 'CAPTCHA ist nicht installiert',
-    'install_success' => 'CAPTCHA-Installation erfolgreich.  <br /><br />Bitte lies Dir die Dokumentation durch und gehe in die <a href="%s">Admin-Sektion</a> um sicherzustellen, dass Deine Einstellungen zu Deiner Hosting-Umgebung passen.',
-    'install_failed' => 'Installation fehlgeschlagen -- Schau in die Datei error.log für weitere Infos.',
-    'uninstall_msg' => 'Plugin erfolgreich deinstalliert',
-    'install' => 'Installieren',
-    'uninstall' => 'Deinstallieren',
-    'warning' => 'Warnung! Plugin ist noch akiviert',
-    'enabled' => 'Deaktiviere das Plugin, bevor Du es deinstallierst.',
-    'readme' => 'CAPTCHA-Plugin-Installation',
-    'installdoc' => "<a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>",
-    'overview' => 'CAPTCHA ist ein natives glFusion-Plugin, dass zusätzlichen Schutz vor Spambots gewährt. <br /><br />Ein CAPTCHA (ein Akronym für "Completely Automated Public Turing test to tell Computers and Humans Apart", TM by Carnegie Mellon University) ist ein Frage/Antwort-Test, um festzustellen, ob der Benutzer ein Mensch oder nicht. Durch das Anzeigen eine schwer lesbaren Grafik mit Buchstaben und Zahlen, geht man davon aus, dass nur ein Mensch sie lesen und die entsprechenden Zeichen eingeben kann. Das Implementieren von CAPTCHA soll helfen, die Anzahl der Spambots auf Deiner Seite zu reduzieren.',
-    'details' => 'Das CAPTCHA-Plugin verwendet statische (vorab generierte) CAPTCHA-Bilder, es sei denn, Du konfigurierst CAPTCHA so, dass dynamisch Bilder mittels der GD Graphic Library oder ImageMagick generiert werden.  Um die GD Libraries oder ImageMagick zu verwenden, müssen True-Type-Schriftarten unterstützen.  Erkundige Dich bei Deinem Webhoster, ob sie TTF unterstützen.',
-    'preinstall_check' => 'CAPTCHA erfordert folgendes:',
-    'glfusion_check' => 'glFusion v1.0.1 oder größer, gemeldete Version ist <b>%s</b>.',
-    'php_check' => 'PHP v4.3.0 oder größer, gemeldete Version ist <b>%s</b>.',
-    'preinstall_confirm' => "Für alle Details zum Installieren von CAPTCHA, schau bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>.",
-    'captcha_help' => 'Solve the Problem',
-    'bypass_error' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte verwende den Neuer-Benutzer-Link zur Registrierung.',
-    'bypass_error_blank' => 'Du hast versucht CAPTCHA auf dieser Seite zu umgehen, bitte gib eine gültige CAPTCHA-Zeichenfolge ein.',
-    'entry_error' => 'Die eingegebene CAPTCHA-Zeichenfolge stimmt nicht mit den Zeichen in der Grafik überein, bitte versuche es erneut. <b>Groß-und Kleinschreibung!</b>',
-    'entry_error_pic' => 'The selected CAPTCHA images did not match the request on the graphic, please try again.',
-    'captcha_info' => 'Das CAPTCHA-Plugin bietet Deiner Seite zusätzlichen Schutz vor Spambots.  Schau in das <a href="%s">Online-Dokumentation-Wiki</a> für mehr Infos.',
-    'enabled_header' => 'Aktuelle CAPTCHA-Einstellungen',
-    'on' => 'An',
-    'off' => 'Aus',
-    'captcha_alt' => 'Du mußt den grafischen Text eingeben - kontaktiere den Seiten-Admin, wenn es Dir nicht möglich ist, die Grafik zu lesen',
-    'save' => 'Speichern',
-    'cancel' => 'Abbruch',
-    'success' => 'Konfigurationsoptionen erfolgreich gespeichert.',
-    'reload' => 'Neues Bild',
-    'reload_failed' => "Sorry, Du kannst das CAPTCHA-Bild nicht neuladen\nSende das Formular ab und ein neues CAPTCHA wird geladen",
-    'reload_too_many' => 'Du kannst max. 5 neue Bilder generieren lassen',
-    'session_expired' => 'Deine CAPTCHA-Session ist abgelaufen, bitte versuche es erneut',
-    'picture' => 'Bild',
-    'characters' => 'Zeichen',
-    'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
-    'captcha_math' => 'Enter the answer',
-    'captcha_prompt' => 'Are You Human?'
+    'menulabel'				=> 'CAPTCHA',
+    'plugin'				=> 'CAPTCHA',
+    'access_denied'			=> 'Zugriff verweigert',
+    'access_denied_msg'		=> 'Du besitzt nicht die nötigen Berechtigungen, um auf diese Seite zugreifen zu können.  Dein Benutzername und Deine IP wurden aufgezeichnet.',
+    'admin'					=> 'CAPTCHA-Administration',
+    'install_header'		=> 'CAPTCHA-Plugin - Installation/Deinstallation',
+    'installed'				=> 'CAPTCHA ist installiert',
+    'uninstalled'			=> 'CAPTCHA ist nicht installiert',
+    'install_success'		=> 'CAPTCHA-Installation erfolgreich.  <br /><br />Bitte lies die Dokumentation durch und gehe in die <a href="%s">Admin-Sektion</a> um sicherzustellen, dass Deine Einstellungen zu Deiner Hosting-Umgebung passen.',
+    'install_failed'		=> 'Installation fehlgeschlagen -- Schaue in die Datei "error.log" für weitere Infos.',
+    'uninstall_msg'			=> 'Plugin erfolgreich deinstalliert',
+    'install'				=> 'Installieren',
+    'uninstall'				=> 'Deinstallieren',
+    'warning'				=> 'Warnung! Plugin ist noch akiviert',
+    'enabled'				=> 'Deaktiviere das Plugin, bevor Du es deinstallierst.',
+    'readme'				=> 'CAPTCHA-Plugin-Installation',
+    'installdoc'			=> "<a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>",
+    'overview'				=> 'CAPTCHA ist ein natives glFusion-Plugin, dass zusätzlichen Schutz vor Spambots gewährt. <br /><br />Ein CAPTCHA (ein Akronym für "Completely Automated Public Turing test to tell Computers and Humans Apart", TM by Carnegie Mellon University) ist ein Frage/Antwort-Test, um festzustellen, ob der Benutzer ein Mensch oder nicht. Durch das Anzeigen eine schwer lesbaren Grafik mit Buchstaben und Zahlen, geht man davon aus, dass nur ein Mensch sie lesen und die entsprechenden Zeichen eingeben kann. Das Implementieren von CAPTCHA soll helfen, die Anzahl der Spambots auf Deiner Seite zu reduzieren.',
+    'details'				=> 'Das CAPTCHA-Plugin verwendet statische (vorab generierte) CAPTCHA-Bilder, es sei denn, Du konfigurierst CAPTCHA so, dass dynamisch Bilder mittels der GD Graphic Library oder ImageMagick generiert werden.  Um die GD Libraries oder ImageMagick zu verwenden, müssen True-Type-Schriftarten unterstützen.  Bitte erkundige Dich bei Deinem Webhoster, ob TTF unterstützt wird.',
+    'preinstall_check'		=> 'CAPTCHA erfordert folgendes:',
+    'glfusion_check'		=> 'glFusion v1.4.3 oder höher, derzeitige Version ist <b>%s</b>.',
+    'php_check'				=> 'PHP v5.2.0 oder höher, derzeitige Version ist <b>%s</b>.',
+    'preinstall_confirm'	=> "Für alle Details zum Installieren von CAPTCHA, schaue bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>.",
+    'captcha_help'			=> 'Gib die Zeichen ein',
+    'bypass_error'			=> 'Du hast versucht die CAPTCHA-Abfrage auf dieser Seite zu umgehen, bitte verwende den "Neuer Benutzer" Link zur Registrierung.',
+    'bypass_error_blank'	=> 'Du hast versucht die CAPTCHA-Abfrage auf dieser Seite zu umgehen, bitte gib eine gültige CAPTCHA-Zeichenfolge ein.',
+    'entry_error'			=> 'Die eingegebene CAPTCHA-Zeichenfolge stimmt nicht mit den Zeichen in der Grafik überein, bitte versuche es erneut und beachte <b>Groß-und Kleinschreibung</b>!',
+    'entry_error_pic'		=> 'Die ausgewählten CAPTCHA-Bilder entsprechen nicht den geforderten in der Grafik. Bitte versuche es erneut.',
+    'captcha_info'			=> 'Das CAPTCHA-Plugin bietet Deiner Seite zusätzlichen Schutz vor Spambots.  Schaue in das <a href="%s">Online-Dokumentation-Wiki</a> für weitere Infos.',
+    'enabled_header'		=> 'Aktuelle CAPTCHA-Einstellungen',
+    'on'					=> 'Ein',
+    'off'					=> 'Aus',
+    'captcha_alt'			=> 'Du musst den grafischen Text eingeben - kontaktiere den Seiten-Admin, wenn es Dir nicht möglich ist, die Grafik zu lesen',
+    'save'					=> 'Speichern',
+    'cancel'				=> 'Abbruch',
+    'success'				=> 'Konfiguration erfolgreich gespeichert.',
+    'reload'				=> 'Neues Bild',
+    'reload_failed'			=> "CAPTCHA-Bild kann nicht automatisch neu geladen werden\nSende das Formular ab um ein neues CAPTCHA-Bild zu generieren",
+    'reload_too_many'		=> 'Du kannst max. 5 neue Bilder generieren lassen',
+    'session_expired'		=> 'Deine CAPTCHA-Gültigkeit ist abgelaufen, bitte versuche es erneut',
+    'picture'				=> 'Bild',
+    'characters'			=> 'Zeichen',
+    'ayah_error'			=> 'Sorry, aber wir waren nicht in der Lage Dich als Mensch zu identifizieren. Bitte versuche es erneut.',
+    'captcha_math'			=> 'Gib die Antwort ein',
+    'captcha_prompt'		=> 'Bist Du ein Mensch?'
 );
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['captcha'] = array(
-    'label' => 'CAPTCHA',
-    'title' => 'CAPTCHA-Konfiguration'
+    'label'					=> 'CAPTCHA',
+    'title'					=> 'CAPTCHA-Konfiguration'
 );
 
 $LANG_confignames['captcha'] = array(
-    'gfxDriver' => 'Grafiktreiber',
-    'gfxFormat' => 'Grafikformate',
-    'imageset' => 'Statisches Bildset',
-    'debug' => 'Debug',
-    'gfxPath' => 'Kompletter Pfad zu ImageMagick\'s Konvertierungstool',
-    'remoteusers' => 'CAPTCHA für alle Remote-Benutzer erzwingen',
-    'logging' => 'Aufzeichnen ungültiger CAPTCHA-Versuche',
-    'anonymous_only' => 'Nur für Gäste',
-    'enable_comment' => 'Für Kommentare',
-    'enable_story' => 'Für Artikel',
-    'enable_registration' => 'Für Registrierung',
-    'enable_contact' => 'Für Kontakt',
-    'enable_emailstory' => 'Für Artikel per E-Mail',
-    'enable_forum' => 'Für Forum',
-    'enable_mediagallery' => 'Für Mediengalerie (Postkarten)',
-    'enable_rating' => 'Für Rating-Plugin',
-    'enable_links' => 'Für Links-Plugin',
-    'enable_calendar' => 'Für Kalender-Plugin',
-    'expire' => 'Wieviele Sekunden eine CAPTCHA-Session gültig ist',
-    'publickey' => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Signup</a>',
-    'privatekey' => 'reCAPTCHA Private Key',
-    'recaptcha_theme' => 'reCAPTCHA Theme'
+    'gfxDriver'				=> 'Grafik-Treiber',
+    'gfxFormat'				=> 'Grafik-Formate',
+    'imageset'				=> 'Statisches Bildset',
+    'debug'					=> 'Detailierte Fehlermeldung',
+    'gfxPath'				=> 'Pfad zu ImageMagick',
+    'remoteusers'			=> 'Für Remote-Benutzer erzwingen',
+    'logging'				=> 'Ungültige Versuche aufzeichnen',
+    'anonymous_only'		=> 'Nur für Gäste',
+    'enable_comment'		=> 'Für Kommentare',
+    'enable_story'			=> 'Für Artikel-Einsendung',
+    'enable_registration'	=> 'Für Registrierung',
+    'enable_contact'		=> 'Für Kontakt-Formulare',
+    'enable_emailstory'		=> 'Für Artikel-Versand',
+    'enable_forum'			=> 'Für Forum-Einträge',
+    'enable_mediagallery'	=> 'Für Medien-Versand',
+    'enable_rating'			=> 'Für Bewertungen',
+    'enable_links'			=> 'Für Link-Einsendung',
+    'enable_calendar'		=> 'Für Kalender-Einsendung',
+    'expire'				=> 'Gültigkeit des CAPTCHA in Sek.',
+    'publickey'				=> 'reCAPTCHA Öffentlicher-Schlüssel<br /><a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Anmeldung</a>',
+    'privatekey'			=> 'reCAPTCHA Privater-Schlüssel',
+    'recaptcha_theme'		=> 'reCAPTCHA Oberfläche'
 );
 
 $LANG_configsubgroups['captcha'] = array(
-    'sg_main' => 'Haupteinstellungen'
+    'sg_main'				=> 'Haupteinstellungen'
 );
 
 $LANG_fs['captcha'] = array(
-    'cp_public' => 'Allgemeine Einstellungen',
-    'cp_integration' => 'CAPTCHA-Integration'
+    'cp_public'				=> 'Allgemeine-Einstellungen',
+    'cp_integration'		=> 'CAPTCHA-Einbindung'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
@@ -129,10 +130,10 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('light' => 'light','dark' => 'dark'),
+    6 => array('Hell' => 'light','Dunkel' => 'dark'),
 );
-$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Upgrade: Update erfolgreich abgeschlossen.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
+$PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin Aktualisierung: Fehlgeschlagen - siehe "error.log"';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA-Plugin erfolgreich installiert';
 
 ?>
