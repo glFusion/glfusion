@@ -472,7 +472,7 @@ function STORY_list()
               'text' => $LANG_ADMIN['submissions']));
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
-                      'text' => 'Global Settings');
+                      'text' => $LANG24[111]);
         }
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']);
