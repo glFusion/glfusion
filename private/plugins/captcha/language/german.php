@@ -41,11 +41,11 @@ $LANG_CP00 = array(
     'access_denied'			=> 'Zugriff verweigert',
     'access_denied_msg'		=> 'Du besitzt nicht die nötigen Berechtigungen, um auf diese Seite zugreifen zu können.  Dein Benutzername und Deine IP wurden aufgezeichnet.',
     'admin'					=> 'CAPTCHA-Administration',
-    'install_header'		=> 'CAPTCHA-Plugin - Installation/Deinstallation',
+    'install_header'		=> 'CAPTCHA-Plugin Installieren / Deinstallieren',
     'installed'				=> 'CAPTCHA ist installiert',
     'uninstalled'			=> 'CAPTCHA ist nicht installiert',
-    'install_success'		=> 'CAPTCHA-Installation erfolgreich.  <br /><br />Bitte lies die Dokumentation durch und gehe in die <a href="%s">Admin-Sektion</a> um sicherzustellen, dass Deine Einstellungen zu Deiner Hosting-Umgebung passen.',
-    'install_failed'		=> 'Installation fehlgeschlagen -- Schaue in die Datei "error.log" für weitere Infos.',
+    'install_success'		=> 'CAPTCHA-Installation erfolgreich.<br /><br />Bitte lies die Dokumentation durch und besuche die <a href="%s">Kommandozentrale</a> um sicherzustellen, dass Deine Einstellungen zu Deiner Hosting-Umgebung passen.',
+    'install_failed'		=> 'Installation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
     'uninstall_msg'			=> 'Plugin erfolgreich deinstalliert',
     'install'				=> 'Installieren',
     'uninstall'				=> 'Deinstallieren',
@@ -58,7 +58,7 @@ $LANG_CP00 = array(
     'preinstall_check'		=> 'CAPTCHA erfordert folgendes:',
     'glfusion_check'		=> 'glFusion v1.4.3 oder höher, derzeitige Version ist <b>%s</b>.',
     'php_check'				=> 'PHP v5.2.0 oder höher, derzeitige Version ist <b>%s</b>.',
-    'preinstall_confirm'	=> "Für alle Details zum Installieren von CAPTCHA, schaue bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>.",
+    'preinstall_confirm'	=> "Für weitere Details zum Installieren von CAPTCHA, schaue bitte in die <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installationsanleitung</a>.",
     'captcha_help'			=> 'Gib die Zeichen ein',
     'bypass_error'			=> 'Du hast versucht die CAPTCHA-Abfrage auf dieser Seite zu umgehen, bitte verwende den "Neuer Benutzer" Link zur Registrierung.',
     'bypass_error_blank'	=> 'Du hast versucht die CAPTCHA-Abfrage auf dieser Seite zu umgehen, bitte gib eine gültige CAPTCHA-Zeichenfolge ein.',
@@ -133,7 +133,7 @@ $LANG_configselects['captcha'] = array(
     6 => array('Hell' => 'light','Dunkel' => 'dark'),
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin Aktualisierung: Fehlgeschlagen - siehe "error.log"';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA-Plugin erfolgreich installiert';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin Aktualisierung: Fehlgeschlagen - siehe "error.log".';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA-Plugin erfolgreich installiert.';
 
 ?>
