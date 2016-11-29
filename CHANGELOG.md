@@ -1,4 +1,6 @@
 ## v1.6.3 (unreleased)
+  - Media Gallery media/image auto tags now produce responsive images
+  - Media Gallery - fixed responsive video for video auto tag
   - Fixed missing translations in story editor and bad behavior menu
   - Automatic URL parsing now adds nofollow attribute
   - Moved story options in full article view to the header area - same as short index view
