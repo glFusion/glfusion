@@ -1882,14 +1882,14 @@ function PLG_autoTagPerms()
 * The autolink would be like:  [story:20040101093000103 here]
 *
 * @param   string   $content   Content that should be parsed for autolinks
-* @param    string  $namespace Optional Namespace or plugin name collecting tag info
-* @param    string  $operation Optional Operation being performed
+* @param   string   $namespace Optional Namespace or plugin name collecting tag info
+* @param   string   $operation Optional Operation being performed
 * @param   string   $plugin    Optional if you only want to parse using a specific plugin
 *
 */
 function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 {
-    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32, $_AUTOTAGS, $mbMenu, $autoTagUsage;
+    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32, $_AUTOTAGS, $_VARS, $mbMenu, $autoTagUsage;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1908,8 +1908,12 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
 
     if ( !empty($namespace) && !empty($operation) ) {
         $postFix = '.'.$namespace.'.'.$operation;
+        $_VARS['at_namespace'] = $namespace;
+        $_VARS['at_operation'] = $operation;
     } else {
         $postFix = '';
+        $_VARS['at_namespace'] = '';
+        $_VARS['at_operation'] = '';
     }
 
     // For each supported module, scan the content looking for any AutoLink tags
@@ -1965,6 +1969,8 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     $tags[] = $newtag;
                 } else {
                     // Error: tags do not match - return with no changes
+                    unset($_VARS['at_namespace']);
+                    unset($_VARS['at_operation']);
                     return $content . $LANG32[32];
                 }
                 $prev_offset = $offset;
@@ -2110,6 +2116,8 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
         }
         $recursionCount--;
     }
+    unset($_VARS['at_namespace']);
+    unset($_VARS['at_operation']);
     return $content;
 }
 
