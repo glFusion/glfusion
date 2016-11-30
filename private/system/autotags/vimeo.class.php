@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Vimeo PHP autotag functions                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2015 by the following authors:                        |
+// | Copyright (C) 2014-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -89,21 +89,6 @@ class autotag_vimeo extends BaseAutotag {
                 }
             }
         }
-/*
-        $extra = '';
-        if ( $align != '') {
-            if ( $align == 'center' ) {
-                $extra .= ' text-align:center;';
-            } else {
-                $extra .= ' float:'.$align.';';
-            }
-        }
-        if ( $pad != 0 ) {
-            $extra .= ' padding:' . $pad . 'px;';
-        }
-
-        $retval .= '<div class="uk-responsive-width uk-responsive-height" style="width:'.$width.'px; height:'.$height.'px;'.$extra.'">';
-*/
 
         $extra = '';
         if ( $align != '' && $responsive == 0) {
@@ -133,9 +118,6 @@ class autotag_vimeo extends BaseAutotag {
         if ( $responsive == 1 ) {
             $retval .= '</div>';
         }
-/*
-        $retval .= '</div>';
-*/
         return $retval;
     }
 }
