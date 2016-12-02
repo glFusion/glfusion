@@ -215,6 +215,20 @@ $_SYSTEM['alert_timeout'] = {alert_timeout};
 $_SYSTEM['alert_position'] = '{alert_position}';
 
 // +--------------------------------------------------------------------------+
+// | UIKIT Style                                                              |
+// |                                                                          |
+// | Specifies the base uikit style  - valid values are:                      |
+// |                                                                          |
+// | '' - will use the flat style                                             |
+// | '.gradient.' - will use the gradient style                               |
+// | '.almost-flat.' - will use the almost flat style                         |
+// |                                                                          |
+// | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme          |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['style_type'] = '{style_type}';
+
+// +--------------------------------------------------------------------------+
 // | Database Backup Max Rows                                                 |
 // |                                                                          |
 // | Defines the maximum number of rows to process in one iteration           |
