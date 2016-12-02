@@ -199,6 +199,8 @@ function getMenuTemplate($menutype, $menuname) {
         return $tFile;
     } elseif ( file_exists($_CONF['path_layout'].'menu/'.$tFile) ) {
         return $tFile;
+    } elseif ( file_exists($_CONF['path_themes'].'cms/menu/'.$tFile ) ) {
+        return $tFile;
     }
     return $sFile;
 }
