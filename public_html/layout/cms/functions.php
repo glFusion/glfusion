@@ -116,7 +116,11 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js'
 
 // Load our CSS specific to this theme
 
-$styleType = '.gradient.'; // almost-flat - gradient - blank
+if ( !isset($_SYSTEM['style_type']) || $_SYSTEM['style_type'] == 'undefined' ) {
+    $styleType = '.gradient.';
+} else {
+    $styleType = $_SYSTEM['style_type'];
+}
 
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_HIGH);
