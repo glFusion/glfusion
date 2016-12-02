@@ -379,6 +379,8 @@ function STORY_global_save()
 
     $_POST['tid'] = '';
 
+    CTL_clearCache();
+
     return STORY_list();
 }
 
