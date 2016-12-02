@@ -115,11 +115,15 @@ $outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
 
 // Load our CSS specific to this theme
-
+$validTypes = array('.','.gradient.','.almost-flat.');
 if ( !isset($_SYSTEM['style_type']) || $_SYSTEM['style_type'] == 'undefined' ) {
     $styleType = '.gradient.';
 } else {
-    $styleType = $_SYSTEM['style_type'];
+    if ( in_array($_SYSTEM['style_type'],$validTypes) ) {
+        $styleType = $_SYSTEM['style_type'];
+    } else {
+        $styleType = '.gradient.';
+    }
 }
 
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);

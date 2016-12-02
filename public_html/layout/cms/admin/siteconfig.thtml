@@ -219,8 +219,8 @@ $_SYSTEM['alert_position'] = '{alert_position}';
 // |                                                                          |
 // | Specifies the base uikit style  - valid values are:                      |
 // |                                                                          |
-// | '' - will use the flat style                                             |
-// | '.gradient.' - will use the gradient style                               |
+// | '.'             - will use the flat style                                |
+// | '.gradient.'    - will use the gradient style                            |
 // | '.almost-flat.' - will use the almost flat style                         |
 // |                                                                          |
 // | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme          |
