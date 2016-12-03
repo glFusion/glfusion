@@ -20,7 +20,7 @@ $_SYSTEM['framework'] = 'uikit';
 $_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
 $_SYSTEM['disable_jquery_menu'] = true;     // not needed for this theme
-$_SYSTEM['disable_jquery_slimbox'] = true;  // use uikit
+$_SYSTEM['disable_jquery_slimbox'] = false;  // use uikit
 
 // multiple language support
 
