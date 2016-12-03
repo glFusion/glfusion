@@ -387,12 +387,20 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     $fields .= ',account_type';
     $values .= ','.$account_type;
 
-    DB_query ("INSERT INTO {$_TABLES['users']} ($fields) VALUES ($values)");
+    $result = DB_query ("INSERT INTO {$_TABLES['users']} ($fields) VALUES ($values)");
+    if (DB_error() != '' ) {
+        COM_errorLog("Error inserting user into USERS table : " . DB_error());
+        return NULL;
+    }
     // Get the uid of the user, possibly given a service:
     if ($remoteusername != '') {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".DB_escapeString($remoteusername)."' AND remoteservice='".DB_escapeString($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
+    }
+    if ( $uid == NULL ) {
+        COM_errorLog("Error: Unable to retrieve uid after creating user");
+        return NULL;
     }
 
     // Add user to Logged-in group (i.e. members) and the All Users group
