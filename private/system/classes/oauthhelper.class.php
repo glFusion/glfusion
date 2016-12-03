@@ -42,6 +42,8 @@ require_once $_CONF['path'] . 'lib/oauth/oauth_client.php';
 class OAuthConsumer {
     protected $consumer = NULL;
     protected $client = NULL;
+    protected $debug_oauth = false;
+
     var $error = '';
 
     public function __construct($service) {
@@ -55,6 +57,7 @@ class OAuthConsumer {
     	$this->client->server     = $service;
         $this->client->debug      = $_SYSTEM['debug_oauth'];
         $this->client->debug_http = $_SYSTEM['debug_oauth'];
+        $this->debug_oauth        = $_SYSTEM['debug_oauth'];
 
         // Set key and secret for OAuth service if found in config
         if ($this->client->client_id == '') {
@@ -91,7 +94,7 @@ class OAuthConsumer {
             case 'twitter' :
                 $api_url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
                 $scope   = '';
-                $q_api   = array();
+                $q_api   = array('include_entities' => "true", 'skip_status' => "true", 'include_email' => "true");
                 break;
             case 'yahoo' :
                 $api_url = 'http://query.yahooapis.com/v1/yql';
@@ -117,7 +120,7 @@ class OAuthConsumer {
     }
 
     public function authenticate_user() {
-        global $_SYSTEM;
+
     	if ( ($success = $this->client->Initialize() ) ) {
     		if ( ($success = $this->client->Process() ) ) {
     			if(strlen($this->client->authorization_error)) {
@@ -130,7 +133,7 @@ class OAuthConsumer {
     		}
     		$success = $this->client->Finalize($success);
     	}
-        if ($_SYSTEM['debug_oauth'] ) COM_errorLog($this->client->debug_output);
+        if ($this->debug_oauth) COM_errorLog($this->client->debug_output);
     	if ($this->client->exit) {
     		exit;
     	}
@@ -148,7 +151,6 @@ class OAuthConsumer {
     			'GET', $this->q_api, array('FailOnAccessError'=>true), $user);
     	}
    		$success = $this->client->Finalize($success);
-
     	if ($this->client->exit) {
     		exit;
     	}
@@ -176,6 +178,33 @@ class OAuthConsumer {
         if (empty($tmp) && $nrows == 1) { // existing user...
             list($uid, $status) = DB_fetchArray($result);
             $checkMerge = false;
+
+            // Update users
+            if (is_array($info)) {
+                $columnCount = 0;
+                $sql = "UPDATE {$_TABLES['users']} SET ";
+                if (!empty($info['fullname'])) {
+                    $updatecolumns .= "fullname='".DB_escapeString($info['fullname'])."'";
+                    $columnCount++;
+                }
+                if (!empty($info['email'])) {
+                    if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                    $updatecolumns .= "email='".DB_escapeString($info['email'])."'";
+                    $columnCount++;
+                }
+                if (!empty($info['homepage'])) {
+                    if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                    $updatecolumns .= "homepage='".DB_escapeString($info['homepage'])."'";
+                    $columnCount++;
+                }
+
+                if ( $columnCount > 0 && $uid > 1 ) {
+                    $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
+                    DB_query($sql);
+                }
+                // Update rest of users info
+                $this->_DBupdate_users($uid, $info);
+            }
         } else {
             if ( $_CONF['disable_new_user_registration'] ) {
                 echo COM_siteHeader();
@@ -197,6 +226,9 @@ class OAuthConsumer {
             }
             $users['loginname'] = $loginname;
             $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
+            if ( $uid == NULL ) {
+                return NULL;
+            }
             if (is_array($users)) {
                 $this->_DBupdate_users($uid, $users);
             }
@@ -230,6 +262,7 @@ class OAuthConsumer {
                 }
             }
         }
+        return true;
     }
 
     public function doSynch($info) {
@@ -254,6 +287,11 @@ class OAuthConsumer {
                 if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
                 $updatecolumns .= "homepage='".DB_escapeString($users['homepage'])."'";
             }
+            if (!empty($users['email'])) {
+                if (!empty($updatecolumns)) { $updatecolumns .= ", "; }
+                $updatecolumns .= "email='".DB_escapeString($users['email'])."'";
+            }
+
             $sql = $sql . $updatecolumns . " WHERE uid=" . (int) $_USER['uid'];
 
             DB_query($sql);
@@ -284,6 +322,9 @@ class OAuthConsumer {
             case 'microsoft' :
                 break;
             case 'twitter' :
+                if ( isset($info->email ) ) {
+                    $userinfo['email'] = $info->email;
+                }
                 break;
             case 'yahoo' :
                 break;
@@ -342,9 +383,13 @@ class OAuthConsumer {
                 );
                 break;
             case 'twitter' :
+                $mail = '';
+                if ( isset($info->email)) {
+                    $mail = $info->email;
+                }
                 $users = array(
                     'loginname'      => $info->screen_name,
-                    'email'          => '',
+                    'email'          => $mail,
                     'passwd'         => '',
                     'passwd2'        => '',
                     'fullname'       => $info->name,
@@ -422,13 +467,21 @@ class OAuthConsumer {
 
     protected function _DBupdate_userinfo($uid, $userinfo) {
         global $_TABLES;
-        if (!empty($userinfo['about']) || !empty($userinfo['location'])) {
+        if (!empty($userinfo['about']) || !empty($userinfo['location']) ) {
+            $commaCount = 0;
             $sql = "UPDATE {$_TABLES['userinfo']} SET";
-            $sql .= !empty($userinfo['about']) ? " about = '".DB_escapeString($userinfo['about'])."'" : "";
-            $sql .= (!empty($userinfo['about']) && !empty($userinfo['location'])) ? "," : "";
-            $sql .= !empty($userinfo['location']) ? " location = '".DB_escapeString($userinfo['location'])."'" : "";
+            if ( !empty($userinfo['about'])) {
+                $sql .= !empty($userinfo['about']) ? " about = '".DB_escapeString($userinfo['about'])."'" : "";
+                $commaCount++;
+            }
+            if ( !empty($userinfo['location'])) {
+                if ( $commaCount > 0 ) $sql .= ",";
+                $sql .= !empty($userinfo['location']) ? " location = '".DB_escapeString($userinfo['location'])."'" : "";
+                $commaCount++;
+            }
             $sql .= " WHERE uid = ".(int) $uid;
-            DB_query($sql);
+            if ( $commaCount > 0 )
+                DB_query($sql);
         }
     }
 
