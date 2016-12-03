@@ -1037,8 +1037,7 @@ function STORY_deleteStory($sid)
     $output = '';
 
     PLG_invokeService('story', 'delete', $args, $output, $svc_msg);
-    CACHE_remove_instance('whatsnew');
-    CACHE_remove_instance('story_'.$sid);
+
     return $output;
 }
 
@@ -1637,6 +1636,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     PLG_itemDeleted($sid, 'article');
 
     // update RSS feed and Older Stories block
+    CTL_clearCache();
     COM_rdfUpToDateCheck ();
     COM_olderStuff ();
     COM_setMessage(10);
