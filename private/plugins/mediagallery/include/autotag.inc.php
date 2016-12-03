@@ -1386,7 +1386,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             } else {
                                 switch ( $src ) {
                                     case 'orig' :
-                                        if ( $_MG_CONF['discard_originals'] == 1 ) {
+                                        if ( $_MG_CONF['discard_original'] == 1 ) {
                                             $default_thumbnail = 'disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
                                         } else {
                                             $default_thumbnail = 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
@@ -1482,7 +1482,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     return $content;
                 }
 
-                if ( $autotag['tag'] == 'oimage' || $src == 'orig') {
+                if ( $autotag['tag'] == 'oimage' ) { //|| $src == 'orig') {
                     $newwidth = $mediaSize[0];
                     $newheight = $mediaSize[1];
                 } else {
