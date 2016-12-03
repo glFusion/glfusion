@@ -323,6 +323,10 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
 
+    if ( ! ($status & DISABLE_URLPARSE ) ) {
+        $bbcode->addParser (array('block','inline','link','listitem'), array (&$filter, 'linkify'));
+    }
+
 //    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_fixtemplate');
 
     if ( ! ( $status & DISABLE_BBCODE ) ) {
@@ -367,6 +371,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
         $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
     }
+
     $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacetags');
 
     if ( ! ($status & DISABLE_SMILIES ) ) {
@@ -379,10 +384,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $str = COM_checkWords($str);
     }
     $str = $bbcode->parse ($str);
-
-    if ( ! ($status & DISABLE_URLPARSE ) ) {
-        $str = $filter->linkify($str);
-    }
 
     return $str;
 }
