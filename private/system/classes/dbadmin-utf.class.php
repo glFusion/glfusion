@@ -68,40 +68,50 @@ class dbConvertUTF8 extends dbAdmin
         $collation = $row[2];
         if ( substr($collation,0,7) == 'utf8mb4')
             $this->returnResult();
-
+        $null = '';
+        if ( $row[3] == "NO" ) {
+            $null = " NOT NULL ";
+            if ( $row[5] !== NULL ) {
+                $null .= "DEFAULT '".$row[5]."' ";
+            }
+        } else {
+            if ( $row[5] !== NULL ) {
+                $null .= " DEFAULT '".$row[5]."' ";
+            }
+        }
         if (preg_match("/^varchar\((\d+)\)$/i", $type, $mat)) {
             $size = $mat[1];
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "CHAR")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR(1) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR(1) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "TINYTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TINYTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TINYTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "MEDIUMTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` MEDIUMTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` MEDIUMTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "LONGTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` LONGTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` LONGTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "TEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation."",true);
+            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
             $errNo = $this->dbHandle->getErrno();
             if ($rc === false || $errNo != 0) {
                 $this->logError($table,$name);
