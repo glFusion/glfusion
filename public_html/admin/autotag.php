@@ -596,7 +596,7 @@ function ATP_edit($autotag_id = '')
                       'title'     => $LANG_AM['autotag'].':&nbsp;'.$autotag_id,
                       'help_url'  => '',
                       'no_data'   => 'No data to display',
-                      'form_url'  => $_CONF['site_admin_url'].'/autotag.php?pedit=x&amp;autotag_id='.$autotag_id,
+//                      'form_url'  => $_CONF['site_admin_url'].'/autotag.php?pedit=x&amp;autotag_id='.$autotag_id,
     );
 
     $defsort_arr = array('field' => 'usage_namespace', 'direction' => 'asc');
