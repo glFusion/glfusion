@@ -33,7 +33,7 @@ class autotag_mgslider extends BaseAutotag {
         $kenBurns        = false;
         $autoPlay        = false;
         $height          = 'auto';
-        
+
         $px = explode (' ', trim ($p2));
         if (is_array ($px)) {
             foreach ($px as $part) {
@@ -92,7 +92,7 @@ class autotag_mgslider extends BaseAutotag {
                 break;
         }
 
-        $options = 'height:' . $height . ',';
+//        $options = 'height:' . $height . ',';
         $T->set_var('overlay_position',$overlay_position);
         if ( $kenBurns == true ) {
             $options .= 'kenburns:true,';
