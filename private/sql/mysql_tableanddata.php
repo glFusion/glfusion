@@ -910,7 +910,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.6.2') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.6.3') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";
@@ -958,11 +958,13 @@ $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `el
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(10, 7, 1, 'Rotator', 5, 'rotator', 30, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(12, 7, 1, 'Tab Slider', 5, 'tab-slider-example', 50, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(13, 7, 1, 'Spring Menu', 5, 'spring-menu', 60, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(46, 7, 1, 'RSS Ticker', 5, 'ticker', 70, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(16, 0, 1, 'Typography', 5, 'typography', 50, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(40, 0, 4, 'Widgets', 1, '', 40, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(41, 40, 4, 'Rotator', 5, 'rotator', 30, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(42, 40, 4, 'Tab Slider', 5, 'tab-slider-example', 50, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(43, 40, 4, 'Spring Menu', 5, 'spring-menu', 60, 1, '', '', 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(47, 40, 4, 'RSS Ticker', 5, 'ticker', 70, 1, '', '', 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(44, 0, 4, 'Typography', 5, 'typography', 50, 1, '', '', 2);";
 
 #

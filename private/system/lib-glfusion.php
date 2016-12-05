@@ -517,4 +517,125 @@ function _phpUpToDate()
 
     return $uptodate;
 }
+
+function _doSiteConfigUpgrade() {
+    global $_SYSTEM, $_CONF;
+
+    $retval = false;
+
+    $_SYSDEFAULT = array(
+        'use_direct_style_js'         => true,
+        'html_filter'                 => 'htmlpurifier',
+        'site_enabled'                => true,
+        'maintenance_mode'            => false,
+        'rootdebug'                   => false,
+        'debug_oauth'                 => false,
+        'debug_html_filter'           => false,
+        'no_fail_sql'                 => false,
+        'no_cache_config'             => false,
+        'disable_instance_caching'    => false,
+        'admin_session'               => 1200,
+        'swedish_date_hack'           => false,
+        'verification_token_ttl'      => 86400,
+        'token_ip'                    => false,
+        'max_captcha_atttempts'       => 4,
+        'custom_topic_templates'      => false,
+        'token_ttl'                   => 1200,
+        'alert_timeout'               => 4000,
+        'alert_position'              => 'top-right',
+        'db_backup_rows'              => 10000,
+        'style_type'                  => 'undefined',
+    );
+
+    if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
+        $_NEWSYSTEM = array_merge($_SYSDEFAULT, $_SYSTEM);
+    } else {
+        $_NEWSYSTEM = $_SYSDEFAULT;
+    }
+
+    $_CFDEFAULT['css_cache_filename']            = 'style.cache';
+    $_CFDEFAULT['js_cache_filename']             = 'js.cache';
+    $_CFDEFAULT['path']                          = '/path/to/glfusion/';
+    $_CFDEFAULT['path_system']                   = $_CONF['path'] . 'system/';
+    $_CFDEFAULT['default_charset']               = 'iso-8859-1';
+
+    if ( empty($_CONF['db_charset'])) {
+        $result = DB_query("SELECT @@character_set_database",1);
+        $collation = DB_fetchArray($result);
+
+        $_CFDEFAULT['db_charset'] = $collation["@@character_set_database"];
+        if ( empty($_CFDEFAULT['db_charset'])) {
+            $_CFDEFAULT['db_charset'] = '';
+        } else {
+            $_CONF['db_charset'] = $_CFDEFAULT['db_charset'];
+        }
+    }
+
+    if (!defined('CONFIG_CACHE_FILE_NAME')) {
+      define('CONFIG_CACHE_FILE_NAME',"'$$$config$$$.cache'");
+    }
+    $_CFDEFAULT['config_cache_file_name']       = CONFIG_CACHE_FILE_NAME;
+
+    $_NEWSYSCONF = array_merge($_CFDEFAULT,$_CONF);
+
+    $T = new Template($_CONF['path_layout'].'/admin/');
+    $T->set_file('page', 'siteconfig.thtml');
+
+    $T->set_var(array(
+        'use_direct_style_js'         => $_NEWSYSTEM['use_direct_style_js'] ? 'true' : 'false',
+        'html_filter'                 => $_NEWSYSTEM['html_filter'],
+        'site_enabled'                => $_NEWSYSTEM['site_enabled'] ? 'true' : 'false',
+        'maintenance_mode'            => $_NEWSYSTEM['maintenance_mode'] ? 'true' : 'false',
+        'rootdebug'                   => $_NEWSYSTEM['rootdebug'] ? 'true' : 'false',
+        'debug_oauth'                 => $_NEWSYSTEM['debug_oauth'] ? 'true' : 'false',
+        'debug_html_filter'           => $_NEWSYSTEM['debug_html_filter'] ? 'true' : 'false',
+        'no_fail_sql'                 => $_NEWSYSTEM['no_fail_sql'] ? 'true' : 'false',
+        'no_cache_config'             => $_NEWSYSTEM['no_cache_config'] ? 'true' : 'false',
+        'disable_instance_caching'    => $_NEWSYSTEM['disable_instance_caching'] ? 'true' : 'false',
+        'admin_session'               => $_NEWSYSTEM['admin_session'],
+        'swedish_date_hack'           => $_NEWSYSTEM['swedish_date_hack'] ? 'true' : 'false',
+        'verification_token_ttl'      => $_NEWSYSTEM['verification_token_ttl'],
+        'token_ip'                    => $_NEWSYSTEM['token_ip'] ? 'true' : 'false',
+        'max_captcha_atttempts'       => $_NEWSYSTEM['max_captcha_atttempts'],
+        'custom_topic_templates'      => $_NEWSYSTEM['custom_topic_templates'] ? 'true' : 'false',
+        'css_cache_filename'          => $_NEWSYSCONF['css_cache_filename'],
+        'js_cache_filename'           => $_NEWSYSCONF['js_cache_filename'],
+        'path'                        => $_NEWSYSCONF['path'],
+        'default_charset'             => $_NEWSYSCONF['default_charset'],
+        'db_charset'                  => $_NEWSYSCONF['db_charset'],
+        'config_cache_file_name'      => $_NEWSYSCONF['config_cache_file_name'],
+        'token_ttl'                   => $_NEWSYSTEM['token_ttl'],
+        'alert_timeout'               => $_NEWSYSTEM['alert_timeout'],
+        'alert_position'              => $_NEWSYSTEM['alert_position'],
+        'style_type'                  => $_NEWSYSTEM['style_type'],
+        'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
+        'beginphp'                    => '<?php',
+        'endphp'                      => '?>',
+    ));
+
+    if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {
+        $T->set_var('path_system', "\$_CONF['path'] . 'system/'");
+    } else {
+        $T->set_var('path_system',$_NEWSYSTEM['path_system']);
+    }
+
+    $T->parse('output','page');
+    $siteconfig_data = $T->finish($T->get_var('output'));
+
+    $siteconfig_path = $_CONF['path_html'] . 'siteconfig.php';
+    if (is_writable($siteconfig_path)) {
+        $siteconfig_file = fopen($siteconfig_path, 'w');
+        if (fwrite($siteconfig_file, $siteconfig_data)) {
+            fclose ($siteconfig_file);
+            $retval = true;
+            COM_errorLog("UPGRADE: Successfully updated siteconfig.php with latest options.");
+        } else {
+            COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
+        }
+    } else {
+        COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
+    }
+    CTL_clearCache();
+    return $retval;
+}
 ?>

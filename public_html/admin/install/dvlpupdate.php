@@ -1487,17 +1487,23 @@ function glfusion_162()
 
     // check if Non-Logged-in Users exists
     $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Non-Logged-in Users'");
-    if ( DB_numRows($result) < 1 ) {
+    if ( DB_numRows($result) == 0 ) {
         DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core, grp_default) VALUES ('Non-Logged-in Users','Non Logged-in Users (anonymous users)',1,0)",1);
-        $nonloggedin_group_id  = DB_insertId();
-        // assign all anonymous users to the group
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",1,NULL) ",1);
-        // assign root group
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",NULL,1) ",1);
-        $sql = "UPDATE {$_TABLES['menu']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
-        DB_query($sql);
-        $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
-        DB_query($sql);
+        $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='Non-Logged-in Users'");
+        if ( $result !== false ) {
+            $row = DB_fetchArray($result);
+            $nonloggedin_group_id = $row['grp_id'];
+            // assign all anonymous users to the group
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",1,NULL) ",1);
+            // assign root group
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (".$nonloggedin_group_id.",NULL,1) ",1);
+            $sql = "UPDATE {$_TABLES['menu']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+            DB_query($sql);
+            $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
+            DB_query($sql);
+        } else {
+            COM_errorLog("dvlpupdate: Error retrieving non-loggedin-user group id");
+        }
     }
     $_SQL = array();
 
@@ -1526,6 +1532,40 @@ function glfusion_162()
 
 }
 
+function glfusion_163()
+{
+    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // put config updates here
+
+    // sql updates here
+    DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+    DB_query("ALTER TABLE {$_TABLES['subscriptions']} DROP INDEX `type`",1);
+    DB_query("ALTER TABLE {$_TABLES['sessions']} CHANGE `md5_sess_id` `md5_sess_id` VARCHAR(128) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['stories']} ADD `subtitle` VARCHAR(128) DEFAULT NULL AFTER `title`;",1);
+    DB_query("ALTER TABLE {$_TABLES['stories']} ADD `story_image` VARCHAR(128) DEFAULT NULL AFTER `alternate_tid`;",1);
+    DB_query("ALTER TABLE {$_TABLES['autotags']} CHANGE `description` `description` VARCHAR(250) NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['rating']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['rating_votes']} CHANGE `item_id` `item_id` VARCHAR(128) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['subscriptions']} CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['rating']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['rating_votes']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['subscriptions']} CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '';",1);
+    DB_query("ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'",1);
+    DB_query("REPLACE INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL)",1);
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.3',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.3' WHERE name='glfusion'",1);
+
+}
+
 function _updateConfig() {
     global $_CONF, $_TABLES;
 
@@ -1533,6 +1573,49 @@ function _updateConfig() {
     $cookiesecure = $_CONF['cookiesecure'];
     $c = config::get_instance();
 
+    require_once $_CONF['path'].'sql/core_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='Core'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$coreConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='Core'");
+        } else {
+            $coreConfigData[$key]['indb'] = 1;
+        }
+    }
+    foreach ($coreConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('Core');
+
+    $site_url = $tcnf['site_url'];
+    $cookiesecure = $tcnf['cookiesecure'];
+    $def_photo = urldecode($_CONF['site_url']) . '/images/userphotos/default.jpg';
+
+    foreach ( $coreConfigData AS $cfgItem ) {
+        if ( $cfgItem['name'] == 'default_photo' )
+            $cfgItem['default_value'] = $def_photo;
+
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+/* ---
+    // Subgroup: Site
     $c->sync('sg_site', NULL, 'subgroup', 0, 0, NULL, 0, TRUE);
 
     $c->sync('fs_site', NULL, 'fieldset', 0, 0, NULL, 0, TRUE);
@@ -1541,7 +1624,7 @@ function _updateConfig() {
     $c->sync('site_name','','text',0,0,NULL,30,TRUE);
     $c->sync('site_slogan','','text',0,0,NULL,40,TRUE);
     $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
-    $c->sync('site_disabled_msg','','text',0,0,NULL,50,TRUE);
+    $c->sync('site_disabled_msg',$site_disabled_msg,'text',0,0,NULL,50,TRUE);
     $c->sync('maintenance_mode',0,'select',0,0,0,60,TRUE);
     $c->sync('copyrightyear','2016','text',0,0,NULL,70,FALSE);
     $c->sync('url_rewrite',FALSE,'select',0,0,1,80,TRUE);
@@ -1884,7 +1967,7 @@ function _updateConfig() {
     $c->sync('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,6,NULL,30,TRUE);
 
     $c->sync('fs_iplookup', NULL, 'fieldset', 7, 7, NULL, 0, TRUE);
-    $c->sync('ip_lookup','/admin/plugins/nettools/whois.php?domain=*','text',7,7,NULL,10,FALSE);
+    $c->sync('ip_lookup','https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=*','text',7,7,NULL,10,FALSE);
 
     $c->sync('fs_perm_story', NULL, 'fieldset', 7, 8, NULL, 0, TRUE);
     $c->sync('default_permissions_story',array(3, 2, 2, 2),'@select',7,8,12,10,TRUE);
@@ -1894,6 +1977,11 @@ function _updateConfig() {
 
     $c->sync('fs_perm_block', NULL, 'fieldset', 7, 10, NULL, 0, TRUE);
     $c->sync('default_permissions_block',array(3, 2, 2, 2),'@select',7,10,12,10,TRUE);
+
+    // hidden system configuration options
+
+    $c->sync('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+-- */
 }
 
 
@@ -2010,6 +2098,58 @@ function _forum_fix_watch() {
     return;
 }
 
+function _searchForId($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $array[$key];
+       }
+   }
+   return null;
+}
+
+function _searchForIdKey($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $key;
+       }
+   }
+   return null;
+}
+
+function _addConfigItem($data = array() )
+{
+    global $_TABLES;
+
+    $Qargs = array(
+                   $data['name'],
+                   $data['set'] ? serialize($data['default_value']) : 'unset',
+                   $data['type'],
+                   $data['subgroup'],
+                   $data['group'],
+                   $data['fieldset'],
+                   ($data['selection_array'] === null) ?
+                    -1 : $data['selection_array'],
+                   $data['sort'],
+                   $data['set'],
+                   serialize($data['default_value']));
+    $Qargs = array_map('DB_escapeString', $Qargs);
+
+    $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+        "subgroup, group_name, selectionArray, sort_order,".
+        " fieldset, default_value) VALUES ("
+        ."'{$Qargs[0]}',"   // name
+        ."'{$Qargs[1]}',"   // value
+        ."'{$Qargs[2]}',"   // type
+        ."{$Qargs[3]},"     // subgroup
+        ."'{$Qargs[4]}',"   // groupname
+        ."{$Qargs[6]},"     // selection array
+        ."{$Qargs[7]},"     // sort order
+        ."{$Qargs[5]},"     // fieldset
+        ."'{$Qargs[9]}')";  // default value
+
+    DB_query($sql);
+}
+
 $use_innodb = false;
 if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
     $use_innodb = true;
@@ -2017,7 +2157,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_162();
+glfusion_163();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

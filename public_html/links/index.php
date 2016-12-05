@@ -322,11 +322,10 @@ function links_list($message)
         }
     }
 
-    if ( $_LI_CONF['linksperpage'] == 1 ) {
+    if ( $_LI_CONF['linksperpage'] == 'x' ) {
         $social_icons = SOC_getShareIcons();
         $linklist->set_var('social_share',$social_icons);
     }
-
 
     $linklist->set_var ('blockfooter',COM_endBlock());
     $linklist->parse ('output', 'linklist');

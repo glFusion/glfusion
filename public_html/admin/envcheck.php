@@ -38,7 +38,7 @@ if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the hosting environment check screen");
+    COM_accessLog ("User {$_USER['username']} tried to access the hosting environment check screen");
     echo $display;
     exit;
 }
@@ -46,9 +46,9 @@ if (!SEC_inGroup ('Root')) {
 
 function _checkEnvironment()
 {
-    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,
+    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,$LANG28,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
 
     $retval = '';
     $permError = 0;
@@ -59,8 +59,6 @@ function _checkEnvironment()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG01['recheck']),
-//        array('url'  => $_CONF['site_admin_url'] .'/filecheck.php',
-//              'text' => $LANG_FILECHECK['filecheck']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -102,10 +100,6 @@ function _checkEnvironment()
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
-
-    $rg = ini_get('register_globals');
-    $sm = ini_get('safe_mode');
-    $ob = ini_get('open_basedir');
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
@@ -367,15 +361,51 @@ function _checkEnvironment()
         ));
     }
 
+    if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
+        $dbInfo['db_driver'] = 'mysqli';
+    } else {
+        $dbInfo['db_driver'] = 'mysql';
+    }
+    $dbInfo['db_version'] = DB_getVersion();
+    $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
+    if ( $result ) {
+        $row = DB_fetchArray($result);
+        $dbInfo['db_collation'] = $row["@@collation_database"];
+        $dbInfo['db_charset'] = $row["@@character_set_database"];
+    } else {
+        $dbInfo['db_collation'] = 'Unknown';
+        $dbInfo['db_charset']   = 'Unknown';
+    }
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_engine'");
+    if ( DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        $dbInfo['db_engine'] = $row['value'];
+    } else {
+        $dbInfo['db_engine'] = 'MyISAM';
+    }
+    foreach ($dbInfo AS $name => $value ) {
+        $T->set_var($name,$value);
+    }
+
+    $T->set_var(array(
+        'lang_status'       => $LANG28['105'],
+        'lang_db_header'    => $LANG01['db_header'],
+        'lang_db_driver'    => $LANG01['db_driver'],
+        'lang_db_version'   => $LANG01['db_version'],
+        'lang_db_engine'    => $LANG01['db_engine'],
+        'lang_db_charset'   => $LANG01['db_charset'],
+        'lang_db_collation' => $LANG01['db_collation'],
+    ));
+
     // extract syndication storage path
     $feedpath = $_CONF['rdf_file'];
     $pos = strrpos( $feedpath, '/' );
     $feedPath = substr( $feedpath, 0, $pos + 1 );
 
     $file_list = array( $_CONF['path_data'],
-                        $_CONF['data_path'].'glfusion.lck',
-                        $_CONF['data_path'].'glfusion_css.lck',
-                        $_CONF['data_path'].'glfusion_js.lck',
+                        $_CONF['path_data'].'glfusion.lck',
+                        $_CONF['path_data'].'glfusion_css.lck',
+                        $_CONF['path_data'].'glfusion_js.lck',
                         $_CONF['path_log'].'error.log',
                         $_CONF['path_log'].'access.log',
                         $_CONF['path_log'].'captcha.log',
@@ -659,8 +689,6 @@ function _bytes_to_mg($bytes, $precision = 2)
     return round ($bytes / pow(1024,2),$precision) . 'M';
 }
 
-
-
 function _checkCacheDir($path,$template,$classCounter)
 {
     $permError = 0;
@@ -741,7 +769,6 @@ function gdVersion($user_ver = 0) {
     $gd_ver = $match[0];
     return $match[0];
 }
-
 
 function _phpinfo()
 {

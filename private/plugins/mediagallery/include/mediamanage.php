@@ -1244,13 +1244,8 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     	$remote_media = DB_getItem($_TABLES['mg_media'],'remote_media','media_id="'.DB_escapeString($media_id).'"');
 	}
 
-	if ( $remote_media ) {
-		$remote_url = isset($_POST['remoteurl']) ? DB_escapeString($_POST['remoteurl']) : '';
-	} else {
-		$remote_url = '';
-	}
+	$remote_url = isset($_POST['remoteurl']) ? DB_escapeString($_POST['remoteurl']) : '';
 
-//    if ( $_MG_CONF['htmlallowed'] ) {
     if ($MG_albums[$album_id]->enable_html ) {
         $media_title    = COM_checkWords($_POST['media_title']);
         $media_desc     = COM_checkWords($_POST['media_desc']);

@@ -246,7 +246,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
         $topic = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".DB_escapeString($tid)."'" );
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 
@@ -284,10 +284,17 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
                 $trbUrl = TRB_makeTrackbackUrl( $row['sid'] );
                 $extensionTags['trackbacktag'] = '<trackback:ping>'.htmlspecialchars($trbUrl).'</trackback:ping>';
             }
+
+            if ( $row['attribution_author'] != "" ) {
+                $author = $row['attribution_author'];
+            } else {
+                $author = COM_getDisplayName( $row['uid'] );
+            }
+
             $article = array( 'title'      => $storytitle,
                               'link'       => $storylink,
                               'uid'        => $row['uid'],
-                              'author'     => COM_getDisplayName( $row['uid'] ),
+                              'author'     => $author,
                               'date'       => $row['modified'],
                               'format'     => $row['postmode'],
                               'topic'      => $topic,
@@ -360,7 +367,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
     if ($frontpage_only) {
         $where .= ' AND frontpage = 1';
     }
-    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
+    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
 
     $content = array();
     $sids = array();
@@ -400,10 +407,16 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
             $trbUrl = TRB_makeTrackbackUrl( $row['sid'] );
             $extensionTags['trackbacktag'] = '<trackback:ping>'.htmlspecialchars($trbUrl).'</trackback:ping>';
         }
+        if ( $row['attribution_author'] != "" ) {
+            $author = $row['attribution_author'];
+        } else {
+            $author = COM_getDisplayName( $row['uid'] );
+        }
+
         $article = array( 'title'      => $storytitle,
                           'link'       => $storylink,
                           'uid'        => $row['uid'],
-                          'author'     => COM_getDisplayName( $row['uid'] ),
+                          'author'     => $author,
                           'date'       => $row['modified'],
                           'format'     => $row['postmode'],
                           'topic'      => $topics[$row['tid']],

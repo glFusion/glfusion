@@ -42,6 +42,7 @@ class dbBackup
 
     private $tablenames;
     private $exclusions;
+    private $prefix;
 
 
     /**
@@ -51,11 +52,12 @@ class dbBackup
     */
     public function __construct($fromCron = false)
     {
-        global $_VARS, $_CONF, $_TABLES;
+        global $_VARS, $_CONF, $_TABLES,$_DB_table_prefix;
 
         $this->setGZip(true);
         $this->fromCron = $fromCron ? true : false;
         $this->backup_dir = $_CONF['backup_path'];
+        $this->prefix = $_DB_table_prefix;
 
     }   // dbBackup()
 
@@ -103,25 +105,28 @@ class dbBackup
     */
     public function getTableList()
     {
-        global $_TABLES, $_VARS;
+        global $_TABLES, $_VARS, $_DB_table_prefix;
 
         // Get all tables in the database
         $mysql_tables = array();
         $res = DB_query('SHOW TABLES');
+        $pfLength = strlen($this->prefix);
         while ($A = DB_fetchArray($res)) {
-            $mysql_tables[] = $A[0];
+            if ( strlen($_DB_table_prefix) > 0 ) {
+                $prefix = substr($A[0],0,$pfLength);
+                if ( $prefix == $_DB_table_prefix )
+                    $mysql_tables[] = $A[0];
+            } else {
+                $mysql_tables[] = $A[0];
+            }
         }
-        // Get only tables that exist and are listed in $_TABLES
-        $this->tablenames = array_intersect($mysql_tables, $_TABLES);
-
+        $this->tablenames = $mysql_tables;
         // Get exclusions and remove from backup list
         $this->exclusions = @unserialize($_VARS['_dbback_exclude']);
         if (!is_array($this->exclusions))
             $this->exclusions = array($this->exclusions);
         $this->tablenames = array_diff($this->tablenames, $this->exclusions);
-
         return $this->tablenames;
-
     }
 
 
@@ -270,12 +275,14 @@ class dbBackup
      */
     public function backupTable($table, $structonly=false, $start = 0)
     {
-        global $_TABLES;
+        global $_TABLES, $_SYSTEM;
 
         $recordCounter = $start;
         $timerStart    = time();
         $sessionCounter = 0;
         $timeout        = 30;
+
+        if (!isset($_SYSTEM['db_backup_rows'])) $_SYSTEM['db_backup_rows'] = 10000;
 
         $maxExecutionTime = @ini_get("max_execution_time");
         $timeout = min($maxExecutionTime,30);
@@ -361,14 +368,22 @@ class dbBackup
                     (0 === strpos(strtolower($struct['Type']), 'mediumint')) ||
                     (0 === strpos(strtolower($struct['Type']), 'int')) ||
                     (0 === strpos(strtolower($struct['Type']), 'timestamp')) ||
-                    (0 === strpos(strtolower($struct['Type']), 'time')) ||
                     (0 === strpos(strtolower($struct['Type']), 'bigint')) ) {
                 $defs[strtolower($struct['Field'])] = (null === $struct['Default']) ? 'NULL' : $struct['Default'];
                 $ints[strtolower($struct['Field'])] = "1";
             }
         }
 
-        $sql = "SELECT * FROM $table LIMIT 18446744073709551610 OFFSET " . $start;
+        $result = DB_query("SELECT COUNT(*) FROM {$db_tablename}");
+        $row = DB_fetchArray($result);
+        $tableRows = $row[0];
+
+        if ( $tableRows > $_SYSTEM['db_backup_rows'] ) {
+            $tableRows =  (int) $_SYSTEM['db_backup_rows'] + 100;
+        }
+
+        $sql = "SELECT * FROM $table LIMIT " . $tableRows . " OFFSET " . $start;
+
         $res = DB_query($sql);
         $table_data = array();
         $insert = "INSERT INTO {$db_tablename} VALUES (";
@@ -393,7 +408,7 @@ class dbBackup
             $recordCounter++;
             $checkTimer = time();
             $elapsedTime = $checkTimer - $timerStart;
-            if ( $elapsedTime > $timeout || $sessionCounter > 10000 ) {
+            if ( $elapsedTime > $timeout || $sessionCounter > $_SYSTEM['db_backup_rows'] ) {
                 $this->close();
                 return array(1,$sessionCounter, $recordCounter);
             }

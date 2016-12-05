@@ -8,6 +8,7 @@
                 toolbar: 'standard',
                 allowedContent: true,
                 contentsCss: '{css_url}',
+								bodyClass: 'tm-container',
                 extraPlugins: 'mediagallery,youtube2',
                 {styleset}
                 height: 300,

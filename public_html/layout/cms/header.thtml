@@ -4,7 +4,7 @@
 {js-header}
 {raw-header}
 </head>
-<body>
+<body style="overflow-y: scroll;">
 {integrated_comments}
 
 <nav class="uk-navbar tm-navbar">

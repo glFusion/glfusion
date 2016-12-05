@@ -55,7 +55,7 @@ $LANG_CP00 = array (
     'glfusion_check'    => 'glFusion v1.4.3 or greater, version reported is <b>%s</b>.',
     'php_check'         => 'PHP v5.2.0 or greater, version reported is <b>%s</b>.',
     'preinstall_confirm' => "For full details on installing CAPTCHA, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/captcha/install_doc.html\">Installation Manual</a>.",
-    'captcha_help'      => 'Enter the characters',
+    'captcha_help'      => 'Solve the Problem',
     'bypass_error'      => "You have attempted to bypass the CAPTCHA processing at this site, please use the New User link to register.",
     'bypass_error_blank' => "You have attempted to bypass the CAPTCHA processing at this site, please complete the CAPTCHA.",
     'entry_error'       => 'The entered CAPTCHA string did not match the characters on the graphic, please try again. <b>This is case sensitive.</b>',
@@ -76,8 +76,7 @@ $LANG_CP00 = array (
     'characters'        => 'Characters',
     'ayah_error'        => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math'      => 'Enter the answer',
-    'captcha_prompt'    => 'Are You Human?',
-    'captcha_help'      => 'Solve the Problem'
+    'captcha_prompt'    => 'Are You Human?'
 );
 
 // Localization of the Admin Configuration UI

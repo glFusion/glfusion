@@ -917,14 +917,14 @@ function GROUP_list($show_all_groups = false)
     }
 
     if ($show_all_groups) {
-        $filter .= '<label for="chk_showall">&nbsp;<input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked">';
+        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked">&nbsp;';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE 1=1",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     } else {
-        $filter .= '<label for="chk_showall">&nbsp;<input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . '>';
+        $filter .= '<label for="chk_showall">&nbsp;<input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . '>&nbsp;';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users','Non-Logged-in Users'))",

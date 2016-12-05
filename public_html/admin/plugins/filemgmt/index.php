@@ -57,7 +57,7 @@ if (!SEC_hasRights('filemgmt.edit')) {
 }
 
 function filemgmt_navbar($selected='') {
-    global $_CONF,$LANG_FM02,$_TABLES, $LANG_ADMIN;
+    global $_CONF,$LANG_FM02,$_TABLES, $LANG_ADMIN,$LANG_FILEMGMT;
 
     $retval = '';
 
@@ -66,7 +66,7 @@ function filemgmt_navbar($selected='') {
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php',
-              'text' => 'File Listing'),
+              'text' => $LANG_FILEMGMT['Filelisting']),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=categoryConfigAdmin',
               'text' => $LANG_FM02['nav2']),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=newfileConfigAdmin',

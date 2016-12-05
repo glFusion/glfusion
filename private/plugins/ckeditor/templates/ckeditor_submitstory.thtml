@@ -11,7 +11,7 @@
             contentsCss: '{css_url}',
             extraPlugins: 'mediagallery',
             {styleset}
-            bodyClass: 'story-body',
+            bodyClass: 'tm-container uk-article tm-article',
             height: 500,
 {!if mbmissing} {# check for mbstring extension in PHP #}
 					filebrowserBrowseUrl :  '',

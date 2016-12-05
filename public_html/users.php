@@ -1124,7 +1124,7 @@ function _userEmailpassword()
     $last = COM_checkSpeedlimit ('password');
     if ($last > 0) {
         $retval .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error');
-$retval .= getpasswordform();
+        $retval .= getpasswordform();
     } else {
         $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
@@ -1370,7 +1370,10 @@ switch ($mode) {
                     COM_errorLog("OAuth Error: " . $consumer->error);
                     echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
                 }
-                $consumer->doAction($oauth_userinfo);
+                if ( $consumer->doAction($oauth_userinfo) == NULL ) {
+                    COM_errorLog("Oauth: Error creating new user in OAuth authentication");
+                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
+                }
             }
 
         //  end OAuth authentication method(s)
@@ -1460,8 +1463,11 @@ switch ($mode) {
                         displayLoginErrorAndAbort(82, $LANG04[113], $LANG04[112]);
                     } else { // Show login form
                         if(($msg != 69) && ($msg != 70)) {
+                            if ( !COM_isAnonUser() ) {
+                                echo COM_refresh($_CONF['site_url'].'/usersettings.php');
+                                exit;
+                            }
                             if ($_CONF['custom_registration'] AND function_exists('CUSTOM_loginErrorHandler') && $msg != 0) {
-                                // Typically this will be used if you have a custom main site page and need to control the login process
                                 $pageBody .= CUSTOM_loginErrorHandler($msg);
                             } else {
                                 $pageBody .= loginform(false, $status);

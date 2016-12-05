@@ -50,6 +50,7 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 $outputHandle = outputHandler::getInstance();
 
 // must load the jquery ui library we want to use.
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/jquery/jquery-ui.min.js');
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui.min.css');
 
 // check to see if we have a custom.css file to load

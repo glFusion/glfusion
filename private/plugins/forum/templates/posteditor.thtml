@@ -241,7 +241,7 @@
 										<input type="hidden" name="postmode" value="{postmode}">
 									</p>
 								</div>
-{!if sticky-prompt}
+{!if sticky_prompt}
 								<div class="uk-width-1-4">
 									<p>
 										<label for="sticky_switch">{$LANG_GF02[msg61]}</label>

@@ -124,8 +124,9 @@ if ( $_DB_dbms == 'mysqli' ) {
     $_DB_dbms = 'mysql';
 }
 // Instantiate the database object
+if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
 $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
-                    $_CONF['default_charset']);
+                    $_CONF['default_charset'], $_CONF['db_charset']);
 unset($_DB_user);
 unset($_DB_pass);
 
@@ -283,8 +284,14 @@ function DB_getItem($table,$what,$selection='')
     } else {
         $result = DB_query("SELECT $what FROM $table");
     }
-    $ITEM = DB_fetchArray($result, true);
-    return $ITEM[0];
+	if ($result === NULL || DB_error() ) {
+		return NULL;
+	} else if (DB_numRows($result) == 0) {
+		return NULL;
+	} else {
+		$ITEM = DB_fetcharray($result);
+		return $ITEM[0];
+	}
 }
 
 /**
@@ -611,7 +618,30 @@ function DB_checkTableExists($table)
 function DB_escapeString($str)
 {
     global $_DB;
-
+    if ( $_DB->getFilter() != 0 ) {
+        $str = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "?", $str);
+        $str = preg_replace('/([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{200D}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F9FF}][\x{FE00}-\x{FEFF}]?/u', '?', $str);
+    }
     return $_DB->dbEscapeString($str);
+}
+
+/**
+* @return     int     the version of the client libraries application as integer
+*/
+function DB_getClientVersion()
+{
+    global $_DB;
+
+    return $_DB->dbGetClientVersion();
+}
+
+/**
+* @return     int     the version of the database application as integer
+*/
+function DB_getServerVersion()
+{
+    global $_DB;
+
+    return $_DB->dbGetServerVersion();
 }
 ?>

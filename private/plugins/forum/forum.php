@@ -46,9 +46,9 @@ $_FF_CONF = array();
 
 $_FF_CONF['pi_name']            = 'forum';
 $_FF_CONF['pi_display_name']    = 'Forum';
-$_FF_CONF['pi_version']         = '3.3.1';
-$_FF_CONF['gl_version']         = '1.6.2';
-$_FF_CONF['pi_url']             = 'http://www.glfusion.org/';
+$_FF_CONF['pi_version']         = '3.3.2';
+$_FF_CONF['gl_version']         = '1.6.3';
+$_FF_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 $_TABLES['ff_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
 $_TABLES['ff_topic']        = $_DB_table_prefix . 'forum_topic';

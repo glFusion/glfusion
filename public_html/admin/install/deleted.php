@@ -45,6 +45,11 @@ $obsoletePrivateDir = array(
 );
 
 $obsoletePublicDir = array(
+// 1.6.3
+    'ckeditor/skins/moono/',
+    'layout/cms/css/ui-lightness/',
+    'layout/cms/css/ui-uikit/',
+// older
     'ckeditor/plugins/filemanager/',
     'fckeditor/',
     'webservices/',
@@ -137,6 +142,12 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// removed in v1.6.3
+    'layout/cms/menu/custom/menu_horizontal_cascading_navigation_mobile.thtml',
+    'javascript/dbbackup.js',
+    'javascript/dbadmin.js',
+    'admin/install/templates/siteconfig.thtml',
+
 // removed in v1.6.2
     'admin/filecheck.php',
     'admin/plugin_upload.php',

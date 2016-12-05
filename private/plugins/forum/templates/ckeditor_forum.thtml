@@ -10,8 +10,8 @@ function loadEditor(id) {
     		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
     		{ name: 'forum', items : [ 'Smiley','NumberedList', 'BulletedList', 'Image','SpecialChar' ] },
     	],
-        contentsCss: '{site_url}/css.php?t={theme}',
-        bodyClass: 'forumpost',
+        contentsCss: [ '{css_url}' ],
+        bodyClass: 'tm-container tm-forum-wrapper',
         removePlugins: 'elementspath',
         resize_enabled: false,
         {smilies}

@@ -400,7 +400,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         }
                     }
                     // determine height / width and aspect
-                    if ( ($width == 'auto' || $width == 0 || $width == -1 || $height == -1) && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
+                    if ( ($width == 'auto' || (int) $width == 0 || (int) $width == -1 || $height == -1) && $row['media_resolution_x'] > 0 && $row['media_resolution_y'] > 0 ) {
                         $videoheight = $row['media_resolution_y'];
                         $videowidth  = $row['media_resolution_x'];
                     } else {
@@ -419,8 +419,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             $orientation = 0;
                         }
                         if ( $orientation == 0 ) {
-                            if ( $width > 0 && $height == 0 ) {
-                                $videoheight = round($width * $ratio);
+                            if ( (int) $width > 0 && $height == 0 ) {
+                                $videoheight = round((int) $width * $ratio);
                                 $videowidth  = $width;
                             } else if ( $width == 0 && $height == 0 ) {
                                 $videoheight = 200 * $ratio;
@@ -455,13 +455,12 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             } else {
                                 $vimeo = '';
                             }
-
                             if ( $align != '' && $align != "center") {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen] '.$classes. '"><span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="video ['.$vimeo.'widescreen] '.$classes. '"><span style="float:' . $align . ';padding:5px;">' . $row['remote_url'] . '</span></div>';
                             } else if ( $align == 'center' ) {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen] ' . $classes. '"><span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="video ['.$vimeo.'widescreen] ' . $classes. '"><span style="text-align:center;padding:5px;">' . $row['remote_url'] . '</span></div>';
                             } else {
-                                $link = '<div class="js-video ['.$vimeo.'widescreen] '.$classes.'"><span style="padding:5px;">' . $row['remote_url'] . '</span></div>';
+                                $link = '<div class="video ['.$vimeo.'widescreen] '.$classes.'"><span style="padding:5px;">' . $row['remote_url'] . '</span></div>';
                             }
                             if ( $destination != 'block' ) {
                                 $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -1287,7 +1286,17 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     'caption'    => $caption,
                     'width'      => $newwidth,
                     'framewidth' => $newwidth + 10,
+                    'media_thumbnail' => $tnImage,
+                    'media_width' => $newwidth,
+                    'media_height' => $newheight,
+                    'classes' => $classes,
+                    'align' => $align,
                 ));
+                if ( $enable_link ) {
+                    $T->set_var('url',$url);
+                    $T->set_var('target',$target);
+                }
+
                 if ( $align == 'left' || $align == 'right' ) {
                     $T->set_var('float','float:' . $align . ';');
                 } else {
@@ -1377,7 +1386,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             } else {
                                 switch ( $src ) {
                                     case 'orig' :
-                                        if ( $_MG_CONF['discard_originals'] == 1 ) {
+                                        if ( $_MG_CONF['discard_original'] == 1 ) {
                                             $default_thumbnail = 'disp/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
                                         } else {
                                             $default_thumbnail = 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
@@ -1473,12 +1482,12 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     return $content;
                 }
 
-                if ( $autotag['tag'] == 'oimage' || $src == 'orig') {
+                if ( $autotag['tag'] == 'oimage' ) { //|| $src == 'orig') {
                     $newwidth = $mediaSize[0];
                     $newheight = $mediaSize[1];
                 } else {
                     if ( $width > 0 ) {
-                        $tn_height = $width;
+                        $tn_height = (int) $width;
                     } else {
                         switch ($src) {
                             case 'orig' :
@@ -1550,13 +1559,14 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     }
                 }
 
-
+                $dolightbox = false;
                 if ( $link == '' ) {
                     if ( $autotag['tag'] != 'image' && ($MG_albums[$aid]->hidden != 1 || $enable_link == 2) && $enable_link != 0) {
                         if ( $enable_link == 2 && $direct_link != '' ) {
                             if ( $_MG_CONF['disable_lightbox'] == true ) {
                                 $link = $tagtext;
                             } else {
+                                $dolightbox = true;
                                 $link = '<a href="' . $direct_link . '" rel="lightbox" data-uk-lightbox title="' . strip_tags(str_replace('$','&#36;',$caption)) . '">' . $tagtext . '</a>';
                             }
                         } else {
@@ -1588,7 +1598,26 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     'caption'   => $caption,
                     'width'     => $newwidth,
                     'framewidth' => $newwidth + 10,
+
+                    'media_thumbnail' => $media_thumbnail,
+                    'media_width' => $newwidth,
+                    'media_height' => $newheight,
+                    'classes' => $classes,
+                    'align' => $align,
                 ));
+                if ( $enable_link ) {
+                    $T->set_var('url',$url);
+                    $T->set_var('target',$target);
+                }
+                if ( $dolightbox ) {
+                    $T->set_var(array(
+                        'lightbox' => true,
+                        'url' => $direct_link,
+                    ));
+                } else {
+                    $T->unset_var('lightbox');
+                }
+
                 if ( $align == 'left' || $align == 'right' ) {
                     $T->set_var('float','float:' . $align . ';');
                 } else {

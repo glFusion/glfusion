@@ -164,7 +164,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion �� ��������� �� ������� �������,�������,� ����� �������. ������ �� ��� ��������� ���� 8MB ���� ��������� ����� �� �������.',
     'use_utf8' => '����������� UTF-8',
     'welcome_help' => '����� ����� ��� ������������� ��������� �� glFusion CMS. ��� ������ �� ����������� ��� glFusion ����,�� �������� ���� ����������� ����, ��� �� ��������� �� ����������� Geekblog 1.4.1 ����.<br /><br />���� �������� ���� �� ����������� � ��������� <strong>������</strong>.',
-    'wizard_version' => 'v'.GVERSION.' ������������� ���������',
+    'wizard_version' => 'v1.6.0 ������������� ���������',
     'system_path_prompt' => '�������� ������ ��� ���  glFusion\ <strong>private/</strong> directory.<br /><br />���� ���������� ������� <strong>db-config.php.dist</strong> ��� <strong>db-config.php</strong> ����.<br /><br />�������: /home/www/glfusion/private ��� c:/www/glfusion/private.<br /><br /><strong>���������:</strong> ������ ��� ���  <strong>public_html/</strong> <i>(He <strong>private/</strong>)</i> ������������ �������� �� �:<br /><br />%s<br /><br /><strong>��� ���������</strong> �� ��������� �� ������� ����� �� ��������. �� � ����� �� �� ���������� ���� ������, ��������� �� �� �������� �����������.',
     'advanced_settings' => '��� ���������',
     'log_path' => '��� ��� logs',
@@ -217,7 +217,9 @@ $LANG_INSTALL = array(
     'delete_files' => 'Delete Files',
     'cancel' => 'Cancel',
     'show_files_to_delete' => 'Show Files to Delete',
-    'skip' => 'Skip'
+    'skip' => 'Skip',
+    'no_utf8' => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.'
 );
 
 // +---------------------------------------------------------------------------+

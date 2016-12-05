@@ -471,6 +471,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $title = (is_array($text_arr) AND !empty($text_arr['title'])) ? $text_arr['title'] : '';
     $help_url = (is_array($text_arr) AND !empty($text_arr['help_url'])) ? $text_arr['help_url'] : '';
     $form_url = (is_array($text_arr) AND !empty($text_arr['form_url'])) ? $text_arr['form_url'] : '';
+    $no_data = (is_array($text_arr) AND !empty($text_arr['no_data'])) ? $text_arr['no_data'] : '';
 
     // determine what extra options we should use (search, limit, paging)
     if (isset($text_arr['has_extras']) && $text_arr['has_extras']) { # old option, denotes all
@@ -551,12 +552,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         } else {
             $orderby = $defsort_arr['field']; // not set - use default (this could be null)
             $orderidx_link = '';
-            $orderbyidx = '';
+            $orderbyidx = -1;
         }
     } else {
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
         $orderidx_link = '';
-        $orderbyidx = '';
+        $orderbyidx = -1;
     }
 
     // set sort direction.  defaults to ASC
@@ -675,6 +676,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
         // set the default sql filter (if any)
         $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
+        $groupbysql = (isset($query_arr['group_by']) && !empty($query_arr['group_by'])) ? " GROUP BY {$query_arr['group_by']} " : '';
         // now add the query fields
         if (!empty($query)) { # add query fields with search term
             $filtersql .= " AND (";
@@ -687,7 +689,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             }
             $filtersql .= ")";
         }
-        $num_pagessql = $sql . $filtersql;
+
+        $num_pagessql = $sql . $filtersql . $groupbysql;
         $num_pagesresult = DB_query($num_pagessql);
         $num_rows = DB_numRows($num_pagesresult);
         $num_pages = ceil ($num_rows / $limit);
@@ -709,13 +712,17 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if ( !isset($filtersql) ) {
         $filtersql = '';
     }
+    if ( !isset($groupbysql) ) {
+        $groupbysql = '';
+    }
     if ( !isset($orderbysql) ) {
         $orderbysql = '';
     }
     if ( !isset($limitsql) ) {
         $limitsql = '';
     }
-    $sql .= "$filtersql $orderbysql $limitsql;";
+    $sql .= "$filtersql $groupbysql $orderbysql $limitsql;";
+
     $result = DB_query($sql);
 
     // number of rows/records to display
@@ -785,11 +792,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     if ($nrows==0) { # there is no data. return notification message.
-        $message = (isset($no_data)) ? $text_arr['no_data'] : $LANG_ADMIN['no_results'];
+        $message = (isset($no_data)) ? $no_data : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
-    } else {
-//        $footer_cols = ($chkselect) ? $ncols + 1 : $ncols;
-//        $admin_templates->set_var('footer_row', '<tr><td colspan="' . $footer_cols . '"><div style="margin:2px 0 2px 0;border-top:1px solid #cccccc"></div></td></tr>');
     }
 
     // if we displayed data, and chkselect option is available, display the
