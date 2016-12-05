@@ -1,4 +1,4 @@
-## v1.6.3 (unreleased)
+## v1.6.3 (December 4, 2016)
   - Fixed issue in forum posts where url parsing could cause errors on auto tags
   - Fixed issue where deleting a story did not properly clear the story cache
   - Auto tags can now see who is calling them (i.e.; Media Gallery calling the Tag autotag - Tag can now see that Media Gallery is calling)
