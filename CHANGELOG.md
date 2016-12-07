@@ -1,4 +1,4 @@
-## v1.6.3.pl1 (December XX, 2016)
+## v1.6.3.pl1 (December 7, 2016)
   - mgslider auto tag cleanup
   - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
   - Static page editor did not display error messages in proper format (no styling)
