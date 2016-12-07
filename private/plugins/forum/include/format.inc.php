@@ -260,7 +260,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
             $codeblock = '</p>' . _ff_geshi_formatted($content,strtoupper(strip_tags($attributes['default']))) . '<p>';
         }
     } else {
-        $codeblock = '<pre class="codeblock">'  . @htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()) . '</pre>';
+        $codeblock = '<pre class="codeblock">'  . $content . '</pre>';
     }
 
     $codeblock = str_replace('{','&#123;',$codeblock);
@@ -415,7 +415,7 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
 
 function _ff_geshi_formatted($str,$type='PHP') {
     global $_CONF;
-
+    $str = htmlspecialchars_decode($str);
     include_once($_CONF['path'].'lib/geshi/geshi.php');
     $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
     $geshi->set_header_type(GESHI_HEADER_DIV);
