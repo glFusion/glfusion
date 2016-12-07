@@ -765,7 +765,11 @@ function forum_xchsmilies($message,$reverse=false) {
     '<img style="vertical-align:middle;" src="images/smilies/mrgreen.gif" alt="Mr. Green"/>');
 
     if (!$reverse) {
-        $message = str_replace($search, $replace, $message);
+        $counter = 0;
+        foreach ( $search AS $emoticon) {
+            $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon) . "#", $replace[$counter], $message);
+            $counter++;
+        }
     } else {
         $message = str_replace($replace, $search, $message);
     }
