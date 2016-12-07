@@ -181,6 +181,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $args['sp_search'] = 0;
     }
 
+    if ( $args['sp_onmenu'] != 1 ) {
+        $args['sp_onmenu'] = 0;
+    }
     if ($args['gl_svc']) {
         // Permissions
         if (!isset($args['perm_owner'])) {
@@ -203,10 +206,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         } else {
             $args['perm_anon'] = COM_applyBasicFilter($args['perm_anon'], true);
         }
-
         if (!isset($args['sp_onmenu'])) {
-            $args['sp_onmenu'] = '';
-        } else if (($args['sp_onmenu'] == 'on') && empty($args['sp_label'])) {
+            $args['sp_onmenu'] = 0;
+        } else if (($args['sp_onmenu'] == 1) && empty($args['sp_label'])) {
             $svc_msg['error_desc'] = 'Menu label missing';
             return PLG_RET_ERROR;
         }
@@ -302,16 +304,15 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $output .= COM_siteFooter ();
         $svc_msg['error_desc'] = 'Duplicate ID';
         return PLG_RET_ERROR;
-    } elseif (!empty ($sp_title) && !empty ($sp_content)) {
+     } elseif (!empty ($sp_title) && !empty ($sp_content)) {
         if (empty ($sp_hits)) {
             $sp_hits = 0;
         }
 
-        if ($sp_onmenu == 'on') {
-            $sp_onmenu = 1;
-        } else {
-            $sp_onmenu = 0;
+        if ( $sp_onmenu == 1 && empty($sp_label) ) {
+            $sp_label = $sp_title;
         }
+
         if ($sp_nf == 'on') {
             $sp_nf = 1;
         } else {
@@ -391,7 +392,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
         PLG_itemSaved($sp_id,'staticpages');
         COM_setMsg( $LANG_STATIC['page_saved'], 'info' );
-
+        CACHE_remove_instance('menu');
         $url = COM_buildURL($_CONF['site_url'] . '/page.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,

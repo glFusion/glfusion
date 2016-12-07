@@ -7,6 +7,16 @@ function actionClick( $action ) {
 $('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
 $('#frmstory').trigger('submit', [ { $action: true } ]);
 }
+$(function(){
+$('#sp_onmenu').on('change', function(){
+if($(this).is(':checked'))
+{
+$('#sp_label').prop('disabled', false);
+} else {
+$('#sp_label').prop('disabled', true);
+}
+});
+});
 </script>
 <div class="tm-admin">
 	{wysiwyg}
@@ -106,6 +116,20 @@ $('#frmstory').trigger('submit', [ { $action: true } ]);
 					<label class="uk-form-label" for="sp_search">{$LANG_STATIC[search]}</label>
 					<div class="uk-form-controls">
 						<input type="checkbox" name="sp_search" id="sp_search" value="1"{sp_search_checked}>
+					</div>
+				</div>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="sp_onmenu">{lang_addtomenu}</label>
+					<div class="uk-form-controls">
+						<input type="checkbox" name="sp_onmenu" id="sp_onmenu" value="1"{sp_onmenu_checked}>
+					</div>
+				</div>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="sp_label">{lang_label}</label>
+					<div class="uk-form-controls">
+						<input class="uk-form-width-large" type="text" name="sp_label" id="sp_label" value="{sp_label}">
 					</div>
 				</div>
 

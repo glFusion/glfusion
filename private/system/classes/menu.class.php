@@ -410,6 +410,12 @@ class menuElement {
         if ( $this->group_id == 1 && !isset($_GROUPS['Root']) ) {
             return NULL;
         }
+        // static page fix
+        if ($this->type == ET_PLUGIN && $this->subtype == 'staticpages') {
+            $this->type = ET_FUSION_MENU;
+            $this->subtype = STATICPAGE_MENU;
+        }
+
         switch ( $this->type ) {
 
             case ET_SUB_MENU :

@@ -313,7 +313,8 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     }
     $filter->setPostmode($postmode);
     if ( $postmode == 'text') {
-        $bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'bbcode_htmlspecialchars');
+        // filter all code prior to replacements
+        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, 'bbcode_htmlspecialchars');
     }
     if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
         $str = str_replace('<pre>','[code]',$str);
@@ -323,14 +324,15 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
 
-    if ( ! ($status & DISABLE_URLPARSE ) ) {
-        $bbcode->addParser (array('block','inline','link','listitem'), array (&$filter, 'linkify'));
+    if ( ! ($status & DISABLE_SMILIES ) ) {
+        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_replacesmilie');      // calls replacesmilie on all text blocks
     }
 
-//    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_fixtemplate');
+    if ( ! ($status & DISABLE_URLPARSE ) ) {
+        $bbcode->addParser (array('block','inline','listitem'), array (&$filter, 'linkify'));
+    }
 
     if ( ! ( $status & DISABLE_BBCODE ) ) {
-
         $bbcode->addParser ('list', 'bbcode_stripcontents');
         $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
                           'code', array ('listitem', 'block', 'inline', 'link'), array ());
@@ -372,11 +374,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
     }
 
-    $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacetags');
-
-    if ( ! ($status & DISABLE_SMILIES ) ) {
-        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_replacesmilie');      // calls replacesmilie on all text blocks
-    }
+    $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
 
     $bbcode->setRootParagraphHandling (true);
 
