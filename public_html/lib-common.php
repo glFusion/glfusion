@@ -63,7 +63,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.6.3');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
@@ -1873,15 +1873,7 @@ function COM_errorLog( $logentry, $actionid = '' )
                 break;
 
            case 2:
-                if ( class_exists('Template') ) {
-                    $retval .= COM_startBlock( $LANG01[55] . ' ' . $timestamp, '',
-                                   COM_getBlockTemplate( '_msg_block', 'header' ))
-                            . nl2br( $logentry )
-                            . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                                  'footer' ));
-                } else {
-                    $retval .= nl2br($logentry);
-                }
+                $retval .= COM_showMessageText($logentry,'', true, 'error');
                 break;
 
             case 3:

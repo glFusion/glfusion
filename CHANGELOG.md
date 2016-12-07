@@ -1,3 +1,10 @@
+## v1.6.3.pl1 (December XX, 2016)
+  - mgslider auto tag cleanup
+  - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
+  - Static page editor did not display error messages in proper format (no styling)
+  - Static page 'Add to Menu' option was not visible
+  - Menu builder did not properly create static page menus
+
 ## v1.6.3 (December 4, 2016)
   - Fixed issue in forum posts where url parsing could cause errors on auto tags
   - Fixed issue where deleting a story did not properly clear the story cache

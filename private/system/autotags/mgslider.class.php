@@ -27,7 +27,6 @@ class autotag_mgslider extends BaseAutotag {
 
         $retval     = '';
         $skip       = 0;
-
         $template        = 'mgslider.thtml';
         $overlayPosition = 'top'; // top, bottom, left, right, center
         $kenBurns        = false;
@@ -92,15 +91,17 @@ class autotag_mgslider extends BaseAutotag {
                 break;
         }
 
-//        $options = 'height:' . $height . ',';
+        $options = '';
         $T->set_var('overlay_position',$overlay_position);
         if ( $kenBurns == true ) {
             $options .= 'kenburns:true,';
         } else {
             $options .= 'kenburns:false,';
         }
-        if ( $autoPlay == true ) {
+        if ( $autoPlay == 1 ) {
             $options .= 'autoplay:true';
+        } else {
+            $options .= 'autoplay:false';
         }
         $T->set_var('options',$options);
 
