@@ -48,7 +48,7 @@ $LANG_SX00 = array(
     'adminc' => 'Comandos de Administración:',
     'mblack' => 'Mi Lista Negra:',
     'rlinks' => 'Enlaces Relacionados:',
-    'e3' => 'Para añadir las palabras desde la lista de palabras censuradas de Geeklogs CensorList Pulsa el Botón:',
+    'e3' => 'Para añadir las palabras desde la lista de palabras censuradas de glFusions CensorList Pulsa el Botón:',
     'addcen' => 'Añadir Lista de Palabras Censuradas',
     'addentry' => 'Añadir dato',
     'e1' => 'Para Borrar el dato cliquéalo.',
@@ -108,7 +108,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Importar la lista Negra-MT inicial',
     'import_success' => '<p>Se ha importado con éxito los datos de la Lista Negra de %d.',
     'import_failure' => '<p><strong>Error:</strong> No se han encontrado datos.',
-    'allow_url_fopen' => '<p>Lo sentimos, la configuración de tu servidor de web no permite la lectura de ficheros remotos (<code>allow_url_fopen</code> is off). Por favor, descarga la Lista Negra desde el siguiente URL y súbelo al directorio de "datos" de Geeklog\'s, <tt>%s</tt>, antes de intentarlo de nuevo:',
+    'allow_url_fopen' => '<p>Lo sentimos, la configuración de tu servidor de web no permite la lectura de ficheros remotos (<code>allow_url_fopen</code> is off). Por favor, descarga la Lista Negra desde el siguiente URL y súbelo al directorio de "datos" de glFusion\'s, <tt>%s</tt>, antes de intentarlo de nuevo:',
     'documentation' => 'Documentación del Plugin de Spam-X',
     'emailmsg' => "Un nuevo comentario de spam ha sido enviado en/desde \"%s\"\nUser UID:\"%s\"\n\nContent:\"%s\"",
     'emailsubject' => 'Spam post at %s',
@@ -161,6 +161,7 @@ $LANG_confignames['spamx'] = array(
     'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
     'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
+    'slc_max_links' => 'Maximum Links allowed in post',
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -170,6 +171,7 @@ $LANG_configsubgroups['spamx'] = array(
 $LANG_fs['spamx'] = array(
     'fs_main' => 'General',
     'fs_sfs' => 'Foro',
+    'fs_slc' => 'Spam Link Counter',
 );
 
 $LANG_configselects['spamx'] = array(
