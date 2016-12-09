@@ -40,7 +40,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '5.3.0');
+    define('SUPPORTED_PHP_VER', '5.3.3');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.0.15');
@@ -1405,6 +1405,24 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("REPLACE INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL)",1);
 
             $current_fusion_version = '1.6.3';
+
+        case '1.6.3' :
+        case '1.6.3.pl1' :
+        case '1.6.3.pl2' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->load_baseconfig();
+            $c->initConfig();
+            $tmpConf = $c->get_config('Core');
+            if ( stristr($tmpConf['htmlfilter_story'],'array') !== FALSE ) {
+                $newfilter = serialize("div[class],h1,h2,h3,pre,br,p[style],b[style],s,strong[style],i[style],em[style],u[style],strike,a[style|href|title|target],ol[style|class],ul[style|class],li[style|class],hr[style],blockquote[style],img[style|alt|title|width|height|src|align],table[style|width|bgcolor|align|cellspacing|cellpadding|border],tr[style],td[style],th[style],tbody,thead,caption,col,colgroup,span[style|class],sup,sub");
+                DB_query("UPDATE {$_TABLES['conf_values']} SET value='".$newfilter."' WHERE name='htmlfilter_story' AND group_name='Core'",1);
+            }
+            if ( stristr($tmpConf['htmlfilter_root'],'array') !== FALSE ) {
+                $newfilter = serialize("div[style|class],span[style|class],table,tr,td,th,img[src|width|height|class|style]");
+                DB_query("UPDATE {$_TABLES['conf_values']} SET value='".$newfilter."' WHERE name='htmlfilter_root' AND group_name='Core'",1);
+            }
+            $current_fusion_version = '1.6.4';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
