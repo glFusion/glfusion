@@ -38,32 +38,32 @@ if (!defined ('GVERSION')) {
 $LANG_FM00 = array (
     'access_denied'     => 'Acceso Denegado',
     'access_denied_msg' => 'Sólo los administradores tiene acceso a esta página.',
-    'admin'             => 'Plugin Admin',
-    'install_header'    => 'Instalar/Desinstalar Plugin',
-    'installed'         => 'El Plugin y el Bloque están instalados,<p><i>Enjoy,<br><a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
-    'uninstalled'       => 'El Plugin no esta instalado',
-    'install_success'   => 'Installación completa<p><b>Next Steps</b>:
-        <ol><li>Use el Filemgmt Admin par completar la configuración</ol>
+    'admin'             => 'Administración de Extensiones',
+    'install_header'    => 'Instalar/Desinstalar Extensión',
+    'installed'         => 'La extensión y el Bloque están instalados,<p><i>Disfrutala,<br><a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
+    'uninstalled'       => 'La Extensión no esta instalada',
+    'install_success'   => 'Instalación completa <p><b>Siguientes Pasos</b>:
+        <ol><li>Usa el Filemgmt Admin para completar la configuración</ol>
         <p>Revisa las <a href="%s">notas de instalación</a>para mas información.',
     'install_failed'    => 'Instalación fallida -- revisa el error.log .',
-    'uninstall_msg'     => 'Plugin instalado satisfactoriamente',
+    'uninstall_msg'     => 'Extensión desinstalada correctamente',
     'install'           => 'Instalar',
     'uninstall'         => 'Desinstalar',
-    'editor'            => 'Editor del Plugin',
+    'editor'            => 'Editor de la Extensión',
     'warning'           => 'Advertencia de desinstalación',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin está instalado y habilitado.<br>deshabilitar primero si quiere desinstalarlo.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor del Plugin </a></div',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">La Extensión está instalada y habilitada.<br>deshabilitala primero si quieres desinstalarla.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor de la Extensión </a></div',
     'WhatsNewLabel'    => 'Nuevas Descargas',
     'WhatsNewPeriod'   => 'últimos %s días',
-    'new_upload'        => 'New File submitted at ',
-    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'new_upload'        => 'Archivo enviado el ',
+    'new_upload_body'   => 'Un archivo ha sido enviado a la cola de carga el ',
     'details'           => 'Detalles',
     'filename'          => 'Documento',
-    'uploaded_by'       => 'Uploaded By',
+    'uploaded_by'       => 'Subido Por',
 );
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
+    'instructions' => 'Para modificar o borrar un archivo, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para ver o modificar categorías, selecciona la opción: <b>Categorías</b> arriba.',
     'nav1'  => 'Opciones',
     'nav2'  => 'Categorías',
     'nav3'  => 'Cargar Archivo',
@@ -86,8 +86,8 @@ $LANG_FILEMGMT = array(
     'downloads' => "Descargas",
     'report' => "Top descargas",
     'usermenu1' => "Descargas",
-    'usermenu2' => "&nbsp;&nbsp;Top rankeadas",
-    'usermenu3' => "Subir un archivo",
+    'usermenu2' => "&nbsp;&nbsp;Mejor votadas",
+    'usermenu3' => "Cargar Archivos",
     'admin_menu' => "Descargas",
     'writtenby' => "Escrito por",
     'date' => "Última actualización",
@@ -96,8 +96,8 @@ $LANG_FILEMGMT = array(
     'hits' => "Accesos",
     'Filelisting' => "Lista de archivos",
     'DownloadReport' => "Historial de descargas para archivos simples",
-    'StatsMsg1' => "Top 10 de archivos accesados",
-    'StatsMsg2' => "Parece que no hay archivos definidos en el plugin filemgmt o nadie ha accesado nunca a el.",
+    'StatsMsg1' => "Archivos más accesados",
+    'StatsMsg2' => "Parece que no hay archivos definidos en la Extensión filemgmt o nadie ha accesado nunca a ella.",
     'usealtheader' => "Use Alt. Header",
     'url' => "URL",
     'edit' => "Modificar",
@@ -107,7 +107,7 @@ $LANG_FILEMGMT = array(
     'blankpage' => "Página en blanco",
     'noblocks' => "Sin bloques",
     'leftblocks' => "Bloque izquierdo",
-    'addtomenu' => 'Agregar al Menu',
+    'addtomenu' => 'Agregar al Menú',
     'label' => 'Etiqueta',
     'nofiles' => 'Número de archivos en el depósito (Descargas)',
     'save' => 'Guardar',
@@ -116,22 +116,22 @@ $LANG_FILEMGMT = array(
     'cancel' => 'Cancelar',
     'access_denied' => 'Acceso Denegado',
     'invalid_install' => 'Alguien ha intentado accesar ilegalmente a la página de instalación del Administrador de Archivos. Id del usuario: ',
-    'start_install' => 'Intentando instalar el Plugin Filemgmt ',
-    'start_dbcreate' => 'Intentando crear una base de datos para el Plugin Filemgmt',
+    'start_install' => 'Intentando instalar la Extensión Filemgmt ',
+    'start_dbcreate' => 'Intentando crear una base de datos para la Extensión File mgmt',
     'install_skip' => '... saltado por filemgmt.cfg',
-    'access_denied_msg' => 'Estás tratando de accesar ilegalmente a la página del administrador de archivos.  Todos los intentos ilegales de accesar a esta página estan siendo registrados',
-    'installation_complete' => 'Instalacion Finalizada',
-    'installation_complete_msg' => 'Las estructuras de datos para el plugin File Mgmt  para glFusion han sido instaladas satisfactoriamente!  si alguna vez necesitas desinstalar este plugin , por favor lee el archivo readme.',
-    'installation_failed' => 'Instalacion Fallida',
-    'installation_failed_msg' => 'La instalación del plugin File Mgmt  ha fallado.  Por favor revisa el glFusion error.log',
+    'access_denied_msg' => 'Estás tratando de accesar ilegalmente a la página del administrador de archivos.  Todos los intentos ilegales de accesar a esta página están siendo registrados',
+    'installation_complete' => 'Instalación Finalizada',
+    'installation_complete_msg' => 'Las estructuras de datos para la Extensión File Mgmt  para glFusion han sido instaladas satisfactoriamente!  si alguna vez necesitas desinstalar esta extensión , por favor lee el archivo readme.',
+    'installation_failed' => 'Instalación Fallida',
+    'installation_failed_msg' => 'La instalación de la extensión File Mgmt ha fallado. Por favor revisa el: error.log de glFusion ',
     'system_locked' => 'Sistema cerrado',
-    'system_locked_msg' => 'La instalación del plugin File Mgmt  esta realizada y cerrada.  Si estas intentando desinstalar el plugin, por favor lee el archivo Readme que viene con este plugin',
-    'uninstall_complete' => 'Desinstalación Completada',
-    'uninstall_complete_msg' => 'Las estructuras de data para el plugin File Mgmt han sido removidas de la base de datos<br><br>Necesitas borrar los archivos del servidor manualmente.',
+    'system_locked_msg' => 'La instalación de la extensión File Mgmt esta realizada y cerrada. Si estas intentando desinstalar la extensión, por favor lee el archivo Readme que viene con ella',
+    'uninstall_complete' => 'Desinstalación Completa',
+    'uninstall_complete_msg' => 'Las estructuras de datos para la extensión File Mgmt han sido removidas de la base de datos<br><br>Necesitas borrar los archivos del servidor manualmente.',
     'uninstall_failed' => 'Desinstalación fallida.',
     'uninstall_failed_msg' => 'La Desinstalación ha fallado.  Por favor revisa tu glFusion error.log ',
-    'install_noop' => 'Instalar Plugin',
-    'install_noop_msg' => 'La instalación del  plugin filemgmt install fue ejecutava pero no habia nada que hacer.<br><br>Revise su archivo del plugin install.cfg .',
+    'install_noop' => 'Instalar Extensión',
+    'install_noop_msg' => 'La instalación de la extensión filemgmt fue ejecutada pero no había nada que hacer.<br><br>Revisa el archivo: install.cfg de la extensión.',
     'all_html_allowed' => 'Todo HTML es permitido',
     'no_new_files'  => 'No hay archivos nuevos',
     'no_comments'   => 'No hay comentarios nuevos',
@@ -183,10 +183,10 @@ $LANG_configsubgroups['filemgmt'] = array(
 );
 $LANG_fs['filemgmt'] = array(
     'fs_public'             => 'Public FileMgmt Settings',
-    'fs_admin'              => 'FileMgmt Admin Settings',
-    'fs_permissions'        => 'Default Permissions',
-    'fm_access'             => 'FileMgmt Access Control',
-    'fm_general'            => 'FileMgmt General Settings',
+    'fs_admin'              => 'Admin Settings',
+    'fs_permissions'        => 'Permisos',
+    'fm_access'             => 'Control de Accesos',
+    'fm_general'            => 'General',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
@@ -198,15 +198,15 @@ $LANG_configselects['filemgmt'] = array(
 
 
 
-$PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Instalación abortada<br>Archivo: plugins/filemgmt/filemgmt.php no está escribible';
-$PLG_filemgmt_MESSAGE3 = 'Este plugin requiere la versión 1.4 de glFusion o una mas nueva, actualización abortada.';
-$PLG_filemgmt_MESSAGE4 = 'versión del Plugin  1.5 código no detectado - actualización abortada.';
-$PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin actualización abortada<br>versión actual no es la 1.3';
+$PLG_filemgmt_MESSAGE1 = 'Instalación de la extensión Filemgmt abortada<br>El archivo: plugins/filemgmt/filemgmt.php no se puede escribir';
+$PLG_filemgmt_MESSAGE3 = 'Esta extensión requiere la versión 1.0 de glFusion o una mas nueva, actualización abortada.';
+$PLG_filemgmt_MESSAGE4 = 'Código de la versión 1.5 de la Extensión no detectado - actualización abortada.';
+$PLG_filemgmt_MESSAGE5 = 'Actualización de la extensión Filemgmt abortada<br>la versión actual no es la 1.3';
 
 
 // Language variables used by the plugin - general users access code.
 
-define("_MD_THANKSFORINFO","Gracias por la información. Daremos un vistazo a tu petición elo más rapido posible.");
+define("_MD_THANKSFORINFO","Gracias por la información. Daremos un vistazo a tu petición lo más rápido posible.");
 define("_MD_BACKTOTOP","Volver al top de descargas");
 define("_MD_THANKSFORHELP","Gracias por ayudar a mantener la integridad de las descargas.");
 define("_MD_FORSECURITY","Por razones de seguridad tu nombre de usuario y tu dirección IP serán grabadas.");
@@ -228,8 +228,8 @@ define("_MD_TOPRATED","Top rankeado");
 define("_MD_NEWTHISWEEK","Nuevo esta semana");
 define("_MD_UPTHISWEEK","Actualizado esta semana");
 
-define("_MD_POPULARITYLTOM","Popularidad (De menos a más Hits)");
-define("_MD_POPULARITYMTOL","Popularidad (De más a menos Hits)");
+define("_MD_POPULARITYLTOM","Popularidad (De menos a más Accesos)");
+define("_MD_POPULARITYMTOL","Popularidad (De más a menos Accesos)");
 define("_MD_TITLEATOZ","Título (A hasta la Z)");
 define("_MD_TITLEZTOA","Título (Z hasta la A)");
 define("_MD_DATEOLD","Fecha (Archivos antiguos mostrados de primero)");
@@ -299,12 +299,12 @@ define("_MD_INTFILEFOUND","Aqui hay una descarga interesante que he encontrado e
 
 define("_MD_RECEIVED","Hemos recibido la información de tu descarga. gracias!");
 define("_MD_WHENAPPROVED","Usted recibirá un E-mail cuando sea aprobado.");
-define("_MD_SUBMITONCE","Envia tu archivo solo una vez.");
+define("_MD_SUBMITONCE","Envía tu archivo solo una vez.");
 define("_MD_APPROVED", "Tu archivo ha sido aprobado");
-define("_MD_ALLPENDING","Toda la información de los archivos serán publicados despues de su aprobación.");
+define("_MD_ALLPENDING","Toda la información de los archivos serán publicados después de su aprobación.");
 define("_MD_DONTABUSE","El nombre de usuario e IP son grabados, por favor no abuse del sistema.");
-define("_MD_TAKEDAYS","Tómara varios días para que su archivo sean agregados al sistema.");
-define("_MD_FILEAPPROVED", "Su archivo ha sifo agregado a las descargas");
+define("_MD_TAKEDAYS","Tomara varios días para que su archivo sean agregados al sistema.");
+define("_MD_FILEAPPROVED", "Su archivo ha sido agregado a las descargas");
 
 define("_MD_RANK","Posición");
 define("_MD_CATEGORY","Categoría");
@@ -324,7 +324,7 @@ define("_MD_PREVIOUS","Anterior");
 define("_MD_NEXT","Siguiente");
 define("_MD_NOMATCH","No hay coincidencias encontradas para");
 
-define("_MD_TOP10","Top 10 de %s ");// %s is a downloads category name
+define("_MD_TOP10","Los 10 mas de %s ");// %s is a downloads category name
 define("_MD_CATEGORIES","Categorías");
 
 define("_MD_SUBMIT","Enviar");
@@ -332,7 +332,7 @@ define("_MD_CANCEL","Cancelar");
 
 define("_MD_BYTES"," Bytes");
 define("_MD_ALREADYREPORTED","Usted ya ha enviado un reporte para este link dañado.");
-define("_MD_MUSTREGFIRST","Disculpe, usted no tiene los permisos para realizar esta acción.<br>Por favor registrese o ingrese al sistema primero!");
+define("_MD_MUSTREGFIRST","Disculpa, no tienes los permisos para realizar esta acción.<br>Por favor registrate o ingresa al sistema primero!");
 define("_MD_NORATING","Sin selección de calificación.");
 define("_MD_CANTVOTEOWN","Usted no puede votar en su propio archivo.<br>Todos los votos son grabados y revisados.");
 
@@ -351,7 +351,7 @@ define("_MD_ADDMODCATEGORY","<b>Categorías:</b> agregar, Modificar, y borrar Ca
 define("_MD_DLSWAITING","Descargas esperando por validación");
 define("_MD_BROKENREPORTS","Reporte de  archivos dañados");
 define("_MD_MODREQUESTS","Descargar las peticiones de modificaciones");
-define("_MD_EMAILOPTION","Envio de email si el archivo es aprobado: ");
+define("_MD_EMAILOPTION","Envío de e-mail si el archivo es aprobado: ");
 define("_MD_COMMENTOPTION","Permitir comentarios:");
 define("_MD_SUBMITTER","Enviado por: ");
 define("_MD_DOWNLOAD","Descargar");
@@ -359,8 +359,8 @@ define("_MD_FILELINK","Dirección del archivo");
 define("_MD_SUBMITTEDBY","Enviado por: ");
 define("_MD_APPROVE","Aprobar");
 define("_MD_DELETE","Borrar");
-define("_MD_NOSUBMITTED","No hay nuevas descargas enviadas.");
-define("_MD_ADDMAIN","Agregar categoría principal");
+define("_MD_NOSUBMITTED","No hay archivos enviados.");
+define("_MD_ADDMAIN","Agregar Categoría Principal");
 define("_MD_TITLEC","Título: ");
 define("_MD_CATSEC", "Pueden ver la categoría: ");
 define("_MD_UPLOADSEC", "Pueden subir archivos: ");
@@ -368,19 +368,19 @@ define("_MD_IMGURL","<br>Tamaño de la imagen <font size='-2'> (Localizado en el
 define("_MD_ADD","Agregar");
 define("_MD_ADDSUB","Agregar SUB-Categoría");
 define("_MD_IN","Divisón de");
-define("_MD_ADDNEWFILE","Agregar nuevo archivo");
+define("_MD_ADDNEWFILE","Cargar archivo");
 define("_MD_MODCAT","Modificar Categoría");
 define("_MD_MODDL","Modificar información de la descarga");
 define("_MD_USER","Usuario");
 define("_MD_IP","Dirección IP");
 define("_MD_USERAVG","Promedio de calificación del usuario");
-define("_MD_TOTALRATE","Calificacies totales");
+define("_MD_TOTALRATE","Calificaciones totales");
 define("_MD_NOREGVOTES","Votos de usuario no registrados");
 define("_MD_NOUNREGVOTES","Votos de usuario registrados");
 define("_MD_VOTEDELETED","Data de votos eliminada.");
-define("_MD_NOBROKEN","Sin archivos dañados reportados.");
+define("_MD_NOBROKEN","No hay archivos dañados reportados.");
 define("_MD_IGNOREDESC","Ignorar (Ignora el reporte y solo elimina este reporte enviado</b>)");
-define("_MD_DELETEDESC","Delete (Elimina <b>El archivo de reporte enviado en el depósito </b> pero no el archivo actual)");
+define("_MD_DELETEDESC","Delete (Elimina <b>El archivo de reporte enviado en el depósito</b> pero no el archivo actual)");
 define("_MD_REPORTER","Reporte enviado por");
 define("_MD_FILESUBMITTER","Archivo enviado por");
 define("_MD_IGNORE","Ignorar");
@@ -403,31 +403,31 @@ define("_MD_YES","Si");
 define("_MD_NO","No");
 define("_MD_NEWCATADDED","Nueva categoría agregada satisfactoriamente!");
 define("_MD_CONFIGUPDATED","Nueva configuración guardada");
-define("_MD_ERROREXIST","ERROR: la información de descarga que usted envio ya se encuentra en la base de datos!");
+define("_MD_ERROREXIST","ERROR: la información de descarga que usted envió ya se encuentra en la base de datos!");
 define("_MD_ERRORNOFILE","ERROR: Archivo no encontrado en el registro de la base de datos!");
-define("_MD_ERRORTITLE","ERROR: Necesitas accesar el título!");
-define("_MD_ERRORDESC","ERROR: Necesitas accesar la descripción!");
+define("_MD_ERRORTITLE","ERROR: Necesitas escribir el título!");
+define("_MD_ERRORDESC","ERROR: Necesitas escribir la descripción!");
 define("_MD_NEWDLADDED","Nueva descarga agregada a la base de datos.");
 define("_MD_NEWDLADDED_DUPFILE","Advertencia: Archivo duplicado. Nueva descarga agregada a la base de datos.");
-define("_MD_NEWDLADDED_DUPSNAP","Advertencia: Duplicate Snap. Nueva descarga agregada a la base de datos.");
+define("_MD_NEWDLADDED_DUPSNAP","Advertencia: Snap Duplicado. Nueva descarga agregada a la base de datos.");
 define("_MD_HELLO","Hola %s");
 define("_MD_WEAPPROVED","Hemos aprobado tu descarga enviada. El nombre del archivo es: ");
-define("_MD_THANKSSUBMIT","Gracias por tu envio!");
-define("_MD_UPLOADAPPROVED","Tu envio ha sido aprobado!");
+define("_MD_THANKSSUBMIT","Gracias por tu envío!");
+define("_MD_UPLOADAPPROVED","Tu envío ha sido aprobado!");
 define("_MD_DLSPERPAGE","Descargas mostradas por página: ");
-define("_MD_HITSPOP","Hits para ser popular: ");
-define("_MD_DLSNEW","Número de descargas como Nuevo en la página del Top: ");
+define("_MD_HITSPOP","Accesos para ser popular: ");
+define("_MD_DLSNEW","Número de descargas como Nuevo en la página de los Más: ");
 define("_MD_DLSSEARCH","Número de descargas en los resultados de la búsqueda: ");
 define("_MD_TRIMDESC","Cortar descripción de los archivos en la lista: ");
-define("_MD_DLREPORT","Retringir acceso al reporte de descargas");
+define("_MD_DLREPORT","Restringir acceso al reporte de descargas");
 define("_MD_WHATSNEWDESC","Habilitar la lista de Que hay nuevo");
-define("_MD_SELECTPRIV","Restringir acceso a grupo solo 'Usuarios logeados': ");
+define("_MD_SELECTPRIV","Restringir acceso a grupo solo 'Usuarios registrados': ");
 define("_MD_ACCESSPRIV","Habilitar acceso a anónimos: ");
-define("_MD_UPLOADSELECT","Permitir subir archivos a logeados:");
+define("_MD_UPLOADSELECT","Permitir subir archivos a usuarios registrados:");
 define("_MD_UPLOADPUBLIC","Permitir subir archivos a anónimos: ");
 define("_MD_USESHOTS","Mostrar las imágenes de las Categorías: ");
-define("_MD_IMGWIDTH","Ancho de la imágen de miniatura: ");
-define("_MD_MUSTBEVALID","Vista en miniatura de la imagen debe estar bajo el directorio %s (ejm. shot.gif). Dejarlo en blanco si no hay archivo de imagen.");
+define("_MD_IMGWIDTH","Ancho de la imagen de miniatura: ");
+define("_MD_MUSTBEVALID","Vista en miniatura de la imagen debe estar bajo el directorio %s (ej shot.gif). Dejalo en blanco si no hay archivo de imagen.");
 define("_MD_REGUSERVOTES","Votos de usuarios registrados (total: %s)");
 define("_MD_ANONUSERVOTES","Votos de usuarios anónimos (total: %s)");
 define("_MD_YOURFILEAT","Tu archivo enviado a %s");// this is an approved mail subject. %s is your site name
@@ -435,24 +435,24 @@ define("_MD_VISITAT","Visita nuestra sección de descarga en  %s");
 define("_MD_DLRATINGS","Calificación de descargas (<i>total de votos: %s</i>)");
 define("_MD_CONFUPDATED","Configuración actualizada satisfactoriamente!");
 define("_MD_NOFILES","No hay archivos encontrados");
-define("_MD_APPROVEREQ","* La carga necesita ser aprovada en esta categoría");
+define("_MD_APPROVEREQ","* La carga necesita ser aprobada en esta categoría");
 define("_MD_REQUIRED","* Campo requerido");
 define("_MD_SILENTEDIT","Silent Edit: ");
 
 // Additional glFusion Defines
 define("_MD_NOVOTE","No ha sido votado todavía");
-define("_IFNOTRELOAD","Si la página no carga automaticamente, por favor clickea aqui <a href=%s>here</a>");
-define("_GL_ERRORNOACCESS","ERROR: Sin acceceso al depósito de esta sección");
-define("_GL_ERRORNOUPLOAD","ERROR: Usted no tiene privilegios para subir archivos");
+define("_IFNOTRELOAD","Si la página no carga automáticamente, haz clic <a href=%s>aquí</a>");
+define("_GL_ERRORNOACCESS","ERROR: Sin acceso al depósito de esta sección");
+define("_GL_ERRORNOUPLOAD","ERROR: No tienes privilegios para subir archivos");
 define("_GL_ERRORNOADMIN","ERROR: Esta función está restringida");
 define("_GL_NOUSERACCESS","Sin acceso al deposito de documentos");
-define("_MD_ERRUPLOAD","Filemgmt: No puede subir archivos - Chequee permisos para los directorios de archivado");
+define("_MD_ERRUPLOAD","Filemgmt: No puede subir archivos - Chequea los permisos para los directorios de archivado");
 define("_MD_DLFILENAME","Archivo: ");
 define("_MD_REPLFILENAME","Archivo de reemplazo: ");
 define("_MD_SCREENSHOT","Foto");
 define("_MD_SCREENSHOT_NA",'&nbsp;');
 define("_MD_COMMENTSWANTED","Sus comentarios son valorados");
-define("_MD_CLICK2SEE","Click para ver: ");
-define("_MD_CLICK2DL","Click para descargar: ");
+define("_MD_CLICK2SEE","Clic para ver: ");
+define("_MD_CLICK2DL","Clic para descargar: ");
 define("_MD_ORDERBY","Ordenar por: ");
 ?>
