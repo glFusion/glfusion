@@ -64,7 +64,7 @@ $LANG_POLLS = array(
     'pollhidden' => 'Poll results will be available only after the Poll has closed.',
     'start_poll' => 'Iniciar Encuesta',
     'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
-    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote",
 );
 
 ###############################################################################
@@ -89,7 +89,7 @@ $LANG25 = array(
     16 => 'borrar',
     17 => 'Please enter a Poll ID',
     18 => 'Listado de Encuestas',
-    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/images/edit.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
+    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
     20 => 'Votos',
     21 => 'Acceso Negado',
     22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
@@ -106,14 +106,14 @@ $LANG25 = array(
     33 => 'Abierta',
     34 => 'Tema:',
     35 => 'Esta encuesta tiene',
-    36 => 'más preguntas.',
+    36 => 'preguntas más.',
     37 => 'Ocultar resultados mientras este abierta',
     38 => 'Mientras la encuesta esta abierta, solo el propietario &amp; root pueden ver los resultados',
     39 => 'El tema solo será mostrado si tiene almenos 1 pregunta.',
     40 => 'Ver todas las respuestas a esta Encuesta',
     41 => '¿Realmente deseas borrar esta Encuesta?',
     42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
-    43 => 'Login Required to Vote'
+    43 => 'Requiere Inicio de Sesión para Votar',
 );
 
 ###############################################################################
@@ -139,17 +139,17 @@ $LANG_configsections['polls'] = array(
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Polls Login Required?',
-    'hidepollsmenu' => 'Hide Polls Menu Entry?',
+    'pollsloginrequired' => '¿Requiere Inicio de Sesión?',
+    'hidepollsmenu' => '¿Ocultar Entrada del Menú?',
     'maxquestions' => 'Max. Preguntas por Encuesta',
     'maxanswers' => 'Max. Opciones por Pregunta',
-    'answerorder' => 'Sort Results ...',
-    'pollcookietime' => 'Voter Cookie valid for',
-    'polladdresstime' => 'Voter IP Address valid for',
-    'delete_polls' => 'Delete Polls with Owner?',
-    'aftersave' => 'After Saving Poll',
-    'default_permissions' => 'Poll Default Permissions',
-    'displayblocks' => 'Display glFusion Blocks'
+    'answerorder' => 'Ordenar Resultados ...',
+    'pollcookietime' => 'Cookie valida para Votar por',
+    'polladdresstime' => 'Dirección IP valida para Votar por',
+    'delete_polls' => '¿Borrar Encuestas con Propietario?',
+    'aftersave' => 'Después de Guardar',
+    'default_permissions' => 'Permisos por Defecto',
+    'displayblocks' => 'Mostrar Bloques',
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -165,10 +165,10 @@ $LANG_fs['polls'] = array(
 $LANG_configselects['polls'] = array(
     0 => array('Sí' => 1, 'No' => 0),
     1 => array('Sí' => true, 'No' => false),
-    2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
-    9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    2 => array('Por envío' => 'submitorder', 'Por Votos' => 'voteorder'),
+    9 => array('Ir a la Encuesta' => 'item', 'Ir a la Lista' => 'list', 'Ir a la Lista Publica' => 'plugin', 'ir al Inicio' => 'home', 'Ir al Panel de Control' => 'admin'),
+    12 => array('Sin Acceso' => 0, 'Solo-Lectura' => 2, 'Lectura-escritura' => 3),
+    13 => array('Izquierda' => 0, 'Derecha' => 1, 'Izquierda & derecha' => 2, 'Ninguno' => 3)
 );
 
 ?>
