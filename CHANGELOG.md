@@ -1,3 +1,10 @@
+## v1.6.3.pl2 (December ##, 2016)
+  - Updated Spanish Columbia Translations from John Torro
+  - Updated German Translations from Matrox66
+  - Modified footer.thtml to use {copyright_msg} tag
+  - Forum hint bubble no longer parses auto tags
+  - Improved error checking on smiley replace in forum
+
 ## v1.6.3.pl1 (December 7, 2016)
   - mgslider auto tag cleanup
   - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
