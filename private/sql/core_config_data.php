@@ -3239,7 +3239,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'htmlfilter_story',
-    	'default_value' => 'divarray(class),h1,h2,h3,pre,br,parray(style),barray(style),s,strongarray(style),iarray(style),emarray(style),uarray(style),strike,aarray(style|href|title|target),olarray(style|class),ularray(style|class),liarray(style|class),hrarray(style),blockquotearray(style),imgarray(style|alt|title|width|height|src|align),tablearray(style|width|bgcolor|align|cellspacing|cellpadding|border),trarray(style),tdarray(style),tharray(style),tbody,thead,caption,col,colgroup,spanarray(style|class),sup,sub',
+    	'default_value' => 'div[class],h1,h2,h3,pre,br,p[style],b[style],s,strong[style],i[style],em[style],u[style],strike,a[style|href|title|target],ol[style|class],ul[style|class],li[style|class],hr[style],blockquote[style],img[style|alt|title|width|height|src|align],table[style|width|bgcolor|align|cellspacing|cellpadding|border],tr[style],td[style],th[style],tbody,thead,caption,col,colgroup,span[style|class],sup,sub',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 5,
@@ -3250,7 +3250,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'htmlfilter_root',
-    	'default_value' => 'divarray(style|class),spanarray(style|class),table,tr,td,th,imgarray(src|width|height|class|style)',
+    	'default_value' => 'div[style|class],span[style|class],table,tr,td,th,img[src|width|height|class|style]',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 5,
