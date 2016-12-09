@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.6.3');
+define('GVERSION','1.6.4');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 

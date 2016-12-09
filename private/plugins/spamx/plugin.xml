@@ -3,7 +3,7 @@
     <name>SPAM-X</name>
     <description>SPAM Prevention</description>
     <version>1.2.2</version>
-    <glfusionversion>1.6.3</glfusionversion>
+    <glfusionversion>1.6.4</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

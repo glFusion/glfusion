@@ -29,7 +29,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.3');
+    define('GVERSION', '1.6.4');
 }
 require_once 'siteconfig.php';
 if ( !isset($_GET['t']) ) {
