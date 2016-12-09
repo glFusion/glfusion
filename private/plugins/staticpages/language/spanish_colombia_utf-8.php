@@ -82,9 +82,9 @@ $LANG_STATIC = array(
     'stats_no_hits' => 'Parece que no hay páginas estáticas o que nadie las ha visto nunca.',
     'id' => 'ID',
     'duplicate_id' => 'La ID elegida ya está en uso. Por favor, elige otra.',
-    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/edit.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="'.$_CONF['layout_url'].'/images/copy.png" /> correspondiente.',
-    'centerblock' => 'Bloque central',
-    'centerblock_msg' => 'Cuando se selecciona esta opción la página estática aparecerá como un bloque central en la página de inicio.',
+    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/copy.png" /> correspondiente.',
+    'centerblock' => 'Bloque Central',
+    'centerblock_msg' => 'Cuando se seleccionas esta opción la página estática aparecerá como un bloque central en la página de inicio.',
     'topic' => 'Sección: ',
     'position' => 'Posición: ',
     'all_topics' => 'Todas',
@@ -94,36 +94,38 @@ $LANG_STATIC = array(
     'position_bottom' => 'Abajo de la página',
     'position_entire' => 'Toda la página',
     'position_nonews' => 'Únicamente si no hay otras Noticias',
-    'head_centerblock' => 'Bloque central',
+    'head_centerblock' => 'Bloque Central',
     'centerblock_no' => 'No',
     'centerblock_top' => 'Arriba',
     'centerblock_feat' => 'Noticia destacada',
     'centerblock_bottom' => 'Abajo',
     'centerblock_entire' => 'Toda la página',
-    'centerblock_nonews' => 'If No News',
+    'centerblock_nonews' => 'Si no hay Noticias',
     'inblock_msg' => 'En un bloque: ',
     'inblock_info' => 'Ubicar Página en un bloque.',
-    'title_edit' => 'Edit page',
-    'title_copy' => 'Make a copy of this page',
-    'title_display' => 'Display page',
+    'title_edit' => 'Modificar pagina',
+    'title_copy' => 'Hacer una copia de esta pagina',
+    'title_display' => 'Mostrar pagina',
     'select_php_none' => 'no ejecutar PHP',
     'select_php_return' => 'ejecutar PHP (volver)',
     'select_php_free' => 'ejecutar PHP',
     'php_not_activated' => "Es uso de PHP en páginas estáticas no está activado. Por favor, véase la <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentación</a> para más información.",
     'printable_format' => 'Listo para imprimir',
     'copy' => 'Copy',
-    'limit_results' => 'Limit Results',
+    'limit_results' => 'Limitar Resultados',
     'search' => 'Incluir en Búsquedas',
     'submit' => 'Enviar',
     'delete_confirm' => 'Esta seguro que desea borrar esta Página?',
     'allnhp_topics' => 'Todas las Secciones (Menos en la página de inicio)',
     'page_list' => 'Paginas',
-    'instructions_edit' => 'Esta pantalla le permite crear/modificar/borrar una pagina. Las paginas puden contener tanto código PHP como HTML.',
+    'instructions_edit' => 'Esta pantalla te permite crear/modificar/borrar una pagina. Las paginas pueden contener tanto código PHP como HTML.',
     'attributes' => 'Atributos',
+    'preview_help' => 'Selecciona el botón <b>Visualizar</b> para refrescar la pantalla',
+    'page_saved' => 'La Pagina ha sido correctametne guardada.',
 );
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage' => 'Enlace: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
     'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
 );
 
@@ -131,7 +133,7 @@ $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
-$PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_staticpages_MESSAGE3001 = 'Actualización de la extensión no soportada.';
 $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
@@ -151,7 +153,7 @@ $LANG_confignames['staticpages'] = array(
     'filter_html' => 'Filtrar HTML',
     'censor' => 'Censurar Contenido',
     'default_permissions' => 'Permisos',
-    'aftersave' => 'Despues de guardar',
+    'aftersave' => 'Después de guardar',
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comentarios',
     'include_search' => 'Incluir en Búsquedas',
