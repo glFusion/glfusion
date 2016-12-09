@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -358,8 +358,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         if ($mode != 'noquote' ) {
             $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><blockquote>', 'end_tag' => '</blockquote><p>'),
                               'inline', array('listitem','block','inline','link'), array());
-//            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote>', 'end_tag' => '</blockquote>'),
-//                              'inline', array('listitem','block','inline','link'), array());
         }
         $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                           'link', array ('listitem', 'block', 'inline'), array ('link'));
@@ -373,9 +371,9 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
         $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
     }
-
-    $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
-
+    if ($mode != 'noquote' ) {
+        $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
+    }
     $bbcode->setRootParagraphHandling (true);
 
     if ($_FF_CONF['use_censor']) { // and $mode == 'preview') {
@@ -415,7 +413,7 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
 
 function _ff_geshi_formatted($str,$type='PHP') {
     global $_CONF;
-    $str = htmlspecialchars_decode($str);
+    $str = @htmlspecialchars_decode($str,ENT_QUOTES);
     include_once($_CONF['path'].'lib/geshi/geshi.php');
     $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
     $geshi->set_header_type(GESHI_HEADER_DIV);

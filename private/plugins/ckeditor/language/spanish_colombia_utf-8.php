@@ -105,7 +105,6 @@ $LANG_confignames['ckeditor'] = array(
     'filemanager_edit_editext' => 'Allowed Edit Extensions',
     'filemanager_fileperm'     => 'Permission for new files',
     'filemanager_dirperm'       => 'Permission for new directories',
-
 );
 $LANG_configsubgroups['ckeditor'] = array(
     'sg_main'  => 'Principal',
@@ -113,18 +112,18 @@ $LANG_configsubgroups['ckeditor'] = array(
 $LANG_fs['ckeditor'] = array(
     'ck_public'                 => 'Configuración CKEditor',
     'ck_integration'            => 'Integración',
-	'fs_filemanager_general'    => 'Filemanager General Settings',
-	'fs_filemanager_upload'     => 'Filemanager Upload Settings',
-	'fs_filemanager_images'     => 'Filemanager Image Settings',
-	'fs_filemanager_videos'     => 'Filemanager Video Settings',
-	'fs_filemanager_audios'     => 'Filemanager Audio Settings',
-	'fs_filemanager_editor'     => 'Filemanager Embedded Editor',
+	'fs_filemanager_general'    => 'General',
+	'fs_filemanager_upload'     => 'Upload Settings',
+	'fs_filemanager_images'     => 'Image Settings',
+	'fs_filemanager_videos'     => 'Video Settings',
+	'fs_filemanager_audios'     => 'Audio Settings',
+	'fs_filemanager_editor'     => 'Embedded Editor',
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['ckeditor'] = array(
     0 => array('Sí' => 1, 'No' => 0),
     1 => array('Sí' => TRUE, 'No' => FALSE),
-	2 => array('grid' => 'grid', 'list' => 'list'),
+	2 => array('grid' => 'grid', 'lista' => 'list'),
 	3 => array('default' => 'default', 'Nombre (asc)' => 'NAME_ASC', 'Nombre (desc)' => 'NAME_DESC', 'Tipo (asc)' => 'TYPE_ASC', 'Tipo (desc)' => 'TYPE_DESC', 'Modified (asc)' => 'MODIFIED_ASC', 'Modified (desc)' => 'MODIFIED_DESC'),
 );
 

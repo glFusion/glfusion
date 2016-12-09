@@ -56,7 +56,7 @@
 
   <div class="uk-form-row uk-margin">
     <div class="uk-form-controls">
-      <span class="uk-text-bold">Answer / Votes / Remarks</span>
+      <span class="uk-text-bold">{lang_answersvotes}</span>
     </div>
   </div>
 

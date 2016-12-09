@@ -8,6 +8,7 @@
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger
 # Modifiziert: August 09 Tony Kluever
+# Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,35 +42,35 @@ global $LANG32;
 $LANG_LINKS = array(
     10 => 'Einsendungen',
     14 => 'Links',
-    84 => 'LINKS',
-    88 => 'Es gibt keine Links anzuzeigen.',
+    84 => 'Links',
+    88 => 'Keine neuen Links',
     114 => 'Links',
     116 => 'Link hinzufügen',
     117 => 'Fehlerhaften Link melden',
-    118 => 'Fehlerhafte Links melden',
+    118 => 'Fehlerhafte Links',
     119 => 'Der folgende Link wurde als fehlerhaft gemeldet: ',
     120 => 'Um den Link zu editieren, bitte hier klicken: ',
     121 => 'Fehlerhafte Link wurde gemeldet von: ',
-    122 => 'Danke fürs Bescheidsagen. Der Administrator korrigiert das Problem sobald wie möglich.',
+    122 => 'Vielen Dank für Deinen Hinweis. Der Administrator wird das Problem so schnell wie möglich beheben',
     123 => 'Danke',
-    124 => 'Go',
+    124 => 'Los',
     125 => 'Kategorien',
     126 => 'Du bist hier:',
     'root' => 'Root',
-    'error_header' => 'Link Submission Error',
-    'verification_failed' => 'The URL specified does not appear to be a valid URL',
-    'category_not_found' => 'The Category does not appear to be valid'
+    'error_header' => 'Link-Einsendung Fehler',
+    'verification_failed' => 'Die angegebene URL scheint keine gültige URL zu sein',
+    'category_not_found' => 'Die angegebene Kategorie scheint fehlerhaft zu sein'
 );
 
 ###############################################################################
 # for stats
 
 $LANG_LINKS_STATS = array(
-    'links' => 'Anzahl Links (Klicks)',
-    'stats_headline' => 'Top Ten der Links',
+    'links' => 'Anzahl der Links (Klicks)',
+    'stats_headline' => 'Top 10 der Links',
     'stats_page_title' => 'Links',
     'stats_hits' => 'Aufrufe',
-    'stats_no_hits' => 'Es gibt keine Links oder sie wurden von niemandem angeklickt.'
+    'stats_no_hits' => 'Es wurden noch keine Links eingetragen.'
 );
 
 ###############################################################################
@@ -97,16 +98,23 @@ $LANG_LINKS_SUBMIT = array(
     8 => 'Titel',
     9 => 'URL',
     10 => 'Kategorie',
-    11 => 'Beiträge: Links',
-    12 => 'eingereicht von'
+    11 => 'Link-Einsendungen',
+    12 => 'Eingereicht von'
+);
+
+###############################################################################
+# autotag description
+
+$LANG_LI_AUTOTAG = array(
+    'desc_link'                 => 'Link: zur Detail-Seite für einen Link auf dieser Seite; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
 # Messages for COM_showMessage the submission form
 
 $PLG_links_MESSAGE1 = "Danke für Deinen Beitrag zu {$_CONF['site_name']}. Dein Link wurde an unser Team weitergeleitet. Wenn er akzeptiert wird, wird er bald unter den <a href=\"{$_CONF['site_url']}/links/index.php\">Links</a> aufgelistet werden.";
-$PLG_links_MESSAGE2 = 'Dein Link wurde gespeichert.';
-$PLG_links_MESSAGE3 = 'Der Link wurde gelöscht.';
+$PLG_links_MESSAGE2 = 'Dein Link wurde erfolgreich gespeichert.';
+$PLG_links_MESSAGE3 = 'Der Link wurde erfolgreich gelöscht.';
 $PLG_links_MESSAGE4 = "Danke für Deinen Link. Du findest ihn nun unter den <a href=\"{$_CONF['site_url']}/links/index.php\">Links</a>.";
 $PLG_links_MESSAGE5 = 'Keine ausreichenden Rechte, diese Kategorie anzusehen.';
 $PLG_links_MESSAGE6 = 'Keine ausreichenden Rechte, diese Kategorie zu bearbeiten.';
@@ -121,7 +129,7 @@ $PLG_links_MESSAGE16 = 'So eine Kategorie existiert nicht.';
 $PLG_links_MESSAGE17 = 'Diese Kategorie-ID existiert schon.';
 
 // Messages for the plugin upgrade
-$PLG_links_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
+$PLG_links_MESSAGE3001 = 'Link-Plugin Aktualisierung: Diese Version kann nicht automatisch aktualisiert werden.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
@@ -138,21 +146,21 @@ $LANG_LINKS_ADMIN = array(
     8 => 'Angeklickt',
     9 => 'Beschreibung',
     10 => 'Einen Titel, eine URL und eine Beschreibung für den Link angeben.',
-    11 => 'Link-Manager',
-    12 => "Auf das Bearbeiten-Icon klicken, um einen Link zu bearbeiten oder zu löschen.  \nMit Neuer Link (s.o.) kann ein neuer Link angelegt werden.",
+    11 => 'Link-Verwaltung',
+    12 => '<ul><li>Auf das Bearbeiten-Icon klicken, um einen Link zu bearbeiten oder zu löschen.</li><li>Mit "Neu anlegen" kann ein neuer Link angelegt werden.</li><li>Um Kategorien zu bearbeiten oder neu anzulegen, wähle "Kategorie-Liste"</li></ul>',
     14 => 'Kategorie',
     16 => 'Zugriff verweigert',
-    17 => "Keine Berechtigungen für diesen Link. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">Zurück zum  Administrator-Menü</a>.",
-    20 => 'Andere bitte eingeben',
+    17 => "Du versuchst, auf einen Link zuzugreifen, für den Du keine Rechte haben. Dieser Versuch wurde protokolliert. Bitte gehe zurück zur <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">Link-Verwaltung</a>.",
+    20 => 'Andere Kategorie bitte eingeben',
     21 => 'Speichern',
-    22 => 'Abbruch',
+    22 => 'Abbrechen',
     23 => 'Löschen',
     24 => 'Link nicht gefunden',
     25 => 'Der zu bearbeitende Link konnte nicht gefunden werden.',
     26 => 'Links überprüfen',
     27 => 'HTML Status',
     28 => 'Kategorie bearbeiten',
-    29 => 'Die Details unten bearbeiten oder eingeben.',
+    29 => '<ul><li>Hier können Sie Ihre Links bearbeiten oder erstellen.</li><li>Es müssen alle Felder eingegeben werden.</li></ul>',
     30 => 'Kategorie',
     31 => 'Beschreibung',
     32 => 'Kategorie-ID',
@@ -165,24 +173,24 @@ $LANG_LINKS_ADMIN = array(
     43 => 'Kategorie der Seite',
     44 => 'Unterkategorie&nbsp;hinzufügen',
     46 => 'Benutzer %s hat unrechtmäßig versucht die Kategorie %s zu löschen.',
-    50 => 'Kategorien auflisten',
-    51 => 'Neuer Link',
+    50 => 'Kategorie-Liste',
+    51 => 'Neue anlegen',
     52 => 'Neue Kategorie',
-    53 => 'Links auflisten',
-    54 => 'Kategorie-Manager',
+    53 => 'Link-Liste',
+    54 => 'Kategorie-Verwaltung',
     55 => 'Die Kategorien unten bearbeiten. Bitte beachten, Kategorie können nicht gelöscht werden, die andere Kategorien oder Links enthalten. - Sie müssen erst gelöscht oder verschoben werden.',
     56 => 'Kategorie-Editor',
     57 => 'Noch nicht überprüft',
     58 => 'Jetzt überprüfen',
     59 => '<p>Um alle aufgeführten Links zu überprüfen, einfach "Jetzt überprüfen" unten anklicken. Es kann etwas dauern, abhängig davon, wie viele Links aufgeführt sind.</p>',
     60 => 'Benutzer %s hat unrechtmäßig versucht, die Kategorie %s zu editieren.',
-    61 => 'Owner',
-    62 => 'Last Updated',
+    61 => 'Besitzer',
+    62 => 'Letzte Aktualisierung',
     63 => 'Soll dieser Link wirklich gelöscht werden?',
     64 => 'Soll diese Kategorie wirklich gelöscht werden?',
-    65 => 'Moderate Link',
-    66 => 'This screen allows you to create / edit links.',
-    67 => 'This screen allows you to create / edit a links category.'
+    65 => 'Link überprüfen und freigeben',
+    66 => 'Hier kannst Du Deine Links erstellen oder bearbeiten.',
+    67 => 'Hier kannst Du Deine Link-Kategorien erstellen oder bearbeiten.'
 );
 
 
@@ -192,7 +200,7 @@ $LANG_LINKS_STATUS = array(
     200 => 'OK',
     201 => 'Erstellt',
     202 => 'Akzeptiert',
-    203 => 'Non-Authoritative Information',
+    203 => 'Unmaßgebliche Information',
     204 => 'Kein Inhalt',
     205 => 'Inhalt zurücksetzten',
     206 => 'Teilweiser Inhalt',
@@ -202,8 +210,8 @@ $LANG_LINKS_STATUS = array(
     303 => 'Siehe andere',
     304 => 'Nicht verändert',
     305 => 'Proxy verwenden',
-    307 => 'vorübergehend umleiten',
-    400 => 'ungültige Anfrage',
+    307 => 'Vorübergehend umleiten',
+    400 => 'Ungültige Anfrage',
     401 => 'Nicht autorisiert',
     402 => 'Zahlung erbeten',
     403 => 'Kein Zugang',
@@ -219,38 +227,35 @@ $LANG_LINKS_STATUS = array(
     413 => 'Anfrage-Objekt zu groß',
     414 => 'Anfrage-URI zu lang',
     415 => 'Medientyp nicht unterstützt',
-    416 => 'angeforderte Operation nicht ausführbar',
-    417 => 'Erwartungen sind nicht eingetroffen',
-    500 => 'Interner Server Error',
+    416 => 'Angeforderte Operation nicht ausführbar',
+    417 => 'Erwartung fehlgeschlagen',
+    500 => 'Interner Server Fehler',
     501 => 'Nicht Implementiert',
-    502 => 'ungültiger Gateway',
+    502 => 'Ungültige Verbindung',
     503 => 'Service nicht verfügbar',
-    504 => 'Gateway Zeitüberschreitung',
+    504 => 'Verbindung Zeitüberschreitung',
     505 => 'HTTP Version wird nicht unterstützt',
     999 => 'Zeitüberschreitung der Verbindung'
 );
 
-$LANG_LI_AUTOTAG = array(
-    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
-);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
     'label' => 'Links',
-    'title' => 'Links-Konfiguration'
+    'title' => 'Links-Einstellungen'
 );
 
 $LANG_confignames['links'] = array(
-    'linksloginrequired' => 'Anmelden zur Ansicht nötig?',
-    'linksubmission' => 'Links moderieren?',
+    'linksloginrequired' => 'Anmelden für Lesen',
+    'linksubmission' => 'Links moderieren',
     'newlinksinterval' => 'Zeitabstand neue Links',
-    'hidenewlinks' => 'Neue Links ausblenden?',
-    'hidelinksmenu' => 'Menüeintrag ausblenden?',
-    'linkcols' => 'Kategorien je Spalte',
-    'linksperpage' => 'Links je Seite',
-    'show_top10' => 'Top 10 Links zeigen?',
-    'notification' => 'E-Mail Benachrichtigung?',
-    'delete_links' => 'Links löschen mit Benutzer?',
+    'hidenewlinks' => 'In "Was ist neu" ausblenden',
+    'hidelinksmenu' => 'Menüeintrag ausblenden',
+    'linkcols' => 'Kategorien pro Spalte',
+    'linksperpage' => 'Links pro Seite',
+    'show_top10' => 'Top 10 Links zeigen',
+    'notification' => 'E-Mail Benachrichtigung',
+    'delete_links' => 'Links mit Benutzer löschen',
     'aftersave' => 'Nach Abspeichern des Links',
     'show_category_descriptions' => 'Kategoriebeschreibung anzeigen?',
     'root' => 'ID der Oberkategorie',
@@ -264,18 +269,18 @@ $LANG_configsubgroups['links'] = array(
 );
 
 $LANG_fs['links'] = array(
-    'fs_public' => 'Einstellungen - öffentliche Links',
+    'fs_public' => 'Öffentliche-Einstellungen',
     'fs_admin' => 'Admin-Einstellungen',
-    'fs_permissions' => 'Standardeinstellungen - Berechtigungen'
+    'fs_permissions' => 'Standard-Berechtigungen'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['links'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    9 => array('Weiterleiten zur verlinkten Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
+    9 => array('Weiter zur Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Link-Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'linker & Rechter Block' => 2, 'Keine' => 3)
+    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'Linker & Rechter Block' => 2, 'Keine' => 3)
 );
 
 ?>
