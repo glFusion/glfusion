@@ -7,7 +7,7 @@
 // | Spanish (Colombia) language file                                         |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2014-2015 by the following authors:                        |
-// |                                                                          |
+// | John J. Toro A.        john DOT toro AT newroute DOT net                 |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
@@ -36,7 +36,7 @@ $LANG_CK00 = array (
     'plugin'            => 'ckeditor',
     'access_denied'     => 'Acceso Denegado',
     'access_denied_msg' => 'You do not have the proper security privilege to access to this page.  Your user name and IP have been recorded.',
-    'admin'             => 'CKEditor Administration',
+    'admin'             => 'CKEditor Administración',
     'install_header'    => 'CKEditor Plugin Install/Uninstall',
     'installed'         => 'CKEditor is Installed',
     'uninstalled'       => 'CKEditor is Not Installed',
@@ -62,7 +62,7 @@ $LANG_CK00 = array (
 // Localization of the Admin Configuration UI
 $LANG_configsections['ckeditor'] = array(
     'label'                 => 'CKEditor',
-    'title'                 => 'CKEditor Configuration'
+    'title'                 => 'Configuración CKEditor'
 );
 $LANG_confignames['ckeditor'] = array(
     'enable_comment'        => 'Enable Comment',
@@ -71,7 +71,7 @@ $LANG_confignames['ckeditor'] = array(
     'enable_contact'        => 'Enable Contact',
     'enable_emailstory'     => 'Enable Email Story',
     'enable_sp'             => 'Enable StaticPages Support',
-    'enable_block'          => 'Enable Block Editor',
+    'enable_block'          => 'Enalbe Block Editor',
     'filemanager_fileroot'  => 'Relative Path (from public_html) to Files',
     'filemanager_per_user_dir' => 'Use Per User Directories',
     'filemanager_browse_only'       => 'Browse only mode',
@@ -103,26 +103,28 @@ $LANG_confignames['ckeditor'] = array(
     'filemanager_edit_linewrapping' => 'Line Wrapping',
     'filemanager_edit_codehighlight' => 'Code Highlighting',
     'filemanager_edit_editext' => 'Allowed Edit Extensions',
+    'filemanager_fileperm'     => 'Permission for new files',
+    'filemanager_dirperm'       => 'Permission for new directories',
 );
 $LANG_configsubgroups['ckeditor'] = array(
-    'sg_main'               => 'Configuration Settings',
+    'sg_main'  => 'Principal',
 );
 $LANG_fs['ckeditor'] = array(
-    'ck_public'                 => 'CKEditor Configuration',
-    'ck_integration'            => 'CKEditor Integration',
-	'fs_filemanager_general'    => 'Filemanager General Settings',
-	'fs_filemanager_upload'     => 'Filemanager Upload Settings',
-	'fs_filemanager_images'     => 'Filemanager Image Settings',
-	'fs_filemanager_videos'     => 'Filemanager Video Settings',
-	'fs_filemanager_audios'     => 'Filemanager Audio Settings',
-	'fs_filemanager_editor'     => 'Filemanager Embedded Editor',
+    'ck_public'                 => 'Configuración CKEditor',
+    'ck_integration'            => 'Integración',
+	'fs_filemanager_general'    => 'General',
+	'fs_filemanager_upload'     => 'Upload Settings',
+	'fs_filemanager_images'     => 'Image Settings',
+	'fs_filemanager_videos'     => 'Video Settings',
+	'fs_filemanager_audios'     => 'Audio Settings',
+	'fs_filemanager_editor'     => 'Embedded Editor',
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['ckeditor'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-	2 => array('grid' => 'grid', 'list' => 'list'),
-	3 => array('default' => 'default', 'Name (asc)' => 'NAME_ASC', 'Name (desc)' => 'NAME_DESC', 'Type (asc)' => 'TYPE_ASC', 'Type (desc)' => 'TYPE_DESC', 'Modified (asc)' => 'MODIFIED_ASC', 'Modified (desc)' => 'MODIFIED_DESC'),
+    0 => array('Sí' => 1, 'No' => 0),
+    1 => array('Sí' => TRUE, 'No' => FALSE),
+	2 => array('grid' => 'grid', 'lista' => 'list'),
+	3 => array('default' => 'default', 'Nombre (asc)' => 'NAME_ASC', 'Nombre (desc)' => 'NAME_DESC', 'Tipo (asc)' => 'TYPE_ASC', 'Tipo (desc)' => 'TYPE_DESC', 'Modified (asc)' => 'MODIFIED_ASC', 'Modified (desc)' => 'MODIFIED_DESC'),
 );
 
 $PLG_ckeditor_MESSAGE1 = 'CKEditor plugin upgrade: Update completed successfully.';
