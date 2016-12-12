@@ -1,3 +1,10 @@
+## v1.6.5 (unreleased)
+  - Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
+  - Forum post edit did not set sticky checkbox appropriately
+  - Modified user story submit info panel - allow it to be closed
+  - Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
+  - New $_SYSTEM option to enable / disable including SP in plugin menu
+
 ## v1.6.4 (December 9, 2016)
   - Updated CKEditor to v4.6.1
   - Fixed a bug on new installs where the HTML filters were not properly configured
