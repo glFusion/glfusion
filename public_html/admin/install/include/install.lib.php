@@ -1426,6 +1426,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.6.4' :
 
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('open_ext_url_new_window',0,'select',7,2,0,40,TRUE);
+
             $current_fusion_version = '1.6.5';
 
         default:

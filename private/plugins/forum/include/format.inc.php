@@ -71,25 +71,37 @@ function bbcode_htmlspecialchars($text) {
 }
 
 function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
-    global $_FF_CONF;
+    global $_FF_CONF, $_CONF;
 
     if ($action == 'validate') {
         return true;
     }
 
+    $url = '';
+    $linktext = '';
+    $target = '';
+
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
+            $url = strip_tags($content);
+            $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt());
         } else {
-            return '<a href="http://'.strip_tags($content).'" rel="nofollow">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
-
+            $url = 'http://'.strip_tags($content);
+            $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt());
         }
-    }
-    if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+    } else if ( stristr($attributes['default'],'http') ) {
+        $url = strip_tags($attributes['default']);
+        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
     } else {
-        return '<a href="http://'.strip_tags($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        $url = 'http://'.strip_tags($attributes['default']);
+        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
     }
+
+    if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
+        $target = ' target="_blank" ';
+    }
+
+    return '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
 }
 
 function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {

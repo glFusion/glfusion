@@ -479,6 +479,7 @@ class sanitizer
      */
     public function linkify($value, $protocols = array('http', 'mail','twitter'), array $attributes = array())
     {
+        global $_CONF;
         // Link attributes
         $attr = '';
         foreach ($attributes as $key => $val) {
@@ -494,7 +495,21 @@ class sanitizer
         foreach ((array)$protocols as $protocol) {
             switch ($protocol) {
                 case 'http':
-                case 'https':   $value = preg_replace_callback('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) { if ($match[1]) $protocol = $match[1]; $link = $match[2] ?: $match[3]; return '<' . array_push($links, "<a $attr href=\"$protocol://$link\" rel=\"nofollow\">$link</a>") . '>'; }, $value); break;
+                case 'https':   $value = preg_replace_callback('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i',
+                    function ($match) use ($protocol, &$links, $attr) {
+                        global $_CONF;
+                        if ($match[1])
+                            $protocol = $match[1];
+                        $link = $match[2] ?: $match[3];
+                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($protocol.'://'.$link,$_CONF['site_url']) === false ) {
+                            // external
+                            $target = ' target="_blank" ';
+                        } else {
+                            $target = '';
+                        }
+                        return '<' . array_push($links, "<a $attr href=\"$protocol://$link\" rel=\"nofollow\"".$target.">$link</a>") . '>';
+                    }, $value);
+                    break;
                 case 'mail':    $value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;
                 case 'twitter': $value = preg_replace_callback('~(?<!\w)[@](\w++)~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1]  . "\">{$match[0]}</a>") . '>'; }, $value); break;
                 default:        $value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) { return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;

@@ -2794,6 +2794,7 @@ $LANG_confignames['Core'] = array(
     'comment_engine'    => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
     'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
 );
 
 $LANG_configsubgroups['Core'] = array(
