@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Forum - fixed formatting issue when previewing posts in HTML mode
   - Added configuration option to open external links in new window
   - Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
   - Forum post edit did not set sticky checkbox appropriately
