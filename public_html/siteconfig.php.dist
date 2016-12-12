@@ -236,6 +236,19 @@ $_SYSTEM['style_type'] = 'undefined';
 $_SYSTEM['db_backup_rows'] = 10000;
 
 // +--------------------------------------------------------------------------+
+// | Static Pages in Plugin Menu                                              |
+// |                                                                          |
+// | If the Add to Menu option is checked on a static page, that page         |
+// | will be included on a menu of type 'StaticPage Menu'. If you also        |
+// | want the page to display on the menu type of 'Plugins' (which was the    |
+// | default behavior at one time), set this value to true.                   |
+// |                                                                          |
+// | NOTE: Clear the cache after changing this setting                        |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['sp_pages_in_plugin_menu'] = false;
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |

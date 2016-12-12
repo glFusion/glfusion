@@ -545,6 +545,7 @@ function _doSiteConfigUpgrade() {
         'alert_position'              => 'top-right',
         'db_backup_rows'              => 10000,
         'style_type'                  => 'undefined',
+        'sp_pages_in_plugin_menu'     => false,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -609,6 +610,7 @@ function _doSiteConfigUpgrade() {
         'alert_position'              => $_NEWSYSTEM['alert_position'],
         'style_type'                  => $_NEWSYSTEM['style_type'],
         'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
+        'sp_pages_in_plugin_menu'     => $_NEWSYSTEM['sp_pages_in_plugin_menu']  ? 'true' : 'false',
         'beginphp'                    => '<?php',
         'endphp'                      => '?>',
     ));
