@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Fixed typo in topic listing that prevented correct sort order from displaying
+  - Fixed bbcode signature preview to prevent invalid header errors
   - Forum - fixed formatting issue when previewing posts in HTML mode
   - Added configuration option to open external links in new window
   - Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
