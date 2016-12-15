@@ -1336,6 +1336,21 @@
 					<dd>When a PHP error occurs, glFusion's error handler will only display the actual error message to members of the Root group (to prevent leakage of possibly sensitive information). When set to true, this information will be displayed to all users. Use only for debugging purposes! </dd>
 				</dl>
 
+				<dl id="desc_enable_404_logging">
+					<dt>Log 404 - Not Found Errors</dt>
+					<dd>If set to TRUE, all 404 Not Found errors will be logged to the 404.log file. </dd>
+				</dl>
+
+				<dl id="desc_debug_oauth">
+					<dt>Oauth Debug Logging</dt>
+					<dd>If this is set to true - verbose log messages of the Oauth login process will be logged to the glFusion error.log file. This option is useful if you are experiencing issues with any of the Oauth protocols. Debug info is logged in the error.log file.</dd>
+				</dl>
+
+				<dl id="desc_debug_html_filter">
+					<dt>HTML Filter Debug Logging</dt>
+					<dd>If this is set to true - the HTML filter will log details on which HTML elements and attributes are filtered. Debug information is logged in the error.log file.</dd>
+				</dl>
+
 				<a name="misc_digest" id="daily_digest"></a><h2>Daily Digest</h2>
 
 				<dl id="desc_emailstories">

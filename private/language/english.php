@@ -2795,6 +2795,9 @@ $LANG_confignames['Core'] = array(
     'comment_disqus_shortname' => 'Disqus Shortname',
     'comment_fb_appid' => 'Facebook App ID',
     'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging',
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -132,6 +132,11 @@ $config->initConfig();
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 
+// reconcile configs
+if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
+if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
+if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
+
 @date_default_timezone_set('America/Chicago');
 
 if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
@@ -6011,7 +6016,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo('<h1>An error has occurred:</h1>');
             if ($_SYSTEM['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your glFusion siteconfig.php.</h2><p>If this is a production
+                        in your glFusion configuration.</h2><p>If this is a production
                         website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
                         troubleshooting.</p>');
@@ -6288,34 +6293,55 @@ function COM_setLangIdAndAttribute(&$template)
  */
 function COM_404()
 {
-    global $LANG_404;
-    /*
-     * Allow for custom 404 handler
-     */
+    global $_CONF, $_USER, $LANG_404;
+
     if ( function_exists('CUSTOM_404') ) {
         return CUSTOM_404();
     }
 
     $url = '';
+    $refUrl = '';
+    $content = '';
 
-    if (isset ($_SERVER['SCRIPT_URI'])) {
-        $url = strip_tags ($_SERVER['SCRIPT_URI']);
-    } else {
-        $pos = strpos ($_SERVER['REQUEST_URI'], '?');
-        if ($pos === false) {
-            $request = $_SERVER['REQUEST_URI'];
+    header('HTTP/1.1 404 Not Found');
+    header('Status: 404 Not Found');
+
+    $url = COM_sanitizeUrl(COM_getCurrentURL());
+
+    if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
+        if (isset($_USER['uid']) && isset($_USER['username'])) {
+            $byUser = $_USER['username'] . '@' . $_SERVER['REMOTE_ADDR'];
         } else {
-            $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
+            $byUser = 'anon@' . $_SERVER['REMOTE_ADDR'];
         }
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
+        if ( isset($_SERVER['HTTP_REFERER'])) {
+            $refUrl = $_SERVER['HTTP_REFERER'];
+        }
+        $timestamp = @strftime('%c');
+        $logEntry = "404 :: $byUser :: URL: $url";
+        if (!empty($refUrl)) {
+            $logEntry .= " :: Referer: $refUrl";
+        }
+        $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
+
+        $logfile = $_CONF['path_log'] . '404.log';
+        if ($file = fopen($logfile, 'a')) {
+            fputs($file, "$timestamp - $logEntry \n");
+            fclose($file);
+        }
     }
-    header("HTTP/1.0 404 Not Found");
-    $display = COM_siteHeader ('menu', $LANG_404[1]);
-    $display .= COM_startBlock ($LANG_404[1]);
-    $display .= sprintf ($LANG_404[2]);
-    $display .= $LANG_404[3];
-    $display .= '<br/><br/><p><b>' . $url . '</b></p>';
-    $display .= COM_endBlock ();
+
+    $content = PLG_replaceTags("[staticpage_content:_404]",'glfusion','404');
+    if ( $content == '' || $content == '[staticpage_content:_404]') {
+        $content = COM_startBlock ($LANG_404[1]);
+        $content .= '<p><b>' . $url . '</b></p>';
+        $content .= sprintf ($LANG_404[2]);
+        $content .= $LANG_404[3];
+        $content .= COM_endBlock ();
+    }
+
+    $display = COM_siteHeader ('none', $LANG_404[1]);
+    $display .= $content;
     $display .= COM_siteFooter ();
     echo $display;
     exit;

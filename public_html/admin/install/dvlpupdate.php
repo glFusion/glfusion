@@ -1575,6 +1575,9 @@ function glfusion_165()
 
     // new configuration option
     $c->add('open_ext_url_new_window',0,'select',7,2,0,40,TRUE);
+    $c->add('enable_404_logging',1,'select',7,3,0,20,TRUE);
+    $c->add('debug_oauth',0,'select',7,3,0,30,TRUE);
+    $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
 
     _updateConfig();
 

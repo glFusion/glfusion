@@ -3150,6 +3150,39 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'enable_404_logging',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 20,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'debug_oauth',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 30,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'debug_html_filter',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_daily_digest',
     	'default_value' => NULL,
     	'type' => 'fieldset',

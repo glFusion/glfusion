@@ -62,36 +62,6 @@ $_SYSTEM['maintenance_mode'] = false;
 // while in maintenance mode.
 // $_SYSTEM['maintenance_mode'] = -1;
 
-
-// +--------------------------------------------------------------------------+
-// | Root debug - Display detailed error messages.                            |
-// |                                                                          |
-// | NOTE: This option should not be enabled on production sites since it     |
-// |       will display configuration options and other details that could    |
-// |       expose confidential data such as database logins, etc.             |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['rootdebug']        = false;
-
-// +--------------------------------------------------------------------------+
-// | OAuth debug - Display detailed message from Oauth authentication.        |
-// |                                                                          |
-// | If this is set to true - verbose log messages of the Oauth login process |
-// | will be logged to the glFusion error.log file. This option is useful if  |
-// | you are experiencing issues with any of the Oauth protocols.             |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['debug_oauth']      = false;
-
-// +--------------------------------------------------------------------------+
-// | HTML Filter debug - Log details on filtered elements.                    |
-// |                                                                          |                                                                     |
-// | If this is set to true - the HTML filter will log details on which       |
-// | HTML elements and attributes are filtered.                               |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['debug_html_filter']      = false;
-
 // +--------------------------------------------------------------------------+
 // | No Fail SQL - Do not fail (crash) if SQL errors are encountered          |
 // |                                                                          |
