@@ -2036,6 +2036,7 @@ $LANG_ADMIN = array(
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters ',
 );
 
 ###############################################################################
