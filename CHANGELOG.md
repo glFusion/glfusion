@@ -1,4 +1,11 @@
 ## v1.6.5 (unreleased)
+  - Moved several debug options from siteconfig.php to the online configuration
+    - rootdebug
+    - debug_oauth
+    - debug_html_filter
+  - Updated fusionrescue.php to allow setting new debug options
+  - Tweaked logview display to remove leading space on first log file line
+  - Improved 404 Not Found handling - ability to use custom static page as 404 page
   - Fixed typo in topic listing that prevented correct sort order from displaying
   - Fixed bbcode signature preview to prevent invalid header errors
   - Forum - fixed formatting issue when previewing posts in HTML mode
