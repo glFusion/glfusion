@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - New character counter for text fields - provided by Buddilla
   - Moved several debug options from siteconfig.php to the online configuration
     - rootdebug
     - debug_oauth
