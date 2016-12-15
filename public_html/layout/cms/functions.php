@@ -182,6 +182,9 @@ $outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/me
 // must load the jquery ui library we want to use if using jquery ui.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery-ui/jquery-ui.min.css');
 
+// Character Counter
+$outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.charactercounter.js');
+
 //  Custom CSS
 if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
     $outputHandle->addCSSFile($_CONF['path_layout'].'custom.css',HEADER_PRIO_VERYLOW); // last one to load
