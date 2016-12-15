@@ -376,7 +376,7 @@ class menuElement {
 
     function _parseElement(  )
     {
-        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$_GROUPS;
+        global $_SP_CONF,$_USER, $_TABLES, $_PLUGINS, $LANG01, $_CONF,$_GROUPS;
 
         $returnArray    = array();
         $childArray     = array();
@@ -478,14 +478,14 @@ class menuElement {
                 $this->url = '';
                 switch ($this->subtype) {
                     case USER_MENU :
-// if anonymous user - show login entry
+
                         if ( COM_isAnonUser() ) {
                             $this->label = $LANG01[58];
                             $this->url   = $_CONF['site_url'] . '/users.php';
                             $this->target = '';
                             break;
                         }
-// logged-in user see My Account entry
+
                         $item_array = getUserMenu();
                         $this->label = $LANG01[47];
                         break;
@@ -500,6 +500,7 @@ class menuElement {
                         break;
 
                     case STATICPAGE_MENU :
+                        if ( !in_array('staticpages',$_PLUGINS)) break;
                         $item_array = array();
                         $order = '';
                         if (!empty ($_SP_CONF['sort_menu_by'])) {
