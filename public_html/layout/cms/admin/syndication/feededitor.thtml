@@ -3,128 +3,128 @@
 {start_feed_editor}
 {admin_menu}
 <form class="uk-form uk-form-horizontal" action="{site_admin_url}/syndication.php" method="post">
-  <input type="hidden" name="fid" value="{feed_id}">
-  <input type="hidden" name="{sec_token_name}" value="{sec_token}" />
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="title">{lang_feedtitle}</label>
-    <div class="uk-form-controls">
-      <input class="uk-form-width-medium required" maxlength="40" id="feed_title" type="text" id="title" name="title" value="{feed_title}">
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="feed_title-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="is_enabled">{lang_enabled}</label>
-    <div class="uk-form-controls">
-      <input type="checkbox" id="is_enabled" name="is_enabled" {is_enabled}>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="type">{lang_type}</label>
-    <div class="uk-form-controls">
-      <input type="text" id="type_display" name="type_display" value="{feed_type}" disabled="disabled">
-      <input type="hidden" id="type" name="type" value="{feed_type}">
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="topic">{lang_topic}</label>
-    <div class="uk-form-controls">
-      {feed_topic}
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="header_tid">{lang_header_topic}</label>
-    <div class="uk-form-controls">
-      <select id="header_tid" name="header_tid">
-        <option value="none" {none_selected}>{lang_header_none}</option>
-        <option value="all" {all_selected}>{lang_header_all}</option>
-        {header_topic_options}
-      </select>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="format">{lang_format}</label>
-    <div class="uk-form-controls">
-      {feed_format}
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="limits">{lang_limits}</label>
-    <div class="uk-form-controls">
-      <input type="text" class="uk-form-width-small" maxlength="5" id="limits" name="limits" value="{feed_limits}"> {feed_limits_what}
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="limits-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="content_length">{lang_content_length}</label>
-    <div class="uk-form-controls">
-      <input type="text" class="uk-form-width-small" id="content_length" maxlength="5" name="content_length" value="{feed_content_length}" /> <span class="uk-text-small">{lang_clen_explain}</span>
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="content_length-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="description">{lang_description}</label>
-    <div class="uk-form-controls">
-      <textarea id="description" name="description" cols="50" rows="8">{feed_description}</textarea>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="feedlogo">{lang_feedlogo}</label>
-    <div class="uk-form-controls">
-      <input type="text" maxlength="255" class="uk-form-width-medium" id="feedlogo" name="feedlogo" value="{feed_logo}"> <span class="uk-text-small">{lang_feedlogo_explain}</span>
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="feedlogo-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="filename">{lang_filename}</label>
-    <div class="uk-form-controls">
-      <input type="text" class="uk-form-width-medium" maxlength="40" id="filename" name="filename" value="{feed_filename}">
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="filename-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="charset">{lang_charset}</label>
-    <div class="uk-form-controls">
-      <input type="text" class="uk-form-width-medium" maxlength="20" id="charset" name="charset" value="{feed_charset}">
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="charset-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="language">{lang_language}</label>
-    <div class="uk-form-controls">
-      <input type="text" maxlength="20" class="uk-form-width-medium" id="language" name="language" value="{feed_language}">
-      <div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="language-count" class="uk-text-muted uk-text-small"></span></span>
-      </div>
-    </div>
-  </div>
-  <div class="uk-form-row">
-    <label class="uk-form-label">{lang_updated}</label>
-    <div class="uk-form-controls">
-      {feed_updated}
-    </div>
-  </div>
-  <div class="uk-form-row uk-text-center">
-    <button class="uk-button uk-button-primary" type="submit" value="{lang_save}" id="save" name="save">{lang_save}</button>
-{!if delete_button}
-    <button class="uk-button uk-button-danger" type="submit" id="mode" name="mode" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
-{!endif}
-    <button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel" id="cancel">{lang_cancel}</button>
-  </div>
+	<input type="hidden" name="fid" value="{feed_id}">
+	<input type="hidden" name="{sec_token_name}" value="{sec_token}" />
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="title">{lang_feedtitle}</label>
+		<div class="uk-form-controls">
+			<input class="uk-form-width-medium required" maxlength="40" id="feed_title" type="text" id="title" name="title" value="{feed_title}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="feed_title-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="is_enabled">{lang_enabled}</label>
+		<div class="uk-form-controls">
+			<input type="checkbox" id="is_enabled" name="is_enabled" {is_enabled}>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="type">{lang_type}</label>
+		<div class="uk-form-controls">
+			<input type="text" id="type_display" name="type_display" value="{feed_type}" disabled="disabled">
+			<input type="hidden" id="type" name="type" value="{feed_type}">
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="topic">{lang_topic}</label>
+		<div class="uk-form-controls">
+			{feed_topic}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="header_tid">{lang_header_topic}</label>
+		<div class="uk-form-controls">
+			<select id="header_tid" name="header_tid">
+				<option value="none" {none_selected}>{lang_header_none}</option>
+				<option value="all" {all_selected}>{lang_header_all}</option>
+				{header_topic_options}
+			</select>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="format">{lang_format}</label>
+		<div class="uk-form-controls">
+			{feed_format}
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="limits">{lang_limits}</label>
+		<div class="uk-form-controls">
+			<input type="text" class="uk-form-width-small" maxlength="5" id="limits" name="limits" value="{feed_limits}"> {feed_limits_what}
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="limits-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="content_length">{lang_content_length}</label>
+		<div class="uk-form-controls">
+			<input type="text" class="uk-form-width-small" id="content_length" maxlength="5" name="content_length" value="{feed_content_length}" /> <span class="uk-text-small">{lang_clen_explain}</span>
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="content_length-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="description">{lang_description}</label>
+		<div class="uk-form-controls">
+			<textarea id="description" name="description" cols="50" rows="8">{feed_description}</textarea>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="feedlogo">{lang_feedlogo}</label>
+		<div class="uk-form-controls">
+			<input type="text" maxlength="255" class="uk-form-width-medium" id="feedlogo" name="feedlogo" value="{feed_logo}"> <span class="uk-text-small">{lang_feedlogo_explain}</span>
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="feedlogo-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="filename">{lang_filename}</label>
+		<div class="uk-form-controls">
+			<input type="text" class="uk-form-width-medium" maxlength="40" id="filename" name="filename" value="{feed_filename}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="filename-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="charset">{lang_charset}</label>
+		<div class="uk-form-controls">
+			<input type="text" class="uk-form-width-medium" maxlength="20" id="charset" name="charset" value="{feed_charset}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="charset-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="language">{lang_language}</label>
+		<div class="uk-form-controls">
+			<input type="text" maxlength="20" class="uk-form-width-medium" id="language" name="language" value="{feed_language}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="language-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_updated}</label>
+		<div class="uk-form-controls">
+			{feed_updated}
+		</div>
+	</div>
+	<div class="uk-form-row uk-text-center">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" id="save" name="save">{lang_save}</button>
+		{!if delete_button}
+		<button class="uk-button uk-button-danger" type="submit" id="mode" name="mode" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
+		{!endif}
+		<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel" id="cancel">{lang_cancel}</button>
+	</div>
 </form>
 <script type="text/javascript">
-$(function(){
+	$(function(){
 		$("#feed_title").characterCounter({
 			limit: '40',
 			counterSelector: '#feed_title-count'
