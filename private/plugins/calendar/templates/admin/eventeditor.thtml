@@ -138,7 +138,7 @@ function toggleTOD() {
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_location}</label>
         <div class="uk-form-controls">
-            <textarea class="uk-form-width-large" maxlength="255" id="location" name="location" cols="45" rows="2">{event_location}</textarea>
+            <textarea class="uk-form-width-large" maxlength="128" id="location" name="location" cols="45" rows="2">{event_location}</textarea>
             <div class="uk-form-help-block uk-margin-small-left">
 						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="location-count" class="uk-text-muted uk-text-small"></span></span>
             </div>
