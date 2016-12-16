@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
 <!--
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
@@ -33,7 +34,10 @@ function toggleTOD() {
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_eventtitle}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-large required" type="text" maxlength="128" name="title" value="{event_title}">
+            <input class="uk-form-width-large required" id="event_title" type="text" maxlength="128" name="title" value="{event_title}">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="event_title-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
@@ -54,7 +58,10 @@ function toggleTOD() {
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_eventurl}</label>
         <div class="uk-form-controls">
-            <input type="text" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{event_url}">&nbsp;{lang_includehttp}
+            <input type="text" id="url" dir="ltr" size="48" maxlength="{max_url_length}" name="url" value="{event_url}">&nbsp;{lang_includehttp}
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="url-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
 
@@ -131,37 +138,55 @@ function toggleTOD() {
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_location}</label>
         <div class="uk-form-controls">
-            <textarea class="uk-form-width-large" name="location" cols="45" rows="2">{event_location}</textarea>
+            <textarea class="uk-form-width-large" maxlength="128" id="location" name="location" cols="45" rows="2">{event_location}</textarea>
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="location-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_addressline1}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-large" type="text" name="address1" value="{event_address1}">
+            <input class="uk-form-width-large" maxlength="40" id="address1" type="text" name="address1" value="{event_address1}">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="address1-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_addressline2}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-large" type="text" name="address2" value="{event_address2}">
+            <input class="uk-form-width-large" maxlength="40" id="address2" type="text" name="address2" value="{event_address2}">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="address2-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_city}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-large" type="text" name="city" value="{event_city}" maxlength="60">
+            <input class="uk-form-width-large" id="event_city" type="text" name="city" value="{event_city}" maxlength="60">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="event_city-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_state}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-large" type="text" name="state" value="{event_state}">
+            <input class="uk-form-width-large" maxlength="40" id="event_state" type="text" name="state" value="{event_state}">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="event_state-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_zipcode}</label>
         <div class="uk-form-controls">
-            <input class="uk-form-width-medium" type="text" name="zipcode" value="{event_zipcode}" maxlength="5">
+            <input class="uk-form-width-medium" id="zipcode" type="text" name="zipcode" value="{event_zipcode}" maxlength="5">
+            <div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="zipcode-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
         </div>
     </div>
 
@@ -170,7 +195,7 @@ function toggleTOD() {
     <div class="uk-form-row">
         <label class="uk-form-label">{lang_eventdescription}</label>
         <div class="uk-form-controls">
-            <textarea class="uk-form-width-large required" name="description" style="width:90%;" cols="45" rows="8">{event_description}</textarea>
+            <textarea class="uk-form-width-large required" maxlength="5" id="description" name="description" style="width:90%;" cols="45" rows="8">{event_description}</textarea>
         </div>
     </div>
     <div class="uk-form-row">
@@ -230,7 +255,41 @@ function toggleTOD() {
         <input type="hidden" name="{gltoken_name}" value="{gltoken}">
     </div>
 </form>
-<script>
+<script type="text/javascript">
 $("#eventeditor").validate();
+$(function(){
+		$("#event_title").characterCounter({
+			limit: '128',
+			counterSelector: '#event_title-count'
+		});
+		$("#url").characterCounter({
+			limit: '{max_url_length}',
+			counterSelector: '#url-count'
+		});
+		$("#location").characterCounter({
+			limit: '128',
+			counterSelector: '#location-count'
+		});
+		$("#address1").characterCounter({
+			limit: '40',
+			counterSelector: '#address1-count'
+		});
+		$("#address2").characterCounter({
+			limit: '40',
+			counterSelector: '#address2-count'
+		});
+		$("#event_city").characterCounter({
+			limit: '60',
+			counterSelector: '#event_city-count'
+		});
+		$("#event_state").characterCounter({
+			limit: '40',
+			counterSelector: '#event_state-count'
+		});
+		$("#zipcode").characterCounter({
+			limit: '5',
+			counterSelector: '#zipcode-count'
+		});
+	});
 </script>
 {# end {templatelocation} #}
