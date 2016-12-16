@@ -367,6 +367,8 @@ function _bbcode_htmlspecialchars($text) {
 function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     global $_CONF;
 
+    $target = '';
+
     if ($action == 'validate') {
         return true;
     }
