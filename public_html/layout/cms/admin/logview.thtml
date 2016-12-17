@@ -16,9 +16,7 @@
 	<strong>{lang_logfile} : {log}</strong>
 </p>
 <pre class="uk-scrollable-text" style="height:600px !important;">
-	<code>
-		{log_data}
-	</code>
+<code>{log_data}</code>
 </pre>
 {!endif}
 <script>

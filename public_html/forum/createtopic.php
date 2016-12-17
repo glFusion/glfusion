@@ -426,19 +426,56 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $disable_bbcode_val = ' checked="checked"';
             $status += DISABLE_BBCODE;
         } else {
-            $disable_bbcode_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( $postData['status'] & DISABLE_BBCODE ) {
+                    $disable_bbcode_val = ' checked="checked"';
+                } else {
+                    $disable_bbcode_val = '';
+                }
+            } else {
+                $disable_bbcode_val = '';
+            }
         }
         if ( isset($postData['disable_smilies']) && $postData['disable_smilies'] == 1 ) {
             $disable_smilies_val = ' checked="checked"';
             $status += DISABLE_SMILIES;
         } else {
-            $disable_smilies_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( $postData['status'] & DISABLE_SMILIES ) {
+                    $disable_smilies_val = ' checked="checked"';
+                } else {
+                    $disable_smilies_val = '';
+                }
+            } else {
+                $disable_smilies_val = '';
+            }
         }
         if ( isset($postData['disable_urlparse']) && $postData['disable_urlparse'] == 1 ) {
             $disable_urlparse_val = ' checked="checked"';
             $status += DISABLE_URLPARSE;
         } else {
-            $disable_urlparse_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( $postData['status'] & DISABLE_URLPARSE ) {
+                    $disable_urlparse_val = ' checked="checked"';
+                } else {
+                    $disable_urlparse_val = '';
+                }
+            } else {
+                $disable_urlparse_val = '';
+            }
+        }
+        if ( (isset($postData['sticky_switch']) AND $postData['sticky_switch'] == 1)) {
+            $sticky_val = 'checked="checked"';
+        } else {
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( $postData['sticky'] == 1 ) {
+                    $sticky_val = ' checked="checked"';
+                } else {
+                    $sticky_val = '';
+                }
+            } else {
+                $sticky_val = '';
+            }
         }
     }
     // create our template

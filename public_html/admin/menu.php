@@ -114,10 +114,12 @@ function MB_displayMenuList( ) {
 
     $form_arr['bottom'] = '
     <input type="hidden" name="mode" value="menuactivate" />
+    ';
+/*
     <script type="text/javascript">
         document.getElementById(\'menubuilder\').style.display=\'\'
     </script>
-    ';
+*/
 
     if ( is_array($menuArray) ) {
         foreach ($menuArray AS $menu) {
@@ -422,10 +424,12 @@ function MB_displayTree( $menu_id ) {
     );
 
     $form_arr['bottom'] = '<input type="hidden" id="menu" name="menu" value="'.$menu_id.'"/>' . LB
-                        . '<input type="hidden" name="mode" value="activate"/>'. LB
+                        . '<input type="hidden" name="mode" value="activate"/>'. LB;
+/*
                         . '<script type="text/javascript">' . LB
                         . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
                         . '</script>';
+*/
 
     $data_arr = $menu->editTree();
 

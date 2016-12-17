@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion 404 Page Note Found                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,25 +35,6 @@
 
 require_once ('lib-common.php');
 
-header("HTTP/1.0 404 Not Found");
-$display = COM_siteHeader ('menu', $LANG_404[1]);
-$display .= COM_startBlock ($LANG_404[1]);
-if (isset ($_SERVER['SCRIPT_URI'])) {
-    $url = strip_tags ($_SERVER['SCRIPT_URI']);
-} else {
-    $pos = strpos ($_SERVER['REQUEST_URI'], '?');
-    if ($pos === false) {
-        $request = $_SERVER['REQUEST_URI'];
-    } else {
-        $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
-    }
-    $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
-}
-$url = COM_sanitizeUrl($url);
-$display .= sprintf ($LANG_404[2], $url);
-$display .= $LANG_404[3];
-$display .= COM_endBlock ();
-$display .= COM_siteFooter ();
+COM_404();
 
-echo $display
 ?>

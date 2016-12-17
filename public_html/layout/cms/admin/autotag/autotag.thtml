@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
 	<!--
 	$(window).load(function() {
@@ -34,14 +35,20 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="tag">{lang_tag}</label>
 		<div class="uk-form-controls">
-			<input class="required alphanumeric" type="text" id="tag" name="tag" value="{tag}">
+			<input class="required alphanumeric" maxlength="24" type="text" id="tag" name="tag" value="{tag}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="tag-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
 		</div>
 	</div>
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="description">{lang_desc}</label>
 		<div class="uk-form-controls">
-			<input class="uk-form-width-large required" type="text" id="description" name="description" value="{description}">
+			<input class="uk-form-width-large required" type="text" maxlength="250" id="description" name="description" value="{description}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="description-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
 		</div>
 	</div>
 
@@ -77,6 +84,16 @@
 </form>
 
 <script>
+	$(function(){
+		$("#tag").characterCounter({
+			limit: '24',
+			counterSelector: '#tag-count'
+		});
+    $("#description").characterCounter({
+			limit: '250',
+			counterSelector: '#description-count'
+		});
+	});
 	$("#autotag-editor").validate();
 </script>
 {# end {templatelocation} #}

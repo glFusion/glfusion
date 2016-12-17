@@ -140,6 +140,9 @@
 {!endif}
 
 {!if html_mode}
+					<div class="uk-form-row">
+						<textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%">{comment}</textarea>
+					</div>
 {!else}
 					<div class="uk-form-row">
 						<div class="uk-form-row uk-margin-small">
@@ -151,14 +154,14 @@
 							<button class="uk-button uk-icon-list-ul uk-icon-mini" onclick="bbstyle(10);return false;" title="{$LANG_GF01[l_help]}"></button>
 							<button class="uk-button uk-icon-list-ol uk-icon-mini" onclick="bbstyle(12);return false;" title="{$LANG_GF01[o_help]}"></button>
 							<button class="uk-button uk-icon-list uk-icon-mini" onclick="bbstyle(-1);return false;" title="{$LANG_GF01[e_help]}"></button>
-{!if allow_img_bbcode}
+  {!if allow_img_bbcode}
 							<button class="uk-button uk-icon-image uk-icon-mini" onclick="bbstyle(15);return false;" title="{$LANG_GF01[p_help]}"></button>
-{!endif}
+  {!endif}
 							<button class="uk-button uk-icon-file-archive-o uk-icon-mini" onclick="bbstyle(19);return false;" title="{$LANG_GF01[t_help]}"></button>
 							<button class="uk-button uk-icon-link uk-icon-mini" onclick="bbstyle(17);return false;" title="{$LANG_GF01[w_help]}"></button>
-{!if smiley_enabled}
+  {!if smiley_enabled}
 							<button class="uk-button uk-icon-smile-o uk-icon-mini" name="toggleV" id="toggleV" title="{$LANG_GF01[smiley]}"></button>
-{!endif}
+  {!endif}
 							<div class="uk-button-dropdown uk-margin-remove" data-uk-dropdown="{mode:'click'}">
 								<button class="uk-button" onclick="return false;">Font&nbsp;<i class="uk-icon-caret-down"></i></button>
 								<div class="uk-dropdown uk-dropdown-small">
@@ -196,20 +199,22 @@
 							</div>
 							<button class="uk-button uk-icon-question uk-icon-mini" data-uk-modal="{target:'#bbc-help'}" title="{$LANG_GF01[h_help]}" onclick="return false;"></button>
 						</div>
-{!endif}
-{!if smilies}
-{!if html_mode}
-{!else}
+  {!if smilies}
 						<div id="smileys" class="uk-form-row uk-clearfix" style="display:none;">
 							<div class="uk-panel uk-margin-bottom">{smilies}</div>
 						</div>
-{!endif}
-{!endif}
+  {!endif}
 						<textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
 					</div>
+{!endif}
 {!if use_attachments}
 					<div class="uk-form-row">
-						<label class="uk-form-label">{LANG_attachments}<br><div class="uk-text-small uk-text-muted">{LANG_maxattachments}</div></label>
+						<label class="uk-form-label">{LANG_attachments}
+							<br>
+							<div class="uk-text-small uk-text-muted">
+								{LANG_maxattachments}
+							</div>
+						</label>
 						<div class="uk-form-controls">
 
 							<div id="divforumfile" style="display:{show_attachments};">

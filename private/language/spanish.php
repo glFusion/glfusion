@@ -2029,7 +2029,8 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
-    'reset' => 'Reset'
+    'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters '
 );
 
 ###############################################################################
@@ -2789,7 +2790,11 @@ $LANG_confignames['Core'] = array(
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
-    'comment_fb_appid' => 'Facebook App ID'
+    'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging'
 );
 
 $LANG_configsubgroups['Core'] = array(

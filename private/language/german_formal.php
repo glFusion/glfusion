@@ -2036,7 +2036,8 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Persönliche-Autotags',
     'alt_topic' => 'Alternative-Kategorie',
     'timeout_msg' => 'Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücken Sie "OK" um die Sitzung wieder zu aktualisieren.',
-    'reset' => 'Reset'
+    'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters '
 );
 
 ###############################################################################
@@ -2796,7 +2797,11 @@ $LANG_confignames['Core'] = array(
     'infinite_scroll' => 'Endloses Skrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
-    'comment_fb_appid' => 'Facebook App ID'
+    'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging'
 );
 
 $LANG_configsubgroups['Core'] = array(

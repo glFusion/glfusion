@@ -85,28 +85,31 @@ include_once $plugin_path . 'services.inc.php';
 */
 function plugin_getmenuitems_staticpages()
 {
-    global $_CONF, $_TABLES, $_SP_CONF;
+    global $_CONF, $_SYSTEM, $_TABLES, $_SP_CONF;
 
-    $order = '';
-    if (!empty ($_SP_CONF['sort_menu_by'])) {
-        $order = ' ORDER BY ';
-        if ($_SP_CONF['sort_menu_by'] == 'date') {
-            $order .= 'sp_date DESC';
-        } else if ($_SP_CONF['sort_menu_by'] == 'label') {
-            $order .= 'sp_label';
-        } else if ($_SP_CONF['sort_menu_by'] == 'title') {
-            $order .= 'sp_title';
-        } else { // default to "sort by id"
-            $order .= 'sp_id';
-        }
-    }
-
-    $result = DB_query('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1 AND sp_status = 1' . COM_getPermSql('AND') . COM_getLangSql('sp_id', 'AND') . $order);
-    $nrows = DB_numRows ($result);
     $menuitems = array ();
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray ($result);
-        $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
+    if ( isset($_SYSTEM['sp_pages_in_plugin_menu']) && $_SYSTEM['sp_pages_in_plugin_menu'] == true ) {
+        $order = '';
+        if (!empty ($_SP_CONF['sort_menu_by'])) {
+            $order = ' ORDER BY ';
+            if ($_SP_CONF['sort_menu_by'] == 'date') {
+                $order .= 'sp_date DESC';
+            } else if ($_SP_CONF['sort_menu_by'] == 'label') {
+                $order .= 'sp_label';
+            } else if ($_SP_CONF['sort_menu_by'] == 'title') {
+                $order .= 'sp_title';
+            } else { // default to "sort by id"
+                $order .= 'sp_id';
+            }
+        }
+
+        $result = DB_query('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1 AND sp_status = 1' . COM_getPermSql('AND') . COM_getLangSql('sp_id', 'AND') . $order);
+        $nrows = DB_numRows ($result);
+
+        for ($i = 0; $i < $nrows; $i++) {
+            $A = DB_fetchArray ($result);
+            $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
+        }
     }
 
     return $menuitems;

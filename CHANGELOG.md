@@ -1,7 +1,28 @@
+## v1.6.5 (unreleased)
+  - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
+  - Media Gallery - fixed error in static sort - descending sorts did not work
+  - New character counter for text fields - provided by Buddilla
+  - Moved several debug options from siteconfig.php to the online configuration
+    - rootdebug
+    - debug_oauth
+    - debug_html_filter
+  - Updated fusionrescue.php to allow setting new debug options
+  - Tweaked logview display to remove leading space on first log file line
+  - Improved 404 Not Found handling - ability to use custom static page as 404 page
+  - Fixed typo in topic listing that prevented correct sort order from displaying
+  - Fixed bbcode signature preview to prevent invalid header errors
+  - Forum - fixed formatting issue when previewing posts in HTML mode
+  - Added configuration option to open external links in new window
+  - Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
+  - Forum post edit did not set sticky checkbox appropriately
+  - Modified user story submit info panel - allow it to be closed
+  - Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
+  - New $_SYSTEM option to enable / disable including SP in plugin menu
+
 ## v1.6.4 (December 9, 2016)
   - Updated CKEditor to v4.6.1
   - Fixed a bug on new installs where the HTML filters were not properly configured
-  - Updated Spanish Columbia Translations from John Torro
+  - Updated Spanish Columbia Translations from John Toro
   - Updated German Translations from Matrox66
   - Modified footer.thtml to use {copyright_msg} tag
   - Forum hint bubble no longer parses auto tags
