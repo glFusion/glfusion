@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
+  - Media Gallery - fixed error in static sort - descending sorts did not work
   - New character counter for text fields - provided by Buddilla
   - Moved several debug options from siteconfig.php to the online configuration
     - rootdebug
@@ -20,7 +22,7 @@
 ## v1.6.4 (December 9, 2016)
   - Updated CKEditor to v4.6.1
   - Fixed a bug on new installs where the HTML filters were not properly configured
-  - Updated Spanish Columbia Translations from John Torro
+  - Updated Spanish Columbia Translations from John Toro
   - Updated German Translations from Matrox66
   - Modified footer.thtml to use {copyright_msg} tag
   - Forum hint bubble no longer parses auto tags
