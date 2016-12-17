@@ -8,7 +8,11 @@
 */
 function handleAdd(self, array_type, array_name) {
     if (array_type.charAt(0) == "*") {
-        handleAddWithName(self, array_type, array_name, self.nextSibling.value);
+        var nextSibling = self.nextSibling;
+        while(nextSibling && nextSibling.nodeType != 1) {
+            nextSibling = nextSibling.nextSibling
+        }
+        handleAddWithName(self, array_type, array_name, nextSibling.value);
     } else {
         handleAddWithName(self, array_type, array_name, self.parentNode.parentNode.parentNode.rows.length - 1);
     }
@@ -44,7 +48,7 @@ function add_select(tbl, arr_name, index, deletable) {
         deleteButton.value = "x";
         deleteButton.onclick =
         function(){
-            gl_cfg_remove(this)
+            glfremove(this)
         };
         paramCell.appendChild(deleteButton);
     }
@@ -68,7 +72,7 @@ function add_element(tbl, arr_name, index, disp_type, def_val, deletable) {
         deleteButton.value = "x";
         deleteButton.onclick =
         function(){
-            gl_cfg_remove(this)
+            glfremove(this)
         };
         paramCell.appendChild(deleteButton);
     }
@@ -108,7 +112,7 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable) {
         deleteButton.type = "button";
         deleteButton.value = "x";
         deleteButton.onclick = function(){
-            gl_cfg_remove(this);
+            glfremove(this);
         };
         arrayCell.appendChild(deleteButton);
     }

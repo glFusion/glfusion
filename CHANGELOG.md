@@ -1,6 +1,67 @@
-Please view this file on the master branch, on other branches it's out of date.
+## v1.6.4 (December 9, 2016)
+  - Updated CKEditor to v4.6.1
+  - Fixed a bug on new installs where the HTML filters were not properly configured
+  - Updated Spanish Columbia Translations from John Torro
+  - Updated German Translations from Matrox66
+  - Modified footer.thtml to use {copyright_msg} tag
+  - Forum hint bubble no longer parses auto tags
+  - Improved error checking on smiley replace in forum
 
-v1.6.2 (October 9, 2016)
+## v1.6.3.pl1 (December 7, 2016)
+  - mgslider auto tag cleanup
+  - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
+  - Static page editor did not display error messages in proper format (no styling)
+  - Static page 'Add to Menu' option was not visible
+  - Menu builder did not properly create static page menus
+
+## v1.6.3 (December 4, 2016)
+  - Fixed issue in forum posts where url parsing could cause errors on auto tags
+  - Fixed issue where deleting a story did not properly clear the story cache
+  - Auto tags can now see who is calling them (i.e.; Media Gallery calling the Tag autotag - Tag can now see that Media Gallery is calling)
+  - Updated Oauth library to v1.152
+  - Improved Twitter Oauth login support
+  - Media Gallery media/image auto tags now produce responsive images
+  - Media Gallery - fixed responsive video for video auto tag
+  - Fixed missing translations in story editor and bad behavior menu
+  - Automatic URL parsing now adds nofollow attribute
+  - Moved story options in full article view to the header area - same as short index view
+  - Implemented new plugin API for whatsrelated in stories
+  - Fixed error in lib-admin where no-data string was not used
+  - Fixed issue with admin lists not always 'remembering' the previous selections when navigating away from the list (i.e.; viewin an item on the list)
+  - Fixed issue in Bad Behavior plugin where log ids were not properly created
+  - Resolved issue where plugins updates would upload but not update automatically
+  - Updated tooltip JS to properly parse titles
+  - Styled the tool-tip title
+  - Forum Plugin - improved WYSIWYG editor integration - better support for site styles
+  - New feature to allow cidr blocks with BB2
+  - Added database info to environment check report
+  - Update Unite Gallery to v1.7.37
+  - Update Media Element to v2.23.4
+  - Update CKeditor to v4.6.0
+  - Moderation System - enabled check all capability for submission lists
+  - Media Gallery: Alternate URL support did not function properly on auto tags
+  - Media Gallery: Info icon would not open modal on mobile devices
+  - Media Gallery: jhead support was broken
+  - Plugin upload did not properly validate plugin.xml file was located - assumed to be in first directory found
+  - Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
+  - Created master core configuration data file - reference it as a single source for maintenance during upgrades
+  - Updated fusionrescue to allow resetting login methods field
+  - Installation validates database charset
+  - Improved the visual cues when backing up large tables
+  - Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
+  - Added RSS Ticker widget
+  - RSS feeds did not use attribution author when available
+  - Update UIKIT to v2.27.2
+  - Story view count was not displaying when configured to do so
+  - Fixed error with adding new keyed configuration items in the online configuration manager
+  - Fixed incorrect path in environment check for lck files
+  - Fixed issue where system messages with double quotes would not properly display
+  - Moved off-canvas menu template out of custom/ directory to menu/ directory
+  - Links auto tag did not honor link / category permissions
+  - Media Gallery: Add 'height' parameter to mgslider autotag
+  - Media Gallery: Make slideshow link a button
+
+## v1.6.2 (October 9, 2016)
   - Updated Exifer library bundled with Media Gallery
   - Updated getID3 library to latest upstream release
   - Modified Admin menu layout to hide instruction block by default - new ? icon to toggle view
@@ -47,7 +108,7 @@ v1.6.2 (October 9, 2016)
   - Story instance - dynamic auto tags would get cached and no longer be dynamic
   - Fixed issue in version check where it did not properly detect pl versions
 
-v1.6.1 (September 13, 2016)
+## v1.6.1 (September 13, 2016)
   - Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
   - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
   - Fixed issue with LinkedIn Oauth login
@@ -108,7 +169,7 @@ v1.6.1 (September 13, 2016)
   - Improved FB login to support more recent FB API version (v2.7 at this time)
   - Fixed error where topic id was not used to filter global story attribute changes
 
-v1.6.0 (July 22, 2016)
+## v1.6.0 (July 22, 2016)
   - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
   - Fixed long standing bug in the Open Graph image property (property is now configured "properly")
   - Experimental feature to allow custom story templates per topic
@@ -195,7 +256,7 @@ v1.6.0 (July 22, 2016)
   - Added alignleft,alignright,aligncenter styles to CMS theme
   - Removed !important attribute from forum style sheet in CMS theme
 
-v1.5.1 (November 8, 2015)
+## v1.5.1 (November 8, 2015)
   - Removed custom.css included in Vintage theme
   - Fixed typo in menu editor template (CMS) that prevented saving menu settings
   - Expand story id, link id, staticpage id, and poll id to 128 characters
@@ -215,7 +276,7 @@ v1.5.1 (November 8, 2015)
   - Added floatleft / floatright styles to CMS theme to support proper wrapping on [imageX] tags in stories
   - Fixed error where both username and email were required on the forgot password screen. Now only requires one or the other
 
-v 1.5.0 (October 31, 2015)
+## v1.5.0 (October 31, 2015)
   - Media Gallery: Improved support for MP4 video playback
   - Fixed incorrect password confirmation field name in CMS theme
   - Media Gallery: Fixed incorrect rating value on search page
@@ -273,7 +334,7 @@ v 1.5.0 (October 31, 2015)
   - Privacy policy and Terms of use now implemented as static pages
   - Support for PHP v5.3+ unlimited post size
 
-v 1.4.3 (Nov 9, 2014)
+## v1.4.3 (Nov 9, 2014)
   - CAPTCHA Plugin - Added mathematical captcha
   - Forum - Fixed error where forum ranking did not always display properly.
   - SpamX - Add Allow TOR IP configuration option
@@ -293,7 +354,7 @@ v 1.4.3 (Nov 9, 2014)
   - Cleaned up the style sheet caching logic and implemented improvements to prevent corrupt cache files.
   - Implemented file locking when creating the style cache file to ensure multiple instances do not cause a file write error
 
-v 1.4.2 (Jun 29, 2014)
+## v1.4.2 (Jun 29, 2014)
   - Ensure CKEditor's Media Gallery browser window has scroll bars and is re-sizable
   - Improved GD2 image re-sizing to preserve transparency
   - Fixed issue where Media Gallery would timeout on album admin screens
@@ -307,7 +368,7 @@ v 1.4.2 (Jun 29, 2014)
   - Forum reorganized forum entry page - moved subject above editing toolbar
   - Media Gallery - fixed HTML5 upload issue
 
-v 1.4.1 (Apr 26, 2014)
+## v1.4.1 (Apr 26, 2014)
   - Several stability improvements
   - Several code improvements for running a site under SSL
   - Improved URL filtering
@@ -328,7 +389,7 @@ v 1.4.1 (Apr 26, 2014)
   - Installation / upgrade enhancements to better support PHP v5.5+
   - Update OAuth library to latest release
 
-v 1.4.0 (Apr 1, 2014)
+## v1.4.0 (Apr 1, 2014)
   - Improved HTML filtering and variable sanitizing capabilities.
   - Fixed security flaw in HTML filter.
   - Removed FCKEditor from code base
@@ -359,14 +420,14 @@ v 1.4.0 (Apr 1, 2014)
        - menu_footer
   - Removed all legacy menu code (i.e.; menu_elements from config, etc.)
 
-v 1.3.2.pl1
+## v1.3.2.pl1
   - Updated PHPMailer to latest upstream release (Mark)
   - Forum Plugin: Fixed new post detection / display (Mark)
   - Forum Plugin: New / Reply post notification emails used wrong text (Mark)
   - Forum Plugin: Stop Forum Spam tweak to only urlencode when needed (Mark)
   - Forum Plugin: Fixed crash when adding group moderators (Mark)
 
-v 1.3.2 (Jan 26, 2014)
+## v1.3.2 (Jan 26, 2014)
   - Style tweak - quotes in Forum plugin pushed past margin in fixed width layout (Mark)
   - Media Gallery - Batch Album delete did not properly remove albums (Mark)
   - Fixed date display issue with Calendar Upcoming Event block (Mark)
@@ -376,7 +437,7 @@ v 1.3.2 (Jan 26, 2014)
   - Updated OAuth library to latest version (Mark)
   - Fixed logic bug in Media Gallery export script (Mark)
 
-v 1.3.1 (Sep 5, 2013)
+## v1.3.1 (Sep 5, 2013)
   - Fixed potential SQL inject in Media Gallery - Identified by Manituna Security (Mark)
   - Fixed SpamX SFS email check - no longer urlencode email address (Mark)
   - Added Clear Cache and Menu Builder entries to the Admins Only block function (Eric)
@@ -390,7 +451,7 @@ v 1.3.1 (Sep 5, 2013)
   - Fixed error when saving in Group editor when chk_showall was set to 1 (Mark)
   - Demo mode security improvements (Mark)
 
-v 1.3.0 (Jun 19, 2013)
+## v1.3.0 (Jun 19, 2013)
   - Added social auth moorotator image to default content (Michael/Eric)
   - Moved hard-coded styles in public_html/layout/nouveau/users/loginform.thtml to style.css, dynamically set loginbox width if oauth enabled (Michael/Eric)
   - Moved hard coded rating speed limit to configuration (Mark)

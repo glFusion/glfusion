@@ -260,7 +260,13 @@ $LANG01 = array(
     'blocks_right_title' => 'Right Side',
     'blocks_footer_title' => 'Footer',
     'source' => 'Source',
-    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.'
+    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
+    'db_header' => 'Database Info',
+    'db_driver' => 'Database Driver',
+    'db_version' => 'Database Version',
+    'db_engine' => 'Database Engine',
+    'db_charset' => 'Database Character Set',
+    'db_collation' => 'Database Collation'
 );
 
 ###############################################################################
@@ -1021,7 +1027,8 @@ $LANG24 = array(
     107 => 'Attribution Author',
     108 => 'Attribution',
     109 => 'Keywords',
-    110 => 'Enter a comma separated list of keywords'
+    110 => 'Enter a comma separated list of keywords',
+    111 => 'Global Settings'
 );
 
 ###############################################################################
@@ -1696,21 +1703,21 @@ $LANG_ACCESS = array(
 ###############################################################################
 # admin/database.php
 
-$LANG_DB_BACKUP = array(
+$LANG_DB_ADMIN = array(
     'database_admin' => 'Database Administration',
-    'last_ten_backups' => 'Últimos 10 Backups',
+    'last_ten_backups' => 'Database Backups',
     'create_backup' => 'Backup Database',
-    'do_backup' => 'Fazer Backup',
-    'backup_successful' => 'Backup do banco de dados feito com sucesso.',
-    'db_explanation' => 'Para criar um novo backup do seu sistema glFusion, clique o botão abaixo',
+    'do_backup' => 'Do Backup',
+    'backup_successful' => 'Database back up was successful.',
+    'db_explanation' => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
-    'zero_size' => 'Backup Falhou: tamanho do arquivo com 0 bytes',
-    'path_not_found' => "{$_CONF['backup_path']} não existe ou não é um diretório",
-    'no_access' => "ERRO: Diretório {$_CONF['backup_path']} não está acessível.",
-    'backup_file' => 'Arquivo de Backup',
-    'size' => 'Tamanho',
+    'zero_size' => 'Backup Failed: Filesize was 0 bytes',
+    'path_not_found' => "{$_CONF['backup_path']} does not exist or is not a directory",
+    'no_access' => "ERROR: Directory {$_CONF['backup_path']} is not accessible.",
+    'backup_file' => 'Backup file',
+    'size' => 'Size',
     'bytes' => 'Bytes',
-    'total_number' => 'Número total de backups: %d',
+    'total_number' => 'Total number of backups: %d',
     'download' => 'Click to download this file',
     'convert_menu' => 'Convert to InnoDB',
     'convert_title' => 'Convert to InnoDB tables',
@@ -1720,19 +1727,19 @@ $LANG_DB_BACKUP = array(
     'converting' => 'Converting',
     'no_innodb' => 'Your version of MySQL does not support InnoDB tables.',
     'no_myisam' => 'Your version of MySQL does not support MyISAM tables.',
-    'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. Please <a href="http://dev.mysql.com/doc/refman/5.7/en/converting-tables-to-innodb.html" target="_blank">read up</a> on the benefits and drawbacks of InnoDB tables before you perform a conversion.',
-    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases.',
+    'innodb_instructions' => 'InnoDB tables can provide better performance on large databases. For sites that have significant or frequent contributors to content such as forum posts, comments or stories, InnoDB may provide a small performance boost.',
+    'myisam_instructions' => 'MyISAM tables can provide better performance on smaller databases. For sites with low contributor traffic such as forums and comments, MyISAM may provide better performance.',
     'already_converted' => 'It appears that all of the tables have already been converted to InnoDB.',
     'already_converted_myisam' => 'It appears that all of the tables have already been converted to MyISAM.',
     'conversion_message' => 'Note: Conversion may take some time - please be patient.',
     'innodb_success' => 'Successfully converted tables to InnoDB.',
     'myisam_success' => 'Successfully converted tables to MyISAM.',
-    'table_issues' => 'There may have been problems with some tables, though. Please check error.log for details.',
+    'table_issues' => 'There may have been problems with some tables. Please see the error.log for details.',
     'optimize_menu' => 'Optimize Tables',
     'optimize_title' => 'Optimize Tables',
     'optimize_button' => 'Optimize',
     'optimizing' => 'Optimizing',
-    'optimize_explain' => 'Optimizing tables may help to improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do no expect to see a huge difference in performance. The <a href="http://dev.mysql.com/doc/mysql/en/optimize-table.html" target="_blank">MySQL manual</a> states: <q>it is not likely that you need to do this more than once a week or month</q>.',
+    'optimize_explain' => 'Optimizing tables will help improve the performance of your site. The actual impact depends on the table usage and some tables may benefit from it more than others. Do not expect to see a huge difference in performance. You should not need optimize tables more than once or twice a month.',
     'last_optimization' => 'Last optimization',
     'optimization_message' => 'Optimization may take some time - please be patient.',
     'optimize_success' => 'Successfully optimized database tables.',
@@ -1752,7 +1759,19 @@ $LANG_DB_BACKUP = array(
     'disable_purge' => '("0" to disable purging.)',
     'use_gzip' => 'Use GZip if available',
     'configure' => 'Configure',
-    'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.'
+    'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
+    'utf8_title' => 'UTF8MB4 Upgrade',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_success' => 'UTF8 Upgrade has completed successfully',
+    'retrieve_tables' => 'Retrieving Table List',
+    'error_heading' => 'Errors',
+    'no_errors' => 'No errors encountered',
+    'error_db_utf' => 'Error converting database to UTF8MB4',
+    'error_table_utf' => 'Error converting table to UTF8MB4',
+    'error_column_utf' => 'Error converting column to UTF8MB4',
+    'error_sc' => 'Error updating siteconfig.php - please update db_charset manually',
+    'current_progress' => 'Current Progress',
+    'overall_progress' => 'Overall Progress'
 );
 
 ###############################################################################

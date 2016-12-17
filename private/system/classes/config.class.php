@@ -380,19 +380,19 @@ class config
     {
         global $_TABLES;
 
-        $Qargs = array($param_name,
-                       $set ? serialize($default_value) : 'unset',
-                       $type,
-                       $subgroup,
-                       $group,
-                       ($selection_array === null ?
+        $Qargs = array($param_name,                                     // 0
+                       $set ? serialize($default_value) : 'unset',      // 1
+                       $type,                                           // 2
+                       $subgroup,                                       // 3
+                       $group,                                          // 4
+                       ($selection_array === null ?                     // 5
                         -1 : $selection_array),
-                       $sort,
-                       $fieldset,
-                       serialize($default_value));
+                       $sort,                                           // 6
+                       $fieldset,                                       // 7
+                       serialize($default_value));                      // 8
         $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "UPDATE {$_TABLES['conf_values']} SET sort_order={$Qargs[6]},fieldset={$Qargs[7]}".
+        $sql = "UPDATE {$_TABLES['conf_values']} SET subgroup={$Qargs[3]},sort_order={$Qargs[6]},fieldset={$Qargs[7]},default_value='{$Qargs[8]}'".
                " WHERE group_name='{$Qargs[4]}' AND name='{$Qargs[0]}'";
 
         $this->_DB_escapedQuery($sql,1);

@@ -45,8 +45,8 @@ global $_DB_table_prefix, $_TABLES;
 $_CA_CONF['pi_name']            = 'calendar';
 $_CA_CONF['pi_display_name']    = 'Calendar';
 $_CA_CONF['pi_version']         = '1.0.7';
-$_CA_CONF['gl_version']         = '1.6.2';
-$_CA_CONF['pi_url']             = 'http://www.glfusion.org/';
+$_CA_CONF['gl_version']         = '1.6.4';
+$_CA_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 // Define database tables
 

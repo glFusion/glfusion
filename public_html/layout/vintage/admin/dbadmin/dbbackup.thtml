@@ -1,3 +1,12 @@
+<script>
+	var lang_backingup = "{lang_backingup}";
+	var lang_backup = "{lang_backup}";
+	var lang_success = "{lang_success}";
+	var lang_ok = "{lang_ok}";
+	var lang_cancel = "{lang_cancel}";
+</script>
+<script src="{site_url}/javascript/dbbackup.min.js"></script>
+
 {start_block}
 
 {admin_menu}
@@ -17,6 +26,20 @@
 		<button id="dbbackupbutton" class="uk-button uk-button-primary" type="submit" >{lang_backup}</button>
 		<button id="dbcancelbutton" name="dbcancelbutton" class="uk-button uk-button-danger" type="submit" >{lang_cancel}</button>
 	</form>
+</div>
+
+<div class="uk-margin-top">
+	<div id="dbadmin_batchprocesor" style="display:none;">
+		<hr>
+		<h3 class="uk-margin-bottom uk-margin-remove-top">{lang_ajax_status}</h3>
+		<div class="uk-margin">
+
+			<span class="msg" id="batchinterface_msg">&nbsp;</span>
+		</div>
+		<div class="uk-progress" style="display:none;">
+			Progress:&nbsp;&nbsp;<div id="progress-bar" class="uk-progress-bar" style="width: 0%;">0%</div>
+		</div>
+	</div>
 </div>
 
 {end_block}

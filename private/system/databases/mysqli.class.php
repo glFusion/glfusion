@@ -6,6 +6,10 @@
 // |                                                                          |
 // | mysqli database class                                                    |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2016 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2000-2011 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
@@ -45,8 +49,8 @@ class database
     private $_name = '';
 
     /**
-    * @var sring|string
-    */
+     * @var string
+     */
     private $_user = '';
 
     /**
@@ -80,9 +84,24 @@ class database
     private $_charset = '';
 
     /**
+    * @var string
+    */
+    private $_character_set_database = '';
+
+    /**
     * @var int
     */
     private $_mysql_version = 0;
+
+    /**
+    * @var int
+    */
+    private $_filter = 1;
+
+    /**
+    * @var int
+    */
+    private $_errno = 0;
 
     /**
     * Logs messages
@@ -102,13 +121,11 @@ class database
     }
 
     /**
-    * Connects to the MySQL database server
-    *
-    * This function connects to the MySQL server and returns the connection object
-    *
-    * @return   object      Returns connection object
-    * @access   private
-    */
+     * Connects to the MySQL database server
+     * This function connects to the MySQL server and returns the connection object
+     *
+     * @return   bool Returns connection object
+     */
     private function _connect()
     {
         if ($this->_verbose) {
@@ -131,20 +148,42 @@ class database
             if ($this->_verbose) {
                 $this->_errorlog("DEUBG: mysqli - error in database->_connect");
             }
-
-            // damn, got an error.
             $this->dbError();
         }
 
         if ($this->_charset === 'utf-8') {
             $result = false;
 
-            if (method_exists($this->_db, 'set_charset')) {
-                $result = $this->_db->set_charset('utf8');
+            if ( $this->_character_set_database == '' ) {
+                $result = $this->_db->query("SELECT @@character_set_database");
+                $collation = $this->dbFetchArray($result);
+                $this->_character_set_database = $collation["@@character_set_database"];
             }
+            if ( $this->_mysql_version >= 50503 ) {
+                if ( $this->_character_set_database == "utf8mb4" ) {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8mb4');
+                    }
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8mb4'");
+                    }
+                    $this->_filter = 0;
+                } else {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8');
+                    }
 
-            if (!$result) {
-                @$this->_db->query("SET NAMES 'utf8'");
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8'");
+                    }
+                }
+            } else {
+                if (method_exists($this->_db, 'set_charset')) {
+                    $result = $this->_db->set_charset('utf8');
+                }
+                if (!$result) {
+                    @$this->_db->query("SET NAMES 'utf8'");
+                }
             }
         }
 
@@ -183,12 +222,13 @@ class database
     *
     * @param        string      $dbhost     Database host
     * @param        string      $dbname     Name of database
-    * @param        sring       $dbuser     User to make connection as
-    * @param        string      $pass       Password for dbuser
+     * @param       string      $dbuser     User to make connection as
+    * @param        string      $dbpass     Password for dbuser
     * @param        string      $errorlogfn Name of the errorlog function
-    * @param        string      $charset    character set to use
+    * @param        string      $charset    character set of site
+    * @param        string      $db_charset character of db
     */
-    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '')
+    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '', $db_charset = '' )
     {
         $this->_host = $dbhost;
         $this->_name = $dbname;
@@ -197,6 +237,7 @@ class database
         $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
+        $this->_character_set_database = strtolower($db_charset);
         $this->_mysql_version = 0;
 
         $this->_connect();
@@ -209,38 +250,36 @@ class database
     }
 
     /**
-    * Turns debug mode on
-    * Set this to TRUE to see debug messages
-    *
-    * @param    bool $flag
-    */
+     * Turns debug mode on
+     * Set this to TRUE to see debug messages
+     *
+     * @param    bool $flag
+     */
     public function setVerbose($flag)
     {
         $this->_verbose = (bool) $flag;
     }
 
     /**
-    * Turns detailed error reporting on
-    *
-    * If set to TRUE, this will display detailed error messages on the site.
-    * Otherwise, it will only that state an error occurred without going into
-    * details. The complete error message (including the offending SQL request)
-    * is always available from error.log.
-    *
-    * @param    bool $flag
-    */
+     * Turns detailed error reporting on
+     * If set to TRUE, this will display detailed error messages on the site.
+     * Otherwise, it will only that state an error occurred without going into
+     * details. The complete error message (including the offending SQL request)
+     * is always available from error.log.
+     *
+     * @param    bool $flag
+     */
     public function setDisplayError($flag)
     {
         $this->_display_error = (bool) $flag;
     }
 
     /**
-    * Checks to see if debug mode is on
-    *
-    * Returns value of $_verbose
-    *
-    * @return   bool     TRUE if in verbose mode otherwise FALSE
-    */
+     * Checks to see if debug mode is on
+     * Returns value of $_verbose
+     *
+     * @return   bool     TRUE if in verbose mode otherwise FALSE
+     */
     public function isVerbose()
     {
         if ($this->_verbose
@@ -289,8 +328,10 @@ class database
             $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
         }
 
+        $this->_errno = $this->_db->errno;
+
         // If OK, return otherwise echo error
-        if ($this->_db->errno == 0 AND ($result !== false)) {
+        if ($this->_db->errno == 0 && ($result !== false)) {
             if ($this->_verbose) {
                 $this->_errorlog("DEBUG: mysqli - SQL query ran without error");
                 $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
@@ -808,8 +849,6 @@ class database
     public function dbGetVersion()
     {
         return $this->_db->server_info;
-
-//        return $this->_mysql_version;
     }
 
     public function dbStartTransaction()
@@ -825,6 +864,26 @@ class database
     public function dbRollback()
     {
         return $this->_db->rollback();
+    }
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
+
+    public function getErrno()
+    {
+        return $this->_errno;
+    }
+
+    public function dbGetClientVersion()
+    {
+        return $this->_db->client_version;
+    }
+
+    public function dbGetServerVersion()
+    {
+        return $this->_mysql_version;
     }
 }
 

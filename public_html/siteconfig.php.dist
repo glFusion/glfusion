@@ -214,6 +214,28 @@ $_SYSTEM['alert_timeout'] = 4000;
 $_SYSTEM['alert_position'] = 'top-right';
 
 // +--------------------------------------------------------------------------+
+// | UIKIT Style                                                              |
+// |                                                                          |
+// | Specifies the base uikit style  - valid values are:                      |
+// |                                                                          |
+// | '.'             - will use the flat style                                |
+// | '.gradient.'    - will use the gradient style                            |
+// | '.almost-flat.' - will use the almost flat style                         |
+// |                                                                          |
+// | See https://www.glfusion.org/wiki/glfusion:styling:custom_theme          |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['style_type'] = 'undefined';
+
+// +--------------------------------------------------------------------------+
+// | Database Backup Max Rows                                                 |
+// |                                                                          |
+// | Defines the maximum number of rows to process in one iteration           |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['db_backup_rows'] = 10000;
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |
@@ -236,6 +258,8 @@ $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
 
 $_CONF['default_charset'] = 'iso-8859-1';
+
+$_CONF['db_charset'] = 'latin1';
 
 if (!defined('LB')) {
   define('LB',"\n");

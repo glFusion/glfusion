@@ -631,19 +631,28 @@ function _pi_parseXML($tmpDirectory)
 {
     global $_CONF, $pluginData;
 
+    $filename = '';
+
     if (!$dh = @opendir($tmpDirectory)) {
         return false;
     }
+
     while (false !== ($file = readdir($dh))) {
         if ( $file == '..' || $file == '.' ) {
             continue;
         }
         if ( @is_dir($tmpDirectory . '/' . $file) ) {
             $filename = $tmpDirectory . '/' . $file . '/plugin.xml';
-            break;
+            if ( @file_exists($filename)) {
+                break;
+            }
         }
     }
     closedir($dh);
+
+    if ( $filename == '' ) {
+        return -1;
+    }
 
     if (!($fp=@fopen($filename, "r"))) {
         return -1;

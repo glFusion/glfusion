@@ -112,11 +112,13 @@ function PAGE_form($A, $error = false)
         $ownername = COM_getDisplayName ($A['owner_id']);
 
         if ( !isset($A['sp_search']) ) $A['sp_search'] = 0;
+        if ( !isset($A['sp_onmenu']) ) $A['sp_onmenu'] = 0;
         if ( !isset($A['sp_status']) ) $A['sp_status'] = 0;
 
         $sp_template->set_var(array(
             'sp_search_checked' => $A['sp_search'] == 1 ? ' checked="checked"' : '',
             'sp_status_checked' => $A['sp_status'] == 1 ? ' checked="checked"' : '',
+            'sp_onmenu_checked' => $A['sp_onmenu'] == 1 ? ' checked="checked"' : '',
             'lang_accessrights' => $LANG_ACCESS['accessrights'],
             'lang_owner'        => $LANG_ACCESS['owner'],
             'owner_username'    => DB_getItem($_TABLES['users'],'username',"uid = {$A['owner_id']}"),
@@ -431,6 +433,7 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
         $A['commentcode'] = $_SP_CONF['comment_code'];
         $A['sp_where'] = 1;             // top of page
         $A['sp_search'] = $_SP_CONF['include_search'];
+        $A['sp_onmenu'] = 0;
     } elseif (!empty ($sp_id) && $action == 'clone') {
         // we're creating a new staticpage based upon an old one.  get the page to be cloned
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 2));
@@ -537,7 +540,6 @@ function PAGE_submit($sp_id, $sp_status, $sp_uid, $sp_title, $sp_content, $sp_hi
                  );
 
     PLG_invokeService('staticpages', 'submit', $args, $retval, $svc_msg);
-    CACHE_remove_instance('stmenu');
     return $retval;
 }
 
@@ -849,9 +851,11 @@ switch ($action) {
             DB_query($sql,1);
 
             if (!empty ($sp_id)) {
+/*
                 if (!isset ($_POST['sp_onmenu'])) {
                     $_POST['sp_onmenu'] = '';
                 }
+*/
                 if (!isset ($_POST['sp_php'])) {
                     $_POST['sp_php'] = '';
                 }
@@ -890,7 +894,7 @@ switch ($action) {
                     isset($_POST['sp_content']) ? $_POST['sp_content'] : '',
                     isset($_POST['sp_hits']) ? COM_applyFilter ($_POST['sp_hits'], true) : 0,
                     isset($_POST['sp_format']) ? COM_applyFilter ($_POST['sp_format']) : '',
-                    isset($_POST['sp_onmenu']) ? $_POST['sp_onmenu'] : '',
+                    isset($_POST['sp_onmenu']) ? 1 : 0,
                     isset($_POST['sp_label']) ? $_POST['sp_label'] : '',
                     isset($_POST['commentcode']) ? COM_applyFilter ($_POST['commentcode'], true) : 0,
                     isset($_POST['owner_id']) ? COM_applyFilter ($_POST['owner_id'], true) : 2,
@@ -945,11 +949,13 @@ switch ($action) {
             $sp_search = (isset($_POST['sp_search']) ? $_POST['sp_search'] : '');
             $sp_onmenu = (isset($_POST['sp_onmenu']) ? $_POST['sp_onmenu'] : '');
             $sp_nf     = (isset($_POST['sp_nf']) ? $_POST['sp_nf'] : '');
+/*
             if ($sp_onmenu == 'on') {
                 $_POST['sp_onmenu'] = 1;
             } else {
                 $_POST['sp_onmenu'] = 0;
             }
+*/
             if ($sp_nf == 'on') {
                 $_POST['sp_nf'] = 1;
             } else {

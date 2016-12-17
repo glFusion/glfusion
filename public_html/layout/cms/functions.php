@@ -20,7 +20,7 @@ $_SYSTEM['framework'] = 'uikit';
 $_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
 $_SYSTEM['disable_jquery_menu'] = true;     // not needed for this theme
-$_SYSTEM['disable_jquery_slimbox'] = true;  // use uikit
+$_SYSTEM['disable_jquery_slimbox'] = false;  // use uikit
 
 // multiple language support
 
@@ -106,12 +106,25 @@ $blockInterface = array(
 
 // define the JS we need for this theme..
 $outputHandle = outputHandler::getInstance();
+
+// if the theme needs jquery-ui - uncomment
+// also see jquery-ui styles below..
+$outputHandle->addScriptFile($_CONF['path_html'].'javascript/jquery/jquery-ui.min.js');
+
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
 
 // Load our CSS specific to this theme
-
-$styleType = '.gradient.'; // almost-flat - gradient - blank
+$validTypes = array('.','.gradient.','.almost-flat.');
+if ( !isset($_SYSTEM['style_type']) || $_SYSTEM['style_type'] == 'undefined' ) {
+    $styleType = '.gradient.';
+} else {
+    if ( in_array($_SYSTEM['style_type'],$validTypes) ) {
+        $styleType = $_SYSTEM['style_type'];
+    } else {
+        $styleType = '.gradient.';
+    }
+}
 
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_HIGH);
@@ -166,8 +179,8 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js'
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
 $outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
 
-// must load the jquery ui library we want to use.
-$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-uikit/jquery-ui-1.10.4.custom.min.css');
+// must load the jquery ui library we want to use if using jquery ui.
+$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery-ui/jquery-ui.min.css');
 
 //  Custom CSS
 if ( file_exists($_CONF['path_layout'] .'custom.css') ) {

@@ -7,7 +7,7 @@ function loadEditor(id) {
     var instance = CKEDITOR.replace( id, {
         toolbar: 'basic',
         contentsCss: '{css_url}',
-        bodyClass: 'comment',
+        bodyClass: 'tm-container comment',
         removePlugins: 'elementspath',
         resize_enabled: false,
 {!if mbmissing} {# check for mbstring extension in PHP #}

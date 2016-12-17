@@ -822,6 +822,27 @@ class database {
     {
         return @mysql_real_escape_string($str);
     }
+
+    /**
+    * always filter escapes
+    *
+    * @return   true
+    *
+    */
+    public function getFilter()
+    {
+        return 1;
+    }
+
+    public function dbGetClientVersion()
+    {
+        return 0;
+    }
+
+    public function dbGetServerVersion()
+    {
+        return $this->_mysql_version;
+    }
 }
 
 ?>

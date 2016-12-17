@@ -202,7 +202,10 @@ function mediagallery_upgrade()
                 DB_query("UPDATE {$_TABLES['mg_albums']} SET enable_html=1",1);
             }
         case '2.1.0' :  //glFusion v1.6.0
-
+        case '2.1.1' :  //glFusion v1.6.2
+            DB_query("ALTER TABLE {$_TABLES['mg_config']} CHANGE `config_name` `config_name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
+            DB_query("ALTER TABLE {$_TABLES['mg_exif_tags']} CHANGE `name` `name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
+            DB_query("ALTER TABLE {$_TABLES['mg_playback_options']} CHANGE `option_name` `option_name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
 
         default :
 

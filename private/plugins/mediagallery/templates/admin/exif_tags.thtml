@@ -45,8 +45,8 @@
         <!-- END exifRow -->
         <tr>
             <td colspan="2" align="left">
-                <button class="uk-button uk-button-small" onclick="javascript:doCheckAll()" value="{lang_check_all}">{lang_check_all}</button>
-                <button class="uk-button uk-button-small" onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheck_all}">{lang_uncheck_all}</button>
+                <button class="uk-button uk-button-small" onclick="javascript:doCheckAll();return false;" value="{lang_check_all}">{lang_check_all}</button>
+                <button class="uk-button uk-button-small" onclick="javascript:doUnCheckAll();return false;" type="button" value="{lang_uncheck_all}">{lang_uncheck_all}</button>
             </td>
         </tr>
     </table>

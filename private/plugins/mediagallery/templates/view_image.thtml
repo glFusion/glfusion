@@ -86,7 +86,9 @@
             <span class="uk-text-bold">{lang_uploaded_by}:</span>&nbsp;{owner_username}&nbsp;&nbsp;<br/><br/>
             {download}
             {shutterfly_submit}&nbsp;
-            <i class="uk-align-right uk-icon-button uk-icon-small uk-icon-info" data-uk-modal="{target: '#metadata'}"></i>
+            <a href="#metadata" data-uk-modal>
+            <i class="uk-align-right uk-icon-button uk-icon-small uk-icon-info"></i>
+	          </a>
         </div>
     </div>
 </div>

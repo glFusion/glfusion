@@ -36,7 +36,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.6.2');
+    define('GVERSION', '1.6.4');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -60,6 +60,8 @@ define('NO_MIGRATE_GLFUSION',      19);
 define('FILE_INCLUDE_ERROR',       20);
 define('NO_DB_DRIVER',             21);
 define('FILE_CLEANUP_ERROR',       22);
+define('DB_NO_UTF8',               23);
+define('DB_NO_CHECK_UTF8',         24);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -367,6 +369,12 @@ function _displayError($error,$step,$errorText='')
             break;
         case DB_EXISTS :
             $T->set_var('text',$LANG_INSTALL['database_exists']);
+            break;
+        case DB_NO_UTF8 :
+            $T->set_var('text',$LANG_INSTALL['no_utf8']);
+            break;
+        case DB_NO_CHECK_UTF8 :
+            $T->set_var('text',$LANG_INSTALL['no_check_utf8']);
             break;
         case NO_MIGRATE_GLFUSION :
             $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
@@ -1324,6 +1332,20 @@ function INST_gotSiteInformation()
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
+        $collationResult = @mysqli_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
+        $collation = @mysqli_fetch_array($collationResult);
+        $collation_database = $collation["@@collation_database"];
+        $character_set = $collation["@@character_set_database"];
+        $_GLFUSION['db_charset'] = $character_set;
+        if ( $_GLFUSION['utf8'] ) {
+            if ( (substr($collation_database,0,4) != "utf8") || (substr($character_set,0,4) != "utf8")  ) {
+                return _displayError(DB_NO_UTF8, 'getsiteinformation');
+            }
+        } else {
+            if ( (substr($collation_database,0,4) == "utf8") || (substr($character_set,0,4) == "utf8")  ) {
+                return _displayError(DB_NO_CHECK_UTF8, 'getsiteinformation');
+            }
+        }
         $result = @mysqli_query($db_handle, "SHOW TABLES LIKE '".$db_prefix."vars'");
         if (@mysqli_num_rows ($result) > 0) {
             return _displayError(DB_EXISTS,'');
@@ -1357,11 +1379,19 @@ function INST_gotSiteInformation()
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
+        $collationResult = @mysql_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
+        $collation = @mysql_fetch_array($collationResult);
+        $collation_database = substr($collation["@@collation_database"],0,4);
+        $character_set = substr($collation["@@character_set_database"],0,4);
+        if ( ($collation_database != "utf8") || ($character_set != "utf8")  ) {
+            return _displayError(DB_NO_UTF8, 'getsiteinformation');
+        }
         $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
         if (@mysql_numrows ($result) > 0) {
             return _displayError(DB_EXISTS,'');
         }
     }
+
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_MISSING,'getsiteinformation',$errText);
     }
@@ -1485,6 +1515,16 @@ function INST_installAndContentPlugins()
              $siteconfig_data
             );
 
+// put database default character set here
+
+    $siteconfig_data = preg_replace
+            (
+             '/\$_CONF\[\'db_charset\'\] = \'[^\']*\';/',
+             "\$_CONF['db_charset'] = '" . $_GLFUSION['db_charset'] . "';",
+             $siteconfig_data
+            );
+
+
     $siteconfig_file = fopen($siteconfig_path, 'w');
     if (!fwrite($siteconfig_file, $siteconfig_data)) {
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
@@ -1554,8 +1594,10 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
     }
     require_once $_CONF['path_system'].'classes/config.class.php';
+    require_once $_CONF['path'].'sql/core_config_data.php';
     require_once 'config-install.php';
-    install_config($site_url);
+
+    install_config($site_url,$coreConfigData);
 
     $gl_path    = $_GLFUSION['dbconfig_path'];
     $html_path  = $_PATH['public_html'];

@@ -765,7 +765,13 @@ function forum_xchsmilies($message,$reverse=false) {
     '<img style="vertical-align:middle;" src="images/smilies/mrgreen.gif" alt="Mr. Green"/>');
 
     if (!$reverse) {
-        $message = str_replace($search, $replace, $message);
+        $counter = 0;
+        foreach ( $search AS $emoticon) {
+            if ( isset($replace[$counter])) {
+                $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon) . "#", $replace[$counter], $message);
+            }
+            $counter++;
+        }
     } else {
         $message = str_replace($replace, $search, $message);
     }
@@ -1367,7 +1373,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     if ($id == '*') {
         $where = '';
-        $permOp = '';
+        $permOp = ' WHERE ';
     } else {
         $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
@@ -1387,6 +1393,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
+
     }
 
     $result = DB_query($sql);

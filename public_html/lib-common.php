@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.3 or greater
-if (version_compare(PHP_VERSION,'5.3.0','<')) {
-    die('Sorry, glFusion requires PHP version 5.3.0 or greater.');
+if (version_compare(PHP_VERSION,'5.3.3','<')) {
+    die('Sorry, glFusion requires PHP version 5.3.3 or greater.');
 }
 
 /**
@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.0','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.2');
+    define('GVERSION', '1.6.4');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -896,7 +896,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     if ( isset($blockInterface['left'] )) {
         $currentURL = COM_getCurrentURL();
-        if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
+        if ( @strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
             if ( $blockInterface['left']['location'] == 'right' ||
                  $blockInterface['left']['location'] == 'left' ) {
                 $theme_what = 'none';
@@ -1873,15 +1873,7 @@ function COM_errorLog( $logentry, $actionid = '' )
                 break;
 
            case 2:
-                if ( class_exists('Template') ) {
-                    $retval .= COM_startBlock( $LANG01[55] . ' ' . $timestamp, '',
-                                   COM_getBlockTemplate( '_msg_block', 'header' ))
-                            . nl2br( $logentry )
-                            . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                                  'footer' ));
-                } else {
-                    $retval .= nl2br($logentry);
-                }
+                $retval .= COM_showMessageText($logentry,'', true, 'error');
                 break;
 
             case 3:
@@ -6834,6 +6826,7 @@ function css_cacheok($cache,$files)
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  */
+
 function _css_compress($css){
     //strip comments through a callback
     $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','_css_comment_cb',$css);
@@ -6869,9 +6862,12 @@ function _css_compress($css){
  * Keeps short comments (< 5 chars) to maintain typical browser hacks
  *
  * @author Andreas Gohr <andi@splitbrain.org>
+ *
+ * @param array $matches
+ * @return string
  */
 function _css_comment_cb($matches){
-    if(strlen($matches[2]) > 4 && $matches[2][0] != '@') return '';
+    if(strlen($matches[2]) > 4) return '';
     return $matches[0];
 }
 
@@ -6880,7 +6876,7 @@ function _css_comment_cb($matches){
  *
  * Strips one line comments but makes sure it will not destroy url() constructs with slashes
  *
- * @param $matches
+ * @param array $matches
  * @return string
  */
 function _css_onelinecomment_cb($matches) {
@@ -6929,7 +6925,6 @@ function _css_onelinecomment_cb($matches) {
     return substr($line, 0, $i);
 }
 
-
 function _js_out()
 {
     global $_CONF, $_SYSTEM, $_USER, $_PLUGINS, $themeAPI;
@@ -6950,7 +6945,7 @@ function _js_out()
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
-        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-ui.min.js';
+        $files[] = $_CONF['path_layout'].'/js/header.js';
         $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
@@ -7031,6 +7026,7 @@ function _js_out()
     /*
      * Let the plugins add any global JS variables
      */
+    $pluginJSvars['gl'] = 'log';
     if (is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
@@ -7118,6 +7114,7 @@ function js_cacheok($cache,$files)
     }
     return true;
 }
+
 
 /**
  * This block will display any social site memberships

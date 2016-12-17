@@ -570,7 +570,8 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'sort_by':
-                $retval = $LANG27[30+$fieldvalue];
+                $sortByLang = 30 + (int) $fieldvalue;
+                $retval = $LANG27[$storyByLang]; // 30+$fieldvalue];
                 break;
 
             case 'is_default':

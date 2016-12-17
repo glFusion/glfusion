@@ -32,7 +32,7 @@ if (!defined ('GVERSION')) {
 }
 
 $_SQL['bad_behavior2'] = "CREATE TABLE {$_TABLES['bad_behavior2']} (
-    `id` INT(11) NOT NULL auto_increment,
+    `id` INT(10) unsigned NOT NULL auto_increment,
     `ip` TEXT NOT NULL,
     `date` DATETIME NOT NULL default '1000-01-01 00:00:00.000000',
     `request_method` TEXT NOT NULL,
@@ -42,9 +42,10 @@ $_SQL['bad_behavior2'] = "CREATE TABLE {$_TABLES['bad_behavior2']} (
     `user_agent` TEXT NOT NULL,
     `request_entity` TEXT NOT NULL,
     `key` TEXT NOT NULL,
+    PRIMARY KEY (`id`),
     INDEX (`ip`(15)),
-    INDEX (`user_agent`(10)),
-    PRIMARY KEY (`id`) ) ENGINE=MyISAM;";
+    INDEX (`user_agent`(10))
+) ENGINE=MyISAM;";
 
 $_SQL['bad_behavior2_ban'] = "CREATE TABLE {$_TABLES['bad_behavior2_ban']} (
     `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -55,5 +56,6 @@ $_SQL['bad_behavior2_ban'] = "CREATE TABLE {$_TABLES['bad_behavior2_ban']} (
     PRIMARY KEY  (id),
     UNIQUE ip (ip),
     INDEX type (type),
-    INDEX timestamp (timestamp) ) ENGINE=MyISAM;";
+    INDEX timestamp (timestamp)
+) ENGINE=MyISAM;";
 ?>

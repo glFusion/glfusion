@@ -57,5 +57,5 @@ function showhideProfileEditorDiv(selected, selindex) {
         if (preview) document.getElementById('pe_preview').style.display = '';
         document.getElementById('save_button').style.display = 'none';
     }
-    positionFooter();
+    pf();
 }

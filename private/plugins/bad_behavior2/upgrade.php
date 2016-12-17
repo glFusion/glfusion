@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -96,7 +96,10 @@ function bad_behavior2_upgrade ()
             $c->add('bb2_offsite_forms',0,'select',8,1,0,110,TRUE);
             $c->add('bb2_eu_cookie',0,'select',8,1,0,120,TRUE);
 
-            break;
+        case '2.0.50' :
+            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} DROP `id`;",1);
+            DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} ADD `id` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);",1);
+
         default:
             break;
     }

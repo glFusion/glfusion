@@ -37,8 +37,8 @@ $_BB2_CONF = array();
 
 $_BB2_CONF['pi_name']           = 'bad_behavior2';
 $_BB2_CONF['pi_display_name']   = 'Bad Behavior2';
-$_BB2_CONF['pi_version']        = '2.0.50';
-$_BB2_CONF['gl_version']        = '1.6.2';
+$_BB2_CONF['pi_version']        = '2.0.51';
+$_BB2_CONF['gl_version']        = '1.6.4';
 $_BB2_CONF['pi_url']            = 'https://www.glfusion.org/';
 
 $_TABLES['bad_behavior2']    	= $_DB_table_prefix . 'bad_behavior2';

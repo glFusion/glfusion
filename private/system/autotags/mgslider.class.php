@@ -27,11 +27,11 @@ class autotag_mgslider extends BaseAutotag {
 
         $retval     = '';
         $skip       = 0;
-
         $template        = 'mgslider.thtml';
         $overlayPosition = 'top'; // top, bottom, left, right, center
         $kenBurns        = false;
         $autoPlay        = false;
+        $height          = 'auto';
 
         $px = explode (' ', trim ($p2));
         if (is_array ($px)) {
@@ -51,6 +51,10 @@ class autotag_mgslider extends BaseAutotag {
                 } elseif (substr ($part,0, 9) == 'template:') {
                     $a = explode(':', $part);
                     $template = $a[1];
+                    $skip++;
+                } elseif (substr ($part,0, 7) == 'height:') {
+                    $a = explode(':', $part);
+                    $height = $a[1];
                     $skip++;
                 } else {
                     break;
@@ -94,8 +98,10 @@ class autotag_mgslider extends BaseAutotag {
         } else {
             $options .= 'kenburns:false,';
         }
-        if ( $autoPlay == true ) {
+        if ( $autoPlay == 1 ) {
             $options .= 'autoplay:true';
+        } else {
+            $options .= 'autoplay:false';
         }
         $T->set_var('options',$options);
 

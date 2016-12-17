@@ -179,18 +179,33 @@ function plugin_autotags_links($op, $content = '', $autotag = '')
         $lid = COM_applyFilter($autotag['parm1']);
         $url = COM_buildUrl($_CONF['site_url']
                             . '/links/portal.php?what=link&amp;item=' . $lid);
-        if (empty($autotag['parm2'])) {
-            $result = DB_query("SELECT url, title FROM {$_TABLES['links']} WHERE lid = '$lid'");
-            list($siteurl, $linktext) = DB_fetchArray($result);
-        } else {
-            $linktext = $autotag['parm2'];
-            $siteurl = DB_getItem($_TABLES['links'], 'url', "lid = '$lid'");
+
+        $sql = "SELECT l.url, l.title, lc.owner_id,lc.group_id,lc.perm_owner,lc.perm_group,lc.perm_members,lc.perm_anon,
+                l.owner_id as lowner_id,l.group_id as lgroup_id,l.perm_owner as lperm_owner,l.perm_group as lperm_group,l.perm_members as lperm_members,l.perm_anon as lperm_anon
+                FROM {$_TABLES['links']} AS l LEFT JOIN {$_TABLES['linkcategories']} AS lc ON l.cid=lc.cid WHERE l.lid = '".DB_escapeString($lid)."'";
+
+        $result = DB_query($sql);
+        $L = DB_fetchArray($result);
+
+        $link = '';
+
+        if (SEC_hasAccess ($L['owner_id'], $L['group_id'], $L['perm_owner'], $L['perm_group'], $L['perm_members'], $L['perm_anon']) >= 2) {
+            if (SEC_hasAccess ($L['lowner_id'], $L['lgroup_id'], $L['lperm_owner'], $L['lperm_group'], $L['lperm_members'], $L['lperm_anon']) >= 2) {
+                if (empty($autotag['parm2'])) {
+                    $siteurl = $L['url'];
+                    $linktext = $L['title'];
+                } else {
+                    $linktext = $autotag['parm2'];
+                    $siteurl = $L['url'];
+                }
+                $attr = array(
+                            'title' => $siteurl,
+                            'class' => 'ext-link'
+                             );
+                $link = COM_createLink($linktext, $url, $attr);
+            }
         }
-        $attr = array(
-                    'title' => $siteurl,
-                    'class' => 'ext-link'
-                     );
-        $link = COM_createLink($linktext, $url, $attr);
+
         $content = str_replace($autotag['tagstr'], $link, $content);
 
         return $content;

@@ -31,26 +31,63 @@
 				<td>{notes}</td>
 			</tr>
 			<!-- END envs -->
+		</table>
 
+		<h2>{lang_extensions}</h2>
+		<hr>
+		<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
 			<tr>
-				<td>{mysql}</td>
-				<td colspan="3">
-					{mysql_version}
-				</td>
-			</tr>
-
-			<tr>
-				<td colspan="4">
-					<h2>{lang_extensions}</h2>
-				</td>
+				<th>{lang_setting}</th>
+				<th class="uk-text-center">{lang_status}</th>
+				<th>{lang_notes}</th>
 			</tr>
 			<!-- BEGIN libs -->
 			<tr>
 				<td>{item}</td>
-				<td colspan="2" class="uk-text-center">{status}</td>
+				<td class="uk-text-center">{status}</td>
 				<td>{notes}</td>
 			</tr>
 			<!-- END libs -->
+		</table>
+
+		<h2>{lang_db_header}</h2>
+		<hr>
+			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+			<tr>
+				<th>{lang_setting}</th>
+				<th>{lang_notes}</th>
+			</tr>
+
+				<tr>
+					<td>{lang_db_driver}</td>
+					<td>
+						{db_driver}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_version}</td>
+					<td>
+						{db_version}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_engine}</td>
+					<td>
+						{db_engine}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_collation}</td>
+					<td>
+						{db_collation}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_charset}</td>
+					<td>
+						{db_charset}
+					</td>
+				</tr>
 		</table>
 
 		<h2>{lang_filesystem}</h2>
