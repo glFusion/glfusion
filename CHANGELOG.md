@@ -1,4 +1,33 @@
-## v1.6.3 (unreleased)
+## v1.6.4 (December 9, 2016)
+  - Updated CKEditor to v4.6.1
+  - Fixed a bug on new installs where the HTML filters were not properly configured
+  - Updated Spanish Columbia Translations from John Torro
+  - Updated German Translations from Matrox66
+  - Modified footer.thtml to use {copyright_msg} tag
+  - Forum hint bubble no longer parses auto tags
+  - Improved error checking on smiley replace in forum
+
+## v1.6.3.pl1 (December 7, 2016)
+  - mgslider auto tag cleanup
+  - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
+  - Static page editor did not display error messages in proper format (no styling)
+  - Static page 'Add to Menu' option was not visible
+  - Menu builder did not properly create static page menus
+
+## v1.6.3 (December 4, 2016)
+  - Fixed issue in forum posts where url parsing could cause errors on auto tags
+  - Fixed issue where deleting a story did not properly clear the story cache
+  - Auto tags can now see who is calling them (i.e.; Media Gallery calling the Tag autotag - Tag can now see that Media Gallery is calling)
+  - Updated Oauth library to v1.152
+  - Improved Twitter Oauth login support
+  - Media Gallery media/image auto tags now produce responsive images
+  - Media Gallery - fixed responsive video for video auto tag
+  - Fixed missing translations in story editor and bad behavior menu
+  - Automatic URL parsing now adds nofollow attribute
+  - Moved story options in full article view to the header area - same as short index view
+  - Implemented new plugin API for whatsrelated in stories
+  - Fixed error in lib-admin where no-data string was not used
+  - Fixed issue with admin lists not always 'remembering' the previous selections when navigating away from the list (i.e.; viewin an item on the list)
   - Fixed issue in Bad Behavior plugin where log ids were not properly created
   - Resolved issue where plugins updates would upload but not update automatically
   - Updated tooltip JS to properly parse titles

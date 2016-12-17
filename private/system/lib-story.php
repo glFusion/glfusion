@@ -352,6 +352,65 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var( 'story_display',
                                ( $index == 'p' ) ? 'preview' : 'article' );
             $article->set_var( 'story_counter', 0 );
+
+            // add print icon
+            $printUrl = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
+                                      . $story->getSid() . '&amp;mode=print' );
+            if ( $_CONF['hideprintericon'] == 1 ) {
+                $article->set_var( 'print_icon', '' );
+            } else {
+                $printicon = '<img src="' . $_CONF['layout_url']
+                    . '/images/print.' . $_IMAGE_TYPE . '" alt="' . $LANG01[65]
+                    . '" title="' . $LANG11[3] . '" />';
+                $article->set_var( 'print_icon',
+                    COM_createLink($printicon, $printUrl, array('rel' => 'nofollow'))
+                );
+                $article->set_var( 'print_story_url', $printUrl );
+                $article->set_var( 'lang_print_story', $LANG11[3] );
+                $article->set_var( 'lang_print_story_alt', $LANG01[65] );
+            }
+// email
+            if (( $_CONF['hideemailicon'] == 1 ) ||
+               ( COM_isAnonUser() &&
+                    (( $_CONF['loginrequired'] == 1 ) ||
+                     ( $_CONF['emailstoryloginrequired'] == 1 )))) {
+                $article->set_var( 'email_icon', '' );
+            } else {
+                $emailUrl = $_CONF['site_url'] . '/profiles.php?sid=' . $story->getSid()
+                          . '&amp;what=emailstory';
+                $emailicon = '<img src="' . $_CONF['layout_url'] . '/images/mail.'
+                    . $_IMAGE_TYPE . '" alt="' . $LANG01[64] . '" title="'
+                    . $LANG11[2] . '" />';
+                $article->set_var( 'email_icon',
+                    COM_createLink($emailicon, $emailUrl)
+                );
+                $article->set_var( 'email_story_url', $emailUrl );
+                $article->set_var( 'lang_email_story', $LANG11[2] );
+                $article->set_var( 'lang_email_story_alt', $LANG01[64] );
+            }
+// subscribe
+            if ($_CONF['backend'] == 1) {
+                $tid = $story->displayElements('tid');
+                $alt_tid = $story->displayElements('alternate_tid');
+                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".DB_escapeString($tid)."' AND is_enabled = 1");
+                $feeds = DB_numRows($result);
+                for ($i = 0; $i < $feeds; $i++) {
+                    list($filename, $title) = DB_fetchArray($result);
+                    $feedUrl = SYND_getFeedUrl($filename);
+                    $feedTitle = sprintf($LANG11[6],$title);
+                }
+                if ( $feeds > 0 ) {
+                    $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
+                             . $_IMAGE_TYPE . '" alt="'. $feedTitle
+                             .'" title="'. $feedTitle .'" />';
+                    $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
+                    $article->set_var( 'feed_url', $feedUrl);
+                } else {
+                    $article->set_var( 'feed_icon', '' );
+                }
+            } else {
+                $article->set_var( 'feed_icon', '' );
+            }
         } else {
             $article->set_var( 'story_introtext', $introtext,false,true );
             $article->set_var( 'story_text_no_br', $introtext,false,true );
@@ -638,7 +697,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 * @return   array   an array of strings of form <a href="...">link</a>
 *
 */
-function STORY_extractLinks( $fulltext, $maxlength = 26 )
+function STORY_extractLinks( $fulltext, $maxlength = 100 )
 {
     $rel = array();
 
@@ -978,8 +1037,7 @@ function STORY_deleteStory($sid)
     $output = '';
 
     PLG_invokeService('story', 'delete', $args, $output, $svc_msg);
-    CACHE_remove_instance('whatsnew');
-    CACHE_remove_instance('story_'.$sid);
+
     return $output;
 }
 
@@ -1578,6 +1636,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     PLG_itemDeleted($sid, 'article');
 
     // update RSS feed and Older Stories block
+    CTL_clearCache();
     COM_rdfUpToDateCheck ();
     COM_olderStuff ();
     COM_setMessage(10);

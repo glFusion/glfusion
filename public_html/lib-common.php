@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.3');
+    define('GVERSION', '1.6.4');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -1873,15 +1873,7 @@ function COM_errorLog( $logentry, $actionid = '' )
                 break;
 
            case 2:
-                if ( class_exists('Template') ) {
-                    $retval .= COM_startBlock( $LANG01[55] . ' ' . $timestamp, '',
-                                   COM_getBlockTemplate( '_msg_block', 'header' ))
-                            . nl2br( $logentry )
-                            . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                                  'footer' ));
-                } else {
-                    $retval .= nl2br($logentry);
-                }
+                $retval .= COM_showMessageText($logentry,'', true, 'error');
                 break;
 
             case 3:

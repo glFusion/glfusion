@@ -1011,7 +1011,8 @@ $LANG24 = array(
     107 => 'Attribution Author',
     108 => 'Attribution',
     109 => 'Keywords',
-    110 => 'Enter a comma separated list of keywords'
+    110 => 'Enter a comma separated list of keywords',
+    111 => 'Global Settings'
 );
 
 ###############################################################################

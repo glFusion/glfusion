@@ -544,6 +544,7 @@ function _doSiteConfigUpgrade() {
         'alert_timeout'               => 4000,
         'alert_position'              => 'top-right',
         'db_backup_rows'              => 10000,
+        'style_type'                  => 'undefined',
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -606,6 +607,7 @@ function _doSiteConfigUpgrade() {
         'token_ttl'                   => $_NEWSYSTEM['token_ttl'],
         'alert_timeout'               => $_NEWSYSTEM['alert_timeout'],
         'alert_position'              => $_NEWSYSTEM['alert_position'],
+        'style_type'                  => $_NEWSYSTEM['style_type'],
         'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
         'beginphp'                    => '<?php',
         'endphp'                      => '?>',

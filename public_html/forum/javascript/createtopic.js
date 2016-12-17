@@ -76,8 +76,7 @@ function checkForm() {
 }
 
 function emoticon(text) {
-
-    bbfontstyle(text,'');
+    bbfontstyle(text + " ",'');
 }
 
 /**

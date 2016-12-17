@@ -20,7 +20,7 @@ $_SYSTEM['framework'] = 'uikit';
 $_SYSTEM['disable_mootools'] = true;
 $_IMAGE_TYPE = 'png';
 $_SYSTEM['disable_jquery_menu'] = true;     // not needed for this theme
-$_SYSTEM['disable_jquery_slimbox'] = true;  // use uikit
+$_SYSTEM['disable_jquery_slimbox'] = false;  // use uikit
 
 // multiple language support
 
@@ -115,8 +115,16 @@ $outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
 
 // Load our CSS specific to this theme
-
-$styleType = '.gradient.'; // almost-flat - gradient - blank
+$validTypes = array('.','.gradient.','.almost-flat.');
+if ( !isset($_SYSTEM['style_type']) || $_SYSTEM['style_type'] == 'undefined' ) {
+    $styleType = '.gradient.';
+} else {
+    if ( in_array($_SYSTEM['style_type'],$validTypes) ) {
+        $styleType = $_SYSTEM['style_type'];
+    } else {
+        $styleType = '.gradient.';
+    }
+}
 
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
 $outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_HIGH);

@@ -1,10 +1,32 @@
 {# begin {templatelocation} #}
-<span style="{float}padding:1px;{margin-right}width:{width}px;border:none;text-align:center;">
-  {autotag}
-  <br  />
-  <span style="clear:both;"></span>
-  <span style="width: {width}px; text-align: center;font-style: italic;font-size: smaller;text-indent: 0;">
-    {caption}
-  </span>
-</span>
+{!!set float "" !!}
+{!!set margin "" !!}
+{!!if {align} == "left" !!}
+  {!!set float "uk-float-left" !!}
+  {!!set margin "uk-margin-right" !!}
+{!endif}
+{!!if {align} == "right" !!}
+  {!!set float "uk-float-right" !!}
+  {!!set margin "uk-margin-left" !!}
+{!endif}
+
+<div class="uk-thumbnail {classes} {float} {margin}" style="border:0 !important;">
+{!if url}
+<a href="{url}"
+	{!if target}
+	 target="{target}"
+	{!endif}
+	{!if lightbox}
+	  rel="lightbox" data-uk-lightbox
+	{!endif}
+	>
+{!endif}
+<img src="{media_thumbnail}" height="{media_height}px" width="{media_width}px">
+{!if url}
+</a>
+{!endif}
+    <div class="uk-thumbnail-caption">
+   	{caption}
+   	</div>
+</div>
 {# end {templatelocation} #}

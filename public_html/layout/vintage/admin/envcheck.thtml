@@ -45,6 +45,45 @@ $(window).load(function() {
       <!-- END libs -->
     </table>
 
+		<h2>{lang_db_header}</h2>
+		<hr>
+			<table class="" style="width:98%;">
+			<tr>
+				<th>{lang_setting}</th>
+				<th>{lang_notes}</th>
+			</tr>
+
+				<tr>
+					<td>{lang_db_driver}</td>
+					<td>
+						{db_driver}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_version}</td>
+					<td>
+						{db_version}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_engine}</td>
+					<td>
+						{db_engine}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_collation}</td>
+					<td>
+						{db_collation}
+					</td>
+				</tr>
+				<tr>
+					<td>{lang_db_charset}</td>
+					<td>
+						{db_charset}
+					</td>
+				</tr>
+		</table>
     <h2>{lang_filesystem}</h2>
     <div style="margin:5px 0 5px 0;border-bottom:1px solid #cccccc"></div>
     <table style="width:194px;">
