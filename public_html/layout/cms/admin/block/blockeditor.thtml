@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 {start_block_editor}
 {wysiwyg}
 {admin_menu}
@@ -6,21 +7,26 @@
 <form id="block" class="uk-form uk-form-horizontal uk-margin-bottom" action="{site_admin_url}/block.php" method="post">
 	<input type="hidden" name="bid" value="{block_bid}" />
 	<input type="hidden" name="{gltoken_name}" value="{gltoken}" />
-
+<div class="uk-panel uk-panel-box uk-margin-bottom">
 	<fieldset>
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="title">{lang_blocktitle}</label>
 			<div class="uk-form-controls">
-				<input class="required uk-form-width-large" type="text" maxlength="254" id="title" name="title" value="{block_title}">
+				<input class="required uk-form-width-large" type="text" maxlength="255" id="title" name="title" value="{block_title}">
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="title-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="name">{lang_blockname}</label>
 			<div class="uk-form-controls">
-				<input class="required alphanumeric uk-form-width-medium" type="text" maxlength="20" id="name" name="name" value="{block_name}">
-				<br>
-				{lang_nospaces}
+				<input class="required alphanumeric uk-form-width-medium" type="text" maxlength="48" id="name" name="name" value="{block_name}">
+				<span class="uk-form-help-inline">{lang_nospaces}</span>
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="name-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
@@ -34,8 +40,11 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="help">{lang_blockhelpurl}</label>
 			<div class="uk-form-controls">
-				<input class="uk-form-width-large" type="text" id="help" name="help" value="{block_help}" maxlength="{max_url_length}">
+				<input class="uk-form-width-large" type="text" maxlength="255" id="help" name="help" value="{block_help}" maxlength="{max_url_length}">
 				<div class="uk-text-small">{lang_includehttp}&nbsp;{lang_explanation}</div>
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="help-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
@@ -64,7 +73,8 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="blockorder">{lang_blockorder}</label>
 			<div class="uk-form-controls">
-				<input type="text" id="blockorder" name="blockorder" value="{block_order}"> 0 - 9999
+				<input class="uk-form-width-medium" type="text" maxlength="5" id="blockorder" name="blockorder" value="{block_order}">
+				<span class="uk-form-help-inline">0 - 9999</span>
 			</div>
 		</div>
 
@@ -79,25 +89,31 @@
 			</div>
 		</div>
 	</fieldset>
-	<fieldset>
+	<fieldset class="uk-margin-top">
 		<legend>{lang_phpblockoptions}</legend>
 
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="phpblockfn">{lang_blockfunction}</label>
 			<div class="uk-form-controls">
-				<input type="text" maxlength="64" name="phpblockfn" value="{block_phpblockfn}">
+				<input class="uk-form-width-large" type="text" maxlength="128" name="phpblockfn" id="phpblockfn" value="{block_phpblockfn}">
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="phpblockfn-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
 		<div class="uk-alert uk-alert-danger">{lang_phpblockwarning}</div>
 	</fieldset>
 
-	<fieldset><legend>{lang_portalblockoptions}</legend>
+	<fieldset class="uk-margin-top"><legend>{lang_portalblockoptions}</legend>
 
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="rdfurl">{lang_rdfurl}</label>
 			<div class="uk-form-controls">
-				<input type="text maxlength="{max_url_length}" id="rdfurl" name="rdfurl" value="{block_rdfurl}">
+				<input class="uk-form-width-large" type="text" maxlength="255" id="rdfurl" name="rdfurl" value="{block_rdfurl}">
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="rdfurl-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
@@ -116,12 +132,11 @@
 		</div>
 	</fieldset>
 
-	<fieldset>
+	<fieldset class="uk-margin-top">
 		<legend>{lang_normalblockoptions}</legend>
 
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="content">{lang_blockcontent}</label>
-		</div>
 		<div id="texteditor">
 {!if wysiwyg}
 			<div class="uk-margin-small">
@@ -133,7 +148,7 @@
 			<br>
 			<span class="warningsmall">{lang_allowed_html}</span>
 		</div>
-
+</div>
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="allow_autotags">{lang_autotags}</label>
 			<div class="uk-form-controls">
@@ -142,7 +157,7 @@
 		</div>
 	</fieldset>
 
-	<fieldset>
+	<fieldset class="uk-margin-top">
 		<legend>{lang_accessrights}</legend>
 
 		<div class="uk-form-row">
@@ -168,7 +183,7 @@
 			</div>
 		</div>
 	</fieldset>
-
+</div>
 	<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
 	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
@@ -177,6 +192,28 @@
 </form>
 
 <script>
+	$(function(){
+		$("#title").characterCounter({
+			limit: '255',
+			counterSelector: '#title-count'
+		});
+    $("#name").characterCounter({
+			limit: '48',
+			counterSelector: '#name-count'
+		});
+    $("#help").characterCounter({
+			limit: '255',
+			counterSelector: '#help-count'
+		});
+    $("#phpblockfn").characterCounter({
+			limit: '128',
+			counterSelector: '#phpblockfn-count'
+		});
+    $("#rdfurl").characterCounter({
+			limit: '255',
+			counterSelector: '#rdfurl-count'
+		});
+	});
 	$("#block").validate();
 </script>
 {# end {templatelocation} #}

@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-bottom">
-    <div class="uk-panel-badge uk-badge uk-badge-danger">{$LANG32[69]}</div>
-    <div class="uk-panel-title">{block_title}</div>
-{# end {templatelocation} #}
+<div class="uk-alert uk-alert-info" data-uk-alert>
+	<a href="" class="uk-alert-close uk-close"></a>
+	<div class="uk-panel-title">{block_title}</div>
+	{# end {templatelocation} #}

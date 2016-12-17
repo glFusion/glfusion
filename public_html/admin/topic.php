@@ -565,13 +565,24 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = $fieldvalue;
                 break;
 
+            case 'limitnews' :
+                if ( $fieldvalue == '' ) {
+                    return $_CONF['limitnews'];
+                }
+                return $fieldvalue;
+                break;
+
             case 'topic':
                 $retval = $fieldvalue;
                 break;
 
             case 'sort_by':
                 $sortByLang = 30 + (int) $fieldvalue;
-                $retval = $LANG27[$storyByLang]; // 30+$fieldvalue];
+                if ( isset($LANG27[$sortByLang])) {
+                    $retval = $LANG27[$sortByLang]; // 30+$fieldvalue];
+                } else {
+                    $retval = 'undefined';
+                }
                 break;
 
             case 'is_default':

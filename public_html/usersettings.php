@@ -1159,7 +1159,11 @@ function saveuser($A)
 
         foreach ( $social_services AS $service ) {
             $service_input = $service['service'].'_username';
-            $A[$service_input] = DB_escapeString($A[$service_input]);
+            if ( isset($A[$service_input])) {
+                $A[$service_input] = DB_escapeString($A[$service_input]);
+            } else {
+                $A[$service_input] = '';
+            }
             if ( $A[$service_input] != '' ) {
                 $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
                 $sql .= " VALUES (" . (int) $service['service_id'] . ",".$_USER['uid'].",'".$A[$service_input]."');";

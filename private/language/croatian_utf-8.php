@@ -970,7 +970,7 @@ $LANG24 = array(
     52 => '',
     53 => 'was not used.  You must include this image in the intro or body before you can save your changes',
     54 => 'Attached Images Not Used',
-    55 => 'The following errors occured while trying to save your story.  Please correct these errors before saving',
+    55 => 'The following errors occurred while trying to save your story.  Please correct these errors before saving',
     56 => 'Prika¾i ikonu teme',
     57 => 'View unscaled image',
     58 => 'Story Management',
@@ -1549,8 +1549,8 @@ $MESSAGE = array(
     69 => 'Your account has been blocked!',
     70 => 'Your account is awaiting administrator approval.',
     71 => 'Your account has now been confirmed and is awaiting administrator approval.',
-    72 => 'An error occured while attempting to install the plugin. See error.log for details.',
-    73 => 'An error occured while attempting to uninstall the plugin. See error.log for details.',
+    72 => 'An error occurred while attempting to install the plugin. See error.log for details.',
+    73 => 'An error occurred while attempting to uninstall the plugin. See error.log for details.',
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
@@ -2033,7 +2033,8 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
-    'reset' => 'Reset'
+    'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters '
 );
 
 ###############################################################################
@@ -2454,7 +2455,7 @@ $LANG_UPGRADE = array(
     'uptodate' => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown' => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title' => 'An error has occured while processing your request.',
+    'error_title' => 'An error has occurred while processing your request.',
     'error' => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
     'was_released' => 'Version %s was released on %s.',
     'plugin_uptodate' => 'Up To Date',
@@ -2793,7 +2794,11 @@ $LANG_confignames['Core'] = array(
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
-    'comment_fb_appid' => 'Facebook App ID'
+    'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging'
 );
 
 $LANG_configsubgroups['Core'] = array(

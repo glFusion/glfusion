@@ -161,6 +161,8 @@ function forum_upgrade() {
         case '3.3.1' :
             DB_query("ALTER TABLE {$_TABLES['ff_banned_ip']} CHANGE `host_ip` `host_ip` VARCHAR(128) NULL DEFAULT NULL;");
 
+        case '3.3.2' :
+
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);

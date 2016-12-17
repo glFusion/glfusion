@@ -528,9 +528,9 @@ function _doSiteConfigUpgrade() {
         'html_filter'                 => 'htmlpurifier',
         'site_enabled'                => true,
         'maintenance_mode'            => false,
-        'rootdebug'                   => false,
-        'debug_oauth'                 => false,
-        'debug_html_filter'           => false,
+//        'rootdebug'                   => false,
+//        'debug_oauth'                 => false,
+//        'debug_html_filter'           => false,
         'no_fail_sql'                 => false,
         'no_cache_config'             => false,
         'disable_instance_caching'    => false,
@@ -545,6 +545,7 @@ function _doSiteConfigUpgrade() {
         'alert_position'              => 'top-right',
         'db_backup_rows'              => 10000,
         'style_type'                  => 'undefined',
+        'sp_pages_in_plugin_menu'     => false,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -586,9 +587,9 @@ function _doSiteConfigUpgrade() {
         'html_filter'                 => $_NEWSYSTEM['html_filter'],
         'site_enabled'                => $_NEWSYSTEM['site_enabled'] ? 'true' : 'false',
         'maintenance_mode'            => $_NEWSYSTEM['maintenance_mode'] ? 'true' : 'false',
-        'rootdebug'                   => $_NEWSYSTEM['rootdebug'] ? 'true' : 'false',
-        'debug_oauth'                 => $_NEWSYSTEM['debug_oauth'] ? 'true' : 'false',
-        'debug_html_filter'           => $_NEWSYSTEM['debug_html_filter'] ? 'true' : 'false',
+//        'rootdebug'                   => $_NEWSYSTEM['rootdebug'] ? 'true' : 'false',
+//        'debug_oauth'                 => $_NEWSYSTEM['debug_oauth'] ? 'true' : 'false',
+//        'debug_html_filter'           => $_NEWSYSTEM['debug_html_filter'] ? 'true' : 'false',
         'no_fail_sql'                 => $_NEWSYSTEM['no_fail_sql'] ? 'true' : 'false',
         'no_cache_config'             => $_NEWSYSTEM['no_cache_config'] ? 'true' : 'false',
         'disable_instance_caching'    => $_NEWSYSTEM['disable_instance_caching'] ? 'true' : 'false',
@@ -609,6 +610,7 @@ function _doSiteConfigUpgrade() {
         'alert_position'              => $_NEWSYSTEM['alert_position'],
         'style_type'                  => $_NEWSYSTEM['style_type'],
         'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
+        'sp_pages_in_plugin_menu'     => $_NEWSYSTEM['sp_pages_in_plugin_menu']  ? 'true' : 'false',
         'beginphp'                    => '<?php',
         'endphp'                      => '?>',
     ));

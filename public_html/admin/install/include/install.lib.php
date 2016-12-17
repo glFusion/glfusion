@@ -1424,6 +1424,17 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             $current_fusion_version = '1.6.4';
 
+        case '1.6.4' :
+
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('open_ext_url_new_window',0,'select',7,2,0,40,TRUE);
+            $c->add('enable_404_logging',1,'select',7,3,0,20,TRUE);
+            $c->add('debug_oauth',0,'select',7,3,0,30,TRUE);
+            $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
+
+            $current_fusion_version = '1.6.5';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

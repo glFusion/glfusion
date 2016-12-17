@@ -242,8 +242,8 @@ function ajax_previewsig() {
     xmlhttp.open('POST', site_url + '/forum/sigpreview.php', true);
     //Send the proper header information along with the request
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.setRequestHeader("Content-length", params.length);
-    xmlhttp.setRequestHeader("Connection", "close");
+//    xmlhttp.setRequestHeader("Content-length", params.length);
+//    xmlhttp.setRequestHeader("Connection", "close");
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
             receiveSigPreview(xmlhttp.responseText);
