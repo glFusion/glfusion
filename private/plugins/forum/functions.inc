@@ -906,11 +906,7 @@ function phpblock_forum_newposts() {
                     $A['subject'] = COM_checkWords($A['subject']);
                 }
                 $fullsubject = $A['subject'];
-                if (strlen ($A['subject']) > $_FF_CONF['sb_subject_size']) {
-                    $A['subject'] = substr($A['subject'], 0, $_FF_CONF['sb_subject_size']);
-                    $A['subject'] .= '..';
-                    $profilelink = '';
-                }
+                $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['sb_subject_size'], '...', false );
 
                 if ($A['replies'] > 0 AND $_FF_CONF['sb_latestpostonly']) {
                     $lastreplySQL = DB_query("Select uid,name,date from {$_TABLES['ff_topic']} WHERE pid={$A['id']} ORDER BY date DESC LIMIT 1");
@@ -1071,10 +1067,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $A['comment'] = COM_checkWords($A['comment']);
             }
             $fullsubject = "{$A['subject']}\n{$LANG_GF01['POSTEDBY']}:{$A['name']}{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}";
-            if (strlen ($A['subject']) > $_FF_CONF['cb_subject_size']) {
-                $A['subject'] = substr ($A['subject'], 0, $_FF_CONF['cb_subject_size']);
-                $A['subject'] .= '...';
-            }
+            $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['cb_subject_size'], '...',false );
             $dt = new Date($A['date'],$_USER['tzid']);
             $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
             $dt = new Date($A['lastupdated'],$_USER['tzid']);

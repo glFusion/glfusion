@@ -890,7 +890,9 @@ if ($forum > 0) {
             $subject = $subject . '&nbsp;<img src="'.$_CONF['site_url'].'/forum/images/document_sm.gif" alt=""/>';
         }
         $firstposterName = $record['name'];
-        $topicinfo  = htmlspecialchars($record['subject']).'::'.htmlspecialchars(preg_replace('#\r?\n#','<br/>',substr(strip_tags($record['comment']),0,$_FF_CONF['contentinfo_numchars']) . '...'));
+
+        $topicinfo  = htmlspecialchars($record['subject']).'::'.htmlspecialchars(preg_replace('#\r?\n#','<br/>',COM_truncate(strip_tags($record['comment']),0,$_FF_CONF['contentinfo_numchars'],'...',false)));
+
         $topiclisting->set_var (array(
                 'folderimg'     => $folderimg,
                 'folder_icon'   => $folder_icon,
