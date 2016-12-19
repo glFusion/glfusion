@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Modified form validation to all dashes on alphanumeric fields
+  - Fixed error where keep unscaled images in stories, which enabled the lightbox view of the image, would cause all links in the story to open in a lightbox - solution provided by Lee Garner
   - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
   - Media Gallery - fixed error in static sort - descending sorts did not work
   - New character counter for text fields - provided by Buddilla
