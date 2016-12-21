@@ -1588,7 +1588,7 @@ function glfusion_165()
 }
 
 function _updateConfig() {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $coreConfigData;
 
     $site_url = $_CONF['site_url'];
     $cookiesecure = $_CONF['cookiesecure'];
