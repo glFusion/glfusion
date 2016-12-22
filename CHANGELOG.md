@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Several code / DB optimizations to improve performance
+  - Improved filtering of user supplied data during login
   - General code clean up - fixed several references to uninitialized variables
   - Forum blocks did not use utf-8 safe functions
   - Update jQuery Validate to v1.15.1
