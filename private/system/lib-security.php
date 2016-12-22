@@ -121,17 +121,15 @@ function SEC_getUserGroups($uid='')
             $uid = 1;
         } else {
             $uid = $_USER['uid'];
-            $cache = true;
         }
     } else {
         $uid = (int) $uid;
     }
-    if ($uid == 1 ) $cache = true;
+    if ($uid > 0 ) $cache = true;
 
     if (array_key_exists($uid, $runonce)) {
         return $runonce[$uid];
     }
-
     if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
         return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
     }
@@ -173,6 +171,7 @@ function SEC_getUserGroups($uid='')
         } else {
             $nrows = 0;
         }
+
     }
     if ( count($groups) == 0 ) {
         $groups = array('All Users' => 2);
