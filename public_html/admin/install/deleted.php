@@ -59,6 +59,8 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 1.6.5
+
 // 1.6.2
     'lib/ZipLib.class.php',
     'filecheck_data.php',
@@ -142,6 +144,9 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// removed in 1.6.5
+    'layout/cms/js/jQuery.menutron.min.js',
+
 // removed in v1.6.3
     'layout/cms/menu/custom/menu_horizontal_cascading_navigation_mobile.thtml',
     'javascript/dbbackup.js',
