@@ -7460,7 +7460,7 @@ if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SE
 
 // Check and see if any plugins (or custom functions)
 // have scheduled tasks to perform
-if ( !isset($_VARS['last_scheduled_run'] ) ) {
+if ( !isset($_VARS['last_scheduled_run'] ) || $_VARS['last_scheduled_run'] == '') {
     $_VARS['last_scheduled_run'] = 0;
 }
 if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {
