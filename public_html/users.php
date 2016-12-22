@@ -1344,13 +1344,13 @@ switch ($mode) {
 
         } elseif ($_CONF['user_login_method']['oauth'] && isset($_GET['oauth_login'])) {
             $modules = SEC_collectRemoteOAuthModules();
-            $active_service = (count($modules) == 0) ? false : in_array($_GET['oauth_login'], $modules);
+            $active_service = (count($modules) == 0) ? false : in_array(COM_applyFilter($_GET['oauth_login']), $modules);
             if (!$active_service) {
                 $status = -1;
-                COM_errorLog("OAuth login failed - there was no consumer available for the service:" . $_GET['oauth_login']);
+                COM_errorLog("OAuth login failed - there was no consumer available for the service:" . COM_applyFilter($_GET['oauth_login']));
             } else {
                 $query = array_merge($_GET, $_POST);
-                $service = $query['oauth_login'];
+                $service = COM_applyFilter($query['oauth_login']);
 
                 COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
                 if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
