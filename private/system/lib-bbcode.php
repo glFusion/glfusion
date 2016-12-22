@@ -384,8 +384,7 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
         } else {
             $url = 'http://'._bbcode_cleanHTML($content);
         }
-    }
-    if ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
+    } elseif ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
         $url = _bbcode_cleanHTML($attributes['default']);
     } else {
         $url = 'http://'._bbcode_cleanHTML($attributes['default']);
