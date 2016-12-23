@@ -412,6 +412,7 @@ function _checkEnvironment()
                         $_CONF['path_log'].'spamx.log',
                         $_CONF['path_data'].'layout_cache/',
                         $_CONF['path_data'].'temp/',
+                        $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
                         $_CONF['rdf_file'],
