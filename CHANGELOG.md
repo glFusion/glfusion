@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
   - Moved HTML filter cache directory under private_data
   - Several code / DB optimizations to improve performance
   - Improved filtering of user supplied data during login
