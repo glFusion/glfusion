@@ -367,6 +367,8 @@ class sanitizer
         $config->set('AutoFormat.Linkify',false);
         $config->set('HTML.SafeObject',true);
         $config->set('Output.FlashCompat',true);
+        $config->set('Cache.SerializerPath',$_CONF['path_data'].'htmlpurifier');
+
 
         if ( $_SYSTEM['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
         $purifier = new HTMLPurifier($config);

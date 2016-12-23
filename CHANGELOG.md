@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Moved HTML filter cache directory under private_data
   - Several code / DB optimizations to improve performance
   - Improved filtering of user supplied data during login
   - General code clean up - fixed several references to uninitialized variables

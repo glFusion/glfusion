@@ -32,6 +32,7 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
+    'lib/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/',
     'system/classes/openid/',
     'system/pear/Auth/',
     'system/pear/Console/',
