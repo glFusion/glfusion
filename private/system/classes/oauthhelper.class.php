@@ -447,7 +447,7 @@ class OAuthConsumer {
             case 'github' :
                 $users = array(
                     'loginname'      => (isset($info->{'login'}) ? $info->{'login'} : $info->id),
-                    'email'          => $info->{'email'},
+                    'email'          => (isset($info->{'email'}) ? $info->{'email'} : '',
                     'passwd'         => '',
                     'passwd2'        => '',
                     'fullname'       => $info->{'name'},
