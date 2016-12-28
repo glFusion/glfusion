@@ -2595,7 +2595,11 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
             $mail->From = $_CONF['site_mail'];
             $mail->AddReplyTo($from[0]);
         } else {
-            $mail->From = $from[0];
+            if ( filter_var($from[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->From = $from[0];
+            } else {
+                $mail->From = $_CONF['noreply_mail'];
+            }
         }
     } else {
         $mail->From = $_CONF['noreply_mail'];
@@ -2608,25 +2612,37 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     }
     if ( is_array($to) && isset($to[0]) && $to[0] != '' ) {
         if ( isset($to[1]) && $to[1] != '' ) {
-            $mail->AddAddress($to[0],$to[1]);
+            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddAddress($to[0],$to[1]);
+            }
         } else {
-            $mail->AddAddress($to[0]);
+            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddAddress($to[0]);
+            }
         }
     } else {
         // assume old style....
-        $mail->AddAddress($to);
+        if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+            $mail->AddAddress($to);
+        }
     }
 
     if ( isset($cc[0]) && $cc[0] != '' ) {
         if ( isset($cc[1]) && $cc[1] != '' ) {
-            $mail->AddCC($cc[0],$cc[1]);
+            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc[0],$cc[1]);
+            }
         } else {
-            $mail->AddCC($cc[0]);
+            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc[0]);
+            }
         }
     } else {
         // assume old style....
         if ( isset($cc) && $cc != '' ) {
-            $mail->AddCC($cc);
+            if ( filter_var($cc, FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc);
+            }
         }
     }
 
@@ -2724,10 +2740,19 @@ function COM_emailNotification( $msgData = array() )
     }
 
     if ( is_array($msgData['from'])) {
-        $mail->From = $msgData['from']['email'];
+        if ( filter_var($msgData['from']['email'], FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $msgData['from']['email'];
+        } else {
+            $mail->From = $_CONF['noreply_mail'];
+        }
         $mail->FromName = $msgData['from']['name'];
+
     } else {
-        $mail->From = $msgData['from'];
+        if ( filter_var($msgData['from'], FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $msgData['from'];
+        } else {
+            $mail->From = $_CONF['noreply_mail'];
+        }
         $mail->FromName = $_CONF['site_name'];
     }
 
@@ -2735,10 +2760,14 @@ function COM_emailNotification( $msgData = array() )
     if ( is_array($msgData['to']) ) {
         foreach ($msgData['to'] AS $to) {
             if ( is_array($to) ) {
-                $mail->AddBCC($to['email'],$to['name']);
+                if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                    $mail->AddBCC($to['email'],$to['name']);
+                }
             } else {
                 if ( COM_isEmail($to) ) {
-                    $mail->AddBCC($to);
+                    if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+                        $mail->AddBCC($to);
+                    }
                 }
             }
 

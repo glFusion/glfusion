@@ -1,6 +1,11 @@
 ## v1.6.5 (unreleased)
+  - Consistent menus in database administration
+  - Improved error logging during authentication
+  - Additional validation on email addresses prior to sending
+  - Update phpmailer to v5.2.19 - SECURITY Critical security update for CVE-2016-10033
   - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
   - Moved HTML filter cache directory under private_data
+  - Fixed invalid image reference in errormessage.html
   - Several code / DB optimizations to improve performance
   - Improved filtering of user supplied data during login
   - General code clean up - fixed several references to uninitialized variables
@@ -8,6 +13,8 @@
   - Update jQuery Validate to v1.15.1
   - Modified form validation to all dashes on alphanumeric fields
   - Fixed error where keep unscaled images in stories, which enabled the lightbox view of the image, would cause all links in the story to open in a lightbox - solution provided by Lee Garner
+  - Media Gallery - Fixed error where .png images did not display on postcard preview
+  - Media Gallery - Fixed error in story import - album select list did not properly display
   - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
   - Media Gallery - fixed error in static sort - descending sorts did not work
   - New character counter for text fields - provided by Buddilla

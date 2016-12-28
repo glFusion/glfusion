@@ -1353,7 +1353,7 @@ switch ($mode) {
                 $service = COM_applyFilter($query['oauth_login']);
 
                 COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
-                if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
+                if ( COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0 ) {
                     displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
                 }
 
@@ -1368,11 +1368,12 @@ switch ($mode) {
                 if ( $oauth_userinfo === false ) {
                     COM_updateSpeedlimit('login');
                     COM_errorLog("OAuth Error: " . $consumer->error);
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
-                }
-                if ( $consumer->doAction($oauth_userinfo) == NULL ) {
-                    COM_errorLog("Oauth: Error creating new user in OAuth authentication");
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
+                    COM_setMsg($MESSAGE[111],'error');
+                } else {
+                    if ( $consumer->doFinalLogin($oauth_userinfo) == NULL ) {
+                        COM_errorLog("Oauth: Error creating new user in OAuth authentication");
+                        COM_setMsg($MESSAGE[111],'error');
+                    }
                 }
             }
 
