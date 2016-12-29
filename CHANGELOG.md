@@ -2,7 +2,7 @@
   - Consistent menus in database administration
   - Improved error logging during authentication
   - Additional validation on email addresses prior to sending
-  - Update phpmailer to v5.2.19 - SECURITY Critical security update for CVE-2016-10033
+  - Update phpmailer to v5.2.21 - SECURITY Critical security update for CVE-2016-10033 and CVE-2016-10045
   - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
   - Moved HTML filter cache directory under private_data
   - Fixed invalid image reference in errormessage.html
