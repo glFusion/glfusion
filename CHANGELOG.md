@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Update Unite Gallery to v1.7.40
   - Consistent menus in database administration
   - Improved error logging during authentication
   - Additional validation on email addresses prior to sending
