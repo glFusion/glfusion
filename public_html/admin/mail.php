@@ -212,6 +212,8 @@ function MAIL_sendMessages($vars)
         $html = true;
     }
 
+    if ( !isset($vars['to_uid'])) $vars['to_uid'] = 0;
+
     $usermode = ((int) $vars['to_uid'] > 0 && (int) $vars['to_group'] == 0) ? true : false;
 
     if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
