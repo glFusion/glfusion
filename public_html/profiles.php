@@ -589,7 +589,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     }
 
     if ($msg > 0) {
-        $retval .= COM_showMessage ($msg,'','',0,'info');
+        $retval .= COM_showMessage ($msg,'','',0,'error');
     }
 
     if (empty ($from) && empty ($fromemail)) {
