@@ -229,33 +229,40 @@
 
 					{captcha}
 
+{!!set columns 3 !!}
+{!if locked_prompt}
+{!inc columns}
+{!endif}
+{!if sticky_prompt}
+{!inc columns}
+{!endif}
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label">{LANG_OPTIONS}</label>
 						<div class="uk-form-controls">
 
 							<div class="uk-grid">
-								<div class="uk-width-1-5 uk-text-center">
+								<div class="uk-width-1-{columns} uk-text-center">
 										<label for="notify">{$LANG_GF02[msg38]}</label><br>
 										<input type="checkbox" id="notify" name="notify" value="on" {notify_val}>
 								</div>
-								<div class="uk-width-1-5 uk-text-center">
+								<div class="uk-width-1-{columns} uk-text-center">
 										<label for="postmode_switch">{postmode_msg}</label><br>
 										<input type="checkbox" id="postmode_switch" name="postmode_switch" value="1">
 										<input type="hidden" name="postmode" value="{postmode}">
 								</div>
 {!if locked_prompt}
-								<div class="uk-width-1-5 uk-text-center">
+								<div class="uk-width-1-{columns} uk-text-center">
 										<label for="locked_switch">{$LANG_GF02[msg109]}</label><br>
 										<input type="checkbox" id="locked_switch" name="locked_switch" {locked_val} value="1">
 								</div>
 {!endif}
 {!if sticky_prompt}
-								<div class="uk-width-1-5 uk-text-center">
+								<div class="uk-width-1-{columns} uk-text-center">
 										<label for="sticky_switch">{$LANG_GF02[msg61]}</label><br>
 										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
 								</div>
 {!endif}
-								<div class="uk-width-1-5 uk-text-center">
+								<div class="uk-width-1-{columns} uk-text-center">
 										<label for="silentedit">{$LANG_GF02[msg190]}</label><br>
 										<input type="checkbox" id="silentedit" name="silentedit" {edit_val} value="1">
 								</div>
