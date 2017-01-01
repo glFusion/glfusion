@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Forum - Fixed erorr moderating forums with question marks in title
   - Update Unite Gallery to v1.7.40
   - Consistent menus in database administration
   - Improved error logging during authentication
