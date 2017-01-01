@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display a topic list                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -65,12 +65,8 @@ if ( $showtopic == 0 ) {
 }
 
 if ( $showtopic == 0 ) {
-    $display  = FF_siteHeader();
-    $display .= COM_startBlock();
-    $display .= _ff_alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
-    $display .= COM_endBlock();
-    $display .= FF_siteFooter();
-    echo $display;
+    COM_setMsg( $LANG_GF02['msg172'], 'error' );
+    echo COM_refresh($_CONF['site_url'].'/forum/index.php');
     exit;
 }
 
@@ -78,12 +74,8 @@ $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['ff_topic']} WHERE
 list($forum, $topic_pid, $subject) = DB_fetchArray($result);
 
 if ($topic_pid == '') {
-    $display  = FF_siteHeader();
-    $display .= COM_startBlock();
-    $display .= _ff_alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
-    $display .= COM_endBlock();
-    $display .= FF_siteFooter();
-    echo $display;
+    COM_setMsg( $LANG_GF02['msg172'], 'error' );
+    echo COM_refresh($_CONF['site_url'].'/forum/index.php');
     exit;
 }
 if ($topic_pid != 0) {
@@ -346,7 +338,7 @@ $topicTemplate->parse ('output', 'topictemplate');
 $display .= $topicTemplate->finish($topicTemplate->get_var('output'));
 
 if( !$iframe ) {
-    $display .= FF_BaseFooter();
+    $display .= FF_BaseFooter(false);
     $display .= FF_siteFooter();
 }
 echo $display;

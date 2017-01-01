@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Forum - Removed footer on view topic - no need to display topic summary icons
+  - Forum - Improved error handling on invalid topics
   - Forum - Fixed error where locked topic option did not appear on post edit
   - Forum - Fixed erorr moderating forums with question marks in title
   - Update Unite Gallery to v1.7.40

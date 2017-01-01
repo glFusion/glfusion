@@ -1,16 +1,18 @@
 {# begin {templatelocation} #}
 <div class="tm-forum-footer uk-margin uk-clearfix">
-    <div class="uk-text-muted">{forum_time}</div>
-    <div class="uk-panel uk-panel-box uk-panel-box-primary">
-        <div class="uk-grid">
-            <div class="uk-width-medium-3-4">
-                {forum_legend}
-            </div>
-            <div class="uk-width-medium-1-4">
-                {forum_rules}
-            </div>
-        </div>
-    </div>
-    {forum_whosonline}
+	<div class="uk-text-muted">{forum_time}</div>
+{!if forum_legend}
+	<div class="uk-panel uk-panel-box uk-panel-box-primary">
+		<div class="uk-grid">
+			<div class="uk-width-medium-3-4">
+				{forum_legend}
+			</div>
+			<div class="uk-width-medium-1-4">
+				{forum_rules}
+			</div>
+		</div>
+	</div>
+{!endif}
+	{forum_whosonline}
 </div>
 {# end {templatelocation} #}
