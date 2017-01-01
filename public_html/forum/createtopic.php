@@ -676,16 +676,14 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $notify_val = '';
         }
         $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" value="on" ' . $notify_val. '/>';
-
         // check that this is the parent topic - only able to make it skicky or locked
         if ( !isset($postData['pid']) || $postData['pid'] == 0 ) {
-            if (!isset($locked_val) and !isset($sticky_val) AND $action == 'edittopic') {
-                if( (!isset($postData['locked_switch']) AND (isset($postData['locked']) && $postData['locked'] == 1)) OR (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
+            if ($action == 'edittopic') {
+                if( (!isset($postData['locked_switch']) AND (isset($postData['locked']) && (int) $postData['locked'] == 1)) || (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
                     $locked_val = 'checked="checked"';
                 } else {
                     $locked_val = '';
                 }
-
                 if( (!isset($postData['sticky_switch']) AND (isset($postData['sticky']) && $postData['sticky'] == 1)) OR (isset($postData['sticky_switch']) && $postData['sticky_switch'] == 1) ) {
                     $sticky_val = 'checked="checked"';
                 } else {
@@ -751,6 +749,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate->set_var(array(
         'edit_val'          => $edit_val,
         'sticky_val'        => $sticky_val,
+        'locked_val'        => $locked_val,
         'postmode_msg'      => $postmode_msg,
         'notify_val'        => $notify_val,
         'disable_bbcode_val' => $disable_bbcode_val,

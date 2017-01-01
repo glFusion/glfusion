@@ -232,33 +232,32 @@
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label">{LANG_OPTIONS}</label>
 						<div class="uk-form-controls">
+
 							<div class="uk-grid">
-								<div class="uk-width-1-4">
-									<p>
-										<label for="notify">{$LANG_GF02[msg38]}</label>
+								<div class="uk-width-1-5 uk-text-center">
+										<label for="notify">{$LANG_GF02[msg38]}</label><br>
 										<input type="checkbox" id="notify" name="notify" value="on" {notify_val}>
-									</p>
 								</div>
-								<div class="uk-width-1-4">
-									<p>
-										<label for="postmode_switch">{postmode_msg}</label>
+								<div class="uk-width-1-5 uk-text-center">
+										<label for="postmode_switch">{postmode_msg}</label><br>
 										<input type="checkbox" id="postmode_switch" name="postmode_switch" value="1">
 										<input type="hidden" name="postmode" value="{postmode}">
-									</p>
 								</div>
-{!if sticky_prompt}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="sticky_switch">{$LANG_GF02[msg61]}</label>
-										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
-									</p>
+{!if locked_prompt}
+								<div class="uk-width-1-5 uk-text-center">
+										<label for="locked_switch">{$LANG_GF02[msg109]}</label><br>
+										<input type="checkbox" id="locked_switch" name="locked_switch" {locked_val} value="1">
 								</div>
 {!endif}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="silentedit">{$LANG_GF02[msg190]}</label>
+{!if sticky_prompt}
+								<div class="uk-width-1-5 uk-text-center">
+										<label for="sticky_switch">{$LANG_GF02[msg61]}</label><br>
+										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
+								</div>
+{!endif}
+								<div class="uk-width-1-5 uk-text-center">
+										<label for="silentedit">{$LANG_GF02[msg190]}</label><br>
 										<input type="checkbox" id="silentedit" name="silentedit" {edit_val} value="1">
-									</p>
 								</div>
 							</div>
 						</div>
@@ -268,25 +267,19 @@
 						<label class="uk-form-label">{$LANG_GF01[features]}</label>
 						<div class="uk-form-controls">
 							<div class="uk-grid">
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_bbcode">{$LANG_GF01[disable_bbcode]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_bbcode">{$LANG_GF01[disable_bbcode]}</label><br>
 										<input type="checkbox" id="disable_bbcode" name="disable_bbcode" value="1" {disable_bbcode_val}>
-									</p>
 								</div>
 {!if smilies_prompt}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_smilies">{$LANG_GF01[disable_smilies]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_smilies">{$LANG_GF01[disable_smilies]}</label><br>
 										<input type="checkbox" id="disable_smilies" name="disable_smilies" value="1" {disable_smilies_val}>
-									</p>
 								</div>
 {!endif}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_urlparse">{$LANG_GF01[disable_urlparse]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_urlparse">{$LANG_GF01[disable_urlparse]}</label><br>
 										<input type="checkbox" id="disable_urlparse" name="disable_urlparse" value="1" {disable_urlparse_val}>
-									</p>
 								</div>
 							</div>
 						</div>
