@@ -398,7 +398,11 @@ function STORY_global_save()
     }
 
     if ( isset($active['move_to_topic'])) {
-        if ( $filter_topic != $LANG09[9] ) {    // don't allow all
+        if ( ($filter_topic != $LANG09[9]) && ($filter_topic != $move_to_topic) ) {    // don't allow all
+// reset the featured flag
+            $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE WHERE tid='".DB_escapeString($filter_topic)."'";
+            DB_query($sql);
+// move the stories
             $sql = "UPDATE {$_TABLES['stories']} SET tid='".DB_escapeString($move_to_topic)."' WHERE tid='".DB_escapeString($filter_topic)."'";
             DB_query($sql);
             $msg .= sprintf($LANG24[122],$filter_topic,$move_to_topic);
