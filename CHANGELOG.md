@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Fixed issue where no content to moderate message was not displayed properly
   - Added "Move to New Topic" feature in Global Story Editor
   - Improved error handling in Global Story Editor
   - Forum - Removed footer on view topic - no need to display topic summary icons
