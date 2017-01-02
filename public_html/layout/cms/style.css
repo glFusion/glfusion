@@ -664,6 +664,13 @@ p.tm-article-meta {
 	background-image: none;
 	text-shadow: none;
 }
+.uk-button.uk-button-github-alt,
+.uk-icon-button.uk-button-github-alt {
+	background-color: #323131;
+	color: #fff;
+	background-image: none;
+	text-shadow: none;
+}
 .uk-icon-button.uk-button-instagram {
 	background-color: #2E5E86;
 	color: #fff;
