@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Added "Move to New Topic" feature in Global Story Editor
+  - Improved error handling in Global Story Editor
   - Forum - Removed footer on view topic - no need to display topic summary icons
   - Forum - Improved error handling on invalid topics
   - Forum - Fixed error where locked topic option did not appear on post edit

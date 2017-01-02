@@ -1014,7 +1014,7 @@ $LANG24 = array(
     96 => 'Set Image',
     97 => 'Remove Image',
     98 => 'Sub Title',
-    99 => 'Select the <b>Update</b> checkbox to update the attribute for all stories, or the stories in a specific topic if the topic filter is selected.',
+    99 => 'Select the <b>Update</b> checkbox to update the attribute for all stories, or the stories in a specific topic if the topic filter is selected. To move stories from one topic to another, you must select topics in both the <b>Filter by Topic</b> and <b>Move to New Topic</b> fields.',
     100 => 'Global Story Attribute Editor',
     101 => 'Filter By Topic',
     102 => 'Attribute',
@@ -1027,6 +1027,18 @@ $LANG24 = array(
     109 => 'Keywords',
     110 => 'Enter a comma separated list of keywords',
     111 => 'Global Settings',
+    112 => 'Move to New Topic',
+    113 => 'Requires a filter topic to be selected (<b>must not be All</b>)',
+    114 => 'Are you sure you want to make the global changes',
+    115 => 'Are you really sure you want to make these global changes, changes are difficult to undo!',
+    116 => 'Changed frontpage setting for stories in selected topic',
+    117 => 'Changed comment mode setting for stories in selected topic',
+    118 => 'Changed trackback setting for stories in selected topic',
+    119 => 'Changed Owner ID for stories in selected topic',
+    120 => 'Changed Group ID for stories in selected topic',
+    121 => 'Changed show topic setting for stories in selected topic',
+    122 => 'Moved all stories in topic %s to topic %s',
+    123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
 );
 
 ###############################################################################

@@ -251,6 +251,8 @@ function STORY_global($errorMsg = '')
         . ': <select name="tid">'
         . $alltopics . $seltopics . '</select>';
 
+    $move_to_topic_list = $seltopics;
+
     $sec_token_name = CSRF_TOKEN;
     $sec_token = SEC_createToken();
 
@@ -261,6 +263,7 @@ function STORY_global($errorMsg = '')
                 'frontpage_options' => COM_optionList ($_TABLES['frontpagecodes'], 'code,name',''),
                 'comment_options' => COM_optionList ($_TABLES['commentcodes'], 'code,name',''),
                 'trackback_options' => COM_optionList ($_TABLES['trackbackcodes'], 'code,name',''),
+                'move_to_topic_list' => $move_to_topic_list,
                 'lang_show_topic_icon' => $LANG24[56],
                 'lang_group' => $LANG_ACCESS['group'],
                 'lang_topic' => $LANG_ADMIN['topic'],
@@ -268,6 +271,10 @@ function STORY_global($errorMsg = '')
                 'lang_comments' => $LANG24[19],
                 'lang_trackbacks' => $LANG24[29],
                 'lang_display' => $LANG24[93],
+                'lang_move_to_topic' => $LANG24[112],
+                'lang_move_to_topic_help' => $LANG24[113],
+                'lang_confirm' => $LANG24[114],
+                'lang_confirm_confirm' => $LANG24[115],
                 'lang_save' => $LANG_ADMIN['save'],
                 'lang_cancel' => $LANG_ADMIN['cancel'],
                 'security_token' => $sec_token,
@@ -282,17 +289,20 @@ function STORY_global($errorMsg = '')
 
 function STORY_global_save()
 {
-    global $_CONF, $_TABLES, $LANG09;
+    global $_CONF, $_TABLES, $LANG09, $LANG24;
 
     if ( !SEC_inGroup('Root')) COM_refresh($_CONF['site_url']);
 
     $sql = '';
+    $global_sql = '';
+    $msg = '';
 
     if (!SEC_checkToken()) {
         COM_refresh($_CONF['site_url']);
     }
 
     $filter_topic = COM_applyFilter($_POST['tid']);
+    $move_to_topic = COM_applyFilter($_POST['move_to_topic']);
     $on_frontpage = COM_applyFilter($_POST['frontpage'],true);
     $comment      = COM_applyFilter($_POST['comment'],true);
     $trackback    = COM_applyFilter($_POST['trackback'],true);
@@ -314,6 +324,7 @@ function STORY_global_save()
         }
         $sql .= "frontpage=".(int) $on_frontpage;
         $comma = 1;
+        $msg .= $LANG24[116].'<br>';
     }
 
     if ( isset($active['comment'])) {
@@ -325,6 +336,7 @@ function STORY_global_save()
 
         $sql .= "commentcode=".(int) $comment;
         $comma = 1;
+        $msg .= $LANG24[117].'<br>';
     }
 
     if ( isset($active['trackback'])) {
@@ -336,6 +348,7 @@ function STORY_global_save()
 
         $sql .= "trackbackcode=".(int) $trackback;
         $comma = 1;
+        $msg .= $LANG24[118].'<br>';
     }
 
     if ( isset($active['owner'])) {
@@ -347,6 +360,7 @@ function STORY_global_save()
 
         $sql .= "owner_id=".(int) $owner_id;
         $comma = 1;
+        $msg .= $LANG24[119].'<br>';
     }
 
     if ( isset($active['group'])){
@@ -357,6 +371,7 @@ function STORY_global_save()
         }
         $sql .= "group_id=".(int) $group_id;
         $comma = 1;
+        $msg .= $LANG24[120].'<br>';
     }
 
     if ( isset($active['show_topic_icon'])) {
@@ -367,15 +382,32 @@ function STORY_global_save()
         }
         $sql .= "show_topic_icon=".(int) $show_topic_icon;
         $comma = 1;
+        $msg .= $LANG24[121].'<br>';
     }
 
-    if ( $filter_topic != $LANG09[9] ) {
+    if ( $filter_topic != $LANG09[9] && $sql != '' ) {
         $sql .= " WHERE tid='".DB_escapeString($filter_topic)."'";
     }
 
-    $global_sql = "UPDATE {$_TABLES['stories']} " . $sql;
+    if ( $sql != '' ) {
+        $global_sql = "UPDATE {$_TABLES['stories']} " . $sql;
+    }
 
-    DB_query($global_sql);
+    if ( $global_sql != '' ) {
+        DB_query($global_sql);
+    }
+
+    if ( isset($active['move_to_topic'])) {
+        if ( $filter_topic != $LANG09[9] ) {    // don't allow all
+            $sql = "UPDATE {$_TABLES['stories']} SET tid='".DB_escapeString($move_to_topic)."' WHERE tid='".DB_escapeString($filter_topic)."'";
+            DB_query($sql);
+            $msg .= sprintf($LANG24[122],$filter_topic,$move_to_topic);
+        } else {
+            $msg .= $LANG24[123];
+        }
+    }
+
+    COM_setMsg( $msg, 'error' );
 
     $_POST['tid'] = '';
 

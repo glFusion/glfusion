@@ -79,9 +79,25 @@
 					<input type="checkbox" name="cb[show_topic_icon]" value="">
 				</td>
 			</tr>
+
+			<tr>
+				<td>{lang_move_to_topic}</td>
+				<td>
+					<select name="move_to_topic">
+						{move_to_topic_list}
+					</select>
+					<div class="uk-form-help-block">
+						{lang_move_to_topic_help}
+					</div>
+				</td>
+				<td class="uk-text-center">
+					<input type="checkbox" name="cb[move_to_topic]" value="">
+				</td>
+			</tr>
+
 		</table>
 		<div class="uk-margin-large">
-			<button class="uk-button uk-button-success" type="submit" value="{lang_save}" name="globalsave">{lang_save}</button>
+			<button class="uk-button uk-button-success" onclick="return doubleconfirm('{lang_confirm}','{lang_confirm_confirm}');" type="submit" value="{lang_save}" name="globalsave">{lang_save}</button>
 			<button class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 		</div>
 	</form>
