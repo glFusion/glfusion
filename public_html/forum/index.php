@@ -891,7 +891,7 @@ if ($forum > 0) {
         }
         $firstposterName = $record['name'];
 
-        $topicinfo  = htmlspecialchars($record['subject']).'::'.htmlspecialchars(preg_replace('#\r?\n#','<br/>',COM_truncate(strip_tags($record['comment']),0,$_FF_CONF['contentinfo_numchars'],'...',false)));
+        $topicinfo  = htmlspecialchars($record['subject']).'::'.htmlspecialchars(preg_replace('#\r?\n#','<br/>',COM_truncate(strip_tags($record['comment']),$_FF_CONF['contentinfo_numchars'],'...',false)));
 
         $topiclisting->set_var (array(
                 'folderimg'     => $folderimg,
