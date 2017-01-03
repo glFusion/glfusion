@@ -130,9 +130,9 @@ function SEC_getUserGroups($uid='')
     if (array_key_exists($uid, $runonce)) {
         return $runonce[$uid];
     }
-    if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
-        return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
-    }
+//    if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
+//        return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
+//    }
 
     $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES['group_assignments']},{$_TABLES['groups']}"
             . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".(int) $uid,1);
@@ -184,9 +184,9 @@ function SEC_getUserGroups($uid='')
     }
 
     $runonce[$uid] = $groups;
-    if ( $cache ) {
-        SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
-    }
+//    if ( $cache ) {
+//        SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
+//    }
     return $groups;
 }
 
