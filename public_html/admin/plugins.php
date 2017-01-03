@@ -430,7 +430,7 @@ function PLUGINS_unInstall($pi_name)
     CTL_clearCache();
 
     if ( $msg != '' ) {
-        COM_setMessage($msg);
+        COM_setMsg($MESSAGE[$msg],'error');
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
     } else {
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
