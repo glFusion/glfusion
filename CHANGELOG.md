@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Forum - Update post time when silent edit is not checked
   - Fixed issue where no content to moderate message was not displayed properly
   - Added "Move to New Topic" feature in Global Story Editor
   - Improved error handling in Global Story Editor
