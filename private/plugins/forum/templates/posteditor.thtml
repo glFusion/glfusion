@@ -129,7 +129,7 @@
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label" for="subject">{LANG_SUBJECT}</label>
 						<div class="uk-form-controls">
-							<input class="uk-width-2-3" type="text" id="subject" name="subject" value="{subject}" tabindex="5">
+							<input class="uk-width-2-3" type="text" id="subject" name="subject" maxlength="100" value="{subject}" tabindex="5">
 						</div>
 					</div>
 {!if wysiwyg}

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to create topics and posts in the forum                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1076,6 +1076,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $postmode = 'text';
             }
         }
+        $postData['subject'] = COM_truncate($postData['subject'],100,'');
         $subject    = _ff_preparefordb(strip_tags($postData['subject']),'text');
         $comment    = _ff_preparefordb($postData['comment'],$postmode);
         $mood       = isset($postData['mood']) ? COM_applyFilter($postData['mood']) : '';
