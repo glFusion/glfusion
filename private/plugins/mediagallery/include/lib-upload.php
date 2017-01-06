@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upload library                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -748,6 +748,10 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	    $result = DB_query($sql);
 	    $row = DB_fetchArray($result);
 	    $media_filename = $row['media_filename'];
+
+	    $original_media_filename = $row['media_filename'];
+	    $original_media_ext      = $row['media_mime_ext'];
+	    $orignal_media_fullname = $original_media_filename . '.' . $original_media_ext;
     } else {
 	    if ( $_MG_CONF['preserve_filename'] == 1 ) {
 	        $loopCounter = 0;
@@ -1168,6 +1172,19 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        					media_resolution_y='".DB_escapeString($resolution_y)."'
 	        					WHERE media_id='".DB_escapeString($replace)."'";
         	DB_query( $sql );
+            if ( $original_media_filename != $media_filename || $original_media_ext != $mimeExt ) {
+                // need to delete the old stuff....
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $original_media_filename[0] . '/' . $original_media_filename . '.'. $original_media_ext) ) {
+                    @unlink($_MG_CONF['path_mediaobjects'] . 'tn/' . $original_media_filename[0] . '/' . $original_media_filename . '.' . $original_media_ext);
+                }
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'orig/' . $original_media_filename[0] . '/' . $original_media_filename . '.'. $original_media_ext) ) {
+                    @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $original_media_filename[0] . '/' . $original_media_filename . '.' . $original_media_ext);
+                }
+                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $original_media_filename[0] . '/' . $original_media_filename . '.'. $original_media_ext) ) {
+                    @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $original_media_filename[0] . '/' . $original_media_filename . '.' . $original_media_ext);
+                }
+            }
+
     	} else {
 
 	        $sql = "INSERT INTO " . $tableMedia . " (media_id,media_filename,media_original_filename,media_mime_ext,media_exif,mime_type,media_title,media_desc,media_keywords,media_time,media_views,media_comments,media_votes,media_rating,media_tn_attached,media_tn_image,include_ss,media_user_id,media_user_ip,media_approval,media_type,media_upload_time,media_category,media_watermarked,v100,maint,media_resolution_x,media_resolution_y,remote_media,remote_url,artist,album,genre)
