@@ -313,13 +313,20 @@ li.header dt, li.header dd {
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
 
+	ul.topiclist .header {
+		padding-bottom:15px;
+	}
+
 	dd.topics, dd.posts,
 	ul.topiclist li.header dd.views,
-	ul.topiclist li.row dd.views {
+	ul.topiclist li.row dd.views ,
+	ul.topiclist li.header dd.lastpost,
+	ul.topiclist li.row dd.lastpost
+	{
 		display: none;
 	}
 	ul.topiclist dt {
-		width: 60%;
+		width: 85%;
 	}
 
 	ul.topiclist dt {
@@ -349,8 +356,11 @@ li.header dt, li.header dd {
 	li.row dd.views {
 		display: none;
 	}
+	ul.topiclist li .header {
+		padding-bottom:5px;
+	}
 	ul.topiclist dt {
-		width: 65%;
+		width: 85%;
 	}
 	.forumbg ul.topiclist li.row dt {
 		width: 80%;
