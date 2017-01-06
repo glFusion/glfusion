@@ -2,7 +2,7 @@
 <div class="tm-forum-footer uk-margin uk-clearfix">
 	<div class="uk-text-muted">{forum_time}</div>
 {!if forum_legend}
-	<div class="uk-panel uk-panel-box uk-panel-box-primary">
+	<div class="uk-clearfix uk-panel uk-panel-box uk-panel-box-primary">
 		<div class="uk-grid">
 			<div class="uk-width-medium-3-4">
 				{forum_legend}
