@@ -44,4 +44,7 @@
 	<!-- END AlbumColumn -->
 	<!-- END AlbumRow -->
 </ul>
+
+<div class="uk-margin uk-text-center">{bottom_pagination}</div>
+
 {# end {templatelocation} #}
