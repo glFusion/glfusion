@@ -1,6 +1,9 @@
 ## v1.6.5 (unreleased)
+  - Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
+  - Media Gallery - Moved old non-responsive layout to new 'legacy' album theme
   - Media Gallery - if a replacement image was uploaded with a different extension, the replaced image was not physically deleted
   - Forum - updated the layout for topic lists on small devices - now display last post information
+  - Forum - updated header area (menu, search, jump) to display cleaner on small screens
   - Forum - several small tweaks to layout on smaller devices - ensure proper alignment, wrapping, etc.
   - Media Gallery - Fixed error where pagination did not display when using a 1 column index
   - Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
