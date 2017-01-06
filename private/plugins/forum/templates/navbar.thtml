@@ -1,19 +1,17 @@
 {# begin {templatelocation} #}
-<div class="uk-grid uk-margin">
-	<div class="uk-width-1-1">
-		<div class="uk-margin">
-			{navmenu}
-		</div>
+<div class="uk-margin">
+	{navmenu}
+	<div class="uk-align-left uk-text-truncate uk-visible-small">
+		{select_forum}
 	</div>
 </div>
-<div class="uk-grid uk-margin-bottom">
-	<div class="uk-width-1-2">
+<div class="uk-grid uk-margin-bottom uk-hidden-small">
+	<div class="uk-width-medium-1-2">
 		{search_forum}
 	</div>
-	<div class="uk-width-1-2">
+	<div class="uk-width-medium-1-2">
 		{select_forum}
 	</div>
 </div>
 <div class="uk-clearfix"></div>
-
 {# end {templatelocation} #}
