@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Media Gallery - Fixed error where pagination did not display when using a 1 column index
+  - Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
   - Integrated codemirror plugin into CKEditor
   - Support for auto upgrading plugins with custom directories
   - Forum - Update post time when silent edit is not checked
