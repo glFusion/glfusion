@@ -8,7 +8,7 @@
 	</div>
 	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
 		<form name="mg-search" method="post" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block">
-		<input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords" value="{keywords}">
+			<input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords" value="{keywords}">
 			<input type="hidden" name="mode" value="search">
 			<input type="hidden" name="swhere" value="0">
 		</form>

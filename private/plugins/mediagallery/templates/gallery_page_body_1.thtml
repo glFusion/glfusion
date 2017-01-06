@@ -4,47 +4,50 @@
 	<!-- BEGIN AlbumRow -->
 	<!-- BEGIN AlbumColumn -->
 
-	<li><div class="uk-panel uk-panel-box">
-		<div class="uk-grid uk-text-left">
-			<div class="uk-width-medium-2-6 uk-text-left">
-					<a class="uk-thumbnail uk-responsive-width" href="{url_media_item}">
+	<li>
+		<div class="uk-panel uk-panel-box">
+			<div class="uk-grid uk-text-left">
+
+				<div class="uk-width-medium-2-6 uk-text-center">
+					<a class="uk-thumbnail" href="{url_media_item}">
 						<img class="" src="{media_thumbnail}" height="{media_height}" width="{media_width}" alt="">
 					</a>
-			</div>
+				</div>
+
 {!if lang_subalbums}
-			<div class="uk-width-medium-2-6">
+				<div class="uk-width-medium-2-6">
 {!else}
-			<div class="uk-width-medium-4-6">
+				<div class="uk-width-medium-4-6">
 {!endif}
-				<div class="uk-text-left uk-clearfix">
-					<h3>{album_title} ({subalbum_media_count})</h3>
-{!if updated_prompt}
-					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
-						<li>{updated_prompt} {album_last_update}</li>
-						<li>{lang_views} {views}</li>
-					</ul>
-{!endif}
-				</div>
 
-				<div class="uk-text-left">
-					{album_desc}
+					<div class="uk-text-left uk-clearfix">
+						<h3>{album_title} ({subalbum_media_count})</h3>
+
+{!if updated_prompt}
+						<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+							<li>{updated_prompt} {album_last_update}</li>
+							<li>{lang_views} {views}</li>
+						</ul>
+{!endif}
+					</div>
+
+					<div class="uk-text-left">
+						{album_desc}
+					</div>
 				</div>
-			</div>
 
 {!if lang_subalbums}
-			<div class="uk-width-medium-2-6 uk-text-left">
-				<h3>{lang_subalbums} {subalbumcount}</h3>
-				<ul class="uk-list uk-text-truncate">
-					{subalbumlist}
-				</ul>
-			</div>
+				<div class="uk-width-medium-2-6 uk-text-left">
+					<h3>{lang_subalbums} {subalbumcount}</h3>
+					<ul class="uk-list uk-text-truncate">
+						{subalbumlist}
+					</ul>
+				</div>
 {!endif}
+
 		</div>
-	</div>		</li>
-	<!-- END AlbumColumn -->
-	<!-- END AlbumRow -->
+	</li>
+		<!-- END AlbumColumn -->
+		<!-- END AlbumRow -->
 </ul>
-
-<div class="uk-margin uk-text-center">{bottom_pagination}</div>
-
 {# end {templatelocation} #}
