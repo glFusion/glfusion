@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Self-enrollment for Member Albums                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -47,6 +47,8 @@ require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 function MG_enroll( ) {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03;
 
+    $retval = '';
+
     // let's make sure this user does not already have a member album
 
     if ($_MG_CONF['member_albums'] != 1 ) {
@@ -58,10 +60,8 @@ function MG_enroll( ) {
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
-        $display = MG_siteHeader();
-        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true,'error');
-        $display .= MG_siteFooter();
-        echo $display;
+        COM_setMsg($LANG_MG03['existing_member_album'],'error');
+        echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
         exit;
     }
 
@@ -75,7 +75,7 @@ function MG_enroll( ) {
         'lang_member_album_overview'    =>  $LANG_MG03['member_album_overview'],
         'lang_member_album_terms'       =>  $LANG_MG03['member_album_terms'],
         'lang_agree'                    =>  $LANG_MG03['agree'],
-        'lang_cancel'                   =>  $LANG_MG03['cancel'],
+        'lang_cancel'                   =>  ucfirst($LANG_MG03['cancel']),
     ));
 
     $T->parse('output','enroll');
@@ -99,10 +99,8 @@ function MG_saveEnroll() {
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
     if ( $nRows > 0 ) {
-        $display = MG_siteHeader();
-        $display .= COM_showMessageText($LANG_MG03['existing_member_album'],'',true,'error');
-        $display .= MG_siteFooter();
-        echo $display;
+        COM_setMsg($LANG_MG03['existing_member_album'],'error');
+        echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
         exit;
     }
 
@@ -121,14 +119,14 @@ function MG_saveEnroll() {
 }
 
 // --- Main Processing Loop
+$mode = '';
 
-$mode = COM_applyFilter ($_REQUEST['mode']);
-if ($mode == $LANG_MG03['cancel']) {
+if ( isset($_POST['cancel'])) {
     echo COM_refresh ($_MG_CONF['site_url'] . '/index.php');
     exit;
 }
 
-if ($mode == $LANG_MG03['agree'] && !empty ($LANG_MG03['agree'])) {
+if ( isset($_POST['mode'])) {
     $pageBody = MG_saveEnroll();
 } else {
     $pageBody = MG_enroll();
