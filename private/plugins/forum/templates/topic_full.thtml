@@ -155,7 +155,7 @@
 						<div class="uk-clearfix"></div>
 						<div class="forum_author_line uk-margin-bottom">
 							<a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-comment-o" title="permalink"></i>
+								<i class="uk-icon-comment-o uk-hidden-small" title="permalink"></i>
 							</a>
 							{$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 {!if bookmark_icon}
