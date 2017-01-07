@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Fixed error where exclude list did not always save properly
   - Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
   - Media Gallery - Moved old non-responsive layout to new 'legacy' album theme
   - Media Gallery - if a replacement image was uploaded with a different extension, the replaced image was not physically deleted

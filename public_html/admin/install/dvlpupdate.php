@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1578,6 +1578,12 @@ function glfusion_165()
     $c->add('enable_404_logging',1,'select',7,3,0,20,TRUE);
     $c->add('debug_oauth',0,'select',7,3,0,30,TRUE);
     $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
+
+    $res = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE name='dbback_exclude' AND group_name='dbadmin_internal'");
+    $num = DB_numRows($res);
+    if ( $num == 0 ) {
+        $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
+    }
 
     _updateConfig();
 

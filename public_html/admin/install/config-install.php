@@ -6,6 +6,10 @@
 // |                                                                          |
 // | Initial configuration setup.                                             |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009-2017 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |
@@ -66,5 +70,6 @@ function install_config($site_url, $coreConfigData)
     }
     // hidden system configuration options
     $c->add('social_site_extra','', 'text',0,0,NULL,1,TRUE,'social_internal');
+    $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
 }
 ?>

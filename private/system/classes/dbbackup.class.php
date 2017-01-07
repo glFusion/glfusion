@@ -5,7 +5,7 @@
 *   http://www.ilfilosofo.com/
 *
 *   @author     Lee Garner <lee@leegarner.com>
-*   @copyright  Copyright (c) 2010-2014 Lee Garner <lee@leegarner.com>
+*   @copyright  Copyright (c) 2010-2017 Lee Garner <lee@leegarner.com>
 *   @package    lglib
 *   @version    0.0.1
 *   @license    http://opensource.org/licenses/gpl-2.0.php
@@ -122,7 +122,12 @@ class dbBackup
         }
         $this->tablenames = $mysql_tables;
         // Get exclusions and remove from backup list
-        $this->exclusions = @unserialize($_VARS['_dbback_exclude']);
+        $cfg =& config::get_instance();
+        $_dbCfg = $cfg->get_config('dbadmin_internal');
+        $this->exclusions = array();
+        if ( isset($_dbCfg['dbback_exclude'])) {
+            $this->exclusions = $_dbCfg['dbback_exclude'];
+        }
         if (!is_array($this->exclusions))
             $this->exclusions = array($this->exclusions);
         $this->tablenames = array_diff($this->tablenames, $this->exclusions);

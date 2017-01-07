@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database backup administration page.                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1120,7 +1120,12 @@ function DBADMIN_configBackup()
     $excluded = '';
     $retval   = '';
 
-    $exclude_tables = @unserialize($_VARS['_dbback_exclude']);
+    $cfg =& config::get_instance();
+    $_dbCfg = $cfg->get_config('dbadmin_internal');
+    $exclude_tables = array();
+    if ( isset($_dbCfg['dbback_exclude'])) {
+        $exclude_tables = $_dbCfg['dbback_exclude'];
+    }
     if (!is_array($exclude_tables)) {
         $exclude_tables = array();
     }
@@ -1172,10 +1177,14 @@ function DBADMIN_configBackup()
     $include_tables = array_diff($tablenames, $exclude_tables);
 
     foreach ($include_tables as $key=>$name) {
-        $included .= "<option value=\"$name\">$name</option>\n";
+        if ( $name != '' ) {
+            $included .= "<option value=\"$name\">$name</option>\n";
+        }
     }
     foreach ($exclude_tables as $key=>$name) {
-        $excluded .= "<option value=\"$name\">$name</option>\n";
+        if ( $name != '' ) {
+            $excluded .= "<option value=\"$name\">$name</option>\n";
+        }
     }
 
     $T->set_var(array(
@@ -1526,7 +1535,11 @@ switch ($action) {
 
         // Get the excluded tables into a serialized string
         $tables = explode('|', $_POST['groupmembers']);
-        $items['_dbback_exclude'] = DB_escapeString(@serialize($tables));
+
+        $cfg =& config::get_instance();
+        if ( is_array($tables)) {
+            $cfg->set('dbback_exclude', $tables, 'dbadmin_internal');
+        }
 
         $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
 
