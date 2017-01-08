@@ -417,6 +417,8 @@ function FF_lastx()
         }
         $link = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . @htmlspecialchars($P['subject'],ENT_QUOTES,COM_getEncodingt()) . '::' . $lastpostinfogll . '" rel="nofollow">';
 
+        $link_notip = '<a style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . ' rel="nofollow">';
+
         $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject'],ENT_QUOTES,COM_getEncodingt()) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
         $dt->setTimestamp($P['date']);
@@ -424,7 +426,8 @@ function FF_lastx()
 
         $data_arr[] = array('forum'   => $P['forum_name'],
                             'subject' => $topiclink,
-                            'date'    => $link . $tdate . '</a>'
+                            'date'    => $link . $tdate . '</a>',
+                            'date_notip' => $link_notip . $tdate .'</a>',
                             );
 
         if ($displayrecs >= $_FF_CONF['show_last_post_count']) {
@@ -432,7 +435,29 @@ function FF_lastx()
         }
     }
 
-    $T->set_var('list_data',ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
+    $L = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $L->set_file('latest', 'latestposts.thtml');
+    $L->set_block('latest','rows','r');
+    foreach ( $data_arr AS $row ) {
+        $L->set_var(array(
+           'forum' => $row['forum'],
+           'subject' => $row['subject'],
+           'date'   => $row['date'],
+           'date_notip' => $row['date_notip'],
+        ));
+        $L->parse('r','rows',true);
+    }
+    $L->set_var(array(
+        'lang_forum' => $LANG_GF01['FORUM'],
+        'lang_topic' => $LANG_GF01['TOPIC'],
+        'lang_latest_post' => $LANG_GF92['sb_latestposts']
+    ));
+
+    $L->parse ('list', 'latest');
+    $output = $L->finish($L->get_var('list'));
+    $T->set_var('list_data',$output);
+
+//    $T->set_var('list_data',ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
     $T->set_var('block_end',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
 
     $T->parse ('output', 'list');

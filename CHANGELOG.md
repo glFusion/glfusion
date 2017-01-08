@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Several layout tweaks in the forum and admin navigation to better support smaller viewports
+  - Set error.log as default log to view on initial load of log viewer
   - Fixed error where exclude list did not always save properly
   - Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
   - Media Gallery - Moved old non-responsive layout to new 'legacy' album theme

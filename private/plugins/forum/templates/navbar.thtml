@@ -1,9 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-margin">
 	{navmenu}
-	<div class="uk-align-left uk-text-truncate uk-visible-small">
-		{select_forum}
-	</div>
 </div>
 <div class="uk-grid uk-margin-bottom uk-hidden-small">
 	<div class="uk-width-medium-1-2">
