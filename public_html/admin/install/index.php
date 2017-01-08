@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Installation                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -1152,6 +1152,9 @@ function INST_getSiteInformation()
  *       otherwise it calls INST_installAndContentPlugins()
  *
  */
+
+// we could start logging here since we know our paths...
+
 function INST_gotSiteInformation()
 {
     global $php55, $_GLFUSION, $LANG_INSTALL;
@@ -1447,61 +1450,81 @@ function INST_installAndContentPlugins()
         $_PATH['public_html'] .= '/';
     }
     $dbconfig_path = str_replace('db-config.php', '', $_PATH['dbconfig_path']);
+    $gl_path    = $dbconfig_path;
+    $log_path   = isset($_GLFUSION['log_path'])    ? $_GLFUSION['log_path']    : $gl_path . 'logs/';
+
+    INST_errorLog($log_path,'INSTALL: lib-custom installation');
 
     // check the lib-custom...
     if (!@file_exists($_PATH['dbconfig_path'].'system/lib-custom.php') ) {
         if ( @file_exists($_PATH['dbconfig_path'].'system/lib-custom.php.dist') ) {
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['dbconfig_path'].'system/lib-custom.php');
             $rc = @copy($_PATH['dbconfig_path'].'system/lib-custom.php.dist',$_PATH['dbconfig_path'].'system/lib-custom.php');
             if ( $rc === false ) {
+                INST_errorLog($log_path,'INSTALL: ERROR: Unable to create lib-custom.php - directory not writable?');
                 return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
             // no lib-custom.php.dist found
+            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['dbconfig_path'].'system/lib-custom.php.dist');
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
 
     // check the mg config...
+    INST_errorLog($log_path,'INSTALL: Media Gallery config.php installation.');
     if (!@file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php') ) {
         if ( @file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist') ) {
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['dbconfig_path'].'plugins/mediagallery/config.php');
             $rc = @copy($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist',$_PATH['dbconfig_path'].'plugins/mediagallery/config.php');
             if ( $rc === false ) {
+                INST_errorLog($log_path,'INSTALL: ERROR: Unable to create Media Gallery config.php - directory not writable?');
                 return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
             // no config.php.dist found
+            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist');
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
 
 
     // check and see if site config really exists...
+    INST_errorLog($log_path,'INSTALL: siteconfig.php Installation');
     if (!@file_exists($_PATH['public_html'].'siteconfig.php') ) {
         if ( @file_exists($_PATH['public_html'].'siteconfig.php.dist') ) {
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['public_html'].'siteconfig.php');
             $rc = @copy($_PATH['public_html'].'siteconfig.php.dist',$_PATH['public_html'].'siteconfig.php');
             if ( $rc === false ) {
+                INST_errorLog($log_path,'INSTALL: ERROR: Unable to create siteconfig.php - directory or file not writable?');
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
             @chmod($_PATH['public_html'].'siteconfig.php',0777);
             if ( !@file_exists($_PATH['public_html'].'siteconfig.php') ) {
+                INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['public_html'].'siteconfig.php');
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
             // no site config found return error
+            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['public_html'].'siteconfig.php.dist');
             return _displayError(SITECONFIG_NOT_FOUND,'getsiteinformation');
         }
     }
 
     // Edit siteconfig.php and enter the correct path and system directory path
+    INST_errorLog($log_path,'INSTALL: Opening siteconfig.php for writing');
     $siteconfig_path = $_PATH['public_html'] . 'siteconfig.php';
     $siteconfig_file = fopen($siteconfig_path, 'r');
     if ( $siteconfig_file === false ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to open ' . $_PATH['public_html'] . 'siteconfig.php for writing');
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
+    INST_errorLog($log_path,'INSTALL: Writing configuration data to siteconfig.php');
     $siteconfig_data = fread($siteconfig_file, filesize($siteconfig_path));
     fclose($siteconfig_file);
 
     if ( !file_exists($siteconfig_path) ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate siteconfig.php after configuration update');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $siteconfig_path;
@@ -1528,6 +1551,7 @@ function INST_installAndContentPlugins()
 
     $siteconfig_file = fopen($siteconfig_path, 'w');
     if (!fwrite($siteconfig_file, $siteconfig_data)) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to write to ' . $siteconfig_path);
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose ($siteconfig_file);
@@ -1539,7 +1563,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $config_file;
-
+    INST_errorLog($log_path,'INSTALL: db-config.php Installation');
     $db = array('host' => (isset($_GLFUSION['db_host']) ? $_GLFUSION['db_host'] : $_DB_host),
                 'name' => (isset($_GLFUSION['db_name']) ? $_GLFUSION['db_name'] : $_DB_name),
                 'user' => (isset($_GLFUSION['db_user']) ? $_GLFUSION['db_user'] : $_DB_user),
@@ -1561,6 +1585,7 @@ function INST_installAndContentPlugins()
     // Write changes to db-config.php
     $dbconfig_file = fopen($config_file, 'w');
     if (!fwrite($dbconfig_file, $dbconfig_data)) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to write to ' . $config_file);
         return _displayError(DBCONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fflush($dbconfig_file);
@@ -1569,12 +1594,15 @@ function INST_installAndContentPlugins()
     require $config_file;
 
     if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path_system'].'lib-database.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
     require $_CONF['path_system'].'lib-database.php';
     if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
+    INST_errorLog($log_path,'INSTALL: Installing Database Tables and Default Data');
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: create tables failed');
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$errors);
     }
     $site_name      = isset($_GLFUSION['site_name']) ? $_GLFUSION['site_name'] : '';
@@ -1584,23 +1612,25 @@ function INST_installAndContentPlugins()
     $site_mail      = isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '' ;
     $noreply_mail   = isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '' ;
 
+//    $gl_path      = $_GLFUSION['dbconfig_path'];
+
     $log_path     = isset($_GLFUSION['log_path'])    ? $_GLFUSION['log_path']    : $gl_path . 'logs/';
     $lang_path    = isset($_GLFUSION['lang_path'])   ? $_GLFUSION['lang_path']   : $gl_path . 'language/';
     $backup_path  = isset($_GLFUSION['backup_path']) ? $_GLFUSION['backup_path'] : $gl_path . 'backups/';
     $data_path    = isset($_GLFUSION['data_path'])   ? $_GLFUSION['data_path']   : $gl_path . 'data/';
-
+    INST_errorLog($log_path,'INSTALL: Personalizing the default Admin account');
     INST_personalizeAdminAccount($site_mail, $site_url);
 
     if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+    INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path_system'].'classes/config.class.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
     }
     require_once $_CONF['path_system'].'classes/config.class.php';
     require_once $_CONF['path'].'sql/core_config_data.php';
     require_once 'config-install.php';
-
+    INST_errorLog($log_path,'INSTALL: Installing default configuration data');
     install_config($site_url,$coreConfigData);
 
-    $gl_path    = $_GLFUSION['dbconfig_path'];
     $html_path  = $_PATH['public_html'];
 
     $config = config::get_instance();
@@ -1645,10 +1675,11 @@ function INST_installAndContentPlugins()
     $var = time() - rand();
     $session_cookie = 'sc'.substr(md5($var),0,3);
     DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_session'",1);
-
+    INST_errorLog($log_path,'INSTALL: Completed installation of default configuration data');
     $config->_purgeCache();
     // rebuild the config array
     if ( !file_exists($siteconfig_path) ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate '. $siteconfig_path . ' at line ' . __LINE__);
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     include $siteconfig_path;
@@ -1658,7 +1689,7 @@ function INST_installAndContentPlugins()
     $_CONF = $config->get_config('Core');
 
     $config->_purgeCache();
-
+    INST_errorLog($log_path,'INSTALL: Touching default log files');
     @touch($log_path.'error.log');
     @touch($log_path.'access.log');
     @touch($log_path.'captcha.log');
@@ -1667,11 +1698,12 @@ function INST_installAndContentPlugins()
     global $_CONF, $_SYSTEM, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
     if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to loate ' . $_CONF['path_html'].'lib-common.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_html'].'lib-common.php';
     if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
-
+    INST_errorLog($log_path,'INSTALL: Performing default plugin installations');
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
     INST_pluginAutoInstall('ckeditor');

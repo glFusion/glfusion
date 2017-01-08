@@ -566,6 +566,8 @@ function INST_createDatabaseStructures ($use_innodb = false)
 
     $rc = true;
 
+    $log_path = $_CONF['path'].'logs/';
+
     switch ( $_DB_dbms ) {
         case 'mysql' :
         case 'mysqli' :
@@ -581,7 +583,9 @@ function INST_createDatabaseStructures ($use_innodb = false)
     // postgresql.class.php, etc)
 
     // Get DBMS-specific create table array and data array
+    INST_errorLog($log_path,'INSTALL: Reading ' . $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php');
     if ( !@file_exists($_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php');
         echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
         exit;
     }
@@ -592,13 +596,16 @@ function INST_createDatabaseStructures ($use_innodb = false)
     $errors = '';
     $rc = true;
 
+    INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
     if (INST_checkTableExists ('access')) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Database already contains glFusion tables');
         return array(false,$LANG_ISNTALL['database_exists']);
     }
 
     switch($_DB_dbms){
         case 'mysql':
         case 'mysqli' :
+            INST_errorLog($log_path,'INSTALL: Running installation SQL queries');
             list($rc,$errors) = INST_updateDB($_SQL,$use_innodb);
             if ( $rc != true ) {
                 return array($rc,$errors);
@@ -610,6 +617,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
     }
 
     // Now insert mandatory data and a small subset of initial data
+    INST_errorLog($log_path,'INSTALL: Installing default data');
     foreach ($_DATA as $data) {
         $progress .= "executing " . $data . "<br />\n";
         DB_query ($data,1);
@@ -2106,6 +2114,26 @@ function _searchForId($id, $array) {
    }
    return null;
 }
+
+function INST_errorLog( $logpath, $logentry)
+{
+    $timestamp = date('d M Y H:i:s');
+
+    if ( !empty( $logentry )) {
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
+
+        $logfile = $logpath . 'error.log';
+        if ( !$file = fopen( $logfile, 'a' )) {
+            return;
+        } else {
+            fputs( $file, "$timestamp: $logentry \n" );
+            fclose($file);
+        }
+    }
+    return;
+}
+
+
 
 function _searchForIdKey($id, $array) {
    foreach ($array as $key => $val) {
