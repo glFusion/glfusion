@@ -417,7 +417,7 @@ function FF_lastx()
         }
         $link = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . @htmlspecialchars($P['subject'],ENT_QUOTES,COM_getEncodingt()) . '::' . $lastpostinfogll . '" rel="nofollow">';
 
-        $link_notip = '<a style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . ' rel="nofollow">';
+        $link_notip = '<a style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" rel="nofollow">';
 
         $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject'],ENT_QUOTES,COM_getEncodingt()) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
