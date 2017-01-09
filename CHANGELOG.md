@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Increase font size on smaller viewports
   - Several layout tweaks in the forum and admin navigation to better support smaller viewports
   - Set error.log as default log to view on initial load of log viewer
   - Fixed error where exclude list did not always save properly

@@ -22,6 +22,16 @@ set of styles.
 	color:#fff;
 }
 
+/* Increase font size on smaller devices */
+@media (max-width: 767px) {
+  .uk-container {
+    padding: 0 5px;
+    font-size:1.2em !important;
+  	line-height:1.4em !important;
+  }
+}
+
+
 /* Primary Styles
 ========================================================================== */
 /* tm-content wraps the entire content area  */

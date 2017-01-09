@@ -1165,8 +1165,10 @@ function INST_gotSiteInformation()
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
+    $log_path = $dbconfig_path .'logs/';
 
     if ( !file_exists($dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
@@ -1303,11 +1305,15 @@ function INST_gotSiteInformation()
         return _displayError(SITE_DATA_ERROR,'getsiteinformation',$errText);
     }
 
+    INST_errorLog($log_path,'INSTALL: Validating MySQL drivers are present in PHP');
+
     if ( !function_exists('mysql_connect') && !function_exists('mysqli_connect') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: No MySQL drivers found');
         return _displayError(NO_DB_DRIVER,'getsiteinformation');
     }
 
     if ( $php55 || $db_type == 'mysqli' ) {
+        INST_errorLog($log_path,'INSTALL: Connecting to the database using MySQLi');
         $db_handle = @mysqli_connect($db_host, $db_user, $db_pass);
         if (!$db_handle) {
             return _displayError(DB_NO_CONNECT,'getsiteinformation');
@@ -1319,6 +1325,7 @@ function INST_gotSiteInformation()
             return _displayError(DB_NO_DATABASE,'getsiteinformation');
         }
         if ( $innodb ) {
+            INST_errorLog($log_path,'INSTALL: Checking MySQL Storage Engines');
             $foundInnoDB = false;
             $res = @mysqli_query($db_handle, "SHOW STORAGE ENGINES");
             $numEngines = @mysqli_num_rows($res);
@@ -1336,6 +1343,7 @@ function INST_gotSiteInformation()
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
+        INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
         $collationResult = @mysqli_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
         $collation = @mysqli_fetch_array($collationResult);
         $collation_database = $collation["@@collation_database"];
@@ -1350,11 +1358,14 @@ function INST_gotSiteInformation()
                 return _displayError(DB_NO_CHECK_UTF8, 'getsiteinformation');
             }
         }
+        INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
         $result = @mysqli_query($db_handle, "SHOW TABLES LIKE '".$db_prefix."vars'");
         if (@mysqli_num_rows ($result) > 0) {
+            INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
             return _displayError(DB_EXISTS,'');
         }
     } else {
+        INST_errorLog($log_path,'INSTALL: Connecting to the database using MySQL');
         $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
         if (!$db_handle) {
             return _displayError(DB_NO_CONNECT,'getsiteinformation');
@@ -1366,6 +1377,7 @@ function INST_gotSiteInformation()
             return _displayError(DB_NO_DATABASE,'getsiteinformation');
         }
         if ( $innodb ) {
+            INST_errorLog($log_path,'INSTALL: Checking available MySQL storage engines');
             $foundInnoDB = false;
             $res = @mysql_query($db_handle, "SHOW STORAGE ENGINES");
             $numEngines = @mysql_num_rows($res);
@@ -1383,6 +1395,7 @@ function INST_gotSiteInformation()
                 return _displayError(DB_NO_INNODB,'getsiteinformation');
             }
         }
+        INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
         $collationResult = @mysql_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
         $collation = @mysql_fetch_array($collationResult);
         $collation_database = substr($collation["@@collation_database"],0,4);
@@ -1390,8 +1403,10 @@ function INST_gotSiteInformation()
         if ( ($collation_database != "utf8") || ($character_set != "utf8")  ) {
             return _displayError(DB_NO_UTF8, 'getsiteinformation');
         }
+        INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
         $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
         if (@mysql_numrows ($result) > 0) {
+            INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
             return _displayError(DB_EXISTS,'');
         }
     }
@@ -1487,7 +1502,6 @@ function INST_installAndContentPlugins()
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
-
 
     // check and see if site config really exists...
     INST_errorLog($log_path,'INSTALL: siteconfig.php Installation');
