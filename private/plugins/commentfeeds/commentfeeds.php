@@ -40,6 +40,6 @@ if (!defined ('GVERSION')) {
 $_CF_CONF['pi_name']            = 'commentfeeds';
 $_CF_CONF['pi_display_name']    = 'Comment Feeds';
 $_CF_CONF['pi_version']         = '1.1.0';
-$_CF_CONF['gl_version']         = '1.6.4';
+$_CF_CONF['gl_version']         = '1.6.5';
 $_CF_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>
