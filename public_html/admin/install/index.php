@@ -880,6 +880,7 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['log_path'].'access.log',
                         $_PATH['log_path'].'captcha.log',
                         $_PATH['log_path'].'spamx.log',
+                        $_PATH['log_path'].'404.log',
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
                         $_PATH['data_path'].'htmlpurifier/',
@@ -1152,9 +1153,6 @@ function INST_getSiteInformation()
  *       otherwise it calls INST_installAndContentPlugins()
  *
  */
-
-// we could start logging here since we know our paths...
-
 function INST_gotSiteInformation()
 {
     global $php55, $_GLFUSION, $LANG_INSTALL;
