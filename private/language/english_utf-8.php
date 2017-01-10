@@ -1039,6 +1039,7 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
 );
 
 ###############################################################################

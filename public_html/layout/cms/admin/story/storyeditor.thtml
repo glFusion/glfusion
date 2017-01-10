@@ -35,8 +35,15 @@
 	}
 
 	function actionClick( $action ) {
-		$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
-		$('#frmstory').trigger('submit', [ { $action: true } ]);
+		if ( $action == 'cancel' ) {
+			UIkit.modal.confirm("{$LANG24[124]}", function(){
+				$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+				$('#frmstory').trigger('submit', [ { $action: true } ]);
+			}, function(){});
+		} else {
+			$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+			$('#frmstory').trigger('submit', [ { $action: true } ]);
+		}
 	}
 
 </script>
@@ -484,13 +491,8 @@
 					<button onclick="actionClick('previewstory');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 				<li>
-					<button onclick="actionClick('cancel');" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
-{!if delete_option}
-				<li>
-					<button class="uk-button uk-button-danger tm-admin-save-button-width" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="{lang_delete}" data-uk-tooltip="{pos:'left'}" title="{lang_delete}"><i class="uk-icon-eraser"></i></button>
-				</li>
-{!endif}
 			</ul>
 		</div>
 		{# end save side bar #}
@@ -500,7 +502,7 @@
 		<div id="se_bottom" class="uk-margin-large">
 			<button onclick="actionClick('save');" class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
 			<button onclick="actionClick('previewstory');" class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
-			<button onclick="actionClick('cancel');" class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+			<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 			<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>
 {!endif}
