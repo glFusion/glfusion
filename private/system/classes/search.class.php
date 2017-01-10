@@ -762,7 +762,7 @@ class Search {
         if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];
 
-            if (is_numeric($row['uid']))
+            if (isset($row['uid']) && is_numeric($row['uid']))
             {
                 if (empty($this->_names[ $row['uid'] ]))
                 {
@@ -777,7 +777,7 @@ class Search {
             $row[SQL_TITLE] = COM_createLink($row[SQL_TITLE], $this->_searchURL.'&amp;type='.$row[SQL_NAME].'&amp;mode=search');
 
             $row['url'] = ($row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
-            if ($this->_url_rewrite[$row[SQL_NAME]])
+            if (isset($this->_url_rewrite[$row[SQL_NAME]]) && $this->_url_rewrite[$row[SQL_NAME]])
                 $row['url'] = COM_buildUrl($row['url']);
 
             if ( $row['title'] == '' ) {
