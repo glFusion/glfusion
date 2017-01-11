@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {!if iframe}
 <!DOCTYPE html>
-<html lang="en-gb" dir="ltr">
+<html lang="{lang_locale}" dir="{direction}">
 	<head>
 		<meta charset="{charset}">
 		<meta name="viewport" content="width=device-width, initial-scale=1">

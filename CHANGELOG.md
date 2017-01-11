@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Forum - set locale header properly in topic review window
   - Added missing confirmations to cancel / delete actions in static page editor
   - Increase font size on smaller viewports
   - Several layout tweaks in the forum and admin navigation to better support smaller viewports

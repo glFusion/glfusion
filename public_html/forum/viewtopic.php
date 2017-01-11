@@ -139,6 +139,8 @@ if ( !$iframe )  {
                 'js-header'    => $outputHandle->renderHeader('script'),
                 'raw-header'   => $outputHandle->renderHeader('raw'),
                 'charset'      => COM_getCharset(),
+                'lang_locale'  => $_CONF['iso_lang'],
+                'direction'    => (empty($LANG_DIRECTION) ? 'ltr' : $LANG_DIRECTION),
     ));
 }
 
