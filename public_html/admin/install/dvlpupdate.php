@@ -1585,6 +1585,19 @@ function glfusion_165()
         $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
     }
 
+    $_SQL = array();
+    // drop unused fields
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP score;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP reason;";
+    // change IP address in speed limit
+    $_SQL[] = "ALTER TABLE {$_TABLES['speedlimit']} CHANGE `ipaddress` `ipaddress` VARCHAR(39) NULL DEFAULT NULL;";
+    // use appropriate topic id length in syndication
+    $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `header_tid` `header_tid` VARCHAR(128) NULL DEFAULT NULL;";
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     _updateConfig();
 
     // update version number

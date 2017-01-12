@@ -1442,6 +1442,15 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
             $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
 
+            $_SQL = array();
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP score;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP reason;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['speedlimit']} CHANGE `ipaddress` `ipaddress` VARCHAR(39) NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `header_tid` `header_tid` VARCHAR(128) NULL DEFAULT NULL;";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             $current_fusion_version = '1.6.5';
 
         default:
