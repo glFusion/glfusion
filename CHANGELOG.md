@@ -1,4 +1,7 @@
 ## v1.6.5 (unreleased)
+  - Enhanced security checks when emailing users / stories
+  - Left align remarks on poll results
+  - Minor table structure updates to remove unused fields, properly align lengths on others
   - Forum - set locale header properly in topic review window
   - Added missing confirmations to cancel / delete actions in static page editor
   - Increase font size on smaller viewports
@@ -27,7 +30,7 @@
   - Consistent menus in database administration
   - Improved error logging during authentication
   - Additional validation on email addresses prior to sending
-  - Update phpmailer to v5.2.21 - SECURITY Critical security update for CVE-2016-10033 and CVE-2016-10045
+  - Update phpmailer to v5.2.22 - SECURITY Critical security update for CVE-2016-10033, CVE-2016-10045,  CVE-2017-5223
   - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
   - Moved HTML filter cache directory under private_data
   - Fixed invalid image reference in errormessage.html
@@ -58,7 +61,7 @@
   - Forum post edit did not set sticky checkbox appropriately
   - Modified user story submit info panel - allow it to be closed
   - Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
-  - New $_SYSTEM option to enable / disable including SP in plugin menu
+  - New $_SYSTEM option to enable / disable including static pages marked with 'Include in Menu' the Plugin menu
 
 ## v1.6.4 (December 9, 2016)
   - Updated CKEditor to v4.6.1

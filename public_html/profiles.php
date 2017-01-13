@@ -7,7 +7,7 @@
 // | This pages lets glFusion users communicate with each other without       |
 // | exposing email addresses.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2016 by the following authors:                        |
+// | Copyright (C) 2011-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // |                                                                          |
@@ -49,7 +49,7 @@ require_once 'lib-common.php';
 */
 function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG08, $LANG_LOGIN, $MESSAGE;
 
     $retval = '';
 
@@ -145,17 +145,18 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             COM_updateSpeedlimit ('mail');
 
             if ( COM_isAnonUser() && $_CONF['profileloginrequired'] == true) {
-                $redirectURL = $_CONF['site_url'] . '/index.php?msg=';
+                $redirectURL = $_CONF['site_url'] . '/index.php';
             } else {
                 $redirectURL = $_CONF['site_url']
-                                . '/users.php?mode=profile&amp;uid=' . $uid
-                                . '&amp;msg=';
+                                . '/users.php?mode=profile&amp;uid=' . $uid;
             }
 
             if ( $rc === false ) {
-                $retval .= COM_refresh($redirectURL . '26');
+                COM_setMsg( $MESSAGE[26], 'error' );
+                $retval .= COM_refresh($redirectURL);
             } else {
-                $retval .= COM_refresh($redirectURL . '27');
+                COM_setMsg( $MESSAGE[27], 'info' );
+                $retval .= COM_refresh($redirectURL);
             }
         } else {
             $subject = strip_tags ($subject);
@@ -216,8 +217,9 @@ function contactform ($uid, $subject = '', $message = '')
     $postmode = $_CONF['mailuser_postmode'];
 
     $displayname = COM_getDisplayName ($uid);
-    if ((($P['emailfromadmin'] == 1) && $isAdmin) ||
-        (($P['emailfromuser'] == 1) && !$isAdmin)) {
+    if ((($P['emailfromadmin'] == 1) && $isAdmin) || ($P['emailfromuser'] == 1) && !$isAdmin) {
+
+        $token = SEC_createToken();
 
         $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname);
         $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
@@ -267,6 +269,8 @@ function contactform ($uid, $subject = '', $message = '')
         $mail_template->set_var ('lang_nohtml', $LANG08[15]);
         $mail_template->set_var ('lang_submit', $LANG08[16]);
         $mail_template->set_var ('uid', $uid);
+        $mail_template->set_var ('sec_token_name', CSRF_TOKEN);
+        $mail_template->set_var ('sec_token', $token);
         PLG_templateSetVars ('contact', $mail_template);
         $mail_template->parse ('output', 'form');
         $retval .= $mail_template->finish ($mail_template->get_var ('output'));
@@ -301,7 +305,7 @@ function contactform ($uid, $subject = '', $message = '')
 */
 function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08, $MESSAGE;
 
     $dt = new Date('now',$_USER['tzid']);
 
@@ -434,18 +438,22 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 
     if ( $rc ) {
         if ($_CONF['url_rewrite']) {
-            $retval = COM_refresh($storyurl . '?msg=27');
+            COM_setMsg( $MESSAGE[27], 'info' );
+            $retval = COM_refresh($storyurl);
         } else {
-            $retval = COM_refresh($storyurl . '&amp;msg=27');
+            COM_setMsg($MESSAGE[27],'info');
+            $retval = COM_refresh($storyurl);
         }
     } else {
         // Increment numemails counter for story
         DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '".DB_escapeString($sid)."'");
 
         if ($_CONF['url_rewrite']) {
-            $retval = COM_refresh($storyurl . '?msg=26');
+            COM_setMsg($MESSAGE[26],'error');
+            $retval = COM_refresh($storyurl);
         } else {
-            $retval = COM_refresh($storyurl . '&amp;msg=26');
+            COM_setMsg($MESSAGE[26],'error');
+            $retval = COM_refresh($storyurl);
         }
     }
     echo COM_refresh($retval);
@@ -582,6 +590,8 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         exit;
     }
 
+    $token = SEC_createToken();
+
     $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));
     $A = DB_fetchArray($result);
     if ($A['count'] == 0) {
@@ -628,6 +638,8 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
     $mail_template->set_var('story_id',$sid);
+    $mail_template->set_var ('sec_token_name', CSRF_TOKEN);
+    $mail_template->set_var ('sec_token', $token);
     PLG_templateSetVars ('emailstory', $mail_template);
     $mail_template->set_var('end_block', COM_endBlock());
     $mail_template->parse('output', 'form');
@@ -639,6 +651,11 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
 // MAIN
 $display = '';
+
+if ( isset($_POST['cancel'])) {
+    echo COM_refresh ($_CONF['site_url'] . '/index.php');
+    exit;
+}
 
 if (isset ($_POST['what'])) {
     $what = COM_applyFilter ($_POST['what']);
@@ -652,20 +669,24 @@ $postmode = $_CONF['mailuser_postmode'];
 
 switch ($what) {
     case 'contact':
-        $uid = COM_applyFilter ($_POST['uid'], true);
-        if ($uid > 1) {
-            $html = 0;
-            if ( $postmode == 'html' ) {
-                $html = 1;
+        if ( SEC_checkToken() ) {
+            $uid = COM_applyFilter ($_POST['uid'], true);
+            if ($uid > 1) {
+                $html = 0;
+                if ( $postmode == 'html' ) {
+                    $html = 1;
+                }
+                $message = $_POST['message'];
+                $display .= contactemail ($uid, $_POST['author'], $_POST['authoremail'], $_POST['subject'], $message,$html);
+                echo $display;
+                exit;
+            } else {
+                $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
+                echo $display;
+                exit;
             }
-            $message = $_POST['message'];
-
-            $display .= contactemail ($uid, $_POST['author'],
-                    $_POST['authoremail'], $_POST['subject'],
-                    $message,$html);
-            echo $display;
-            exit;
         } else {
+            COM_setMsg( $MESSAGE[26], 'error' );
             $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
             echo $display;
             exit;
@@ -687,47 +708,54 @@ switch ($what) {
         break;
 
     case 'sendstory':
-        $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
-        if (empty ($sid)) {
-            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
-        } else {
-            $html = 0;
-
-            if ( $postmode == 'html' ) {
-                $html = 1;
-            }
-            $shortmessage = $_POST['shortmsg'];
-
-            if (empty ($_POST['toemail']) || empty ($_POST['fromemail'])
-                    || !COM_isEmail ($_POST['toemail'])
-                    || !COM_isEmail ($_POST['fromemail'])) {
-                $display .= COM_siteHeader ('menu', $LANG08[17])
-                         . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
-                                          COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
-                                          $shortmessage, 52)
-                         . COM_siteFooter ();
-            } else if (empty ($_POST['to']) || empty ($_POST['from']) ||
-                    empty ($shortmessage)) {
-                $display .= COM_siteHeader ('menu', $LANG08[17])
-                         . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
-                                          COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
-                                          $shortmessage)
-                         . COM_siteFooter ();
+        if ( SEC_checkToken() ) {
+            $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
+            if (empty ($sid)) {
+                $display = COM_refresh ($_CONF['site_url'] . '/index.php');
             } else {
-                $msg = PLG_itemPreSave ('emailstory', $shortmessage);
-                if (!empty ($msg)) {
-                    $display .= COM_siteHeader ('menu', '')
-                             . COM_errorLog ($msg, 2)
+                $html = 0;
+
+                if ( $postmode == 'html' ) {
+                    $html = 1;
+                }
+                $shortmessage = $_POST['shortmsg'];
+
+                if (empty ($_POST['toemail']) || empty ($_POST['fromemail'])
+                        || !COM_isEmail ($_POST['toemail'])
+                        || !COM_isEmail ($_POST['fromemail'])) {
+                    $display .= COM_siteHeader ('menu', $LANG08[17])
+                             . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
+                                              COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
+                                              $shortmessage, 52)
+                             . COM_siteFooter ();
+                } else if (empty ($_POST['to']) || empty ($_POST['from']) ||
+                        empty ($shortmessage)) {
+                    $display .= COM_siteHeader ('menu', $LANG08[17])
                              . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
                                               COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
                                               $shortmessage)
                              . COM_siteFooter ();
                 } else {
+                    $msg = PLG_itemPreSave ('emailstory', $shortmessage);
+                    if (!empty ($msg)) {
+                        $display .= COM_siteHeader ('menu', '')
+                                 . COM_errorLog ($msg, 2)
+                                 . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
+                                                  COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
+                                                  $shortmessage)
+                                 . COM_siteFooter ();
+                    } else {
 
-                    $display .= mailstory ($sid, $_POST['to'], $_POST['toemail'],
-                        $_POST['from'], $_POST['fromemail'], $shortmessage,$html);
+                        $display .= mailstory ($sid, $_POST['to'], $_POST['toemail'],
+                            $_POST['from'], $_POST['fromemail'], $shortmessage,$html);
+                    }
                 }
             }
+        } else {
+            COM_setMsg( $MESSAGE[26], 'error' );
+            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
+            echo $display;
+            exit;
         }
         break;
 

@@ -32,7 +32,9 @@
 <input type="hidden" name="sid" value="{story_id}" />
 <input type="hidden" name="what" value="sendstory" />
 <input type="hidden" name="postmode" value="{postmode}" />
+<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 <input type="submit" value="{lang_sendmessage}" />
+
 </form>
 
 {end_block}
