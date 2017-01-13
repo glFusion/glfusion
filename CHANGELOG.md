@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Enhanced validation / error handling for comment entry
+  - Polls - Display poll above comment entry form
   - Enhanced security checks when emailing users / stories
   - Left align remarks on poll results
   - Minor table structure updates to remove unused fields, properly align lengths on others
