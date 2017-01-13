@@ -12,7 +12,7 @@
  * @category   glFusion CMS
  * @package    dbAdmin
  * @author     Mark R. Evans  mark AT glFusion DOT org
- * @copyright  2015-2016 - Mark R. Evans
+ * @copyright  2015-2017 - Mark R. Evans
  * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
  * @since      File available since Release 1.6.3
  */
@@ -77,7 +77,8 @@ class dbAdmin
         $queryShowTables = $this->dbHandle->dbQuery("SHOW TABLES");
 
         $numTables = $this->dbHandle->dbNumRows($queryShowTables);
-
+// debug / dvlp
+//$numTables = 4;
         for ($i = 0; $i < $numTables; $i++) {
             $row = $this->dbHandle->dbFetchArray($queryShowTables,true);
             $table = $row[0];

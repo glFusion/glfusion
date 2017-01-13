@@ -280,7 +280,7 @@ class dbBackup
      */
     public function backupTable($table, $structonly=false, $start = 0)
     {
-        global $_TABLES, $_SYSTEM;
+        global $_TABLES, $_SYSTEM, $_DB_name;
 
         $recordCounter = $start;
         $timerStart    = time();
@@ -305,10 +305,33 @@ class dbBackup
         // Save the backquoted table name, gets used a lot
         $db_tablename = $this->backquote($table);
 
+        if ( $start == 0 ) {
+            $showTableResult = DB_query("SHOW TABLE STATUS FROM ".$_DB_name." LIKE '".$table."'",true);
+            $row = DB_fetchArray($showTableResult);
+            $tb_collation = substr($row['Collation'],0,7);
+            if ( strcasecmp($tb_collation, 'utf8mb4') === 0 ) {
+                $mm = 0;
+                $describeResult = DB_query("SHOW FULL COLUMNS FROM ".$db_tablename.";",true);
+                $numColumns = DB_numRows($describeResult);
+                if ( $numColumns > 0 ) {
+                    for ($i = 0; $i < $numColumns; $i++ ) {
+                        $row = DB_fetchArray($describeResult);
+                        if ( isset($row['Collation']) && $row['Collation'] != "" && (substr($row['Collation'],0,7) != 'utf8mb4')) {
+                            $mm = 1;
+                            break;
+                        }
+                    }
+                    if ( $mm == 1 ) {
+                        DB_query("ALTER TABLE $db_tablename CHARACTER SET = 'utf8'  COLLATE = 'utf8_general_ci'",1);
+                    }
+                }
+            }
+        }
+
         // Get the table structure
         $res = DB_query("DESCRIBE $table");
         $table_structure = array();
-        while ($A =DB_fetchArray($res, false)) {
+        while ($A = DB_fetchArray($res, false)) {
             $table_structure[] = $A;
         }
         if (empty($table_structure)) {
@@ -369,15 +392,37 @@ class dbBackup
         $ints = array();
         foreach ($table_structure as $struct) {
             if ( (0 === strpos($struct['Type'], 'tinyint')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'date')) ||
                     (0 === strpos(strtolower($struct['Type']), 'smallint')) ||
                     (0 === strpos(strtolower($struct['Type']), 'mediumint')) ||
                     (0 === strpos(strtolower($struct['Type']), 'int')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'double')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'float')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'decimal')) ||
                     (0 === strpos(strtolower($struct['Type']), 'timestamp')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'time')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'datetime')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'year')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'time')) ||
                     (0 === strpos(strtolower($struct['Type']), 'bigint')) ) {
                 $defs[strtolower($struct['Field'])] = (null === $struct['Default']) ? 'NULL' : $struct['Default'];
+            }
+        }
+
+        foreach ($table_structure as $struct) {
+            if ( (0 === strpos($struct['Type'], 'tinyint')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'smallint')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'mediumint')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'int')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'double')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'float')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'decimal')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'year')) ||
+                    (0 === strpos(strtolower($struct['Type']), 'bigint')) ) {
                 $ints[strtolower($struct['Field'])] = "1";
             }
         }
+
 
         $result = DB_query("SELECT COUNT(*) FROM {$db_tablename}");
         $row = DB_fetchArray($result);
@@ -402,11 +447,19 @@ class dbBackup
                 if (isset($ints[strtolower($key)]) && $ints[strtolower($key)]) {
                     // make sure there are no blank spots in the insert syntax,
                     // yet try to avoid quotation marks around integers
-                    $value = (null === $value || '' === $value) ?
-                            $defs[strtolower($key)] : $value;
+                    $value = (null === $value || '' === $value) ? $defs[strtolower($key)] : $value;
                     $values[] = ( '' === $value ) ? "''" : $value;
                 } else {
-                    $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
+                    if ( isset($defs[strtolower($key)]) && $defs[strtolower($key)]) {
+                        if ( $value === null || $value === '' ) {
+                            $value = $defs[strtolower($key)];
+                            $values[] = ( '' === $value ) ? "''" : $value;
+                        } else {
+                            $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
+                        }
+                    } else {
+                        $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
+                    }
                 }
             }
             $this->stow(" \n" . $insert . implode(', ', $values) . ');');
@@ -443,12 +496,13 @@ class dbBackup
         }
 
         //Begin new backup of MySql
-        $this->stow("# glFusion MySQL database backup\n");
+        $this->stow("# glFusion  MySQL database backup\n");
         $this->stow("#\n");
         $this->stow('# Generated: ' . date('l j. F Y H:i T') .  "\n");
         $this->stow("# Hostname: $_DB_host\n");
         $this->stow("# Database: $_DB_name\n");
-        $this->stow("# --------------------------------------------------------\n");
+        $this->stow("# glFusion: v".GVERSION."\n");
+        $this->stow("# --------------------------------------------------------\n\n");
 
         $this->close();
 
@@ -637,14 +691,14 @@ class dbBackup
     {
         global $_VARS, $_CONF;
 
-        if ($filename == '' || !filename) return false;
+        if ( $filename == '' || !filename ) return false;
         $diskfile = $this->backup_dir . $filename;
         $recipient = $_VARS['_dbback_sendto'];
         if (!file_exists($diskfile)) {
             COM_errorLog("dbBackup: File $diskfile does not exist");
             return false;
         }
-        if (!COM_isEmail($recipient)) {
+        if (!COM_isEmail( $recipient ) ) {
             COM_errorLog("$recipient is not a valid email address");
             return false;
         }
@@ -714,17 +768,16 @@ class dbBackup
 
         if ( !isset($_VARS['_dbback_files'])) $_VARS['_dbback_files'] = 5;
 
-        if ($files == 0) {
+        if ( $files == 0 ) {
             $files = (int)$_VARS['_dbback_files'];
         }
-        if ($files == 0) return;
+        if ( $files == 0 ) return;
 
         $backups = array();
         $fd = opendir($this->backup_dir);
         $index = 0;
         while ((false !== ($file = @readdir($fd)))) {
-            if ($file <> '.' && $file <> '..' && $file <> 'CVS' &&
-                    preg_match('/\.sql(\.gz)?$/i', $file)) {
+            if ($file <> '.' && $file <> '..' && $file <> 'CVS' && preg_match('/\.sql(\.gz)?$/i', $file)) {
                 $index++;
                 clearstatcache();
                 $backups[] = $file;
@@ -737,7 +790,7 @@ class dbBackup
         $topurge = $count - $files;     // How many to delete
         if ($topurge <= 0) return;
         for ($i = 0; $i < $topurge; $i++) {
-            unlink($this->backup_dir . $backups[$i]);
+            @unlink($this->backup_dir . $backups[$i]);
         }
     }
 
