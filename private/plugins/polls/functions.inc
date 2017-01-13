@@ -502,6 +502,7 @@ function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, 
     $retval = '';
 
     $pid = $id;
+    $aid = 0;
 
     $result = DB_query("SELECT is_open FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'");
     if ( $result && DB_numRows($result) > 0 ) {
