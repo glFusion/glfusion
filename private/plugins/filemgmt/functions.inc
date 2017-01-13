@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin interface to glFusion                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -267,67 +267,79 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     include_once $_CONF['path']. 'plugins/filemgmt/include/xoopstree.php';
     include_once $_CONF['path']. 'plugins/filemgmt/include/textsanitizer.php';
 
-    $comments = true;   // Checked in filemgmt code in dlformat.php
+    $groupsql = filemgmt_buildAccessSql();
 
-    $myts = new MyTextSanitizer; // MyTextSanitizer object
-    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
+    $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+    $sql .= "WHERE a.lid='".DB_escapeString($id)."' $groupsql AND a.status > 0";
+    list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
 
-    $display = COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>");
-    $fields = 'd.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl,';
-    $fields .= 'd.submitter, d.status, d.date, d.hits, d.rating, d.votes, t.description';
+    if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($id) ) == 1) {
 
-    $sql = "SELECT $fields FROM {$_TABLES['filemgmt_filedetail']} d, ";
-    $sql .= "{$_TABLES['filemgmt_filedesc']} t ";
-    $sql .= "WHERE d.lid='".DB_escapeString($id)."' AND d.lid=t.lid AND status > 0";
-    $result=DB_query($sql);
-    list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $description)=DB_fetchARRAY($result);
+        $comments = true;   // Checked in filemgmt code in dlformat.php
 
-    $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
-    $p->set_file (array (
-        'page'             =>     'filelisting.thtml',
-        'records'          =>     'filelisting_record.thtml',
-        'category'         =>     'filelisting_category.thtml'));
+        $myts = new MyTextSanitizer; // MyTextSanitizer object
+        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
 
-    $p->set_var ('layout_url', $_CONF['layout_url']);
-    $p->set_var ('site_url',$_CONF['site_url']);
+        $display = COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>");
+        $fields = 'd.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl,';
+        $fields .= 'd.submitter, d.status, d.date, d.hits, d.rating, d.votes, t.description';
 
-    $pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
-    $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php?op=");
-    $pathstring .= $nicepath;
-    $p->set_var('category_path_link',$pathstring);
+        $sql = "SELECT $fields FROM {$_TABLES['filemgmt_filedetail']} d, ";
+        $sql .= "{$_TABLES['filemgmt_filedesc']} t ";
+        $sql .= "WHERE d.lid='".DB_escapeString($id)."' AND d.lid=t.lid AND status > 0";
+        $result=DB_query($sql);
+        list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $description)=DB_fetchARRAY($result);
 
-    $rating = number_format($rating, 2);
-    $dtitle = $myts->makeTboxData4Show($dtitle);
-    $url = $myts->makeTboxData4Show($url);
-    $homepage = $myts->makeTboxData4Show($homepage);
-    $version = $myts->makeTboxData4Show($version);
-    $size = $myts->makeTboxData4Show($size);
-//    $platform = $myts->makeTboxData4Show($platform);
-    $logourl = $myts->makeTboxData4Show($logourl);
-    $datetime = formatTimestamp($time);
-    $description = $myts->makeTareaData4Show($description,0); //no html
-    $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
-    list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
-    $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-    include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
-    $p->set_var('cssid',1);
-    $p->parse ('filelisting_records', 'records');
-    $p->parse ('output', 'page');
-    $display .= $p->finish ($p->get_var('output'));
+        $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $p->set_file (array (
+            'page'             =>     'filelisting.thtml',
+            'records'          =>     'filelisting_record.thtml',
+            'category'         =>     'filelisting_category.thtml'));
 
-    $display .= COM_endBlock();
+        $p->set_var ('layout_url', $_CONF['layout_url']);
+        $p->set_var ('site_url',$_CONF['site_url']);
 
-    /* Get formatted comment thread */
-    if (SEC_hasRights('filemgmt.edit')) {
-        $delete_option = true;
+        $pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
+        $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php?op=");
+        $pathstring .= $nicepath;
+        $p->set_var('category_path_link',$pathstring);
+
+        $rating = number_format($rating, 2);
+        $dtitle = $myts->makeTboxData4Show($dtitle);
+        $url = $myts->makeTboxData4Show($url);
+        $homepage = $myts->makeTboxData4Show($homepage);
+        $version = $myts->makeTboxData4Show($version);
+        $size = $myts->makeTboxData4Show($size);
+    //    $platform = $myts->makeTboxData4Show($platform);
+        $logourl = $myts->makeTboxData4Show($logourl);
+        $datetime = formatTimestamp($time);
+        $description = $myts->makeTareaData4Show($description,0); //no html
+        $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
+        list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
+        $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
+        include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
+        $p->set_var('cssid',1);
+        $p->parse ('filelisting_records', 'records');
+        $p->parse ('output', 'page');
+        $display .= $p->finish ($p->get_var('output'));
+
+        $display .= COM_endBlock();
+
+        /* Get formatted comment thread */
+        if (SEC_hasRights('filemgmt.edit')) {
+            $delete_option = true;
+        } else {
+            $delete_option = false;
+        }
+
+        if ($view == 1) {
+            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option,0,$submitter);
+        } else {
+            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option,0,$submitter);
+        }
     } else {
-        $delete_option = false;
-    }
-
-    if ($view == 1) {
-        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option,0,$submitter);
-    } else {
-        $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option,0,$submitter);
+        return false;
     }
 
     return $display;

@@ -5,7 +5,7 @@
 // | functions.inc                                                            |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -501,27 +501,23 @@ function plugin_displaycomment_polls($id, $cid, $title, $order, $format, $page, 
 
     $retval = '';
 
-    $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
-        . "perm_group, perm_members, perm_anon "
-        . "FROM {$_TABLES['polltopics']} "
-        . "WHERE (pid = '".DB_escapeString($id)."')" . COM_getPermSQL('AND')
-        . ' GROUP BY pid';
-    $result = DB_query ($sql);
-    $A = DB_fetchArray ($result);
-    $allowed = $A['count'];
+    $pid = $id;
 
-    if ($allowed == 1) {
-        $delete_option = (SEC_hasRights ('polls.edit') &&
-                (SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                    $A['perm_owner'], $A['perm_group'], $A['perm_members'],
-                    $A['perm_anon']) == 3));
-        $retval .= CMT_userComments ($id, $title, 'polls', $order, $format,
-                                     $cid, $page, $view, $delete_option,
-                                     $A['commentcode'],$A['owner_id']);
+    $result = DB_query("SELECT is_open FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'");
+    if ( $result && DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        $is_open = $row['is_open'];
+        if ($is_open != 1) {
+            $aid = -1; // poll closed - show result
+        }
+        if (!isset ($_COOKIE['poll-'.$pid]) && !POLLS_ipAlreadyVoted ($pid) && $aid != -1 ) {
+            $retval .= POLLS_pollVote($pid);
+        } else {
+            $retval .= POLLS_pollResults($pid, 400, '', '');
+        }
     } else {
-        $retval .= COM_showMessageText($LANG_POLLS['deny_msg'],$LANG_ACCESS['accessdenied'],true,'error');
+        return false;
     }
-
     return $retval;
 }
 
