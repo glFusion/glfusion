@@ -30,6 +30,20 @@
 			}
 		});
 	});
+{!if !wysiwyg}
+  function activityCheck( edtType ) {
+		lastActivity = new Date().getTime();
+		if ( edtType == 'wysiwyg' ) {
+  		sp_content.on( 'key', function(){
+	  		lastActivity = new Date().getTime();
+    	});
+  	} else {
+			$('#sp_content').keyup(function() {
+				lastActivity = new Date().getTime();
+			});
+		}
+  }
+{!endif}
 </script>
 <div class="tm-admin">
 	{wysiwyg}
