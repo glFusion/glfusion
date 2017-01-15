@@ -1784,6 +1784,7 @@ $LANG_DB_ADMIN = array(
     'error_sc'            => 'Error updating siteconfig.php - please update db_charset manually',
     'current_progress'    => 'Current Progress',
     'overall_progress'    => 'Overall Progress',
+    'no_backups_found'    => 'No Backup Files Found',
 );
 
 ###############################################################################

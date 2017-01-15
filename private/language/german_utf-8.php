@@ -1785,7 +1785,8 @@ $LANG_DB_ADMIN = array(
     'error_column_utf' => 'Fehler beim Konvertieren der Spalten in UTF8MB4',
     'error_sc' => 'Fehler beim Aktualisieren von siteconfig.php - Bitte aktualisieren Sie db_charset manuell',
     'current_progress' => 'Aktueller-Fortschritt',
-    'overall_progress' => 'Gesamt-Fortschritt'
+    'overall_progress' => 'Gesamt-Fortschritt',
+    'no_backups_found' => 'No Backup Files Found'
 );
 
 ###############################################################################

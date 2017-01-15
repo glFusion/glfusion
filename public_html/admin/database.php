@@ -165,6 +165,7 @@ function DBADMIN_list()
         );
 
         $text_arr = array(
+            'no_data'  => $LANG_DB_ADMIN['no_backups_found'],
             'form_url' => $thisUrl
         );
         $form_arr = array('bottom' => '', 'top' => '');
