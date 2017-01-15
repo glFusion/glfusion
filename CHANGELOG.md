@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Updated CKEditor to v4.6.2
+  - PHP Info in environment check did not display well with older versions of PHP
   - Enhanced validation / error handling for comment entry
   - Polls - Display poll above comment entry form
   - Enhanced security checks when emailing users / stories
