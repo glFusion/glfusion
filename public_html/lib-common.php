@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -6223,8 +6223,8 @@ function COM_checkVersion($have, $need) {
         } else if ( $requireMinor <= $minor ) {
             if ( $requireMinor < $minor ) {
                 $passed = 1;
-            } else if ( $requireRev <= $rev ) {
-                if ( $requireRev < $rev ) {
+            } else if ( $requireRev <= (int) $rev ) {
+                if ( $requireRev < (int) $rev ) {
                     $passed = 1;
                 } else if ($requireExtra != '' ) {
                     if ( $requireExtra == 'fusion' ) {
