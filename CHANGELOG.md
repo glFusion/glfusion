@@ -1,4 +1,8 @@
 ## v1.6.5 (unreleased)
+  - Added red border around required field in forms to help highlight required fields
+  - Calendar - Implemented a more better mobile / responsive style for the calendar month view
+  - Calendar - Adjusted the event entry screen to place all required fields at the top of the form
+  - Forum - Add no bookmarks / no new posts to empty lists
   - Forum - Display success message after marking all topics read
   - New Forum feature - ability to replace the home page with the forum index page
   - Updated CKEditor to v4.6.2

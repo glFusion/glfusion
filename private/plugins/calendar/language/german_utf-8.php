@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # german_utf-8.php
 #
@@ -28,7 +27,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -93,7 +92,8 @@ $LANG_CAL_1 = array(
     49 => 'Es wurden noch keine Termine eingetragen.',
     50 => 'Termine',
     51 => 'Löschen',
-    52 => 'Eingereicht von'
+    52 => 'Eingereicht von',
+    53 => 'Calendar View'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -157,7 +157,7 @@ $LANG_CAL_ADMIN = array(
     17 => "Du hast keine Berechtigung auf diesen Termin zuzugreifen. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">Zurück zur Termin-Verwaltung</a>.",
     18 => '',
     19 => '',
-	20 => 'Speichern',
+    20 => 'Speichern',
     21 => 'Abbruch',
     22 => 'Löschen',
     23 => 'Datum-Beginn ungültig!',
@@ -166,7 +166,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Alte Einträge löschen',
     27 => 'Diese Termine sind älter als ',
     28 => ' Monate.<ul><li>Aktualisiere den Zeitraum, wie gewünscht, und klicken dann auf "Liste aktualisieren".</li><li>Wähle einen oder mehrere Termine aus den angezeigten Ergebnissen aus.</li><li>Klicke anschließend auf das Symbol Löschen, um diese Termine aus Deiner Datenbank zu entfernen.</li><li>Nur Termine, die auf dieser Seite angezeigt und ausgewählt sind, werden gelöscht.</li></ul>',
-    29 => '',		
+    29 => '',
     30 => 'Liste aktualisieren',
     31 => 'Bist Du sicher, dass Du alle ausgewählten Benutzer dauerhaft löschen möchtest?',
     32 => 'Alle auflisten',

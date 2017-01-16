@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-margin-remove">
-	<div class="uk-grid uk-margin">
+	<div class="uk-grid uk-margin uk-hidden-small">
 		<div class="uk-width-medium-1-3 uk-text-center">
 			<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a>
 		</div>
@@ -10,6 +10,17 @@
 		<div class="uk-width-medium-1-3 uk-text-center">
 			<a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a>
 		</div>
+	</div>
+	<div class="uk-grid uk-margin-remove uk-visible-small">
+		<form id="viewselectform" class="uk-form" action="{site_url}/calendar/index.php" method="get">
+			<label class="uk-form-label">{$LANG_CAL_1[53]}</label>
+			<input type="hidden" name="mode" value="{mode}">
+			<select id="viewselect" name="view"  onchange="this.form.submit()">
+				<option value="day">{lang_day}</option>
+				<option value="week" selected="selected">{lang_week}</option>
+				<option value="month">{lang_month}</option>
+			</select>
+		</form>
 	</div>
 </div>
 

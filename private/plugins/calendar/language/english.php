@@ -93,6 +93,7 @@ $LANG_CAL_1 = array(
     50 => 'Events',
     51 => 'Delete',
     52 => 'Submitted By',
+    53 => 'Calendar View',
 );
 
 $_LANG_CAL_SEARCH = array(

@@ -1,130 +1,141 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-margin-remove">
-    <div class="uk-grid uk-margin">
-        <div class="uk-width-medium-1-3 uk-text-center">
-            <span class="uk-text-bold">{lang_day}</span>
-        </div>
-        <div class="uk-width-medium-1-3 uk-text-center">
-            <a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a>
-        </div>
-        <div class="uk-width-medium-1-3 uk-text-center">
-            <a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a>
-        </div>
-    </div>
+	<div class="uk-grid uk-margin uk-hidden-small">
+		<div class="uk-width-medium-1-3 uk-text-center">
+			<span class="uk-text-bold">{lang_day}</span>
+		</div>
+		<div class="uk-width-medium-1-3 uk-text-center">
+			<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=week" rel="nofollow">{lang_week}</a>
+		</div>
+		<div class="uk-width-medium-1-3 uk-text-center">
+			<a href="{site_url}/calendar/index.php?mode={mode}" rel="nofollow">{lang_month}</a>
+		</div>
+	</div>
+	<div class="uk-grid uk-margin-remove uk-visible-small">
+		<form id="viewselectform" class="uk-form" action="{site_url}/calendar/index.php" method="get">
+			<label class="uk-form-label">{$LANG_CAL_1[53]}</label>
+			<input type="hidden" name="mode" value="{mode}">
+			<select id="viewselect" name="view"  onchange="this.form.submit()">
+				<option value="day" selected="selected">{lang_day}</option>
+				<option value="week">{lang_week}</option>
+				<option value="month">{lang_month}</option>
+			</select>
+		</form>
+	</div>
 </div>
 <div class="uk-panel">
-    <div class="uk-text-muted">
-        <a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a>
-    </div>
-    <div>
-        {calendar_title} {calendar_toggle}
-    </div>
+	<div class="uk-text-muted">
+		<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={prevmonth}&amp;day={prevday}&amp;year={prevyear}">&lt;&lt;</a>&nbsp;&nbsp;{currentday}&nbsp;&nbsp;<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day&amp;month={nextmonth}&amp;day={nextday}&amp;year={nextyear}" rel="nofollow">&gt;&gt;</a>
+	</div>
+	<div>
+		{calendar_title} {calendar_toggle}
+	</div>
 </div>
 <table class="uk-table uk-table-striped uk-table-hover">
-    <tr>
-        <td>
-            {lang_week} {week_num}
-        </td>
-        <td>
-            {allday_events}
-        </td>
-    </tr>
-    <tr>
-        <td>{0_hour}</td>
-        <td>{0_cols}</td>
-    </tr>
-    <tr>
-        <td>{1_hour}</td>
-        <td>{1_cols}</td>
-    </tr>
-    <tr>
-        <td>{2_hour}</td>
-        <td>{2_cols}</td>
-    </tr>
-    <tr>
-        <td>{3_hour}</td>
-        <td>{3_cols}</td>
-    </tr>
-    <tr>
-        <td>{4_hour}</td>
-        <td>{4_cols}</td>
-    </tr>
-    <tr>
-        <td>{5_hour}</td>
-        <td>{5_cols}</td>
-    </tr>
-    <tr>
-        <td>{6_hour}</td>
-        <td>{6_cols}</td>
-    </tr>
-    <tr>
-        <td>{7_hour}</td>
-        <td>{7_cols}</td>
-    </tr>
-    <tr>
-        <td>{8_hour}</td>
-        <td>{8_cols}</td>
-    </tr>
-    <tr>
-        <td>{9_hour}</td>
-        <td>{9_cols}</td>
-    </tr>
-    <tr>
-        <td>{10_hour}</td>
-        <td>{10_cols}</td>
-    </tr>
-    <tr>
-        <td>{11_hour}</td>
-        <td>{11_cols}</td>
-    </tr>
-    <tr>
-        <td>{12_hour}</td>
-        <td>{12_cols}</td>
-    </tr>
-    <tr>
-        <td>{13_hour}</td>
-        <td>{13_cols}</td>
-    </tr>
-    <tr>
-        <td>{14_hour}</td>
-        <td>{14_cols}</td>
-    </tr>
-    <tr>
-        <td>{15_hour}</td>
-        <td>{15_cols}</td>
-    </tr>
-    <tr>
-        <td>{16_hour}</td>
-        <td>{16_cols}</td>
-    </tr>
-    <tr>
-        <td>{17_hour}</td>
-        <td>{17_cols}</td>
-    </tr>
-    <tr>
-        <td>{18_hour}</td>
-        <td>{18_cols}</td>
-    </tr>
-    <tr>
-        <td>{19_hour}</td>
-        <td>{19_cols}</td>
-    </tr>
-    <tr>
-        <td>{20_hour}</td>
-        <td>{20_cols}</td>
-    </tr>
-    <tr>
-        <td>{21_hour}</td>
-        <td>{21_cols}</td>
-    </tr>
-    <tr>
-        <td>{22_hour}</td>
-        <td>{22_cols}</td>
-    </tr>
-    <tr>
-        <td>{23_hour}</td>
-        <td>{23_cols}</td>
-    </tr>
+	<tr>
+		<td>
+			{lang_week} {week_num}
+		</td>
+		<td>
+			{allday_events}
+		</td>
+	</tr>
+	<tr>
+		<td>{0_hour}</td>
+		<td>{0_cols}</td>
+	</tr>
+	<tr>
+		<td>{1_hour}</td>
+		<td>{1_cols}</td>
+	</tr>
+	<tr>
+		<td>{2_hour}</td>
+		<td>{2_cols}</td>
+	</tr>
+	<tr>
+		<td>{3_hour}</td>
+		<td>{3_cols}</td>
+	</tr>
+	<tr>
+		<td>{4_hour}</td>
+		<td>{4_cols}</td>
+	</tr>
+	<tr>
+		<td>{5_hour}</td>
+		<td>{5_cols}</td>
+	</tr>
+	<tr>
+		<td>{6_hour}</td>
+		<td>{6_cols}</td>
+	</tr>
+	<tr>
+		<td>{7_hour}</td>
+		<td>{7_cols}</td>
+	</tr>
+	<tr>
+		<td>{8_hour}</td>
+		<td>{8_cols}</td>
+	</tr>
+	<tr>
+		<td>{9_hour}</td>
+		<td>{9_cols}</td>
+	</tr>
+	<tr>
+		<td>{10_hour}</td>
+		<td>{10_cols}</td>
+	</tr>
+	<tr>
+		<td>{11_hour}</td>
+		<td>{11_cols}</td>
+	</tr>
+	<tr>
+		<td>{12_hour}</td>
+		<td>{12_cols}</td>
+	</tr>
+	<tr>
+		<td>{13_hour}</td>
+		<td>{13_cols}</td>
+	</tr>
+	<tr>
+		<td>{14_hour}</td>
+		<td>{14_cols}</td>
+	</tr>
+	<tr>
+		<td>{15_hour}</td>
+		<td>{15_cols}</td>
+	</tr>
+	<tr>
+		<td>{16_hour}</td>
+		<td>{16_cols}</td>
+	</tr>
+	<tr>
+		<td>{17_hour}</td>
+		<td>{17_cols}</td>
+	</tr>
+	<tr>
+		<td>{18_hour}</td>
+		<td>{18_cols}</td>
+	</tr>
+	<tr>
+		<td>{19_hour}</td>
+		<td>{19_cols}</td>
+	</tr>
+	<tr>
+		<td>{20_hour}</td>
+		<td>{20_cols}</td>
+	</tr>
+	<tr>
+		<td>{21_hour}</td>
+		<td>{21_cols}</td>
+	</tr>
+	<tr>
+		<td>{22_hour}</td>
+		<td>{22_cols}</td>
+	</tr>
+	<tr>
+		<td>{23_hour}</td>
+		<td>{23_cols}</td>
+	</tr>
 
 </table>
 {quickadd_form}
