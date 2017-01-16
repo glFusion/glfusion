@@ -83,7 +83,7 @@ function FF_newPosts($forum = 0)
         array('text' => $LANG_GF92['sb_latestposts'],   'field' => 'date', 'nowrap' => true),
     );
     $data_arr = array();
-    $text_arr = array();
+    $text_arr = array('no_data' => $LANG_GF02['msg202']);
     if ($_FF_CONF['usermenu'] == 'navbar') {
         $T->set_var('navbar',FF_NavbarMenu($LANG_GF02['new_posts']));
     }
@@ -298,7 +298,8 @@ function FF_bookmarks()
     $text_arr = array(
         'has_extras' => true,
         'form_url'   => $_CONF['site_url'] . '/forum/list.php?op=bookmarks',
-        'help_url'   => ''
+        'help_url'   => '',
+        'no_data'    => $LANG_GF02['msg205']
     );
 
     $defsort_arr = array('field'     => 'date',

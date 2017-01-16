@@ -442,6 +442,7 @@ $LANG_GF02 = array(
     'msg202' => 'No new posts',
     'msg203' => 'Click to add bookmark',
     'msg204' => 'Click to remove bookmark',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'New Posts',
     'StatusHeading' => 'Information Only',
     'PostReply' => 'Post New Reply',

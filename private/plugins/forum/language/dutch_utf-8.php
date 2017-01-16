@@ -436,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Geen nieuwe berichten',
     'msg203' => 'Toevoegen aan Mijn Markeringen',
     'msg204' => 'Verwijder uit Mijn Markeringen',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nieuwe Berichten',
     'StatusHeading' => 'Alleen Informatie',
     'PostReply' => 'Plaats Reactie',

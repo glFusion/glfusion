@@ -440,6 +440,7 @@ $LANG_GF02 = array(
     'msg202' => 'Keine neuen Beiträge',
     'msg203' => 'Leseszeichen hinzuzufügen',
     'msg204' => 'Lesenzeichen zu entfernen',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Neue Beiträge',
     'StatusHeading' => 'Nur zur Information',
     'PostReply' => 'Neue Antwort schreiben',

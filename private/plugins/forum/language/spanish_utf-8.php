@@ -438,6 +438,7 @@ $LANG_GF02 = array(
     'msg202' => 'No hay Posts nuevos',
     'msg203' => 'Clic para añadir marcador',
     'msg204' => 'Click para quitar marcador',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nuevos Posts',
     'StatusHeading' => 'Información',
     'PostReply' => 'Enviar nueva respuesta',

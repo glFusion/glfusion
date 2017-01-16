@@ -436,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Ei uusia viestej&auml;',
     'msg203' => 'Lis&auml;&auml; kirjamerkkeihin',
     'msg204' => 'Poista kirjamerkki',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Uusia viestej&auml;',
     'StatusHeading' => 'Vain Info',
     'PostReply' => 'L&auml;het&auml; uusi kommentti',

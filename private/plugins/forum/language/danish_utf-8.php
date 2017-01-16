@@ -437,6 +437,7 @@ $LANG_GF02 = array(
     'msg202' => 'Ingen Nye Indlæg',
     'msg203' => 'Click to add Bogmærke',
     'msg204' => 'Click to remove Bogmærke',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nye Indlæg',
     'StatusHeading' => 'Information',
     'PostReply' => 'Skriv nyt svar',

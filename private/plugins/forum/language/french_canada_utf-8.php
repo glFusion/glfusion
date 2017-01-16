@@ -436,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Pas de nouveaux messages',
     'msg203' => 'Cliquez pour ajouter aux favoris',
     'msg204' => 'Cliquez sur pour effacer un signet',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nouveaux Messages',
     'StatusHeading' => 'Informations Seulement',
     'PostReply' => 'Poster un nouveau commentaire',
