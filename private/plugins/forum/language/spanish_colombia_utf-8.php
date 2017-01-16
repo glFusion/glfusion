@@ -962,7 +962,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('Sí' => 1, 'No' => 0),
     1 => array('Sí' => true, 'No' => false),
-    2 => array('Arriba' => 1, 'Después de Noticias Destacados' => 2, 'Abajo' => 3),
+    2 => array('Replace Home Page' => 0, 'Arriba' => 1, 'Después de Noticias Destacados' => 2, 'Abajo' => 3),
     3 => array('Sin Bloques' => 'noblocks', 'Izquierda' => 'leftblocks', 'Derecha' => 'rightblocks', 'Izquierda/Derecha' => 'allblocks'),
     4 => array('Menú de Bloque' => 'blockmenu', 'Barra de Navegación' => 'navbar', 'Ninguna' => 'none'),
     5 => array('Descendente' => 'DESC', 'Ascendente' => 'ASC'),

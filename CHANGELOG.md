@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - New Forum feature - ability to replace the home page with the forum index page
   - Updated CKEditor to v4.6.2
   - PHP Info in environment check did not display well with older versions of PHP
   - Enhanced validation / error handling for comment entry

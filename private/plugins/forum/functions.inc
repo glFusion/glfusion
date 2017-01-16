@@ -987,6 +987,11 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$_FF_CONF,
            $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM;
 
+    if ( $_FF_CONF['centerblock_where'] == 0 && $where == 0 ) {
+        require_once $_CONF['path'].'plugins/forum/include/forum_index.php';
+        forum_index();
+    }
+
     if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }

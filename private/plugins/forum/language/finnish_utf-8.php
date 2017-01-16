@@ -941,7 +941,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
+    2 => array('Replace Home Page' => 0, 'Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
