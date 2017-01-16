@@ -133,7 +133,7 @@
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label" for="subject">{LANG_SUBJECT}</label>
 						<div class="uk-form-controls">
-							<input class="uk-width-2-3" type="text" id="subject"  maxlength="100" name="subject" value="{subject}" tabindex="5">
+							<input class="uk-width-2-3 required" type="text" id="subject"  maxlength="100" name="subject" value="{subject}" tabindex="5">
 							<div class="uk-form-help-block uk-margin-small-left">
 						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="subject-count" class="uk-text-muted uk-text-small"></span></span>
 </div>
@@ -301,7 +301,7 @@
 					<div class="uk-form-row">
 						<button class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
 						<button class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
-						<button class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
+						<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
 					</div>
 				</form>
 			</div>
@@ -412,6 +412,7 @@
 	</div>
 </div>
 <script>
+$("#forumpost").validate();
 $(document).ready(function() {
 	lastActivity = new Date().getTime();
 	$('#comment').keyup(function() {
@@ -422,7 +423,7 @@ $(document).ready(function() {
             {!if anonymous_user}
             $("#name").characterCounter({
             limit: '50',
-            counterSelector: '#name-count' 
+            counterSelector: '#name-count'
             });{!endif}
             $("#subject").characterCounter({
 			limit: '100',
