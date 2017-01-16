@@ -427,7 +427,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $status += DISABLE_BBCODE;
         } else {
             if ( $viewMode != PREVIEW_VIEW ) {
-                if ( $postData['status'] & DISABLE_BBCODE ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_BBCODE ) {
                     $disable_bbcode_val = ' checked="checked"';
                 } else {
                     $disable_bbcode_val = '';
@@ -441,7 +441,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $status += DISABLE_SMILIES;
         } else {
             if ( $viewMode != PREVIEW_VIEW ) {
-                if ( $postData['status'] & DISABLE_SMILIES ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_SMILIES ) {
                     $disable_smilies_val = ' checked="checked"';
                 } else {
                     $disable_smilies_val = '';
@@ -455,7 +455,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $status += DISABLE_URLPARSE;
         } else {
             if ( $viewMode != PREVIEW_VIEW ) {
-                if ( $postData['status'] & DISABLE_URLPARSE ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_URLPARSE ) {
                     $disable_urlparse_val = ' checked="checked"';
                 } else {
                     $disable_urlparse_val = '';
@@ -468,7 +468,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $sticky_val = 'checked="checked"';
         } else {
             if ( $viewMode != PREVIEW_VIEW ) {
-                if ( $postData['sticky'] == 1 ) {
+                if ( isset($postData['sticky']) && $postData['sticky'] == 1 ) {
                     $sticky_val = ' checked="checked"';
                 } else {
                     $sticky_val = '';
