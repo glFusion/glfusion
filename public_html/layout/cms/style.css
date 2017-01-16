@@ -31,6 +31,9 @@ set of styles.
   }
 }
 
+.required {
+	border: 1px solid #FFCCCC !important;
+}
 
 /* Primary Styles
 ========================================================================== */
