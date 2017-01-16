@@ -99,6 +99,7 @@ function forum_index()
                 }
             }
         }
+        COM_setMsg($LANG_GF01['all_read_success'],'info');
         if ( $extraWhere != '' ) {
             echo COM_refresh($_CONF['site_url'].'/forum/index.php?forum='.(int) $forum_id);
         } else {

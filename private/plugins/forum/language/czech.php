@@ -36,7 +36,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -238,7 +238,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
-    'rss_link' => 'Odebírat příspěvky z tohoto fora pomocí RSS.'
+    'rss_link' => 'Odebírat příspěvky z tohoto fora pomocí RSS.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(

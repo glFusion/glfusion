@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -51,7 +51,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Resultados de la búsqueda en el Foro %s',
     'access_denied' => 'Acceso denegado',
     'uploaderr' => 'Error al Cargar el Archivo',
-    'instructions' => 'Selecciona las opciones arriba para crear / modificar categorías y foros. Tambien puedes definir los moderadores, importar Noticias dentro de foros y administrar los ajustes de moderación de la comunidad.',
+    'instructions' => 'Selecciona las opciones arriba para crear / modificar categorías y foros. Tambien puedes definir los moderadores, importar Noticias dentro de foros y administrar los ajustes de moderación de la comunidad.'
 );
 
 $LANG_GF01 = array(
@@ -223,8 +223,6 @@ $LANG_GF01 = array(
     't_help' => 'Usa [file]#[/file] para incluir una imagen adjunta en la publicación',
     'e_help' => 'List item: [*]texto',
     'smiley' => 'Smileys',
-
-    /* --- Community moderation tags --- */
     'grade' => '<br /><b>Group Comfort<br />Level:</b>',
     'grade_user' => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
@@ -239,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Deshabilitar Smilies:',
     'disable_urlparse' => 'No analizar URLs:',
     'features' => 'O. Envío:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -444,13 +443,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Modificar Tema',
     'quietforum' => 'El Foro no tiene nuevos temas',
     'notify_full' => 'Incluir publicación completa en la notificación',
-    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.',
-    'invalid_token' => 'Invalid Security Token',
-    'edit_time_passed' => 'The allowed time to edit your post has expired',
-    'not_your_post' => 'You donot appear to be the author of this post.',
-    'spam_detected' => 'Your post has been identified as a spam message',
-    'invalid_email' => 'Email empty or not a valid email address',
-    'invalid_name'  => 'Sin nombre o en blanco',
+    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.'
 );
 
 $LANG_GF03 = array(
@@ -517,7 +510,7 @@ $LANG_GF06 = array(
     7 => 'Gestión de IP',
     8 => 'Community Moderation',
     9 => 'Importar',
-    10 => 'Foro - Administración',
+    10 => 'Foro - Administración'
 );
 
 $LANG_GF07 = array(
@@ -576,12 +569,6 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Preferencias del Foro',
     'forumprefs_help_title' => 'Forum Prefs Help',
     'forumprefs_help' => 'Modifica las preferencias de usuario del Módulo de Foro.<ul><li>Numero de temas a mostrar en el índice de foros.</li><li>Numero de publicaciones a mostrar por pagina.</li><li>Ocultar publicaciones de usuarios anónimos.</li><li>Habilitar autonotificaciones.</li><li>Solo enviar una notificación.</li><li>Mostrar revisión del tema (iframe) al final cuando se este respondiendo.</li></ul>',
-    'topicspp_help' => 'Numero de topics to display when viewing the forum index.',
-    'postspp_help' => 'Numero de mensajea a mostrar por pagina.',
-    'anonymous_help' => 'Ocultar mensajes de usuarios anónimos.',
-    'notify_help' => 'Permitir auto notificaciones.',
-    'notify_once_help' => 'Only send one notification.',
-    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Orden de los Temas',
     'editor_type' => 'Tipo de Editor',
     'bbcode' => 'BBCode',
@@ -688,7 +675,7 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Tiempo permitido (<i>min</i>) para que los miembros modifiquen sus mesajes',
+    'edit_timewindowdscp' => 'Tiempo permitido (<i>min</i>) para que los miembros modifiquen sus mesajes'
 );
 
 $LANG_GF93 = array(
@@ -746,13 +733,7 @@ $LANG_GF93 = array(
     'hiddendscp' => 'El Foro no se mostrará en el indice de foros',
     'hideposts' => 'Ocultar Nuevos mensajes',
     'hidepostsdscp' => 'Los mensajes recientes no se mostraran en el Bloque de Mensajes Recientes o en el RSS',
-    'attachaccess' => 'Permitir adjuntos de:',
-    'name_blank' => 'El nombre no puede estar en blanco',
-    'desc_blank' => 'La descripción no puede estar en blanco',
-    'category_resynced' => 'All forums in the category have been resynced',
-    'forum_resynced' => 'The Forum has been resynced',
-    'forum_options'  => 'Forum Options...',
-    'category_options' => 'Category Options...',
+    'attachaccess' => 'Permitir adjuntos de:'
 );
 
 $LANG_GF94 = array(
@@ -848,7 +829,6 @@ $LANG_FF_AUTOTAG = array(
     'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Actualización de la Extensión Foro completa - sin errores';
 $PLG_forum_MESSAGE2 = 'Actualización de la Extensión Foro: No se pudo actualizar esta versión automáticamente. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Actualización de la Extensión Foro fallida - verifica el: error.log';
@@ -942,7 +922,7 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Opción Predeterminada para Smilies deshabilitada',
     'urlparse_disabled' => 'Opción Predeterminada para URL Parse deshabilitada',
     'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
-    'allowed_html' => 'HTML Permitido',
+    'allowed_html' => 'HTML Permitido'
 );
 
 $LANG_configsubgroups['forum'] = array(

@@ -244,6 +244,7 @@ $LANG_GF01 = array(
     'features' => 'Features:',
     /* --- rss feature --- */
     'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read',
 );
 
 $LANG_GF02 = array(
