@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-margin-remove">
-	<div class="uk-grid uk-margin uk-hidden-small">
+	<div class="uk-grid uk-hidden-small">
 		<div class="uk-width-medium-1-3 uk-text-center">
 			<a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a>
 		</div>
