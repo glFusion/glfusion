@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Ensure admin lists display at 100% width of the available viewport
   - Added red border around required field in forms to help highlight required fields
   - Calendar - Implemented a more better mobile / responsive style for the calendar month view
   - Calendar - Adjusted the event entry screen to place all required fields at the top of the form
