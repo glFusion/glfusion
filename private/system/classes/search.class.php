@@ -312,15 +312,19 @@ class Search {
         if ($_CONF['contributedbyline'] == 1) {
             $searchform->set_var('lang_authors', $LANG09[8]);
             $searchusers = array();
-            $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['comments']}");
-            while ($A = DB_fetchArray($result)) {
-                $searchusers[$A['uid']] = $A['uid'];
+            if ( $_CONF['comment_engine'] == 'internal' && isset($_TABLES['comments'])) {
+                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['comments']}");
+                while ($A = DB_fetchArray($result)) {
+                    $searchusers[$A['uid']] = $A['uid'];
+                }
             }
-            $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['stories']} WHERE (date <= NOW()) AND (draft_flag = 0)");
-            while ($A = DB_fetchArray($result)) {
-                $searchusers[$A['uid']] = $A['uid'];
+            if ( isset($_TABLES['stories'])) {
+                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['stories']} WHERE (date <= NOW()) AND (draft_flag = 0)");
+                while ($A = DB_fetchArray($result)) {
+                    $searchusers[$A['uid']] = $A['uid'];
+                }
             }
-            if (in_array('forum', $_PLUGINS)) {
+            if (in_array('forum', $_PLUGINS) && isset($_TABLES['ff_topic'] ) ) {
                 $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['ff_topic']}");
                 while ( $A = DB_fetchArray($result)) {
                     $searchusers[$A['uid']] = $A['uid'];
