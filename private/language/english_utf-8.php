@@ -1785,6 +1785,7 @@ $LANG_DB_ADMIN = array(
     'current_progress'    => 'Current Progress',
     'overall_progress'    => 'Overall Progress',
     'no_backups_found'    => 'No Backup Files Found',
+    'error_msg'           => 'The following errors were encountered',
 );
 
 ###############################################################################
