@@ -6728,20 +6728,20 @@ function _css_out()
     list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
 
     // default css to support JS libraries
-    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css');
-    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css');
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css',HEADER_PRIO_NORMAL);
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css',HEADER_PRIO_NORMAL);
 
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css',HEADER_PRIO_VERYHIGH);
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css',HEADER_PRIO_HIGH);
     } else {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css',HEADER_PRIO_VERYHIGH);
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css',HEADER_PRIO_HIGH);
     }
 
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css',HEADER_PRIO_VERYHIGH);
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css',HEADER_PRIO_HIGH);
     } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css',HEADER_PRIO_VERYHIGH);
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css',HEADER_PRIO_HIGH);
     }
 
     /*
@@ -6751,7 +6751,7 @@ function _css_out()
         $customCSS = CUSTOM_css( );
         if ( is_array($customCSS) ) {
             foreach($customCSS AS $item => $file) {
-                $outputHandle->addCSSFile($file,HEADER_PRIO_LOW);
+                $outputHandle->addCSSFile($file,HEADER_PRIO_VERYLOW);
             }
         }
     }
