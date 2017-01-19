@@ -6733,22 +6733,15 @@ function _css_out()
 
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css',HEADER_PRIO_VERYHIGH);
     } else {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css',HEADER_PRIO_VERYHIGH);
     }
 
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css',HEADER_PRIO_VERYHIGH);
     } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css');
-    }
-
-    // need to parse the outputhandler to see if there are any js scripts to load
-
-    $headercss = $outputHandle->getCSSFiles();
-    foreach ($headercss as $s ) {
-        $files[] = $s;
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css',HEADER_PRIO_VERYHIGH);
     }
 
     /*
@@ -6758,7 +6751,7 @@ function _css_out()
         $customCSS = CUSTOM_css( );
         if ( is_array($customCSS) ) {
             foreach($customCSS AS $item => $file) {
-                $files[] = $file;
+                $outputHandle->addCSSFile($file,HEADER_PRIO_LOW);
             }
         }
     }
@@ -6771,13 +6764,18 @@ function _css_out()
                 $pHeader = $function();
                 if ( is_array($pHeader) ) {
                     foreach($pHeader AS $item => $file) {
-                        $files[] = $file;
+						$outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
                     }
                 }
             }
         }
     }
 
+    // need to parse the outputhandler to see if there are any js scripts to load
+    $headercss = $outputHandle->getCSSFiles();
+    foreach ($headercss as $s ) {
+        $files[] = $s;
+    }
 
     // check cache age & handle conditional request
     if (css_cacheok($cacheFile,$files)){
