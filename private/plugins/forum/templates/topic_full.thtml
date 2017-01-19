@@ -232,7 +232,14 @@
 							</div>
 						</div>
 						<div class="uk-grid">
-							<div class="uk-width-medium-8-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
+{!if last_edited}
+							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
+								<span class="uk-text-small uk-text-muted">{$LANG_GF02[last_edited]} {last_edited}</span>
+							</div>
+{!else}
+							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left"></div>
+{!endif}
+							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta">
 {!if editlink}
 									<a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">

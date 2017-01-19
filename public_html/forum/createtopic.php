@@ -531,7 +531,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('hidden_editid',  $postData['id']);
 
         $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
-        if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) OR ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
+        if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) || ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
              $edit_val = ' checked="checked" ';
         } else {
@@ -1206,7 +1206,8 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
             $savedPostID = $editid;
             if (!isset($postData['silentedit']) || $postData['silentedit'] != 1) {
-                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."',date='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+//                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."',date='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
                 DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
             }

@@ -53,6 +53,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     } else {
         $dt = new Date('now',$_USER['tzid']);
     }
+    if ( isset($showtopic['lastupdated']) ) {
+        $dt_lu = new Date($showtopic['lastupdated'],$_USER['tzid']);
+    }
 
     static $cacheUserArray = array();
     static $_user_already_voted = array();
@@ -412,6 +415,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
       			$voteHTML =  $LANG_GF01['grade'].': '.$grade;
             }
         }
+    }
+
+    if ( isset($showtopic['date']) && isset($showtopic['lastupdated']) && ($showtopic['date'] != $showtopic['lastupdated'] ) ) {
+        $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
+        $topictemplate->set_var('last_edited', $ludate);
+    } else {
+        $topictemplate->unset_var('last_edited');
     }
 
     $topictemplate->set_var (array(
