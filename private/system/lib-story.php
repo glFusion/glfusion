@@ -1168,7 +1168,7 @@ function STORY_renderImages($sid, $text)
             $lLink_attr = '';
             if (file_exists($lFilename_large_complete)) {
                 $lLink_url = $lFilename_large_URL;
-                $lLink_attr = array('title' => $LANG24[57]);
+                $lLink_attr = array('rel' => 'lightbox','data-uk-lightbox' => '');
             }
         }
 
@@ -1176,7 +1176,6 @@ function STORY_renderImages($sid, $text)
             $parsedText = str_replace($norm,  COM_createLink($img_noalign,   $lLink_url, $lLink_attr), $parsedText);
             $parsedText = str_replace($left,  COM_createLink($img_leftalgn,  $lLink_url, $lLink_attr), $parsedText);
             $parsedText = str_replace($right, COM_createLink($img_rightalgn, $lLink_url, $lLink_attr), $parsedText);
-            $parsedText = str_replace("a href","a data-uk-lightbox href",$parsedText);
         } else {
             // We aren't wrapping our image tags in hyperlinks, so
             // just replace the [imagex_mode] tags with the image:

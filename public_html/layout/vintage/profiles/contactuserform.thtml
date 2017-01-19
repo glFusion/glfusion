@@ -27,6 +27,7 @@
 <div style="padding:5px;">
 <input type="hidden" name="what" value="contact" />
 <input type="hidden" name="uid" value="{uid}" />
+<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 <input type="submit" value="{lang_submit}" />
 </div>
 </form>

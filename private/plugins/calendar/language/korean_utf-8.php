@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -91,7 +91,8 @@ $LANG_CAL_1 = array(
     49 => '이 사이트에는 이벤트가 없거나, 아무도 이벤트를 클릭한 적 없거나 어느 쪽일 것으로 생각됩니다。',
     50 => '이벤트',
     51 => '삭제',
-    52 => 'Submitted By'
+    52 => 'Submitted By',
+    53 => 'Calendar View'
 );
 
 $_LANG_CAL_SEARCH = array(

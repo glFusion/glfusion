@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Let user comment on a story or plugin.                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -680,10 +680,15 @@ if ( isset($_POST['cancel'] ) ) {
                     if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] != 'internal') {
                         $pageBody = PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0);
                     } else {
-                        $outputHandle = outputHandler::getInstance();
-                        $outputHandle->addMeta('name','robots','noindex');
-                        $pageBody .= PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-                                  .  CMT_commentForm ($title, '', $sid,$pid, $type, $mode,$postmode);
+                        $currentComments = PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0);
+                        if ( $currentComments != false ) {
+                            $outputHandle = outputHandler::getInstance();
+                            $outputHandle->addMeta('name','robots','noindex');
+                            $pageBody .= $currentComments
+                                      .  CMT_commentForm ($title, '', $sid,$pid, $type, $mode,$postmode);
+                        } else {
+                            COM_404();
+                        }
                     }
                 } else {
                     echo COM_refresh($_CONF['site_url'].'/index.php');

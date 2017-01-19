@@ -6,6 +6,8 @@
 	var lang_success = "{lang_success}";
 	var lang_ok = "{lang_ok}";
 	var lang_cancel = "{lang_cancel}";
+	var lang_error = "{lang_errors} <br>";
+	var timeout = {timeout};
 </script>
 <script src="{site_url}/javascript/dbadmin.min.js"></script>
 

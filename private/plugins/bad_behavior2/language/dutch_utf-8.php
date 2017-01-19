@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -105,7 +105,9 @@ $LANG_BAD_BEHAVIOR = array(
     'token' => 'Token',
     'captcha' => 'CAPTCHA',
     'auto_refresh_on' => 'Auto Refresh On',
-    'auto_refresh_off' => 'Auto Refresh Off'
+    'auto_refresh_off' => 'Auto Refresh Off',
+    'no_data' => 'No data available',
+    'banned_ips' => 'Banned IPs'
 );
 
 $LANG_BB2_RESPONSE = array(

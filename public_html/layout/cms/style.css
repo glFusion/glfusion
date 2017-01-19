@@ -22,6 +22,19 @@ set of styles.
 	color:#fff;
 }
 
+/* Increase font size on smaller devices */
+@media (max-width: 767px) {
+  .uk-container {
+    padding: 0 5px;
+    font-size:1.2em !important;
+  	line-height:1.4em !important;
+  }
+}
+
+.required {
+	border: 1px solid #FFCCCC !important;
+}
+
 /* Primary Styles
 ========================================================================== */
 /* tm-content wraps the entire content area  */
@@ -659,6 +672,13 @@ p.tm-article-meta {
 }
 .uk-button.uk-button-github,
 .uk-icon-button.uk-button-github {
+	background-color: #323131;
+	color: #fff;
+	background-image: none;
+	text-shadow: none;
+}
+.uk-button.uk-button-github-alt,
+.uk-icon-button.uk-button-github-alt {
 	background-color: #323131;
 	color: #fff;
 	background-image: none;
@@ -2146,6 +2166,84 @@ input.error {
 	border: 2px dotted red;
 }
 
+/* PHP Info Block - Environment Check
+========================================================================== */
+#phpinfo {
+	background-color: #fff;
+	color: #222;
+	font-family: sans-serif;
+}
+#phpinfo pre {
+	margin: 0;
+	font-family: monospace;
+}
+#phpinfo a:link {
+	color: #009;
+	text-decoration: none;
+	background-color: #fff;
+}
+#phpinfo a:hover {
+	text-decoration: underline;
+}
+#phpinfo table {
+	border-collapse: collapse;
+	border: 0;
+	width: 934px;
+	box-shadow: 1px 2px 3px #ccc;
+}
+#phpinfo .center {
+	text-align: center;
+}
+#phpinfo .center table {
+	margin: 1em auto;
+	text-align: left;
+}
+#phpinfo .center th {
+	text-align: center !important;
+}
+#phpinfo td,
+#phpinfo th {
+	border: 1px solid #666;
+	vertical-align: baseline;
+	padding: 4px 5px;
+}
+#phpinfo h1 {
+	font-size: 150%;
+}
+#phpinfo h2 {
+	font-size: 125%;
+}
+#phpinfo .p {
+	text-align: left;
+}
+#phpinfo .e {
+	background-color: #ccf;
+	width: 300px;
+	font-weight: bold;
+}
+#phpinfo .h {
+	background-color: #99c;
+	font-weight: bold;
+}
+#phpinfo .v {
+	background-color: #ddd;
+	max-width: 300px;
+	overflow-x: auto;
+	word-wrap: break-word;
+}
+#phpinfo .v i {
+	color: #999;
+}
+#phpinfo img {
+	float: right;
+	border: 0;
+}
+#phpinfo hr {
+	width: 934px;
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+}
 
 /* Auto Translation Block Styles
 ========================================================================== */

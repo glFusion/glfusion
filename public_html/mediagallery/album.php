@@ -639,7 +639,12 @@ if ( $total_media > 0 ) {
                 }
                 $celldisplay = $MG_media[$j]->displayThumb($z,$sortOrder);
                 if ( $MG_media[$j]->type == 1 ) {
-                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . '.jpg';
+                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $MG_media[$j]->filename[0] . '/' . $MG_media[$j]->filename . $ext) ) {
+                            break;
+                        }
+                    }
+                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . $ext;
                     $T->set_var(array(
                         'URL' => $PhotoURL,
                     ));

@@ -1029,7 +1029,20 @@ $LANG24 = array(
     108 => 'Quellenangabe',
     109 => 'Schlüsselwörter',
     110 => 'Gib eine durch Komma getrennte Liste von Schlüsselwörtern ein',
-    111 => 'Global Settings'
+    111 => 'Global Settings',
+    112 => 'Move to New Topic',
+    113 => 'Requires a filter topic to be selected (<b>must not be All</b>)',
+    114 => 'Are you sure you want to make the global changes',
+    115 => 'Are you really sure you want to make these global changes, changes are difficult to undo!',
+    116 => 'Changed frontpage setting for stories in selected topic',
+    117 => 'Changed comment mode setting for stories in selected topic',
+    118 => 'Changed trackback setting for stories in selected topic',
+    119 => 'Changed Owner ID for stories in selected topic',
+    120 => 'Changed Group ID for stories in selected topic',
+    121 => 'Changed show topic setting for stories in selected topic',
+    122 => 'Moved all stories in topic %s to topic %s',
+    123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
 );
 
 ###############################################################################
@@ -1772,7 +1785,9 @@ $LANG_DB_ADMIN = array(
     'error_column_utf' => 'Fehler beim Konvertieren der Spalten in UTF8MB4',
     'error_sc' => 'Fehler beim Aktualisieren von siteconfig.php - Bitte aktualisieren Sie db_charset manuell',
     'current_progress' => 'Aktueller-Fortschritt',
-    'overall_progress' => 'Gesamt-Fortschritt'
+    'overall_progress' => 'Gesamt-Fortschritt',
+    'no_backups_found' => 'No Backup Files Found',
+    'error_msg' => 'The following errors were encountered'
 );
 
 ###############################################################################

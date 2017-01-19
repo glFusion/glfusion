@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Désactiver les Smileys:',
     'disable_urlparse' => 'Ne pas analyser les URL:',
     'features' => 'Caractéristiques:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Pas de nouveaux messages',
     'msg203' => 'Cliquez pour ajouter aux favoris',
     'msg204' => 'Cliquez sur pour effacer un signet',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nouveaux Messages',
     'StatusHeading' => 'Informations Seulement',
     'PostReply' => 'Poster un nouveau commentaire',
@@ -941,7 +943,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('Haut de la Page' => 1, 'Histoire Après Vedette' => 2, 'Bas de la Page' => 3),
+    2 => array('Replace Home Page' => 0, 'Haut de la Page' => 1, 'Histoire Après Vedette' => 2, 'Bas de la Page' => 3),
     3 => array('Pas de Blocs' => 'noblocks', 'Gauche Blocs' => 'leftblocks', 'Blocs Droite' => 'rightblocks', 'Droite / Gauche Blocs' => 'allblocks'),
     4 => array('Bloquer Menu' => 'blockmenu', 'La Barre de Navigation' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),

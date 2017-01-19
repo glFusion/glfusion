@@ -158,11 +158,24 @@
 <!-- BEGIN topicrows -->
 		<li class="row">
 			<dl class="icon" style="background-image: url({folder_icon}); background-repeat: no-repeat;">
-				<dt onmouseover="this.style.cursor='pointer';" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
+				<dt class="uk-text-truncate" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">
 					{moved}
-					<a class="tooltip topictitle" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{topicinfo}">{subject}</a>
-					<span class="uk-align-right">{gotomsg}&nbsp;{displaypageslink}</span>
-					<div style="font-size:.9em;padding-bottom:5px;">by {author} <i class="uk-icon-long-arrow-right uk-icon-mini"></i>&nbsp;{startdate}</div>
+					<a class="tooltip topictitle" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{topicinfo}">
+						{subject}
+					</a>
+					<div class="uk-hidden-small">
+						<span class="uk-align-right">{gotomsg}&nbsp;{displaypageslink}</span>
+						<div style="font-size:.9em;padding-bottom:5px;">by {author} <i class="uk-icon-long-arrow-right uk-icon-mini"></i>&nbsp;{startdate}</div>
+					</div>
+					<div class="uk-visible-small uk-text-medium" style="font-size:.9em;">
+						<div>{LANG_LASTPOST} by {lastposter} <i class="uk-icon-long-arrow-right uk-icon-mini"></i>&nbsp;{lastdate}</div>
+						<div class="uk-float-left">
+							{LANG_REPLIES}: {replies}
+						</div>
+						<div class="uk-float-right">
+							<span class="uk-align-right" style="font-size:1em;">{gotomsg}&nbsp;{displaypageslink}</span>
+						</div>
+					</div>
 				</dt>
 				<dd class="topics uk-hidden-small">{views}</dd>
 				<dd class="posts uk-hidden-small">{replies}</dd>
@@ -174,12 +187,18 @@
 		</li>
 <!-- END topicrows -->
 	</ul>
-	<div class="uk-text-small uk-align-right uk-text-right uk-margin-small">
-		{pagenavigation}
-	</div>
 {!else}
 	{no_topics_message}
 {!endif}
-	<div class="uk-hidden-small uk-text-small uk-text-muted">{page_generated_time}</div>
+	<div class="uk-grid uk-width-1-1 uk-margin">
+		<div class="uk-width-medium-1-2 uk-hidden-small">
+			<div class="uk-text-small uk-text-muted">{page_generated_time}</div>
+		</div>
+		<div class="uk-width-medium-1-2 uk-small-1-1">
+			<div class="uk-align-right uk-text-right uk-margin-small uk-text-small">
+				{pagenavigation}
+			</div>
+		</div>
+	</div>
 </div>
 {# end {templatelocation} #}

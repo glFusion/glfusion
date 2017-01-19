@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {!if iframe}
 <!DOCTYPE html>
-<html lang="en-gb" dir="ltr">
+<html lang="{lang_locale}" dir="{direction}">
 	<head>
 		<meta charset="{charset}">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,7 +63,7 @@
 {!if full}
 			<div class="uk-grid">
 				<div class="uk-width-medium-1-1">
-					<ul class="uk-breadcrumb uk-margin-remove">
+					<ul class="uk-breadcrumb uk-margin-remove  uk-text-truncate">
 			            <li><i class="uk-icon-home"></i></li>
 						<li><a href="{site_url}/forum/index.php">{forum_home}</a></li>
 						<li><a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a></li>
@@ -72,7 +72,6 @@
 				</div>
 			</div>
 
-{# subject went here #}
 			<div class="uk-grid uk-margin-small-top">
 				<div class="uk-width-1-1 uk-margin-small">
 
@@ -150,13 +149,13 @@
 							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}{subject}</a>
 						</div>
 
-						<div class="uk-align-right uk-text-right uk-margin-bottom-remove">
+						<div class="uk-align-right uk-text-right uk-margin-bottom-remove uk-hidden-small">
 							{mod_functions}
 						</div>
 						<div class="uk-clearfix"></div>
 						<div class="forum_author_line uk-margin-bottom">
 							<a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-comment-o" title="permalink"></i>
+								<i class="uk-icon-comment-o uk-hidden-small" title="permalink"></i>
 							</a>
 							{$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 {!if bookmark_icon}
@@ -248,6 +247,15 @@
 								</div> {# end of bottom meta #}
 							</div> {# end of bottom line 1/1 #}
 						</div> {# end of uk-grid #2 #}
+
+						<div class="uk-grid uk-margin-small uk-visible-small">
+							<div class="uk-width-1-1 uk-visible-small">
+								<div class="uk-align-right uk-text-right uk-margin-remove uk-visible-small">
+									{mod_functions}
+								</div>
+							</div>
+						</div>
+
 					</div> {# end of uk-margin 1 - 1 #}
 				</div> {# end of uk-grid main #}
 			</div> {# end of panel #}

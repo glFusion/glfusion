@@ -206,6 +206,7 @@ function mediagallery_upgrade()
             DB_query("ALTER TABLE {$_TABLES['mg_config']} CHANGE `config_name` `config_name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
             DB_query("ALTER TABLE {$_TABLES['mg_exif_tags']} CHANGE `name` `name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
             DB_query("ALTER TABLE {$_TABLES['mg_playback_options']} CHANGE `option_name` `option_name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
+        case '2.1.2' :
 
         default :
 

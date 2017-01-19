@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1579,6 +1579,25 @@ function glfusion_165()
     $c->add('debug_oauth',0,'select',7,3,0,30,TRUE);
     $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
 
+    $res = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE name='dbback_exclude' AND group_name='dbadmin_internal'");
+    $num = DB_numRows($res);
+    if ( $num == 0 ) {
+        $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
+    }
+
+    $_SQL = array();
+    // drop unused fields
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP score;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP reason;";
+    // change IP address in speed limit
+    $_SQL[] = "ALTER TABLE {$_TABLES['speedlimit']} CHANGE `ipaddress` `ipaddress` VARCHAR(39) NULL DEFAULT NULL;";
+    // use appropriate topic id length in syndication
+    $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `header_tid` `header_tid` VARCHAR(128) NULL DEFAULT NULL;";
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     _updateConfig();
 
     // update version number
@@ -1588,7 +1607,7 @@ function glfusion_165()
 }
 
 function _updateConfig() {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $coreConfigData;
 
     $site_url = $_CONF['site_url'];
     $cookiesecure = $_CONF['cookiesecure'];

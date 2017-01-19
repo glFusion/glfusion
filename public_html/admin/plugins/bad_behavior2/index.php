@@ -7,9 +7,9 @@
 // | Main administration page.                                                |
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2015 Michael Hampton                                  |
+// | Copyright (C) 2005-2017 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -156,6 +156,10 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     $result = DB_query ("SELECT id,ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " " . $where . " ORDER BY date DESC LIMIT $start,50");
     $num = DB_numRows ($result);
+
+    if ( $num == 0 ) {
+        $templates->set_var('lang_no_data',$LANG_BAD_BEHAVIOR['list_no_entries']);
+    }
 
     $templates->set_block('list','logrow','lrow');
 

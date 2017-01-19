@@ -1,9 +1,14 @@
 {# begin {templatelocation} #}
+{!!if {question_id} == '0' !!}
+  {!!set reqclass ' required ' !!}
+{!else}
+  {!!set reqclass '' !!}
+{!endif}
 <div id="po_{question_id}" {style}>
   <div class="uk-form-row">
     <label class="uk-form-label" for="question"><span class="uk-text-bold">{lang_question}</span></label>
     <div class="uk-form-controls">
-      <input class="uk-form-width-large" type="text" name="question[]" value="{question_text}" maxlength="255">
+      <input class="uk-form-width-large {reqclass}" type="text" name="question[]" value="{question_text}" maxlength="255">
     </div>
   </div>
   <div class="uk-form-row">

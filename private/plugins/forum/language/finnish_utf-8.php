@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Hymi&ouml;t pois:',
     'disable_urlparse' => '&auml;l&auml; j&auml;senn&auml; URLi&auml;:',
     'features' => 'Toiminnot:',
-    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.'
+    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Ei uusia viestej&auml;',
     'msg203' => 'Lis&auml;&auml; kirjamerkkeihin',
     'msg204' => 'Poista kirjamerkki',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Uusia viestej&auml;',
     'StatusHeading' => 'Vain Info',
     'PostReply' => 'L&auml;het&auml; uusi kommentti',
@@ -941,7 +943,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
+    2 => array('Replace Home Page' => 0, 'Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),

@@ -452,9 +452,10 @@ class Story
          if (array_key_exists('about',$story)) {
             $this->_about = $story['about'];
         }
-
-        // Overwrite the date with the timestamp.
-        $this->_date = $story['unixdate'];
+        if ( isset($story['unixdate'])) {
+            // Overwrite the date with the timestamp.
+            $this->_date = $story['unixdate'];
+        }
         if (!empty($story['expireunix'])) {
             $this->_expire = $story['expireunix'];
         } else {

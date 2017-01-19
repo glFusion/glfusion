@@ -3,190 +3,191 @@
 <script type="text/javascript" src="{site_url}/javascript/pwd_strength.js"></script>
 
 <div id="pe_navbar" class="uk-margin" style="display:none">
-    {navbar}
+	{navbar}
 </div>
+<div class="uk-clearfix"></div>
 <div class="uk-clearfix">
 
-    <form class="uk-form uk-form-horizontal" id="profileform" name="profileform" action="{site_url}/usersettings.php" method="post" {enctype}>
-        <div id="pe_preview" class="jsenabled_hide" style="display:none;">
-            <fieldset data-uk-margin>
-                <legend>{lang_preview_title}</legend>
-                {preview}
-            </fieldset>
-        </div>
+	<form class="uk-form uk-form-horizontal" id="profileform" name="profileform" action="{site_url}/usersettings.php" method="post" {enctype}>
+		<div id="pe_preview" class="jsenabled_hide" style="display:none;">
+			<fieldset data-uk-margin>
+				<legend>{lang_preview_title}</legend>
+				{preview}
+			</fieldset>
+		</div>
 
-        <div id="pe_namepass" class="jsenabled_show">
+		<div id="pe_namepass" class="jsenabled_show">
 
-            <fieldset data-uk-margin>
-                <legend>{lang_name_legend}</legend>
-                <div class="uk-panel uk-panel-box">
-                    {username_option}
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="fullname">{lang_fullname}</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-width-1-1" type="text" id="fullname" name="fullname" maxlength="80" value="{fullname_value}" />
-                        </div>
-                    </div>
-                </div>
-                {plugin_namepass_name}
-            </fieldset>
+			<fieldset data-uk-margin>
+				<legend>{lang_name_legend}</legend>
+				<div class="uk-panel uk-panel-box">
+					{username_option}
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="fullname">{lang_fullname}</label>
+						<div class="uk-form-controls">
+							<input class="uk-width-1-1" type="text" id="fullname" name="fullname" maxlength="80" value="{fullname_value}" />
+						</div>
+					</div>
+				</div>
+				{plugin_namepass_name}
+			</fieldset>
 
-            <fieldset data-uk-margin>
-                <legend>{lang_password_email_legend}</legend>
-                <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
-                    <span class="warningsmall"><p>{lang_enter_current_password}</p></span>
-                    <p>{lang_password_help}</p>
-                </div>
+			<fieldset data-uk-margin>
+				<legend>{lang_password_email_legend}</legend>
+				<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+					<span class="warningsmall"><p>{lang_enter_current_password}</p></span>
+					<p>{lang_password_help}</p>
+				</div>
 
-                <div class="uk-panel uk-panel-box">
-                    {current_password_option}
-                    {password_option}
-                    {resynch_option}
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="cooktime">{lang_cooktime}</label>
-                        <div class="uk-form-controls">
-                            {cooktime_selector}
-                        </div>
-                    </div>
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="email">{lang_email}</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-width-1-1" type="text" id="email" name="email" value="{email_value}">
-                        </div>
-                    </div>
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="email_conf">{lang_email_conf}</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-width-1-1" type="text" id="email_conf" name="email_conf" value="{email_value}">
-                        </div>
-                    </div>
-                    {plugin_namepass_pwdemail}
+				<div class="uk-panel uk-panel-box">
+					{current_password_option}
+					{password_option}
+					{resynch_option}
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="cooktime">{lang_cooktime}</label>
+						<div class="uk-form-controls">
+							{cooktime_selector}
+						</div>
+					</div>
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="email">{lang_email}</label>
+						<div class="uk-form-controls">
+							<input class="uk-width-1-1" type="text" id="email" name="email" value="{email_value}">
+						</div>
+					</div>
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="email_conf">{lang_email_conf}</label>
+						<div class="uk-form-controls">
+							<input class="uk-width-1-1" type="text" id="email_conf" name="email_conf" value="{email_value}">
+						</div>
+					</div>
+					{plugin_namepass_pwdemail}
 
-                    {delete_account_option}
-                </div>
+					{delete_account_option}
+				</div>
 
-            </fieldset>
-            {plugin_namepass}
-        </div>
+			</fieldset>
+			{plugin_namepass}
+		</div>
 
-<!--below needs fixing for mobile-->
+		<!--below needs fixing for mobile-->
 
-        <div id="pe_userinfo" class="jsenabled_hide">
-            <fieldset data-uk-margin>
-                <legend>{lang_personal_info_legend}</legend>
-                <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
-                    {lang_userinfo_help}
-                </div>
-                <div class="uk-panel uk-panel-box uk-margin-bottom">
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="homepage">{lang_homepage}</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-form-width-medium" type="text" id="homepage" name="homepage" value="{homepage_value}">
-                        </div>
-                    </div>
-                    {customfields}
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="location">{lang_location}</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-form-width-medium" type="text" id="location" name="location" value="{location_value}">
-                        </div>
-                    </div>
-                    {userphoto_option}
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="sig">{lang_signature}</label>
-                        <div class="uk-form-controls">
-                            <textarea class="uk-form-width-medium texteditor" id="sig" name="sig">{signature_value}</textarea>
-                        </div>
-                    </div>
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="about">{lang_about}</label>
-                        <div class="uk-form-controls">
-                            <textarea class="uk-form-width-medium texteditor" id="about" rows="10" name="about">{about_value}</textarea>
-                        </div>
-                    </div>
+		<div id="pe_userinfo" class="jsenabled_hide">
+			<fieldset data-uk-margin>
+				<legend>{lang_personal_info_legend}</legend>
+				<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+					{lang_userinfo_help}
+				</div>
+				<div class="uk-panel uk-panel-box uk-margin-bottom">
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="homepage">{lang_homepage}</label>
+						<div class="uk-form-controls">
+							<input class="uk-form-width-medium" type="text" id="homepage" name="homepage" value="{homepage_value}">
+						</div>
+					</div>
+					{customfields}
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="location">{lang_location}</label>
+						<div class="uk-form-controls">
+							<input class="uk-form-width-medium" type="text" id="location" name="location" value="{location_value}">
+						</div>
+					</div>
+					{userphoto_option}
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="sig">{lang_signature}</label>
+						<div class="uk-form-controls">
+							<textarea class="uk-form-width-medium texteditor" id="sig" name="sig">{signature_value}</textarea>
+						</div>
+					</div>
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="about">{lang_about}</label>
+						<div class="uk-form-controls">
+							<textarea class="uk-form-width-medium texteditor" id="about" rows="10" name="about">{about_value}</textarea>
+						</div>
+					</div>
 
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="pgpkey">{lang_pgpkey}</label>
-                        <div class="uk-form-controls">
-                            <textarea class="uk-form-width-medium texteditor" rows="7" id="pgpkey" name="pgpkey">{pgp_value}</textarea>
-                        </div>
-                    </div>
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="pgpkey">{lang_pgpkey}</label>
+						<div class="uk-form-controls">
+							<textarea class="uk-form-width-medium texteditor" rows="7" id="pgpkey" name="pgpkey">{pgp_value}</textarea>
+						</div>
+					</div>
 
-                </div>
-            </fieldset>
+				</div>
+			</fieldset>
 
 {!if social_followme_enabled}
-						<fieldset data-uk-margin>
-							<legend>{$LANG04[198]}</legend>
-							<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
-						    {$LANG04[199]}
-							</div>
-							<div class="uk-panel uk-panel-box uk-margin-bottom">
-								<div class="uk-form-row uk-text-bold">
-							    <label class="uk-form-label">{$LANG04[200]}</label>
-							    <div class="uk-form-label">
-						        {$LANG04[201]}
-							    </div>
-								</div>
-<!-- BEGIN social_links -->
-								<div class="uk-form-row">
-							    <label class="uk-form-label" for="about">{service_display_name}</label>
-							    <div class="uk-form-controls">
-						        {service_url}&nbsp;<input class="uk-form-width-medium" id="{service}_username" name="{service}_username" value="{service_username}" />
-							    </div>
-								</div>
-<!-- END social_links -->
-							</div>
-						</fieldset>
+			<fieldset data-uk-margin>
+				<legend>{$LANG04[198]}</legend>
+				<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+					{$LANG04[199]}
+				</div>
+				<div class="uk-panel uk-panel-box uk-margin-bottom">
+					<div class="uk-form-row uk-text-bold">
+						<label class="uk-form-label">{$LANG04[200]}</label>
+						<div class="uk-form-label">
+							{$LANG04[201]}
+						</div>
+					</div>
+					<!-- BEGIN social_links -->
+					<div class="uk-form-row">
+						<label class="uk-form-label" for="about">{service_display_name}</label>
+						<div class="uk-form-controls">
+							{service_url}&nbsp;<input class="uk-form-width-medium" id="{service}_username" name="{service}_username" value="{service_username}" />
+						</div>
+					</div>
+					<!-- END social_links -->
+				</div>
+			</fieldset>
 {!endif}
 
-						{plugin_userinfo_personalinfo}
+			{plugin_userinfo_personalinfo}
 
-            {plugin_userinfo}
-        </div>
+			{plugin_userinfo}
+		</div>
 
-        {prefs}
+		{prefs}
 
-        {plugin_panel}
+		{plugin_panel}
 
-        <input type="hidden" name="uid" value="{uid_value}" />
-        <input type="hidden" name="mode" value="saveuser" />
-        <input type="hidden" name="username" value="{username_value}" />
-        <div id="save_button" class="uk-margin">
-            <button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
-            <button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
-        </div>
-    </form>
+		<input type="hidden" name="uid" value="{uid_value}" />
+		<input type="hidden" name="mode" value="saveuser" />
+		<input type="hidden" name="username" value="{username_value}" />
+		<div id="save_button" class="uk-margin">
+			<button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
+			<button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
+		</div>
+	</form>
 </div>
 <!-- end needs fixing -->
 
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/JavaScript">
-    /* Initially the navbar is hidden - in case JS is disabled. Enable it now */
-    document.getElementById('pe_navbar').style.display='';
+	/* Initially the navbar is hidden - in case JS is disabled. Enable it now */
+	document.getElementById('pe_navbar').style.display='';
 
-    /* Now cycle through the profile tabs as the number in the template could have been modified (personalized)
-    If you add custom panels, just ensure you use the class jsenabled_hide or jsenabled_show
-    Build an object that can then be referenced in the functon showhideProfileEditorDiv
-    */
+	/* Now cycle through the profile tabs as the number in the template could have been modified (personalized)
+	If you add custom panels, just ensure you use the class jsenabled_hide or jsenabled_show
+	Build an object that can then be referenced in the functon showhideProfileEditorDiv
+	*/
 
-    var profilepanels = new Object;
-    var el;
-    el=document.getElementsByTagName('div');
-    for(i=0;i<el.length;i++) {
-        var divname = el[i].id
-        if(el[i].className == 'jsenabled_show'){
-            el[i].style.display = '';
-            profilepanels[divname] = 'show';
-        } else if(el[i].className == 'jsenabled_hide'){
-            el[i].style.display = 'none';
-            profilepanels[divname] = 'hidden';
-        }
-    }
+	var profilepanels = new Object;
+	var el;
+	el=document.getElementsByTagName('div');
+	for(i=0;i<el.length;i++) {
+		var divname = el[i].id
+		if(el[i].className == 'jsenabled_show'){
+			el[i].style.display = '';
+			profilepanels[divname] = 'show';
+		} else if(el[i].className == 'jsenabled_hide'){
+			el[i].style.display = 'none';
+			profilepanels[divname] = 'hidden';
+		}
+	}
 </script>
 <script>
-    $( document ).ready(function() {
-        showhideProfileEditorDiv("pe_namepass", 1);
-    });
+	$( document ).ready(function() {
+		showhideProfileEditorDiv("pe_namepass", 1);
+	});
 </script>
 {# end {templatelocation} #}

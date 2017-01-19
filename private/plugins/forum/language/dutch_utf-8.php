@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Geen nieuwe berichten',
     'msg203' => 'Toevoegen aan Mijn Markeringen',
     'msg204' => 'Verwijder uit Mijn Markeringen',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nieuwe Berichten',
     'StatusHeading' => 'Alleen Informatie',
     'PostReply' => 'Plaats Reactie',
@@ -941,7 +943,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => true, 'Nee' => false),
-    2 => array('Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
+    2 => array('Replace Home Page' => 0, 'Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
     3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks', 'Rechter / Linker Blokken' => 'allblocks'),
     4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
     5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),

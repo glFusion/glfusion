@@ -1,15 +1,6 @@
 {# begin {templatelocation} #}
-<style>
-#cal-body {   font-size: 76%; }
-
-.cal-date { vertical-align:top; }
-.cal-oldday { vertical-align:top !important; }
-.cal-today { vertical-align:top; }
-.cal-futureday { vertical-align: top; }
-</style>
-
 <div class="uk-panel uk-panel-box uk-margin-remove">
-    <div class="uk-grid uk-margin">
+    <div class="uk-grid uk-hidden-small">
         <div class="uk-width-medium-1-3 uk-text-center">
             <a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day" rel="nofollow">{lang_day}</a>
         </div>
@@ -20,7 +11,21 @@
             <span class="uk-text-bold">{lang_month}</span>
         </div>
     </div>
+
+    <div class="uk-grid uk-margin-remove uk-visible-small">
+    	<form id="viewselectform" class="uk-form" action="{site_url}/calendar/index.php" method="get">
+    		<label class="uk-form-label">{$LANG_CAL_1[53]}</label>
+    		<input type="hidden" name="mode" value="{mode}">
+    		<select id="viewselect" name="view">
+    			<option value="day">{lang_day}</option>
+    			<option value="week">{lang_week}</option>
+    			<option value="month" selected="selected">{lang_month}</option>
+    		</select>
+    	</form>
+    </div>
+
 </div>
+
 <div class="uk-grid uk-margin">
     <div class="uk-width-medium-1-3 uk-hidden-small">
         {previous_months_calendar}
@@ -47,10 +52,10 @@
             </select>
         </form>
 
-        <div class="uk-text-center uk-margin">
+        <div class="uk-text-center uk-margin uk-hidden-small">
             {add_event_option}
         </div>
-        <div class="uk-text-center uk-margin-small">
+        <div class="uk-text-center uk-margin-small uk-hidden-small">
             {personal_calendar_option}
             {master_calendar_option}
         </div>
@@ -62,21 +67,23 @@
 </div>
 
 <div class="uk-clearfix"></div>
-<div class="uk-overflow-container">
-<table id="cal-body">
-    <tr>
-        <td>&nbsp;</td>
-        <td style="width:15%;" class="cal-day">{lang_sunday}</td>
-        <td style="width:14%;" class="cal-day">{lang_monday}</td>
-        <td style="width:14%;" class="cal-day">{lang_tuesday}</td>
-        <td style="width:14%;" class="cal-day">{lang_wednesday}</td>
-        <td style="width:14%;" class="cal-day">{lang_thursday}</td>
-        <td style="width:14%;" class="cal-day">{lang_friday}</td>
-        <td style="width:15%;" class="cal-day">{lang_saturday}</td>
-    </tr>
+
+<div id="calendar-wrap" style="clear:both;">
+  <div class="tm-calendar">
+    <ul class="weekdays">
+      <li>{lang_sunday}</li>
+      <li>{lang_monday}</li>
+      <li>{lang_tuesday}</li>
+      <li>{lang_wednesday}</li>
+      <li>{lang_thursday}</li>
+      <li>{lang_friday}</li>
+      <li>{lang_saturday}</li>
+    </ul>
     {cal_week}
-</table>
+	</div>
 </div>
+
+
 <table class="uk-table uk-text-center">
     <tr>
         <td>
@@ -104,5 +111,10 @@
         </td>
     </tr>
 </table>
+<script>
+	$( "#viewselect" ).change(function() {
+  $( "#viewselectform" ).submit();
+});
+</script>
 {# End Calendar #}
 {# end {templatelocation} #}

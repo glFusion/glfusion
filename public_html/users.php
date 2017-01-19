@@ -1344,16 +1344,16 @@ switch ($mode) {
 
         } elseif ($_CONF['user_login_method']['oauth'] && isset($_GET['oauth_login'])) {
             $modules = SEC_collectRemoteOAuthModules();
-            $active_service = (count($modules) == 0) ? false : in_array($_GET['oauth_login'], $modules);
+            $active_service = (count($modules) == 0) ? false : in_array(COM_applyFilter($_GET['oauth_login']), $modules);
             if (!$active_service) {
                 $status = -1;
-                COM_errorLog("OAuth login failed - there was no consumer available for the service:" . $_GET['oauth_login']);
+                COM_errorLog("OAuth login failed - there was no consumer available for the service:" . COM_applyFilter($_GET['oauth_login']));
             } else {
                 $query = array_merge($_GET, $_POST);
-                $service = $query['oauth_login'];
+                $service = COM_applyFilter($query['oauth_login']);
 
                 COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
-                if (COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0) {
+                if ( COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0 ) {
                     displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
                 }
 
@@ -1368,11 +1368,12 @@ switch ($mode) {
                 if ( $oauth_userinfo === false ) {
                     COM_updateSpeedlimit('login');
                     COM_errorLog("OAuth Error: " . $consumer->error);
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
-                }
-                if ( $consumer->doAction($oauth_userinfo) == NULL ) {
-                    COM_errorLog("Oauth: Error creating new user in OAuth authentication");
-                    echo COM_refresh($_CONF['site_url'] . '/users.php?msg=111'); // OAuth authentication error
+                    COM_setMsg($MESSAGE[111],'error');
+                } else {
+                    if ( $consumer->doFinalLogin($oauth_userinfo) == NULL ) {
+                        COM_errorLog("Oauth: Error creating new user in OAuth authentication");
+                        COM_setMsg($MESSAGE[111],'error');
+                    }
                 }
             }
 

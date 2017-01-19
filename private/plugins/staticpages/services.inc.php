@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This file implements the services provided by the 'Static Pages' plugin. |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2013-2015 by the following authors:                        |
+// | Copyright (C) 2013-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -450,7 +450,7 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
     DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_id);
     DB_delete($_TABLES['comments'], array('sid',  'type'),array($sp_id, 'staticpages'));
     PLG_itemDeleted($sp_id, 'staticpages');
-
+    COM_setMsg( $LANG_STATIC['page_deleted'], 'error' );
     $output = COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
 
     return PLG_RET_OK;

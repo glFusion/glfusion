@@ -1,45 +1,45 @@
 {# begin {templatelocation} #}
 <nav class="uk-navbar tm-admin-navbar uk-margin">
-    <ul class="uk-navbar-nav uk-hidden-small">
+	<ul class="uk-navbar-nav uk-hidden-small">
 <!-- BEGIN menu_items -->
-      <li><a href="{menu_item_url}">{menu_item_text}</a></li>
+		<li><a href="{menu_item_url}">{menu_item_text}</a></li>
 <!-- END menu_items -->
-    </ul>
+	</ul>
 {!if lang_instructions}
-		<div class="uk-navbar-flip">
-			<ul class="uk-navbar-nav uk-hidden-small">
+	<div class="uk-navbar-flip">
+		<ul class="uk-navbar-nav uk-hidden-small">
 			<li><a class="toggle_inst" href="#"><i class="uk-icon uk-icon-question uk-icon-medium"></i></a></li>
-			</ul>
-		</div>
+		</ul>
+	</div>
 {!endif}
-    <div class="uk-navbar-content uk-visible-small">{$LANG01[menu]}</div>
 
-    <div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
-        <a class="uk-navbar-toggle"></a>
-        <div class="uk-dropdown">
-            <ul class="uk-nav uk-nav-dropdown">
+	<div class="uk-navbar-content uk-visible-small">
+			<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+				<button class="uk-button uk-button-primary">{$LANG01[menu]}&nbsp;<i class="uk-icon-caret-down"></i></button>
+				<div class="uk-dropdown uk-dropdown-close">
+					<ul class="uk-nav uk-nav-dropdown">
 <!-- BEGIN alt_menu_items -->
-                <li><a href="{menu_item_url}">{menu_item_text}</a></li>
+						<li><a href="{menu_item_url}">{menu_item_text}</a></li>
 <!-- END alt_menu_items -->
 {!if lang_instructions}
-								<li><a class="toggle_inst" href="#"><i class="uk-icon uk-icon-question uk-icon-small"></i></a></li>
+						<li><a class="toggle_inst" href="#"><i class="uk-icon uk-icon-question uk-icon-small"></i></a></li>
 {!endif}
-            </ul>
-        </div>
-    </div>
-
+					</ul>
+				</div>
+			</div>
+	</div>
 </nav>
 {!if lang_instructions}
 	<div id="instructions" style="display:none;" class="uk-alert" data-uk-alert>
-	  <p>{lang_instructions}</p>
+		<p>{lang_instructions}</p>
 	</div>
 {!endif}
 <script>
-$(window).load(function() {
-	$( ".toggle_inst" ).click(function() {
-		$( "#instructions" ).slideToggle( "fast" );return false;
+	$(window).load(function() {
+		$( ".toggle_inst" ).click(function() {
+			$( "#instructions" ).slideToggle( "fast" );return false;
+		});
+		$("#instructions").hide();
 	});
-	$("#instructions").hide();
-});
 </script>
 {# end {templatelocation} #}

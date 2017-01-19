@@ -13,7 +13,7 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="grp_descr">{lang_description}</label>
 			<div class="uk-form-controls">
-				<input type="text" class="uk-form-width-large" maxlength="255" id="grp_descr" name="grp_descr" value="{group_description}">
+				<input type="text" class="uk-form-width-large required" maxlength="255" id="grp_descr" name="grp_descr" value="{group_description}">
 				<div class="uk-form-help-block uk-margin-small-left">
 					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="grp_descr-count" class="uk-text-muted uk-text-small"></span></span>
 				</div>

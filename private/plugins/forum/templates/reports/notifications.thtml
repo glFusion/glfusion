@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <div class="forumpost">
   {navmenu}
-  <div class="uk-grid uk-margin">
+  <div class="uk-grid uk-margin uk-hidden-small">
     <div class="uk-width-1-2">
       <form class="uk-form uk-form-horizontal" action="{phpself}" method="post">
           <select name="filter" onchange="this.form.submit();">{filter_options}</select>
@@ -22,10 +22,10 @@
         </th>
         <th>{LANG_Heading2}</th>
         <th>{LANG_Heading3}</th>
-        <th>{LANG_Heading4}</th>
-        <th>{LANG_Heading5}</th>
-        <th>{LANG_Heading6}</th>
-        <th>{LANG_Heading7}</th>
+        <th class="uk-hidden-small">{LANG_Heading4}</th>
+        <th class="uk-hidden-small">{LANG_Heading5}</th>
+        <th class="uk-hidden-small">{LANG_Heading6}</th>
+        <th class="uk-hidden-small">{LANG_Heading7}</th>
         <th>{LANG_Heading8}</th>
       </tr>
 <!-- BEGIN notification -->
@@ -35,16 +35,16 @@
         </td>
         <td class="uk-text-left">{forum}</td>
         <td class="uk-text-left">{is_forum}&nbsp;{topic_link}</td>
-        <td>{date_added}</td>
-        <td>
+        <td class="uk-hidden-small">{date_added}</td>
+        <td class="uk-hidden-small">
           {!if topicauthor}
           <a href="{site_url}/users.php?mode=profile&amp;uid={uid}">{topicauthor}</a>
           {!else}
           &nbsp;
           {!endif}
         </td>
-        <td>{views}</td>
-        <td>{replies}</td>
+        <td class="uk-hidden-small">{views}</td>
+        <td class="uk-hidden-small">{replies}</td>
         <td><a href="notify.php?submit=delete&amp;id={notify_id}&amp;filter={notifytype}">{LANG_REMOVE}</a></td>
       </tr>
 <!-- END notification -->

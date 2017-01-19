@@ -194,6 +194,7 @@ function PLG_callFunctionForOnePlugin($function, $args='')
 */
 function PLG_install($type)
 {
+    CACHE_remove_instance('atperm');
     return PLG_callFunctionForOnePlugin('plugin_install_' . $type);
 }
 
@@ -206,6 +207,7 @@ function PLG_install($type)
 */
 function PLG_upgrade($type)
 {
+    CACHE_remove_instance('atperm');
     return PLG_callFunctionForOnePlugin('plugin_upgrade_' . $type);
 }
 
@@ -236,7 +238,7 @@ function PLG_uninstall ($type)
     if (empty ($type)) {
         return false;
     }
-
+    CACHE_remove_instance('atperm');
     if (function_exists('plugin_autouninstall_' . $type)) {
         COM_errorLog ("Auto-uninstalling plugin $type:", 1);
         $function = 'plugin_autouninstall_' . $type;
@@ -1859,6 +1861,14 @@ function PLG_autoTagPerms()
         return $autoTagUsage;
     }
 
+    $cacheInstance = 'atperm__' . CACHE_security_hash();
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+        $autoTagUsage = unserialize($retval);
+        $atp_initialized = 1;
+        return $retval;
+    }
+
     $autoTagArray = array();
     $tags = array();
 
@@ -1872,6 +1882,9 @@ function PLG_autoTagPerms()
     }
     $atp_initialized = 1;
     $autoTagUsage = $autoTagArray;
+
+    CACHE_create_instance($cacheInstance, serialize($autoTagArray), 0);
+
     return $autoTagArray;
 }
 

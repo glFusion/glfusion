@@ -27,7 +27,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -92,7 +92,8 @@ $LANG_CAL_1 = array(
     49 => 'Izgleda, da na tem mestu ni dogodkov ali pa še nikoli ni nihèe kliknil na nobenega.',
     50 => 'Dogodki',
     51 => 'Izbriši',
-    52 => 'Submitted By'
+    52 => 'Submitted By',
+    53 => 'Calendar View'
 );
 
 $_LANG_CAL_SEARCH = array(

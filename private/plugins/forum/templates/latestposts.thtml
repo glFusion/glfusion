@@ -1,0 +1,33 @@
+{# begin {templatelocation} #}
+<div class="uk-row">
+	<table class="uk-table uk-table-hover uk-table-striped">
+		<tr>
+			<th class="uk-hidden-small">
+				{lang_forum}
+			</th>
+			<th>
+				<div class="uk-hidden-small">{lang_topic}</div>
+				<div class="uk-visible-small">{lang_forum} / {lang_topic} / {lang_latest_post}</div>
+			</th>
+			<th class="uk-hidden-small">
+				{lang_latest_post}
+			</th>
+		</tr>
+<!-- BEGIN rows -->
+		<tr>
+			<td class="uk-hidden-small">{forum}</td>
+			<td>
+				<div class="uk-visible-small uk-text-bold uk-margin-small-bottom">
+					{forum}
+				</div>
+				{subject}
+				<div class="uk-visible-small uk-text-bold uk-margin-small-top" style="font-size:.9em;">
+					Last post on {date_notip}
+				</div>
+			</td>
+			<td class="uk-hidden-small">{date}</td>
+		</tr>
+<!-- END rows -->
+	</table>
+</div>
+{# end {templatelocation} #}

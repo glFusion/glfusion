@@ -1,8 +1,8 @@
-{# begin {templatelocation} #}  
-<ul class="uk-grid uk-grid-width-1-2 uk-margin" data-uk-grid-match>    
-            <li class="poll_answer_text uk-width-1-2">{answer_text}</li>
-            <li class="poll_answer_percent uk-width-1-2">{answer_percent}% </li>
+{# begin {templatelocation} #}
+<ul class="uk-grid uk-grid-width-1-2 uk-margin" data-uk-grid-match>
+	<li class="poll_answer_text uk-width-1-2">{answer_text}</li>
+	<li class="poll_answer_percent uk-width-1-2">{answer_percent}% </li>
 </ul>
-            <hr>
+<hr>
 {# end {templatelocation} #}
 

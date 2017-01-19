@@ -378,6 +378,8 @@ class menuElement {
     {
         global $_SP_CONF,$_USER, $_TABLES, $_PLUGINS, $LANG01, $_CONF,$_GROUPS;
 
+        static $nonloggedinusergroup = -1;
+
         $returnArray    = array();
         $childArray     = array();
         $item_array     = array();
@@ -386,7 +388,8 @@ class menuElement {
             return NULL;
         }
 
-        $nonloggedinusergroup = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Non-Logged-in Users"');
+        if ( $nonloggedinusergroup == -1 )
+            $nonloggedinusergroup = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Non-Logged-in Users"');
 
         if ( $this->group_id == $nonloggedinusergroup && !COM_isAnonUser()) return NULL;
 

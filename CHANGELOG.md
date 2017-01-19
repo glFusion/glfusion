@@ -1,4 +1,60 @@
 ## v1.6.5 (unreleased)
+  - Ensure admin lists display at 100% width of the available viewport
+  - Improved error handling on db admin actions
+  - Added red border around required field in forms to help highlight required fields
+  - Calendar - Implemented a more better mobile / responsive style for the calendar month view
+  - Calendar - Adjusted the event entry screen to place all required fields at the top of the form
+  - Forum - Add no bookmarks / no new posts to empty lists
+  - Forum - Display success message after marking all topics read
+  - New Forum feature - ability to replace the home page with the forum index page
+  - Updated CKEditor to v4.6.2
+  - PHP Info in environment check did not display well with older versions of PHP
+  - Enhanced validation / error handling for comment entry
+  - Polls - Display poll above comment entry form
+  - Enhanced security checks when emailing users / stories
+  - Left align remarks on poll results
+  - Minor table structure updates to remove unused fields, properly align lengths on others
+  - Forum - set locale header properly in topic review window
+  - Added missing confirmations to cancel / delete actions in static page editor
+  - Increase font size on smaller viewports
+  - Several layout tweaks in the forum and admin navigation to better support smaller viewports
+  - Set error.log as default log to view on initial load of log viewer
+  - Fixed error where exclude list did not always save properly
+  - Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
+  - Media Gallery - Moved old non-responsive layout to new 'legacy' album theme
+  - Media Gallery - if a replacement image was uploaded with a different extension, the replaced image was not physically deleted
+  - Forum - updated the layout for topic lists on small devices - now display last post information
+  - Forum - updated header area (menu, search, jump) to display cleaner on small screens
+  - Forum - several small tweaks to layout on smaller devices - ensure proper alignment, wrapping, etc.
+  - Media Gallery - Fixed error where pagination did not display when using a 1 column index
+  - Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
+  - Integrated codemirror plugin into CKEditor
+  - Support for auto upgrading plugins with custom directories
+  - Forum - Update post time when silent edit is not checked
+  - Fixed issue where no content to moderate message was not displayed properly
+  - Added "Move to New Topic" feature in Global Story Editor
+  - Improved error handling in Global Story Editor
+  - Forum - Removed footer on view topic - no need to display topic summary icons
+  - Forum - Improved error handling on invalid topics
+  - Forum - Fixed error where locked topic option did not appear on post edit
+  - Forum - Fixed erorr moderating forums with question marks in title
+  - Update Unite Gallery to v1.7.40
+  - Consistent menus in database administration
+  - Improved error logging during authentication
+  - Additional validation on email addresses prior to sending
+  - Update phpmailer to v5.2.22 - SECURITY Critical security update for CVE-2016-10033, CVE-2016-10045,  CVE-2017-5223
+  - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
+  - Moved HTML filter cache directory under private_data
+  - Fixed invalid image reference in errormessage.html
+  - Several code / DB optimizations to improve performance
+  - Improved filtering of user supplied data during login
+  - General code clean up - fixed several references to uninitialized variables
+  - Forum blocks did not use utf-8 safe functions
+  - Update jQuery Validate to v1.15.1
+  - Modified form validation to all dashes on alphanumeric fields
+  - Fixed error where keep unscaled images in stories, which enabled the lightbox view of the image, would cause all links in the story to open in a lightbox - solution provided by Lee Garner
+  - Media Gallery - Fixed error where .png images did not display on postcard preview
+  - Media Gallery - Fixed error in story import - album select list did not properly display
   - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
   - Media Gallery - fixed error in static sort - descending sorts did not work
   - New character counter for text fields - provided by Buddilla
@@ -17,7 +73,7 @@
   - Forum post edit did not set sticky checkbox appropriately
   - Modified user story submit info panel - allow it to be closed
   - Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
-  - New $_SYSTEM option to enable / disable including SP in plugin menu
+  - New $_SYSTEM option to enable / disable including static pages marked with 'Include in Menu' the Plugin menu
 
 ## v1.6.4 (December 9, 2016)
   - Updated CKEditor to v4.6.1

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -230,7 +230,7 @@ function plugin_getuseroption_mediagallery()
     if ( COM_isAnonUser() )  {
         return '';
     }
-
+/* ----
     if ( $_MG_CONF['up_display_rows_enabled'] == 0 &&
          $_MG_CONF['up_display_columns_enabled'] == 0 &&
          $_MG_CONF['up_mp3_player_enabled'] == 0 &&
@@ -238,7 +238,7 @@ function plugin_getuseroption_mediagallery()
          $_MG_CONF['up_thumbnail_size_enabled'] == 0) {
              return '';
     }
-
+---- */
     $title = $LANG_MG01['user_prefs'];
 
     if ( $_MG_CONF['member_albums'] == 1 && $_MG_CONF['link_to_member_album'] == 1 && !COM_isAnonUser() ) {
@@ -1916,7 +1916,7 @@ function MG_initAlbums($force=0) {
          */
 
         if ( $album->access > 0 ) {
-                $MG_albums[$album->id] = $album;
+            $MG_albums[$album->id] = $album;
         }
     }
 

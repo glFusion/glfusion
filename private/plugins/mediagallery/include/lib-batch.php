@@ -842,7 +842,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     default:
                         $filetype="application/force-download";
                 }
-                list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'', $mid,0,0,0 );
+                list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, '', 0, $purgefiles, $filetype,0,'', 0,0,0,0 );
                 $mid = $new_media_id;
                 $statusMsg = DB_escapeString($baseSrcFile . " " . $msg);
                 DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");

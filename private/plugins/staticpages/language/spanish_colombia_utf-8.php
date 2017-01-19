@@ -81,7 +81,7 @@ $LANG_STATIC = array(
     'stats_no_hits' => 'Parece que no hay páginas estáticas o que nadie las ha visto nunca.',
     'id' => 'ID',
     'duplicate_id' => 'La ID elegida ya está en uso. Por favor, elige otra.',
-    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/copy.png" /> correspondiente.',
+    'instructions' => 'Para modificar o borrar, haz clic en el icono: <img src="/layout//images/admin/edit.png" /> o <img src="/layout//images/admin/delete.png" /> correspondiente. Para ver la pagina haz clic sobre el <b>Título</b>. Para crear, haz clic sobre el enlace: "<b>Crear</b>" arriba. Para crear una copia de una pagina existente, haz clic en el icono: <img src="/layout//images/admin/copy.png" /> correspondiente.',
     'centerblock' => 'Bloque Central',
     'centerblock_msg' => 'Cuando se seleccionas esta opción la página estática aparecerá como un bloque central en la página de inicio.',
     'topic' => 'Sección: ',
@@ -121,13 +121,14 @@ $LANG_STATIC = array(
     'attributes' => 'Atributos',
     'preview_help' => 'Selecciona el botón <b>Visualizar</b> para refrescar la pantalla',
     'page_saved' => 'La Pagina ha sido correctametne guardada.',
+    'page_deleted' => 'Page has been successfully deleted.'
 );
 ###############################################################################
 # autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
     'desc_staticpage' => 'Enlace: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
+    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
 );
 
 

@@ -658,6 +658,7 @@ function MODERATE_submissions()
 {
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
+    $pageContent = '';
     $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array(
@@ -670,22 +671,24 @@ function MODERATE_submissions()
     $token = SEC_createToken();
 
     // user submissions
-    $retval .= (MODERATE_ismoderator_user() &&
+    $pageContent .= (MODERATE_ismoderator_user() &&
                 (MODERATE_submissioncount_user() > 0) &&
                 ($_CONF['usersubmission'] == 1)
                 ) ? MODERATE_itemList('user', $token) : '';
 
     // draft story submissions
-    $retval .= (plugin_ismoderator_story() &&
+    $pageContent .= (plugin_ismoderator_story() &&
                 (MODERATE_submissioncount_draftstory() > 0) &&
                  ($_CONF['listdraftstories'] == 1)
                  ) ? MODERATE_itemList('draftstory', $token) : '';
 
     // story & plugin submissions
-    $retval .= PLG_showModerationList($token);
+    $pageContent .= PLG_showModerationList($token);
 
     // if empty at this point, we have no submissions to moderate
-    $retval .= (empty($retval)) ? '<br /><p>' . $LANG29[39] . '</p>' : '';
+    $pageContent .= (empty($pageContent)) ? '<br /><p>' . $LANG29[39] . '</p>' : '';
+
+    $retval .= $pageContent;
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 

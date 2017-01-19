@@ -41,7 +41,7 @@ define('BB2_CWD', dirname(__FILE__));
 $bb2_settings_defaults = array(
     'log_table'     => $_DB_table_prefix . 'bad_behavior2',
     'ban_table'     => $_DB_table_prefix . 'bad_behavior2_ban',
-    'display_stats' => $_CONF['bb2_display_stats'],
+    'display_stats' => 0,
     'strict'        => $_CONF['bb2_strict'],
     'verbose'       => $_CONF['bb2_verbose'],
     'logging'       => $_CONF['bb2_logging'],
@@ -116,7 +116,7 @@ function bb2_read_settings() {
 
     return array('log_table'      => $bb2_settings_defaults['log_table'],
                  'ban_table'      => $bb2_settings_defaults['ban_table'],
-                 'display_stats' => $_CONF['bb2_display_stats'],
+                 'display_stats' => 0,
                  'strict'        => $_CONF['bb2_strict'],
                  'verbose'       => $_CONF['bb2_verbose'],
                  'logging'       => $_CONF['bb2_logging'],

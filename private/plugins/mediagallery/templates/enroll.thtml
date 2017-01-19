@@ -1,25 +1,23 @@
 {# begin {templatelocation} #}
-<div class="plugin">
-<table width="100%" border="0" align="left">
-<tr class="pluginCellTitle">
-  <td><span style="font-weight:bold;">{lang_title}</span></td>
-</tr>
-</table>
-<br />
-<form name="enroll" method="post" action="{s_form_action}">
-<br />
-<span style="font-weight:bold;">{lang_overview}</span><br />
-{lang_member_album_overview}
-<br />
-<br />
-<span style="font-weight:bold;">{lang_terms}</span><br />
-{lang_member_album_terms}
-<br /><br />
-<div style="text-align:center;">
-<input type="submit" value="{lang_agree}"  name="mode">
-<input type="submit" value="{lang_cancel}" name="mode">
-</div>
-</form>
-<br /><br />
+<div class="uk-container">
+	<h1>{lang_title}</h1>
+	<form name="enroll" class="uk-form" method="post" action="{s_form_action}">
+		<div class="uk-form-row">
+			<h2>{lang_overview}</h2>
+			<div class="uk-panel">
+				{lang_member_album_overview}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<h2>{lang_terms}</h2>
+			<div class="uk-panel">
+				{lang_member_album_terms}
+			</div>
+		</div>
+		<div class="uk-form-row uk-text-center">
+			<button class="uk-button uk-button-primary" type="submit" value="x"  name="mode">{lang_agree}</button>
+			<button class="uk-button uk-button-danger" type="submit" value="x" name="cancel">{lang_cancel}</button>
+		</div>
+	</form>
 </div>
 {# end {templatelocation} #}

@@ -7,9 +7,9 @@
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2014 Michael Hampton                                  |
+// | Copyright (C) 2005-2017 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -104,6 +104,8 @@ $LANG_BAD_BEHAVIOR = array (
     'captcha'               => 'CAPTCHA',
     'auto_refresh_on'       => 'Auto Refresh On',
     'auto_refresh_off'      => 'Auto Refresh Off',
+    'no_data'               => 'No data available',
+    'banned_ips'            => 'Banned IPs',
 );
 
 $LANG_BB2_RESPONSE = array (

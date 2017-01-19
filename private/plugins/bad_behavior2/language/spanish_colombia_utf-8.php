@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -106,6 +106,8 @@ $LANG_BAD_BEHAVIOR = array(
     'captcha' => 'CAPTCHA',
     'auto_refresh_on' => 'Refresco Automático Sí',
     'auto_refresh_off' => 'Refresco Automático No',
+    'no_data' => 'No data available',
+    'banned_ips' => 'Banned IPs'
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -151,10 +153,11 @@ $LANG_BB2_RESPONSE = array(
     '96c0bd29' => 'SQL Injection detected',
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
-    '96c0bd30' => 'IP Prohibida',
+    '96c0bd30' => 'IP Prohibida'
 );
 
 $PLG_bad_behavior_MESSAGE1 = '¡Si ves este mensaje, Bad Behavior2 <b>NO</b> esta instalado correctamente! Por favor lee cuidadosamente las instrucciones de instalación nuevamente.';
 $PLG_bad_behavior_MESSAGE100 = 'La dirección IP ha sido desbloqueada.';
 $PLG_bad_behavior_MESSAGE101 = 'Ocurrió un problema al  desbloquear la dirección IP.';
+
 ?>

@@ -4,45 +4,49 @@
 {!endif}
 <form class="uk-form" action="{site_url}/profiles.php" method="post" id="contact">
 
-<div class="uk-form-row">
-<label class="uk-form-label" for="author">{lang_username}</label>
-<div class="uk-form-controls">
-<input class="required" type="text" id="author" name="author" value="{username}">
-</div>
-</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="author">{lang_username}</label>
+		<div class="uk-form-controls">
+			<input class="required" type="text" id="author" name="author" value="{username}">
+		</div>
+	</div>
 
-<div class="uk-form-row">
-<label class="uk-form-label" for="authoremail">{lang_useremail}</label>
-<div class="uk-form-controls">
-<input class="required uk-form-width-medium" type="text" id="authoremail" name="authoremail" value="{usermail}">
-</div>
-</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="authoremail">{lang_useremail}</label>
+		<div class="uk-form-controls">
+			<input class="required uk-form-width-medium" type="text" id="authoremail" name="authoremail" value="{usermail}">
+		</div>
+	</div>
 
-<div class="uk-form-row">
-<label class="uk-form-label" for="subject">{lang_subject}</label>
-<div class="uk-form-controls">
-<input class="required uk-form-width-large" type="text" id="subject" name="subject" value="{subject}">
-</div>
-</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="subject">{lang_subject}</label>
+		<div class="uk-form-controls">
+			<input class="required uk-form-width-large" type="text" id="subject" name="subject" value="{subject}">
+		</div>
+	</div>
 
-<div class="uk-form-row">
-<label class="uk-form-label" for="message">{lang_message}</label>
-<div class="uk-form-controls">
-<textarea id="message" name="message" rows="10" cols="80">{message}</textarea>
-</div>
-</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="message">{lang_message}</label>
+		<div class="uk-form-controls">
+			<textarea id="message" name="message" rows="10" cols="80">{message}</textarea>
+		</div>
+	</div>
 
 
-<div style="uk-alert-warning">{lang_nohtml}</div>
-<div>{captcha}</div>
+	<div style="uk-alert-warning">{lang_nohtml}</div>
+	<div>{captcha}</div>
 
-<input type="hidden" name="what" value="contact" />
-<input type="hidden" name="uid" value="{uid}" />
-<input class="uk-button" type="submit" value="{lang_submit}" />
+  <div class="uk-margin">
+		<input type="hidden" name="what" value="contact" />
+		<input type="hidden" name="uid" value="{uid}" />
+		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
+		<button class="uk-button uk-button-primary" type="submit" value="{lang_submit}">{lang_submit}</button>
+		<button class="uk-button uk-button-danger cancel" type="cancel" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
+	</div>
 
 </form>
 
 <script>
-$("#contact").validate();
+	$("#contact").validate();
 </script>
 {# end {templatelocation} #}

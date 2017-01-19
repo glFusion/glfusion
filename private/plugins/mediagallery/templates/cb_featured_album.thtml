@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div class="uk-panel">
+<div class="uk-panel uk-margin-large-bottom">
 	<div class="uk-panel-title">{featured_album}</div>
 	<div class="uk-grid uk-text-left">
 		<div class="uk-width-medium-1-5 uk-text-left">
@@ -7,7 +7,7 @@
 			<img class="uk-thumbnail" src="{album_last_image}" {media_size}></a>
 		</div>
 {!if lang_subalbums}
-		<div class="uk-width-medium-3-5">
+		<div class="uk-width-medium-2-5">
 {!else}
 		<div class="uk-width-medium-4-5">
 {!endif}
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 {!if lang_subalbums}
-		<div class="uk-width-medium-1-5 uk-text-left">
+		<div class="uk-width-medium-2-5 uk-text-left">
 			<h3>{lang_subalbums} {subalbumcount}</h3>
 			<ul class="uk-list uk-text-truncate">
 				{subalbumlist}
