@@ -6731,6 +6731,26 @@ function _css_out()
     $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css');
     $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css');
 
+    // Let's look in the custom directory first...
+    if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css');
+    } else {
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css');
+    }
+
+    if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css');
+    } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css');
+    }
+
+    // need to parse the outputhandler to see if there are any js scripts to load
+
+    $headercss = $outputHandle->getCSSFiles();
+    foreach ($headercss as $s ) {
+        $files[] = $s;
+    }
+
     /*
      * Check to see if there are any custom CSS files to include
      */
@@ -6758,25 +6778,6 @@ function _css_out()
         }
     }
 
-    // Let's look in the custom directory first...
-    if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css');
-    } else {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css');
-    }
-
-    if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css');
-    } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css');
-    }
-
-    // need to parse the outputhandler to see if there are any js scripts to load
-
-    $headercss = $outputHandle->getCSSFiles();
-    foreach ($headercss as $s ) {
-        $files[] = $s;
-    }
 
     // check cache age & handle conditional request
     if (css_cacheok($cacheFile,$files)){
