@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Tweaked sort order for style sheets - Order is: UIKIT Styles, Theme Styles, Plugin Styles, custom.css
   - Ensure admin lists display at 100% width of the available viewport
   - Improved error handling on db admin actions
   - Added red border around required field in forms to help highlight required fields

@@ -51,12 +51,12 @@ $outputHandle = outputHandler::getInstance();
 
 // must load the jquery ui library we want to use.
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/jquery/jquery-ui.min.js');
-$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui.min.css');
+$outputHandle->addLinkStyle($_CONF['layout_url'].'/css/ui-lightness/jquery-ui.min.css',HEADER_PRIO_NORMAL);
 
 // check to see if we have a custom.css file to load
 
 if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
-    $outputHandle->addLinkStyle($_CONF['layout_url'] . '/custom.css');
+    $outputHandle->addLinkStyle($_CONF['layout_url'] . '/custom.css',HEADER_PRIO_VERYLOW);
 }
 
 // uncomment the line below to enable chronometer header rotator
@@ -65,9 +65,9 @@ if ( file_exists($_CONF['path_layout'] .'custom.css') ) {
 
 // Media Player
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
-$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
+$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css',HEADER_PRIO_NORMAL);
 
-$outputHandle->addLinkStyle($_CONF['layout_url'] . '/font-awesome/css/font-awesome.css');
+$outputHandle->addLinkStyle($_CONF['layout_url'] . '/font-awesome/css/font-awesome.css',HEADER_PRIO_NORMAL);
 
 
 function theme_getToolTipStyle()
