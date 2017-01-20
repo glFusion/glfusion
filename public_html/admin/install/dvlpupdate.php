@@ -1595,7 +1595,7 @@ function glfusion_165()
     $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `header_tid` `header_tid` VARCHAR(128) NULL DEFAULT NULL;";
 
     // forum updates
-    $_SQL[] "ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;";
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
