@@ -234,7 +234,7 @@
 						<div class="uk-grid">
 {!if last_edited}
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
-								<span class="uk-text-small uk-text-muted">{$LANG_GF02[last_edited]} {last_edited}</span>
+								<span class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02[last_edited]} {last_edited}</span>
 							</div>
 {!else}
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left"></div>
