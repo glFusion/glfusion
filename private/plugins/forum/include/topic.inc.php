@@ -492,7 +492,7 @@ function _ff_getmodFunctions($showtopic)
     }
 
     if ($options != '') {
-        $retval .= '<form action="'.$_CONF['site_url'].'/forum/moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
+        $retval .= '<form class="uk-form" action="'.$_CONF['site_url'].'/forum/moderation.php" method="post" style="margin:0px;"><div><select class="uk-form-small" name="modfunction">';
         $retval .= $options;
 
         if ($showtopic['pid'] == 0) {
@@ -507,7 +507,8 @@ function _ff_getmodFunctions($showtopic)
         $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"/>';
         $retval .= '<input type="hidden" name="top" value="' .$top. '"/>';
         $retval .= '<input type="hidden" name="page" value="' .$page. '"/>';
-        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'"/>';
+//        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'"/>';
+        $retval .= '<button class="uk-button uk-button-small" type="submit" name="submit" value="'.$LANG_GF01['GO'].'">'.$LANG_GF01['GO'].'</button>';
         $retval .= '</div></form>';
     }
     return $retval;
