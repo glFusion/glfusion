@@ -1,4 +1,6 @@
 ## v1.6.5 (unreleased)
+  - Forum - If a post is edited (and silent edit is not checked), display a Last Edited msg in the post.
+  - Forum - Do not display Silent Edit checkbox for new posts or replies
   - Tweaked sort order for style sheets - Order is: UIKIT Styles, Theme Styles, Plugin Styles, custom.css
   - Ensure admin lists display at 100% width of the available viewport
   - Improved error handling on db admin actions
@@ -31,7 +33,6 @@
   - Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
   - Integrated codemirror plugin into CKEditor
   - Support for auto upgrading plugins with custom directories
-  - Forum - Update post time when silent edit is not checked
   - Fixed issue where no content to moderate message was not displayed properly
   - Added "Move to New Topic" feature in Global Story Editor
   - Improved error handling in Global Story Editor
