@@ -26,7 +26,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -248,7 +248,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'מידע PHP',
     'album_cover' => 'עטיפת אלבום',
     'album_attributes' => 'מאפייני אלבום',
-    'media_attributes' => 'אפשרויות טיפול במדיה',
     'attached_thumbnail' => 'תמונה מוקטנת מצורפת',
     'thumbnail' => 'תמונה מוקטנת',
     'new_upload_subject' => 'פריטי מדיה חדשים הועלו אל ',
@@ -615,6 +614,7 @@ $LANG_MG01 = array(
     'random_size' => 'רוחב קוביית מידע של תמונה אקראית',
     'flash_slideshow_full' => 'פלאש (מקור)',
     'flash_slideshow_disp' => 'פלאש (מוצג)',
+    'media_attributes' => 'אפשרויות טיפול במדיה',
     'orig_jpg_quality' => 'איכות ה-JPG המקורי',
     'truncate_breadcrumb' => 'קיצוץ Breadcrumbs',
     'member_use_fullname' => 'שימוש בשם מלא בכותרות אלבומי משתמשים',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################

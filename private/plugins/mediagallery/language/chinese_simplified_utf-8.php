@@ -26,7 +26,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -248,7 +248,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'PHP 信息',
     'album_cover' => '影集封面',
     'album_attributes' => '影集属性',
-    'media_attributes' => '媒体处理选项',
     'attached_thumbnail' => '府上缩图',
     'thumbnail' => 'Thumbnail',
     'new_upload_subject' => '新媒体项目上载于 ',
@@ -615,6 +614,7 @@ $LANG_MG01 = array(
     'random_size' => '任意图宽度',
     'flash_slideshow_full' => 'Flash (原装)',
     'flash_slideshow_disp' => 'Flash (显示)',
+    'media_attributes' => '媒体处理选项',
     'orig_jpg_quality' => '原装 JPG 质量',
     'truncate_breadcrumb' => '截断面包屑 Breadcrumbs',
     'member_use_fullname' => '在影集标题上显示用户的整姓名',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################
