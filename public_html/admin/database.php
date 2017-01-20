@@ -1373,24 +1373,24 @@ function DBADMIN_supportUtf8mb()
     }
 
     if ( $collation_database != "utf8" ) {
-        COM_errorLog('DBADMIN: Unable to convert to utf8mb4 - database is not a UTF-8 database');
+//        COM_errorLog('DBADMIN: Unable to convert to utf8mb4 - database is not a UTF-8 database');
         return false;
     }
     $serverVersion = DB_getServerVersion();
     if ( $serverVersion < 50503 ) {
-        COM_errorLog("DBADMIN: MySQL Server must be v5.5.3 or higher to convert to utf8mb4");
+//        COM_errorLog("DBADMIN: MySQL Server must be v5.5.3 or higher to convert to utf8mb4");
         return false;
     }
     $clientVersion = DB_getClientVersion();
     if (function_exists('mysqli_get_client_stats')) {
         // mysqlnd
         if ( $clientVersion < 50009 ) {
-            COM_errorLog('DBADMIN: mysqlnd driver does not support utf8mb4 :: ' . $clientVersion);
+//            COM_errorLog('DBADMIN: mysqlnd driver does not support utf8mb4 :: ' . $clientVersion);
             return false;
         }
     } else {
         if ( $clientVersion < 50503) {
-            COM_errorLog('DBADMIN: libmysqlclient driver does not support utf8mb4 :: ' . $clientVersion );
+//            COM_errorLog('DBADMIN: libmysqlclient driver does not support utf8mb4 :: ' . $clientVersion );
             return false;
         }
     }

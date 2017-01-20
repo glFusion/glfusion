@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2016 by the following authors:
+*  Copyright (C) 2010-2017 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -126,28 +126,28 @@ if ( !isset($_SYSTEM['style_type']) || $_SYSTEM['style_type'] == 'undefined' ) {
     }
 }
 
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/autocomplete'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/datepicker'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/dotnav'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-advanced'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-file'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-password'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-select'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/htmleditor'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/nestable'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/notify'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/placeholder'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/progress'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/search'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slidenav'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slider'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slideshow'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sortable'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sticky'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/tooltip'.$styleType.'min.css',HEADER_PRIO_HIGH);
-$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleType.'min.css',HEADER_PRIO_HIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/uikit'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/accordion'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/autocomplete'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/datepicker'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/dotnav'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-advanced'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-file'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-password'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/form-select'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/htmleditor'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/nestable'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/notify'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/placeholder'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/progress'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/search'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slidenav'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slider'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/slideshow'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sortable'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/sticky'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/tooltip'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
+$outputHandle->addCSSFile($_CONF['path_layout'].'css/components/upload'.$styleType.'min.css',HEADER_PRIO_VERYHIGH);
 
 // Load our JS specific to this theme
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/uikit.min.js');

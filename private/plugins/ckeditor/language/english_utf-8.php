@@ -70,7 +70,7 @@ $LANG_confignames['ckeditor'] = array(
     'enable_submitstory'    => 'Enable User Story Contribute',
     'enable_contact'        => 'Enable Contact',
     'enable_emailstory'     => 'Enable Email Story',
-    'enable_sp'             => 'Enable StaticPages Support',
+    'enable_sp'             => 'Enable Pages Editor Support',
     'enable_block'          => 'Enable Block Editor',
     'filemanager_fileroot'  => 'Relative Path (from public_html) to Files',
     'filemanager_per_user_dir' => 'Use Per User Directories',
@@ -105,9 +105,10 @@ $LANG_confignames['ckeditor'] = array(
     'filemanager_edit_editext' => 'Allowed Edit Extensions',
     'filemanager_fileperm'     => 'Permission for new files',
     'filemanager_dirperm'       => 'Permission for new directories',
+
 );
 $LANG_configsubgroups['ckeditor'] = array(
-    'sg_main'               => 'Configuration Settings',
+    'sg_main'               => 'Configuration Settings'
 );
 $LANG_fs['ckeditor'] = array(
     'ck_public'                 => 'CKEditor Configuration',

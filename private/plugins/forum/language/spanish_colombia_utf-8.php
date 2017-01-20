@@ -444,7 +444,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Modificar Tema',
     'quietforum' => 'El Foro no tiene nuevos temas',
     'notify_full' => 'Incluir publicación completa en la notificación',
-    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.'
+    'view_online' => 'If this email doesn\'t display correctly,<a href="%s">view the online version</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -570,6 +577,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Preferencias del Foro',
     'forumprefs_help_title' => 'Forum Prefs Help',
     'forumprefs_help' => 'Modifica las preferencias de usuario del Módulo de Foro.<ul><li>Numero de temas a mostrar en el índice de foros.</li><li>Numero de publicaciones a mostrar por pagina.</li><li>Ocultar publicaciones de usuarios anónimos.</li><li>Habilitar autonotificaciones.</li><li>Solo enviar una notificación.</li><li>Mostrar revisión del tema (iframe) al final cuando se este respondiendo.</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Orden de los Temas',
     'editor_type' => 'Tipo de Editor',
     'bbcode' => 'BBCode',
@@ -734,7 +747,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'El Foro no se mostrará en el indice de foros',
     'hideposts' => 'Ocultar Nuevos mensajes',
     'hidepostsdscp' => 'Los mensajes recientes no se mostraran en el Bloque de Mensajes Recientes o en el RSS',
-    'attachaccess' => 'Permitir adjuntos de:'
+    'attachaccess' => 'Permitir adjuntos de:',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(

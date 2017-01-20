@@ -26,7 +26,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -248,7 +248,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'PHP Bilgileri',
     'album_cover' => 'Album Cover',
     'album_attributes' => 'Album özellikleri',
-    'media_attributes' => 'Media Handling Options',
     'attached_thumbnail' => 'Ataçlý önizleme resmi',
     'thumbnail' => 'Önizleme resmi',
     'new_upload_subject' => 'Yeni media öðesi þu tarihte eklendi : ',
@@ -615,6 +614,7 @@ $LANG_MG01 = array(
     'random_size' => 'Random Image Block Width',
     'flash_slideshow_full' => 'Flash (Orig)',
     'flash_slideshow_disp' => 'Flash (Disp)',
+    'media_attributes' => 'Media Handling Options',
     'orig_jpg_quality' => 'Original JPG Quality',
     'truncate_breadcrumb' => 'Truncate Breadcrumbs',
     'member_use_fullname' => 'Use Fullname for Member Album title',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################

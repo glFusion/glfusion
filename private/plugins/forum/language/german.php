@@ -448,7 +448,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Thema bearbeiten',
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
-    'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schau sie Dir Online an</a>.'
+    'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schau sie Dir Online an</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -574,6 +581,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Einstellungen',
     'forumprefs_help_title' => 'Forum-Einstellungen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzer-Einstellungen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Kategorie-Reihenfolge',
     'editor_type' => 'Editor-Typ',
     'bbcode' => 'BBCode',
@@ -738,7 +751,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Forum wird im Forenindex nicht angezeigt',
     'hideposts' => 'Neue Beiträge verstecken',
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
-    'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen'
+    'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(

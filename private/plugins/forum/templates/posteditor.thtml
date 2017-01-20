@@ -243,6 +243,7 @@
 {!if sticky_prompt}
 {!inc columns}
 {!endif}
+
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label">{LANG_OPTIONS}</label>
 						<div class="uk-form-controls">
@@ -269,9 +270,12 @@
 										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
 								</div>
 {!endif}
+
 								<div class="uk-width-1-{columns} uk-text-center">
+{!if edit_prompt}
 										<label for="silentedit">{$LANG_GF02[msg190]}</label><br>
 										<input type="checkbox" id="silentedit" name="silentedit" {edit_val} value="1">
+{!endif}
 								</div>
 							</div>
 						</div>

@@ -519,7 +519,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('hidden_editpost','yes');
         if ( $editmoderator ) {
             $username = $postData['name'];
-        } elseif ($postData['uid'] > 1) {
+        } elseif (isset($postData['uid']) && $postData['uid'] > 1) {
             $username = COM_getDisplayName($postData['uid']);
         }
 
@@ -530,14 +530,19 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         }
         $peTemplate->set_var ('hidden_editid',  $postData['id']);
 
-        $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
-        if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) OR ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
-             $edit_prompt .= 'checked="checked" ';
-             $edit_val = ' checked="checked" ';
+        if ( $editmoderator ) {
+            $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
+            if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) || ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
+                 $edit_prompt .= 'checked="checked" ';
+                 $edit_val = ' checked="checked" ';
+            } else {
+                $edit_val = '';
+            }
+            $edit_prompt .= 'value="1"/>';
         } else {
+            $edit_prompt = '';
             $edit_val = '';
         }
-        $edit_prompt .= 'value="1"/>';
 
         $peTemplate->set_var('attachments','<div id="fileattachlist">' . _ff_showattachments($postData['id'],'edit') . '</div>');
         $numAttachments = DB_Count($_TABLES['ff_attachments'],'topic_id',$postData['id']);
@@ -552,6 +557,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $peTemplate->set_var('attachments','<div id="fileattachlist">' . _ff_showattachments($uniqueid,'edit') . '</div>');
         }
         $edit_prompt = '&nbsp;';
+        $edit_prompt = '';
     }
 
     if ($action == 'newreply') {
@@ -986,7 +992,7 @@ function FF_saveTopic( $forumData, $postData, $action )
     }
 
     // speed limit check
-    if ( !SEC_hasRights('forum.edit') ) {
+    if ( !SEC_hasRights('forum.edit') && $action != 'saveedit' ) {
         COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
         $last = COM_checkSpeedlimit ('forum');
         if ($last > 0) {
@@ -1206,7 +1212,8 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
             $savedPostID = $editid;
             if (!isset($postData['silentedit']) || $postData['silentedit'] != 1) {
-                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."',date='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastedited='".DB_escapeString($date)."' WHERE id=".(int) $editid);
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
                 DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
             }

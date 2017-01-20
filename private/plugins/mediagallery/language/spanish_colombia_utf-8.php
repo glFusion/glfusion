@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -131,7 +131,7 @@ $LANG_MG01 = array(
     'albums' => 'Álbumes',
     'media_management' => 'Media Management',
     'count' => 'Cuenta',
-    'order' => 'Secuencia',
+    'order' => 'Orden',
     'action' => 'Acción',
     'move_up' => 'Subir',
     'move_down' => 'Bajar',
@@ -146,7 +146,7 @@ $LANG_MG01 = array(
     'capture_time' => 'Fecha: ',
     'uploaded_by' => 'Publicada Por',
     'delete_files' => 'Borrar Archivo de Origen',
-    'not_writable' => 'NOT Writable',
+    'not_writable' => 'NO Escribible',
     'root_level' => 'Root Level (Do not Create Here)',
     'admin_main_help' => 'Most of the administration features are available directly in the user interface.',
     'configuration_help' => 'Set the various Media Gallery configuration options to modify the standard behavior of the Media Gallery Plugin.',
@@ -194,10 +194,8 @@ $LANG_MG01 = array(
     'graphics_options' => 'Graphics Package',
     'usage_tracking' => 'Usage Tracking',
     'title' => 'Título',
-    'order' => 'Orden',
     'item' => 'Item',
     'select' => 'Seleccionar',
-    'order' => 'Orden',
     'cover' => 'Portada',
     'time' => 'Hora',
     'user_id' => 'User ID',
@@ -224,9 +222,6 @@ $LANG_MG01 = array(
     'options' => 'Opciones',
     'admin' => 'Administración',
     'add_media' => 'Agregar Medios',
-    'ftp_media' => 'FTP Media',
-    'edit_album' => 'Modificar Álbum',
-    'create_album' => 'Crear Álbum',
     'static_sort_media' => 'Orden Estático de Medios',
     'manage_media' => 'Administrar Medios',
     'sort_albums' => 'Ordenar Álbumes',
@@ -237,14 +232,12 @@ $LANG_MG01 = array(
     'mg_dir_structure' => 'Media Gallery Directory Structure',
     'ok' => 'OK',
     'not_found' => 'No Encontrado',
-    'not_writable' => 'NO Escribible',
     'ascending' => 'Ascendentemente',
     'descending' => 'Descendentemente',
     'static_media_sort' => 'Media Gallery Static Sort Media',
     'sort_options' => 'Sort Options',
     'order_options' => 'Order Options',
-    'all_dates' => 'Todas las Fechas',
-    'subalbums' => 'Sub Albums',
+    'subalbums' => 'Sub Álbumes',
     'destination_album' => 'Álbum de Destino',
     'move' => 'mover',
     'date' => 'Fecha',
@@ -452,9 +445,8 @@ $LANG_MG01 = array(
     'wn_title_length' => 'What\'s New Title Length',
     'batch_options' => 'Batch Processing Options',
     'refresh_rate' => 'Refresh Rate',
-    'time_limit'  => 'Maximum execution time allowed',
     'item_limit' => 'Maximum items per cycle',
-    'custom' => 'Personalizado',
+    'custom' => 'Custom',
     'system_default_editor' => 'System Defaults Editor',
     'av_default_editor' => 'Audio / Video Defaults',
     'system_options' => 'Opciones del Sistema',
@@ -478,7 +470,7 @@ $LANG_MG01 = array(
     'ftp_path' => 'FTP Path Directory',
     'put_files' => 'Put Files of',
     'into_album' => 'into album',
-    'root_album' => 'Album Inicial',
+    'root_album' => 'Álbum Raíz',
     'size_500x375' => 'Tamaño 500x375',
     'size_600x450' => 'Tamaño 600x450',
     'size_620x465' => 'Tamaño 620x465',
@@ -503,7 +495,6 @@ $LANG_MG01 = array(
     'rebuild_quota_help' => 'This will scan all the álbumes on the system and rebuild the quota usage for each user.',
     'member_archive' => 'Archive Deleted Member Álbumes',
     'do_not_archive' => 'Delete - Do Not Archive',
-    'root_album' => 'Álbum Raíz',
     'batch_create_members' => 'Batch Create Member Álbumes',
     'quota_report' => 'Quota Report',
     'username' => 'User Name',
@@ -554,8 +545,6 @@ $LANG_MG01 = array(
     'no_sessions' => 'No active sessions found',
     'media_title' => 'Media Title',
     'seconds_per_item' => '%s segundos por item',
-    'subalbums' => 'Sub Álbumes',
-    'rss_options' => 'RSS Options',
     'filecheck' => 'FileCheck',
     'reset_defaults' => 'Reset Defaults',
     'reset_defaults_details' => 'Reset ALL System Options, Álbum Defaults and AV Defaults to installation defaults. This will only affect the default settings, it will not affect any existing álbumes.  Use with caution!',
@@ -644,7 +633,6 @@ $LANG_MG01 = array(
     'genre' => 'Genero',
     'tn_height' => 'Custom Thumbnail Height',
     'tn_width' => 'Custom Thumbnail Width',
-    'custom' => 'Custom',
     'use_alternate_url' => 'Use Alternate URL',
     'hide_email' => 'Hide Email in RSS Feed',
     'album_theme' => 'Álbum Theme',
@@ -692,7 +680,7 @@ $LANG_MG01 = array(
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
     'square' => 'Square',
-    'posted' => 'Posted',
+    'posted' => 'Posted'
 );
 
 ###############################################################################
@@ -888,7 +876,6 @@ $LANG_MG03 = array(
     'tagline' => 'Gallery powered by <a href="http://www.gllabs.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows Vista)</a>',
-    'title_desc_keywords' => 'All media meta data',
     'votes' => 'votos',
     'play_full_album' => 'Play Full Álbum',
     'by' => 'Por',
@@ -1072,10 +1059,9 @@ $LANG_MG04 = array(
     'iptc_date_created' => 'IPTC: Date Created',
     'iptc_copyright_flag' => 'IPTC: Copyright Flag',
     'iptc_time_created' => 'IPTC: Time Created',
-    //
-    'dots_per_resolution_unit' => ' dots per ResolutionUnit',	// Xresolution YResolution
-    'sec' => ' sec',	// Exposure Time
-    'ev' => ' EV',		// Exposure Bias Value
+    'dots_per_resolution_unit' => ' dots per ResolutionUnit',
+    'sec' => ' sec',
+    'ev' => ' EV',
     'bulb' => 'Bulb',
     'normal' => 'Normal (0 deg)',
     'mirrored' => 'Mirrored',
@@ -1110,7 +1096,6 @@ $LANG_MG04 = array(
     'daylight' => 'Daylight',
     'flourescent' => 'Flourescent',
     'tungsten' => 'Tungsten',
-    'flash'  => 'Flash',
     'standard_a' => 'Standard Light A',
     'standard_b' => 'Standard Light B',
     'standard_c' => 'Standard Light C',
@@ -1235,8 +1220,8 @@ $LANG_MG07 = array(
     'swf_scale_help' => 'Default (Show all) makes the entire movie visible in the specified area without distortion, while maintaining the original aspect ratio of the movie. Borders may appear on two sides of the movie. No Border scales the movie to fill the specified area, without distortion but possibly with some cropping, while maintaining the original aspect ratio of the movie.  Exact Fit makes the entire movie visible in the specified area without trying to preserve the original aspect ratio. Distortion may occur.',
     'wmode' => 'Window Mode',
     'wmode_help' => 'Sets the Window Mode property of the Flash movie for transparency, layering, and positioning in the browser.',
-    'loop' => 'Repetir',
-    'loop_help' => 'Reproducción continua',
+    'loop' => 'Ciclo',
+    'loop_help' => 'Reproducción Continua',
     'always' => 'Always',
     'sameDomain' => 'SameDomain',
     'never' => 'Never',
@@ -1248,8 +1233,6 @@ $LANG_MG07 = array(
     'codebase' => 'Codebase',
     'playcount' => 'Playcount',
     'playcount_help' => 'How many times the file should be repeated',
-    'loop' => 'Ciclo',
-    'loop_help' => 'Reproducción Continua',
     'wmp_options' => 'Windows Media Player Options',
     'qt_options' => 'QuickTime Player Options',
     'mp3_options' => 'MP3 Playback Options',
