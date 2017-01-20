@@ -296,11 +296,11 @@ $topicTemplate->set_block('topictemplate', 'topicrow', 'trow');
 
 while ($topicRec = DB_fetchArray($result) ) {
     if ($FF_userprefs['viewanonposts'] == 0 AND $topicRec['uid'] == 1) {
-       $display .= '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
+       $display .= '<div class="uk-alert uk-alert-danger" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
        break;
 	} else if ( !_ff_canUserViewRating($forum) ) {
 	    if ( $cantView == 0 ) {
-    		$display .= '<div class="pluginAlert" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_thread'].'</div>';
+    		$display .= '<div class="uk-alert uk-alert-danger" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_thread'].'</div>';
     	}
     	$cantView++;
     } else {
