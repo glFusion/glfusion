@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion session library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -62,7 +62,7 @@ if (session_id()) {
 ini_set('session.use_trans_sid', '0');
 if ( !isset($_CONF['cookie_session']) || $_CONF['cookie_session'] == '' ) $_CONF['cookie_session'] = 'glfsc';
 session_name($_CONF['cookie_session']); // cookie name
-
+$_SERVER['REMOTE_USER'] = 'anonymous';
 $_USER = SESS_sessionCheck();
 
 $_CONTEXT = array();
@@ -109,6 +109,7 @@ function SESS_sessionCheck()
                 $status = $userdata['status'];
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
+                    $_SERVER['REMOTE_USER'] = $_USER['username'];
                 }
             } else {
                 $userid = 0;
@@ -127,6 +128,7 @@ function SESS_sessionCheck()
                 $status = $userdata['status'];
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
+                    $_SERVER['REMOTE_USER'] = $_USER['username'];
                     // Create new session and write cookie
                     $sessid = SESS_newSession($userid,$request_ip, $_CONF['session_cookie_timeout']);
                     if ( $sessid === false ) {
