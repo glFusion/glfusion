@@ -53,8 +53,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     } else {
         $dt = new Date('now',$_USER['tzid']);
     }
-    if ( isset($showtopic['lastupdated']) ) {
-        $dt_lu = new Date($showtopic['lastupdated'],$_USER['tzid']);
+    if ( isset($showtopic['lastedited']) ) {
+        $dt_lu = new Date($showtopic['lastedited'],$_USER['tzid']);
     }
 
     static $cacheUserArray = array();
@@ -417,7 +417,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
     }
 
-    if ( isset($showtopic['date']) && isset($showtopic['lastupdated']) && ($showtopic['date'] != $showtopic['lastupdated'] ) ) {
+    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited'] ) ) {
         $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
         $topictemplate->set_var('last_edited', $ludate);
     } else {
