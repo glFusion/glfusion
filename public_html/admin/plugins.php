@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion plugin administration page.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -473,8 +473,8 @@ function PLUGINS_remove($pi_name)
         $retval .= COM_showMessage(116);
     } else {
         COM_errorLog("Error removing the plugin file structure - the web server may not have sufficient permissions");
-        $msg = 95;
-        $retval .= COM_showMessage(95);
+        $msg = 91;
+        $retval .= COM_showMessage(91);
     }
     CTL_clearCache();
 

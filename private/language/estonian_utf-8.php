@@ -1580,7 +1580,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Palun <a href=\"{$_CONF['site_admin_url']}/sectest.php\">kontrolli enne oma lehe kasutama hakkamist selle turvalisust!</a>",
     93 => 'Andmebaasi varundamine oli edukas.',
     94 => 'Varundamine ebaõnnestus: faili suurus on alla 1kb',

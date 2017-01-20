@@ -1586,7 +1586,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "使用する前に<a href=\"{$_CONF['site_admin_url']}/sectest.php\">セキュリティをチェックを確認</a>してください！",
     93 => 'データベースのバックアップに成功しました。',
     94 => 'バックアップ失敗: ファイルサイズが1KByte未満です。',

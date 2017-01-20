@@ -6440,19 +6440,33 @@ function COM_isWritable($path)
 
 function COM_recursiveDelete($path)
 {
-    global $_COM_VERBOSE;
-
-    if (is_file($path)){
-        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
-        return @unlink($path);
-    } elseif (is_dir($path)){
-        $scan = glob(rtrim($path,'/').'/*');
-        foreach($scan as $index => $file){
-            COM_recursiveDelete($file);
-        }
-        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
-        return @rmdir($path);
+    if (!is_string($path) || $path == "") return false;
+    if ( function_exists('set_time_limit') ) {
+        @set_time_limit( 30 );
     }
+    if (@is_dir($path)) {
+        if (!$dh = @opendir($path)) {
+            COM_errorLog("Error opening directory " . $path );
+            return false;
+        }
+        while (false !== ($f = readdir($dh))) {
+            if ($f == '..' || $f == '.') continue;
+            COM_recursiveDelete("$path/$f");
+        }
+        closedir($dh);
+        $rc = @rmdir($path);
+        if ( $rc == false ) {
+            COM_errorLog("Error removing path " . $path);
+        }
+        return $rc;
+    } else {
+        $rc = @unlink($path);
+        if ( $rc == false ) {
+            COM_errorLog("Error removing file " . $path);
+        }
+        return $rc;
+    }
+    return false;
 }
 
 function COM_buildOwnerList($fieldName,$owner_id=2)
