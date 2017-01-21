@@ -113,10 +113,12 @@
         <a class="uk-modal-close uk-close"></a>
         <h3 class="uk-modal-header">{$LANG_MG03[media_properties]}</h3>
         <table class="uk-table">
+{!if media_id}
             <tr>
                 <td>{$LANG_MG03[media_id]}</td>
                 <td>{media_id}</td>
             </tr>
+{!endif}
 {!if getid3}
             <tr>
                 <td>{$LANG_MG03[media_properties]}</td>
