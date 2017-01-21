@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main interface to Media Gallery                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -157,14 +157,15 @@ class mediaItem extends Media {
             case 5 :
                 case 'embed' :
 					if (preg_match("/youtube/i", $this->remote_url)) {
-						$default_thumbnail = 'youtube.png';
+						$default_thumbnail = 'youtube.png'; // 'placeholder_youtube.svg';
 					} else if (preg_match("/google/i", $this->remote_url)) {
 						$default_thumbnail = 'googlevideo.png';
+					} else if (preg_match("/vimeo/i", $this->remote_url)) {
+					    $default_thumbnail = 'placeholder_vimeo.svg';
 					} else {
 						$default_thumbnail = 'remote.png';
 					}
 					break;
-
         }
 
         if ( $this->tn_attached == 1 ) {
@@ -211,10 +212,10 @@ class mediaItem extends Media {
 			            $new_x = 580;
 			        }
 			        if ( $this->tn_attached == 1 && $player != 2) {
-				        $tnsize = @getimagesize($media_thumbnail_file);
-				        $new_y += $tnsize[0];
+				        $thumbsize = @getimagesize($media_thumbnail_file);
+				        $new_y += $thumbsize[0];
 				        if ( $tnsize[1] > $new_x ) {
-					        $new_x = $tnsize[1];
+					        $new_x = $thumbsize[1];
 				        }
 			        }
 		            if ( $MG_albums[$this->album_id]->playback_type == 0 ) {
@@ -488,7 +489,8 @@ class mediaItem extends Media {
             'media_link_start'  => $media_start_link,
             'media_link_end'    => '</a>',
             'artist'		    => $this->artist,
-            'copyright_name'    => ($this->artist != "" ? $this->artist : $fullname),
+//            'copyright_name'    => ($this->artist != "" ? $this->artist : $fullname),
+            'copyright_name'    => ($this->artist != "" ? $this->artist : ''),
             'musicalbum'	    => $this->album != '' ? $this->album : '',
             'genre'		        => $this->genre != '' ? $this->genre : '',
             'alt_edit_link'     => $edit_item,
@@ -852,10 +854,10 @@ function MG_indexAll()
     $T->set_file (array(
         'page'      => 'index-all.thtml',
     ));
-//@TODO fix language tag
     $T->set_var(array(
         'site_url'              => $_MG_CONF['site_url'],
-        'album_title'           => "All Photos - Sorted by Post Date", // PLG_replaceTags($MG_albums[$album_id]->title),
+//        'album_title'           => "All Photos - Sorted by Post Date", // PLG_replaceTags($MG_albums[$album_id]->title),
+        'album_title'           => $LANG_MG03['all_media'],
         'table_columns'         => $columns_per_page,
         'table_column_width'    => intval(100 / $columns_per_page) . '%',
         'top_pagination'        => COM_printPageNavigation($_MG_CONF['site_url'] . '/index.php?aid='.$album_id,$page+1,ceil($total_items_in_album  / $media_per_page)),

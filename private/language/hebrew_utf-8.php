@@ -1581,7 +1581,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "אנא <a href=\"{$_CONF['site_admin_url']}/sectest.php\">בידקו את האבטחה באתרכם</a> לפני השימוש בו!",
     93 => 'גיבוי מאגר המידע עבר בהצלחה.',
     94 => 'הגיבוי נכשל. גודל הקובץ היה פחות מ-1kb',

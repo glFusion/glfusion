@@ -884,7 +884,8 @@ $LANG_MG03 = array(
     'your_member_album' => 'Twój album',
     'ip_rated' => 'Twój adres IP ju¿ odda³ g³os.',
     'uid_rated' => 'Twój ID ju¿ odda³ g³os.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(

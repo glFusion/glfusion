@@ -1,4 +1,8 @@
 ## v1.6.5 (unreleased)
+  - Media Gallery - styled the postcard screens using uikit styles
+  - Media Gallery - removed hard coded language string from summary index page
+  - Media Gallery - allow summary index page template to control whether owner name is used when no copyright name is available
+  - Media Gallery - do not display language prompts when no corresponding data is available (i.e.; View or Media ID)
   - Forum - If a post is edited (and silent edit is not checked), display a Last Edited msg in the post.
   - Forum - Do not display Silent Edit checkbox for new posts or replies
   - Tweaked sort order for style sheets - Order is: UIKIT Styles, Theme Styles, Plugin Styles, custom.css

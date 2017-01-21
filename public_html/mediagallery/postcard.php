@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Allows users to send electronic postcards of images                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -186,8 +186,20 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
             $errMsg .= $msg;
         }
     } else {
-        $fromname   = (empty($_USER['fullname']) ? $_USER['username'] : $_USER['fullname']);
-        $fromemail  = $_USER['email'];
+        if ( isset($_USER['fullname']) && !empty($_USER['fullname']) ) {
+            $fromname = $_USER['fullname'];
+        } else {
+            if ( !COM_isAnonUser() ) {
+                $fromname = $_USER['username'];
+            } else {
+                $fromname = '';
+            }
+        }
+        if ( !COM_isAnonUser() && isset($_USER['email']) && !empty($_USER['email']) ) {
+            $fromemail  = $_USER['email'];
+        } else {
+            $fromemail = '';
+        }
     }
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');

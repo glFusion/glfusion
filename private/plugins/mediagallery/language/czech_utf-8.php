@@ -888,7 +888,8 @@ $LANG_MG03 = array(
     'your_member_album' => 'Your Member Album',
     'ip_rated' => 'Z této IP adresy již byla tato položka hodnocena.',
     'uid_rated' => 'Přihlášený uživatel již hodnotil tuto položku.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(

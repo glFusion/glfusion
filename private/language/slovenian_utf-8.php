@@ -1582,7 +1582,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Prosim <a href=\"{$_CONF['site_admin_url']}/sectest.php\">preveri varnost svojih strani</a> preden jih uporabljaš!",
     93 => 'Varnostna kopija baze podatkov, je bila uspešno narejena.',
     94 => 'Varnostna kopija baze podatkov NI uspela: Datoteka je manjša kot 1kb',

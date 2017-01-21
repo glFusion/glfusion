@@ -1582,7 +1582,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Huom! <a href=\"{$_CONF['site_admin_url']}/sectest.php\">tarkista sivustosi turvallisuus</a> ennenkuin käytät sitä!",
     93 => 'Tietokannan varmuuskopio onnistui.',
     94 => 'Varmuuskopio epäonnistui: Tiedoston koko pienempi kuin 1kb',

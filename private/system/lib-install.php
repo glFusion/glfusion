@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Install/Uninstall library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2016 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -610,19 +610,17 @@ function _pi_deleteDir($path) {
         @set_time_limit( 30 );
     }
     if (@is_dir($path)) {
-      if (!$dh = @opendir($path)) return false;
+        if (!$dh = @opendir($path)) return false;
 
-    while (false !== ($f = readdir($dh))) {
-        if ($f == '..' || $f == '.') continue;
-        _pi_deleteDir("$path/$f");
-    }
-
-      closedir($dh);
-      return @rmdir($path);
+        while (false !== ($f = readdir($dh))) {
+            if ($f == '..' || $f == '.') continue;
+            _pi_deleteDir("$path/$f");
+        }
+        closedir($dh);
+        return @rmdir($path);
     } else {
-      return @unlink($path);
+        return @unlink($path);
     }
-
     return false;
 }
 

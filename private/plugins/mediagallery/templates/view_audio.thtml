@@ -67,7 +67,9 @@
         <div class="uk-width-1-4">
             {media_number}
             <div>{lang_comments} {media_comments}</div>
+{!if lang_views}
             <div>{lang_views} {media_views}</div>
+{!endif}
         </div>
         <div class="uk-width-2-4 uk-text-center">
             <div>{media_time}</div>
@@ -94,16 +96,18 @@
         <a class="uk-modal-close uk-close"></a>
         <h3 class="uk-modal-header">{$LANG_MG03[media_properties]}</h3>
         <table class="uk-table">
+{!if media_id}
             <tr>
                 <td>{$LANG_MG03[media_id]}</td>
                 <td>{media_id}</td>
             </tr>
-            {!if getid3}
+{!endif}
+{!if getid3}
             <tr>
                 <td>{$LANG_MG03[media_properties]}</td>
                 <td>{media_properties}</td>
             </tr>
-            {!endif}
+{!endif}
             <tr>
                 <td>{$LANG_MG01[date]}</td>
                 <td>{media_time}</td>
@@ -112,26 +116,28 @@
                 <td>{lang_comments}</td>
                 <td>{media_comments}</td>
             </tr>
+{!if lang_views}
             <tr>
                 <td>{$LANG_MG03[views]}</td>
                 <td>{media_views}</td>
             </tr>
-            {!if media_keywords}
+{!endif}
+{!if media_keywords}
             <tr>
                 <td>{lang_keywords}</td>
                 <td>{media_keywords}</td>
             </tr>
-            {!endif}
+{!endif}
             <tr>
                 <td>{lang_uploaded_by}</td>
                 <td>{owner_username}</td>
             </tr>
-            {!if download}
+{!if download}
             <tr>
                 <td>{$LANG_MG03[download]}</td>
                 <td>{download}</td>
             </tr>
-            {!endif}
+{!endif}
             {exif_info}
         </table>
         <div>{edit_item}</div>

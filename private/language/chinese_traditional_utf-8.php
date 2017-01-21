@@ -1582,7 +1582,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "請 <a href=\"{$_CONF['site_admin_url']}/sectest.php\"> 檢查你的網站的安全 </a> 然後再開始運用!",
     93 => '資料庫備份成功。',
     94 => '備份失敗: 文件小於 1kb',

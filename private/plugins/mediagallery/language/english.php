@@ -905,6 +905,7 @@ $LANG_MG03 = array (
     'ip_rated'              => 'Your IP address has already rated this item.',
     'uid_rated'             => 'Your User ID has already rated this item.',
     'media_id'              => 'Media ID',
+    'all_media'             => 'All Media',
 );
 
 // EXIF labels
