@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Media Gallery - removed references to depreciated online print option
   - Media Gallery - styled the postcard screens using uikit styles
   - Media Gallery - removed hard coded language string from summary index page
   - Media Gallery - allow summary index page template to control whether owner name is used when no copyright name is available
