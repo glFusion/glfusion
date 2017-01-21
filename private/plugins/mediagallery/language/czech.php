@@ -884,7 +884,8 @@ $LANG_MG03 = array(
     'your_member_album' => 'Your Member Album',
     'ip_rated' => 'Z této IP adresy ji¾ byla tato polo¾ka hodnocena.',
     'uid_rated' => 'Pøihlá¹ený u¾ivatel ji¾ hodnotil tuto polo¾ku.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(
