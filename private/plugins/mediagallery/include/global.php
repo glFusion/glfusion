@@ -299,7 +299,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $ss_select      .= '</select>';
 
     $ri_select      = '<input type="checkbox" name="enable_random" value="1" />';
-    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" />';
+//    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" />';
     $views_select   = '<input type="checkbox" name="enable_views" value="1" />';
     $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" />';
     $sort_select    = '<input type="checkbox" name="enable_sort" value="1" />';
@@ -401,7 +401,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'ss_select'             => $ss_select,
         'full_select'           => $full_select,
         'ri_select'             => $ri_select,
-        'sf_select'             => $sf_select,
+//        'sf_select'             => $sf_select,
         'rss_select'            => $rss_select,
         'postcard_select'       => $postcard_select,
         'views_select'          => $views_select,
