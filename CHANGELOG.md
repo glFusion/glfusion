@@ -1,4 +1,5 @@
 ## v1.6.5 (unreleased)
+  - Updated German Translations from Matrox66
   - Media Gallery - removed references to depreciated online print option
   - Media Gallery - styled the postcard screens using uikit styles
   - Media Gallery - removed hard coded language string from summary index page
