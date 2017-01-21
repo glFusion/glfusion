@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+{!if !copyright_name}
+{!!set copyright_name {owner_fullname} !!}
+{!endif}
 <li>
 	<div class="uk-panel">
 		<a name="{media_id}"></a>
