@@ -4,9 +4,9 @@
 <nav class="uk-navbar uk-margin-bottom">
     <div class="uk-navbar-content">
         {album_title}
-        {!if rsslink_url}
+{!if rsslink_url}
         <a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
-        {!endif}
+{!endif}
     </div>
     <div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
         <form name="mg-search" method="post" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block">
@@ -15,7 +15,7 @@
             <input type="hidden" name="swhere" value="0">
         </form>
     </div>
-    {!if select_box_items}
+{!if select_box_items}
     <div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
         <form name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get" class="uk-form uk-margin-remove uk-display-inline-block">
             <select onchange="javascript:forms['adminbox'].submit();" name="mode">
@@ -33,7 +33,7 @@
             </ul>
         </div>
     </div>
-    {!endif}
+{!endif}
 </nav>
 
 <div class="uk-grid uk-margin-remove">
