@@ -301,7 +301,7 @@ class Media {
 					} else if (preg_match("/google/i", $this->remote_url)) {
 						$default_thumbnail = 'googlevideo.png';
 					} else if (preg_match("/vimeo/i", $this->remote_url)) {
-					    $default_thumbnail = 'placeholder_viemo.svg';
+					    $default_thumbnail = 'placeholder_vimeo.svg';
 					    $data_type = 'vimeo';
 					    $videoid = getVimeoId($this->remote_url);
 					} else {
