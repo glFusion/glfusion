@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 {!if show_htmleditor}
 {wysiwyg}
 {!endif}
@@ -15,7 +16,10 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="fromemail">{lang_fromemailaddress}</label>
 		<div class="uk-form-controls">
-			<input class="required email" type="text" id="fromemail" name="fromemail" value="{email}">
+			<input class="required email" type="text" id="fromemail" name="fromemail" value="{email}" maxlength="320">
+			<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="fromemail-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
 		</div>
 	</div>
 
@@ -29,7 +33,10 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="toemail">{lang_toemailaddress}</label>
 		<div class="uk-form-controls">
-			<input class="required" type="text" id="toemail" name="toemail" value="{toemail}">
+			<input class="required" type="text" id="toemail" name="toemail" value="{toemail}" maxlength="320">
+			<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="toemail-count" class="uk-text-muted uk-text-small"></span></span>
+            </div>
 		</div>
 	</div>
 
@@ -55,5 +62,15 @@
 {end_block}
 <script>
 	$("#contact").validate();
+	$(function(){
+		$("#fromemail").characterCounter({
+			limit: '320',
+			counterSelector: '#fromemail-count'
+		});
+		$("#toemail").characterCounter({
+			limit: '320',
+			counterSelector: '#toemail-count'
+		});
+	});
 </script>
 {# end {templatelocation} #}
