@@ -1,3 +1,7 @@
+## v1.6.6 (unrelease)
+  - Updated German Translations - Matrox66
+  - Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66
+
 ## v1.6.5 (January 22, 2017)
   - Updated German Translations from Matrox66
   - Media Gallery - removed references to depreciated online print option
