@@ -1,4 +1,4 @@
-## v1.6.5 (unreleased)
+## v1.6.5 (January 22, 2017)
   - Updated German Translations from Matrox66
   - Media Gallery - removed references to depreciated online print option
   - Media Gallery - styled the postcard screens using uikit styles
