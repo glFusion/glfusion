@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion log viewer.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,13 +38,12 @@ require_once 'auth.inc.php';
 USES_lib_admin();
 
 if ( isset($_GET['log']) ) {
-    $log = COM_applyFilter($_GET['log']);
+    $log = COM_sanitizeFilename(COM_applyFilter($_GET['log']),true);
 } else if ( isset( $_POST['log']) ) {
-    $log = COM_applyFilter($_POST['log']);
+    $log = COM_sanitizeFilename(COM_applyFilter($_POST['log']),true);
 } else {
-    $log = '';
+    $log = 'error.log';
 }
-$log = preg_replace('/[^a-z0-9\.\-_]/', '', $log);
 
 $pageBody = '';
 

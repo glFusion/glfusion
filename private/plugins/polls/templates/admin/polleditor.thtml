@@ -3,7 +3,7 @@
 
 <script type="text/javascript" src="{site_url}/polls/polls_editor.js"></script>
 
-<form class="uk-form uk-form-horizontal uk-panel uk-panel-box" action="{site_admin_url}/plugins/polls/index.php" method="post">
+<form id="polleditor" class="uk-form uk-form-horizontal uk-panel uk-panel-box" action="{site_admin_url}/plugins/polls/index.php" method="post">
   <div class="uk-form-row">
     <label class="uk-form-label" for="pid">{lang_pollid}</label>
     <div class="uk-form-controls">
@@ -13,7 +13,7 @@
   <div class="uk-form-row">
     <label class="uk-form-label" for="topic">{lang_topic}</label>
     <div class="uk-form-controls">
-      <input type="text" id="topic" name="topic" value="{poll_topic}" class="uk-form-width-large" maxlength="255">
+      <input type="text" id="topic" name="topic" value="{poll_topic}" class="uk-form-width-large required" maxlength="255">
       <div class="uk-text-bold">{poll_topic_info}</div>
     </div>
   </div>
@@ -105,4 +105,7 @@
 <input type="hidden" name="{gltoken_name}" value="{gltoken}">
 <input type="hidden" value="{poll_id}" name="old_pid">
 </form>
+<script>
+	$("#polleditor").validate();
+</script>
 {# end {templatelocation} #}

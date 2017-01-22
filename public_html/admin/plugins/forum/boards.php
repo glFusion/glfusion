@@ -126,7 +126,7 @@ function board_admin_list($statusText='')
         $boards->set_var ('order', $C['cat_order']);
 
         // Display each forum within this category
-        $forum_sql_result = DB_query("SELECT * FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $C['id']." ORDER BY forum_order");
+        $forum_sql_result = DB_query("SELECT * FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $C['id']." ORDER BY forum_order ASC");
         $forum_number_of_rows = DB_numRows($forum_sql_result);
 
         $boards->set_block('boards', 'catrows', 'crow');
@@ -851,7 +851,7 @@ function board_edit_forum_save($id)
         } else {
             $forum_order = DB_getItem($_TABLES['ff_forums'],'forum_order','forum_id=' . (int) $forum_order_id);
         }
-        $order = $forum_order++;
+        $order = $forum_order + 1;
 
         $name = _ff_preparefordb($name,'text');
         $dscp = _ff_preparefordb($dscp,'text');
@@ -859,6 +859,7 @@ function board_edit_forum_save($id)
         $sql = "UPDATE {$_TABLES['ff_forums']} SET forum_name='".DB_escapeString($name)."',forum_order=".(int) $order.",forum_dscp='".DB_escapeString($dscp)."', grp_id=".(int) $privgroup.", ";
         $sql .= "is_hidden='".DB_escapeString($is_hidden)."', is_readonly='".DB_escapeString($is_readonly)."', no_newposts='".DB_escapeString($no_newposts)."',use_attachment_grpid=".(int) $attachmentgroup.",forum_cat=".(int) $category." ";
         $sql .= "WHERE forum_id=".(int) $id;
+
         DB_query($sql);
         reorderForums($category);
         $retval = true;

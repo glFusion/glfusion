@@ -122,7 +122,7 @@ $LANG_MG01 = array (
     'configuration'             => 'Configuration',
     'media_queue'               => 'Media Queue',
     'admin_home'                => 'Admin Home',
-    'edit_album'                => 'Edit Album',
+    'edit_album'                => 'Album Properties',
     'create_album'              => 'Create Album',
     'delete_album'              => 'Delete Album',
     'album_name_desc'           => 'Album Title / Description',
@@ -224,7 +224,6 @@ $LANG_MG01 = array (
     'admin'                     => 'Admin',
     'add_media'                 => 'Add Media',
     'ftp_media'                 => 'FTP Media',
-    'edit_album'                => 'Edit Album',
     'create_album'              => 'Create Album',
     'static_sort_media'         => 'Sort Media',
     'manage_media'              => 'Manage Media',
@@ -908,6 +907,7 @@ $LANG_MG03 = array (
     'ip_rated'              => 'Your IP address has already rated this item.',
     'uid_rated'             => 'Your User ID has already rated this item.',
     'media_id'              => 'Media ID',
+    'all_media'             => 'All Media',
 );
 
 // EXIF labels

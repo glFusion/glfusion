@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.4');
+    define('GVERSION', '1.6.5');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -131,6 +131,11 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
+
+// reconcile configs
+if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
+if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
+if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
 @date_default_timezone_set('America/Chicago');
 
@@ -2590,7 +2595,11 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
             $mail->From = $_CONF['site_mail'];
             $mail->AddReplyTo($from[0]);
         } else {
-            $mail->From = $from[0];
+            if ( filter_var($from[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->From = $from[0];
+            } else {
+                $mail->From = $_CONF['noreply_mail'];
+            }
         }
     } else {
         $mail->From = $_CONF['noreply_mail'];
@@ -2603,25 +2612,37 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     }
     if ( is_array($to) && isset($to[0]) && $to[0] != '' ) {
         if ( isset($to[1]) && $to[1] != '' ) {
-            $mail->AddAddress($to[0],$to[1]);
+            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddAddress($to[0],$to[1]);
+            }
         } else {
-            $mail->AddAddress($to[0]);
+            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddAddress($to[0]);
+            }
         }
     } else {
         // assume old style....
-        $mail->AddAddress($to);
+        if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+            $mail->AddAddress($to);
+        }
     }
 
     if ( isset($cc[0]) && $cc[0] != '' ) {
         if ( isset($cc[1]) && $cc[1] != '' ) {
-            $mail->AddCC($cc[0],$cc[1]);
+            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc[0],$cc[1]);
+            }
         } else {
-            $mail->AddCC($cc[0]);
+            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc[0]);
+            }
         }
     } else {
         // assume old style....
         if ( isset($cc) && $cc != '' ) {
-            $mail->AddCC($cc);
+            if ( filter_var($cc, FILTER_VALIDATE_EMAIL) ) {
+                $mail->AddCC($cc);
+            }
         }
     }
 
@@ -2719,10 +2740,19 @@ function COM_emailNotification( $msgData = array() )
     }
 
     if ( is_array($msgData['from'])) {
-        $mail->From = $msgData['from']['email'];
+        if ( filter_var($msgData['from']['email'], FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $msgData['from']['email'];
+        } else {
+            $mail->From = $_CONF['noreply_mail'];
+        }
         $mail->FromName = $msgData['from']['name'];
+
     } else {
-        $mail->From = $msgData['from'];
+        if ( filter_var($msgData['from'], FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $msgData['from'];
+        } else {
+            $mail->From = $_CONF['noreply_mail'];
+        }
         $mail->FromName = $_CONF['site_name'];
     }
 
@@ -2730,10 +2760,14 @@ function COM_emailNotification( $msgData = array() )
     if ( is_array($msgData['to']) ) {
         foreach ($msgData['to'] AS $to) {
             if ( is_array($to) ) {
-                $mail->AddBCC($to['email'],$to['name']);
+                if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                    $mail->AddBCC($to['email'],$to['name']);
+                }
             } else {
                 if ( COM_isEmail($to) ) {
-                    $mail->AddBCC($to);
+                    if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+                        $mail->AddBCC($to);
+                    }
                 }
             }
 
@@ -6011,7 +6045,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo('<h1>An error has occurred:</h1>');
             if ($_SYSTEM['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your glFusion siteconfig.php.</h2><p>If this is a production
+                        in your glFusion configuration.</h2><p>If this is a production
                         website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
                         troubleshooting.</p>');
@@ -6189,8 +6223,8 @@ function COM_checkVersion($have, $need) {
         } else if ( $requireMinor <= $minor ) {
             if ( $requireMinor < $minor ) {
                 $passed = 1;
-            } else if ( $requireRev <= $rev ) {
-                if ( $requireRev < $rev ) {
+            } else if ( $requireRev <= (int) $rev ) {
+                if ( $requireRev < (int) $rev ) {
                     $passed = 1;
                 } else if ($requireExtra != '' ) {
                     if ( $requireExtra == 'fusion' ) {
@@ -6288,34 +6322,55 @@ function COM_setLangIdAndAttribute(&$template)
  */
 function COM_404()
 {
-    global $LANG_404;
-    /*
-     * Allow for custom 404 handler
-     */
+    global $_CONF, $_USER, $LANG_404;
+
     if ( function_exists('CUSTOM_404') ) {
         return CUSTOM_404();
     }
 
     $url = '';
+    $refUrl = '';
+    $content = '';
 
-    if (isset ($_SERVER['SCRIPT_URI'])) {
-        $url = strip_tags ($_SERVER['SCRIPT_URI']);
-    } else {
-        $pos = strpos ($_SERVER['REQUEST_URI'], '?');
-        if ($pos === false) {
-            $request = $_SERVER['REQUEST_URI'];
+    header('HTTP/1.1 404 Not Found');
+    header('Status: 404 Not Found');
+
+    $url = COM_sanitizeUrl(COM_getCurrentURL());
+
+    if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
+        if (isset($_USER['uid']) && isset($_USER['username'])) {
+            $byUser = $_USER['username'] . '@' . $_SERVER['REMOTE_ADDR'];
         } else {
-            $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
+            $byUser = 'anon@' . $_SERVER['REMOTE_ADDR'];
         }
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
+        if ( isset($_SERVER['HTTP_REFERER'])) {
+            $refUrl = $_SERVER['HTTP_REFERER'];
+        }
+        $timestamp = @strftime('%c');
+        $logEntry = "404 :: $byUser :: URL: $url";
+        if (!empty($refUrl)) {
+            $logEntry .= " :: Referer: $refUrl";
+        }
+        $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
+
+        $logfile = $_CONF['path_log'] . '404.log';
+        if ($file = fopen($logfile, 'a')) {
+            fputs($file, "$timestamp - $logEntry \n");
+            fclose($file);
+        }
     }
-    header("HTTP/1.0 404 Not Found");
-    $display = COM_siteHeader ('menu', $LANG_404[1]);
-    $display .= COM_startBlock ($LANG_404[1]);
-    $display .= sprintf ($LANG_404[2]);
-    $display .= $LANG_404[3];
-    $display .= '<br/><br/><p><b>' . $url . '</b></p>';
-    $display .= COM_endBlock ();
+
+    $content = PLG_replaceTags("[staticpage_content:_404]",'glfusion','404');
+    if ( $content == '' || $content == '[staticpage_content:_404]') {
+        $content = COM_startBlock ($LANG_404[1]);
+        $content .= '<p><b>' . $url . '</b></p>';
+        $content .= sprintf ($LANG_404[2]);
+        $content .= $LANG_404[3];
+        $content .= COM_endBlock ();
+    }
+
+    $display = COM_siteHeader ('none', $LANG_404[1]);
+    $display .= $content;
     $display .= COM_siteFooter ();
     echo $display;
     exit;
@@ -6385,19 +6440,33 @@ function COM_isWritable($path)
 
 function COM_recursiveDelete($path)
 {
-    global $_COM_VERBOSE;
-
-    if (is_file($path)){
-        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(file): {$path}");
-        return @unlink($path);
-    } elseif (is_dir($path)){
-        $scan = glob(rtrim($path,'/').'/*');
-        foreach($scan as $index => $file){
-            COM_recursiveDelete($file);
-        }
-        if ($_COM_VERBOSE) COM_errorLog("COM_recursiveDelete(dir): {$path}");
-        return @rmdir($path);
+    if (!is_string($path) || $path == "") return false;
+    if ( function_exists('set_time_limit') ) {
+        @set_time_limit( 30 );
     }
+    if (@is_dir($path)) {
+        if (!$dh = @opendir($path)) {
+            COM_errorLog("Error opening directory " . $path );
+            return false;
+        }
+        while (false !== ($f = readdir($dh))) {
+            if ($f == '..' || $f == '.') continue;
+            COM_recursiveDelete("$path/$f");
+        }
+        closedir($dh);
+        $rc = @rmdir($path);
+        if ( $rc == false ) {
+            COM_errorLog("Error removing path " . $path);
+        }
+        return $rc;
+    } else {
+        $rc = @unlink($path);
+        if ( $rc == false ) {
+            COM_errorLog("Error removing file " . $path);
+        }
+        return $rc;
+    }
+    return false;
 }
 
 function COM_buildOwnerList($fieldName,$owner_id=2)
@@ -6673,27 +6742,20 @@ function _css_out()
     list($cacheFile,$cacheURL) = COM_getStyleCacheLocation();
 
     // default css to support JS libraries
-    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css');
-    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css');
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css',HEADER_PRIO_NORMAL);
+    $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css',HEADER_PRIO_NORMAL);
 
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css',HEADER_PRIO_HIGH);
     } else {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style.css',HEADER_PRIO_HIGH);
     }
 
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css');
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style-colors.css',HEADER_PRIO_HIGH);
     } else if (file_exists($_CONF['path_layout'].'style-color.css')) {
-        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css');
-    }
-
-    // need to parse the outputhandler to see if there are any js scripts to load
-
-    $headercss = $outputHandle->getCSSFiles();
-    foreach ($headercss as $s ) {
-        $files[] = $s;
+        $outputHandle->addCSSFile($_CONF['path_layout'] . 'style-colors.css',HEADER_PRIO_HIGH);
     }
 
     /*
@@ -6703,7 +6765,7 @@ function _css_out()
         $customCSS = CUSTOM_css( );
         if ( is_array($customCSS) ) {
             foreach($customCSS AS $item => $file) {
-                $files[] = $file;
+                $outputHandle->addCSSFile($file,HEADER_PRIO_VERYLOW);
             }
         }
     }
@@ -6716,13 +6778,18 @@ function _css_out()
                 $pHeader = $function();
                 if ( is_array($pHeader) ) {
                     foreach($pHeader AS $item => $file) {
-                        $files[] = $file;
+						$outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
                     }
                 }
             }
         }
     }
 
+    // need to parse the outputhandler to see if there are any js scripts to load
+    $headercss = $outputHandle->getCSSFiles();
+    foreach ($headercss as $s ) {
+        $files[] = $s;
+    }
 
     // check cache age & handle conditional request
     if (css_cacheok($cacheFile,$files)){
@@ -7434,7 +7501,7 @@ if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SE
 
 // Check and see if any plugins (or custom functions)
 // have scheduled tasks to perform
-if ( !isset($_VARS['last_scheduled_run'] ) ) {
+if ( !isset($_VARS['last_scheduled_run'] ) || $_VARS['last_scheduled_run'] == '') {
     $_VARS['last_scheduled_run'] = 0;
 }
 if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {

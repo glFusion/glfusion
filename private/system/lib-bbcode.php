@@ -365,6 +365,9 @@ function _bbcode_htmlspecialchars($text) {
 }
 
 function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
+    global $_CONF;
+
+    $target = '';
 
     if ($action == 'validate') {
         return true;
@@ -377,16 +380,20 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
 
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') || stristr($content,'mailto') ) {
-            return '<a href="'._bbcode_cleanHTML($content).'" rel="nofollow">'.$content.'</a>';
+            $url = _bbcode_cleanHTML($content);
         } else {
-            return '<a href="http://'._bbcode_cleanHTML($content).'" rel="nofollow">'.$content.'</a>';
+            $url = 'http://'._bbcode_cleanHTML($content);
         }
-    }
-    if ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
-        return '<a href="'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+    } elseif ( stristr($attributes['default'],'http') || stristr($attributes['default'],'mailto') ) {
+        $url = _bbcode_cleanHTML($attributes['default']);
     } else {
-        return '<a href="http://'._bbcode_cleanHTML($attributes['default']).'" rel="nofollow">'.$content.'</a>';
+        $url = 'http://'._bbcode_cleanHTML($attributes['default']);
     }
+
+    if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
+        $target = ' target="_blank" ';
+    }
+    return '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$content.'</a>';
 }
 
 function _bbcode_list ($action, $attributes, $content, $params, $node_object) {

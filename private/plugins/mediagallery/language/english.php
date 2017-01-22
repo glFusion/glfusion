@@ -120,7 +120,7 @@ $LANG_MG01 = array (
     'configuration'             => 'Configuration',
     'media_queue'               => 'Media Queue',
     'admin_home'                => 'Admin Home',
-    'edit_album'                => 'Edit Album',
+    'edit_album'                => 'Album Properties',
     'create_album'              => 'Create Album',
     'delete_album'              => 'Delete Album',
     'album_name_desc'           => 'Album Title / Description',
@@ -182,7 +182,7 @@ $LANG_MG01 = array (
     'displayblock_prompt'       => 'Display glFusion Blocks',
     'displayblock_help'         => 'Select whether to display the left / right / both or none of the glFusion blocks while in Media Gallery',
     'static_sort_help'          => 'This will overwrite any manual sorting that you have completed.',
-    'htmlallowed'               => 'Allow HTML in titles',
+    'htmlallowed'               => 'Allow HTML in titles / descriptions',
     'whatsnew'                  => 'Enable Whats New listing in glFusion',
     'dfid'                      => 'Date Format',
     'general_options'           => 'General Options',
@@ -222,7 +222,6 @@ $LANG_MG01 = array (
     'admin'                     => 'Admin',
     'add_media'                 => 'Add Media',
     'ftp_media'                 => 'FTP Media',
-    'edit_album'                => 'Edit Album',
     'create_album'              => 'Create Album',
     'static_sort_media'         => 'Sort Media',
     'manage_media'              => 'Manage Media',
@@ -256,8 +255,7 @@ $LANG_MG01 = array (
     'successful_upload'         => ' successfully uploaded to album',
     'phpinfo'                   => 'PHP Information',
     'album_cover'               => 'Album Cover',
-    'album_attributes'          => 'Album Attributes',
-    'media_attributes'          => 'Media Options',
+    'album_attributes'          => 'Attributes',
     'attached_thumbnail'        => 'Attached Thumbnail',
     'thumbnail'                 => 'Thumbnail',
     'new_upload_subject'        => 'New media item uploaded at ',
@@ -632,6 +630,7 @@ $LANG_MG01 = array (
     'random_size'               => 'Random Image Block Width',
     'flash_slideshow_full'      => 'Flash (Orig)',
     'flash_slideshow_disp'      => 'Flash (Disp)',
+    'media_attributes'          => 'Media Options',
     'orig_jpg_quality'          => 'Original JPG Quality',
     'truncate_breadcrumb'       => 'Truncate Breadcrumbs',
     'member_use_fullname'       => 'Use Fullname for Member Album title',
@@ -695,6 +694,7 @@ $LANG_MG01 = array (
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id'    => 'Unable to determine destination album',
     'square'                    => 'Square',
+    'posted'                    => 'Posted',
 );
 
 // error messages
@@ -905,6 +905,7 @@ $LANG_MG03 = array (
     'ip_rated'              => 'Your IP address has already rated this item.',
     'uid_rated'             => 'Your User ID has already rated this item.',
     'media_id'              => 'Media ID',
+    'all_media'             => 'All Media',
 );
 
 // EXIF labels

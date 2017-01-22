@@ -1,10 +1,10 @@
 {# begin {templatelocation} #}
 {search_menu}
 {!if form_url}
-<form class="uk-form" action="{form_url}" method="post">
+<form class="uk-form uk-width-1-1" action="{form_url}" method="post">
 	{formfields_top}
 {!endif}
-	<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+	<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed uk-width-1-1">
 		<tr>
 			{header_row}
 		</tr>
@@ -12,11 +12,12 @@
 		{footer_row}
 		{action_row}
 	</table>
-
+{!if form_url}
+  {!if formfields_bottom}
 	<div>
 		{formfields_bottom}
 	</div>
-{!if form_url}
+	{!endif}
 </form>
 {!endif}
 <p class="uk-text-center" style="{show_message}"><span class="uk-text-bold">{message}</span></p>

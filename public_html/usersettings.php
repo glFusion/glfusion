@@ -1159,7 +1159,11 @@ function saveuser($A)
 
         foreach ( $social_services AS $service ) {
             $service_input = $service['service'].'_username';
-            $A[$service_input] = DB_escapeString($A[$service_input]);
+            if ( isset($A[$service_input])) {
+                $A[$service_input] = DB_escapeString($A[$service_input]);
+            } else {
+                $A[$service_input] = '';
+            }
             if ( $A[$service_input] != '' ) {
                 $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
                 $sql .= " VALUES (" . (int) $service['service_id'] . ",".$_USER['uid'].",'".$A[$service_input]."');";
@@ -1194,7 +1198,7 @@ function saveuser($A)
                     $callback_url = $_CONF['site_url'];
                     $consumer->setRedirectURL($callback_url);
                     $user = $consumer->authenticate_user();
-                    $consumer->doSynch($user);
+                    $consumer->resyncUserData($user);
                 }
             }
 
@@ -1747,7 +1751,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                         $msg = 114; // Account saved but re-synch failed.
                         COM_errorLog($MESSAGE[$msg]);
                     } else {
-                        $consumer->doSynch($oauth_userinfo);
+                        $consumer->resyncUserData($oauth_userinfo);
                     }
                 } else {
                     // other OAuth services are more complex
@@ -1764,19 +1768,11 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                         $msg = 114; // Resynch with remote account has failed but other account information has been successfully saved
                     // elseif the callback query string is set, then we have successfully authenticated
                     } elseif (isset($query[$callback_query_string])) {
-                        // COM_errorLog("authenticated with remote service, retrieve userinfo");
-                        // foreach($query as $key=>$value) {
-                        //     COM_errorLog("query[{$key}]={$value}");
-                        // }
                         $oauth_userinfo = $consumer->sreq_userinfo_response($query);
                         if (empty($oauth_userinfo)) {
                             $msg = 111; // Authentication error.
                         } else {
-                            // COM_errorLog("resynchronizing userinfo");
-                            // foreach($oauth_userinfo as $key=>$value) {
-                            //     COM_errorLog("oauth_user_info[{$key}] set");
-                            // }
-                            $consumer->doSynch($oauth_userinfo);
+                            $consumer->resyncUserData($oauth_userinfo);
                         }
                     } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
                         $msg = 112; // Certification has been cancelled.

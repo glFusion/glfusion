@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion BB2 Ban administration.                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2015 by the following authors:                        |
+// | Copyright (C) 2014-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,9 +38,6 @@ if (!SEC_inGroup ('Bad Behavior2 Admin')) {
     exit;
 }
 
-// **** TEMP LANG ENTRIES - move to language file prior to prod
-//$LANG_BAD_BEHAVIOR['automatic_token'] = 'Automatically Added - Token misuse';
-
 USES_lib_admin();
 require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 
@@ -62,7 +59,7 @@ function BB2_ban_list()
         'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['block_title_list'], '',
+    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['banned_ips'], '',
     COM_getBlockTemplate ('_admin_block', 'header'));
 
     $retval .= ADMIN_createMenu(
@@ -87,7 +84,7 @@ function BB2_ban_list()
     $defsort_arr = array('field' => 'ip', 'direction' => 'asc');
 
     $text_arr = array(
-        'no_data'    => '',
+        'no_data'    => $LANG_BAD_BEHAVIOR['no_data'],
         'title'      => "",
         'form_url'   => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/ban.php',
         'has_search'    => true,

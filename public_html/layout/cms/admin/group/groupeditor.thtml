@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <form class="uk-form uk-form-horizontal uk-margin" action="{site_admin_url}/group.php" method="post">
 	<fieldset class="uk-margin">
 		<div class="uk-form-row">
@@ -12,7 +13,10 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="grp_descr">{lang_description}</label>
 			<div class="uk-form-controls">
-				<input type="text" class="uk-form-width-large" maxlength="255" id="grp_descr" name="grp_descr" value="{group_description}">
+				<input type="text" class="uk-form-width-large required" maxlength="255" id="grp_descr" name="grp_descr" value="{group_description}">
+				<div class="uk-form-help-block uk-margin-small-left">
+					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="grp_descr-count" class="uk-text-muted uk-text-small"></span></span>
+				</div>
 			</div>
 		</div>
 
@@ -58,7 +62,9 @@
 		<div class="uk-form-controls">
 			<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
 			<button class="uk-button" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
-			{delete_option}
+{!if delete_option}
+			<button class="uk-button uk-button-danger" type="submit" value="{$LANG_ADMIN[delete]}" onclick="return confirm('{$LANG_ACCESS[confirm1]}');">{$LANG_ADMIN[delete]}</button>
+{!endif}
 			<input type="hidden" name="grp_gl_core" value="{group_core}">
 			<input type="hidden" name="grp_id" value="{group_id}">
 			<input type="hidden" name="chk_showall" value="{show_all}">
@@ -66,4 +72,12 @@
 		</div>
 	</div>
 </form>
+<script>
+	$(function(){
+		$("#grp_descr").characterCounter({
+			limit: '255',
+			counterSelector: '#grp_descr-count'
+		});
+	});
+</script>
 {# end {templatelocation} #}

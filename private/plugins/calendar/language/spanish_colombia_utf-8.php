@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -91,7 +91,8 @@ $LANG_CAL_1 = array(
     49 => 'Parece que no hay eventos en el sitio o que nadie ha hecho clic en uno.',
     50 => 'Eventos',
     51 => 'Borrar',
-    52 => 'Enviado por'
+    52 => 'Enviado por',
+    53 => 'Calendar View'
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -147,7 +148,7 @@ $LANG_CAL_ADMIN = array(
     9 => '(incluye: <b>http://</b>)',
     10 => 'Debes proporcionar las fechas / horas, título del evento, y la descripción',
     11 => 'Calendario - Listado de Eventos',
-    12 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para crear, selecciona la opción: "<b><i>Crear</i></b>" arriba. Para crear una copia de un evento existente haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/copy.png" /> correspondiente.',
+    12 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout//images/admin/edit.png" /> o <img src="/layout//images/admin/delete.png" /> correspondiente. Para crear, selecciona la opción: "<b><i>Crear</i></b>" arriba. Para crear una copia de un evento existente haz clic en el icono: <img src="/layout//images/admin/copy.png" /> correspondiente.',
     13 => 'Autor',
     14 => 'Inicia',
     15 => 'Termina',
@@ -163,7 +164,7 @@ $LANG_CAL_ADMIN = array(
     25 => 'La Fecha final es anterior a la fecha inicial.',
     26 => 'Borrar Eventos Antiguos',
     27 => 'Estos son los eventos que tienen mas de ',
-    28 => ' meses. Actualiza al periodo de tiempo deseado, y luego haz clic en el boton: "<b><i>Actualizar</i></b>". Selecciona uno o mas eventos de los resultados que se muestran, y luego haz clic en el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> al final para borrarlos. Solo se borraran los eventos mostrados y seleccionados en esta pagina.',
+    28 => ' meses. Actualiza al periodo de tiempo deseado, y luego haz clic en el boton: "<b><i>Actualizar</i></b>". Selecciona uno o mas eventos de los resultados que se muestran, y luego haz clic en el icono: <img src="/layout//images/admin/delete.png" /> al final para borrarlos. Solo se borraran los eventos mostrados y seleccionados en esta pagina.',
     29 => '',
     30 => 'Actualizar',
     31 => '¿Seguro deseas borrar permanentemente Todos los usuarios seleccionados?',
@@ -176,11 +177,11 @@ $LANG_CAL_ADMIN = array(
     38 => 'Gestión Múltiple',
     39 => 'Eventos',
     40 => 'Eventos',
-    41 => 'Esta pantalla te permite modificar/crear eventos. Modifica los campos a continuación y guarda.',
+    41 => 'Esta pantalla te permite modificar/crear eventos. Modifica los campos a continuación y guarda.'
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Enlace: a un evento del Calendario; texto de enlace por defecto  al titulo del evento: [calendar:<i>event_id</i> {link_text}]',
+    'desc_calendar' => 'Enlace: a un evento del Calendario; texto de enlace por defecto  al titulo del evento: [calendar:<i>event_id</i> {link_text}]'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -224,7 +225,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'Después de Guardar un Evento',
     'default_permissions' => 'Permisos por defecto de Evento',
     'only_admin_submit' => 'Solo Permitir Envío de Administradores',
-    'displayblocks' => 'Mostrar los Bloques glFusion',
+    'displayblocks' => 'Mostrar los Bloques glFusion'
 );
 
 $LANG_configsubgroups['calendar'] = array(

@@ -170,7 +170,7 @@ $LANG_configsubgroups['spamx'] = array(
 
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Main Settings',
-    'fs_sfs'  => 'Stop Forum Spam Settings',
+    'fs_sfs'  => 'Stop Forum Spam',
     'fs_slc'  => 'Spam Link Counter',
 );
 

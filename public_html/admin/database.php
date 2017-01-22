@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database backup administration page.                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -126,18 +126,20 @@ function DBADMIN_list()
         $menu_arr = array();
 
         $allInnoDB = DBADMIN_innodbStatus();
+        $allMyIsam = DBADMIN_myisamStatus();
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
                             'text' => $LANG_DB_ADMIN['create_backup']);
 
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
-                            'text' => $LANG_DB_ADMIN['optimize_menu']);
-
+//        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                                'text' => $LANG_DB_ADMIN['optimize_menu']);
+//        }
         if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_ADMIN['convert_menu']);
         }
-        if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
@@ -165,6 +167,7 @@ function DBADMIN_list()
         );
 
         $text_arr = array(
+            'no_data'  => $LANG_DB_ADMIN['no_backups_found'],
             'form_url' => $thisUrl
         );
         $form_arr = array('bottom' => '', 'top' => '');
@@ -338,6 +341,7 @@ function DBADMIN_backupPrompt()
         $menu_arr = array();
 
         $allInnoDB = DBADMIN_innodbStatus();
+        $allMyIsam = DBADMIN_myisamStatus();
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
                             'text' => $LANG_DB_ADMIN['database_admin']);
@@ -349,10 +353,16 @@ function DBADMIN_backupPrompt()
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_ADMIN['convert_menu']);
         }
-        if ( $allInnoDB && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
+        if ( DBADMIN_supportUtf8mb() ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                                'text' => $LANG_DB_ADMIN['utf8_title']);
+        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                            'text' => $LANG_DB_ADMIN['configure']);
 
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
                             'text' => $LANG_ADMIN['admin_home']);
@@ -381,6 +391,10 @@ function DBADMIN_backupPrompt()
         if ( isset($_VARS['_dbback_allstructs']) && $_VARS['_dbback_allstructs'] ) {
             $T->set_var('struct_warning',$LANG_DB_ADMIN['backup_warning']);
         }
+
+        $timeout = (int) ini_get('max_execution_time');
+        if ( $timeout == 0 ) $timeout = 60;
+        $T->set_var('timeout', $timeout * 1000 );
 
         $T->set_var(array(
             'action'            => 'backup',
@@ -536,15 +550,33 @@ function DBADMIN_innodb()
 
     $retval = '';
 
+    $allInnoDB = DBADMIN_innodbStatus();
+    $allMyISam = DBADMIN_myisamStatus();
+
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbconvert.thtml');
 
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_ADMIN['database_admin']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+          'text' => $LANG_DB_ADMIN['database_admin']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                        'text' => $LANG_DB_ADMIN['create_backup']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                        'text' => $LANG_DB_ADMIN['optimize_menu']);
+
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                            'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
+    }
+    if ( DBADMIN_supportUtf8mb() ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                            'text' => $LANG_DB_ADMIN['utf8_title']);
+    }
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                        'text' => $LANG_DB_ADMIN['configure']);
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                        'text' => $LANG_ADMIN['admin_home']);
 
     $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
@@ -554,6 +586,9 @@ function DBADMIN_innodb()
                 "",
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
+    $timeout = (int) ini_get('max_execution_time');
+    if ( $timeout == 0 ) $timeout = 60;
+    $T->set_var('timeout', $timeout * 1000 );
 
     $T->set_var('lang_title',$LANG_DB_ADMIN['convert_title']);
     $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['innodb_instructions']);
@@ -571,6 +606,7 @@ function DBADMIN_innodb()
         'lang_converting'   => $LANG_DB_ADMIN['converting'],
         'lang_success'      => $LANG_DB_ADMIN['innodb_success'],
         'lang_ajax_status'  => $LANG_DB_ADMIN['conversion_status'],
+        'lang_errors'       => $LANG_DB_ADMIN['error_msg'],
         'to_engine'         => 'InnoDB',
         'action'            => "doinnodb",
         'mode'              => "convertdb",
@@ -589,15 +625,33 @@ function DBADMIN_myisam()
 
     $retval = '';
 
+    $allInnoDB = DBADMIN_innodbStatus();
+
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbconvert.thtml');
 
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_ADMIN['database_admin']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+          'text' => $LANG_DB_ADMIN['database_admin']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                        'text' => $LANG_DB_ADMIN['create_backup']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                        'text' => $LANG_DB_ADMIN['optimize_menu']);
+
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
+                            'text' => $LANG_DB_ADMIN['convert_menu']);
+    }
+    if ( DBADMIN_supportUtf8mb() ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                            'text' => $LANG_DB_ADMIN['utf8_title']);
+    }
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                        'text' => $LANG_DB_ADMIN['configure']);
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                        'text' => $LANG_ADMIN['admin_home']);
+
 
     $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
@@ -607,6 +661,9 @@ function DBADMIN_myisam()
                 "",
                 $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
     );
+    $timeout = (int) ini_get('max_execution_time');
+    if ( $timeout == 0 ) $timeout = 60;
+    $T->set_var('timeout', $timeout * 1000 );
 
     $T->set_var('lang_title',$LANG_DB_ADMIN['convert_myisam_title']);
     $T->set_var('lang_conversion_instructions',$LANG_DB_ADMIN['myisam_instructions']);
@@ -624,6 +681,7 @@ function DBADMIN_myisam()
         'lang_converting'   => $LANG_DB_ADMIN['converting'],
         'lang_success'      => $LANG_DB_ADMIN['myisam_success'],
         'lang_ajax_status'  => $LANG_DB_ADMIN['conversion_status'],
+        'lang_errors'       => $LANG_DB_ADMIN['error_msg'],
         'to_engine'         => 'MyISAM',
         'action'            => "domyisam",
         'mode'              => "convertdb",
@@ -803,19 +861,37 @@ function DBADMIN_optimize()
 
     $retval = '';
 
+    $allInnoDB = DBADMIN_innodbStatus();
+    $allMyIsam = DBADMIN_myisamStatus();
+
     $lastrun = DB_getItem($_TABLES['vars'], 'UNIX_TIMESTAMP(value)',
                           "name = 'lastoptimizeddb'");
-
 
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbconvert.thtml');
 
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_ADMIN['database_admin']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+          'text' => $LANG_DB_ADMIN['database_admin']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                        'text' => $LANG_DB_ADMIN['create_backup']);
+
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
+                            'text' => $LANG_DB_ADMIN['convert_menu']);
+    }
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                            'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
+    }
+    if ( DBADMIN_supportUtf8mb() ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                            'text' => $LANG_DB_ADMIN['utf8_title']);
+    }
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                        'text' => $LANG_DB_ADMIN['configure']);
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                        'text' => $LANG_ADMIN['admin_home']);
 
     $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
@@ -835,6 +911,9 @@ function DBADMIN_optimize()
         $T->set_var('lang_last_optimization',$LANG_DB_ADMIN['last_optimization']);
         $T->set_var('last_optimization',$last[0]);
     }
+    $timeout = (int) ini_get('max_execution_time');
+    if ( $timeout == 0 ) $timeout = 60;
+    $T->set_var('timeout', $timeout * 1000 );
 
     $T->set_var('security_token',SEC_createToken());
     $T->set_var('security_token_name',CSRF_TOKEN);
@@ -845,6 +924,7 @@ function DBADMIN_optimize()
         'lang_converting'   => $LANG_DB_ADMIN['optimizing'],
         'lang_success'      => $LANG_DB_ADMIN['optimize_success'],
         'lang_ajax_status'  => $LANG_DB_ADMIN['optimization_status'],
+        'lang_errors'       => $LANG_DB_ADMIN['error_msg'],
         'to_engine'         => 'all',
         'action'            => "dooptimize",
         'mode'              => "optimize",
@@ -983,15 +1063,26 @@ function DBADMIN_ajaxConvertTable( $table, $engine = 'MyISAM')
 
 function DBADMIN_ajaxOptimizeTable( $table )
 {
+    global $_DB_name;
     if ( !COM_isAjax()) die();
 
     $retval = array();
     $return = array();
-
+/* - allow optimization on innodb tables
+    $result = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+    $I = DB_fetchArray($result);
+    if (strcasecmp($I['Engine'], 'InnoDB') == 0) {
+        $rc = true;
+        COM_errorLog("DBadmin: Skipping optimization for table '".$table."' because it is a InnoDB table");
+    } else {
+        $rc = DB_query("OPTIMIZE TABLE $table", 1);
+    }
+*/
     $rc = DB_query("OPTIMIZE TABLE $table", 1);
-    if ( $rc === false ) {
+    if ( $rc == false ) {
         $retval['errorCode'] = 1;
         $retval['statusMessage'] = 'Failure: '.$table.' was not optimized.';
+        COM_errorLog("DBadmin: Error optimizing table " . $table);
     } else {
         $retval['errorCode'] = 0;
     }
@@ -1055,12 +1146,19 @@ function DBADMIN_configBackup()
 {
     global $_CONF, $_TABLES, $_VARS, $LANG_DB_ADMIN, $LANG_ADMIN, $_IMAGE_TYPE;
 
+    $allInnoDB = DBADMIN_innodbStatus();
+    $allMyIsam = DBADMIN_myisamStatus();
     $tablenames = DBADMIN_getTableList();
     $included = '';
     $excluded = '';
     $retval   = '';
 
-    $exclude_tables = @unserialize($_VARS['_dbback_exclude']);
+    $cfg =& config::get_instance();
+    $_dbCfg = $cfg->get_config('dbadmin_internal');
+    $exclude_tables = array();
+    if ( isset($_dbCfg['dbback_exclude'])) {
+        $exclude_tables = $_dbCfg['dbback_exclude'];
+    }
     if (!is_array($exclude_tables)) {
         $exclude_tables = array();
     }
@@ -1073,12 +1171,29 @@ function DBADMIN_configBackup()
 
     $max_files = (isset($_VARS['_dbback_files']) ? (int)$_VARS['_dbback_files'] : 0);
 
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_ADMIN['database_admin']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+          'text' => $LANG_DB_ADMIN['database_admin']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                        'text' => $LANG_DB_ADMIN['create_backup']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                        'text' => $LANG_DB_ADMIN['optimize_menu']);
+
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
+                            'text' => $LANG_DB_ADMIN['convert_menu']);
+    }
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                            'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
+    }
+    if ( DBADMIN_supportUtf8mb() ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
+                            'text' => $LANG_DB_ADMIN['utf8_title']);
+    }
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                        'text' => $LANG_ADMIN['admin_home']);
 
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbbackupcfg.thtml');
@@ -1095,10 +1210,14 @@ function DBADMIN_configBackup()
     $include_tables = array_diff($tablenames, $exclude_tables);
 
     foreach ($include_tables as $key=>$name) {
-        $included .= "<option value=\"$name\">$name</option>\n";
+        if ( $name != '' ) {
+            $included .= "<option value=\"$name\">$name</option>\n";
+        }
     }
     foreach ($exclude_tables as $key=>$name) {
-        $excluded .= "<option value=\"$name\">$name</option>\n";
+        if ( $name != '' ) {
+            $excluded .= "<option value=\"$name\">$name</option>\n";
+        }
     }
 
     $T->set_var(array(
@@ -1159,15 +1278,34 @@ function DBADMIN_utf8mb4()
 
     $retval = '';
 
+    $allInnoDB = DBADMIN_innodbStatus();
+    $allMyIsam = DBADMIN_myisamStatus();
+
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbconvert-utf.thtml');
 
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/database.php',
-              'text' => $LANG_DB_ADMIN['database_admin']),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php',
+          'text' => $LANG_DB_ADMIN['database_admin']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
+                        'text' => $LANG_DB_ADMIN['create_backup']);
+
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
+                        'text' => $LANG_DB_ADMIN['optimize_menu']);
+
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
+                            'text' => $LANG_DB_ADMIN['convert_menu']);
+    }
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
+                            'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
+    }
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?config=x',
+                        'text' => $LANG_DB_ADMIN['configure']);
+    $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+                        'text' => $LANG_ADMIN['admin_home']);
+
 
     $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
@@ -1235,24 +1373,24 @@ function DBADMIN_supportUtf8mb()
     }
 
     if ( $collation_database != "utf8" ) {
-        COM_errorLog('DBADMIN: Unable to convert to utf8mb4 - database is not a UTF-8 database');
+//        COM_errorLog('DBADMIN: Unable to convert to utf8mb4 - database is not a UTF-8 database');
         return false;
     }
     $serverVersion = DB_getServerVersion();
     if ( $serverVersion < 50503 ) {
-        COM_errorLog("DBADMIN: MySQL Server must be v5.5.3 or higher to convert to utf8mb4");
+//        COM_errorLog("DBADMIN: MySQL Server must be v5.5.3 or higher to convert to utf8mb4");
         return false;
     }
     $clientVersion = DB_getClientVersion();
     if (function_exists('mysqli_get_client_stats')) {
         // mysqlnd
         if ( $clientVersion < 50009 ) {
-            COM_errorLog('DBADMIN: mysqlnd driver does not support utf8mb4 :: ' . $clientVersion);
+//            COM_errorLog('DBADMIN: mysqlnd driver does not support utf8mb4 :: ' . $clientVersion);
             return false;
         }
     } else {
         if ( $clientVersion < 50503) {
-            COM_errorLog('DBADMIN: libmysqlclient driver does not support utf8mb4 :: ' . $clientVersion );
+//            COM_errorLog('DBADMIN: libmysqlclient driver does not support utf8mb4 :: ' . $clientVersion );
             return false;
         }
     }
@@ -1431,7 +1569,11 @@ switch ($action) {
 
         // Get the excluded tables into a serialized string
         $tables = explode('|', $_POST['groupmembers']);
-        $items['_dbback_exclude'] = DB_escapeString(@serialize($tables));
+
+        $cfg =& config::get_instance();
+        if ( is_array($tables)) {
+            $cfg->set('dbback_exclude', $tables, 'dbadmin_internal');
+        }
 
         $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
 

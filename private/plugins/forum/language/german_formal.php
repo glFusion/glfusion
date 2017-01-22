@@ -39,7 +39,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -227,26 +227,22 @@ $LANG_GF01 = array(
     't_help' => 'Verwende [file]#[/file], um ein angehangenes Bild in diesen Beitrag einzufügen',
     'e_help' => 'Listenobjekt: [*]text',
     'smiley' => 'Smileys',
-
-    /* --- Community moderation tags --- */
     'grade' => '<br /><b>Gruppen - Komfortlevel:</b>',
     'grade_user' => '<br /><b>Benutzer bewerten</b>',
     'retract_grade' => '<br /><b>Bewertung zurückziehen</b>',
     'rate_too_low' => 'Ihr Bewertungslevel ist zu niedrig, um in diesem Forum zu schreiben',
     'rate_too_low_forum' => 'Ihr Bewertungslevel ist nicht hoch genug, um dieses Forum zu lesen',
     'rate_too_low_thread' => 'Ihr Bewertungslevel ist nicht hoch genug, um dieses Thema zu lesen',
-    /* --- bbcode signature --- */
     'signature' => 'Signatur',
     'edit_signature' => 'Bearbeite BBcode-Signatur',
     'signature_preview' => 'Signatur-Vorschau',
     'cancel_confirm' => 'Soll die Übermittlung dieser Nachricht abgebrochen werden?',
-    /* --- topic features --- */
     'disable_bbcode' => 'BBCode deaktivieren:',
     'disable_smilies' => 'Smilies deaktivieren:',
     'disable_urlparse' => 'URLs nicht analysieren:',
     'features' => 'Funktionen:',
-    /* --- rss feature --- */
-    'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.'
+    'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -444,6 +440,7 @@ $LANG_GF02 = array(
     'msg202' => 'Keine neuen Beiträge',
     'msg203' => 'Leseszeichen hinzuzufügen',
     'msg204' => 'Lesenzeichen zu entfernen',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Neue Beiträge',
     'StatusHeading' => 'Nur zur Information',
     'PostReply' => 'Neue Antwort schreiben',
@@ -451,7 +448,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Thema bearbeiten',
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
-    'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schauen Sie sie Online an</a>.'
+    'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schauen Sie sie Online an</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -508,7 +512,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistik',
     2 => 'Einstellungen',
@@ -522,7 +525,6 @@ $LANG_GF06 = array(
     10 => 'Forum Administration'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Foren anschauen',
     2 => 'Einstellungen',
@@ -531,14 +533,12 @@ $LANG_GF07 = array(
     5 => 'Mitglieder'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Benachrichtigungen für Themen',
     2 => 'Benachrichtigungen für ganze Foren',
     3 => 'Ausnahmen'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Anhänge',
     'maxattachments' => 'Max. %s erlaubt',
@@ -574,7 +574,6 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Durchschnittliche Aufrufe je:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Themen pro Seite',
     'showiframe' => 'Themenübersicht',
@@ -582,6 +581,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Einstellungen',
     'forumprefs_help_title' => 'Forum-Einstellungen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzer-Einstellungen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Kategorie-Reihenfolge',
     'editor_type' => 'Editor-Typ',
     'bbcode' => 'BBCode',
@@ -691,7 +696,6 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Erlaubte Zeit (Min.), um Mitgliedern das Bearbeiten ihrer Beiträge zu ermöglichen'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Forum-Administration',
     'vieworder' => 'Sortierung anzeigen??????',
@@ -747,7 +751,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Forum wird im Forenindex nicht angezeigt',
     'hideposts' => 'Neue Beiträge verstecken',
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
-    'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen'
+    'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(
@@ -843,7 +853,6 @@ $LANG_FF_AUTOTAG = array(
     'desc_forum' => 'Link: zu einem Forum-Eintrag.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
 $PLG_forum_MESSAGE2 = 'Forum-Plugin Aktualisierung: Diese Version kann nicht automatisch aktualisiert werden. Lesen Sie bitte die Dokumentation.';
 $PLG_forum_MESSAGE5 = 'Forum-Plugin Aktualisierung: Fehlgeschlagen - siehe "error.log".';
@@ -957,7 +966,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
+    2 => array('Replace Home Page' => 0, 'Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
     3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Rechte & Linke Blöcke' => 'allblocks'),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
     5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),

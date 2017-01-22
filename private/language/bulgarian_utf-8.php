@@ -968,7 +968,7 @@ $LANG24 = array(
     52 => '',
     53 => 'was not used.  You must include this image in the intro or body before you can save your changes',
     54 => 'Attached Images Not Used',
-    55 => 'The following errors occured while trying to save your story.  Please correct these errors before saving',
+    55 => 'The following errors occurred while trying to save your story.  Please correct these errors before saving',
     56 => 'Show Topic Icon',
     57 => 'View unscaled image',
     58 => 'Story Management',
@@ -1024,7 +1024,20 @@ $LANG24 = array(
     108 => 'Attribution',
     109 => 'Keywords',
     110 => 'Enter a comma separated list of keywords',
-    111 => 'Global Settings'
+    111 => 'Global Settings',
+    112 => 'Move to New Topic',
+    113 => 'Requires a filter topic to be selected (<b>must not be All</b>)',
+    114 => 'Are you sure you want to make the global changes',
+    115 => 'Are you really sure you want to make these global changes, changes are difficult to undo!',
+    116 => 'Changed frontpage setting for stories in selected topic',
+    117 => 'Changed comment mode setting for stories in selected topic',
+    118 => 'Changed trackback setting for stories in selected topic',
+    119 => 'Changed Owner ID for stories in selected topic',
+    120 => 'Changed Group ID for stories in selected topic',
+    121 => 'Changed show topic setting for stories in selected topic',
+    122 => 'Moved all stories in topic %s to topic %s',
+    123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
 );
 
 ###############################################################################
@@ -1547,8 +1560,8 @@ $MESSAGE = array(
     69 => 'Your account has been blocked!',
     70 => 'Your account is awaiting administrator approval.',
     71 => 'Your account has now been confirmed and is awaiting administrator approval.',
-    72 => 'An error occured while attempting to install the plugin. See error.log for details.',
-    73 => 'An error occured while attempting to uninstall the plugin. See error.log for details.',
+    72 => 'An error occurred while attempting to install the plugin. See error.log for details.',
+    73 => 'An error occurred while attempting to uninstall the plugin. See error.log for details.',
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
@@ -1566,7 +1579,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
@@ -1767,7 +1780,9 @@ $LANG_DB_ADMIN = array(
     'error_column_utf' => 'Error converting column to UTF8MB4',
     'error_sc' => 'Error updating siteconfig.php - please update db_charset manually',
     'current_progress' => 'Current Progress',
-    'overall_progress' => 'Overall Progress'
+    'overall_progress' => 'Overall Progress',
+    'no_backups_found' => 'No Backup Files Found',
+    'error_msg' => 'The following errors were encountered'
 );
 
 ###############################################################################
@@ -2031,7 +2046,8 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Custom Autotags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
-    'reset' => 'Reset'
+    'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters '
 );
 
 ###############################################################################
@@ -2452,7 +2468,7 @@ $LANG_UPGRADE = array(
     'uptodate' => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown' => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. You are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title' => 'An error has occured while processing your request.',
+    'error_title' => 'An error has occurred while processing your request.',
     'error' => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
     'was_released' => 'Version %s was released on %s.',
     'plugin_uptodate' => 'Up To Date',
@@ -2791,7 +2807,11 @@ $LANG_confignames['Core'] = array(
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
-    'comment_fb_appid' => 'Facebook App ID'
+    'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging'
 );
 
 $LANG_configsubgroups['Core'] = array(

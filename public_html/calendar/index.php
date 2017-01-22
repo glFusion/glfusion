@@ -969,6 +969,13 @@ for ($i = 1; $i <= 6; $i++) {
                     array('class'=>'cal-date','rel'=>'nofollow'))
                     . '<div style="margin:2px 0 5px;border-bottom:1px solid #666666"></div>'
             );
+            $cal_templates->set_var ('cal_day_anchortags_nohtml',
+                COM_createLink($curday->daynumber, $_CONF['site_url']
+                    . '/calendar/index.php?view=day&amp;' . addMode ($mode)
+                    . 'day=' . $curday->daynumber . "&amp;month=$month&amp;year=$year",
+                    array('class'=>'cal-date','rel'=>'nofollow'))
+            );
+
 
             if (strlen($month) == 1) {
                 $month = '0' . $month;
@@ -1031,6 +1038,7 @@ for ($i = 1; $i <= 6; $i++) {
                 for ($k = $j; $k <= 7; $k++) {
                     $cal_templates->set_var('cal_day_style','cal-nullday');
                     $cal_templates->set_var('cal_day_anchortags', '');
+                    $cal_templates->set_var('cal_day_anchortags_nohtml', '');
                     $cal_templates->set_var('cal_day_entries','&nbsp;');
                     if ($k < 7) $cal_templates->parse('cal_days', 'day', true);
                 }
@@ -1042,6 +1050,7 @@ for ($i = 1; $i <= 6; $i++) {
                 // before the first day
                 $cal_templates->set_var('cal_day_style','cal-nullday');
                 $cal_templates->set_var('cal_day_anchortags', '');
+                $cal_templates->set_var('cal_day_anchortags_nohtml', '');
                 $cal_templates->set_var('cal_day_entries','&nbsp;');
             }
         }

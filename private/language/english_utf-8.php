@@ -376,7 +376,7 @@ $LANG04 = array(
     47 => 'News box Configuration for',
     48 => 'Topics',
     49 => 'No icons in stories',
-    50 => 'Uncheck this if you aren\'t interested',
+    50 => 'Uncheck this if you are not interested',
     51 => 'Just the news stories',
     52 => 'The default is',
     53 => 'Receive the days stories every night',
@@ -1014,7 +1014,7 @@ $LANG24 = array(
     96 => 'Set Image',
     97 => 'Remove Image',
     98 => 'Sub Title',
-    99 => 'Select the <b>Update</b> checkbox to update the attribute for all stories, or the stories in a specific topic if the topic filter is selected.',
+    99 => 'Select the <b>Update</b> checkbox to update the attribute for all stories, or the stories in a specific topic if the topic filter is selected. To move stories from one topic to another, you must select topics in both the <b>Filter by Topic</b> and <b>Move to New Topic</b> fields.',
     100 => 'Global Story Attribute Editor',
     101 => 'Filter By Topic',
     102 => 'Attribute',
@@ -1027,6 +1027,19 @@ $LANG24 = array(
     109 => 'Keywords',
     110 => 'Enter a comma separated list of keywords',
     111 => 'Global Settings',
+    112 => 'Move to New Topic',
+    113 => 'Requires a filter topic to be selected (<b>must not be All</b>)',
+    114 => 'Are you sure you want to make the global changes',
+    115 => 'Are you really sure you want to make these global changes, changes are difficult to undo!',
+    116 => 'Changed frontpage setting for stories in selected topic',
+    117 => 'Changed comment mode setting for stories in selected topic',
+    118 => 'Changed trackback setting for stories in selected topic',
+    119 => 'Changed Owner ID for stories in selected topic',
+    120 => 'Changed Group ID for stories in selected topic',
+    121 => 'Changed show topic setting for stories in selected topic',
+    122 => 'Moved all stories in topic %s to topic %s',
+    123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
 );
 
 ###############################################################################
@@ -1494,7 +1507,7 @@ $MESSAGE = array(
     13 => 'Your Topic has been successfully saved.',
     14 => 'The Topic and all its Stories and Blocks have been successfully deleted.',
     15 => 'Your Comment has been submitted for review and will be published when approved by a moderator.',
-    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
+    16 => 'You have been un-subscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1523,7 +1536,7 @@ $MESSAGE = array(
     42 => 'Your word has been successfully saved.',
     43 => 'The word has been successfully deleted.',
     44 => 'The plugin was successfully installed!',
-    45 => 'The plugin was successfully uninstalled.  The plugin file structure will remain and can be reinstalled unless the plugin is removed.',
+    45 => 'The plugin was successfully un-installed.  The plugin file structure will remain and can be reinstalled unless the plugin is removed.',
     46 => 'Sorry, you do not have access to the database backup utility.  Please note that all attempts to access unauthorized features are logged',
     47 => 'This functionality only works under *nix.  If you are running *nix as your operating system then your cache has been successfully cleared. If you are on Windows, you will need to search for files name adodb_*.php and remove them manually.',
     48 => "Thank you for applying for a membership with {$_CONF['site_name']}. Our team will review your application. If approved, your password will be emailed to you at the email address you just entered.",
@@ -1569,7 +1582,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
@@ -1771,6 +1784,8 @@ $LANG_DB_ADMIN = array(
     'error_sc'            => 'Error updating siteconfig.php - please update db_charset manually',
     'current_progress'    => 'Current Progress',
     'overall_progress'    => 'Overall Progress',
+    'no_backups_found'    => 'No Backup Files Found',
+    'error_msg'           => 'The following errors were encountered',
 );
 
 ###############################################################################
@@ -2036,6 +2051,7 @@ $LANG_ADMIN = array(
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reset',
+    'remaining_chars' => 'Remaining Characters ',
 );
 
 ###############################################################################
@@ -2413,7 +2429,7 @@ $LANG_AM = array (
     'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
     'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
                                 .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
-                                .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain whitespace which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+                                .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and $site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
     'autotag'                   => 'Autotag',
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
@@ -2421,7 +2437,7 @@ $LANG_AM = array (
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
     'desc_vmenu'                => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</id>]',
     'desc_hmenu'                => '<b>Depreciated</b> - Use <b>menu</b> tag. HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
-    'desc_menu'                 => 'HTML: reneders a JS-enhanced menu. usage : [menu:<i>menu_id</i>]',
+    'desc_menu'                 => 'HTML: renders a JS-enhanced menu. usage : [menu:<i>menu_id</i>]',
     'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
     'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
     'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
@@ -2456,7 +2472,7 @@ $LANG_UPGRADE = array(
     'uptodate'      => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. If you are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title'   => 'An error has occured while processing your request.',
+    'error_title'   => 'An error has occurred while processing your request.',
     'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
     'was_released'  => 'Version %s was released on %s.',
     'plugin_uptodate' => 'Up To Date',
@@ -2794,6 +2810,10 @@ $LANG_confignames['Core'] = array(
     'comment_engine'    => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
     'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'External Links in New Window',
+    'enable_404_logging' => 'Log 404 - Not Found Errors',
+    'debug_oauth' => 'Oauth Debug Logging',
+    'debug_html_filter' => 'HTML Filter Debug Logging',
 );
 
 $LANG_configsubgroups['Core'] = array(

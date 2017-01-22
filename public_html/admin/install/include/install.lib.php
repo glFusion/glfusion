@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -566,6 +566,8 @@ function INST_createDatabaseStructures ($use_innodb = false)
 
     $rc = true;
 
+    $log_path = $_CONF['path'].'logs/';
+
     switch ( $_DB_dbms ) {
         case 'mysql' :
         case 'mysqli' :
@@ -581,7 +583,9 @@ function INST_createDatabaseStructures ($use_innodb = false)
     // postgresql.class.php, etc)
 
     // Get DBMS-specific create table array and data array
+    INST_errorLog($log_path,'INSTALL: Reading ' . $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php');
     if ( !@file_exists($_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path'] . 'sql/' . $dbDriver . '_tableanddata.php');
         echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
         exit;
     }
@@ -592,13 +596,16 @@ function INST_createDatabaseStructures ($use_innodb = false)
     $errors = '';
     $rc = true;
 
+    INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
     if (INST_checkTableExists ('access')) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Database already contains glFusion tables');
         return array(false,$LANG_ISNTALL['database_exists']);
     }
 
     switch($_DB_dbms){
         case 'mysql':
         case 'mysqli' :
+            INST_errorLog($log_path,'INSTALL: Running installation SQL queries');
             list($rc,$errors) = INST_updateDB($_SQL,$use_innodb);
             if ( $rc != true ) {
                 return array($rc,$errors);
@@ -610,6 +617,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
     }
 
     // Now insert mandatory data and a small subset of initial data
+    INST_errorLog($log_path,'INSTALL: Installing default data');
     foreach ($_DATA as $data) {
         $progress .= "executing " . $data . "<br />\n";
         DB_query ($data,1);
@@ -1424,6 +1432,27 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             $current_fusion_version = '1.6.4';
 
+        case '1.6.4' :
+
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('open_ext_url_new_window',0,'select',7,2,0,40,TRUE);
+            $c->add('enable_404_logging',1,'select',7,3,0,20,TRUE);
+            $c->add('debug_oauth',0,'select',7,3,0,30,TRUE);
+            $c->add('debug_html_filter',0,'select',7,3,0,40,TRUE);
+            $c->add('dbback_exclude','', 'text',0,0,NULL,1,TRUE,'dbadmin_internal');
+
+            $_SQL = array();
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP score;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} DROP reason;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['speedlimit']} CHANGE `ipaddress` `ipaddress` VARCHAR(39) NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE `header_tid` `header_tid` VARCHAR(128) NULL DEFAULT NULL;";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
+            $current_fusion_version = '1.6.5';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
@@ -2094,6 +2123,26 @@ function _searchForId($id, $array) {
    }
    return null;
 }
+
+function INST_errorLog( $logpath, $logentry)
+{
+    $timestamp = date('d M Y H:i:s');
+
+    if ( !empty( $logentry )) {
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
+
+        $logfile = $logpath . 'error.log';
+        if ( !$file = fopen( $logfile, 'a' )) {
+            return;
+        } else {
+            fputs( $file, "$timestamp: $logentry \n" );
+            fclose($file);
+        }
+    }
+    return;
+}
+
+
 
 function _searchForIdKey($id, $array) {
    foreach ($array as $key => $val) {

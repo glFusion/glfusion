@@ -149,8 +149,6 @@ CREATE TABLE {$_TABLES['comments']} (
   date datetime default NULL,
   title varchar(128) default NULL,
   comment text,
-  score tinyint(4) NOT NULL default '0',
-  reason tinyint(4) NOT NULL default '0',
   pid int(10) unsigned NOT NULL default '0',
   lft mediumint(10) unsigned NOT NULL default '0',
   rht mediumint(10) unsigned NOT NULL default '0',
@@ -369,7 +367,7 @@ CREATE TABLE {$_TABLES['sortcodes']} (
 $_SQL[] = "
 CREATE TABLE {$_TABLES['speedlimit']} (
   id int(10) unsigned NOT NULL auto_increment,
-  ipaddress varchar(15) NOT NULL default '',
+  ipaddress varchar(39) NOT NULL default '',
   date int(10) unsigned default NULL,
   type varchar(30) NOT NULL default 'submit',
   PRIMARY KEY (id),
@@ -471,7 +469,7 @@ CREATE TABLE {$_TABLES['syndication']} (
   fid int(10) unsigned NOT NULL auto_increment,
   type varchar(30) NOT NULL default 'article',
   topic varchar(128) NOT NULL default '::all',
-  header_tid varchar(48) NOT NULL default 'none',
+  header_tid varchar(128) NOT NULL default 'none',
   format varchar(20) NOT NULL default 'RSS-2.0',
   limits varchar(5) NOT NULL default '10',
   content_length smallint(5) unsigned NOT NULL default '0',
@@ -910,7 +908,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.6.4') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.6.5') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";

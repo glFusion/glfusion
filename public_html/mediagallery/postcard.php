@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Allows users to send electronic postcards of images                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -102,7 +102,16 @@ function MG_previewPostCard() {
     $T = new Template( MG_getTemplatePath($aid) );
     $T->set_file ('postcard', 'pc_preview.thtml');
 
-    $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg');
+    $media_image = '';
+    $media_disp_image = '';
+    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext) ) {
+            $media_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext;
+            $media_disp_image = $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext;
+            break;
+        }
+    }
+    $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext);
 
     $T->set_var(array(
         's_form_action'     =>  $_MG_CONF['site_url'] . '/postcard.php',
@@ -111,7 +120,7 @@ function MG_previewPostCard() {
         'media_title'       =>  $M['media_title'],
         'media_description' =>  $M['media_desc'],
         'media_url'         =>  $_MG_CONF['site_url'] . '/media.php?s=' . $mid,
-        'media_image'       =>  $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
+        'media_image'       =>  $media_disp_image, // $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
         'site_url'          =>  $_MG_CONF['site_url'] . '/',
         'postcard_subject'  =>  $subject,
         'postcard_message'  =>  $message,
@@ -177,8 +186,20 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
             $errMsg .= $msg;
         }
     } else {
-        $fromname   = (empty($_USER['fullname']) ? $_USER['username'] : $_USER['fullname']);
-        $fromemail  = $_USER['email'];
+        if ( isset($_USER['fullname']) && !empty($_USER['fullname']) ) {
+            $fromname = $_USER['fullname'];
+        } else {
+            if ( !COM_isAnonUser() ) {
+                $fromname = $_USER['username'];
+            } else {
+                $fromname = '';
+            }
+        }
+        if ( !COM_isAnonUser() && isset($_USER['email']) && !empty($_USER['email']) ) {
+            $fromemail  = $_USER['email'];
+        } else {
+            $fromemail = '';
+        }
     }
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . DB_escapeString($mid) . '"');
@@ -207,14 +228,25 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     $T = new Template( MG_getTemplatePath($aid) );
     $T->set_file ('postcard', 'pc_edit.thtml');
 
-    $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg');
+    $media_image = '';
+    $media_disp_image = '';
+    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext) ) {
+            $media_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext;
+            $media_disp_image = $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext;
+            break;
+        }
+    }
+
+
+    $media_size        = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext);
 
     $T->set_var(array(
         's_form_action'     =>  $_MG_CONF['site_url'] . '/postcard.php',
         'mid'               =>  $mid,
         'display_url'       =>  $_MG_CONF['site_url'] . '/media.php?s=' . $mid,
-        'image_url'         =>  $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
-        'image_tn'          =>  $_MG_CONF['mediaobjects_url'] . '/tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
+        'image_url'         =>  $media_disp_image, // $_MG_CONF['mediaobjects_url'] . '/disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
+        'image_tn'          =>  $media_image, // $_MG_CONF['mediaobjects_url'] . '/tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',
         'stamp_url'         =>  $_MG_CONF['site_url'] . MG_getImageFile('stamp.jpg'),
         'border_width'      =>  $media_size[0] + 15,
         'lang_send_postcard' => $LANG_MG03['send_postcard'],

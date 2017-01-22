@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var editor_type = 'forumeditor';
 	var lang_timer  = "{lang_timeout}";
@@ -102,6 +103,9 @@
 						<label class="uk-form-label" for="name">{LANG_NAME}</label>
 						<div class="uk-form-controls">
 							<input type="text" id="name" name="name" value="{name}" maxlength="50" tabindex="1">
+							<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="name-count" class="uk-text-muted uk-text-small"></span></span>
+</div>
 {!if LANG_MOOD}
 							<div class="uk-form-controls uk-align-right">
 								<span class="uk-text-bold">{LANG_MOOD}</span>
@@ -129,7 +133,10 @@
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label" for="subject">{LANG_SUBJECT}</label>
 						<div class="uk-form-controls">
-							<input class="uk-width-2-3" type="text" id="subject" name="subject" value="{subject}" tabindex="5">
+							<input class="uk-width-2-3 required" type="text" id="subject"  maxlength="100" name="subject" value="{subject}" tabindex="5">
+							<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="subject-count" class="uk-text-muted uk-text-small"></span></span>
+</div>
 						</div>
 					</div>
 {!if wysiwyg}
@@ -140,6 +147,9 @@
 {!endif}
 
 {!if html_mode}
+					<div class="uk-form-row">
+						<textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%">{comment}</textarea>
+					</div>
 {!else}
 					<div class="uk-form-row">
 						<div class="uk-form-row uk-margin-small">
@@ -151,14 +161,14 @@
 							<button class="uk-button uk-icon-list-ul uk-icon-mini" onclick="bbstyle(10);return false;" title="{$LANG_GF01[l_help]}"></button>
 							<button class="uk-button uk-icon-list-ol uk-icon-mini" onclick="bbstyle(12);return false;" title="{$LANG_GF01[o_help]}"></button>
 							<button class="uk-button uk-icon-list uk-icon-mini" onclick="bbstyle(-1);return false;" title="{$LANG_GF01[e_help]}"></button>
-{!if allow_img_bbcode}
+  {!if allow_img_bbcode}
 							<button class="uk-button uk-icon-image uk-icon-mini" onclick="bbstyle(15);return false;" title="{$LANG_GF01[p_help]}"></button>
-{!endif}
+  {!endif}
 							<button class="uk-button uk-icon-file-archive-o uk-icon-mini" onclick="bbstyle(19);return false;" title="{$LANG_GF01[t_help]}"></button>
 							<button class="uk-button uk-icon-link uk-icon-mini" onclick="bbstyle(17);return false;" title="{$LANG_GF01[w_help]}"></button>
-{!if smiley_enabled}
+  {!if smiley_enabled}
 							<button class="uk-button uk-icon-smile-o uk-icon-mini" name="toggleV" id="toggleV" title="{$LANG_GF01[smiley]}"></button>
-{!endif}
+  {!endif}
 							<div class="uk-button-dropdown uk-margin-remove" data-uk-dropdown="{mode:'click'}">
 								<button class="uk-button" onclick="return false;">Font&nbsp;<i class="uk-icon-caret-down"></i></button>
 								<div class="uk-dropdown uk-dropdown-small">
@@ -196,20 +206,22 @@
 							</div>
 							<button class="uk-button uk-icon-question uk-icon-mini" data-uk-modal="{target:'#bbc-help'}" title="{$LANG_GF01[h_help]}" onclick="return false;"></button>
 						</div>
-{!endif}
-{!if smilies}
-{!if html_mode}
-{!else}
+  {!if smilies}
 						<div id="smileys" class="uk-form-row uk-clearfix" style="display:none;">
 							<div class="uk-panel uk-margin-bottom">{smilies}</div>
 						</div>
-{!endif}
-{!endif}
+  {!endif}
 						<textarea name="comment" id="comment" rows="20" cols="45" tabindex="6" class="post" style="width:99%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{comment}</textarea>
 					</div>
+{!endif}
 {!if use_attachments}
 					<div class="uk-form-row">
-						<label class="uk-form-label">{LANG_attachments}<br><div class="uk-text-small uk-text-muted">{LANG_maxattachments}</div></label>
+						<label class="uk-form-label">{LANG_attachments}
+							<br>
+							<div class="uk-text-small uk-text-muted">
+								{LANG_maxattachments}
+							</div>
+						</label>
 						<div class="uk-form-controls">
 
 							<div id="divforumfile" style="display:{show_attachments};">
@@ -224,36 +236,46 @@
 
 					{captcha}
 
+{!!set columns 3 !!}
+{!if locked_prompt}
+{!inc columns}
+{!endif}
+{!if sticky_prompt}
+{!inc columns}
+{!endif}
+
 					<div class="uk-form-row uk-margin-small">
 						<label class="uk-form-label">{LANG_OPTIONS}</label>
 						<div class="uk-form-controls">
+
 							<div class="uk-grid">
-								<div class="uk-width-1-4">
-									<p>
-										<label for="notify">{$LANG_GF02[msg38]}</label>
+								<div class="uk-width-1-{columns} uk-text-center">
+										<label for="notify">{$LANG_GF02[msg38]}</label><br>
 										<input type="checkbox" id="notify" name="notify" value="on" {notify_val}>
-									</p>
 								</div>
-								<div class="uk-width-1-4">
-									<p>
-										<label for="postmode_switch">{postmode_msg}</label>
+								<div class="uk-width-1-{columns} uk-text-center">
+										<label for="postmode_switch">{postmode_msg}</label><br>
 										<input type="checkbox" id="postmode_switch" name="postmode_switch" value="1">
 										<input type="hidden" name="postmode" value="{postmode}">
-									</p>
 								</div>
-{!if sticky_prompt}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="sticky_switch">{$LANG_GF02[msg61]}</label>
-										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
-									</p>
+{!if locked_prompt}
+								<div class="uk-width-1-{columns} uk-text-center">
+										<label for="locked_switch">{$LANG_GF02[msg109]}</label><br>
+										<input type="checkbox" id="locked_switch" name="locked_switch" {locked_val} value="1">
 								</div>
 {!endif}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="silentedit">{$LANG_GF02[msg190]}</label>
+{!if sticky_prompt}
+								<div class="uk-width-1-{columns} uk-text-center">
+										<label for="sticky_switch">{$LANG_GF02[msg61]}</label><br>
+										<input type="checkbox" id="sticky_switch" name="sticky_switch" {sticky_val} value="1">
+								</div>
+{!endif}
+
+								<div class="uk-width-1-{columns} uk-text-center">
+{!if edit_prompt}
+										<label for="silentedit">{$LANG_GF02[msg190]}</label><br>
 										<input type="checkbox" id="silentedit" name="silentedit" {edit_val} value="1">
-									</p>
+{!endif}
 								</div>
 							</div>
 						</div>
@@ -263,25 +285,19 @@
 						<label class="uk-form-label">{$LANG_GF01[features]}</label>
 						<div class="uk-form-controls">
 							<div class="uk-grid">
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_bbcode">{$LANG_GF01[disable_bbcode]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_bbcode">{$LANG_GF01[disable_bbcode]}</label><br>
 										<input type="checkbox" id="disable_bbcode" name="disable_bbcode" value="1" {disable_bbcode_val}>
-									</p>
 								</div>
 {!if smilies_prompt}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_smilies">{$LANG_GF01[disable_smilies]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_smilies">{$LANG_GF01[disable_smilies]}</label><br>
 										<input type="checkbox" id="disable_smilies" name="disable_smilies" value="1" {disable_smilies_val}>
-									</p>
 								</div>
 {!endif}
-								<div class="uk-width-1-4">
-									<p>
-										<label for="disable_urlparse">{$LANG_GF01[disable_urlparse]}</label>
+								<div class="uk-width-1-3 uk-text-center">
+										<label for="disable_urlparse">{$LANG_GF01[disable_urlparse]}</label><br>
 										<input type="checkbox" id="disable_urlparse" name="disable_urlparse" value="1" {disable_urlparse_val}>
-									</p>
 								</div>
 							</div>
 						</div>
@@ -289,7 +305,7 @@
 					<div class="uk-form-row">
 						<button class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
 						<button class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
-						<button class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
+						<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
 					</div>
 				</form>
 			</div>
@@ -400,11 +416,23 @@
 	</div>
 </div>
 <script>
+$("#forumpost").validate();
 $(document).ready(function() {
 	lastActivity = new Date().getTime();
 	$('#comment').keyup(function() {
 		lastActivity = new Date().getTime();
 	});
+	});
+	$(function(){
+            {!if anonymous_user}
+            $("#name").characterCounter({
+            limit: '50',
+            counterSelector: '#name-count'
+            });{!endif}
+            $("#subject").characterCounter({
+			limit: '100',
+			counterSelector: '#subject-count'
+		});
 });
 </script>
 <script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>

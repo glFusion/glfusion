@@ -26,7 +26,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -248,7 +248,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'PHP 信息',
     'album_cover' => '影集封面',
     'album_attributes' => '影集屬性',
-    'media_attributes' => '媒體處理選項',
     'attached_thumbnail' => '府上縮圖',
     'thumbnail' => 'Thumbnail',
     'new_upload_subject' => '新媒體項目上載於 ',
@@ -615,6 +614,7 @@ $LANG_MG01 = array(
     'random_size' => '任意圖寬度',
     'flash_slideshow_full' => 'Flash (原裝)',
     'flash_slideshow_disp' => 'Flash (顯示)',
+    'media_attributes' => '媒體處理選項',
     'orig_jpg_quality' => '原裝 JPG 質量',
     'truncate_breadcrumb' => '截斷麵包屑 Breadcrumbs',
     'member_use_fullname' => '在影集標題上顯示用戶的整姓名',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################
@@ -883,7 +884,8 @@ $LANG_MG03 = array(
     'your_member_album' => '你的會員影集',
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(

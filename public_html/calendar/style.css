@@ -259,3 +259,123 @@
   text-align: center;
 }
 
+/* calendar responsive stuff */
+.tm-calendar {
+	width: 100%;
+}
+
+.tm-calendar a {
+	text-decoration: none;
+}
+
+.tm-calendar a.cal-event {
+	font-size:1em;
+}
+
+.tm-calendar ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+.tm-calendar li {
+	display: block;
+	float: left;
+	width:14.342%;
+	padding: 5px;
+	box-sizing:border-box;
+	border: 1px solid #ccc;
+	margin-right: -1px;
+	margin-bottom: -1px;
+}
+
+.tm-calendar ul.weekdays {
+	height: 40px;
+	/*background: #8e352e;*/
+	background: #325482;
+}
+
+.tm-calendar ul.weekdays li {
+	text-align: center;
+	text-transform: uppercase;
+	line-height: 20px;
+	border: none !important;
+	padding: 10px 6px;
+	color: #fff;
+	font-size: 13px;
+}
+
+.tm-calendar .days li {
+	height: 180px;
+}
+
+.tm-calendar .days li:hover {
+	background: #d3d3d3;
+}
+
+.tm-calendar .date a {
+	text-align: center;
+	margin-bottom: 5px;
+	padding: 4px;
+	width: 20px;
+	float: right;
+	color: #07D;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.tm-calendar .event {
+	clear: both;
+	display: block;
+	font-size: 13px;
+	border-radius: 4px;
+	margin-bottom: 5px;
+	line-height: 14px;
+	background: #e4f2f2;
+	border: 1px solid #b5dbdc;
+	color: #009aaf;
+	text-decoration: none;
+}
+
+.tm-calendar .cal-futureday {
+	background:#F7F7F7;
+}
+
+
+.tm-calendar .event-desc {
+	color: #666;
+	margin: 3px 0 7px 0;
+	text-decoration: none;
+}
+
+.tm-calendar .other-month {
+	background: #d4d4d4;
+	color: #666;
+}
+
+/* ============================
+Mobile Responsiveness
+============================*/
+
+
+@media(max-width: 768px) {
+	.tm-calendar .weekdays, .tm-calendar .cal-nullday {
+		display: none;
+	}
+
+	.tm-calendar li {
+		height: auto !important;
+		border: 1px solid #cccf;
+		width: 100%;
+		padding: 10px;
+		margin-bottom: -1px;
+	}
+
+	.tm-calendar .date {
+		float: none;
+	}
+	.tm-calendar .date a {
+		float: none;
+	}
+}

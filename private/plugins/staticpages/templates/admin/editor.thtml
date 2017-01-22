@@ -1,22 +1,49 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <script>
-var editor_type = 'speditor';
-var lang_timer  = "{lang_timeout}";
-var lastActivity = 0;
-function actionClick( $action ) {
-$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
-$('#frmstory').trigger('submit', [ { $action: true } ]);
-}
-$(function(){
-$('#sp_onmenu').on('change', function(){
-if($(this).is(':checked'))
-{
-$('#sp_label').prop('disabled', false);
-} else {
-$('#sp_label').prop('disabled', true);
-}
-});
-});
+	var editor_type = 'speditor';
+	var lang_timer  = "{lang_timeout}";
+	var lastActivity = 0;
+	function actionClick( $action ) {
+		if ( $action == 'cancel' ) {
+			UIkit.modal.confirm("{$LANG24[124]}", function(){
+				$('#spedit').append("<input type='hidden' name='" + $action + "' value='clicked'>");
+				$('#spedit').trigger('submit', [ { $action: true } ]);
+			}, function(){});
+		} else if ( $action == 'delete' ) {
+			UIkit.modal.confirm("{$LANG_STATIC['delete_confirm']}", function(){
+				$('#spedit').append("<input type='hidden' name='" + $action + "' value='clicked'>");
+				$('#spedit').trigger('submit', [ { $action: true } ]);
+			}, function(){});
+		} else {
+	  	$('#spedit').append("<input type='hidden' name='" + $action + "' value='clicked'>");
+			$('#spedit').trigger('submit', [ { $action: true } ]);
+		}
+	}
+	$(function(){
+		$('#sp_onmenu').on('change', function(){
+			if($(this).is(':checked'))
+			{
+				$('#sp_label').prop('disabled', false);
+			} else {
+				$('#sp_label').prop('disabled', true);
+			}
+		});
+	});
+{!if !wysiwyg}
+  function activityCheck( edtType ) {
+		lastActivity = new Date().getTime();
+		if ( edtType == 'wysiwyg' ) {
+  		sp_content.on( 'key', function(){
+	  		lastActivity = new Date().getTime();
+    	});
+  	} else {
+			$('#sp_content').keyup(function() {
+				lastActivity = new Date().getTime();
+			});
+		}
+  }
+{!endif}
 </script>
 <div class="tm-admin">
 	{wysiwyg}
@@ -24,7 +51,7 @@ $('#sp_label').prop('disabled', true);
 	{admin_menu}
 	{end_block}
 
-	<form class="uk-form uk-form-horizontal uk-margin" action="{site_admin_url}/plugins/staticpages/index.php" method="post">
+	<form class="uk-form uk-form-horizontal uk-margin" id="spedit" action="{site_admin_url}/plugins/staticpages/index.php" method="post">
 		<input type="hidden" name="sp_hits" value="{sp_hits}">
 		<input type="hidden" name="sp_old_id" value="{sp_old_id}">
 		<input type="hidden" id="sectoken" name="{gltoken_name}" value="{gltoken}">
@@ -42,10 +69,16 @@ $('#sp_label').prop('disabled', true);
 		<div id="sp_id" class="uk-panel uk-panel-box uk-margin">
 			<div class="uk-grid">
 				<div class="uk-width-medium-2-3">
-					<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="sp_title" type="text" name="sp_title" value="{sp_title}">
+					<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1 required" id="sp_title" maxlength="128" type="text" name="sp_title" value="{sp_title}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sp_title-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
 				</div>
 				<div class="uk-width-medium-1-3">
-					<strong>{lang_id}</strong>&nbsp;<input class="uk-width-1-1" id="sp_id" class="required alphanumeric" type="text" name="sp_id" value="{sp_id}">
+					<strong>{lang_id}</strong>&nbsp;<input class="uk-width-1-1 required alphanumeric" id="sp_id" maxlength="128" type="text" name="sp_id" value="{sp_id}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sp_id-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
 				</div>
 			</div>
 			<div class="uk-grid">
@@ -129,7 +162,10 @@ $('#sp_label').prop('disabled', true);
 				<div class="uk-form-row">
 					<label class="uk-form-label" for="sp_label">{lang_label}</label>
 					<div class="uk-form-controls">
-						<input class="uk-form-width-large" type="text" name="sp_label" id="sp_label" value="{sp_label}">
+						<input class="uk-form-width-large" maxlength="64" type="text" name="sp_label" id="sp_label" value="{sp_label}">
+						<div class="uk-form-help-block uk-margin-small-left">
+							<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sp_label-count" class="uk-text-muted uk-text-small"></span></span>
+						</div>
 					</div>
 				</div>
 
@@ -166,8 +202,11 @@ $('#sp_label').prop('disabled', true);
 				<div class="uk-form-row">
 					<label class="uk-form-label" for="sp_help">{lang_centerblock_help}</label>
 					<div class="uk-form-controls">
-						<input type="text" class="uk-form-width-large" id="sp_help" name="sp_help" value="{centerblock_help}">&nbsp;{lang_centerblock_include}
-						<br>{lang_centerblock_desc}
+						<input type="text" maxlength="255" class="uk-form-width-large uk-margin-small-bottom uk-margin-small-right" id="sp_help" name="sp_help" value="{centerblock_help}">&nbsp;{lang_centerblock_include}
+						<br>&nbsp;{lang_centerblock_desc}
+						<div class="uk-form-help-block uk-margin-small-left">
+							<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sp_help-count" class="uk-text-muted uk-text-small"></span></span>
+						</div>
 					</div>
 				</div>
 			</li>
@@ -230,48 +269,62 @@ $('#sp_label').prop('disabled', true);
 				</li>
 
 				<li>
-					<button onclick="actionClick('cancel');" class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
-{!if delete_option}
-				<li>
-					<button onclick="actionClick('delete');" class="uk-button uk-button-danger tm-admin-save-button-width" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="delete" id="delete" value="{lang_delete}" data-uk-tooltip="{pos:'left'}" title="{lang_delete}"><i class="uk-icon-eraser"></i></button>
-				</li>
-{!endif}
 			</ul>
 		</div>
 		{# end save side bar #}
 
 		<ul class="uk-grid uk-grid-small">
 			<li><button onclick="actionClick('save');" type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
-			<li><button onclick="actionClick('preview');" class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button>
-				<li><button onclick="actionClick('cancel');" type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
+			<li><button onclick="actionClick('preview');" class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button></li>
+			<li><button onclick="actionClick('cancel');return false;" type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
 {!if delete_button}
-				<li><button onclick="actionClick('delete');" type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
+			<li><button onclick="actionClick('delete');return false;" type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
 {!endif}
-			</ul>
-		</form>
-	</div>
-	<script>
-		$(document).ready(function() {
-			$('.toggle_yes_no').click(function(e) {
-				var buttonClicked = $(this).attr('id');
-				var myparentid = $(this).parent().attr("id");
-				var yes_or_no = $('#'+buttonClicked).hasClass("toggle_yes");
-				$('#'+myparentid+'.toggle_button label').removeClass("uk-button-success");
-				$('#'+myparentid+'.toggle_button label').removeClass("uk-button-danger");
-				if ( yes_or_no == true ) {
-					$('#'+buttonClicked).addClass("uk-button-success");
-					$("#status_yes_radio").prop('checked', true);
-					$("#status_no_radio").prop('checked', false);
-				} else {
-					$('#'+buttonClicked).addClass("uk-button-danger");
-					$("#status_yes_radio").prop('checked', false);
-					$("#status_no_radio").prop('checked', true);
-				}
-				e.stopPropagation();
-			});
-			activityCheck('textarea');
+		</ul>
+	</form>
+</div>
+<script>
+	$(document).ready(function() {
+		$('.toggle_yes_no').click(function(e) {
+			var buttonClicked = $(this).attr('id');
+			var myparentid = $(this).parent().attr("id");
+			var yes_or_no = $('#'+buttonClicked).hasClass("toggle_yes");
+			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-success");
+			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-danger");
+			if ( yes_or_no == true ) {
+				$('#'+buttonClicked).addClass("uk-button-success");
+				$("#status_yes_radio").prop('checked', true);
+				$("#status_no_radio").prop('checked', false);
+			} else {
+				$('#'+buttonClicked).addClass("uk-button-danger");
+				$("#status_yes_radio").prop('checked', false);
+				$("#status_no_radio").prop('checked', true);
+			}
+			e.stopPropagation();
 		});
-	</script>
+		activityCheck('textarea');
+	});
+
+	$(function(){
+		$("#sp_title").characterCounter({
+			limit: '128',
+			counterSelector: '#sp_title-count'
+		});
+		$("#sp_id").characterCounter({
+			limit: '128',
+			counterSelector: '#sp_id-count'
+		});
+		$("#sp_label").characterCounter({
+			limit: '64',
+			counterSelector: '#sp_label-count'
+		});
+		$("#sp_help").characterCounter({
+			limit: '255',
+			counterSelector: '#sp_help-count'
+		});
+	});
+</script>
 <script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}

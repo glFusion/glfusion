@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion comment library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1875,7 +1875,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
                         $B['commentcode'],$B['uid']);
 
     } else {
-        $retval .= COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true,'error');
+        return false;
     }
     return $retval;
 }

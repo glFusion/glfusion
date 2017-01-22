@@ -27,7 +27,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -249,7 +249,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'PHP-Information',
     'album_cover' => 'Albumcover',
     'album_attributes' => 'Albumeigenschaften',
-    'media_attributes' => 'Medienbearbeitungsoptionen',
     'attached_thumbnail' => 'Angehängtes Vorschaubild',
     'thumbnail' => 'Vorschaubild',
     'new_upload_subject' => 'Ein neues Medienobjekt wurde hochgeladen bei ',
@@ -616,6 +615,7 @@ $LANG_MG01 = array(
     'random_size' => 'Breite des Zufallsbild-Block',
     'flash_slideshow_full' => 'Flash (Orig.)',
     'flash_slideshow_disp' => 'Flash (Anz.)',
+    'media_attributes' => 'Medienbearbeitungsoptionen',
     'orig_jpg_quality' => 'Original JPG-Qualität',
     'truncate_breadcrumb' => 'Brotkrumen kürzen',
     'member_use_fullname' => 'Benutze den vollen Namen als Titel des Mitgliederalbums',
@@ -676,7 +676,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################
@@ -884,7 +885,8 @@ $LANG_MG03 = array(
     'your_member_album' => 'Dein Mitgliederalbum',
     'ip_rated' => 'Deine IP-Address hat dieses Objekt schon bewertet.',
     'uid_rated' => 'Deine Benutzer-ID hat dieses Objekt schon bewertet.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(

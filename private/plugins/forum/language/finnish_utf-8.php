@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Hymi&ouml;t pois:',
     'disable_urlparse' => '&auml;l&auml; j&auml;senn&auml; URLi&auml;:',
     'features' => 'Toiminnot:',
-    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.'
+    'rss_link' => 'Tilaa t&auml;m&auml;n keskustelun RSS sy&ouml;te.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Ei uusia viestej&auml;',
     'msg203' => 'Lis&auml;&auml; kirjamerkkeihin',
     'msg204' => 'Poista kirjamerkki',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Uusia viestej&auml;',
     'StatusHeading' => 'Vain Info',
     'PostReply' => 'L&auml;het&auml; uusi kommentti',
@@ -442,7 +444,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Muokkaa aihetta',
     'quietforum' => 'Keskustelussa ei uusia aiheita',
     'notify_full' => 'Sis&auml;llyt&auml; koko viesti ilmoitukseen',
-    'view_online' => 'Jos t&auml;m&auml; s&auml;hk&ouml;posti ei n&auml;y oikein, <a href="%s">katso online versio</a>.'
+    'view_online' => 'Jos t&auml;m&auml; s&auml;hk&ouml;posti ei n&auml;y oikein, <a href="%s">katso online versio</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -568,6 +577,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Foorumi asetukset',
     'forumprefs_help_title' => 'Foorumi asetus ohjeita',
     'forumprefs_help' => 'Muokkaa foorumin k&auml;ytt&auml;j&auml; asetuksia.<ul><li>Kuinka monta aihetta n&auml;ytet&auml;&auml;n foorumin alkusivulla.</li><li>Viestien m&auml;&auml;r&auml; per sivu.</li><li>Viestien m&auml;&auml;r&auml; ennenkuin  se merkit&auml;&auml;n suosituksi.</li><li>Monta rivi&auml; n&auml;ytet&auml;&auml;n hakutuloksissa.</li><li>J&auml;senlista ikkunassa</li><li>Piiloita tuntemattomien viestit.</li><li>Automaattinen Ilmoitus.</li><li>Vain yksi Ilmoitus.</li><li>N&auml;yt&auml; aiheen arvostelu ikkunassa (iframe).</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Aihej&auml;rjestys',
     'editor_type' => 'Editorin tyyppi',
     'bbcode' => 'BBCode',
@@ -732,7 +747,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Foorumi Ei N&auml;y Foorimi indexiss&auml;',
     'hideposts' => 'Piiloita Uudet Viestit',
     'hidepostsdscp' => 'Updates will not show in the New Posts Blocks or RSS Feeds',
-    'attachaccess' => 'Voi lis&auml;t&auml; liitteit&auml;'
+    'attachaccess' => 'Voi lis&auml;t&auml; liitteit&auml;',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(
@@ -941,7 +962,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
+    2 => array('Replace Home Page' => 0, 'Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),

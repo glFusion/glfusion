@@ -86,19 +86,23 @@ function bad_behavior2_upgrade ()
             $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
             $c->add('bb2_ban_enabled',0,'select',8,1,0,20,TRUE);
             $c->add('bb2_ban_timeout',24,'text',8,1,0,30,TRUE);
-            $c->add('bb2_display_stats',0,'select',8,1,0,40,TRUE);
-            $c->add('bb2_strict',0,'select',8,1,0,50,TRUE);
-            $c->add('bb2_verbose',0,'select',8,1,0,60,TRUE);
-            $c->add('bb2_logging',1,'select',8,1,0,70,TRUE);
-            $c->add('bb2_httpbl_key','','text',8,1,NULL,80,TRUE);
-            $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,90,TRUE);
-            $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,100,TRUE);
-            $c->add('bb2_offsite_forms',0,'select',8,1,0,110,TRUE);
-            $c->add('bb2_eu_cookie',0,'select',8,1,0,120,TRUE);
+            $c->add('bb2_strict',0,'select',8,1,0,40,TRUE);
+            $c->add('bb2_verbose',0,'select',8,1,0,50,TRUE);
+            $c->add('bb2_logging',1,'select',8,1,0,60,TRUE);
+            $c->add('bb2_httpbl_key','','text',8,1,NULL,70,TRUE);
+            $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,80,TRUE);
+            $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,90,TRUE);
+            $c->add('bb2_offsite_forms',0,'select',8,1,0,100,TRUE);
+            $c->add('bb2_eu_cookie',0,'select',8,1,0,110,TRUE);
 
         case '2.0.50' :
             DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} DROP `id`;",1);
             DB_query("ALTER TABLE {$_TABLES['bad_behavior2']} ADD `id` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);",1);
+
+        case '2.0.51' :
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            $c = config::get_instance();
+            $c->del('bb2_display_stats','Core');
 
         default:
             break;

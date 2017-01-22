@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/resetrating.js" type="text/javascript"></script>
-
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 	var editor_type = 'storyeditor';
@@ -34,10 +34,17 @@
 		f.elements["cmt_close_ampm"].disabled=!disable;
 	}
 
-function actionClick( $action ) {
- $('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
- $('#frmstory').trigger('submit', [ { $action: true } ]);
-}
+	function actionClick( $action ) {
+		if ( $action == 'cancel' ) {
+			UIkit.modal.confirm("{$LANG24[124]}", function(){
+				$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+				$('#frmstory').trigger('submit', [ { $action: true } ]);
+			}, function(){});
+		} else {
+			$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+			$('#frmstory').trigger('submit', [ { $action: true } ]);
+		}
+	}
 
 </script>
 <div class="tm-admin">
@@ -77,10 +84,18 @@ function actionClick( $action ) {
 		<div id="story_id" class="uk-panel uk-panel-box uk-margin">
 			<div class="uk-grid ">
 				<div class="uk-width-medium-2-3">
-					<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="title" type="text" name="title" value="{story_title}">
+					<strong>{lang_title}</strong>&nbsp;
+					<input class="uk-width-1-1 required" id="title" type="text" maxlength="128" name="title" value="{story_title}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="title-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
 				</div>
 				<div class="uk-width-medium-1-3">
-					<strong>{lang_sid}</strong>&nbsp;<input class="uk-width-1-1" id="sid" class="required alphanumeric" maxlength="128" type="text" name="sid" value="{story_id}">
+					<strong>{lang_sid}</strong>&nbsp;
+					<input id="sid" class="uk-width-1-1 required alphanumeric" maxlength="128" type="text" name="sid" value="{story_id}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sid-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -94,42 +109,45 @@ function actionClick( $action ) {
 
 					<div id="textbox">
 						<span class="uk-text-large">{lang_introtext}</span>
-						{!if wysiwyg}
+{!if wysiwyg}
 						<div class="uk-margin-small">
 							<button id="visual1" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 							<button id="std1" type="button" class="uk-button" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success')">{html_editor}</button>
 						</div>
-						{!endif}
+{!endif}
 						<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{story_introtext}</textarea>
 					</div>
 
 					<span class="uk-text-large">{lang_bodytext}</span>
-					{!if wysiwyg}
+{!if wysiwyg}
 					<div class="uk-margin-small">
 						<button id="visual2" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 						<button id="std2" type="button" class="uk-button" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success')">{html_editor}</button>
 					</div>
-					{!endif}
+{!endif}
 					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="40" style="width:100%;">{story_bodytext}</textarea>
 				</div>
 				<div class="uk-form-row uk-margin-small">
-						<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
-							{$LANG01[show_allowed_content]}
-						</button>
-						<div id="allowed_html" class="uk-hidden">{lang_allowed_html}</div>
+					<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
+						{$LANG01[show_allowed_content]}
+					</button>
+					<div id="allowed_html" class="uk-hidden">{lang_allowed_html}</div>
 				</div>
 			</li>
 
 			{# publish options panel #}
 			<li>
-				<div id="se_publish">
+				<div id="se_publish" class="uk-panel uk-panel-box uk-margin">
 					<fieldset>
 						<legend>{lang_publishoptions}</legend>
 
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="topic">{$LANG24[98]}</label>
 							<div class="uk-form-controls">
-								<input class="uk-width-1-1" id="subtitle" type="text" name="subtitle" value="{story_subtitle}">
+								<input class="uk-width-1-1"  maxlength="128" id="subtitle" type="text" name="subtitle" value="{story_subtitle}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="subtitle-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
 							</div>
 						</div>
 
@@ -165,7 +183,7 @@ function actionClick( $action ) {
 							</div>
 						</div>
 
-  {!if featured_options_data}
+{!if featured_options_data}
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="featured">{$LANG24[32]}</label>
 							<div class="uk-form-controls uk-width-medium">
@@ -294,21 +312,30 @@ function actionClick( $action ) {
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="attribution_url">{lang_attribution_url}</label>
 							<div class="uk-form-controls">
-								<input class="uk-form-width-large" type="text" id="attribution_url" name="attribution_url" value="{attribution_url}">
+								<input class="uk-form-width-large" type="text" maxlength="255" id="attribution_url" name="attribution_url" value="{attribution_url}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_url-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
 							</div>
 						</div>
 
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="attribution_name">{lang_attribution_name}</label>
 							<div class="uk-form-controls">
-								<input class="uk-form-width-medium" type="text" id="attribution_name" name="attribution_name" value="{attribution_name}">
+								<input class="uk-form-width-large" type="text" maxlength="255" id="attribution_name" name="attribution_name" value="{attribution_name}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_name-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
 							</div>
 						</div>
 
 						<div class="uk-form-row">
 							<label class="uk-form-label" for="attribution_author">{lang_attribution_author}</label>
 							<div class="uk-form-controls">
-								<input class="uk-form-width-medium" type="text" id="attribution_author" name="attribution_author" value="{attribution_author}">
+								<input class="uk-form-width-large" type="text" id="attribution_author" maxlength="255" name="attribution_author" value="{attribution_author}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_author-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
 							</div>
 						</div>
 					</fieldset>
@@ -317,7 +344,7 @@ function actionClick( $action ) {
 			</li>
 			{# image panel #}
 			<li>
-				<div id="se_images">
+				<div id="se_images" class="uk-panel uk-panel-box uk-margin">
 
 					<div class="uk-grid">
 						<div class="uk-width-medium-1-2">
@@ -353,7 +380,7 @@ function actionClick( $action ) {
 
 			{# archive panel #}
 			<li>
-				<div id="se_archive">
+				<div id="se_archive" class="uk-panel uk-panel-box uk-margin">
 					<fieldset>
 						<legend>{lang_archivetitle}</legend>
 
@@ -409,7 +436,7 @@ function actionClick( $action ) {
 
 			{# permission panel #}
 			<li>
-				<div id="se_perms">
+				<div id="se_perms" class="uk-panel uk-panel-box uk-margin">
 					<fieldset>
 						<legend>{lang_permissions}</legend>
 						<div class="uk-form-row">
@@ -464,13 +491,8 @@ function actionClick( $action ) {
 					<button onclick="actionClick('previewstory');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 				<li>
-					<button onclick="actionClick('cancel');" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" class="cancel" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
-{!if delete_option}
-				<li>
-					<button class="uk-button uk-button-danger tm-admin-save-button-width" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="{lang_delete}" data-uk-tooltip="{pos:'left'}" title="{lang_delete}"><i class="uk-icon-eraser"></i></button>
-				</li>
-{!endif}
 			</ul>
 		</div>
 		{# end save side bar #}
@@ -480,7 +502,7 @@ function actionClick( $action ) {
 		<div id="se_bottom" class="uk-margin-large">
 			<button onclick="actionClick('save');" class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
 			<button onclick="actionClick('previewstory');" class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
-			<button onclick="actionClick('cancel');" class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+			<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 			<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>
 {!endif}
@@ -509,8 +531,6 @@ function actionClick( $action ) {
 		document.frmstory.cmt_close_minute.disabled=true;
 		document.frmstory.cmt_close_ampm.disabled=true;
 	}
-</script>
-<script>
 	function openStoryImage(){
 		$('#storyImage').dialog({modal:true, width:875,height:600});
 	}
@@ -521,8 +541,32 @@ function actionClick( $action ) {
 		$(document).find('#story_image_img').attr('src', '{site_url}/images/placeholder.png');
 		$(document).find('#story_image').attr('value', '');
 	}
-</script>
-<script>
+	$(function(){
+		$("#title").characterCounter({
+			limit: '128',
+			counterSelector: '#title-count'
+		});
+		$("#sid").characterCounter({
+			limit: '128',
+			counterSelector: '#sid-count'
+		});
+		$("#subtitle").characterCounter({
+			limit: '128',
+			counterSelector: '#subtitle-count'
+		});
+		$("#attribution_url").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_url-count'
+		});
+		$("#attribution_name").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_name-count'
+		});
+		$("#attribution_author").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_author-count'
+		});
+	});
 	$("#frmstory").validate();
 </script>
 <script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>

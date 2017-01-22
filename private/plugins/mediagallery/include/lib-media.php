@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General purpose media display / manipulation interface                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1810,11 +1810,12 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     // construct the album jumpbox...
     $level = 0;
-    $album_jumpbox = '<form name="jumpbox" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0"><div>';
+    $album_jumpbox = '<form class="uk-form" name="jumpbox" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0"><div>';
     $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onchange="forms[\'jumpbox\'].submit()">';
     $MG_albums[0]->buildJumpBox($aid);
     $album_jumpbox .= '</select>';
-    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
+//    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"/>';
+    $album_jumpbox .= '<button class="uk-button" type="submit" value="'.$LANG_MG03['go'].'">'.$LANG_MG03['go'].'</button>';
     $album_jumpbox .= '<input type="hidden" name="page" value="1"/>';
     $album_jumpbox .= '</div></form>';
 

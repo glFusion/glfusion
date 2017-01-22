@@ -2,8 +2,8 @@
     <id>calendar</id>
     <name>Calendar</name>
     <description>Online Calendar System</description>
-    <version>1.0.7</version>
-    <glfusionversion>1.6.4</glfusionversion>
+    <version>1.1.0</version>
+    <glfusionversion>1.6.5</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

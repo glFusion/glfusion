@@ -3117,6 +3117,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'open_ext_url_new_window',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 2,
+    	'selection_array' => 0,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_debug',
     	'default_value' => NULL,
     	'type' => 'fieldset',
@@ -3135,6 +3146,39 @@ $coreConfigData = array(
     	'fieldset' => 3,
     	'selection_array' => 1,
     	'sort' => 10,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'enable_404_logging',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 20,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'debug_oauth',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 30,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'debug_html_filter',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 40,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3447,7 +3491,7 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'bb2_display_stats',
+    	'name' => 'bb2_strict',
     	'default_value' => 0,
     	'type' => 'select',
     	'subgroup' => 8,
@@ -3458,7 +3502,7 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'bb2_strict',
+    	'name' => 'bb2_verbose',
     	'default_value' => 0,
     	'type' => 'select',
     	'subgroup' => 8,
@@ -3469,24 +3513,13 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'bb2_verbose',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 8,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 60,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'bb2_logging',
     	'default_value' => 1,
     	'type' => 'select',
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 70,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3497,7 +3530,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 80,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3508,7 +3541,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 90,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3519,7 +3552,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 100,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3530,7 +3563,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3541,7 +3574,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 120,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     )

@@ -74,5 +74,11 @@
 	<!-- END logrow -->
 	{log_row}
 </table>
+
+{!if lang_no_data}
+    <div class="uk-container uk-container-center uk-width-1-1 uk-text-center uk-text-bold uk-margin">{lang_no_data}</div>
+{!endif}
+
+
 {google_paging}
 {# end {templatelocation} #}

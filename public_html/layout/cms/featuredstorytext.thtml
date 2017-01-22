@@ -55,13 +55,13 @@
 		</ul>
 		<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
-					<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-envelope"></a></li>
+					<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope"></a></li>
 {!endif}
 {!if print_story_url}
-					<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-small uk-icon-print"></a></li>
+					<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
-					<li><a href="{edit_url}" class="tm-meta-icon uk-icon-small uk-icon-edit"></a></li>
+					<li><a href="{edit_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-edit"></a></li>
 {!endif}
 {!if plugin_meta_vars}
 			{plugin_meta_vars}
@@ -70,7 +70,7 @@
 			{plugin_icon_vars}
 
 {!if feed_icon}
-					<li><a href="{feed_url}" class="tm-meta-icon uk-icon-small uk-icon-rss"></a></li>
+					<li><a href="{feed_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-rss"></a></li>
 {!endif}
 		</ul>
 

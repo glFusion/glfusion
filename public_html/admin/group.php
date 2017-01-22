@@ -657,7 +657,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         echo COM_refresh($url);
     } else {
         $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
-        $retval .= COM_showMessageText($LANG_ACCESS['missingfieldmsg'],$LANG_ACCESS['missingfields'],true,'error');
+        $retval .= COM_showMessageText($LANG_ACCESS['missingfieldsmsg'],$LANG_ACCESS['missingfields'],true,'error');
         $retval .= GROUP_edit($grp_id);
         $retval .= COM_siteFooter ();
 

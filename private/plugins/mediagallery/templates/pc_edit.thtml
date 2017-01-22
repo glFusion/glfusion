@@ -1,97 +1,110 @@
 {# begin {templatelocation} #}
-  <form name="postcard" method="post" action="{s_form_action}">
-    <div>
-    <input type="hidden" name="mid" value="{mid}" />
-    <table width="100%" border="0" cellspacing="0" cellpadding="5">
-      <tr>
-        <th colspan="4">
-          {lang_send_postcard}
-        </th>
-      </tr>
+<h2>{lang_send_postcard}</h2>
 
-      <tr>
-        <td colspan="3">
-          <span style="font-weight:bold;">{lang_send_from}</span>
-        </td>
-        <td rowspan="6" style="width:240px;text-align:right;vertical-align:top;">
-    	  <div class="out" style="width:{border_width}px;">
-    	  <div class="in ltin tpin">
-           <img src="{image_tn}" alt="" />
-          </div>
-          </div>
-        </td>
-      </tr>
+{!if errMsg}
+<div class="uk-alert uk-alert-danger">
+	{errMsg}
+</div>
+{!endif}
 
-      <tr>
-        <td colspan="2" style="width:15%;">
-          {lang_from_name}
-        </td>
-        <td>
-          <input type="text" name="fromname" size="60" value="{from_name}" style="width: 100%;" />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          {lang_from_email}
-        </td>
-        <td>
-          <input type="text" name="fromemail" size="60" value="{from_email}" style="width: 100%;" />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <span style="font-weight:bold;">{lang_send_to}</span>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          {lang_to_name}
-        </td>
-        <td>
-          <input type="text" name="toname" size="60" value="{to_name}" style="width: 100%;" />
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          {lang_to_email}
-        </td>
-        <td>
-          <input type="text" name="toemail" size="60" value="{to_email}" style="width: 100%;" />
-        </td>
-      </tr>
-      <tr>
-        <th colspan="4">
-          <span style="font-weight:bold;">{lang_subject}</span>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="4">
-          <input type="text" name="subject" size="60" value="{postcard_subject}" style="width: 100%;" />
-        </td>
-      </tr>
-      <tr>
-        <th colspan="4">
-          <span style="font-weight:bold;">{lang_message}</span>
-        </th>
-      </tr>
-      <tr>
-        <td colspan="4">
-    	  <textarea name="message" class="textinput" rows="8" cols="40"  style="width: 100%;">{postcard_message}</textarea>
-        </td>
-      </tr>
-    </table>
-    {captcha}
-    <br />
-    <div style="text-align:center;">
-      <div style="color:red;">{errMsg}</div>
-    </div>
-    <br />
-    <div style="text-align:center;">
-      {lang_ccself}<input type="checkbox" value="1" name="ccself"{ccself_checked}  /><br /><br />
-      <input type="submit" value="{lang_preview}"  name="mode" />
-      <input type="submit" value="{lang_cancel}" name="mode" />
-      <input type="submit" value="{lang_send}"  name="mode" />
-    </div>
-    </div>
-  </form>
+
+<form id="postcard" class="uk-form uk-form-horizontal" name="postcard" method="post" action="{s_form_action}">
+	<input type="hidden" name="mid" value="{mid}" />
+	<div class="uk-grid">
+		<div class="uk-width-medium-1-4 uk-push-3-4">
+			<img class="uk-align-center uk-thumbnail uk-thumbnail-medium" src="{image_tn}" alt="" />
+		</div>
+
+		<div class="uk-width-medium-3-4 uk-pull-1-4">
+
+			<fieldset class="uk-margin-top" data-uk-margin>
+				<legend>{lang_send_from}</legend>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="fromname">{lang_from_name}</label>
+					<div class="uk-form-controls">
+						<input class="uk-form-width-medium required" type="text" name="fromname" value="{from_name}">
+					</div>
+				</div>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="fromemail">{lang_from_email}</label>
+					<div class="uk-form-controls">
+						<input class="uk-form-width-medium required" type="text" name="fromemail" value="{from_email}">
+					</div>
+				</div>
+
+			</fieldset>
+
+			<fieldset class="uk-margin-top" data-uk-margin>
+				<legend>{lang_send_to}</legend>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="toname">{lang_to_name}</label>
+					<div class="uk-form-controls">
+						<input class="uk-form-width-medium required" type="text" name="toname" value="{to_name}">
+					</div>
+				</div>
+
+				<div class="uk-form-row">
+					<label class="uk-form-label" for="toemail">{lang_to_email}</label>
+					<div class="uk-form-controls">
+						<input class="uk-form-width-medium required" type="text" name="toemail" value="{to_email}">
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+
+	<div class="uk-grid">
+		<div class="uk-width-medium-4-4">
+
+			<div class="uk-form-row">
+				<label class="uk-form-label" for="subject">{lang_subject}</label>
+				<div class="uk-form-controls">
+					<input class="uk-form-width-large required" type="text" name="subject" value="{postcard_subject}">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label" for="message">{lang_message}</label>
+				<div class="uk-form-controls">
+					<textarea class="uk-form-large uk-form-width-large required" name="message" class="textinput" rows="8" cols="40">{postcard_message}</textarea>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="uk-grid">
+		<div class="uk-width-4-4">
+			<div class="uk-text-center">
+				{lang_ccself}&nbsp;&nbsp;<input type="checkbox" value="1" name="ccself" {ccself_checked}>
+			</div>
+		</div>
+	</div>
+
+	<div class="uk-grid">
+		<div class="uk-width-2-4">
+			<label class="uk-form-label"></label>
+			<div class="uk-form-controls">
+				{captcha}
+			</div>
+		</div>
+	</div>
+
+	<div class="uk-grid">
+		<div class="uk-width-4-4">
+			<div class="uk-text-center">
+
+				<button class="uk-button uk-button-success cancel" type="submit" value="{lang_preview}"  name="mode">{lang_preview}</button>
+				<button class="uk-button uk-button-primary" type="submit" value="{lang_send}"  name="mode">{lang_send}</button>
+				<button class="uk-button uk-button-danger cancel" type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+
+			</div>
+		</div>
+	</div>
+</form>
+<script>$("#postcard").validate();</script>
 {# end {templatelocation} #}

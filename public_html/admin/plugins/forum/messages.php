@@ -184,6 +184,7 @@ if ($parentonly == 1) {
 
 if ($num_messages == 0) {
     $report->set_var('startblock', COM_startBlock($LANG_GF95['header1']));
+    $report->set_var('title', $LANG_GF95['header1']);
     $report->set_var('showalert','');
     $report->set_var ('alertmessage', $LANG_GF95['nomess']);
     $report->set_var('endblock', COM_endBlock());
@@ -191,8 +192,10 @@ if ($num_messages == 0) {
 } else {
     if ($forumname == '') {
         $report->set_var('startblock', COM_startBlock($LANG_GF95['header1']));
+        $report->set_var('title',$LANG_GF95['header1']);
     } else {
         $report->set_var('startblock', COM_startBlock(sprintf($LANG_GF95['header2'],$forumname)));
+        $report->set_var('title', sprintf($LANG_GF95['header2'],$forumname));
     }
     $report->set_var('showalert','none');
     $report->set_var ('alertmessage', '');

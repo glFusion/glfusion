@@ -1029,7 +1029,20 @@ $LANG24 = array(
     108 => 'Quellenangabe',
     109 => 'Schlüsselwörter',
     110 => 'Geben Sie eine durch Komma getrennte Liste von Schlüsselwörtern ein',
-    111 => 'Global Settings'
+    111 => 'Allgemeine Einstellungen',
+    112 => 'In eine neue Kategorie verschieben',
+    113 => 'Kategorie-Filter erforderlich (<b>es dürfen nicht alle ausgewählt werden</b>)',
+    114 => 'Sind Sie sicher, dass Sie die Allgemeinen Einstellungen ändern möchten?',
+    115 => 'Sind Sie absolut sicher, dass Sie die Allgemeinen Einstellungen ändern möchten? Es kann sehr schwierig werden die Änderungen rückgängig zu machen!',
+    116 => 'Startseiten - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    117 => 'Kommentar - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    118 => 'Trackback - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    119 => 'Inhaber - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    120 => 'Gruppen - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    121 => 'Zeige Kategorie - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
+    122 => 'Alle Artikel der Kategorie %s wurden in die Kategorie %s verschoben.',
+    123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
+    124 => 'Sind Sie sicher, dass Sie abbrechen möchten? Sämtliche Änderungen werden nicht gespeichert.'
 );
 
 ###############################################################################
@@ -1571,7 +1584,7 @@ $MESSAGE = array(
     88 => '',
     89 => '',
     90 => '',
-    91 => '',
+    91 => 'Fehler beim Entfernen der Plugin-Dateien. Der Webserver verfügt möglicherweise nicht über ausreichende Berechtigungen. Siehe error.log für weitere Informationen.',
     92 => "Bitte <a href=\"{$_CONF['site_admin_url']}/sectest.php\">die Sicherheit ihrer Seite überprüfen</a> bevor Sie sie benutzen!",
     93 => 'Datenbank Backup war erfolgreich.',
     94 => 'Backup fehlgeschlagen: Dateigröße unter 1kb',
@@ -1772,7 +1785,9 @@ $LANG_DB_ADMIN = array(
     'error_column_utf' => 'Fehler beim Konvertieren der Spalten in UTF8MB4',
     'error_sc' => 'Fehler beim Aktualisieren von siteconfig.php - Bitte aktualisieren Sie db_charset manuell',
     'current_progress' => 'Aktueller-Fortschritt',
-    'overall_progress' => 'Gesamt-Fortschritt'
+    'overall_progress' => 'Gesamt-Fortschritt',
+    'no_backups_found' => 'Keine Backup-Dateien gefunden',
+    'error_msg' => 'Die folgenden Fehler sind aufgetreten'
 );
 
 ###############################################################################
@@ -2036,7 +2051,8 @@ $LANG_ADMIN = array(
     'custom_autotag' => 'Persönliche-Autotags',
     'alt_topic' => 'Alternative-Kategorie',
     'timeout_msg' => 'Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücken Sie "OK" um die Sitzung wieder zu aktualisieren.',
-    'reset' => 'Reset'
+    'reset' => 'Zurücksetzen',
+    'remaining_chars' => 'Verbleibende Zeichen '
 );
 
 ###############################################################################
@@ -2416,21 +2432,21 @@ $LANG_AM = array(
     'replace_explain' => '<ul><li>Autotags haben die Form [Tag-Name:{Parameter1} {Parameter2}].</li><li>Im "Austausch"-Feld können Sie jedes gültige HTML verwenden.</li><li>Sie können {Parameter1} und/oder {Parameter2} in Ihren Austausch-String einfügen.</li><li>{Parameter1} wird ersetzt durch das Austausch-Makros %1%, {Parameter2} durch %2%.</li><li>Autotags werden häufig verwendet, um Links wie im folgenden Beispiel, zu erstellen.<br /><br /></li><li>Ein "Austausch"-Feld von: &lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</li><li>Ergibt bei Aufruf von: [Tag-Name:foo Dies ist ein Link]</li><li>Folgenden Link: &lt;a href="http://path.to.somewhere/foo"&gt;Dies ist ein Link&lt;/a&gt;<br /><br /></li><li>Sie können auch %0% verwenden, um die gesamte Zeichenfolge nach dem ersten Doppelpunkt darzustellen. Dies ist praktisch, wenn Sie nur einen einzelnen Parameter verwenden möchten, der Wert aber Leerzeichen enthält, welche aber sonst als ein Trennzeichen zwischen mehreren Parametern interpretiert werden.</li><li>Die %site_url% und $site_admin_url% Makros können auch verwendet werden und werden durch die Basis- bzw. Admin-URL ersetzt.</li></ul>',
     'autotagpermmsg' => 'Wählen Sie aus, welche Funktionen (Operationen) für den Autotag verwendet werden sollen.',
     'autotag' => 'Autotag',
-    'desc_showblock' => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
-    'desc_story' => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
-    'desc_story_introtext' => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
-    'desc_vmenu' => 'HTML: renders a JS-enhanced vertical menu. usage: [vmenu:<i>menu_id</i>]',
-    'desc_hmenu' => 'HTML: renders a JS-enhanced horizontal menu.  usage: [hmenu:<i>menu_id</i>]',
-    'desc_menu' => 'HTML: reneders a JS-enhanced menu. usage : [menu:<i>menu_id</i>]',
+    'desc_showblock' => 'HTML: erzeugt einen beliebigen Block. Anwendung: [show_block:<i>block_id</i>]',
+    'desc_story' => 'Link: zu einem Artiekl der Seite. (Voreinstellung link_text = Artikel Titel) Anwendung: [story:<i>story_id</i> {link_text}]',
+    'desc_story_introtext' => 'HTML: zeigt die Einleitung eine Artikels. Anwendung: [story_introtext:<i>story_id</i>]',
+    'desc_vmenu' => 'HTML: erzeugt ein vertikales, erweitertes JS-Menü. Anwendung: [vmenu:<i>menu_id</i>]',
+    'desc_hmenu' => 'HTML: erzeugt ein horizontales, erweitertes JS-Menü.  Anwendung: [hmenu:<i>menu_id</i>]',
+    'desc_menu' => 'HTML: erzeugt ein erweitertes JS-Menü. Anwendung: [menu:<i>menu_id</i>]',
     'desc_cipher' => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
-    'desc_topic' => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
-    'desc_glfwiki' => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
+    'desc_topic' => 'Link: zur eine Kategorie der Seite. (Voreinstellung link_text = Kategorie Beschreibung) Anwendung: [topic:<i>topic_id</i> {link_text}]',
+    'desc_glfwiki' => 'Link: zu den Suchergebnissen für den angegebenen Text auf www.glfusion.org/wiki. Anwendung: [glfwiki:<i>text</i>]',
     'desc_lang' => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
     'desc_conf' => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
     'desc_user' => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
-    'desc_wikipedia' => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
-    'desc_youtube' => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
-    'desc_headlines' => 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
+    'desc_wikipedia' => 'Link: zu den Suchergebnissen für den angegebenen Text auf Wikipedia. Anwendung: [wikipedia:<i>text</i>]',
+    'desc_youtube' => 'HTML: Fügt ein youtube Video ein. Anwendung: [youtube:<i>video_id</i>]',
+    'desc_headlines' => 'HTML: erstellt eine Liste der Artikel-Titel. Anwendung: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
     'instructions_edit' => 'Hier können Sie Persönliche-Autotags anlegen.',
     'allowed' => 'Erlaubt',
     'namespace' => 'Bereich',
@@ -2793,17 +2809,21 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
-    'infinite_scroll' => 'Endloses Skrollen',
+    'infinite_scroll' => 'Endloses scrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
-    'comment_fb_appid' => 'Facebook App ID'
+    'comment_fb_appid' => 'Facebook App ID',
+    'open_ext_url_new_window' => 'Externe Links in neuem Fenster',
+    'enable_404_logging' => '404-Fehler (NotFound) aufzeichnen',
+    'debug_oauth' => 'Oauth Fehler aufzeichnen',
+    'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen'
 );
 
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Seiteninfo &amp; Konfiguration',
     'sg_stories' => 'Artikel &amp; Track-Pingback',
     'sg_theme' => 'Theme &amp; Darstellung',
-    'sg_blocks' => 'Block-Einstellungen',
+    'sg_blocks' => 'Einstellungen für Blöcke',
     'sg_users' => 'Benutzer &amp; Beiträge',
     'sg_images' => 'Bilder &amp; Icon &amp; Logo',
     'sg_locale' => 'Sprache &amp; Lokalisierung',
@@ -2867,7 +2887,7 @@ $LANG_configselects['Core'] = array(
     4 => array('Nichts prüfen' => 0, 'Seiten URL prüfen' => 1, 'Volle URL prüfen' => 2, 'Seiten URL und volle URL prüfen' => 3, 'Trackback IP mit Seiten IP vergleichen' => 4, 'IP und Seiten URL prüfen' => 5, 'IP und volle URL prüfen' => 6, 'IP, volle URL, und Seiten URL prüfen' => 7),
     5 => array('als Text' => 'plaintext', 'in HTML' => 'html'),
     6 => array('12' => 12, '24' => 24),
-    7 => array('Letzte Seite' => 'letzte', 'Erste Seite' => 'erste', 'Jede Seite' => 'alle'),
+    7 => array('Letzte Seite' => 'last', 'Erste Seite' => 'first', 'Jede Seite' => 'all'),
     8 => array('Rechts' => 'right', 'Links' => 'left'),
     9 => array('Auf Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite anzeigen' => 'home', 'Admin anzeigen' => 'admin'),
     10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),

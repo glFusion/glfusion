@@ -29,7 +29,7 @@
 <!-- BEGIN forumrows -->
   <tr>
     <td class="uk-width-1-1">
-      <a href="{site_admin_url}/plugins/forum/messages.php?forum={forumid}&amp;forumname={forumname}">{forumname}</a>
+      <a href="{site_admin_url}/plugins/forum/messages.php?forum={forumid}">{forumname}</a>
       <br>{forumdscp}
     </td>
     <td class="uk-text-center" style="vertical-align:middle;">

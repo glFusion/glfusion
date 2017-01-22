@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -160,6 +160,9 @@ function forum_upgrade() {
 
         case '3.3.1' :
             DB_query("ALTER TABLE {$_TABLES['ff_banned_ip']} CHANGE `host_ip` `host_ip` VARCHAR(128) NULL DEFAULT NULL;");
+
+        case '3.3.2' :
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
 
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main functions to show - format topics in the forum                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -52,6 +52,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $dt = new Date($showtopic['date'],$_USER['tzid']);
     } else {
         $dt = new Date('now',$_USER['tzid']);
+    }
+    if ( isset($showtopic['lastedited']) ) {
+        $dt_lu = new Date($showtopic['lastedited'],$_USER['tzid']);
     }
 
     static $cacheUserArray = array();
@@ -195,8 +198,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
-    $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
+
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
+    $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
 
     if ($mode != 'preview' && $uservalid && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
@@ -413,6 +417,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
     }
 
+    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited'] ) ) {
+        $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
+        $topictemplate->set_var('last_edited', $ludate);
+    } else {
+        $topictemplate->unset_var('last_edited');
+    }
+
     $topictemplate->set_var (array(
             'user_name'     => isset($username) ? $username : 'Anonymous',
             'vote_html'     => $voteHTML,
@@ -481,7 +492,7 @@ function _ff_getmodFunctions($showtopic)
     }
 
     if ($options != '') {
-        $retval .= '<form action="'.$_CONF['site_url'].'/forum/moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
+        $retval .= '<form class="uk-form" action="'.$_CONF['site_url'].'/forum/moderation.php" method="post" style="margin:0px;"><div><select class="uk-form-small" name="modfunction">';
         $retval .= $options;
 
         if ($showtopic['pid'] == 0) {
@@ -496,7 +507,8 @@ function _ff_getmodFunctions($showtopic)
         $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"/>';
         $retval .= '<input type="hidden" name="top" value="' .$top. '"/>';
         $retval .= '<input type="hidden" name="page" value="' .$page. '"/>';
-        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'"/>';
+//        $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'"/>';
+        $retval .= '<button class="uk-button uk-button-small" type="submit" name="submit" value="'.$LANG_GF01['GO'].'">'.$LANG_GF01['GO'].'</button>';
         $retval .= '</div></form>';
     }
     return $retval;

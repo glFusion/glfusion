@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to create topics and posts in the forum                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -426,19 +426,56 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $disable_bbcode_val = ' checked="checked"';
             $status += DISABLE_BBCODE;
         } else {
-            $disable_bbcode_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_BBCODE ) {
+                    $disable_bbcode_val = ' checked="checked"';
+                } else {
+                    $disable_bbcode_val = '';
+                }
+            } else {
+                $disable_bbcode_val = '';
+            }
         }
         if ( isset($postData['disable_smilies']) && $postData['disable_smilies'] == 1 ) {
             $disable_smilies_val = ' checked="checked"';
             $status += DISABLE_SMILIES;
         } else {
-            $disable_smilies_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_SMILIES ) {
+                    $disable_smilies_val = ' checked="checked"';
+                } else {
+                    $disable_smilies_val = '';
+                }
+            } else {
+                $disable_smilies_val = '';
+            }
         }
         if ( isset($postData['disable_urlparse']) && $postData['disable_urlparse'] == 1 ) {
             $disable_urlparse_val = ' checked="checked"';
             $status += DISABLE_URLPARSE;
         } else {
-            $disable_urlparse_val = '';
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( isset($postData['status']) && $postData['status'] & DISABLE_URLPARSE ) {
+                    $disable_urlparse_val = ' checked="checked"';
+                } else {
+                    $disable_urlparse_val = '';
+                }
+            } else {
+                $disable_urlparse_val = '';
+            }
+        }
+        if ( (isset($postData['sticky_switch']) AND $postData['sticky_switch'] == 1)) {
+            $sticky_val = 'checked="checked"';
+        } else {
+            if ( $viewMode != PREVIEW_VIEW ) {
+                if ( isset($postData['sticky']) && $postData['sticky'] == 1 ) {
+                    $sticky_val = ' checked="checked"';
+                } else {
+                    $sticky_val = '';
+                }
+            } else {
+                $sticky_val = '';
+            }
         }
     }
     // create our template
@@ -482,7 +519,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('hidden_editpost','yes');
         if ( $editmoderator ) {
             $username = $postData['name'];
-        } elseif ($postData['uid'] > 1) {
+        } elseif (isset($postData['uid']) && $postData['uid'] > 1) {
             $username = COM_getDisplayName($postData['uid']);
         }
 
@@ -493,14 +530,19 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         }
         $peTemplate->set_var ('hidden_editid',  $postData['id']);
 
-        $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
-        if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) OR ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
-             $edit_prompt .= 'checked="checked" ';
-             $edit_val = ' checked="checked" ';
+        if ( $editmoderator ) {
+            $edit_prompt = $LANG_GF02['msg190'] . '<br/><input type="checkbox" name="silentedit" ';
+            if ((isset($postData['silentedit']) && $postData['silentedit'] == 1) || ( !isset($postData['modedit']) AND $_FF_CONF['silent_edit_default'])) {
+                 $edit_prompt .= 'checked="checked" ';
+                 $edit_val = ' checked="checked" ';
+            } else {
+                $edit_val = '';
+            }
+            $edit_prompt .= 'value="1"/>';
         } else {
+            $edit_prompt = '';
             $edit_val = '';
         }
-        $edit_prompt .= 'value="1"/>';
 
         $peTemplate->set_var('attachments','<div id="fileattachlist">' . _ff_showattachments($postData['id'],'edit') . '</div>');
         $numAttachments = DB_Count($_TABLES['ff_attachments'],'topic_id',$postData['id']);
@@ -515,6 +557,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $peTemplate->set_var('attachments','<div id="fileattachlist">' . _ff_showattachments($uniqueid,'edit') . '</div>');
         }
         $edit_prompt = '&nbsp;';
+        $edit_prompt = '';
     }
 
     if ($action == 'newreply') {
@@ -639,16 +682,14 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $notify_val = '';
         }
         $notify_prompt = $LANG_GF02['msg38']. '<br/><input type="checkbox" name="notify" value="on" ' . $notify_val. '/>';
-
         // check that this is the parent topic - only able to make it skicky or locked
         if ( !isset($postData['pid']) || $postData['pid'] == 0 ) {
-            if (!isset($locked_val) and !isset($sticky_val) AND $action == 'edittopic') {
-                if( (!isset($postData['locked_switch']) AND (isset($postData['locked']) && $postData['locked'] == 1)) OR (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
+            if ($action == 'edittopic') {
+                if( (!isset($postData['locked_switch']) AND (isset($postData['locked']) && (int) $postData['locked'] == 1)) || (isset($postData['locked_switch']) && $postData['locked_switch'] == 1) ) {
                     $locked_val = 'checked="checked"';
                 } else {
                     $locked_val = '';
                 }
-
                 if( (!isset($postData['sticky_switch']) AND (isset($postData['sticky']) && $postData['sticky'] == 1)) OR (isset($postData['sticky_switch']) && $postData['sticky_switch'] == 1) ) {
                     $sticky_val = 'checked="checked"';
                 } else {
@@ -714,6 +755,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $peTemplate->set_var(array(
         'edit_val'          => $edit_val,
         'sticky_val'        => $sticky_val,
+        'locked_val'        => $locked_val,
         'postmode_msg'      => $postmode_msg,
         'notify_val'        => $notify_val,
         'disable_bbcode_val' => $disable_bbcode_val,
@@ -950,7 +992,7 @@ function FF_saveTopic( $forumData, $postData, $action )
     }
 
     // speed limit check
-    if ( !SEC_hasRights('forum.edit') ) {
+    if ( !SEC_hasRights('forum.edit') && $action != 'saveedit' ) {
         COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
         $last = COM_checkSpeedlimit ('forum');
         if ($last > 0) {
@@ -1040,6 +1082,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $postmode = 'text';
             }
         }
+        $postData['subject'] = COM_truncate($postData['subject'],100,'');
         $subject    = _ff_preparefordb(strip_tags($postData['subject']),'text');
         $comment    = _ff_preparefordb($postData['comment'],$postmode);
         $mood       = isset($postData['mood']) ? COM_applyFilter($postData['mood']) : '';
@@ -1168,10 +1211,11 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $topicPID = $editid;
             }
             $savedPostID = $editid;
-            if ($postData['silentedit'] != 1) {
-                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+            if (!isset($postData['silentedit']) || $postData['silentedit'] != 1) {
+//                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastedited='".DB_escapeString($date)."' WHERE id=".(int) $editid);
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
-                DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
+//                DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
             }
             if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $editid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $topicPID);

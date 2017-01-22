@@ -26,7 +26,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -248,7 +248,6 @@ $LANG_MG01 = array(
     'phpinfo' => 'PHP Information',
     'album_cover' => 'Okładka albumu',
     'album_attributes' => 'Ustawienia albumu',
-    'media_attributes' => 'Dodatkowe opcje',
     'attached_thumbnail' => 'Dodaj minaturkę',
     'thumbnail' => 'Miniaturka',
     'new_upload_subject' => 'New media item uploaded at ',
@@ -615,6 +614,7 @@ $LANG_MG01 = array(
     'random_size' => 'Random Image Block Width',
     'flash_slideshow_full' => 'Flash (Orig)',
     'flash_slideshow_disp' => 'Flash (Disp)',
+    'media_attributes' => 'Dodatkowe opcje',
     'orig_jpg_quality' => 'Orginalna jakoć JPG',
     'truncate_breadcrumb' => 'Truncate Breadcrumbs',
     'member_use_fullname' => 'Use Fullname for Member Album title',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'html5upload_allowed_types' => 'File Types Allowed:',
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
-    'square' => 'Square'
+    'square' => 'Square',
+    'posted' => 'Posted'
 );
 
 ###############################################################################
@@ -883,7 +884,8 @@ $LANG_MG03 = array(
     'your_member_album' => 'Twój album',
     'ip_rated' => 'Twój adres IP już oddał głos.',
     'uid_rated' => 'Twój ID już oddał głos.',
-    'media_id' => 'Media ID'
+    'media_id' => 'Media ID',
+    'all_media' => 'All Media'
 );
 
 $LANG_MG04 = array(

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion plugin administration page.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -430,7 +430,7 @@ function PLUGINS_unInstall($pi_name)
     CTL_clearCache();
 
     if ( $msg != '' ) {
-        COM_setMessage($msg);
+        COM_setMsg($MESSAGE[$msg],'error');
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
     } else {
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
@@ -454,7 +454,7 @@ function PLUGINS_unInstall($pi_name)
 */
 function PLUGINS_remove($pi_name)
 {
-    global $_CONF, $LANG32;
+    global $_CONF, $LANG32, $MESSAGE;
 
     $retval = '';
 
@@ -473,13 +473,13 @@ function PLUGINS_remove($pi_name)
         $retval .= COM_showMessage(116);
     } else {
         COM_errorLog("Error removing the plugin file structure - the web server may not have sufficient permissions");
-        $msg = 95;
-        $retval .= COM_showMessage(95);
+        $msg = 91;
+        $retval .= COM_showMessage(91);
     }
     CTL_clearCache();
 
     if ( $msg != '' ) {
-        COM_setMessage($msg);
+        COM_setMsg($MESSAGE[$msg],'error');
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
     } else {
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
@@ -900,7 +900,16 @@ function PLUGINS_processUpload()
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$pluginData['id']);
+
+    $fnCustomDir = 'plugin_custom_public_dir_'.$pluginData['id'];
+    if ( function_exists($fnCustomDir)) {
+        $public_dir_name = $fnCustomDir();
+    } else {
+        $public_dir_name = $pluginData['id'];
+    }
+    if ($public_dir_name == '' ) $public_dir_name = $pluginData['id'];
+
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -1054,8 +1063,19 @@ function PLUGINS_post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
+
+    $fnCustomDir = 'plugin_custom_public_dir_'.$pluginData['id'];
+    if ( function_exists($fnCustomDir)) {
+        $public_dir_name = $fnCustomDir();
+    } else {
+        $public_dir_name = $pluginData['id'];
+    }
+    if ($public_dir_name == '' ) $public_dir_name = $pluginData['id'];
+
     if ( file_exists($pluginTmpDir.'public_html/') ) {
-        $rc = _pi_dir_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$pluginData['id']);
+
+        $rc = _pi_dir_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
+
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -1166,13 +1186,13 @@ function PLUGINS_post_uploadProcess() {
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
-                if ( !file_exists($_CONF['path_html'].$pluginData['id'].$pathTo.$fileName) ) {
+                if ( !file_exists($_CONF['path_html'].$public_dir_name.$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
-                    $rc = @copy ($_CONF['path_html'].$pluginData['id'].$absoluteFileName,$_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path_html'].$public_dir_name.$absoluteFileName,$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$pluginData['id'].$absoluteFileName." to ".$_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$public_dir_name.$absoluteFileName." to ".$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                         $masterErrorCount++;
-                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].$pluginData['id'].$absoluteFileName,$_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].$public_dir_name.$absoluteFileName,$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                     }
                 }
             } else {

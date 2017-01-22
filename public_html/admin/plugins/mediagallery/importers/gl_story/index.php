@@ -454,7 +454,7 @@ function MG_importSelectAlbums() {
     $level = 0;
     $album_jumpbox  = '<select name="destination">';
     $album_jumpbox .= '<option value="0">Create Album Using Story Title</option>';
-    $valid_albums += $MG_albums[0]->buildJumpBox('',3);
+    $valid_albums .= $MG_albums[0]->buildJumpBox('',3);
     $album_jumpbox .= '</select>';
 
     MG_buildImportAlbums();

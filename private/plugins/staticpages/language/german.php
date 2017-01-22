@@ -127,7 +127,8 @@ $LANG_STATIC = array(
     'instructions_edit' => '<ul><li>Hier kannst Du eine neue Statische-Seite erstellen oder vorhandene Seiten bearbeiten.</li><li>Seiten können PHP-Code und HTML-Code enthalten.</li></ul>',
     'attributes' => 'Allgemeines',
     'preview_help' => 'Wählen Sie die Schaltfläche <b>Vorschau</b>, um die Vorschauanzeige zu aktualisieren',
-    'page_saved' => 'Seite wurde erfolgreich gespeichert.'
+    'page_saved' => 'Seite wurde erfolgreich gespeichert.',
+    'page_deleted' => 'Page has been successfully deleted.'
 );
 ###############################################################################
 # autotag descriptions

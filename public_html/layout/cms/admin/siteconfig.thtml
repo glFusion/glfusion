@@ -63,36 +63,6 @@ $_SYSTEM['maintenance_mode'] = {maintenance_mode};
 // while in maintenance mode.
 // $_SYSTEM['maintenance_mode'] = -1;
 
-
-// +--------------------------------------------------------------------------+
-// | Root debug - Display detailed error messages.                            |
-// |                                                                          |
-// | NOTE: This option should not be enabled on production sites since it     |
-// |       will display configuration options and other details that could    |
-// |       expose confidential data such as database logins, etc.             |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['rootdebug']        = {rootdebug};
-
-// +--------------------------------------------------------------------------+
-// | OAuth debug - Display detailed message from Oauth authentication.        |
-// |                                                                          |
-// | If this is set to true - verbose log messages of the Oauth login process |
-// | will be logged to the glFusion error.log file. This option is useful if  |
-// | you are experiencing issues with any of the Oauth protocols.             |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['debug_oauth']      = {debug_oauth};
-
-// +--------------------------------------------------------------------------+
-// | HTML Filter debug - Log details on filtered elements.                    |
-// |                                                                          |                                                                     |
-// | If this is set to true - the HTML filter will log details on which       |
-// | HTML elements and attributes are filtered.                               |
-// +--------------------------------------------------------------------------+
-
-$_SYSTEM['debug_html_filter']      = {debug_html_filter};
-
 // +--------------------------------------------------------------------------+
 // | No Fail SQL - Do not fail (crash) if SQL errors are encountered          |
 // |                                                                          |
@@ -235,6 +205,20 @@ $_SYSTEM['style_type'] = '{style_type}';
 // +--------------------------------------------------------------------------+
 
 $_SYSTEM['db_backup_rows'] = {db_backup_rows};
+
+
+// +--------------------------------------------------------------------------+
+// | Static Pages in Plugin Menu                                              |
+// |                                                                          |
+// | If the Add to Menu option is checked on a static page, that page         |
+// | will be included on a menu of type 'StaticPage Menu'. If you also        |
+// | want the page to display on the menu type of 'Plugins' (which was the    |
+// | default behavior at one time), set this value to true.                   |
+// |                                                                          |
+// | NOTE: Clear the cache after changing this setting                        |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['sp_pages_in_plugin_menu'] = {sp_pages_in_plugin_menu};
 
 // +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |

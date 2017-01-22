@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # german_formal_utf-8.php
 #
@@ -28,7 +27,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -93,7 +92,8 @@ $LANG_CAL_1 = array(
     49 => 'Es wurden noch keine Termine eingetragen.',
     50 => 'Termine',
     51 => 'Löschen',
-    52 => 'Eingereicht von'
+    52 => 'Eingereicht von',
+    53 => 'Calendar View'
 );
 
 $_LANG_CAL_SEARCH = array(

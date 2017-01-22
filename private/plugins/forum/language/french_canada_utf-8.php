@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Désactiver les Smileys:',
     'disable_urlparse' => 'Ne pas analyser les URL:',
     'features' => 'Caractéristiques:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Pas de nouveaux messages',
     'msg203' => 'Cliquez pour ajouter aux favoris',
     'msg204' => 'Cliquez sur pour effacer un signet',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nouveaux Messages',
     'StatusHeading' => 'Informations Seulement',
     'PostReply' => 'Poster un nouveau commentaire',
@@ -442,7 +444,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Modifier le Sujet',
     'quietforum' => 'Forum n`a pas de nouveaux sujets',
     'notify_full' => 'Inclure le post complet dans la notification',
-    'view_online' => 'Si ce message ne ​​s`affiche pas correctement, <a href="%s">Voir la version en ligne</a>.'
+    'view_online' => 'Si ce message ne ​​s`affiche pas correctement, <a href="%s">Voir la version en ligne</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -568,6 +577,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum Préférences',
     'forumprefs_help_title' => 'Forum Préf Aide',
     'forumprefs_help' => 'Modifier les préférences de l`utilisateur Forum Plugin. <li> Nombre de sujets à afficher lors de la visualisation de l`indice de forum. </Li> <li> Nombre de messages à afficher par page. </Li> <li> Masquer les messages depuis anonyme utilisateurs. </li> <li> Activer les notifications d`automobiles. </li> <li> Seulement envoyer une notification. </li> <li> Afficher examen de sujet (iframe) en bas lorsque vous répondez. </li></ul >',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Sujet Trier',
     'editor_type' => 'Type d`éditeur',
     'bbcode' => 'BBCode',
@@ -732,7 +747,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Forum n`apparaît pas dans l`index du forum',
     'hideposts' => 'Cachez Nouveaux messages',
     'hidepostsdscp' => 'Mises à jour ne seront pas affichées dans les blocs de nouveaux messages ou de flux RSS',
-    'attachaccess' => 'En mesure d`ajouter des pièces jointes'
+    'attachaccess' => 'En mesure d`ajouter des pièces jointes',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(
@@ -941,7 +962,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array('Haut de la Page' => 1, 'Histoire Après Vedette' => 2, 'Bas de la Page' => 3),
+    2 => array('Replace Home Page' => 0, 'Haut de la Page' => 1, 'Histoire Après Vedette' => 2, 'Bas de la Page' => 3),
     3 => array('Pas de Blocs' => 'noblocks', 'Gauche Blocs' => 'leftblocks', 'Blocs Droite' => 'rightblocks', 'Droite / Gauche Blocs' => 'allblocks'),
     4 => array('Bloquer Menu' => 'blockmenu', 'La Barre de Navigation' => 'navbar', 'None' => 'none'),
     5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),

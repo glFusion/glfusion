@@ -35,7 +35,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -237,7 +237,8 @@ $LANG_GF01 = array(
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
-    'rss_link' => 'Subscribe to this forum\'s RSS feed.'
+    'rss_link' => 'Subscribe to this forum\'s RSS feed.',
+    'all_read_success' => 'All topics have been marked as read'
 );
 
 $LANG_GF02 = array(
@@ -435,6 +436,7 @@ $LANG_GF02 = array(
     'msg202' => 'Geen nieuwe berichten',
     'msg203' => 'Toevoegen aan Mijn Markeringen',
     'msg204' => 'Verwijder uit Mijn Markeringen',
+    'msg205' => 'You have not posts bookmarked',
     'new_posts' => 'Nieuwe Berichten',
     'StatusHeading' => 'Alleen Informatie',
     'PostReply' => 'Plaats Reactie',
@@ -442,7 +444,14 @@ $LANG_GF02 = array(
     'EditTopic' => 'Wijzig Onderwerp',
     'quietforum' => 'Forum heeft geen nieuwe onderwerpen',
     'notify_full' => 'Include full post in notification',
-    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.'
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
+    'invalid_token' => 'Invalid Security Token',
+    'edit_time_passed' => 'The allowed time to edit your post has expired',
+    'not_your_post' => 'You donot appear to be the author of this post.',
+    'spam_detected' => 'Your post has been identified as a spam message',
+    'invalid_email' => 'Email empty or not a valid email address',
+    'invalid_name' => 'No name or name blank',
+    'last_edited' => 'Last Edited'
 );
 
 $LANG_GF03 = array(
@@ -568,6 +577,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum Voorkeur',
     'forumprefs_help_title' => 'Forum Voorkeur Help',
     'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
+    'postspp_help' => 'Number of posts to show per page.',
+    'anonymous_help' => 'Hide posts from anonymous users.',
+    'notify_help' => 'Enable auto notifications.',
+    'notify_once_help' => 'Only send one notification.',
+    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Topic Order',
     'editor_type' => 'Editor Type',
     'bbcode' => 'BBCode',
@@ -732,7 +747,13 @@ $LANG_GF93 = array(
     'hiddendscp' => 'Forum wordt niet getoond in het forum overzicht',
     'hideposts' => 'Verberg Nieuwe Berichten',
     'hidepostsdscp' => 'Updates worden niet getoond in Wat is er Nieuw of RSS Feeds',
-    'attachaccess' => 'Bijlagen kunnen worden toegevoegd'
+    'attachaccess' => 'Bijlagen kunnen worden toegevoegd',
+    'name_blank' => 'Name cannot be blank',
+    'desc_blank' => 'Description cannot be blank',
+    'category_resynced' => 'All forums in the category have been resynced',
+    'forum_resynced' => 'The Forum has been resynced',
+    'forum_options' => 'Forum Options...',
+    'category_options' => 'Category Options...'
 );
 
 $LANG_GF94 = array(
@@ -941,7 +962,7 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => true, 'Nee' => false),
-    2 => array('Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
+    2 => array('Replace Home Page' => 0, 'Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
     3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks', 'Rechter / Linker Blokken' => 'allblocks'),
     4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
     5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),

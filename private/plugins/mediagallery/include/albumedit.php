@@ -141,7 +141,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['exif_display']		= $_MG_CONF['ad_exif_display'];
         $A['enable_slideshow']  = $_MG_CONF['ad_enable_slideshow'];
         $A['enable_random']     = $_MG_CONF['ad_enable_random'];
-        $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
+//        $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
         $A['enable_views']      = $_MG_CONF['ad_enable_views'];
         $A['enable_keywords']   = $_MG_CONF['ad_enable_keywords'];
         $A['enable_html']       = 0;
@@ -267,7 +267,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $ss_select		.= '<option value="5"' . ($A['enable_slideshow'] == 5 ? ' selected="selected"' : '') . '>' . $LANG_MG01['mp3_jukebox'] . '</option>';
     $ss_select      .= '</select>';
 
-    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
+//    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
     $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($A['enable_views'] ? ' checked="checked"' : '') . '/>';
     $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" ' . ($A['enable_keywords'] ? ' checked="checked"' : '') . '/>';
     $html_select    = '<input type="checkbox" name="enable_html" value="1" ' . ($A['enable_html'] ? ' checked="checked"' : '') . '/>';
@@ -633,7 +633,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'rsschildren_select'    => $rsschildren_select,
         'full_select'           => $full_select,
         'ss_select'             => $ss_select,
-        'sf_select'             => $sf_select,
+//        'sf_select'             => $sf_select,
         'views_select'          => $views_select,
         'keywords_select'       => $keywords_select,
         'html_select'           => $html_select,
@@ -928,11 +928,11 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     } else {
         $album->enable_random = 0;
     }
-    if ( isset($_POST['enable_shutterfly'] ) ) {
-        $album->enable_shutterfly   = COM_applyFilter($_POST['enable_shutterfly'],true);
-    } else {
+//    if ( isset($_POST['enable_shutterfly'] ) ) {
+//        $album->enable_shutterfly   = COM_applyFilter($_POST['enable_shutterfly'],true);
+//    } else {
         $album->enable_shutterfly = 0;
-    }
+//    }
     if ( isset($_POST['enable_views']) ) {
         $album->enable_views        = COM_applyFilter($_POST['enable_views'],true);
     } else {
@@ -971,9 +971,9 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     }
     $album->full                = COM_applyFilter($_POST['full_display'],true);
     $album->tn_size             = COM_applyFilter($_POST['tn_size'],true);
-    $album->max_image_height    = COM_applyFilter($_POST['max_image_height'],true);
-    $album->max_image_width     = COM_applyFilter($_POST['max_image_width'],true);
-    $album->max_filesize        = COM_applyFilter($_POST['max_filesize'],true);
+    if ( isset($_POST['max_image_height'])) $album->max_image_height = COM_applyFilter($_POST['max_image_height'],true);
+    if ( isset($_POST['max_image_width']))  $album->max_image_width = COM_applyFilter($_POST['max_image_width'],true);
+    if ( isset($_POST['max_filesize'])) $album->max_filesize = COM_applyFilter($_POST['max_filesize'],true);
     if ( $album->max_filesize != 0 ) {
         $album->max_filesize = $album->max_filesize * 1024;
     }
@@ -1099,8 +1099,10 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
                 $album->mod_group_id = $grp_id;
             }
         }
-        $perm_members               = $_POST['perm_members'];
-        $perm_anon                  = $_POST['perm_anon'];
+        $perm_members = 0;
+        $perm_anon = 0;
+        if ( isset($_POST['perm_members'])) $perm_members = $_POST['perm_members'];
+        if ( isset($_POST['perm_anon'])) $perm_anon = $_POST['perm_anon'];
         list($junk1,$junk2,$album->perm_members,$album->perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
     }
     if ( isset($_POST['owner_id']) ) {
@@ -1183,7 +1185,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
             }
         }
     } else { // if a new album, set the member album defaults since we are a non-admin
-        if ($album->isMemberAlbum() && update == 0) {
+        if ($album->isMemberAlbum() && $update == 0) {
             $album->perm_owner        = $_MG_CONF['member_perm_owner'];
             $album->perm_group        = $_MG_CONF['member_perm_group'];
             $album->enable_random     = $_MG_CONF['member_enable_random'];

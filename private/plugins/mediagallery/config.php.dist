@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Configuration options for Media Gallery                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -112,23 +112,6 @@ $_MG_CONF['disable_version_check']   = 1;
 $_MG_CONF['mediamanage_items']       = 100;
 
 /*
- * Media Gallery will convert all uploaded image media to JPG format,
- * including the original uploaded file. To keep Media Gallery from converting
- * the original file to JPG, set this variable to 1.
- */
-
-$_MG_CONF['do_not_convert_original'] = 1;
-
-/*
- * With ImageMagick, you can keep the JPEG profile data (EXIF) in the
- * display and thumbnail images.  Set this variable to 1 to keep this
- * data.  It will make these files a little bit larger.  On Solaris, setting
- * this option to 1 seems to break the convert command.
- */
-
-$_MG_CONF['im_keep_profiles']        = 0;
-
-/*
  * Media Gallery will attempt to automatically locate some of the external
  * utilities.  If your PHP installation has openbase_dir restrictions enabled
  * this can cause some issues.  Set this variable to 1 to skip the automatic
@@ -220,13 +203,6 @@ $_MG_CONF['dt']['pdf'] = 'pdf.png';
 $_MG_CONF['dt']['zip'] = 'zip.png';
 // $_MG_CONF['dt']['doc'] = 'doc.gif';
 // $_MG_CONF['dt']['xls'] = 'xls.png';
-
-/*
- * If you are using another plugin or theme that loads the mootools JavaScript
- * library, you can disable Media Gallery loading the library.
- */
-
-$_MG_CONF['load_mootools'] = false;
 
 /*
  * The JavaScript used by the lightbox slideshow can cause

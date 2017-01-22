@@ -96,11 +96,6 @@ class OAuthConsumer {
                 $scope   = '';
                 $q_api   = array('include_entities' => "true", 'skip_status' => "true", 'include_email' => "true");
                 break;
-            case 'yahoo' :
-                $api_url = 'http://query.yahooapis.com/v1/yql';
-                $scope   = '';
-                $q_api   = array('q'=>'select * from social.profile where guid=me','format'=>'json');
-                break;
             case 'linkedin' :
                 $api_url = 'http://api.linkedin.com/v1/people/~:(id,first-name,last-name,location,summary,email-address,picture-url,public-profile-url)';
                 $scope   = 'r_basicprofile r_emailaddress';
@@ -130,8 +125,12 @@ class OAuthConsumer {
 			    } elseif(strlen($this->client->access_token)) {
                     $user = $this->get_userinfo();
                 }
+    		} else {
+    		    $this->error = $this->client->error;
     		}
     		$success = $this->client->Finalize($success);
+    	} else {
+    	    $this->error = $this->client->error;
     	}
         if ($this->debug_oauth) COM_errorLog($this->client->debug_output);
     	if ($this->client->exit) {
@@ -163,7 +162,7 @@ class OAuthConsumer {
             $this->client->redirect_uri  = $url;
     }
 
-    public function doAction($info) {
+    public function doFinalLogin($info) {
         global $_TABLES, $LANG04, $status, $uid, $_CONF, $checkMerge;
 
         $users      = $this->_getCreateUserInfo($info);
@@ -265,7 +264,7 @@ class OAuthConsumer {
         return true;
     }
 
-    public function doSynch($info) {
+    public function resyncUserData($info) {
         global $_TABLES, $_USER, $status, $uid, $_CONF;
 
         $users = $this->_getCreateUserInfo($info);
@@ -325,8 +324,6 @@ class OAuthConsumer {
                 if ( isset($info->email ) ) {
                     $userinfo['email'] = $info->email;
                 }
-                break;
-            case 'yahoo' :
                 break;
             case 'linkedin' :
                 if ( isset($info->location->name) ) {
@@ -415,19 +412,6 @@ class OAuthConsumer {
                     'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
                 );
                 break;
-            case 'yahoo' :
-                $users = array(
-                    'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
-                    'email'          => $info->emails->preferred,
-                    'passwd'         => '',
-                    'passwd2'        => '',
-                    'fullname'       => $info->name,
-                    'homepage'       => '',
-                    'remoteusername' => DB_escapeString($info->id),
-                    'remoteservice'  => 'oauth.yahoo',
-                    'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
-                );
-                break;
             case 'linkedin' :
                 $users = array(
                     'loginname'      => (isset($info->{'firstName'}) ? $info->{'firstName'} : $info->id),
@@ -447,7 +431,7 @@ class OAuthConsumer {
             case 'github' :
                 $users = array(
                     'loginname'      => (isset($info->{'login'}) ? $info->{'login'} : $info->id),
-                    'email'          => $info->{'email'},
+                    'email'          => (isset($info->{'email'}) ? $info->{'email'} : ''),
                     'passwd'         => '',
                     'passwd2'        => '',
                     'fullname'       => $info->{'name'},

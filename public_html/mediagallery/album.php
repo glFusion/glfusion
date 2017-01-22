@@ -446,8 +446,10 @@ if ( $adminMenu == 1 ) {
     $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=create">'.$LANG_MG01['create_album'].'</a></li>';
     $admin_box_items .= '<option value="batchcaption">' . $LANG_MG01['batch_caption'] . '</option>';
     $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=batchcaption">'.$LANG_MG01['batch_caption'].'</a></li>';
-    $admin_box_items .= '<option value="staticsort">' . $LANG_MG01['static_sort_media'] . '</option>';
-    $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=staticsort">'.$LANG_MG01['static_sort_media'].'</a></li>';
+    if ( $MG_albums[$album_id]->album_sort_order == 0 ) {
+        $admin_box_items .= '<option value="staticsort">' . $LANG_MG01['static_sort_media'] . '</option>';
+        $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=staticsort">'.$LANG_MG01['static_sort_media'].'</a></li>';
+    }
     $admin_box_items .= '<option value="media">' . $LANG_MG01['manage_media'] .'</option>';
     $admin_menu .= '<li><a href="'.$admin_url.'&amp;mode=media">'.$LANG_MG01['manage_media'].'</a></li>';
     $admin_box_items .= '<option value="resize">' . $LANG_MG01['resize_display'] . '</option>';
@@ -637,7 +639,12 @@ if ( $total_media > 0 ) {
                 }
                 $celldisplay = $MG_media[$j]->displayThumb($z,$sortOrder);
                 if ( $MG_media[$j]->type == 1 ) {
-                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . '.jpg';
+                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $MG_media[$j]->filename[0] . '/' . $MG_media[$j]->filename . $ext) ) {
+                            break;
+                        }
+                    }
+                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . $ext;
                     $T->set_var(array(
                         'URL' => $PhotoURL,
                     ));

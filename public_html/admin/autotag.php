@@ -862,6 +862,7 @@ function ATP_permSave()
                     DB_query($sqlUpdate);
                 }
             }
+            CACHE_remove_instance('atperm');
             $retval .= COM_showMessageText($LANG_AM['perm_saved'],'',false,'info');
         }
     } else {

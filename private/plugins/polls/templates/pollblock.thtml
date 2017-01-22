@@ -4,7 +4,7 @@
 $(window).load(function() {
   $( "#pollautotag_{poll_id}" ).on( "click", "#votebutton", function(event) {
 		event.preventDefault();
-		var data = $("#Vote{poll_id}").serialize();
+		var data = $("#vote{poll_id}").serialize();
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -34,7 +34,7 @@ $(window).load(function() {
 {!elseif edit_icon}
 	  <br />
 {!endif}
-	<form class="uk-form uk-form-horizontal uk-width-1-1" action="{poll_vote_url}" id="Vote{poll_id}" method="post">
+	<form class="uk-form uk-form-horizontal uk-width-1-1" action="{poll_vote_url}" id="vote{poll_id}" method="post">
 	  <input type="hidden" name="pid" value="{poll_id}">
 	  {poll_questions}
 	  <span class="uk-text-small">{poll_notification}</span><br>
