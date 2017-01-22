@@ -60,7 +60,7 @@
 		<input type="hidden" name="uid" value="{uid}" />
 		<input type="hidden" name="{sec_token_name}" value="{sec_token}">
 		<button class="uk-button uk-button-primary" type="submit" value="{lang_submit}">{lang_submit}</button>
-		<button class="uk-button uk-button-danger cancel" type="cancel" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
+		<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
 	</div>
 
 </form>

@@ -391,7 +391,7 @@ function rescue_header( $authenticated ) {
             </ul>
             <div class="uk-navbar-flip uk-hidden-small">
             <div class="uk-navbar-content">
-            <a class="uk-button uk-button-danger" type="cancel" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
+            <a class="uk-button uk-button-danger" type="submit" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
             </div>
             </div>
         ';
@@ -672,7 +672,7 @@ function getNewPaths( $group = 'Core') {
         </div>
         <div class="uk-text-center">
         <button class="uk-button uk-button-success" type="submit" name="mode" value="save" />Save</button>
-        <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+        <button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel" />Logout</button>
         </div>
         </form>
     ';
@@ -790,7 +790,7 @@ function requestNewPassword($errorMsg = '')
           </div>
           <div class="uk-text-center">
             <button class="uk-button uk-button-success" type="submit" name="mode" value="reset" />Reset Password</button>
-            <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+            <button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel" />Logout</button>
           </div>
         </form>
     ';

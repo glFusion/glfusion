@@ -45,6 +45,6 @@ The albums will be created immediately and all the media items will be placed in
 the batch import queue to be processed.
 <p>
 	<button class="uk-button uk-button-success" type="submit" name="mode" value="convert">Convert</button>
-	<button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel">Cancel</button>
+	<button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel">Cancel</button>
 </form>
 {# end {templatelocation} #}
