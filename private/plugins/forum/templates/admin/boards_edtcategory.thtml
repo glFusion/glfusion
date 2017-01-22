@@ -6,7 +6,7 @@
 
 {status_text}
 
-<form class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
+<form id="forumcatedit" class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
 	<input type="hidden" name="type" value="category">
 	<input type="hidden" name="id" value="{id}">
 	<input type="hidden" name="confirm" value="{confirm}">
@@ -15,28 +15,37 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="name">{LANG_NAME}</label>
 		<div class="uk-form-controls">
-			<input class="required uk-form-width-large" type="text" maxlength="70" id="name" name="name" value="{catname}">
+			<input class="required uk-form-width-large" type="text" maxlength="255" id="name" name="name" value="{catname}">
 			<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="name-count" class="uk-text-muted uk-text-small"></span></span>
-</div>
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="name-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="catorder">{LANG_ORDER}</label>
 		<div class="uk-form-controls">
-			<input class="required" type="text" maxlength="5" id="catorder" name="catorder" value="{catorder}">
+			<input class="required" type="text" maxlength="4" id="catorder" name="catorder" value="{catorder}">
 			<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="catorder-count" class="uk-text-muted uk-text-small"></span></span>
-</div>
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="catorder-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="dscp">{LANG_DESCRIPTION}</label>
 		<div class="uk-form-controls">
-			<input class="required uk-form-width-large" type="text" maxlength="70" id="dscp" name="dscp" value="{catdscp}">
+			<input class="required uk-form-width-large" type="text" maxlength="255" id="dscp" name="dscp" value="{catdscp}">
 			<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="dscp-count" class="uk-text-muted uk-text-small"></span></span>
-</div>
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="dscp-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 
@@ -45,19 +54,20 @@
 
 </form>
 <script type="text/javascript">
+$("#forumcatedit").validate();
 $(function(){
-		$("#name").characterCounter({
-			limit: '70',
-			counterSelector: '#name-count'
-		});
-		$("#catorder").characterCounter({
-			limit: '5',
-			counterSelector: '#catorder-count'
-		});
-		$("#dscp").characterCounter({
-			limit: '70',
-			counterSelector: '#dscp-count'
-		});
+	$("#name").characterCounter({
+		limit: '255',
+		counterSelector: '#name-count'
 	});
+	$("#catorder").characterCounter({
+		limit: '4',
+		counterSelector: '#catorder-count'
+	});
+	$("#dscp").characterCounter({
+		limit: '255',
+		counterSelector: '#dscp-count'
+	});
+});
 </script>
 {# end {templatelocation} #}

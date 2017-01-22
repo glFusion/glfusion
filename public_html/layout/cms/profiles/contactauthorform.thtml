@@ -9,34 +9,49 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="from">{lang_fromname}</label>
 		<div class="uk-form-controls">
-			<input class="required" type="text" id="from" name="from" value="{name}">
+			<input class="uk-form-width-large required" maxlength="128" type="text" id="from" name="from" value="{name}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="from-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="fromemail">{lang_fromemailaddress}</label>
 		<div class="uk-form-controls">
-			<input class="required email" type="text" id="fromemail" name="fromemail" value="{email}" maxlength="320">
+			<input class="uk-form-width-large required email" type="text" id="fromemail" name="fromemail" value="{email}" maxlength="128">
 			<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="fromemail-count" class="uk-text-muted uk-text-small"></span></span>
-            </div>
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="fromemail-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="to">{lang_toname}</label>
 		<div class="uk-form-controls">
-			<input class="required" type="text" id="to" name="to" value="{toname}">
+			<input class="uk-form-width-large required" maxlength="128" type="text" id="to" name="to" value="{toname}">
+			<div class="uk-form-help-block uk-margin-small-left">
+				<span class="uk-text-muted uk-text-small">
+					{$LANG_ADMIN[remaining_chars]}
+					<span id="to-count" class="uk-text-muted uk-text-small"></span>
+				</span>
+			</div>
 		</div>
 	</div>
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="toemail">{lang_toemailaddress}</label>
 		<div class="uk-form-controls">
-			<input class="required" type="text" id="toemail" name="toemail" value="{toemail}" maxlength="320">
+			<input class="uk-form-width-large required" type="text" id="toemail" name="toemail" value="{toemail}" maxlength="128">
 			<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="toemail-count" class="uk-text-muted uk-text-small"></span></span>
-            </div>
+				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="toemail-count" class="uk-text-muted uk-text-small"></span></span>
+			</div>
 		</div>
 	</div>
 
@@ -63,12 +78,20 @@
 <script>
 	$("#contact").validate();
 	$(function(){
+		$("#from").characterCounter({
+			limit: '128',
+			counterSelector: '#from-count'
+		});
 		$("#fromemail").characterCounter({
-			limit: '320',
+			limit: '128',
 			counterSelector: '#fromemail-count'
 		});
+		$("#to").characterCounter({
+			limit: '128',
+			counterSelector: '#to-count'
+		});
 		$("#toemail").characterCounter({
-			limit: '320',
+			limit: '128',
 			counterSelector: '#toemail-count'
 		});
 	});
