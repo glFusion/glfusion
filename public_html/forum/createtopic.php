@@ -1212,10 +1212,10 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
             $savedPostID = $editid;
             if (!isset($postData['silentedit']) || $postData['silentedit'] != 1) {
-                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
+//                DB_query("UPDATE {$_TABLES['ff_topic']} SET lastupdated='".DB_escapeString($date)."' WHERE id=".(int) $topicPID);
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET lastedited='".DB_escapeString($date)."' WHERE id=".(int) $editid);
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
-                DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
+//                DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
             }
             if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $editid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $topicPID);
