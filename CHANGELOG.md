@@ -1,4 +1,5 @@
 ## v1.6.6 (unrelease)
+  - Additional checks in Media Gallery view templates to ensure prompts are not shown without data
   - Updated German Translations - Matrox66
   - Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66
 

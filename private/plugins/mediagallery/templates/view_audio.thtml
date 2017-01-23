@@ -72,9 +72,15 @@
 {!endif}
         </div>
         <div class="uk-width-2-4 uk-text-center">
+{!if media_time}
             <div>{media_time}</div>
+{!endif}
+{!if rating_box}
             <div class="uk-hidden-small">{rating_box}</div>
+{!endif}
+{!if lang_keywords}
             <div><span class="uk-text-bold">{lang_keywords}</span> {media_keywords}</div>
+{!endif}
             <div><a href="#" onclick="return popitup('{property}')">{lang_property}</a></div>
             <div>{edit_item}</div>
         </div>
@@ -108,14 +114,18 @@
                 <td>{media_properties}</td>
             </tr>
 {!endif}
+{!if media_time}
             <tr>
                 <td>{$LANG_MG01[date]}</td>
                 <td>{media_time}</td>
             </tr>
+{!endif}
+{!if lang_comments}
             <tr>
                 <td>{lang_comments}</td>
                 <td>{media_comments}</td>
             </tr>
+{!endif}
 {!if lang_views}
             <tr>
                 <td>{$LANG_MG03[views]}</td>
@@ -128,10 +138,12 @@
                 <td>{media_keywords}</td>
             </tr>
 {!endif}
+{!if lang_uploaded_by}
             <tr>
                 <td>{lang_uploaded_by}</td>
                 <td>{owner_username}</td>
             </tr>
+{!endif}
 {!if download}
             <tr>
                 <td>{$LANG_MG03[download]}</td>
