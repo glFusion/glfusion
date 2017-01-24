@@ -89,7 +89,7 @@ function INST_header($percent_complete)
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
         'language'          =>  $_GLFUSION['language'],
-        'wizard_version'    =>  $LANG_INSTALL['wizard_version'],
+        'wizard_version'    =>  sprintf($LANG_INSTALL['wizard_version'],GVERSION),
         'progress_bar'      =>  $progress_bar,
         'percent_complete'  =>  $percent_complete,
     ));
@@ -1700,18 +1700,21 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
-    if ($path{strlen($path)-1}=='/')
+    if ($path{strlen($path)-1}=='/') {
+        if ( !is_dir($path)) {
+            return false;
+        }
         return INST_isWritable($path.uniqid(mt_rand()).'.tmp');
-
+    }
     if (@file_exists($path)) {
         if (!($f = @fopen($path, 'r+')))
             return false;
         fclose($f);
         return true;
     }
-
-    if (!($f = @fopen($path, 'w')))
+    if (!($f = @fopen($path, 'w'))) {
         return false;
+    }
     @fclose($f);
     @unlink($path);
     return true;

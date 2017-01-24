@@ -165,7 +165,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion允许您上传插件、图片和文件。您应设置至少8M的文件上传权限。',
     'use_utf8' => '使用UTF-8',
     'welcome_help' => '欢迎使用glFusion CMS安装向导。',
-    'wizard_version' => 'v'.GVERSION.'安装向导工具',
+    'wizard_version' => 'v%s 安装向导工具',
     'system_path_prompt' => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private<br /><br /><strong>提示：</strong> 您的public_html/的绝对路径应该是：<br />%s<br /><br /><strong>高级设置</strong>允许您强制更改这些默认路径，但一般情况下您不需要修改这些路径，系统会自动为您设置。',
     'advanced_settings' => '高级设置',
     'log_path' => '日志文件路径',
@@ -220,7 +220,15 @@ $LANG_INSTALL = array(
     'show_files_to_delete' => 'Show Files to Delete',
     'skip' => 'Skip',
     'no_utf8' => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
-    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.'
+    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'ext_installed' => 'Installed',
+    'ext_missing' => 'Missing',
+    'ext_required' => 'Required',
+    'ext_optional' => 'Optional',
+    'ext_required_desc' => 'must be installed in PHP',
+    'ext_optional_desc' => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_good' => 'properly installed.',
+    'ext_heading' => 'PHP Extensions'
 );
 
 // +---------------------------------------------------------------------------+

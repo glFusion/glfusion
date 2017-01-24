@@ -1,4 +1,6 @@
-## v1.6.6 (unrelease)
+## v1.6.6 (unreleased)
+  - Additional environment validations (required PHP extensions) performed during install / upgrade
+  - Forum - Fix on smiley replacement to properly escape text
   - Additional checks in Media Gallery view templates to ensure prompts are not shown without data
   - Updated German Translations - Matrox66
   - Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66

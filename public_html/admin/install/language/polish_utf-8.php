@@ -164,7 +164,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion daje ci możliwość wgrywania pluginów, zdjęć/obrazków, oraz plików. Powinieneś mieć co najmniej 8M pamięci dla wgrywania plików.',
     'use_utf8' => 'Użyj kodowania UTF-8',
     'welcome_help' => 'Witaj w kreatorze instalacji CMS glFusion. Możesz zainstalować nową stronę opartą na glFusion, zaktualizować istniejącą stronę opartą na glFusion.<br /><br />Wybierz język kreatora instalacji, oraz zadanie do wykonania, następnie przyciśnij <strong>Następny</strong>.',
-    'wizard_version' => 'v'.GVERSION.' Kreator Instalacji',
+    'wizard_version' => 'v%s Kreator Instalacji',
     'system_path_prompt' => 'Wpisz pełną, absolutną ścieżkę do serwera glFusion wskazując katalog <strong>private/</strong>.<br /><br />Ten katalog zawiera plik <strong>db-config.php.dist</strong> lub <strong>db-config.php</strong>.<br /><br />Przykłady: /home/www/glfusion/private lub c:/www/glfusion/private.<br /><br /><strong>Wskazówka:</strong> Abslotutna ścieżka do twojego katalogu <strong>public_html/</strong> <i>(nie <strong>private/</strong>)</i> to prawdopodobnie:<br /><br />%s<br /><br /><strong>Zaawansowane ustawienia</strong> pozwalają ci ominąć niektóre domyślne ścieżki. Generalnie nie powinna być potrzeba modyfikowania tych specificznych ścieżek, system powinien je wykryć i ustawić automatycznie.',
     'advanced_settings' => 'Zaawanasowane ustawienia',
     'log_path' => 'Ścieżka logów',
@@ -219,7 +219,15 @@ $LANG_INSTALL = array(
     'show_files_to_delete' => 'Show Files to Delete',
     'skip' => 'Skip',
     'no_utf8' => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
-    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.'
+    'no_check_utf8' => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'ext_installed' => 'Installed',
+    'ext_missing' => 'Missing',
+    'ext_required' => 'Required',
+    'ext_optional' => 'Optional',
+    'ext_required_desc' => 'must be installed in PHP',
+    'ext_optional_desc' => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_good' => 'properly installed.',
+    'ext_heading' => 'PHP Extensions'
 );
 
 // +---------------------------------------------------------------------------+

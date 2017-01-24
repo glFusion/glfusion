@@ -420,7 +420,7 @@ function INST_getLanguageTask( )
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
     } else {
-        $language = 'english';
+        $language = 'english_utf-8';
     }
 
     $retval = '';
@@ -701,11 +701,28 @@ function INST_gotPathSetting($dbc_path = '')
 function INST_checkEnvironment($dbconfig_path='')
 {
     global $_GLFUSION, $LANG_INSTALL, $_DB, $_DB_host, $_DB_name, $_DB_user,
-           $_DB_pass,$_DB_table_prefix,$_DB_dbms, $_TABLES, $_SYSTEM;
+           $_DB_pass,$_DB_table_prefix,$_DB_dbms, $_TABLES, $_SYSTEM, $php55;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
+    if ( $php55 ) {
+        $mysqlExtension = 'mysqli';
+    } else {
+        $mysqlExtension = 'mysql';
+    }
+
+    $required_extensions = array(
+        array('extension' => 'date','description' => 'Date Extension','fail' => 1),
+        array('extension' => 'filter', 'description' => 'Filter Extension', 'fail' => 1),
+        array('extension' => 'gd', 'description' => 'GD Graphics Extension', 'fail' => 0),
+        array('extension' => 'json', 'description' => 'JSON Extension', 'fail' => 1),
+        array('extension' => 'xml', 'description' => 'XML Extension', 'fail' => 1),
+        array('extension' => 'mbstring', 'description' => 'MultiByte (mbstring) Extension', 'fail' => 0),
+        array('extension' => $mysqlExtension, 'description' => 'MySQL Extension ('.$mysqlExtension.')', 'fail' => 1),
+        array('extension' => 'openssl', 'description' => 'OpenSSL Extension', 'fail' => 0),
+        array('extension' => 'session', 'description' => 'Session Extension', 'fail' => 1)
+    );
 
     $_GLFUSION['currentstep'] = 'checkenvironment';
 
@@ -720,6 +737,7 @@ function INST_checkEnvironment($dbconfig_path='')
     }
 
     $permError = 0;
+    $envError  = 0;
 
     $T = new TemplateLite('templates/');
     $T->set_file('page','checkenvironment.thtml');
@@ -730,6 +748,26 @@ function INST_checkEnvironment($dbconfig_path='')
      * First we will validate the general environment..
      */
 
+    $T->set_block('page','extensions','extension');
+    foreach ( $required_extensions AS $extension ) {
+        $available = extension_loaded($extension['extension']);
+        $T->set_var('item',$extension['description']);
+        $T->set_var('status',$available == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ext_installed'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['ext_missing'].'</span>');
+        if ( $available != 1 && $extension['fail'] ) $envError = 1;
+        if ( $available != 1 ) {
+            if ( $extension['fail'] == 1 ) {
+                $msg = ' '.$LANG_INSTALL['ext_required_desc'];
+            } else {
+                $msg = ' '. $LANG_INSTALL['ext_optional_desc'];
+            }
+        } else {
+            $msg = ' '. $LANG_INSTALL['ext_good'];
+        }
+        $T->set_var('notes', $extension['description'] . $msg);
+        $T->set_var('recommended',$extension['fail'] == 1 ? $LANG_INSTALL['ext_required'] : $LANG_INSTALL['ext_optional']);
+        $T->parse('extension','extensions',true);
+    }
+
     $T->set_block('page','envs','env');
 
     // PHP Version
@@ -737,7 +775,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('item',$LANG_INSTALL['php_version']);
 
     if ( INST_phpOutOfDate() ) {
-        $T->set_var('status','<span class="uk-text-danger">'.phpversion().'</span>');
+        $T->set_var('status','<span class="uk-text-danger uk-text-bold">'.phpversion().'</span>');
     } else {
         $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
@@ -745,13 +783,9 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 
-//    $rg = ini_get('register_globals');
-//    $sm = ini_get('safe_mode');
-//    $ob = ini_get('open_basedir');
-
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
 
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['register_globals']);
@@ -759,7 +793,7 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $sm = ini_get('safe_mode');
     $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
 
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['safe_mode']);
@@ -773,23 +807,15 @@ function INST_checkEnvironment($dbconfig_path='')
         $open_basedir_directories = $ob;
     }
     $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['enabled'].'</span>');
+    $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['enabled'].'</span>');
 
     $T->set_var('notes',$LANG_INSTALL['open_basedir']);
-    $T->parse('env','envs',true);
-
-    $mbs = extension_loaded('mbstring');
-    $T->set_var('item','mbstring extension');
-    $T->set_var('status',$mbs == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['off'].'</span>');
-
-    $T->set_var('recommended',$LANG_INSTALL['on']);
-    $T->set_var('notes',$LANG_INSTALL['mbstring_support']);
     $T->parse('env','envs',true);
 
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
-    $T->set_var('status',$memory_limit < 50331648 ? '<span class="uk-text-danger">'.$memory_limit_print.'M</span>' : '<span class="uk-text-success">'.$memory_limit_print.'M</span>');
+    $T->set_var('status',$memory_limit < 50331648 ? '<span class="uk-text-danger uk-text-bold">'.$memory_limit_print.'M</span>' : '<span class="uk-text-success">'.$memory_limit_print.'M</span>');
 
     $T->set_var('recommended','64M');
     $T->set_var('notes',$LANG_INSTALL['memory_limit']);
@@ -797,7 +823,7 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $fu = ini_get('file_uploads');
     $T->set_var('item','file_uploads');
-    $T->set_var('status',$fu == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-danger">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('status',$fu == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['off'].'</span>');
     $T->set_var('recommended',$LANG_INSTALL['on']);
     $T->set_var('notes',$LANG_INSTALL['file_uploads']);
     $T->parse('env','envs',true);
@@ -805,7 +831,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $upload_limit = INST_return_bytes(ini_get('upload_max_filesize'));
     $upload_limit_print = ($upload_limit / 1024) / 1024;
     $T->set_var('item','upload_max_filesize');
-    $T->set_var('status',$upload_limit < 8388608 ? '<span class="uk-text-danger">'.$upload_limit_print.'M</span>' : '<span class="uk-text-success">'.$upload_limit_print.'M</span>');
+    $T->set_var('status',$upload_limit < 8388608 ? '<span class="uk-text-danger uk-text-bold">'.$upload_limit_print.'M</span>' : '<span class="uk-text-success">'.$upload_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['upload_max_filesize']);
     $T->parse('env','envs',true);
@@ -813,7 +839,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $post_limit = INST_return_bytes(ini_get('post_max_size'));
     $post_limit_print = ($post_limit / 1024) / 1024;
     $T->set_var('item','post_max_size');
-    $T->set_var('status',$post_limit < 8388608 ? '<span class="uk-text-danger">'.$post_limit_print.'M</span>' : '<span class="uk-text-success">'.$post_limit_print.'M</span>');
+    $T->set_var('status',$post_limit < 8388608 ? '<span class="uk-text-danger uk-text-bold">'.$post_limit_print.'M</span>' : '<span class="uk-text-success">'.$post_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['post_max_size']);
     $T->parse('env','envs',true);
@@ -941,7 +967,7 @@ function INST_checkEnvironment($dbconfig_path='')
         }
     }
     // special test to see if we can create a directory under layout_cache...
-    $rc = mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
+    $rc = @mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     if (!$rc) {
         $T->set_var('location',$_PATH['dbconfig_path'].'data/layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
         $T->set_var('status', '<span class="Unwriteable">'.$LANG_INSTALL['unable_mkdir'].'</span>');
@@ -971,13 +997,25 @@ function INST_checkEnvironment($dbconfig_path='')
         $permError = 1;
     }
     $T->set_var('icon','arrow-right');
-    if ( $permError ) {
+    if ( $permError || $envError ) {
         $button = 'Recheck';
         $action = 'checkenvironment';
+    }
+
+    if ( $permError ) {
         $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
         $T->set_var('icon','repeat');
         $recheck = '';
-    } else {
+    }
+
+    if ( $envError ) {
+        $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
+        $T->set_var('icon','repeat');
+        $recheck = '';
+    }
+
+    if ( $permError == 0 && $envError == 0 ) {
+
         $recheck = '';
         $T->set_var('location',$LANG_INSTALL['directory_permissions']);
         $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
@@ -1017,6 +1055,7 @@ function INST_checkEnvironment($dbconfig_path='')
         'lang_filesystem'   => $LANG_INSTALL['filesystem_check'],
         'lang_php_settings' => $LANG_INSTALL['php_settings'],
         'lang_php_warning'  => $LANG_INSTALL['php_warning'],
+        'lang_ext_heading'  => $LANG_INSTALL['ext_heading'],
         'hiddenfields'      => _buildHiddenFields(),
         'percent_complete'      => '20',
     ));
@@ -1454,7 +1493,7 @@ function INST_installAndContentPlugins()
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
     } else {
-        $language = 'english';
+        $language = 'english_utf-8';
     }
 
     $_PATH['dbconfig_path'] = $_GLFUSION['dbconfig_path'];
@@ -2162,7 +2201,7 @@ function INST_installAlert( )
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
     } else {
-        $language = 'english';
+        $language = 'english_utf-8';
     }
 
     $retval = '';
@@ -2219,7 +2258,7 @@ function INST_upgradeAlert( )
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
     } else {
-        $language = 'english';
+        $language = 'english_utf-8';
     }
 
     $retval = '';
@@ -2278,7 +2317,7 @@ for ($i = 0; $i < 4; $i++) {
 if ( isset($_GLFUSION['language']) ) {
     $lng = $_GLFUSION['language'];
 } else {
-    $lng = 'english';
+    $lng = 'english_utf-8';
 }
 if ( isset($_POST['lang']) ) {
     $lng = $_POST['lang'];
@@ -2292,7 +2331,7 @@ $lng = preg_replace('/[^a-z0-9\-_]/', '', $lng);
 if (!empty($lng) && is_file('language/' . $lng . '.php')) {
     $language = $lng;
 } else {
-    $language = 'english';
+    $language = 'english_utf-8';
 }
 
 $_GLFUSION['language'] = $language;

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -160,7 +160,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize'		=> 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'use_utf8'                  => 'Use UTF-8',
     'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
-    'wizard_version'            => 'v' . GVERSION . ' Installation Wizard',
+    'wizard_version'            => 'v%s Installation Wizard',
     'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />For a new install, this is the directory that contains the <strong>db-config.php.dist</strong> file, or for an upgrade, and existing <strong>db-config.php</strong> file.<br /><br />Directory Examples:<br />/home/www/glfusion/private/<br />c:/www/glfusion/private/<br /><br /><strong>Hint:</strong> From a security perspective, the most desirable location for the private/ directory is outside of the web root.  The web root is the directory that is served by your web host that relates to the root url of your site (http://www.yoursite.com/).<br /><br />It appears that the absolute path to your <strong>public_html/</strong> <i>(not <strong>private/</strong>)</i> directory is:<br /><br />%s<br /><br />We suggest that you place your private/ directory somewhere outside of the web root, if your web host allows this.<br /><br />If your web host does not allow for placement of files outside of the web root, please follow the instructions on <a href="https://www.glfusion.org/wiki/glfusion:install:pathsetting" target="_blank">Installing the private/ directory in the public web space</a> at the glFusion Documentation Wiki.<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
     'advanced_settings'         => 'Advanced Settings',
     'log_path'                  => 'Logs Path',
@@ -216,6 +216,14 @@ $LANG_INSTALL = array(
     'skip'                      => 'Skip',
     'no_utf8'                   => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
     'no_check_utf8'             => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'ext_installed'             => 'Installed',
+    'ext_missing'               => 'Missing',
+    'ext_required'              => 'Required',
+    'ext_optional'              => 'Optional',
+    'ext_required_desc'         => 'must be installed in PHP',
+    'ext_optional_desc'         => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_good'                  => 'properly installed.',
+    'ext_heading'               => 'PHP Extensions',
 );
 
 // +---------------------------------------------------------------------------+
