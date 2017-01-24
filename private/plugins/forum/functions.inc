@@ -768,7 +768,7 @@ function forum_xchsmilies($message,$reverse=false) {
         $counter = 0;
         foreach ( $search AS $emoticon) {
             if ( isset($replace[$counter])) {
-                $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon) . "#", $replace[$counter], $message);
+                $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon,"#") . "#", $replace[$counter], $message);
             }
             $counter++;
         }
