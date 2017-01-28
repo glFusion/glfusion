@@ -1349,7 +1349,6 @@ function service_submit_story($args, &$output, &$svc_msg)
         } else {
             $args['perm_anon'] = COM_applyBasicFilter($args['perm_anon'], true);
         }
-
         if (!isset($args['draft_flag'])) {
             $args['draft_flag'] = $_CONF['draft_flag'];
         }
@@ -1363,6 +1362,14 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
     /* - END: Set all the defaults - */
+
+    if ( isset($args['draft_flag_yes'] ) || isset($args['draft_flag_no']) ) {
+        if ( isset($args['draft_flag_yes']) ) {
+            $args['draft_flag'] = 1;
+        } else {
+            $args['draft_flag'] = 0;
+        }
+    }
 
     if (!isset($args['sid'])) {
         $args['sid'] = '';
