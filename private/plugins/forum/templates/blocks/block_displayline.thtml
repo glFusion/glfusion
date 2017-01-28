@@ -1,10 +1,21 @@
 {# begin {templatelocation} #}
-<li>
-<img src="{img_dir}/icon_minipost.gif" alt="" />
-<b>
-<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;fromblock=yes" title="{fullsubject}">{topic_subject}</a>
-</b>
-<br/>
-&nbsp;<span class="pluginTinyText"><b>{LANG_BY}</b>&nbsp;{profilelink}{user_name}</a></span><br />&nbsp;<span class="pluginTinyText"><b>{LANG_ON}</b>&nbsp;{date}</span><br />&nbsp;<span class="pluginTinyText"><b>{LANG_VIEWS}</b>&nbsp;{views}&nbsp;<b>{LANG_REPLIES}</b>&nbsp;{replies}<br /></span>
+<li class="uk-margin-bottom">
+	<h4 class="uk-margin-remove uk-text-truncate">
+		<a class="uk-text-truncate" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;fromblock=yes" title="{fullsubject}">{topic_subject}</a>
+	</h4>
+	&nbsp;
+	<span class="uk-text-small">
+	<b>{LANG_BY}</b>&nbsp;{profilelink}{user_name}</a>
+	</span>
+	<br />&nbsp;
+	<span class="uk-text-small">
+		<b>{LANG_ON}</b>&nbsp;{date}
+	</span>
+	<br />
+	&nbsp;
+	<span class="uk-text-small">
+		<b>{LANG_VIEWS}</b>&nbsp;{views}&nbsp;<b>{LANG_REPLIES}</b>&nbsp;{replies}
+		<br />
+	</span>
 </li>
 {# end {templatelocation} #}
