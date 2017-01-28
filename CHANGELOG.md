@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
   - Demo Mode updates
   - Cancel button did not cancel on forms with empty required fields
   - Forum - Formatting improvements to Latest Post block
