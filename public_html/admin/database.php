@@ -135,15 +135,15 @@ function DBADMIN_list()
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                                 'text' => $LANG_DB_ADMIN['optimize_menu']);
 //        }
-        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_ADMIN['convert_menu']);
         }
-        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
-        if ( DBADMIN_supportUtf8mb() ) {
+        if ( DBADMIN_supportUtf8mb() && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                                 'text' => $LANG_DB_ADMIN['utf8_title']);
         }
@@ -349,15 +349,15 @@ function DBADMIN_backupPrompt()
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                             'text' => $LANG_DB_ADMIN['optimize_menu']);
 
-        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+        if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                                 'text' => $LANG_DB_ADMIN['convert_menu']);
         }
-        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+        if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                                 'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
         }
-        if ( DBADMIN_supportUtf8mb() ) {
+        if ( DBADMIN_supportUtf8mb() && !defined('DEMO_MODE') ) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                                 'text' => $LANG_DB_ADMIN['utf8_title']);
         }
@@ -550,6 +550,8 @@ function DBADMIN_innodb()
 
     $retval = '';
 
+    if ( defined('DEMO_MODE') ) return DB_list();
+
     $allInnoDB = DBADMIN_innodbStatus();
     $allMyISam = DBADMIN_myisamStatus();
 
@@ -565,11 +567,11 @@ function DBADMIN_innodb()
     $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                         'text' => $LANG_DB_ADMIN['optimize_menu']);
 
-    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) && !defined('DEMO_MODE') ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                             'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
     }
-    if ( DBADMIN_supportUtf8mb() ) {
+    if ( DBADMIN_supportUtf8mb() && !defined('DEMO_MODE') ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                             'text' => $LANG_DB_ADMIN['utf8_title']);
     }
@@ -624,6 +626,8 @@ function DBADMIN_myisam()
     global $_CONF, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
+
+    if ( defined('DEMO_MODE') ) return DB_list();
 
     $allInnoDB = DBADMIN_innodbStatus();
 
@@ -710,6 +714,8 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
     $retval = '';
     $start = time();
 
+    if ( defined('DEMO_MODE') ) return DB_list();
+
     DB_displayError(true);
 
     $maxtime = @ini_get('max_execution_time');
@@ -795,6 +801,8 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
     $retval = '';
     $start = time();
 
+    if ( defined('DEMO_MODE') ) return DB_list();
+
     DB_displayError(true);
 
     $maxtime = @ini_get('max_execution_time');
@@ -876,15 +884,15 @@ function DBADMIN_optimize()
     $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/database.php?backupdb=x',
                         'text' => $LANG_DB_ADMIN['create_backup']);
 
-    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) && !defined('DEMO_MODE') ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                             'text' => $LANG_DB_ADMIN['convert_menu']);
     }
-    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) && !defined('DEMO_MODE') ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                             'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
     }
-    if ( DBADMIN_supportUtf8mb() ) {
+    if ( DBADMIN_supportUtf8mb() && !defined('DEMO_MODE') ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                             'text' => $LANG_DB_ADMIN['utf8_title']);
     }
@@ -1066,6 +1074,13 @@ function DBADMIN_ajaxOptimizeTable( $table )
     global $_DB_name;
     if ( !COM_isAjax()) die();
 
+    if ( defined('DEMO_MODE') ) {
+        $retval['errorCode'] = 0;
+        $return["js"] = json_encode($retval);
+        echo json_encode($return);
+        exit;
+    }
+
     $retval = array();
     $return = array();
 /* - allow optimization on innodb tables
@@ -1180,15 +1195,15 @@ function DBADMIN_configBackup()
     $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?optimize=x',
                         'text' => $LANG_DB_ADMIN['optimize_menu']);
 
-    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' ) ) {
+    if ( !$allInnoDB && DBADMIN_supported_engine( 'InnoDB' )  && !defined('DEMO_MODE')  ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?innodb=x',
                             'text' => $LANG_DB_ADMIN['convert_menu']);
     }
-    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+    if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) && !defined('DEMO_MODE')  ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?myisam=x',
                             'text' => $LANG_DB_ADMIN['convert_myisam_menu']);
     }
-    if ( DBADMIN_supportUtf8mb() ) {
+    if ( DBADMIN_supportUtf8mb() && !defined('DEMO_MODE')  ) {
         $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                             'text' => $LANG_DB_ADMIN['utf8_title']);
     }
@@ -1567,26 +1582,29 @@ switch ($action) {
     case 'saveconfig' :
         $items = array();
 
-        // Get the excluded tables into a serialized string
-        $tables = explode('|', $_POST['groupmembers']);
+        if ( !defined('DEMO_MODE') ) {
+            // Get the excluded tables into a serialized string
+            $tables = explode('|', $_POST['groupmembers']);
 
-        $cfg =& config::get_instance();
-        if ( is_array($tables)) {
-            $cfg->set('dbback_exclude', $tables, 'dbadmin_internal');
+            $cfg =& config::get_instance();
+            if ( is_array($tables)) {
+                $cfg->set('dbback_exclude', $tables, 'dbadmin_internal');
+            }
+
+            $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
+
+            $items['_dbback_gzip'] = isset($_POST['use_gzip']) ? 1 : 0;
+            $items['_dbback_allstructs'] = isset($_POST['allstructs']) ? 1 : 0;
+
+            foreach ($items as $name => $value) {
+                $sql = "INSERT INTO {$_TABLES['vars']} (name, value)
+                        VALUES ('$name', '$value')
+                        ON DUPLICATE KEY UPDATE value='$value'";
+                DB_query($sql);
+            }
+        } else {
+            COM_setMsg('Saving Database Admin Options is Disabled in Demo Mode','error');
         }
-
-        $items['_dbback_files'] = (int)$_POST['db_backup_maxfiles'];
-
-        $items['_dbback_gzip'] = isset($_POST['use_gzip']) ? 1 : 0;
-        $items['_dbback_allstructs'] = isset($_POST['allstructs']) ? 1 : 0;
-
-        foreach ($items as $name => $value) {
-            $sql = "INSERT INTO {$_TABLES['vars']} (name, value)
-                    VALUES ('$name', '$value')
-                    ON DUPLICATE KEY UPDATE value='$value'";
-            DB_query($sql);
-        }
-
         $page = DBADMIN_list();
 
         break;
