@@ -185,7 +185,7 @@
 	</fieldset>
 </div>
 	<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
-	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+	<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 	<button class="uk-button uk-button-danger" type="submit" value="{lang_delete}" name="delete" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
 {!endif}

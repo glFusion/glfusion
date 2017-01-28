@@ -98,7 +98,7 @@
 		</table>
 		<div class="uk-margin-large">
 			<button class="uk-button uk-button-success" onclick="return doubleconfirm('{lang_confirm}','{lang_confirm_confirm}');" type="submit" value="{lang_save}" name="globalsave">{lang_save}</button>
-			<button class="uk-button uk-button-primary" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+			<button class="uk-button uk-button-primary cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 		</div>
 	</form>
 </div>

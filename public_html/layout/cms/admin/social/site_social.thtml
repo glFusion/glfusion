@@ -30,6 +30,6 @@
 	</div>
 
 	<button class="uk-button uk-button-primary" type="submit" value="save" name="savesitememberships">{lang_save}</button>
-	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+	<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 </form>
 {# end {templatelocation} #}
