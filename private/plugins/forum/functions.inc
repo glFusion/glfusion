@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -909,7 +909,7 @@ function phpblock_forum_newposts() {
                 $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['sb_subject_size'], '...', false );
 
                 if ($A['replies'] > 0 AND $_FF_CONF['sb_latestpostonly']) {
-                    $lastreplySQL = DB_query("Select uid,name,date from {$_TABLES['ff_topic']} WHERE pid={$A['id']} ORDER BY date DESC LIMIT 1");
+                    $lastreplySQL = DB_query("SELECT uid,name,date from {$_TABLES['ff_topic']} WHERE pid={$A['id']} ORDER BY date DESC LIMIT 1");
                     list ($uid,$postername,$postdate) = DB_fetchArray($lastreplySQL);
                 } else {
                     $postername = $A['name'];
@@ -922,7 +922,6 @@ function phpblock_forum_newposts() {
                 } else {
                     $profilelink = '';
                 }
-
                 $block->set_var ('css_id', $onetwo);
                 $block->set_var ('img_dir', $_CONF['site_url'] . '/forum/images');
                 $block->set_var ('forum_id', $A['forum']);
