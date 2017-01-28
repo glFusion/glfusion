@@ -157,7 +157,7 @@ function bb2_insert_head() {
     global $bb2_javascript;
     $retval = '';
 
-    $retval =  "\n<!-- Bad Behavior " . BB2_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->\n";
+    $retval =  "\n<!-- Bad Behavior " . BAD_BEHAVIOR_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->\n";
     $retval .= $bb2_javascript;
     return $retval;
 }
