@@ -564,9 +564,10 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var('save_button','savereply');
         $postmessage = $LANG_GF02['PostReply'];
         $peTemplate->set_var ('hidden_action', 'newreply');
-        if ( !$viewMode ) {
-            $postData['subject'] = $LANG_GF01['RE'] . $postData['subject'];
-        }
+// do not prepend the re: on reply subjects
+//        if ( !$viewMode ) {
+//            $postData['subject'] = $LANG_GF01['RE'] . $postData['subject'];
+//        }
         $quoteid = isset($_GET['quoteid']) ? COM_applyFilter($_GET['quoteid'],true) : 0;
         if ( !$viewMode) $postData['mood'] = '';
         if ($quoteid > 0 && !$viewMode ) {
