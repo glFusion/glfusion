@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | logo.php                                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -37,7 +37,7 @@ if (!SEC_hasRights('logo.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the logo administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the logo administration screen.");
     echo $display;
     exit;
 }
@@ -88,7 +88,6 @@ function _saveLogo() {
     // 2 = Unknown file type
     // 3 = no file available
     // 4 = invalid size
-
 
     $retval = 1;
 
@@ -172,20 +171,24 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $currentSelect = $LANG_LOGO['logo'];
             break;
         case 'savelogo' :
+            $mtype = 'info';
             $rc = _saveLogo();
             switch ( $rc ) {
                 case 2:
                     $message = $LANG_LOGO['invalid_type'];
+                    $mtype = 'error';
                     break;
                 case 4 :
                     $message = $LANG_LOGO['invalid_size'].$_CONF['max_logo_height'].'x'.$_CONF['max_logo_width'].'px';
+                    $mtype = 'error';
                     break;
                 default :
                     $message = $LANG_LOGO['logo_saved'];
+                    $mtype = 'info';
                     break;
             }
 
-            $content = COM_showMessageText( $message, 'Logo Administration' );
+            $content = COM_setMsg($message,$mtype);
             $content .= _logoEdit( );
             $currentSelect = $LANG_LOGO['logo_admin'];
             break;
