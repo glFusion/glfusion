@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Environment Check                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -46,28 +46,42 @@ if (!SEC_inGroup ('Root')) {
 
 function _checkEnvironment()
 {
-    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG01,$LANG28,
+    global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
            $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
 
     $retval = '';
     $permError = 0;
 
+    $required_extensions = array(
+        array('extension' => 'ctype',   'fail' => 1),
+        array('extension' => 'date',    'fail' => 1),
+        array('extension' => 'filter',  'fail' => 1),
+        array('extension' => 'gettext', 'fail' => 1),
+        array('extension' => 'json',    'fail' => 1),
+        array('extension' => 'mysqli',  'fail' => 1),
+        array('extension' => 'mbstring','fail' => 0),
+        array('extension' => 'openssl', 'fail' => 0),
+        array('extension' => 'session', 'fail' => 1),
+        array('extension' => 'xml',     'fail' => 1),
+        array('extension' => 'zlib',    'fail' => 1)
+    );
+
     $T = new Template($_CONF['path_layout'] . 'admin');
     $T->set_file('page','envcheck.thtml');
 
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
-              'text' => $LANG01['recheck']),
+              'text' => $LANG_ENVCHK['recheck']),
         array('url'  => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $retval .= COM_startBlock($LANG01['hosting_env'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= COM_startBlock($LANG_ENVCHK['hosting_env'], '', COM_getBlockTemplate('_admin_block', 'header'));
+
     $retval .= ADMIN_createMenu(
         $menu_arr,
-        $LANG01['php_warning'],
+        $LANG_ENVCHK['php_warning'],
         $_CONF['layout_url'] . '/images/icons/envcheck.png'
     );
 
@@ -81,20 +95,21 @@ function _checkEnvironment()
 
     // PHP Version
 
-    $T->set_var('item',$LANG01['php_version']);
+    $T->set_var('item',$LANG_ENVCHK['php_version']);
 
     $classCounter = 0;
 
+    $T->set_var('status',phpversion());
     if ( _phpOutOfDate() ) {
-        $T->set_var('status','<span class="notok">'.phpversion().'</span>');
+        $T->set_var('class','tm-fail');
     } else {
-        $T->set_var('status','<span class="yes">'.phpversion().'</span>');
+        $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','5.6.0+');
+    $T->set_var('recommended','7.0.0+');
 
-    $phpnotes = $LANG01['php_req_version'];
+    $phpnotes = $LANG_ENVCHK['php_req_version'];
     if ( !_phpUpToDate() ) {
-        $phpnotes .= '<br><span class="notok">'.$LANG01['phpendoflife'].'</span>';
+        $phpnotes .= '<br><span class="tm-fail">'.$LANG_ENVCHK['phpendoflife'].'</span>';
     }
     $T->set_var('notes',$phpnotes);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -103,18 +118,20 @@ function _checkEnvironment()
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? '<span class="notok">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
-    $T->set_var('recommended',$LANG01['off']);
-    $T->set_var('notes',$LANG01['register_globals']);
+    $T->set_var('status',$rg == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+    $T->set_var('class',$rg == 1 ? 'tm-fail' : 'tm-pass');
+    $T->set_var('recommended',$LANG_ENVCHK['off']);
+    $T->set_var('notes',$LANG_ENVCHK['register_globals']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
 
     $sm = ini_get('safe_mode');
     $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? '<span class="notok">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
-    $T->set_var('recommended',$LANG01['off']);
-    $T->set_var('notes',$LANG01['safe_mode']);
+    $T->set_var('status',$sm == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+    $T->set_var('class',$sm == 1 ? 'tm-fmail' : 'tm-pass');
+    $T->set_var('recommended',$LANG_ENVCHK['off']);
+    $T->set_var('notes',$LANG_ENVCHK['safe_mode']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
@@ -127,8 +144,9 @@ function _checkEnvironment()
         $open_basedir_directories = $ob;
     }
     $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG01['off'].'</span>' : '<span class="notok">'.$LANG01['enabled'].'</span>');
-    $T->set_var('notes',$LANG01['open_basedir']);
+    $T->set_var('status',$ob == '' ? $LANG_ENVCHK['off'] : $LANG_ENVCHK['enabled']);
+    $T->set_var('class', $ob == '' ? 'tm-pass' : 'tm-fail');
+    $T->set_var('notes',$LANG_ENVCHK['open_basedir']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
@@ -136,19 +154,21 @@ function _checkEnvironment()
     $memory_limit = _return_bytes(ini_get('memory_limit'));
     $memory_limit_print = _bytes_to_mg($memory_limit); //  / 1024) / 1024;
     $T->set_var('item','memory_limit');
-    // check for at least 48M
-    $T->set_var('status',$memory_limit < 50331648 ? '<span class="notok">'.$memory_limit_print.'</span>' : '<span class="yes">'.$memory_limit_print.'</span>');
+
+    $T->set_var('status',$memory_limit < 50331648 ? $memory_limit_print : $memory_limit_print);
+    $T->set_var('class',$memory_limit < 50331648 ? 'tm-fail' : 'tm-pass');
     $T->set_var('recommended','64M');
-    $T->set_var('notes',$LANG01['memory_limit']);
+    $T->set_var('notes',$LANG_ENVCHK['memory_limit']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
 
     $fu = ini_get('file_uploads');
     $T->set_var('item','file_uploads');
-    $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG01['on'].'</span>' : '<span class="notok">'.$LANG01['off'].'</span>');
-    $T->set_var('recommended',$LANG01['on']);
-    $T->set_var('notes',$LANG01['file_uploads']);
+    $T->set_var('status',$fu == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+    $T->set_var('class',$fu == 1 ? 'tm-pass' : 'tm-fail');
+    $T->set_var('recommended',$LANG_ENVCHK['on']);
+    $T->set_var('notes',$LANG_ENVCHK['file_uploads']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
@@ -157,79 +177,72 @@ function _checkEnvironment()
     $upload_limit_print = _bytes_to_mg($upload_limit);
     $T->set_var('item','upload_max_filesize');
     // check for at least 8M
-    $T->set_var('status',$upload_limit < 8388608 ? '<span class="notok">'.$upload_limit_print.'</span>' : '<span class="yes">'.$upload_limit_print.'</span>');
+    $T->set_var('status',$upload_limit < 8388608 ? $upload_limit_print : $upload_limit_print);
+    $T->set_var('class',$upload_limit < 8388608 ? 'tm-fail' : 'tm-pass');
     $T->set_var('recommended','8M');
-    $T->set_var('notes',$LANG01['upload_max_filesize']);
+    $T->set_var('notes',$LANG_ENVCHK['upload_max_filesize']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
 
     $post_limit = _return_bytes(ini_get('post_max_size'));
     if ( $post_limit == 0 ) {
-        $post_limit_print = 'unlimited';
-        $T->set_var('status','<span class="yes">'.$post_limit_print.'</span>');
+        $post_limit_print = $LANG_ENVCHK['unlimited'];
+        $T->set_var('status',$post_limit_print);
+        $T->set_var('class','tm-pass');
     } else {
         $post_limit_print = _bytes_to_mg($post_limit);
-        $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'</span>' : '<span class="yes">'.$post_limit_print.'</span>');
+        $T->set_var('status',$post_limit < 8388608 ? $post_limit_print : $post_limit_print);
+        $T->set_var('class',$post_limit < 8388608 ? 'tm-fail' : 'tm-pass');
     }
     $T->set_var('item','post_max_size');
     $T->set_var('recommended','8M');
-    $T->set_var('notes',$LANG01['post_max_size']);
+    $T->set_var('notes',$LANG_ENVCHK['post_max_size']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
 
     $max_execution_time = ini_get('max_execution_time');
     $T->set_var('item', 'max_execution_time');
-    $T->set_var('status', $max_execution_time < 30 ? '<span class="notok">' . $max_execution_time . ' secs</span>' : '<span class="yes">' . $max_execution_time . ' secs</span>');
+    $T->set_var('status', $max_execution_time < 30 ? $max_execution_time . ' secs' : $max_execution_time . ' secs');
+    $T->set_var('class', $max_execution_time < 30 ? 'tm-fail' : 'tm-pass');
     $T->set_var('recommended', '30 secs');
-    $T->set_var('notes',$LANG01['max_execution_time']);
+    $T->set_var('notes',$LANG_ENVCHK['max_execution_time']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
 
     $mysql_version = DB_getVersion();
-    $T->set_var('mysql', 'MySQL Version');
+    $T->set_var('mysql', $LANG_ENVCHK['database_version']);
     $T->set_var('mysql_version',$mysql_version);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $classCounter++;
 
     $T->set_block('page','libs','lib');
 
-    if (extension_loaded('mbstring')) {
-        $T->set_var(array(
-            'item' => $LANG01['mbstring_library'],
-            'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
-            'notes' => $LANG01['mbstring_ok']
-        ));
-    } else {
-        $T->set_var(array(
-            'item' => $LANG01['mbstring_library'],
-            'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
-            'notes' => $LANG01['mbstring_not_found']
-        ));
+    foreach ( $required_extensions AS $extension ) {
+        if ( $extension['fail'] ) {
+            $note = $LANG_ENVCHK[$extension['extension'].'_extension'] .' '.$LANG_ENVCHK['is_required'];
+        } else {
+            $note = $LANG_ENVCHK[$extension['extension'].'_extension'] .' '.$LANG_ENVCHK['is_optional'];
+        }
+        if  (extension_loaded($extension['extension'])) {
+            $T->set_var(array(
+                'item' => $LANG_ENVCHK[$extension['extension'].'_extension'],
+                'status' => $LANG_ENVCHK['ok'],
+                'notes' => $note,
+                'class' => 'tm-pass',
+            ));
+        } else {
+            $T->set_var(array(
+                'item' => $LANG_ENVCHK[$extension['extension'].'_extension'],
+                'status' => $LANG_ENVCHK['not_found'],
+                'notes' => $note,
+                'class' => 'tm-fail',
+            ));
+        }
+        $T->parse('lib','libs',true);
     }
-
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('lib','libs',true);
-    $classCounter++;
-
-    if (extension_loaded('openssl')) {
-        $T->set_var(array(
-            'item' => $LANG01['openssl_library'],
-            'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
-            'notes' => $LANG01['openssl_ok']
-        ));
-    } else {
-        $T->set_var(array(
-            'item' => $LANG01['openssl_library'],
-            'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
-            'notes' => $LANG01['openssl_not_found']
-        ));
-    }
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('lib','libs',true);
-    $classCounter++;
 
     if ( $sm != 1 && $open_basedir_restriction != 1 ) {
         switch ( $_CONF['image_lib'] ) {
@@ -242,15 +255,17 @@ function _checkEnvironment()
                 clearstatcache();
                 if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
                     $T->set_var(array(
-                        'item'   =>  $LANG01['imagemagick'],
-                        'status' =>  '<span class="notok">' .  $LANG01['not_found'] . '</span>',
-                        'notes'  => $LANG01['im_not_found'],
+                        'item'   =>  $LANG_ENVCHK['imagemagick'],
+                        'status' =>  $LANG_ENVCHK['not_found'],
+                        'class' =>  'tm-fail',
+                        'notes'  => $LANG_ENVCHK['im_not_found'],
                     ));
                 } else {
                     $T->set_var(array(
-                        'item'   => $LANG01['imagemagick'],
-                        'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
-                        'notes'  => $LANG01['im_ok'],
+                        'item'   => $LANG_ENVCHK['imagemagick'],
+                        'status' => $LANG_ENVCHK['ok'],
+                        'class' => 'tm-pass',
+                        'notes'  => $LANG_ENVCHK['im_ok'],
                     ));
                 }
                 break;
@@ -258,23 +273,26 @@ function _checkEnvironment()
                 if ($gdv = gdVersion()) {
                     if ($gdv >=2) {
                         $T->set_var(array(
-                            'item'   => $LANG01['gd_lib'],
-                            'status' => '<span class="yes">'.$LANG01['ok'].'</span>',
-                            'notes'  => $LANG01['gd_ok'],
+                            'item'   => $LANG_ENVCHK['gd_lib'],
+                            'status' => $LANG_ENVCHK['ok'],
+                            'class' => 'tm-pass',
+                            'notes'  => $LANG_ENVCHK['gd_ok'],
                         ));
 
                     } else {
                         $T->set_var(array(
-                            'item'   => $LANG01['gd_lib'],
-                            'status' => '<span class="yes">'.$LANG01['ok'].'</span>',
-                            'notes'  => $LANG01['gd_v1'],
+                            'item'   => $LANG_ENVCHK['gd_lib'],
+                            'status' => $LANG_ENVCHK['ok'],
+                            'class' => 'tm-pass',
+                            'notes'  => $LANG_ENVCHK['gd_v1'],
                         ));
                     }
                 } else {
                     $T->set_var(array(
-                        'item'   =>  $LANG01['gd_lib'],
-                        'status' =>  '<span class="notok">' . $LANG01['not_found'] . '</span>',
-                        'notes' =>   $LANG01['gd_not_found'],
+                        'item'   =>  $LANG_ENVCHK['gd_lib'],
+                        'status' =>  $LANG_ENVCHK['not_found'],
+                        'class'  =>  'tm-fail',
+                        'notes' =>   $LANG_ENVCHK['gd_not_found'],
                     ));
                 }
                 break;
@@ -287,15 +305,17 @@ function _checkEnvironment()
                 clearstatcache();
                 if (! @file_exists( $_CONF['path_to_netpbm'] . $binary ) ) {
                     $T->set_var(array(
-                        'item'   => $LANG01['netpbm'],
-                        'status' => '<span class="notok">' . $LANG01['not_found'] . '</span>',
-                        'notes'  => $LANG01['np_not_found'],
+                        'item'   => $LANG_ENVCHK['netpbm'],
+                        'status' => $LANG_ENVCHK['not_found'],
+                        'class' => 'tm-fail',
+                        'notes'  => $LANG_ENVCHK['np_not_found'],
                     ));
                 } else {
                     $T->set_var(array(
-                        'item'   =>  $LANG01['netpbm'],
-                        'status' =>  '<span class="yes">' . $LANG01['ok'] . '</span>',
-                        'notes'  => $LANG01['np_ok'],
+                        'item'   =>  $LANG_ENVCHK['netpbm'],
+                        'status' =>  $LANG_ENVCHK['ok'],
+                        'class' =>  'tm-pass',
+                        'notes'  => $LANG_ENVCHK['np_ok'],
                     ));
                 }
                 break;
@@ -312,15 +332,17 @@ function _checkEnvironment()
             clearstatcache();
             if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
                 $T->set_var(array(
-                    'item'      => $LANG01['jhead'],
-                    'status'    => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
-                    'notes'     => $LANG01['jhead_not_found'],
+                    'item'      => $LANG_ENVCHK['jhead'],
+                    'status'    => $LANG_ENVCHK['not_found'],
+                    'class'    => 'tm-fail',
+                    'notes'     => $LANG_ENVCHK['jhead_not_found'],
                 ));
             } else {
                 $T->set_var(array(
-                    'item'      => $LANG01['jhead'],
-                    'status'    => '<span class="yes">' . $LANG01['ok'] . '</span>',
-                    'notes'     => $LANG01['jhead_ok'],
+                    'item'      => $LANG_ENVCHK['jhead'],
+                    'status'    => $LANG_ENVCHK['ok'],
+                    'class'    => 'tm-pass',
+                    'notes'     => $LANG_ENVCHK['jhead_ok'],
                 ));
             }
             $T->set_var('rowclass',($classCounter % 2)+1);
@@ -337,15 +359,17 @@ function _checkEnvironment()
             clearstatcache();
             if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
                 $T->set_var(array(
-                    'item'   => $LANG01['jpegtran'],
-                    'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
-                    'notes'  => $LANG01['jpegtran_not_found'],
+                    'item'   => $LANG_ENVCHK['jpegtran'],
+                    'status' => $LANG_ENVCHK['not_found'],
+                    'class' => 'tm-fail',
+                    'notes'  => $LANG_ENVCHK['jpegtran_not_found'],
                 ));
             } else {
                 $T->set_var(array(
-                    'item'   => $LANG01['jpegtran'],
-                    'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
-                    'notes'  => $LANG01['jpegtran_ok'],
+                    'item'   => $LANG_ENVCHK['jpegtran'],
+                    'status' => $LANG_ENVCHK['ok'],
+                    'class' => 'tm-pass',
+                    'notes'  => $LANG_ENVCHK['jpegtran_ok'],
                 ));
             }
             $T->set_var('rowclass',($classCounter % 2)+1);
@@ -355,9 +379,10 @@ function _checkEnvironment()
 
     } else {
         $T->set_var(array(
-            'item'   => $LANG01['graphics'],
-            'status' => $LANG01['not_checked'],
-            'notes'  => $LANG01['bypass_note'],
+            'item'   => $LANG_ENVCHK['graphics'],
+            'status' => $LANG_ENVCHK['not_checked'],
+            'class' => 'tm-pass',
+            'notes'  => $LANG_ENVCHK['bypass_note'],
         ));
     }
 
@@ -373,8 +398,8 @@ function _checkEnvironment()
         $dbInfo['db_collation'] = $row["@@collation_database"];
         $dbInfo['db_charset'] = $row["@@character_set_database"];
     } else {
-        $dbInfo['db_collation'] = 'Unknown';
-        $dbInfo['db_charset']   = 'Unknown';
+        $dbInfo['db_collation'] = $LANG_ENVCHK['unknown'];
+        $dbInfo['db_charset']   = $LANG_ENVCHK['unknown'];
     }
     $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_engine'");
     if ( DB_numRows($result) > 0 ) {
@@ -388,13 +413,13 @@ function _checkEnvironment()
     }
 
     $T->set_var(array(
-        'lang_status'       => $LANG28['105'],
-        'lang_db_header'    => $LANG01['db_header'],
-        'lang_db_driver'    => $LANG01['db_driver'],
-        'lang_db_version'   => $LANG01['db_version'],
-        'lang_db_engine'    => $LANG01['db_engine'],
-        'lang_db_charset'   => $LANG01['db_charset'],
-        'lang_db_collation' => $LANG01['db_collation'],
+        'lang_status'       => $LANG_ENVCHK['status'],
+        'lang_db_header'    => $LANG_ENVCHK['db_header'],
+        'lang_db_driver'    => $LANG_ENVCHK['db_driver'],
+        'lang_db_version'   => $LANG_ENVCHK['db_version'],
+        'lang_db_engine'    => $LANG_ENVCHK['db_engine'],
+        'lang_db_charset'   => $LANG_ENVCHK['db_charset'],
+        'lang_db_collation' => $LANG_ENVCHK['db_collation'],
     ));
 
     // extract syndication storage path
@@ -515,7 +540,8 @@ function _checkEnvironment()
         $ok = _isWritable($path);
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? $LANG_ENVCHK['ok'] : $LANG_ENVCHK['not_writable']);
+            $T->set_var('class', $ok ? 'tm-pass' : 'tm-fail');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -526,7 +552,7 @@ function _checkEnvironment()
 /* --- debug code ---
         else {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="yes">'.$LANG_ENVCHK['ok'].'</span>' : '<span class="notwriteable">'.$LANG_ENVCHK['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -536,8 +562,9 @@ function _checkEnvironment()
     // special test to see if we can create a directory under layout_cache...
     $rc = @mkdir($_CONF['path_data'].'layout_cache/test/');
     if (!$rc) {
-        $T->set_var('location',$_CONF['path_data'].'layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
-        $T->set_var('status', '<span class="notwriteable">'.$LANG01['unable_mkdir'].'</span>');
+        $T->set_var('location',$_CONF['path_data'].'layout_cache/');
+        $T->set_var('status', $LANG_ENVCHK['unable_mkdir']);
+        $T->set_var('class', 'tm-fail');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
@@ -547,7 +574,8 @@ function _checkEnvironment()
         $ok = _isWritable($_CONF['path_data'].'layout_cache/test/');
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? $LANG_ENVCHK['ok'] : $LANG_ENVCHK['not_writable']);
+            $T->set_var('class', $ok ? 'tm-pass' : 'tm-fail');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -565,46 +593,48 @@ function _checkEnvironment()
     }
 
     if ( $permError ) {
-        $button = $LANG01['recheck'];
+        $button = $LANG_ENVCHK['recheck'];
         $action = 'checkenvironment';
-        $T->set_var('error_message',$LANG01['correct_perms']);
+        $T->set_var('error_message',$LANG_ENVCHK['correct_perms']);
 
         $recheck  = '<button type="submit" name="submit" onclick="submitForm( checkenv, \'checkenvironment\' );">' . LB;
-        $recheck .= $LANG01['recheck'] . LB;
+        $recheck .= $LANG_ENVCHK['recheck'] . LB;
         $recheck .= '<img src="layout/arrow-recheck.gif" alt=""/>' . LB;
         $recheck .= '</button>' . LB;
 
     } else {
         $classCounter = 0;
         $recheck = '';
-        $T->set_var('location',$LANG01['directory_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
+        $T->set_var('location',$LANG_ENVCHK['directory_permissions']);
+        $T->set_var('status', $LANG_ENVCHK['ok']);
+        $T->set_var('class', 'tm-pass');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
 
-        $T->set_var('location',$LANG01['file_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
+        $T->set_var('location',$LANG_ENVCHK['file_permissions']);
+        $T->set_var('status', $LANG_ENVCHK['ok']);
+        $T->set_var('class', 'tm-pass');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
     }
 
     $T->set_var(array(
-        'lang_host_env'     => $LANG01['hosting_env'],
-        'lang_setting'      => $LANG01['setting'],
-        'lang_current'      => $LANG01['current'],
-        'lang_recommended'  => $LANG01['recommended'],
-        'lang_notes'        => $LANG01['notes'],
-        'lang_filesystem'   => $LANG01['filesystem_check'],
-        'lang_php_settings' => $LANG01['php_settings'],
-        'lang_php_warning'  => $LANG01['php_warning'],
-        'lang_current_php_settings' => $LANG01['current_php_settings'],
-        'lang_show_phpinfo' => $LANG01['show_phpinfo'],
-        'lang_hide_phpinfo' => $LANG01['hide_phpinfo'],
-        'lang_graphics'     => $LANG01['graphics'],
-        'lang_extensions'   => $LANG01['extensions'],
-        'lang_recheck'      => $LANG01['recheck'],
+        'lang_host_env'     => $LANG_ENVCHK['hosting_env'],
+        'lang_setting'      => $LANG_ENVCHK['setting'],
+        'lang_current'      => $LANG_ENVCHK['current'],
+        'lang_recommended'  => $LANG_ENVCHK['recommended'],
+        'lang_notes'        => $LANG_ENVCHK['notes'],
+        'lang_filesystem'   => $LANG_ENVCHK['filesystem_check'],
+        'lang_php_settings' => $LANG_ENVCHK['php_settings'],
+        'lang_php_warning'  => $LANG_ENVCHK['php_warning'],
+        'lang_current_php_settings' => $LANG_ENVCHK['current_php_settings'],
+        'lang_show_phpinfo' => $LANG_ENVCHK['show_phpinfo'],
+        'lang_hide_phpinfo' => $LANG_ENVCHK['hide_phpinfo'],
+        'lang_graphics'     => $LANG_ENVCHK['graphics'],
+        'lang_extensions'   => $LANG_ENVCHK['extensions'],
+        'lang_recheck'      => $LANG_ENVCHK['recheck'],
         'phpinfo'           => _phpinfo(),
     ));
 
@@ -777,9 +807,6 @@ function _phpinfo()
     phpinfo();
 
     preg_match ('%<style type="text/css">(.*?)</style>.*?<body>(.*?)</body>%s', ob_get_clean(), $matches);
-
-    # $matches [1]; # Style information
-    # $matches [2]; # Body information
 
     $retval = "<div class='phpinfodisplay' style=\"font-size:1.2em;width:100%\"><style type='text/css'>\n" .
         join( "\n",

@@ -2451,12 +2451,13 @@ input.error {
 
 /* Envcheck styles
 ========================================================================== */
-.yes {
-	color: #659f13;
+.tm-fail {
+	color:#FF0000 !important;
+	font-weight:700 !important;
 }
-.notok {
-	color: #d85030;
-	font-weight:700;
+.tm-pass {
+	color:#659f13;
+	font-weight:normal;
 }
 
 /* Configuration Search styles

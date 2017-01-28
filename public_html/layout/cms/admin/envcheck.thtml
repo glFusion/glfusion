@@ -26,7 +26,7 @@
 			<!-- BEGIN envs -->
 			<tr>
 				<td>{item}</td>
-				<td class="uk-text-center">{status}</td>
+				<td class="uk-text-center"><span class="{class}">{status}</span></td>
 				<td class="uk-text-center">{recommended}</td>
 				<td>{notes}</td>
 			</tr>
@@ -44,7 +44,7 @@
 			<!-- BEGIN libs -->
 			<tr>
 				<td>{item}</td>
-				<td class="uk-text-center">{status}</td>
+				<td class="uk-text-center"><span class="{class}">{status}</span></td>
 				<td>{notes}</td>
 			</tr>
 			<!-- END libs -->
@@ -52,42 +52,42 @@
 
 		<h2>{lang_db_header}</h2>
 		<hr>
-			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+		<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
 			<tr>
 				<th>{lang_setting}</th>
 				<th>{lang_notes}</th>
 			</tr>
 
-				<tr>
-					<td>{lang_db_driver}</td>
-					<td>
-						{db_driver}
-					</td>
-				</tr>
-				<tr>
-					<td>{lang_db_version}</td>
-					<td>
-						{db_version}
-					</td>
-				</tr>
-				<tr>
-					<td>{lang_db_engine}</td>
-					<td>
-						{db_engine}
-					</td>
-				</tr>
-				<tr>
-					<td>{lang_db_collation}</td>
-					<td>
-						{db_collation}
-					</td>
-				</tr>
-				<tr>
-					<td>{lang_db_charset}</td>
-					<td>
-						{db_charset}
-					</td>
-				</tr>
+			<tr>
+				<td>{lang_db_driver}</td>
+				<td>
+					{db_driver}
+				</td>
+			</tr>
+			<tr>
+				<td>{lang_db_version}</td>
+				<td>
+					{db_version}
+				</td>
+			</tr>
+			<tr>
+				<td>{lang_db_engine}</td>
+				<td>
+					{db_engine}
+				</td>
+			</tr>
+			<tr>
+				<td>{lang_db_collation}</td>
+				<td>
+					{db_collation}
+				</td>
+			</tr>
+			<tr>
+				<td>{lang_db_charset}</td>
+				<td>
+					{db_charset}
+				</td>
+			</tr>
 		</table>
 
 		<h2>{lang_filesystem}</h2>
@@ -96,17 +96,17 @@
 			<!-- BEGIN perms -->
 			<tr>
 				<td class="pathtext">{location}</td>
-				<td class="pathtext-status">{status}</td>
+				<td class="pathtext-status"><span class="{class}">{status}</span></td>
 			</tr>
 			<!-- END perms -->
 		</table>
-{!if phpinfo}
+		{!if phpinfo}
 		<h2>{lang_current_php_settings}</h2>
 		<div style="margin:5px 0 10px 0;border-bottom:1px solid #cccccc"></div>
 		<button class="uk-button uk-button-success" type="button" value="{lang_show_phpinfo}" name="toggleV" id="toggleV"/>{lang_show_phpinfo}</button>
 		<div id="phpinfo">
 			{phpinfo}
 		</div>
-{!endif}
+		{!endif}
 	</div>
 </div>
