@@ -207,7 +207,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $editAllowed = false;
         if ($_FF_CONF['allowed_editwindow'] > 0) {
             $t1 = $showtopic['date'];
-            $t2 = $_FF_CONF['allowed_editwindow'];
+            $t2 = $_FF_CONF['allowed_editwindow'] * 60;
             if ((time() - $t2) < $t1) {
                 $editAllowed = true;
             }
