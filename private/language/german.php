@@ -201,7 +201,8 @@ $LANG01 = array(
     'blocks_left_title' => 'Linke Seite',
     'blocks_right_title' => 'Rechte Seite',
     'blocks_footer_title' => 'Fußzeile',
-    'source' => 'Quelle'
+    'source' => 'Quelle',
+    'env_check' => 'Environment Check'
 );
 
 ###############################################################################
