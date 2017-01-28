@@ -1,4 +1,8 @@
 ## v1.6.6 (unreleased)
+  - Demo Mode updates
+  - Cancel button did not cancel on forms with empty required fields
+  - Forum - Formatting improvements to Latest Post block
+  - Additional environment checks (required PHP extensions) added to Environment Check
   - Additional environment validations (required PHP extensions) performed during install / upgrade
   - Forum - Fix on smiley replacement to properly escape text
   - Additional checks in Media Gallery view templates to ensure prompts are not shown without data

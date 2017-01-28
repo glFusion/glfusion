@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -228,6 +228,23 @@ $LANG_INSTALL = array(
     'ext_optional_desc'         => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
     'ext_good'                  => 'properly installed.',
     'ext_heading'               => 'PHP Extensions',
+    'ctype_extension'           => 'Ctype Extension',
+    'date_extension'            => 'Date Extension',
+    'filter_extension'          => 'Filter Extension',
+    'gd_extension'              => 'GD Graphics Extension',
+    'gettext_extension'         => 'Gettext Extension',
+    'json_extension'            => 'Json Extension',
+    'mbstring_extension'        => 'Multibyte (mbstring) Extension',
+    'mysqli_extension'          => 'MySQLi Extension',
+    'mysql_extension'           => 'MySQL Extension',
+    'openssl_extension'         => 'OpenSSL Extension',
+    'session_extension'         => 'Session Extension',
+    'xml_extension'             => 'XML Extension',
+    'zlib_extension'            => 'zlib Extension',
+    'required_php_ext'          => 'Required PHP Extensions',
+    'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
+    'extension'                 => 'Extension',
+    'status'                    => 'Status',
 );
 
 // +---------------------------------------------------------------------------+

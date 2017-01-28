@@ -713,15 +713,18 @@ function INST_checkEnvironment($dbconfig_path='')
     }
 
     $required_extensions = array(
-        array('extension' => 'date','description' => 'Date Extension','fail' => 1),
-        array('extension' => 'filter', 'description' => 'Filter Extension', 'fail' => 1),
-        array('extension' => 'gd', 'description' => 'GD Graphics Extension', 'fail' => 0),
-        array('extension' => 'json', 'description' => 'JSON Extension', 'fail' => 1),
-        array('extension' => 'xml', 'description' => 'XML Extension', 'fail' => 1),
-        array('extension' => 'mbstring', 'description' => 'MultiByte (mbstring) Extension', 'fail' => 0),
-        array('extension' => $mysqlExtension, 'description' => 'MySQL Extension ('.$mysqlExtension.')', 'fail' => 1),
-        array('extension' => 'openssl', 'description' => 'OpenSSL Extension', 'fail' => 0),
-        array('extension' => 'session', 'description' => 'Session Extension', 'fail' => 1)
+        array('extension' => 'ctype',   'fail' => 1),
+        array('extension' => 'date',    'fail' => 1),
+        array('extension' => 'filter',  'fail' => 1),
+        array('extension' => 'gd',      'fail' => 0),
+        array('extension' => 'gettext', 'fail' => 1),
+        array('extension' => 'json',    'fail' => 1),
+        array('extension' => $mysqlExtension, 'fail' => 1),
+        array('extension' => 'mbstring','fail' => 0),
+        array('extension' => 'openssl', 'fail' => 0),
+        array('extension' => 'session', 'fail' => 1),
+        array('extension' => 'xml',     'fail' => 1),
+        array('extension' => 'zlib',    'fail' => 1)
     );
 
     $_GLFUSION['currentstep'] = 'checkenvironment';
@@ -738,6 +741,7 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $permError = 0;
     $envError  = 0;
+    $envWarning = 0;
 
     $T = new TemplateLite('templates/');
     $T->set_file('page','checkenvironment.thtml');
@@ -749,22 +753,42 @@ function INST_checkEnvironment($dbconfig_path='')
      */
 
     $T->set_block('page','extensions','extension');
+
     foreach ( $required_extensions AS $extension ) {
         $available = extension_loaded($extension['extension']);
-        $T->set_var('item',$extension['description']);
-        $T->set_var('status',$available == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ext_installed'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['ext_missing'].'</span>');
-        if ( $available != 1 && $extension['fail'] ) $envError = 1;
+// test fail condition
+//if ( $extension['extension'] == 'mbstring' || $extension['extension'] == 'ctype') $available = 0;
+//$available = 0;
+        if ( $available != 1 && $extension['fail'] ) {
+            $envError = 1;
+            $color = "uk-text-danger";
+        } else if ( $available != 1 && $extension['fail'] == 0 ) {
+            $envWarning = 1;
+            $color = "uk-text-warning";
+        }
         if ( $available != 1 ) {
+            $T->set_var('item',$LANG_INSTALL[$extension['extension'].'_extension']);
+            $T->set_var('status',$available == 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ext_installed'].'</span>' : '<span class="'.$color.' uk-text-bold">'.$LANG_INSTALL['ext_missing'].'</span>');
+
             if ( $extension['fail'] == 1 ) {
                 $msg = ' '.$LANG_INSTALL['ext_required_desc'];
             } else {
                 $msg = ' '. $LANG_INSTALL['ext_optional_desc'];
             }
+            $T->set_var('notes', $LANG_INSTALL[$extension['extension'].'_extension'] . $msg);
+            $T->set_var('recommended',$extension['fail'] == 1 ? $LANG_INSTALL['ext_required'] : $LANG_INSTALL['ext_optional']);
+            $T->parse('extension','extensions',true);
+
         } else {
             $msg = ' '. $LANG_INSTALL['ext_good'];
         }
-        $T->set_var('notes', $extension['description'] . $msg);
-        $T->set_var('recommended',$extension['fail'] == 1 ? $LANG_INSTALL['ext_required'] : $LANG_INSTALL['ext_optional']);
+    }
+
+    if ( $envError == 0 && $envWarning == 0) {
+        $T->set_var('item',$LANG_INSTALL['required_php_ext']);
+        $T->set_var('status','<span class="uk-text-success">'.$LANG_INSTALL['ext_installed'].'</span>');
+        $T->set_var('notes', $LANG_INSTALL['all_ext_present']);
+        $T->set_var('recommended','');
         $T->parse('extension','extensions',true);
     }
 
@@ -974,6 +998,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
+
         $permError = 1;
         @rmdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     } else {
@@ -984,9 +1009,7 @@ function INST_checkEnvironment($dbconfig_path='')
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
-            if  ( !$ok ) {
-                $permError = 1;
-            }
+            $permError = 1;
         }
         @rmdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     }
@@ -996,37 +1019,33 @@ function INST_checkEnvironment($dbconfig_path='')
     if ( $rc > 0 ) {
         $permError = 1;
     }
+
+    if ( $permError == 0 ) {
+        $T->set_var('location',$LANG_INSTALL['directory_permissions']);
+        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+        $classCounter++;
+        $T->parse('perm','perms',true);
+        $T->set_var('location',$LANG_INSTALL['file_permissions']);
+        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
+        $classCounter++;
+        $T->parse('perm','perms',true);
+    }
+
     $T->set_var('icon','arrow-right');
+
     if ( $permError || $envError ) {
         $button = 'Recheck';
         $action = 'checkenvironment';
     }
 
-    if ( $permError ) {
-        $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
-        $T->set_var('icon','repeat');
-        $recheck = '';
-    }
-
-    if ( $envError ) {
+    if ( $permError || $envError) {
         $T->set_var('error_message','<div class="uk-alert uk-alert-danger">'.$LANG_INSTALL['correct_perms'].'</div>');
         $T->set_var('icon','repeat');
         $recheck = '';
     }
 
     if ( $permError == 0 && $envError == 0 ) {
-
         $recheck = '';
-        $T->set_var('location',$LANG_INSTALL['directory_permissions']);
-        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
-        $classCounter++;
-        $T->parse('perm','perms',true);
-
-        $T->set_var('location',$LANG_INSTALL['file_permissions']);
-        $T->set_var('status', 1 ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
-        $classCounter++;
-        $T->parse('perm','perms',true);
-
         $button = $LANG_INSTALL['next'];
 
         if ( $_GLFUSION['method'] == 'upgrade' ) {
@@ -1056,6 +1075,8 @@ function INST_checkEnvironment($dbconfig_path='')
         'lang_php_settings' => $LANG_INSTALL['php_settings'],
         'lang_php_warning'  => $LANG_INSTALL['php_warning'],
         'lang_ext_heading'  => $LANG_INSTALL['ext_heading'],
+        'lang_extension'    => $LANG_INSTALL['extension'],
+        'lang_status'       => $LANG_INSTALL['status'],
         'hiddenfields'      => _buildHiddenFields(),
         'percent_complete'      => '20',
     ));
