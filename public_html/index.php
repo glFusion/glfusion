@@ -331,7 +331,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                                          "tid = '".DB_escapeString($topic)."'");
                 $eMsg .= sprintf ($LANG05[3], $topicname);
             }
-            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'info');
+            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'warning');
         }
     }
     $pageBody .= $cbDisplay;
