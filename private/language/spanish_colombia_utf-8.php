@@ -198,7 +198,8 @@ $LANG01 = array(
     'blocks_right_title' => 'Derecha',
     'blocks_footer_title' => 'Pie de Pagina',
     'source' => 'fuente',
-    'env_check' => 'Environment Check'
+    'env_check' => 'Environment Check',
+    'ok' => 'OK'
 );
 
 ###############################################################################

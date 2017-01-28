@@ -200,6 +200,7 @@ $LANG01 = array(
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
     'env_check'                 => 'Environment Check',
+    'ok'                        => 'OK',
 );
 
 ###############################################################################

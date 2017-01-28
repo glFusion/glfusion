@@ -553,7 +553,7 @@ function DBADMIN_innodb()
     if ( defined('DEMO_MODE') ) return DB_list();
 
     $allInnoDB = DBADMIN_innodbStatus();
-    $allMyISam = DBADMIN_myisamStatus();
+    $allMyIsam = DBADMIN_myisamStatus();
 
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbconvert.thtml');
