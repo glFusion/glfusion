@@ -2,14 +2,16 @@
 {content}
 <div class="uk-width-1-1 uk-container-center uk-text-center uk-clearfix">
 {!if lastupdate}
- {lastupdate}&nbsp;
- {hits}
+	{lastupdate}&nbsp;
+{!endif}
+{!if hits}
+	{hits}&nbsp;
 {!endif}
 {!if print_icon}
-  &nbsp;<a href="{link_print}"><i class="uk-icon-print"></i></a>&nbsp;
+	<a href="{link_print}"><i class="uk-icon-print"></i></a>&nbsp;
 {!endif}
 {!if edit_icon}
-  &nbsp;<a href="{link_edit}"><i class="uk-icon-edit"></i></a>
+	<a href="{link_edit}"><i class="uk-icon-edit"></i></a>
 {!endif}
 </div>
 {!if commentbar}
