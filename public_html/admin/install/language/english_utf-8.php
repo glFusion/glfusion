@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
@@ -35,10 +35,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-
-if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
-}
 
 // +---------------------------------------------------------------------------+
 
@@ -243,8 +239,6 @@ $LANG_INSTALL = array(
     'zlib_extension'            => 'zlib Extension',
     'required_php_ext'          => 'Required PHP Extensions',
     'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
-    'extension'                 => 'Extension',
-    'status'                    => 'Status',
 );
 
 // +---------------------------------------------------------------------------+
@@ -270,7 +264,7 @@ $LANG_SUCCESS = array(
     16 => 'Set permissions on',
     17 => 'and',
     18 => 'back to',
-    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>newadmin</b> and the password is <b>password</b>',
+    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
     20 => 'installed',
     21 => 'upgraded'
 );
