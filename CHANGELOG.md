@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Improved consistency on status / warning / error messages
+  - Forum - Do not prepend the "RE:" on reply subjects
   - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
   - Demo Mode updates
   - Cancel button did not cancel on forms with empty required fields
