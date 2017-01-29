@@ -3,6 +3,7 @@
 {!if show_htmleditor}
 	{wysiwyg}
 {!endif}
+<div class="uk-panel uk-panel-box">
 <form class="uk-form" action="{site_url}/profiles.php" method="post" id="contact">
 
 	<div class="uk-form-row">
@@ -64,7 +65,7 @@
 	</div>
 
 </form>
-
+</div>
 <script>
 $("#contact").validate();
 $(function(){
