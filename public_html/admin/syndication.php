@@ -570,7 +570,7 @@ function FEED_save($A)
         $A[$name] = $value;
     }
 
-    if ($A['is_enabled'] == 'on') {
+    if (isset($A['is_enabled']) && $A['is_enabled'] == 'on') {
         $A['is_enabled'] = 1;
     } else {
         $A['is_enabled'] = 0;
