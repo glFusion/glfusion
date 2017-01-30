@@ -2,7 +2,7 @@
   - Forum - Moderators were not displayed when configured to display
   - Wrap mail story / contact user forms in a panel
   - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
-  - Removed invalid BOM marker from install english utf8 langauge file
+  - Removed invalid BOM marker from install english utf8 language file
   - Improved consistency on status / warning / error messages
   - Forum - Do not prepend the "RE:" on reply subjects
   - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
