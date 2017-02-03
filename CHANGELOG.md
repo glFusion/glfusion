@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum - Rounded corners on topic list hearders
   - Forum - Moderators were not displayed when configured to display
   - Wrap mail story / contact user forms in a panel
   - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
