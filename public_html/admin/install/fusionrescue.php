@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Safely edit glFusion configuration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -562,7 +562,20 @@ function getNewPaths( $group = 'Core') {
     $group = DB_escapeString($group);
 
     $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = DB_query($sql,1) or die('Cannot execute query');
+    $result = DB_query($sql,1);
+
+    if ( $result === false ) {
+        $retval = rescue_header(0);
+        $retval .= '<div class="uk-alert uk-alert-danger">
+                    fusionrecue is unable to retrieve the glFusion configuration data from the database.<br>
+                    Please validate that the glFusion database is not corrupted and that it contains an
+                    active glFusion site\'s data.
+                    </div>
+                    ';
+        $retval .= rescue_footer();
+        echo $retval;
+        exit;
+    }
 
     if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
     $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
