@@ -512,7 +512,7 @@ function INST_getPathSetting()
     $T = new TemplateLite('templates/');
     $T->set_file('page', 'pathsetting.thtml');
 
-
+    clearstatcache();
     if (@file_exists($dbconfig_path . $dbconfig_file) || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file)
     || @file_exists($dbconfig_path . $dbconfig_file.'.dist') || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file.'.dist') || @file_exists($dbconfig_path.'private/'.$dbconfig_file.'.dist')
     ) {
@@ -639,7 +639,7 @@ function INST_gotPathSetting($dbc_path = '')
     }
 
     // now, lets see if it exists, if not, try to rename the .dist file...
-
+    clearstatcache();
     if (!@file_exists($dbconfig_path.'db-config.php') ) {
         // see if the .dist is there
         if ( @file_exists($dbconfig_path.'db-config.php.dist') ) {
@@ -653,7 +653,7 @@ function INST_gotPathSetting($dbc_path = '')
             return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
         }
     }
-
+    clearstatcache();
     // if it isn't there, ask again...
     if ( !@file_exists($dbconfig_path.'db-config.php') ) {
         return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
@@ -867,7 +867,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['post_max_size']);
     $T->parse('env','envs',true);
-
+    clearstatcache();
     if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
         require '../../siteconfig.php';
         $_GLFUSION['dbconfig_path'] = $_CONF['path'];
@@ -1119,7 +1119,7 @@ function INST_getSiteInformation()
     $noreply_mail   = (isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '');
     $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
     $dbconfig_path  = $_GLFUSION['dbconfig_path'];
-
+    clearstatcache();
     if ( !file_exists($dbconfig_path.'db-config.php') ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
@@ -1224,7 +1224,7 @@ function INST_gotSiteInformation()
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
     $log_path = $dbconfig_path .'logs/';
-
+    clearstatcache();
     if ( !file_exists($dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php') ) {
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1527,7 +1527,7 @@ function INST_installAndContentPlugins()
     $log_path   = isset($_GLFUSION['log_path'])    ? $_GLFUSION['log_path']    : $gl_path . 'logs/';
 
     INST_errorLog($log_path,'INSTALL: lib-custom installation');
-
+    clearstatcache();
     // check the lib-custom...
     if (!@file_exists($_PATH['dbconfig_path'].'system/lib-custom.php') ) {
         if ( @file_exists($_PATH['dbconfig_path'].'system/lib-custom.php.dist') ) {
