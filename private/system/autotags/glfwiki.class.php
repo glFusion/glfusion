@@ -56,7 +56,7 @@ class autotag_glfwiki extends BaseAutotag {
             $lang = (empty($lang)) ? 'en' : $lang; // default to en
             $attr['target'] = '_blank';
             $attr['style'] = "cursor:help;text-decoration:none;')";
-            $url = "http://www.glfusion.org/wiki/doku.php/?do=search&id=" . trim(str_replace(' ','_',$p1));
+            $url = "https://www.glfusion.org/wiki/doku.php/?do=search&id=" . trim(str_replace(' ','_',$p1));
             $retval = COM_createLink( $p1, $url, $attr );
         }
         return $retval;
