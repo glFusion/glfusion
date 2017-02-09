@@ -2162,13 +2162,13 @@ function COM_userMenu( $help='', $title='', $position='' )
                 } else {
                     // Build select
                     $select = '<select name="service" id="service">';
-                    if ($_CONF['user_login_method']['standard']) {
-                        $select .= '<option value="">' . $_CONF['site_name']
-                                . '</option>';
-                    }
                     foreach ($modules as $service) {
                         $select .= '<option value="' . $service . '">'
                                 . $service . '</option>';
+                    }
+                    if ($_CONF['user_login_method']['standard']) {
+                        $select .= '<option value="">' . $_CONF['site_name']
+                                . '</option>';
                     }
                     $select .= '</select>';
                 }
