@@ -417,7 +417,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
     }
 
-    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited'] ) ) {
+    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited']  ) && ($showtopic['lastedited'] != '' ) ) {
         $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
         $topictemplate->set_var('last_edited', $ludate);
     } else {
