@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum - Sort mood dropwdown in alphabetical order
   - Forum - Rounded corners on topic list hearders
   - Forum - Moderators were not displayed when configured to display
   - Wrap mail story / contact user forms in a panel

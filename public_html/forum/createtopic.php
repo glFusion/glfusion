@@ -623,20 +623,23 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         if (!isset($postData['mood']) || $postData['mood'] == '') {
             $moodoptions = '<option value="" selected="selected">' . $LANG_GF01['NOMOOD'] . '</option>';
         }
+        $moodarray = array();
         if ($dir = @opendir($_CONF['path_html'].'/forum/images/moods')) {
             while (($file = readdir($dir)) !== false) {
                 if ((strlen($file) > 3) && substr(strtolower(trim($file)), -4, 4) == '.gif') {
                     $file = str_replace(array('.gif','.jpg'), array('',''), $file);
-                    if(isset($postData['mood']) && $file == $postData['mood']) {
-                        $moodoptions .= "<option selected=\"selected\">" . $file. "</option>";
-                    } else {
-                        $moodoptions .= "<option>" .$file. "</option>";
-                    }
-                } else {
-                    $moodoptions .= '';
+                    $moodarray[] = $file;
                 }
             }
             closedir($dir);
+        }
+        asort($moodarray);
+        foreach ( $moodarray AS $file ) {
+            if(isset($postData['mood']) && $file == $postData['mood']) {
+                $moodoptions .= "<option selected=\"selected\">" . $file. "</option>";
+            } else {
+                $moodoptions .= "<option>" .$file. "</option>";
+            }
         }
         $peTemplate->set_var ('LANG_MOOD', $LANG_GF02['msg36']);
         $peTemplate->set_var ('moodoptions', $moodoptions);
