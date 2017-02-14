@@ -522,9 +522,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } elseif (isset($postData['uid']) && $postData['uid'] > 1) {
             $username = COM_getDisplayName($postData['uid']);
         }
-
-        $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
-
+//        $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
         if ( isset($postData['pid']) ) {
             $peTemplate->set_var ('hidden_editpid', $postData['pid']);
         }
