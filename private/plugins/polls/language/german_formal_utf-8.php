@@ -27,7 +27,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -65,7 +65,14 @@ $LANG_POLLS = array(
     'pollhidden' => 'Die Umfrage-Ergebnisse stehen erst nach dem schließen der Umfrage zur Verfügung.',
     'start_poll' => 'Umfrage starten',
     'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder Sie verfügen nicht über ausreichende Berechtigungen.',
-    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um zu stimmen."
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um zu stimmen.",
+    'username' => 'Username',
+    'ipaddress' => 'IP Address',
+    'date_voted' => 'Date Voted',
+    'description' => 'Description',
+    'general' => 'General',
+    'poll_questions' => 'Poll Questions',
+    'permissions' => 'Permissions'
 );
 
 ###############################################################################
@@ -114,16 +121,16 @@ $LANG25 = array(
     40 => 'Alle Antworten zu dieser Umfrage ansehen',
     41 => 'Möchtest du diese Umfrage wirklich löschen?',
     42 => 'Sind Sie absolut sicher, dass Sie diese Umfrage löschen möchten? Alle Fragen, Antworten und Kommentare, die mit dieser Umfrage verknüpft sind, werden dauerhaft gelöscht.',
-    43 => "Anmelden um zu stimmen."
+    43 => 'Anmelden um zu stimmen.'
 );
 
 ###############################################################################
 # autotag descriptions
 
 $LANG_PO_AUTOTAG = array(
-    'desc_poll'			=> 'Link: zu einer Umfrage dieser Seite.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
-    'desc_poll_result'	=> 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote'	=> 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage.  usage: [poll_vote:<i>poll_id</i>]'
+    'desc_poll' => 'Link: zu einer Umfrage dieser Seite.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result' => 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite.  usage: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage.  usage: [poll_vote:<i>poll_id</i>]'
 );
 
 $PLG_polls_MESSAGE19 = 'Umfrage wurde erfolgreich gespeichert.';

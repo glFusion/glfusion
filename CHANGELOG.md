@@ -1,4 +1,8 @@
 ## v1.6.6 (unreleased)
+  - Polls Enhancements
+    - Ability to view vote data per poll
+    - Description field added to each poll
+    - Admin interface improvements
   - Forum - Sort mood dropwdown in alphabetical order
   - Forum - Rounded corners on topic list hearders
   - Forum - Moderators were not displayed when configured to display

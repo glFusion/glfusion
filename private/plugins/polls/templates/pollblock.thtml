@@ -1,56 +1,59 @@
 {# begin {templatelocation} #}
 {!if autotag}
 <script>
-$(window).load(function() {
-  $( "#pollautotag_{poll_id}" ).on( "click", "#votebutton", function(event) {
-		event.preventDefault();
-		var data = $("#vote{poll_id}").serialize();
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			url: glfusionSiteUrl + "/polls/ajax_handler.php",
-			data: data,
-			success: function(data) {
-				var result = $.parseJSON(data["json"]);
-				try {
-					$.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:'top-center'});
-					$('#pollautotag_{poll_id}').html(result.html);
-				}
-				catch(err) {
-					alert(result.statusMessage);
-				}
-			}
-		});
-	});
-});
+  $(window).load(function() {
+    $( "#pollautotag_{poll_id}" ).on( "click", "#votebutton", function(event) {
+      event.preventDefault();
+      var data = $("#vote{poll_id}").serialize();
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: glfusionSiteUrl + "/polls/ajax_handler.php",
+        data: data,
+        success: function(data) {
+          var result = $.parseJSON(data["json"]);
+          try {
+            $.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:'top-center'});
+            $('#pollautotag_{poll_id}').html(result.html);
+          }
+          catch(err) {
+            alert(result.statusMessage);
+          }
+        }
+      });
+    });
+  });
 </script>
 {!endif}
 <div id="pollautotag_{poll_id}">
 {!if edit_url}
-	  <span class="uk-align-right"><a href="{edit_url}" class="uk-aling-right uk-icon uk-icon-edit tm-meta-icon"></a></span>
+  <span class="uk-align-right"><a href="{edit_url}" class="uk-aling-right uk-icon uk-icon-edit tm-meta-icon"></a></span>
 {!endif}
 {!if poll_topic}
-	  <h3>{poll_topic}</h3>
+  <h3>{poll_topic}</h3>
 {!elseif edit_icon}
-	  <br />
+  <br />
 {!endif}
-	<form class="uk-form uk-form-horizontal uk-width-1-1" action="{poll_vote_url}" id="vote{poll_id}" method="post">
-	  <input type="hidden" name="pid" value="{poll_id}">
-	  {poll_questions}
-	  <span class="uk-text-small">{poll_notification}</span><br>
+{!if poll_description}
+  <div class="uk-panel uk-panel-box">{poll_description}</div>
+{!endif}
+  <form class="uk-form uk-form-horizontal uk-width-1-1" action="{poll_vote_url}" id="vote{poll_id}" method="post">
+    <input type="hidden" name="pid" value="{poll_id}">
+    {poll_questions}
+    <span class="uk-text-small">{poll_notification}</span><br>
 
 {!if poll_login_required}
-		<div class="uk-alert uk-alert-danger">
-  		{lang_login_required}
-		</div>
+    <div class="uk-alert uk-alert-danger">
+      {lang_login_required}
+    </div>
 {!else}
-	  <button class="uk-button uk-button-primary" id="votebutton" name="votebutton" type="submit" value="{lang_vote}">{lang_vote}</button>
-	  {poll_results}
+    <button class="uk-button uk-button-primary" id="votebutton" name="votebutton" type="submit" value="{lang_vote}">{lang_vote}</button>
+    {poll_results}
 {!endif}
 
-	</form>
-	<span class="uk-text-small">
-	  <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
-	</span>
+  </form>
+  <span class="uk-text-small">
+    <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
+  </span>
 </div>
 {# end {templatelocation} #}

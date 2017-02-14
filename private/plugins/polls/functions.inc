@@ -922,7 +922,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 
     $retval = '';
 
-    $result = DB_query("SELECT topic,voters,commentcode,is_open,login_required,hideresults,owner_id "
+    $result = DB_query("SELECT topic,description,voters,commentcode,is_open,login_required,hideresults,owner_id "
         . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
         . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql('AND'));
     $ntopics = DB_numRows($result);
@@ -947,10 +947,11 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                                         'pquestions' => 'pollquestions.thtml',
                                         'comments' => 'pollcomments.thtml'));
                 $poll->set_var('poll_id', $pid );
-                if ($nquestions > 1) {
+            //    if ($nquestions > 1) {
                     $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
                     $poll->set_var('lang_question', $LANG25[31].':');
-                }
+            //    }
+                $poll->set_var('poll_description', htmlspecialchars($P['description']));
                 $poll->set_var('num_votes', COM_numberFormat($P['voters']));
                 $poll->set_var('poll_vote_url', $_CONF['site_url']
                                                 . '/polls/index.php');
@@ -1010,7 +1011,6 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     $Q = DB_fetchArray($questions);
                     $poll->set_var('poll_question', " ".$Q['question']);
                     $poll->set_var('question_id', $j);
-
                     $notification = "";
                     $filter = "";
                     if ($showall == false) {
@@ -1030,8 +1030,9 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     for($i=0; $i<$nanswers; $i++) {
                         $A = DB_fetchArray($answers );
                         if (($j < count($aid)) && ($aid[$j] == $A['aid'])) {
-                            $poll->set_var('selected', ' checked');
+                            $poll->set_var('selected', ' checked="checked"');
                         }
+
                         $poll->set_var('answer_id', $A['aid']);
                         $poll->set_var('answer_text', $A['answer']);
                         $poll->parse('poll_answers', 'panswer', true);
@@ -1248,6 +1249,7 @@ function POLLS_saveVote($pid, $aid)
             true
         );
     }
+
     if ( COM_isAnonUser() ) {
         $userid = 1;
     } else {
@@ -1287,7 +1289,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
            $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
 
     $retval = '';
-    $topic_sql = "SELECT topic,voters,is_open,hideresults,commentcode,owner_id,group_id,"
+    $topic_sql = "SELECT topic,description,voters,is_open,hideresults,commentcode,owner_id,group_id,"
         . "perm_owner,perm_group,perm_members,perm_anon "
         . "FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'";
     $result = DB_query($topic_sql);
@@ -1342,6 +1344,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 'votes_num' => 'pollvotes_num.thtml' ));
             $poll->set_var('layout_url', $_CONF['layout_url']);
             $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
+            $poll->set_var('poll_description',htmlspecialchars($P['description']));
 
             $poll->set_var('poll_id', $pid);
             $poll->set_var('num_votes', COM_numberFormat($P['voters']));
@@ -1378,12 +1381,14 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     . "FROM {$_TABLES['pollanswers']} "
                     . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
                     . "ORDER BY $order";
+
                 $answers = DB_query ($answer_sql);
                 $nanswers = DB_numRows($answers);
 
                 $a_summ_sql = "SELECT SUM(votes) as votesumm FROM {$_TABLES['pollanswers']} "
                     . "WHERE pid='".DB_escapeString($pid)."' and qid='".DB_escapeString($Q['qid'])."' "
                     . "GROUP BY qid";
+
                 $a_summ = DB_query ($a_summ_sql);
                 $S = DB_fetchArray($a_summ);
 
@@ -1476,6 +1481,90 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
     return $retval;
 }
 
+function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG25, $LANG_ACCESS, $LANG_ADMIN, $_USER;
+
+    $retval = '';
+
+    $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
+                             $A['perm_owner'], $A['perm_group'],
+                             $A['perm_members'], $A['perm_anon']);
+    if ($access > 0) {
+
+        $dt = new Date('now',$_USER['tzid']);
+
+        switch($fieldname) {
+
+            case 'edit':
+                if ($access == 3) {
+                    $retval = COM_createLink($icon_arr['edit'],
+                        "{$_CONF['site_admin_url']}/plugins/polls/index.php?edit=x&amp;pid={$A['pid']}");
+                }
+                break;
+
+            case 'unixdate':
+                $dt->setTimestamp($A['unixdate']);
+                $retval = $dt->format($_CONF['daytime'],true);
+                break;
+
+            case 'topic':
+                $retval = COM_createLink($fieldvalue,
+                        "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
+                break;
+
+            case 'access':
+                if ($access == 3) {
+                    $access = $LANG_ACCESS['edit'];
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+                $retval = $access;
+                break;
+
+            case 'is_open':
+                $retval = ($A['is_open'] == 1) ? $icon_arr['check'] : '';
+                break;
+
+            case 'display':
+                if ($A['display'] == 1) {
+                    $retval = $LANG25[25];
+                } else {
+                    $retval = $LANG25[26];
+                }
+                break;
+
+            case 'voters':
+                // add a link there to the list of voters
+                $url = $_CONF['site_admin_url'].'/plugins/polls/index.php?lv=x&amp;pid='.urlencode($A['pid']);
+                $retval = '<a href="'.$url.'">'.COM_numberFormat($A['voters']).'</a>';
+                break;
+
+            case 'delete':
+                if ($access == 3) {
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return doubleconfirm('" . $LANG25[41] . "','" . $LANG25[42] . "');";
+                    $retval = COM_createLink(
+                        $icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
+                        . '?delete=x&amp;pid=' . $A['pid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                } else {
+                    $retval = $icon_arr['blank'];
+                }
+                break;
+
+
+            default:
+                $retval = $fieldvalue;
+                break;
+        }
+    } else {
+        $retval = false;
+    }
+
+    return $retval;
+}
+
 /**
 * Check if we already have a vote from this IP address
 *
@@ -1553,88 +1642,4 @@ function POLLS_siteFooter() {
     }
     return $retval;
 }
-
-function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
-{
-    global $_CONF, $LANG25, $LANG_ACCESS, $LANG_ADMIN, $_USER;
-
-    $retval = '';
-
-    $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
-                             $A['perm_owner'], $A['perm_group'],
-                             $A['perm_members'], $A['perm_anon']);
-    if ($access > 0) {
-
-        $dt = new Date('now',$_USER['tzid']);
-
-        switch($fieldname) {
-
-            case 'edit':
-                if ($access == 3) {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/plugins/polls/index.php?edit=x&amp;pid={$A['pid']}");
-                }
-                break;
-
-            case 'unixdate':
-                $dt->setTimestamp($A['unixdate']);
-                $retval = $dt->format($_CONF['daytime'],true);
-                break;
-
-            case 'topic':
-                $retval = COM_createLink($fieldvalue,
-                        "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
-                break;
-
-            case 'access':
-                if ($access == 3) {
-                    $access = $LANG_ACCESS['edit'];
-                } else {
-                    $access = $LANG_ACCESS['readonly'];
-                }
-                $retval = $access;
-                break;
-
-            case 'is_open':
-                $retval = ($A['is_open'] == 1) ? $icon_arr['check'] : '';
-                break;
-
-            case 'display':
-                if ($A['display'] == 1) {
-                    $retval = $LANG25[25];
-                } else {
-                    $retval = $LANG25[26];
-                }
-                break;
-
-            case 'voters':
-                $retval = COM_numberFormat ($A['voters']);
-                break;
-
-            case 'delete':
-                if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return doubleconfirm('" . $LANG25[41] . "','" . $LANG25[42] . "');";
-                    $retval = COM_createLink(
-                        $icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
-                        . '?delete=x&amp;pid=' . $A['pid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-                } else {
-                    $retval = $icon_arr['blank'];
-                }
-                break;
-
-
-            default:
-                $retval = $fieldvalue;
-                break;
-        }
-    } else {
-        $retval = false;
-    }
-
-    return $retval;
-}
-
-
 ?>
