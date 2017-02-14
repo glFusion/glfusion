@@ -205,6 +205,9 @@ function POLLS_edit($pid = '')
     $questions = DB_query($question_sql);
     include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navbar = new navbar;
+
+    $poll_templates->set_block('editor','questiontab','qt');
+
     for ($j=0; $j<$_PO_CONF['maxquestions']; $j++) {
         $display_id = $j+1;
         if ($j > 0) {
@@ -212,6 +215,9 @@ function POLLS_edit($pid = '')
         } else {
             $poll_templates->set_var('style', '');
         }
+
+        $poll_templates->set_var('question_tab', $LANG25[31] . " $display_id");
+
         $navbar->add_menuitem(
             $LANG25[31] . " $display_id",
             "showhidePollsEditorDiv(\"$j\",$j,{$_PO_CONF['maxquestions']});return false;",
@@ -222,6 +228,13 @@ function POLLS_edit($pid = '')
         $poll_templates->set_var('question_id', $j);
         $poll_templates->set_var('lang_question', $LANG25[31] . " $display_id");
         $poll_templates->set_var('lang_saveaddnew', $LANG25[32]);
+
+        if ( $Q['question'] != '' ) {
+            $poll_templates->set_var('hasdata',true);
+        } else {
+            $poll_templates->unset_var('hasdata');
+        }
+        $poll_templates->parse('qt','questiontab',true);
 
         // answers
         $answer_sql = "SELECT answer,aid,votes,remark "
@@ -255,15 +268,6 @@ function POLLS_edit($pid = '')
     $token = SEC_createToken();
     $poll_templates->set_var('sectoken', $token);
     $poll_templates->set_var('gltoken', $token);
-
-
-    $poll_templates->set_block('editor','questiontab','qt');
-    for ($j=1; $j<=$_PO_CONF['maxquestions']; $j++) {
-        $display_id = $j;
-        $poll_templates->set_var('question_tab', $LANG25[31] . " $display_id");
-        $poll_templates->parse('qt','questiontab',true);
-    }
-
 
     $poll_templates->parse('output','editor');
     $retval .= $poll_templates->finish($poll_templates->get_var('output'));
