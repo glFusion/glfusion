@@ -45,7 +45,7 @@ require_once $_CONF['path_system'].'lib-database.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -57,7 +57,6 @@ define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to 
 /* Constants for account types */
 define('LOCAL_USER',1);
 define('REMOTE_USER',2);
-
 
 function FR_stripslashes( $text ) {
     if( get_magic_quotes_gpc() == 1 ) {

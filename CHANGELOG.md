@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Allow Bad Behavior2 functionality to be disabled in fusionrescue
   - Polls Enhancements
     - Ability to view vote data per poll
     - Description field added to each poll
