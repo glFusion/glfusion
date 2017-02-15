@@ -1,12 +1,14 @@
 {# begin {templatelocation} #}
-<p>
-	{lang_instruction}
-</p>
-<form class="uk-form uk-form-horizontal" action="{site_admin_url}/user.php?batchadmin=x" method="post">
-	<input type="hidden" name="batchadmin" value="x">
-	<input type="hidden" name="usr_type" value="{usr_type}">
-	<input type="hidden" name="usr_time[{usr_type}]" value="{usr_time}">
-	{options_list}
-	<button class="uk-button uk-button-primary" type="submit" name="button" value="{lang_updatelist}">{lang_updatelist}</button>
-</form>
+<div class="uk-panel uk-panel-box uk-margin">
+  <p>
+    {lang_instruction}
+  </p>
+  <form class="uk-form uk-form-horizontal" action="{site_admin_url}/user.php?batchadmin=x" method="post">
+    <input type="hidden" name="batchadmin" value="x">
+    <input type="hidden" name="usr_type" value="{usr_type}">
+    <input type="hidden" name="usr_time[{usr_type}]" value="{usr_time}">
+    {options_list}
+    <button class="uk-button uk-button-primary" type="submit" name="button" value="{lang_updatelist}">{lang_updatelist}</button>
+  </form>
+</div>
 {# end {templatelocation} #}
