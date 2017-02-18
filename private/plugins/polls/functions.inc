@@ -1141,10 +1141,11 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
     } else {
         $polladdresstime = $_PO_CONF['polladdresstime'];
     }
-    $checkTime = time() - $polladdresstime;
-    $sql = "DELETE FROM {$_TABLES['pollvoters']} WHERE uid = 1 && date < " . $checkTime . "";
-    DB_query($sql,1);
-
+    if ( $polladdresstime != 0 ) {
+        $checkTime = time() - $polladdresstime;
+        $sql = "DELETE FROM {$_TABLES['pollvoters']} WHERE uid = 1 && date < " . $checkTime . "";
+        DB_query($sql,1);
+    }
     if(!empty($pid)) {
         $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'";
         $result = DB_query($sql);
