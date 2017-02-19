@@ -2045,11 +2045,18 @@ function SEC_loginForm($use_options = array())
             } else {
                 // Build select
                 $select = '<select name="service">';
-                if ($_CONF['user_login_method']['standard']) {
-                    $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
+                if ( isset($_CONF['standard_auth_first']) && $_CONF['standard_auth_first'] == 1 ) {
+                    if ($_CONF['user_login_method']['standard']) {
+                        $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
+                    }
                 }
                 foreach ($modules as $service) {
                     $select .= '<option value="' . $service . '">' . $service . '</option>' . LB;
+                }
+                if ( !isset($_CONF['standard_auth_first']) || $_CONF['standard_auth_first'] == 0 ) {
+                    if ($_CONF['user_login_method']['standard']) {
+                        $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
+                    }
                 }
                 $select .= '</select>';
             }

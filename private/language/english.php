@@ -2831,6 +2831,7 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
 );
 
 $LANG_configsubgroups['Core'] = array(

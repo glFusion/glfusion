@@ -1454,7 +1454,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.6.5';
 
         case '1.6.5' :
-
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('standard_auth_first',1,'select',4,1,1,125,TRUE);
 
             $current_fusion_version = '1.6.6';
 

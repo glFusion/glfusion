@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Added configuration option to set display order for 3rd party authentication modules
+  - Fixed issue where help text did not display in configuration screen for items that were arrays
   - Ensure links in emailed stories are absolute
   - Allow Bad Behavior2 functionality to be disabled in fusionrescue
   - Polls Enhancements

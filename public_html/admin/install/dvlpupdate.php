@@ -1617,6 +1617,7 @@ function glfusion_166()
     $c = config::get_instance();
 
     // new configuration option
+    $c->add('standard_auth_first',1,'select',4,1,1,125,TRUE);
 
     $_SQL = array();
 

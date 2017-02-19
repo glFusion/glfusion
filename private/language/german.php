@@ -2834,7 +2834,8 @@ $LANG_confignames['Core'] = array(
     'open_ext_url_new_window' => 'Externe Links in neuem Fenster',
     'enable_404_logging' => '404-Fehler (NotFound) aufzeichnen',
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
-    'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen'
+    'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
 );
 
 $LANG_configsubgroups['Core'] = array(
