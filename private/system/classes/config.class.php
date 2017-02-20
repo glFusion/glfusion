@@ -815,11 +815,7 @@ class config
         $t->set_var('lang_restore', $LANG_CONFIG['restore']);
         $t->set_var('lang_enable', $LANG_CONFIG['enable']);
         $t->set_var('lang_add_element', $LANG_CONFIG['add_element']);
-
-        $idname = str_replace("[","_",$name);
-        $idname = str_replace("]","",$idname);
-
-        $t->set_var('name', $idname);
+        $t->set_var('name', $name);
         $t->set_var('display_name', $display_name);
         if (!is_array($val)) {
             if (is_float($val)) {
