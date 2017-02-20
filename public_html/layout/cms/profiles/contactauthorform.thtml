@@ -4,7 +4,13 @@
 {wysiwyg}
 {!endif}
 {start_block_mailstory2friend}
-<div class="uk-panel uk-panel-box">
+
+<div class="uk-panel uk-panel-box uk-margin">
+	<div class="uk-panel-title uk-text-bold">{story_title}</div>
+	{story_summary}
+</div>
+
+<div class="uk-panel uk-panel-box uk-panel-box-secondary">
 	<form class="uk-form" action="{site_url}/profiles.php" method="post" id="contact">
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="from">{lang_fromname}</label>
