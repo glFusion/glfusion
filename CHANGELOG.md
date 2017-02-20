@@ -2,14 +2,14 @@
   - Added configuration option to set display order for 3rd party authentication modules
   - Fixed issue where help text did not display in configuration screen for items that were arrays
   - Ensure links in emailed stories are absolute
-  - Allow Bad Behavior2 functionality to be disabled in fusionrescue
+  - Allow Bad Behavior 2 functionality to be disabled in fusionrescue
   - Polls Enhancements
     - Ability to view vote data per poll
     - Description field added to each poll
     - Admin interface improvements
     - Allow configuration setting so no anonymous voter id data is removed
-  - Forum - Sort mood dropwdown in alphabetical order
-  - Forum - Rounded corners on topic list hearders
+  - Forum - Sort mood dropdown in alphabetical order
+  - Forum - Rounded corners on topic list headers
   - Forum - Moderators were not displayed when configured to display
   - Wrap mail story / contact user forms in a panel
   - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
