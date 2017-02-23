@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
   - Display story summary at the top of the email story form
   - Added configuration option to set display order for 3rd party authentication modules
   - Fixed issue where help text did not display in configuration screen for items that were arrays

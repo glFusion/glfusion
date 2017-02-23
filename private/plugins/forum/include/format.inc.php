@@ -188,7 +188,12 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
                     $srcThumbnail = "{$_CONF['site_url']}/forum/images/icons/none.gif";
                 }
             }
-            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'" alt="'.$LANG_GF10['click2download'].'"/></a>';
+            if ( $lb == '' ) {
+                $titletext = $LANG_GF10['click2download'];
+            } else {
+                $titletext = $LANG_GF10['click2view'];
+            }
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$titletext.'" alt="'.$titletext.'"/></a>';
             break;
          }
         $i++;

@@ -542,7 +542,8 @@ $LANG_GF10 = array(
     'usefilemgmt' => 'Store in File Repository',
     'category' => 'Kategorie',
     'description' => 'Popis',
-    'click2download' => 'Klikni na obrázek ke stažení'
+    'click2download' => 'Klikni na obrázek ke stažení',
+    'click2view' => 'Click on view image'
 );
 
 $LANG_GF90 = array(

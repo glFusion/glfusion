@@ -545,7 +545,8 @@ $LANG_GF10 = array(
     'usefilemgmt' => 'Im Archiv speichern',
     'category' => 'Kategorie',
     'description' => 'Beschreibung',
-    'click2download' => 'Zum Herunterladen klicke auf das Bild'
+    'click2download' => 'Zum Herunterladen klicke auf das Bild',
+    'click2view' => 'Click on view image'
 );
 
 $LANG_GF90 = array(
