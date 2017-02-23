@@ -542,7 +542,7 @@ $LANG_GF10 = array(
     'category' => 'Kategoria',
     'description' => 'Kuvaus',
     'click2download' => 'Klikkaa kuvaa ladataksesi',
-    'click2view' => 'Click on view image'
+    'click2view' => 'Click to view image'
 );
 
 $LANG_GF90 = array(

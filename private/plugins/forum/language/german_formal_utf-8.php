@@ -546,7 +546,7 @@ $LANG_GF10 = array(
     'category' => 'Kategorie',
     'description' => 'Beschreibung',
     'click2download' => 'Zum Herunterladen klicke auf das Bild',
-    'click2view' => 'Click on view image'
+    'click2view' => 'Click to view image'
 );
 
 $LANG_GF90 = array(

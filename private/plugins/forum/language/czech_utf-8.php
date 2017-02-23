@@ -543,7 +543,7 @@ $LANG_GF10 = array(
     'category' => 'Kategorie',
     'description' => 'Popis',
     'click2download' => 'Klikni na obrázek ke stažení',
-    'click2view' => 'Click on view image'
+    'click2view' => 'Click to view image'
 );
 
 $LANG_GF90 = array(
