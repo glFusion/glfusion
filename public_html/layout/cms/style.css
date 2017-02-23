@@ -2533,11 +2533,10 @@ input.error {
   text-align: center;
   line-height: 22px;
   color: #00a8e6;
-
 	display: block;
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 2px;
 	width: 45%;
 	height: 80%;
 	background-color: #fdfdfd;
