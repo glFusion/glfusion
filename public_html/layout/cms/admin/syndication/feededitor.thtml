@@ -14,7 +14,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="uk-form-row">
+	<div class="uk-form-row slider_checkbox">
 		<label class="uk-form-label" for="is_enabled">{lang_enabled}</label>
 		<div class="uk-form-controls">
 			<input type="checkbox" id="is_enabled" name="is_enabled" {is_enabled}>

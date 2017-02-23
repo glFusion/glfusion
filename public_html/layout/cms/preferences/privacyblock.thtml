@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<fieldset data-uk-margin>
+<fieldset class="slider_checkbox" data-uk-margin>
   <legend>{lang_privacy_title}</legend>
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
     {lang_privacy_help}

@@ -82,30 +82,18 @@
 				</div>
 			</div>
 			<div class="uk-grid">
-				<div class="uk-width-medium-2-3">
+				<div class="uk-width-medium-2-3 uk-hidden-small">
 					{example_url}
 					&nbsp;&nbsp;&nbsp;
 					{lang_hits}: {sp_hits_formatted}
 				</div>
-				<div class="uk-width-medium-1-3">
 
-					<span class="uk-text-bold uk-form-controls-text uk-margin-right">{$LANG_ADMIN[enabled]}</span>
-
-					<div id="active_toggle" class="uk-button-group toggle_button" data-uk-button-radio>
-						<label id="active_yes" class="uk-button toggle_yes_no toggle_yes
-							{!if sp_status_checked}  uk-button-success {!endif}
-						" for="sp_status">{$LANG_ACCESS[yes]}</label>
-						<input type="radio" id="status_yes_radio" name="sp_status_yes" value="1" style="display:none;"
-						{!if sp_status_checked}  checked="checked" {!endif} >
-
-						<label id="active_no" class="uk-button toggle_yes_no toggle_no
-							{!if sp_status_checked}{!else}  uk-button-danger {!endif}
-						" for="sp_status">{$LANG_ACCESS[no]}</button>
-						<input type="radio" id="status_no_radio" name="sp_status_no" value="0" style="display:none;"
-						{!if sp_status_checked}{!else}  checked="checked" {!endif} >
-					</div>
+				<div class="uk-width-medium-1-3 slider_checkbox">
+					<span class="uk-text-bold uk-form-controls-text uk-margin-right" style="vertical-align:top;">{$LANG_ADMIN[enabled]}</span>
+          <input class="onoff" type="checkbox" name="sp_status" id="sp_status" value="1"{sp_status_checked} />
 				</div>
 			</div>
+
 		</div>
 		<ul id="sp-form" class="uk-switcher uk-margin">
 			{# Page Editor #}
@@ -287,23 +275,6 @@
 </div>
 <script>
 	$(document).ready(function() {
-		$('.toggle_yes_no').click(function(e) {
-			var buttonClicked = $(this).attr('id');
-			var myparentid = $(this).parent().attr("id");
-			var yes_or_no = $('#'+buttonClicked).hasClass("toggle_yes");
-			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-success");
-			$('#'+myparentid+'.toggle_button label').removeClass("uk-button-danger");
-			if ( yes_or_no == true ) {
-				$('#'+buttonClicked).addClass("uk-button-success");
-				$("#status_yes_radio").prop('checked', true);
-				$("#status_no_radio").prop('checked', false);
-			} else {
-				$('#'+buttonClicked).addClass("uk-button-danger");
-				$("#status_yes_radio").prop('checked', false);
-				$("#status_no_radio").prop('checked', true);
-			}
-			e.stopPropagation();
-		});
 		activityCheck('textarea');
 	});
 
