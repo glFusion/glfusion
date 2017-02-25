@@ -66,7 +66,9 @@
 {!endif}
 		<!-- BEGIN ImageRow -->
 		<!-- BEGIN ImageColumn -->
+{!if CELL_DISPLAY_IMAGE}
 		<li>{CELL_DISPLAY_IMAGE}</li>
+{!endif}
 		<!-- END ImageColumn -->
 		<!-- END ImageRow -->
 	</ul>

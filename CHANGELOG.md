@@ -1,5 +1,6 @@
 ## v1.6.6 (unreleased)
   - Removed duplicated comment link in Lightbox Media Gallery album theme
+  - Improved responsiveness of lightbox and clean Media Gallery themes
   - Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
   - Display story summary at the top of the email story form
   - Added configuration option to set display order for 3rd party authentication modules

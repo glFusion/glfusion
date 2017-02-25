@@ -1,25 +1,26 @@
 {# begin {templatelocation} #}
 <a name="{media_id}"></a>
-<table style="margin:0px auto;">
-	<tr class="uk-text-center" style="height:{row_height}px;">
-		<td class="uk-text-middle uk-text-center">
-			{media_item_thumbnail}
-			<div class="uk-margin-small">{mp3_podcast}</div>
-		</td>
-	</tr>
-	<tr>
-		<td class="uk-text-center">
-			<div class="uk-text-medium">
-				{media_title}
+
+<div class="uk-panel uk-margin-small">
+	{media_link_start}
+    <img class="" src="{raw_media_thumbnail}" alt="">
+	{media_link_end}
+</div>
+
+<div class="">
+	{media_title}
 {!if musicalbum}
 				&nbsp;/&nbsp;{musicalbum}
 {!endif}
-			</div>
+</div>
+
+
 {!if artist}
 			<div class="uk-text-medium">
 				{artist}
 			</div>
 {!endif}
+
 {!if search_album}
 			<div class="uk-text-small">{search_album}</div>
 {!endif}
@@ -39,7 +40,11 @@
 {!if media_cell_keywords}
 			<div class="uk-text-small">{media_cell_keywords}</div>
 {!endif}
-		</td>
-	</tr>
-</table>
+
+
+
+
+
+
+
 {# end {templatelocation} #}
