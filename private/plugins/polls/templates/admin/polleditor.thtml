@@ -50,7 +50,7 @@
             <input type="checkbox" id="mainpage" name="mainpage" {poll_display}>
           </div>
         </div>
-        <div class="uk-form-row">
+        <div class="uk-form-row slider_checkbox">
           <label class="uk-form-label" for="open">{lang_openforvoting}</label>
           <div class="uk-form-controls">
             <input type="checkbox" id="open" name="open" {poll_open}>
