@@ -137,10 +137,12 @@ function plugin_getwhatsnew_links()
             if ( $_LI_CONF['target_blank'] == 1 ) {
                 $attr = array(
                     'title' => @htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()),
-                    'target' => '_blank');
+                    'target' => '_blank',
+                    'rel' => 'nofollow');
             } else {
                 $attr = array(
-                    'title' => @htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())
+                    'title' => @htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()),
+                    'rel' => 'nofollow'
                     );
             }
 

@@ -646,7 +646,7 @@ function plugin_getwhatsnew_mediagallery()
             } else {
                 $dTitle = $title;
             }
-            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'">' . $dTitle . '</a>';
+            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'" rel="nofollow">' . $dTitle . '</a>';
             $newMediaCount++;
         }
 
@@ -673,7 +673,7 @@ function plugin_getwhatsnew_mediagallery()
                 if ( $access > 0 ) {
                     $titleLength = $_MG_CONF['title_length'];        // Compensate for the added HTML
                     $title = "<b>C:</b>&nbsp;".$A['title'];
-                    $str = "<a href=\"{$_CONF['site_url']}/comment.php?mode=view&amp;cid={$A['cid']}&amp;sid={$A['sid']}&amp;type=mediagallery\">";
+                    $str = "<a href=\"{$_CONF['site_url']}/comment.php?mode=view&amp;cid={$A['cid']}&amp;sid={$A['sid']}&amp;type=mediagallery\" rel=\"nofollow\">";
                     $str .= substr($title,0,$titleLength);
                     $str .= '</a>';
                     $items[] = $str;

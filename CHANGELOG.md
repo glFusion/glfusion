@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Updated online help documents to include missing configuration items
+  - Added rel="nofollow" to what's new items
   - Removed duplicated comment link in Lightbox Media Gallery album theme
   - Improved responsiveness of lightbox and clean Media Gallery themes
   - Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
