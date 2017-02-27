@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum - improved handling of the edit post window and validation checks
   - Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
   - Updated online help documents to include missing configuration items
   - Added rel="nofollow" to what's new items
