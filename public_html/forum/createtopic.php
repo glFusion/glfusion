@@ -260,14 +260,14 @@ switch ( $mode ) {
         }
         // ensure we can actually edit...
         $editAllowed = false;
-        $editfailedreason = '';
+        $editfailedreason = $LANG_GF02['msg72'];
         if (forum_modPermission($forumData['forum'],$_USER['uid'],'mod_edit')) {
             $editAllowed = true;
             $body .= '<input type="hidden" name="modedit" value="1"/>';
         } else {
             if ($postData['date'] > 0 AND $postData['uid'] == $_USER['uid'] ) {
                 if ($_FF_CONF['allowed_editwindow'] > 0) {
-                    $t2 = $_FF_CONF['allowed_editwindow'];
+                    $t2 = $_FF_CONF['allowed_editwindow'] * 60;
                     $time = time();
                     if ((time() - $t2) < $postData['date']) {
                         $editAllowed = true;
@@ -282,10 +282,9 @@ switch ( $mode ) {
             }
         }
         if ( $editAllowed == false ) {
-            $display  = FF_siteHeader();
-            $display .= _ff_alertMessage($LANG_GF02['msg72'],$editfailedreason);
-            $display .= FF_siteFooter();
-            echo $display;
+            COM_setMsg( $editfailedreason, 'error' );
+            $url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$id.'&topic='.$id;
+            echo COM_refresh($url);
             exit;
         }
         if ( $viewMode ) {
@@ -961,8 +960,8 @@ function FF_saveTopic( $forumData, $postData, $action )
             $editAllowed = true;
         } else {
             if ($_FF_CONF['allowed_editwindow'] > 0) {
-                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $postData['id']);
-                $t2 = $_FF_CONF['allowed_editwindow'];
+                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $editid);
+                $t2 = $_FF_CONF['allowed_editwindow'] * 60;
                 $time = time();
                 if ((time() - $t2) < $t1) {
                     $editAllowed = true;
@@ -976,9 +975,10 @@ function FF_saveTopic( $forumData, $postData, $action )
             $retval .= FF_BlockMessage('',$LANG_GF02['msg18'],false);
             $okToSave = false;
         } elseif (!$editAllowed) {
-            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.(int) $postData['$id'];
-            $retval.= _ff_alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
-            $okToSave = false;
+            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.(int) $editid;
+            COM_setMsg($LANG_GF02['edit_time_passed'],'error');
+            echo COM_refresh($link);
+            exit;
         }
     } else {
         if ( !COM_isAnonUser() && $_FF_CONF['use_sfs']) {
