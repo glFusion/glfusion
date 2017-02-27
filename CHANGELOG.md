@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
   - Updated online help documents to include missing configuration items
   - Added rel="nofollow" to what's new items
   - Removed duplicated comment link in Lightbox Media Gallery album theme
