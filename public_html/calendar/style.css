@@ -31,7 +31,6 @@
   border-top:#1A3955 1px dashed;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   vertical-align:bottom;
 }
 
@@ -45,14 +44,12 @@
   background:#FFFFFF;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
 }
 
 .cal-dayx-subcur {
   background:#FFFFFF;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   padding-top:4px;
 }
 .cal-dayx-times {
@@ -154,7 +151,6 @@
   border-top:#E7E7E7 1px solid;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   padding:4px;
   text-align:right;
   white-space: nowrap;
@@ -167,7 +163,6 @@
   border-right:#E7E7E7 1px solid;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   padding:4px;
 }
 
@@ -184,7 +179,6 @@
   border-top:#E7E7E7 1px solid;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   padding:4px;
 }
 
@@ -194,7 +188,6 @@
   border-top:#E7E7E7 1px solid;
   color:#000000;
   font-weight:bold;
-  font-size:.8em;
   padding:4px;
 }
 

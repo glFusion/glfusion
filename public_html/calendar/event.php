@@ -90,8 +90,8 @@ function CALENDAR_addUserEvent($eid)
         $cal_template->set_var('lang_starts', $LANG_CAL_1[13]);
         $cal_template->set_var('lang_ends', $LANG_CAL_1[14]);
 
-        $thestart = CAL_getUserDateTimeFormat($A['datestart'] . ' ' . $A['timestart']);
-        $theend = CAL_getUserDateTimeFormat($A['dateend'] . ' ' . $A['timeend']);
+        $thestart = COM_getUserDateTimeFormat($A['datestart'] . ' ' . $A['timestart']);
+        $theend = COM_getUserDateTimeFormat($A['dateend'] . ' ' . $A['timeend']);
         if ($A['allday'] == 0) {
             $cal_template->set_var('event_start', $thestart[0]);
             $cal_template->set_var('event_end', $theend[0]);
@@ -564,6 +564,7 @@ default:
                     $str_month = $cal->getMonthName(strftime('%m',strtotime($A['datestart'])));
                     $cal_templates->set_var('lang_month', $str_month);
                     $cal_templates->set_var('event_year', strftime('%Y',strtotime($A['datestart'])));
+// full month name
                     $currentmonth = strftime('%B',strtotime($A['datestart']));
                 }
                 $cal_templates->set_var('event_title', stripslashes($A['title']));
@@ -598,19 +599,23 @@ default:
                 }
                 $cal_templates->set_var('lang_when', $LANG_CAL_1[3]);
                 if ($A['allday'] == 0) {
-                    $thedatetime = CAL_getUserDateTimeFormat ($A['datestart'] .
+                    $thedatetime = COM_getUserDateTimeFormat ($A['datestart'] .
                                                         ' ' . $A['timestart']);
                     $cal_templates->set_var ('event_start', $thedatetime[0]);
 
                     if ($A['datestart'] == $A['dateend']) {
+// HH:MM
                         $thedatetime[0] = strftime ('%I:%M%p',
                             strtotime ($A['dateend'] . ' ' . $A['timeend']));
+
                     } else {
-                        $thedatetime = CAL_getUserDateTimeFormat ($A['dateend']
+                        $thedatetime = COM_getUserDateTimeFormat ($A['dateend']
                                                         . ' ' . $A['timeend']);
                     }
                     $cal_templates->set_var ('event_end', $thedatetime[0]);
+
                 } else if ($A['allday'] == 1 AND $A['datestart'] <> $A['dateend']) {
+// DOW_NAME . %x(full date based on local)
                     $thedatetime1 = strftime ('%A, ' . '%x',
                                              strtotime ($A['datestart']));
                     $cal_templates->set_var ('event_start', $thedatetime1);
