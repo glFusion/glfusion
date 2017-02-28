@@ -769,7 +769,7 @@ $LANG20 = array(
     3 => 'パスワードが違います。ユーザ名：',
     4 => 'ユーザ名：',
     5 => 'パスワード：',
-    6 => '管理ツールの使用は，すべてが記録されます。<br' . XHTML . '>このページは，管理者のみ使用できます。',
+    6 => '管理ツールの使用は，すべてが記録されます。<br>このページは，管理者のみ使用できます。',
     7 => 'ログイン',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -907,7 +907,7 @@ $LANG24 = array(
     48 => '画像',
     49 => '右',
     50 => '左',
-    51 => '<p>添付した画像は，自動タグで記述してください。書式は，[imageX]，[imageX_right]，[imageX_left]（Xは添付した画像の番号）（例 [image1]）。注意：添付した画像は記事内ですべて使用しなければ記事を保存できません。<br' . XHTML . '><p><strong>プレビュー</strong>: 画像付きの記事はドラフト（下書き）として保存して閲覧してください。プレビューボタンは画像が無いときにのみ利用できます。</p>',
+    51 => '<p>添付した画像は，自動タグで記述してください。書式は，[imageX]，[imageX_right]，[imageX_left]（Xは添付した画像の番号）（例 [image1]）。注意：添付した画像は記事内ですべて使用しなければ記事を保存できません。<br><p><strong>プレビュー</strong>: 画像付きの記事はドラフト（下書き）として保存して閲覧してください。プレビューボタンは画像が無いときにのみ利用できます。</p>',
     52 => '',
     53 => 'は使用されていません。保存する前に冒頭文または本文で画像を使用しなければなりません。',
     54 => '添付された画像が使用されていません。',
@@ -1101,7 +1101,7 @@ $LANG28 = array(
     49 => '管理者グループ',
     50 => 'このグループを管理者グループとしてフィルタリングするには，チェックしてください。',
     51 => 'オンライン期間',
-    52 => '<br' . XHTML . '>注: 「オンライン期間」とは，最初にアカウントを登録してから前回ログインした時までの日数です。',
+    52 => '<br>注: 「オンライン期間」とは，最初にアカウントを登録してから前回ログインした時までの日数です。',
     53 => '登録済み',
     54 => '一括削除',
     55 => 'この機能はコンフィギュレーションの管理パネルで「最終ログインを記録する」を有効に設定している場合にのみ動作します。',
@@ -1248,7 +1248,7 @@ $LANG32 = array(
     7 => 'インストールしようとしているプラグインはすでに存在しています。再インストールする前に一旦削除してください。',
     8 => 'プラグインの互換性チェックに失敗しました。',
     9 => 'このプラグインは新しいバージョンのglFusionが必要です。<a href=http://www.gllabs.org>glFusion</a>をアップグレードするか，新しいバージョンのプラグインを入手してください。',
-    10 => '<br' . XHTML . '><strong>プラグインはインストールされていません</strong><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><strong>プラグインはインストールされていません</strong><br><br>',
     11 => 'プラグインを修正・削除するにはプラグインの編集アイコンをクリックしてください。プラグインの作者のページへのリンクも併せて表示されます。プラグインのバージョンは，インストール中のものとファイルから得られたものが表示されます。これによってプラグインの更新の必要性を判断することができます。',
     12 => 'plugineditor()にプラグイン名が渡されませんでした',
     13 => 'プラグイン編集',
@@ -1508,7 +1508,7 @@ $MESSAGE = array(
     74 => 'ピングバックが無事送られました。',
     75 => 'トラックバックはPOSTリクエストで送信する必要があります。',
     76 => 'この項目を削除してもよいですか？',
-    77 => '警告:<br' . XHTML . '>デフォルトのエンコーディングをUTF-8に設定していますが，サーバーがマルチバイトエンコーディングをサポートしていません。PHP用に mbstring モジュールをインストールするか，UTF-8ではないキャラクタセットないし言語に変更してください。',
+    77 => '警告:<br>デフォルトのエンコーディングをUTF-8に設定していますが，サーバーがマルチバイトエンコーディングをサポートしていません。PHP用に mbstring モジュールをインストールするか，UTF-8ではないキャラクタセットないし言語に変更してください。',
     78 => 'メールアドレスと確認用メールアドレスには同じものを入力してください。',
     79 => '開こうしたページは，このサイトにもはや存在していない関数を参照しています。',
     80 => 'このフィードを作成したプラグインは，現在無効にされています。そのプラグインを再び有効にしなければ，フィードを編集できません。',
@@ -1713,7 +1713,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -1866,7 +1866,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1941,7 +1941,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1995,7 +1995,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
