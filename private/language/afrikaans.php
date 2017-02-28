@@ -762,7 +762,7 @@ $LANG20 = array(
     3 => 'Ongeldige wagwoord vir gebruiker',
     4 => 'Gebruikernaam:',
     5 => 'Wagwoord:',
-    6 => 'Alle toegang tot administratiewe gedeeltes van hierdie werf word aangeteken en hersien.<br' . XHTML . '>Hierdie bladsy is allenlik vir die gebruik van regmatige personeel.',
+    6 => 'Alle toegang tot administratiewe gedeeltes van hierdie werf word aangeteken en hersien.<br>Hierdie bladsy is allenlik vir die gebruik van regmatige personeel.',
     7 => 'teken in',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -900,7 +900,7 @@ $LANG24 = array(
     48 => 'beeld',
     49 => 'regs',
     50 => 'links',
-    51 => 'Om een van die beelde wat jy by die artikel aanheg in die artikel te laat vertoon moet jy spesiale teks gebruik.  Die formaat van die spesiale teks is [imageX], [imageX_right] of [imageX_left] waar X die nommer is van die beeld/prent wat jy aangeheg het.  LET WEL: Jy moet die beelde gebruik wat jy aanheg gebruik.  As jy dit nie doen nie sal jy nie jou artikel kan stoor nie.<br' . XHTML . '>',
+    51 => 'Om een van die beelde wat jy by die artikel aanheg in die artikel te laat vertoon moet jy spesiale teks gebruik.  Die formaat van die spesiale teks is [imageX], [imageX_right] of [imageX_left] waar X die nommer is van die beeld/prent wat jy aangeheg het.  LET WEL: Jy moet die beelde gebruik wat jy aanheg gebruik.  As jy dit nie doen nie sal jy nie jou artikel kan stoor nie.<br>',
     52 => '',
     53 => 'is nie gebruik nie.  Jy moet hierdie beeld in die Inleiding of Kern van jou teks insluit alvorens jy jou veranderinge kan stoor',
     54 => 'Aangehegte Beelde nie Gebruik',
@@ -1094,7 +1094,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1241,7 +1241,7 @@ $LANG32 = array(
     7 => 'Die prop wat u probeer installeer bestaan reeds.  Verwyder asseblief die prop alvorens u dit herinstalleer',
     8 => 'Prop Versoenbaarheidstoets het Misluk',
     9 => 'Hierdie prop vereis \'n nuwer weergawe van glFusion. Gradeer of u kopie van <a href="http://www.gllabs.org">glFusion</a> op of kry \'n nuwer weergawe van die prop.',
-    10 => '<br' . XHTML . '><b>Daar is tans geen proppe ge&iuml;nstalleer nie.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>Daar is tans geen proppe ge&iuml;nstalleer nie.</b><br><br>',
     11 => 'Om \'n prop te wysig of te verwyder,  kliek op daardie prop se ikoon hieronder. Dit sal die prop se besonderhede vertoon, insluitend die samesteller se webwerf.  Beide die ge&iuml;nstalleerde weergawe en die weergawe wat vanaf die prop se eie kode teruggestuur is, word vertoon.  Dit sal u in staat stel om vas te stel of die prop opgegradeer moet word.  Vir aanwysings oor hoe om \'n prop te installeer of op te gradeer raadpleeg daardie prop se dokumentasie.',
     12 => 'geen propnaam is aan plugineditor() verskaf nie',
     13 => 'Propbestuurder',
@@ -1501,7 +1501,7 @@ $MESSAGE = array(
     74 => 'Die skakelkennisgewing is suksesvol gestuur.',
     75 => 'Terugsporings moet gestuur word deur die POST versoek.',
     76 => 'Do you really want to delete this item?',
-    77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
+    77 => 'WARNING:<br>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the email address and the confirmation email address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
     80 => 'The plugin that created this feed is currently disabled. You will not be able to edit this feed until you re-enable the parent plugin.',
@@ -1706,7 +1706,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -1859,7 +1859,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1934,7 +1934,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1988,7 +1988,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
