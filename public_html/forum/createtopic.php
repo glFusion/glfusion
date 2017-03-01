@@ -719,7 +719,11 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     }
 
     if ($postData['postmode'] == 'html' || $postData['postmode'] == 'HTML') {
-        $postmode_msg = $LANG_GF01['TEXTMODE'];
+        if ($_FF_CONF['use_wysiwyg_editor'] ) {
+            $postmode_msg = '';
+        } else {
+            $postmode_msg = $LANG_GF01['TEXTMODE'];
+        }
         $postData['postmode'] = 'html';
     } else {
         $peTemplate->unset_var('show_htmleditor');

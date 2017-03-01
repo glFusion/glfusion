@@ -6,14 +6,16 @@ function loadEditor(id) {
     var instance = CKEDITOR.replace( id, {
     	toolbar: [
     		{ name: 'document', items: [ 'Source' ] },
-    		[ 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo' ],
+    		[ 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo', '-','Scayt' ],
     		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
     		{ name: 'forum', items : [ 'Smiley','NumberedList', 'BulletedList', 'Image','SpecialChar' ] },
+    		[ 'Maximize' ],
     	],
         contentsCss: [ '{css_url}' ],
         bodyClass: 'tm-container tm-forum-wrapper',
         removePlugins: 'elementspath',
-        resize_enabled: false,
+        resize_enabled: true,
+        height: 350,
         {smilies}
      } );
      return instance;
