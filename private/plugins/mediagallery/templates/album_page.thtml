@@ -2,159 +2,153 @@
 {lbslideshow}
 <script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
 
-<nav class="uk-navbar uk-margin-bottom">
-	<div class="uk-navbar-content uk-text-truncate">
-		<span class="uk-text-truncate">{album_title}</span>
-{!if rsslink_url}
-		<a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
-{!endif}
-	</div>
+<ul class="uk-breadcrumb">
+  {birdseed_ul}
+</ul>
 
-	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
-		<form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
-			<input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
-			<input type="hidden" name="mode" value="search">
-			<input type="hidden" name="swhere" value="0">
-		</form>
-	</div>
+<nav class="uk-navbar uk-margin-remove-bottom">
+  <div class="uk-navbar-content uk-width-1-3 uk-text-truncate">
+    <span class="uk-text-truncate">{album_title}</span>
+{!if rsslink_url}
+    <a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
+{!endif}
+  </div>
+
+  <div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+    <form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
+      <input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
+      <input type="hidden" name="mode" value="search">
+      <input type="hidden" name="swhere" value="0">
+    </form>
+  </div>
 
 {!if select_adminbox}
-	<div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
-		<form class="uk-form uk-margin-remove uk-display-inline-block" name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get">
-			<input type="hidden" name="album_id" value="{album_id}">
-			<select name="mode" onchange="forms['adminbox'].submit()">
-				{admin_box_items}
-			</select>
-		</form>
-	</div>
+  <div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
+    <form class="uk-form uk-margin-remove uk-display-inline-block" name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get">
+      <input type="hidden" name="album_id" value="{album_id}">
+      <select name="mode" onchange="forms['adminbox'].submit()">
+        {admin_box_items}
+      </select>
+    </form>
+  </div>
 
-	<div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
-		<a class="uk-navbar-toggle"></a>
-		<div class="uk-dropdown">
-			<ul class="uk-nav uk-nav-dropdown">
-				{admin_menu}
-			</ul>
-		</div>
-	</div>
+  <div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
+    <a class="uk-navbar-toggle"></a>
+    <div class="uk-dropdown">
+      <ul class="uk-nav uk-nav-dropdown">
+        {admin_menu}
+      </ul>
+    </div>
+  </div>
 {!endif}
 </nav>
-<div class="uk-panel uk-panel-box uk-margin">
-	<div class="uk-grid uk-margin-remove">
-		<div class="uk-width-1-1">
-			<ul class="uk-breadcrumb">
-				{birdseed_ul}
-			</ul>
-		</div>
-	</div>
-	<div class="uk-grid uk-margin-remove">
-		<div class="uk-width-1-2 uk-margin-remove uk-vertical-align">
+
+<div class="uk-grid uk-margin">
+  <div class="uk-width-1-2">
+    <ul class="uk-subnav">
 {!if url_slideshow}
-			<div id="mgslideshow" class="uk-vertical-align-middle">
-				<a class="uk-button" href="{url_slideshow}">
-					{lang_slideshow}
-				</a>
-			</div>
+      <li><a class="uk-button uk-button-primary" href="{url_slideshow}">{lang_slideshow}</a></li>
 {!endif}
-		</div>
-		<div class="uk-width-1-2 uk-margin-remove uk-vertical-align">
+    </ul>
+  </div>
+  <div class="uk-width-1-2">
 {!if top_pagination}
-			<div class="uk-align-right  uk-vertical-align-middle">
-				{top_pagination}
-			</div>
+    <div class="uk-align-right uk-vertical-align-middle">
+      {top_pagination}
+    </div>
 {!endif}
-		</div>
-	</div>
+  </div>
 </div>
 
 {!if album_description}
 <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-margin-top uk-text-large uk-text-center">
-	{album_description}
+  {album_description}
 </div>
 {!endif}
 
 {!if album_noimages}
 <div class="uk-panel uk-panel-box uk-margin">
-	{album_noimages}
+  {album_noimages}
 </div>
 {!else}
 <div class="uk-panel uk-panel-box">
 {!!if {table_columns} == 6 !!}
-	<ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-5 uk-grid-width-large-1-6 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-4 uk-grid-width-medium-1-5 uk-grid-width-large-1-6 uk-text-center">
 {!else}
 {!!if {table_columns} == 5 !!}
-	<ul class="uk-grid uk-grid-width-small-1-3 uk-grid-width-medium-1-4 uk-grid-width-large-1-5 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-3 uk-grid-width-medium-1-4 uk-grid-width-large-1-5 uk-text-center">
 {!else}
 {!!if {table_columns} == 4 !!}
-	<ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-text-center">
 {!else}
 {!!if {table_columns} == 3 !!}
-	<ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3 uk-text-center">
 {!else}
 {!!if {table_columns} == 2 !!}
-	<ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-2 uk-grid-width-large-1-2 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-2 uk-grid-width-large-1-2 uk-text-center">
 {!else}
 {!!if {table_columns} == 1 !!}
-	<ul class="uk-grid uk-grid-width-1-1" data-uk-grid-margin>
+  <ul class="uk-grid uk-grid-width-1-1" data-uk-grid-margin>
 {!else}
-	<ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3 uk-text-center">
+  <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3 uk-text-center">
 {!endif}
 {!endif}
 {!endif}
 {!endif}
 {!endif}
 {!endif}
-	<!-- BEGIN ImageRow -->
-	<!-- BEGIN ImageColumn -->
-		<li>
-			<div class="uk-panel">
-			{CELL_DISPLAY_IMAGE}
-			</div>
-		</li>
-	<!-- END ImageColumn -->
-	<!-- END ImageRow -->
-	</ul>
+    <!-- BEGIN ImageRow -->
+    <!-- BEGIN ImageColumn -->
+    <li>
+      <div class="uk-panel">
+        {CELL_DISPLAY_IMAGE}
+      </div>
+    </li>
+    <!-- END ImageColumn -->
+    <!-- END ImageRow -->
+  </ul>
 </div>
 {!endif}
 
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-top">
-	<div class="uk-grid uk-width-1-1 uk-container-center">
-		<div class="uk-width-medium-2-3">
-			<form class="uk-form uk-form-horizontal" name="jumpbox" id="jumpbox" action="{site_url}/album.php" method="get">
-				<input type="hidden" name="page" value="1">
-				{$LANG_MG03[jump_to]}
-				<select id="aid" name="aid" onchange="forms['jumpbox'].submit()">
-					{album_jumpbox_raw}
-				</select>
-			</form>
-		</div>
-		<div class="uk-width-medium-1-3 uk-text-right">
-			<span class="uk-align-right">
-				{bottom_pagination}
-			</span>
-		</div>
-	</div>
-	<div class="uk-grid uk-container-center">
-		<div class="uk-width-medium-1-2">
-			{album_id_display}&nbsp;
+  <div class="uk-grid uk-width-1-1 uk-container-center">
+    <div class="uk-width-medium-2-3">
+      <form class="uk-form uk-form-horizontal" name="jumpbox" id="jumpbox" action="{site_url}/album.php" method="get">
+        <input type="hidden" name="page" value="1">
+        {$LANG_MG03[jump_to]}
+        <select id="aid" name="aid" onchange="forms['jumpbox'].submit()">
+          {album_jumpbox_raw}
+        </select>
+      </form>
+    </div>
+    <div class="uk-width-medium-1-3 uk-text-right">
+      <span class="uk-align-right">
+        {bottom_pagination}
+      </span>
+    </div>
+  </div>
+  <div class="uk-grid uk-container-center">
+    <div class="uk-width-medium-1-2">
+      {album_id_display}&nbsp;
 {!if subscribe}
-			&nbsp;[{subscribe}]
+      &nbsp;[{subscribe}]
 {!endif}
-		</div>
-		<div class="uk-width-medium-1-2">
+    </div>
+    <div class="uk-width-medium-1-2">
 {!if select_sortbox_raw}
-			<form class="uk-form uk-form-horizontal" name="sortbox" id="sortbox" action="{site_url}/album.php" method="get">
-				<div class="uk-form-row uk-align-right">
-					{$LANG_MG03[sort_by]}
-					<input type="hidden" name="aid" value="{album_id}">
-					<input type="hidden" name="page" value="{page}">
-					<select name="sort" id="sort" onchange="forms['sortbox'].submit()">
-						{select_sortbox_raw}
-					</select>
-					<button class="uk-button uk-button-primary" type="submit" value="{$LANG_MG03[go]}">{$LANG_MG03[go]}</button>
-				</div>
-			</form>
+      <form class="uk-form uk-form-horizontal" name="sortbox" id="sortbox" action="{site_url}/album.php" method="get">
+        <div class="uk-form-row uk-align-right">
+          {$LANG_MG03[sort_by]}
+          <input type="hidden" name="aid" value="{album_id}">
+          <input type="hidden" name="page" value="{page}">
+          <select name="sort" id="sort" onchange="forms['sortbox'].submit()">
+            {select_sortbox_raw}
+          </select>
+          <button class="uk-button uk-button-primary" type="submit" value="{$LANG_MG03[go]}">{$LANG_MG03[go]}</button>
+        </div>
+      </form>
 {!endif}
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 {# end {templatelocation} #}
