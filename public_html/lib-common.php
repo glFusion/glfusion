@@ -139,6 +139,9 @@ if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF[
 
 @date_default_timezone_set('America/Chicago');
 
+$charset = COM_getCharset();
+if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
+
 if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
     require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }

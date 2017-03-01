@@ -1,4 +1,11 @@
 ## v1.6.6 (unreleased)
+  - Forum - disable text mode checkbox when using WYSIWYG editor
+  - Forum - WYSIWYG tweaks - added spell check, maximize buttons - increased editor window to match height of non-WYSIWYG window
+  - Implemented custom style filter for htmLawed to handle the 'style' attribute
+  - Updated htmLawed to v1.2
+  - Force htmlawed HTML filter for non-utf-8 sites
+  - Media Gallery - Improved album page head layout
+  - Removed hard coded date formats from calendar plugin
   - Forum - improved handling of the edit post window and validation checks
   - Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
   - Updated online help documents to include missing configuration items
