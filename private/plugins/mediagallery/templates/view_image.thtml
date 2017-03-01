@@ -11,6 +11,10 @@
 </script>
 {lbslideshow}
 
+<ul class="uk-breadcrumb">
+  {birdseed_ul}
+</ul>
+
 <nav class="uk-navbar uk-margin-bottom">
     <div class="uk-navbar-content uk-text-truncate">
         <span class="uk-text-truncate">{album_title}</span>
@@ -27,13 +31,6 @@
 
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-remove">
     <div class="uk-grid uk-margin-remove">
-        <div class="uk-width-1-1">
-            <ul class="uk-breadcrumb">
-                {birdseed_ul}
-            </ul>
-        </div>
-    </div>
-    <div class="uk-grid uk-margin-remove">
         <div class="uk-width-1-2 uk-vertical-align">
 {!if slide_show}
             <div class="uk-vertical-align-middle">{slide_show}&nbsp;&nbsp;</div>
@@ -43,7 +40,7 @@
 {!endif}
         </div>
         <div class="uk-width-1-2 uk-vertical-align">
-            <div class="uk-align-right uk-vertical-align-middle">{pagination}</div>
+            <div class="uk-align-right uk-vertical-align-middle uk-margin-right">{pagination}</div>
         </div>
     </div>
 </div>
