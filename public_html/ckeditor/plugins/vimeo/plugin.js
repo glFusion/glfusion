@@ -1,12 +1,22 @@
-vimeo_Reg = /https?:\/\/(?:www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+/**
+* glFusion CMS
+*
+* Vimeo Plugin for CKEditor
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2014-2017 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*/
 function VimeoGetID(e) {
-  var t = "";
-  var match = e.match(vimeo_Reg);
-  if (match){
-    return match[3];
-  } else {
-    return match;
-  }
+    var t = "";
+    var result = e.match(/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i);
+    if ( result) {
+        return result[1];
+    } else {
+        return result;
+    }
 }(function() {
     CKEDITOR.plugins.add("vimeo", {
         lang: ["en"],
@@ -89,9 +99,9 @@ function VimeoGetID(e) {
                                 type: "select",
                                 label: e.lang.vimeo.txtAlign,
                                 items: [
-                                    [e.lang.vimeo.left, "left"],
-                                    [e.lang.vimeo.right, "right"],
-                                    [e.lang.vimeo.center, "center"]
+                                [e.lang.vimeo.left, "left"],
+                                [e.lang.vimeo.right, "right"],
+                                [e.lang.vimeo.center, "center"]
                                 ]
                             }, {
                                 id: "txtPad",
@@ -105,8 +115,8 @@ function VimeoGetID(e) {
                                 width: "60px",
                                 label: e.lang.vimeo.txtResponsive,
                                 items: [
-                                    [e.lang.vimeo.no, "0"],
-                                    [e.lang.vimeo.yes, "1"]
+                                [e.lang.vimeo.no, "0"],
+                                [e.lang.vimeo.yes, "1"]
                                 ]
                             }]
                         }]
@@ -119,6 +129,7 @@ function VimeoGetID(e) {
                         var i = this.getValueOf("vimeoPlugin", "txtEmbed");
                         var s = this.getValueOf("vimeoPlugin", "txtPad");
                         var p = this.getValueOf("vimeoPlugin", "txtResponsive");
+                        if ( p == null || p == '' ) p = 0;
                         var o = VimeoGetID(i);
                         t += " width:" + n;
                         t += " height:" + r;
