@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Media Gallery search implementation                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -283,7 +283,13 @@ function MG_search($id,$page) {
                 $celldisplay = MG_searchDisplayThumb($M[$j],0,$id,$page+1);
 
                 if ( $MG_media[$j]->type == 1 ) {
-                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . '.jpg';
+                    $PhotoURL = '';
+                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . $ext) ) {
+                            $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $MG_media[$j]->filename[0] .'/' . $MG_media[$j]->filename . $ext;
+                            break;
+                        }
+                    }
                     $T->set_var(array(
                         'URL' => $PhotoURL,
                     ));
@@ -739,7 +745,9 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'lang_published'	=> $LANG_MG03['published'],
         'lang_on'			=> $LANG_MG03['on'],
         'media_link_start'  => '<a href="' . $url_media_item . '">',
+        'display_url'       => $url_media_item,
         'media_link_end'    => '</a>',
+        'raw_media_thumbnail' => $media_thumbnail,
         'artist'			=> (isset($M['artist']) && $M['artist'] != ' ') ? $M['artist'] : '',
         'musicalbum'		=> (isset($M['album']) && $M['album'] != ' ') ? $M['album'] : '',
         'genre'				=> (isset($M['genre']) && $M['genre'] != ' ') ? $M['genre'] : '',
@@ -753,6 +761,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'url_media_item'    =>  $url_media_item,
         'url_display_item'  =>  $url_display_item,
         'media_thumbnail'   =>  $media_thumbnail,
+        'raw_media_thumbnail' => $media_thumbnail,
         'media_size'        =>  'width="' . $newwidth . '" height="' . $newheight . '"',
         'media_height'      =>  $newheight,
         'media_width'       =>  $newwidth,

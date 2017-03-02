@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Media Gallery search did not display thumbnails
   - Forum - disable text mode checkbox when using WYSIWYG editor
   - Forum - WYSIWYG tweaks - added spell check, maximize buttons - increased editor window to match height of non-WYSIWYG window
   - Implemented custom style filter for htmLawed to handle the 'style' attribute
