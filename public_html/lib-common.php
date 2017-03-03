@@ -5915,11 +5915,13 @@ function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 
     if ($printedLength < $maxLength && $position < strlen($html))
         $retval .= substr($html, $position, $maxLength - $printedLength);
 
+    $retval .= $end;
+
     // Close any open tags.
     while (!empty($tags))
         $retval .= sprintf('</%s>', array_pop($tags));
 
-    return $retval . $end;
+    return $retval;
 }
 
 /**
