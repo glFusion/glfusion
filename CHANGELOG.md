@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Allow users with existing accounts to log in via Oauth accounts using same email address - patch by Lee Garner
   - Headlines auto tag now shows Read More prompt when introtext is truncated
   - Improved HTML truncation - no longer orphans some opening HTML tags
   - Updated the video id detection in vimeo ckeditor plugin - resolves issue detecting id in embed code
