@@ -5853,65 +5853,73 @@ function COM_switchLocaleSettings()
 * @return   string              truncated string
 *
 */
-function COM_truncateHTML ( $str, $len, $end = '&hellip;', $endchars = 0 )
+function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 )
 {
+    if ( utf8_strlen($html) <= $maxLength ) return $html;
 
-    if ( utf8_strlen($str) <= $len ) return $str;
+    $printedLength = 0;
+    $position = 0;
+    $tags = array();
+    $isUtf8 = false;
+    $retval = '';
 
-    $tagPattern = '/(<\/?)([\w]*)(\s*[^>]*)>?|&[\w#]+;/i';  //match html tags and entities
-    preg_match_all($tagPattern, $str, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
+    if ( COM_getCharSet() == 'utf-8' ) $isUtf8 = true;
 
-    $i = 0;
-    $closeTagString = '';
+    // For UTF-8, we need to count multibyte sequences as one character.
+    $re = $isUtf8
+        ? '{</?([a-z]+)[^>]*>|&#?[a-zA-Z0-9]+;|[\x80-\xFF][\x80-\xBF]*}'
+        : '{</?([a-z]+)[^>]*>|&#?[a-zA-Z0-9]+;}';
 
-    while ( @$matches[$i][0][1] < $len && !empty($matches[$i]) ) {
+    while ($printedLength < $maxLength && preg_match($re, $html, $match, PREG_OFFSET_CAPTURE, $position)) {
+        list($tag, $tagPosition) = $match[0];
 
-        $len = $len + strlen($matches[$i][0][0]);
-        if (utf8_substr($matches[$i][0][0],0,1) == '&' ) {
-            $len = $len-1;
+        // Print text leading up to the tag.
+        $str = substr($html, $position, $tagPosition - $position);
+        if ($printedLength + strlen($str) > $maxLength) {
+            $retval .= (substr($str, 0, $maxLength - $printedLength));
+            $printedLength = $maxLength;
+            break;
         }
 
-        //if $matches[$i][2] is undefined then its an html entity, want to ignore those for tag counting
-        //ignore empty/singleton tags for tag counting
-        if (!empty($matches[$i][2][0]) && !in_array($matches[$i][2][0],array('br','img','hr', 'input', 'param', 'link'))) {
-            if ( utf8_substr($matches[$i][3][0],-1 ) !='/' && utf8_substr( $matches[$i][1][0],-1 ) != '/') {
-                $openTags[] = $matches[$i][2][0];
-            } elseif( end($openTags) == $matches[$i][2][0] ) {
-                array_pop($openTags);
+        $retval .= $str;
+        $printedLength += strlen($str);
+        if ($printedLength >= $maxLength) break;
+
+        if ($tag[0] == '&' || ord($tag) >= 0x80) {
+            // Pass the entity or UTF-8 multibyte sequence through unchanged.
+            $retval .= $tag;
+            $printedLength++;
+        } else {
+            // Handle the tag.
+            $tagName = $match[1][0];
+            if ($tag[1] == '/') {
+                // This is a closing tag.
+                $openingTag = array_pop($tags);
+                assert($openingTag == $tagName); // check that tags are properly nested.
+                $retval .= $tag;
+            } else if ($tag[strlen($tag) - 2] == '/') {
+                // Self-closing tag.
+                $retval .= $tag;
             } else {
-                $warnings[] = "html has some tags mismatched in it:  $str";
+                // Opening tag.
+                $retval .= $tag;
+                $tags[] = $tagName;
             }
         }
-        $i++;
+
+        // Continue after the tag.
+        $position = $tagPosition + strlen($tag);
     }
 
-    $closeTags = '';
+    // Print any remaining text.
+    if ($printedLength < $maxLength && $position < strlen($html))
+        $retval .= substr($html, $position, $maxLength - $printedLength);
 
-    if (!empty($openTags)) {
-        $openTags = array_reverse($openTags);
-        foreach ($openTags as $t){
-            $closeTagString .="</".$t . ">";
-        }
-    }
+    // Close any open tags.
+    while (!empty($tags))
+        $retval .= sprintf('</%s>', array_pop($tags));
 
-    if (utf8_strlen($str)>$len ) {
-        $truncated_html = $str;
-        // Finds the last space from the string new length
-        $lastWord = utf8_strpos($str, ' ', $len);
-        if ($lastWord) {
-            //truncate with new len last word
-            $str = utf8_substr($str, 0, $lastWord);
-            //finds last character
-            $last_character = (utf8_substr($str, -1, 1));
-            //add the end text
-            $truncated_html = ($last_character == '.' ? $str : ($last_character == ',' ? utf8_substr($str, 0, -1) : $str) . $end);
-        }
-        //restore any open tags
-        $truncated_html .= $closeTagString;
-    } else {
-        $truncated_html = $str;
-    }
-    return $truncated_html;
+    return $retval . $end;
 }
 
 /**
