@@ -697,6 +697,13 @@ $LANG_MG01 = array (
     'html5upload_err_album_id'    => 'Unable to determine destination album',
     'square'                    => 'Square',
     'posted'                    => 'Posted',
+    'general'                   => 'General',
+    'audio_properties'          => 'Audio Properties',
+    'attributes'                => 'Attributes',
+    'media_details'             => 'Media Details',
+    'playback_options'          => 'Playback Options',
+    'meta_data'                 => 'Meta Data',
+
 );
 
 // error messages
