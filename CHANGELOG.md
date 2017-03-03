@@ -1,4 +1,7 @@
 ## v1.6.6 (unreleased)
+  - Headlines auto tag now shows Read More prompt when introtext is truncated
+  - Improved HTML truncation - no longer orphans some opening HTML tags
+  - Updated the video id detection in vimeo ckeditor plugin - resolves issue detecting id in embed code
   - Fixed corrupted HTML in link editor
   - Media Gallery search did not display thumbnails
   - Forum - disable text mode checkbox when using WYSIWYG editor

@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2016 by the following authors
+ * @copyright   Copyright (C) 2014-2017 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -205,6 +205,7 @@ class autotag_headlines extends BaseAutotag {
 
             $newstories = array();
             while ( $A = DB_fetchArray($result) ) {
+                $readMore = false;
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
 
@@ -226,6 +227,7 @@ class autotag_headlines extends BaseAutotag {
                 $A['introtext'] = STORY_renderImages($A['sid'], $A['introtext']);
 
                 if ( !empty($A['bodytext']) ) {
+                    $readMore = true;
                     $closingP = strrpos($A['introtext'], "</p>");
                     if ( $closingP !== FALSE ) {
                         $text = substr($A['introtext'],0,$closingP);
@@ -237,7 +239,13 @@ class autotag_headlines extends BaseAutotag {
                 }
 
                 if ( $truncate > 0 ) {
-                    $A['introtext'] = $this->truncateHTML($A['introtext'], $truncate,'...');
+                    $truncatedArticle = COM_truncateHTML($A['introtext'], $truncate,'...');
+                    if ( $readMore == false && utf8_strlen($A['introtext']) != utf8_strlen($truncatedArticle) ) {
+                        // adds the read more link
+                        $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
+                        $T->set_var('lang_readmore',$LANG01['continue_reading']);
+                    }
+                    $A['introtext'] = $truncatedArticle;
                 }
 
                 $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
@@ -289,67 +297,6 @@ class autotag_headlines extends BaseAutotag {
             CACHE_create_instance($instance_id, $retval, 0);
         }
         return $retval;
-    }
-
-    // adapted from http://stackoverflow.com/questions/1193500/truncate-text-containing-html-ignoring-tags
-    public static function truncateHTML($str, $len, $end = '&hellip;')
-    {
-
-        if ( utf8_strlen($str) <= $len ) return $str;
-
-        $tagPattern = '/(<\/?)([\w]*)(\s*[^>]*)>?|&[\w#]+;/i';  //match html tags and entities
-        preg_match_all($tagPattern, $str, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
-
-        $i = 0;
-        $closeTagString = '';
-
-        while ( @$matches[$i][0][1] < $len && !empty($matches[$i]) ) {
-
-            $len = $len + strlen($matches[$i][0][0]);
-            if (utf8_substr($matches[$i][0][0],0,1) == '&' ) {
-                $len = $len-1;
-            }
-
-            //if $matches[$i][2] is undefined then its an html entity, want to ignore those for tag counting
-            //ignore empty/singleton tags for tag counting
-            if (!empty($matches[$i][2][0]) && !in_array($matches[$i][2][0],array('br','img','hr', 'input', 'param', 'link'))) {
-                if ( utf8_substr($matches[$i][3][0],-1 ) !='/' && utf8_substr( $matches[$i][1][0],-1 ) != '/') {
-                    $openTags[] = $matches[$i][2][0];
-                } elseif( end($openTags) == $matches[$i][2][0] ) {
-                    array_pop($openTags);
-                } else {
-                    $warnings[] = "html has some tags mismatched in it:  $str";
-                }
-            }
-            $i++;
-        }
-
-        $closeTags = '';
-
-        if (!empty($openTags)) {
-            $openTags = array_reverse($openTags);
-            foreach ($openTags as $t){
-                $closeTagString .="</".$t . ">";
-            }
-        }
-
-        if (utf8_strlen($str)>$len ) {
-            // Finds the last space from the string new length
-            $lastWord = utf8_strpos($str, ' ', $len);
-            if ($lastWord) {
-                //truncate with new len last word
-                $str = utf8_substr($str, 0, $lastWord);
-                //finds last character
-                $last_character = (utf8_substr($str, -1, 1));
-                //add the end text
-                $truncated_html = ($last_character == '.' ? $str : ($last_character == ',' ? utf8_substr($str, 0, -1) : $str) . $end);
-            }
-            //restore any open tags
-            $truncated_html .= $closeTagString;
-        } else {
-            $truncated_html = $str;
-        }
-        return $truncated_html;
     }
 }
 ?>
