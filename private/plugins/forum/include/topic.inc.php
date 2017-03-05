@@ -451,8 +451,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             'back_link'     => isset($backlink) ? $backlink : '',
             'member_badge'  => forumPLG_getMemberBadge($showtopic['uid'])
     ));
-    if ( $replytopicid != 0 ) {
-        $topictemplate->set_var('prefix',$LANG_GF01['RE']);
+    if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {
+        $check = substr($showtopic['subject'],0,strlen($LANG_GF01['RE']));
+        if ( strcasecmp($check,$LANG_GF01['RE']) != 0 ) {
+            $topictemplate->set_var('prefix',$LANG_GF01['RE']);
+        } else {
+            $topictemplate->set_var('prefix','');
+        }
     } else {
         $topictemplate->set_var('prefix','');
     }

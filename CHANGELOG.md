@@ -40,7 +40,7 @@
   - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
   - Removed invalid BOM marker from install english utf8 language file
   - Improved consistency on status / warning / error messages
-  - Forum - Do not prepend the "RE:" on reply subjects
+  - Forum - Improved handling of RE: prefix on forum subjects
   - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
   - Demo Mode updates
   - Cancel button did not cancel on forms with empty required fields
