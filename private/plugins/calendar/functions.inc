@@ -125,7 +125,7 @@ function phpblock_calendar( $help='', $title='' )
                                  "name = 'events_block'" );
         }
 
-        $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
+        $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
         . "FROM {$_TABLES['events']} ";
         if($_DB_dbms == 'mssql') {
             $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) AND (status = 1)";
@@ -213,7 +213,7 @@ function phpblock_calendar( $help='', $title='' )
                     if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                         $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
                     }
-                    $dt->setTimestamp($theTime1);
+                    $dt->setTimestamp($theEvent['datestart_unix']);
                     $abbrDate1 = $dt->format($dateonly,true);
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
@@ -222,7 +222,7 @@ function phpblock_calendar( $help='', $title='' )
                     if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                         $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
                     }
-                    $dt->setTimestamp($theTime2);
+                    $dt->setTimestamp($theEvent['dateend_unix']);
                     $abbrDate2 = $dt->format($dateonly,true);
                     if ( COM_getCharset() == 'utf-8' ) {
                         if ( !MBYTE_is_utf8($dayName1) ) {
