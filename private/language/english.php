@@ -1968,7 +1968,6 @@ $LANG_ADMIN = array(
     'list' => 'List',
     'list_all' => 'List all',
     'na' => '-',
-    'action' => 'Action',
     'enable' => 'Enable',
     'disable' => 'Disable',
     'admin_users' => 'User Admin',
