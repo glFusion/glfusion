@@ -331,7 +331,7 @@ $LANG04 = array(
     63 => "Ihr Passwort sollte in Kürze per E-Mail eintreffen. Bitte beachten Sie die Hinweise in der E-Mail und Danke für ihr Interesse an {$_CONF['site_name']}",
     64 => 'Kommentar-Einstellungen für',
     65 => "Anmeldung bei {$_CONF['site_name']}",
-    66 => 'Bitte geben Sie Ihren Benutzernamen und Ihr Passwort unten ein.',
+    66 => 'Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein.',
     67 => 'Mitglied seit',
     68 => 'Angemeldet für',
     69 => 'Wie lange soll das System Sie nach dem Anmelden erkennen?',
@@ -738,7 +738,7 @@ $LANG12 = array(
 );
 
 ###############################################################################
-# lib-rating.php
+# rater.php
 
 $LANG13 = array(
     'vote' => 'Abstimmen',
@@ -1394,7 +1394,7 @@ $LANG33 = array(
 
 $LANG_LOGVIEW = array(
     'logview' => 'Protokolle',
-    'info' => 'glFusion Protokoll Verwaltung:<ul><li>access.log - Unerlaubten Zugriffe</li><li>captcha.log - Falsche Captcha abfragen</li><li>error.log - Server und Datenbankfehler</li><li>spamx.log - Erkannte Spameinträge</li></ul>',
+    'info' => 'glFusion Protokoll Verwaltung:<ul><li>404.log - Nicht gefundene Seiten</li><li>access.log - Unerlaubten Zugriffe</li><li>captcha.log - Falsche Captcha abfragen</li><li>error.log - Server und Datenbankfehler</li><li>spamx.log - Erkannte Spameinträge</li></ul>',
     'logs' => 'Protokolle',
     'view' => 'Protokoll anzeigen',
     'clear' => 'Protokoll löschen',
@@ -1970,11 +1970,11 @@ $LANG_ADMIN = array(
     'list' => 'Auflisten',
     'list_all' => 'Alle auflisten',
     'na' => '-',
-    'action' => 'Aktion für alle ausgewählten:',
     'enable' => 'Aktivieren',
     'disable' => 'Deaktivieren',
     'admin_users' => 'Benutzer-Verwaltung',
     'admin_groups' => 'Gruppen-Verwaltung',
+    'action' => 'Aktion für alle ausgewählten:',
     'authenticate' => 'Authentifizieren',
     'select' => 'Wähle',
     'name' => 'Name',
@@ -2116,7 +2116,7 @@ $LANG_BBCODE = array(
 
 # Localisation of the texts for the Admin file check
 ###############################################################################
-# filecheck.php
+# admin/filecheck.php - distribution integrity checker
 
 $LANG_FILECHECK = array(
     'filecheck' => 'Datei-Integritätsprüfung',
@@ -2145,7 +2145,7 @@ $LANG_FILECHECK = array(
 
 # Localisation of the texts for Menu Builder
 ###############################################################################
-# Menu Builder
+# admin/menu.php - menu builder
 
 $LANG_MB01 = array(
     'javascript_required' => 'Menü Manager erfordert aktiviertes JavaScript.',
@@ -2307,7 +2307,7 @@ $LANG_MB_ADMIN = array(
 );
 
 ###############################################################################
-# logo.php
+# admin/logo.php - logo administration
 
 $LANG_LOGO = array(
     'logo_admin' => 'Logo',
@@ -2328,7 +2328,7 @@ $LANG_LOGO = array(
 );
 
 ###############################################################################
-# autotag.php
+# admin/autotag.php - autotag administration
 
 $LANG_AM = array(
     'plugin' => 'Autotag',
@@ -2397,89 +2397,89 @@ $LANG_AM = array(
 );
 
 ###############################################################################
-# envcheck.php
+# admin/envcheck.php - environment check
 
 $LANG_ENVCHK = array(
-    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
-    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
-    'ctype_extension' => 'Ctype Extension',
-    'current' => 'Current',
-    'current_php_settings' => 'Current PHP Settings',
-    'database_version' => 'Database Version',
-    'date_extension' => 'Date Extension',
-    'db_charset' => 'Database Character Set',
-    'db_collation' => 'Database Collation',
-    'db_driver' => 'Database Driver',
-    'db_engine' => 'Database Engine',
-    'db_header' => 'Database Info',
-    'db_version' => 'Database Version',
-    'directory_permissions' => 'Directory Permissions',
-    'enabled' => 'Enabled',
-    'extensions' => 'Required PHP Extensions',
-    'file_permissions' => 'File Permissions',
-    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
-    'filesystem_check' => 'Directory / File Permissions',
-    'filter_extension' => 'Filter Extension',
-    'gd_lib' => 'GD Libraries',
-    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
-    'gd_ok' => 'GD Libraries v2 are installed.',
-    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
-    'gettext_extension' => 'Gettext Extension',
-    'graphics' => 'Graphics Library',
-    'hide_phpinfo' => 'Hide Full PHP Info',
-    'hosting_env' => 'Hosting Environment Check',
-    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
-    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
-    'imagemagick' => 'ImageMagick Programs',
-    'is_optional' => ' is optional',
-    'is_required' => ' is required',
-    'jhead' => 'jhead Program',
-    'jhead_not_found' => 'Unable to locate the jhead executable.',
-    'jhead_ok' => 'The jhead executable is installed.',
-    'jpegtran' => 'jpegtran Program',
-    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
-    'jpegtran_ok' => 'The jpegtran executable is installed.',
-    'json_extension' => 'Json Extension',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
-    'mbstring_extension' => 'Multibyte (mbstring) Extension',
-    'memory_limit' => 'It is recommended that you have at least 64M of memory enabled on your site.',
-    'mysqli_extension' => 'MySQLi Extension',
-    'netpbm' => 'NetPBM Library',
-    'not_checked' => 'Skipped',
-    'not_found' => 'Not Found',
-    'not_writable' => 'NOT WRITABLE',
-    'notes' => 'Notes',
-    'np_not_found' => 'The NetPBM executables were not found.',
-    'np_ok' => 'The NetPBM library is installed',
-    'off' => 'Off',
+    'bypass_note' => 'Da entweder "safe_mode" oder "open_basedir" Einschränkungen erkannt wurden, wurde die Prüfung auf Grafikbibliotheken übersprungen.',
+    'correct_perms' => 'Bitte beheben Sie die unten aufgeführten Probleme und betätigen Sie anschließend die Schaltfläche "Umgebung erneut prüfen".',
+    'ctype_extension' => 'Ctype-Erweiterung',
+    'current' => 'Aktuell',
+    'current_php_settings' => 'Aktuelle PHP-Einstellungen',
+    'database_version' => 'Datenbank-Version',
+    'date_extension' => 'Datum-Erweiterung',
+    'db_charset' => 'Datenbank-Zeichensatz',
+    'db_collation' => 'Datenbank-Sortierung',
+    'db_driver' => 'Datenbank-Treiber',
+    'db_engine' => 'Datenbank-Engine',
+    'db_header' => 'Datenbank-Info',
+    'db_version' => 'Datenbank-Version',
+    'directory_permissions' => 'Verzeichnis-Berechtigungen',
+    'enabled' => 'Aktiviert',
+    'extensions' => 'Benötigte PHP-Erweiterungen',
+    'file_permissions' => 'Datei-Berechtigungen',
+    'file_uploads' => 'Viele Funktionen von glFusion erfordern die Möglichkeit, Dateien hochzuladen, diese sollte aktiviert sein.',
+    'filesystem_check' => 'Verzeichnis / Datei-Berechtigungen',
+    'filter_extension' => 'Filter-Erweiterung',
+    'gd_lib' => 'GD-Bibliotheken',
+    'gd_not_found' => 'Die Funktionen der GD-Bibliothek konnten nicht gefunden werden. Bitte prüfen Sie das vorhanden sein der GD-Bibliothek oder wählen Sie eine alternative Grafik-Bibliothek.',
+    'gd_ok' => 'GD-Bibliotheken v2 ist installiert.',
+    'gd_v1' => 'GD-Bibliotheken v1 ist installiert - Diese Version unterstützt die JPG-Bildverarbeitung nicht vollständig, dies kann zu Qualitätsproblemen führen.',
+    'gettext_extension' => 'Gettext-Erweiterung',
+    'graphics' => 'Grafik-Bibliotheken',
+    'hide_phpinfo' => 'PHP-Info ausblenden',
+    'hosting_env' => 'Hosting-Umgebung prüfen',
+    'im_not_found' => 'Die ausführbare Datei <b>convert</b> konnte nicht gefunden werden.',
+    'im_ok' => 'Die ausführbare Datei <b>convert</b> scheint vorhanden zu sein.',
+    'imagemagick' => 'ImageMagick-Programm',
+    'is_optional' => ' ist optional',
+    'is_required' => ' ist erforderlich',
+    'jhead' => 'jhead-Programm',
+    'jhead_not_found' => 'Die ausführbare Datei <b>jhead</b> konnte nicht gefunden werden.',
+    'jhead_ok' => 'Die ausführbare Datei <b>jhead</b> scheint vorhanden zu sein.',
+    'jpegtran' => 'jpegtran-Programm',
+    'jpegtran_not_found' => 'Die ausführbare Datei <b>jpegtran</b> konnte nicht gefunden werden.',
+    'jpegtran_ok' => 'Die ausführbare Datei <b>jpegtran</b> scheint vorhanden zu sein.',
+    'json_extension' => 'Json-Erweiterung',
+    'max_execution_time' => 'GlFusion empfiehlt den PHP-Standardwert von 30 Sekunden als Minimum, jedoch können Uploads und andere Operationen durchaus länger dauern. Wenn "safe_mode" ausgeschaltet ist, können Sie diesen Wert durch Ändern von <b>max_execution_time</b> in Ihrer php.ini-Datei erhöhen.',
+    'mbstring_extension' => 'Multibyte-Erweiterung (mbstring)',
+    'memory_limit' => 'Es wird empfohlen, dass Sie mindestens 64MB aktiviert haben',
+    'mysqli_extension' => 'MySQLi-Erweiterung',
+    'netpbm' => 'NetPBM-Bibliothek',
+    'not_checked' => 'Übersprungen',
+    'not_found' => 'Nicht gefunden',
+    'not_writable' => 'NICHT BESCHREIBBAR',
+    'notes' => 'Notizen',
+    'np_not_found' => 'Die ausführbaren Datein von <b>NetPBM</b> konnte nicht gefunden werden.',
+    'np_ok' => 'Die <b>NetPBM-Bibliothek</b> scheint vorhanden zu sein.',
+    'off' => 'Aus',
     'ok' => 'OK',
-    'on' => 'On',
-    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
-    'openssl_extension' => 'OpenSSL Extension',
-    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
-    'php_settings' => 'PHP Settings',
-    'php_version' => 'PHP Version',
-    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
-    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
-    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
-    'recheck' => 'Recheck Environment',
-    'recommended' => 'Recommended',
-    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
-    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
-    'session_extension' => 'Session Extension',
-    'setting' => 'Setting',
-    'show_phpinfo' => 'Show Full PHP Info',
+    'on' => 'Ein',
+    'open_basedir' => 'Wenn "open_basedir" aktiviert ist, kann es während der Installation zu Berechtigungsproblemen führen.<br />Die Dateisystem-Überprüfung sollte diesbezüglich auf Probleme hinweisen.',
+    'openssl_extension' => 'OpenSSL-Erweiterung',
+    'php_req_version' => 'glFusion erfordert PHP-Version 5.3.3 oder höher.',
+    'php_settings' => 'PHP-Einstellungen',
+    'php_version' => 'PHP-Version',
+    'php_warning' => 'Wenn irgendwelche der aufgeführten Punkte in <span class="no">rot</span> markiert sind, könnten Sie Probleme mit Ihrer glFusion-Website haben.<br />Halten Sie diesbezüglich Rücksprache mit Ihrem Hosting-Provider bezüglich Änderung dieser PHP-Einstellungen',
+    'phpendoflife' => 'Ihre PHP-Version, einschließlich Sicherheitsupdates, ist veraltet und wird nicht mehr unterstützt.<br />Bitte erwägen Sie eine Aktualisierung auf eine <a href="http://php.net/supported-versions.php" target="_blank">Aktuelle PHP-Version</a>.',
+    'post_max_size' => 'Mit glFusion können Sie Plugins, Bilder und Dateien hochladen. Sie sollten hierfür mindestens 8MB zulassen.',
+    'recheck' => 'Umgebung erneut prüfen',
+    'recommended' => 'Empfohlen',
+    'register_globals' => 'Wenn "register_globals" aktiviert ist, kann dies Sicherheitsprobleme verursachen.',
+    'safe_mode' => 'Wenn "safe_mode" aktiviert ist, funktionieren einige Funktionen von glFusion möglicherweise nicht ordnungsgemäß. Im speziellen das Media Gallery Plugin.',
+    'session_extension' => 'Session-Erweiterng',
+    'setting' => 'Einstellungen',
+    'show_phpinfo' => 'PHP-Info einblenden',
     'status' => 'Status',
-    'unable_mkdir' => 'Unable to create directory',
-    'unknown' => 'unknown',
-    'unlimited' => 'unlimited',
-    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
-    'xml_extension' => 'XML Extension',
-    'zlib_extension' => 'zlib Extension'
+    'unable_mkdir' => 'Verezeichnis konnte nicht erstellt werden',
+    'unknown' => 'unbekannt',
+    'unlimited' => 'unbegrenzt',
+    'upload_max_filesize' => 'Mit glFusion können Sie Plugins, Bilder und Dateien hochladen. Sie sollten hierfür mindestens 8MB zulassen.',
+    'xml_extension' => 'XML-Erweiterung',
+    'zlib_extension' => 'zlib-Erweiterung'
 );
 
 ###############################################################################
-# versioncheck.php
+# admin/vercheck.php - version checker
 
 $LANG_UPGRADE = array(
     'recheck' => 'Version überprüfen',
@@ -2507,7 +2507,7 @@ $LANG_UPGRADE = array(
 );
 
 ###############################################################################
-# sfs.php
+# admin/sfs.php - stop forum spam checks
 
 $LANG_SFS = array(
     'title' => 'Stop Forum Spam (SFS) Benutzer-Prüfung',
@@ -2572,11 +2572,11 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pfad zu Pear',
     'have_pear' => 'Pear vorhanden',
     'mail_settings' => 'Einstellungen ',
-    'theme' => 'Theme',
+    'theme' => 'Design',
     'menu_elements' => 'Elemente des Menüs',
-    'path_themes' => 'Pfad zu Themes',
+    'path_themes' => 'Pfad zu Designs',
     'disable_new_user_registration' => 'Benutzerregistrierung abschalten',
-    'allow_user_themes' => 'Benutzer kann Theme wählen',
+    'allow_user_themes' => 'Benutzer kann Design wählen',
     'allow_user_language' => 'Benutzer kann Sprache wählen',
     'allow_user_photo' => 'Benutzer kann Foto hochladen',
     'allow_username_change' => 'Benutzer kann Benutzername ändern',
@@ -2586,7 +2586,7 @@ $LANG_confignames['Core'] = array(
     'hide_exclude_content' => 'Inhalte im Profil verstecken',
     'show_servicename' => 'Name des Service wird angezeigt',
     'custom_registration' => '"Custom Registration" aktivieren',
-    'user_login_method' => 'Benutzer-Anmeldemethode',
+	'user_login_method' => 'Anmeldemethode ',
     'facebook_login' => 'Facebook Login Aktivieren',
     'facebook_consumer_key' => 'Facebook OAuth Application ID',
     'facebook_consumer_secret' => 'Facebook OAuth Application Secret',
@@ -2622,12 +2622,12 @@ $LANG_confignames['Core'] = array(
     'language_files' => 'Sprachdateien',
     'languages' => 'Sprachen',
     'timezone' => 'Zeitzone',
-    'site_disabled_msg' => 'Hinweistext bzw. Weiterleitungs URL bei Abschaltung von glFusion',
+    'site_disabled_msg' => 'Text oder URL bei Wartungsmodus',
     'rootdebug' => 'Root Debugging',
     'cookie_session' => 'Session Cookie Name',
     'cookie_name' => 'Permanent Cookie Name',
     'cookie_password' => 'Password Cookie Name',
-    'cookie_theme' => 'Theme Cookie Name',
+    'cookie_theme' => 'Design Cookie Name',
     'cookie_language' => 'Sprache Cookie Name',
     'cookie_tzid' => 'Zeitzone Cookie Name',
     'cookie_ip' => 'Cookies embed IP',
@@ -2647,9 +2647,9 @@ $LANG_confignames['Core'] = array(
     'emailuserloginrequired' => 'Anmelden für E-Mail an Benutzer',
     'emailstoryloginrequired' => 'Anmelden für E-Mail Artikelversand',
     'directoryloginrequired' => 'Anmelden für Artikelverzeichnis',
-    'storysubmission' => 'Artikel moderieren',
+    'storysubmission' => 'Artikel Einsendungen erlauben',
     'usersubmission' => 'Neue Benutzer zur Moderation',
-    'listdraftstories' => 'Anzahl Artikel auf Entwurf anzeigen',
+    'listdraftstories' => 'Entwürfe bei Einsendungen anzeigen',
     'notification' => 'Benachrichtigung',
     'postmode' => 'Standard-Beitragsmodus',
     'mailuser_postmode' => 'HTML oder Text-Modus bei E-Mails',
@@ -2658,7 +2658,7 @@ $LANG_confignames['Core'] = array(
     'cron_schedule_interval' => 'Cron Zeitabstand',
     'sortmethod' => 'Kategorien sortieren',
     'showstorycount' => 'Anzahl Artikel anzeigen',
-    'showsubmissioncount' => 'Anzahl Artikel zur Moderation anzeigen',
+    'showsubmissioncount' => 'Zahl offener Einsendungen anzeigen',
     'hide_home_link' => 'Home Link ausblenden',
     'whosonline_threshold' => 'Session ist gültig (sec.)',
     'whosonline_anonymous' => 'Namen für Gäste ausblenden',
@@ -2676,9 +2676,9 @@ $LANG_confignames['Core'] = array(
     'hidenewtrackbacks' => 'Neue Trackbacks ausblenden',
     'hidenewplugins' => 'Neue Plugin-Einträge ausblenden',
     'title_trim_length' => 'Titel abschneiden nach',
-    'trackback_enabled' => 'Trackback möglich',
-    'pingback_enabled' => 'Pingback möglich',
-    'ping_enabled' => 'Ping möglich',
+    'trackback_enabled' => 'Trackback erlauben',
+    'pingback_enabled' => 'Pingback erlauben',
+    'ping_enabled' => 'Ping erlauben',
     'trackback_code' => 'Trackback-Standard',
     'multiple_trackbacks' => 'Mehrere Trackbacks',
     'trackbackspeedlimit' => 'Trackback Speed-Limit',
@@ -2699,11 +2699,11 @@ $LANG_confignames['Core'] = array(
     'page_break_comments' => 'Kommentare auf Mehrseiten-Artikeln',
     'article_image_align' => 'Ausrichtung Kategorie-Icon',
     'show_topic_icon' => 'Kategorie Icon anzeigen',
-    'draft_flag' => 'Entwurf als Standart',
-    'frontpage' => 'Auf der Titelseite als Standart',
+    'draft_flag' => 'Neue Artikel als Entwurf',
+    'frontpage' => 'Neue Artikel auf der Titelseite',
     'hide_no_news_msg' => '"Keine News" - Info ausblenden',
     'hide_main_page_navigation' => 'Hauptseiten-Navigation ausblenden',
-    'onlyrootfeatures' => 'Nur Root kann Hauptartikel schreiben',
+    'onlyrootfeatures' => 'Hauptartikel nur für Root',
     'aftersave_story' => 'Nach dem Artikel speichern',
     'aftersave_user' => 'Nach dem Benutzer speichern',
     'show_right_blocks' => 'Immer rechte Blöcke anzeigen',
@@ -2775,7 +2775,7 @@ $LANG_confignames['Core'] = array(
     'search_show_hits' => 'Anzahl Treffer anzeigen',
     'search_show_sort' => 'Darf Benutzer Ergebnisse sortieren',
     'search_show_limit' => 'Seitenlimits anzeigen',
-    'search_no_data' => 'Wenn keine Daten verfügbar sind, anzeigen',
+    'search_no_data' => 'Anzeige bei null Treffer',
     'search_separator' => 'Gruppen-Trenner',
     'search_def_keytype' => 'Standard-Suchmethode',
     'mail_backend' => 'Mail Backend',
@@ -2791,16 +2791,16 @@ $LANG_confignames['Core'] = array(
     'compress_css' => 'CSS komprimieren',
     'jpg_orig_quality' => 'JPEG Qualitätsfaktor',
     'allow_embed_object' => 'EMBED Object erlauben',
-    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung',
-    'use_from_site_mail' => 'Seiten-E-Mail als E-Mail-von Adresse verwenden',
+    'story_submit_by_perm_only' => 'Erlaube Einsendungen nur in Kategorien mit Schreibberechtigung',
+    'use_from_site_mail' => 'Immer Seiten E-Mail als Absender',
     'cache_templates' => 'Template-Caching aktivieren',
     'template_comments' => 'Template-Kommentare aktivieren',
-    'hidestorydate' => 'Artikeldatum verstecken',
+    'hidestorydate' => 'Artikeldatum ausblenden',
     'maintenance_mode' => 'Wartungsmodus aktivieren',
-    'rating_enabled' => 'Bewertung aktivieren',
+    'rating_enabled' => 'Bewertung erlauben für',
     'user_reg_fullname' => 'Voller Name bei Anmeldung',
     'session_ip_check' => 'Überprüfung Session-IP',
-    'article_comment_close_enabled' => 'Automatisch Kommentare schliessen (Standarteinstellung)',
+    'article_comment_close_enabled' => 'Kommentare automatisch schließen (Standarteinstellung)',
     'registration_type' => 'Registrierungsart',
     'comment_postmode' => 'Kommentar Eingabeart',
     'max_logo_width' => 'Max. Logo-Breite',
@@ -2835,14 +2835,14 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => '404-Fehler (NotFound) aufzeichnen',
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
     'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => '"Standard Auth" als erstes in Dropdown'
 );
 
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Seiteninfo &amp; Konfiguration',
     'sg_stories' => 'Artikel &amp; Track-Pingback',
-    'sg_theme' => 'Theme &amp; Darstellung',
-    'sg_blocks' => 'Einstellungen für Blöcke',
+    'sg_theme' => 'Design &amp; Darstellung',
+    'sg_blocks' => 'Blöcke &amp; Einstellungen',
     'sg_users' => 'Benutzer &amp; Beiträge',
     'sg_images' => 'Bilder &amp; Icon &amp; Logo',
     'sg_locale' => 'Sprache &amp; Lokalisierung',
@@ -2853,7 +2853,7 @@ $LANG_configsubgroups['Core'] = array(
 $LANG_fs['Core'] = array(
     'fs_site' => 'Seite',
     'fs_paths' => 'Pfade',
-    'fs_theme' => 'Theme',
+    'fs_theme' => 'Design',
     'fs_mail' => 'Mail',
     'fs_pear' => 'Pear',
     'fs_users' => 'Benutzer',
@@ -2891,7 +2891,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_topic' => 'Standard-Kategorierechte',
     'fs_perm_block' => 'Standard-Blockrechte',
     'fs_caching' => 'Caching',
-    'fs_mulitlanguage' => 'Unterstützung mehrerer Sprachen - Siehe: <a href="http://www.glfusion.org/wiki/doku.php/glfusion:language#multilingual_sites" target=_blank>Multi-Language Documentation</a>',
+    'fs_mulitlanguage' => 'Mehrsprachiger Auftritt ',
     'fs_logo' => 'Logo-Optionen',
     'fs_update' => 'Aktualisierungs-Manager',
     'fs_rating' => 'Bewertungs-Optionen',
