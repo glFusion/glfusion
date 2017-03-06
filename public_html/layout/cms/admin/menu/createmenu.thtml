@@ -5,7 +5,7 @@
 		<input type="hidden" id="mode" name="mode" value="savenewmenu">
 
 		<div class="uk-form-row">
-			<label for="menuname" class="uk-form-label">{$LANG_MB01[label]}</label>
+			<label for="menuname" class="uk-form-label">{$LANG_MB01[label]}&nbsp;<span id="menuname-count" class="uk-badge uk-badge-notification uk-margin-small-bottom"></span></label>
 			<div class="uk-form-controls">
 				<input class="required" type="text" id="menuname" name="menuname" size="48" value="{menuname}">
 				<div class="uk-form-help-block uk-margin-small-left">
@@ -47,5 +47,15 @@
 		});
 	});
 	$("#menubuilder").validate();
+</script>
+<script>
+		$(function(){
+			// Menu Name
+            $("#menuname").characterCounter({
+            limit: '64',
+            counterSelector: '#menuname-count' 
+            });
+            
+            });
 </script>
 {# end {templatelocation} #}
