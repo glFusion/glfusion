@@ -127,8 +127,8 @@ $LANG_SX00 = array(
     'stats_deleted' => 'Beiträge als Spam gelöscht',
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV-Whitelist',
-    'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
-    'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked'
+    'instructions' => 'Spam-X erlaubt Dir, Wörter, URLs und andere Elemente zu definieren, die verwendet werden können, um Spam-Beiträge auf Deiner Website zu blockieren.',
+    'invalid_email_or_ip' => 'Ungültige E-Mail-Adresse und/oder IP-Adresse wurde blockiert'
 );
 
 // Define Messages that are shown when Spam-X module action is taken
@@ -151,13 +151,13 @@ $LANG_confignames['spamx'] = array(
     'admin_override' => 'Admin-Beiträge nicht filtern',
     'logging' => 'Logging aktivieren',
     'timeout' => 'Timeout',
-    'sfs_username_check' => 'Enable User name validation',
-    'sfs_email_check' => 'Enable email validation',
-    'sfs_ip_check' => 'Enable IP address validation',
-    'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
-    'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
-    'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
-    'slc_max_links' => 'Maximum Links allowed in post'
+    'sfs_username_check' => 'Benutzer-Name überprüfen',
+    'sfs_email_check' => 'E-Mail überprüfen',
+    'sfs_ip_check' => 'IP-Adresse überprüfen',
+    'sfs_username_confidence' => 'Schwellwert Benutzer-Name',
+    'sfs_email_confidence' => 'Schwellwert E-Mail',
+    'sfs_ip_confidence' => 'Schwellwert IP-Adresse',
+    'slc_max_links' => 'Maximale Links in Beiträgen'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -166,8 +166,8 @@ $LANG_configsubgroups['spamx'] = array(
 
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Haupteinstellungen',
-    'fs_sfs' => 'Stop Forum Spam Settings',
-    'fs_slc' => 'Spam Link Counter'
+    'fs_sfs' => 'Stop Forum Spam Einstellungen',
+    'fs_slc' => 'Spam Link Zähler'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

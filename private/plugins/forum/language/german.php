@@ -242,7 +242,7 @@ $LANG_GF01 = array(
     'disable_urlparse' => 'URLs nicht analysieren:',
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
-    'all_read_success' => 'All topics have been marked as read'
+    'all_read_success' => 'Alle Themen wurden als gelesen markiert'
 );
 
 $LANG_GF02 = array(
@@ -263,7 +263,7 @@ $LANG_GF02 = array(
     'msg15' => 'Wenn Du meinst, dass dies ein Fehler ist, kontaktiere den <a href="mailto:%s?subject=Forum IP-Sperre">Seiten-Admin</a>.',
     'msg16' => 'Dies sind die beliebtesten Beiträge, Du kannst sie nach Anzahl der Antworten oder Aufrufen sortieren.',
     'msg17' => 'Nachricht bearbeitet! Deine Nachricht wurde erfolgreich bearbeitet. Kehre nun zur Nachricht zurück.',
-    'msg18' => 'Fehler! Es wurden nicht alle benötigten Felder ausgefüllt oder die Einträge waren zu kurz.',
+    'msg18' => 'Fehler: Es wurden nicht alle benötigten Felder ausgefüllt oder die Einträge waren zu kurz.',
     'msg19' => 'Dein Beitrag wurde veröffentlicht.',
     'msg20' => 'Antwort hinzugefügt! Deine Antwort wurde veröffentlicht. Kehre nun zum Forum zurück',
     'msg21' => 'Es tut uns leid, aber Du hast keine Berechtigung dazu. <a href="javascript:history.back()">Zurück</a> oder <a href="%s/users.php?mode=login">Anmelden</a><br /><br />',
@@ -275,7 +275,7 @@ $LANG_GF02 = array(
     'msg25' => "\nViel Spaß,\n",
     'msg26' => "\nDu bekommst diese E-Mail, da Du die Benachrichtigung für dieses Thema aktiviert hast. ",
     'msg27' => "Deine Benachrichtigungen kannst Du unter <%s> löschen.\n",
-    'msg28' => 'Fehler, kein Thema für diesen Beitrag',
+    'msg28' => 'Fehler: Kein Thema für diesen Beitrag',
     'msg29' => 'Deine Signatur wird hier platziert.',
     'msg30' => 'Nach oben',
     'msg31' => '<b>Du kannst es noch hier bearbeiten:</b>',
@@ -400,7 +400,7 @@ $LANG_GF02 = array(
     'msg162' => 'Um jetzt zum Forenindex zurückzukehren, klicke <a href="%s">hier</a><br /><br />Standard ist die automatische Rückkehr zum Beitrag.<br />Wenn Du nicht warten möchtest, dann klicke jetzt <a href="%s">hier</a>.',
     'msg163' => 'Beitrag verschoben',
     'msg164' => 'Alle Kategorien und Themen als gelesen markeiren',
-    'msg165' => 'FEHLER<br />Passender <b>ZITAT</b>-Tag fehlt. Kann Nachricht nicht formatieren.<br />',
+    'msg165' => 'FEHLER: Passender <b>ZITAT</b>-Tag fehlt.<br />Nachricht nicht formatiert werden.',
     'msg166' => 'FEHLER: Ungültiges Thema oder Thema nicht gefunden',
     'msg167' => 'Benachrichtigungs-Option',
     'msg168' => 'Einstellung NEIN deaktiviert E-Mail-Benachrichtigungen',
@@ -440,7 +440,7 @@ $LANG_GF02 = array(
     'msg202' => 'Keine neuen Beiträge',
     'msg203' => 'Leseszeichen hinzuzufügen',
     'msg204' => 'Lesenzeichen zu entfernen',
-    'msg205' => 'You have not posts bookmarked',
+    'msg205' => 'Du hast keine Lesezeichen hinzugefügt',
     'new_posts' => 'Neue Beiträge',
     'StatusHeading' => 'Nur zur Information',
     'PostReply' => 'Neue Antwort schreiben',
@@ -449,13 +449,13 @@ $LANG_GF02 = array(
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
     'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schau sie Dir Online an</a>.',
-    'invalid_token' => 'Invalid Security Token',
-    'edit_time_passed' => 'The allowed time to edit your post has expired',
-    'not_your_post' => 'You donot appear to be the author of this post.',
-    'spam_detected' => 'Your post has been identified as a spam message',
-    'invalid_email' => 'Email empty or not a valid email address',
-    'invalid_name' => 'No name or name blank',
-    'last_edited' => 'Last Edited'
+    'invalid_token' => 'Sicherheits Schlüssel ist ungültig - Möglicherweise ist Deine Sitzung abgelaufen',
+    'edit_time_passed' => 'Die erlaubte Zeit, um Deinen Beitrag bearbeiten zu dürfen, ist leider abgelaufen',
+    'not_your_post' => 'Du scheinst nicht der Verfasser dieses Beitrags zu sein.',
+    'spam_detected' => 'Dein Beitrag wurde als Spam-Nachricht identifiziert',
+    'invalid_email' => 'Deine E-Mail-Adresse scheint leer oder ungültig zu sein',
+    'invalid_name' => 'Dein Name scheint leer oder ungültig zu sein',
+    'last_edited' => 'Zuletzt bearbeitet'
 );
 
 $LANG_GF03 = array(
@@ -581,12 +581,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Einstellungen',
     'forumprefs_help_title' => 'Forum-Einstellungen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzer-Einstellungen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
-    'topicspp_help' => 'Number of topics to display when viewing the forum index.',
-    'postspp_help' => 'Number of posts to show per page.',
-    'anonymous_help' => 'Hide posts from anonymous users.',
-    'notify_help' => 'Enable auto notifications.',
-    'notify_once_help' => 'Only send one notification.',
-    'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
+    'topicspp_help' => 'Anzahl der anzuzeigenden Themen im Forenindex.',
+    'postspp_help' => 'Anzahl der Beiträge pro Seite.',
+    'anonymous_help' => 'Gast-Beiträge ausblenden.',
+    'notify_help' => 'Automatische Benachrichtigung aktivieren.',
+    'notify_once_help' => 'Nur eine Benachrichtigung senden.',
+    'iframe_help' => 'Themenübsicht beim Antworten anzeigen.',
     'topic_order' => 'Kategorie-Reihenfolge',
     'editor_type' => 'Editor-Typ',
     'bbcode' => 'BBCode',
@@ -644,8 +644,8 @@ $LANG_GF92 = array(
     'setsave' => 'Einstellungen gespeichert',
     'defaultmode' => 'Standard-Beitragsmodus',
     'defaultmodedscp' => 'HTML-Modus als Standard - auf Ja stellen.<br />Text-Modus als Standard (sicherer) - auf Nein stellen.',
-    'cbsettings' => 'Centerblock-Einstellungen',
-    'cbenable' => 'Centerblock aktivieren',
+    'cbsettings' => 'Zentrumsblock-Einstellungen',
+    'cbenable' => 'Zentrumsblock aktivieren',
     'cbenabledscp' => '',
     'cbhomepage' => 'Nur Startseite',
     'cbhomepagedscp' => 'Aktiviert - wird nur auf Seite 1 angezeigt',
@@ -676,7 +676,7 @@ $LANG_GF92 = array(
     'cb_subjectsize' => 'Titlellänge',
     'cb_subjectsizedscp' => 'Anzahl der erlaubten Zeichen im angezeigten Betreff',
     'cb_numposts' => 'Anzahl der Beiträge',
-    'cb_numpostsdscp' => 'Anzahl der angezeigten Beiträge im Centerblock',
+    'cb_numpostsdscp' => 'Anzahl der angezeigten Beiträge im Zentrumsblock',
     'sb_subjectsize' => 'Titellänge',
     'sb_subjectsizedscp' => 'Anzahl der erlaubten Zeichen im angezeigten Betreff',
     'sb_numposts' => 'Anzahl der Beiträge',
@@ -752,12 +752,12 @@ $LANG_GF93 = array(
     'hideposts' => 'Neue Beiträge verstecken',
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
     'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen',
-    'name_blank' => 'Name cannot be blank',
-    'desc_blank' => 'Description cannot be blank',
-    'category_resynced' => 'All forums in the category have been resynced',
-    'forum_resynced' => 'The Forum has been resynced',
-    'forum_options' => 'Forum Options...',
-    'category_options' => 'Category Options...'
+    'name_blank' => 'Name darf nicht leer sein',
+    'desc_blank' => 'Beschreibung darf nicht leer sein',
+    'category_resynced' => 'Alle Foren in der Kategorie wurden neu abgeglichen',
+    'forum_resynced' => 'Das Forum wurden neu abgeglichen',
+    'forum_options' => 'Forum Optionen...',
+    'category_options' => 'Kategorie Optionen...'
 );
 
 $LANG_GF94 = array(
@@ -850,7 +850,7 @@ $LANG_GF98 = array(
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: zu einem Forum-Eintrag.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: zu einem Forum-Eintrag.. (Standart link_text: Forum-Thema). Anwendung: [forum:<i>post_id</i> {link_text}]'
 );
 
 $PLG_forum_MESSAGE1 = 'Forum-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
@@ -892,11 +892,11 @@ $LANG_confignames['forum'] = array(
     'use_smilies_plugin' => 'Smilies-Plugin installiert',
     'use_pm_plugin' => 'Private-Nachrichten-Plugin installiert',
     'use_spamx_filter' => 'Beiträge mit Spam-X-Plugin filtern',
-    'show_centerblock' => 'Centerblock aktivieren',
+    'show_centerblock' => 'Zentrumsblock aktivieren',
     'centerblock_homepage' => 'Nur auf Startseite',
     'centerblock_where' => 'Platzierung auf der Seite',
     'cb_subject_size' => 'Max. Zeichen im Betreff',
-    'centerblock_numposts' => 'Beiträge im Centerblock',
+    'centerblock_numposts' => 'Beiträge im Zentrumsblock',
     'sb_subject_size' => 'Max. Zeichen im Betreff',
     'sb_latestpostonly' => 'Nur letzte Beiträge anzeigen',
     'sideblock_numposts' => 'Max. Angezeigte Beiträge',
@@ -956,7 +956,7 @@ $LANG_configsubgroups['forum'] = array(
 $LANG_fs['forum'] = array(
     'ff_public' => 'Allgemeine-Einstellungen',
     'ff_topic_post_settings' => 'Thema erstellen',
-    'ff_centerblock' => 'Centerblock',
+    'ff_centerblock' => 'Zentrumsblock',
     'ff_latest_post_block' => 'Letzte-Beiträge-Block',
     'ff_rank_settings' => 'Ränge',
     'ff_attachments_settings' => 'Anhänge'
@@ -966,8 +966,8 @@ $LANG_fs['forum'] = array(
 $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Replace Home Page' => 0, 'Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
-    3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Rechte & Linke Blöcke' => 'allblocks'),
+    2 => array('Als Startseite' => 0, 'Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
+    3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Linke & Rechte Blöcke' => 'allblocks'),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
     5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),
     6 => array('aktiviert' => 1, 'deaktiviert' => 0)

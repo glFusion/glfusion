@@ -110,12 +110,12 @@ $LANG_BAD_BEHAVIOR = array(
     'captcha' => 'CAPTCHA',
     'auto_refresh_on' => 'Aktualisierung Ein',
     'auto_refresh_off' => 'Aktualisierung Aus',
-    'no_data' => 'No data available',
-    'banned_ips' => 'Banned IPs'
+    'no_data' => 'Keine Daten verfügbar',
+    'banned_ips' => 'Blockierte IPs'
 );
 
 $LANG_BB2_RESPONSE = array(
-    '00000000' => 'Request Passed - No User Agent Specified',
+    '00000000' => 'Request Passed - Kein Benutzeragent angegeben',
     '136673cd' => 'IP-Adresse in externer Blacklist gefunden',
     '17566707' => 'Benötigte Header \'Accept \' fehlt',
     '17f4e8c8' => 'User-Agent wurde in Blacklist gefunden',
