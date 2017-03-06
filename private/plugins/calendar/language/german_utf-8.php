@@ -93,7 +93,7 @@ $LANG_CAL_1 = array(
     50 => 'Termine',
     51 => 'Löschen',
     52 => 'Eingereicht von',
-    53 => 'Calendar View'
+    53 => 'Kalender-Ansicht'
 );
 
 $_LANG_CAL_SEARCH = array(

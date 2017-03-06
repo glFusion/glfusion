@@ -106,7 +106,7 @@ $LANG_LINKS_SUBMIT = array(
 # autotag description
 
 $LANG_LI_AUTOTAG = array(
-    'desc_link'                 => 'Link: zur Detail-Seite für einen Link auf dieser Seite; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
+    'desc_link'                 => 'Link: zur Link-Detail-Seite. (Standart link_text: Link-Name). Anwendung: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -280,7 +280,7 @@ $LANG_configselects['links'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     9 => array('Weiter zur Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Link-Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Linker Block' => 0, 'Rechter Block' => 1, 'Linker & Rechter Block' => 2, 'Keine' => 3)
+    13 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3)
 );
 
 ?>

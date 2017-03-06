@@ -139,8 +139,8 @@ $LANG_FILEMGMT = array(
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
-    'desc_file'                 => 'Link: zur Download Detail-Seite.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
-    'desc_file_download'        => 'Link: direkter Download-Link.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
+    'desc_file'                 => 'Link: zur Download Detail-Seite. (Standart link_text: Datei-Titel). Anwendung: [file:<i>file_id</i> {link_text}]',
+    'desc_file_download'        => 'Link: zu direktem Download. (Standart link_text: Datei-Titel). Anwendung: [file_download:<i>file_id</i> {link_text}]',
 );
 
 // Localization of the Admin Configuration UI
