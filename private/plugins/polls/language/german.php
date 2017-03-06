@@ -66,13 +66,13 @@ $LANG_POLLS = array(
     'start_poll' => 'Umfrage starten',
     'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder Du verfügst nicht über ausreichende Berechtigungen.',
     'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um zu stimmen.",
-    'username' => 'Username',
-    'ipaddress' => 'IP Address',
-    'date_voted' => 'Date Voted',
-    'description' => 'Description',
-    'general' => 'General',
-    'poll_questions' => 'Poll Questions',
-    'permissions' => 'Permissions'
+    'username' => 'Benutzername',
+    'ipaddress' => 'IP-Adresse',
+    'date_voted' => 'Abgestimmt am',
+    'description' => 'Beschreibung',
+    'general' => 'Allgemein',
+    'poll_questions' => 'Umfrage Fragen',
+    'permissions' => 'Berechtigungen'
 );
 
 ###############################################################################
@@ -128,9 +128,9 @@ $LANG25 = array(
 # autotag descriptions
 
 $LANG_PO_AUTOTAG = array(
-    'desc_poll' => 'Link: zu einer Umfrage dieser Seite.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
-    'desc_poll_result' => 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote' => 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage.  usage: [poll_vote:<i>poll_id</i>]'
+    'desc_poll'			=> 'Link: zu einer Umfrage dieser Seite. (Standart link_text: Umfrage-Titel). Anwendung: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result'	=> 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite. Anwendung: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote'	=> 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage. Anwendung: [poll_vote:<i>poll_id</i>]'
 );
 
 $PLG_polls_MESSAGE19 = 'Umfrage wurde erfolgreich gespeichert.';

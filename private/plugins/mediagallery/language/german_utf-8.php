@@ -685,12 +685,12 @@ $LANG_MG01 = array(
     'html5upload_err_album_id' => 'Das Ziel-Album konnte nicht gefunden werden',
     'square' => 'Quadrat',
     'posted' => 'Gesendet',
-    'general' => 'General',
-    'audio_properties' => 'Audio Properties',
-    'attributes' => 'Attributes',
-    'media_details' => 'Media Details',
-    'playback_options' => 'Playback Options',
-    'meta_data' => 'Meta Data'
+    'general' => 'Allgemein',
+    'audio_properties' => 'Audio-Eigenschaften',
+    'attributes' => 'Merkmale',
+    'media_details' => 'Medien-Details',
+    'playback_options' => 'Playback-Optionen',
+    'meta_data' => 'Meta-Daten'
 );
 
 ###############################################################################
@@ -1296,14 +1296,14 @@ $LANG_MG_AUTOTAG = array(
     'desc_album' => 'HTML: erstellt eine Miniaturbild-Verknüpfung zu einem bestimmten Album. Anwendung: [album:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#album" target="_blank">options</a>}]',
     'desc_alink' => 'Link: zu einem Medien Galerie Album. (Standart link_text: Album Name) Anwendung: [alink:<i>album_id</i> {link_text}]',
     'desc_audio' => 'HTML: erstellt einen Audio-Media-Player mit oder ohne Miniaturbild. Anwendung: [audio:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#audio" target="_blank">options</a>}]',
-    'desc_fslideshow' => 'HTML: renders a flash image Media slideshow. usage: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
+    'desc_fslideshow' => 'HTML: erstellt eine Flash-SlideShow eines bestimmten Albums. Anwendung: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
     'desc_image' => 'HTML: (Veraltet) Verwende stattdessen den [media:] Autotag.',
     'desc_img' => 'HTML: erzeugt ein HTML-Tag für eine Miniaturansicht. Anwendung: [img:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#img" target="_blank">options</a>}]',
     'desc_media' => 'HTML: erstellt ein Medien-Objekt (allgemeiner Zweck). Anwendung: [media:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#media" target="_blank">options</a>}]',
     'desc_mlink' => 'Link: zu einem Medien-Objekt.(Nur Text) Anwendung: [mlink:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#mlink" target="_blank">options</a>}]',
     'desc_oimage' => 'HTML: (Veraltet) Verwende stattdessen den [media:] Autotag.',
     'desc_playall' => 'HTML: erstellt einen Audio-Media-Player wieder, der ein komplettes Album wiedergibt. Anwendung: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
-    'desc_slideshow' => 'HTML: renders a JS-based image Media slideshow. usage: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
+    'desc_slideshow' => 'HTML: erstellt eine JS-SlideShow eines bestimmten Albums. Anwendung: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
     'desc_video' => 'HTML: erstellt einen Video-Player für alle lokalen oder Remote-Videos. Anwendung:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#video" target="_blank">options</a>}',
     'desc_download' => 'Link: zu einem Medien-Objekt-Download. (Standart link_text: Bild-Titel). Anwendung: [download:<i>media_id</i> {link_text}]'
 );
