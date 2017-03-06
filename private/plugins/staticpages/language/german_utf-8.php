@@ -128,14 +128,14 @@ $LANG_STATIC = array(
     'attributes' => 'Allgemeines',
     'preview_help' => 'Wählen Sie die Schaltfläche <b>Vorschau</b>, um die Vorschauanzeige zu aktualisieren',
     'page_saved' => 'Seite wurde erfolgreich gespeichert.',
-    'page_deleted' => 'Page has been successfully deleted.'
+    'page_deleted' => 'Seite wurde erfolgreich gelöscht.'
 );
 ###############################################################################
 # autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Link: zu einer Statischen-Seite; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: zeigt den Inhalt einer Statischen.-Seite.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage' => 'Link: zu einer Statischen-Seite. (Standart link_text: Seiten-Titel). Anwendung: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content' => 'HTML: zeigt den Inhalt einer Statischen-Seite an. Anwendung: [staticpage_content:<i>page_id</i>]'
 );
 
 
