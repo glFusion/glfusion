@@ -225,13 +225,20 @@ function forum_index()
                     }
                     $postdate = COM_getUserDateTimeFormat($P['date']);
                     $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;highlight='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
+                    if ( $P['pid'] != 0 ) {
+                        $pResult = DB_query("SELECT views, replies FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['pid']);
+                        list($views,$replies) = DB_fetchArray($pResult);
+                    } else {
+                        $views = $P['views'];
+                        $replies = $P['replies'];
+                    }
                     $report->set_var(array(
                             'post_start_ahref'  => $link,
                             'post_subject'      => $P['subject'],
                             'post_end_ahref'    => '</a>',
                             'post_date'         => $postdate[0],
-                            'post_replies'      => $P['replies'],
-                            'post_views'        => $P['views'],
+                            'post_replies'      => $replies, // $P['replies'],
+                            'post_views'        => $views, // $P['views'],
                             'csscode'           => $csscode));
                     $report->parse('rrow', 'reportrow',true);
 

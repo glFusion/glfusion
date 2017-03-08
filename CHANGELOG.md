@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum - Use proper views / reply counts on search results
   - Media Gallery: Random block did not link to media item
   - Media Gallery: slideshow auto tag did not honor link: option
   - Media Gallery: Fixed URL link to glFuison on postcards
