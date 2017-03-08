@@ -188,7 +188,9 @@
 <!-- END topicrows -->
 	</ul>
 {!else}
-	{no_topics_message}
+  <div class="uk-alert uk-alert-warning uk-margin">
+    {$LANG_GF02[msg05]}
+  </div>
 {!endif}
 	<div class="uk-grid uk-width-1-1 uk-margin">
 		<div class="uk-width-medium-1-2 uk-hidden-small">
