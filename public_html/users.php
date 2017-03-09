@@ -834,7 +834,7 @@ function newuserform ($msg = '')
     }
 
     if (!empty ($msg)) {
-        $retval .= COM_showMessageText($msg,$LANG04[21],false,'info');
+        $retval .= COM_showMessageText($msg,$LANG04[21],false,'error');
     }
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('regform', 'registrationform.thtml');
