@@ -76,7 +76,8 @@ $LANG_CP00 = array (
     'characters'        => 'Characters',
     'ayah_error'        => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math'      => 'Enter the answer',
-    'captcha_prompt'    => 'Are You Human?'
+    'captcha_prompt'    => 'Are You Human?',
+    'recaptcha_entry_error'  => 'The CAPTCHA verification failed. Please try again.',
 );
 
 // Localization of the Admin Configuration UI

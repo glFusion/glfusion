@@ -76,7 +76,8 @@ $LANG_CP00 = array (
     'characters'        => 'Characters',
     'ayah_error'        => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math'      => 'Enter the answer',
-    'captcha_prompt'    => 'Are You Human?'
+    'captcha_prompt'    => 'Are You Human?',
+    'recaptcha_entry_error'  => 'The CAPTCHA verification failed. Please try again.',
 );
 
 // Localization of the Admin Configuration UI
@@ -107,6 +108,7 @@ $LANG_confignames['captcha'] = array(
     'publickey'             => 'reCAPTCHA Public Key - <a href="https://www.google.com/recaptcha/admin/create" target=_blank>reCAPTCHA Signup</a>',
     'privatekey'            => 'reCAPTCHA Private Key',
     'recaptcha_theme'       => 'reCAPTCHA Theme',
+
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'
