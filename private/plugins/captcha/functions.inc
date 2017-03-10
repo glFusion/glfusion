@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -649,8 +649,8 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             }
 
             # set the error code so that we can display it
-            $error = $LANG_CP00['entry_error'];
-            CAPTCHA_errorLog("CAPTCHA: An invalid reCAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            $error = $LANG_CP00['recaptcha_entry_error'];
+            CAPTCHA_errorLog("CAPTCHA: The reCAPTCHA verification failed in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
 
             CAPTCHA_checkRetries( $csid );
             return array(0,$error);
