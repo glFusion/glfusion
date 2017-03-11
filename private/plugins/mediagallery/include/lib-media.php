@@ -1700,7 +1700,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     } else {
         $aOffset = -1;
     }
-    if ( $aOffset == -1 || $MG_albums[$aid]->access == 0 ) {
+    if ( $aOffset == -1 || $MG_albums[$aid]->access == 0 || ($MG_albums[$aid]->hidden == 1 && $MG_albums[$aid]->access != 3 )) {
         $retval .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_ACCESS['accessdenied'],true,'error');
         return array($LANG_MG00['access_denied_msg'],$retval,'','');
     }
