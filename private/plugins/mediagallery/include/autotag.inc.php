@@ -1525,13 +1525,18 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 $link = '';
                 if ( $alt == 1 && $row['remote_url'] != '' ) {
                     $url = $row['remote_url'];
-                    if ( $autotag['tag'] != 'image' && $enable_link != 0) {
+                    if ( $autotag['tag'] != 'image' && $enable_link != 0 && $MG_albums[$aid]->hidden != 1 ) {
                         $link = '<a href="' . $url . '"' . ($target=='' ? '' : ' target="' . $target . '"') . '>' . $tagtext . '</a>';
                     } else {
                         $link = $tagtext;
                     }
                 } else if ( $linkID == 0 ) {
-                    $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                    if ( $MG_albums[$aid]->hidden != 1 ) {
+                        $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                    } else {
+                        $url = '';
+                        $link = '';
+                    }
                 } else {
                     if ( $linkID < 1000000 ) {
                         if ( isset($MG_albums[$linkID]->id ) ) {
@@ -1542,7 +1547,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 $link = $tagtext;
                             }
                         } else {
-                            $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                            if ( $MG_albums[$aid]->hidden != 1 ) {
+                                $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                            } else {
+                                $url = '';
+                            }
                         }
                     } else {
                         $linkAID = (int) DB_getItem($_TABLES['mg_media_albums'],'album_id','media_id="' . DB_escapeString($linkID) . '"');
