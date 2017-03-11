@@ -463,7 +463,9 @@ $LANG04 = array(
     200 => 'Netzwerk',
     201 => 'Benutzername',
     202 => 'Folge mir',
-    203 => 'Konto aktivieren'
+    203 => 'Konto aktivieren',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -738,7 +740,7 @@ $LANG12 = array(
 );
 
 ###############################################################################
-# rater.php
+# lib-rating.php
 
 $LANG13 = array(
     'vote' => 'Abstimmen',
@@ -1537,6 +1539,8 @@ $MESSAGE = array(
     114 => 'Warnung: Die Resynchronisation mit Ihrem Remote-OAuth-Konto ist fehlgeschlagen, aber Ihre anderen Kontoinformationen wurden erfolgreich gespeichert.',
     115 => 'Warnung: Der Remote-OAuth-Authentifizierungsdienst wurde deaktiviert.',
     116 => 'Die Dateien des Plugins und verwandte Verzeichnisse wurden erfolgreich entfernt.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Leider haben Sie keinen Zugriff auf diese Seite.  Bitte beachten Sie, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     500 => 'Der Template-Cache wurde erfolgreich geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
@@ -2116,7 +2120,7 @@ $LANG_BBCODE = array(
 
 # Localisation of the texts for the Admin file check
 ###############################################################################
-# admin/filecheck.php - distribution integrity checker
+# filecheck.php
 
 $LANG_FILECHECK = array(
     'filecheck' => 'Datei-Integritätsprüfung',
@@ -2145,7 +2149,7 @@ $LANG_FILECHECK = array(
 
 # Localisation of the texts for Menu Builder
 ###############################################################################
-# admin/menu.php - menu builder
+# Menu Builder
 
 $LANG_MB01 = array(
     'javascript_required' => 'Menü Manager erfordert aktiviertes JavaScript.',
@@ -2307,7 +2311,7 @@ $LANG_MB_ADMIN = array(
 );
 
 ###############################################################################
-# admin/logo.php - logo administration
+# logo.php
 
 $LANG_LOGO = array(
     'logo_admin' => 'Logo',
@@ -2328,7 +2332,7 @@ $LANG_LOGO = array(
 );
 
 ###############################################################################
-# admin/autotag.php - autotag administration
+# autotag.php
 
 $LANG_AM = array(
     'plugin' => 'Autotag',
@@ -2397,7 +2401,7 @@ $LANG_AM = array(
 );
 
 ###############################################################################
-# admin/envcheck.php - environment check
+# envcheck.php
 
 $LANG_ENVCHK = array(
     'bypass_note' => 'Da entweder "safe_mode" oder "open_basedir" Einschränkungen erkannt wurden, wurde die Prüfung auf Grafikbibliotheken übersprungen.',
@@ -2479,7 +2483,7 @@ $LANG_ENVCHK = array(
 );
 
 ###############################################################################
-# admin/vercheck.php - version checker
+# versioncheck.php
 
 $LANG_UPGRADE = array(
     'recheck' => 'Version überprüfen',
@@ -2507,7 +2511,7 @@ $LANG_UPGRADE = array(
 );
 
 ###############################################################################
-# admin/sfs.php - stop forum spam checks
+# sfs.php
 
 $LANG_SFS = array(
     'title' => 'Stop Forum Spam (SFS) Benutzer-Prüfung',
@@ -2586,7 +2590,7 @@ $LANG_confignames['Core'] = array(
     'hide_exclude_content' => 'Inhalte im Profil verstecken',
     'show_servicename' => 'Name des Service wird angezeigt',
     'custom_registration' => '"Custom Registration" aktivieren',
-	'user_login_method' => 'Anmeldemethode ',
+    'user_login_method' => 'Anmeldemethode ',
     'facebook_login' => 'Facebook Login Aktivieren',
     'facebook_consumer_key' => 'Facebook OAuth Application ID',
     'facebook_consumer_secret' => 'Facebook OAuth Application Secret',

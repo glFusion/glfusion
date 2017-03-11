@@ -331,7 +331,7 @@ $LANG04 = array(
     68 => 'Pamatovat si mne',
     69 => 'Jak dlouho si Vás systém bude pamatovat.',
     70 => "Přizpůsobení vzhledu a obsahu {$_CONF['site_name']}",
-    71 => "Přizpůsobení vzhledu na {$_CONF['site_name']} vám umožní nastavit si vlastní vzhled a řazení položek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">přihlásit</a> na {$_CONF['site_name']}. <br" . XHTML . "> Jste uživatelem?  Pak použijte přihlašovací formulář vlevo!",
+    71 => "Přizpůsobení vzhledu na {$_CONF['site_name']} vám umožní nastavit si vlastní vzhled a řazení položek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">přihlásit</a> na {$_CONF['site_name']}. <br> Jste uživatelem?  Pak použijte přihlašovací formulář vlevo!",
     72 => 'Grafické téma',
     73 => 'Jazyk',
     74 => 'Vyberte jak má weblog vypadat',
@@ -458,7 +458,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
-    203 => 'Activate Account'
+    203 => 'Activate Account',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1532,6 +1534,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s files and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Bohužel na tuto stránku nemáte přístup. Prosím všimněte se, že neoprávněné pokusy o přístup jsou logovány.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -1965,11 +1969,11 @@ $LANG_ADMIN = array(
     'list' => 'Výpis',
     'list_all' => 'Vypsat vše',
     'na' => '-',
-    'action' => 'Akce pro vše vybrané:',
     'enable' => 'Povolena',
     'disable' => 'Zakázána',
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
+    'action' => 'Akce pro vše vybrané:',
     'authenticate' => 'Ověř heslo',
     'select' => 'Select',
     'name' => 'Jméno',

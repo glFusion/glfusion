@@ -462,7 +462,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
-    203 => 'Activate Account'
+    203 => 'Activate Account',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1536,6 +1538,8 @@ $MESSAGE = array(
     114 => 'Attention: resynchronisation avec votre compte OAuth à distance a échoué, mais vos autres informations de compte a bien été enregistré.',
     115 => 'Attention: Le service d`authentification OAuth à distance a été désactivé.',
     116 => 'Les fichiers du plugin et répertoires liés ont été supprimés.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Désolé, vous n`avez pas accès à cette page. S`il vous plaît noter que toutes les tentatives d`accès non autorisées caractéristiques sont enregistrés.',
     500 => 'Le cache de modèle a été effacé avec succès',
     501 => 'Jeton de sécurité est valide - Possible expiration de la session.',
@@ -1969,11 +1973,11 @@ $LANG_ADMIN = array(
     'list' => 'Liste',
     'list_all' => 'la liste de Tous',
     'na' => '-',
-    'action' => 'Action pour tous sélectionnés:',
     'enable' => 'Permettre',
     'disable' => 'Désactiver',
     'admin_users' => 'Administration des Utilisateurs',
     'admin_groups' => 'Admin Groupe',
+    'action' => 'Action pour tous sélectionnés:',
     'authenticate' => 'Authentifier',
     'select' => 'Sélectionner',
     'name' => 'Nom',

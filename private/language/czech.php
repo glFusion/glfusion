@@ -282,7 +282,7 @@ $LANG04 = array(
     20 => 'Email se zdá být v nesprávném formátu',
     21 => 'Chyba',
     22 => "Registrace na {$_CONF['site_name']}!",
-    23 => "Anonymní u¾ivatelé - Hosté nemohou napøíklad komentovat èi pøidávat èlánky.<br" . XHTML . ">Vytvoøení úètu Vám umo¾ní vyu¾ívat v¹ech funkcí na {$_CONF['site_name']}. <br" . XHTML . ">Va¹e emailová adresa nebude <b><i>nikdy a nikde</i></b> zveøejnìna na tìchto stránkách.",
+    23 => "Anonymní u¾ivatelé - Hosté nemohou napøíklad komentovat èi pøidávat èlánky.<br>Vytvoøení úètu Vám umo¾ní vyu¾ívat v¹ech funkcí na {$_CONF['site_name']}. <br>Va¹e emailová adresa nebude <b><i>nikdy a nikde</i></b> zveøejnìna na tìchto stránkách.",
     24 => 'Va¹e heslo bude posláno na vámi zadanou emailovou adresu.',
     25 => 'Zapomenuté heslo?',
     26 => 'Vlo¾te Va¹e pøihla¹ovací jméno a klepnìte na Poslat-heslo a nové heslo Vám bude zasláno na Vámi zadanou emailovou adresu.',
@@ -330,7 +330,7 @@ $LANG04 = array(
     68 => 'Pamatovat si mne',
     69 => 'Jak dlouho si Vás systém bude pamatovat.',
     70 => "Pøizpùsobení vzhledu a obsahu {$_CONF['site_name']}",
-    71 => "Pøizpùsobení vzhledu na {$_CONF['site_name']} vám umo¾ní nastavit si vlastní vzhled a øazení polo¾ek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">pøihlásit</a> na {$_CONF['site_name']}. <br" . XHTML . "> Jste u¾ivatelem?  Pak pou¾ijte pøihla¹ovací formuláø vlevo!",
+    71 => "Pøizpùsobení vzhledu na {$_CONF['site_name']} vám umo¾ní nastavit si vlastní vzhled a øazení polo¾ek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">pøihlásit</a> na {$_CONF['site_name']}. <br> Jste u¾ivatelem?  Pak pou¾ijte pøihla¹ovací formuláø vlevo!",
     72 => 'Grafické téma',
     73 => 'Jazyk',
     74 => 'Vyberte jak má weblog vypadat',
@@ -457,7 +457,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
-    203 => 'Activate Account'
+    203 => 'Activate Account',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1531,6 +1533,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s files and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -1964,11 +1968,11 @@ $LANG_ADMIN = array(
     'list' => 'list',
     'list_all' => 'List all',
     'na' => '-',
-    'action' => 'Action',
     'enable' => 'Enable',
     'disable' => 'Disable',
     'admin_users' => 'User Admin',
     'admin_groups' => 'Group Admin',
+    'action' => 'Action',
     'authenticate' => 'Authenticate',
     'select' => 'Select',
     'name' => 'Name',
