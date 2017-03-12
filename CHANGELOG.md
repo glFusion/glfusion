@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Media Gallery - disable add media if no albums exist
+  - Improved error handling on user profile (improved error reporting)
   - Added new option to unlink a remote account from a merged local account
   - Fixed issue where remote account merge would display on already merged accounts
   - Media Gallery: media auto tag did not honor hidden album permission (created link)
