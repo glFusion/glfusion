@@ -966,13 +966,10 @@ function saveuser($A)
     if ( $current_password != '' && $current_password != NULL ) {
         if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) ||
                 ($A['cooktime'] != $_USER['cookietimeout'])) {
-            if (empty($A['passwd']) ||
-                !SEC_check_hash($A['passwd'],$current_password)) {
-
-                return COM_refresh ($_CONF['site_url']
-                                        . '/usersettings.php?msg=83');
-            } elseif ($_CONF['custom_registration'] &&
-                        function_exists ('CUSTOM_userCheck')) {
+            if (empty($A['passwd']) || !SEC_check_hash($A['passwd'],$current_password)) {
+                COM_setMsg($MESSAGE[83],'error');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+            } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
                 $ret = CUSTOM_userCheck ($A['username'], $A['email']);
                 if (!empty($ret)) {
                     // Need a numeric return for the default message handler
@@ -983,8 +980,7 @@ function saveuser($A)
                     return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
                 }
             }
-        } elseif ($_CONF['custom_registration'] &&
-                    function_exists ('CUSTOM_userCheck')) {
+        } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
             if (!empty($ret)) {
                 // Need a numeric return for the default message hander - if not numeric use default message
@@ -1010,8 +1006,7 @@ function saveuser($A)
     // no need to filter the password as it's encoded anyway
     if ($_CONF['allow_username_change'] == 1) {
         $A['new_username'] = $A['new_username'];
-        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) &&
-                ($A['new_username'] != $_USER['username'])) {
+        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) && ($A['new_username'] != $_USER['username'])) {
             $A['new_username'] = DB_escapeString ($A['new_username']);
             if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
                 if ($_CONF['allow_user_photo'] == 1) {
@@ -1064,14 +1059,14 @@ function saveuser($A)
     }
 
     if (!COM_isEmail ($A['email'])) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=52');
+        COM_setMsg($MESSAGE[52],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else if ($A['email'] !== $A['email_conf']) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=78');
+        COM_setMsg($MESSAGE[78],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=56');
+        COM_setMsg($MESSAGE[56],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else {
         if ( $current_password != '' ) {
             if (!empty($A['newp'])) {
@@ -1088,12 +1083,13 @@ function saveuser($A)
                         $token_ttl = 14400;
                     }
                     $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
-                    SEC_setCookie($_CONF['cookie_password'], $ltToken,
-                                  time() + $cooktime);
+                    SEC_setCookie($_CONF['cookie_password'], $ltToken,time() + $cooktime);
                 } elseif (!SEC_check_hash($A['passwd'],$current_password) ) {
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
+                    COM_setMsg($MESSAGE[68],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 } elseif ($A['newp'] != $A['newp_conf']) {
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=67');
+                    COM_setMsg($MESSAGE[67],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 }
             }
         } else {
