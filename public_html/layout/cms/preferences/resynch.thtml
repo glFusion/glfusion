@@ -1,31 +1,62 @@
 {# begin {templatelocation} #}
 <div class="uk-form-row">
-<label class="uk-form-label" for="resynch">{lang_resynch}</label>
-<div class="uk-form-controls">
-<input type="checkbox" id="resynch" name="resynch" {resynch_checked} />
-</div>
-</div>
-
-{!if merge_account}
-<div class="uk-form-row">
-  <label class="uk-form-label" for="merge">{$LANG04[192]}</label>
-  <div class="uk-form-controls">
-    <input type="checkbox" id="merge" name="merge" >
-    <input type="hidden" id="localuid" name="localuid" value="{localuid}">
-    <input type="hidden" id="remoteuid" name="remoteuid" value="{remoteuid}">
-    {local_username}
-    <p>
-    {$LANG04[193]}
-    </p>
-  </div>
+	<label class="uk-form-label" for="resynch">{lang_resynch}</label>
+	<div class="uk-form-controls">
+		<input type="checkbox" id="resynch" name="resynch" {resynch_checked} />
+	</div>
 </div>
 
-<div class="uk-form-row">
-  <label class="uk-form-label" for="localp">{$LANG04[191]}</label>
-  <div class="uk-form-controls">
-    <input type="password" id="localp" name="localp" >
-  </div>
-</div>
+{!if remote_account_type}
+	<div class="uk-form-row">
+		<label class="uk-form-label">{lang_remote_service}</label>
+		<div class="uk-form-controls">
+			{remote_account_type}
+		</div>
+	</div>
 {!endif}
 
+{!if merge_account}
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="merge">{$LANG04[192]}</label>
+		<div class="uk-form-controls">
+			<input type="checkbox" id="merge" name="merge" >
+			<input type="hidden" id="localuid" name="localuid" value="{localuid}">
+			<input type="hidden" id="remoteuid" name="remoteuid" value="{remoteuid}">
+			{local_username}
+			<p>
+				{$LANG04[193]}
+			</p>
+		</div>
+	</div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="localp">{$LANG04[191]}</label>
+		<div class="uk-form-controls">
+			<input type="password" id="localp" name="localp" >
+		</div>
+	</div>
+{!endif}
+
+{!if unlink_accounts}
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="unmerge">{$LANG04[204]}</label>
+		<div class="uk-form-controls">
+			<input type="checkbox" id="unmerge" name="unmerge">
+			<input type="hidden" id="localuid" name="localuid" value="{localuid}">
+		</div>
+	</div>
+{!endif}
+
+<script>
+$('input[name="unmerge"]').on('click', function(){
+	if ( $(this).is(':checked') ) {
+		UIkit.modal.confirm("{$LANG04[205]}", function(){
+			$('#unmerge').prop('checked', true);
+		}, function() {
+			$('#unmerge').prop('checked', false);
+		});
+	} else {
+		$('#unmerge').prop('checked', false);
+	}
+});
+</script>
 {# end {templatelocation} #}

@@ -459,7 +459,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Sígueme',
-    203 => 'Activar Cuenta'
+    203 => 'Activar Cuenta',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1533,6 +1535,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s archivos and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'El Cache de la plantilla se ha borrado exitosamente',
     501 => 'Token de seguridad no valido - Posible tiempo de espera de sesión agotado.',
@@ -1966,11 +1970,11 @@ $LANG_ADMIN = array(
     'list' => 'list',
     'list_all' => 'Listar todo',
     'na' => '-',
-    'action' => 'Acción para todo lo seleccionado:',
     'enable' => 'Habilitado',
     'disable' => 'Disable',
     'admin_users' => 'Usuarios',
     'admin_groups' => 'Grupos',
+    'action' => 'Acción para todo lo seleccionado:',
     'authenticate' => 'Autenticar',
     'select' => 'Seleccionar',
     'name' => 'Nombre',

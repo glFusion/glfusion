@@ -461,7 +461,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
-    203 => 'Activate Account'
+    203 => 'Activate Account',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1535,6 +1537,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s files and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Valitamme, mutta sinulla ei ole tarvittavia oikeuksia t&auml;lle sivulle.  Huom! kaikki yritykset p&auml;&auml;st&auml; t&auml;h&auml;n ilman tarvittavia oikeuksia tallennetaan.',
     500 => 'Ulkoasun V&auml;limuisti Tyhjennetty',
     501 => 'Turva Valtuutus On Ep&auml;kelpo - Mahdollisesti Istunnon Aikarajoitus.',
@@ -1968,11 +1972,11 @@ $LANG_ADMIN = array(
     'list' => 'lista',
     'list_all' => 'Listaa kaikki',
     'na' => '-',
-    'action' => 'Toimenpide',
     'enable' => 'Ota k&auml;ytt&ouml;&ouml;n',
     'disable' => 'Pois k&auml;yt&ouml;st&auml;',
     'admin_users' => 'K&auml;ytt&auml;j&auml; Admin',
     'admin_groups' => 'Ryhm&auml; Admin',
+    'action' => 'Toimenpide',
     'authenticate' => 'Tunnistaudu',
     'select' => 'Valitse',
     'name' => 'Nimi',
