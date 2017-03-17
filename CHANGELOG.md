@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Twitter links did not honor open external links in new window setting
   - Media Gallery - disable add media if no albums exist
   - Improved error handling on user profile (improved error reporting)
   - Added new option to unlink a remote account from a merged local account

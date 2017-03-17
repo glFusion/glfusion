@@ -514,9 +514,39 @@ class sanitizer
                         return '<' . array_push($links, "<a $attr href=\"$protocol://$link\" rel=\"nofollow\"".$target.">$link</a>") . '>';
                     }, $value);
                     break;
-                case 'mail':    $value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;
-                case 'twitter': $value = preg_replace_callback('~(?<!\w)[@](\w++)~', function ($match) use (&$links, $attr) { return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1]  . "\">{$match[0]}</a>") . '>'; }, $value); break;
-                default:        $value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i', function ($match) use ($protocol, &$links, $attr) { return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\">{$match[1]}</a>") . '>'; }, $value); break;
+                case 'mail':
+                    $value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~',
+                        function ($match) use (&$links, $attr) {
+                            return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>';
+                        }, $value);
+
+                    break;
+                case 'twitter':
+                    $value = preg_replace_callback('~(?<!\w)[@](\w++)~',
+                    function ($match) use (&$links, $attr) {
+                        global $_CONF;
+                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
+                            // external
+                            $target = ' target="_blank" ';
+                        } else {
+                            $target = '';
+                        }
+                        return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1]  . "\" rel=\"nofollow\"".$target.">{$match[0]}</a>") . '>';
+                    }, $value);
+                    break;
+                default:
+                    $value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i',
+                    function ($match) use ($protocol, &$links, $attr) {
+                        global $_CONF;
+                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
+                            // external
+                            $target = ' target="_blank" ';
+                        } else {
+                            $target = '';
+                        }
+                        return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\" rel=\"nofollow\" ".$target.">{$match[1]}</a>") . '>';
+                    }, $value);
+                    break;
             }
         }
 
