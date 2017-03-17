@@ -7478,6 +7478,11 @@ function USES_lib_social() {
     require_once $_CONF['path_system'].'lib-social.php';
 }
 
+// load custom language file if it exists...
+if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
+    include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
+}
+
 // Now include all plugin functions
 if ( is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
@@ -7486,11 +7491,6 @@ if ( is_array($_PLUGINS) ) {
         }
     }
     $_PLUGINS = array_values($_PLUGINS);
-}
-
-// load custom language file if it exists...
-if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
-    include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
 }
 
 if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 ) {
