@@ -355,7 +355,7 @@ function INSTALLER_fail($pluginName,$rev)
 
 function INSTALLER_install($A)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF, $_PLUGIN_INFO;
 
     COM_errorLog("AutoInstall: **** Start Installation ****");
 
@@ -381,6 +381,44 @@ function INSTALLER_install($A)
     }
 
     $pluginName = $A['plugin']['name'];
+
+    // check prerequisites
+    require_once $_CONF['path'].'system/classes/pluginxml.class.php';
+
+    $xml = new pluginXML;
+    if ( $xml->parseXMLFile($_CONF['path'].'plugins/'.$pluginName.'/plugin.xml') == -1 ) {
+        COM_errorLog("AutoInstall: Unable to locate plugin.xml");
+    } else {
+        $pluginData = $xml->getPluginData();
+        $errors = 0;
+        if ( isset($pluginData['requires']) && is_array($pluginData['requires']) ) {
+            foreach ($pluginData['requires'] AS $reqPlugin ) {
+                if ( strstr($reqPlugin,",") !== false ) {
+                    list($reqPlugin, $required_ver) = @explode(',', $reqPlugin);
+                } else {
+                    $reqPlugin = $reqPlugin;
+                    $required_ver = '';
+                }
+                if (!isset($_PLUGIN_INFO[$reqPlugin]) || $_PLUGIN_INFO[$reqPlugin]['pi_enabled'] == 0 ) {
+                    COM_errorLog("AutoInstall: Plugin requires " . $reqPlugin . " be installed and enabled");
+                    // required plugin not installed
+                    $errors++;
+                } elseif (!empty($required_ver)) {
+                    $installed_ver = $_PLUGIN_INFO[$reqPlugin]['pi_version'];
+                    if (!COM_checkVersion($installed_ver, $required_ver)) {
+                        // required plugin installed, but wrong version
+                        COM_errorLog("AutoInstall: Plugin requires " . $reqPlugin . " v".$required_ver." or greater");
+                        $errors++;
+                    }
+                }
+            }
+        }
+        if ( $errors ) {
+            COM_errorLog("AutoInstall: Plugin install failed prerequisite check");
+            COM_errorLog("AutoInstall: **** END Installation ****");
+            return 1;
+        }
+    }
 
     $vars = array('__groups' => array(), '__features' => array(), '__blocks' => array());
     $reverse = array();
