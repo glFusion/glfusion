@@ -1449,7 +1449,15 @@ switch ($action) {
         } else if (isset ($_GET['plugin'])) {
             $plugin = COM_applyFilter ($_GET['plugin']);
         }
-        $page .= ($msg > 0) ? COM_showMessage($msg,$plugin) : '';
+        if ( $msg > 0 ) {
+            $msgType = 'info';
+            $msgPersist = 'false';
+            if ( $msg == 72 ) {
+                $msgType = 'error';
+                $msgPersist = 'true';
+            }
+        }
+        $page .= ($msg > 0) ? COM_showMessage($msg,$plugin,'',$msgPersist,$msgType) : '';
         $token = SEC_createToken();
         $page .= PLUGINS_list($token);
         break;
