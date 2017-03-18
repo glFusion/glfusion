@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Update OAuth library to v1.163
+  - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
   - Added sort: and order: options to headlines auto tag
   - Fixed custom language file overwriting LANG_MYACCOUNT which removed plugins from the user preference page
   - Twitter links did not honor open external links in new window setting
