@@ -433,14 +433,16 @@ function _checkVersion()
     $done = 0;
 
     if ( is_array($response['response']['plugin'] ) ) {
-        foreach ($_PLUGIN_INFO AS $iPlugin => $iPluginVer ) {
-            $upToDate = 0;
-            foreach ($response['response']['plugin'] AS $plugin ) {
-                if ( strcmp($plugin['name'],$iPlugin) == 0 ) {
-                    if ( _upToDate($plugin['version'],$iPluginVer) == 0 ) {
-                        $pluginsUpToDate = 0;
-                        $done = 1;
-                        break;
+        foreach ($_PLUGIN_INFO AS $iPlugin ) {
+            if ( $iPlugin['pi_enabled'] ) {
+                $upToDate = 0;
+                foreach ($response['response']['plugin'] AS $plugin ) {
+                    if ( strcmp($plugin['name'],$iPlugin['pi_name']) == 0 ) {
+                        if ( _upToDate($plugin['version'],$iPlugin['pi_version']) == 0 ) {
+                            $pluginsUpToDate = 0;
+                            $done = 1;
+                            break;
+                        }
                     }
                 }
             }
@@ -462,21 +464,23 @@ function _checkVersion()
     $pluginData['glfusioncms']['url'] = '';
 
     if ( is_array($response['response']['plugin'] ) ) {
-        foreach ($_PLUGIN_INFO AS $iPlugin => $iPluginVer ) {
-            $upToDate = 0;
-            $pluginData[$iPlugin]['plugin'] = $iPlugin;
-            $pluginData[$iPlugin]['installed_version'] = $iPluginVer;
-            $pluginData[$iPlugin]['display_name'] = $iPlugin;
-            $pluginData[$iPlugin]['latest_version'] = 0;
-            $pluginData[$iPlugin]['release_date'] = 0;
-            $pluginData[$iPlugin]['url'] = '';
-            foreach ($response['response']['plugin'] AS $plugin ) {
-                if ( strcmp($plugin['name'],$iPlugin) == 0 ) {
-                    $pluginData[$iPlugin]['display_name'] = $plugin['displayname'];
-                    $pluginData[$iPlugin]['latest_version'] = $plugin['version'];
-                    $pluginData[$iPlugin]['release_date'] = $plugin['date'];
-                    if (isset($plugin['url']) ) {
-                        $pluginData[$iPlugin]['url'] = $plugin['url'];
+        foreach ($_PLUGIN_INFO AS $iPlugin ) {
+            if ( $iPlugin['pi_enabled'] ) {
+                $upToDate = 0;
+                $pluginData[$iPlugin['pi_name']]['plugin'] = $iPlugin['pi_name'];
+                $pluginData[$iPlugin['pi_name']]['installed_version'] = $iPlugin['pi_version'];
+                $pluginData[$iPlugin['pi_name']]['display_name'] = $iPlugin['pi_name'];
+                $pluginData[$iPlugin['pi_name']]['latest_version'] = 0;
+                $pluginData[$iPlugin['pi_name']]['release_date'] = 0;
+                $pluginData[$iPlugin['pi_name']]['url'] = '';
+                foreach ($response['response']['plugin'] AS $plugin ) {
+                    if ( strcmp($plugin['name'],$iPlugin['pi_name']) == 0 ) {
+                        $pluginData[$iPlugin['pi_name']]['display_name'] = $plugin['displayname'];
+                        $pluginData[$iPlugin['pi_name']]['latest_version'] = $plugin['version'];
+                        $pluginData[$iPlugin['pi_name']]['release_date'] = $plugin['date'];
+                        if (isset($plugin['url']) ) {
+                            $pluginData[$iPlugin['pi_name']]['url'] = $plugin['url'];
+                        }
                     }
                 }
             }

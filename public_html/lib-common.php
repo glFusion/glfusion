@@ -292,13 +292,12 @@ require_once $_CONF['path_system'].'classes/output.class.php';
 *
 */
 
-$result       = DB_query("SELECT pi_name,pi_version FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
-$_PLUGINS     = array();
+$result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
+$_PLUGINS = array();
 $_PLUGIN_INFO = array();
-
 while ($A = DB_fetchArray($result)) {
-    $_PLUGINS[] = $A['pi_name'];
-    $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
+    if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
+    $_PLUGIN_INFO[$A['pi_name']] = $A;
 }
 
 /**
