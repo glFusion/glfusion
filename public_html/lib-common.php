@@ -292,13 +292,12 @@ require_once $_CONF['path_system'].'classes/output.class.php';
 *
 */
 
-$result       = DB_query("SELECT pi_name,pi_version FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
-$_PLUGINS     = array();
+$result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
+$_PLUGINS = array();
 $_PLUGIN_INFO = array();
-
 while ($A = DB_fetchArray($result)) {
-    $_PLUGINS[] = $A['pi_name'];
-    $_PLUGIN_INFO[$A['pi_name']] = $A['pi_version'];
+    if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
+    $_PLUGIN_INFO[$A['pi_name']] = $A;
 }
 
 /**
@@ -7478,6 +7477,11 @@ function USES_lib_social() {
     require_once $_CONF['path_system'].'lib-social.php';
 }
 
+// load custom language file if it exists...
+if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
+    include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
+}
+
 // Now include all plugin functions
 if ( is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
@@ -7486,11 +7490,6 @@ if ( is_array($_PLUGINS) ) {
         }
     }
     $_PLUGINS = array_values($_PLUGINS);
-}
-
-// load custom language file if it exists...
-if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
-    include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
 }
 
 if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 ) {

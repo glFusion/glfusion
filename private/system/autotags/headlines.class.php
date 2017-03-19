@@ -56,6 +56,8 @@ class autotag_headlines extends BaseAutotag {
                                 // 0 = display those without
                                 // 1 = display those with
                                 // 2 - don't care - just pull all stories
+        $sortby     = 'date';   // sort by: date, views, rating
+        $orderby    = 'desc';   // order by - desc or asc
         $template   = 'headlines.thtml';
 
         $px = explode (' ', trim ($p2));
@@ -97,7 +99,14 @@ class autotag_headlines extends BaseAutotag {
                     $a = explode(':', $part);
                     $storyimage = $a[1];
                     $skip++;
-
+                } elseif (substr ($part,0, 5) == 'sort:') {
+                    $a = explode(':', $part);
+                    $sortby = $a[1];
+                    $skip++;
+                } elseif (substr ($part,0, 6) == 'order:') {
+                    $a = explode(':', $part);
+                    $orderby = $a[1];
+                    $skip++;
                 } else {
                     break;
                 }
@@ -117,6 +126,12 @@ class autotag_headlines extends BaseAutotag {
             $caption = trim ($p2);
         }
         if ( $display < 0 ) $display = 3;
+
+        $valid_sortby = array('date','views','rating');
+        if ( !in_array($sortby,$valid_sortby)) $sortby = 'date';
+        if( $sortby == 'views' ) $sortby = 'hits';
+        $valid_order = array('desc','asc');
+        if ( !in_array($orderby,$valid_order)) $orderby = 'desc';
 
         if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) $storyimage = 2;
 
@@ -172,13 +187,14 @@ class autotag_headlines extends BaseAutotag {
             }
         }
 
-        $orderBy = ' date DESC ';
+        $sort_order = ' '.$sortby.' ' .$orderby.' ';
+
         $headlinesSQL = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
                  . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
                  . $userfields . ", t.topic, t.imageurl "
                  . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
                  . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                 . $sql . "ORDER BY featured DESC," . $orderBy;
+                 . $sql . "ORDER BY featured DESC," . $sort_order;
 
         if ($display > 0 ) {
             $headlinesSQL .= " LIMIT ".$display;

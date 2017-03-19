@@ -1,11 +1,16 @@
 ## v1.6.6 (unreleased)
+  - Update OAuth library to v1.163
+  - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
+  - Added sort: and order: options to headlines auto tag
+  - Fixed custom language file overwriting LANG_MYACCOUNT which removed plugins from the user preference page
+  - Twitter links did not honor open external links in new window setting
   - Media Gallery - disable add media if no albums exist
   - Improved error handling on user profile (improved error reporting)
   - Added new option to unlink a remote account from a merged local account
   - Fixed issue where remote account merge would display on already merged accounts
   - Media Gallery: media auto tag did not honor hidden album permission (created link)
   - Media Gallery: Do not allow access to hidden albums by non-owners
-  - CAPTCHA - Updated reCAPTCHA library to v1.1.2
+  - CAPTCHA - Updated reCAPTCHA library to v1.1.3
   - CAPTCHA - Updated invalid entry for reCAPTCHA to be more appropriate (no longer reference invalid string entry)
   - Forum - Use proper views / reply counts on search results
   - Media Gallery: Random block did not link to media item

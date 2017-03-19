@@ -60,7 +60,7 @@ if (file_exists($langfile)) {
 
 require_once $_CONF['path'].'plugins/forum/forum.php';
 if ( isset($_PLUGIN_INFO['forum']) ) {
-    $pi_version = $_PLUGIN_INFO['forum'];
+    $pi_version = $_PLUGIN_INFO['forum']['pi_version'];
 } else {
     $pi_version = $_FF_CONF['pi_version'];
 }
@@ -974,6 +974,33 @@ function phpblock_forum_newposts() {
         return;
     }
 }
+function stripBBCode($text_to_search) {
+	// Replace paragraph tags
+	$pattern = '[p]';
+	$replace = '<br>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+	$pattern = '[/p]';
+	$replace = '<br>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+	$pattern = '[QUOTE]';
+	$replace = "<span style='font-style:italic;'>";
+	$replace = "<i>";
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+	$pattern = '[/QUOTE]';
+	$replace = '</span>';
+	$replace = '</i>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+
+	// Replace everything else with nothing
+	$pattern = '|[[\/\!]*?[^\[\]]*?]|si';
+	$replace = '';
+	$text_to_search = preg_replace($pattern, $replace, $text_to_search);
+
+	return $text_to_search;
+}
 
 
 /**
@@ -1104,6 +1131,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $shortComment = trim($shortComment).$tailString;
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+$lastpostinfo = stripBBCode($lastpostinfo);
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1132,7 +1160,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
+//$shortComment = stripBBCode($shortComment);
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+$lastpostinfo = stripBBCode($lastpostinfo);
             }
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var (array(

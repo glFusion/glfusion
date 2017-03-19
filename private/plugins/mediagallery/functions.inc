@@ -77,7 +77,10 @@ require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
 require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
-$mg_installed_version = $_PLUGIN_INFO['mediagallery'];
+$mg_installed_version = '0.0.0';
+if ( isset($_PLUGIN_INFO['mediagallery']) && $_PLUGIN_INFO['mediagallery']['pi_enabled']) {
+    $mg_installed_version = $_PLUGIN_INFO['mediagallery']['pi_version'];
+}
 
 // This is a list of valid extensions for image media thumbnails / display images
 $_MG_CONF['validExtensions'] = array('.jpg','.jpeg','.png','.gif','.bmp');

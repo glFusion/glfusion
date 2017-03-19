@@ -700,12 +700,14 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
             $plugin = COM_applyFilter($plugin);
             if ( isset($plugin_name_arr[$plugin]) ) {
                 DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
+                $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
+                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
                 PLG_enableStateChange ($plugin, true);
             } else {
                 $rc = PLG_enableStateChange ($plugin, false);
                 if ( $rc != 99 ) {
                     DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
+                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
                 }
             }
         }
@@ -817,11 +819,11 @@ function PLUGINS_processUpload()
                 $reqPlugin = $reqPlugin;
                 $required_ver = '';
             }
-            if (!isset($_PLUGIN_INFO[$reqPlugin])) {
+            if (!isset($_PLUGIN_INFO[$reqPlugin]) || $_PLUGIN_INFO[$reqPlugin]['pi_enabled'] == 0 ) {
                 // required plugin not installed
                 $errors .= sprintf($LANG32[51],$pluginData['id'],$reqPlugin,$reqPlugin);
             } elseif (!empty($required_ver)) {
-                $installed_ver = $_PLUGIN_INFO[$reqPlugin];
+                $installed_ver = $_PLUGIN_INFO[$reqPlugin]['pi_version'];
                 if (!COM_checkVersion($installed_ver, $required_ver)) {
                     // required plugin installed, but wrong version
                     $errors .= sprintf($LANG32[90],$required_ver,$reqPlugin,$installed_ver,$reqPlugin);
@@ -1447,7 +1449,15 @@ switch ($action) {
         } else if (isset ($_GET['plugin'])) {
             $plugin = COM_applyFilter ($_GET['plugin']);
         }
-        $page .= ($msg > 0) ? COM_showMessage($msg,$plugin) : '';
+        if ( $msg > 0 ) {
+            $msgType = 'info';
+            $msgPersist = 'false';
+            if ( $msg == 72 ) {
+                $msgType = 'error';
+                $msgPersist = 'true';
+            }
+        }
+        $page .= ($msg > 0) ? COM_showMessage($msg,$plugin,'',$msgPersist,$msgType) : '';
         $token = SEC_createToken();
         $page .= PLUGINS_list($token);
         break;
