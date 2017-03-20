@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - New 'Be the first to comment' message when no comments exist
   - Update OAuth library to v1.163
   - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
   - Added sort: and order: options to headlines auto tag
