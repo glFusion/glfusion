@@ -39,6 +39,8 @@ class autotag_headlines extends BaseAutotag {
         // featured - 0 = show all, 1 = only featured, 2 = all except featured
         // frontpage - 1 = show only items marked for frontpage - 0 = show all
         // cols - number of columns to show
+        // sort - sort by date, views, rating, featured (implies date)
+        // order - desc, asc
         // template - the template name
 
         $topic = $p1;
@@ -56,7 +58,7 @@ class autotag_headlines extends BaseAutotag {
                                 // 0 = display those without
                                 // 1 = display those with
                                 // 2 - don't care - just pull all stories
-        $sortby     = 'date';   // sort by: date, views, rating
+        $sortby     = 'featured';  // sort by: date, views, rating, featured
         $orderby    = 'desc';   // order by - desc or asc
         $template   = 'headlines.thtml';
 
@@ -101,11 +103,11 @@ class autotag_headlines extends BaseAutotag {
                     $skip++;
                 } elseif (substr ($part,0, 5) == 'sort:') {
                     $a = explode(':', $part);
-                    $sortby = $a[1];
+                    $sortby = strtolower($a[1]);
                     $skip++;
                 } elseif (substr ($part,0, 6) == 'order:') {
                     $a = explode(':', $part);
-                    $orderby = $a[1];
+                    $orderby = strtolower($a[1]);
                     $skip++;
                 } else {
                     break;
@@ -127,8 +129,8 @@ class autotag_headlines extends BaseAutotag {
         }
         if ( $display < 0 ) $display = 3;
 
-        $valid_sortby = array('date','views','rating');
-        if ( !in_array($sortby,$valid_sortby)) $sortby = 'date';
+        $valid_sortby = array('date','views','rating','featured');
+        if ( !in_array($sortby,$valid_sortby)) $sortby = 'featured';
         if( $sortby == 'views' ) $sortby = 'hits';
         $valid_order = array('desc','asc');
         if ( !in_array($orderby,$valid_order)) $orderby = 'desc';
@@ -187,14 +189,21 @@ class autotag_headlines extends BaseAutotag {
             }
         }
 
-        $sort_order = ' '.$sortby.' ' .$orderby.' ';
+        $sort_order = $sortby.' ' .$orderby.' ';
+
+        if ( $sortby == 'featured' ) {
+            $featuredOrderBy = 'featured ' . $orderby . ', ';
+            $sort_order = 'date ' . $orderby.' ';
+        } else {
+            $featuredOrderBy = ' ';
+        }
 
         $headlinesSQL = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
                  . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
                  . $userfields . ", t.topic, t.imageurl "
                  . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
                  . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                 . $sql . "ORDER BY featured DESC," . $sort_order;
+                 . $sql . "ORDER BY " . $featuredOrderBy . $sort_order;
 
         if ($display > 0 ) {
             $headlinesSQL .= " LIMIT ".$display;
