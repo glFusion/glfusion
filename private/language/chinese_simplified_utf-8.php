@@ -258,7 +258,8 @@ $LANG03 = array(
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
-    50 => 'Login required to comment'
+    50 => 'Login required to comment',
+    51 => 'Be the first to comment'
 );
 
 ###############################################################################
@@ -464,7 +465,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +769,7 @@ $LANG20 = array(
     3 => '无效的密码',
     4 => '用户名：',
     5 => '密码：',
-    6 => '这页只供授权人员使用。<br>所有存取将被记录和检查。',
+    6 => '这页只供授权人员使用。<br' . XHTML . '>所有存取将被记录和检查。',
     7 => '登入',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1100,7 +1101,7 @@ $LANG28 = array(
     49 => '管理组',
     50 => '打勾来准许过滤此组为管理组',
     51 => '在线日',
-    52 => '<br>注: "在线日" 是从登记的第一天到最后一次登入.',
+    52 => '<br' . XHTML . '>注: "在线日" 是从登记的第一天到最后一次登入.',
     53 => '登记过的',
     54 => '批量的删除',
     55 => '这功能只会有效若你已在 config.php 里设定为 <code>$_CONF[\'lastlogin\'] = true;</code>',
@@ -1247,7 +1248,7 @@ $LANG32 = array(
     7 => '你想安装的插件已经存在，请先把它删除再安装。',
     8 => '插件不能通过兼容性校验。',
     9 => '这插件要求一个更新版本的志乐. 你可以升级你的<a href="http://www.gllabs.org">志乐</a>或是另找一个适合的版本。',
-    10 => '<br><b>没有安装的插件。</b><br><br>',
+    10 => '<br' . XHTML . '><b>没有安装的插件。</b><br' . XHTML . '><br' . XHTML . '>',
     11 => '若想修改或删除插件，点击以下插件的名称。这会显示插件的详细内容和制作者的网站。安装的版本和从代码中来的版本都会显出来。这会让你知道此插件是否应该更新。若要安装或升级插件请咨询它的说明文件。',
     12 => 'plugineditor() 找不到插件名',
     13 => '插件编辑器',
@@ -1507,7 +1508,7 @@ $MESSAGE = array(
     74 => 'Ping 回已成功地送出.',
     75 => '迹回必须用 POST 要求.',
     76 => '你真的要删除这项目吗？',
-    77 => '警告:<br>你已默认UTF-8 为语文编码。 但是，你的服务器不支持多字节编码。请安装 mbstring 入 PHP 或选另一种语文编码。',
+    77 => '警告:<br' . XHTML . '>你已默认UTF-8 为语文编码。 但是，你的服务器不支持多字节编码。请安装 mbstring 入 PHP 或选另一种语文编码。',
     78 => '请确定你的电信地址跟你的确认电信地址是完全同样的。',
     79 => '你想打开的网页提交到已经在这网站不存在的功能。',
     80 => '建立此文流的插件已被关闭。你不能修改此文流除非你从新启动有关插件。',
@@ -1714,7 +1715,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2397,88 +2398,6 @@ $LANG_AM = array(
     'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
     'perm_header' => 'Auto Tag Permissions by Content Area',
     'perm_editor' => 'Permission Editor'
-);
-
-###############################################################################
-# envcheck.php
-
-$LANG_ENVCHK = array(
-    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
-    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
-    'ctype_extension' => 'Ctype Extension',
-    'current' => 'Current',
-    'current_php_settings' => 'Current PHP Settings',
-    'database_version' => 'Database Version',
-    'date_extension' => 'Date Extension',
-    'db_charset' => 'Database Character Set',
-    'db_collation' => 'Database Collation',
-    'db_driver' => 'Database Driver',
-    'db_engine' => 'Database Engine',
-    'db_header' => 'Database Info',
-    'db_version' => 'Database Version',
-    'directory_permissions' => 'Directory Permissions',
-    'enabled' => 'Enabled',
-    'extensions' => 'Required PHP Extensions',
-    'file_permissions' => 'File Permissions',
-    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
-    'filesystem_check' => 'Directory / File Permissions',
-    'filter_extension' => 'Filter Extension',
-    'gd_lib' => 'GD Libraries',
-    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
-    'gd_ok' => 'GD Libraries v2 are installed.',
-    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
-    'gettext_extension' => 'Gettext Extension',
-    'graphics' => 'Graphics Library',
-    'hide_phpinfo' => 'Hide Full PHP Info',
-    'hosting_env' => 'Hosting Environment Check',
-    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
-    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
-    'imagemagick' => 'ImageMagick Programs',
-    'is_optional' => ' is optional',
-    'is_required' => ' is required',
-    'jhead' => 'jhead Program',
-    'jhead_not_found' => 'Unable to locate the jhead executable.',
-    'jhead_ok' => 'The jhead executable is installed.',
-    'jpegtran' => 'jpegtran Program',
-    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
-    'jpegtran_ok' => 'The jpegtran executable is installed.',
-    'json_extension' => 'Json Extension',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
-    'mbstring_extension' => 'Multibyte (mbstring) Extension',
-    'memory_limit' => 'It is recommended that you have at least 64M of memory enabled on your site.',
-    'mysqli_extension' => 'MySQLi Extension',
-    'netpbm' => 'NetPBM Library',
-    'not_checked' => 'Skipped',
-    'not_found' => 'Not Found',
-    'not_writable' => 'NOT WRITABLE',
-    'notes' => 'Notes',
-    'np_not_found' => 'The NetPBM executables were not found.',
-    'np_ok' => 'The NetPBM library is installed',
-    'off' => 'Off',
-    'ok' => 'OK',
-    'on' => 'On',
-    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
-    'openssl_extension' => 'OpenSSL Extension',
-    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
-    'php_settings' => 'PHP Settings',
-    'php_version' => 'PHP Version',
-    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
-    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
-    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
-    'recheck' => 'Recheck Environment',
-    'recommended' => 'Recommended',
-    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
-    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
-    'session_extension' => 'Session Extension',
-    'setting' => 'Setting',
-    'show_phpinfo' => 'Show Full PHP Info',
-    'status' => 'Status',
-    'unable_mkdir' => 'Unable to create directory',
-    'unknown' => 'unknown',
-    'unlimited' => 'unlimited',
-    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
-    'xml_extension' => 'XML Extension',
-    'zlib_extension' => 'zlib Extension'
 );
 
 ###############################################################################

@@ -259,7 +259,8 @@ $LANG03 = array(
     47 => 'Benachrichtige mich per E-Mail, wenn es neue Antworten oder Kommentare zu diesem Beitrag gibt.',
     48 => 'Klicke Sie <a href="javascript:history.back()">hier</a> um zurückzukehren',
     49 => 'Kommentare sind geschlossen',
-    50 => "Sie müssen sich <a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um schreiben zu dürfen"
+    50 => "Sie müssen sich <a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um schreiben zu dürfen",
+    51 => 'Be the first to comment'
 );
 
 ###############################################################################
@@ -465,7 +466,7 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Sind Sie sicher, dass Sie Ihr Remote-Konto entfernen möchten?<br>Sie benötigen dazu Ihr aktuelles Passwort Ihres Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Sind Sie sicher, dass Sie Ihr Remote-Konto entfernen möchten?<br' . XHTML . '>Sie benötigen dazu Ihr aktuelles Passwort Ihres Lokalen-Kontos, um den Vorgang abzuschließen.'
 );
 
 ###############################################################################
@@ -2398,88 +2399,6 @@ $LANG_AM = array(
     'perm_instructions' => 'Überprüfen Sie welche Autotags, Sie für welchen Bereich zulassen wollen.',
     'perm_header' => 'Autotag Berechtigungen nach Bereich',
     'perm_editor' => 'Berechtigungs Manager'
-);
-
-###############################################################################
-# envcheck.php
-
-$LANG_ENVCHK = array(
-    'bypass_note' => 'Da entweder "safe_mode" oder "open_basedir" Einschränkungen erkannt wurden, wurde die Prüfung auf Grafikbibliotheken übersprungen.',
-    'correct_perms' => 'Bitte beheben Sie die unten aufgeführten Probleme und betätigen Sie anschließend die Schaltfläche "Umgebung erneut prüfen".',
-    'ctype_extension' => 'Ctype-Erweiterung',
-    'current' => 'Aktuell',
-    'current_php_settings' => 'Aktuelle PHP-Einstellungen',
-    'database_version' => 'Datenbank-Version',
-    'date_extension' => 'Datum-Erweiterung',
-    'db_charset' => 'Datenbank-Zeichensatz',
-    'db_collation' => 'Datenbank-Sortierung',
-    'db_driver' => 'Datenbank-Treiber',
-    'db_engine' => 'Datenbank-Engine',
-    'db_header' => 'Datenbank-Info',
-    'db_version' => 'Datenbank-Version',
-    'directory_permissions' => 'Verzeichnis-Berechtigungen',
-    'enabled' => 'Aktiviert',
-    'extensions' => 'Benötigte PHP-Erweiterungen',
-    'file_permissions' => 'Datei-Berechtigungen',
-    'file_uploads' => 'Viele Funktionen von glFusion erfordern die Möglichkeit, Dateien hochzuladen, diese sollte aktiviert sein.',
-    'filesystem_check' => 'Verzeichnis / Datei-Berechtigungen',
-    'filter_extension' => 'Filter-Erweiterung',
-    'gd_lib' => 'GD-Bibliotheken',
-    'gd_not_found' => 'Die Funktionen der GD-Bibliothek konnten nicht gefunden werden. Bitte prüfen Sie das vorhanden sein der GD-Bibliothek oder wählen Sie eine alternative Grafik-Bibliothek.',
-    'gd_ok' => 'GD-Bibliotheken v2 ist installiert.',
-    'gd_v1' => 'GD-Bibliotheken v1 ist installiert - Diese Version unterstützt die JPG-Bildverarbeitung nicht vollständig, dies kann zu Qualitätsproblemen führen.',
-    'gettext_extension' => 'Gettext-Erweiterung',
-    'graphics' => 'Grafik-Bibliotheken',
-    'hide_phpinfo' => 'PHP-Info ausblenden',
-    'hosting_env' => 'Hosting-Umgebung prüfen',
-    'im_not_found' => 'Die ausführbare Datei <b>convert</b> konnte nicht gefunden werden.',
-    'im_ok' => 'Die ausführbare Datei <b>convert</b> scheint vorhanden zu sein.',
-    'imagemagick' => 'ImageMagick-Programm',
-    'is_optional' => ' ist optional',
-    'is_required' => ' ist erforderlich',
-    'jhead' => 'jhead-Programm',
-    'jhead_not_found' => 'Die ausführbare Datei <b>jhead</b> konnte nicht gefunden werden.',
-    'jhead_ok' => 'Die ausführbare Datei <b>jhead</b> scheint vorhanden zu sein.',
-    'jpegtran' => 'jpegtran-Programm',
-    'jpegtran_not_found' => 'Die ausführbare Datei <b>jpegtran</b> konnte nicht gefunden werden.',
-    'jpegtran_ok' => 'Die ausführbare Datei <b>jpegtran</b> scheint vorhanden zu sein.',
-    'json_extension' => 'Json-Erweiterung',
-    'max_execution_time' => 'GlFusion empfiehlt den PHP-Standardwert von 30 Sekunden als Minimum, jedoch können Uploads und andere Operationen durchaus länger dauern. Wenn "safe_mode" ausgeschaltet ist, können Sie diesen Wert durch Ändern von <b>max_execution_time</b> in Ihrer php.ini-Datei erhöhen.',
-    'mbstring_extension' => 'Multibyte-Erweiterung (mbstring)',
-    'memory_limit' => 'Es wird empfohlen, dass Sie mindestens 64MB aktiviert haben',
-    'mysqli_extension' => 'MySQLi-Erweiterung',
-    'netpbm' => 'NetPBM-Bibliothek',
-    'not_checked' => 'Übersprungen',
-    'not_found' => 'Nicht gefunden',
-    'not_writable' => 'NICHT BESCHREIBBAR',
-    'notes' => 'Notizen',
-    'np_not_found' => 'Die ausführbaren Datein von <b>NetPBM</b> konnte nicht gefunden werden.',
-    'np_ok' => 'Die <b>NetPBM-Bibliothek</b> scheint vorhanden zu sein.',
-    'off' => 'Aus',
-    'ok' => 'OK',
-    'on' => 'Ein',
-    'open_basedir' => 'Wenn "open_basedir" aktiviert ist, kann es während der Installation zu Berechtigungsproblemen führen.<br />Die Dateisystem-Überprüfung sollte diesbezüglich auf Probleme hinweisen.',
-    'openssl_extension' => 'OpenSSL-Erweiterung',
-    'php_req_version' => 'glFusion erfordert PHP-Version 5.3.3 oder höher.',
-    'php_settings' => 'PHP-Einstellungen',
-    'php_version' => 'PHP-Version',
-    'php_warning' => 'Wenn irgendwelche der aufgeführten Punkte in <span class="no">rot</span> markiert sind, könnten Sie Probleme mit Ihrer glFusion-Website haben.<br />Halten Sie diesbezüglich Rücksprache mit Ihrem Hosting-Provider bezüglich Änderung dieser PHP-Einstellungen',
-    'phpendoflife' => 'Ihre PHP-Version, einschließlich Sicherheitsupdates, ist veraltet und wird nicht mehr unterstützt.<br />Bitte erwägen Sie eine Aktualisierung auf eine <a href="http://php.net/supported-versions.php" target="_blank">Aktuelle PHP-Version</a>.',
-    'post_max_size' => 'Mit glFusion können Sie Plugins, Bilder und Dateien hochladen. Sie sollten hierfür mindestens 8MB zulassen.',
-    'recheck' => 'Umgebung erneut prüfen',
-    'recommended' => 'Empfohlen',
-    'register_globals' => 'Wenn "register_globals" aktiviert ist, kann dies Sicherheitsprobleme verursachen.',
-    'safe_mode' => 'Wenn "safe_mode" aktiviert ist, funktionieren einige Funktionen von glFusion möglicherweise nicht ordnungsgemäß. Im speziellen das Media Gallery Plugin.',
-    'session_extension' => 'Session-Erweiterng',
-    'setting' => 'Einstellungen',
-    'show_phpinfo' => 'PHP-Info einblenden',
-    'status' => 'Status',
-    'unable_mkdir' => 'Verezeichnis konnte nicht erstellt werden',
-    'unknown' => 'unbekannt',
-    'unlimited' => 'unbegrenzt',
-    'upload_max_filesize' => 'Mit glFusion können Sie Plugins, Bilder und Dateien hochladen. Sie sollten hierfür mindestens 8MB zulassen.',
-    'xml_extension' => 'XML-Erweiterung',
-    'zlib_extension' => 'zlib-Erweiterung'
 );
 
 ###############################################################################

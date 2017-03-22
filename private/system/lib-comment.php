@@ -395,7 +395,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     if( empty( $A ) ) {
         return '';
     }
-
     $token = '';
     if ($delete_option && !$preview) {
         $token = SEC_createToken();
@@ -776,7 +775,7 @@ function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewr
 */
 function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $pid = 0, $page = 1, $cid = false, $delete_option = false, $ccode = 0, $sid_author_id = '' )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03;
 
     $retval = '';
 
@@ -976,6 +975,12 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
                 $thecomments .= CMT_getComment( $result, $mode, $type, $order,
                                                 $delete_option, false, $ccode, $sid_author_id );
+
+                if ( $thecomments == '' ) {
+                    if ( $ccode == 0 ) {
+                        $template->set_var( 'lang_be_the_first',$LANG03[51]);
+                    }
+                }
 
                 // Pagination
                 $tot_pages =  ceil( $count / $limit );

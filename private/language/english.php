@@ -257,6 +257,7 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to comment',
+    51 => 'Be the first to comment',
 );
 
 ###############################################################################

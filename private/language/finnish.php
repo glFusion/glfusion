@@ -257,7 +257,8 @@ $LANG03 = array(
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
-    50 => 'Login required to comment'
+    50 => 'Login required to comment',
+    51 => 'Be the first to comment'
 );
 
 ###############################################################################
@@ -463,7 +464,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -767,7 +768,7 @@ $LANG20 = array(
     3 => 'Väärä salasana käyttäjälle',
     4 => 'Käyttäjätunnus:',
     5 => 'Salasana:',
-    6 => 'Kaikki ylläpidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br>Sivu on tarkoitettu vain sallitulle henkilökunnalle.',
+    6 => 'Kaikki ylläpidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br' . XHTML . '>Sivu on tarkoitettu vain sallitulle henkilökunnalle.',
     7 => 'kirjaudu',
     8 => 'Aikakatkaisu - Tunnistaudu uudelleen',
     9 => 'Admin toimintoihin pääsy vaatii uudelleen tunnistautumisen'
@@ -1099,7 +1100,7 @@ $LANG28 = array(
     49 => 'Admin Ruhmä',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Päivät',
-    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'rekisteörityi',
     54 => 'Joukko Poisto',
     55 => 'Tämä toimii vain jos sinulla on <code>$_CONF[\'lastlogin\'] = true;</code> config.php tiedostossa',
@@ -1246,7 +1247,7 @@ $LANG32 = array(
     7 => 'Laajennus jonka asentamista yrität, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti epäonnistui',
     9 => 'Laajennus vaatii uudemman version glFusionista. Päivitä <a href="http://www.gllabs.org">glFusion-järjestelmäsi</a> tai hanki uudempi versio laajennuksesta.',
-    10 => '<br><b>Laajennuksia ei ole tällä hetkellä asennettuna.</b><br><br>',
+    10 => '<br' . XHTML . '><b>Laajennuksia ei ole tällä hetkellä asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lisätietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai päivittääksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nimeä ei ole lähetetty plugineditor()',
     13 => 'Laajennusten muokkain',
@@ -1506,7 +1507,7 @@ $MESSAGE = array(
     74 => 'Pingback Lähetetty.',
     75 => 'Paluuviitteet täytyy lähettää käyttämällä POST requestia.',
     76 => 'Haluatko varmasti poistaa tämän?',
-    77 => 'Varoitus:<br>Olet asettanut oletukseksi UTF-8 Merkistön. Mutta serverisi ei tue tätä. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkistö/Kieli.',
+    77 => 'Varoitus:<br' . XHTML . '>Olet asettanut oletukseksi UTF-8 Merkistön. Mutta serverisi ei tue tätä. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkistö/Kieli.',
     78 => 'Varmista että sähköpostiosoite ja vahvistus sähköpostiosoite ovat samat.',
     79 => 'Sivu jota yrität avata liittyy toimintoon jota tällä sivustolla ei ole enää.',
     80 => 'Lisäosa joka loi tämän syötteen ei ole enää toiminnassa. Et voi muokata tätä syötettä ennenkuin ota lisäosan uudestaan käyttöön.',
@@ -1713,7 +1714,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2396,88 +2397,6 @@ $LANG_AM = array(
     'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
     'perm_header' => 'Auto Tag Permissions by Content Area',
     'perm_editor' => 'Permission Editor'
-);
-
-###############################################################################
-# envcheck.php
-
-$LANG_ENVCHK = array(
-    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
-    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
-    'ctype_extension' => 'Ctype Extension',
-    'current' => 'Current',
-    'current_php_settings' => 'Current PHP Settings',
-    'database_version' => 'Database Version',
-    'date_extension' => 'Date Extension',
-    'db_charset' => 'Database Character Set',
-    'db_collation' => 'Database Collation',
-    'db_driver' => 'Database Driver',
-    'db_engine' => 'Database Engine',
-    'db_header' => 'Database Info',
-    'db_version' => 'Database Version',
-    'directory_permissions' => 'Directory Permissions',
-    'enabled' => 'Enabled',
-    'extensions' => 'Required PHP Extensions',
-    'file_permissions' => 'File Permissions',
-    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
-    'filesystem_check' => 'Directory / File Permissions',
-    'filter_extension' => 'Filter Extension',
-    'gd_lib' => 'GD Libraries',
-    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
-    'gd_ok' => 'GD Libraries v2 are installed.',
-    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
-    'gettext_extension' => 'Gettext Extension',
-    'graphics' => 'Graphics Library',
-    'hide_phpinfo' => 'Hide Full PHP Info',
-    'hosting_env' => 'Hosting Environment Check',
-    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
-    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
-    'imagemagick' => 'ImageMagick Programs',
-    'is_optional' => ' is optional',
-    'is_required' => ' is required',
-    'jhead' => 'jhead Program',
-    'jhead_not_found' => 'Unable to locate the jhead executable.',
-    'jhead_ok' => 'The jhead executable is installed.',
-    'jpegtran' => 'jpegtran Program',
-    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
-    'jpegtran_ok' => 'The jpegtran executable is installed.',
-    'json_extension' => 'Json Extension',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
-    'mbstring_extension' => 'Multibyte (mbstring) Extension',
-    'memory_limit' => 'It is recommended that you have at least 64M of memory enabled on your site.',
-    'mysqli_extension' => 'MySQLi Extension',
-    'netpbm' => 'NetPBM Library',
-    'not_checked' => 'Skipped',
-    'not_found' => 'Not Found',
-    'not_writable' => 'NOT WRITABLE',
-    'notes' => 'Notes',
-    'np_not_found' => 'The NetPBM executables were not found.',
-    'np_ok' => 'The NetPBM library is installed',
-    'off' => 'Off',
-    'ok' => 'OK',
-    'on' => 'On',
-    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
-    'openssl_extension' => 'OpenSSL Extension',
-    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
-    'php_settings' => 'PHP Settings',
-    'php_version' => 'PHP Version',
-    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
-    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
-    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
-    'recheck' => 'Recheck Environment',
-    'recommended' => 'Recommended',
-    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
-    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
-    'session_extension' => 'Session Extension',
-    'setting' => 'Setting',
-    'show_phpinfo' => 'Show Full PHP Info',
-    'status' => 'Status',
-    'unable_mkdir' => 'Unable to create directory',
-    'unknown' => 'unknown',
-    'unlimited' => 'unlimited',
-    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
-    'xml_extension' => 'XML Extension',
-    'zlib_extension' => 'zlib Extension'
 );
 
 ###############################################################################
