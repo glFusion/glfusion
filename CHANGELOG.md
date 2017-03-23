@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
   - New 'Be the first to comment' message when no comments exist
   - Update OAuth library to v1.163
   - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
