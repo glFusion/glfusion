@@ -970,7 +970,7 @@ function PLUGINS_processUpload()
 */
 function PLUGINS_post_uploadProcess() {
 
-    global $_CONF, $_PLUGINS, $_TABLES, $pluginData, $LANG32,$_DB_dbms, $_DB_table_prefix ;
+    global $_CONF, $_PLUGINS, $_PLUGIN_INFO, $_TABLES, $pluginData, $LANG32,$_DB_dbms, $_DB_table_prefix ;
 
     $retval = '';
     $upgrade = false;
