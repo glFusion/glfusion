@@ -462,7 +462,7 @@ $LANG04 = array(
     202 => 'Sígueme',
     203 => 'Activar Cuenta',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -766,7 +766,7 @@ $LANG20 = array(
     3 => 'La contraseña ingresada es inválida',
     4 => 'Usuario:',
     5 => 'Contraseña:',
-    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br' . XHTML . '>Esta página es para uso exclusivo del personal autorizado.',
+    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br>Esta página es para uso exclusivo del personal autorizado.',
     7 => 'Identificación',
     8 => 'Tiempo de Espera de Sesión Agotado - Autentícate de nuevo',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1098,7 +1098,7 @@ $LANG28 = array(
     49 => 'Grupo Admin',
     50 => 'Seleccione para permitir filtrar este grupo como un Grupo de Usuarios Admin',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Borrado masivo',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1245,7 +1245,7 @@ $LANG32 = array(
     7 => 'La Extensión que intenta instalar ya existe. Borra la Extensión antes de reinstalarla.',
     8 => 'Falló la comprobación de compatibilidad de la Extensión',
     9 => 'Esta Extensión requiere una versión más nueva de glFusion. Puede obtener una copia actualizada de <a href=http://www.gllabs.org>glFusion</a> o instalar otra versión de la Extensión.',
-    10 => '<br' . XHTML . '><b>No hay Extensiones instaladas.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>No hay Extensiones instaladas.</b><br><br>',
     11 => 'Para habilitar o deshabilitar una Extensión, haz clic en la caja de chequeo correspondiente. Extensiones que han sido cargadas al sistema pueden ser instaladas haciendo clic en el icono Instalar en la columna de Control. Para actuaizar una Extensión, haz clic en el icono Actualizar de la columna versión. Para desinstalar una Extensión, haz clic en el icono: <img src="/layout//images/admin/delete.png" /> correspondiente.',
     12 => 'no se ha dado un nombre de Extensión a la función plugineditor()',
     13 => 'Editor de Extensión',
@@ -1712,7 +1712,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configurar',
     'config_instructions' => 'Selecciona la tablas que deseas excluir del respaldo. También puedes indicar cuantos respaldos conservar, respaldos viejos serán borrados automáticamente.',
     'utf8_title' => 'Actualización UTF8MB4',
-    'utf8_instructions' => 'Actualizar tu sitio utf-8 a utf8mb4 - proporciona suporte completo para todos los caracteres unicode.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Actualizar tu sitio utf-8 a utf8mb4 - proporciona suporte completo para todos los caracteres unicode.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

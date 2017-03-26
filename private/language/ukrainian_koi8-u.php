@@ -465,7 +465,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -769,7 +769,7 @@ $LANG20 = array(
     3 => 'Неправильний пароль користувача',
     4 => '╤м\'я користувача:',
     5 => 'Пароль:',
-    6 => 'Доступ до адм╕н╕стративних функц╕й цього сайта запису╓ться ╕ перегляда╓ться. <br' . XHTML . '>Ця стор╕нка лише для авторизованого персоналу сайту.',
+    6 => 'Доступ до адм╕н╕стративних функц╕й цього сайта запису╓ться ╕ перегляда╓ться. <br>Ця стор╕нка лише для авторизованого персоналу сайту.',
     7 => 'ув╕йти',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1101,7 +1101,7 @@ $LANG28 = array(
     49 => 'Адм╕н╕стративна група',
     50 => 'В╕дм╕тьте, щоб ф╕льтрувати цю групу як адм╕н╕стративну',
     51 => 'Дн╕в онлайн',
-    52 => '<br' . XHTML . '>Зауважте: "Дн╕в онлайн" - це к╕льк╕сть дн╕в м╕ж першою ре╓страц╕╓ю та останн╕м входом до системи.',
+    52 => '<br>Зауважте: "Дн╕в онлайн" - це к╕льк╕сть дн╕в м╕ж першою ре╓страц╕╓ю та останн╕м входом до системи.',
     53 => 'заре╓стровано',
     54 => 'Масове вилучення',
     55 => 'Це працб╓ лише у випадку, коли ви встановили <code>$_CONF[\'lastlogin\'] = true;</code> у вашому файл╕ config.php',
@@ -1248,7 +1248,7 @@ $LANG32 = array(
     7 => 'Модуль, який Ви намага╓тесь встановити, вже ╕сну╓. Перед тим, як перевстановити модуль, вилуч╕ть старий',
     8 => 'Модуль не пройшов перев╕рку сум╕сност╕ верс╕╖',
     9 => 'Модуль потребу╓ б╕льш ново╖ верс╕╖ glFusion. Онов╕ть Вашу коп╕ю <a href="http://www.gllabs.org">glFusion</a> або спробуйте знайти ╕ншу верс╕ю модуля.',
-    10 => '<br' . XHTML . '><b>В систем╕ нема╓ встановлених модул╕в.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>В систем╕ нема╓ встановлених модул╕в.</b><br><br>',
     11 => 'Щоб зм╕нити чи вилучити модуль, натисн╕ть його ╕конку редагування нижче. Буде виведено детал╕ про модуль, включаючи домашню стор╕нку автора. Виводиться як ╕нстальована верс╕я, так ╕ верс╕я з коду модуля. Це дасть вам знати, коли варто оновлювати модуль. Щоб встановити чи оновити модуль, будь-ласка, зверн╕ться до його документац╕╖.',
     12 => '╕м\'я модуля не передано в plugineditor()',
     13 => 'Редактор модул╕в',
@@ -1508,7 +1508,7 @@ $MESSAGE = array(
     74 => 'П╕нгбек усп╕шно в╕дправлено.',
     75 => 'Трекбеки повинн╕ в╕дправлятись через POST запит.',
     76 => 'Ви впевнен╕, що хочете вилучити цей елемент?',
-    77 => 'ПОПЕРЕДЖЕННЯ:<br' . XHTML . '>Ваше кодування символ╕в за замовчуванням - UTF-8. Проте ваш сервер не п╕дтриму╓ багатобайтов╕ кодування. Будь-ласка, встанов╕ть функц╕╖ mbstring для PHP або обер╕ть ╕нше кодування/мову.',
+    77 => 'ПОПЕРЕДЖЕННЯ:<br>Ваше кодування символ╕в за замовчуванням - UTF-8. Проте ваш сервер не п╕дтриму╓ багатобайтов╕ кодування. Будь-ласка, встанов╕ть функц╕╖ mbstring для PHP або обер╕ть ╕нше кодування/мову.',
     78 => 'Будь-ласка, переконайтеся, що електронна адреса та ╖╖ п╕дтвердження сп╕впадають.',
     79 => 'Стор╕нка, яку ви намагалися в╕дкрити, посила╓ться на функц╕ю, якою вже нема╓ на цьому сайт╕.',
     80 => 'Модуль, що створив цю стр╕чку, нараз╕ вимкнено. Ви не зможете редагувати цю стр╕чку, поки не ув╕мкнете в╕дпов╕дний батьк╕вський модуль.',
@@ -1715,7 +1715,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

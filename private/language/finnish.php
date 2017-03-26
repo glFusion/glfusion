@@ -464,7 +464,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +768,7 @@ $LANG20 = array(
     3 => 'Väärä salasana käyttäjälle',
     4 => 'Käyttäjätunnus:',
     5 => 'Salasana:',
-    6 => 'Kaikki ylläpidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br' . XHTML . '>Sivu on tarkoitettu vain sallitulle henkilökunnalle.',
+    6 => 'Kaikki ylläpidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br>Sivu on tarkoitettu vain sallitulle henkilökunnalle.',
     7 => 'kirjaudu',
     8 => 'Aikakatkaisu - Tunnistaudu uudelleen',
     9 => 'Admin toimintoihin pääsy vaatii uudelleen tunnistautumisen'
@@ -1100,7 +1100,7 @@ $LANG28 = array(
     49 => 'Admin Ruhmä',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Päivät',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'rekisteörityi',
     54 => 'Joukko Poisto',
     55 => 'Tämä toimii vain jos sinulla on <code>$_CONF[\'lastlogin\'] = true;</code> config.php tiedostossa',
@@ -1247,7 +1247,7 @@ $LANG32 = array(
     7 => 'Laajennus jonka asentamista yrität, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti epäonnistui',
     9 => 'Laajennus vaatii uudemman version glFusionista. Päivitä <a href="http://www.gllabs.org">glFusion-järjestelmäsi</a> tai hanki uudempi versio laajennuksesta.',
-    10 => '<br' . XHTML . '><b>Laajennuksia ei ole tällä hetkellä asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>Laajennuksia ei ole tällä hetkellä asennettuna.</b><br><br>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lisätietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai päivittääksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nimeä ei ole lähetetty plugineditor()',
     13 => 'Laajennusten muokkain',
@@ -1507,7 +1507,7 @@ $MESSAGE = array(
     74 => 'Pingback Lähetetty.',
     75 => 'Paluuviitteet täytyy lähettää käyttämällä POST requestia.',
     76 => 'Haluatko varmasti poistaa tämän?',
-    77 => 'Varoitus:<br' . XHTML . '>Olet asettanut oletukseksi UTF-8 Merkistön. Mutta serverisi ei tue tätä. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkistö/Kieli.',
+    77 => 'Varoitus:<br>Olet asettanut oletukseksi UTF-8 Merkistön. Mutta serverisi ei tue tätä. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkistö/Kieli.',
     78 => 'Varmista että sähköpostiosoite ja vahvistus sähköpostiosoite ovat samat.',
     79 => 'Sivu jota yrität avata liittyy toimintoon jota tällä sivustolla ei ole enää.',
     80 => 'Lisäosa joka loi tämän syötteen ei ole enää toiminnassa. Et voi muokata tätä syötettä ennenkuin ota lisäosan uudestaan käyttöön.',
@@ -1714,7 +1714,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

@@ -469,7 +469,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -773,7 +773,7 @@ $LANG20 = array(
     3 => 'Λάθος κωδικός πρόσβασης χρήστη',
     4 => 'Όνομα χρήστη:',
     5 => 'Κωδικός πρόσβασης:',
-    6 => 'Η πρόσβαση σε επίπεδο διαχειριστή για αυτήν την ιστοσελίδα είναι ελεγχόμενη και καταγραφόμενη. <br' . XHTML . '> Η παρούσα ιστοσελίδα είναι για χρήση πιστοποιημένου προσωπικού',
+    6 => 'Η πρόσβαση σε επίπεδο διαχειριστή για αυτήν την ιστοσελίδα είναι ελεγχόμενη και καταγραφόμενη. <br> Η παρούσα ιστοσελίδα είναι για χρήση πιστοποιημένου προσωπικού',
     7 => 'σύνδεση',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1105,7 +1105,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1252,7 +1252,7 @@ $LANG32 = array(
     7 => 'Το εξωτερικό πρόγραμμα που προσπαθείτε να εγκαταστήσετε είναι ήδη εγκατεστημένο. Παρακαλώ, σβήστε το και ξαναπροσπαθήστε.',
     8 => 'H εξέταση συμβατότητας για εξωτερικό πρόγραμμα απέτυχε',
     9 => 'Αυτό το εξωτερικό πρόγραμμα απαιτεί νεότερη έκδοση του glFusion. Η αναβαθμίστε την έκδοση σας του <a href="http://www.gllabs.org">glFusion</a> η βρείτε μία νεότερη έκδοση του.',
-    10 => '<br' . XHTML . '><b>Δεν υπάρχουν εγκατεστημένα εξωτερικά προγράμματα.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>Δεν υπάρχουν εγκατεστημένα εξωτερικά προγράμματα.</b><br><br>',
     11 => 'Για να επεξεργαστείτε η να διαγράψετε ένα εξωτερικό πρόγραμμα, επιλέξτε το παρακάτω με βάση την αριθμό του. Για να μάθετε περισσότερα για ένα συγκεκριμένο εξωτερικό πρόγραμμα, επιλέξτε το όνομα του και θα οδηγηθείτε στην ιστοσελίδα του. Για να to αναβαθμίσετε  συμβουλευτείτε το εγχειρίδιο χρήσης. ',
     12 => 'Δεν δόθηκε το όνομα του εξωτερικού προγράμμaτος στον plugineditor()',
     13 => 'Επεξεργαστής εξωτερικών προγραμμάτων',
@@ -1512,7 +1512,7 @@ $MESSAGE = array(
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
-    77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
+    77 => 'WARNING:<br>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the email address and the confirmation email address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
     80 => 'The plugin that created this feed is currently disabled. You will not be able to edit this feed until you re-enable the parent plugin.',
@@ -1719,7 +1719,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
