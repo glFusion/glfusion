@@ -5467,6 +5467,8 @@ function COM_numberFormat( $number, $decimals=-1 )
 {
     global $_CONF;
 
+    if ( empty($number) || $number == '' ) return '0';
+
     if ($decimals != -1) {
         // Specific number of decimals requested, could be zero
         $dc = (int)$decimals;
@@ -5480,7 +5482,7 @@ function COM_numberFormat( $number, $decimals=-1 )
     $ts = $_CONF['thousand_separator'];
     $ds = $_CONF['decimal_separator'];
 
-    return @number_format( $number, $dc, $ds, $ts );
+    return @number_format( (float) $number, $dc, $ds, $ts );
 }
 
 /**
