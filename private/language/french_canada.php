@@ -464,7 +464,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +768,7 @@ $LANG20 = array(
     3 => 'Mot de passe incorrect',
     4 => 'Nom du membre:',
     5 => 'Mot de passe:',
-    6 => 'Toutes tentatives d\'acc&egrave;s &agrave; cette portion du site est enregistr&eacute;e et analys&eacute;e.<br>Cette page est r&eacute;serv&eacute;e aux personnes autoris&eacute;es.',
+    6 => 'Toutes tentatives d\'acc&egrave;s &agrave; cette portion du site est enregistr&eacute;e et analys&eacute;e.<br' . XHTML . '>Cette page est r&eacute;serv&eacute;e aux personnes autoris&eacute;es.',
     7 => 'Connexion',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1100,7 +1100,7 @@ $LANG28 = array(
     49 => 'Groupe Admin',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Jours en ligne',
-    52 => '<br>Note: Les "jours en ligne", c\'est le total de jours entre la cr&eacute;ation du compte et le dernier acc&egrave;s.',
+    52 => '<br' . XHTML . '>Note: Les "jours en ligne", c\'est le total de jours entre la cr&eacute;ation du compte et le dernier acc&egrave;s.',
     53 => 'enregistr&eacute;',
     54 => 'Tous effac&eacute;s',
     55 => '&Ccedil;a ne fonctionnera seulement que si vous avez le code <code>$_CONF[\'lastlogin\'] = true;</code> dans config.php',
@@ -1247,7 +1247,7 @@ $LANG32 = array(
     7 => 'Le plugin que vous essayez d\'installer existe d&eacute;j&agrave;.  Veuillez supprimer le plugin avant de le r&eacute;installer.',
     8 => 'Test de compatibilit&eacute; du plugin &eacute;chou&eacute;',
     9 => 'Ce plugin requiert une version plus r&eacute;cente du syst&egrave;me. Vous pouvez mettre &agrave; jour votre <a href=\'http://www.gllabs.org\'>syst&egrave;me</a> ou obtenir une autre version du plugin.',
-    10 => '<br><b>Aucun plugin n\'est actuellement install&eacute;.</b><br><br>',
+    10 => '<br' . XHTML . '><b>Aucun plugin n\'est actuellement install&eacute;.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Cliquez sur le num&eacute;ro du plugin pour le modifier ou le supprimer. Pour en savoir d\'avantage sur les plugins, cliquez sur le nom du plugin et vous serez redirig&eacute; vers le site web du plugin. Pour installer ou mettre &agrave; jour un plugin veuillez vous r&eacute;f&eacute;rer &agrave; la documentation du plugin.',
     12 => 'Aucun nom de plugin n\'a &eacute;t&eacute; pass&eacute; &agrave; plugineditor()',
     13 => 'Editeur de plugin',
@@ -1507,7 +1507,7 @@ $MESSAGE = array(
     74 => 'Le ping-pong &agrave; &eacute;t&eacute; envoy&eacute; avec succ&egrave;s.',
     75 => 'Les pistels doivent être envoy&eacute;s suivant une requête POST.',
     76 => 'D&eacute;sirez-vous vraiment effacer cet article ?',
-    77 => 'ATTENTION:<br>Vous avez choisi UTF-8 comme encodage par d&eacute;faut, malgr&eacute; le fait que vos serveurs ne supportent pas un encodage multi-bit. Pri&egrave;re d\'installer les fonctions mbstring pour PHP ou choisissez une langue diff&eacute;rente.',
+    77 => 'ATTENTION:<br' . XHTML . '>Vous avez choisi UTF-8 comme encodage par d&eacute;faut, malgr&eacute; le fait que vos serveurs ne supportent pas un encodage multi-bit. Pri&egrave;re d\'installer les fonctions mbstring pour PHP ou choisissez une langue diff&eacute;rente.',
     78 => 'Pri&egrave;re de vous assurer que l\'adresse courriel et le courriel de confirmation soient le mêmes.',
     79 => 'La page que vous tentez d\'ouvrir r&eacute;f&egrave;re &agrave; une fonctionalit&eacute; d&eacute;sinstall&eacute;e de ce site.',
     80 => 'Le plugin qui a cr&eacute;&eacute; ce lien a &eacute;t&eacute; d&eacute;sinstall&eacute;. Merci de r&eacute;installer le plugin avant toute chose.',
@@ -1714,7 +1714,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

@@ -120,7 +120,7 @@ $LANG01 = array(
     56 => 'Голосовать',
     57 => 'Пароль',
     58 => 'Войти',
-    59 => "Не зарегистрировались?<br>-> <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">Новый пользователь</a>",
+    59 => "Не зарегистрировались?<br" . XHTML . ">-> <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">Новый пользователь</a>",
     60 => 'Послать комментарий',
     61 => 'Создать учётную запись',
     62 => 'cлова',
@@ -477,7 +477,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -781,7 +781,7 @@ $LANG20 = array(
     3 => 'Неверный пароль',
     4 => 'Имя пользователя:',
     5 => 'Пароль:',
-    6 => 'Доступ к административным функциям этого сайта журналируется и просматривается.<br>Эта страница только для авторизованного персонала сайта.',
+    6 => 'Доступ к административным функциям этого сайта журналируется и просматривается.<br' . XHTML . '>Эта страница только для авторизованного персонала сайта.',
     7 => 'вход',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -811,7 +811,7 @@ $LANG21 = array(
     18 => 'Пожалуйста, заполните поля Заголовок блока, Уровень допуска и Содержимое блока',
     19 => 'Менеджер блоков',
     20 => '',
-    21 => 'Уровень<br>секетности блока',
+    21 => 'Уровень<br' . XHTML . '>секетности блока',
     22 => '',
     23 => 'Порядок блока',
     24 => '',
@@ -1113,7 +1113,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1260,7 +1260,7 @@ $LANG32 = array(
     7 => 'Плагин, который Вы пытаетесь установить, уже существует. Перед тем, как переустановить плагин, удалите его.',
     8 => 'Проверка совместимости плагина провалилась',
     9 => 'Плагин требует более новой версии glFusion-а. Обновите Вашу копию с <a href=http://www.gllabs.org>glFusion</a> или попробуйте найти другую версию плагина.',
-    10 => '<br><b>В системе нет установленных плагинов.</b><br><br>',
+    10 => '<br' . XHTML . '><b>В системе нет установленных плагинов.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Для изменения или удаления плагина, нажмите на его номер ниже. Для получения информации о плагине, нажмите на его имя, и вы будете направлены вебсайт плагина. Для установки или обновления плагина нажмите кнопку "Новый плагин" выше.',
     12 => 'имя плагина не передано в plugineditor()',
     13 => 'Редактор плагинов',
@@ -1520,7 +1520,7 @@ $MESSAGE = array(
     74 => 'Pingback был успешно отправлен.',
     75 => 'Trackbacks должен быть отправлен, используя запрос POST.',
     76 => 'Вы действительно хотите удалить этот пункт?',
-    77 => 'ВНИМАНИЕ:<br>Вы должны установить кодировкой по умолчанию UTF-8. Тем не менее, Ваш сервер не поддерживает мультибайтовые кодировки. Пожалуйста, установите функции mbstring для PHP или выберите другую раскладку/язык.',
+    77 => 'ВНИМАНИЕ:<br' . XHTML . '>Вы должны установить кодировкой по умолчанию UTF-8. Тем не менее, Ваш сервер не поддерживает мультибайтовые кодировки. Пожалуйста, установите функции mbstring для PHP или выберите другую раскладку/язык.',
     78 => 'Пожалуйста, проверьте, чтобы email адрес и адрес подтверждения email совпадали.',
     79 => 'Страница, которую Вы пытаетесь открыть, обращается к функции, которой больше нет на сайте.',
     80 => 'Плагин, который создал этот механизм, отключен. Вы не сможете редактировать этот механизм, пока не включите родительский плагин.',
@@ -1727,7 +1727,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

@@ -462,7 +462,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1712,7 +1712,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

@@ -464,7 +464,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +768,7 @@ $LANG20 = array(
     3 => 'V&auml;&auml;r&auml; salasana k&auml;ytt&auml;j&auml;lle',
     4 => 'K&auml;ytt&auml;j&auml;tunnus:',
     5 => 'Salasana:',
-    6 => 'Kaikki yll&auml;pidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br>Sivu on tarkoitettu vain sallitulle henkil&ouml;kunnalle.',
+    6 => 'Kaikki yll&auml;pidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br' . XHTML . '>Sivu on tarkoitettu vain sallitulle henkil&ouml;kunnalle.',
     7 => 'kirjaudu',
     8 => 'Aikakatkaisu - Tunnistaudu uudelleen',
     9 => 'Admin toimintoihin p&auml;&auml;sy vaatii uudelleen tunnistautumisen'
@@ -1100,7 +1100,7 @@ $LANG28 = array(
     49 => 'Admin Ruhm&auml;',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online P&auml;iv&auml;t',
-    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'rekiste&ouml;rityi',
     54 => 'Joukko Poisto',
     55 => 'T&auml;m&auml; toimii vain jos sinulla on <code>$_CONF[\'lastlogin\'] = true;</code> config.php tiedostossa',
@@ -1247,7 +1247,7 @@ $LANG32 = array(
     7 => 'Laajennus jonka asentamista yrit&auml;t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep&auml;onnistui',
     9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="http://www.gllabs.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
-    10 => '<br><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br><br>',
+    10 => '<br' . XHTML . '><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis&auml;tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p&auml;ivitt&auml;&auml;ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime&auml; ei ole l&auml;hetetty plugineditor()',
     13 => 'Laajennusten muokkain',
@@ -1507,7 +1507,7 @@ $MESSAGE = array(
     74 => 'Pingback L&auml;hetetty.',
     75 => 'Paluuviitteet t&auml;ytyy l&auml;hett&auml;&auml; k&auml;ytt&auml;m&auml;ll&auml; POST requestia.',
     76 => 'Haluatko varmasti poistaa t&auml;m&auml;n?',
-    77 => 'Varoitus:<br>Olet asettanut oletukseksi UTF-8 Merkist&ouml;n. Mutta serverisi ei tue t&auml;t&auml;. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkist&ouml;/Kieli.',
+    77 => 'Varoitus:<br' . XHTML . '>Olet asettanut oletukseksi UTF-8 Merkist&ouml;n. Mutta serverisi ei tue t&auml;t&auml;. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkist&ouml;/Kieli.',
     78 => 'Varmista ett&auml; s&auml;hk&ouml;postiosoite ja vahvistus s&auml;hk&ouml;postiosoite ovat samat.',
     79 => 'Sivu jota yrit&auml;t avata liittyy toimintoon jota t&auml;ll&auml; sivustolla ei ole en&auml;&auml;.',
     80 => 'Lis&auml;osa joka loi t&auml;m&auml;n sy&ouml;tteen ei ole en&auml;&auml; toiminnassa. Et voi muokata t&auml;t&auml; sy&ouml;tett&auml; ennenkuin ota lis&auml;osan uudestaan k&auml;ytt&ouml;&ouml;n.',
@@ -1714,7 +1714,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',

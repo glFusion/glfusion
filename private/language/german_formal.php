@@ -466,7 +466,7 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Sind Sie sicher, dass Sie Ihr Remote-Konto entfernen möchten?<br>Sie benötigen dazu Ihr aktuelles Passwort Ihres Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Sind Sie sicher, dass Sie Ihr Remote-Konto entfernen möchten?<br' . XHTML . '>Sie benötigen dazu Ihr aktuelles Passwort Ihres Lokalen-Kontos, um den Vorgang abzuschließen.'
 );
 
 ###############################################################################
