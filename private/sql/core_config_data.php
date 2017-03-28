@@ -2777,7 +2777,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'date',
-    	'default_value' => 'l, F d Y @ h:i A T',
+    	'default_value' => 'l, F d Y @ h:i a',
     	'type' => 'text',
     	'subgroup' => 6,
     	'fieldset' => 2,
@@ -2788,7 +2788,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'daytime',
-    	'default_value' => 'm/d h:iA',
+    	'default_value' => 'm/d/Y h:i a',
     	'type' => 'text',
     	'subgroup' => 6,
     	'fieldset' => 2,
@@ -2821,7 +2821,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'timeonly',
-    	'default_value' => 'H:iA',
+    	'default_value' => 'H:i',
     	'type' => 'text',
     	'subgroup' => 6,
     	'fieldset' => 2,
