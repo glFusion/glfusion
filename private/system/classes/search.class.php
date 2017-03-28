@@ -759,7 +759,7 @@ class Search {
      */
     function searchFormatCallBack($preSort, $row)
     {
-        global $_CONF, $_USER;
+        global $_CONF, $_USER, $LANG21;
 
         $dt = new Date('now',$_USER['tzid']);
 
@@ -785,7 +785,7 @@ class Search {
                 $row['url'] = COM_buildUrl($row['url']);
 
             if ( $row['title'] == '' ) {
-                $row['title'] = $row[SQL_TITLE];
+                $row['title'] = $LANG21[61];
             }
 
             $row['title'] = $row['title']; // $this->_shortenText($this->_query, $row['title'], 6);

@@ -479,6 +479,7 @@ function INSTALLER_install($A)
     // run any post install routines
     $postInstallFunction = 'plugin_postinstall_'.$plugin['name'];
     if ( function_exists($postInstallFunction) ) {
+        COM_errorLog("AutoInstall: Running post installation routine.");
         $postInstallFunction();
     } else {
         COM_errorLog("AutoInstall: No post installation routine found.");

@@ -115,6 +115,15 @@ function _checkEnvironment()
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
+    $st = ini_get('short_open_tag');
+    $T->set_var('item','short_open_tag');
+    $T->set_var('status',$st == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+    $T->set_var('class',$st == 1 ? 'tm-fail' : 'tm-pass');
+    $T->set_var('recommended',$LANG_ENVCHK['off']);
+    $T->set_var('notes',$LANG_ENVCHK['short_open_tags']);
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('env','envs',true);
+    $classCounter++;
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
