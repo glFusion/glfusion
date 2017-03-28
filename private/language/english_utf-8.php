@@ -2479,7 +2479,7 @@ $LANG_ENVCHK = array(
     'upload_max_filesize'       => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'xml_extension'             => 'XML Extension',
     'zlib_extension'            => 'zlib Extension',
-    'short_open_tags'           => 'PHP\'s <b>short_open_tags</b> should be off.',
+    'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
 );
 
 ###############################################################################
