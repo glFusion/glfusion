@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum: Removed all hard coded date formats - now use glFusion data formats
   - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
   - New 'Be the first to comment' message when no comments exist
   - Update OAuth library to v1.163

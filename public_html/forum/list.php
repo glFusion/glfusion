@@ -3,10 +3,8 @@
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
 // | list.php                                                                 |
-// |                                                                          |
-// | Message Lists                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2014 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -129,9 +127,9 @@ function FF_newPosts($forum = 0)
             $displayrecs++;
 
             $dt->setTimestamp($P['date']);
-            $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $firstdate = $dt->format($_CONF['date'],true);
             $dt->setTimestamp($P['lastupdated']);
-            $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $lastdate = $dt->format($_CONF['date'],true);
 
             if ($P['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -170,7 +168,7 @@ function FF_newPosts($forum = 0)
             $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
             $dt->setTimestamp($P['date']);
-            $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $tdate = $dt->format($_CONF['date'],true);
 
             $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,
@@ -380,9 +378,9 @@ function FF_lastx()
         $displayrecs++;
 
         $dt->setTimestamp($P['date']);
-        $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+        $firstdate = $dt->format($_CONF['date'],true);
         $dt->setTimestamp($P['lastupdated']);
-        $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+        $lastdate = $dt->format($_CONF['date'],true);
 
         if ($P['uid'] > 1) {
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -423,7 +421,7 @@ function FF_lastx()
         $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject'],ENT_QUOTES,COM_getEncodingt()) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
         $dt->setTimestamp($P['date']);
-        $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+        $tdate = $dt->format($_CONF['date'],true);
 
         $data_arr[] = array('forum'   => $P['forum_name'],
                             'subject' => $topiclink,
@@ -486,7 +484,7 @@ function _ff_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         case 'date':
         case 'lastupdated' :
             $dt->setTimestamp($fieldvalue);
-            $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $retval = $dt->format($_CONF['date'],true);
             break;
         case 'subject':
             $testText        = FF_formatTextBlock($A['comment'],'text','text',$A['status']);

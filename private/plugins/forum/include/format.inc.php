@@ -480,7 +480,7 @@ function gfm_getoutput( $id ) {
     $A['comment'] = _ff_FormatForEmail( $A['comment'], $A['postmode'] );
     $notifymsg = sprintf($LANG_GF02['msg27'],'<a href="'.$_CONF['site_url'].'/forum/notify.php">'.$_CONF['site_url'].'/forum/notify.php</a>');
     $dt->setTimestamp($A['date']);
-    $date = $dt->format('F d Y @ h:i a');
+    $date = $dt->format($_CONF['date'],true);
     if ($A['pid'] == '0') {
         $postid = $A['id'];
     } else {

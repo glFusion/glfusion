@@ -164,6 +164,11 @@ function forum_upgrade() {
         case '3.3.2' :
             DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
 
+        case '3.3.3' :
+            $c = config::get_instance();
+            $c->del('default_Datetime_format','forum');
+            $c->del('default_Topic_Datetime_format','forum');
+
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
