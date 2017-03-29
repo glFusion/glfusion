@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion date/time handling library.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2015 by the following authors:                        |
+// | Copyright (C) 2011-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // |                                                                          |
@@ -76,6 +76,13 @@ class Date extends DateTime
     protected $_tz;
 
     /**
+     * Holding place for the initial user timezone
+     *
+     * @var     string
+     */
+    protected $_user_time_zone;
+
+    /**
      * Constructor.
      *
      * @param   string  String in a format accepted by strtotime(), defaults to "now".
@@ -85,6 +92,12 @@ class Date extends DateTime
      */
     public function __construct($date = 'now', $tz = null)
     {
+        if ( $tz == null ) {
+            $this->_user_time_zone = 'UTC';
+        } else {
+            $this->_user_time_zone = $tz;
+        }
+
         // Create a base GMT and a server time zone object
         if (empty(self::$gmt) || empty(self::$stz)) {
             self::$gmt = new DateTimeZone('GMT');
@@ -307,11 +320,13 @@ class Date extends DateTime
      */
     public function isToday()
     {
-        $now = time();
 
+        @date_default_timezone_set($this->_user_time_zone);
+        $now = time();
         $year  = date('Y',$now);
         $month = date('m',$now);
         $day   = date('d',$now);
+        @date_default_timezone_set('UTC');
 
         if ( (int) $this->year == (int) $year && (int) $this->month == (int) $month
             && (int) $this->day == (int) $day ) {
@@ -368,6 +383,12 @@ class Date extends DateTime
      */
     public function setTimezone($tz)
     {
+if ( $tz == null ) {
+    $this->_user_time_zone = 'UTC';
+} else {
+    $this->_user_time_zone = $tz;
+}
+
         $this->_tz = $tz;
         return parent::setTimezone($tz);
     }
