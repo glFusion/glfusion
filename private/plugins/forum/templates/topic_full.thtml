@@ -211,13 +211,17 @@
 										</div>
 									</div>
 								</div>
-
-								<h4 class="uk-margin-bottom-remove">
+{!if user_level}
+  							<div class="uk-text-muted uk-text-small">
+  								{user_level}<br>
+  								{user_levelname}
+  							</div>
+{!endif}
+								<h4 class="uk-margin-bottom-remove uk-margin-small-top">
 									<a href="{profilelink}" class="authorname">
 										<b>{user_name}</b>
 									</a>
 								</h4>
-								<a id="18270"></a>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
 									{magical_image}

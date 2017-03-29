@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Forum: Added missing forum rankings to the topic view
   - Forum: Removed all hard coded date formats - now use glFusion data formats
   - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
   - New 'Be the first to comment' message when no comments exist
