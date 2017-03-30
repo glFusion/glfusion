@@ -84,6 +84,9 @@ if ( $_CONF['loginrequired'] == 1 ) {
     $_FF_CONF['registration_required'] = 1;
 }
 
+$_FF_CONF['default_Datetime_format'] = $_CONF['date'];
+$_FF_CONF['default_Topic_Datetime_format'] = $_CONF['date'];
+
 $FF_userprefs['topicsperpage']  = isset($_FF_CONF['show_topics_perpage']) ? $_FF_CONF['show_topics_perpage'] : 10;
 $FF_userprefs['postsperpage']   = isset($_FF_CONF['show_posts_perpage']) ? $_FF_CONF['show_posts_perpage'] : 10;
 $FF_userprefs['showiframe']     = isset($_FF_CONF['show_topicreview']) ? $_FF_CONF['show_topicreview'] : true;
@@ -946,7 +949,7 @@ function phpblock_forum_newposts() {
                     $date = $dt->format($dt->getUserFormat(),true);
                     $block->set_var ('date', $date);
                 } else {
-                    $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+                    $tdate = $dt->format($_CONF['date'],true);
                     $block->set_var ('date', $tdate);
                 }
 
@@ -974,6 +977,7 @@ function phpblock_forum_newposts() {
         return;
     }
 }
+
 function stripBBCode($text_to_search) {
 	// Replace paragraph tags
 	$pattern = '[p]';
@@ -992,7 +996,6 @@ function stripBBCode($text_to_search) {
 	$replace = '</span>';
 	$replace = '</i>';
 	$text_to_search = str_replace($pattern, $replace, $text_to_search);
-
 
 	// Replace everything else with nothing
 	$pattern = '|[[\/\!]*?[^\[\]]*?]|si';
@@ -1103,9 +1106,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             $fullsubject = "{$A['subject']}\n{$LANG_GF01['POSTEDBY']}:{$A['name']}{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}";
             $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['cb_subject_size'], '...',false );
             $dt = new Date($A['date'],$_USER['tzid']);
-            $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $firstdate = $dt->format($_CONF['daytime'],true);
             $dt = new Date($A['lastupdated'],$_USER['tzid']);
-            $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $lastdate = $dt->format($_CONF['daytime'],true);
 
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . $A['name'].', ';
             $topicinfo .= "{$firstdate}&lt;br/&gt;{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}&lt;br/&gt;";
@@ -1131,7 +1134,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $shortComment = trim($shortComment).$tailString;
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
-$lastpostinfo = stripBBCode($lastpostinfo);
+                $lastpostinfo = stripBBCode($lastpostinfo);
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1160,9 +1163,8 @@ $lastpostinfo = stripBBCode($lastpostinfo);
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-//$shortComment = stripBBCode($shortComment);
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
-$lastpostinfo = stripBBCode($lastpostinfo);
+                $lastpostinfo = stripBBCode($lastpostinfo);
             }
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var (array(

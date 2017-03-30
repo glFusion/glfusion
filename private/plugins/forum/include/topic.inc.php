@@ -250,7 +250,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     if ($_FF_CONF['allow_user_dateformat']) {
         $date = $dt->format($dt->getUserFormat(),true);
     } else {
-        $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
+        $date = $dt->format($_CONF['date'],true);
     }
     $topictemplate->set_var ('posted_date', $date);
 
@@ -418,7 +418,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     }
 
     if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited']  ) && ($showtopic['lastedited'] != '' ) ) {
-        $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
+        $ludate = $dt_lu->format($_CONF['date'],true);
         $topictemplate->set_var('last_edited', $ludate);
     } else {
         $topictemplate->unset_var('last_edited');

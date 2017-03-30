@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display a formatted listing of users                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -102,7 +102,7 @@ function _ff_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
         case 'regdate':
             $phpdate = strtotime( $fieldvalue );
             $dt = new Date($phpdate,$_USER['tzid']);
-            $retval = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $retval = $dt->format($_CONF['date'],true);
             break;
         default:
             $retval = $fieldvalue;
@@ -200,9 +200,9 @@ if ($op == "last10posts") {
             $displayrecs++;
 
             $dt->setTimestamp($P['date']);
-            $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $firstdate = $dt->format($_CONF['date'],true);
             $dt->setTimestamp($P['lastupdated']);
-            $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $lastdate = $dt->format($_CONF['date'],true);
 
             if ($P['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -241,7 +241,7 @@ if ($op == "last10posts") {
             $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
             $dt->setTimestamp($P['date']);
-            $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $tdate = $dt->format($_CONF['date'],true);
 
             $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,

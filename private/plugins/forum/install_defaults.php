@@ -105,8 +105,8 @@ $_FF_DEFAULT['imgset']                  = $_CONF['layout_url'] .'/forum/image_se
 $_FF_DEFAULT['imgset_path']             = $_CONF['path_layout'] .'/forum/image_set';
 $_FF_DEFAULT['autoimagetype']           = true;
 $_FF_DEFAULT['image_type_override']     = 'gif';
-$_FF_DEFAULT['default_Datetime_format'] = 'm/d/y h:i a';
-$_FF_DEFAULT['default_Topic_Datetime_format'] = 'M d Y H:i a';
+//$_FF_DEFAULT['default_Datetime_format'] = 'm/d/y h:i a';
+//$_FF_DEFAULT['default_Topic_Datetime_format'] = 'M d Y H:i a';
 $_FF_DEFAULT['contentinfo_numchars']    = 256;
 $_FF_DEFAULT['linkinfo_width']          = 40;
 $_FF_DEFAULT['quoteformat'] = "[QUOTE][u]Quote by: %s[/u][p]%s[/p][/QUOTE]";
@@ -369,10 +369,10 @@ function plugin_initconfig_forum()
                 0, 0, 0, 180, true, 'forum');
         $c->add('show_moderators', $_FF_DEFAULT['show_moderators'], 'select',
                 0, 0, 0, 190, true, 'forum');
-        $c->add('default_Datetime_format', $_FF_DEFAULT['default_Datetime_format'], 'text',
-                0, 0, 0, 200, true, 'forum');
-        $c->add('default_Topic_Datetime_format', $_FF_DEFAULT['default_Topic_Datetime_format'], 'text',
-                0, 0, 0, 210, true, 'forum');
+//        $c->add('default_Datetime_format', $_FF_DEFAULT['default_Datetime_format'], 'text',
+//                0, 0, 0, 200, true, 'forum');
+//        $c->add('default_Topic_Datetime_format', $_FF_DEFAULT['default_Topic_Datetime_format'], 'text',
+//                0, 0, 0, 210, true, 'forum');
         $c->add('contentinfo_numchars', $_FF_DEFAULT['contentinfo_numchars'], 'text',
                 0, 0, 0, 220, true, 'forum');
         $c->add('linkinfo_width', $_FF_DEFAULT['linkinfo_width'], 'text',
