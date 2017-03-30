@@ -105,9 +105,19 @@ function FF_newPosts($forum = 0)
     $direction  = "DESC";
 
     if ($_FF_CONF['enable_user_rating_system']) {
-        $sql = "SELECT * FROM {$_TABLES['ff_topic']} a LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id WHERE (pid=0) AND b.rating_view <= ".$rating." $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
+        $sql = "SELECT * FROM {$_TABLES['ff_topic']} a
+                LEFT JOIN (SELECT topic, time, uid as user FROM {$_TABLES['ff_log']} where uid=".(int)$_USER['uid'].") as l on a.id=l.topic
+                LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id
+                WHERE (pid=0) AND b.rating_view <= ".$rating." $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0
+                and (l.topic IS NULL OR a.lastupdated > l.time)
+                ORDER BY $orderby $direction";
     } else {
-        $sql = "SELECT * FROM {$_TABLES['ff_topic']} a LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
+        $sql = "SELECT * FROM {$_TABLES['ff_topic']} a
+                LEFT JOIN (SELECT topic, time, uid as user FROM {$_TABLES['ff_log']} WHERE uid=".(int)$_USER['uid'].") as l on a.id=l.topic
+                LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id
+                WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0
+                and (l.topic IS NULL OR a.lastupdated > l.time)
+                ORDER BY $orderby $direction";
     }
 
     $result = DB_query($sql);
@@ -117,67 +127,65 @@ function FF_newPosts($forum = 0)
     $displayrecs = 0;
     for ($i = 1; $i <= $nrows; $i++) {
         $P = DB_fetchArray($result);
-        $userlogtime = DB_getItem($_TABLES['ff_log'],"time", "uid=".(int)$_USER['uid']." AND topic=".(int)$P['id']);
-        if ($userlogtime == NULL OR $P['lastupdated'] > $userlogtime) {
-            if ($_FF_CONF['use_censor']) {
-                $P['subject'] = COM_checkWords($P['subject']);
-                $P['comment'] = COM_checkWords($P['comment']);
-            }
-            $topic_id = $P['id'];
-            $displayrecs++;
 
-            $dt->setTimestamp($P['date']);
-            $firstdate = $dt->format($_CONF['date'],true);
-            $dt->setTimestamp($P['lastupdated']);
-            $lastdate = $dt->format($_CONF['date'],true);
+        if ($_FF_CONF['use_censor']) {
+            $P['subject'] = COM_checkWords($P['subject']);
+            $P['comment'] = COM_checkWords($P['comment']);
+        }
+        $topic_id = $P['id'];
+        $displayrecs++;
 
-            if ($P['uid'] > 1) {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+        $dt->setTimestamp($P['date']);
+        $firstdate = $dt->format($_CONF['date'],true);
+        $dt->setTimestamp($P['lastupdated']);
+        $lastdate = $dt->format($_CONF['date'],true);
+
+        if ($P['uid'] > 1) {
+            $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+        } else {
+            $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
+        }
+
+        $topicinfo .= "{$firstdate}<br/>{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br/>";
+
+        if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
+            $lastid = $P['id'];
+            $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
+            $testText = strip_tags($testText);
+            $html2txt = new html2text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
+        } else {
+            $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['last_reply_rec']);
+            $B = DB_fetchArray($qlreply);
+            $lastid = $B['id'];
+            $lastcomment = $B['comment'];
+            $P['date'] = $B['date'];
+            if ($B['uid'] > 1) {
+                $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
             } else {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
+                $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
             }
+            $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
+            $testText = strip_tags($testText);
+            $html2txt = new html2text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
+        }
+        $link = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . @htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
 
-            $topicinfo .= "{$firstdate}<br/>{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br/>";
+        $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
-            if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
-                $lastid = $P['id'];
-                $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
-                $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
-                $testText = trim($html2txt->get_text());
-                $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
-            } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['last_reply_rec']);
-                $B = DB_fetchArray($qlreply);
-                $lastid = $B['id'];
-                $lastcomment = $B['comment'];
-                $P['date'] = $B['date'];
-                if ($B['uid'] > 1) {
-                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
-                } else {
-                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
-                }
-                $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
-                $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
-                $testText = trim($html2txt->get_text());
-                $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
-            }
-            $link = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . @htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
+        $dt->setTimestamp($P['date']);
+        $tdate = $dt->format($_CONF['date'],true);
 
-            $topiclink = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . @htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
+        $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
+                            'subject' => $topiclink,
+                            'date'    => $link . $tdate . '</a>'
+                            );
 
-            $dt->setTimestamp($P['date']);
-            $tdate = $dt->format($_CONF['date'],true);
-
-            $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
-                                'subject' => $topiclink,
-                                'date'    => $link . $tdate . '</a>'
-                                );
-
-            if ($displayrecs >= 100) {
-                break;
-            }
+        if ($displayrecs >= 100) {
+            break;
         }
     }
 
