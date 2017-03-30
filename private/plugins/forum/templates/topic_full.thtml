@@ -225,12 +225,22 @@
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
 									{magical_image}
-									{vote_html}<br>
+									<div>{vote_html}</div>
 {!if regdate}
-									{$LANG_GF01[REGISTERED]}:: {regdate}<br>
+									<div>{$LANG_GF01[REGISTERED]}:: {regdate}</div>
 {!endif}
 {!if numposts}
-									{$LANG_GF01[POSTS]}: {numposts}<br>
+									<div>{$LANG_GF01[POSTS]}: {numposts}</div>
+{!endif}
+								{grade}
+{!if location}
+								<div><strong>{$LANG_GF04[label_location]}: </strong>{location}</div>
+{!endif}
+{!if ipaddress}
+								<div>
+								  {ipaddress}<br>
+  							  {remote_ip}
+  						  </div>
 {!endif}
 								</div>
 							</div>
