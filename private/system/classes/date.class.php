@@ -383,12 +383,11 @@ class Date extends DateTime
      */
     public function setTimezone($tz)
     {
-if ( $tz == null ) {
-    $this->_user_time_zone = 'UTC';
-} else {
-    $this->_user_time_zone = $tz;
-}
-
+        if ( $tz == null ) {
+            $this->_user_time_zone = 'UTC';
+        } else {
+            $this->_user_time_zone = $tz;
+        }
         $this->_tz = $tz;
         return parent::setTimezone($tz);
     }
