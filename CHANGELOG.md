@@ -1,4 +1,5 @@
 ## v1.6.6 (unreleased)
+  - Add Justify Block to the CKeditor toolbar
   - Forum: Significant optimizaton on the New Post query - builds the list with a single query
   - Forum: Added missing forum rankings to the topic view
   - Forum: Removed all hard coded date formats - now use glFusion data formats

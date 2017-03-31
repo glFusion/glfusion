@@ -10,7 +10,7 @@ var tbitems = {
 		'links'         : ['Link', 'Unlink'],
 		'basicstyles'   : ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
 		'insert'        : ['Image', 'Mediagallery', 'Youtube2', 'Vimeo','Table', 'HorizontalRule', 'SpecialChar'],
-		'paragraph'     : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+		'paragraph'     : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 		'styles'        : ['Styles', 'Format', 'Font', 'FontSize'],
 		'colors'        : ['TextColor', 'BGColor'],
 		'tools'         : ['Maximize', 'ShowBlocks'],
