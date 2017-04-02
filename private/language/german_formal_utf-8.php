@@ -467,7 +467,7 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br' . XHTML . '>Du benötigst dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigst dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
 );
 
 ###############################################################################
@@ -1870,7 +1870,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1945,7 +1945,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1999,7 +1999,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
