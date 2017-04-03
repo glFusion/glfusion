@@ -3,7 +3,7 @@
   - Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
   - Fixed issue where CAPTCHA reload did not work properly for languages other than english
   - Add Justify Block to the CKeditor toolbar
-  - Forum: Significant optimizaton on the New Post query - builds the list with a single query
+  - Forum: Significant optimization on the New Post query - builds the list with a single query
   - Forum: Added missing forum rankings to the topic view
   - Forum: Removed all hard coded date formats - now use glFusion data formats
   - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
