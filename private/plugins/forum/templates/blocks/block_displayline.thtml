@@ -5,7 +5,12 @@
 	</h4>
 	&nbsp;
 	<span class="uk-text-small">
-	<b>{LANG_BY}</b>&nbsp;{profilelink}{user_name}</a>
+	<b>{LANG_BY}</b>&nbsp;
+	{profilelink}
+	{user_name}
+{!if profilelink}
+	</a>
+{!endif}
 	</span>
 	<br />&nbsp;
 	<span class="uk-text-small">
