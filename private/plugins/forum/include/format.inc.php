@@ -407,7 +407,12 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
     $sig    = '';
 
     if ( $_FF_CONF['bbcode_signature'] && $signature != '') {
-        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text').'</div><div style="clear:both;"></div>';
+        if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+            $exclude = array('img');
+        } else {
+            $exclude = array();
+        }
+        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text',array(),array(), $exclude).'</div><div style="clear:both;"></div>';
     } else {
         if (!empty ($tagline)) {
             if ( $postmode == 'html' ) {

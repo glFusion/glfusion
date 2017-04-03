@@ -1,4 +1,6 @@
 ## v1.6.6 (unreleased)
+  - Forum: Enforce Allow IMG bbcode in signatures as well as forum posts
+  - Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
   - Fixed issue where CAPTCHA reload did not work properly for languages other than english
   - Add Justify Block to the CKeditor toolbar
   - Forum: Significant optimizaton on the New Post query - builds the list with a single query

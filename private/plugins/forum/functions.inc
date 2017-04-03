@@ -1850,10 +1850,20 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file ('signature','signature_profile.thtml');
 
+    if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+        $exclude = array('img');
+        $img_tag = false;
+        $T->unset_var('img_tag_allowed');
+    } else {
+        $exclude = array();
+        $T->set_var('img_tag_allowed',true);
+    }
+
     $T->set_var(array(
         'signature'   => $signature,
-        'preview_signature' => BBC_formatTextBlock($signature,'text'),
+        'preview_signature' => BBC_formatTextBlock($signature,'text',array(),array(), $exclude),
     ));
+
     $error_message = '';
     if ( count($errors) > 0 ) {
         foreach($errors AS $error) {
