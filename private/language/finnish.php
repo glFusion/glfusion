@@ -1238,7 +1238,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j‰rjestelm‰‰si. K‰yt‰ vain <a href="http://www.gllabs.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l‰hetetyt laajennukset usealla k‰yttˆj‰rjestelm‰ll‰. On t‰rke‰‰ ymm‰rt‰‰ laajennuksien asentamisen vaativan joidenkin k‰yttˆj‰rjestelmi‰k‰skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k‰ytt‰ji‰ laajennuksista, emme takaa asennuksen onnistumista emmek‰ ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n‰it‰ omalla vastuullasi. Varovaisille; k‰sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
+    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j‰rjestelm‰‰si. K‰yt‰ vain <a href="https://www.glfusion.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l‰hetetyt laajennukset usealla k‰yttˆj‰rjestelm‰ll‰. On t‰rke‰‰ ymm‰rt‰‰ laajennuksien asentamisen vaativan joidenkin k‰yttˆj‰rjestelmi‰k‰skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k‰ytt‰ji‰ laajennuksista, emme takaa asennuksen onnistumista emmek‰ ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n‰it‰ omalla vastuullasi. Varovaisille; k‰sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
     2 => 'Huomioi laajennuksia asentaessasi',
     3 => 'Laajennuksien asentamislomake',
     4 => 'Laajennustiedosto',
@@ -1246,7 +1246,7 @@ $LANG32 = array(
     6 => 'Varoitus: laajennus on jo asennettu!',
     7 => 'Laajennus jonka asentamista yrit‰t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep‰onnistui',
-    9 => 'Laajennus vaatii uudemman version glFusionista. P‰ivit‰ <a href="http://www.gllabs.org">glFusion-j‰rjestelm‰si</a> tai hanki uudempi versio laajennuksesta.',
+    9 => 'Laajennus vaatii uudemman version glFusionista. P‰ivit‰ <a href="https://www.glfusion.org">glFusion-j‰rjestelm‰si</a> tai hanki uudempi versio laajennuksesta.',
     10 => '<br' . XHTML . '><b>Laajennuksia ei ole t‰ll‰ hetkell‰ asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis‰tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p‰ivitt‰‰ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime‰ ei ole l‰hetetty plugineditor()',

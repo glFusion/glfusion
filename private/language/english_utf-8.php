@@ -1237,7 +1237,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.gllabs.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not guarantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
+    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="https://www.glfusion.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not guarantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
     2 => 'Plugin Installation Disclaimer',
     3 => 'Plugin Installation Form',
     4 => 'Plugin File',
@@ -1245,7 +1245,7 @@ $LANG32 = array(
     6 => 'Warning: Plugin Already Installed!',
     7 => 'The plugin you are trying to install already exists.  Please delete the plugin before re-installing it',
     8 => 'Plugin Compatibility Check Failed',
-    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="http://www.gllabs.org">glFusion</a> or get a newer version of the plugin.',
+    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="https://www.glfusion.org">glFusion</a> or get a newer version of the plugin.',
     10 => '<br/><b>There are no plugins currently installed.</b><br/><br/>',
     11 => 'To enable or disable installed plugins, click the associated checkbox in the Control column.  Plugins that have been uploaded to your system may be installed by clicking the Install icon in the Control column.  To update a plugin, click the Update icon that is displayed in the Version column.  To uninstall a plugin, click the icon in the UnPlug column.',
     12 => 'No plugin name provided to plugineditor()',

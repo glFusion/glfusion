@@ -1238,7 +1238,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="http://www.gllabs.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
+    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="https://www.glfusion.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
     2 => 'Huomioi laajennuksia asentaessasi',
     3 => 'Laajennuksien asentamislomake',
     4 => 'Laajennustiedosto',
@@ -1246,7 +1246,7 @@ $LANG32 = array(
     6 => 'Varoitus: laajennus on jo asennettu!',
     7 => 'Laajennus jonka asentamista yrit&auml;t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep&auml;onnistui',
-    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="http://www.gllabs.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
+    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="https://www.glfusion.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
     10 => '<br' . XHTML . '><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis&auml;tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p&auml;ivitt&auml;&auml;ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime&auml; ei ole l&auml;hetetty plugineditor()',

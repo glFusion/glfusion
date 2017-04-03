@@ -1234,7 +1234,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'A instalação de plugins pode danificar a instalação do glFusion e, possivelmente, o sistema. É importante que apenas instale plugins descarregados do <a href="http://www.gllabs.org" target="_blank">Site glFusion</a> dado que nós testamos todos os plugins enviados para o nosso site nos mais variados sistemas operativos. É importante que perceba que a instalação de plugin\'s requere a execução de comandos do sistema que lhe podem trazer problemas de segurança se esses plugins não vierem de sites fidedignos. Para além deste aviso, nós não garantimos o sucesso da instalação de plugins nem podemos ser responsabilizados pelos danos causados pela instalação de plugin\'s. Por outras palavras, instale à sua responsabilidade. Por prudencia, recomendações de como instalar um plugin manualmente vem incluidas com cada plugin.',
+    1 => 'A instalação de plugins pode danificar a instalação do glFusion e, possivelmente, o sistema. É importante que apenas instale plugins descarregados do <a href="https://www.glfusion.org" target="_blank">Site glFusion</a> dado que nós testamos todos os plugins enviados para o nosso site nos mais variados sistemas operativos. É importante que perceba que a instalação de plugin\'s requere a execução de comandos do sistema que lhe podem trazer problemas de segurança se esses plugins não vierem de sites fidedignos. Para além deste aviso, nós não garantimos o sucesso da instalação de plugins nem podemos ser responsabilizados pelos danos causados pela instalação de plugin\'s. Por outras palavras, instale à sua responsabilidade. Por prudencia, recomendações de como instalar um plugin manualmente vem incluidas com cada plugin.',
     2 => 'Responsabilidade da Instalação de Plug-in',
     3 => 'Formulário de instalação de Plug-in',
     4 => 'Ficheiro do Plug-in',
@@ -1242,7 +1242,7 @@ $LANG32 = array(
     6 => 'Aviso: o Plug-in já está instalado!',
     7 => 'O plug-in que está a tentar instalar já existe. Tem de apagar antes de reinstalar',
     8 => 'Falhou o teste de compatibilidade do Plugin',
-    9 => 'Este plugin necessita de uma versão mais recente do glFusion. Faça a actualização da sua cópia do <a href="http://www.gllabs.org">glFusion</a> ou procure outra versão do plug-in.',
+    9 => 'Este plugin necessita de uma versão mais recente do glFusion. Faça a actualização da sua cópia do <a href="https://www.glfusion.org">glFusion</a> ou procure outra versão do plug-in.',
     10 => '<br' . XHTML . '><b>Não há plugins instalados.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Para modificar ou apagar um plug-in, clique no número desse plugin. Para saber maia sobre um plug-in, clique no nome do plug-in e será redireccionado para o site desse plugin. Para instalar ou actualizar um plug-in consulte a sua documentação.',
     12 => 'nenhum nome de plugin enviado à função plugineditor()',

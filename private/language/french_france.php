@@ -1234,7 +1234,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installer des plugin peut causer des domages à glFusion.  Il est important de n\'installer que des plugins provenant de <a href="http://www.gllabs.org" target="_blank">glFusion</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
+    1 => 'Installer des plugin peut causer des domages à glFusion.  Il est important de n\'installer que des plugins provenant de <a href="https://www.glfusion.org" target="_blank">glFusion</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
     2 => 'Instructions d\'installation d\'un plugin',
     3 => 'Formulaire d\'installation d\'un plugin',
     4 => 'Fichier de plugin',
@@ -1242,7 +1242,7 @@ $LANG32 = array(
     6 => 'Attention: plugin déjà installé!',
     7 => 'Le plugin que vous essayer d\'installer existe déjà.  Veuillez supprimer le plugin avant de le réinstaller.',
     8 => 'Test de compatibilité du plugin échoué',
-    9 => 'Ce plugin requiert une version plus récente de glFusion. Vous pouvez mettre à jour votre <a href="http://www.gllabs.org">glFusion</a> ou obtenir une autre version du plugin.',
+    9 => 'Ce plugin requiert une version plus récente de glFusion. Vous pouvez mettre à jour votre <a href="https://www.glfusion.org">glFusion</a> ou obtenir une autre version du plugin.',
     10 => '<br' . XHTML . '><b>Aucun plugin n\'est actuellement installé.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Cliquez sur le numéro du plugin pour le modifier ou le supprimer. Pour en savoir d\'avantage sur les plugins, cliquez sur le nom du plugin et vous serez dirigé vers le site web du plugin. Pour installer ou mettre à jour un plugin veuillez vous référer à la documentation du plugin.',
     12 => 'Aucun nom de plugin n\'a été passé à plugineditor()',

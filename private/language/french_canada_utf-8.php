@@ -1239,7 +1239,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'L`installation de greffons pourraient éventuellement causer des dommages à votre installation de glFusion et, éventuellement, à votre système. Il est important que vous ne installer des plugins téléchargés à partir de la page d`accueil <a href="http://www.gllabs.org"> glFusion </a> que nous testons minutieusement tous les plugins soumises à notre site sur une variété de systèmes d`exploitation. Il est important que vous compreniez que le processus d`installation du plugin, il faudra l`exécution de quelques commandes de systèmes de fichiers qui pourraient conduire à des problèmes de sécurité en particulier si vous utilisez les plugins de sites tiers. Même avec cet avertissement, vous avez trouvé, nous ne vous garantissons pas le succès de toute l`installation nous ne sommes pas responsables des dommages causés par l`installation d`un plugin glFusion. En d`autres termes, installez à vos propres risques. Pour l`méfier, instructions sur la façon d`installer manuellement un plugin est inclus dans chaque pack de plugin.',
+    1 => 'L`installation de greffons pourraient éventuellement causer des dommages à votre installation de glFusion et, éventuellement, à votre système. Il est important que vous ne installer des plugins téléchargés à partir de la page d`accueil <a href="https://www.glfusion.org"> glFusion </a> que nous testons minutieusement tous les plugins soumises à notre site sur une variété de systèmes d`exploitation. Il est important que vous compreniez que le processus d`installation du plugin, il faudra l`exécution de quelques commandes de systèmes de fichiers qui pourraient conduire à des problèmes de sécurité en particulier si vous utilisez les plugins de sites tiers. Même avec cet avertissement, vous avez trouvé, nous ne vous garantissons pas le succès de toute l`installation nous ne sommes pas responsables des dommages causés par l`installation d`un plugin glFusion. En d`autres termes, installez à vos propres risques. Pour l`méfier, instructions sur la façon d`installer manuellement un plugin est inclus dans chaque pack de plugin.',
     2 => 'Plugin Installation Avertissement',
     3 => 'Formulaire d`installation Plugin',
     4 => 'Fichier Plugin',
@@ -1247,7 +1247,7 @@ $LANG32 = array(
     6 => 'Attention: Plugin déjà installé!',
     7 => 'Le plugin vous essayez d`installer existe déjà. S`il vous plaît supprimer le plugin avant de le réinstaller',
     8 => 'Plugin Vérification de la compatibilité a échoué',
-    9 => 'Ce plugin nécessite une version plus récente de glFusion. Soit mettre à jour votre copie de <a href="http://www.gllabs.org"> glFusion </a> ou obtenir une version plus récente du plugin.',
+    9 => 'Ce plugin nécessite une version plus récente de glFusion. Soit mettre à jour votre copie de <a href="https://www.glfusion.org"> glFusion </a> ou obtenir une version plus récente du plugin.',
     10 => '<br/><b>Il n`y a pas de plugins installés.</b><br/><br/>',
     11 => 'Pour activer ou désactiver les plugins installés, cliquez sur la case à cocher correspondante dans la colonne de contrôle. Plugins qui ont été téléchargées sur votre système peuvent être installés en cliquant sur l`icône d`installation dans la colonne de contrôle. Pour mettre à jour un plugin, cliquez sur l`icône de mise à jour qui est affiché dans la colonne Version. Pour désinstaller un plugin, cliquez sur l`icône dans la colonne UnPlug.',
     12 => 'Pas de nom du plugin fourni à l`éditeur de plug-in()',

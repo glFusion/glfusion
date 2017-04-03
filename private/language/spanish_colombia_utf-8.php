@@ -1236,7 +1236,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'La instalación de Extensiones puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instale Extensiones obtenidas de <a href="http://www.gllabs.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. También es importante que entiendas que la instalación de la Extensión requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación de la Extensión ni nos hacemos responsables por cualquier daño causado durante la instalación (<i>o posterior a la misma</i>). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Extensión.',
+    1 => 'La instalación de Extensiones puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instale Extensiones obtenidas de <a href="https://www.glfusion.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. También es importante que entiendas que la instalación de la Extensión requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación de la Extensión ni nos hacemos responsables por cualquier daño causado durante la instalación (<i>o posterior a la misma</i>). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Extensión.',
     2 => 'Advertencia de la instalación de la Extensión',
     3 => 'Formulario de instalación de la Extensión',
     4 => 'Archivo de la Extensión',
@@ -1244,7 +1244,7 @@ $LANG32 = array(
     6 => 'Advertencia: ¡La Extensión ya está instalada!',
     7 => 'La Extensión que intenta instalar ya existe. Borra la Extensión antes de reinstalarla.',
     8 => 'Falló la comprobación de compatibilidad de la Extensión',
-    9 => 'Esta Extensión requiere una versión más nueva de glFusion. Puede obtener una copia actualizada de <a href=http://www.gllabs.org>glFusion</a> o instalar otra versión de la Extensión.',
+    9 => 'Esta Extensión requiere una versión más nueva de glFusion. Puede obtener una copia actualizada de <a href=https://www.glfusion.org>glFusion</a> o instalar otra versión de la Extensión.',
     10 => '<br' . XHTML . '><b>No hay Extensiones instaladas.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Para habilitar o deshabilitar una Extensión, haz clic en la caja de chequeo correspondiente. Extensiones que han sido cargadas al sistema pueden ser instaladas haciendo clic en el icono Instalar en la columna de Control. Para actuaizar una Extensión, haz clic en el icono Actualizar de la columna versión. Para desinstalar una Extensión, haz clic en el icono: <img src="/layout//images/admin/delete.png" /> correspondiente.',
     12 => 'no se ha dado un nombre de Extensión a la función plugineditor()',
