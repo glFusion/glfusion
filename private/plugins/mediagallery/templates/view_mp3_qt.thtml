@@ -3,7 +3,7 @@
 {u_pic}
 </div>
 <div style="text-align:center;">
-<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" height="45" width="300">
+<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="//www.apple.com/qtactivex/qtplugin.cab" height="45" width="300">
 <param name="src" value="{movie}">
 <param name="autoplay" value="{autostart}">
 <param name="controller" value="true">
@@ -11,7 +11,7 @@
 <param name="kioskmode" value="1">
 <param name="scale" value="aspect">
 <param name="loop" value="false">
-<embed height="45" width="300" loop="false" src="{movie}" pluginspage="http://www.apple.com/quicktime/download/" type="video/quicktime" controller="true" autoplay="{autoplay}" autoref="true" kioskmode="1" scale="aspect"></embed>
+<embed height="45" width="300" loop="false" src="{movie}" pluginspage="//www.apple.com/quicktime/download/" type="video/quicktime" controller="true" autoplay="{autoplay}" autoref="true" kioskmode="1" scale="aspect"></embed>
 </object>
 </div>
 {# end {templatelocation} #}
