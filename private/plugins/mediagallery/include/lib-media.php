@@ -2190,6 +2190,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $outputHandle->addMeta('property','og:image:height',$raw_image_height);
     $outputHandle->addMeta('property','og:image:type',$media[$mediaObject]['mime_type']);
 
+    $shareImage = '';
+
     // look for twitter social site config
     if ( $media[$mediaObject]['media_type'] == 0 ) { // only for images
         $twitterSiteUser = '';
@@ -2207,10 +2209,11 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $imageDesc = (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '';
             $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($imageDesc,ENT_QUOTES,COM_getEncodingt()));
             $outputHandle->addMeta('property','twitter:image',$raw_image);
+            $shareImage = $raw_image;
         }
     }
 
-    $social_icons = SOC_getShareIcons();
+    $social_icons = SOC_getShareIcons($ptitle,'',$permalink,$shareImage,'mediagallery');
     $T->set_var('social_share',$social_icons);
 
     $getid3link = '';
