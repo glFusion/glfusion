@@ -3562,4 +3562,43 @@ function PLG_displayAdBlock($plugin, $counter)
     }
     return $retval;
 }
+
+/**
+* Allow plugins to add JavaScript to execute on page load for infinite scroll
+*
+* @return   string  JavaScript to include in afterPageLoad function
+* @since    glFusion v1.6.6
+*
+*/
+function PLG_isOnPageLoad()
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_isOnPageLoad_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ();
+        }
+    }
+    return $retval;
+}
+
+function PLG_replaceSocialShare($type='article',$title='',$url='',$desc='')
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_social_share_replacement_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ($type,$title,$url,$desc);
+            break; //first one wins!
+        }
+    }
+    return $retval;
+}
+
 ?>

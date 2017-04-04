@@ -36,6 +36,11 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
 {
     global $_CONF, $_TABLES, $LANG_SOCIAL;
 
+    $retval = '';
+
+    $retval = PLG_replaceSocialShare($type,$title,$itemUrl,$summary);
+    if ( $retval != '' ) return $retval;
+
     $replacementArray = array('%%t', '%%s', '%%u', '%%i');
 
     $retval = '';
