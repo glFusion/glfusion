@@ -1,5 +1,8 @@
 ## v1.6.6 (unreleased)
-  - Forum: Enforce Allow IMG bbcode in signatures as well as forum posts
+  - New Plugin APIs to social integrations - allow plugins to override default share buttons
+  - New Plugin API to infinite scroll - allow plugins to hook into new item load JS
+  - Media Gallery: Improved integrations to social share - pass meta data to social engine
+  - Forum: Enforce "Allow IMG bbcode" in signatures as well as forum posts
   - Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
   - Fixed issue where CAPTCHA reload did not work properly for languages other than english
   - Add Justify Block to the CKeditor toolbar
