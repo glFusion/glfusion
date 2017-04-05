@@ -289,8 +289,7 @@ $LANG04 = array(
     20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein',
     21 => 'Fehler',
     22 => "Registrieren bei {$_CONF['site_name']}!",
-    23 => "Indem Sie sich bei {$_CONF['site_name']} registrieren, können Sie Artikel und Kommentare unter ihrem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />
-\nÜbrigens wird Ihre E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
+    23 => "Indem Sie sich bei {$_CONF['site_name']} registrieren, können Sie Artikel und Kommentare unter ihrem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Ihre E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
     24 => 'Ihr Passwort wird Ihnen an die angegebene E-Mail Adresse gesendet.',
     25 => 'Passwort vergessen?',
     26 => 'Geben Sie <b>entweder</b> Ihren Benutzernamen <b>oder</b> Ihre E-Mail Adresse ein, mit der Sie sich registriert haben, und klicken Sie auf Passwort senden. Eine E-Mail mit einer Anleitung, wie Sie ein neues Passwort eingeben können, wird dann an die gespeicherte E-Mail Adresse gesendet.',
@@ -356,7 +355,7 @@ $LANG04 = array(
     86 => 'Alle Artikel und Kommentare von',
     87 => 'Ihr Benutzername',
     88 => "Jemand (höchstwahrscheinlich Sie selbst) hat ein neues Passwort für Ihre Konto \"%s\" auf {$_CONF['site_name']} <{$_CONF['site_url']}> angefordert.<br /><br />Wenn Sie tatsächlich ein neues Passwort benötigen, klicken Sie bitte auf den folgenden Link:<br /><br />",
-    89 => "Möchten Sie Ihr Passwort nicht ändern, so können Sie diese E-Mail einfach ignorieren (Ihr bisheriges Passwort bleibt dann unverändert gültig).\n\n",
+    89 => "Möchten Sie Ihr Passwort nicht ändern, so können Sie diese E-Mail einfach ignorieren (Ihr bisheriges Passwort bleibt dann unverändert gültig).",
     90 => 'Sie können hier jetzt ein neues Passwort für ihren Konto eingeben. Ihr altes Passwort bleibt noch solange gültig, bis Sie dieses Formular absenden.',
     91 => 'Neues Passwort',
     92 => 'Neues Passwort eingeben',
@@ -1427,7 +1426,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Netzwerk URL',
     'site_username' => 'Netzwerk Benutzername',
     'additional_html' => 'Zusätzliches HTML nach den "Folge mir" Knöpfen',
-    'saved_msg' => 'Verknüpfungen wurden gespeichert.'
+    'saved_msg' => 'Verknüpfungen wurden gespeichert.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
