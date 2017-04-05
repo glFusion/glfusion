@@ -246,13 +246,15 @@ class outputHandler {
 	 * @param  int      $priority   Load priority
 	 * @param  string   $mime       The mime type of the stylesheet, 'text/css'
 	 *                              used if no other type passed.
+	 * @param  boolean  $async      true - load script asynchronously
      *
 	 * @access public
 	 * @return nothing
 	 */
-    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
+    public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript',$async = false)
     {
         $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
+        if ( $async ) $link .= ' async';
         $link .= "></script>" . LB;
 
         $this->_header['script'][$priority][] = $link;
