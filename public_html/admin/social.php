@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Social Integration management console                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -164,6 +164,8 @@ function SI_list()
         $menu_arr = array();
     }
 
+    $overridden = PLG_overrideSocialShare();
+
     // display the header and instructions
 
     $retval .= COM_startBlock($LANG_SOCIAL['social_share'], '', COM_getBlockTemplate('_admin_block', 'header'));
@@ -206,10 +208,18 @@ function SI_list()
         'bottom' => '<input type="hidden" name="sisenabler" value="1">'
     );
 
-    $retval .= ADMIN_list(
-        'social_share', 'SI_getListField', $header_arr, $text_arr,
-        $query_arr, $defsort_arr, '', $token, '', $form_arr
-    );
+    if ( $overridden === false ) {
+        $retval .= ADMIN_list(
+            'social_share', 'SI_getListField', $header_arr, $text_arr,
+            $query_arr, $defsort_arr, '', $token, '', $form_arr
+        );
+    } else {
+        $lang_override = sprintf($LANG_SOCIAL['overridden'],$overridden);
+        $T = new Template($_CONF['path_layout'] . 'admin/social');
+        $T->set_file('page','social_override.thtml');
+        $T->set_var('lang_override',$lang_override);
+        $retval .= $T->finish ($T->parse ('output', 'page'));
+    }
 
     $outputHandle = outputHandler::getInstance();
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');

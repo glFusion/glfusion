@@ -1424,6 +1424,7 @@ $LANG_SOCIAL = array(
     'site_username'         => 'Site Username',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
+    'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
 );
 
 

@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+  <div class="uk-alert uk-alert-danger uk-text-large">
+    {lang_override}
+  </div>
+{# end {templatelocation} #}
