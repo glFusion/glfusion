@@ -46,11 +46,6 @@ $obsoletePrivateDir = array(
 );
 
 $obsoletePublicDir = array(
-// 1.6.6
-    'mediagallery/players/FMP3.swf',
-    'mediagallery/players/XSPF_EV.swf',
-    'mediagallery/players/XSPF_RadioV.swf',
-
 // 1.6.3
     'ckeditor/skins/moono/',
     'layout/cms/css/ui-lightness/',
@@ -150,6 +145,11 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// 1.6.6
+    'mediagallery/players/FMP3.swf',
+    'mediagallery/players/XSPF_EV.swf',
+    'mediagallery/players/XSPF_RadioV.swf',
+
 // removed in 1.6.5
     'layout/cms/js/jQuery.menutron.min.js',
 
