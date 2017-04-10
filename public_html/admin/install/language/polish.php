@@ -116,7 +116,7 @@ $LANG_INSTALL = array(
     'path_prompt' => '�cie�ka do katalogu private/',
     'path_settings' => 'Ustawienia �cie�ki',
     'perform_upgrade' => 'Wykonaj Aktualizacj�',
-    'php_req_version' => 'glFusion wymaga PHP w wersji 5.3.0 lub wy�szej.',
+    'php_req_version' => 'glFusion wymaga PHP w wersji 5.3.3 lub wy�szej.',
     'php_settings' => 'Ustawienia PHP',
     'php_version' => 'Wersja PHP',
     'php_warning' => 'Je�eli jaka� opcja na dole jest zaznaczona kolorem <span class="no">czerwonym</span>, mo�esz mie� problemy ze swoj� instalacj� glFusion. Skontaktuj si� ze swoim us�ugodawc� hostingu celem naniesienia niezb�dnych zmian w ustawieniach PHP.',

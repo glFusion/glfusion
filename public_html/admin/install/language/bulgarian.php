@@ -116,7 +116,7 @@ $LANG_INSTALL = array(
     'path_prompt' => '��� ��� private/ ����������',
     'path_settings' => '��������� �� ��������',
     'perform_upgrade' => '������� ����������',
-    'php_req_version' => 'glFusion ������� PHP ������ 5.3.0 ��� �� ����.',
+    'php_req_version' => 'glFusion ������� PHP ������ 5.3.3 ��� �� ����.',
     'php_settings' => 'PHP ���������',
     'php_version' => 'PHP ������',
     'php_warning' => '��� ����� �� ������ �� ���������� ��� <span class="no">�������</span>, �� ������ ���� �� �������� �������� ��� glFusion site.  ��������� ����� ���� ������������ ���� ��� ������� ��� ����� �� ���� PHP ���������.',

@@ -118,7 +118,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Pad naar prive / directory',
     'path_settings' => 'Pad settings',
     'perform_upgrade' => 'Uitvoeren Upgrade',
-    'php_req_version' => 'glFusion vereist PHP versie 5.3.0 of nieuwer.',
+    'php_req_version' => 'glFusion vereist PHP versie 5.3.3 of nieuwer.',
     'php_settings' => 'PHP Settings',
     'php_version' => 'PHP Versie',
     'php_warning' => 'Indien één van de items hieronder zijn gemarkeerd <span class="no">rood</span>, kun je problemen tegenkomen op je glFusion site. Controleer met je hosting provider of de informatie klopt of dat deze PHP instellingen gewijzigd kunnen worden.',

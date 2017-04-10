@@ -116,7 +116,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 's&ouml;kv&auml;g till private/ katalogen',
     'path_settings' => 's&ouml;kv&auml;gs inst&auml;llningar',
     'perform_upgrade' => 'Utf&ouml;r Uppgradering',
-    'php_req_version' => 'glFusion beh&ouml;ver PHP version 5.3.0 eller senare.',
+    'php_req_version' => 'glFusion beh&ouml;ver PHP version 5.3.3 eller senare.',
     'php_settings' => 'PHP inst&auml;llningar',
     'php_version' => 'PHP Version',
     'php_warning' => 'Om n&aring;gon av nedanst&aring;ende saker &auml;r markerade i <span class="no">r&ouml;tt</span>, s&aring; kan du komma att f&aring; problem med din glFusion sajt. Kontrollera med din webbplats leverant&ouml;r f&ouml;r information om f&ouml;r&auml;ndring av n&aring;gon av dessa inst&auml;llningar.',
