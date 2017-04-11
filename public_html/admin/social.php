@@ -151,6 +151,11 @@ function SI_list()
     USES_lib_admin();
 
     $retval = '';
+    $menu_arr = array();
+
+    $overridden = PLG_overrideSocialShare();
+
+    if ( $overridden !== false ) return SI_FollowMelist();
 
     // if an social admin is using this page, offer navigation to the admin page(s)
 
@@ -163,8 +168,6 @@ function SI_list()
     } else {
         $menu_arr = array();
     }
-
-    $overridden = PLG_overrideSocialShare();
 
     // display the header and instructions
 
@@ -182,7 +185,6 @@ function SI_list()
     // render the list of share options
 
     $header_arr = array(
-//        array('text' => $LANG_SOCIAL['id'], 'field' => 'id', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_SOCIAL['name'], 'field' => 'display_name', 'sort' => true),
         array('text' => $LANG_SOCIAL['enabled'], 'field' => 'enabled', 'sort' => true, 'align' => 'center'),
     );
@@ -241,6 +243,8 @@ function SI_FollowMelist()
 
     USES_lib_admin();
 
+    $overridden = PLG_overrideSocialShare();
+
     $outputHandle = outputHandler::getInstance();
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/admin.js',HEADER_PRIO_NORMAL,'text/javascript');
 
@@ -249,11 +253,11 @@ function SI_FollowMelist()
     // if an social admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('social.admin')) {
-        $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']),
-            array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']),
-            array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
-        );
+        if ( $overridden === false ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
+        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']);
     } else {
         $menu_arr = array();
     }
@@ -369,15 +373,18 @@ function SI_get_site()
     USES_lib_admin();
 
     $retval = '';
+    $menu_arr = array();
+
+    $overridden = PLG_overrideSocialShare();
 
     // if an social admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('social.admin')) {
-        $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']),
-            array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']),
-            array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
-        );
+        if ( $overridden === false ) {
+            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
+        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']);
     } else {
         $menu_arr = array();
     }
