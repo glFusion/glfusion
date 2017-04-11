@@ -1,4 +1,4 @@
-## v1.6.6 (unreleased)
+## v1.6.6 (April ??, 2017)
   - Media Gallery - Replaced old flash based audio jukebox with JavaScript player
   - New Plugin APIs to social integrations - allow plugins to override default share buttons
   - New Plugin API to infinite scroll - allow plugins to hook into new item load JS
