@@ -696,6 +696,11 @@
 					<dd>Allow (when set to true) users who already have an account with an OAuth-based service (eg. Facebook, LinkedIn, Twitter and others) to log into your glFusion site with the credentials they have established with that service. Enabling this option result in the display of one or more service-specific login buttons in the site login dialog(s). Please refer to our <a href="http://www.glfusion.org/wiki/glfusion:remoteauth#oauth_support" target="_blank">glFusion Remote Authentication wiki page</a> for more information.</dd>
 				</dl>
 
+				<dl id="desc_standard_auth_first">
+					<dt>Display Standard Auth First in Dropdown</dt>
+					<dd>When there are multiple authentications methods, such as LDAP and local authentication, if this is set to True, it will display the local login option first in the method dropdown list.</dd>
+				</dl>
+
 				<dl id="desc_facebook_login">
 					<dt>Enable Facebook OAuth Login Method</dt>
 					<dd>Allow (when set to true) users to login to the site using their Facebook account. <b>Note:</b> You must create a Facebook Application ID (consumer key) and Application Secret (consumer secret) for your site.</dd>
@@ -1498,12 +1503,12 @@
 
 				<dl id="desc_bb2_ban_enabled">
 					<dt>Enable Automatic Banning</dt>
-					<dd>If set to <b>true</b>, IPs will be automatically banned if they fail the CAPTCHA entry 5 times, or if a post fails the Cross Site Forgery Check. IPs will be banned for 24 hours.</dd>
+					<dd>If set to <b>true</b>, IPs will be automatically banned if they fail the CAPTCHA entry 5 times, or if a post fails the Cross Site Forgery Check. IPs will be banned for number of hours configured below.</dd>
 				</dl>
 
-				<dl id="desc_bb2_display_stats">
-					<dt>Display Stats</dt>
-					<dd>Enabling this option will add a blurb to your web site footer advertising Bad Behavior's presence and the number of recently blocked requests. Sites receiving more than 1,000 visitors per day should leave this option disabled as it is database intensive. This option is not available or has no effect when logging is not in use.</dd>
+				<dl id="desc_bb2_ban_timeout">
+					<dt>Number of hours to ban IP</dt>
+					<dd>The number of hours to ban an IP that has been automatically banned.</dd>
 				</dl>
 
 				<dl id="desc_bb2_strict">

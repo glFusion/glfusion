@@ -1,7 +1,7 @@
 CKEDITOR.plugins.setLang('vimeo', 'en', {
 	button : 'Embed Vimeo Video',
 	title : 'Embed Vimeo Video',
-	txtEmbed : 'Paste Embed Code Here',
+	txtEmbed : 'Paste Link Code Here',
 	txtWidth : 'Width',
 	txtHeight : 'Height',
 	txtAlign : 'Alignment',

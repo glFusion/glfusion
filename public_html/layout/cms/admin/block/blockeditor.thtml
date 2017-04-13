@@ -30,7 +30,7 @@
 			</div>
 		</div>
 
-		<div class="uk-form-row">
+		<div class="uk-form-row slider_checkbox">
 			<label class="uk-form-label" for="is_enabled">{lang_enabled}</label>
 			<div class="uk-form-controls">
 				<input type="checkbox" name="is_enabled" {is_enabled}>
@@ -89,7 +89,7 @@
 			</div>
 		</div>
 	</fieldset>
-	<fieldset class="uk-margin-top">
+	<fieldset id="fs-phpblock-options" class="uk-margin-top">
 		<legend>{lang_phpblockoptions}</legend>
 
 		<div class="uk-form-row">
@@ -105,7 +105,7 @@
 		<div class="uk-alert uk-alert-danger">{lang_phpblockwarning}</div>
 	</fieldset>
 
-	<fieldset class="uk-margin-top"><legend>{lang_portalblockoptions}</legend>
+	<fieldset id="fs-portal-options"" class="uk-margin-top"><legend>{lang_portalblockoptions}</legend>
 
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="rdfurl">{lang_rdfurl}</label>
@@ -132,7 +132,7 @@
 		</div>
 	</fieldset>
 
-	<fieldset class="uk-margin-top">
+	<fieldset id="fs-normal-options" class="uk-margin-top">
 		<legend>{lang_normalblockoptions}</legend>
 
 		<div class="uk-form-row">
@@ -185,35 +185,48 @@
 	</fieldset>
 </div>
 	<button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="save">{lang_save}</button>
-	<button class="uk-button" type="submit" class="cancel" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+	<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 	<button class="uk-button uk-button-danger" type="submit" value="{lang_delete}" name="delete" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button>
 {!endif}
 </form>
 
 <script>
-	$(function(){
-		$("#title").characterCounter({
-			limit: '255',
-			counterSelector: '#title-count'
-		});
-    $("#name").characterCounter({
-			limit: '48',
-			counterSelector: '#name-count'
-		});
-    $("#help").characterCounter({
-			limit: '255',
-			counterSelector: '#help-count'
-		});
-    $("#phpblockfn").characterCounter({
-			limit: '128',
-			counterSelector: '#phpblockfn-count'
-		});
-    $("#rdfurl").characterCounter({
-			limit: '255',
-			counterSelector: '#rdfurl-count'
-		});
+$(function () {
+	$('#type').on('change', function () {
+		var fs, i, fieldsets = ['normal', 'phpblock', 'portal'];
+		for (i = 0; i < 3; i++) {
+			if (this.value === fieldsets[i]) {
+				$('#fs-' + fieldsets[i] + '-options').show();
+			} else {
+				$('#fs-' + fieldsets[i] + '-options').hide();
+			}
+		}
+	})
+	.trigger('change');
+});
+$(function(){
+	$("#title").characterCounter({
+		limit: '255',
+		counterSelector: '#title-count'
 	});
-	$("#block").validate();
+	$("#name").characterCounter({
+		limit: '48',
+		counterSelector: '#name-count'
+	});
+	$("#help").characterCounter({
+		limit: '255',
+		counterSelector: '#help-count'
+	});
+	$("#phpblockfn").characterCounter({
+		limit: '128',
+		counterSelector: '#phpblockfn-count'
+	});
+	$("#rdfurl").characterCounter({
+		limit: '255',
+		counterSelector: '#rdfurl-count'
+	});
+});
+$("#block").validate();
 </script>
 {# end {templatelocation} #}

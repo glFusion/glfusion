@@ -171,20 +171,33 @@ function edituser()
         $preferences->set_var ('current_password_option', '');
         $preferences->set_var ('password_option', '');
      }
+
      if ( $A['account_type'] & REMOTE_USER ) {
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) { // OAuth only supports re-synch at the moment
-            $preferences->set_var ('resynch_checked', '');
-            $sql = "SELECT * FROM {$_TABLES['users']} WHERE email='".DB_escapeString($A['email'])."' AND account_type = " . LOCAL_USER;
-            $mergeResult = DB_query($sql);
-            if ( DB_numRows($mergeResult) == 1 ) {
-                $localAccountData = DB_fetchArray($mergeResult);
-                $preferences->set_var('merge_account',true);
-                $preferences->set_var('localuid',$localAccountData['uid']);
-                $preferences->set_var('local_username',$localAccountData['username']);
-                $preferences->set_var('remoteuid',$_USER['uid']);
-            }
-            $preferences->parse ('resynch_option', 'resynch', true);
+            $pos = strpos($_USER['remoteservice'],'.');
+            $remoteService = ucfirst(substr($_USER['remoteservice'],$pos+1));
 
+            $preferences->set_var('remote_account_type',$remoteService);
+
+            if ( $A['account_type'] & LOCAL_USER ) {
+                $preferences->set_var ('resynch_checked', '');
+                $preferences->set_var('localuid',$_USER['uid']);
+                $preferences->set_var('unlink_accounts',true);
+            } else {
+                $preferences->unset_var('unlink_accounts');
+                $preferences->set_var ('resynch_checked', '');
+                $sql = "SELECT * FROM {$_TABLES['users']} WHERE email='".DB_escapeString($A['email'])."' AND account_type = " . LOCAL_USER;
+                $mergeResult = DB_query($sql);
+                if ( DB_numRows($mergeResult) == 1 ) {
+                    $localAccountData = DB_fetchArray($mergeResult);
+                    $preferences->set_var('merge_account',true);
+                    $preferences->set_var('localuid',$localAccountData['uid']);
+                    $preferences->set_var('local_username',$localAccountData['username']);
+                    $preferences->set_var('remoteuid',$_USER['uid']);
+                }
+            }
+            $preferences->set_var('lang_remote_service',$LANG04[165]);
+            $preferences->parse ('resynch_option', 'resynch', true);
         } else {
             $preferences->set_var ('resynch_option', '');
         }
@@ -912,7 +925,7 @@ function handlePhotoUpload ($delete_photo = '')
 */
 function saveuser($A)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $_US_VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $MESSAGE, $_US_VERBOSE;
 
     if ($_US_VERBOSE) {
         COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
@@ -953,13 +966,10 @@ function saveuser($A)
     if ( $current_password != '' && $current_password != NULL ) {
         if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) ||
                 ($A['cooktime'] != $_USER['cookietimeout'])) {
-            if (empty($A['passwd']) ||
-                !SEC_check_hash($A['passwd'],$current_password)) {
-
-                return COM_refresh ($_CONF['site_url']
-                                        . '/usersettings.php?msg=83');
-            } elseif ($_CONF['custom_registration'] &&
-                        function_exists ('CUSTOM_userCheck')) {
+            if (empty($A['passwd']) || !SEC_check_hash($A['passwd'],$current_password)) {
+                COM_setMsg($MESSAGE[83],'error');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+            } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
                 $ret = CUSTOM_userCheck ($A['username'], $A['email']);
                 if (!empty($ret)) {
                     // Need a numeric return for the default message handler
@@ -970,8 +980,7 @@ function saveuser($A)
                     return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
                 }
             }
-        } elseif ($_CONF['custom_registration'] &&
-                    function_exists ('CUSTOM_userCheck')) {
+        } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
             if (!empty($ret)) {
                 // Need a numeric return for the default message hander - if not numeric use default message
@@ -997,8 +1006,7 @@ function saveuser($A)
     // no need to filter the password as it's encoded anyway
     if ($_CONF['allow_username_change'] == 1) {
         $A['new_username'] = $A['new_username'];
-        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) &&
-                ($A['new_username'] != $_USER['username'])) {
+        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) && ($A['new_username'] != $_USER['username'])) {
             $A['new_username'] = DB_escapeString ($A['new_username']);
             if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
                 if ($_CONF['allow_user_photo'] == 1) {
@@ -1051,14 +1059,14 @@ function saveuser($A)
     }
 
     if (!COM_isEmail ($A['email'])) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=52');
+        COM_setMsg($MESSAGE[52],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else if ($A['email'] !== $A['email_conf']) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=78');
+        COM_setMsg($MESSAGE[78],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
-        return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?msg=56');
+        COM_setMsg($MESSAGE[56],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
     } else {
         if ( $current_password != '' ) {
             if (!empty($A['newp'])) {
@@ -1075,12 +1083,13 @@ function saveuser($A)
                         $token_ttl = 14400;
                     }
                     $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
-                    SEC_setCookie($_CONF['cookie_password'], $ltToken,
-                                  time() + $cooktime);
+                    SEC_setCookie($_CONF['cookie_password'], $ltToken,time() + $cooktime);
                 } elseif (!SEC_check_hash($A['passwd'],$current_password) ) {
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=68');
+                    COM_setMsg($MESSAGE[68],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 } elseif ($A['newp'] != $A['newp_conf']) {
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=67');
+                    COM_setMsg($MESSAGE[67],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 }
             }
         } else {
@@ -1182,41 +1191,54 @@ function saveuser($A)
         PLG_userInfoChanged ((int)$_USER['uid']);
 
         // at this point, the user information has been saved, but now we're going to check to see if
-        // the user has requested resynchronization with their remoteservice account
+        // the user has requested resynchronization with their remoteservice account or to unlink their remote account
         $msg = 5; // default msg = Your account information has been successfully saved
-        if (isset($A['resynch']) ) {
-            if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
-                $modules = SEC_collectRemoteOAuthModules();
-                $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
-                if (!$active_service) {
-                    $status = -1;
-                    $msg = 115; // Remote service has been disabled.
-                } else {
-                    require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
-                    $service = substr($_USER['remoteservice'], 6);
-                    $consumer = new OAuthConsumer($service);
-                    $callback_url = $_CONF['site_url'];
-                    $consumer->setRedirectURL($callback_url);
-                    $user = $consumer->authenticate_user();
-                    $consumer->resyncUserData($user);
+
+        if ( isset($A['unmerge']) ) {
+            if ( USER_unmergeAccounts() ) {
+                $msg = 117;
+            } else {
+                $msg = 118;
+            }
+        } else {
+            if (isset($A['resynch']) ) {
+                if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
+                    $modules = SEC_collectRemoteOAuthModules();
+                    $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
+                    if (!$active_service) {
+                        $status = -1;
+                        $msg = 115; // Remote service has been disabled.
+                    } else {
+                        require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
+                        $service = substr($_USER['remoteservice'], 6);
+                        $consumer = new OAuthConsumer($service);
+                        $callback_url = $_CONF['site_url'];
+                        $consumer->setRedirectURL($callback_url);
+                        $user = $consumer->authenticate_user();
+                        $consumer->resyncUserData($user);
+                    }
+                }
+
+                if ($msg != 5) {
+                    $msg = 114; // Account saved but re-synch failed.
+                    COM_errorLog($MESSAGE[$msg]);
                 }
             }
-
-            if ($msg != 5) {
-                $msg = 114; // Account saved but re-synch failed.
-                COM_errorLog($MESSAGE[$msg]);
-            }
         }
-
         PLG_profileExtrasSave ();
         PLG_profileSave();
 
         if ($_US_VERBOSE) {
             COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
         }
+        if ( $msg == 5 ) {
+            COM_setMsg($MESSAGE[$msg],'info');
+        } else {
+            COM_setMsg($MESSAGE[$msg],'error');
+        }
 
         return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
-                            . $_USER['uid'] . '&amp;msg=' . $msg);
+                            . $_USER['uid']); //  . '&amp;msg=' . $msg);
     }
 }
 

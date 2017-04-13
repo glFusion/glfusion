@@ -22,6 +22,6 @@
       <div class="uk-text-muted">{$LANG04[187]}</div>
     </div>
   </div>
-  <input class="uk-button uk-button-primary" type="submit" name="merge" value="{$LANG04[188]}">
-  <input class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG32[24]}">
+  <button class="uk-button uk-button-primary" type="submit" name="merge" value="{$LANG04[188]}">{$LANG04[188]}</button>
+  <button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG32[24]}">{$LANG32[24]}</button>
 </form>

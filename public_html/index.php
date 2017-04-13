@@ -331,7 +331,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                                          "tid = '".DB_escapeString($topic)."'");
                 $eMsg .= sprintf ($LANG05[3], $topicname);
             }
-            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'info');
+            $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'warning');
         }
     }
     $pageBody .= $cbDisplay;
@@ -344,6 +344,11 @@ if (isset($_CONF['infinite_scroll']) && $_CONF['infinite_scroll'] == true ) {
     }
     if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'disqus') {
         $T->set_var('comment_disqus_shortname',$_CONF['comment_disqus_shortname']);
+    }
+
+    $pluginData = PLG_isOnPageLoad();
+    if ( $pluginData != '' ) {
+        $T->set_var('plugin_scripts',$pluginData);
     }
 }
 

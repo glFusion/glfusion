@@ -1,7 +1,17 @@
 {# begin {templatelocation} #}
-
-  <img src="{media_thumbnail_img}" class="uk-thumbnail uk-align-center">
-  <div class="uk-text-small uk-text-center">{media_title}</div>
-  <div class="uk-text-muted uk-text-center"><a href="{url_album}">{lang_browse_album}</a></div>
-
+{!if url_media}
+<a class="" href="{url_media}">
+{!endif}
+	<img src="{media_thumbnail_img}" class="uk-thumbnail uk-align-center">
+{!if url_media}
+</a>
+{!endif}
+<div class="uk-text-small uk-text-center">
+	{media_title}
+</div>
+<div class="uk-text-muted uk-text-center">
+	<a href="{url_album}">
+		{lang_browse_album}
+	</a>
+</div>
 {# end {templatelocation} #}

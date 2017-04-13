@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion calendar plugin                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -113,7 +113,7 @@ function shortDaysName ($day)
 {
     global $LANG_WEEK;
 
-    return MBYTE_substr ($LANG_WEEK[$day], 0, 2);
+    return utf8_substr ($LANG_WEEK[$day], 0, 2);
 }
 
 function makeDaysHeadline ()
@@ -540,7 +540,7 @@ case 'day':
             $cal_templates->set_var('calendar_toggle', ']');
         }
     }
-    $thedate = CAL_getUserDateTimeFormat(mktime(0,0,0,$month,$day,$year));
+    $thedate = COM_getUserDateTimeFormat(mktime(0,0,0,$month,$day,$year));
     $cal_templates->set_var('week_num',@strftime('%V',$thedate[1]));
     if ($mode == 'personal') {
         $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} "
@@ -722,9 +722,9 @@ case 'week':
     }
     $cal_templates->set_var('date_range', $date_range);
     if ($_CONF['week_start'] == 'Mon') {
-        $thedate = CAL_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day + 1,$year));
+        $thedate = COM_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day + 1,$year));
     } else {
-        $thedate = CAL_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day, $year));
+        $thedate = COM_getUserDateTimeFormat (mktime (0, 0, 0, $month, $day, $year));
     }
     $cal_templates->set_var('week_num',$thedate[1]);
     for ($i = 1; $i <= 7; $i++) {
@@ -825,7 +825,7 @@ case 'week':
             $cal_templates->parse('events_day'.$i,'events',true);
         }
         // Go to next day
-        $thedate = CAL_getUserDateTimeFormat(mktime(0,0,0,$monthnum, $daynum + 1, $yearnum));
+        $thedate = COM_getUserDateTimeFormat(mktime(0,0,0,$monthnum, $daynum + 1, $yearnum));
     }
 
     $display .= $cal_templates->parse('output','week');

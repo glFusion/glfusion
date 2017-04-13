@@ -387,7 +387,7 @@ if ($A['count'] > 0) {
             }
         }
 
-        $social_icons = SOC_getShareIcons();
+        $social_icons = SOC_getShareIcons($pagetitle,htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()),$permalink,'','article');
 
         $story_template->set_var('social_share',$social_icons);
 

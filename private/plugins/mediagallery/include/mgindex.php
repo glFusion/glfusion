@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main index page for Media Gallery                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -110,9 +110,12 @@ function MG_index() {
     $admin_box .= '<div>';
     $admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
     $admin_box_item .= '<option label="' . $LANG_MG01['options'] . '" value="">' . $LANG_MG01['options'] . '</option>' . LB;
-
+    $disabled = '';
     if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (!COM_isAnonUser() ) )  {
-        $admin_box_item .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
+        if ( count($MG_albums) == 1 ) {
+            $disabled = ' disabled="disabled" ';
+        }
+        $admin_box_item .= '<option value="upload"'.$disabled.'>' . $LANG_MG01['add_media'] . '</option>' . LB;
         $showAdminBox = 1;
     }
     if ( $MG_albums[0]->owner_id ) {

@@ -19,7 +19,7 @@ The destination directory is where you want to create the new directories (using
 <br /><br />
 You will also need to tell the export routine if your system is a Unix/Linux system or a Windows system.  If you are using Mac OS/X, choose Unix.
 <br /><br />
-For more detailed directions, see the <a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery:export">Online Documentation Wiki</a>
+For more detailed directions, see the <a href="https://www.glfusion.org/wiki/">Online Documentation Wiki</a>
 <br /><br />
 <form method="post" action="{s_form_action}" name="mgexport" enctype="multipart/form-data" id="mgexport">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">

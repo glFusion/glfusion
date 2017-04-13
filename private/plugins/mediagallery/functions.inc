@@ -77,7 +77,10 @@ require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
 require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
-$mg_installed_version = $_PLUGIN_INFO['mediagallery'];
+$mg_installed_version = '0.0.0';
+if ( isset($_PLUGIN_INFO['mediagallery']) && $_PLUGIN_INFO['mediagallery']['pi_enabled']) {
+    $mg_installed_version = $_PLUGIN_INFO['mediagallery']['pi_version'];
+}
 
 // This is a list of valid extensions for image media thumbnails / display images
 $_MG_CONF['validExtensions'] = array('.jpg','.jpeg','.png','.gif','.bmp');
@@ -646,7 +649,7 @@ function plugin_getwhatsnew_mediagallery()
             } else {
                 $dTitle = $title;
             }
-            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'">' . $dTitle . '</a>';
+            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'" rel="nofollow">' . $dTitle . '</a>';
             $newMediaCount++;
         }
 
@@ -673,7 +676,7 @@ function plugin_getwhatsnew_mediagallery()
                 if ( $access > 0 ) {
                     $titleLength = $_MG_CONF['title_length'];        // Compensate for the added HTML
                     $title = "<b>C:</b>&nbsp;".$A['title'];
-                    $str = "<a href=\"{$_CONF['site_url']}/comment.php?mode=view&amp;cid={$A['cid']}&amp;sid={$A['sid']}&amp;type=mediagallery\">";
+                    $str = "<a href=\"{$_CONF['site_url']}/comment.php?mode=view&amp;cid={$A['cid']}&amp;sid={$A['sid']}&amp;type=mediagallery\" rel=\"nofollow\">";
                     $str .= substr($title,0,$titleLength);
                     $str .= '</a>';
                     $items[] = $str;

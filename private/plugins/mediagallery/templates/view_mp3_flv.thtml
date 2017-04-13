@@ -1,21 +1,73 @@
 {# begin {templatelocation} #}
-{u_pic}
-<br />
+{!!if {align} == "center" !!}
+  <style>#{id2} { margin: 0 auto !important; } </style>
+{!endif}
 <script type="text/javascript">
-	var flashvars = {};
-    var params = {
-    wmode: "transparent"
-    };
-	var attributes = {};
-    flashvars.action="{autostart}";
-    flashvars.mp3="{movie}";
-    flashvars.vol="50";
-    flashvars.title="{title}";
-    swfobject.embedSWF("{site_url}/players/FMP3.swf", "{id}", "260", "60", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
+//<![CDATA[
+	$(document).ready(function(){
+		new jPlayerPlaylist({
+			jPlayer: "#{id}",
+			cssSelectorAncestor: "#{id2}"
+		}, [
+		{
+			title:"{title}",
+			mp3:"{movie}",
+		}
+		], {
+			playlistOptions: {
+				autoPlay: {autoplay},
+			},
+			swfPath: "{site_url}/players/jplayer/jplayer",
+			supplied: "mp3",
+			wmode: "window",
+			useStateClassSkin: true,
+			autoBlur: false,
+			smoothPlayBar: true,
+			keyEnabled: true,
+		});
+	});
+	//]]>
 </script>
-<div id="{id}">
-	<a href="http://www.adobe.com/go/getflashplayer">
-		<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-	</a>
+{u_pic}
+<div id="{id}" class="jp-jplayer"></div>
+<div id="{id2}" class="jp-audio" role="application" aria-label="media player">
+	<div class="jp-type-playlist">
+		<div class="jp-gui jp-interface">
+			<div class="jp-volume-controls">
+				<button class="jp-mute" role="button" tabindex="0">mute</button>
+				<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+				<div class="jp-volume-bar">
+					<div class="jp-volume-bar-value"></div>
+				</div>
+			</div>
+			<div class="jp-controls-holder">
+				<div class="jp-controls">
+					<button class="jp-previous" role="button" tabindex="0">previous</button>
+					<button class="jp-play" role="button" tabindex="0">play</button>
+					<button class="jp-stop" role="button" tabindex="0">stop</button>
+					<button class="jp-next" role="button" tabindex="0">next</button>
+				</div>
+				<div class="jp-progress">
+					<div class="jp-seek-bar">
+						<div class="jp-play-bar"></div>
+					</div>
+				</div>
+				<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+				<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+				<div class="jp-toggles">
+					<button class="jp-repeat" role="button" tabindex="0">repeat</button>
+				</div>
+			</div>
+		</div>
+		<div class="jp-playlist">
+			<ul>
+				<li>&nbsp;</li>
+			</ul>
+		</div>
+		<div class="jp-no-solution">
+			<span>Update Required</span>
+			To play the media you will need to either update your browser to a recent version or update your <a href="https://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+		</div>
+	</div>
 </div>
 {# end {templatelocation} #}

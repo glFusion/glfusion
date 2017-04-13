@@ -186,70 +186,11 @@ $LANG01 = array(
     505 => 'Tietokantasi versio on: %s<br />glFusion script versio on: %s<br />Tarkista sivustosi eheys!',
     'ctl' => 'Tyhjenn&auml; ulkoasun v&auml;limuisti',
     'logview' => 'Logi N&auml;kym&auml;',
-    'correct_perms' => 'Korjaa alla mainitut ongelmat. Kun ongelmat on korjattu, klikkaa <b>Tarkista uudelleen</b> nappia.',
-    'current' => 'Nykyinen',
-    'current_php_settings' => 'Nykyiset PHP Asetukset',
-    'directory_permissions' => 'Hakemisto Oikeudet',
-    'enabled' => 'K&auml;yt&ouml;ss&auml;',
-    'env_check' => 'Toimintaymp&auml;rist&ouml;n Tarkistus',
-    'file_permissions' => 'Tiedosto oikeudet',
-    'file_uploads' => 'Moni glFusion toiminto vaatii ett&auml; tiedostoja voidaan ladata, t&auml;m&auml; pit&auml;isi olla k&auml;yt&ouml;ss&auml;.',
-    'filesystem_check' => 'Hakemisto / Tiedosto oikeudet',
-    'gd_lib' => 'GD Kirjastot',
-    'gd_not_found' => 'GD Kirjasto toimitoja ei l&ouml;ydy.  Tarkista ett&auml; GD Kirjastot on k&auml;yt&ouml;ss&auml; ja toimivat tai valitse jokin toinen vastaava kirjasto.',
-    'gd_ok' => 'GD Kirjastot v2 asennettu.',
-    'gd_v1' => 'GD Kirjastot v1 asennettu - T&auml;m&auml; versio ei t&auml;ysin tue JPG prosessointia, joten pient&auml; laadunlaskua saattaa ilmet&auml;.',
-    'graphics' => 'Grafiikka Kirjasto',
-    'hosting_env' => 'Palveluntarjoajan toimintaymp&auml;rist&ouml;n tarkistus',
-    'imagemagick' => 'ImageMagick Ohjelmat',
-    'im_not_found' => 'Ei l&ouml;ydet&auml; <strong>convert</strong> executable for ImageMagick.',
-    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
-    'memory_limit' => 'Suositellaan ett&auml; sinun serverill&auml; on v&auml;hint&auml;&auml;n 48M muista k&auml;yt&ouml;ss&auml;.',
-    'not_writable' => 'EI VOIDA KIRJOITTAA',
-    'notes' => 'Muistutukset',
-    'not_found' => 'Ei l&ouml;ydy',
-    'netpbm' => 'NetPBM Kirjasto',
-    'np_ok' => 'NetPBM kirjasto on asennettu',
-    'np_not_found' => 'NetPBM suoritus ohjelmia ei l&ouml;ydy.',
-    'off' => 'Kiinni',
-    'ok' => 'OK',
-    'on' => 'Auki',
-    'open_basedir' => 'Jos <strong>open_basedir</strong> rajoitukset on p&auml;&auml;ll&auml; sivustollasi, se saattaa aiheuttaa ongelmia asennusvaiheessa. File System Check alhaalla pit&auml;isi kertoa mahdolliset ongelmat.',
-    'php_req_version' => 'glFusion vaatii PHP version 4.3.0 tai uudemman.',
-    'php_settings' => 'PHP Asetukset',
-    'php_version' => 'PHP Versio',
-    'php_warning' => 'Jos joki allaolevista kohteista on merkitty <span class="no">punaisella</span>, saattaa ilmet&auml; ongelmia sinun glFusion sivustolla.  Tiedustele palveluntarjoajaltasi voiko niit&auml; PHP asetuksia muuttaa.',
-    'post_max_size' => 'glFusion sallii ladata lis&auml;osia, kuvia, ja tiedostoja. Salli v&auml;hint&auml;&auml;n 8M max l&auml;hetysten koko.',
-    'extensions' => 'Required PHP Extensions',
-    'mbstring_library' => 'Multibyte Extensions',
-    'mbstring_ok' => 'Mutlibyte extensions are properly configured.',
-    'mbstring_not_found' => 'Multibyte extension not found - some features will be disabled such as the image browser in the WYSIWYG editor.',
-    'openssl_library' => 'OpenSSL Extension',
-    'openssl_ok' => 'OpenSSL found',
-    'openssl_not_found' => 'OpenSSL extension not found - these are required if you are using remote login features such as Facebook or Twitter logins.',
-    'recheck' => 'Tarkista toimintaymp&auml;rist&ouml; uudelleen',
-    'recommended' => 'Suositellaan',
-    'register_globals' => 'Jos PHP\'n <strong>register_globals</strong> on k&auml;yt&ouml;ss&auml;, se voi aiheuttaa turvaongelmia.',
-    'safe_mode' => 'Jos PHP\'n <strong>safe_mode</strong> on k&auml;yt&ouml;ss&auml;, jotkin glFusion toiminnot ei ehk&auml; toimi oikein. Erityisesti Media Gallery lis&auml;osa.',
-    'setting' => 'Asetus',
-    'unable_mkdir' => 'Hakemistoa ei voitu luoda',
-    'upload_max_filesize' => 'glFusion sallii sinun ladata lis&auml;osia, kuvia, ja tiedostoja. Salli v&auml;hint&auml;&auml;n 8M latauskooksi.',
-    'not_checked' => 'Ei valittu',
-    'bypass_note' => 'Koska joko Safe Mode tai open_basedir rajoitus havaittiin, grafiikka kirjastojen tarkistus ohitettiin.',
-    'jhead' => 'jhead Ohjelma',
-    'jhead_not_found' => 'Suoritettavaa jhead tiedostoa ei l&ouml;ydy.',
-    'jhead_ok' => 'Suoritettava jhead tiedosto on asennettu.',
-    'jpegtran' => 'jpegtran Ohjelma',
-    'jpegtran_not_found' => 'Suoritettavaa jpegtran tiedostoa ei l&ouml;ydy.',
-    'jpegtran_ok' => 'Suoritettava jpegtran on asennettu.',
-    'show_phpinfo' => 'N&auml;yt&auml; t&auml;ysi PHP Info',
-    'hide_phpinfo' => 'Piiloita t&auml;ysi PHP Info',
     'autotag_perms' => 'Autotag Permissions',
     'subscribe' => 'Subscribe',
     'unsubscribe' => 'Unsubscribe',
     'view_online' => 'Click here %s to view online',
     'no_new_items' => 'No New Items',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
     'allowed_html' => 'Allowed HTML:',
     'posted_in' => 'Posted in',
     'continue_reading' => 'Continue Reading',
@@ -259,13 +200,8 @@ $LANG01 = array(
     'blocks_right_title' => 'Right Side',
     'blocks_footer_title' => 'Footer',
     'source' => 'Source',
-    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
-    'db_header' => 'Database Info',
-    'db_driver' => 'Database Driver',
-    'db_version' => 'Database Version',
-    'db_engine' => 'Database Engine',
-    'db_charset' => 'Database Character Set',
-    'db_collation' => 'Database Collation'
+    'env_check' => 'Environment Check',
+    'ok' => 'OK'
 );
 
 ###############################################################################
@@ -321,7 +257,8 @@ $LANG03 = array(
     47 => 'Notify me via eMail when new comments or replies are posted for this item.',
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
-    50 => 'Login required to comment'
+    50 => 'Login required to comment',
+    51 => 'Be the first to comment'
 );
 
 ###############################################################################
@@ -525,7 +462,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Follow Me',
-    203 => 'Activate Account'
+    203 => 'Activate Account',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1299,7 +1238,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="http://www.gllabs.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
+    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="https://www.glfusion.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
     2 => 'Huomioi laajennuksia asentaessasi',
     3 => 'Laajennuksien asentamislomake',
     4 => 'Laajennustiedosto',
@@ -1307,7 +1246,7 @@ $LANG32 = array(
     6 => 'Varoitus: laajennus on jo asennettu!',
     7 => 'Laajennus jonka asentamista yrit&auml;t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep&auml;onnistui',
-    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="http://www.gllabs.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
+    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="https://www.glfusion.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
     10 => '<br' . XHTML . '><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis&auml;tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p&auml;ivitt&auml;&auml;ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime&auml; ei ole l&auml;hetetty plugineditor()',
@@ -1485,7 +1424,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1599,6 +1539,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s files and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Valitamme, mutta sinulla ei ole tarvittavia oikeuksia t&auml;lle sivulle.  Huom! kaikki yritykset p&auml;&auml;st&auml; t&auml;h&auml;n ilman tarvittavia oikeuksia tallennetaan.',
     500 => 'Ulkoasun V&auml;limuisti Tyhjennetty',
     501 => 'Turva Valtuutus On Ep&auml;kelpo - Mahdollisesti Istunnon Aikarajoitus.',
@@ -2032,11 +1974,11 @@ $LANG_ADMIN = array(
     'list' => 'lista',
     'list_all' => 'Listaa kaikki',
     'na' => '-',
-    'action' => 'Toimenpide',
     'enable' => 'Ota k&auml;ytt&ouml;&ouml;n',
     'disable' => 'Pois k&auml;yt&ouml;st&auml;',
     'admin_users' => 'K&auml;ytt&auml;j&auml; Admin',
     'admin_groups' => 'Ryhm&auml; Admin',
+    'action' => 'Toimenpide',
     'authenticate' => 'Tunnistaudu',
     'select' => 'Valitse',
     'name' => 'Nimi',
@@ -2459,6 +2401,89 @@ $LANG_AM = array(
 );
 
 ###############################################################################
+# envcheck.php
+
+$LANG_ENVCHK = array(
+    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
+    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
+    'ctype_extension' => 'Ctype Extension',
+    'current' => 'Current',
+    'current_php_settings' => 'Current PHP Settings',
+    'database_version' => 'Database Version',
+    'date_extension' => 'Date Extension',
+    'db_charset' => 'Database Character Set',
+    'db_collation' => 'Database Collation',
+    'db_driver' => 'Database Driver',
+    'db_engine' => 'Database Engine',
+    'db_header' => 'Database Info',
+    'db_version' => 'Database Version',
+    'directory_permissions' => 'Directory Permissions',
+    'enabled' => 'Enabled',
+    'extensions' => 'Required PHP Extensions',
+    'file_permissions' => 'File Permissions',
+    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
+    'filesystem_check' => 'Directory / File Permissions',
+    'filter_extension' => 'Filter Extension',
+    'gd_lib' => 'GD Libraries',
+    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
+    'gd_ok' => 'GD Libraries v2 are installed.',
+    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
+    'gettext_extension' => 'Gettext Extension',
+    'graphics' => 'Graphics Library',
+    'hide_phpinfo' => 'Hide Full PHP Info',
+    'hosting_env' => 'Hosting Environment Check',
+    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
+    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
+    'imagemagick' => 'ImageMagick Programs',
+    'is_optional' => ' is optional',
+    'is_required' => ' is required',
+    'jhead' => 'jhead Program',
+    'jhead_not_found' => 'Unable to locate the jhead executable.',
+    'jhead_ok' => 'The jhead executable is installed.',
+    'jpegtran' => 'jpegtran Program',
+    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
+    'jpegtran_ok' => 'The jpegtran executable is installed.',
+    'json_extension' => 'Json Extension',
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'mbstring_extension' => 'Multibyte (mbstring) Extension',
+    'memory_limit' => 'It is recommended that you have at least 64M of memory enabled on your site.',
+    'mysqli_extension' => 'MySQLi Extension',
+    'netpbm' => 'NetPBM Library',
+    'not_checked' => 'Skipped',
+    'not_found' => 'Not Found',
+    'not_writable' => 'NOT WRITABLE',
+    'notes' => 'Notes',
+    'np_not_found' => 'The NetPBM executables were not found.',
+    'np_ok' => 'The NetPBM library is installed',
+    'off' => 'Off',
+    'ok' => 'OK',
+    'on' => 'On',
+    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
+    'openssl_extension' => 'OpenSSL Extension',
+    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
+    'php_settings' => 'PHP Settings',
+    'php_version' => 'PHP Version',
+    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
+    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
+    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
+    'recheck' => 'Recheck Environment',
+    'recommended' => 'Recommended',
+    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
+    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
+    'session_extension' => 'Session Extension',
+    'setting' => 'Setting',
+    'show_phpinfo' => 'Show Full PHP Info',
+    'status' => 'Status',
+    'unable_mkdir' => 'Unable to create directory',
+    'unknown' => 'unknown',
+    'unlimited' => 'unlimited',
+    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
+    'xml_extension' => 'XML Extension',
+    'zlib_extension' => 'zlib Extension',
+    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.'
+);
+
+###############################################################################
 # versioncheck.php
 
 $LANG_UPGRADE = array(
@@ -2814,7 +2839,8 @@ $LANG_confignames['Core'] = array(
     'open_ext_url_new_window' => 'External Links in New Window',
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
-    'debug_html_filter' => 'HTML Filter Debug Logging'
+    'debug_html_filter' => 'HTML Filter Debug Logging',
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
 );
 
 $LANG_configsubgroups['Core'] = array(

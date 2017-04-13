@@ -66,10 +66,10 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     }
 
     if ( defined('DEMO_MODE') ) {
-        $output  = COM_siteHeader('menu');
-        $output .= COM_showMessageText('Option disabled in Demo Mode','Option disabled in Demo Mode',true,'error');
-        $output .= COM_siteFooter();
-        return PLG_REG_AUTH_FAILED;
+        COM_setMsg( 'Saving Pages is Disabled in Demo Mode', 'error' );
+        $url = COM_buildURL($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
+        $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,'staticpages');
+        return PLG_RET_OK;
     }
 
     $gl_edit = false;
@@ -421,8 +421,13 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
  */
 function service_delete_staticpages($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG12, $LANG_STATIC,
-           $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG12, $LANG_STATIC, $LANG_LOGIN;
+
+    if ( defined('DEMO_MODE') ) {
+        COM_setMsg( 'Deleting Pages is Disabled in Demo Mode', 'error' );
+        $output = COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
+        return PLG_RET_OK;
+    }
 
     if (empty($args['sp_id']) && !empty($args['id']))
         $args['sp_id'] = $args['id'];

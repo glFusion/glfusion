@@ -184,70 +184,11 @@ $LANG01 = array(
     505 => 'Tu versión de base de datos es: %s<br />La versión del script de glFusion es: %s<br />¡Verifica la integridad de tu sitio!',
     'ctl' => 'Borrar Cache',
     'logview' => 'Visor de Sucesos',
-    'correct_perms' => 'Corrige los problemas identificados. Una vez hayan sido corregidos, usa el botón: <b>Recheck</b> para validar el entorno.',
-    'current' => 'Actual',
-    'current_php_settings' => 'Ajustes Actuales de PHP',
-    'directory_permissions' => 'Permisos de Directorios',
-    'enabled' => 'Habilitado',
-    'env_check' => 'Verificar Entorno',
-    'file_permissions' => 'Permisos de Archivos',
-    'file_uploads' => 'Varias características de glFusion requieren la habilidad de cargar archivos, esto debería estar habilitado.',
-    'filesystem_check' => 'Permisos de Directorio / Archivo',
-    'gd_lib' => 'Libraría GD',
-    'gd_not_found' => 'No se puede localizar las funciones de la librería GD. Asegúrate que las librarías GD este compiladas dentro de PHP o selecciona una librería de gráficos alternativa.',
-    'gd_ok' => 'Librerías GD v2 están instaladas.',
-    'gd_v1' => 'Librerías GD v1 están instaladas - Esta versión no soporta completamente el procesamiento de imágenes JPG luego podrían haber algunos problemas de calidad.',
-    'graphics' => 'Librería Gráfica',
-    'hosting_env' => 'Verificación del Entorno',
-    'imagemagick' => 'Programas ImageMagick',
-    'im_not_found' => 'No se puede localizar el programa <strong>convert</strong> para ImageMagick.',
-    'im_ok' => 'El programa <strong>convert</strong> parece ser valido.',
-    'memory_limit' => 'Es recomendable que tengas habilitadas al menos 48M de memoria en tu sitio.',
-    'not_writable' => 'NO ESCRIBIBLE',
-    'notes' => 'Notas',
-    'not_found' => 'No Encontrado',
-    'netpbm' => 'Librería NetPBM',
-    'np_ok' => 'La Librería NetPBM esta instalada',
-    'np_not_found' => 'El programa NetPBM fue encontrado.',
-    'off' => 'Off',
-    'ok' => 'OK',
-    'on' => 'On',
-    'open_basedir' => 'Si la restricción <strong>open_basedir</strong> esta habilitada en tu sitio, podría causar problemas de permisos durante la instalación. La verificación del Sistema de Archivos podría mostrar algunos errores.',
-    'php_req_version' => 'glFusion requiere PHP versión 5.2.0 o superior.',
-    'php_settings' => 'Ajustes PHP',
-    'php_version' => 'Versión PHP',
-    'php_warning' => 'Si alguno de los elementos a continuación están marcados en <span class="no">rojo</span>, podarías encontrar problemas con tu sitio glFusion. Consulta con tu proveedor de hospedaje para información sobre como cambiar alguno de estos ajustes de PHP.',
-    'post_max_size' => 'glFusion te permite cargar Extensiones, imágenes, y archivos. Deberías permitir al menos 8M para el tamaño máximo de envíos.',
-    'extensions' => 'Extensiones PHP Requiredas ',
-    'mbstring_library' => 'Extensiones Multibyte',
-    'mbstring_ok' => 'La extensiones Mutlibyte están configuradas apropiadamente.',
-    'mbstring_not_found' => 'Extensión Multibyte no encontrada - algunas caracterizaras se deshabilitaran como el explorador de imágenes en el editor WYSIWYG.',
-    'openssl_library' => 'Extensión OpenSSL',
-    'openssl_ok' => 'OpenSSL encontrado',
-    'openssl_not_found' => 'Extensión OpenSSL no encontrada - se requiere si estas usando características de acceso remoto como inicio de sesión desde Facebook o Twitter.',
-    'recheck' => 'Comprobar',
-    'recommended' => 'Recomendado',
-    'register_globals' => 'Si la opción <strong>register_globals</strong> de PHP esta habilitada, puede crear problemas de seguridad.',
-    'safe_mode' => 'Si la opción <strong>safe_mode</strong> de PHS esta habilitada, algunas funciones de glFusion podrían no trabajar correctamente. Específicamente la Extensión de Galería de Medios.',
-    'setting' => 'Ajsutes',
-    'unable_mkdir' => 'No se puede crear el directorio',
-    'upload_max_filesize' => 'glFusion te permite cargar extensiones, imágenes, y archivos. Deberías permitir al menos 8M de tamaño para la carga.',
-    'not_checked' => 'Saltado',
-    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
-    'jhead' => 'Programa jhead',
-    'jhead_not_found' => 'No se puede localizar el programa jhead.',
-    'jhead_ok' => 'El programa jhead esta instalado.',
-    'jpegtran' => 'Programa jpegtran',
-    'jpegtran_not_found' => 'No se puede localizar el programa jpegtran.',
-    'jpegtran_ok' => 'El programa jpegtran esta instalado.',
-    'show_phpinfo' => 'Mostrar Ajustes PHP',
-    'hide_phpinfo' => 'Ocultar Ajustes PHP',
     'autotag_perms' => 'Permisos Autoetiqueta',
     'subscribe' => 'Suscribirse',
     'unsubscribe' => 'Cancelar Suscripción',
     'view_online' => 'Clic <a href="%s">aquí</a> para ver en linea',
     'no_new_items' => 'No hay novedades',
-    'max_execution_time' => 'glFusion recomienda un valor mínimo de PHP por defecto de 30 segundos, pero carga Extensiones y otras operaciones podrían tomar mas tiempo que este, dependiendo de tu ambiente de hospedaje. Si safe_mode (arriba) esta Off, deberías incrementar este modificando el valor de <b>max_execution_time</b> en tu archivo: php.ini.',
     'allowed_html' => 'HTML Permitido:',
     'posted_in' => 'Publicado en',
     'continue_reading' => 'Continuar Leyendo',
@@ -257,13 +198,8 @@ $LANG01 = array(
     'blocks_right_title' => 'Derecha',
     'blocks_footer_title' => 'Pie de Pagina',
     'source' => 'fuente',
-    'phpendoflife' => 'Tu versión PHP ha alcanzado su ciclo final y ya no sera soportada, incluyendo las actualizaciones de seguridad. Considera actualizarla a la <a href="http://php.net/supported-versions.php" target="_blank">versión de PHP soportada </a>.',
-    'db_header' => 'Database Info',
-    'db_driver' => 'Database Driver',
-    'db_version' => 'Database Version',
-    'db_engine' => 'Database Engine',
-    'db_charset' => 'Database Character Set',
-    'db_collation' => 'Database Collation'
+    'env_check' => 'Environment Check',
+    'ok' => 'OK'
 );
 
 ###############################################################################
@@ -319,7 +255,8 @@ $LANG03 = array(
     47 => 'Notifícame vía e-Mail cuando nuevos comentarios o respuestas sean publicadas pare este elemento.',
     48 => 'Haz clic <a href="javascript:history.back()">aquí</a> para regresar',
     49 => 'Los comentarios están cerrados',
-    50 => 'Se requiere iniciar sesión para comentar'
+    50 => 'Se requiere iniciar sesión para comentar',
+    51 => 'Be the first to comment'
 );
 
 ###############################################################################
@@ -523,7 +460,9 @@ $LANG04 = array(
     200 => 'Social Service',
     201 => 'Username',
     202 => 'Sígueme',
-    203 => 'Activar Cuenta'
+    203 => 'Activar Cuenta',
+    204 => 'Disconnect Remote Account',
+    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1297,7 +1236,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'La instalación de Extensiones puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instale Extensiones obtenidas de <a href="http://www.gllabs.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. También es importante que entiendas que la instalación de la Extensión requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación de la Extensión ni nos hacemos responsables por cualquier daño causado durante la instalación (<i>o posterior a la misma</i>). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Extensión.',
+    1 => 'La instalación de Extensiones puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instale Extensiones obtenidas de <a href="https://www.glfusion.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. También es importante que entiendas que la instalación de la Extensión requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación de la Extensión ni nos hacemos responsables por cualquier daño causado durante la instalación (<i>o posterior a la misma</i>). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Extensión.',
     2 => 'Advertencia de la instalación de la Extensión',
     3 => 'Formulario de instalación de la Extensión',
     4 => 'Archivo de la Extensión',
@@ -1305,7 +1244,7 @@ $LANG32 = array(
     6 => 'Advertencia: ¡La Extensión ya está instalada!',
     7 => 'La Extensión que intenta instalar ya existe. Borra la Extensión antes de reinstalarla.',
     8 => 'Falló la comprobación de compatibilidad de la Extensión',
-    9 => 'Esta Extensión requiere una versión más nueva de glFusion. Puede obtener una copia actualizada de <a href=http://www.gllabs.org>glFusion</a> o instalar otra versión de la Extensión.',
+    9 => 'Esta Extensión requiere una versión más nueva de glFusion. Puede obtener una copia actualizada de <a href=https://www.glfusion.org>glFusion</a> o instalar otra versión de la Extensión.',
     10 => '<br' . XHTML . '><b>No hay Extensiones instaladas.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Para habilitar o deshabilitar una Extensión, haz clic en la caja de chequeo correspondiente. Extensiones que han sido cargadas al sistema pueden ser instaladas haciendo clic en el icono Instalar en la columna de Control. Para actuaizar una Extensión, haz clic en el icono Actualizar de la columna versión. Para desinstalar una Extensión, haz clic en el icono: <img src="/layout//images/admin/delete.png" /> correspondiente.',
     12 => 'no se ha dado un nombre de Extensión a la función plugineditor()',
@@ -1483,7 +1422,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1597,6 +1537,8 @@ $MESSAGE = array(
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
     116 => 'The plugin\'s archivos and related directories were successfully removed.',
+    117 => 'The remote account has been unlinked from your local account.',
+    118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'El Cache de la plantilla se ha borrado exitosamente',
     501 => 'Token de seguridad no valido - Posible tiempo de espera de sesión agotado.',
@@ -2030,11 +1972,11 @@ $LANG_ADMIN = array(
     'list' => 'list',
     'list_all' => 'Listar todo',
     'na' => '-',
-    'action' => 'Acción para todo lo seleccionado:',
     'enable' => 'Habilitado',
     'disable' => 'Disable',
     'admin_users' => 'Usuarios',
     'admin_groups' => 'Grupos',
+    'action' => 'Acción para todo lo seleccionado:',
     'authenticate' => 'Autenticar',
     'select' => 'Seleccionar',
     'name' => 'Nombre',
@@ -2457,6 +2399,89 @@ $LANG_AM = array(
 );
 
 ###############################################################################
+# envcheck.php
+
+$LANG_ENVCHK = array(
+    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
+    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
+    'ctype_extension' => 'Ctype Extension',
+    'current' => 'Current',
+    'current_php_settings' => 'Current PHP Settings',
+    'database_version' => 'Database Version',
+    'date_extension' => 'Date Extension',
+    'db_charset' => 'Database Character Set',
+    'db_collation' => 'Database Collation',
+    'db_driver' => 'Database Driver',
+    'db_engine' => 'Database Engine',
+    'db_header' => 'Database Info',
+    'db_version' => 'Database Version',
+    'directory_permissions' => 'Directory Permissions',
+    'enabled' => 'Enabled',
+    'extensions' => 'Required PHP Extensions',
+    'file_permissions' => 'File Permissions',
+    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
+    'filesystem_check' => 'Directory / File Permissions',
+    'filter_extension' => 'Filter Extension',
+    'gd_lib' => 'GD Libraries',
+    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
+    'gd_ok' => 'GD Libraries v2 are installed.',
+    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
+    'gettext_extension' => 'Gettext Extension',
+    'graphics' => 'Graphics Library',
+    'hide_phpinfo' => 'Hide Full PHP Info',
+    'hosting_env' => 'Hosting Environment Check',
+    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
+    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
+    'imagemagick' => 'ImageMagick Programs',
+    'is_optional' => ' is optional',
+    'is_required' => ' is required',
+    'jhead' => 'jhead Program',
+    'jhead_not_found' => 'Unable to locate the jhead executable.',
+    'jhead_ok' => 'The jhead executable is installed.',
+    'jpegtran' => 'jpegtran Program',
+    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
+    'jpegtran_ok' => 'The jpegtran executable is installed.',
+    'json_extension' => 'Json Extension',
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'mbstring_extension' => 'Multibyte (mbstring) Extension',
+    'memory_limit' => 'It is recommended that you have at least 64M of memory enabled on your site.',
+    'mysqli_extension' => 'MySQLi Extension',
+    'netpbm' => 'NetPBM Library',
+    'not_checked' => 'Skipped',
+    'not_found' => 'Not Found',
+    'not_writable' => 'NOT WRITABLE',
+    'notes' => 'Notes',
+    'np_not_found' => 'The NetPBM executables were not found.',
+    'np_ok' => 'The NetPBM library is installed',
+    'off' => 'Off',
+    'ok' => 'OK',
+    'on' => 'On',
+    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
+    'openssl_extension' => 'OpenSSL Extension',
+    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
+    'php_settings' => 'PHP Settings',
+    'php_version' => 'PHP Version',
+    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
+    'phpendoflife' => 'Your PHP version has reached end of life and is no longer supported, including security updates. Please consider upgrading to a <a href="http://php.net/supported-versions.php" target="_blank">supported version of PHP</a>.',
+    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
+    'recheck' => 'Recheck Environment',
+    'recommended' => 'Recommended',
+    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
+    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
+    'session_extension' => 'Session Extension',
+    'setting' => 'Setting',
+    'show_phpinfo' => 'Show Full PHP Info',
+    'status' => 'Status',
+    'unable_mkdir' => 'Unable to create directory',
+    'unknown' => 'unknown',
+    'unlimited' => 'unlimited',
+    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
+    'xml_extension' => 'XML Extension',
+    'zlib_extension' => 'zlib Extension',
+    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.'
+);
+
+###############################################################################
 # versioncheck.php
 
 $LANG_UPGRADE = array(
@@ -2812,7 +2837,8 @@ $LANG_confignames['Core'] = array(
     'open_ext_url_new_window' => 'External Links in New Window',
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
-    'debug_html_filter' => 'HTML Filter Debug Logging'
+    'debug_html_filter' => 'HTML Filter Debug Logging',
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
 );
 
 $LANG_configsubgroups['Core'] = array(

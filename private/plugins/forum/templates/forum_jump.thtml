@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-align-right uk-margin">
-	<form class="uk-form" action="{action}" method="post" name="jumpbox" onsubmit="if(document.jumpbox.forum.value == -1){return false;}">
+	<form class="uk-form" action="{action}" method="get" name="jumpbox" onsubmit="if(document.jumpbox.forum.value == -1){return false;}">
 		<select name="forum" title="{LANG_msg106}" onchange="this.form.submit();">
 			<option selected="selected" value="-1">{LANG_msg106}</option>
 			{selecthtml}

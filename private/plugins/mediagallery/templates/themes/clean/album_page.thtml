@@ -21,9 +21,7 @@
 
 {!if url_slideshow}
 <div class="uk-text-center uk-margin">
-	<a href="{url_slideshow}">
-		<button class="uk-button uk-button-success">{lang_slideshow}</button>
-	</a>
+  <a class="uk-button uk-button-primary" href="{url_slideshow}">{lang_slideshow}</a>
 </div>
 {!endif}
 
@@ -66,7 +64,9 @@
 {!endif}
 		<!-- BEGIN ImageRow -->
 		<!-- BEGIN ImageColumn -->
+{!if CELL_DISPLAY_IMAGE}
 		<li>{CELL_DISPLAY_IMAGE}</li>
+{!endif}
 		<!-- END ImageColumn -->
 		<!-- END ImageRow -->
 	</ul>

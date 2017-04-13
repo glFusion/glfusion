@@ -39,7 +39,8 @@ class BlackList extends BaseCommand
 
     protected function callbackHex($str)
     {
-        return chr('0x' . $str);
+        if ( is_array($str)) $str = implode(' ',$str);
+        return @chr('0x' . (string) $str);
     }
 
     /**

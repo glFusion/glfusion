@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -60,7 +60,7 @@ if (file_exists($langfile)) {
 
 require_once $_CONF['path'].'plugins/forum/forum.php';
 if ( isset($_PLUGIN_INFO['forum']) ) {
-    $pi_version = $_PLUGIN_INFO['forum'];
+    $pi_version = $_PLUGIN_INFO['forum']['pi_version'];
 } else {
     $pi_version = $_FF_CONF['pi_version'];
 }
@@ -83,6 +83,9 @@ if ( isset($_FF_CONF['use_wysiwyg_editor']) ) {
 if ( $_CONF['loginrequired'] == 1 ) {
     $_FF_CONF['registration_required'] = 1;
 }
+
+$_FF_CONF['default_Datetime_format'] = $_CONF['date'];
+$_FF_CONF['default_Topic_Datetime_format'] = $_CONF['date'];
 
 $FF_userprefs['topicsperpage']  = isset($_FF_CONF['show_topics_perpage']) ? $_FF_CONF['show_topics_perpage'] : 10;
 $FF_userprefs['postsperpage']   = isset($_FF_CONF['show_posts_perpage']) ? $_FF_CONF['show_posts_perpage'] : 10;
@@ -765,13 +768,16 @@ function forum_xchsmilies($message,$reverse=false) {
     '<img style="vertical-align:middle;" src="images/smilies/mrgreen.gif" alt="Mr. Green"/>');
 
     if (!$reverse) {
+        $message = str_replace($search, $replace, $message);
+/*
         $counter = 0;
         foreach ( $search AS $emoticon) {
             if ( isset($replace[$counter])) {
-                $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon) . "#", $replace[$counter], $message);
+                $message = preg_replace("#(?<=\s|^)" . preg_quote($emoticon,"#") . "#", $replace[$counter], $message);
             }
             $counter++;
         }
+*/
     } else {
         $message = str_replace($replace, $search, $message);
     }
@@ -909,7 +915,7 @@ function phpblock_forum_newposts() {
                 $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['sb_subject_size'], '...', false );
 
                 if ($A['replies'] > 0 AND $_FF_CONF['sb_latestpostonly']) {
-                    $lastreplySQL = DB_query("Select uid,name,date from {$_TABLES['ff_topic']} WHERE pid={$A['id']} ORDER BY date DESC LIMIT 1");
+                    $lastreplySQL = DB_query("SELECT uid,name,date from {$_TABLES['ff_topic']} WHERE pid={$A['id']} ORDER BY date DESC LIMIT 1");
                     list ($uid,$postername,$postdate) = DB_fetchArray($lastreplySQL);
                 } else {
                     $postername = $A['name'];
@@ -922,7 +928,6 @@ function phpblock_forum_newposts() {
                 } else {
                     $profilelink = '';
                 }
-
                 $block->set_var ('css_id', $onetwo);
                 $block->set_var ('img_dir', $_CONF['site_url'] . '/forum/images');
                 $block->set_var ('forum_id', $A['forum']);
@@ -944,7 +949,7 @@ function phpblock_forum_newposts() {
                     $date = $dt->format($dt->getUserFormat(),true);
                     $block->set_var ('date', $date);
                 } else {
-                    $tdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+                    $tdate = $dt->format($_CONF['date'],true);
                     $block->set_var ('date', $tdate);
                 }
 
@@ -971,6 +976,33 @@ function phpblock_forum_newposts() {
     } else {
         return;
     }
+}
+
+function stripBBCode($text_to_search) {
+	// Replace paragraph tags
+	$pattern = '[p]';
+	$replace = '<br>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+	$pattern = '[/p]';
+	$replace = '<br>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+	$pattern = '[QUOTE]';
+	$replace = "<span style='font-style:italic;'>";
+	$replace = "<i>";
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+	$pattern = '[/QUOTE]';
+	$replace = '</span>';
+	$replace = '</i>';
+	$text_to_search = str_replace($pattern, $replace, $text_to_search);
+
+	// Replace everything else with nothing
+	$pattern = '|[[\/\!]*?[^\[\]]*?]|si';
+	$replace = '';
+	$text_to_search = preg_replace($pattern, $replace, $text_to_search);
+
+	return $text_to_search;
 }
 
 
@@ -1074,9 +1106,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             $fullsubject = "{$A['subject']}\n{$LANG_GF01['POSTEDBY']}:{$A['name']}{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}";
             $A['subject'] = COM_truncate( $A['subject'], $_FF_CONF['cb_subject_size'], '...',false );
             $dt = new Date($A['date'],$_USER['tzid']);
-            $firstdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $firstdate = $dt->format($_CONF['daytime'],true);
             $dt = new Date($A['lastupdated'],$_USER['tzid']);
-            $lastdate = $dt->format($_FF_CONF['default_Datetime_format'],true);
+            $lastdate = $dt->format($_CONF['daytime'],true);
 
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . $A['name'].', ';
             $topicinfo .= "{$firstdate}&lt;br/&gt;{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}&lt;br/&gt;";
@@ -1102,6 +1134,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $shortComment = trim($shortComment).$tailString;
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = stripBBCode($lastpostinfo);
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1131,6 +1164,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $shortComment = trim($shortComment).$tailString;
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+                $lastpostinfo = stripBBCode($lastpostinfo);
             }
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var (array(
@@ -1816,10 +1850,20 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file ('signature','signature_profile.thtml');
 
+    if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+        $exclude = array('img');
+        $img_tag = false;
+        $T->unset_var('img_tag_allowed');
+    } else {
+        $exclude = array();
+        $T->set_var('img_tag_allowed',true);
+    }
+
     $T->set_var(array(
         'signature'   => $signature,
-        'preview_signature' => BBC_formatTextBlock($signature,'text'),
+        'preview_signature' => BBC_formatTextBlock($signature,'text',array(),array(), $exclude),
     ));
+
     $error_message = '';
     if ( count($errors) > 0 ) {
         foreach($errors AS $error) {

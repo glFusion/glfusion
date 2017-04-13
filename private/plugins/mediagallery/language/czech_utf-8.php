@@ -680,7 +680,13 @@ $LANG_MG01 = array(
     'html5upload_file_size_limit' => 'File Size Limit:',
     'html5upload_err_album_id' => 'Unable to determine destination album',
     'square' => 'Square',
-    'posted' => 'Posted'
+    'posted' => 'Posted',
+    'general' => 'General',
+    'audio_properties' => 'Audio Properties',
+    'attributes' => 'Attributes',
+    'media_details' => 'Media Details',
+    'playback_options' => 'Playback Options',
+    'meta_data' => 'Meta Data'
 );
 
 ###############################################################################
@@ -872,7 +878,7 @@ $LANG_MG03 = array(
     'click_here' => 'klikni zde',
     'published' => 'Přidáno',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Zdá se, že Flash Plugin není nainstalován nebo že verze není aktuální a nedokáže zobrazit požadovaný obsah.<br/><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;"></a></p></div>',
+    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Zdá se, že Flash Plugin není nainstalován nebo že verze není aktuální a nedokáže zobrazit požadovaný obsah.<br/><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;"></a></p></div>',
     'tagline' => 'Galerie vytvořena pomocí <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Stáhni si soubor <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',

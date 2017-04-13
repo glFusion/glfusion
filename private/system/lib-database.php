@@ -115,8 +115,13 @@ $_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
 * Include appropriate DBMS object
 *
 */
+if ( !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
+    die("No MySQL driver found in PHP environment.");
+}
 if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
     require_once $_CONF['path_system'] . 'databases/mysqli.class.php';
+} else if ( ($_DB_dbms === 'mysqli') && !class_exists('MySQLi') ) {
+    require_once $_CONF['path_system'] . 'databases/mysql.class.php';
 } else {
     require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
 }

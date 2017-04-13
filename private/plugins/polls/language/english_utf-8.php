@@ -59,6 +59,13 @@ $LANG_POLLS = array(
     'start_poll'        => 'Start Poll',
     'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
     'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
+    'username'          => 'Username',
+    'ipaddress'         => 'IP Address',
+    'date_voted'        => 'Date Voted',
+    'description'       => 'Description',
+    'general'           => 'General',
+    'poll_questions'    => 'Poll Questions',
+    'permissions'       => 'Permissions',
 );
 
 ###############################################################################
@@ -97,7 +104,7 @@ $LANG25 = array(
     30 => 'Limit Results',
     31 => 'Question',
     32 => 'To remove this question from the poll, remove its question text',
-    33 => 'Open',
+    33 => 'Open for Voting',
     34 => 'Poll Topic:',
     35 => 'This poll has',
     36 => 'more questions.',

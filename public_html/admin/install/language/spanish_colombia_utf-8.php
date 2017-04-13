@@ -45,7 +45,7 @@ if (!defined ('GVERSION')) {
 $LANG_CHARSET = 'utf-8';
 
 // +---------------------------------------------------------------------------+
-// index.php
+// install.php
 
 $LANG_INSTALL = array(
     'back_to_top' => 'Arriba',
@@ -116,7 +116,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Ruta del directorio <i>private/</i> ',
     'path_settings' => 'Configurar rutas',
     'perform_upgrade' => 'Realizar actualización',
-    'php_req_version' => 'glFusion requiere PHP en su versión 5.2.0 o superior.',
+    'php_req_version' => 'glFusion requiere PHP en su versión 5.3.3 o superior.',
     'php_settings' => 'Configuraciones de PHP',
     'php_version' => 'Versión de PHP',
     'php_warning' => 'Si alguno de los objetos listados a continuación, aparece marcado en color <span class="no">rojo</span>, significa que encontrarás problemas con tu sitio glFusion. Verifica con tu proveedor de Alojamiento acerca de cómo cambiar alguna de las configuraciones de PHP.',
@@ -164,7 +164,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize' => 'glFusion le permite cargar extensiones, imágenes y archivos. Deberías permitir al menos 8M para la carga.',
     'use_utf8' => 'Utilizar UTF-8',
     'welcome_help' => 'Bienvenido al Asistente de instalación del CMS glFusion. Puedes instalar un nuevo sitio glFusion o actualizar un sitio glFusion existente.<br /><br />Selecciona el idioma para el asistente y la tarea a realizar, luego, haz clic sobre el botón: <strong>Siguiente</strong>.',
-    'wizard_version' => 'v'.GVERSION.' Asistente de instalación',
+    'wizard_version' => 'v%s Asistente de instalación',
     'system_path_prompt' => 'Ingresa la ruta completa, ruta absoluta de tu servidor al directorio: <strong>private/</strong> de glFusion.<br /><br />Este directorio contiene el archivo: <strong>db-config.php.dist</strong> o <strong>db-config.php</strong>.<br /><br />Ejemplos: /home/www/glfusion/private o c:/www/glfusion/private.<br /><br /><strong>Sugerencia:</strong> La ruta absoluta de tu directorio: <strong>public_html/</strong> <i>(no <strong>private/</strong>)</i> parece ser:<br />%s<br /><br /><strong>Configuraciones avanzadas</strong> Te permite sobre escribir varias de las rutas por defecto. Generalmente no necesitas modificar o definir esas rutas. El sistema las determinará automáticamente.',
     'advanced_settings' => 'Configuraciones Avanzadas',
     'log_path' => 'Ruta de Registros',
@@ -203,23 +203,46 @@ $LANG_INSTALL = array(
     'upgrade_bullet2' => 'Si estas usando un tema diferente del CMS predeterminado, asegurate que el tema ha sido actualizado para suportar glFusion. Existen varios cambios en los temas que deberían ser hechos en los temas personalizados para permitir que glFusion trabaje apropiadamente. Verifica que tienes hechos todos los cambios necesarios en la plantilla visitando la pagina <a target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Cambios en Plantillas</a>.',
     'upgrade_bullet3' => 'Si has personalizado alguna plantilla de temas, verifica los <a target="_blank" href="https://www.glfusion.org/wiki/glfusion:template_changes" title="glfusion:template_changes">Cambios en Plantillas</a> para el lanzamiento actual para ver si necesitas hacer alguna actualización para tus personalizaciones.',
     'upgrade_bullet4' => 'Verifica las extensiones de terceros para asegurar que son compatibles o si necesitaran ser actualizadas.',
-    'upgrade_bullet_title'      => 'Te recomendamos que hagas lo siguiente:',
-    'cleanup'                   => 'Borra los Archivos Obsoletos',
-    'obsolete_confirm'          => 'Confirma la Limpieza de Archivos',
-    'remove_skip_warning'       => '¿Seguro desear saltarte el borrado de los archivos obsoletos? Estos archivos ya no son necesarios y deben ser borrados por razones de seguridad. Si escoges saltarte el borrado automático, considera borrarlos manualmente.',
-	'removal_failure'           => 'Fallas en el Borrado',
-    'removal_fail_msg'          => 'Necesitaras borrar manualmente los archivos a continuación. Mira la <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">Wiki de glFusion - Archivos Obsoletos</a> para una lista detallada de los archivos a borrar.',
-    'removal_success'           => 'Archivos Obsoletos Borrados',
-    'removal_success_msg'       => 'Todos los archivos obsoletos han sido borrados exitosamente. Selecciona: <b>Completo</b> para terminar la actualización.',
-    'remove_obsolete'           => 'Borrar Archivos Obsoletos',
-    'remove_instructions'       => '<p>Con cada lanzamiento de glFusion, hay algunos archivos que son actualizados y en algunos casos borrados del sistema. Desde una perspectiva de seguridad, es importante borrar archivos viejos, no usados. El Asistente de Actualización puede borrar los archivos viejos, si así lo deseas, de otro modo necesitarías borrarlos manualmente.</p><p>Si deseas borrar manualmente los archivos - verifica la <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank"> Wiki de glFusion - Archivos Obsoletos</a> para obtener una lista de los archivos obsoletos a borrar. Selecciona: <span class="uk-text-bold">Saltar</span>, para completar el proceso de Actualización.</p><p>Para dejar que el asistente de Instalación borre automáticamente los archivos, selecciona: <b>Borrar Archivos</b>, para completar la actualización.',
-    'complete'                  => 'Completo',
-    'delete_files'              => 'Borrar Archivos',
-    'cancel'                    => 'Cancelar',
-    'show_files_to_delete'      => 'Mostrar Archivos a Borrar',
-    'skip'                      => 'Saltar',
-    'no_utf8'                   => 'Has selecccionado usar UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Crea la base de datos con el UTF-8 collation apropiado. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
-    'no_check_utf8'             => 'No has seleccionado to use UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Selecciona la opción UTF-8 en la pantalla de instalación. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
+    'upgrade_bullet_title' => 'Te recomendamos que hagas lo siguiente:',
+    'cleanup' => 'Borra los Archivos Obsoletos',
+    'obsolete_confirm' => 'Confirma la Limpieza de Archivos',
+    'remove_skip_warning' => '¿Seguro desear saltarte el borrado de los archivos obsoletos? Estos archivos ya no son necesarios y deben ser borrados por razones de seguridad. Si escoges saltarte el borrado automático, considera borrarlos manualmente.',
+    'removal_failure' => 'Fallas en el Borrado',
+    'removal_fail_msg' => 'Necesitaras borrar manualmente los archivos a continuación. Mira la <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">Wiki de glFusion - Archivos Obsoletos</a> para una lista detallada de los archivos a borrar.',
+    'removal_success' => 'Archivos Obsoletos Borrados',
+    'removal_success_msg' => 'Todos los archivos obsoletos han sido borrados exitosamente. Selecciona: <b>Completo</b> para terminar la actualización.',
+    'remove_obsolete' => 'Borrar Archivos Obsoletos',
+    'remove_instructions' => '<p>Con cada lanzamiento de glFusion, hay algunos archivos que son actualizados y en algunos casos borrados del sistema. Desde una perspectiva de seguridad, es importante borrar archivos viejos, no usados. El Asistente de Actualización puede borrar los archivos viejos, si así lo deseas, de otro modo necesitarías borrarlos manualmente.</p><p>Si deseas borrar manualmente los archivos - verifica la <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank"> Wiki de glFusion - Archivos Obsoletos</a> para obtener una lista de los archivos obsoletos a borrar. Selecciona: <span class="uk-text-bold">Saltar</span>, para completar el proceso de Actualización.</p><p>Para dejar que el asistente de Instalación borre automáticamente los archivos, selecciona: <b>Borrar Archivos</b>, para completar la actualización.',
+    'complete' => 'Completo',
+    'delete_files' => 'Borrar Archivos',
+    'cancel' => 'Cancelar',
+    'show_files_to_delete' => 'Mostrar Archivos a Borrar',
+    'skip' => 'Saltar',
+    'no_utf8' => 'Has selecccionado usar UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Crea la base de datos con el UTF-8 collation apropiado. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
+    'no_check_utf8' => 'No has seleccionado to use UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Selecciona la opción UTF-8 en la pantalla de instalación. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
+    'ext_installed' => 'Installed',
+    'ext_missing' => 'Missing',
+    'ext_required' => 'Required',
+    'ext_optional' => 'Optional',
+    'ext_required_desc' => 'must be installed in PHP',
+    'ext_optional_desc' => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_good' => 'properly installed.',
+    'ext_heading' => 'PHP Extensions',
+    'ctype_extension' => 'Ctype Extension',
+    'date_extension' => 'Date Extension',
+    'filter_extension' => 'Filter Extension',
+    'gd_extension' => 'GD Graphics Extension',
+    'gettext_extension' => 'Gettext Extension',
+    'json_extension' => 'Json Extension',
+    'mbstring_extension' => 'Multibyte (mbstring) Extension',
+    'mysqli_extension' => 'MySQLi Extension',
+    'mysql_extension' => 'MySQL Extension',
+    'openssl_extension' => 'OpenSSL Extension',
+    'session_extension' => 'Session Extension',
+    'xml_extension' => 'XML Extension',
+    'zlib_extension' => 'zlib Extension',
+    'required_php_ext' => 'Required PHP Extensions',
+    'all_ext_present' => 'All required and optional PHP extensions are properly installed.'
 );
 
 // +---------------------------------------------------------------------------+
@@ -233,9 +256,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion exitosamente. Toma un minuto para leer la información mostrada a continuación.',
     5 => 'Para ingresar en tu nuevo sitio glFusion, emplea esta cuenta:',
     6 => 'Usuario:',
-    7 => 'Admin', // do not translate
+    7 => 'Admin',
     8 => 'Contraseña:',
-    9 => 'password', // do not translate
+    9 => 'password',
     10 => 'Advertencia de seguridad',
     11 => 'No olvides',
     12 => 'cosas',
@@ -249,4 +272,5 @@ $LANG_SUCCESS = array(
     20 => 'instalado',
     21 => 'actualizar'
 );
+
 ?>

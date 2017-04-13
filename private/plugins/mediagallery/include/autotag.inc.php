@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | autotag.inc.php                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,6 +34,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
     global $mgAutoTagArray, $mg_installed_version;
 
     static $ss_count = 0;
+
+    static $jplayerLoaded = 0;
 
     if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $content;
@@ -345,28 +347,129 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 }
                 break;
             case 'playall' :
-               if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ||
-                        ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )) {
+               if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 || ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )) {
                     $link = '';
                     $content = str_replace ($autotag['tagstr'], $link, $content);
                     return $content;
                 }
+                if ( $jplayerLoaded == 0 ) {
+                    $outputHandle = outputHandler::getInstance();
+                    $outputHandle->addLinkScript($_MG_CONF['site_url'].'/players/jplayer/jplayer/jquery.jplayer.min.js');
+                    $outputHandle->addLinkScript($_MG_CONF['site_url'].'/players/jplayer/add-on/jplayer.playlist.min.js');
+                    $outputHandle->addLinkStyle($_MG_CONF['site_url'].'/players/jplayer/skin/pink.flag/css/jplayer.pink.flag.min.css');
+                    $jplayerLoaded++;
+                }
                 $V = new Template( MG_getTemplatePath(0) );
                 $V->set_file (array ('xspf' => 'xspf_radio.thtml'));
+                $aid = $parm1;
+            	if ( isset($MG_albums[$aid]->id ) ) {
+                    if ( $MG_albums[$aid]->access >= 1 ) {
+            			if ( $MG_albums[$aid]->cover_filename != '' && $MG_albums[$aid]->cover_filename != '0') {
+            			    if ( substr($MG_albums[$aid]->cover_filename,0,3) == 'tn_' ) {
+            			        $offset = 3;
+            			    } else {
+            			        $offset = 0;
+            			    }
+                            foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $MG_albums[$aid]->cover_filename[$offset] .'/' . $MG_albums[$aid]->cover_filename . $ext) ) {
+                                    $image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $MG_albums[$aid]->cover_filename[$offset] .'/' . $MG_albums[$aid]->cover_filename . $ext;
+                                    break;
+                                }
+                            }
+            			} else {
+            				$albumCover = $MG_albums[$aid]->findCover();
+            				if ( $albumCover != '' ) {
+            			    	if ( substr($albumCover,0,3) == 'tn_' ) {
+            			        	$offset = 3;
+            			    	} else {
+            			        	$offset = 0;
+            			    	}
+                                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $albumCover[$offset] .'/' . $albumCover . $ext) ) {
+                                        $image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $albumCover[$offset] .'/' . $albumCover . $ext;
+                                        break;
+                                    }
+                                }
+            				} else {
+            					$image = '/mediagallery/mediaobjects/speaker.svg';
+            				}
+            			}
+
+            			if ( $MG_albums[$aid]->tn_attached == 1 ) {
+                            foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'covers/cover_' . $MG_albums[$aid]->id . $ext) ) {
+                                    $image = $_MG_CONF['mediaobjects_url'] . '/covers/cover_' . $MG_albums[$aid]->id . $ext;
+                                    break;
+                                }
+                            }
+            			}
+            			$orderBy = MG_getSortOrder($aid, 0);
+
+            			$sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
+            			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.media_type=2 AND m.mime_type='audio/mpeg' " . $orderBy;
+            			$result = DB_query( $sql );
+            			$nRows  = DB_numRows( $result );
+            			$mediaRows = 0;
+                        $V->set_block('xspf', 'playlist', 'pl');
+                        $V->set_block('xspf', 'htmlplaylist', 'hpl');
+            			if ( $nRows > 0 ) {
+            			    while ( $row = DB_fetchArray($result)) {
+            			    	if ( $row['media_type'] == 0 ) {
+                                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                        if ( file_exists($_MG_CONF['path_mediaobjects'] . $src . "/" . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext) ) {
+                                            $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/' . $src . "/" . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext;
+                                            break;
+                                        }
+                                    }
+            		            } else {
+            		            	$PhotoURL  = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+            					}
+
+            			        if ( $row['media_tn_attached'] == 1 ) {
+                                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
+                                            $media_thumbnail = $_MG_CONF['mediaobjects_url'] . '/tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                                            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . 'tn/'.  $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
+                                            break;
+                                        }
+                                    }
+            			        } else {
+            			            $media_thumbnail      = '';
+            			        }
+            			        if ( $media_thumbnail != '' ) {
+            			        	if ( !file_exists($media_thumbnail_file) ) {
+            			        		$medai_thumbnail = '';
+            			        	}
+            			        }
+
+                                $V->set_var(array (
+                                    'audio_title' => $row['media_title'],
+                                    'audio_url'     => $PhotoURL,
+                                    'audio_poster'  => ($media_thumbnail != '') ? $media_thumbnail : $image,
+                                ));
+                                $V->parse('pl', 'playlist',true);
+                                $V->parse('hpl', 'htmlplaylist',true);
+            			    }
+            			}
+                    }
+            	}
                 $V->set_var(array(
                 	'aid'				=> $parm1,
-                	'site_url'			=> $_MG_CONF['site_url'],
-                	'autoplay'			=> $autoplay ? 'play' : 'stop',
+                	'site_url'			=> $_CONF['site_url'],
+                	'autoplay'			=> $autoplay ? 'true' : 'false',
                 	'id'				=> 'mp3radio' . rand(),
                 	'id2'				=> 'mp3radio' . rand(),
+                	'align'             => $align,
                 ));
                 $V->parse('output','xspf');
+                $player = $V->finish($V->get_var('output'));
+
                 if ( $align != '' && $align != "center") {
-                    $link = '<span style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output')) . '</span>';
+                    $link = '<span style="float:' . $align . ';padding:5px;">' . $player . '</span>';
                 } else if ($align == "center") {
-                    $link = '<span style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output')) . '</span>';
+                    $link = '<span style="text-align:center;padding:5px;">' . $player . '</span>';
                 } else {
-                    $link = '<span style="padding:5px;">' . $V->finish($V->get_var('output')) . '</span>';
+                    $link = '<span style="padding:5px;">' . $player . '</span>';
                 }
                 if ( $destination != 'block' ) {
                     $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -829,12 +932,20 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             $playback_options['height'] = 50;;
                             $playback_options['width']  = 300;
                             $V = new Template( MG_getTemplatePath(0) );
-                            if ($mp3_type == 'ribbon' ) {
+                            if (isset($mp3_type) && $mp3_type == 'ribbon' ) {
                                 $tfile = 'mp3_podcast.thtml';
                             } else {
+                                if ( $jplayerLoaded == 0 ) {
+                                    $outputHandle = outputHandler::getInstance();
+                                    $outputHandle->addLinkScript($_MG_CONF['site_url'].'/players/jplayer/jplayer/jquery.jplayer.min.js');
+                                    $outputHandle->addLinkScript($_MG_CONF['site_url'].'/players/jplayer/add-on/jplayer.playlist.min.js');
+                                    $outputHandle->addLinkStyle($_MG_CONF['site_url'].'/players/jplayer/skin/pink.flag/css/jplayer.pink.flag.min.css');
+                                    $jplayerLoaded++;
+                                }
     			                $tfile = 'view_mp3_flv.thtml';
     			            }
 			                $autostart = $autoplay ? 'play' : 'stop';
+			                $autoplay = $autoplay ? 'true' : 'false';
 
                             if ( $row['media_tn_attached'] == 1 ) {
                                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -854,7 +965,9 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 
                             $V->set_file (array ('audio' => $tfile));
                             $V->set_var(array(
+                                'align'             => $align,
                                 'autostart'         => $autostart,
+                                'autoplay'          => $autoplay,
                                 'enablecontextmenu' => 'true',
                                 'stretchtofit'      => 'false',
                                 'showstatusbar'     => 'true',
@@ -875,7 +988,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             if ( $align != '' && $align != "center") {
                                 $u_image = '<span style="float:' . $align . ';padding:5px;text-align:center;">' . $V->finish($V->get_var('output')) . '</span>';
                             } else if ($align == "center") {
-                                $u_image = '<span style="text-align:center;padding:5px;text-align:center;">' . $V->finish($V->get_var('output')) . '</span>';
+                                $u_image = '<div style="text-align:center;padding:5px;text-align:center;">' . $V->finish($V->get_var('output')) . '</div>';
                             } else {
                                 $u_image = '<span style="padding:5px;text-align:center;">' . $V->finish($V->get_var('output')) . '</span>';
                             }
@@ -1525,13 +1638,18 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                 $link = '';
                 if ( $alt == 1 && $row['remote_url'] != '' ) {
                     $url = $row['remote_url'];
-                    if ( $autotag['tag'] != 'image' && $enable_link != 0) {
+                    if ( $autotag['tag'] != 'image' && $enable_link != 0 && $MG_albums[$aid]->hidden != 1 ) {
                         $link = '<a href="' . $url . '"' . ($target=='' ? '' : ' target="' . $target . '"') . '>' . $tagtext . '</a>';
                     } else {
                         $link = $tagtext;
                     }
                 } else if ( $linkID == 0 ) {
-                    $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                    if ( $MG_albums[$aid]->hidden != 1 ) {
+                        $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                    } else {
+                        $url = '';
+                        $link = '';
+                    }
                 } else {
                     if ( $linkID < 1000000 ) {
                         if ( isset($MG_albums[$linkID]->id ) ) {
@@ -1542,7 +1660,11 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 $link = $tagtext;
                             }
                         } else {
-                            $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                            if ( $MG_albums[$aid]->hidden != 1 ) {
+                                $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
+                            } else {
+                                $url = '';
+                            }
                         }
                     } else {
                         $linkAID = (int) DB_getItem($_TABLES['mg_media_albums'],'album_id','media_id="' . DB_escapeString($linkID) . '"');

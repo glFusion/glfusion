@@ -770,7 +770,7 @@ function plugin_getwhatsnew_filemgmt() {
         } else {
             for( $i = 0; $i < $nrows1; $i++ ) {
                 list($lid, $ftitle) = DB_fetchArray( $result );
-                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\" title=\"".htmlspecialchars($ftitle,ENT_COMPAT,COM_getEncodingt())."\">";
+                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\" title=\"".htmlspecialchars($ftitle,ENT_COMPAT,COM_getEncodingt())."\" rel=\"nofollow\">";
 				if( strlen( $ftitle ) > $filemgmtWhatsNewTitleLength ) {
 					$titleTrimLength = $filemgmtWhatsNewTitleLength - 3;
                     $str .= COM_truncate( $ftitle,$titleTrimLength, '...' );
@@ -801,7 +801,7 @@ function plugin_getwhatsnew_filemgmt() {
                     $titlePrefix = "<b>C:</b>&nbsp;";
                     $ctitle = $titlePrefix . $ctitle;
                     $titleLength = $filemgmtWhatsNewTitleLength + strlen( $titlePrefix ) - 3;        // Compensate for the added HTML
-                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\" title=\"".htmlspecialchars($commentTitle,ENT_COMPAT,COM_getEncodingt())."\" >";
+                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\" title=\"".htmlspecialchars($commentTitle,ENT_COMPAT,COM_getEncodingt())."\" rel=\"nofollow\" >";
 					if( strlen( $ctitle ) > $titleLength ) {
 						$titleTrimLength = $titleLength - 3;
 	                    $str .= COM_truncate( $ctitle,$titleTrimLength, '...' );

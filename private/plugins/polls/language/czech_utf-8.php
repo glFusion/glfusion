@@ -66,7 +66,14 @@ $LANG_POLLS = array(
     'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Zahaj hlasování',
     'deny_msg' => 'Přístup k tomuto hlasování je odepřen. Buď bylo hlasování přesunuto či odstraněno nebo nemáte dostatečná práva.',
-    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote",
+    'username' => 'Username',
+    'ipaddress' => 'IP Address',
+    'date_voted' => 'Date Voted',
+    'description' => 'Description',
+    'general' => 'General',
+    'poll_questions' => 'Poll Questions',
+    'permissions' => 'Permissions'
 );
 
 ###############################################################################

@@ -37,7 +37,7 @@
 	<div class="uk-form-row uk-margin">
 		<button class="uk-button uk-button-success" type="submit" name="permsave" value="save">{$LANG_ADMIN[save]}</button>
 		<button class="uk-button uk-button-primary" type="reset" name="reset" value="reset">{$LANG_ADMIN[reset]}</button>
-		<button class="uk-button uk-button-danger" type="cancel" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
+		<button class="uk-button uk-button-danger" type="submit" name="cancel" value="cancel">{$LANG_ADMIN[cancel]}</button>
 	</div>
 
 </form>

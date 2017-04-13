@@ -13,9 +13,9 @@
 	</div>
 {!endif}
 
-	<div class="uk-navbar-content uk-visible-small">
+	<div class="uk-navbar-content  uk-navbar-flip uk-visible-small">
 			<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-				<button class="uk-button uk-button-primary">{$LANG01[menu]}&nbsp;<i class="uk-icon-caret-down"></i></button>
+				<button class="uk-button" type="button"><i class="uk-icon uk-icon-bars"></i>&nbsp;{$LANG01[menu]}&nbsp;<i class="uk-icon-caret-down"></i></button>
 				<div class="uk-dropdown uk-dropdown-close">
 					<ul class="uk-nav uk-nav-dropdown">
 <!-- BEGIN alt_menu_items -->

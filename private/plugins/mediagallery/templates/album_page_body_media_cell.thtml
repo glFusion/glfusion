@@ -41,10 +41,4 @@
 			<div class="uk-text-small">{media_cell_keywords}</div>
 {!endif}
 
-
-
-
-
-
-
 {# end {templatelocation} #}

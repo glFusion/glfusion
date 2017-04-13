@@ -6,6 +6,10 @@
 // |                                                                          |
 // | glFusion poll administration page                                        |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2017 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
@@ -47,7 +51,7 @@ if (!SEC_hasRights ('polls.edit')) {
     $display .= $MESSAGE[36];
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the poll administration screen.");
+    COM_accessLog ("User {$_USER['username']} tried to access the poll administration screen.");
     echo $display;
     exit;
 }
@@ -109,7 +113,7 @@ function POLLS_edit($pid = '')
 
     if (!empty ($pid) AND ($access == 3) AND !empty ($T['owner_id'])) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="delete"%s>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $poll_templates->set_var ('delete_option',
                                   sprintf ($delbutton, $jsconfirm));
@@ -123,6 +127,7 @@ function POLLS_edit($pid = '')
     } else {
         $T['pid'] = COM_makeSid ();
         $T['topic'] = '';
+        $T['description'] = '';
         $T['voters'] = 0;
         $T['display'] = 1;
         $T['is_open'] = 1;
@@ -145,7 +150,10 @@ function POLLS_edit($pid = '')
     $poll_templates->set_var('lang_donotusespaces', $LANG25[7]);
     $poll_templates->set_var('lang_topic', $LANG25[9]);
     $poll_templates->set_var('poll_topic', htmlspecialchars ($T['topic']));
+    $poll_templates->set_var('poll_description', htmlspecialchars($T['description']));
     $poll_templates->set_var('lang_mode', $LANG25[1]);
+
+    $poll_templates->set_var('lang_description', $LANG_POLLS['description']);
 
     $poll_templates->set_var('status_options', COM_optionList ($_TABLES['statuscodes'], 'code,name', $T['statuscode']));
     $poll_templates->set_var('comment_options', COM_optionList($_TABLES['commentcodes'],'code,name',$T['commentcode']));
@@ -197,6 +205,9 @@ function POLLS_edit($pid = '')
     $questions = DB_query($question_sql);
     include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navbar = new navbar;
+
+    $poll_templates->set_block('editor','questiontab','qt');
+
     for ($j=0; $j<$_PO_CONF['maxquestions']; $j++) {
         $display_id = $j+1;
         if ($j > 0) {
@@ -204,6 +215,9 @@ function POLLS_edit($pid = '')
         } else {
             $poll_templates->set_var('style', '');
         }
+
+        $poll_templates->set_var('question_tab', $LANG25[31] . " $display_id");
+
         $navbar->add_menuitem(
             $LANG25[31] . " $display_id",
             "showhidePollsEditorDiv(\"$j\",$j,{$_PO_CONF['maxquestions']});return false;",
@@ -214,6 +228,13 @@ function POLLS_edit($pid = '')
         $poll_templates->set_var('question_id', $j);
         $poll_templates->set_var('lang_question', $LANG25[31] . " $display_id");
         $poll_templates->set_var('lang_saveaddnew', $LANG25[32]);
+
+        if ( $Q['question'] != '' ) {
+            $poll_templates->set_var('hasdata',true);
+        } else {
+            $poll_templates->unset_var('hasdata');
+        }
+        $poll_templates->parse('qt','questiontab',true);
 
         // answers
         $answer_sql = "SELECT answer,aid,votes,remark "
@@ -242,8 +263,11 @@ function POLLS_edit($pid = '')
     }
     $navbar->set_selected($LANG25[31] . " 1");
     $poll_templates->set_var ('navbar', $navbar->generate());
+    $poll_templates->set_var('sectoken_name', CSRF_TOKEN);
     $poll_templates->set_var('gltoken_name', CSRF_TOKEN);
-    $poll_templates->set_var('gltoken', SEC_createToken());
+    $token = SEC_createToken();
+    $poll_templates->set_var('sectoken', $token);
+    $poll_templates->set_var('gltoken', $token);
 
     $poll_templates->parse('output','editor');
     $retval .= $poll_templates->finish($poll_templates->get_var('output'));
@@ -252,6 +276,7 @@ function POLLS_edit($pid = '')
 
     return $retval;
 }
+
 
 /**
 * Saves a poll
@@ -280,7 +305,7 @@ function POLLS_edit($pid = '')
 * @return   string                  HTML redirect or error message
 *
 */
-function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $login_required, $hideresults,
+function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $statuscode, $open, $login_required, $hideresults,
                   $commentcode, $A, $V, $R, $owner_id, $group_id, $perm_owner,
                   $perm_group, $perm_members, $perm_anon)
 
@@ -294,7 +319,8 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
 
     $pid = COM_sanitizeID($pid);
-    $topic = $topic;
+//    $topic = $topic;
+
     $old_pid = COM_sanitizeID($old_pid);
     if (empty($pid)) {
         if (empty($old_pid)) {
@@ -375,6 +401,10 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
 
     $topic = DB_escapeString ($topic);
 
+    $filter = new sanitizer();
+    $description = $filter->filterText($description);
+    $description = DB_escapeString($description);
+
     $k = 0; // set up a counter to make sure we do assign a straight line of question id's
     $v = 0; // re-count votes sine they might have been changed
     // first dimension of array are the questions
@@ -406,7 +436,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
         }
     }
     // save topics after the questions so we can include question count into table
-    $sql = "'$pid','$topic',$v, $k, '" . date ('Y-m-d H:i:s');
+    $sql = "'$pid','$topic','$description',$v, $k, '" . date ('Y-m-d H:i:s');
 
     if ($mainpage == 'on') {
         $sql .= "',1";
@@ -432,7 +462,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $
     $sql .= ",'$statuscode','$commentcode',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon";
 
     // Save poll topic
-    DB_save($_TABLES['polltopics'],"pid, topic, voters, questions, date, display, "
+    DB_save($_TABLES['polltopics'],"pid, topic, description,voters, questions, date, display, "
            . "is_open, login_required, hideresults, statuscode, commentcode, owner_id, group_id, "
            . "perm_owner, perm_group, perm_members, perm_anon",$sql);
 
@@ -553,11 +583,133 @@ function POLLS_list()
     return $retval;
 }
 
+function POLLS_deleteVote($id)
+{
+    global $_CONF, $_TABLES, $_PO_CONF;
+
+    $retval = false;
+
+    $result = DB_query("SELECT * FROM {$_TABLES['pollvoters']} WHERE id=".(int) $id);
+    if ( DB_numRows($result) == 1 ) {
+        $row = DB_fetchArray($result);
+        $pid = $row['pid'];
+
+        DB_query("DELETE FROM {$_TABLES['pollvoters']} WHERE id=".(int) $id);
+/* ------
+        $numVotes = DB_getItem($_TABLES['polltopics'],'voters','pid="'.DB_escapeString($pid).'"');
+        $numVotes--;
+        DB_query("UPDATE {$_TABLES['polltopics']} SET voters=".$numVotes." WHERE pid='".DB_escapeString($pid)."'");
+---- */
+        $retval = true;
+    }
+    return $retval;
+}
+
+
+function POLLS_listVotes($pid)
+{
+    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG_ADMIN, $LANG_POLLS, $LANG25, $LANG_ACCESS;
+
+    $retval = '';
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
+              'text' => 'Poll List'),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home']));
+
+    $retval .= COM_startBlock('Poll Votes for ' . $pid, '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG25[19],
+        plugin_geticon_polls()
+    );
+
+    $header_arr = array(
+//        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center', 'width' => '25px'),
+        array('text' => $LANG_POLLS['username'], 'field' => 'username', 'sort' => true),
+        array('text' => $LANG_POLLS['ipaddress'], 'field' => 'ipaddress', 'sort' => true),
+        array('text' => $LANG_POLLS['date_voted'], 'field' => 'date','sort' => true),
+    );
+
+    $defsort_arr = array('field' => 'date', 'direction' => 'desc');
+
+    $text_arr = array(
+        'has_extras'   => true,
+        'instructions' => $LANG25[19],
+        'form_url'     => $_CONF['site_admin_url'] . '/plugins/polls/index.php?lv=x&amp;pid='.urlencode($pid)
+    );
+
+    $sql = "SELECT * FROM {$_TABLES['pollvoters']} AS voters LEFT JOIN {$_TABLES['users']} AS users ON voters.uid=users.uid WHERE voters.pid='".DB_escapeString($pid)."'";
+
+    $query_arr = array(
+        'table' => 'pollvoters',
+        'sql' => $sql,
+        'query_fields' => array('uid'),
+        'default_filter' => ''
+    );
+
+    $token = SEC_createToken();
+
+    $retval .= ADMIN_list (
+        'polls', 'POLLS_getListFieldVoters', $header_arr,
+        $text_arr, $query_arr, $defsort_arr, '', $token
+    );
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+}
+
+function POLLS_getListFieldVoters($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $LANG25, $LANG_ACCESS, $LANG_ADMIN, $_USER;
+
+    $retval = '';
+
+        $dt = new Date('now',$_USER['tzid']);
+
+        switch($fieldname) {
+
+            case 'username' :
+                $retval = $fieldvalue;
+                if ( $fieldvalue == '' || $fieldvalue == NULL ) {
+                    $retval =  'Anonymous';
+                }
+                break;
+
+             case 'date':
+                $dt->setTimestamp($A['date']);
+                $retval = $dt->format($_CONF['date'],true);
+                break;
+
+            case 'delete':
+
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return doubleconfirm('" . 'Are you sure you want to delete this vote' . "','" . 'Are you really sure you want to delete this vote?' . "');";
+                    $retval = COM_createLink(
+                        $icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
+                        . '?delvote=x&amp;id=' . $A['id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                break;
+
+
+            default:
+                $retval = $fieldvalue;
+                break;
+        }
+
+
+    return $retval;
+}
+
 // MAIN ========================================================================
 
 
 $action = '';
-$expected = array('edit','save','delete');
+$expected = array('edit','save','delete','lv','delvote');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -580,58 +732,76 @@ if (isset($_POST['msg'])) {
     $msg = COM_applyFilter($_GET['msg'], true);
 }
 
+$page = '';
+$title = $LANG25[18];
+
 switch ($action) {
 
+    case 'delvote' :
+        if ( !isset($_GET['id'])) {
+            $page = POLLS_list();
+        } elseif (SEC_checktoken() ) {
+            $id = COM_applyFilter($_GET['id'],true);
+            POLLS_deleteVote($id);
+            $page = POLLS_list();
+        } else {
+            $page = POLLS_list();
+        }
+        break;
+
+    case 'lv' :
+        $title = $LANG25[5];
+        $page .= POLLS_listVotes($pid);
+        break;
+
     case 'edit':
-        $display .= COM_siteHeader('menu', $LANG25[5]);
-        $display .= POLLS_edit($pid);
-        $display .= COM_siteFooter();
+        $title = $LANG25[5];
+        $page .= POLLS_edit($pid);
         break;
 
     case 'save':
         if (SEC_checktoken()) {
-          $old_pid = (isset($_POST['old_pid'])) ? COM_sanitizeID(COM_applyFilter($_POST['old_pid'])): '';
-          if (empty($pid) && !empty($old_pid)) {
-              $pid = $old_pid;
-          }
-          if (empty($old_pid) && (!empty($pid))) {
-              $old_pid = $pid;
-          }
-          if (!empty ($pid)) {
-              $statuscode = (isset($_POST['statuscode'])) ? COM_applyFilter($_POST['statuscode'], true) : 0;
-              $mainpage = (isset($_POST['mainpage'])) ? COM_applyFilter($_POST['mainpage']) : '';
-              $open = (isset($_POST['open'])) ? COM_applyFilter($_POST['open']) : '';
-              $login_required = (isset($_POST['login_required'])) ? COM_applyFilter($_POST['login_required']) : '';
-              $hideresults = (isset($_POST['hideresults'])) ? COM_applyFilter($_POST['hideresults']) : '';
-              $display .= POLLS_save($pid, $old_pid, $_POST['question'], $mainpage, $_POST['topic'],
-                              $statuscode, $open, $login_required, $hideresults,
-                              COM_applyFilter($_POST['commentcode'], true),
-                              $_POST['answer'], $_POST['votes'], $_POST['remark'],
-                              COM_applyFilter($_POST['owner_id'], true),
-                              COM_applyFilter($_POST['group_id'], true),
-                              $_POST['perm_owner'], $_POST['perm_group'],
-                              $_POST['perm_members'], $_POST['perm_anon']);
-          } else {
-              $display .= COM_siteHeader('menu', $LANG25[5]);
-              $display .= COM_startBlock($LANG21[32], '',
-                                  COM_getBlockTemplate('_msg_block', 'header'));
-              $display .= $LANG25[17];
-              $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-              $display .= POLLS_edit ();
-              $display .= COM_siteFooter ();
-          }
+            $old_pid = (isset($_POST['old_pid'])) ? COM_sanitizeID(COM_applyFilter($_POST['old_pid'])): '';
+            if (empty($pid) && !empty($old_pid)) {
+                $pid = $old_pid;
+            }
+            if (empty($old_pid) && (!empty($pid))) {
+                $old_pid = $pid;
+            }
+            if (!empty ($pid)) {
+                $statuscode = (isset($_POST['statuscode'])) ? COM_applyFilter($_POST['statuscode'], true) : 0;
+                $mainpage = (isset($_POST['mainpage'])) ? COM_applyFilter($_POST['mainpage']) : '';
+                $open = (isset($_POST['open'])) ? COM_applyFilter($_POST['open']) : '';
+                $login_required = (isset($_POST['login_required'])) ? COM_applyFilter($_POST['login_required']) : '';
+                $hideresults = (isset($_POST['hideresults'])) ? COM_applyFilter($_POST['hideresults']) : '';
+                $page .= POLLS_save($pid, $old_pid, $_POST['question'], $mainpage, $_POST['topic'],$_POST['description'],
+                    $statuscode, $open, $login_required, $hideresults,
+                    COM_applyFilter($_POST['commentcode'], true),
+                    $_POST['answer'], $_POST['votes'], $_POST['remark'],
+                    COM_applyFilter($_POST['owner_id'], true),
+                    COM_applyFilter($_POST['group_id'], true),
+                    $_POST['perm_owner'], $_POST['perm_group'],
+                    $_POST['perm_members'], $_POST['perm_anon']);
+            } else {
+                $title = $LANG25[5];
+                $page .= COM_startBlock($LANG21[32], '',
+                COM_getBlockTemplate('_msg_block', 'header'));
+                $page .= $LANG25[17];
+                $page .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+                $page .= POLLS_edit ();
+            }
         } else {
-          COM_accessLog("User {$_USER['username']} tried to save poll $pid and failed CSRF checks.");
-          $display =  COM_refresh($_CONF['site_admin_url'] . '/index.php');
+            COM_accessLog("User {$_USER['username']} tried to save poll $pid and failed CSRF checks.");
+            $page =  COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
 
     case 'delete':
         if (empty($pid)) {
             COM_errorLog ('Ignored possibly manipulated request to delete a poll.');
-            $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php');
+            $page .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php');
         } elseif (SEC_checktoken()) {
-            $display .= POLLS_delete($pid);
+            $page .= POLLS_delete($pid);
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete poll $pid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
@@ -639,14 +809,14 @@ switch ($action) {
         break;
 
     default:
-        $display .= COM_siteHeader('menu', $LANG25[18]);
-        $display .= ($msg > 0) ? COM_showMessage ($msg, 'polls') : '';
-        $display .= POLLS_list();
-        $display .= COM_siteFooter();
+        $title = $LANG25[18];
+        $page .= ($msg > 0) ? COM_showMessage ($msg, 'polls') : '';
+        $page .= POLLS_list();
         break;
-
 }
 
+$display .= COM_siteHeader('menu', $title);
+$display .= $page;
+$display .= COM_siteFooter();
 echo $display;
-
 ?>

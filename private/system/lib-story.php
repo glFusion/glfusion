@@ -350,7 +350,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                    $LANG_TRB['send_trackback'] );
             }
             $article->set_var( 'story_display',
-                               ( $index == 'p' ) ? 'preview' : 'article' );
+                               ( $index == 'p' ) ? 'preview' : 'article', false, true );
             $article->set_var( 'story_counter', 0 );
 
             // add print icon
@@ -585,7 +585,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             } else {
                 $article->set_var( 'feed_icon', '' );
             }
-            $article->set_var( 'story_display', 'index' );
+            $article->set_var( 'story_display', 'index', false,true );
 
             $storycounter++;
             $article->set_var( 'story_counter', $storycounter );
@@ -643,6 +643,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     } else {
+        $article->set_var( 'story_display', ( $index != 'p' ) ? 'index' : 'article', false, true );
         PLG_templateSetVars($article_filevar,$article);
         if ( ( $index == 'n' ) || ( $index == 'p' ) ) {
             if ( empty( $bodytext )) {
@@ -1349,7 +1350,6 @@ function service_submit_story($args, &$output, &$svc_msg)
         } else {
             $args['perm_anon'] = COM_applyBasicFilter($args['perm_anon'], true);
         }
-
         if (!isset($args['draft_flag'])) {
             $args['draft_flag'] = $_CONF['draft_flag'];
         }
@@ -1363,6 +1363,14 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
     /* - END: Set all the defaults - */
+
+    if ( isset($args['draft_flag_yes'] ) || isset($args['draft_flag_no']) ) {
+        if ( isset($args['draft_flag_yes']) ) {
+            $args['draft_flag'] = 1;
+        } else {
+            $args['draft_flag'] = 0;
+        }
+    }
 
     if (!isset($args['sid'])) {
         $args['sid'] = '';

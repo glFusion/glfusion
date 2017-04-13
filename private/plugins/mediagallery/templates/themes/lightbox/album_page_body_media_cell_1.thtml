@@ -2,14 +2,15 @@
 <a name="{media_id}"></a>
 <div class="uk-panel uk-panel-box">
 	<div class="uk-grid uk-text-left">
-
-	<div class="uk-width-medium-1-3">
-		{media_item_thumbnail}
+		<div class="uk-width-medium-1-3 uk-text-center">
+			{media_link_start}
+    		<img class="" src="{raw_media_thumbnail}" alt="">
+			{media_link_end}
 {!if rating_box}
 		{rating_box}
 {!endif}
 		<div class="uk-text-center">
-			{lang_comments} {media_comments_count}&nbsp;{edit_link}
+			{lang_comments_hot}&nbsp;{edit_link}
 		</div>
 	</div>
 	<div class="uk-width-medium-2-3">

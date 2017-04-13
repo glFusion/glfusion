@@ -104,8 +104,8 @@
 	</fieldset>
 
 	<div class="uk-form-row uk-margin">
-		<button class="uk-button uk-button-success" type=submit name="mode" value="{lang_save}">{lang_save}</button>
-		<button class="uk-button uk-button-danger" type="cancel" name="mode" value="{lang_cancel}">{lang_cancel}</button>
+		<button class="uk-button uk-button-success" type="submit" name="mode" value="{lang_save}">{lang_save}</button>
+		<button class="uk-button uk-button-danger" type="submit" name="mode" value="{lang_cancel}">{lang_cancel}</button>
 	</div>
 
 </form>

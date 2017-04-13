@@ -61,6 +61,7 @@ $_SQL['polltopics'] = "
 CREATE TABLE {$_TABLES['polltopics']} (
   pid varchar(128) NOT NULL,
   topic varchar(255) default NULL,
+  description text default NULL,
   voters mediumint(8) unsigned default NULL,
   questions int(11) NOT NULL default '0',
   date datetime default NULL,
@@ -92,7 +93,8 @@ CREATE TABLE {$_TABLES['pollvoters']} (
   ipaddress varchar(15) NOT NULL default '',
   uid mediumint(8) NOT NULL default 1,
   date int(10) unsigned default NULL,
-  PRIMARY KEY  (id)
+  PRIMARY KEY  (id),
+  INDEX pollid( pid )
 ) ENGINE=MyISAM
 ";
 

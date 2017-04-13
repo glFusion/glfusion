@@ -63,7 +63,7 @@
 {!endif}
         <div class="uk-margin-top">
             <button class="uk-button uk-button-danger" type="submit" name="submit" value="{button_text}">{button_text}</button>
-            <button class="uk-button uk-button-primary" type="cancel" name="cancel" value="{$LANG_GF01[CANCEL]}">{$LANG_GF01[CANCEL]}</button>
+            <button class="uk-button uk-button-primary" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}">{$LANG_GF01[CANCEL]}</button>
         </div>
     </form>
 </div>

@@ -225,13 +225,20 @@ function forum_index()
                     }
                     $postdate = COM_getUserDateTimeFormat($P['date']);
                     $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;highlight='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
+                    if ( $P['pid'] != 0 ) {
+                        $pResult = DB_query("SELECT views, replies FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['pid']);
+                        list($views,$replies) = DB_fetchArray($pResult);
+                    } else {
+                        $views = $P['views'];
+                        $replies = $P['replies'];
+                    }
                     $report->set_var(array(
                             'post_start_ahref'  => $link,
                             'post_subject'      => $P['subject'],
                             'post_end_ahref'    => '</a>',
                             'post_date'         => $postdate[0],
-                            'post_replies'      => $P['replies'],
-                            'post_views'        => $P['views'],
+                            'post_replies'      => $replies, // $P['replies'],
+                            'post_views'        => $views, // $P['views'],
                             'csscode'           => $csscode));
                     $report->parse('rrow', 'reportrow',true);
 
@@ -425,15 +432,15 @@ function forum_index()
         	                $folder_msg = $LANG_GF02['quietforum'];
     	                }
     	                $dt->setTimestamp($B['date']);
-                        $lastdate1 = $dt->format('Y-m-d',true);
+                        $lastdate1 = $dt->format($_CONF['shortdate'],true);
                         $dtNow = new Date('now',$_USER['tzid']);
             	        if ($dt->isToday()) {
-            	            $lasttime = $dt->format('h:i a',true);
+                            $lasttime = $dt->format($_CONF['timeonly'],true);
                     	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
     	                } elseif ($_FF_CONF['allow_user_dateformat']) {
         	                $lastdate = $dt->format($dt->getUserFormat(),$B['date'],true);
                 	    } else {
-                    	    $lastdate = $dt->format('M/d/y h:i a',true);
+                            $lastdate = $dt->format($_CONF['daytime'],true);
     	                }
 
         	            $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
@@ -790,30 +797,30 @@ function forum_index()
                 $lastreply['date'] = $record['lastupdated'];
                 $lastreply['name'] = $record['lpname'];
                 $dt->setTimestamp($lastreply['date']);
-                $lastdate1 = $dt->format('m/d/Y',true);
+                $lastdate1 = $dt->format($_CONF['shortdate'],true);
                 if ($dt->isToday()) {
-                    $lasttime = $dt->format('H:i a',true);
+                    $lasttime = $dt->format($_CONF['timeonly'],true);
                     $lastdate = $LANG_GF01['TODAY'] . $lasttime;
                 } elseif ($_FF_CONF['allow_user_dateformat']) {
                     $lastdate = $dt->format($dt->getUserFormat(),true);
                 } else {
-                    $lastdate = $dt->format('M/d/y H:i a',true);
+                    $lastdate = $dt->format($_CONF['daytime'],true);
                 }
             } else {
                 $dt->setTimestamp($record['lastupdated']);
-                $lastdate = $dt->format('M/d/y H:i a',true);
+                $lastdate = $dt->format($_CONF['daytime'],true);
                 $lastreply = $record;
             }
 
             $dt->setTimestamp($record['date']);
-            $firstdate1 = $dt->format('m/d/Y',true);
+            $firstdate1 = $dt->format($_CONF['shortdate'],true);
             if ($dt->isToday() ) {
-                $firsttime = $dt->format('H:i a',true);
+                $firsttime = $dt->format($_CONF['timeonly'],true);
                 $firstdate = $LANG_GF01['TODAY'] . $firsttime;
             } elseif ($_FF_CONF['allow_user_dateformat']) {
                 $firstdate = $dt->format($dt->getUserFormat(),true);
             } else {
-                $firstdate = $dt->format('M/d/y H:i a',true);
+                $firstdate = $dt->format($_CONF['daytime'],true);
             }
 
             if (!COM_isAnonUser()) {

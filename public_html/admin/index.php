@@ -276,7 +276,7 @@ function security_check_reminder()
 
     $done = DB_getItem ($_TABLES['vars'], 'value', "name = 'security_check'");
     if ($done != 1) {
-        $retval .= COM_showMessage(92,'','',true,'error');
+        $retval .= COM_showMessage(92,'','',false,'error');
     }
 
     return $retval;

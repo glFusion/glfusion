@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display poll results and past polls.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -99,6 +99,8 @@ function POLLS_pollList()
 // an aid of -1 will display the select poll
 
 $display = '';
+$page = '';
+$title = $LANG_POLLS['pollstitle'];
 
 $pid = isset($_POST['pid']) ? COM_applyFilter($_POST['pid'],true) : 0;
 $type = isset($_POST['type']) ? COM_applyFilter($_POST['type']) : '';
@@ -110,10 +112,9 @@ if ( $type != '' && $type != 'article' ) {
 }
 
 if (isset ($_POST['reply']) && ($_POST['reply'] == $LANG01[25])) {
-    $display .= COM_refresh ($_CONF['site_url'] . '/comment.php?sid='
+    echo COM_refresh ($_CONF['site_url'] . '/comment.php?sid='
              . $pid . '&pid=' . $pid
              . '&type=' . $type);
-    echo $display;
     exit;
 }
 
@@ -151,25 +152,26 @@ if (isset($pid)) {
     $nquestions = DB_numRows($questions);
 }
 if (empty($pid)) {
-    $display .= POLLS_siteHeader( $LANG_POLLS['pollstitle']);
+    $title = $LANG_POLLS['pollstitle'];
     if ($msg > 0) {
-        $display .= COM_showMessage($msg, 'polls');
+        $page .= COM_showMessage($msg, 'polls');
     }
-    $display .= POLLS_pollList ();
-} else if ((isset($_POST['aid']) && (count($_POST['aid']) == $nquestions)) && !isset ($_COOKIE['poll-'.$pid])) {
-    setcookie ('poll-'.$pid, implode('-',$aid), time() + $_PO_CONF['pollcookietime'],
+    $page .= POLLS_pollList ();
+} else if ((isset($_POST['aid']) && is_array($_POST['aid']) && (count($_POST['aid']) == $nquestions)) && !isset($_COOKIE['poll-' . $pid])) {
+    setcookie ('poll-'.$pid, 'x', time() + $_PO_CONF['pollcookietime'],
                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                $_CONF['cookiesecure']);
-    $display .= POLLS_siteHeader() . POLLS_saveVote($pid, $aid);
+
+    $page .= POLLS_saveVote($pid, $aid);
+
 } else if (isset($pid)) {
-    $display .= POLLS_siteHeader();
     if ($msg > 0) {
-        $display .= COM_showMessage($msg, 'polls');
+        $page .= COM_showMessage($msg, 'polls');
     }
     if (isset($_POST['aid'])) {
         $eMsg = $LANG_POLLS['answer_all'] . ' "'
             . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'") . '"';
-        $display .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
+        $page .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
     }
     if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".DB_escapeString($pid)."'") != 1) {
         $aid = -1; // poll closed - show result
@@ -178,21 +180,24 @@ if (empty($pid)) {
         && !POLLS_ipAlreadyVoted ($pid)
         && $aid != -1
         ) {
-        $display .= POLLS_pollVote($pid);
+        $page .= POLLS_pollVote($pid);
     } else {
-        $display .= POLLS_pollResults($pid, 400, $order, $mode);
+        $page .= POLLS_pollResults($pid, 400, $order, $mode);
     }
 } else {
     $poll_topic = DB_query ("SELECT topic FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql ('AND'));
     $Q = DB_fetchArray ($poll_topic);
     if (empty ($Q['topic'])) {
-        $display .= POLLS_siteHeader($LANG_POLLS['pollstitle'])
-                 . POLLS_pollList();
+        $title = $LANG_POLLS['pollstitle'];
+        $page .= POLLS_pollList();
     } else {
-        $display .= POLLS_siteHeader($Q['topic'])
-                 . POLLS_pollResults($pid, 400, $order, $mode);
+        $title = $Q['topic'];
+        $page .= POLLS_pollResults($pid, 400, $order, $mode);
     }
 }
+
+$display = POLLS_siteHeader($title);
+$display .= $page;
 $display .= POLLS_siteFooter();
 
 echo $display;

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -67,7 +67,7 @@ function bbcode_stripcontents ($text) {
 function bbcode_htmlspecialchars($text) {
     global $_FF_CONF;
 
-    return (@htmlspecialchars ($text,ENT_QUOTES, COM_getEncodingt()));
+    return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt()));
 }
 
 function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
@@ -188,7 +188,12 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
                     $srcThumbnail = "{$_CONF['site_url']}/forum/images/icons/none.gif";
                 }
             }
-            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'" alt="'.$LANG_GF10['click2download'].'"/></a>';
+            if ( $lb == '' ) {
+                $titletext = $LANG_GF10['click2download'];
+            } else {
+                $titletext = $LANG_GF10['click2view'];
+            }
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$titletext.'" alt="'.$titletext.'"/></a>';
             break;
          }
         $i++;
@@ -257,13 +262,6 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
         return true;
     }
 
-    if($_FF_CONF['allow_smilies']) {
-        if (function_exists('msg_restoreEmoticons') AND $_FF_CONF['use_smilies_plugin']) {
-            $content = msg_restoreEmoticons($content);
-        } else {
-            $content = forum_xchsmilies($content,true);
-        }
-    }
     if ($_FF_CONF['use_geshi']) {
         /* Support for formatting various code types : [code=java] for example */
         if (!isset ($attributes['default'])) {
@@ -337,7 +335,8 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     }
 
     if ( ! ($status & DISABLE_SMILIES ) ) {
-        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_replacesmilie');      // calls replacesmilie on all text blocks
+//        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_replacesmilie');      // calls replacesmilie on all text blocks
+        $bbcode->addParser (array ('block', 'inline', 'listitem'), '_ff_replacesmilie');
     }
 
     if ( ! ($status & DISABLE_URLPARSE ) ) {
@@ -408,7 +407,12 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
     $sig    = '';
 
     if ( $_FF_CONF['bbcode_signature'] && $signature != '') {
-        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text').'</div><div style="clear:both;"></div>';
+        if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+            $exclude = array('img');
+        } else {
+            $exclude = array();
+        }
+        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text',array(),array(), $exclude).'</div><div style="clear:both;"></div>';
     } else {
         if (!empty ($tagline)) {
             if ( $postmode == 'html' ) {
@@ -481,7 +485,7 @@ function gfm_getoutput( $id ) {
     $A['comment'] = _ff_FormatForEmail( $A['comment'], $A['postmode'] );
     $notifymsg = sprintf($LANG_GF02['msg27'],'<a href="'.$_CONF['site_url'].'/forum/notify.php">'.$_CONF['site_url'].'/forum/notify.php</a>');
     $dt->setTimestamp($A['date']);
-    $date = $dt->format('F d Y @ h:i a');
+    $date = $dt->format($_CONF['date'],true);
     if ($A['pid'] == '0') {
         $postid = $A['id'];
     } else {

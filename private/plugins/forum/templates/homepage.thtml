@@ -27,6 +27,11 @@
 					<div class="uk-text-left uk-text-medium">
 						{forum_desc}
 					</div>
+{!if moderator}
+					<div class="uk-text-left uk-text-medium">
+        		{moderator}
+		      </div>
+{!endif}
 				</dt>
 				<dd class="topics uk-hidden-small">{topics}</dd>
 				<dd class="posts uk-hidden-small">{posts}</dd>

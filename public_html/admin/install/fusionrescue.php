@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Safely edit glFusion configuration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.6.5');
+define('GVERSION','1.6.6');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
@@ -45,7 +45,7 @@ require_once $_CONF['path_system'].'lib-database.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -57,7 +57,6 @@ define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to 
 /* Constants for account types */
 define('LOCAL_USER',1);
 define('REMOTE_USER',2);
-
 
 function FR_stripslashes( $text ) {
     if( get_magic_quotes_gpc() == 1 ) {
@@ -391,7 +390,7 @@ function rescue_header( $authenticated ) {
             </ul>
             <div class="uk-navbar-flip uk-hidden-small">
             <div class="uk-navbar-content">
-            <a class="uk-button uk-button-danger" type="cancel" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
+            <a class="uk-button uk-button-danger" type="submit" name="mode" href="fusionrescue.php?mode=cancel">Logout</a>
             </div>
             </div>
         ';
@@ -562,7 +561,20 @@ function getNewPaths( $group = 'Core') {
     $group = DB_escapeString($group);
 
     $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = DB_query($sql,1) or die('Cannot execute query');
+    $result = DB_query($sql,1);
+
+    if ( $result === false ) {
+        $retval = rescue_header(0);
+        $retval .= '<div class="uk-alert uk-alert-danger">
+                    fusionrecue is unable to retrieve the glFusion configuration data from the database.<br>
+                    Please validate that the glFusion database is not corrupted and that it contains an
+                    active glFusion site\'s data.
+                    </div>
+                    ';
+        $retval .= rescue_footer();
+        echo $retval;
+        exit;
+    }
 
     if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
     $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
@@ -672,7 +684,7 @@ function getNewPaths( $group = 'Core') {
         </div>
         <div class="uk-text-center">
         <button class="uk-button uk-button-success" type="submit" name="mode" value="save" />Save</button>
-        <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+        <button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel" />Logout</button>
         </div>
         </form>
     ';
@@ -790,7 +802,7 @@ function requestNewPassword($errorMsg = '')
           </div>
           <div class="uk-text-center">
             <button class="uk-button uk-button-success" type="submit" name="mode" value="reset" />Reset Password</button>
-            <button class="uk-button uk-button-danger" type="cancel" name="mode" value="cancel" />Logout</button>
+            <button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel" />Logout</button>
           </div>
         </form>
     ';

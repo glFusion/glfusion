@@ -18,7 +18,7 @@ $(document).ready(function() {
 	var counter = 1;
 	var infinite = new Waypoint.Infinite({
   	element: $('.infinite-container')[0],
- 	  onAfterPageLoad: function() {
+ 	  onAfterPageLoad: function($item) {
  	  	counter++;
  	  	$("iframe.uk-responsive-width").each(function(i,el) {
  	  		var ele = $( el );
@@ -45,6 +45,11 @@ $(document).ready(function() {
 {!if fb_comment_engine}
  	  	FB.XFBML.parse();
 {!endif}
+
+{!if plugin_scripts}
+  {plugin_scripts}
+{!endif}
+
  	  },
  	  onBeforePageLoad: function() {
  	  	if (counter > 3 ) {

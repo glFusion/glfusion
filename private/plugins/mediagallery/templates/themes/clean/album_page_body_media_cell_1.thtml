@@ -6,9 +6,6 @@
 		<a href="{url_media_item}">
 			<img class="uk-thumbnail uk-align-center" src="{media_thumbnail}" {media_size}>
 		</a>
-{!if rating_box}
-		{rating_box}
-{!endif}
 		<div class="uk-text-center">
 			{lang_comments} {media_comments_count}&nbsp;{edit_link}
 		</div>

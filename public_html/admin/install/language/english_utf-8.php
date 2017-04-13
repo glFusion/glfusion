@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -112,7 +112,7 @@ $LANG_INSTALL = array(
     'path_prompt'               => 'Path to private/ directory',
     'path_settings'             => 'Path Settings',
     'perform_upgrade'			=> 'Perform Upgrade',
-    'php_req_version'			=> 'glFusion requires PHP version 5.3.0 or newer.',
+    'php_req_version'			=> 'glFusion requires PHP version 5.3.3 or newer.',
     'php_settings'				=> 'PHP Settings',
     'php_version'				=> 'PHP Version',
     'php_warning'				=> 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -160,7 +160,7 @@ $LANG_INSTALL = array(
     'upload_max_filesize'		=> 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'use_utf8'                  => 'Use UTF-8',
     'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
-    'wizard_version'            => 'v' . GVERSION . ' Installation Wizard',
+    'wizard_version'            => 'v%s Installation Wizard',
     'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />For a new install, this is the directory that contains the <strong>db-config.php.dist</strong> file, or for an upgrade, and existing <strong>db-config.php</strong> file.<br /><br />Directory Examples:<br />/home/www/glfusion/private/<br />c:/www/glfusion/private/<br /><br /><strong>Hint:</strong> From a security perspective, the most desirable location for the private/ directory is outside of the web root.  The web root is the directory that is served by your web host that relates to the root url of your site (http://www.yoursite.com/).<br /><br />It appears that the absolute path to your <strong>public_html/</strong> <i>(not <strong>private/</strong>)</i> directory is:<br /><br />%s<br /><br />We suggest that you place your private/ directory somewhere outside of the web root, if your web host allows this.<br /><br />If your web host does not allow for placement of files outside of the web root, please follow the instructions on <a href="https://www.glfusion.org/wiki/glfusion:install:pathsetting" target="_blank">Installing the private/ directory in the public web space</a> at the glFusion Documentation Wiki.<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
     'advanced_settings'         => 'Advanced Settings',
     'log_path'                  => 'Logs Path',
@@ -216,6 +216,29 @@ $LANG_INSTALL = array(
     'skip'                      => 'Skip',
     'no_utf8'                   => 'You have selected to use UTF-8 (which is recommended), but the database is not configured with a UTF-8 collation. Please create the database with the proper UTF-8 collation. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
     'no_check_utf8'             => 'You have not selected to use UTF-8 (which is recommended), but the database is configured with a UTF-8 collation. Please select UTF-8 option on install screen. Please see the <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Database Setup Guide</a> in the glFusion Documentation Wiki for more information.',
+    'ext_installed'             => 'Installed',
+    'ext_missing'               => 'Missing',
+    'ext_required'              => 'Required',
+    'ext_optional'              => 'Optional',
+    'ext_required_desc'         => 'must be installed in PHP',
+    'ext_optional_desc'         => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_good'                  => 'properly installed.',
+    'ext_heading'               => 'PHP Extensions',
+    'ctype_extension'           => 'Ctype Extension',
+    'date_extension'            => 'Date Extension',
+    'filter_extension'          => 'Filter Extension',
+    'gd_extension'              => 'GD Graphics Extension',
+    'gettext_extension'         => 'Gettext Extension',
+    'json_extension'            => 'Json Extension',
+    'mbstring_extension'        => 'Multibyte (mbstring) Extension',
+    'mysqli_extension'          => 'MySQLi Extension',
+    'mysql_extension'           => 'MySQL Extension',
+    'openssl_extension'         => 'OpenSSL Extension',
+    'session_extension'         => 'Session Extension',
+    'xml_extension'             => 'XML Extension',
+    'zlib_extension'            => 'zlib Extension',
+    'required_php_ext'          => 'Required PHP Extensions',
+    'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
 );
 
 // +---------------------------------------------------------------------------+
@@ -241,7 +264,7 @@ $LANG_SUCCESS = array(
     16 => 'Set permissions on',
     17 => 'and',
     18 => 'back to',
-    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>newadmin</b> and the password is <b>password</b>',
+    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
     20 => 'installed',
     21 => 'upgraded'
 );

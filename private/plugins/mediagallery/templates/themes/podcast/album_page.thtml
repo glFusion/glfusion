@@ -1,74 +1,67 @@
 {# begin {templatelocation} #}
 {lbslideshow}
 <script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
-<nav class="uk-navbar uk-margin-bottom">
-	<div class="uk-navbar-content uk-text-truncate {!if select_adminbox} uk-width-1-3 {!endif}">
-		<span class="uk-text-truncate">{album_title}</span>
-{!if rsslink_url}
-		<a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
-{!endif}
-	</div>
+<ul class="uk-breadcrumb">
+  {birdseed_ul}
+</ul>
 
-	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
-		<form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
-			<input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
-			<input type="hidden" name="mode" value="search">
-			<input type="hidden" name="swhere" value="0">
-		</form>
-	</div>
+<nav class="uk-navbar uk-margin-remove-bottom">
+  <div class="uk-navbar-content uk-width-1-3 uk-text-truncate">
+    <span class="uk-text-truncate">{album_title}</span>
+{!if rsslink_url}
+    <a href="{rsslink_url}" type="application/rss+xml"><i class="uk-icon-rss-square"></i></a>
+{!endif}
+  </div>
+
+  <div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+    <form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
+      <input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
+      <input type="hidden" name="mode" value="search">
+      <input type="hidden" name="swhere" value="0">
+    </form>
+  </div>
 
 {!if select_adminbox}
-	<div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
-		<form class="uk-form uk-margin-remove uk-display-inline-block" name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get">
-			<input type="hidden" name="album_id" value="{album_id}">
-			<select name="mode" onchange="forms['adminbox'].submit()">
-				{admin_box_items}
-			</select>
-		</form>
-	</div>
+  <div class="uk-navbar-content uk-navbar-center  uk-hidden-small">
+    <form class="uk-form uk-margin-remove uk-display-inline-block" name="adminbox" id="adminbox" action="{site_url}/admin.php" method="get">
+      <input type="hidden" name="album_id" value="{album_id}">
+      <select name="mode" onchange="forms['adminbox'].submit()">
+        {admin_box_items}
+      </select>
+    </form>
+  </div>
 
-	<div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
-		<a class="uk-navbar-toggle"></a>
-		<div class="uk-dropdown">
-			<ul class="uk-nav uk-nav-dropdown">
-				{admin_menu}
-			</ul>
-		</div>
-	</div>
+  <div class="uk-button-dropdown uk-navbar-content uk-navbar-flip uk-visible-small" data-uk-dropdown="{mode:'click'}">
+    <a class="uk-navbar-toggle"></a>
+    <div class="uk-dropdown">
+      <ul class="uk-nav uk-nav-dropdown">
+        {admin_menu}
+      </ul>
+    </div>
+  </div>
 {!endif}
 </nav>
 
-<div class="uk-panel uk-panel-box uk-margin">
-	<div class="uk-grid uk-margin-remove">
-		<div class="uk-width-1-1">
-			<ul class="uk-breadcrumb">
-				{birdseed_ul}
-			</ul>
-		</div>
-	</div>
-	<div class="uk-grid uk-margin-remove">
-		<div class="uk-width-1-2 uk-margin-remove uk-vertical-align">
+<div class="uk-grid uk-margin">
+  <div class="uk-width-1-2">
+    <ul class="uk-subnav">
 {!if url_slideshow}
-			<div id="mgslideshow" class="uk-vertical-align-middle">
-				<a href="{url_slideshow}">
-					<span class="uk-text-bold">{lang_slideshow}</span>
-				</a>
-			</div>
+      <li><a class="uk-button uk-button-primary" href="{url_slideshow}">{lang_slideshow}</a></li>
 {!endif}
-		</div>
-		<div class="uk-width-1-2 uk-margin-remove uk-vertical-align">
+    </ul>
+  </div>
+  <div class="uk-width-1-2">
 {!if top_pagination}
-			<div class="uk-align-right  uk-vertical-align-middle">
-				{top_pagination}
-			</div>
+    <div class="uk-align-right uk-vertical-align-middle">
+      {top_pagination}
+    </div>
 {!endif}
-		</div>
-	</div>
+  </div>
 </div>
 
 {!if album_description}
-<div class="uk-panel uk-panel-box uk-panel-box-secondary uk-margin uk-text-large uk-text-center">
-	{album_description}
+<div class="uk-panel uk-panel-box uk-panel-box-secondary uk-margin-top uk-text-large uk-text-center">
+  {album_description}
 </div>
 {!endif}
 

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion BOT Check                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2105 by the following authors:                        |
+// | Copyright (C) 2014-2107 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -57,6 +57,8 @@ function _checkSFS($username, $email, $ip = '')
     $rc = 0;
     $arguments = array();
     $response = '';
+
+    if ( defined('DEMO_MODE') ) return 0;
 
     $http=new http_class;
     $http->timeout=0;
@@ -234,7 +236,9 @@ function SFS_banUsers()
 {
     global $_CONF, $_TABLES, $LANG_SFS;
 
-   if (isset($_POST['actionitem']) AND is_array($_POST['actionitem'])) {
+    if ( defined('DEMO_MODE') ) return 'Banning Users is disabled in Demo Mode';
+
+    if (isset($_POST['actionitem']) AND is_array($_POST['actionitem'])) {
         foreach($_POST['actionitem'] as $actionitem) {
             $uid = COM_applyFilter($actionitem);
             if ( $uid <> 2 ) {
@@ -248,6 +252,8 @@ function SFS_banUsers()
 function SFS_delUsers()
 {
     global $_USER, $_CONF, $_TABLES, $LANG_SFS, $LANG28;
+
+    if ( defined('DEMO_MODE') ) return 'Deleting users is disabled in Demo Mode';
 
     $msg = '';
 

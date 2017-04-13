@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Forum functions                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -451,7 +451,7 @@ function f_forumtime() {
     $forum_time = new Template($_CONF['path'] . 'plugins/forum/templates/footer');
     $forum_time->set_file (array ('forum_time'=>'forum_time.thtml'));
     $timezone = $dt->format('T',true);
-    $time = $dt->format('h:i a',true);
+    $time = $dt->format($_CONF['timeonly'],true);
     $forum_time->set_var ('message', sprintf($LANG_GF02['msg121'],$timezone,$time));
     $forum_time->parse ('output', 'forum_time');
     return $forum_time->finish($forum_time->get_var('output'));

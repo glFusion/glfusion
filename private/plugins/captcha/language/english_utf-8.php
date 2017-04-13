@@ -69,14 +69,15 @@ $LANG_CP00 = array (
     'cancel'            => 'Cancel',
     'success'           => 'Configuration Options successfully saved.',
     'reload'            => 'Reload',
-    'reload_failed'     => 'Sorry, cannot autoreload CAPTCHA image\nSubmit the form and a new CAPTCHA will be loaded',
+    'reload_failed'     => 'Sorry, cannot autoreload CAPTCHA image. Submit the form and a new CAPTCHA will be loaded',
     'reload_too_many'   => 'You may only request up to 5 image refreshes',
     'session_expired'   => 'Your CAPTCHA Session has expired, please try again',
     'picture'           => 'Picture',
     'characters'        => 'Characters',
     'ayah_error'        => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math'      => 'Enter the answer',
-    'captcha_prompt'    => 'Are You Human?'
+    'captcha_prompt'    => 'Are You Human?',
+    'recaptcha_entry_error'  => 'The CAPTCHA verification failed. Please try again.',
 );
 
 // Localization of the Admin Configuration UI

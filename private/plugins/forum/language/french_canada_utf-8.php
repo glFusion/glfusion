@@ -541,7 +541,8 @@ $LANG_GF10 = array(
     'usefilemgmt' => 'Conserver dans File Repository',
     'category' => 'Catégorie',
     'description' => 'Description',
-    'click2download' => 'Cliquez sur l`image pour télécharger'
+    'click2download' => 'Cliquez sur l`image pour télécharger',
+    'click2view' => 'Click to view image'
 );
 
 $LANG_GF90 = array(

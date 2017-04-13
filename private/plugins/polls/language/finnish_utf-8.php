@@ -64,7 +64,14 @@ $LANG_POLLS = array(
     'pollhidden' => 'Tulokset saatavilla kyselyn suljettua.',
     'start_poll' => 'Aloita polli',
     'deny_msg' => 'P&auml;&auml;sy ev&auml;tty.  Polli on joko poistettu tai sinulla ei ole tarvittavia oikeuksia siihen.',
-    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote"
+    'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote",
+    'username' => 'Username',
+    'ipaddress' => 'IP Address',
+    'date_voted' => 'Date Voted',
+    'description' => 'Description',
+    'general' => 'General',
+    'poll_questions' => 'Poll Questions',
+    'permissions' => 'Permissions'
 );
 
 ###############################################################################

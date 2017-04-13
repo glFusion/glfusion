@@ -815,7 +815,6 @@ class config
         $t->set_var('lang_restore', $LANG_CONFIG['restore']);
         $t->set_var('lang_enable', $LANG_CONFIG['enable']);
         $t->set_var('lang_add_element', $LANG_CONFIG['add_element']);
-
         $t->set_var('name', $name);
         $t->set_var('display_name', $display_name);
         if (!is_array($val)) {
@@ -1217,21 +1216,23 @@ class config
                 $descUrl = 'http://www.glfusion.org/docs/english/config.html';
             }
             if (! empty($descUrl)) {
-                $helpUrl = $descUrl . '#desc_' . $option;
+                $helpoption = str_replace("[","_",$option);
+                $helpoption = str_replace("]","",$helpoption);
+                $helpUrl = $descUrl . '#desc_' . $helpoption;
             }
-            $retval = '<a href="#" onclick="popupWindow(\'' . $helpUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+            $retval = '<a href="#" onclick="popupWindow(\'' . $helpUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>';
         } else {
             list ($doc_url, $popuptype) = PLG_getConfigElementHelp($group, $option, $doclang );
             if ( $doc_url != '' ) {
                 if ( $popuptype == 2 ) {
-                    $retval = '<a href="'.$doc_url.'" onclick="window.open(this.href);return false;" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+                    $retval = '<a href="'.$doc_url.'" onclick="window.open(this.href);return false;" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>';
                 } else {
-                    $retval = '<a href="#" onclick="popupWindow(\'' . $doc_url . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+                    $retval = '<a href="#" onclick="popupWindow(\'' . $doc_url . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>';
                 }
             } else if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/'. $group . '.html') ) {
                 $baseUrl = $GLOBALS['_CONF']['site_url'];
                 $descUrl = $baseUrl . '/docs/' . $doclang . '/'. $group . '.html#desc_' . $option;
-                $retval = '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+                $retval = '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>';
             } else {
                 $retval = '';
             }

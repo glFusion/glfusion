@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div id="forumcenterblock">
-	<table class="uk-table tm-table uk-table-hover uk-table-striped uk-table-condensed tm-forum-table">
+	<table class="uk-table tm-table uk-table-hover uk-table-striped uk-table-condensed tm-forum-table" style="table-layout:fixed !important;">
 		<tr>
 			<th class="uk-width-1-4">{LANG_FORUM}</th>
 			<th class="uk-width-2-4">{LANG_TOPIC}</th>
@@ -11,7 +11,7 @@
 			<td class="uk-text-middle" onclick="window.location.href='{site_url}/forum/index.php?forum={forum_id}'" onmouseover="this.style.cursor='pointer';" title="{LANG_forumjump}">
 				{forum_name}
 			</td>
-			<td class="uk-text-middle" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}'" onmouseover="this.style.cursor='pointer';">
+			<td class="uk-text-middle uk-text-truncate" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}'" onmouseover="this.style.cursor='pointer';">
 				<a class="{tooltip_style}" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{topic_subject}::{topicinfo}">{topic_subject}</a>
 			</td>
 			<td class="uk-text-middle uk-hidden-small">

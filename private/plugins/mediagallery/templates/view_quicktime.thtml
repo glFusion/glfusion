@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
-  codebase="http://www.apple.com/qtactivex/qtplugin.cab"
+  codebase="//www.apple.com/qtactivex/qtplugin.cab"
         width="{width}" height="{height}">
   <param name="src" value="{movie}" />
   <param name="autoplay" value="{autoplay}" />

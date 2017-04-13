@@ -125,7 +125,7 @@ function FUSION_formatTextBlock( $str, $postmode='html', $parser = array(), $cod
  * @param   array   $code       Additional bbcodes
  * @return  string              the formatted string
  */
-function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code = array() )
+function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code = array(), $exclude = array() )
 {
     global $_CONF;
 
@@ -183,8 +183,13 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', '_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
-    $bbcode->addCode ('img', 'usecontent', '_bbcode_img', array (),
-                      'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    if ( in_array('img',$exclude ) ) {
+        $bbcode->addCode ('img', 'usecontent', '_bbcode_null', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    } else {
+        $bbcode->addCode ('img', 'usecontent', '_bbcode_img', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    }
     $bbcode->addCode ('code', 'usecontent', '_bbcode_code', array ('usecontent_param' => 'default'),
                       'code', array ('listitem', 'block', 'inline', 'link'), array ());
 
@@ -362,6 +367,13 @@ function _bbcode_stripcontents ($text) {
 function _bbcode_htmlspecialchars($text) {
 
     return (@htmlspecialchars ($text,ENT_QUOTES, COM_getEncodingt()));
+}
+
+function _bbcode_null  ($action, $attributes, $content, $params, $node_object) {
+    if ( $action == 'validate') {
+        return true;
+    }
+    return '';
 }
 
 function _bbcode_url ($action, $attributes, $content, $params, $node_object) {

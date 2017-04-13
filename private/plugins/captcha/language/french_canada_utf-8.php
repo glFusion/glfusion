@@ -28,7 +28,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -71,14 +71,15 @@ $LANG_CP00 = array(
     'cancel' => 'Annuler',
     'success' => 'Options de configuration sauvegardé avec succès.',
     'reload' => 'Recharger',
-    'reload_failed' => 'Désolé, ne peut pas autoreload CAPTCHA image \ n soumettez le formulaire et une nouvelle CAPTCHA sera chargé',
+    'reload_failed' => 'Désolé, ne peut pas autoreload CAPTCHA image. Soumettez le formulaire et une nouvelle CAPTCHA sera chargé',
     'reload_too_many' => 'Vous ne pouvez demander jusqu`à 5 images rafraîchit',
     'session_expired' => 'Votre CAPTCHA session a expiré, s`il vous plaît essayer à nouveau',
     'picture' => 'Image',
     'characters' => 'Personnages',
     'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math' => 'Enter the answer',
-    'captcha_prompt' => 'Are You Human?'
+    'captcha_prompt' => 'Are You Human?',
+    'recaptcha_entry_error' => 'The CAPTCHA verification failed. Please try again.'
 );
 
 // Localization of the Admin Configuration UI
@@ -128,7 +129,7 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Default' => 'default', 'Simple' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('light' => 'light','dark' => 'dark'),
+    6 => array('light' => 'light', 'dark' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'Plugin Captcha mise à niveau: Mise à jour effectuée avec succès.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';

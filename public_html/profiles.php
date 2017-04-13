@@ -347,12 +347,28 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $filter->setReplaceTags(true);
     $filter->setNamespace('glfusion','mail_story');
 
-    $sql = "SELECT uid,title,introtext,bodytext,story_image,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
-    $result = DB_query($sql);
-    if (DB_numRows($result) == 0) {
+    $story = new Story();
+    $args = array ( 'sid' => $sid, 'mode' => 'view' );
+    $output = STORY_LOADED_OK;
+    $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
+    if ( $result == PLG_RET_OK ) {
+        reset($story->_dbFields);
+        while (list($fieldname,$save) = each($story->_dbFields)) {
+            $varname = '_' . $fieldname;
+            if (array_key_exists($fieldname, $output)) {
+                $story->{$varname} = $output[$fieldname];
+            }
+        }
+        $story->_username = $output['username'];
+        $story->_fullname = $output['fullname'];
+    } else {
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
-    $A = DB_fetchArray($result);
+    $A['title'] = $story->DisplayElements('title');
+    $A['introtext'] = $story->DisplayElements('introtext');
+    $A['uid'] = $story->displayElements('uid');
+    $A['story_image'] = $story->DisplayElements('story_image');
+    $A['day'] = $story->DisplayElements('date');
 
     $result = PLG_checkforSpam ($shortmsg, $_CONF['spamx']);
     if ($result > 0) {
@@ -373,7 +389,32 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $html2txt = new html2text($shortmsg,false);
     $shortmsg_text = $html2txt->get_text();
 
-    $story_body = COM_truncateHTML ( $A['introtext'], 512);
+    $emailStory = preg_replace_callback('/<a\s+.*?href="(.*?)".*?>/i',
+        function ($matches) {
+            global $_CONF;
+            $tag = $matches[0];
+            $url = $matches[1];
+            if (!preg_match('/\A(http|https|ftp|ftps|javascript):/i', $url)) {
+                $absUrl = rtrim($_CONF['site_url'], '/') . '/' . ltrim($url, '/');
+                $tag = str_replace($url, $absUrl, $tag);
+            }
+            return $tag;
+        },$A['introtext']);
+
+    $emailStory = preg_replace_callback('/<img\s+.*?src="(.*?)".*?>/i',
+        function ($matches) {
+            global $_CONF;
+            $tag = $matches[0];
+            $url = $matches[1];
+            if (!preg_match('/\A(http|https|ftp|ftps|javascript):/i', $url)) {
+                $absUrl = rtrim($_CONF['site_url'], '/') . '/' . ltrim($url, '/');
+                $tag = str_replace($url, $absUrl, $tag);
+            }
+            return $tag;
+        },$emailStory);
+
+    $story_body = COM_truncateHTML($emailStory,512);
+
     $html2txt = new html2text($story_body,false);
     $story_body_text = $html2txt->get_text();
 
@@ -611,6 +652,27 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         }
     }
 
+    $story = new Story();
+    $args = array ( 'sid' => $sid, 'mode' => 'view' );
+    $output = STORY_LOADED_OK;
+    $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
+    if ( $result == PLG_RET_OK ) {
+        reset($story->_dbFields);
+        while (list($fieldname,$save) = each($story->_dbFields)) {
+            $varname = '_' . $fieldname;
+            if (array_key_exists($fieldname, $output)) {
+                $story->{$varname} = $output[$fieldname];
+            }
+        }
+        $story->_username = $output['username'];
+        $story->_fullname = $output['fullname'];
+    } else {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    $story_title = $story->DisplayElements('title');
+    $introtext = $story->DisplayElements('introtext');
+    $story_body = COM_truncateHTML($introtext,512);
+
     $postmode = $_CONF['mailuser_postmode'];
 
     $mail_template = new Template($_CONF['path_layout'] . 'profiles');
@@ -622,24 +684,29 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     } else {
         $mail_template->unset_var ('show_htmleditor');
     }
-    $mail_template->set_var('lang_postmode', $LANG03[2]);
-    $mail_template->set_var('postmode', $postmode);
-    $mail_template->set_var('start_block_mailstory2friend', COM_startBlock($LANG08[17]));
-    $mail_template->set_var('lang_fromname', $LANG08[20]);
-    $mail_template->set_var('name', $from);
-    $mail_template->set_var('lang_fromemailaddress', $LANG08[21]);
-    $mail_template->set_var('email', $fromemail);
-    $mail_template->set_var('lang_toname', $LANG08[18]);
-    $mail_template->set_var('toname', $to);
-    $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
-    $mail_template->set_var('toemail', $toemail);
-    $mail_template->set_var('lang_shortmessage', $LANG08[27]);
-    $mail_template->set_var('shortmsg', @htmlspecialchars($shortmsg,ENT_COMPAT,COM_getEncodingt()));
-    $mail_template->set_var('lang_warning', $LANG08[22]);
-    $mail_template->set_var('lang_sendmessage', $LANG08[16]);
-    $mail_template->set_var('story_id',$sid);
-    $mail_template->set_var ('sec_token_name', CSRF_TOKEN);
-    $mail_template->set_var ('sec_token', $token);
+
+    $mail_template->set_var(array(
+        'story_title'           => $story_title,
+        'story_summary'         => $story_body,ENT_COMPAT,COM_getEncodingt(),
+        'lang_postmode'         => $LANG03[2],
+        'postmode'              => $postmode,
+        'start_block_mailstory2friend'=> COM_startBlock($LANG08[17]),
+        'lang_fromname'         => $LANG08[20],
+        'name'                  => $from,
+        'lang_fromemailaddress' => $LANG08[21],
+        'email'                 => $fromemail,
+        'lang_toname'           => $LANG08[18],
+        'toname'                => $to,
+        'lang_toemailaddress'   => $LANG08[19],
+        'toemail'               => $toemail,
+        'lang_shortmessage'     => $LANG08[27],
+        'shortmsg'              => @htmlspecialchars($shortmsg,ENT_COMPAT,COM_getEncodingt()),
+        'lang_warning'          => $LANG08[22],
+        'lang_sendmessage'      => $LANG08[16],
+        'story_id'              => $sid,
+        'sec_token_name'        => CSRF_TOKEN,
+        'sec_token'             => $token
+    ));
     PLG_templateSetVars ('emailstory', $mail_template);
     $mail_template->set_var('end_block', COM_endBlock());
     $mail_template->parse('output', 'form');

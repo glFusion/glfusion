@@ -952,6 +952,35 @@ function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
 }
 
 /**
+* Un-Merge User Accounts
+*
+* This validates the entered password and then unlinks a remote account
+* from the local account
+*
+* @return   bool          true on success, false on failure
+*
+*/
+function USER_unmergeAccounts()
+{
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER;
+
+    $retval = false;
+
+    $localUID  = COM_applyFilter($_POST['localuid'],true);
+    $localpwd  = $_POST['passwd'];
+    $localResult  = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".(int) $localUID);
+    if ( DB_numRows($localResult) == 1 ) {
+        $localRow = DB_fetchArray($localResult);
+        if ( SEC_check_hash($localpwd, $localRow['passwd']) ) {
+            $sql = "UPDATE {$_TABLES['users']} SET account_type=".LOCAL_USER.", remoteusername='', remoteservice=NULL WHERE uid=".(int) $localUID;
+            DB_query($sql);
+            $retval = true;
+        }
+    }
+    return $retval;
+}
+
+/**
 * Merge User Accounts
 *
 * This validates the entered password and then merges a remote

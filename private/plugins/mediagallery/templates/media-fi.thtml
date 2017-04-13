@@ -26,7 +26,15 @@
 		<div class="uk-text-small">&copy; <span class="uk-text-bold">{copyright_name}</span></div>
 {!endif}
 		<div class="uk-text-small">{lang_posted} {upload_time}</div>
-		<div class="uk-text-small">{media_views} / {media_comments}</div>
+		<div class="uk-text-small">
+{!if media_views}
+		  {media_views}
+{!if media_comments}
+		  &nbsp;/&nbsp;
+{!endif}
+{!endif}
+		  {media_comments}
+		</div>
 {!if edit_link}
 		<div class="uk-text-center">{edit_link}</div>
 {!endif}

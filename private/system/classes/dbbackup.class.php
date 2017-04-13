@@ -282,6 +282,8 @@ class dbBackup
     {
         global $_TABLES, $_SYSTEM, $_DB_name;
 
+        if ( defined('DEMO_MODE') ) $structonly = true;
+
         $recordCounter = $start;
         $timerStart    = time();
         $sessionCounter = 0;
@@ -305,7 +307,7 @@ class dbBackup
         // Save the backquoted table name, gets used a lot
         $db_tablename = $this->backquote($table);
 
-        if ( $start == 0 ) {
+        if ( $start == 0 && !defined('DEMO_MODE') ) {
             $showTableResult = DB_query("SHOW TABLE STATUS FROM ".$_DB_name." LIKE '".$table."'",true);
             $row = DB_fetchArray($showTableResult);
             $tb_collation = substr($row['Collation'],0,7);
@@ -499,8 +501,10 @@ class dbBackup
         $this->stow("# glFusion  MySQL database backup\n");
         $this->stow("#\n");
         $this->stow('# Generated: ' . date('l j. F Y H:i T') .  "\n");
-        $this->stow("# Hostname: $_DB_host\n");
-        $this->stow("# Database: $_DB_name\n");
+        if ( !defined('DEMO_MODE') ) {
+            $this->stow("# Hostname: $_DB_host\n");
+            $this->stow("# Database: $_DB_name\n");
+        }
         $this->stow("# glFusion: v".GVERSION."\n");
         $this->stow("# --------------------------------------------------------\n\n");
 

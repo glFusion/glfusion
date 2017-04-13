@@ -1006,7 +1006,7 @@ function MB_saveEditMenuElement ( ) {
             $subtype = '';
             break;
     }
-    $active     = COM_applyFilter($_POST['menuactive'],true);
+    $active     = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
     $url = '';
     if ( isset($_POST['menuurl']) && $_POST['menuurl'] != '' ) {
         $url        = trim(DB_escapeString(COM_applyFilter($_POST['menuurl'])));

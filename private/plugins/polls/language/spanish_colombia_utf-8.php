@@ -65,6 +65,13 @@ $LANG_POLLS = array(
     'start_poll' => 'Iniciar Encuesta',
     'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
     'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote",
+    'username' => 'Username',
+    'ipaddress' => 'IP Address',
+    'date_voted' => 'Date Voted',
+    'description' => 'Description',
+    'general' => 'General',
+    'poll_questions' => 'Poll Questions',
+    'permissions' => 'Permissions'
 );
 
 ###############################################################################
@@ -89,7 +96,7 @@ $LANG25 = array(
     16 => 'borrar',
     17 => 'Please enter a Poll ID',
     18 => 'Listado de Encuestas',
-    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
+    19 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout//images/admin/edit.png" /> o <img src="/layout//images/admin/delete.png" /> correspondiente. Para crear, haz clic sobre el enlace: "<b><i>Crear</i></b>" arriba.',
     20 => 'Votos',
     21 => 'Acceso Negado',
     22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
@@ -113,7 +120,7 @@ $LANG25 = array(
     40 => 'Ver todas las respuestas a esta Encuesta',
     41 => '¿Realmente deseas borrar esta Encuesta?',
     42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
-    43 => 'Requiere Inicio de Sesión para Votar',
+    43 => 'Requiere Inicio de Sesión para Votar'
 );
 
 ###############################################################################
@@ -149,7 +156,7 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => '¿Borrar Encuestas con Propietario?',
     'aftersave' => 'Después de Guardar',
     'default_permissions' => 'Permisos por Defecto',
-    'displayblocks' => 'Mostrar Bloques',
+    'displayblocks' => 'Mostrar Bloques'
 );
 
 $LANG_configsubgroups['polls'] = array(

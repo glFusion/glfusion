@@ -205,7 +205,7 @@ class OAuthConsumer {
                 $this->_DBupdate_users($uid, $info);
             }
         } else {
-            if ( $_CONF['disable_new_user_registration'] ) {
+            if ( $_CONF['disable_new_user_registration'] && (DB_count($_TABLES['users'],array('email','status'),array(DB_escapeString($users['email']),3)) != 1 ) ) {
                 echo COM_siteHeader();
                 echo $LANG04[122];
                 echo COM_siteFooter();

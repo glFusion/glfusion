@@ -4,7 +4,7 @@
 {!else}
   {!!set reqclass '' !!}
 {!endif}
-<div id="po_{question_id}" {style}>
+<li>
   <div class="uk-form-row">
     <label class="uk-form-label" for="question"><span class="uk-text-bold">{lang_question}</span></label>
     <div class="uk-form-controls">
@@ -16,5 +16,5 @@
       {answer_option}
     </div>
   </div>
-</div>
+</li>
 {# end {templatelocation} #}

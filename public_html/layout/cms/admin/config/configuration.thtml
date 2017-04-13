@@ -113,8 +113,11 @@
 				var ajobj = $(this);
 				$.get(attrHref, function(data) {
 					var confVar = ajobj.attr('id');
-					if (data.indexOf(confVar) > 0) {
-						var desc = $(data).find('#desc_' + confVar + ' dd:first').text();
+					var helpVar = confVar.replace("[","_");
+					helpVar = helpVar.replace("]","");
+//					if (data.indexOf(confVar) > 0) {
+					if (data.indexOf(helpVar) > 0) {
+						var desc = $(data).find('#desc_' + helpVar + ' dd:first').text();
 						origin.tooltipster('content', desc);
 					} else {
 						origin.tooltipster('content', 'No Help Text Found');

@@ -31,7 +31,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -74,14 +74,15 @@ $LANG_CP00 = array(
     'cancel' => 'Zrušit',
     'success' => 'Configuration Options successfully saved.',
     'reload' => 'Znovu načíst obrázek',
-    'reload_failed' => "Sorry, cannot autoreload CAPTCHA image\nSubmit the form and a new CAPTCHA will be loaded",
+    'reload_failed' => "Sorry, cannot autoreload CAPTCHA image. Submit the form and a new CAPTCHA will be loaded",
     'reload_too_many' => 'Můžeš si vyžádat nejvýše 5 obrázků',
     'session_expired' => 'Tvé CAPTCHA sezení skončilo, zkus to znova',
     'picture' => 'Obrázek',
     'characters' => 'Písmena',
     'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math' => 'Enter the answer',
-    'captcha_prompt' => 'Are You Human?'
+    'captcha_prompt' => 'Are You Human?',
+    'recaptcha_entry_error' => 'The CAPTCHA verification failed. Please try again.'
 );
 
 // Localization of the Admin Configuration UI
@@ -131,7 +132,7 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Default' => 'default', 'Simple' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('light' => 'light','dark' => 'dark'),
+    6 => array('light' => 'light', 'dark' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update completed successfully.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';

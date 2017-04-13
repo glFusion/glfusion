@@ -216,7 +216,7 @@ function toggleFields() {
     </div>
   </div>
   <button class="uk-button uk-button-primary uk-margin" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
-  <button class="uk-button uk-button-danger cancel uk-margin" type="submit" class="cancel" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+  <button class="uk-button uk-button-danger cancel uk-margin" type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
 </form>
 </div>
 <script>

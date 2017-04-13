@@ -1,3 +1,84 @@
+## v1.6.6 (April 12, 2017)
+  - Media Gallery - Replaced old flash based audio jukebox with JavaScript player
+  - New Plugin APIs to social integrations - allow plugins to override default share buttons
+  - New Plugin API to infinite scroll - allow plugins to hook into new item load JS
+  - Media Gallery: Improved integrations to social share - pass meta data to social engine
+  - Forum: Enforce "Allow IMG bbcode" in signatures as well as forum posts
+  - Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
+  - Fixed issue where CAPTCHA reload did not work properly for languages other than english
+  - Add Justify Block to the CKeditor toolbar
+  - Forum: Significant optimization on the New Post query - builds the list with a single query
+  - Forum: Added missing forum rankings to the topic view
+  - Forum: Removed all hard coded date formats - now use glFusion data formats
+  - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
+  - New 'Be the first to comment' message when no comments exist
+  - Update OAuth library to v1.163
+  - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
+  - Added sort: and order: options to headlines auto tag
+  - Fixed custom language file overwriting LANG_MYACCOUNT which removed plugins from the user preference page
+  - Twitter links did not honor open external links in new window setting
+  - Media Gallery - disable add media if no albums exist
+  - Improved error handling on user profile (improved error reporting)
+  - Added new option to unlink a remote account from a merged local account
+  - Fixed issue where remote account merge would display on already merged accounts
+  - Media Gallery: media auto tag did not honor hidden album permission (created link)
+  - Media Gallery: Do not allow access to hidden albums by non-owners
+  - CAPTCHA - Updated reCAPTCHA library to v1.1.3
+  - CAPTCHA - Updated invalid entry for reCAPTCHA to be more appropriate (no longer reference invalid string entry)
+  - Forum - Use proper views / reply counts on search results
+  - Media Gallery: Random block did not link to media item
+  - Media Gallery: slideshow auto tag did not honor link: option
+  - Media Gallery: Fixed URL link to glFuison on postcards
+  - Media Gallery: Fixed hard coded strings in media edit template
+  - Allow users with existing accounts to log in via Oauth accounts using same email address - patch by Lee Garner
+  - Headlines auto tag now shows Read More prompt when introtext is truncated
+  - Improved HTML truncation - no longer orphans some opening HTML tags
+  - Updated the video id detection in vimeo ckeditor plugin - resolves issue detecting id in embed code
+  - Fixed corrupted HTML in link editor
+  - Media Gallery search did not display thumbnails
+  - Forum - disable text mode checkbox when using WYSIWYG editor
+  - Forum - WYSIWYG tweaks - added spell check, maximize buttons - increased editor window to match height of non-WYSIWYG window
+  - Implemented custom style filter for htmLawed to handle the 'style' attribute
+  - Updated htmLawed to v1.2
+  - Force htmlawed HTML filter for non-utf-8 sites
+  - Media Gallery - Improved album page head layout
+  - Removed hard coded date formats from calendar plugin
+  - Forum - improved handling of the edit post window and validation checks
+  - Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
+  - Updated online help documents to include missing configuration items
+  - Added rel="nofollow" to what's new items
+  - Removed duplicated comment link in Lightbox Media Gallery album theme
+  - Improved responsiveness of lightbox and clean Media Gallery themes
+  - Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
+  - Display story summary at the top of the email story form
+  - Added configuration option to set display order for 3rd party authentication modules
+  - Fixed issue where help text did not display in configuration screen for items that were arrays
+  - Ensure links in emailed stories are absolute
+  - Allow Bad Behavior 2 functionality to be disabled in fusionrescue
+  - Polls Enhancements
+    - Ability to view vote data per poll
+    - Description field added to each poll
+    - Admin interface improvements
+    - Allow configuration setting so no anonymous voter id data is removed
+  - Forum - Sort mood dropdown in alphabetical order
+  - Forum - Rounded corners on topic list headers
+  - Forum - Moderators were not displayed when configured to display
+  - Wrap mail story / contact user forms in a panel
+  - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
+  - Removed invalid BOM marker from install english utf8 language file
+  - Improved consistency on status / warning / error messages
+  - Forum - Improved handling of RE: prefix on forum subjects
+  - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
+  - Demo Mode updates
+  - Cancel button did not cancel on forms with empty required fields
+  - Forum - Formatting improvements to Latest Post block
+  - Additional environment checks (required PHP extensions) added to Environment Check
+  - Additional environment validations (required PHP extensions) performed during install / upgrade
+  - Forum - Fix on smiley replacement to properly escape text
+  - Additional checks in Media Gallery view templates to ensure prompts are not shown without data
+  - Updated German Translations - Matrox66
+  - Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66
+
 ## v1.6.5 (January 22, 2017)
   - Updated German Translations from Matrox66
   - Media Gallery - removed references to depreciated online print option

@@ -260,14 +260,14 @@ switch ( $mode ) {
         }
         // ensure we can actually edit...
         $editAllowed = false;
-        $editfailedreason = '';
+        $editfailedreason = $LANG_GF02['msg72'];
         if (forum_modPermission($forumData['forum'],$_USER['uid'],'mod_edit')) {
             $editAllowed = true;
             $body .= '<input type="hidden" name="modedit" value="1"/>';
         } else {
             if ($postData['date'] > 0 AND $postData['uid'] == $_USER['uid'] ) {
                 if ($_FF_CONF['allowed_editwindow'] > 0) {
-                    $t2 = $_FF_CONF['allowed_editwindow'];
+                    $t2 = $_FF_CONF['allowed_editwindow'] * 60;
                     $time = time();
                     if ((time() - $t2) < $postData['date']) {
                         $editAllowed = true;
@@ -282,10 +282,9 @@ switch ( $mode ) {
             }
         }
         if ( $editAllowed == false ) {
-            $display  = FF_siteHeader();
-            $display .= _ff_alertMessage($LANG_GF02['msg72'],$editfailedreason);
-            $display .= FF_siteFooter();
-            echo $display;
+            COM_setMsg( $editfailedreason, 'error' );
+            $url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$id.'&topic='.$id;
+            echo COM_refresh($url);
             exit;
         }
         if ( $viewMode ) {
@@ -522,9 +521,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } elseif (isset($postData['uid']) && $postData['uid'] > 1) {
             $username = COM_getDisplayName($postData['uid']);
         }
-
-        $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
-
+//        $postData['comment'] = str_ireplace('</textarea>','&lt;/textarea&gt;',$postData['comment']);
         if ( isset($postData['pid']) ) {
             $peTemplate->set_var ('hidden_editpid', $postData['pid']);
         }
@@ -564,9 +561,10 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var('save_button','savereply');
         $postmessage = $LANG_GF02['PostReply'];
         $peTemplate->set_var ('hidden_action', 'newreply');
-        if ( !$viewMode ) {
-            $postData['subject'] = $LANG_GF01['RE'] . $postData['subject'];
-        }
+// do not prepend the re: on reply subjects
+//        if ( !$viewMode ) {
+//            $postData['subject'] = $LANG_GF01['RE'] . $postData['subject'];
+//        }
         $quoteid = isset($_GET['quoteid']) ? COM_applyFilter($_GET['quoteid'],true) : 0;
         if ( !$viewMode) $postData['mood'] = '';
         if ($quoteid > 0 && !$viewMode ) {
@@ -622,20 +620,23 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         if (!isset($postData['mood']) || $postData['mood'] == '') {
             $moodoptions = '<option value="" selected="selected">' . $LANG_GF01['NOMOOD'] . '</option>';
         }
+        $moodarray = array();
         if ($dir = @opendir($_CONF['path_html'].'/forum/images/moods')) {
             while (($file = readdir($dir)) !== false) {
                 if ((strlen($file) > 3) && substr(strtolower(trim($file)), -4, 4) == '.gif') {
                     $file = str_replace(array('.gif','.jpg'), array('',''), $file);
-                    if(isset($postData['mood']) && $file == $postData['mood']) {
-                        $moodoptions .= "<option selected=\"selected\">" . $file. "</option>";
-                    } else {
-                        $moodoptions .= "<option>" .$file. "</option>";
-                    }
-                } else {
-                    $moodoptions .= '';
+                    $moodarray[] = $file;
                 }
             }
             closedir($dir);
+        }
+        asort($moodarray);
+        foreach ( $moodarray AS $file ) {
+            if(isset($postData['mood']) && $file == $postData['mood']) {
+                $moodoptions .= "<option selected=\"selected\">" . $file. "</option>";
+            } else {
+                $moodoptions .= "<option>" .$file. "</option>";
+            }
         }
         $peTemplate->set_var ('LANG_MOOD', $LANG_GF02['msg36']);
         $peTemplate->set_var ('moodoptions', $moodoptions);
@@ -718,7 +719,11 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     }
 
     if ($postData['postmode'] == 'html' || $postData['postmode'] == 'HTML') {
-        $postmode_msg = $LANG_GF01['TEXTMODE'];
+        if ($_FF_CONF['use_wysiwyg_editor'] ) {
+            $postmode_msg = '';
+        } else {
+            $postmode_msg = $LANG_GF01['TEXTMODE'];
+        }
         $postData['postmode'] = 'html';
     } else {
         $peTemplate->unset_var('show_htmleditor');
@@ -959,8 +964,8 @@ function FF_saveTopic( $forumData, $postData, $action )
             $editAllowed = true;
         } else {
             if ($_FF_CONF['allowed_editwindow'] > 0) {
-                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $postData['id']);
-                $t2 = $_FF_CONF['allowed_editwindow'];
+                $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $editid);
+                $t2 = $_FF_CONF['allowed_editwindow'] * 60;
                 $time = time();
                 if ((time() - $t2) < $t1) {
                     $editAllowed = true;
@@ -974,9 +979,10 @@ function FF_saveTopic( $forumData, $postData, $action )
             $retval .= FF_BlockMessage('',$LANG_GF02['msg18'],false);
             $okToSave = false;
         } elseif (!$editAllowed) {
-            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.(int) $postData['$id'];
-            $retval.= _ff_alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
-            $okToSave = false;
+            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.(int) $editid;
+            COM_setMsg($LANG_GF02['edit_time_passed'],'error');
+            echo COM_refresh($link);
+            exit;
         }
     } else {
         if ( !COM_isAnonUser() && $_FF_CONF['use_sfs']) {

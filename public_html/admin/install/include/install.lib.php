@@ -89,7 +89,7 @@ function INST_header($percent_complete)
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
         'language'          =>  $_GLFUSION['language'],
-        'wizard_version'    =>  $LANG_INSTALL['wizard_version'],
+        'wizard_version'    =>  sprintf($LANG_INSTALL['wizard_version'],GVERSION),
         'progress_bar'      =>  $progress_bar,
         'percent_complete'  =>  $percent_complete,
     ));
@@ -1453,6 +1453,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.6.5';
 
+        case '1.6.5' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('standard_auth_first',1,'select',4,1,1,125,TRUE);
+
+            $current_fusion_version = '1.6.6';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
@@ -1695,18 +1702,21 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
-    if ($path{strlen($path)-1}=='/')
+    if ($path{strlen($path)-1}=='/') {
+        if ( !is_dir($path)) {
+            return false;
+        }
         return INST_isWritable($path.uniqid(mt_rand()).'.tmp');
-
+    }
     if (@file_exists($path)) {
         if (!($f = @fopen($path, 'r+')))
             return false;
         fclose($f);
         return true;
     }
-
-    if (!($f = @fopen($path, 'w')))
+    if (!($f = @fopen($path, 'w'))) {
         return false;
+    }
     @fclose($f);
     @unlink($path);
     return true;

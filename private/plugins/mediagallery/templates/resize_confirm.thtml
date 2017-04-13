@@ -4,6 +4,7 @@
 	var lang_processing = "{lang_processing}";
 	var lang_process = "{lang_process}";
 	var lang_success = "{lang_success}";
+	var lang_error = "";
 	var button_id  = "{button_id}";
 </script>
 <script src="{site_url}/js/rebuild.js"></script>
@@ -25,7 +26,11 @@
 	<div id="bpstatus" style="display:none;">
 		<hr>
 		<h3>{lang_status}</h3>
-		<div class="msg" id="glfusion_batchinterface_msg">&nbsp;</div>
+
+		<div class="uk-margin">
+			<span id="t" class="tm-updating" style="display:none;">&nbsp;</span>
+			<span class="msg" id="batchinterface_msg">&nbsp;</span>
+		</div>
 		<div class="uk-progress">
 			<div id="progress-bar" class="uk-progress-bar" style="width: 0%;">0%</div>
 		</div>

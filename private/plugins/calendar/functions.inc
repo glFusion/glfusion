@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2015 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -114,17 +114,18 @@ function phpblock_calendar( $help='', $title='' )
         if( $range == 0 ) {
             $range = 14; // fallback: 14 days
         }
+        $dt = new Date(time(),$_USER['tzid']);
         $dateonly = $_CONF['dateonly'];
-//        if( empty( $dateonly )) {
-            $dateonly = '%d-%b'; // fallback: day - abbrev. month name
-//        }
+        if( empty( $dateonly )) {
+            $dateonly = 'd-M'; // fallback: day - abbrev. month name
+        }
 
         if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name = 'events_block'" );
         }
 
-        $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
+        $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
         . "FROM {$_TABLES['events']} ";
         if($_DB_dbms == 'mssql') {
             $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) AND (status = 1)";
@@ -212,8 +213,8 @@ function phpblock_calendar( $help='', $title='' )
                     if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                         $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
                     }
-                    $abbrDate1 = strftime( $dateonly, $theTime1 );
-
+                    $dt->setTimestamp($theEvent['datestart_unix']);
+                    $abbrDate1 = $dt->format($dateonly,true);
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
@@ -221,8 +222,8 @@ function phpblock_calendar( $help='', $title='' )
                     if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                         $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
                     }
-                    $abbrDate2 = strftime( $dateonly, $theTime2 );
-
+                    $dt->setTimestamp($theEvent['dateend_unix']);
+                    $abbrDate2 = $dt->format($dateonly,true);
                     if ( COM_getCharset() == 'utf-8' ) {
                         if ( !MBYTE_is_utf8($dayName1) ) {
                             $dayName1 = utf8_encode($dayName1);
@@ -1954,46 +1955,4 @@ function CALENDAR_setLanguage(&$aCalendar)
 
     $aCalendar->setLanguage($lang_days, $lang_months, $_CONF['week_start']);
 }
-
-/**
-* Returns formatted date/time for user
-*
-* This function takes a date in either unixtimestamp or in english and
-* formats it to the users preference.  If the user didn't specify a format
-* the format in the config file is used.  This returns an array where array[0]
-* is the formatted date and array[1] is the unixtimestamp
-*
-* @param        string      $date       date to format, otherwise we format current date/time
-* @return   array   array[0] is the formatted date and array[1] is the unixtimestamp.
-*/
-
-function CAL_getUserDateTimeFormat( $date='' )
-{
-    global $_TABLES, $_USER, $_CONF, $_SYSTEM;
-
-    $dateformat = "%A, %B %d %Y @ %I:%M %p";
-
-    // date         : %A, %B %d %Y @ %I:%M %p %Z";
-    // timeonly     : %I:%M%p
-    // daytime      : %m/%d/%Y %I:%M%p
-    // short date   : %x
-    // date only    : %d-%b
-
-    if( empty( $date )) {
-        // Date is empty, get current date/time
-        $stamp = time();
-    } else if( is_numeric( $date )) {
-        // This is a timestamp
-        $stamp = $date;
-    } else {
-        // This is a string representation of a date/time
-        $stamp = strtotime( $date );
-    }
-
-    // Format the date
-    $date = strftime( $dateformat, $stamp );
-
-    return array( $date, $stamp );
-}
-
 ?>

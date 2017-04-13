@@ -70,7 +70,7 @@
 
     <div class="uk-form-row uk-margin-top">
         <button class="uk-button uk-button-primary" type="submit" value="{lang_save}" name="mode">{lang_save}</button>
-        <button class="uk-button uk-button-danger"  type="cancel" value="{lang_cancel}" name="mode">{lang_cancel}</button>
+        <button class="uk-button uk-button-danger"  type="submit" value="{lang_cancel}" name="mode">{lang_cancel}</button>
     </div>
 </form>
 {# end {templatelocation} #}

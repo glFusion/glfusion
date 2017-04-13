@@ -1,6 +1,13 @@
 {# begin {templatelocation} #}
 <div id="commentarea">
 {commentbar}
+
+{!if lang_be_the_first}
+<div class="uk-alert uk-text-center">
+  <span class="uk-text-bold">{lang_be_the_first}</span>
+</div>
+{!endif}
+
 {comments}
 <div class="aligncenter">{pagenav}</div>
 </div>

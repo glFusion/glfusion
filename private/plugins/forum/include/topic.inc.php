@@ -207,7 +207,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $editAllowed = false;
         if ($_FF_CONF['allowed_editwindow'] > 0) {
             $t1 = $showtopic['date'];
-            $t2 = $_FF_CONF['allowed_editwindow'];
+            $t2 = $_FF_CONF['allowed_editwindow'] * 60;
             if ((time() - $t2) < $t1) {
                 $editAllowed = true;
             }
@@ -250,7 +250,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     if ($_FF_CONF['allow_user_dateformat']) {
         $date = $dt->format($dt->getUserFormat(),true);
     } else {
-        $date = $dt->format($_FF_CONF['default_Topic_Datetime_format'],true);
+        $date = $dt->format($_CONF['date'],true);
     }
     $topictemplate->set_var ('posted_date', $date);
 
@@ -417,8 +417,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
     }
 
-    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited'] ) ) {
-        $ludate = $dt_lu->format($_FF_CONF['default_Topic_Datetime_format'],true);
+    if ( isset($showtopic['date']) && isset($showtopic['lastedited']) && ($showtopic['date'] != $showtopic['lastedited']  ) && ($showtopic['lastedited'] != '' ) ) {
+        $ludate = $dt_lu->format($_CONF['date'],true);
         $topictemplate->set_var('last_edited', $ludate);
     } else {
         $topictemplate->unset_var('last_edited');
@@ -451,8 +451,13 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
             'back_link'     => isset($backlink) ? $backlink : '',
             'member_badge'  => forumPLG_getMemberBadge($showtopic['uid'])
     ));
-    if ( $replytopicid != 0 ) {
-        $topictemplate->set_var('prefix',$LANG_GF01['RE']);
+    if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {
+        $check = substr($showtopic['subject'],0,strlen($LANG_GF01['RE']));
+        if ( strcasecmp($check,$LANG_GF01['RE']) != 0 ) {
+            $topictemplate->set_var('prefix',$LANG_GF01['RE']);
+        } else {
+            $topictemplate->set_var('prefix','');
+        }
     } else {
         $topictemplate->set_var('prefix','');
     }
