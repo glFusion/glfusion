@@ -1,3 +1,6 @@
+## v1.6.7 (unreleased)
+  - Media Gallery: EXIF media date was not converted to user's timezone
+
 ## v1.6.6 (April 12, 2017)
   - Media Gallery - Replaced old flash based audio jukebox with JavaScript player
   - New Plugin APIs to social integrations - allow plugins to override default share buttons
