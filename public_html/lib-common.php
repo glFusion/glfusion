@@ -34,7 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
