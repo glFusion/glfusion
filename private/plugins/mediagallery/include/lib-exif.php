@@ -192,6 +192,8 @@ function ExifProcessor( $file ) {
 }
 
 function postProcessValue(  $property, $value ) {
+    global $_CONF, $_USER;
+
     switch($property) {
     case 'ShutterSpeedValue':
         /* Convert "25/10000 sec" to "1/400 sec" */
@@ -224,6 +226,9 @@ function postProcessValue(  $property, $value ) {
                            (int)$m[2], (int)$m[3], (int)$m[1]);
         }
         if (!empty($time)) {
+            $dt = MG_getUserDateTimeFormat( $time );
+            $value = $dt[0];
+/*
             if (isset($m[8])) {
                 $offset = ((int)$m[9] * 60 + (isset($m[11]) ? (int)$m[11] : 0)) * 60;
                 if ($m[8] == '+') {
@@ -234,6 +239,7 @@ function postProcessValue(  $property, $value ) {
                 }
             }
             $value = strftime('%x %X', $time);
+*/
         }
         break;
     }
