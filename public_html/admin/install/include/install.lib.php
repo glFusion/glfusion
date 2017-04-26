@@ -1461,6 +1461,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.6.6';
 
         case '1.6.6' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->del('digg_enabled','Core');
 
             $current_fusion_version = '1.6.7';
 

@@ -783,17 +783,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'digg_enabled',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 100,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+
     array(
     	'name' => 'rating_enabled',
     	'default_value' => 1,
@@ -801,7 +791,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 24,
-    	'sort' => 110,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -812,7 +802,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 120,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -823,7 +813,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 7,
-    	'sort' => 130,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -834,7 +824,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 8,
-    	'sort' => 140,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -845,7 +835,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 150,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -856,7 +846,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 160,
+    	'sort' => 150,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -867,7 +857,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 170,
+    	'sort' => 160,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -878,7 +868,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 180,
+    	'sort' => 170,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -889,7 +879,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 190,
+    	'sort' => 180,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -900,7 +890,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 200,
+    	'sort' => 190,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -911,7 +901,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 9,
-    	'sort' => 210,
+    	'sort' => 200,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

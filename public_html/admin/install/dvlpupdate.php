@@ -1639,6 +1639,7 @@ function glfusion_167()
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
+    $c->del('digg_enabled','Core');
 
     $_SQL = array();
 
