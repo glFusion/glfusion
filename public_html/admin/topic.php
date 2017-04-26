@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion topic administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -524,7 +524,7 @@ function TOPIC_save($T)
         // update feed(s) and Older Stories block
         COM_rdfUpToDateCheck ('article', $tid);
         COM_olderStuff ();
-        CACHE_remove_instance('stmenu');
+        CACHE_remove_instance('menu');
         COM_setMessage(13);
         $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
     } else {
@@ -756,7 +756,7 @@ function TOPIC_delete($tid)
     // update feed(s) and Older Stories block
     COM_rdfUpToDateCheck ('article');
     COM_olderStuff ();
-    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('menu');
     COM_setMessage(14);
     return COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
 }
