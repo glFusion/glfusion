@@ -658,10 +658,10 @@ class Story
             $this->_old_sid = $this->_sid;
             $this->_originalSid = '';
             if ( COM_isAnonUser() ) {
-	        $this->_uid = 1;
-	    } else {
+    	        $this->_uid = 1;
+	        } else {
                 $this->_uid = $_USER['uid'];
-	    }
+	        }
             $this->_date = $dtPublish->toUnix();
             $this->_expire = $dtExpire->toUnix(); //time();
 
@@ -841,7 +841,7 @@ class Story
         }
 
         CACHE_remove_instance('whatsnew');
-        CACHE_remove_instance('stmenu');
+        CACHE_remove_instance('menu');
         return STORY_SAVED;
     }
 
