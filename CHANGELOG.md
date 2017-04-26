@@ -1,5 +1,7 @@
 ## v1.6.7 (unreleased)
+  - Fixed old references to stmenu
   - Media Gallery: EXIF media date was not converted to user's timezone
+  - Media Gallery: EXIF parser would crash on some Canon images due to invalid exif tag
 
 ## v1.6.6 (April 12, 2017)
   - Media Gallery - Replaced old flash based audio jukebox with JavaScript player
