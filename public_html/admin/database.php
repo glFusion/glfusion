@@ -755,11 +755,11 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
             exit;
         }
 
-        $make_innodb = DB_query("ALTER TABLE $table ENGINE=InnoDB", 1);
+        $sql = "ALTER TABLE ".$table." ENGINE=InnoDB";
+        $make_innodb = DB_query($sql, 1);
         if ($make_innodb === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                         . DB_error());
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
         }
     }
 
@@ -842,11 +842,11 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
             exit;
         }
 
-        $make_myisam = DB_query("ALTER TABLE $table ENGINE=MyISAM", 1);
+        $sql = "ALTER TABLE ".$table." ENGINE=MyISAM";
+        $make_myisam = DB_query($sql, 1);
         if ($make_myisam === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                         . DB_error());
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
         }
     }
 
@@ -1009,11 +1009,11 @@ function DBADMIN_dooptimize($startwith = '', $failures = 0)
         } else {
             DB_query("UPDATE {$_TABLES['vars']} SET value = '$table' WHERE name = 'lastoptimizedtable'");
         }
-        $optimize = DB_query("OPTIMIZE TABLE $table", 1);
+        $sql = "OPTIMIZE TABLE " . $table;
+        $optimize = DB_query($sql, 1);
         if ($optimize === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '
-                         . DB_error());
+            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
 
             $startwith = $table;
             $url = $_CONF['site_admin_url']
@@ -1039,11 +1039,11 @@ function DBADMIN_alterEngine($table_name, $engine = 'MyISAM')
     global $_CONF;
 
     $retval = true;
-
-    $convert_engine = DB_query("ALTER TABLE $table_name ENGINE=".$engine, 1);
+    $sql = "ALTER TABLE ".$table_name." ENGINE=".$engine;
+    $convert_engine = DB_query($sql, 1);
     if ($convert_engine === false) {
         $retval = false;
-        COM_errorLog('SQL error converting table "' . $table_name . '" to '.$engine.' (ignored): '.DB_error());
+        COM_errorLog('SQL error converting table "' . $table_name . '" to '.$engine.' (ignored): '.DB_error($sql));
     }
     return $retval;
 }

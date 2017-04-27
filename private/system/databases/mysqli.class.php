@@ -768,9 +768,17 @@ class database
                 }
             }
             if (empty($fn)) {
-                $this->_errorlog($this->_db->errno . ': ' . $this->_db->error . ". SQL in question: $sql");
+                $errorMessage = $this->_db->errno . ': '.$this->_db->error;
+                if ( $sql != '' ) {
+                    $errorMessage .= " SQL in question: " . $sql;
+                }
+                $this->_errorlog($errorMessage);
             } else {
-                $this->_errorlog($this->_db->errno . ': ' . $this->_db->error . " in $fn. SQL in question: $sql");
+                $errorMessage = $this->_db->errno . ': ' . $this->_db->error . " in " . $fn;
+                if ( $sql != '' ) {
+                    $errorMessage .= " SQL in question: ".$sql;
+                }
+                $this->_errorlog($errorMessage);
             }
 
             if ($this->_display_error) {

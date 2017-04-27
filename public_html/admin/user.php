@@ -1472,6 +1472,7 @@ function USER_save($uid)
     global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE;
 
     $retval = '';
+    $sql = '';
     $userChanged = false;
 
     if ($_USER_VERBOSE) COM_errorLog("**** entering USER_save()****",1);
@@ -1892,7 +1893,9 @@ function USER_save($uid)
             PLG_userInfoChanged ($uid);
         }
         CACHE_remove_instance('menu');
-        $errors = DB_error();
+//@TODO - this error check does not seem correct
+//      - this only checks the last SQL
+        $errors = DB_error($sql);
         if (empty($errors)) {
             echo PLG_afterSaveSwitch (
                 $_CONF['aftersave_user'],

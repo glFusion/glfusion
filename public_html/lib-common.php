@@ -3313,8 +3313,9 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($loginname)."'" );
-    $tmp = DB_error();
+    $sql = "SELECT passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($loginname)."'";
+    $result = DB_query($sql);
+    $tmp = DB_error($sql);
     $nrows = DB_numRows( $result );
 
     if (( $tmp == 0 ) && ( $nrows == 1 )) {

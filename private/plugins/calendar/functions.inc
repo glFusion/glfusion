@@ -372,7 +372,7 @@ function plugin_moderationvalues_calendar()
     return array (
         'eid',
         $_TABLES['events'],
-        "eid,status,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
+        "eid,status,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url",
         $_TABLES['eventsubmission']
     );
 }

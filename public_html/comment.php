@@ -344,10 +344,11 @@ function handleEditSubmit()
         $comment = DB_escapeString ($comment);
 
         // save the comment into the comment table
-        DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'");
+        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
+                . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
+        DB_query($sql);
 
-        if (DB_error() ) { //saving to non-existent comment or comment in wrong article
+        if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
             COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
             . 'to edit to a non-existent comment or the cid/sid did not match');
             return COM_refresh($_CONF['site_url'] . '/index.php');

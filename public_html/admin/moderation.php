@@ -569,7 +569,7 @@ function MODERATE_itemList($type='', $token)
                     $result = DB_query($sql, 1);
                 }
 
-                if (empty($sql) || DB_error()) {
+                if (empty($sql) || DB_error($sql)) {
                     $nrows = 0; // more than likely a plugin that doesn't need moderation
                 } else {
                     $nrows = DB_numRows($result);
