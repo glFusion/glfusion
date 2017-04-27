@@ -1,4 +1,7 @@
 ## v1.6.7 (unreleased)
+  - Media Gallery: Replacing an image set exif flag to 0 resulting in no meta data for the new image
+  - Improved SQL error reporting
+  - Fixed SQL error in calendar moderation view
   - Fixed old references to stmenu
   - Media Gallery: EXIF media date was not converted to user's timezone
   - Media Gallery: EXIF parser would crash on some Canon images due to invalid exif tag
