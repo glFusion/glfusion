@@ -36,6 +36,29 @@ $(document).ready(function() {
                 var newheight= (width < iwidth) ? height : ele.data('height');
             ele.css({'height': (width < iwidth) ? height : ele.data('height')});
  	  	});
+      $('video,audio').mediaelementplayer({
+          defaultVideoWidth: 480,
+          defaultVideoHeight: 270,
+          videoWidth: -1,
+          videoHeight: -1,
+          audioWidth: 400,
+          audioHeight: 30,
+          startVolume: 0.8,
+          loop: false,
+          enableAutosize: true,
+          features: ['playpause','progress','current','duration','tracks','volume','fullscreen'],
+          alwaysShowControls: false,
+          iPadUseNativeControls: false,
+          iPhoneUseNativeControls: false,
+          AndroidUseNativeControls: false,
+          alwaysShowHours: false,
+          showTimecodeFrameCount: false,
+          framesPerSecond: 25,
+          enableKeyboard: true,
+          pauseOtherPlayers: true,
+          pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
+          keyActions: []
+      });
 {!if comment_disqus_shortname}
 			var disqus_shortname = "{comment_disqus_shortname}";
 			$(document).ready (function () {

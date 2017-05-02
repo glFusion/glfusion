@@ -57,6 +57,8 @@ $('video,audio').mediaelementplayer({
     enableKeyboard: true,
     // when this player starts, it will pause other players
     pauseOtherPlayers: true,
+    // path to players
+    pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
     // array of keyboard commands
     keyActions: []
 });
