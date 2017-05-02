@@ -746,6 +746,7 @@ function MG_displaySWF( $aid, $I, $full ) {
                 'id'        => 'swf' . rand(),
                 'id2'       => 'swf2' . rand(),
                 'movie'     => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
+                'mime_type' => 'application/x-shockwave-flash',
             ));
 
             $flasharray = array();
@@ -987,6 +988,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
     			$streamingServerURLmg = '';
     			$streamingServer      = '';
     			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
+                $movie                = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
   			}
   			$width  = $playback_options['width'];
   			$height = $playback_options['height'];
@@ -1017,6 +1019,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'site_url'  	=> $_MG_CONF['site_url'],
                 'lang_noflash'  => $LANG_MG03['no_flash'],
                 'play'          => $autoplay,
+                'autoplay_text' => true,
                 'autoplay'      => $autoplay,
                 'menu'          => ($playback_options['menu'] ? 'true' : 'false'),
                 'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
@@ -1039,6 +1042,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'lang_normal'   => $LANG_MG03['normal'],
                 'resolution_x'  => $resolution_x,
                 'resolution_y'  => $resolution_y,
+                'mime_type'     => 'video/x-flv',
             ));
     		$F->parse('output','player');
     		$flv_player = $F->finish($F->get_var('output'));

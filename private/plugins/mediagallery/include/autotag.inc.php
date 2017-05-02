@@ -727,7 +727,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             while ( $poRow = DB_fetchArray($poResult) ) {
                                 $playback_options[$poRow['option_name']] = $poRow['option_value'];
                             }
-
+/*
                             if ( $swfjsinclude > 0 ) {
                                 $u_image = '';
                             } else {
@@ -740,7 +740,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 $u_image = $S->finish($S->get_var('output'));
                                 $swfjsinclude++;
                             }
-
+*/
                             $V = new Template( MG_getTemplatePath(0) );
                             $V->set_file (array ('video' => 'view_swf.thtml'));
                             $V->set_var(array(
@@ -791,6 +791,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				            while ( $poRow = DB_fetchArray($poResult) ) {
 				                $playback_options[$poRow['option_name']] = $poRow['option_value'];
 				            }
+                            $u_image = '';
+/*
 				            if ( $swfjsinclude > 0 ) {
 				                $u_image = '';
 				            } else {
@@ -803,13 +805,14 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				                $u_image = $S->finish($S->get_var('output'));
 				                $swfjsinclude++;
 				            }
-
+*/
 				            $V = new Template( MG_getTemplatePath(0) );
 				    		$V->set_file('video','view_flv_light.thtml');
-                            $playImage = MG_getImageFile('blank_blk.jpg');
+                            $playImageJPG = MG_getImageFile('blank_blk.jpg');
 				            // now the player specific items.
 				    		$F = new Template( MG_getTemplatePath(0) );
 				           	$F->set_file(array('player' => 'flvfp.thtml'));
+				           	$playImage = $_MG_CONF['mediaobjects_url'].'/placeholder_video_w.svg';
 				        	if ( $autoplay == 1 ) {  // auto start
 				        		$playButton = '';
 				        	} else {
@@ -846,10 +849,12 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 						        $videoFile            = $basefilename;
 					           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
 					           	$streamingServer      = "streamingServer: 'fms',";
+					           	$movie = '';
 				    		} else {
 				    			$streamingServerURL   = '';
 				    			$streamingServer      = '';
 				    			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
+				    			$movie                = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
 				  			}
 				  			$width  = $videowidth;
 				  			$height = $videoheight + 22;
@@ -861,6 +866,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				                'site_url'  		=> $_MG_CONF['site_url'],
 				                'lang_noflash' 		=> $LANG_MG03['no_flash'],
 				                'play'          	=> ($autoplay ? 'true' : 'false'),
+				                'autoplay'          => ($autoplay ? 1 : 0),
 				                'menu'          	=> ($playback_options['menu'] ? 'true' : 'false'),
 				                'loop'          	=> ($playback_options['loop'] ? 'true' : 'false'),
 				                'scale'         	=> $playback_options['scale'],
@@ -870,12 +876,22 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 					           	'streamingServerURL'=> $streamingServerURL,
 					           	'streamingServer'	=> $streamingServer,
 					           	'videoFile'			=> $videoFile,
+					           	'movie'             => $movie,
 					           	'playButton'		=> $playButton,
 				                'id'            	=> $id,
 				                'id2'           	=> $id2,
 				                'resolution_x'  	=> $resolution_x,
 				                'resolution_y'  	=> $resolution_y,
+				                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+				                'thumbnail'         => $playImage,
+				                'tn_jpg'            => $playImageJPG,
+				                'mime_type'         => 'video/x-flv',
 				            ));
+                            if ( $align != '' && $align != "center" ) {
+                                $F->set_var('alignment','float:'.$align.';');
+                            } else {
+                                $F->set_var('alignment','');
+                            }
 				    		$F->parse('output','player');
 				    		$flv_player = $F->finish($F->get_var('output'));
 
@@ -887,9 +903,13 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				                'width'         => $resolution_x,
 				                'height'        => $resolution_y,
 				                'flv_player'	=> $flv_player,
+                                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
 							));
 
                             $V->parse('output','video');
+
+                            $u_image .= $V->finish($V->get_var('output'));
+/*
                             if ( $align != '' && $align != "center") {
                                 $u_image .= '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
                             } else if ($align == "center") {
@@ -897,6 +917,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             } else {
                                 $u_image .= '<span class="'.$classes.'" style="padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
                             }
+*/
                             break;
                     }
                     $link = $u_image;
