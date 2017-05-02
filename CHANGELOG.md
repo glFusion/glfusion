@@ -1,4 +1,8 @@
 ## v1.6.7 (unreleased)
+  - Improved error logging for invalid / missing tokens
+  - Add new error message that triggers when local (standard) login is disabled and user passes username / password only
+  - Media Gallery: Update swfobject (used for legacy flash player / slideshow) to latest version (v2.3)
+  - Media Gallery: Updated flash media items to play using MediaElementJS
   - Media Gallery: Replacing an image set exif flag to 0 resulting in no meta data for the new image
   - Improved SQL error reporting
   - Fixed SQL error in calendar moderation view
