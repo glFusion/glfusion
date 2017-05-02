@@ -1374,7 +1374,7 @@ function _sec_checkToken($ajax=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckToken: Token failed - no token found in database");
+                COM_errorLog("CheckToken: Token failed - no token found in database - " . $referCheck);
             } else {
                 COM_errorLog("CheckToken: Token failed - more than 1 token found in database");
             }
@@ -1479,7 +1479,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database");
+                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
             } else {
                 COM_errorLog("CheckTokenGeneral: Token failed - more than one token found in the database");
             }
