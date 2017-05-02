@@ -639,12 +639,14 @@ function forum_showBlocks($showblocks)
         $noboxes = $_USER['noboxes'];
     }
 
-    foreach($showblocks as $block) {
-        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
-        $result = DB_query($sql);
-        if (DB_numRows($result) == 1) {
-            $A = DB_fetchArray($result);
-            $retval .= COM_formatBlock($A,$noboxes);
+    if ( is_array($showblocks)) {
+        foreach($showblocks as $block) {
+            $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
+            $result = DB_query($sql);
+            if (DB_numRows($result) == 1) {
+                $A = DB_fetchArray($result);
+                $retval .= COM_formatBlock($A,$noboxes);
+            }
         }
     }
 
