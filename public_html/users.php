@@ -1325,15 +1325,14 @@ switch ($mode) {
                     $local_login = true;
                 }
             } else {
+                COM_errorLog("ERROR: Username and Password were posted, but local authenticatio is disabled - check configuration settings");
                 $status = -2;
             }
 
         // begin distributed (3rd party) remote authentication method
 
         } elseif (!empty($loginname) && $_CONF['user_login_method']['3rdparty'] &&
-            ($_CONF['usersubmission'] == 0) &&
-            ($service != '')) {
-
+            ($_CONF['usersubmission'] == 0) && ($service != '')) {
             COM_updateSpeedlimit('login');
             //pass $loginname by ref so we can change it ;-)
             $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
