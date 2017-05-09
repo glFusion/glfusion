@@ -253,7 +253,6 @@ function handleEdit() {
         }
     }
 
-
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                . 'to edit a comment with one or more missing/bad values.');
@@ -280,6 +279,7 @@ function handleEdit() {
         } else {
             $postmode = 'plaintext';
         }
+//        $postmode = $_CONF['comment_postmode'];
     } else {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                . 'to edit a comment that doesn\'t exist as described.');

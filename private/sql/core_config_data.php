@@ -3273,7 +3273,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'htmlfilter_comment',
-    	'default_value' => 'p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre',
+    	'default_value' => 'p,b,a[href|title|target],i,strong,em,br,tt,hr,li,ol,ul,code,pre',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 5,

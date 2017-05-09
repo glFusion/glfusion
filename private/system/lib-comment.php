@@ -435,6 +435,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $A['uid'] = 1;
         }
 
+        $filter->setReplaceTags(true);
+        $filter->setCensorData(true);
+
+        $filter->setPostmode('html');
+
         $template->set_var( 'indent', $indent );
         $template->set_var( 'author_name', $filter->sanitizeUsername($A['username'] ));
         $template->set_var( 'author_id', $A['uid'] );
@@ -620,24 +625,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $text = str_replace('<div class="comment-edit">', '', $text);
         $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
 
-        $filter->setReplaceTags(true);
-        $filter->setCensorData(true);
-
-        if( preg_match( '/<.*>/', $text ) == 0 ) {
-            $A['comment'] = nl2br( $A['comment'] );
-        }
-        $filter->setPostmode('html');
-        $A['comment'] = $filter->displayText($A['comment']);
-
         // highlight search terms if specified
         if( !empty( $_REQUEST['query'] )) {
-            $A['comment'] = COM_highlightQuery( $A['comment'],
-                                                strip_tags($_REQUEST['query']) );
+            $A['comment'] = COM_highlightQuery( $A['comment'], strip_tags($_REQUEST['query']) );
         }
 
         if (function_exists('msg_replaceEmoticons'))  {
             $A['comment'] = msg_replaceEmoticons($A['comment']);
         }
+
+        $A['comment'] = $filter->displayText($A['comment']);
 
         // create a reply to link
         $reply_link = '';
@@ -1214,7 +1211,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('lang_postmode', $LANG03[2]);
             $comment_template->set_var('postmode',$postmode);
             $comment_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
-            $comment_template->set_var('allowed_html', $filter->getAllowedHTML() . '<br/>'. COM_AllowedAutotags('', false, 'glfusion','comment'));
+            if ( $postmode == 'html' ) {
+                $comment_template->set_var('allowed_html', $filter->getAllowedHTML() . '<br/>'. COM_AllowedAutotags('', false, 'glfusion','comment'));
+            } else {
+                $comment_template->set_var('allowed_html', COM_AllowedAutotags('', false, 'glfusion','comment'));
+            }
             $comment_template->set_var('lang_importantstuff', $LANG03[18]);
             $comment_template->set_var('lang_instr_line1', $LANG03[19]);
             $comment_template->set_var('lang_instr_line2', $LANG03[20]);
@@ -1332,6 +1333,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ($someError = PLG_commentPreSave($uid, $title, $comment, $sid, $pid, $type, $postmode)) {
         return $someError;
     }
+
     $title = COM_checkWords (strip_tags ($title));
     $comment = CMT_prepareText($comment,$postmode);
 
@@ -1698,12 +1700,12 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     $filter->setPostmode($postmode);
     $filter->setCensorData(true);
     $filter->setNamespace('glfusion','comment');
-
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedElements($AllowedElements);
     $comment = $filter->filterData($comment);  // does not censor...
     $comment = $filter->censor($comment);
-
+// see if we can force html mode...
+    if ( $postmode == 'html' ) { $comment = '<!-- comment -->' . $comment; }
     if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
@@ -1777,9 +1779,6 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
 
     return $retval;
 }
-
-
-
 
 
 /**

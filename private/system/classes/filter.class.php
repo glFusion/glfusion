@@ -344,10 +344,10 @@ class sanitizer
     {
         global $_CONF,$_SYSTEM;
 
-        if ( !isset($_SYSTEM['debug_html_filter']) ) $_SYSTEM['debug_html_filter'] = false;
+        if ( !isset($_CONF['debug_html_filter']) ) $_CONF['debug_html_filter'] = false;
 
         if ( isset( $_CONF['skip_html_filter_for_root'] ) && ( $_CONF['skip_html_filter_for_root'] == 1 ) && SEC_inGroup( 'Root' )) {
-            if ( $_SYSTEM['debug_html_filter'] == true ) COM_errorLog("HTMLFILTER: Skipped for root user");
+            if ( $_CONF['debug_html_filter'] == true ) COM_errorLog("HTMLFILTER: Skipped for root user");
             return $str;
         }
         $configArray = explode(',',$this->allowedElements);
@@ -369,12 +369,12 @@ class sanitizer
         $config->set('Output.FlashCompat',true);
         $config->set('Cache.SerializerPath',$_CONF['path_data'].'htmlpurifier');
 
-        if ( $_SYSTEM['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
+        if ( $_CONF['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
         $purifier = new HTMLPurifier($config);
 
         $clean_html = $purifier->purify($str);
 
-        if (  $_SYSTEM['debug_html_filter'] == true  ) {
+        if (  $_CONF['debug_html_filter'] == true  ) {
             $e = $purifier->context->get('ErrorCollector');
             $errArray = $e->getRaw();
             if (is_array($errArray)) {
@@ -505,6 +505,7 @@ class sanitizer
                         if ($match[1])
                             $protocol = $match[1];
                         $link = $match[2] ?: $match[3];
+                        $link = $this->sanitizeUrl( $link );
                         if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($protocol.'://'.$link,$_CONF['site_url']) === false ) {
                             // external
                             $target = ' target="_blank" ';
@@ -544,6 +545,7 @@ class sanitizer
                         } else {
                             $target = '';
                         }
+                        $match[1] = $this->sanitizeUrl( $match[1] );
                         return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\" rel=\"nofollow\" ".$target.">{$match[1]}</a>") . '>';
                     }, $value);
                     break;
@@ -632,6 +634,7 @@ class sanitizer
         $id = str_replace( ' ', '', $id );
         $id = str_replace( array( '/', '\\', ':', '+' ), '-', $id );
         $id = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '', $id );
+        $id = trim($id);
         if ( empty( $id ) && $new_id ) {
             $id = COM_makesid();
         }
