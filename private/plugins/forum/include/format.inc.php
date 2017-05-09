@@ -77,6 +77,7 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
         return true;
     }
 
+	$retval = '';
     $url = '';
     $linktext = '';
     $target = '';
@@ -100,8 +101,9 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
     if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
         $target = ' target="_blank" ';
     }
-
-    return '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
+	$url = COM_sanitizeUrl( $url );
+    $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
+	return $retval;
 }
 
 function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {

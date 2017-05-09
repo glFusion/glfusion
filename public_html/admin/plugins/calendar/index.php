@@ -536,7 +536,7 @@ function CALENDAR_save( $eid, $C )
     $state       = DB_escapeString (COM_checkHTML (COM_checkWords ($state)));
     $zipcode     = DB_escapeString (COM_checkHTML (COM_checkWords ($zipcode)));
     $event_type  = DB_escapeString (strip_tags (COM_checkWords ($event_type)));
-    $url         = DB_escapeString (strip_tags ($url));
+    $url         = DB_escapeString (COM_sanitizeURL ($url));
 
     if ($allday == 0) {
         // Add 12 to make time on 24 hour clock if needed

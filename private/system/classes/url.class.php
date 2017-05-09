@@ -225,6 +225,7 @@ class url {
     */
     function buildURL($url)
     {
+        $retval = '';
         if (!$this->isEnabled()) {
             return $url;
         }
@@ -250,7 +251,8 @@ class url {
             }
             next($finalList);
         }
-        return str_replace('?' . $query_string,$newArgs,$url);
+        $retval = str_replace('?' . $query_string,$newArgs,$url);
+        return COM_sanitizeURL($retval);
     }
 }
 

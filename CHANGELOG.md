@@ -1,10 +1,12 @@
 ## v1.6.7 (unreleased)
+  - Comment formatting updates
+  - Security Updates - Implemented several additional XSS protections identified through our on-going security scans
   - Fixed incorrect help text for Hide Story Date
   - Improved error logging for invalid / missing tokens
   - Add new error message that triggers when local (standard) login is disabled and user passes username / password only
   - Media Gallery: Update swfobject (used for legacy flash player / slideshow) to latest version (v2.3)
   - Media Gallery: Updated flash media items to play using MediaElementJS
-  - Media Gallery: Replacing an image set exif flag to 0 resulting in no meta data for the new image
+  - Media Gallery: Replacing an image set exif flag to false, resulting in no meta data for the new image
   - Improved SQL error reporting
   - Fixed SQL error in calendar moderation view
   - Fixed old references to stmenu

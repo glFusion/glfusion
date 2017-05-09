@@ -5625,7 +5625,7 @@ function COM_createLink($content, $url, $attr = array())
 {
     $retval = '';
 
-    $attr_str = 'href="' . $url . '"';
+    $attr_str = 'href="' . COM_sanitizeURL($url) . '"';
     foreach ($attr as $key => $value) {
         $attr_str .= " $key=\"$value\"";
     }
