@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Additional checks to ensure environment check functions are available prior to calling
+  - Polls - Fixed issue where vote count was not properly saved when editing existing poll
   - Comment formatting updates
   - Security Updates - Implemented several additional XSS protections identified through our on-going security scans
   - Fixed incorrect help text for Hide Story Date
