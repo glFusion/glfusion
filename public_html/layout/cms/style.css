@@ -2579,3 +2579,13 @@ input.error {
 	left: 0%;
 	content:"\f00d";
 }
+
+/* glFusion generated checkbox lists */
+.checkboxes-list {
+	list-style-type: none;
+	padding:5px;
+}
+.checkboxes-list input {
+	padding:5px;
+	margin-right: 10px;
+}

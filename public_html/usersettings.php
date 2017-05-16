@@ -666,11 +666,9 @@ function editpreferences()
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         $permissions = COM_getPermSQL ('');
         $preferences->set_var ('exclude_topic_checklist',
+                COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
 
-        COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
-
-        if (($_CONF['contributedbyline'] == 1) &&
-            ($_CONF['hide_author_exclusion'] == 0)) {
+        if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
             $preferences->set_var ('lang_authors', $LANG04[56]);
             $sql = "SELECT DISTINCT story.uid, users.username,users.fullname FROM {$_TABLES['stories']} story, {$_TABLES['users']} users WHERE story.uid = users.uid";
             if ($_CONF['show_fullname'] == 1) {

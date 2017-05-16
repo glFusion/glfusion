@@ -10,12 +10,14 @@
       {exclude_topic_checklist}
     </div>
   </div>
+{!if lang_authors}
   <div class="uk-form-row">
     <label class="uk-form-label">{lang_authors}</label>
     <div class="uk-form-controls">
       {exclude_author_checklist}
     </div>
   </div>
+{!endif}
   {plugin_content_exclude}
 </fieldset>
 {# end {templatelocation} #}
