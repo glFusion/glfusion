@@ -1,6 +1,8 @@
 {# begin {templatelocation} #}
 {!if preview_mode}
 <div class="uk-panel uk-panel-box uk-margin-bottom">
+{!else}
+<div class="uk-panel uk-panel-box uk-margin-small-bottom">
 {!endif}
 <div class="uk-flex uk-comment tm-comment uk-visible-hover" style="padding-left:{indent}px;">
 	<div class="uk-margin-right uk-hidden-small">
@@ -43,6 +45,8 @@
 	</div>
 </div>
 {!if preview_mode}
+</div>
+{!else}
 </div>
 {!endif}
 <div class="uk-clearfix"></div>
