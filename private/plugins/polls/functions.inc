@@ -1134,7 +1134,6 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
 
     $retval = '';
     $is_open = 0;
-
     // housekeeping - delete old anonymous voting data
     if ( !isset($_PO_CONF['polladdresstime']) ) {
         $polladdresstime = 86400; // 24 hours
@@ -1235,7 +1234,6 @@ function POLLS_saveVote($pid, $aid)
     if (POLLS_ipAlreadyVoted ($pid)) {
         exit;
     }
-
     DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',DB_escapeString($pid),'',true);
     // This call to DB-change will properly supress the insertion of quotes around $value in the sql
     $answers = count($aid);
