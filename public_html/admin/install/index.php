@@ -807,10 +807,16 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 
+    $st = ini_get('short_open_tag');
+    $T->set_var('item','short_open_tag');
+    $T->set_var('status',$st == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+    $T->set_var('recommended',$LANG_INSTALL['off']);
+    $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
+    $T->parse('env','envs',true);
+
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
     $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['register_globals']);
     $T->parse('env','envs',true);
@@ -818,7 +824,6 @@ function INST_checkEnvironment($dbconfig_path='')
     $sm = ini_get('safe_mode');
     $T->set_var('item','safe_mode');
     $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-
     $T->set_var('recommended',$LANG_INSTALL['off']);
     $T->set_var('notes',$LANG_INSTALL['safe_mode']);
     $T->parse('env','envs',true);
@@ -832,7 +837,6 @@ function INST_checkEnvironment($dbconfig_path='')
     }
     $T->set_var('item','open_basedir');
     $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['enabled'].'</span>');
-
     $T->set_var('notes',$LANG_INSTALL['open_basedir']);
     $T->parse('env','envs',true);
 
@@ -840,7 +844,6 @@ function INST_checkEnvironment($dbconfig_path='')
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
     $T->set_var('status',$memory_limit < 50331648 ? '<span class="uk-text-danger uk-text-bold">'.$memory_limit_print.'M</span>' : '<span class="uk-text-success">'.$memory_limit_print.'M</span>');
-
     $T->set_var('recommended','64M');
     $T->set_var('notes',$LANG_INSTALL['memory_limit']);
     $T->parse('env','envs',true);
@@ -867,6 +870,14 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG_INSTALL['post_max_size']);
     $T->parse('env','envs',true);
+
+    $max_execution_time = ini_get('max_execution_time');
+    $T->set_var('item', 'max_execution_time');
+    $T->set_var('status', $max_execution_time < 30 ? '<span class="uk-text-danger uk-text-bold">'.$max_execution_time . ' secs</span>' : '<span class="uk-text-success">'.$max_execution_time . ' secs</span>');
+    $T->set_var('recommended', '30 secs');
+    $T->set_var('notes',$LANG_INSTALL['max_execution_time']);
+    $T->parse('env','envs',true);
+
     clearstatcache();
     if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
         require '../../siteconfig.php';

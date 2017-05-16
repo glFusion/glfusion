@@ -239,6 +239,8 @@ $LANG_INSTALL = array(
     'zlib_extension'            => 'zlib Extension',
     'required_php_ext'          => 'Required PHP Extensions',
     'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
+    'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
 );
 
 // +---------------------------------------------------------------------------+
