@@ -812,6 +812,9 @@ function gdVersion($user_ver = 0) {
 
 function _phpinfo()
 {
+    if (preg_match('/phpinfo/', ini_get('disable_functions'))) {
+        return '';
+    }
     ob_start();
     phpinfo();
 
@@ -835,8 +838,10 @@ function _phpinfo()
 
 }
 
+$page = _checkEnvironment();
+
 $display  = COM_siteHeader();
-$display .= _checkEnvironment();
+$display .= $page;
 $display .= COM_siteFooter();
 echo $display;
 ?>
