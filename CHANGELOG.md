@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Updated auto tag editor to remove informational text when de-selecting PHP function option
+  - Display appropriate error if upgrade checks cannot communicate with glFusion.org website
   - Additional checks to ensure environment check functions are available prior to calling
   - Polls - Fixed issue where vote count was not properly saved when editing existing poll
   - Comment formatting updates
