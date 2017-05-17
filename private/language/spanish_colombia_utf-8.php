@@ -2506,7 +2506,9 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Versión Instalada',
     'latest_version' => 'Última Versión',
     'notes' => 'Notas',
-    'phpeol' => 'La versión de PHP esta desactualizada'
+    'phpeol' => 'La versión de PHP esta desactualizada',
+    'com_error_title' => 'Communication Error',
+    'com_error_text' => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...'
 );
 
 ###############################################################################
@@ -2752,7 +2754,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Saltar filtro HTML para Root',
     'allowed_protocols' => 'Protocolos Permitidos',
     'disable_autolinks' => 'Deshabilitar Autoenlaces',
-    'digg_enabled' => 'Mostrar Enlaces a Digg.com ?',
     'censormode' => 'Modo de Censura',
     'censorreplace' => 'Texto de Reemplazo',
     'censorlist' => 'Palabras censuradas',

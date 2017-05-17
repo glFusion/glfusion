@@ -355,7 +355,7 @@ $LANG04 = array(
     86 => 'Alle Artikel und Kommentare von',
     87 => 'Dein Benutzername',
     88 => "Jemand (höchstwahrscheinlich Du selbst) hat ein neues Passwort für Dein Konto \"%s\" auf {$_CONF['site_name']} <{$_CONF['site_url']}> angefordert.<br /><br />Wenn Du tatsächlich ein neues Passwort benötigst, klicke bitte auf den folgenden Link:<br /><br />",
-    89 => "Möchtest Du Dein Passwort nicht ändern, so kannst Du diese E-Mail einfach ignorieren (Dein bisheriges Passwort bleibt dann unverändert gültig).",
+    89 => 'Möchtest Du Dein Passwort nicht ändern, so kannst Du diese E-Mail einfach ignorieren (Dein bisheriges Passwort bleibt dann unverändert gültig).',
     90 => 'Du kannst hier jetzt ein neues Passwort für Deinen Konto eingeben. Dein altes Passwort bleibt noch solange gültig, bis Du dieses Formular absendest.',
     91 => 'Neues Passwort',
     92 => 'Neues Passwort eingeben',
@@ -466,7 +466,7 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br' . XHTML . '>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
 );
 
 ###############################################################################
@@ -1870,7 +1870,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1945,7 +1945,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1999,7 +1999,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-#
+# 
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -2510,7 +2510,9 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Installierte Version',
     'latest_version' => 'Letzte Version',
     'notes' => 'Status',
-    'phpeol' => 'PHP-Version ist veraltet'
+    'phpeol' => 'PHP-Version ist veraltet',
+    'com_error_title' => 'Communication Error',
+    'com_error_text' => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...'
 );
 
 ###############################################################################
@@ -2756,7 +2758,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'HTML des Root nicht filtern',
     'allowed_protocols' => 'Erlaubte Protokolle',
     'disable_autolinks' => 'Autolinks ausschalten',
-    'digg_enabled' => 'Digg.com Links anzeigen',
     'censormode' => 'Zensur-Modus',
     'censorreplace' => 'Zensurwort ersetzen mit',
     'censorlist' => 'Liste zensierter Wörter',

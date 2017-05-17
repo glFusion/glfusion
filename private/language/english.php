@@ -2508,6 +2508,8 @@ $LANG_UPGRADE = array(
     'latest_version' => 'Latest Version',
     'notes'         => 'Notes',
     'phpeol'        => 'PHP Version is out-of-date',
+    'com_error_title' => 'Communication Error',
+    'com_error_text'    => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...',
 );
 
 ###############################################################################

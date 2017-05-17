@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Version Check                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2016 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -74,6 +74,11 @@ function _displayVersionData()
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     switch ( $upToDate ) {
+        case -1 :
+            $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
+            $statusMsg  = $LANG_UPGRADE['com_error_title'];
+            $statusText = $LANG_UPGRADE['com_error_text'];
+            break;
         case 0 :
             $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
             $statusMsg  = $LANG_UPGRADE['upgrade_title'];
