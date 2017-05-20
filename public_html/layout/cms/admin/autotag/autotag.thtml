@@ -12,13 +12,11 @@
 			case false:
   			$('#replacement').prop('disabled',false);
   			$('#replacement-help').css('display','');
-  			$('#php-msg').css('dispaly','');
   			$('#replacement').html('');
   			break;
 			case true:
   			$('#replacement').prop('disabled', true);
   			$('#replacement-help').css('display','none');
-  			$('#php-msg').css('display','none');
   			$('#replacement').html('{phpfn_replace} {phpfn_must_exist}');
   			break;
 		}
