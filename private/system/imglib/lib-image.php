@@ -40,6 +40,9 @@ switch ( $_CONF['image_lib'] ) {
     case 'imagemagick' :    // ImageMagick...
         require_once($_CONF['path_system'] . 'imglib/im_image.php');
         break;
+    case 'graphicsmagick' : // GraphicsMagick...
+        require_once($_CONF['path_system'] . 'imglib/gm_image.php');
+        break;
     case 'netpbm' :    // NetPBM
         require_once($_CONF['path_system'] . 'imglib/pbm_image.php');
         break;

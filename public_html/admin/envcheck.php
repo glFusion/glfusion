@@ -255,6 +255,29 @@ function _checkEnvironment()
 
     if ( $sm != 1 && $open_basedir_restriction != 1 ) {
         switch ( $_CONF['image_lib'] ) {
+            case 'graphicsmagick' :    // GraphicsMagick
+                if (PHP_OS == "WINNT") {
+                    $binary = "/gm.exe";
+                } else {
+                    $binary = "/gm";
+                }
+                clearstatcache();
+                if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
+                    $T->set_var(array(
+                        'item'   =>  $LANG_ENVCHK['graphicsmagick'],
+                        'status' =>  $LANG_ENVCHK['not_found'],
+                        'class' =>  'tm-fail',
+                        'notes'  => $LANG_ENVCHK['gm_not_found'],
+                    ));
+                } else {
+                    $T->set_var(array(
+                        'item'   => $LANG_ENVCHK['graphicsmagick'],
+                        'status' => $LANG_ENVCHK['ok'],
+                        'class' => 'tm-pass',
+                        'notes'  => $LANG_ENVCHK['gm_ok'],
+                    ));
+                }
+                break;
             case 'imagemagick' :    // ImageMagick
                 if (PHP_OS == "WINNT") {
                     $binary = "/convert.exe";

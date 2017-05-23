@@ -466,7 +466,7 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br' . XHTML . '>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
 );
 
 ###############################################################################
@@ -2437,6 +2437,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
     'im_ok' => 'Die Datei <b>convert</b> scheint vorhanden zu sein.',
     'imagemagick' => 'ImageMagick-Erweiterung',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' optional',
     'is_required' => ' erforderlich',
     'jhead' => 'Jhead-Erweiterung',
@@ -2917,7 +2920,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Letzte Seite' => 'last', 'Erste Seite' => 'first', 'Jede Seite' => 'all'),
     8 => array('Rechts' => 'right', 'Links' => 'left'),
     9 => array('Auf Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite anzeigen' => 'home', 'Admin anzeigen' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Der Reihe nach' => 'flat', 'Verschachtelt' => 'nested', 'Keine Kommentare' => 'nocomment'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-schreiben' => 3),
     13 => array('Uberspringen' => 0, 'Erlauben mit Speed-Limit' => 1, 'Erlauben ohne Speed-Limit' => 2),

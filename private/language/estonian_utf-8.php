@@ -462,7 +462,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -1713,7 +1713,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2433,6 +2433,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2913,7 +2916,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('lihtne' => 'flat', 'Üksteise sees' => 'nested', 'pole kommentaare' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),

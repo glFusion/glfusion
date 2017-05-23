@@ -459,7 +459,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -763,7 +763,7 @@ $LANG20 = array(
     3 => 'La contraseña ingresada es inválida',
     4 => 'Usuario(a):',
     5 => 'Contraseña:',
-    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br' . XHTML . '>Esta página es para uso exclusivo del personal autorizado.',
+    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br>Esta página es para uso exclusivo del personal autorizado.',
     7 => 'Identificación',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1095,7 +1095,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1242,7 +1242,7 @@ $LANG32 = array(
     7 => 'El Plug-in que intentas instalar ya existe. Por favor borra el Plug-in antes de reinstalarlo.',
     8 => 'Falló la comprobación de compatibilidad del Plug-in',
     9 => 'Este Plug-in requiere una versión más nueva de glFusion. Puedes obtener una copia actualizada de <a href=https://www.glfusion.org>glFusion</a> o instalar otra versión del Plug-in.',
-    10 => '<br' . XHTML . '><b>No hay Plug-in(s) instalados.</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>No hay Plug-in(s) instalados.</b><br><br>',
     11 => 'Para modificar o borrar un Plug-in selecciona el número a la izquierda del mismo. Para acceder a la página de sus creadores seleccione en el título del Plug-in. Para instalar un nuevo Plug-in selecciona \'Nuevo Plug-in\' más arriba.',
     12 => 'no se ha dado un nombre de plugin a la función plugineditor()',
     13 => 'Editor de Plugins',
@@ -1503,7 +1503,7 @@ $MESSAGE = array(
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
-    77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
+    77 => 'WARNING:<br>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the email address and the confirmation email address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
     80 => 'The plugin that created this feed is currently disabled. You will not be able to edit this feed until you re-enable the parent plugin.',
@@ -1710,7 +1710,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2430,6 +2430,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2910,7 +2913,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),

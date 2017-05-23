@@ -464,7 +464,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +768,7 @@ $LANG20 = array(
     3 => '無效的密碼',
     4 => '用戶名：',
     5 => '密碼：',
-    6 => '這頁只供授權人員使用。<br' . XHTML . '>所有存取將被記錄和檢查。',
+    6 => '這頁只供授權人員使用。<br>所有存取將被記錄和檢查。',
     7 => '登入',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -1100,7 +1100,7 @@ $LANG28 = array(
     49 => '管理組',
     50 => '打勾來准許過濾此組為管理組',
     51 => '線上日',
-    52 => '<br' . XHTML . '>注: "線上日" 是從登記的第一天到最後一次登入.',
+    52 => '<br>注: "線上日" 是從登記的第一天到最後一次登入.',
     53 => '登記過的',
     54 => '批量的刪除',
     55 => '這功能只會有效若你已在 config.php 裏設定為 <code>$_CONF[\'lastlogin\'] = true;</code>',
@@ -1247,7 +1247,7 @@ $LANG32 = array(
     7 => '你想安裝的插件已經存在，請先把它刪除再安裝。',
     8 => '插件不能通過相容性校驗。',
     9 => '這插件要求一個更新版本的志樂. 你可以升級你的<a href="https://www.glfusion.org">志樂</a>或是另找一個適合的版本。',
-    10 => '<br' . XHTML . '><b>沒有安裝的插件。</b><br' . XHTML . '><br' . XHTML . '>',
+    10 => '<br><b>沒有安裝的插件。</b><br><br>',
     11 => '若想修改或刪除插件，點擊以下插件的名稱。這會顯示插件的詳細內容和製作者的網站。安裝的版本和從代碼中來的版本都會顯出來。這會讓你知道此插件是否應該更新。若要安裝或升級插件請諮詢它的說明文件。',
     12 => 'plugineditor() 找不到插件名',
     13 => '插件編輯器',
@@ -1508,7 +1508,7 @@ $MESSAGE = array(
     74 => 'Ping 回已成功地送出.',
     75 => '跡回必須用 POST 要求.',
     76 => '你真的要刪除這項目嗎？',
-    77 => '警告:<br' . XHTML . '>你已默認UTF-8 為語文編碼。 但是，你的伺服器不支援多位元組編碼。請安裝 mbstring 入 PHP 或選另一種語文編碼。',
+    77 => '警告:<br>你已默認UTF-8 為語文編碼。 但是，你的伺服器不支援多位元組編碼。請安裝 mbstring 入 PHP 或選另一種語文編碼。',
     78 => '請確定你的電信位址跟你的確認電信位址是完全同樣的。',
     79 => '你想打開的網頁提交到已經在這網站不存在的功能。',
     80 => '建立此文流的插件已被關閉。你不能修改此文流除非你從新啟動有關插件。',
@@ -1715,7 +1715,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2435,6 +2435,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2915,7 +2918,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
