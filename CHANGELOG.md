@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Added support for GraphicsMagick Image processing library
   - Updated auto tag editor to remove informational text when de-selecting PHP function option
   - Display appropriate error if upgrade checks cannot communicate with glFusion.org website
   - Additional checks to ensure environment check functions are available prior to calling
