@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Controls the UI and database for configuration settings                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1592,6 +1592,56 @@ function configmanager_rdf_file_validate($value)
     return $value;
 }
 
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+function configmanager_path_to_mogrify_validate($value)
+{
+    $value = trim($value);
+    if ( strlen($value) > 0 ) {
+        if ( $value[strlen($value)-1] != '/' ) {
+            return $value . '/';
+        }
+    }
+    return $value;
+}
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+function configmanager_path_to_jhead_validate($value)
+{
+    $value = trim($value);
+    if ( strlen($value) > 0 ) {
+        if ( $value[strlen($value)-1] != '/' ) {
+            return $value . '/';
+        }
+    }
+    return $value;
+}
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+function configmanager_path_to_jpegtrans_validate($value)
+{
+    $value = trim($value);
+    if ( strlen($value) > 0 ) {
+        if ( $value[strlen($value)-1] != '/' ) {
+            return $value . '/';
+        }
+    }
+    return $value;
+}
 /**
 * Helper function: Provide timezone dropdown
 *
