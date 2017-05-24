@@ -83,19 +83,6 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
 {
     global $_CONF, $_MG_CONF;
 
-    $noLayers = 1;
-/*
-    $version = _img_getIMversion();
-
-    if ( is_array($version) ) {
-        $rc = version_compare($version[1],"1.0.0");
-        if ( $rc == -1 ) {
-            $noLayers = 1;
-        } else {
-            $noLayers = 0;
-        }
-    }
-*/
     $JpegQuality = $_MG_CONF['jpg_quality'];
 
     if ( $_CONF['debug_image_upload'] ) {
@@ -109,17 +96,9 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
 
     if ( $mimeType == 'image/gif' ) {
         if ( $_CONF['debug_image_upload'] ) {
-            if ( $noLayers == 0 ) {
-                $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -verbose -coalesce -quality $JpegQuality -resize $newdim -layers Optimize $destImage");
-            } else {
-                $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -verbose -coalesce -quality $JpegQuality -resize $newdim $destImage");
-            }
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -verbose -coalesce -quality $JpegQuality -resize $newdim $destImage");
         } else {
-            if ( $noLayers == 0 ) {
-                $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -coalesce -quality $JpegQuality -resize $newdim -layers Optimize $destImage");
-            } else {
-                $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -coalesce -quality $JpegQuality -resize $newdim $destImage");
-            }
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $srcImage -coalesce -quality $JpegQuality -resize $newdim $destImage");
         }
         if ( $rc != true ) {
             COM_errorLog("_img_resizeImage: Error - Unable to resize image - GraphicsMagick convert failed.");
@@ -226,19 +205,6 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
 {
     global $_CONF, $_MG_CONF;
 
-    $noLayers = 1;
-/*
-    $version = _img_getIMversion();
-
-    if ( is_array($version) ) {
-        $rc = version_compare($version[1],"1.0.0");
-        if ( $rc == -1 ) {
-            $noLayers = 1;
-        } else {
-            $noLayers = 0;
-        }
-    }
-*/
     $opt = '-quality ' . 91;
 
     if ($_MG_CONF['verbose']) {
@@ -248,7 +214,6 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
 
     if ($mimeType == 'image/gif') {
         $opt .= ' -coalesce';
-        $opt .= ($noLayers == 0) ? ' -layers Optimize' : '';
     } else {
         $opt .= ' -flatten';
     }
@@ -257,12 +222,12 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
     $dImageHeight = $dSize;
     $dSizeX2 = (int) $dSize * 2;
 
-    $binary = 'convert' . ((PHP_OS == 'WINNT') ? '.exe' : '');
+    $binary = 'gm' . ((PHP_OS == 'WINNT') ? '.exe' : '');
 
     $opt .= " -thumbnail x".$dSizeX2;
     $opt .= " -resize " . ((PHP_OS == 'WINNT') ? $dSizeX2."x^<" : "'".$dSizeX2."x<'");
 
-    $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . $binary . '"'
+    $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . $binary . '" convert'
                           . " $opt -resize 50% -gravity center -crop ".$dSize."x".$dSize."+0+0 +repage -quality 91 $srcImage $destImage");
 
     if ($rc != true) {
