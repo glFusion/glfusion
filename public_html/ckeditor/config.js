@@ -49,6 +49,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'youtube2,vimeo';
 	config.autoParagraph = false;
 	config.entities_latin = false;
+	config.scayt_autoStartup = true;
 
     // FileMan
 	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/fileman/index.html?type=file';

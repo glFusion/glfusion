@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Update ckeditor to v4.7.0
+  - CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
   - Added support for GraphicsMagick Image processing library
   - Updated auto tag editor to remove informational text when de-selecting PHP function option
   - Display appropriate error if upgrade checks cannot communicate with glFusion.org website
