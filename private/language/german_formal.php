@@ -2513,9 +2513,7 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Installierte Version',
     'latest_version' => 'Letzte Version',
     'notes' => 'Status',
-    'phpeol' => 'PHP-Version ist veraltet',
-    'com_error_title' => 'Communication Error',
-    'com_error_text' => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...'
+    'phpeol' => 'PHP-Version ist veraltet'
 );
 
 ###############################################################################

@@ -76,8 +76,8 @@ function _displayVersionData()
     switch ( $upToDate ) {
         case -1 :
             $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
-            $statusMsg  = $LANG_UPGRADE['com_error_title'];
-            $statusText = $LANG_UPGRADE['com_error_text'];
+            $statusMsg  = $LANG_UPGRADE['error_title'];
+            $statusText = $LANG_UPGRADE['error'];
             break;
         case 0 :
             $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
@@ -95,8 +95,8 @@ function _displayVersionData()
             $statusText = sprintf($LANG_UPGRADE['unknown'],$pluginData['glfusioncms']['installed_version']);
             break;
         default :
-            $alertIcon = $_CONF['layout_url'].'/images/alert.png';
-            $statusMsg = $LANG_UPGRADE['error_title'];
+            $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
+            $statusMsg  = $LANG_UPGRADE['error_title'];
             $statusText = $LANG_UPGRADE['error'];
             break;
     }

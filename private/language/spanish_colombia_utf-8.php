@@ -2509,9 +2509,7 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Versión Instalada',
     'latest_version' => 'Última Versión',
     'notes' => 'Notas',
-    'phpeol' => 'La versión de PHP esta desactualizada',
-    'com_error_title' => 'Communication Error',
-    'com_error_text' => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...'
+    'phpeol' => 'La versión de PHP esta desactualizada'
 );
 
 ###############################################################################
