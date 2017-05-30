@@ -452,7 +452,9 @@ $LANG_GF02 = array(
     'spam_detected' => 'Your post has been identified as a spam message',
     'invalid_email' => 'Email empty or not a valid email address',
     'invalid_name' => 'No name or name blank',
-    'last_edited' => 'Last Edited'
+    'last_edited' => 'Last Edited',
+    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
+    'post_ctc' => 'Permalink Copied to Clipboard'
 );
 
 $LANG_GF03 = array(

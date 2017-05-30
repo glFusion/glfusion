@@ -14,6 +14,7 @@
 	<body class="sitebody">
 {!endif}
 {!if full}
+    <script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 		<script type="text/javascript">
 			var site_url = '{site_url}';
 		</script>
@@ -153,16 +154,16 @@
 							{mod_functions}
 						</div>
 						<div class="uk-clearfix"></div>
-						<div class="forum_author_line uk-margin-bottom">
-							<a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-comment-o uk-hidden-small" title="permalink"></i>
-							</a>
+            <div class="forum_author_line uk-margin-bottom">
+              <a class="btn" title="{$LANG_GF02[copy_to_clipboard]}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+                <i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
+              </a>
 							{$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 {!if bookmark_icon}
 {!if bookmarked}
-							<i class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02[msg204]}" class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
 {!else}
-							<i class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02[msg203]}" class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
 {!endif}
 {!endif}
 						</div> {# end of forum_author_line #}
@@ -312,5 +313,12 @@
 
 	<div class="uk-clear"></div>
 </div> <!-- main wrapper -->
+<script>
+	var clipboard = new Clipboard('.btn');
+  clipboard.on('success', function(e) {
+    e.clearSelection();
+    UIkit.notify('{$LANG_GF02[post_ctc]}',{timeout: 300});
+  });
+</script>
 {!endif} {# else frame #}
 {# end {templatelocation} #}

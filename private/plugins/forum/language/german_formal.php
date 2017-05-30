@@ -449,13 +449,15 @@ $LANG_GF02 = array(
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
     'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schauen Sie sie Online an</a>.',
-	'invalid_token' => 'Sicherheits Schlüssel ist ungültig - Möglicherweise ist Deine Sitzung abgelaufen',
+    'invalid_token' => 'Sicherheits Schlüssel ist ungültig - Möglicherweise ist Deine Sitzung abgelaufen',
     'edit_time_passed' => 'Die erlaubte Zeit, um Deinen Beitrag bearbeiten zu dürfen, ist leider abgelaufen',
     'not_your_post' => 'Du scheinst nicht der Verfasser dieses Beitrags zu sein.',
     'spam_detected' => 'Dein Beitrag wurde als Spam-Nachricht identifiziert',
     'invalid_email' => 'Deine E-Mail-Adresse scheint leer oder ungültig zu sein',
     'invalid_name' => 'Dein Name scheint leer oder ungültig zu sein',
-    'last_edited' => 'Zuletzt bearbeitet'
+    'last_edited' => 'Zuletzt bearbeitet',
+    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
+    'post_ctc' => 'Permalink Copied to Clipboard'
 );
 
 $LANG_GF03 = array(
@@ -582,7 +584,7 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Einstellungen',
     'forumprefs_help_title' => 'Forum-Einstellungen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzer-Einstellungen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
-	'topicspp_help' => 'Anzahl der anzuzeigenden Themen im Forenindex.',
+    'topicspp_help' => 'Anzahl der anzuzeigenden Themen im Forenindex.',
     'postspp_help' => 'Anzahl der Beiträge pro Seite.',
     'anonymous_help' => 'Gast-Beiträge ausblenden.',
     'notify_help' => 'Automatische Benachrichtigung aktivieren.',
@@ -753,7 +755,7 @@ $LANG_GF93 = array(
     'hideposts' => 'Neue Beiträge verstecken',
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
     'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen',
-	'name_blank' => 'Name darf nicht leer sein',
+    'name_blank' => 'Name darf nicht leer sein',
     'desc_blank' => 'Beschreibung darf nicht leer sein',
     'category_resynced' => 'Alle Foren in der Kategorie wurden neu abgeglichen',
     'forum_resynced' => 'Das Forum wurden neu abgeglichen',
