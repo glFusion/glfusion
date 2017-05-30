@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Media Gallery Plugin - glFusion CMS                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Translator:                                                              |
@@ -915,6 +915,8 @@ $LANG_MG03 = array (
     'uid_rated'             => 'Your User ID has already rated this item.',
     'media_id'              => 'Media ID',
     'all_media'             => 'All Media',
+    'copy_to_clipboard'     => 'Copy to Clipboard',
+    'media_id_ctc'          => 'Media ID Copied to Clipboard',
 );
 
 // EXIF labels

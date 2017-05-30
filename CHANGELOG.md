@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Media Gallery - new copy to clipboard for media id
   - Update ckeditor to v4.7.0
   - CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
   - Added support for GraphicsMagick Image processing library

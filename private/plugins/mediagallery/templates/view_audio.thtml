@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	function popitup(url)	{
@@ -57,6 +58,12 @@
 {!if lang_views}
 			<div>{lang_views} {media_views}</div>
 {!endif}
+{!if media_id}
+    {$LANG_MG03[media_id]} {media_id}&nbsp;
+    <a class="btn" title="{$LANG_MG03[copy_to_clipboard]}" data-clipboard-text="{media_id}">
+      <i class="uk-icon-clipboard uk-icon-hover"></i>
+    </a>
+{!endif}
 		</div>
 		<div class="uk-width-2-4 uk-text-center">
 {!if media_time}
@@ -92,7 +99,13 @@
 {!if media_id}
 			<tr>
 				<td>{$LANG_MG03[media_id]}</td>
-				<td>{media_id}</td>
+				<td>
+				  {media_id}
+          &nbsp;
+          <a class="btn" title="{$LANG_MG03[copy_to_clipboard]}" data-clipboard-text="{media_id}">
+            <i class="uk-icon-clipboard uk-icon-hover"></i>
+          </a>
+				</td>
 			</tr>
 {!endif}
 {!if getid3}
@@ -154,6 +167,11 @@
 			el[i].style.display = 'none';
 		}
 	}
+	var clipboard = new Clipboard('.btn');
+  clipboard.on('success', function(e) {
+    e.clearSelection();
+    UIkit.notify('{$LANG_MG03[media_id_ctc]}',{timeout: 300});
+  });
 	//]]>
 </script>
 {# end {templatelocation} #}

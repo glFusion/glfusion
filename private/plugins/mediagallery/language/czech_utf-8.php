@@ -895,7 +895,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Z této IP adresy již byla tato položka hodnocena.',
     'uid_rated' => 'Přihlášený uživatel již hodnotil tuto položku.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

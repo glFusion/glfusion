@@ -891,7 +891,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Twój adres IP ju¿ odda³ g³os.',
     'uid_rated' => 'Twój ID ju¿ odda³ g³os.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

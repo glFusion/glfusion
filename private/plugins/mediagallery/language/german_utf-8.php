@@ -899,7 +899,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Mit Deiner IP-Address wurde dieses Objekt bereits bewertet.',
     'uid_rated' => 'Mit Deine Benutzer-ID wurde dieses Objekt bereits bewertet.',
     'media_id' => 'Medien-ID',
-    'all_media' => 'Alle Medien'
+    'all_media' => 'Alle Medien',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(
