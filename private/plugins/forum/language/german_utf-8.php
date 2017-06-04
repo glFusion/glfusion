@@ -457,7 +457,9 @@ $LANG_GF02 = array(
     'invalid_name' => 'Dein Name scheint leer oder ungültig zu sein',
     'last_edited' => 'Zuletzt bearbeitet',
     'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
-    'post_ctc' => 'Permalink Copied to Clipboard'
+    'post_ctc' => 'Permalink Copied to Clipboard',
+    'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
 );
 
 $LANG_GF03 = array(

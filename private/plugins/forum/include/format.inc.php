@@ -465,7 +465,7 @@ function _ff_FormatForEmail( $str, $postmode='html' ) {
     return $str;
 }
 
-function gfm_getoutput( $id ) {
+function gfm_getoutput( $id, $type = 'digest' ) {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$_FF_CONF,$_USER;
 
     $dt = new Date('now',$_USER['tzid']);
@@ -473,6 +473,8 @@ function gfm_getoutput( $id ) {
     $id = COM_applyFilter($id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $id);
     $A = DB_fetchArray($result);
+
+    $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name',"forum_id=". (int) $A['forum']);
 
     if ( $A['pid'] == 0 ) {
         $pid = $id;
@@ -502,12 +504,22 @@ function gfm_getoutput( $id ) {
         'post_subject'  => $A['subject'],
         'post_date'     => $date,
         'post_name'     => $A['name'],
-        'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
         'online_version' => sprintf($LANG_GF02['view_online'],$permalink),
         'permalink'     => $permalink,
+        'forum_name'    => $forum_name,
     ));
+
+    if ( $type == 'digest' ) {
+        $T->set_var('post_comment',$A['comment']);
+    } else {
+        $notify_msg = sprintf($LANG_GF02['html_notify_message'],
+            $A['subject'],$A['name'],$forum_name,$_CONF['site_name'],$permalink,$A['subject']);
+        $T->set_var('post_notify', $notify_msg);
+        $T->unset_var('post_comment');
+    }
+
     $T->parse('output','email');
     $message = $T->finish($T->get_var('output'));
 
@@ -520,11 +532,22 @@ function gfm_getoutput( $id ) {
         'post_subject'  => $A['subject'],
         'post_date'     => $date,
         'post_name'     => $A['name'],
-        'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
         'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$A['id']),
+        'permalink'     => $permalink,
+        'forum_name'    => $forum_name,
     ));
+
+    if ( $type == 'digest' ) {
+        $T->set_var('post_comment',$A['comment']);
+    } else {
+        $notify_msg = sprintf($LANG_GF02['text_notify_message'],
+            $A['subject'],$A['name'],$forum_name,$_CONF['site_name'],$permalink);
+        $T->set_var('post_notify', $notify_msg);
+        $T->unset_var('post_comment');
+    }
+
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));
 

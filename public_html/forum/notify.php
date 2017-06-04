@@ -6,7 +6,7 @@
 // |                                                                          |
 // | View users curent monitored topics                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -82,7 +82,8 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($topic != 
             }  else {
                 $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$forum);
                 $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$pid);
-                DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',".(int)$pid.",'".DB_escapeString($topic_name)."',".(int)$_USER['uid'].",now() )");
+                PLG_subscribe('forum', (int)$forum,(int)$pid,(int)$_USER['uid'],DB_escapeString($forum_name), DB_escapeString($topic_name) );
+
             }
             $display .= FF_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg142']);
         } else {
@@ -91,7 +92,7 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($topic != 
     } else {
         $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$forum);
         $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$pid);
-        DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',".(int)$pid.",'".DB_escapeString($topic_name)."',".(int)$_USER['uid'].",now() )");
+        PLG_subscribe('forum', (int)$forum,(int)$pid,(int)$_USER['uid'],DB_escapeString($forum_name), DB_escapeString($topic_name) );
         $nid = -$id;
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int)$forum." AND id = ".$nid);
         $display .= FF_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg142']);
@@ -116,7 +117,8 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($topic != 
         $topic_name = DB_getItem($_TABLES['ff_topic'],'subject','id='.(int)$topic);
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int)$forum." AND id = ".(int)$topic);
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int)$_USER['uid']." AND category=".(int)$forum." AND id = ".(int) $ntopic);
-        DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum',".(int)$forum.",'".DB_escapeString($forum_name)."',".(int)$ntopic.",'".DB_escapeString($topic_name)."',".(int)$_USER['uid'].",now() )");
+        PLG_subscribe('forum', (int)$forum,(int)$ntopic,(int)$_USER['uid'],DB_escapeString($forum_name), DB_escapeString($topic_name) );
+
     } else {
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE (sub_id=".(int)$id.")");
     }
@@ -261,11 +263,11 @@ while (list($notify_recid,$forum_id,$forum_name,$topic_id,$subject,$date_added) 
     }
 
     $report->set_var (array(
-            'id'    => $notify_recid,
-            'csscode'   => $i%2+1,
-            'forum'     => $forum_name,
+            'id'            => $notify_recid,
+            'csscode'       => $i%2+1,
+            'forum'         => $forum_name,
             'linksubject'   => @htmlspecialchars($subject,ENT_QUOTES,COM_getEncodingt()),
-            'is_forum'  => $is_forum,
+            'is_forum'      => $is_forum,
             'topic_link'    => $topic_link,
             'topicauthor'   => $A['name'],
             'date_added'    => $date_added,
