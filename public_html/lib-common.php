@@ -142,6 +142,8 @@ if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF[
 $charset = COM_getCharset();
 if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
 
+require_once $_CONF['path_system'].'/lib-cache.php';
+
 if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
     require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }
@@ -3664,7 +3666,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         if ( $nrows > 0 ) {
             // Any late breaking news stories?
             $T->set_var('section_title',$LANG01[99]);
-            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newcommentsinterval'] ));
+            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newstoriesinterval'] ));
 
             $newstory = array();
 
@@ -3865,7 +3867,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 
     // This is the amount you have to divide the previous by to get the
     // different time intervals: hour, day, week, months
-    $time_divider = array( 60, 60, 24, 7, 4 );
+    $time_divider = array( 60, 60, 24, 7, 52 );
 
     // These are the respective strings to the numbers above. They have to match
     // the strings in $LANG_WHATSNEW (i.e. these are the keys for the array -
@@ -3888,7 +3890,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
                 $time_str = $times_description[$s];
             }
             $fields = array( '%n', '%i', '%t', '%s' );
-            $values = array( $amount, $type, $time, $LANG_WHATSNEW[$time_str] );
+            $values = array( $amount, $type, round($time), $LANG_WHATSNEW[$time_str] );
             $retval = str_replace( $fields, $values, $retval );
             break;
         }
