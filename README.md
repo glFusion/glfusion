@@ -38,6 +38,14 @@ install, extend and use the glFusion CMS.
 The best support method for glFusion CMS is the glFusion Web Site located at
 <a href="http://www.glfusion.org" target="_blank">http://www.glfusion.org</a>.  There is an active community ready to help out.
 
+Please do not email the developers directly - there is a good chance the email will be
+missed due to the high volume of email they receive.
+The <a href="http://www.glfusion.org" target="_blank">glFusion Website</a>
+and <a href="https://gitter.im/glFusion/glfusion" target="_blank">Gitter Room</a>
+are the best methods to receive support. The goal is to have questions asked and
+answered in a publicly available place so everyone can benefit from the answer
+and other experienced users can provide insight and answers.
+
 The glFusion CMS documentation is located at <a href="https://www.glfusion.org/wiki/doku.php" target="_blank">
 https://www.glfusion.org/wiki/doku.php</a>.
 

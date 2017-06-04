@@ -1,4 +1,8 @@
 ## v1.6.7 (unreleased)
+  - What's New for stories did not display correct timeframe
+  - Reorganized caching / template code into two separate files
+  - Removed Published Slider in story editor - it did not degrade well on non-supported browsers
+  - Forum - Improved formatting on non-diget email notifications
   - Forum - Add copy to clipboard for post permalink
   - Forum - Added tooltip (hover) for bookmark / remove bookmark
   - Media Gallery - new copy to clipboard for media id
