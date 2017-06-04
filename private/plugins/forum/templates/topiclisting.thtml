@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	var site_url = '{site_url}';
 </script>
-<script>
+<script type="text/javascript">
 	$(document).ready(function(){
 		$("#subscribe-link").click(function(e){
 			e.preventDefault();
