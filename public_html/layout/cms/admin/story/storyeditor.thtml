@@ -105,8 +105,8 @@
 					</div>
 				</div>
 
-				<div class="uk-width-medium-1-3 slider_checkbox slider_reverse">
-					<div style="padding-bottom:5px;"><strong>{$LANG24[94]}</strong></div>
+				<div class="uk-width-medium-1-3">
+					<div style="padding-bottom:5px;"><strong>{$LANG24[34]}</strong></div>
 					<input class="onoff" type="checkbox" name="draft_flag" {is_checked} />
 				</div>
 
