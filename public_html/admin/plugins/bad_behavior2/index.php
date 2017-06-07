@@ -98,10 +98,13 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     // writing the menu on top
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php',
-              'text' => $LANG_BAD_BEHAVIOR['list_ips']),
-        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php?mode=add',
-              'text' => $LANG_BAD_BEHAVIOR['ban_ip']),
+        array('url' => '#',
+              'text' => $LANG_BAD_BEHAVIOR['log_entries'], 'active' => true),
+
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/blacklist.php',
+              'text' => $LANG_BAD_BEHAVIOR['blacklist']),
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/whitelist.php',
+              'text' => $LANG_BAD_BEHAVIOR['whitelist']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -145,6 +148,11 @@ function _bb_listEntries ($page = 1, $msg = '')
         $filter_select .= ' selected="selected" ';
     }
     $filter_select .= '>'.$LANG_BAD_BEHAVIOR['no_filter'].'</option>';
+
+//$tmpArr = $LANG_BB2_RESPONSE;
+asort($LANG_BB2_RESPONSE);
+
+
     foreach ($LANG_BB2_RESPONSE AS $code => $text ) {
         $filter_select .= '<option value="'.$code.'"';
         if ( $filter == $code ) {

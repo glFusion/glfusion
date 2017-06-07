@@ -2,6 +2,8 @@
 
 function bb2_whitelist($package)
 {
+    global $_CONF;
+
 	// DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
 
 	// Inappropriate whitelisting WILL expose you to spam, or cause Bad
@@ -19,7 +21,6 @@ function bb2_whitelist($package)
 		"192.168.0.0/16",
 //		"127.0.0.1",
 	);
-
 	// DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
 
 	// Inappropriate whitelisting WILL expose you to spam, or cause Bad
@@ -37,7 +38,6 @@ function bb2_whitelist($package)
 	$bb2_whitelist_user_agents = array(
 	//	"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) It's me, let me in",
 	);
-
 	// DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
 
 	// Inappropriate whitelisting WILL expose you to spam, or cause Bad
@@ -57,6 +57,17 @@ function bb2_whitelist($package)
 
 	// Do not edit below this line
 
+	if ( isset($_CONF['bb2_whitelist_ip_ranges'] ) && is_array($_CONF['bb2_whitelist_ip_ranges'] ) ) {
+	    $bb2_whitelist_ip_ranges = array_merge($bb2_whitelist_ip_ranges,$_CONF['bb2_whitelist_ip_ranges']);
+	}
+
+	if ( isset($_CONF['bb2_whitelist_user_agents'] ) && is_array($_CONF['bb2_whitelist_user_agents'] ) ) {
+	    $bb2_whitelist_user_agents = array_merge($bb2_whitelist_user_agents,$_CONF['bb2_whitelist_user_agents']);
+	}
+
+	if ( isset($_CONF['bb2_whitelist_urls'] ) && is_array($_CONF['bb2_whitelist_urls'] ) ) {
+	    $bb2_whitelist_urls = array_merge($bb2_whitelist_urls,$_CONF['bb2_whitelist_urls']);
+	}
 	if (!empty($bb2_whitelist_ip_ranges)) {
 		foreach ($bb2_whitelist_ip_ranges as $range) {
 			if (match_cidr($package['ip'], $range)) return true;

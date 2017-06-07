@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,7 +36,7 @@ if (!defined ('GVERSION')) {
 
 function bad_behavior2_upgrade ()
 {
-    global $_TABLES, $_CONF, $_BB2_CONF;
+    global $_TABLES, $_CONF, $_BB2_CONF,$bb2_blacklist_cidrs;
 
     $sql = '';
 
@@ -103,6 +103,64 @@ function bad_behavior2_upgrade ()
             require_once $_CONF['path_system'] . 'classes/config.class.php';
             $c = config::get_instance();
             $c->del('bb2_display_stats','Core');
+
+        case '2.0.52' :
+            $_SQL = array();
+            $_SQL[] = "CREATE TABLE IF NOT EXISTS  {$_TABLES['bad_behavior2_whitelist']} (
+                `id` smallint(5) unsigned NOT NULL auto_increment,
+                `item` varchar(254) NOT NULL DEFAULT '',
+                `type` varchar(128) NOT NULL DEFAULT 'IP',
+                `reason` VARCHAR(255) NULL DEFAULT NULL,
+                `timestamp` int(8) NOT NULL DEFAULT '0',
+                PRIMARY KEY  (id),
+                INDEX type (type),
+                INDEX timestamp (timestamp)
+            ) ENGINE=MyISAM;";
+
+            $_SQL[] = "CREATE TABLE IF NOT EXISTS  {$_TABLES['bad_behavior2_blacklist']} (
+                `id` smallint(5) unsigned NOT NULL auto_increment,
+                `item` varchar(254) NOT NULL DEFAULT '',
+                `type` varchar(128) NOT NULL DEFAULT 'IP',
+                `autoban` tinyint(3) unsigned NOT NULL DEFAULT 0,
+                `reason` VARCHAR(255) NULL DEFAULT NULL,
+                `timestamp` int(8) NOT NULL DEFAULT '0',
+                PRIMARY KEY  (id),
+                INDEX type (type),
+                INDEX timestamp (timestamp)
+            ) ENGINE=MyISAM;";
+            foreach ($_SQL AS $sql ) {
+                DB_query($sql,1);
+            }
+            // data migrations
+            $sql = "SELECT inet_ntoa(ip) as item,type,timestamp,reason FROM {$_TABLES['bad_behavior2_ban']}";
+            $result = DB_query($sql,1);
+            if ( $result !== false ) {
+                while (( $row = DB_fetchArray($result)) != NULL ) {
+                    $item = $row['item'];
+                    $type = 'spambot_ip';
+                    $autoban = $row['type'];
+                    $reason = $row['reason'];
+                    $timestamp = $row['timestamp'];
+                    DB_query("INSERT INTO {$_TABLES['bad_behavior2_blacklist']}
+                            (item,type,reason,autoban,timestamp)
+                            VALUE ('".DB_escapeString($item)."','".DB_escapeString($type)."','".DB_escapeString($reason)."',".(int) $autoban.",".$timestamp.")",1);
+                }
+            }
+
+            $bb2_blacklist_cidrs = array();
+            if ( @file_exists($_CONF['path_data'].'bb2_ip_ban.php')) {
+                include $_CONF['path_data'].'bb2_ip_ban.php';
+            } else {
+                $bb2_blacklist_cidrs = array();
+            }
+            $timestamp = time();
+            foreach ($bb2_blacklist_cidrs AS $ip ) {
+                DB_query("INSERT INTO {$_TABLES['bad_behavior2_blacklist']}
+                        (item,type,reason,autoban,timestamp)
+                        VALUE ('".DB_escapeString($ip)."','spambot_ip','Migrated from bb2_ip_ban',0,".$timestamp.")",1);
+
+            }
+            CACHE_remove_instance('bb2_bl_data');
 
         default:
             break;

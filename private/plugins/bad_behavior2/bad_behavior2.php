@@ -37,10 +37,12 @@ $_BB2_CONF = array();
 
 $_BB2_CONF['pi_name']           = 'bad_behavior2';
 $_BB2_CONF['pi_display_name']   = 'Bad Behavior2';
-$_BB2_CONF['pi_version']        = '2.0.52';
+$_BB2_CONF['pi_version']        = '2.0.53';
 $_BB2_CONF['gl_version']        = '1.6.7';
 $_BB2_CONF['pi_url']            = 'https://www.glfusion.org/';
 
-$_TABLES['bad_behavior2']    	= $_DB_table_prefix . 'bad_behavior2';
-$_TABLES['bad_behavior2_ban'] 	= $_DB_table_prefix . 'bad_behavior2_ban';
+$_TABLES['bad_behavior2']    	    = $_DB_table_prefix . 'bad_behavior2';
+$_TABLES['bad_behavior2_ban'] 	    = $_DB_table_prefix . 'bad_behavior2_ban';
+$_TABLES['bad_behavior2_whitelist'] = $_DB_table_prefix . 'bad_behavior2_whitelist';
+$_TABLES['bad_behavior2_blacklist'] = $_DB_table_prefix . 'bad_behavior2_blacklist';
 ?>

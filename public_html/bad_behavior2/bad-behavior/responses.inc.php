@@ -47,6 +47,7 @@ function bb2_get_response($key) {
         'f9f3b8b2' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => '/rk=0/rs= attack'),
         '96c0bd29' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'SQL Injection'),
         '96c0bd30' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'IP has been banned from this site'),
+        '96c0bd40' => array('response' => 403, 'explanation' => 'An invalid request was received.', 'log' => 'Match to Blacklist entry'),
 	);
 
 	if (array_key_exists($key, $bb2_responses)) return $bb2_responses[$key];

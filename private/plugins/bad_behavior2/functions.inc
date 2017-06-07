@@ -310,4 +310,29 @@ function phpblock_bad_behavior2_stats() {
     }
     return '';
 }
+
+function _validate_ip_cidr($cidr)
+{
+    $must_cidr = false;
+    if (!preg_match("/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}(\/[0-9]{1,2})?$/", $cidr)) {
+        $return = false;
+    } else {
+        $return = true;
+    }
+    if ($return == true) {
+        $parts = explode("/", $cidr);
+        $ip = @$parts[0];
+        $netmask = @$parts[1];
+        $octets = explode(".", $ip);
+        foreach ($octets as $octet) {
+            if ($octet > 255) {
+                $return = false;
+            }
+        }
+        if ((($netmask != "") && ($netmask > 32) && !$must_cidr) || (($netmask == ""||$netmask > 32) && $must_cidr)) {
+            $return = false;
+        }
+    }
+    return $return;
+}
 ?>
