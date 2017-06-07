@@ -1647,6 +1647,10 @@ function glfusion_167()
         DB_query($sql,1);
     }
 
+    // add new configuration items
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
     _updateConfig();
 
     // update version number
