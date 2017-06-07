@@ -5,7 +5,7 @@
 
 <!-- BEGIN text-element -->
 <tr>
-  <td class="uk-text-middle key">
+  <td class="uk-text-middle key" style="width:30%;">
     <span id="{name}" {!if cfg_item} class="tooltip_cfg" title="" {!endif}>
       {display_name}
     </span>
@@ -22,7 +22,7 @@
 
 <!-- BEGIN passwd-element -->
 <tr>
-	<td class="uk-width-1-3 key">
+	<td class="uk-width-1-3 key" style="width:30%;">
 		<span id="{name}" {!if cfg_item} class="tooltip_cfg" title=""{!endif}>
 			{display_name}
 	  </span>
@@ -39,7 +39,7 @@
 
 <!-- BEGIN placeholder-element -->
 <tr>
-	<td class="uk-width-1-3 key">
+	<td class="uk-width-1-3 key" style="width:30%;">
     <span id="{name}" {!if cfg_item}class="tooltip_cfg" title=""{!endif}>
 			{display_name}
     </span>
@@ -53,7 +53,7 @@
 
 <!-- BEGIN select-element -->
 <tr>
-	<td class="uk-width-1-3 key">
+	<td class="uk-width-1-3 key" style="width:30%;">
     <span id="{name}" {!if cfg_item} class="tooltip_cfg" title=""{!endif}>
 			{display_name}
     </span>
@@ -71,7 +71,7 @@
 
 <!-- BEGIN unset-param -->
 <tr>
-	<td class="uk-width-1-3 key">
+	<td class="uk-width-1-3 key" style="width:30%;">
     <span id="{name}" {!if cfg_item} class="tooltip_cfg" title=""{!endif}>
 			{display_name}
     </span>
@@ -84,19 +84,19 @@
 
 <!-- BEGIN list-element -->
 <tr>
-	<td class="uk-text-middle key">
+	<td class="uk-text-middle key" style="width:30%;">
 		<span id="{name}" {!if cfg_item} class="tooltip_cfg" title=""{!endif}>
 		{display_name} {unset_link}
 		</span>
 	</td>
 	<td>
-		<input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);">
+    <button class="uk-button uk-button-small uk-button-primary" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);return false;">+</button>
 
 {!if delete}
 		<button class="uk-button uk-button-danger del-link" onclick="glfremove(this);return false;" value="x">x</button>
 {!endif}
 		<input type="hidden" value="true" name="{name}[placeholder]">
-		<table class="uk-table uk-table-compact" style="display:none" id="arr_table{arr_name}">
+		<table class="uk-table uk-table-condensed" style="display:none" id="arr_table{arr_name}">
 			<col width="10%">
 			<col width="90%">
 			{my_elements}
@@ -109,8 +109,8 @@
 <!-- BEGIN keyed-add-button -->
 <tr>
 	<td colspan="2">
-		<input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')">
-		<input class="uk-form-width-small">
+	  <button class="uk-button uk-button-success add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}');return false;">{lang_add_element}</button>
+		<input class="uk-form-width-medium">
 	</td>
 </tr>
 <!-- END keyed-add-button -->
@@ -118,7 +118,7 @@
 <!-- BEGIN unkeyed-add-button -->
 <tr>
 	<td colspan="2">
-		<button class="uk-button uk-button-primary add_ele_input" value="{lang_add_element}" onclick="handleAdd(this, '{array_type}', '{arr_name}');return false;">{lang_add_element}</button>
+		<button class="uk-button uk-button-success add_ele_input" value="{lang_add_element}" onclick="handleAdd(this, '{array_type}', '{arr_name}');return false;">{lang_add_element}</button>
 	</td>
 </tr>
 <!-- END unkeyed-add-button -->
