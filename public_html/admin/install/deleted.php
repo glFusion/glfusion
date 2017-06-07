@@ -60,6 +60,9 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 1.6.7
+    'plugins/bad_behavior2/templates/ban_entry.thtml',
+
 // 1.6.5
 
 // 1.6.2
@@ -141,10 +144,11 @@ $obsoletePrivateFiles = array(
     'system/pear/PEAR/RunTest.php',
     'system/pear/README',
     'system/pear/index.html',
-
 );
 
 $obsoletePublicFiles = array(
+// 1.6.7
+    'admin/plugins/bad_behavior2/ban.php',
 // 1.6.6
     'mediagallery/players/FMP3.swf',
     'mediagallery/players/XSPF_EV.swf',
