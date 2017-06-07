@@ -2,7 +2,7 @@
 <nav class="uk-navbar tm-admin-navbar uk-margin">
 	<ul class="uk-navbar-nav uk-hidden-small">
 <!-- BEGIN menu_items -->
-		<li><a href="{menu_item_url}">{menu_item_text}</a></li>
+		<li {!if menu_item_active} class="uk-active" {!endif}><a href="{menu_item_url}">{menu_item_text}</a></li>
 <!-- END menu_items -->
 	</ul>
 {!if lang_instructions}
@@ -19,7 +19,7 @@
 				<div class="uk-dropdown uk-dropdown-close">
 					<ul class="uk-nav uk-nav-dropdown">
 <!-- BEGIN alt_menu_items -->
-						<li><a href="{menu_item_url}">{menu_item_text}</a></li>
+						<li {!if menu_item_active} class="uk-active" {!endif}><a href="{menu_item_url}">{menu_item_text}</a></li>
 <!-- END alt_menu_items -->
 {!if lang_instructions}
 						<li><a class="toggle_inst" href="#"><i class="uk-icon uk-icon-question uk-icon-small"></i></a></li>

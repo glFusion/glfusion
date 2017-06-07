@@ -876,6 +876,11 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
         $menu_fields .= COM_createLink($menu_arr[$i]['text'], $menu_arr[$i]['url'], $attr);
         $admin_templates->set_var('menu_item_url',$menu_arr[$i]['url']);
         $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
+        if ( isset($menu_arr[$i]['active'] ) ) {
+            $admin_templates->set_var('menu_item_active',true);
+        } else {
+            $admin_templates->unset_var('menu_item_active');
+        }
         $admin_templates->parse('menuvar', 'menu_items',true);
         $admin_templates->parse('alt_menuvar', 'alt_menu_items',true);
 
