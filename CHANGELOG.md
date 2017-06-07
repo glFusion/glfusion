@@ -1,4 +1,7 @@
 ## v1.6.7 (unreleased)
+  - Bad Behavior - New whitelist / blacklist management via online interface
+  - Bad Behavior - Performance improvements
+  - Directory listing did not include alternate topics
   - What's New for stories did not display correct timeframe
   - Reorganized caching / template code into two separate files
   - Removed Published Slider in story editor - it did not degrade well on non-supported browsers
