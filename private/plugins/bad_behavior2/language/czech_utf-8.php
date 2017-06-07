@@ -45,6 +45,7 @@ $LANG_BAD_BEHAVIOR = array(
     'auto_refresh_off' => 'Auto Refresh Off',
     'auto_refresh_on' => 'Auto Refresh On',
     'automatic_captcha' => 'Automatically Added (CAPTCHA)',
+    'automatic_token' => 'Automatically Added (Token)',
     'ban_ip' => 'Ban IPs',
     'ban_list_info' => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans expire after 24 hours.',
     'ban_results' => 'IPs listed below had errors that prevented them from being added to the ban list.',
