@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - StaticPages - Increased max size of page content from ~64kb to ~16MB
   - Bad Behavior - New whitelist / blacklist management via online interface
   - Bad Behavior - Performance improvements
   - Directory listing did not include alternate topics

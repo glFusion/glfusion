@@ -2,7 +2,7 @@
     <id>staticpages</id>
     <name>Static Pages</name>
     <description>Static Content Management</description>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
     <glfusionversion>1.6.7</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
