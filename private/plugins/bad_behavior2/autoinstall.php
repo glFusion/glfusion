@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -52,7 +52,8 @@ $INSTALL_plugin['bad_behavior2'] = array(
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
     array('type' => 'table', 'table' => $_TABLES['bad_behavior2'], 'sql' => $_SQL['bad_behavior2']),
-    array('type' => 'table', 'table' => $_TABLES['bad_behavior2_ban'], 'sql' => $_SQL['bad_behavior2_ban']),
+    array('type' => 'table', 'table' => $_TABLES['bad_behavior2_whitelist'], 'sql' => $_SQL['bad_behavior2_whitelist']),
+    array('type' => 'table', 'table' => $_TABLES['bad_behavior2_blacklist'], 'sql' => $_SQL['bad_behavior2_blacklist']),
 );
 
 
@@ -133,7 +134,7 @@ function plugin_autouninstall_bad_behavior2 ()
 
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('bad_behavior2','bad_behavior2_ban'),
+        'tables' => array('bad_behavior2','bad_behavior2_whitelist','bad_behavior2_blacklist'),
         /* give the full name of the group, as in the db */
         'groups' => array('Bad Behavior2 Admin'),
         /* give the full name of the feature, as in the db */
