@@ -72,11 +72,19 @@ function POLLS_edit($pid = '')
 
     $retval = '';
 
+    if (!empty ($pid)) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    }
+
     // writing the menu on top
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
               'text' => $LANG_ADMIN['list_all']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
+              'text' => $lang_create_or_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 
@@ -534,6 +542,8 @@ function POLLS_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
+              'text' => $LANG_ADMIN['list_all'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
@@ -618,7 +628,9 @@ function POLLS_listVotes($pid)
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
-              'text' => 'Poll List'),
+              'text' => $LANG_ADMIN['list_all']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 
