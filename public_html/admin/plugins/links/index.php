@@ -390,14 +390,14 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
 function LINK_list($validate)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LINKS_ADMIN, $LANG_ACCESS,
-           $_IMAGE_TYPE;
+           $_IMAGE_TYPE, $_SYSTEM;
 
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
     $retval = '';
     $token = SEC_createToken();
 
-    $header_arr = array(      # display 'text' and use table field 'field'
+    $header_arr = array(
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_LINKS_ADMIN[2], 'field' => 'lid', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
@@ -417,7 +417,12 @@ function LINK_list($validate)
         );
         $dovalidate_url = $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=validate' . '&amp;'.CSRF_TOKEN.'='.$token;
         $dovalidate_text = $LANG_LINKS_ADMIN[58];
-        $validate_link = '<span style="padding-right:20px;">' . COM_createLink($dovalidate_text, $dovalidate_url) . '</span>';
+        if ( $_SYSTEM['framework'] == 'uikit' ) {
+            $validate_link = '<a href="'.$dovalidate_url.'" class="uk-button uk-button-success">'.$dovalidate_text.'</a>';
+        } else {
+            $validate_link = '<span style="padding-right:20px;">' . COM_createLink($dovalidate_text, $dovalidate_url) . '</span>';
+        }
+
         if ($_GET['validate'] == 'enabled') {
             $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'beforevalidate', 'sort' => false, 'align' => 'center');
             $validate = '?validate=enabled';
