@@ -86,13 +86,19 @@ function LINK_CAT_list($root)
 
     $defsort_arr = array('field' => 'category', 'direction' => 'asc');
 
-    $menu_arr = array (
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+                'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
+                'text' => $LANG_LINKS_ADMIN[51]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+                'text' => $LANG_LINKS_ADMIN[50],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x',
               'text' => $LANG_LINKS_ADMIN[52]),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
-              'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
+            'text' => $LANG_LINKS_ADMIN[26]),
         array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
+                'text' => $LANG_ADMIN['admin_home'])
     );
 
     $retval .= COM_startBlock($LANG_LINKS_ADMIN[54], '',
@@ -157,6 +163,7 @@ function LINK_CAT_edit($cid, $pid)
     USES_lib_admin();
 
     $retval = '';
+    $editFlag = false;
 
     $cid = DB_escapeString($cid);
 
@@ -173,6 +180,7 @@ function LINK_CAT_edit($cid, $pid)
              . COM_getPermSQL('AND');
         $result = DB_query($sql);
         $A = DB_fetchArray($result);
+        $editFlag = true;
     } else {
         // nothing, so making a new top-level category
         // get default access rights
@@ -189,13 +197,25 @@ function LINK_CAT_edit($cid, $pid)
         return COM_showMessage(6, 'links');
     }
 
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
-              'text' => $LANG_LINKS_ADMIN[50]),
+    if ( $editFlag ) {
+        $lang_edit_or_create = $LANG_ADMIN['edit'];
+    } else {
+        $lang_edit_or_create = $LANG_LINKS_ADMIN[52];
+    }
+
+    $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
-              'text' => $LANG_LINKS_ADMIN[53]),
+                'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
+                'text' => $LANG_LINKS_ADMIN[51]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+                'text' => $LANG_LINKS_ADMIN[50]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x',
+              'text' => $lang_edit_or_create,'active'=>true),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
+            'text' => $LANG_LINKS_ADMIN[26]),
         array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
+                'text' => $LANG_ADMIN['admin_home'])
     );
 
     $retval .= COM_startBlock($LANG_LINKS_ADMIN[56], '',
