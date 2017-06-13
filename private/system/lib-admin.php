@@ -874,9 +874,13 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
     $attr = array('class' => 'admin-menu-item');
     for ($i = 0; $i < count($menu_arr); $i++) { # iterate through menu
         $menu_fields .= COM_createLink($menu_arr[$i]['text'], $menu_arr[$i]['url'], $attr);
-        $admin_templates->set_var('menu_item_url',$menu_arr[$i]['url']);
+        if ( isset($menu_arr[$i]['active'] ) && $menu_arr[$i]['active'] == true ) {
+            $admin_templates->set_var('menu_item_url',"#");
+        } else {
+            $admin_templates->set_var('menu_item_url',$menu_arr[$i]['url']);
+        }
         $admin_templates->set_var('menu_item_text',$menu_arr[$i]['text']);
-        if ( isset($menu_arr[$i]['active'] ) ) {
+        if ( isset($menu_arr[$i]['active'] ) && $menu_arr[$i]['active'] == true) {
             $admin_templates->set_var('menu_item_active',true);
         } else {
             $admin_templates->unset_var('menu_item_active');
