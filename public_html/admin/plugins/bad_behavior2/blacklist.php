@@ -49,7 +49,6 @@ function BB2_blacklist_list($filterid = '')
 
     $retval = '';
 
-    // writing the menu on top
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php',
               'text' => $LANG_BAD_BEHAVIOR['log_entries']),
@@ -136,13 +135,7 @@ function BB2_blacklist_list($filterid = '')
             . '" onclick="return doubleconfirm(\'' . $LANG_BAD_BEHAVIOR['delete_bl_confirm_1'] . '\',\'' . $LANG_BAD_BEHAVIOR['delete_confirm_2'] . '\');"'
             . '/>&nbsp;' . $LANG_BAD_BEHAVIOR['delete'];
     }
-/*
-    $actions = '<input name="deletebutton" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/delete.png'
-        . '" style="vertical-align:text-bottom;" title="' . $LANG_BAD_BEHAVIOR['delete_info']
-        . '" onclick="return doubleconfirm(\'' . $LANG_BAD_BEHAVIOR['delete_bl_confirm_1'] . '\',\'' . $LANG_BAD_BEHAVIOR['delete_confirm_2'] . '\');"'
-        . '/>&nbsp;' . $LANG_BAD_BEHAVIOR['delete'];
-*/
+
     $option_arr = array(
         'chkselect'     => true,
         'chkall'        => true,
@@ -475,7 +468,7 @@ function BB2_process_blacklist($editsave = 0)
                 } else {
                     $autoban = 0;
                 }
-                $sql = "UPDATE {$_TABLES['bad_behavior2_blacklist']} SET item='".DB_escapeString($bl_item)."', type='".DB_escapeString($bl_type)."', reason='".DB_escapeString($reason)."', autoban=".(int) $autoban . ", timestamp=".$timestamp." WHERE id=".(int) $bl_id;
+                $sql = "UPDATE {$_TABLES['bad_behavior2_blacklist']} SET item='".DB_escapeString($bl_item)."', type='".DB_escapeString($bl_type)."', reason='".DB_escapeString($reason)."', autoban=".(int) $autoban . " WHERE id=".(int) $bl_id;
             } else {
                 $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']} (item,type,reason,timestamp) VALUE ('".DB_escapeString($bl_item)."','".DB_escapeString($bl_type)."','".DB_escapeString($reason)."',".$timestamp.")";
             }

@@ -361,9 +361,17 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 
     $retval .= COM_startBlock ($LANG27[1], '',COM_getBlockTemplate ('_admin_block', 'header'));
 
+    if ( $topicEdit ) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    }
+
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/topic.php',
               'text' => $LANG_ADMIN['topic_list']),
+        array('url' => $_CONF['site_admin_url'] . '/topic.php?edit=x',
+              'text' => $lang_create_or_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -648,6 +656,8 @@ function TOPIC_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/topic.php',
+              'text' => $LANG_ADMIN['topic_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/topic.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],

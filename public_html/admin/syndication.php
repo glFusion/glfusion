@@ -254,6 +254,8 @@ function FEED_list()
     $defsort_arr = array('field' => 'title', 'direction' => 'asc');
 
     $menu_arr = array (
+                    array('url' => $_CONF['site_admin_url'].'/syndication.php',
+                          'text' => $LANG33[57],'active' =>true),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $LANG_ADMIN['create_new']),
                     array('url' => $_CONF['site_admin_url'],
@@ -311,10 +313,13 @@ function FEED_edit($fid = 0, $type = '')
 
     USES_lib_admin();
 
+    $editMode = false;
+
     if ($fid > 0) {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(updated) AS date FROM {$_TABLES['syndication']} WHERE fid = '$fid'");
         $A = DB_fetchArray ($result);
         $fid = $A['fid'];
+        $editMode = true;
     }
     if ($fid == 0) {
         if (!empty ($type)) { // set defaults
@@ -342,9 +347,17 @@ function FEED_edit($fid = 0, $type = '')
 
     $retval = '';
 
+    if ( $editMode ) {
+        $lang_create_edit = $LANG33[24];
+    } else {
+        $lang_create_edit = $LANG_ADMIN['create_new'];
+    }
+
     $menu_arr = array (
                     array('url' => $_CONF['site_admin_url'].'/syndication.php',
                           'text' => $LANG33[57]),
+                    array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
+                          'text' => $lang_create_edit,'active'=>true),
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home'])
     );
@@ -533,6 +546,8 @@ function FEED_newFeed()
         $menu_arr = array (
                         array('url' => $_CONF['site_admin_url'].'/syndication.php',
                               'text' => $LANG33[57]),
+                    array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
+                          'text' => $LANG_ADMIN['create_new'],'active' => true),
                         array('url' => $_CONF['site_admin_url'],
                               'text' => $LANG_ADMIN['admin_home'])
         );

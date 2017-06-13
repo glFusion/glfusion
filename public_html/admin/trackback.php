@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Admin functions handle Trackback, Pingback, and Ping                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -493,7 +493,7 @@ function TRACKBACK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "name":
-            $retval = ($enabled) ? COM_createLink($A['name'], $A['site_url']) : '<span class="disabledfield">' . $fieldvalue . '</span>';
+            $retval = ($enabled) ? COM_createLink($A['name'], $A['site_url'],array('target'=>'_blank')) : '<span class="disabledfield">' . $fieldvalue . '</span>';
             break;
 
         case "method":
@@ -555,6 +555,8 @@ function TRACKBACK_serviceList()
     $defsort_arr = array('field' => 'name', 'direction' => 'asc');
 
     $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/trackback.php',
+              'text' => $LANG_ADMIN['tb_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/trackback.php?mode=editservice',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
@@ -625,8 +627,10 @@ function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = 
     USES_lib_admin();
 
     $retval = '';
+    $editMode = false;
 
     if ($pid > 0) {
+        $editMode = true;
         $result = DB_query("SELECT * FROM {$_TABLES['pingservice']} WHERE pid = '$pid'");
         $A = DB_fetchArray($result);
     } else {
@@ -660,9 +664,16 @@ function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = 
                                . '/docs/trackback.html#ping',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
+    if ( $editMode ) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    }
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/trackback.php',
               'text' => $LANG_ADMIN['tb_list']),
+        array('url' => $_CONF['site_admin_url'] . '/trackback.php?mode=editservice',
+              'text' => $lang_create_or_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 

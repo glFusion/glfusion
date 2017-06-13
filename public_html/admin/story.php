@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion story administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -221,8 +221,12 @@ function STORY_global($errorMsg = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/story.php',
               'text' => $LANG_ADMIN['story_list']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
+       array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
+                      'text' => $LANG24[111],'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']),
     );
@@ -504,10 +508,13 @@ function STORY_list()
     $defsort_arr = array('field' => 'unixdate', 'direction' => 'desc');
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/story.php',
+              'text' => $LANG_ADMIN['story_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']));
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions'])
+        );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
@@ -578,6 +585,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     USES_lib_admin();
 
     $display = '';
+    $editStory = false;
 
     switch ($action) {
         case 'clone' :
@@ -689,11 +697,14 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/story.php',
               'text' => $LANG_ADMIN['story_list']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']));
+        array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
+              'text' => $LANG24[5],'active'=>true),
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions']),
+        );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
-                      'text' => 'Global Settings');
+                      'text' => $LANG24[111]);
         }
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']);

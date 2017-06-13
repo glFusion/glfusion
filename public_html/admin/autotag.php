@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Autotag management console                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -68,25 +68,45 @@ function AT_mergeAllTags()
 
 // returns html to create the autotag admin form
 
-function AT_adminForm($A, $error = false)
+function AT_adminForm($A, $error = false, $editOrNew = 0)
 {
     global $_CONF, $LANG_AM, $_AM_CONF, $LANG_ADMIN;
     global $cc_url;
 
     USES_lib_admin();
 
+    $editMode = false;
+
     if ($error) {
         $retval = $error . '<br/><br/>';
     } else {
+
+        if ( $editOrNew) $editMode = true;
+
+        if ( $editMode ) {
+            $lang_create_edit = 'Edit Custom'; // $LANG_ADMIN['create_new'];
+        } else {
+            $lang_create_edit = $LANG_ADMIN['create_new'];
+        }
+
         $form = new Template($_CONF['path_layout'] .'admin/autotag/');
         $form->set_file('form', 'autotag.thtml');
 
+        $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $lang_create_edit,'active' => true),
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
+            array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
+        );
+
+/*
         $menu_arr = array (
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
             array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
             array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
         );
-
+*/
         $form->set_var(array(
                 'start_block_editor'=> COM_startBlock($LANG_AM['autotag_editor'], '', COM_getBlockTemplate('_admin_block', 'header')),
                 'end_block'         => COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')),
@@ -148,11 +168,14 @@ function AT_edit($tag, $action = '')
 {
     global $_TABLES;
 
+    $editOrNew = false;
+
     if (!empty($tag) && $action == 'edit') {
         // edit an existing autotag
         $query = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag = '".DB_escapeString($tag)."'");
         $A = DB_fetchArray($query);
         $A['old_tag'] = $A['tag'];
+        $editOrNew = true;
     } elseif ($action == 'edit') {
         // create a new autotag
         $A['tag'] = '';
@@ -166,7 +189,7 @@ function AT_edit($tag, $action = '')
         $A = $_POST;
         $A['tag'] = COM_applyFilter($A['tag']);
     }
-    return AT_adminForm($A);
+    return AT_adminForm($A,'',$editOrNew);
 }
 
 // performs server-side field validation, and saves autotag data to db
@@ -282,8 +305,10 @@ function AT_adminList()
     // render the menu
 
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag'],'active' => true),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
         array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
     );
 
@@ -341,6 +366,7 @@ function AT_list()
 
     if (SEC_hasRights('autotag.admin')) {
         $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title'], 'active' => true),
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
             array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
@@ -746,11 +772,12 @@ function ATP_permEdit()
     }
 
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
         array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
+//        array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $lang_create_edit),
+        array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor'],'active' => true),
         array('url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home']),
     );
-
     $selectBox = '<select onchange="this.form.submit()" name="perm">';
     foreach ($tagUsage AS $perm ) {
         $indexIdentifier = $perm['namespace'].'.'.$perm['usage'];

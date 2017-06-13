@@ -1658,7 +1658,7 @@ $LANG_ACCESS = array(
 # admin/database.php
 
 $LANG_DB_ADMIN = array(
-    'database_admin'      => 'Database Administration',
+    'database_admin'      => 'DB Admin',
     'last_ten_backups'    => 'Database Backups',
     'create_backup'       => 'Backup Database',
     'do_backup'           => 'Do Backup',

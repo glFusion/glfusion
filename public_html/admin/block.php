@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion block administration.                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2016 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -47,7 +47,7 @@ if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[33],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the block administration screen");
+    COM_accessLog ("User {$_USER['username']} tried to access the block administration screen");
     echo $display;
     exit;
 }
@@ -198,8 +198,10 @@ function BLOCK_edit($bid = '', $B = array())
 
     $retval = '';
     $A = array();
+    $editMode = false;
 
     if (!empty($bid)) {
+        $editMode = true;
         $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE bid ='".DB_escapeString($bid)."'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -248,10 +250,17 @@ function BLOCK_edit($bid = '', $B = array())
         }
         $access = 3;
     }
+    if ( $editMode ) {
+        $lang_menu_edit = $LANG01[4];
+    } else {
+        $lang_menu_edit = $LANG_ADMIN['create_new'];
+    }
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/block.php',
               'text' => $LANG_ADMIN['block_list']),
+        array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
+              'text' => $lang_menu_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -507,6 +516,8 @@ function BLOCK_list()
 
     // writing the menu on top
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/block.php',
+              'text' => $LANG_ADMIN['block_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],

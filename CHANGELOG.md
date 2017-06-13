@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - CKeditor - Set default font name / size in menu bar
+  - Links - Make Validate Now link more prominate
   - StaticPages - Increased max size of page content from ~64kb to ~16MB
   - Bad Behavior - New whitelist / blacklist management via online interface
   - Bad Behavior - Performance improvements
@@ -11,6 +13,7 @@
   - Forum - Added tooltip (hover) for bookmark / remove bookmark
   - Media Gallery - new copy to clipboard for media id
   - Update ckeditor to v4.7.0
+  - CKeditor - Add SCAYT (Spell Check As You Type) to menu bar on all entry types
   - CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
   - Added support for GraphicsMagick Image processing library
   - Updated auto tag editor to remove informational text when de-selecting PHP function option

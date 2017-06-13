@@ -58,7 +58,7 @@ if (!SEC_hasrights ('user.mail')) {
 */
 function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject='', $message='' )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG31, $LANG03, $LANG_ADMIN;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG31, $LANG03, $LANG_ADMIN;
 
     USES_lib_admin();
 
@@ -96,6 +96,8 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     $mail_templates->set_var ('send_to_group', $send_to_group);
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/mail.php',
+              'text' => $LANG01[105],'active' => true),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'] . '/group.php',

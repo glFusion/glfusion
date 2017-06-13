@@ -155,16 +155,13 @@ function SI_list()
 
     $overridden = PLG_overrideSocialShare();
 
-    if ( $overridden !== false ) return SI_FollowMelist();
-
     // if an social admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('social.admin')) {
-        $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']),
-            array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']),
-            array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']),
-        );
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share'],'active' => true);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']);
     } else {
         $menu_arr = array();
     }
@@ -253,9 +250,8 @@ function SI_FollowMelist()
     // if an social admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('social.admin')) {
-        if ( $overridden === false ) {
-            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
-        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow'],'active' => true);
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships']);
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']);
     } else {
@@ -380,10 +376,9 @@ function SI_get_site()
     // if an social admin is using this page, offer navigation to the admin page(s)
 
     if (SEC_hasRights('social.admin')) {
-        if ( $overridden === false ) {
-            $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
-        }
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php','text' => $LANG_SOCIAL['social_share']);
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=f','text' => $LANG_SOCIAL['social_follow']);
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/social.php?list=s','text' => $LANG_SOCIAL['site_memberships'],'active' => true);
         $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/index.php', 'text' => $LANG_ADMIN['admin_home']);
     } else {
         $menu_arr = array();
