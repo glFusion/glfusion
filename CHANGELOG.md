@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Calendar - Fixed error where calendar submissions did not show in moderation queue
   - CKeditor - Set default font name / size in menu bar
   - Links - Make Validate Now link more prominate
   - StaticPages - Increased max size of page content from ~64kb to ~16MB
