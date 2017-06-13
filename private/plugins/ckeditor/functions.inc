@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2016 by the following authors:                        |
+// | Copyright (C) 2014-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -43,8 +43,8 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 } else {
-    $langfile = $_CONF['path'].'plugins/ckeditor/language/english.php';
-    $custfile = $_CONF['path'].'plugins/ckeditor/language/custom/english.php';
+    $langfile = $_CONF['path'].'plugins/ckeditor/language/english_utf-8.php';
+    $custfile = $_CONF['path'].'plugins/ckeditor/language/custom/english_utf-8.php';
     include_once $langfile;
     if (file_exists($custfile)) {
         include_once $custfile;
