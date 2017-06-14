@@ -99,14 +99,6 @@ function AT_adminForm($A, $error = false, $editOrNew = 0)
             array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor']),
             array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
         );
-
-/*
-        $menu_arr = array (
-            array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
-            array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
-            array('url' => $cc_url, 'text' => $LANG_ADMIN['admin_home']),
-        );
-*/
         $form->set_var(array(
                 'start_block_editor'=> COM_startBlock($LANG_AM['autotag_editor'], '', COM_getBlockTemplate('_admin_block', 'header')),
                 'end_block'         => COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')),
@@ -319,7 +311,7 @@ function AT_adminList()
 
     // render the autotag manager list
 
-    $header_arr = array(      # dislay 'text' and use table field 'field'
+    $header_arr = array(
         array('text' => $LANG_AM['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_AM['tag'], 'field' => 'tag', 'sort' => true, 'align' => 'left'),
         array('text' => $LANG_AM['function'], 'field' => 'is_function', 'sort' => true, 'align' => 'center', 'nowrap' => true),
