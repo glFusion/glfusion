@@ -1413,7 +1413,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     if ($scale < 120) {
                         $poll->parse('poll_votes', 'votes_num', true );
                     } else {
-                        $width = (int)($percent * $scale);
+                        $width = (int) ($percent * 100 );
                         $poll->set_var('bar_width', $width);
                         $poll->parse('poll_votes', 'votes_bar', true);
                     }

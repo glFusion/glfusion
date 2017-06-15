@@ -5,7 +5,7 @@
 	</div>
 	<div class="uk-width-small-3-4">
 		<div class="uk-progress">
-			<div class="uk-progress-bar" style="width: {answer_percent}%;">{answer_percent}%</div>
+			<div class="uk-progress-bar" style="width: {bar_width}%;">{answer_percent}%</div>
 		</div>
 {!if remark_text}
 		<div class="uk-text-left uk-margin-small">
