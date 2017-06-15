@@ -239,8 +239,7 @@
 {!endif}
 {!if ipaddress}
 								<div>
-								  {ipaddress}<br>
-  							  {remote_ip}
+								  {ipaddress}
   						  </div>
 {!endif}
 								</div>

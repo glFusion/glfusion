@@ -147,7 +147,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                         $min_height = $min_height + 10;
                     }
                 }
-                if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
+                if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
                     $min_height = $min_height + 5;
                 }
                 $udt = new Date(strtotime($userarray['regdate']),$_USER['tzid']);
@@ -365,14 +365,16 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     } elseif ($uniqueid > 0) {
         $topictemplate->set_var('attachments',_ff_showattachments((int) $uniqueid));
     }
-
-    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
-        $iplink = '<a href="' . $_CONF['site_admin_url'] . '/plugins/nettools/whois.php?domain=' . $showtopic['ip'] . '" target="_new">' . $showtopic['ip'] . '</a>';
-        $topictemplate->set_var('ipaddress',$iplink);
+    if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
+        if( !empty( $_CONF['ip_lookup'] )) {
+            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank">'.$showtopic['ip'].'</a>';
+            $topictemplate->set_var('ipaddress',$iplink);
+        } else {
+            $topictemplate->set_var('ipaddress',$showtopic['ip']);
+        }
     } else {
         $topictemplate->set_var('ipaddress','');
     }
-
     $voteHTML = '';
     if ( $_FF_CONF['enable_user_rating_system']) {
         if ( $showtopic['uid'] > 1 ) { //not an anonymous poster

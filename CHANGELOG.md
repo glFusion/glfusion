@@ -1,4 +1,7 @@
 ## v1.6.7 (unreleased)
+  - Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
+  - Themes - Added missing UI icons
+  - Polls - Fixed issue where the bar width was not properly formatted if locale used a comma separator for decimals
   - Calendar - Fixed error where calendar submissions did not show in moderation queue
   - CKeditor - Set default font name / size in menu bar
   - Links - Make Validate Now link more prominate
