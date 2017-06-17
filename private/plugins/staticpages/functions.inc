@@ -157,7 +157,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $retval = SP_returnStaticpage($id,'page', $order,$format);
+    $retval = SP_returnStaticpage($id,'comment', $order,$format);
     return $retval;
 }
 
@@ -530,6 +530,9 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
             $retval = SP_printPage($page, $retval);
         } else if ($mode =='autotag') {
             $retval = SP_render_content($retval['sp_content'], $retval['sp_php']);
+        } else if ( $mode == 'comment' ) {
+            $retval['sp_format'] = 'blankpage';
+            $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         } else {
             $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         }
