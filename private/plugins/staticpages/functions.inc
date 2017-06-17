@@ -157,7 +157,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $retval = SP_returnStaticpage($id,'autotag', $order,$format);
+    $retval = SP_returnStaticpage($id,'page', $order,$format);
     return $retval;
 }
 

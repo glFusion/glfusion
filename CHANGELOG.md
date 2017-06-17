@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page
   - Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
   - Themes - Added missing UI icons
   - Polls - Fixed issue where the bar width was not properly formatted if locale used a comma separator for decimals
