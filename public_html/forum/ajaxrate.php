@@ -6,7 +6,7 @@
 // |                                                                          |
 // | AJAX code to update community moderation value                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -46,6 +46,7 @@ $vote = isset($_GET['vote']) ? COM_applyFilter($_GET['vote'],true) : 0;
 $mode = isset($_GET['mode']) ? COM_applyFilter($_GET['mode'],true) : 0;
 
 if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
+
     if ( $mode == 1 ) {
     	if ($_USER['uid'] == $pid) {
     		exit;
@@ -54,8 +55,16 @@ if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
     	if (DB_numRows($user_already_voted_res) < 1) {
         	//Increate or decrease user rating
         	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid=".(int) $pid);
-        	$user_rating_row = DB_fetchArray($user_rating_res);
-        	$user_rating = $user_rating_row['rating'];
+            if ( DB_numRows($user_rating_res) === 0 ) {
+                $check = DB_query("SELECT SUM(grade) AS user_rating FROM {$_TABLES['ff_rating_assoc']} WHERE user_id=".(int) $pid);
+                $check_row = DB_fetchArray($check);
+                $user_rating = (int) $check_row['user_rating'];
+                DB_query("INSERT INTO {$_TABLES['ff_userinfo']} (uid,location,aim,icq,yim,msnm,interests,occupation,signature,rating)
+                    VALUES (".(int)$pid.",'','','','','','','','',".$user_rating.");",1);
+            } else {
+            	$user_rating_row = DB_fetchArray($user_rating_res);
+            	$user_rating = $user_rating_row['rating'];
+            }
         	if ( $vote > 0 ) {
         		$user_rating++;
         		$grade = 1;
@@ -79,7 +88,7 @@ if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
         	//Increate or decrease user rating
         	$user_rating_res = DB_query("SELECT rating FROM {$_TABLES['ff_userinfo']} WHERE uid = ".(int)$pid);
         	$user_rating_row = DB_fetchArray($user_rating_res);
-        	$user_rating = $user_rating_row['rating'];
+        	$user_rating = (int) $user_rating_row['rating'];
         	if ( $vote > 0 ) {
         		$user_rating++;
         	} else {
