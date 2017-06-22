@@ -138,7 +138,7 @@ if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
 $adminurl = $_CONF['site_admin_url'];
-if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
+if (strrpos ($adminurl, '/') == strlen ($adminurl) - 1) {
     $adminurl = substr ($adminurl, 0, -1);
 }
 $pos = strrpos ($adminurl, '/');
