@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Allow for alternate admin/ directory
+  - Updated upgrade file removal to use proper paths if different from detaults
   - Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page
   - Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
   - Themes - Added missing UI icons

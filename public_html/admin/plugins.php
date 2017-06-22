@@ -895,7 +895,7 @@ function PLUGINS_processUpload()
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -1048,7 +1048,7 @@ function PLUGINS_post_uploadProcess() {
         @set_time_limit( 30 );
     }
     if ( file_exists($pluginTmpDir.'admin/') ) {
-        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -1158,13 +1158,13 @@ function PLUGINS_post_uploadProcess() {
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
-                if ( !file_exists($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
-                    $rc = @copy ($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                if ( !file_exists($_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName) ) {
+                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                         $masterErrorCount++;
-                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     }
                 }
             } elseif (strncmp($fileToRename,'public_html',10) == 0 ) {

@@ -818,7 +818,7 @@ $LANG21 = array(
     42 => 'Du skal angive kasserækkefølge og sikkerhedsniveau for standard glFusion kasser',
     43 => 'Kun På Hjemmeside',
     44 => 'All Except Homepage',
-    45 => "Du forsøger at få adgang til en kasse, som du ikke har rettigheder til. Dette forsøg er blevet skrevet til loggen. Gå venligst <a href=\"{$_CONF['site_url']}/admin/block.php\">tilbage til kasseadministrationssiden</a> - tak.",
+    45 => "Du forsøger at få adgang til en kasse, som du ikke har rettigheder til. Dette forsøg er blevet skrevet til loggen. Gå venligst <a href=\"{$_CONF['site_admin_url']}/block.php\">tilbage til kasseadministrationssiden</a> - tak.",
     46 => 'Ny Kasse',
     47 => '',
     48 => 'Kasse Navn',
@@ -892,8 +892,8 @@ $LANG24 = array(
     38 => 'Mere fra',
     39 => 'Emails',
     40 => '',
-    41 => "Du prøver at få adgang til en historie, som du ikke har rettigheder til! Dette forsøg er blevet logget! Gå tilbage til <a href=\"{$_CONF['site_url']}/admin/story.php\">administration af historier interfacet</a>.",
-    42 => "Du prøver at få adgang til en historie, som du ikke har rettigheder til! Dette forsøg er blevet logget! Gå tilbage til <a href=\"{$_CONF['site_url']}/admin/story.php\">administration af historier interfacet</a>.",
+    41 => "Du prøver at få adgang til en historie, som du ikke har rettigheder til! Dette forsøg er blevet logget! Gå tilbage til <a href=\"{$_CONF['site_admin_url']}/story.php\">administration af historier interfacet</a>.",
+    42 => "Du prøver at få adgang til en historie, som du ikke har rettigheder til! Dette forsøg er blevet logget! Gå tilbage til <a href=\"{$_CONF['site_admin_url']}/story.php\">administration af historier interfacet</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -994,7 +994,7 @@ $LANG27 = array(
     10 => 'Sorteringsrækkefølge',
     11 => 'Historier/Sider',
     12 => 'Adgang Nægtet',
-    13 => "Du prøver at få adgang til et emne, som du ikke har rettigheder til. Dette forsøg er blevet logget. Gå venligst <a href=\"{$_CONF['site_url']}/admin/topic.php\">tilbage til emneredigeringssiden</a>.",
+    13 => "Du prøver at få adgang til et emne, som du ikke har rettigheder til. Dette forsøg er blevet logget. Gå venligst <a href=\"{$_CONF['site_admin_url']}/topic.php\">tilbage til emneredigeringssiden</a>.",
     14 => 'Sorteringsmetode',
     15 => 'alfabetisk',
     16 => 'standard er',
@@ -1214,10 +1214,10 @@ $LANG31 = array(
     14 => 'Ignorer bruger indstillinger',
     15 => 'Fejl ved afsendelse til: ',
     16 => 'Besked sendt til: ',
-    17 => "<a href={$_CONF['site_url']}/admin/mail.php>Send endnu en besked</a>",
+    17 => "<a href={$_CONF['site_admin_url']}/mail.php>Send endnu en besked</a>",
     18 => 'Til',
     19 => 'Bemærk: Hvis du ønsker at sende en besked til alle sidens oprettede brugere, vælg da Logged-in Users gruppen fra rullemenuen.',
-    20 => "Successfully sent <successcount> messages and unsuccessfully sent <failcount> messages.  If you need them, the details of each message attempts is below.  Otherwise you can <a href=\"{$_CONF['site_url']}/admin/mail.php\">Send another message</a> or you can <a href=\"{$_CONF['site_url']}/admin/moderation.php\">go back to the administration page</a>.",
+    20 => "Successfully sent <successcount> messages and unsuccessfully sent <failcount> messages.  If you need them, the details of each message attempts is below.  Otherwise you can <a href=\"{$_CONF['site_admin_url']}/mail.php\">Send another message</a> or you can <a href=\"{$_CONF['site_admin_url']}/moderation.php\">go back to the administration page</a>.",
     21 => 'Fejl',
     22 => 'Succeser',
     23 => 'Ingen fejl',
@@ -1864,7 +1864,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1939,7 +1939,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1993,7 +1993,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

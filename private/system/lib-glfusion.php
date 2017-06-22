@@ -44,7 +44,7 @@ function glfusion_UpgradeCheck() {
 
     $dbversion = $_VARS['glfusion'];
     $comparison = version_compare( GVERSION, $dbversion );
-    $install_url = $_CONF['site_url'] . '/admin/install/index.php';
+    $install_url = $_CONF['site_admin_url'] . '/install/index.php';
 
     switch ($comparison) {
         case 1:
@@ -70,7 +70,7 @@ function glfusion_SecurityCheck() {
 
     $retval = '';
     $msg = '';
-    if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
+    if ( file_exists($_CONF['path_admin'] . 'install/') ) {
         $msg .= $LANG01[500].'<br>';
     }
     if ( $_SYSTEM['rootdebug'] ) {

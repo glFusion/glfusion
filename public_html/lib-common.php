@@ -137,6 +137,17 @@ if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
+$adminurl = $_CONF['site_admin_url'];
+if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
+    $adminurl = substr ($adminurl, 0, -1);
+}
+$pos = strrpos ($adminurl, '/');
+if ($pos === false) {
+    $_CONF['path_admin'] = $_CONF['path_html'] . 'admin/';
+} else {
+    $_CONF['path_admin'] = $_CONF['path_html'] . substr ($adminurl, $pos + 1).'/';
+}
+
 @date_default_timezone_set('America/Chicago');
 
 $charset = COM_getCharset();

@@ -822,7 +822,7 @@ $LANG21 = array(
     42 => 'Vnesite ime bloka in vrstni red za prednastavljene bloke glFusiona.',
     43 => 'Samo domača stran',
     44 => 'All Except Homepage',
-    45 => "Do tega bloka nimaš dostopa. Poskus je bil zabeležen v bazo podatkov. Prosim vrni se na <a href=\"{$_CONF['site_url']}/admin/block.php\">zaslon za skrbništvo blokov</a>.",
+    45 => "Do tega bloka nimaš dostopa. Poskus je bil zabeležen v bazo podatkov. Prosim vrni se na <a href=\"{$_CONF['site_admin_url']}/block.php\">zaslon za skrbništvo blokov</a>.",
     46 => 'Premakni',
     47 => '',
     48 => 'Ime bloka',
@@ -896,8 +896,8 @@ $LANG24 = array(
     38 => 'Več s področja',
     39 => 'Št. posredovanj po e-pošti',
     40 => '',
-    41 => "Poskušaš dostopiti do članka, do katerega nimaš pravice dostopa. Ta poskus je bil zabeležen in shranjen. Članek lahko samo preberete, ne morete pa ga urejati. Ko končaš, pojdi prosim nazaj na <a href=\"{$_CONF['site_url']}/admin/story.php\">zaslon za skrbništvo člankov</a>.",
-    42 => "Poskušaš dostopiti do članka, do katerega nimaš pravice dostopa. Ta poskus je bil zabeležen in shranjen. Pojdi prosim nazaj na <a href=\"{$_CONF['site_url']}/admin/story.php\">zaslon za skrbništvo člankov</a>.",
+    41 => "Poskušaš dostopiti do članka, do katerega nimaš pravice dostopa. Ta poskus je bil zabeležen in shranjen. Članek lahko samo preberete, ne morete pa ga urejati. Ko končaš, pojdi prosim nazaj na <a href=\"{$_CONF['site_admin_url']}/story.php\">zaslon za skrbništvo člankov</a>.",
+    42 => "Poskušaš dostopiti do članka, do katerega nimaš pravice dostopa. Ta poskus je bil zabeležen in shranjen. Pojdi prosim nazaj na <a href=\"{$_CONF['site_admin_url']}/story.php\">zaslon za skrbništvo člankov</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -998,7 +998,7 @@ $LANG27 = array(
     10 => 'Uredi po',
     11 => 'Člankov/Strani',
     12 => 'Dostop zavrnjen',
-    13 => "Do te rubrike nimaš dostopa. Tvoj poskus je bil zabeležen in shranjen. Prosim vrni se na <a href=\"{$_CONF['site_url']}/admin/topic.php\">zaslon za skrbništvo rubrik</a>.",
+    13 => "Do te rubrike nimaš dostopa. Tvoj poskus je bil zabeležen in shranjen. Prosim vrni se na <a href=\"{$_CONF['site_admin_url']}/topic.php\">zaslon za skrbništvo rubrik</a>.",
     14 => 'Uredi po',
     15 => 'abecedi',
     16 => 'privzeto',
@@ -1218,10 +1218,10 @@ $LANG31 = array(
     14 => 'Prezri uporabniške nastavitve',
     15 => 'Napaka pri pošiljanju  ',
     16 => 'Sporočilo je bilo uspešno poslano: ',
-    17 => "<a href={$_CONF['site_url']}/admin/mail.php>Pošlji novo sporočilo</a>",
+    17 => "<a href={$_CONF['site_admin_url']}/mail.php>Pošlji novo sporočilo</a>",
     18 => 'Za',
     19 => 'OPOMBA: Če hošeč poslati sporočilo vsem uporabnikom strani, izberi skupino Prijavljeni uporabniki iz menija Uporabniki.',
-    20 => "Uspešno poslana sporočila: <successcount>;<BR>Neuspešno poslana sporočila: <failcount>. Podrobnosti o neuspešno poslanih sporočilh so spodaj.<BR><BR>Hočeš poslati še kakšno <a href=\"{$_CONF['site_url']}/admin/mail.php\">sporočilo</a>? <BR><BR>Nazaj na <a href=\"{$_CONF['site_url']}/admin/moderation.php\">skrbnikovo stran</a>.",
+    20 => "Uspešno poslana sporočila: <successcount>;<BR>Neuspešno poslana sporočila: <failcount>. Podrobnosti o neuspešno poslanih sporočilh so spodaj.<BR><BR>Hočeš poslati še kakšno <a href=\"{$_CONF['site_admin_url']}/mail.php\">sporočilo</a>? <BR><BR>Nazaj na <a href=\"{$_CONF['site_admin_url']}/moderation.php\">skrbnikovo stran</a>.",
     21 => 'Neuspešno poslana sporočila',
     22 => 'Uspešno poslana sporočila',
     23 => 'Nobenega neuspešno poslanega sporočila',
@@ -1580,7 +1580,7 @@ $LANG_ACCESS = array(
     'grantgrouplabel' => 'Dodeli zgornji skupini pravice za spreminjanje',
     'permmsg' => 'OBVESTILO: Uporabniki so vsi prijavljeni člani, anonimni uporabniki in vsi trenutni neprijavljeni obiskovalci strani.',
     'securitygroups' => 'Varnostne skupine',
-    'editrootmsg' => "Čeprav si skrbnik, ne moreš spreminjati nastavitev korenskega uporabnika, če nisi sam korenski uporabnik. Lahko pa urejaš nastavitve vseh drugih uporabnikov. Vsi poskusi dostopa do nepooblaščenih funkcij se beležijo. Vrni se na <a href=\"{$_CONF['site_url']}/admin/user.php\">stran za skrbništvo uporabnikov</a>.",
+    'editrootmsg' => "Čeprav si skrbnik, ne moreš spreminjati nastavitev korenskega uporabnika, če nisi sam korenski uporabnik. Lahko pa urejaš nastavitve vseh drugih uporabnikov. Vsi poskusi dostopa do nepooblaščenih funkcij se beležijo. Vrni se na <a href=\"{$_CONF['site_admin_url']}/user.php\">stran za skrbništvo uporabnikov</a>.",
     'securitygroupsmsg' => 'Izberite skupine, ki naj jim pripada uporabnik',
     'groupeditor' => 'Urejanje skupin',
     'description' => 'Opis',
@@ -1868,7 +1868,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1943,7 +1943,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1997,7 +1997,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

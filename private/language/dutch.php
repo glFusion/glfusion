@@ -825,7 +825,7 @@ $LANG21 = array(
     42 => 'Gelieve de bloktitel en de blokvolgorde op te geven (standaard blokken).',
     43 => 'Alleen Homepagina',
     44 => 'All Except Homepage',
-    45 => "U heeft geprobeerd een blok op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/block.php\'>Terug naar de blok administratie pagina</a>.",
+    45 => "U heeft geprobeerd een blok op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/block.php\'>Terug naar de blok administratie pagina</a>.",
     46 => 'Nieuw blok',
     47 => '',
     48 => 'Blok Naam',
@@ -899,8 +899,8 @@ $LANG24 = array(
     38 => 'Meer van..',
     39 => 'Emails',
     40 => '',
-    41 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. Het Artikel is hieronder weergegeven. <a href=\'{$_CONF['site_url']}/admin/story.php\'>Terug naar de artikel administratie pagina</a>.",
-    42 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/story.php\'>Terug naar de artikel administratie pagina</a>.",
+    41 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. Het Artikel is hieronder weergegeven. <a href=\'{$_CONF['site_admin_url']}/story.php\'>Terug naar de artikel administratie pagina</a>.",
+    42 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/story.php\'>Terug naar de artikel administratie pagina</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -1001,7 +1001,7 @@ $LANG27 = array(
     10 => 'Sorteer Volgorde',
     11 => 'Artikelen/Pagina',
     12 => 'Geen toegang',
-    13 => "U heeft geprobeerd een Thema op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/topic.php\'>Terug naar de Thema administratie pagina</a>.",
+    13 => "U heeft geprobeerd een Thema op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/topic.php\'>Terug naar de Thema administratie pagina</a>.",
     14 => 'Sorteer Methode',
     15 => 'alfabetisch',
     16 => 'standaard is',
@@ -1221,10 +1221,10 @@ $LANG31 = array(
     14 => 'Instellingen van de gebruiker negeren',
     15 => 'Probleem tijdens verzending naar: ',
     16 => 'Bericht met succes gezonden naar: ',
-    17 => "<a href=\'{$_CONF['site_url']}/admin/mail.php\'>Stuur nog een bericht</a>",
+    17 => "<a href=\'{$_CONF['site_admin_url']}/mail.php\'>Stuur nog een bericht</a>",
     18 => 'To',
     19 => 'NOTE: Indien u een bericht wilt sturen aan alle portaal leden, kies dan de \'Logged-in\' groep.',
-    20 => "<successcount> berichten verstuurd en <failcount> fouten. Onderstaand vindt u de details van elk bericht ter controle. U kunt nu ook <a href=\'{$_CONF['site_url']}/admin/mail.php\'>nog een bericht versturen</a> of <a href=\'{$_CONF['site_url']}/admin/moderation.php\'>terug gaan naar de administratie pagina</a>.",
+    20 => "<successcount> berichten verstuurd en <failcount> fouten. Onderstaand vindt u de details van elk bericht ter controle. U kunt nu ook <a href=\'{$_CONF['site_admin_url']}/mail.php\'>nog een bericht versturen</a> of <a href=\'{$_CONF['site_admin_url']}/moderation.php\'>terug gaan naar de administratie pagina</a>.",
     21 => 'Fouten',
     22 => 'Succes',
     23 => 'Geen fouten',
@@ -1871,7 +1871,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1946,7 +1946,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -2000,7 +2000,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(

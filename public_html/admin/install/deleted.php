@@ -147,8 +147,7 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
-// 1.6.7
-    'admin/plugins/bad_behavior2/ban.php',
+
 // 1.6.6
     'mediagallery/players/FMP3.swf',
     'mediagallery/players/XSPF_EV.swf',
@@ -163,9 +162,6 @@ $obsoletePublicFiles = array(
     'javascript/dbadmin.js',
     'admin/install/templates/siteconfig.thtml',
 
-// removed in v1.6.2
-    'admin/filecheck.php',
-    'admin/plugin_upload.php',
 // removed in v1.6.1
     'layout/vintage/plugins/ckeditor/ckeditor.thtml',
     'layout/vintage/plugins/ckeditor/ckeditor_block.thtml',
@@ -196,29 +192,6 @@ $obsoletePublicFiles = array(
     'ckeditor/plugins/wsc/dialogs/tmp.html',
     'ckeditor/skins/moono/dialog_opera.css',
 
-    'admin/install/help.php',
-    'admin/install/layout/arrow-back.gif',
-    'admin/install/layout/arrow-next.gif',
-    'admin/install/layout/arrow-recheck.gif',
-    'admin/install/layout/arrow.png',
-    'admin/install/layout/arrow_down.png',
-    'admin/install/layout/arrow_open.png',
-    'admin/install/layout/bottom-l-corner.png',
-    'admin/install/layout/bottom-r-corner.png',
-    'admin/install/layout/check.png',
-    'admin/install/layout/error.png',
-    'admin/install/layout/gl_moomenu1-bg.gif',
-    'admin/install/layout/gl_moopngfix.js',
-    'admin/install/layout/header-bg.png',
-    'admin/install/layout/ie6.css',
-    'admin/install/layout/ie7.css',
-    'admin/install/layout/mootools-release-1.11.packed.js',
-    'admin/install/layout/steplist-bottom.png',
-    'admin/install/layout/steplist-repeat.png',
-    'admin/install/layout/top-l-corner.png',
-    'admin/install/layout/top-r-corner.png',
-    'admin/install/layout/top.png',
-    'admin/install/toinnodb.php',
     'docs/docstyle.css',
     'docs/images/background.gif',
     'docs/images/index.html',
@@ -252,9 +225,41 @@ $obsoletePublicFiles = array(
     'layout/vintage/menuitem_none.thtml',
     'layout/vintage/useroption.thtml',
     'layout/vintage/useroption_off.thtml',
+);
 
-    'admin/plugins/forum/phpbb3_migrate.php',
-    'admin/plugins/mediagallery/xppubwiz.php',
+$obsoleteAdminFiles = array(
+// 1.6.7
+    'plugins/bad_behavior2/ban.php',
+// removed in v1.6.2
+    'filecheck.php',
+    'plugin_upload.php',
+
+    'install/help.php',
+    'install/layout/arrow-back.gif',
+    'install/layout/arrow-next.gif',
+    'install/layout/arrow-recheck.gif',
+    'install/layout/arrow.png',
+    'install/layout/arrow_down.png',
+    'install/layout/arrow_open.png',
+    'install/layout/bottom-l-corner.png',
+    'install/layout/bottom-r-corner.png',
+    'install/layout/check.png',
+    'install/layout/error.png',
+    'install/layout/gl_moomenu1-bg.gif',
+    'install/layout/gl_moopngfix.js',
+    'install/layout/header-bg.png',
+    'install/layout/ie6.css',
+    'install/layout/ie7.css',
+    'install/layout/mootools-release-1.11.packed.js',
+    'install/layout/steplist-bottom.png',
+    'install/layout/steplist-repeat.png',
+    'install/layout/top-l-corner.png',
+    'install/layout/top-r-corner.png',
+    'install/layout/top.png',
+    'install/toinnodb.php',
+
+    'plugins/forum/phpbb3_migrate.php',
+    'plugins/mediagallery/xppubwiz.php',
 );
 
 ?>

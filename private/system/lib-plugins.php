@@ -3484,7 +3484,7 @@ function PLG_remove($pi_name)
     global $_CONF;
 
     $p = array();
-    $p['admin'] = $_CONF['path_html'] . 'admin/plugins/' . $pi_name;
+    $p['admin'] = $_CONF['path_admin'] . 'plugins/' . $pi_name;
     $p['public'] = $_CONF['path_html'] . $pi_name;
     $p['private'] =  $_CONF['path'] . 'plugins/' . $pi_name;
 

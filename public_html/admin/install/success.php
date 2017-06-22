@@ -70,7 +70,7 @@ if ($type == 'install') {
 $pageBody .= '<h2 style="color:red">' . $LANG_SUCCESS[10] . '</h2>
 <p>' . $LANG_SUCCESS[11] . ' <strong>' . (($type == 'upgrade') ? '2' : '3') . '</strong> ' . $LANG_SUCCESS[12] . ':</p>
 <ol>
-<li style="padding-bottom:3px">' . $LANG_SUCCESS[13] . ' <strong>' . $_CONF['path_html'] . 'admin/install</strong>.</li>';
+<li style="padding-bottom:3px">' . $LANG_SUCCESS[13] . ' <strong>' . $_CONF['path_admin'] . 'install</strong>.</li>';
 
 if ($type == 'install') {
     $pageBody .= "<li style=\"padding-bottom:3px\"><a href=\"{$_CONF['site_url']}/usersettings.php?mode=edit\">" . $LANG_SUCCESS[14] . ' <strong>' . $LANG_SUCCESS[7] . '</strong> ' . $LANG_SUCCESS[15] . '</a></li>';
@@ -84,8 +84,8 @@ $pageBody .= '<p>'.$LANG_INSTALL['quick_start_help'].'</p>';
 
 if ( $type == 'upgrade' ) {
 
-    if ( @file_exists($_CONF['path_html'].'admin/install/alert.html') ) {
-        $alertMsg = file_get_contents($_CONF['path_html'].'admin/install/alert.html');
+    if ( @file_exists($_CONF['path_admin'].'install/alert.html') ) {
+        $alertMsg = file_get_contents($_CONF['path_admin'].'install/alert.html');
         if ( $alertMsg != '' ) $pageBody .= $alertMsg;
     }
 
