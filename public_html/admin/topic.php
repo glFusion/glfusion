@@ -118,6 +118,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     	$A = array();
         $A['tid']           = isset($T['tid']) ? $T['tid'] : '';
         $A['topic']         = isset($T['topic']) ? $T['topic'] : '';
+        $A['description']   = isset($T['description']) ? $T['description'] : '';
         $A['sortnum']       = isset($T['sortnum']) ? $T['sortnum'] : 0;
         $A['limitnews']     = isset($T['limitnews']) ? $T['limitnews'] : ''; // leave empty!
         $A['is_default']    = isset($T['is_default']) && $T['is_default'] == 'on' ? 1 : 0;
@@ -171,9 +172,9 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 
     // generate input for topic id
     if (!empty($topicEdit) && SEC_hasRights('topic.edit')) {
-        $tid_input = $tid . '<input type="hidden" size="20" maxlength="128" name="tid" value="'.$tid.'"' . XHTML . '>';
+        $tid_input = $tid . '<input type="hidden" size="20" maxlength="128" name="tid" value="'.$tid.'">';
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"%s' . XHTML . '>';
+                   . '" name="delete"%s>';
         $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . '\');"';
         $topic_templates->set_var('delete_option',
                                   sprintf($delbutton, $jsconfirm));
@@ -181,7 +182,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
                                   sprintf($delbutton, ''));
         $topic_templates->clear_var('lang_donotusespaces');
     } else {
-        $tid_input = '<input class="required alphanumeric" type="text" size="20" maxlength="128" name="tid" id="tid" value="'.$tid.'"' . XHTML . '>';
+        $tid_input = '<input class="required alphanumeric" type="text" size="20" maxlength="128" name="tid" id="tid" value="'.$tid.'">';
         $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     }
     $topic_templates->set_var('tid_input',$tid_input);
@@ -210,7 +211,7 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     $topic_templates->set_var('permissions_editor', SEC_getPermissionsHTML($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']));
 
     $sort_select = '<select id="sortnum" name="sortnum">' . LB;
-    $sort_select .= '<option value="0">' . 'First Position' . '</option>' . LB;
+    $sort_select .= '<option value="0">' . $LANG27[58] . '</option>' . LB;
     $result = DB_query("SELECT tid,topic,sortnum FROM {$_TABLES['topics']} ORDER BY sortnum ASC");
 
     if ( $topicEdit == 1 ) {
@@ -250,6 +251,8 @@ function TOPIC_edit ($tid = '', $T = array(), $msg = '')
     $topic_templates->set_var('lang_defaultis', $LANG27[16]);
     $topic_templates->set_var('lang_topicname', $LANG27[3]);
     $topic_templates->set_var('topic_name', htmlentities($A['topic']));
+    $topic_templates->set_var('lang_description', $LANG27[59]);
+    $topic_templates->set_var('topic_description', htmlentities($A['description']));
     if (empty($A['tid'])) {
         $A['imageurl'] = '/images/topics/';
     }
@@ -414,6 +417,7 @@ function TOPIC_save($T)
 
     $tid        = isset($T['tid']) ? $T['tid'] : '';
     $topic      = $T['topic'];
+    $description = $T['description'];
     $imageurl   = $T['imageurl'];
     $sortnum    = $T['sortnum'];
     $sort_by    = $T['sort_by'];
@@ -526,7 +530,8 @@ function TOPIC_save($T)
         } else {
             $newSortNum = 0;
         }
-        DB_save($_TABLES['topics'],'tid, topic, imageurl, sortnum, sort_by, sort_dir, limitnews, is_default, archive_flag, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon',"'$tid', '$topic', '$imageurl','$newSortNum',$sort_by,'$sort_dir','$limitnews',$is_default,'$archive_flag',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
+        $description = DB_escapeString($description);
+        DB_save($_TABLES['topics'],'tid, topic, description,imageurl, sortnum, sort_by, sort_dir, limitnews, is_default, archive_flag, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon',"'$tid', '$topic', '$description','$imageurl','$newSortNum',$sort_by,'$sort_dir','$limitnews',$is_default,'$archive_flag',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
         TOPIC_reorderTopics();
 
         // update feed(s) and Older Stories block
@@ -610,11 +615,11 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         $moveTitleMsg = $LANG21[60];
                         $switchside = '0';
                     }
-                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
+                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\">"
                             ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
-                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\"" . XHTML . ">"
-                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\"" . XHTML . ">"
-                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\"" . XHTML . ">"
+                            ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\">"
+                            ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\">"
+                            ."<area coords=\"30,0,43,20\" title=\"{$LANG21[57]}\" href=\"{$_CONF['site_admin_url']}/block.php?move=1&amp;bid={$A['bid']}&amp;where=dn&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[57]}\">"
                             ."</map>";
                 }
                 break;
@@ -902,6 +907,7 @@ switch ($action) {
 
         $T['tid']           = (isset($_POST['tid']) ? $_POST['tid'] : '');
         $T['topic']         = (isset($_POST['topic']) ? $_POST['topic'] : '');
+        $T['description']   = (isset($_POST['description']) ? $_POST['description'] : '');
         $T['sortnum']       = (isset($_POST['sortnum']) ? COM_applyFilter($_POST['sortnum']) : '');
         $T['limitnews']     = (isset($_POST['limitnews']) ? COM_applyFilter($_POST['limitnews'],true) : '');
         $T['owner_id']      = (isset($_POST['owner_id']) ? COM_applyFilter($_POST['owner_id'],true) : 2 );
