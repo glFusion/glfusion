@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Story Abstraction.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -147,10 +147,13 @@ class Story
     var $_email;
     var $_about;
     var $_topic;
+    var $_topic_description;
     var $_alternate_topic;
+    var $_alternate_topic_description;
     var $_imageurl;
     var $_subtitle;
     var $_story_image = '';
+    var $_story_video = '';
 
     var $_attribution_url = '';
     var $_attribution_name = '';
@@ -191,6 +194,7 @@ class Story
            'tid' => 1,
            'alternate_tid' => 1,
            'story_image' => 1,
+            'story_video' => 1,
            'date' => 1,
            'title' => 1,
            'subtitle' => 1,
@@ -220,7 +224,9 @@ class Story
            'perm_anon' => 1,
            'imageurl' => 0,
            'topic' => 0,
+           'topic_description' => 0,
            'alternate_topic' => 0,
+           'alternate_topic_description' => 0,
            'attribution_url' => 1,
            'attribution_name' =>1,
            'attribution_author' => 1,
@@ -431,9 +437,11 @@ class Story
       */
     function loadFromArray($story)
     {
+        global $_TABLES, $_CONF;
         /* Use the magic cheat array to quickly reload the whole story
          * from the database result array, doing the quick stripslashes.
          */
+
         reset($this->_dbFields);
 
         while (list($fieldname,$save) = each($this->_dbFields)) {
@@ -467,6 +475,22 @@ class Story
             $this->_comment_expire = 0;
         }
 
+        $alternate_topic = '';
+        $alternate_topic_description = '';
+        if ( $story['alternate_tid'] != NULL && $story['alternate_tid'] != "" ) {
+            $atresult = DB_query("SELECT topic, description from {$_TABLES['topics']} WHERE tid='".DB_escapeString($story['alternate_tid']) ."'");
+            if ( DB_numRows($atresult) > 0 ) {
+                $atrow = DB_fetchArray($atresult);
+                $alternate_topic = $atrow['topic'];
+                $alternate_topic_description = $atrow['description'];
+            } else {
+                $alternate_topic = '';
+                $alternate_topic_description = '';
+            }
+        }
+        $this->_alternate_topic = $alternate_topic;
+        $this->_alternate_topic_description = $alternate_topic_description;
+
         // Store the original SID
         $this->_originalSid = $this->_sid;
     }
@@ -494,10 +518,10 @@ class Story
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
             $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
-                . "u.username, u.fullname, u.photo, u.email, p.about,p.uid, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['userinfo']} AS p, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.uid = p.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
+                . "u.username, u.fullname, u.photo, u.email, p.about,p.uid, t.topic, t.description AS topic_description,t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['userinfo']} AS p, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.uid = p.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
         } elseif (!empty($sid) && ($mode == 'moderate')) {
             $sql = 'SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, '
-            . 'u.username, u.fullname, u.photo, u.email, up.about, up.uid, t.topic, t.imageurl, t.group_id, ' . 't.perm_owner, t.perm_group, t.perm_members, t.perm_anon ' . 'FROM ' . $_TABLES['storysubmission'] . ' AS s, ' . $_TABLES['userinfo'] . ' AS up, '.$_TABLES['users'].' AS u, ' . $_TABLES['topics'] . ' AS t WHERE (s.uid = u.uid) AND (s.uid = up.uid) AND' . ' (s.tid = t.tid) AND (sid = \'' . $sid . '\')';
+            . 'u.username, u.fullname, u.photo, u.email, up.about, up.uid, t.topic, t.description AS topic_description, t.imageurl, t.group_id, ' . 't.perm_owner, t.perm_group, t.perm_members, t.perm_anon ' . 'FROM ' . $_TABLES['storysubmission'] . ' AS s, ' . $_TABLES['userinfo'] . ' AS up, '.$_TABLES['users'].' AS u, ' . $_TABLES['topics'] . ' AS t WHERE (s.uid = u.uid) AND (s.uid = up.uid) AND' . ' (s.tid = t.tid) AND (sid = \'' . $sid . '\')';
         } elseif ($mode == 'edit') {
             $this->_sid = COM_makesid();
             $this->_old_sid = $this->_sid;
@@ -587,6 +611,7 @@ class Story
 
             if ($result) {
                 $story = DB_fetchArray($result, false);
+
                 if ($story == null) {
                     return STORY_INVALID_SID;
                 }
@@ -908,16 +933,28 @@ class Story
         }
 
         /* Load up the topic name and icon */
-        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($this->_tid)."'");
+        $topic = DB_query("SELECT topic, description, imageurl FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($this->_tid)."'");
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
+        $this->_topic_description = $topic['description'];
 
         $alternate_topic = '';
+        $alternate_topic_description = '';
         if ( $this->_alternate_tid != NULL ) {
-            $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid).'"');
+            $atresult = DB_query("SELECT topic, description from {$_TABLES['topics']} WHERE tid='".DB_escapeString($this->_alternate_tid) ."'");
+            if ( DB_numRows($atresult) > 0 ) {
+                $atrow = DB_fetchArray($atresult);
+                $alternate_topic = $atrow['topic'];
+                $alternate_topic_description = $atrow['description'];
+            } else {
+                $alternate_topic = '';
+                $alternate_topic_description = '';
+            }
+//            $alternate_topic = DB_getItem($_TABLES['topics'],'topic','tid="'.DB_escapeString($this->_alternate_tid).'"');
         }
         $this->_alternate_topic = $alternate_topic;
+        $this->_alternate_topic_description = $alternate_topic_description;
 
         $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
 
@@ -925,6 +962,7 @@ class Story
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
             $this->_story_image = htmlspecialchars($array['story_image']);
+$this->_story_video = htmlspecialchars($array['story_video']);
             if ($this->_postmode == 'adveditor') {
                 $this->_postmode = 'html';
             }
@@ -932,6 +970,7 @@ class Story
             $this->_plainTextLoadStory($array['title'], $array['introtext'], $array['bodytext']);
             $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
             $this->_story_image = htmlspecialchars($array['story_image']);
+            $this->_story_video = htmlspecialchars($array['story_video']);
         }
 
         if (empty($this->_title) || empty($this->_introtext)) {
@@ -1059,6 +1098,9 @@ class Story
         if ( isset($array['story_image'] ) ) {
            $this->_story_image = htmlspecialchars($array['story_image']);
         }
+if ( isset($array['story_video'] ) ) {
+    $this->_story_video = htmlspecialchars($array['story_video']);
+}
 
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
@@ -1506,12 +1548,19 @@ class Story
             case 'title':
                 $return = $this->_title;
                 break;
+
             case 'subtitle' :
                 $return = $this->_subtitle;
                 break;
+
             case 'story_image' :
                 $return = $this->_story_image;
                 break;
+
+            case 'story_video' :
+                $return = $this->_story_video;
+                break;
+
             case 'draft_flag':
                 if (isset($this->_draft_flag) && ($this->_draft_flag == 1)) {
                     $return = true;
@@ -1631,6 +1680,18 @@ class Story
             case 'alternate_topic':
                 $return = $filter->htmlspecialchars($this->_alternate_topic);
                 break;
+            case 'topic_description' :
+                $return = $filter->filterHTML($this->_topic_description);
+                break;
+            case 'alternate_topic_description' :
+                $return = $filter->filterHTML($this->_alternate_topic_description);
+                break;
+            case 'topic_description_text' :
+                $return = strip_tags($this->_topic_description);
+                break;
+            case 'alternate_topic_description_text' :
+                $return = strip_tags($this->_alternate_topic_description);
+                break;
 
             case 'attribution_url' :
                 $return = $filter->htmlspecialchars($this->_attribution_url);
@@ -1646,6 +1707,10 @@ class Story
 
             case 'story_image' :
                 $return = $filter->htmlspecialchars($this->_story_image);
+                break;
+
+            case 'story_video' :
+                $return = $filter->htmlspecialchars($this->_story_video);
                 break;
 
             case 'subtitle' :

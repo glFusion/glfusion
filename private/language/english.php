@@ -979,6 +979,7 @@ $LANG24 = array(
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
 );
 
 ###############################################################################
@@ -1042,6 +1043,8 @@ $LANG27 = array(
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
     57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description',
 );
 
 ###############################################################################

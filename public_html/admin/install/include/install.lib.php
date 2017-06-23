@@ -1465,6 +1465,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c = config::get_instance();
             $c->del('digg_enabled','Core');
 
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_video` VARCHAR(255) NULL DEFAULT NULL AFTER `story_image`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT NOT NULL DEFAULT '' AFTER `topic`;"
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             $current_fusion_version = '1.6.7';
 
         default:

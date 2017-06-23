@@ -512,8 +512,6 @@ function STORY_list()
               'text' => $LANG_ADMIN['story_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-//              'text' => $LANG_ADMIN['submissions'])
         );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
@@ -699,8 +697,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
               'text' => $LANG_ADMIN['story_list']),
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
               'text' => $LANG24[5],'active'=>true),
-//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-//              'text' => $LANG_ADMIN['submissions']),
         );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
@@ -930,6 +926,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var('show_topic_icon_checked', '');
     }
     $story_templates->set_var('story_image_url',$story->EditElements('story_image'));
+    $story_templates->set_var('story_video_url',$story->EditElements('story_video'));
 
     $story_templates->set_var('lang_draft', $LANG24[34]);
     if ($story->EditElements('draft_flag')) {

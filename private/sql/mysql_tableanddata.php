@@ -392,6 +392,7 @@ CREATE TABLE {$_TABLES['stories']} (
   tid varchar(128) NOT NULL default 'General',
   alternate_tid varchar(128) NULL DEFAULT NULL,
   story_image varchar(128) default NULL,
+  story_video varchar(128) default NULL,
   date datetime default NULL,
   title varchar(128) default NULL,
   subtitle varchar(128) default NULL,
@@ -505,6 +506,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['topics']} (
   tid varchar(128) NOT NULL default '',
   topic varchar(128) default NULL,
+  description text default '' NOT NULL,
   imageurl varchar(255) default NULL,
   sortnum mediumint(8) default NULL,
   limitnews tinyint(3) default NULL,

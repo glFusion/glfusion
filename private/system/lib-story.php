@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Story-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -220,15 +220,20 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
         }
         $topicname = $story->DisplayElements('topic');
+        $topic_description = $story->DisplayElements('topic_description');
+        $alttopic = '';
+        $alttopic_description = '';
         if ( $story->DisplayElements('alternate_tid')  != NULL ) {
-            $alttopic = DB_getItem( $_TABLES['topics'], 'topic', "tid = '".DB_escapeString($story->DisplayElements('alternate_tid'))."'" );
-        } else {
-            $alttopic = '';
+            $alttopic = $story->DisplayElements('alternate_topic');
+            $alttopic_description = $story->DisplayElements('alternate_topic_description');
         }
         $article->set_var('story_topic_id', $story->DisplayElements('tid'));
         $article->set_var('alt_story_topic_id', $story->DisplayElements('alternate_tid'));
         $article->set_var('story_topic_name', $topicname);
         $article->set_var('story_alternate_topic_name',$alttopic);
+        $article->set_var('story_topic_description',$topic_description);
+        $article->set_var('story_alternate_topic_description',$alttopic_description);
+        $article->set_var('story_topic_description_text',$story->DisplayElements('topic_description_text'));
 
         $article->set_var('story_subtitle',$story->DisplayElements('subtitle'));
 
@@ -249,8 +254,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var('lang_source',$LANG01['source']);
 
         $story_image = $story->DisplayElements('story_image');
+        $story_video = $story->DisplayElements('story_video');
 
         $article->set_var('story_image',$story_image);
+        $article->set_var('story_video',$story_video);
 
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
         $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');

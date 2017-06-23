@@ -348,7 +348,9 @@
 								{image_form_elements}
 							</fieldset>
 						</div>
+
 						<div class="uk-width-medium-1-2">
+{# begin story image support #}
 							<fieldset>
 								<legend>{$LANG24[95]}</legend>
 							</fieldset>
@@ -367,6 +369,38 @@
 								<iframe src="{site_url}/ckeditor/plugins/fileman/index.html?integration=custom&type=files&txtFieldId=story_image" style="width:100%;height:100%" frameborder="0">
 								</iframe>
 							</div>
+{# end of story image #}
+
+{# story video support #}
+							<fieldset>
+								<legend>{$LANG24[125]}</legend>
+							</fieldset>
+{!if story_video_url}
+							<div id="story_video_img">
+								<video class="uk-responsive-width" controls="controls" preload="auto">
+								  <source type="video/mp4" src="{story_video_url}" />
+								    <!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+								    <object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+								      <param name="movie" value="{player_url}flashmediaelement.swf" />
+								      <param name="flashvars" value="controls=true&file={movie}" />
+								      <!-- Image as a last resort -->
+								      <img src="{story_video_url}" width="320" height="160" title="No video playback capabilities" />
+								    </object>
+								</video>
+							</div>
+{!else}
+							<div id="story_video_img">
+								<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">
+							</div>
+{!endif}
+							<div class="uk-clearfix"></div>
+							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryVideo();return false;" value="{$LANG24[96]}">Set Video</button>
+							<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryVideo();return false;" value="{$LANG24[97]}">Remove Video</button>
+							<input type="hidden" value="{story_video_url}" id="story_video" name="story_video">
+							<div id="storyVideo" style="display: none;">
+								<iframe src="{site_url}/ckeditor/plugins/fileman/video.html?integration=custom&type=files&txtFieldId=story_video" style="width:100%;height:100%" frameborder="0"></iframe>
+							</div>
+{# end story video support #}
 						</div>
 					</div>
 				</div>
@@ -504,6 +538,7 @@
 		</div>
 	</form>
 </div>
+
 <script type="text/javascript">
 	var archiveTest = {showarchivedisabled};
 	var commentTest = {showcmtclosedisabled};
@@ -525,6 +560,31 @@
 		document.frmstory.cmt_close_minute.disabled=true;
 		document.frmstory.cmt_close_ampm.disabled=true;
 	}
+/*
+  $('video,audio').mediaelementplayer({
+      defaultVideoWidth: 480,
+      defaultVideoHeight: 270,
+      videoWidth: -1,
+      videoHeight: -1,
+      audioWidth: 400,
+      audioHeight: 30,
+      startVolume: 0.8,
+      loop: false,
+      enableAutosize: true,
+      features: ['playpause','progress','current','duration','tracks','volume','fullscreen'],
+      alwaysShowControls: false,
+      iPadUseNativeControls: false,
+      iPhoneUseNativeControls: false,
+      AndroidUseNativeControls: false,
+      alwaysShowHours: false,
+      showTimecodeFrameCount: false,
+      framesPerSecond: 25,
+      enableKeyboard: true,
+      pauseOtherPlayers: true,
+      pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
+      keyActions: []
+  });
+*/
 	function openStoryImage(){
 		$('#storyImage').dialog({modal:true, width:875,height:600});
 	}
@@ -535,6 +595,40 @@
 		$(document).find('#story_image_img').attr('src', '{site_url}/images/placeholder.png');
 		$(document).find('#story_image').attr('value', '');
 	}
+	function openStoryVideo(){
+		$('#storyVideo').dialog({modal:true, width:875,height:600});
+	}
+	function closeStoryVideo(){
+		$('#storyVideo').dialog('close');
+    $('video,audio').mediaelementplayer({
+        defaultVideoWidth: 480,
+        defaultVideoHeight: 270,
+        videoWidth: -1,
+        videoHeight: -1,
+        audioWidth: 400,
+        audioHeight: 30,
+        startVolume: 0.8,
+        loop: false,
+        enableAutosize: true,
+        features: ['playpause','progress','current','duration','tracks','volume','fullscreen'],
+        alwaysShowControls: false,
+        iPadUseNativeControls: false,
+        iPhoneUseNativeControls: false,
+        AndroidUseNativeControls: false,
+        alwaysShowHours: false,
+        showTimecodeFrameCount: false,
+        framesPerSecond: 25,
+        enableKeyboard: true,
+        pauseOtherPlayers: true,
+        pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
+        keyActions: []
+    });
+	}
+	function removeStoryVideo() {
+		$(document).find('#story_video_img').html('<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">');
+		$(document).find('#story_video').attr('value', '');
+	}
+
 	$(function(){
 		$("#title").characterCounter({
 			limit: '128',
@@ -562,6 +656,7 @@
 		});
 	});
 	$("#frmstory").validate();
+
 </script>
 <script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}
