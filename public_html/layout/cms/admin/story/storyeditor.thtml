@@ -396,6 +396,9 @@
 							<div class="uk-clearfix"></div>
 							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryVideo();return false;" value="{$LANG24[96]}">Set Video</button>
 							<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryVideo();return false;" value="{$LANG24[97]}">Remove Video</button>
+
+							<input class="uk-margin-large-left" type="checkbox" name="sv_autoplay" id="sv_autoplay" value="1" {autoplay_is_checked} ><span class=".uk-form-help-inline"> {$LANG24[126]}</span>
+
 							<input type="hidden" value="{story_video_url}" id="story_video" name="story_video">
 							<div id="storyVideo" style="display: none;">
 								<iframe src="{site_url}/ckeditor/plugins/fileman/video.html?integration=custom&type=files&txtFieldId=story_video" style="width:100%;height:100%" frameborder="0"></iframe>

@@ -255,9 +255,15 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $story_image = $story->DisplayElements('story_image');
         $story_video = $story->DisplayElements('story_video');
+        $sv_autoplay = $story->DisplayElements('sv_autoplay');
 
         $article->set_var('story_image',$story_image);
         $article->set_var('story_video',$story_video);
+        if ( $sv_autoplay ) {
+            $article->set_var('autoplay',"autoplay");
+        } else {
+            $article->unset_var('autoplay');
+        }
 
         $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
         $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');

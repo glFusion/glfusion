@@ -927,6 +927,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     $story_templates->set_var('story_image_url',$story->EditElements('story_image'));
     $story_templates->set_var('story_video_url',$story->EditElements('story_video'));
+    if ($story->EditElements('sv_autoplay')) {
+        $story_templates->set_var('autoplay_is_checked', 'checked="checked"');
+    } else {
+        $story_templates->set_var('autoplay_is_checked', '');
+    }
 
     $story_templates->set_var('lang_draft', $LANG24[34]);
     if ($story->EditElements('draft_flag')) {

@@ -980,6 +980,7 @@ $LANG24 = array(
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
+    126 => 'Auto Play',
 );
 
 ###############################################################################

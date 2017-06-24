@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Allow topics to have descriptions
+  - Story Video support
   - Allow for alternate admin/ directory
   - Updated upgrade file removal to use proper paths if different from detaults
   - Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page

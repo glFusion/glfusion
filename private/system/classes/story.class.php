@@ -154,6 +154,7 @@ class Story
     var $_subtitle;
     var $_story_image = '';
     var $_story_video = '';
+    var $_sv_autoplay = 0;
 
     var $_attribution_url = '';
     var $_attribution_name = '';
@@ -194,7 +195,8 @@ class Story
            'tid' => 1,
            'alternate_tid' => 1,
            'story_image' => 1,
-            'story_video' => 1,
+           'story_video' => 1,
+           'sv_autoplay' => 1,
            'date' => 1,
            'title' => 1,
            'subtitle' => 1,
@@ -267,6 +269,12 @@ class Story
                 STORY_AL_CHECKBOX,
                 '_draft_flag'
               ),
+           'sv_autoplay' => array
+              (
+                STORY_AL_CHECKBOX,
+                '_sv_autoplay'
+              ),
+
            'statuscode' => array
               (
                 STORY_AL_NUMERIC,
@@ -962,7 +970,7 @@ class Story
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') ) {
             $this->_htmlLoadStory($array['title'], $array['introtext'], $array['bodytext']);
             $this->_story_image = htmlspecialchars($array['story_image']);
-$this->_story_video = htmlspecialchars($array['story_video']);
+            $this->_story_video = htmlspecialchars($array['story_video']);
             if ($this->_postmode == 'adveditor') {
                 $this->_postmode = 'html';
             }
@@ -971,6 +979,11 @@ $this->_story_video = htmlspecialchars($array['story_video']);
             $this->_subtitle = htmlspecialchars(strip_tags(COM_checkWords($array['subtitle'])));
             $this->_story_image = htmlspecialchars($array['story_image']);
             $this->_story_video = htmlspecialchars($array['story_video']);
+        }
+        if ( isset($array['sv_autoplay'] ) ) {
+            $this->_sv_autoplay = (int) $array['sv_autoplay'];
+        } else {
+            $this->_sv_autoplay = 0;
         }
 
         if (empty($this->_title) || empty($this->_introtext)) {
@@ -1098,9 +1111,12 @@ $this->_story_video = htmlspecialchars($array['story_video']);
         if ( isset($array['story_image'] ) ) {
            $this->_story_image = htmlspecialchars($array['story_image']);
         }
-if ( isset($array['story_video'] ) ) {
-    $this->_story_video = htmlspecialchars($array['story_video']);
-}
+        if ( isset($array['story_video'] ) ) {
+            $this->_story_video = htmlspecialchars($array['story_video']);
+        }
+        if ( isset($array['sv_autoplay'] ) ) {
+            $this->_sv_autoplay = 1;
+        }
 
         if (empty($this->_title) || empty($this->_introtext)) {
             return STORY_EMPTY_REQUIRED_FIELDS;
@@ -1560,6 +1576,13 @@ if ( isset($array['story_video'] ) ) {
             case 'story_video' :
                 $return = $this->_story_video;
                 break;
+
+            case 'sv_autoplay' :
+                if ( isset($this->_sv_autoplay) && ($this->_sv_autoplay == 1 ) ) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 'draft_flag':
                 if (isset($this->_draft_flag) && ($this->_draft_flag == 1)) {
@@ -2189,6 +2212,12 @@ if ( isset($array['story_video'] ) ) {
             $this->_draft_flag = 1;
         } elseif ($this->_draft_flag != 1) {
             $this->_draft_flag = 0;
+        }
+
+        if ($this->_sv_autoplay === 'on') {
+            $this->_sv_autoplay = 1;
+        } elseif ($this->_sv_autoplay != 1) {
+            $this->_sv_autoplay = 0;
         }
 
         if ($this->_show_topic_icon === 'on') {

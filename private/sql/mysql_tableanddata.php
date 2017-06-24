@@ -393,6 +393,7 @@ CREATE TABLE {$_TABLES['stories']} (
   alternate_tid varchar(128) NULL DEFAULT NULL,
   story_image varchar(128) default NULL,
   story_video varchar(128) default NULL,
+  sv_autoplay tinyint(3) NOT NULL default '0',
   date datetime default NULL,
   title varchar(128) default NULL,
   subtitle varchar(128) default NULL,
