@@ -19,35 +19,56 @@
   {!endif}
 {!endif}
 
-{!if story_video}
-	<video class="uk-responsive-width uk-margin-bottom" controls="controls" preload="auto"
-  {!if story_image}
-		  poster="{story_image}"
-  {!endif}
-	>
-	  <source type="video/mp4" src="{story_video}"/>
-	    <!-- Flash fallback for non-HTML5 browsers without JavaScript -->
-	    <object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
-	      <param name="movie" value="{player_url}flashmediaelement.swf" />
-	      <param name="flashvars" value="controls=true&file={story_video}" />
-	      <!-- Image as a last resort -->
-	      <img src="{story_image}" width="320" height="160" title="No video playback capabilities" />
-	    </object>
-	</video>
-{!else}
-	{!if story_image}
-		{!if story_url}
-				<a href="{story_url}">
+{# begin story image / video #}
+{!!if {story_display} == 'article' !!}
+	{!if story_video}
+		<video class="uk-responsive-width uk-margin-bottom" controls="controls" preload="auto"
+	  {!if story_image}
+			  poster="{story_image}"
+	  {!endif}
+	  {!if autoplay}
+		autoplay="{autoplay}"
 		{!endif}
-					<div class="uk-margin-bottom">
-						<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
-					</div>
-		{!if story_url}
-				</a>
+		>
+		  <source type="video/mp4" src="{story_video}"/>
+		    <!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+		    <object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+		      <param name="movie" value="{player_url}flashmediaelement.swf" />
+		      <param name="flashvars" value="controls=true&file={story_video}" />
+		      <!-- Image as a last resort -->
+		      <img src="{story_image}" width="320" height="160" title="No video playback capabilities" />
+		    </object>
+		</video>
+	{!else}
+		{!if story_image}
+			{!if story_url}
+					<a href="{story_url}">
+			{!endif}
+						<div class="uk-margin-bottom">
+							<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+						</div>
+			{!if story_url}
+					</a>
+			{!endif}
 		{!endif}
+
 	{!endif}
 
+{!else}
+		{!if story_image}
+			{!if story_url}
+					<a href="{story_url}">
+			{!endif}
+						<div class="uk-margin-bottom">
+							<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+						</div>
+			{!if story_url}
+					</a>
+			{!endif}
+		{!endif}
 {!endif}
+
+{# end of story video / image #}
 
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
