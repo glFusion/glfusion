@@ -507,7 +507,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['topics']} (
   tid varchar(128) NOT NULL default '',
   topic varchar(128) default NULL,
-  description text default '' NOT NULL,
+  description text,
   imageurl varchar(255) default NULL,
   sortnum mediumint(8) default NULL,
   limitnews tinyint(3) default NULL,
