@@ -1646,7 +1646,7 @@ function glfusion_167()
 
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_video` VARCHAR(255) NULL DEFAULT NULL AFTER `story_image`;";
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
-    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT `topic`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
 
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
