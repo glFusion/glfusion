@@ -1350,6 +1350,12 @@ function SP_render_content ($sp_content, $sp_php)
         }
     }
 
+    // check for query here...
+    $highlight = isset($_GET['query']) ? trim(COM_applyFilter($_GET['query'])) : '';
+    if ( $highlight != '' ) {
+        $retval = COM_highlightQuery($retval,$highlight);
+    }
+
     return $retval;
 }
 
