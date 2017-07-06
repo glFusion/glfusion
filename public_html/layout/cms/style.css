@@ -2589,3 +2589,8 @@ input.error {
 	padding:5px;
 	margin-right: 10px;
 }
+
+/* search highlight */
+span.highlight {
+	background-color:chartreuse;
+}
