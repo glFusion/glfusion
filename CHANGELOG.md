@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Update CKEditor to v4.7.1
   - Media Gallery - Removed HTML from hover caption on lightbox theme
   - Fixed search string highlighting in stories, forum and static pages
   - story rendering optimizations
