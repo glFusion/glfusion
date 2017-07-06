@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Shows articles in various formats.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,7 +70,7 @@ if (isset ($_POST['mode'])) {
         $order = COM_applyFilter ($_POST['order']);
     }
     if (isset ($_POST['query'])) {
-        $query = COM_applyFilter ($_POST['query']);
+        $query = trim(COM_applyFilter ($_POST['query']));
     }
     if (isset ($_POST['reply'])) {
         $reply = COM_applyFilter ($_POST['reply']);
@@ -83,7 +83,7 @@ if (isset ($_POST['mode'])) {
         $order = COM_applyFilter ($_GET['order']);
     }
     if (isset ($_GET['query'])) {
-        $query = COM_applyFilter ($_GET['query']);
+        $query = trim(COM_applyFilter ($_GET['query']));
     }
     if (isset ($_GET['reply'])) {
         $reply = COM_applyFilter ($_GET['reply']);
