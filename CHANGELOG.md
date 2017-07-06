@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Media Gallery - Removed HTML from hover caption on lightbox theme
   - Fixed search string highlighting in stories, forum and static pages
   - story rendering optimizations
   - Allow topics to have descriptions
