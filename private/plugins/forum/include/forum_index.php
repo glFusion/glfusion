@@ -167,7 +167,7 @@ function forum_index()
             $returnPostfix = '?cat='.$dCat;
         }
 
-        $html_query = strip_tags($_REQUEST['query']);
+        $html_query = trim(strip_tags($_REQUEST['query']));
         $query = DB_escapeString($_REQUEST['query']);
         $report->set_var (array(
                 'form_action'   => $_CONF['site_url'] . '/forum/index.php?op=search',
@@ -224,7 +224,7 @@ function forum_index()
                         $P['subject'] = COM_checkWords($P['subject']);
                     }
                     $postdate = COM_getUserDateTimeFormat($P['date']);
-                    $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;highlight='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
+                    $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;query='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
                     if ( $P['pid'] != 0 ) {
                         $pResult = DB_query("SELECT views, replies FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['pid']);
                         list($views,$replies) = DB_fetchArray($pResult);

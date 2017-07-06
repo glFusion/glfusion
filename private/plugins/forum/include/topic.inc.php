@@ -41,9 +41,8 @@ if (!defined ('GVERSION')) {
 
 USES_lib_user();
 
-function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) {
+function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$query='') {
     global $_FF_CONF,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02,$_SYSTEM;
-    global $highlight;
     global $forumfiles;
     global $canPost;
 
@@ -197,7 +196,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $min_height = $min_height + 30;
     }
 
-    $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
+    $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status'],$query);
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
     $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
@@ -229,9 +228,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                 'LANG_edit' => ''));
     }
 
-    if ( $highlight != '' ) {
-        $showtopic['subject'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['subject']);
-        $showtopic['comment'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['comment']);
+    if ( $query != '' ) {
+        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
     }
 
     if ($showtopic['pid'] == 0) {

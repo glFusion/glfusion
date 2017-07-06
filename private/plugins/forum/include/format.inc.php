@@ -309,7 +309,7 @@ function bbcode_cleanHTML($str) {
 }
 
 /* for display */
-function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
+function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query = '') {
     global $_CONF, $_FF_CONF, $_ff_pm;
 
     $bbcode = new StringParser_BBCode ();
@@ -334,6 +334,11 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     }
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
+    }
+
+    if ( $query != '' ) {
+        $filter->query = $query;
+        $bbcode->addParser(array('block','inline','listiem'), array(&$filter,'highlightQuery'));
     }
 
     if ( ! ($status & DISABLE_SMILIES ) ) {

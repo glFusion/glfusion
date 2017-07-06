@@ -306,7 +306,7 @@ while ($topicRec = DB_fetchArray($result) ) {
     } else {
         $topicRec['is_readonly'] = $viewtopic['is_readonly'];
         $topicRec['locked'] = $viewtopic['locked'];
-        FF_showtopic($topicRec,$mode,$onetwo,$page,$topicTemplate);
+        FF_showtopic($topicRec,$mode,$onetwo,$page,$topicTemplate,$highlight);
         $topicTemplate->parse('trow', 'topicrow',true);
         $onetwo = ($onetwo == 1) ? 2 : 1;
     }
