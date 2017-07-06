@@ -66,6 +66,8 @@ class sanitizer
     var $_censorData     = true;    // do we or don't we censor data
     var $filterMethod    = 'htmlpurifier'; // or htmlawed
 
+    var $query = '';
+
     public function __construct( )
     {
         global $_SYSTEM;
@@ -738,6 +740,10 @@ class sanitizer
         }
         $codeblock = '<pre>' . @htmlspecialchars($content,ENT_NOQUOTES, $this->encoding) . '</pre>';
         return $codeblock;
+    }
+
+    function highlightQuery($str){
+        return COM_highlightQuery( $str, $this->query);
     }
 
 }
