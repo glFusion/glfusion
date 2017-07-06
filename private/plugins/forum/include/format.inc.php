@@ -338,7 +338,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
 
     if ( $query != '' ) {
         $filter->query = $query;
-        $bbcode->addParser(array('block','inline','listiem'), array(&$filter,'highlightQuery'));
+        $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
     }
 
     if ( ! ($status & DISABLE_SMILIES ) ) {
