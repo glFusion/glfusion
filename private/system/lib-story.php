@@ -169,8 +169,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     $article->set_var( 'story_display', $story_display, false, true );
 
-    PLG_templateSetVars($article_filevar,$article);
-
     if (( $index == 'n' ) || ( $index == 'p' )) {  // full article view or preview
         if ( empty( $bodytext )) {
             $article->set_var( 'story_introtext', $introtext,false,true );
@@ -208,7 +206,39 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var('rating_bar','',false,true );
     }
 
-    // begin instance caching...
+    $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
+    $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');
+
+    if (( !isset( $_USER['noicons'] ) || ( $_USER['noicons'] != 1 )) && $story->DisplayElements('show_topic_icon') == 1 ) {
+        $imageurl = $story->DisplayElements('imageurl');
+        if ( !empty( $imageurl )) {
+            $imageurl = COM_getTopicImageUrl( $imageurl );
+            $article->set_var( 'story_topic_image_url', $imageurl, false,true );
+            $article->set_var( 'topic_url',$topicurl);
+            $topicimage = '<img src="' . $imageurl . '" class="float'
+                        . $_CONF['article_image_align'] . '" alt="'
+                        . $topicname . '" title="' . $topicname . '" />';
+            $article->set_var( 'story_anchortag_and_image',
+                COM_createLink(
+                    $topicimage,
+                    $topicurl,
+                    array('rel'=>"category tag")
+                ), false,true
+            );
+            $article->set_var( 'story_topic_image', $topicimage, false,true );
+            $topicimage_noalign = '<img src="' . $imageurl . '" alt="'
+                        . $topicname . '" title="' . $topicname . '" />';
+            $article->set_var( 'story_anchortag_and_image_no_align',
+                COM_createLink(
+                    $topicimage_noalign,
+                    $topicurl,
+                    array('rel'=>"category tag")
+                ), false,true
+            );
+            $article->set_var( 'story_topic_image_no_align',
+                               $topicimage_noalign, false,true );
+        }
+    }
 
     $hash = CACHE_security_hash();
     $instance_id = 'story_'.$story->getSid().'_'.$index.'_'.$article_filevar.'_'.$hash.'_'.$_USER['theme'];
@@ -326,39 +356,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->unset_var('autoplay');
         }
 
-        $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('tid');
-        $alttopicurl = $_CONF['site_url'] . '/index.php?topic=' . $story->DisplayElements('alternate_tid');
-        if (( !isset( $_USER['noicons'] ) OR ( $_USER['noicons'] != 1 )) AND
-                $story->DisplayElements('show_topic_icon') == 1 ) {
-            $imageurl = $story->DisplayElements('imageurl');
-            if ( !empty( $imageurl )) {
-                $imageurl = COM_getTopicImageUrl( $imageurl );
-                $article->set_var( 'story_topic_image_url', $imageurl );
-                $article->set_var( 'topic_url',$topicurl);
-                $topicimage = '<img src="' . $imageurl . '" class="float'
-                            . $_CONF['article_image_align'] . '" alt="'
-                            . $topicname . '" title="' . $topicname . '" />';
-                $article->set_var( 'story_anchortag_and_image',
-                    COM_createLink(
-                        $topicimage,
-                        $topicurl,
-                        array('rel'=>"category tag")
-                    )
-                );
-                $article->set_var( 'story_topic_image', $topicimage );
-                $topicimage_noalign = '<img src="' . $imageurl . '" alt="'
-                            . $topicname . '" title="' . $topicname . '" />';
-                $article->set_var( 'story_anchortag_and_image_no_align',
-                    COM_createLink(
-                        $topicimage_noalign,
-                        $topicurl,
-                        array('rel'=>"category tag")
-                    )
-                );
-                $article->set_var( 'story_topic_image_no_align',
-                                   $topicimage_noalign );
-            }
-        }
         $article->set_var( 'story_topic_url', $topicurl );
         $article->set_var( 'alt_story_topic_url',$alttopicurl);
 
@@ -672,6 +669,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     }
+    PLG_templateSetVars($article_filevar,$article);
     $article->parse('finalstory',$article_filevar);
     SESS_clearContext();
     return $article->finish( $article->get_var( 'finalstory' ));

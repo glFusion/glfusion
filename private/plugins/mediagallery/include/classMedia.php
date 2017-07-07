@@ -706,6 +706,7 @@ class Media {
             $caption .= '<br />('.$this->id.')';
         }
         $L->set_var('caption', $caption);
+        $L->set_var('caption_text', COM_getTextContent($caption));
     	$L->set_var('id','id' . rand());
 
     	$L->parse('media_link_start','media_link');
