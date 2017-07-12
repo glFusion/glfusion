@@ -151,6 +151,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_counter', $storycounter, false, true );
         $article->set_var( 'adblock',PLG_displayAdBlock('story',$storycounter), false, true);
     }
+    $topicname = $story->DisplayElements('topic');
 
     switch ($index) {
         case 'p' :
@@ -310,7 +311,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var('follow_me',SOC_getFollowMeIcons( $story->DisplayElements('uid') ));
             }
         }
-        $topicname = $story->DisplayElements('topic');
         $topic_description = $story->DisplayElements('topic_description');
         $alttopic = '';
         $alttopic_description = '';
