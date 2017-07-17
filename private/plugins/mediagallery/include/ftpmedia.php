@@ -354,7 +354,7 @@ function MG_FTPpickFiles( $album_id, $dir, $purgefiles, $recurse ) {
     } else {
         $album_jumpbox .= '<option disabled value="0">' . $LANG_MG01['root_level'] . '</option>';
     }
-    $valid_albums += $MG_albums[0]->buildJumpBox(0,3);
+    $valid_albums .= $MG_albums[0]->buildJumpBox(0,3);
     $album_jumpbox .= '</select>';
 
     $T->set_var(array(
