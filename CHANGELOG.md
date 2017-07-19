@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Links Plugin - link auto tag did not honor Open External URL in New Window configuration setting
   - Update CKEditor to v4.7.1
   - Media Gallery - Removed HTML from hover caption on lightbox theme
   - Fixed search string highlighting in stories, forum and static pages
