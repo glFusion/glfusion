@@ -1388,6 +1388,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         if ($type == 'article') {
             CACHE_remove_instance('story_'.$sid);
         }
+        PLG_itemSaved($cid, 'comment');
+
         // check to see if user has subscribed....
 
         if ( !COM_isAnonUser() ) {
