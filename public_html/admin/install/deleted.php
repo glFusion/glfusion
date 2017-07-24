@@ -32,6 +32,10 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
+// 1.6.7
+    'lib/utf8/docs/examples/',
+    'lib/utf8/docs/',
+
     'lib/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/',
     'system/classes/openid/',
     'system/pear/Auth/',
