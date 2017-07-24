@@ -787,7 +787,7 @@ function USER_layoutPanel($U, $newuser = 0)
             $usertheme = $U['theme'];
         }
         $themeFiles = COM_getThemes ();
-        usort ($themeFiles,create_function ('$a,$b', 'return strcasecmp($a,$b);'));
+        usort ($themeFiles,function ($a,$b) { return strcasecmp($a,$b); } );
 
         foreach ($themeFiles as $theme) {
             $selection .= '<option value="' . $theme . '"';
