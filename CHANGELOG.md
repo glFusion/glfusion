@@ -1,4 +1,7 @@
 ## v1.6.7 (unreleased)
+  - General code optimizations
+  - Update HTMLPurifier to v4.9.3
+  - Updated gravatar link to be ssl / non-ssl agnostic
   - Links Plugin - link auto tag did not honor Open External URL in New Window configuration setting
   - Update CKEditor to v4.7.1
   - Media Gallery - Removed HTML from hover caption on lightbox theme
