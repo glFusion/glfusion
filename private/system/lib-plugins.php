@@ -955,7 +955,7 @@ function PLGINT_getOptionsforMenus($var_names, $required_names, $function_name)
         $function = $function_name . $pi_name;
         if (function_exists ($function)) {
             $plg_array = $function();
-            if (($plg_array !== false) && (count ($plg_array) > 0)) {
+            if (($plg_array !== false) && (is_array($plg_array) && count ($plg_array) > 0)) {
                 // Check if plugin is returning a single record array or multiple records
                 $entries = @count ($plg_array[0]);
                 $sets_array = array();
