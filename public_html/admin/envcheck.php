@@ -846,10 +846,9 @@ function _phpinfo()
     $retval = "<div class='phpinfodisplay' style=\"font-size:1.2em;width:100%\"><style type='text/css'>\n" .
         join( "\n",
             array_map(
-                create_function(
-                    '$i',
-                    'return ".phpinfodisplay " . preg_replace( "/,/", ",.phpinfodisplay ", $i );'
-                    ),
+                function($i) {
+                    return ".phpinfodisplay " . preg_replace( "/,/", ",.phpinfodisplay ", $i );
+                },
                 preg_split( '/\n/', trim(preg_replace( "/\nbody/", "\n", $matches[1])) )
                 )
             ) .
