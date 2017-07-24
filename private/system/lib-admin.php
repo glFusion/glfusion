@@ -57,14 +57,20 @@ function ADMIN_chkDefault($A = array())
 */
 function ADMIN_sortArray(&$data, $field, $dir='')
 {
-    $asc_sort = "return strnatcmp(\$a['$field'], \$b['$field']);";
-    $desc_sort = "return -strnatcmp(\$a['$field'], \$b['$field']);";
     $dir = strtolower($dir);
-    $dir = (($dir == 'asc') OR ($dir == 'desc')) ? $dir : 'asc';
-    if ($dir == 'asc') {
-        usort($data, create_function('$a,$b', $asc_sort));
+    $dir = (($dir == 'asc') || ($dir == 'desc')) ? $dir : 'asc';
+    usort($data,build_sorter($dir,$field));
+}
+
+function build_sorter($dir, $key) {
+    if ( $dir == 'asc' ) {
+        return function ($a, $b) use ($key) {
+            return strnatcmp($a[$key], $b[$key]);
+        };
     } else {
-        usort($data, create_function('$a,$b', $desc_sort));
+        return function ($a, $b) use ($key) {
+            return -strnatcmp($a[$key], $b[$key]);
+        };
     }
 }
 
