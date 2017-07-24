@@ -552,7 +552,7 @@ function editpreferences()
 
         $themeFiles = COM_getThemes ();
         usort ($themeFiles,
-               create_function ('$a,$b', 'return strcasecmp($a,$b);'));
+               function ($a,$b) { return strcasecmp($a,$b); } );
 
         foreach ($themeFiles as $theme) {
             $selection .= '<option value="' . $theme . '"';

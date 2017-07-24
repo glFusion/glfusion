@@ -891,8 +891,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
 
     if (count($fields) == 0) {
         $retval = array();
-
-        return $retval;
+        return NULL;
     }
 
     if ($sid == '*') {
@@ -1018,6 +1017,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
         $tRet = array_values($retval);
         $retval = $tRet[0];
     }
+    if ( $retval === '' || (is_array($retval) && count($retval) == 0 ) ) return NULL;
 
     return $retval;
 }
@@ -1733,9 +1733,7 @@ function service_get_story($args, &$output, &$svc_msg)
             return PLG_RET_ERROR;
         }
 
-        reset($story->_dbFields);
-
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
             $output[$fieldname] = $story->{$varname};
         }
@@ -1813,11 +1811,9 @@ function service_get_story($args, &$output, &$svc_msg)
 
             $story->_sanitizeData();
 
-            reset($story->_dbFields);
-
             $output_item = array ();
 
-            while (list($fieldname,$save) = each($story->_dbFields)) {
+            foreach ( $story->_dbFields AS $fieldname => $save ) {
                 $varname = '_' . $fieldname;
                 $output_item[$fieldname] = $story->{$varname};
             }

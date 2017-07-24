@@ -450,9 +450,7 @@ class Story
          * from the database result array, doing the quick stripslashes.
          */
 
-        reset($this->_dbFields);
-
-        while (list($fieldname,$save) = each($this->_dbFields)) {
+        foreach ( $this->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $story)) {
@@ -829,13 +827,11 @@ class Story
         $values = ' VALUES (';
         $fields = '';
 
-        reset($this->_dbFields);
-
         /* This uses the database field array to generate a SQL Statement. This
          * means that when adding new fields to save and load, all we need to do
          * is add the field name to the array, and the code will magically cope.
          */
-        while (list($fieldname, $save) = each($this->_dbFields)) {
+        foreach ( $this->_dbFields AS $fieldname => $save ) { 
             if ($save === 1) {
                 $varname = '_' . $fieldname;
                 $sql .= $fieldname . ', ';
@@ -1066,7 +1062,7 @@ class Story
             $this->_comment_expire = 0;
         }
 
-        while (list($key, $value) = each($array)) {
+        foreach ( $array AS $key => $value ) {
             $array[$key] = $value;
         }
 

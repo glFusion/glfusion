@@ -637,11 +637,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $story = new Story();
     if ($action == 'preview' || $action == 'error') {
-        while (list($key, $value) = each($_POST)) {
+        foreach ( $_POST AS $key => $value ) {
             if (!is_array($value)) {
                 $_POST[$key] = $value;
             } else {
-                while (list($subkey, $subvalue) = each($value)) {
+                foreach ( $value AS $subkey => $subvalue ) {
                     $value[$subkey] = $subvalue;
                 }
             }
@@ -1158,11 +1158,11 @@ function STORY_submit($type='')
 
     $args = &$_POST;
 
-    while (list($key, $value) = each($args)) {
+    foreach ( $args AS $key => $value ) {
         if (!is_array($value)) {
             $args[$key] = $value;
         } else {
-            while (list($subkey, $subvalue) = each($value)) {
+            foreach ($value AS $subkey => $subvalue ) {
                 $value[$subkey] = $subvalue;
             }
         }

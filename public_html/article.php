@@ -118,9 +118,8 @@ if ($A['count'] > 0) {
 
     if($result == PLG_RET_OK) {
         /* loadFromArray cannot be used, since it overwrites the timestamp */
-        reset($story->_dbFields);
 
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $output)) {
