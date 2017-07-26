@@ -352,8 +352,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $output = STORY_LOADED_OK;
     $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
     if ( $result == PLG_RET_OK ) {
-        reset($story->_dbFields);
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
             if (array_key_exists($fieldname, $output)) {
                 $story->{$varname} = $output[$fieldname];
@@ -520,9 +519,7 @@ function _createMailStory( $sid )
 
     if($result == PLG_RET_OK) {
         /* loadFromArray cannot be used, since it overwrites the timestamp */
-        reset($story->_dbFields);
-
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $output)) {
@@ -657,8 +654,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $output = STORY_LOADED_OK;
     $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
     if ( $result == PLG_RET_OK ) {
-        reset($story->_dbFields);
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
             if (array_key_exists($fieldname, $output)) {
                 $story->{$varname} = $output[$fieldname];
