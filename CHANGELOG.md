@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - FileMgmt - Fixed error where server side compression / caching could cause network failure error
   - General code optimizations
   - Update HTMLPurifier to v4.9.3
   - Updated gravatar link to be ssl / non-ssl agnostic
