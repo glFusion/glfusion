@@ -3071,6 +3071,7 @@ function COM_formatBlock( $A, $noboxes = false )
     }
 
     if ( $A['type'] == 'portal' ) {
+        if ( !isset($A['date'])) $A['date'] = 0;
         if ( COM_rdfCheck( $A['bid'], $A['rdfurl'], $A['date'], $A['rdflimit'] )) {
             $A['content'] = DB_getItem( $_TABLES['blocks'], 'content',
                                         "bid = '{$A['bid']}'");
