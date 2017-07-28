@@ -532,7 +532,6 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
 
 function AT_sortArray(&$data, $field, $dir='')
 {
-print "here";exit;
     $dir = strtolower($dir);
     $dir = (($dir == 'asc') OR ($dir == 'desc')) ? $dir : 'asc';
     usort($data,at_build_sorter($dir,$field));
