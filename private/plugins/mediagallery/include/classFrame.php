@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Image frames (borders) routines                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -359,8 +359,7 @@ function MG_array_sort($array, $key) {
         $sort_values[$i] = $array[$i][$key];
     }
     asort($sort_values);
-    reset($sort_values);
-    while (list($arr_key, $arr_val) = each($sort_values)) {
+    foreach ( $sort_values AS $arr_key => $arr_val ) {
         $sorted_arr[] = $array[$arr_key];
     }
     return $sorted_arr;

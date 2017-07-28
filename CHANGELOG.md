@@ -15,14 +15,14 @@
   - Allow topics to have descriptions
   - Story Video support
   - Allow for alternate admin/ directory
-  - Updated upgrade file removal to use proper paths if different from detaults
+  - Updated upgrade file removal to use proper paths if different from defaults
   - Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page
   - Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
   - Themes - Added missing UI icons
   - Polls - Fixed issue where the bar width was not properly formatted if locale used a comma separator for decimals
   - Calendar - Fixed error where calendar submissions did not show in moderation queue
   - CKeditor - Set default font name / size in menu bar
-  - Links - Make Validate Now link more prominate
+  - Links - Make Validate Now link more prominent
   - StaticPages - Increased max size of page content from ~64kb to ~16MB
   - Bad Behavior - New whitelist / blacklist management via online interface
   - Bad Behavior - Performance improvements
@@ -30,11 +30,10 @@
   - What's New for stories did not display correct timeframe
   - Reorganized caching / template code into two separate files
   - Removed Published Slider in story editor - it did not degrade well on non-supported browsers
-  - Forum - Improved formatting on non-diget email notifications
+  - Forum - Improved formatting on non-digest email notifications
   - Forum - Add copy to clipboard for post permalink
   - Forum - Added tooltip (hover) for bookmark / remove bookmark
   - Media Gallery - new copy to clipboard for media id
-  - Update ckeditor to v4.7.0
   - CKeditor - Add SCAYT (Spell Check As You Type) to menu bar on all entry types
   - CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
   - Added support for GraphicsMagick Image processing library
