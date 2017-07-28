@@ -5153,20 +5153,20 @@ function COM_makeClickableLinks( $text )
 {
     // Matches http:// or https:// or ftp:// or ftps://
     $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:(?:ht|f)tps?:\/{2})(?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)+)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
-    $replace = create_function(
-        '$match',
-        'return COM_makeClickableLinksCallback(\'\', $match[1]);'
-    );
 
-    $text = preg_replace_callback($regex, $replace, $text);
+    $text = preg_replace_callback($regex,
+        function($match) {
+            return COM_makeClickableLinksCallback('', $match[1]);
+        },
+        $text);
 
     $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:[a-z0-9]+\.)*[a-z0-9-]+\.(?:[a-z]{2,}|xn--[0-9a-z]+)(?:[\/?#](?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)*)?)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
-    $replace = create_function(
-        '$match',
-        'return COM_makeClickableLinksCallback(\'http://\', $match[1]);'
-    );
 
-    $text = preg_replace_callback($regex, $replace, $text);
+    $text = preg_replace_callback($regex,
+        function($match) {
+            return COM_makeClickableLinksCallback('http://', $match[1]);
+        },
+        $text);
 
     return $text;
 }
