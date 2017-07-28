@@ -66,6 +66,7 @@ $obsoletePublicDir = array(
 $obsoletePrivateFiles = array(
 // 1.6.7
     'plugins/bad_behavior2/templates/ban_entry.thtml',
+    'lib/geshi/geshi/css-gen.cfg',
 
 // 1.6.5
 
