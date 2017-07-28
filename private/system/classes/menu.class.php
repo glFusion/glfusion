@@ -535,6 +535,7 @@ class menuElement {
                         if ( count( $plugin_menu ) == 0 ) {
                             $this->access = 0;
                         } else {
+                            ksort($plugin_menu);
                             for( $i = 1; $i <= count( $plugin_menu ); $i++ ) {
                                 $url = current($plugin_menu);
                                 $label = key($plugin_menu);

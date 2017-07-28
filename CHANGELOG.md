@@ -1,4 +1,5 @@
 ## v1.6.7 (unreleased)
+  - Properly sort plugin menu in alphabetical order by label
   - FileMgmt - Fixed error where server side compression / caching could cause network failure error
   - General code optimizations
   - Update HTMLPurifier to v4.9.3
