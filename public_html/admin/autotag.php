@@ -532,16 +532,24 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
 
 function AT_sortArray(&$data, $field, $dir='')
 {
-    $asc_sort = "return strnatcmp(\$a['$field'], \$b['$field']);";
-    $desc_sort = "return -strnatcmp(\$a['$field'], \$b['$field']);";
+print "here";exit;
     $dir = strtolower($dir);
     $dir = (($dir == 'asc') OR ($dir == 'desc')) ? $dir : 'asc';
-    if ($dir == 'asc') {
-        usort($data, create_function('$a,$b', $asc_sort));
+    usort($data,at_build_sorter($dir,$field));
+}
+
+function at_build_sorter($dir, $key) {
+    if ( $dir == 'asc' ) {
+        return function ($a, $b) use ($key) {
+            return strnatcmp($a[$key], $b[$key]);
+        };
     } else {
-        usort($data, create_function('$a,$b', $desc_sort));
+        return function ($a, $b) use ($key) {
+            return -strnatcmp($a[$key], $b[$key]);
+        };
     }
 }
+
 
 // toggle a tag's is_enabled status
 

@@ -1,4 +1,6 @@
 ## v1.6.7 (unreleased)
+  - Updated htmLawed to v1.2.3
+  - Update GeSHi Library to v1.0.9.0
   - Additional security protections for external links
   - Properly sort plugin menu in alphabetical order by label
   - FileMgmt - Fixed error where server side compression / caching could cause network failure error

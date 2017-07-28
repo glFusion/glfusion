@@ -1408,7 +1408,7 @@ function configmanager_select_theme_helper()
     $themeFiles = COM_getThemes(true);
 
     usort($themeFiles,
-          create_function('$a,$b', 'return strcasecmp($a,$b);'));
+          function($a,$b) { return strcasecmp($a,$b); });
 
     foreach ($themeFiles as $theme) {
         $words = explode ('_', $theme);
