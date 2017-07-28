@@ -3235,9 +3235,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
             $enclosure = $item->get_enclosure();
 
             if ($link != '') {
-                $content = COM_createLink($title, $link, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $link, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } elseif ($enclosure != '') {
-                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } else {
                 $content = $title;
             }

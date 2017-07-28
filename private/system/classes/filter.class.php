@@ -510,7 +510,7 @@ class sanitizer
                         $link = $this->sanitizeUrl( $link );
                         if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($protocol.'://'.$link,$_CONF['site_url']) === false ) {
                             // external
-                            $target = ' target="_blank" ';
+                            $target = ' target="_blank" rel="noopener noreferrer" ';
                         } else {
                             $target = '';
                         }
@@ -530,7 +530,7 @@ class sanitizer
                         global $_CONF;
                         if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
                             // external
-                            $target = ' target="_blank" ';
+                            $target = ' target="_blank" rel="noopener noreferrer" ';
                         } else {
                             $target = '';
                         }
@@ -543,7 +543,7 @@ class sanitizer
                         global $_CONF;
                         if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
                             // external
-                            $target = ' target="_blank" ';
+                            $target = ' target="_blank" rel="noopener noreferrer" ';
                         } else {
                             $target = '';
                         }

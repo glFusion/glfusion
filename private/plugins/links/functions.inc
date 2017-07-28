@@ -206,6 +206,7 @@ function plugin_autotags_links($op, $content = '', $autotag = '')
                              );
                 if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($siteurl,$_CONF['site_url']) === false ) {
                     $attr['target'] = '_blank';
+                    $attr['rel'] = 'noopener noreferrer';
                 }
 
                 $link = COM_createLink($linktext, $url, $attr);

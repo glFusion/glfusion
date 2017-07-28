@@ -404,7 +404,7 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
 
     if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
-        $target = ' target="_blank" ';
+        $target = ' target="_blank" rel="noopener noreferrer" ';
     }
     $url = COM_sanitizeUrl( $url );
     $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$content.'</a>';

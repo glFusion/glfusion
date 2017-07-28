@@ -91,7 +91,7 @@
                             <button class="uk-button uk-button-small"><i class="uk-icon-cog"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href="{printlink}" rel="nofollow" target="_blank"><i class="uk-icon-print"></i>&nbsp;{$LANG_GF01[PRINTABLE]}</a></li>
+                                    <li><a href="{printlink}" rel="nofollow" target="_blank" rel="noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;{$LANG_GF01[PRINTABLE]}</a></li>
 {!if notifylink}
             						<li>
             							<a id="subscribe-link" href="{notifylink}" rel="nofollow">

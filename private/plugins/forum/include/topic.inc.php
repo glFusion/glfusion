@@ -365,7 +365,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
     }
     if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
         if( !empty( $_CONF['ip_lookup'] )) {
-            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank">'.$showtopic['ip'].'</a>';
+            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
             $topictemplate->set_var('ipaddress',$iplink);
         } else {
             $topictemplate->set_var('ipaddress',$showtopic['ip']);
