@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2012-2015 by the following authors:                        |
+// | Copyright (C) 2012-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1288,12 +1288,14 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'date' :
             case 'date-modified':
                 $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
             case 'raw-description' :
+            case 'searchidx' :
                 $fields[] = 'description';
                 break;
             case 'id':
@@ -1305,6 +1307,17 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
             case 'label':
             case 'url':
                 $fields[] = 'lid';
+                break;
+            case 'perms' :
+                $fields[] = 'owner_id';
+                $fields[] = 'group_id';
+                $fields[] = 'perm_owner';
+                $fields[] = 'perm_group';
+                $fields[] = 'perm_members';
+                $fields[] = 'perm_anon';
+                break;
+            case 'hits' :
+                $fields[] = 'hits';
                 break;
             default:
                 // nothing to do
@@ -1347,12 +1360,16 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                    $props['date'] = $A['unixdate'];
+                    break;
                 case 'date-modified':
                     $props['date-modified'] = $A['unixdate'];
                     break;
                 case 'description':
                 case 'excerpt':
                 case 'raw-description' :
+                case 'searchidx' :
                     $props[$p] = $A['description'];
                     break;
                 case 'id':
@@ -1373,6 +1390,19 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
                     break;
                 case 'status':
                     $props['status'] = 1; // stub - default status
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['hits'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
                 default:
                     $props[$p] = '';

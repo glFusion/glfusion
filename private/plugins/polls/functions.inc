@@ -727,10 +727,16 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     foreach ($properties as $p) {
         switch ($p) {
             case 'date-modified':
+            case 'date' :
                 $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
                 break;
             case 'id':
                 $fields[] = 'pid';
+                break;
+            case 'description' :
+            case 'searchidx' :
+                $fields[] = 'description';
+                $fields[] = 'topic';
                 break;
             case 'title':
                 $fields[] = 'topic';
@@ -742,6 +748,17 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $fields[] = 'owner_id';
+                break;
+            case 'hits' :
+                $fields[] = 'voters';
+                break;
+            case 'perms' :
+                $fields[] = 'owner_id';
+                $fields[] = 'group_id';
+                $fields[] = 'perm_owner';
+                $fields[] = 'perm_group';
+                $fields[] = 'perm_members';
+                $fields[] = 'perm_anon';
                 break;
             default:
                 break;
@@ -784,10 +801,21 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
         foreach ($properties as $p) {
             switch ($p) {
                 case 'date-modified':
-                    $props['date-modified'] = $A['unixdate'];
+                case 'date' :
+                    $props[$p] = $A['unixdate'];
                     break;
                 case 'id':
                     $props['id'] = $A['pid'];
+                    break;
+                case 'description' :
+                    $props['description'] = $A['description'];
+                    break;
+                case 'searchidx' :
+                    if ( $A['description'] == '' ) {
+                        $props['searchidx'] = $A['description'];
+                    } else {
+                        $props['searchidx'] = $A['topic'];
+                    }
                     break;
                 case 'title':
                     $props['title'] = $A['topic'];
@@ -811,6 +839,19 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author':
                     $props['author'] = $A['owner_id'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['voters'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
                 default:
                     $props[$p] = '';

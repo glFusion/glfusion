@@ -846,11 +846,13 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'date' :
             case 'date-created':
                 $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
                 break;
             case 'description':
             case 'raw-description':
+            case 'searchidx' :
                 $fields[] = 'introtext';
                 $fields[] = 'bodytext';
                 break;
@@ -881,6 +883,17 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                 break;
             case 'video_url' :
                 $fields[] = 'story_video';
+                break;
+            case 'perms' :
+                $fields[] = 'owner_id';
+                $fields[] = 'group_id';
+                $fields[] = 'perm_owner';
+                $fields[] = 'perm_group';
+                $fields[] = 'perm_members';
+                $fields[] = 'perm_anon';
+                break;
+            case 'hits' :
+                $fields[] = 'hits';
                 break;
             default:
                 break;
@@ -921,11 +934,15 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                    $props['date'] = $A['unixdate'];
+                    break;
                 case 'date-created':
                     $props['date-created'] = $A['unixdate'];
                     break;
                 case 'description':
-                    $props['description'] = trim(PLG_replaceTags($A['introtext'] . ' ' . $A['bodytext'],'glfusion','story'));
+                case 'searchidx' :
+                    $props[$p] = trim(PLG_replaceTags($A['introtext'] . ' ' . $A['bodytext'],'glfusion','story'));
                     break;
                 case 'raw-description':
                     $props['raw-description'] = trim($A['introtext'] . ' ' . $A['bodytext']);
@@ -986,6 +1003,19 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     if ( $A['story_video'] != '' && $A['story_video'] != NULL ) {
                         $props['video_url'] = $_CONF['site_url'].$A['story_video'];
                     }
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['hits'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
 
                 default:

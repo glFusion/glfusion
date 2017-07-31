@@ -1172,12 +1172,14 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+        case 'date' :
         case 'date-modified':
             $fields[] = 'UNIX_TIMESTAMP(sp_date) AS unixdate';
             break;
         case 'description':
         case 'excerpt':
         case 'raw-description':
+        case 'searchidx' :
             $fields[] = 'sp_content';
             $fields[] = 'sp_php';
             break;
@@ -1193,6 +1195,17 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
             break;
         case 'status':
             $fields[] = 'sp_status';
+            break;
+        case 'perms' :
+            $fields[] = 'owner_id';
+            $fields[] = 'group_id';
+            $fields[] = 'perm_owner';
+            $fields[] = 'perm_group';
+            $fields[] = 'perm_members';
+            $fields[] = 'perm_anon';
+            break;
+        case 'hits' :
+            $fields[] = 'sp_hits';
             break;
         default:
             break;
@@ -1234,9 +1247,17 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                    $props['date'] = $A['unixdate'];
+                    break;
                 case 'date-modified':
                     $props['date-modified'] = $A['unixdate'];
                     break;
+                case 'searchidx' :
+// check if searchable first
+                    $props[$p] = SP_render_content($A['sp_content'],$A['sp_php']);
+                    break;
+
                 case 'description':
                 case 'excerpt':
                     $props[$p] = SP_render_content($A['sp_content'],$A['sp_php']);
@@ -1262,6 +1283,19 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     break;
                 case 'status':
                     $props['status'] = $A['sp_status'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['sp_hits'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
                 default:
                     $props[$p] = '';

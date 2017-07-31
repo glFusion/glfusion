@@ -1368,12 +1368,15 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'date' :
             case 'date-modified':
-                $fields[] = 'UNIX_TIMESTAMP(a.date) AS unixdate';
+            case 'date-created' :
+                $fields[] = 'a.date AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
             case 'raw-description' :
+            case 'searchidx' :
                 $fields[] = 'a.comment';
                 break;
             case 'id':
@@ -1388,6 +1391,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $fields[] = 'a.uid';
+                break;
+            case 'hits' :
+                $fields[] = 'a.views';
                 break;
             default:
                 break;
@@ -1418,14 +1424,13 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     }
     $grouplist = implode(',',$groups);
 
-    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status ";
+    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status, b.* ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
     $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
-
     }
 
     $result = DB_query($sql);
@@ -1438,12 +1443,15 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                case 'date-created' :
                 case 'date-modified':
-                    $props['date-modified'] = $A['unixdate'];
+                    $props[$p] = $A['unixdate'];
                     break;
                 case 'description':
                 case 'excerpt':
-                    $prop[$p] = FF_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
+                case 'searchidx' :
+                    $props[$p] = FF_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
                     break;
                 case 'raw-description' :
                     $props[$p] = $A['comment'];
@@ -1473,6 +1481,20 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'author' :
                     $props['author'] = $A['uid'];
                     break;
+                case 'hits' :
+                    $props['hits'] = $A['views'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => 2,
+                        'group_id' => $A['grp_id'],
+                        'perm_owner' => 3,
+                        'perm_group' => 3,
+                        'perm_members' => 1,    // fix
+                        'perm_anon' => 1,       // fix
+                    );
+                    break;
+
                 default:
                     $props[$p] = '';
                     break;
@@ -1504,6 +1526,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $tRet = array_values($retval);
         $retval = $tRet[0];
     }
+    if ( $retval === '' || count($retval) == 0 ) return NULL;
 
     return $retval;
 }

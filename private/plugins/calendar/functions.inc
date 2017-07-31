@@ -1677,8 +1677,12 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+        case 'date' :
+            $fields[] = 'UNIX_TIMESTAMP(datestart) AS unixdate';
+            break;
         case 'description':
         case 'excerpt':
+        case 'searchidx' :
             $fields[] = 'description';
             break;
         case 'raw-description' :
@@ -1701,6 +1705,17 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             break;
         case 'author' :
             $fields[] = 'owner_id';
+            break;
+        case 'perms' :
+            $fields[] = 'owner_id';
+            $fields[] = 'group_id';
+            $fields[] = 'perm_owner';
+            $fields[] = 'perm_group';
+            $fields[] = 'perm_members';
+            $fields[] = 'perm_anon';
+            break;
+        case 'hits' :
+            $fields[] = 'hits';
             break;
         default:
             break;
@@ -1741,8 +1756,12 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+            case 'date' :
+                $props[$p] = $A['unixdate'];
+                break;
             case 'description':
             case 'excerpt':
+            case 'searchidx' :
                 $props[$p] = PLG_replaceTags($A['description'],'calendar','description');
                 break;
             case 'raw-description' :
@@ -1769,6 +1788,19 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $props['author'] = $A['owner_id'];
+                break;
+            case 'hits' :
+                $props['hits'] = $A['hits'];
+                break;
+            case 'perms' :
+                $props['perms'] = array(
+                    'owner_id' => $A['owner_id'],
+                    'group_id' => $A['group_id'],
+                    'perm_owner' => $A['perm_owner'],
+                    'perm_group' => $A['perm_group'],
+                    'perm_members' => $A['perm_members'],
+                    'perm_anon' => $A['perm_anon'],
+                );
                 break;
             default:
                 $props[$p] = '';

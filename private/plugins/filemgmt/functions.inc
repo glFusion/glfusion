@@ -986,12 +986,14 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'date' :
             case 'date-modified':
             case 'date-created' :
                 $fields[] = 'date AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
+            case 'searchidx' :
                 $fields[] = 'description.description';
                 break;
             case 'raw-description' :
@@ -1010,6 +1012,12 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $fields[] = 'detail.submitter';
+                break;
+            case 'hits' :
+                $fields[] = 'hits';
+                break;
+            case 'perms' :
+
                 break;
             default:
                 break;
@@ -1035,7 +1043,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
     $groupsql = filemgmt_buildAccessSql();
 
     $sql = "SELECT " . implode(',', $fields)
-            . " FROM {$_TABLES['filemgmt_filedetail']} AS detail LEFT JOIN {$_TABLES['filemgmt_filedesc']} AS description "
+            . ",b.* FROM {$_TABLES['filemgmt_filedetail']} AS detail LEFT JOIN {$_TABLES['filemgmt_filedesc']} AS description "
             . " ON detail.lid=description.lid LEFT JOIN {$_TABLES['filemgmt_cat']} b ON detail.cid=b.cid " . $where . $groupsql;
     if ($id != '*') {
         $sql .= ' LIMIT 1';
@@ -1051,12 +1059,14 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
                 case 'date-created' :
                 case 'date-modified':
                     $props[$p] = $A['unixdate'];
                     break;
                 case 'description':
                 case 'excerpt':
+                case 'searchidx' :
                     $props[$p] = PLG_replaceTags($A['description'],'filemgmt','description');
                     break;
                 case 'raw-description':
@@ -1083,6 +1093,19 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author' :
                     $props['author'] = $A['submitter'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['hits'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => 2,
+                        'group_id' => $A['grp_access'],
+                        'perm_owner' => 3,
+                        'perm_group' => 3,      // fix these
+                        'perm_members' => 1,
+                        'perm_anon' => 1,
+                    );
                     break;
                 default:
                     $props[$p] = '';

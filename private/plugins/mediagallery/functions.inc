@@ -1471,15 +1471,25 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
     MG_initAlbums();
     $properties = explode(',', $what);
     $fields = array();
+
     foreach ($properties as $p) {
         switch ($p) {
+            case 'date' :
             case 'date-modified':
-                $fields[] = 'UNIX_TIMESTAMP(media_upload_time) AS unixdate';
+                $fields[] = 'media_upload_time AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
             case 'raw-description' :
                 $fields[] = 'media_desc';
+                $fields[] = 'media_title';
+                $fields[] = 'media_original_filename';
+                break;
+            case 'searchidx' :
+                $fields[] = 'media_desc';
+                $fields[] = 'media_title';
+                $fields[] = 'media_original_filename';
+	            $fields[] = 'media_keywords';
                 break;
             case 'id':
                 $fields[] = 'a.media_id';
@@ -1493,6 +1503,12 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                 $fields[] = 'a.media_id';
                 break;
             case 'author' :
+                $fields[] = 'a.media_user_id';
+                break;
+            case 'hits' :
+                $fields[] = 'a.media_views';
+                break;
+            case 'perms' :
                 $fields[] = 'a.media_user_id';
                 break;
             default:
@@ -1532,15 +1548,29 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
             $props = array();
             foreach ($properties as $p) {
                 switch ($p) {
+                    case 'date' :
+                        $props['date'] = $A['unixdate'];
+                        break;
                     case 'date-modified':
                         $props['date-modified'] = $A['unixdate'];
                         break;
                     case 'description':
                     case 'excerpt':
-                        $prop[$p] = PLG_replaceTags($A['media_desc'],'mediagallery','media_description');
+                        if ( $A['media_desc'] != '' ) {
+                            $props[$p] = PLG_replaceTags($A['media_desc'],'mediagallery','media_description');
+                        } else if ( $A['media_title'] != '' ) {
+                            $props[$p] = PLG_replaceTags($A['media_title'],'mediagallery','media_title');
+                        } else if ( $A['media_original_filename'] != '' ) {
+                            $props[$p] = $A['media_original_filename'];
+                        } else {
+                            $props[$p] = ' ';
+                        }
                         break;
                     case 'raw-description' :
                         $props[$p] = $A['media_desc'];
+                        break;
+                    case 'searchidx' :
+                        $props['searchidx'] = $A['media_title'].' '.$A['media_desc'].' '.$A['media_keywords'].' '.$A['media_original_filename'];
                         break;
                     case 'id':
                         $props['id'] = $A['media_id'];
@@ -1563,6 +1593,19 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'author' :
                         $props['author'] = $A['media_user_id'];
+                        break;
+                    case 'hits' :
+                        $props['hits'] = $A['media_views'];
+                        break;
+                    case 'perms' :
+                        $props['perms'] = array(
+                            'owner_id' => $A['media_user_id'],
+                            'group_id' => $MG_albums[$aid]->group_id,
+                            'perm_owner' => $MG_albums[$aid]->perm_owner,
+                            'perm_group' => $MG_albums[$aid]->perm_group,
+                            'perm_members' => $MG_albums[$aid]->perm_members,
+                            'perm_anon' => $MG_albums[$aid]->perm_anon,
+                        );
                         break;
                     default:
                         $props[$p] = '';
