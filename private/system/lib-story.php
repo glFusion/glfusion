@@ -841,11 +841,16 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG09;
 
+    $buildingSearchIndex = false;
+
     $properties = explode(',', $what);
 
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'search_index' :
+                $buildingSearchIndex = true;
+                break;
             case 'date' :
             case 'date-created':
                 $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
@@ -908,7 +913,11 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     }
 
     if ($sid == '*') {
-        $where = ' WHERE';
+        if ( $buildingSearchIndex ) {
+            $where = " WHERE draft_flag=0 AND ";
+        } else {
+            $where = ' WHERE';
+        }
     } else {
         $where = " WHERE (sid = '" . DB_escapeString($sid) . "') AND";
     }

@@ -1167,11 +1167,16 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
 {
     global $_CONF, $_TABLES, $LANG_STATIC;
 
+    $buildingSearchIndex = false;
+
     // parse $what to see what we need to pull from the database
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+        case 'search_index' :
+            $buildingSearchIndex = true;
+            break;
         case 'date' :
         case 'date-modified':
             $fields[] = 'UNIX_TIMESTAMP(sp_date) AS unixdate';
@@ -1221,8 +1226,13 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
     }
 
     if ($id == '*') {
-        $where = '';
-        $permOp = 'WHERE';
+        if ( $buildingSearchIndex ) {
+            $where = " (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = 'WHERE';
+        }
     } else {
         $where = " WHERE sp_id = '" . DB_escapeString($id) . "'";
         $permOp = 'AND';

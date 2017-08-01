@@ -1364,10 +1364,16 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG_GF00;
 
+    $buildingSearchIndex = false;
+
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'search_index' :
+                $buildingSearchIndex = true;
+                break;
+
             case 'date' :
             case 'date-modified':
             case 'date-created' :
@@ -1410,8 +1416,13 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     USES_forum_format();
 
     if ($id == '*') {
-        $where = '';
-        $permOp = ' WHERE ';
+        if ( $buildingSearchIndex ) {
+            $where = " WHERE a.pid=0 ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = ' WHERE ';
+        }
     } else {
         $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
@@ -1450,10 +1461,22 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'description':
                 case 'excerpt':
-                case 'searchidx' :
                     $props[$p] = FF_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
                     break;
+                case 'searchidx' :
                 case 'raw-description' :
+
+                    if ( $buildingSearchIndex ) {
+                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
+                        $childres = DB_query($sql);
+                        if ( DB_numRows($childres) > 0 ) {
+                            $B = DB_fetchArray($childres);
+                            if ( isset($B['comment'])) {
+                                $A['comment'] = $A['comment'] . $B['comment'];
+                            }
+                        }
+                    }
+
                     $props[$p] = $A['comment'];
                     break;
                 case 'id':
