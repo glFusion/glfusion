@@ -1227,7 +1227,7 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
 
     if ($id == '*') {
         if ( $buildingSearchIndex ) {
-            $where = " (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
+            $where = " WHERE (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
             $permOp = " AND ";
         } else {
             $where = '';

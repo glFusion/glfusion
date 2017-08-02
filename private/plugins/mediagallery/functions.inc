@@ -1570,7 +1570,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         $props[$p] = $A['media_desc'];
                         break;
                     case 'searchidx' :
-                        $props['searchidx'] = $A['media_title'].' '.$A['media_desc'].' '.$A['media_keywords'].' '.$A['media_original_filename'];
+                        $props['searchidx'] = $A['media_desc'].' '.$A['media_keywords'].' '.$A['media_original_filename'];
                         break;
                     case 'id':
                         $props['id'] = $A['media_id'];
