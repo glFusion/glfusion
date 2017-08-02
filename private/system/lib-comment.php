@@ -1894,4 +1894,200 @@ function plugin_getcommenturlid_article( )
     $retval[] = 'page=';
     return $retval;
 }
+
+/**
+* Return information for a comment
+*
+* @param    string  $id         topic id or *
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES;
+
+    $buildingSearchIndex = false;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    $fields[] = 'type';
+    $fields[] = 'sid';
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'search_index' :
+                $buildingSearchIndex = true;
+                break;
+            case 'date' :
+            case 'date-modified':
+            case 'date-created' :
+                $fields[] = 'date AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+            case 'raw-description' :
+            case 'searchidx' :
+                $fields[] = 'comment';
+                break;
+            case 'id':
+                $fields[] = 'cid';
+                break;
+            case 'title':
+                $fields[] = 'title';
+                break;
+            case 'label':
+            case 'url':
+                $fields[] = 'cid';
+                break;
+            case 'author' :
+                $fields[] = 'uid';
+                break;
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+        return $retval;
+    }
+
+    USES_forum_format();
+
+    if ($id == '*') {
+        if ( $buildingSearchIndex ) {
+            $where = " WHERE pid=0 ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = ' WHERE ';
+        }
+    } else {
+        $where = " WHERE cid = '" . DB_escapeString($id) . "'";
+        $permOp = ' AND ';
+    }
+
+    $groups = array ();
+    $usergroups = SEC_getUserGroups();
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
+
+    $sql  = "SELECT " . implode(',', $fields) . " ";
+    $sql .= "FROM {$_TABLES['comments']} ";
+    $sql .= $where;
+
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date' :
+                case 'date-created' :
+                case 'date-modified':
+                    $props[$p] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                    $props[$p] = $A['comment'];
+                    break;
+                case 'searchidx' :
+                case 'raw-description' :
+                    if ( $buildingSearchIndex ) {
+                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['comments']} WHERE pid=".$id." GROUP BY pid";
+                        $childres = DB_query($sql);
+                        if ( DB_numRows($childres) > 0 ) {
+                            $B = DB_fetchArray($childres);
+                            if ( isset($B['comment'])) {
+                                $A['comment'] = $A['comment'] . $B['comment'];
+                            }
+                        }
+                    }
+                    $props[$p] = $A['comment'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['cid'];
+                    break;
+                case 'title':
+                    $props['title'] = strip_tags($A['title']);
+                    break;
+                case 'url':
+                    $url = PLG_getCommentUrlId($A['type']);
+                    $sep = strpos($url[0], '?') ? '&' : '?';
+                    $finalurl = $url[0] . $sep . $url[1].'='.$A['sid'];
+                    $props['url'] = $finalurl;
+                    break;
+                case 'label':
+                    $props['label'] = 'Comments';
+                    break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
+                case 'author' :
+                    $props['author'] = $A['uid'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = 0;
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => 2,
+                        'group_id' => 2,
+                        'perm_owner' => 3,
+                        'perm_group' => 3,
+                        'perm_members' => 1,    // fix
+                        'perm_anon' => 1,       // fix
+                    );
+                    break;
+
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        if ( is_array($props) ) {
+            foreach ($props as $key => $value) {
+                if ($id == '*') {
+                    if ($value != '') {
+                        $mapped[$key] = $value;
+                    }
+                } else {
+                    $mapped[$key] = $value;
+                }
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $tRet = array_values($retval);
+        $retval = $tRet[0];
+    }
+    if ( $retval === '' || count($retval) == 0 ) return NULL;
+
+    return $retval;
+}
 ?>
