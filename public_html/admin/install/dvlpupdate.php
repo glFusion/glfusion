@@ -1634,7 +1634,7 @@ function glfusion_166()
 
 }
 
-function glfusion_167()
+function glfusion_170()
 {
     global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
@@ -1659,8 +1659,8 @@ function glfusion_167()
     _updateConfig();
 
     // update version number
-    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.7',name='glfusion'",1);
-    DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.7' WHERE name='glfusion'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.0' WHERE name='glfusion'",1);
 
 }
 
@@ -1887,7 +1887,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_167();
+glfusion_170();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

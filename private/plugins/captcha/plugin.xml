@@ -3,7 +3,7 @@
     <name>CAPTCHA</name>
     <description>CAPTCHA Security Plugin</description>
     <version>3.5.4</version>
-    <glfusionversion>1.6.7</glfusionversion>
+    <glfusionversion>1.7.0</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

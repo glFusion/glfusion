@@ -1,4 +1,7 @@
-## v1.6.7 (unreleased)
+## v1.7.0 (unreleased)
+  - Several plugin updates to support new capabilities in PLG_getItemInfo()
+    - Supports returning permissions on content items
+    - Updates to support new Searcher Plugin
   - Updated htmLawed to v1.2.3
   - Update GeSHi Library to v1.0.9.0
   - Additional security protections for external links

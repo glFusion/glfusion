@@ -911,7 +911,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.6.7') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.7.0') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";
