@@ -978,7 +978,7 @@ function plugin_canuserrate_filemgmt($item_id, $uid)
 */
 function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
 {
-    global $_CONF, $_TABLES, $LANG_FILEMGMT;
+    global $_CONF, $_TABLES, $LANG_FILEMGMT, $mydownloads_publicpriv;
 
     $id = str_replace('fileid_','',$id);
 
@@ -1102,9 +1102,9 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                         'owner_id' => 2,
                         'group_id' => $A['grp_access'],
                         'perm_owner' => 3,
-                        'perm_group' => 3,      // fix these
-                        'perm_members' => 1,
-                        'perm_anon' => 1,
+                        'perm_group' => 2,
+                        'perm_members' => ( $mydownloads_publicpriv != 1 ? 0 : 2),
+                        'perm_anon' => ( $mydownloads_publicpriv != 1 ? 0 : 2),
                     );
                     break;
                 default:
