@@ -1365,6 +1365,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     global $_CONF, $_TABLES, $LANG_GF00;
 
     $buildingSearchIndex = false;
+    $batchreindex = false;
 
     $properties = explode(',', $what);
     $fields = array();
@@ -1373,7 +1374,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'search_index' :
                 $buildingSearchIndex = true;
                 break;
-
+            case 'reindex' :
+                $batchreindex = true;
+                break;
             case 'date' :
             case 'date-modified':
             case 'date-created' :
@@ -1424,6 +1427,18 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             $permOp = ' WHERE ';
         }
     } else {
+        // but I don't want to call this when doing batch reindexing...
+        if ( $buildingSearchIndex == true && $batchreindex == false) {
+            // check to see if we have the PID or a reply ID
+            // query the record for PID
+            // if it is 0 - we are good
+            // if it is not 0 - update ID to PID
+            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
+            if ( $pid != 0 && $pid != NULL) {
+                $id = $pid;
+            }
+        }
+
         $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
     }
@@ -1467,6 +1482,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'raw-description' :
 
                     if ( $buildingSearchIndex ) {
+                        DB_query("SET group_concat_max_len = 204800");
                         $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
                         $childres = DB_query($sql);
                         if ( DB_numRows($childres) > 0 ) {
