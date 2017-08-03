@@ -1528,6 +1528,9 @@ function CMT_deleteComment ($cid, $sid, $type)
            . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND lft >= $rht");
         DB_query("UPDATE {$_TABLES['comments']} SET rht = rht - 2 "
            . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND rht >= $rht");
+
+        PLG_itemDeleted((int) $cid, 'comment');
+
     } else {
         COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to delete a comment that doesn\'t exist as described.');
@@ -1923,7 +1926,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
             case 'date' :
             case 'date-modified':
             case 'date-created' :
-                $fields[] = 'date AS unixdate';
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
