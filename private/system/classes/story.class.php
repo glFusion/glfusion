@@ -831,7 +831,7 @@ class Story
          * means that when adding new fields to save and load, all we need to do
          * is add the field name to the array, and the code will magically cope.
          */
-        foreach ( $this->_dbFields AS $fieldname => $save ) { 
+        foreach ( $this->_dbFields AS $fieldname => $save ) {
             if ($save === 1) {
                 $varname = '_' . $fieldname;
                 $sql .= $fieldname . ', ';
@@ -1210,7 +1210,7 @@ class Story
             $this->_perm_anon = $T['perm_anon'];
 
             $this->saveToDatabase();
-            PLG_itemSaved($this->_sid, 'article');
+            PLG_itemSaved($this->_sid, 'article',$this->_originalSid);
 
             COM_rdfUpToDateCheck();
             COM_olderStuff();
