@@ -353,6 +353,8 @@ function handleEditSubmit()
             . 'to edit to a non-existent comment or the cid/sid did not match');
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
+
+        PLG_itemSaved((int) $cid,'comment');
         $safecid = (int) $cid;
         $safeuid = (int) $uid;
         DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
@@ -361,7 +363,9 @@ function handleEditSubmit()
                    . 'to submit a comment with invalid $title and/or $comment.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
+
     PLG_commentEditSave($type,$cid,$sid);
+
 
     $urlArray = PLG_getCommentUrlId($type);
     if ( is_array($urlArray) ) {
