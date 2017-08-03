@@ -1528,9 +1528,6 @@ function CMT_deleteComment ($cid, $sid, $type)
            . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND lft >= $rht");
         DB_query("UPDATE {$_TABLES['comments']} SET rht = rht - 2 "
            . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND rht >= $rht");
-
-        PLG_itemDeleted((int) $cid, 'comment');
-
     } else {
         COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to delete a comment that doesn\'t exist as described.');
@@ -1538,6 +1535,7 @@ function CMT_deleteComment ($cid, $sid, $type)
     }
 
     DB_unlockTable ($_TABLES['comments']);
+    PLG_itemDeleted((int) $cid, 'comment');
 
     CACHE_remove_instance('whatsnew');
     CACHE_remove_instance('story_');
