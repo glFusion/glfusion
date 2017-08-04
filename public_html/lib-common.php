@@ -6208,7 +6208,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 function COM_rootDebugClean($array, $blank=false)
 {
     $blankField = false;
-    while (list($key, $value) = each($array)) {
+    foreach ($array AS $key => $value ) {
         $lkey = strtolower($key);
         if ((strpos($lkey, 'pass') !== false) || (strpos($lkey, 'cookie')!== false)) {
             $blankField = true;
