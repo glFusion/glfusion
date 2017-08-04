@@ -1003,7 +1003,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                 $fields[] = 'detail.lid';
                 break;
             case 'title':
-                $fields[] = 'detail.title';
+                $fields[] = 'detail.title AS filetitle';
                 break;
             case 'label':
             case 'url':
@@ -1076,7 +1076,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     $props['id'] = $A['lid'];
                     break;
                 case 'title':
-                    $props['title'] = $A['title'];
+                    $props['title'] = $A['filetitle'];
                     break;
                 case 'url':
                     if (empty($A['id'])) {
@@ -1098,13 +1098,17 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     $props['hits'] = $A['hits'];
                     break;
                 case 'perms' :
+                    $p_anon = 0;
+                    $p_member = 0;
+                    if ( ($mydownloads_publicpriv == 1 && $A['grp_access'] == 13 ) || $A['grp_access'] == 2 ) $p_anon = 2;
+                    if ( $A['grp_access'] == 2 || $A['grp_access'] == 13 ) $p_member = 2;
                     $props['perms'] = array(
                         'owner_id' => 2,
                         'group_id' => $A['grp_access'],
                         'perm_owner' => 3,
                         'perm_group' => 2,
-                        'perm_members' => ( $mydownloads_publicpriv != 1 ? 0 : 2),
-                        'perm_anon' => ( $mydownloads_publicpriv != 1 ? 0 : 2),
+                        'perm_members' => $p_member,
+                        'perm_anon' => $p_anon,
                     );
                     break;
                 default:
