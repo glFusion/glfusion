@@ -780,7 +780,7 @@ class Search {
         } else {
             $row[SQL_TITLE] = COM_createLink($row[SQL_TITLE], $this->_searchURL.'&amp;type='.$row[SQL_NAME].'&amp;mode=search');
 
-            $row['url'] = ($row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
+            $row['url'] = (isset($row['url'][0]) && $row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
             if (isset($this->_url_rewrite[$row[SQL_NAME]]) && $this->_url_rewrite[$row[SQL_NAME]])
                 $row['url'] = COM_buildUrl($row['url']);
 
