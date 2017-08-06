@@ -350,6 +350,9 @@ function PLG_uninstall ($type)
 
         COM_errorLog ('...success', 1);
 
+        // tell other plugins we are removing all content
+        PLG_itemDeleted('*', $type);
+
         // uninstall the plugin
         COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
         DB_delete($_TABLES['plugins'], 'pi_name', $type);
