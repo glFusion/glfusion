@@ -68,6 +68,9 @@ class outputHandler {
     private $_directHeader = array();
     private $_rewriteEnabled = false;
     private $priorities = array(HEADER_PRIO_VERYHIGH, HEADER_PRIO_HIGH, HEADER_PRIO_NORMAL, HEADER_PRIO_LOW, HEADER_PRIO_VERYLOW);
+    private static $norepeat = array(
+        'meta' => array('keywords', 'description', 'author'),
+    );
     private $_header = array(
                     'meta' => array('http-equiv' => array(), 'name' => array()),
                     'style' => array(HEADER_PRIO_VERYHIGH => array(),
@@ -307,9 +310,21 @@ class outputHandler {
 	 * @return nothing
 	 */
 
-    public function addMeta($type, $name, $content)
+    public function addMeta($type, $name, $content, $priority = HEADER_PRIO_VERYLOW)
     {
-        $this->_header['meta'][] = $link = '<meta '.$type.'="' .  $name . '" content="' . $content . '"/>' . LB;
+        //$this->_header['meta'][] = $link = '<meta '.$type.'="' .  $name . '" content="' . $content . '"/>' . LB;
+        // This blocks any duplicate "<meta name=..." tags, as well as any in
+        // the $norepeat array
+        if (    ($type == 'name' || in_array($name, self::$norepeat['meta'])) &&
+                isset($this->_header['meta'][$type][$name]) &&
+                $this->_header['meta'][$type][$name]['priority'] <= $priority
+        ) {
+            return;
+        }
+        $this->_header['meta'][$type][$name] = array(
+            'content' => $content,
+            'priority' => $priority,
+        );
     }
 
 
@@ -384,10 +399,32 @@ class outputHandler {
 
     public function renderHeader($type)
     {
-        if ( $type != 'script' && $type != 'style' && $type != 'raw' && $type != 'meta' ) {
+        //if ( $type != 'script' && $type != 'style' && $type != 'raw' && $type != 'meta' ) {
+        //    return '';
+        //}
+        //return $this->_array_concat_recursive($this->_header[$type]);
+        switch ($type) {
+        case 'script':
+        case 'style':
+        case 'raw':
+            return $this->_array_concat_recursive($this->_header[$type]);
+        case 'meta':
+            return $this->_renderMeta();
+        default:
             return '';
         }
-        return $this->_array_concat_recursive($this->_header[$type]);
+    }
+
+    private function _renderMeta()
+    {
+        $ret = '';
+        foreach ($this->_header['meta'] as $type=>$data) {
+            foreach ($data as $name=>$values) {
+                $ret .= '<meta '. $type . '="' . $name . '" content="' . $values['content'] .
+                '" />' . LB;
+            }
+        }
+        return $ret;
     }
 
 	/**
