@@ -537,6 +537,7 @@ class downloader
             ob_end_flush();
             // Send file contents.
             $fp = fopen($this->_sourceDirectory . $fileName, 'rb');
+            ob_end_clean();
             fpassthru($fp);
             fclose($fp);
         }

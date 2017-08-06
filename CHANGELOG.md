@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Fixed issue where very large downloads could fail due to out of memory error
+  - Update UIKIT library to v2.27.4
   - Several plugin updates to support new capabilities in PLG_getItemInfo()
     - Supports returning permissions on content items
     - Updates to support new Searcher Plugin
