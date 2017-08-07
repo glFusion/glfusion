@@ -629,7 +629,7 @@ class Template
                 $str = ob_get_contents();
                 ob_end_clean();
             } else {
-                $str = slow_subst($varname);
+                $str = $this->slow_subst($varname);
             }
             return $str;
         } else {
