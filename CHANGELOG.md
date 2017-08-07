@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Environment check now ignores depreciated PHP settings based on PHP version installed
   - Fixed issue where very large downloads could fail due to out of memory error
   - Update UIKIT library to v2.27.4
   - Several plugin updates to support new capabilities in PLG_getItemInfo()
