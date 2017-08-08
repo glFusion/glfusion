@@ -390,7 +390,7 @@ function PLG_uninstall ($type)
 */
 function PLG_enableStateChange ($type, $enable)
 {
-   global $_CONF, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
+   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
 
     $args[1] = $enable;
 
