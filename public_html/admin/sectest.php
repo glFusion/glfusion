@@ -44,8 +44,6 @@ if (!SEC_inGroup ('Root')) {
     exit;
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
 $failed_tests = 0;
 
 /**

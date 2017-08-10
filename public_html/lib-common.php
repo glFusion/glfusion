@@ -34,7 +34,8 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_ALL );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -7409,10 +7410,6 @@ function USES_lib_comment() {
 function USES_lib_comments() {  // depreciated
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
-}
-function USES_lib_html2text() {
-    global $_CONF;
-//    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 }
 function USES_lib_image() {
     global $_CONF;

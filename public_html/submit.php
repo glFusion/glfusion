@@ -234,10 +234,9 @@ function sendNotification($table, $story)
     $postmode = $story->displayElements('postmode');
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
     if ($postmode == 'html') {
-        USES_lib_html2text();
         $introtext = str_replace("\\r","",$introtext);
         $introtext = $introtext;
-        $html2txt  = new html2text($introtext,false);
+        $html2txt  = new Html2Text\Html2Text($introtext,false);
         $introtext = trim($html2txt->get_text());
     }
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );

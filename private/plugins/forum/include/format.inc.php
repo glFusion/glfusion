@@ -50,8 +50,6 @@ define('DISABLE_BBCODE',1);
 define('DISABLE_SMILIES',2);
 define('DISABLE_URLPARSE',4);
 
-USES_lib_html2text();
-
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
@@ -555,7 +553,7 @@ function gfm_getoutput( $id, $type = 'digest' ) {
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));
 
-    $html2txt = new html2text($msgText,false);
+    $html2txt = new Html2Text\Html2Text($msgText,false);
 
     $messageText = $html2txt->get_text();
     return array($message,$messageText);

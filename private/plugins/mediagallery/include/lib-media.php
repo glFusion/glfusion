@@ -2065,10 +2065,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
-        USES_lib_html2text();
         $metaDesc = $media_desc;
         $metaDesc = strip_tags($metaDesc);
-        $html2txt = new html2text($metaDesc,false);
+        $html2txt = new Html2Text\Html2Text($metaDesc,false);
         $metaDesc = trim($html2txt->get_text());
         $shortComment = '';
         $metaArray = explode(' ',$metaDesc);

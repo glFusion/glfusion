@@ -3418,8 +3418,6 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
 {
     global $_CONF, $_TABLES, $LANG04;
 
-    USES_lib_html2text();
-
     $function = 'plugin_subscription_email_format_' . $type;
     if ( function_exists($function) ) {
         $args[1] = $category;

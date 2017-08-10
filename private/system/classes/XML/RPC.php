@@ -1486,7 +1486,7 @@ class XML_RPC_Message extends XML_RPC_Base
         $data = substr($data, 0, strpos($data, "</methodResponse>") + 17);
         $this->response_payload = $data;
 
-        if (!xml_parse($parser_resource, $data, strlen($data))) {
+        if (!xml_parse($parser_resource, $data, sizeof($data))) {
             // thanks to Peter Kocks <peter.kocks@baygate.com>
             if (xml_get_current_line_number($parser_resource) == 1) {
                 $errstr = 'XML error at line 1, check URL';
@@ -1751,13 +1751,12 @@ class XML_RPC_Value extends XML_RPC_Base
      */
     function serializeval($o)
     {
-        $typ = $val = '';
         if (!is_object($o) || empty($o->me) || !is_array($o->me)) {
             return '';
         }
         $ar = $o->me;
-        if ( isset($ar[0] )) $typ = $ar[0];
-        if ( isset($ar[1] )) $val = $ar[1];
+        reset($ar);
+        list($typ, $val) = each($ar);
         return '<value>' .  $this->serializedata($typ, $val) .  "</value>\n";
     }
 
