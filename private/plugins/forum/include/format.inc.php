@@ -437,8 +437,7 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
 function _ff_geshi_formatted($str,$type='PHP') {
     global $_CONF;
     $str = @htmlspecialchars_decode($str,ENT_QUOTES);
-    include_once($_CONF['path'].'lib/geshi/geshi.php');
-    $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
+    $geshi = new Geshi($str,$type);
     $geshi->set_header_type(GESHI_HEADER_DIV);
     //$geshi->enable_strict_mode(true);
     //$geshi->enable_classes();

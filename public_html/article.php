@@ -223,10 +223,9 @@ if ($A['count'] > 0) {
             }
             $pingback = true;
         }
-        USES_lib_html2text();
         $metaDesc = $story->DisplayElements('introtext');
         $metaDesc = strip_tags($metaDesc);
-        $html2txt = new html2text($metaDesc,false);
+        $html2txt = new Html2Text\Html2Text($metaDesc,false);
         $metaDesc = trim($html2txt->get_text());
         $shortComment = '';
         $metaArray = explode(' ',$metaDesc);

@@ -40,8 +40,6 @@ define('TRB_SAVE_REJECT', -2);
 // set to true to log rejected Trackbacks
 $_TRB_LOG_REJECTS = false;
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
 /**
  * Send a trackback response message
  *

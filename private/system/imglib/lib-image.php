@@ -96,13 +96,6 @@ function UTL_execWrapper($cmd) {
 function IMG_getMediaMetaData( $filename ) {
     global $_CONF;
 
-    // include getID3() library
-    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-    // Needed for windows only
-    if ( !defined('GETID3_HELPERAPPSDIR') ) {
-        define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-    }
-
     $getID3 = new getID3;
 
     // Analyze file and store returned data in $ThisFileInfo

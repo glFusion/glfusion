@@ -1062,7 +1062,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             return $retval;
         }
 
-        USES_lib_html2text();
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file ('block','centerblock.thtml');
         $block->set_var (array(
@@ -1117,7 +1116,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $lastid = $A['id'];
                 $testText = FF_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1147,7 +1146,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = FF_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);

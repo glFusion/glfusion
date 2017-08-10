@@ -32,9 +32,22 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
-// 1.6.7
+// 1.7.0
+
+    'lib/email-address-validation/',
+    'lib/feedcreator/',
+    'lib/geshi/',
+    'lib/getid3/',
+    'lib/html2text/',
+    'lib/htmlpurifier/',
+    'lib/http/',
+    'lib/oauth/',
+    'lib/phpmailer/',
+    'lib/simplepie/',
+    'system/pear/',
     'lib/utf8/docs/examples/',
     'lib/utf8/docs/',
+
 
     'lib/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/',
     'system/classes/openid/',

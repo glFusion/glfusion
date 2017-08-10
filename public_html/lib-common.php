@@ -122,7 +122,9 @@ if ( function_exists('set_error_handler') ) {
   *
   */
 require_once 'siteconfig.php' ;
-require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+require_once $_CONF['path_system'] . 'classes/Autoload.php';
+glFusion\Autoload::initialize();
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -228,8 +230,6 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
 
-require_once($_CONF['path'].'vendor/autoload.php');
-
 /**
 * If needed, add our PEAR path to the list of include paths
 *
@@ -255,31 +255,15 @@ if ( !$_CONF['have_pear'] ) {
 *
 */
 
-require_once $_CONF['path_system'].'classes/timer.class.php';
+//require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
 /**
-* Include URL class
-*
-* This provides optional URL rewriting functionality.
+* Initialize $_URL globa
 */
 
-require_once $_CONF['path_system'].'classes/url.class.php';
 $_URL = new url( $_CONF['url_rewrite'] );
-
-/**
-* This is our HTML template class.
-*
-*/
-
-require_once $_CONF['path_system'].'classes/template.class.php';
-
-/**
-* This is our HTML filter / sanitization class.
-*
-*/
-require_once $_CONF['path_system'].'classes/filter.class.php';
 
 /**
 * This is the database library.
@@ -288,17 +272,6 @@ require_once $_CONF['path_system'].'classes/filter.class.php';
 
 require_once $_CONF['path_system'].'lib-database.php';
 
-/**
-* This is the date / time library used for formatting
-*
-*/
-require_once $_CONF['path_system'] . 'classes/date.class.php';
-
-/**
-* This is the output library used to control JS / CSS
-*
-*/
-require_once $_CONF['path_system'].'classes/output.class.php';
 
 /**
 * Buffer all enabled plugins
@@ -2488,12 +2461,12 @@ function COM_isEmail( $email )
 {
     global $_CONF;
 
-    if (!class_exists('EmailAddressValidator') ) {
-        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
-    }
+//    if (!class_exists('EmailAddressValidator') ) {
+//        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
+//    }
 
     $validator = new EmailAddressValidator;
-    return ( $validator->check_email_address( $email ) ? true : false );
+    return ( $validator->checkEmailAddress( $email ) ? true : false );
 }
 
 
@@ -2576,10 +2549,10 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
+//    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
 
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+//    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
     $mail->CharSet = COM_getCharset();
     $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (https://www.glfusion.org)';
     if ($_CONF['mail_backend'] == 'smtp' ) {
@@ -2708,10 +2681,10 @@ function COM_emailNotification( $msgData = array() )
     $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
+//    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
 
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+//    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
     $mail->CharSet = COM_getCharset();
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
@@ -3186,7 +3159,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
+//    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
@@ -7439,7 +7412,7 @@ function USES_lib_comments() {  // depreciated
 }
 function USES_lib_html2text() {
     global $_CONF;
-    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
+//    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 }
 function USES_lib_image() {
     global $_CONF;

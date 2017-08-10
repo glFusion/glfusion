@@ -1,17 +1,17 @@
 [
     {
         "name": "splitbrain/php-archive",
-        "version": "1.0.7",
-        "version_normalized": "1.0.7.0",
+        "version": "1.0.9",
+        "version_normalized": "1.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/splitbrain/php-archive.git",
-            "reference": "c075304b44c4aadff0718af445e86bf730f331ff"
+            "reference": "2a63b8cf0bfc7fdc0d987c9b7348e639e55cce76"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/c075304b44c4aadff0718af445e86bf730f331ff",
-            "reference": "c075304b44c4aadff0718af445e86bf730f331ff",
+            "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/2a63b8cf0bfc7fdc0d987c9b7348e639e55cce76",
+            "reference": "2a63b8cf0bfc7fdc0d987c9b7348e639e55cce76",
             "shasum": ""
         },
         "require": {
@@ -20,7 +20,11 @@
         "require-dev": {
             "phpunit/phpunit": "4.5.*"
         },
-        "time": "2015-08-12 13:24:34",
+        "suggest": {
+            "ext-iconv": "Used for proper filename encode handling",
+            "ext-mbstring": "Can be used alternatively for handling filename encoding"
+        },
+        "time": "2017-06-11T06:11:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -47,5 +51,714 @@
             "unzip",
             "zip"
         ]
+    },
+    {
+        "name": "openpsa/universalfeedcreator",
+        "version": "v1.8.3",
+        "version_normalized": "1.8.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/flack/UniversalFeedCreator.git",
+            "reference": "6261e130446d8f787bbfd229a602fb11e6816a4e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/flack/UniversalFeedCreator/zipball/6261e130446d8f787bbfd229a602fb11e6816a4e",
+            "reference": "6261e130446d8f787bbfd229a602fb11e6816a4e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2017-05-18T08:28:48+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "lib"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Andreas Flack",
+                "email": "flack@contentcontrol-berlin.de",
+                "homepage": "http://www.contentcontrol-berlin.de/"
+            }
+        ],
+        "description": "RSS and Atom feed generator by Kai Blankenhorn",
+        "keywords": [
+            "atom",
+            "georss",
+            "gpx",
+            "opml",
+            "pie",
+            "rss"
+        ]
+    },
+    {
+        "name": "geshi/geshi",
+        "version": "v1.0.9.0",
+        "version_normalized": "1.0.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/GeSHi/geshi-1.0.git",
+            "reference": "5a7b461338d322d941986a656d4d1651452e73dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/5a7b461338d322d941986a656d4d1651452e73dd",
+            "reference": "5a7b461338d322d941986a656d4d1651452e73dd",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7"
+        },
+        "time": "2017-05-05T05:51:25+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/geshi/",
+                "src/geshi.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Benny Baumann",
+                "email": "BenBE@geshi.org",
+                "homepage": "http://blog.benny-baumann.de/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Generic Syntax Highlighter",
+        "homepage": "http://qbnz.com/highlighter/"
+    },
+    {
+        "name": "html2text/html2text",
+        "version": "4.1.0",
+        "version_normalized": "4.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mtibben/html2text.git",
+            "reference": "bf613dc8d3389d70c891cd847954346acab16574"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mtibben/html2text/zipball/bf613dc8d3389d70c891cd847954346acab16574",
+            "reference": "bf613dc8d3389d70c891cd847954346acab16574",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4"
+        },
+        "suggest": {
+            "ext-mbstring": "For best performance",
+            "symfony/polyfill-mbstring": "If you can't install ext-mbstring"
+        },
+        "time": "2017-05-15T01:50:59+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Html2Text\\": [
+                    "src/",
+                    "test/"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPLv2"
+        ],
+        "description": "Converts HTML to formatted plain text"
+    },
+    {
+        "name": "james-heinrich/getid3",
+        "version": "v1.9.14",
+        "version_normalized": "1.9.14.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/JamesHeinrich/getID3.git",
+            "reference": "30bd11473b0eef6f1b47866ef7ab0a557917fc21"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/30bd11473b0eef6f1b47866ef7ab0a557917fc21",
+            "reference": "30bd11473b0eef6f1b47866ef7ab0a557917fc21",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2017-03-27T21:12:55+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "getid3/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL"
+        ],
+        "description": "PHP script that extracts useful information from popular multimedia file formats",
+        "homepage": "http://www.getid3.org/",
+        "keywords": [
+            "codecs",
+            "php",
+            "tags"
+        ]
+    },
+    {
+        "name": "ezyang/htmlpurifier",
+        "version": "v4.9.3",
+        "version_normalized": "4.9.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ezyang/htmlpurifier.git",
+            "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
+            "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "require-dev": {
+            "simpletest/simpletest": "^1.1"
+        },
+        "time": "2017-06-03T02:28:16+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "HTMLPurifier": "library/"
+            },
+            "files": [
+                "library/HTMLPurifier.composer.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Edward Z. Yang",
+                "email": "admin@htmlpurifier.org",
+                "homepage": "http://ezyang.com"
+            }
+        ],
+        "description": "Standards compliant HTML filter written in PHP",
+        "homepage": "http://htmlpurifier.org/",
+        "keywords": [
+            "html"
+        ]
+    },
+    {
+        "name": "phpclasses/sasl",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "dist": {
+            "type": "zip",
+            "url": "https://www.phpclasses.org/install/package/sasl.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "sasl.php",
+                "plain_sasl_client.php",
+                "login_sasl_client.php",
+                "cram_md5_sasl_client.php",
+                "ntlm_sasl_client.php",
+                "basic_sasl_client.php",
+                "digest_sasl_client.php"
+            ]
+        }
+    },
+    {
+        "name": "phpclasses/httpclient",
+        "version": "1.0.5",
+        "version_normalized": "1.0.5.0",
+        "dist": {
+            "type": "zip",
+            "url": "https://www.phpclasses.org/install/package/httpclient.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "phpclasses/sasl": ">=1.0.0"
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "http.php",
+                "yahoo_user.php"
+            ]
+        }
+    },
+    {
+        "name": "phpclasses/oauth-api",
+        "version": "1.0.100",
+        "version_normalized": "1.0.100.0",
+        "dist": {
+            "type": "zip",
+            "url": "https://www.phpclasses.org/install/package/oauth-api.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "phpclasses/httpclient": "1.0.5"
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "oauth_client.php",
+                "mysqli_oauth_client.php",
+                "mysqli_offline_access_to_google.php",
+                "database_oauth_client.php",
+                "cookie_oauth_client.php",
+                "file_oauth_client.php"
+            ]
+        }
+    },
+    {
+        "name": "pear/pear_exception",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pear/PEAR_Exception.git",
+            "reference": "8c18719fdae000b690e3912be401c76e406dd13b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/8c18719fdae000b690e3912be401c76e406dd13b",
+            "reference": "8c18719fdae000b690e3912be401c76e406dd13b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=4.4.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2015-02-10T20:07:52+00:00",
+        "type": "class",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PEAR": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "include-path": [
+            "."
+        ],
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Helgi Thormar",
+                "email": "dufuz@php.net"
+            },
+            {
+                "name": "Greg Beaver",
+                "email": "cellog@php.net"
+            }
+        ],
+        "description": "The PEAR Exception base class.",
+        "homepage": "https://github.com/pear/PEAR_Exception",
+        "keywords": [
+            "exception"
+        ]
+    },
+    {
+        "name": "pear/net_url2",
+        "version": "v2.2.1",
+        "version_normalized": "2.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pear/Net_URL2.git",
+            "reference": "43a87606daf52efe6685c92131be083143108e37"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pear/Net_URL2/zipball/43a87606daf52efe6685c92131be083143108e37",
+            "reference": "43a87606daf52efe6685c92131be083143108e37",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.1.4"
+        },
+        "require-dev": {
+            "phpunit/phpunit": ">=3.3.0"
+        },
+        "time": "2016-04-18T22:24:01+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Net/URL2.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "David Coallier",
+                "email": "davidc@php.net"
+            },
+            {
+                "name": "Tom Klingenberg",
+                "email": "tkli@php.net"
+            },
+            {
+                "name": "Christian Schmidt",
+                "email": "chmidt@php.net"
+            }
+        ],
+        "description": "Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs.",
+        "homepage": "https://github.com/pear/Net_URL2",
+        "keywords": [
+            "PEAR",
+            "net",
+            "networking",
+            "rfc3986",
+            "uri",
+            "url"
+        ]
+    },
+    {
+        "name": "pear/http_request2",
+        "version": "v2.3.0",
+        "version_normalized": "2.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pear/HTTP_Request2.git",
+            "reference": "3599cf0fe455a4e281da464f6510bfc5c2ce54c4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pear/HTTP_Request2/zipball/3599cf0fe455a4e281da464f6510bfc5c2ce54c4",
+            "reference": "3599cf0fe455a4e281da464f6510bfc5c2ce54c4",
+            "shasum": ""
+        },
+        "require": {
+            "pear/net_url2": "^2.2.0",
+            "pear/pear_exception": "^1.0.0",
+            "php": ">=5.2.0"
+        },
+        "suggest": {
+            "ext-fileinfo": "Adds support for looking up mime-types using finfo.",
+            "ext-zlib": "Allows handling gzip compressed responses.",
+            "lib-curl": "Allows using cURL as a request backend.",
+            "lib-openssl": "Allows handling SSL requests when not using cURL."
+        },
+        "time": "2016-02-13T20:20:39+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-trunk": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "HTTP_Request2": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "include-path": [
+            "./"
+        ],
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Alexey Borzov",
+                "email": "avb@php.net"
+            }
+        ],
+        "description": "Provides an easy way to perform HTTP requests.",
+        "homepage": "http://pear.php.net/package/HTTP_Request2",
+        "keywords": [
+            "PEAR",
+            "curl",
+            "http",
+            "request"
+        ]
+    },
+    {
+        "name": "phpmailer/phpmailer",
+        "version": "v5.2.24",
+        "version_normalized": "5.2.24.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPMailer/PHPMailer.git",
+            "reference": "22d04c6a58145a244696f3f254c1875aa653b26a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/22d04c6a58145a244696f3f254c1875aa653b26a",
+            "reference": "22d04c6a58145a244696f3f254c1875aa653b26a",
+            "shasum": ""
+        },
+        "require": {
+            "ext-ctype": "*",
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "doctrine/annotations": "1.2.*",
+            "jms/serializer": "0.16.*",
+            "phpdocumentor/phpdocumentor": "2.*",
+            "phpunit/phpunit": "4.8.*",
+            "symfony/debug": "2.8.*",
+            "symfony/filesystem": "2.8.*",
+            "symfony/translation": "2.8.*",
+            "symfony/yaml": "2.8.*",
+            "zendframework/zend-cache": "2.5.1",
+            "zendframework/zend-config": "2.5.1",
+            "zendframework/zend-eventmanager": "2.5.1",
+            "zendframework/zend-filter": "2.5.1",
+            "zendframework/zend-i18n": "2.5.1",
+            "zendframework/zend-json": "2.5.1",
+            "zendframework/zend-math": "2.5.1",
+            "zendframework/zend-serializer": "2.5.*",
+            "zendframework/zend-servicemanager": "2.5.*",
+            "zendframework/zend-stdlib": "2.5.1"
+        },
+        "suggest": {
+            "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+        },
+        "time": "2017-07-26T21:00:20+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "class.phpmailer.php",
+                "class.phpmaileroauth.php",
+                "class.phpmaileroauthgoogle.php",
+                "class.smtp.php",
+                "class.pop3.php",
+                "extras/EasyPeasyICS.php",
+                "extras/ntlm_sasl_client.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Jim Jagielski",
+                "email": "jimjag@gmail.com"
+            },
+            {
+                "name": "Marcus Bointon",
+                "email": "phpmailer@synchromedia.co.uk"
+            },
+            {
+                "name": "Andy Prevost",
+                "email": "codeworxtech@users.sourceforge.net"
+            },
+            {
+                "name": "Brent R. Matzelle"
+            }
+        ],
+        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
+    },
+    {
+        "name": "simplepie/simplepie",
+        "version": "1.5",
+        "version_normalized": "1.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/simplepie/simplepie.git",
+            "reference": "5de5551953f95feef12cf355a7a26a70f94aa3ab"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/simplepie/simplepie/zipball/5de5551953f95feef12cf355a7a26a70f94aa3ab",
+            "reference": "5de5551953f95feef12cf355a7a26a70f94aa3ab",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4 || ~5"
+        },
+        "suggest": {
+            "mf2/mf2": "Microformat module that allows for parsing HTML for microformats"
+        },
+        "time": "2017-04-17T07:29:31+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SimplePie": "library"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Ryan Parman",
+                "homepage": "http://ryanparman.com/",
+                "role": "Creator, alumnus developer"
+            },
+            {
+                "name": "Geoffrey Sneddon",
+                "homepage": "http://gsnedders.com/",
+                "role": "Alumnus developer"
+            },
+            {
+                "name": "Ryan McCue",
+                "email": "me@ryanmccue.info",
+                "homepage": "http://ryanmccue.info/",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple Atom/RSS parsing library for PHP",
+        "homepage": "http://simplepie.org/",
+        "keywords": [
+            "atom",
+            "feeds",
+            "rss"
+        ]
+    },
+    {
+        "name": "aziraphale/email-address-validator",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/aziraphale/email-address-validator.git",
+            "reference": "484d795f7f86c63cd0750553f94debd8812585f7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/aziraphale/email-address-validator/zipball/484d795f7f86c63cd0750553f94debd8812585f7",
+            "reference": "484d795f7f86c63cd0750553f94debd8812585f7",
+            "shasum": ""
+        },
+        "time": "2015-01-03T12:17:43+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "EmailAddressValidator": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Dave Child",
+                "email": "dave@addedbytes.com"
+            },
+            {
+                "name": "Andrew Gillard",
+                "email": "andrew@lorddeath.net"
+            }
+        ],
+        "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
+        "homepage": "https://github.com/aziraphale/email-address-validator"
+    },
+    {
+        "name": "pear/xml_rpc2",
+        "version": "1.1.3",
+        "version_normalized": "1.1.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pear/XML_RPC2.git",
+            "reference": "085e9da0896e2bd4fb7479dc0d5e40f0731582f0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pear/XML_RPC2/zipball/085e9da0896e2bd4fb7479dc0d5e40f0731582f0",
+            "reference": "085e9da0896e2bd4fb7479dc0d5e40f0731582f0",
+            "shasum": ""
+        },
+        "require": {
+            "pear/http_request2": "^2.3.0",
+            "pear/pear_exception": "^1.0.0",
+            "php": ">=5.2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2016-06-21T19:29:17+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "XML_RPC2": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "include-path": [
+            "./"
+        ],
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Sergio Carvalho",
+                "email": "sergiosgc@php.net",
+                "role": "Lead"
+            },
+            {
+                "name": "Fabien MARTY",
+                "email": "fab@php.net",
+                "role": "Developer"
+            },
+            {
+                "name": "Alan Langford",
+                "email": "jal@ambitonline.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "More info available on: http://pear.php.net/package/XML_RPC2"
     }
 ]

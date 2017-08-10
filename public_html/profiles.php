@@ -375,8 +375,6 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
 
-    USES_lib_html2text();
-
     $T = new Template($_CONF['path_layout'].'email/');
     $T->set_file(array('html_msg'   => 'mailstory_html.thtml',
                        'text_msg'   => 'mailstory_text.thtml'
@@ -385,7 +383,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     // filter any HTML from the short message
     $shortmsg = $filter->filterHTML($shortmsg);
 
-    $html2txt = new html2text($shortmsg,false);
+    $html2txt = new Html2Text\Html2Text($shortmsg,false);
     $shortmsg_text = $html2txt->get_text();
 
     $emailStory = preg_replace_callback('/<a\s+.*?href="(.*?)".*?>/i',
@@ -414,7 +412,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 
     $story_body = COM_truncateHTML($emailStory,512);
 
-    $html2txt = new html2text($story_body,false);
+    $html2txt = new Html2Text\Html2Text($story_body,false);
     $story_body_text = $html2txt->get_text();
 
     $dt->setTimestamp($A['day']);

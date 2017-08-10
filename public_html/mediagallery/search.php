@@ -522,9 +522,6 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                $resolution_y = $M['media_resolution_y'];
 	            } else {
 	                if ( $M['media_resolution_x'] == 0 && $M['remote_media'] != 1) {
-	                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-	                    // Needed for windows only
-	                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 	                    $getID3 = new getID3;
 	                    // Analyze file and store returned data in $MG_mediaFileInfo
 	                    $MG_mediaFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.' . $M['media_mime_ext']);

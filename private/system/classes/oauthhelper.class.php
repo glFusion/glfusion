@@ -36,9 +36,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-require_once $_CONF['path'] . 'lib/oauth/oauth_client.php';
-
 class OAuthConsumer {
     protected $consumer = NULL;
     protected $client = NULL;

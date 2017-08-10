@@ -1212,8 +1212,6 @@ function links_validateUrl($url)
 {
     global $_CONF, $LANG_LINKS_STATUS;
 
-    require_once $_CONF['path'].'lib/http/http.php';
-
     $retval = '';
 
 	set_time_limit(0);
