@@ -255,7 +255,6 @@ if ( !$_CONF['have_pear'] ) {
 *
 */
 
-//require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
@@ -7437,26 +7436,6 @@ function USES_lib_user() {
 function USES_lib_widgets() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-widgets.php';
-}
-function USES_class_navbar() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-}
-function USES_class_date() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/date.class.php';
-}
-function USES_class_search() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/search.class.php';
-}
-function USES_class_story() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/story.class.php';
-}
-function USES_class_upload() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
 }
 function USES_lib_social() {
     global $_CONF;

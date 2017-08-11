@@ -64,7 +64,7 @@ if ( isset($_PLUGIN_INFO['forum']) ) {
 } else {
     $pi_version = $_FF_CONF['pi_version'];
 }
-require_once $_CONF['path_system'] . 'classes/config.class.php';
+
 $ff_config = config::get_instance();
 $_FF_FORUM = $ff_config->get_config('forum');
 if ( is_array($_FF_FORUM) && is_array($_FF_CONF) ) {

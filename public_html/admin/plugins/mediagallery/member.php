@@ -59,8 +59,6 @@ function MG_editMemberDefaults( ) {
         'admin_formats' =>  'editalbum_formats.thtml',
     ));
 
-    include_once($_CONF['path_system']."classes/navbar.class.php");
-
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['member_albums'],'showhideMGAdminEditorDiv("members",0);return false;',true);
     $navbar->add_menuitem($LANG_MG01['allowed_media_formats'],'showhideMGAdminEditorDiv("media",1);return false;',true);

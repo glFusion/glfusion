@@ -81,6 +81,7 @@ $obsoletePrivateFiles = array(
     'system/classes/output.class.php',
     'system/classes/ajax.class.php',
     'system/classes/dbadmn-utf.class.php',
+    'system/classes/oauthhelper.class.php',
     'plugins/bad_behavior2/templates/ban_entry.thtml',
     'lib/geshi/geshi/css-gen.cfg',
 

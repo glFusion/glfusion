@@ -33,7 +33,6 @@ require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 
 USES_lib_story();
-USES_class_story();
 
 class mgAlbumg {
 

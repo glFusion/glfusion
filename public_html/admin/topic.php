@@ -787,8 +787,6 @@ function TOPIC_iconUpload($tid)
 {
     global $_CONF, $_TABLES, $LANG27;
 
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
-
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
 

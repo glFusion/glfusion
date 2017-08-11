@@ -211,7 +211,6 @@ function POLLS_edit($pid = '')
     $question_sql = "SELECT question,qid "
         . "FROM {$_TABLES['pollquestions']} WHERE pid='$pid' ORDER BY qid;";
     $questions = DB_query($question_sql);
-    include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navbar = new navbar;
 
     $poll_templates->set_block('editor','questiontab','qt');

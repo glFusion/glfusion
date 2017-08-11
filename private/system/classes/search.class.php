@@ -37,10 +37,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path_system'] . 'classes/plugin.class.php';
-require_once $_CONF['path_system'] . 'classes/searchcriteria.class.php';
-require_once $_CONF['path_system'] . 'classes/listfactory.class.php';
-
 /**
 * glFusion Search Class
 *

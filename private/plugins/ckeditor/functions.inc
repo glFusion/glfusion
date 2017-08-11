@@ -51,8 +51,6 @@ if (file_exists($langfile)) {
     }
 }
 if (!isset($_CK_CONF['enable_story'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $tm_config = config::get_instance();
     $_CK_CONF = $tm_config->get_config('ckeditor');
 }

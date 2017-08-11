@@ -39,7 +39,6 @@ include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
-USES_class_navbar() ;
 USES_lib_admin();
 
 $op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
@@ -764,7 +763,6 @@ function modDownloadS() {
     $newfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
 
     if ( $newfile != '' ) {
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
         $upload->setFieldName('newfile');
         $upload->setPath($filemgmt_FileStore);
@@ -821,7 +819,6 @@ function modDownloadS() {
     $newsnapfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfileshot']['name']));
 
     if ( $newsnapfile != '' ) {
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
         $upload->setFieldName('newfileshot');
         $upload->setPath($filemgmt_SnapStore);
@@ -1010,8 +1007,6 @@ function modCatS() {
     }
     if ($_FILES['imgurl']['name']!='') {
 
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
-
         $upload = new upload();
 
         $name = $_FILES['imgurl']['name'];        // this is the real name of your file
@@ -1159,7 +1154,6 @@ function addCat() {
             $tmp  = $_FILES["uploadfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $imgurl = rawurlencode($myts->makeTboxData4Save($name));
 
-            require_once $_CONF['path_system'] . 'classes/upload.class.php';
             $upload = new upload();
 
             $upload->setAutomaticResize (true);
@@ -1252,7 +1246,6 @@ function addDownload() {
     $snapfilename = '';// = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
     $logourl = '';//$myts->makeTboxData4Save(rawurlencode($snapfilename));
 
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
     $upload = new upload();
     $upload->setFieldName('newfile');
     $upload->setPath($filemgmt_FileStore);

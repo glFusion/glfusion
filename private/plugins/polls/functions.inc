@@ -60,8 +60,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_PO_CONF['pollsloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $po_config = config::get_instance();
     $_PO_CONF = $po_config->get_config('polls');
 }

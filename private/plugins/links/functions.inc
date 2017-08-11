@@ -64,8 +64,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_LI_CONF['linksloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $li_config = config::get_instance();
     $_LI_CONF = $li_config->get_config('links');
 }

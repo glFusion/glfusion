@@ -705,8 +705,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']);
 
-    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
     if ($story->hasContent()) {

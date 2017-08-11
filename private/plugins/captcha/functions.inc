@@ -54,8 +54,6 @@ if (file_exists($langfile)) {
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
 
 if (!isset($_CP_CONF['gfxDriver'])) {
-    require_once $_CONF['path_system'].'classes/config.class.php';
-
     $cp_config = config::get_instance();
     $_CP_CFG = $cp_config->get_config('captcha');
 
@@ -735,7 +733,6 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
         return;
     }
 
-    USES_class_date();
     $dt = new Date('now',$_CONF['timezone']);
 
     if( !empty( $logentry )) {

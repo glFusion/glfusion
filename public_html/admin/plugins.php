@@ -733,7 +733,6 @@ function PLUGINS_processUpload()
     $upgrade = false;
 
     if (count($_FILES) > 0 && $_FILES['pluginfile']['error'] != UPLOAD_ERR_NO_FILE) {
-        require_once($_CONF['path_system'] . 'classes/upload.class.php');
         $upload = new upload();
 
         if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {

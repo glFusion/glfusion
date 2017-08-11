@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Automated autotag installer                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -61,7 +61,6 @@ function processAutotagUpload()
     $errors = '';
 
     if (count($_FILES) > 0 && $_FILES['autotagfile']['error'] != UPLOAD_ERR_NO_FILE) {
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
 
         if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {

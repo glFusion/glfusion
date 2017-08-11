@@ -1838,7 +1838,6 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
     global $_CONF, $_TABLES, $LANG_ACCESS;
 
     USES_lib_story();
-    USES_class_story();
 
     $retval = '';
     // display story
