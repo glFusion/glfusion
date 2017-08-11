@@ -30,9 +30,9 @@ if (!SEC_inGroup('Root') ) {
     exit;
 }
 
-require_once $_CONF['path_system'].'classes/ajax.class.php';
-require_once $_CONF['path_system'].'classes/dbadmin.class.php';
-require_once $_CONF['path_system'].'classes/dbadmin-utf.class.php';
+//require_once $_CONF['path_system'].'classes/ajax.class.php';
+//require_once $_CONF['path_system'].'classes/dbadmin.class.php';
+//require_once $_CONF['path_system'].'classes/dbadmin-utf.class.php';
 
 $action = '';
 $mode = '';

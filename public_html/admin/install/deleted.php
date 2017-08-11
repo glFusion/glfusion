@@ -77,7 +77,10 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
-// 1.6.7
+// 1.7.0
+    'system/classes/output.class.php',
+    'system/classes/ajax.class.php',
+    'system/classes/dbadmn-utf.class.php',
     'plugins/bad_behavior2/templates/ban_entry.thtml',
     'lib/geshi/geshi/css-gen.cfg',
 
