@@ -1,6 +1,25 @@
 <?php
+/**
+ * glFusion Autoloader
+ *
+ * LICENSE: This program is free software; you can redistribute it
+ *  and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * @category   glFusion CMS
+ * @package    glFusion
+ * @maintainer Mark R. Evans  mark AT glFusion DOT org
+ * @copyright  2016-2017 - Mark R. Evans
+ * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
+ * @since      File available since Release 1.7.0
+ */
 
 namespace glFusion;
+
+if (!defined('GVERSION')) {
+    die('This file can not be used on its own.');
+}
 
 /**
  * Class Autoload
@@ -46,24 +65,19 @@ class Autoload
         } else {
             // Legacy glFusion classes
             $path = __DIR__ . DIRECTORY_SEPARATOR . strtolower($className) . '.class.php';
-//echo $path . '<br>';
             if (file_exists($path)) {
                 /** @noinspection PhpIncludeInspection */
                 include $path;
             } else {
                 if ( stripos($className,'stringparser') === 0 ) {
                     include __DIR__ . '/../../lib/bbcode/'.$className.'.class.php';
-                }
-                if (stripos($className, 'timerobject') === 0) {
+                } elseif (stripos($className, 'timerobject') === 0) {
                     include __DIR__ . '/timer.class.php';
                 } elseif (stripos($className, 'XML_RPC_Server') === 0) {
                     include __DIR__ . '/XML/RPC/Server.php';
                 } elseif (stripos($className, 'XML_RPC_') === 0) {
                     include __DIR__ . '/XML/RPC.php';
-                } elseif (stripos($className, 'Date_TimeZone') === 0) {
-                    include __DIR__ . '/Date/TimeZone.php';
                 }
-
             }
         }
     }
@@ -74,7 +88,6 @@ class Autoload
     public static function initialize()
     {
         if (!self::$initialized) {
-//            echo __DIR__;exit;
             require_once __DIR__ . '/../../vendor/autoload.php';
             spl_autoload_register('glFusion\\Autoload::load', true, true);
             self::$initialized = true;
@@ -104,3 +117,4 @@ class Autoload
         }
     }
 }
+?>
