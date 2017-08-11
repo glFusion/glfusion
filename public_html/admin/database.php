@@ -37,8 +37,6 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-require_once $_CONF['path'].'system/classes/dbbackup.class.php';
-
 $display = '';
 $page    = '';
 
@@ -407,8 +405,6 @@ function DBADMIN_backup()
 function DBADMIN_download($file)
 {
     global $_CONF;
-
-    require_once $_CONF['path_system'] . 'classes/downloader.class.php';
 
     $dl = new downloader;
 
