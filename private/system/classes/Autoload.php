@@ -63,7 +63,6 @@ class Autoload
                 }
             }
         } else {
-            // Legacy glFusion classes
             $path = __DIR__ . DIRECTORY_SEPARATOR . strtolower($className) . '.class.php';
             if (file_exists($path)) {
                 /** @noinspection PhpIncludeInspection */

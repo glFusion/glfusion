@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | CAPTCHA Plugin - glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | error.class.php                                                          |
+// | cperror.class.php                                                        |
 // |                                                                          |
 // | CAPTCHA error processing                                                 |
 // +--------------------------------------------------------------------------+
@@ -30,76 +30,69 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-  class cperror
-  {
+namespace Captcha;
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+class cperror
+{
 
     var $errors;
 
     public function __construct()
     {
-
-      $this->errors = array();
+        $this->errors = array();
 
     } //error
 
     function addError ($errormsg)
     {
-
-      $this->errors[] = $errormsg;
+        $this->errors[] = $errormsg;
 
     } //addError
 
     function displayError ()
     {
+        $iheight     = count($this->errors) * 20 + 10;
+        $iheight     = ($iheight < 130) ? 130 : $iheight;
 
-      $iheight     = count($this->errors) * 20 + 10;
-      $iheight     = ($iheight < 130) ? 130 : $iheight;
+        $image       = imagecreate(600, $iheight);
 
-      $image       = imagecreate(600, $iheight);
+        $errorsign   = imagecreatefromjpeg('./gfx/errorsign.jpg');
+        imagecopy($image, $errorsign, 1, 1, 1, 1, 180, 120);
 
-      $errorsign   = imagecreatefromjpeg('./gfx/errorsign.jpg');
-      imagecopy($image, $errorsign, 1, 1, 1, 1, 180, 120);
+        $bgcolor     = imagecolorallocate($image, 255, 255, 255);
 
-      $bgcolor     = imagecolorallocate($image, 255, 255, 255);
+        $stringcolor = imagecolorallocate($image, 0, 0, 0);
 
-      $stringcolor = imagecolorallocate($image, 0, 0, 0);
+        for ($i = 0; $i < count($this->errors); $i++)
+        {
+            $imx = ($i == 0) ? $i * 20 + 5 : $i * 20;
 
-      for ($i = 0; $i < count($this->errors); $i++)
-      {
+            $msg = 'Error[' . $i . ']: ' . $this->errors[$i];
 
-        $imx = ($i == 0) ? $i * 20 + 5 : $i * 20;
+            imagestring($image, 5, 190, $imx, $msg, $stringcolor);
+        }
 
+        imagepng($image);
 
-        $msg = 'Error[' . $i . ']: ' . $this->errors[$i];
-
-        imagestring($image, 5, 190, $imx, $msg, $stringcolor);
-
-      }
-
-      imagepng($image);
-
-      imagedestroy($image);
+        imagedestroy($image);
 
     } //displayError
 
     function isError ()
     {
+        if (count($this->errors) == 0) {
+            return FALSE;
 
-      if (count($this->errors) == 0)
-      {
-
-        return FALSE;
-
-      }
-      else
-      {
-
-        return TRUE;
-
-      }
+        } else {
+            return TRUE;
+        }
 
     } //isError
 
-  } //class: error
+} //class: error
 
 ?>

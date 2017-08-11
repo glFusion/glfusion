@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Displays the CAPTCHA block                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -32,9 +32,6 @@
 
 require_once '../lib-common.php';
 
-//Load the Class
-require $_CONF['path'] . 'plugins/captcha/class/captcha.class.php';
-
 // see if an existing session_id is passed
 if (isset($_GET['csid']) ) {
     $csid = COM_applyFilter($_GET['csid']);
@@ -42,6 +39,5 @@ if (isset($_GET['csid']) ) {
     die("Invalid session id");
 }
 
-//Create a CAPTCHA
-$captcha = new captcha($csid);
+$captcha = new Captcha\captcha($csid);
 ?>
