@@ -516,7 +516,7 @@ function _bbcode_replaceTags($text) {
 function _geshi($str,$type='PHP') {
     global $_CONF, $LANG_BBCODE;
 
-    $geshi = new Geshi($str,$type);
+    $geshi = new GeSHi($str,$type);
     $geshi->set_header_type(GESHI_HEADER_DIV);
     $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS, 5);
     $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
