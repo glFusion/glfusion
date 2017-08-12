@@ -69,7 +69,7 @@ class Autoload
                 include $path;
             } else {
                 if ( stripos($className,'stringparser') === 0 ) {
-                    include __DIR__ . '/../../lib/bbcode/'.$className.'.class.php';
+                    include __DIR__ . '/../../lib/bbcode/'.strtolower($className).'.class.php';
                 } elseif (stripos($className, 'timerobject') === 0) {
                     include __DIR__ . '/timer.class.php';
                 } elseif (stripos($className, 'XML_RPC_Server') === 0) {
