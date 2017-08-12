@@ -1758,6 +1758,10 @@ function INST_installAndContentPlugins()
     $var = time() - rand();
     $session_cookie = 'sc'.substr(md5($var),0,3);
     DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_session'",1);
+
+    $rk = INST_randomKey(80);
+    DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')",1);
+
     INST_errorLog($log_path,'INSTALL: Completed installation of default configuration data');
     $config->_purgeCache();
     // rebuild the config array
@@ -1778,7 +1782,7 @@ function INST_installAndContentPlugins()
     @touch($log_path.'captcha.log');
     @touch($log_path.'spamx.log');
 
-    global $_CONF, $_SYSTEM, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
+    global $_CONF, $_SYSTEM, $_VARS, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
     if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to loate ' . $_CONF['path_html'].'lib-common.php');

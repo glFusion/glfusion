@@ -584,13 +584,13 @@ class dbBackup
         $altBody = '',
         $attachments = array()
     ) {
-        global $_CONF;
+        global $_CONF, $_VARS;
 
         $subject = substr($subject, 0, strcspn($subject, "\r\n"));
         $subject = COM_emailEscape($subject);
 
         $mail = new PHPMailer();
-//        $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+        $mail->SetLanguage('en');
         $mail->CharSet = COM_getCharset();
         if ($_CONF['mail_backend'] == 'smtp') {
             $mail->IsSMTP();
@@ -602,7 +602,7 @@ class dbBackup
             if ($_CONF['mail_smtp_auth']) {
                 $mail->SMTPAuth   = true;
                 $mail->Username = $_CONF['mail_smtp_username'];
-                $mail->Password = $_CONF['mail_smtp_password'];
+                $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
             }
             $mail->Mailer = "smtp";
 

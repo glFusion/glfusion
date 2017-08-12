@@ -165,7 +165,6 @@ $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
 }
-
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -2539,7 +2538,7 @@ function COM_formatEmailAddress( $name, $address )
 */
 function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '', $altBody = '' )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
     $subject = COM_emailEscape( $subject );
@@ -2548,10 +2547,8 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-//    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-//    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (https://www.glfusion.org)';
     if ($_CONF['mail_backend'] == 'smtp' ) {
@@ -2564,7 +2561,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
+            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
         }
         $mail->Mailer = "smtp";
 
@@ -2656,7 +2653,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
  */
 function COM_emailNotification( $msgData = array() )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     // define the maximum number of emails allowed per bcc
     $maxEmailsPerSend = 10;
@@ -2680,10 +2677,8 @@ function COM_emailNotification( $msgData = array() )
     $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-//    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-//    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
@@ -2695,7 +2690,7 @@ function COM_emailNotification( $msgData = array() )
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
+            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
         }
         $mail->Mailer = "smtp";
 
@@ -7386,6 +7381,47 @@ function phpblock_whosonline()
     return $retval;
 }
 
+/**
+* Encrypt string using key
+* @return   string  encrypted string
+*/
+function COM_encrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_encrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return trim(base64_encode(openssl_encrypt($data, 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Decrypts string encrypted with COM_encrypt
+* @return   string  decrypted string
+*/
+function COM_decrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_decrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return (trim(openssl_decrypt(base64_decode($data), 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Random key generator
+* @return   string  random key of length $length
+*/
+function COM_randomKey($length = 40 )
+{
+    $max = ceil($length / 40);
+    $random = '';
+    for ($i = 0; $i < $max; $i ++) {
+    $random .= sha1(microtime(true).mt_rand(10000,90000));
+    }
+    return substr($random, 0, $length);
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php

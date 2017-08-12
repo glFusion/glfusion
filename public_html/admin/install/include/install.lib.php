@@ -694,7 +694,7 @@ function INST_updateDB($_SQL,$use_innodb)
  */
 function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
-    global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
+    global $_TABLES, $_CONF, $_SYSTEM, $_VARS, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
     global $_GLFUSION;
 
@@ -1475,6 +1475,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sql,1);
             }
 
+            $rk = INST_randomKey(80);
+            DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')");
+            $_VARS['guid'] = $rk;
+            $_coreCfg = $c->get_config('Core');
+            $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
+
             $current_fusion_version = '1.7.0';
 
         default:
@@ -2167,6 +2173,16 @@ function INST_errorLog( $logpath, $logentry)
         }
     }
     return;
+}
+
+function INST_randomKey($length = 40 )
+{
+    $max = ceil($length / 40);
+    $random = '';
+    for ($i = 0; $i < $max; $i ++) {
+    $random .= sha1(microtime(true).mt_rand(10000,90000));
+    }
+    return substr($random, 0, $length);
 }
 
 
