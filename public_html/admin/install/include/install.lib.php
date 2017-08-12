@@ -1475,9 +1475,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sql,1);
             }
             $rk = DB_getItem($_TABLES['vars'],'value','name="guid"');
-            if ( $rk == NULL || $rk == '' ) {
+            if ( $rk === NULL || $rk === '' ) {
                 $rk = INST_randomKey(80);
-                DB_query("INSERT INTO {$_TABLES['vars']} ('name','value') VALUES ('guid','".DB_escapeString($rk)."')",1);
+                DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".DB_escapeString($rk)."')",1);
             }
             $_VARS['guid'] = $rk;
             $_coreCfg = $c->get_config('Core');
