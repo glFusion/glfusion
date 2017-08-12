@@ -1474,9 +1474,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
-
-            $rk = INST_randomKey(80);
-            DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')");
+            $rk = DB_getItem($_TABLES['vars'],'value','name="guid"');
+            if ( $rk == NULL || $rk == '' ) {
+                $rk = INST_randomKey(80);
+                DB_query("INSERT INTO {$_TABLES['vars']} ('name','value') VALUES ('guid','".DB_escapeString($rk)."')",1);
+            }
             $_VARS['guid'] = $rk;
             $_coreCfg = $c->get_config('Core');
             $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
@@ -2147,6 +2149,17 @@ function INST_deleteDirIfEmpty($path) {
     }
     return true;
 }
+
+function INST_encrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_encrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return trim(base64_encode(openssl_encrypt($data, 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
 
 function _searchForId($id, $array) {
    foreach ($array as $key => $val) {

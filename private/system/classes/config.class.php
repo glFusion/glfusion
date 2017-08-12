@@ -216,7 +216,11 @@ class config
         }
 
         if ( $name == 'mail_smtp_password') {
-            $value = COM_encrypt($value,$_VARS['guid']);
+            if ( function_exists('COM_encrypt')) {
+                $value = COM_encrypt($value,$_VARS['guid']);
+            } elseif ( function_exists('INST_encrypt')) {
+                $value = INST_encrypt($value,$_VARS['guid']);
+            }
         }
 
         if ( in_array($name,$this->consumer_keys) ) {
