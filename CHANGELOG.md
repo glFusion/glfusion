@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Encrypt smtp passwords in DB
+  - Moved most external libs to Composer / auto load
   - Environment check now ignores depreciated PHP settings based on PHP version installed
   - Fixed issue where very large downloads could fail due to out of memory error
   - Update UIKIT library to v2.27.4

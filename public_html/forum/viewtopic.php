@@ -44,7 +44,6 @@ if (!in_array('forum', $_PLUGINS)) {
 USES_forum_functions();
 USES_forum_format();
 USES_forum_topic();
-require_once $_CONF['path_system'] . 'classes/timer.class.php';
 
 $display = '';
 

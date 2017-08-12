@@ -1612,7 +1612,7 @@ function glfusion_165()
 
 function glfusion_166()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1636,7 +1636,7 @@ function glfusion_166()
 
 function glfusion_170()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1655,6 +1655,17 @@ function glfusion_170()
     // add new configuration items
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
+
+    // encrypt
+    if ( !isset($_VARS['guid'])) {
+        $rk = COM_randomKey(80);
+        DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')");
+        $_VARS['guid'] = $rk;
+        // encrypt mail_smtp_password
+        $_coreCfg = $c->get_config('Core');
+        $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
+    }
+
 
     _updateConfig();
 

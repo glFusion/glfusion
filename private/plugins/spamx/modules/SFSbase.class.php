@@ -17,8 +17,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
 /**
 * Sends posts to SFS (http://www.stopforumspam.com) for examination
 *

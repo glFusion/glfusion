@@ -57,8 +57,6 @@ if (@file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_SP_CONF['allow_php'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $sp_config = config::get_instance();
     $_SP_CONF = $sp_config->get_config('staticpages');
 }

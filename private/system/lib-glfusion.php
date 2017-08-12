@@ -301,8 +301,6 @@ function _checkVersion()
 
     // build XML request
 
-    require_once $_CONF['path'].'lib/http/http.php';
-
     $result = '';
 
     $http=new http_class;

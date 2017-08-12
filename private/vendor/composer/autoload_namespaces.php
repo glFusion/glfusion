@@ -6,4 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'XML_RPC2' => array($vendorDir . '/pear/xml_rpc2'),
+    'SimplePie' => array($vendorDir . '/simplepie/simplepie/library'),
+    'PEAR' => array($vendorDir . '/pear/pear_exception'),
+    'HTTP_Request2' => array($vendorDir . '/pear/http_request2'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
+    'EmailAddressValidator' => array($vendorDir . '/aziraphale/email-address-validator'),
 );

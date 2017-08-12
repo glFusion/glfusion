@@ -120,8 +120,6 @@ function _ff_check4files($id,$tempfile=false) {
 function _ff_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt=0) {
     global $_FILES,$_CONF,$_TABLES,$_FF_CONF,$LANG_GF00,$filemgmt_FileStore;
 
-    USES_class_upload();
-
     $upload = new upload();
     if ($use_filemgmt == 1) {
         $upload->setPath($filemgmt_FileStore);

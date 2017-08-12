@@ -122,7 +122,9 @@ if ( function_exists('set_error_handler') ) {
   *
   */
 require_once 'siteconfig.php' ;
-require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+require_once $_CONF['path_system'] . 'classes/Autoload.php';
+glFusion\Autoload::initialize();
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -163,7 +165,6 @@ $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
 }
-
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -228,8 +229,6 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
 
-require_once($_CONF['path'].'vendor/autoload.php');
-
 /**
 * If needed, add our PEAR path to the list of include paths
 *
@@ -255,31 +254,14 @@ if ( !$_CONF['have_pear'] ) {
 *
 */
 
-require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
 /**
-* Include URL class
-*
-* This provides optional URL rewriting functionality.
+* Initialize $_URL globa
 */
 
-require_once $_CONF['path_system'].'classes/url.class.php';
 $_URL = new url( $_CONF['url_rewrite'] );
-
-/**
-* This is our HTML template class.
-*
-*/
-
-require_once $_CONF['path_system'].'classes/template.class.php';
-
-/**
-* This is our HTML filter / sanitization class.
-*
-*/
-require_once $_CONF['path_system'].'classes/filter.class.php';
 
 /**
 * This is the database library.
@@ -288,17 +270,6 @@ require_once $_CONF['path_system'].'classes/filter.class.php';
 
 require_once $_CONF['path_system'].'lib-database.php';
 
-/**
-* This is the date / time library used for formatting
-*
-*/
-require_once $_CONF['path_system'] . 'classes/date.class.php';
-
-/**
-* This is the output library used to control JS / CSS
-*
-*/
-require_once $_CONF['path_system'].'classes/output.class.php';
 
 /**
 * Buffer all enabled plugins
@@ -2488,12 +2459,12 @@ function COM_isEmail( $email )
 {
     global $_CONF;
 
-    if (!class_exists('EmailAddressValidator') ) {
-        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
-    }
+//    if (!class_exists('EmailAddressValidator') ) {
+//        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
+//    }
 
     $validator = new EmailAddressValidator;
-    return ( $validator->check_email_address( $email ) ? true : false );
+    return ( $validator->checkEmailAddress( $email ) ? true : false );
 }
 
 
@@ -2567,7 +2538,7 @@ function COM_formatEmailAddress( $name, $address )
 */
 function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '', $altBody = '' )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
     $subject = COM_emailEscape( $subject );
@@ -2576,10 +2547,8 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (https://www.glfusion.org)';
     if ($_CONF['mail_backend'] == 'smtp' ) {
@@ -2592,7 +2561,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
+            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
         }
         $mail->Mailer = "smtp";
 
@@ -2684,7 +2653,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
  */
 function COM_emailNotification( $msgData = array() )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     // define the maximum number of emails allowed per bcc
     $maxEmailsPerSend = 10;
@@ -2708,10 +2677,8 @@ function COM_emailNotification( $msgData = array() )
     $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
@@ -2723,7 +2690,7 @@ function COM_emailNotification( $msgData = array() )
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
+            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
         }
         $mail->Mailer = "smtp";
 
@@ -3186,7 +3153,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
+//    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
@@ -7414,6 +7381,47 @@ function phpblock_whosonline()
     return $retval;
 }
 
+/**
+* Encrypt string using key
+* @return   string  encrypted string
+*/
+function COM_encrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_encrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return trim(base64_encode(openssl_encrypt($data, 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Decrypts string encrypted with COM_encrypt
+* @return   string  decrypted string
+*/
+function COM_decrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_decrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return (trim(openssl_decrypt(base64_decode($data), 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Random key generator
+* @return   string  random key of length $length
+*/
+function COM_randomKey($length = 40 )
+{
+    $max = ceil($length / 40);
+    $random = '';
+    for ($i = 0; $i < $max; $i ++) {
+    $random .= sha1(microtime(true).mt_rand(10000,90000));
+    }
+    return substr($random, 0, $length);
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
@@ -7436,10 +7444,6 @@ function USES_lib_comment() {
 function USES_lib_comments() {  // depreciated
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
-}
-function USES_lib_html2text() {
-    global $_CONF;
-    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 }
 function USES_lib_image() {
     global $_CONF;
@@ -7468,26 +7472,6 @@ function USES_lib_user() {
 function USES_lib_widgets() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-widgets.php';
-}
-function USES_class_navbar() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-}
-function USES_class_date() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/date.class.php';
-}
-function USES_class_search() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/search.class.php';
-}
-function USES_class_story() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/story.class.php';
-}
-function USES_class_upload() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
 }
 function USES_lib_social() {
     global $_CONF;

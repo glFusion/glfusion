@@ -60,8 +60,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_CA_CONF['calendarloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $ca_config = config::get_instance();
     $_CA_CONF = $ca_config->get_config('calendar');
 }

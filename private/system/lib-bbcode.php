@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion bbcode processing library                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,10 +30,6 @@
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
-}
-
-if (!class_exists('StringParser') ) {
-    require_once $_CONF['path'].'lib/bbcode/stringparser_bbcode.class.php';
 }
 
 /**
@@ -520,9 +516,7 @@ function _bbcode_replaceTags($text) {
 function _geshi($str,$type='PHP') {
     global $_CONF, $LANG_BBCODE;
 
-    include_once($_CONF['path'].'lib/geshi/geshi.php');
-
-    $geshi = new Geshi($str,$type,$_CONF['path'].'lib/geshi');
+    $geshi = new Geshi($str,$type);
     $geshi->set_header_type(GESHI_HEADER_DIV);
     $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS, 5);
     $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);

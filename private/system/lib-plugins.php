@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This file implements plugin support in glFusion.                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -43,8 +43,6 @@ if (!defined ('GVERSION')) {
 * See each function for more details.
 *
 */
-
-require_once $_CONF['path_system'] . 'classes/plugin.class.php';
 
 global $autoTagUsage;
 
@@ -333,7 +331,6 @@ function PLG_uninstall ($type)
         // remove config table data for this plugin
 
         COM_errorLog ("Attempting to remove config table records for group_name: $type", 1);
-        require_once $_CONF['path_system'] . 'classes/config.class.php';
 
         $c = config::get_instance();
         if ($c->group_exists($type)) {
@@ -3417,8 +3414,6 @@ function PLG_isSubscribed( $type, $category, $id, $uid = 0 )
 function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$post_uid)
 {
     global $_CONF, $_TABLES, $LANG04;
-
-    USES_lib_html2text();
 
     $function = 'plugin_subscription_email_format_' . $type;
     if ( function_exists($function) ) {

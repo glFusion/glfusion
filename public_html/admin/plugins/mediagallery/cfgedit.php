@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Set configuration options for Media Gallery Plugin.                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2016 by the following authors:                        |
+// | Copyright (C) 2005-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -398,8 +398,6 @@ function MG_editConfig( $msgString = '' ) {
 		$theme_select .= '<option value="' . $themes[$i] . '"' . ($_MG_CONF['indextheme'] == $themes[$i] ? ' selected="selected" ': '') .'>' . $themes[$i] .  '</option>';
 	}
 	$theme_select .= '</select>';
-
-    require_once $_CONF['path_system'].'classes/navbar.class.php';
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['general_options'],'showhideMGAdminEditorDiv("general",0);return false;',true);

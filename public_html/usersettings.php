@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user settings page.                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -64,7 +64,6 @@ function edituser()
                                    'resynch'            => 'resynch.thtml',
                                    'deleteaccount'      => 'deleteaccount.thtml'));
 
-    include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navbar = new navbar;
     $cnt = 0;
     if ( is_array($LANG_MYACCOUNT) ) {
@@ -823,8 +822,6 @@ function handlePhotoUpload ($delete_photo = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG24;
 
-    require_once ($_CONF['path_system'] . 'classes/upload.class.php');
-
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
 
@@ -1207,7 +1204,6 @@ function saveuser($A)
                         $status = -1;
                         $msg = 115; // Remote service has been disabled.
                     } else {
-                        require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
                         $service = substr($_USER['remoteservice'], 6);
                         $consumer = new OAuthConsumer($service);
                         $callback_url = $_CONF['site_url'];
@@ -1759,8 +1755,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                 // COM_errorLog("-------------------------------------------------------------------------");
                 // COM_errorLog("usersettings.php?mode=resynch&oauth_login={$service}");
                 // COM_errorLog("-------------------------------------------------------------------------");
-
-                require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
 
                 $consumer = new OAuthConsumer($service);
 

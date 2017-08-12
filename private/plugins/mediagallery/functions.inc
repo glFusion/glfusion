@@ -1118,7 +1118,6 @@ function plugin_moderationapprove_mediagallery($id)
 
     require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
     require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
-    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 
     MG_initAlbums();
 
@@ -1183,7 +1182,7 @@ function plugin_moderationapprove_mediagallery($id)
                     $msgData = array();
                     $msgData['subject'] = $LANG_MG01['upload_approved'];
                     $msgData['htmlmessage'] = $body;
-                    $html2txt = new html2text($body,false);
+                    $html2txt = new Html2Text\Html2Text($body,false);
                     $msgData['textmessage'] = $html2txt->get_text();
                     $msgData['from'] = $_CONF['noreply_mail'];
                     $msgData['to']   = array('email' => $email, 'name' => $username);
@@ -1371,7 +1370,6 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
 {
     global $_CONF, $_USER, $_MG_CONF, $_TABLES, $MG_albums, $LANG_MG01,$LANG01, $LANG03;
 
-    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
     MG_initAlbums();
     $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
@@ -1447,7 +1445,7 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
         $T->parse('textoutput','textemail');
         $msgText = $T->finish($T->get_var('textoutput'));
 
-        $html2txt = new html2text($msgText,false);
+        $html2txt = new Html2Text\Html2Text($msgText,false);
 
         $messageText = $html2txt->get_text();
         return array($message,$messageText,$imageData);

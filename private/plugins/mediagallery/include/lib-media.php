@@ -112,9 +112,6 @@ function MG_displayASF( $aid, $I, $full ) {
         $resolution_y = $I['media_resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -302,9 +299,6 @@ function MG_displayMOV( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -473,7 +467,6 @@ function MG_displayMP4( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -661,9 +654,6 @@ function MG_displaySWF( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -836,9 +826,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 && $I['remote_media'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -1186,7 +1173,6 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
 
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -2079,10 +2065,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
-        USES_lib_html2text();
         $metaDesc = $media_desc;
         $metaDesc = strip_tags($metaDesc);
-        $html2txt = new html2text($metaDesc,false);
+        $html2txt = new Html2Text\Html2Text($metaDesc,false);
         $metaDesc = trim($html2txt->get_text());
         $shortComment = '';
         $metaArray = explode(' ',$metaDesc);

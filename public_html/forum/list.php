@@ -71,7 +71,6 @@ function FF_newPosts($forum = 0)
     }
 
     USES_lib_admin();
-    USES_lib_html2text();
 
     $dt = new Date('now',$_USER['tzid']);
 
@@ -152,7 +151,7 @@ function FF_newPosts($forum = 0)
             $lastid = $P['id'];
             $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
             $testText = strip_tags($testText);
-            $html2txt = new html2text($testText,false);
+            $html2txt = new Html2Text\Html2Text($testText,false);
             $testText = trim($html2txt->get_text());
             $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
         } else {
@@ -168,7 +167,7 @@ function FF_newPosts($forum = 0)
             }
             $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
             $testText = strip_tags($testText);
-            $html2txt = new html2text($testText,false);
+            $html2txt = new Html2Text\Html2Text($testText,false);
             $testText = trim($html2txt->get_text());
             $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
         }
@@ -334,7 +333,6 @@ function FF_lastx()
     $pageTitle = $LANG_GF01['LASTX'];
 
     USES_lib_admin();
-    USES_lib_html2text();
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file('list', 'lists.thtml');
@@ -402,7 +400,7 @@ function FF_lastx()
             $lastid = $P['id'];
             $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
             $testText = strip_tags($testText);
-            $html2txt = new html2text($testText,false);
+            $html2txt = new Html2Text\Html2Text($testText,false);
             $testText = trim($html2txt->get_text());
             $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
         } else {
@@ -418,7 +416,7 @@ function FF_lastx()
             }
             $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
             $testText = strip_tags($testText);
-            $html2txt = new html2text($testText,false);
+            $html2txt = new Html2Text\Html2Text($testText,false);
             $testText = trim($html2txt->get_text());
             $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
         }
@@ -482,8 +480,6 @@ function _ff_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         $A['status'] = 0;
     }
 
-    USES_lib_html2text();
-
     $retval = '';
 
     $dt = new Date('now',$_USER['tzid']);
@@ -497,7 +493,7 @@ function _ff_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         case 'subject':
             $testText        = FF_formatTextBlock($A['comment'],'text','text',$A['status']);
             $testText        = strip_tags($testText);
-            $html2txt        = new html2text($testText,false);
+            $html2txt        = new Html2Text\Html2Text($testText,false);
             $testText        = trim($html2txt->get_text());
             $lastpostinfogll = @htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<a class="'.COM_getTooltipStyle().'" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Edit Media Gallery Default Settings.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -61,8 +61,6 @@ function MG_editDefaults( ) {
 
     $T->set_var('site_url', $_MG_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-
-    include_once($_CONF['path_system']."classes/navbar.class.php");
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['album_attributes'],'showhideMGAdminEditorDiv("attributes",0);return false;',true);

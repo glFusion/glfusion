@@ -149,9 +149,6 @@ if ( $nRows > 0 ) {
                 $resolution_y = $row['media_resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
-                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-                    // Needed for windows only
-
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -245,7 +242,6 @@ if ( $nRows > 0 ) {
                 $resolution_y = $row['media_resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
-                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -427,7 +423,6 @@ if ( $nRows > 0 ) {
                 $resolution_y = $row['resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
-                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
@@ -541,7 +536,6 @@ if ( $nRows > 0 ) {
                 $resolution_y = $row['resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
-                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
                     $getID3 = new getID3;
                     // Analyze file and store returned data in $ThisFileInfo
                     $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);

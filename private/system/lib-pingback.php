@@ -32,11 +32,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
-// PEAR class to handle XML-RPC
-require_once 'XML/RPC.php';
-
 /**
  * Get the Pingback URL for a given URL
  *

@@ -38,8 +38,6 @@ if (!in_array('calendar', $_PLUGINS)) {
     exit;
 }
 
-require_once $_CONF['path_system'] . 'classes/calendar.class.php';
-
 $display = '';
 
 if (COM_isAnonUser() &&

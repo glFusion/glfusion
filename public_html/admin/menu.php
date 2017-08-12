@@ -29,7 +29,6 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'classes/menu.class.php';
 require_once $_CONF['path_system'] . 'lib-menu.php';
 
 USES_lib_admin();

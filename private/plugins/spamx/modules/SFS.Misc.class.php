@@ -18,8 +18,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
 /**
 * Include Abstract Examine Class
 */

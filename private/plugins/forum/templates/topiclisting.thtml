@@ -188,8 +188,8 @@
 <!-- END topicrows -->
 	</ul>
 {!else}
-  <div class="uk-alert uk-alert-warning uk-margin">
-    {$LANG_GF02[msg05]}
+  <div class="uk-alert uk-alert-warning uk-margin uk-text-center">
+    <em>{$LANG_GF02[msg05]}</em>
   </div>
 {!endif}
 	<div class="uk-grid uk-width-1-1 uk-margin">

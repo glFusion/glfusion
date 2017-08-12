@@ -449,8 +449,6 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    require_once $_CONF['path'].'/lib/feedcreator/feedcreator.class.php';
-
     $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($fid)."'");
     $A = DB_fetchArray( $result );
 
@@ -462,7 +460,7 @@ function SYND_updateFeed( $fid )
             $rss->descriptionTruncSize = $A['content_length'];
         }
         $rss->descriptionHtmlSyndicated = false;
-        $rss->encoding = $A['charset'];
+//        $rss->encoding = $A['charset'];
         $rss->language = $A['language'];
         $rss->title = $A['title'];
         $rss->description = $A['description'];

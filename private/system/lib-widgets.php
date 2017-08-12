@@ -676,8 +676,6 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
 
     $optionsArray = array_merge($defaultOptions, $options);
 
-    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
-
     $outputHandle = outputHandler::getInstance();
 
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/webticker/jquery.webticker.min.js');

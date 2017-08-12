@@ -88,8 +88,6 @@ function USER_edit($uid = '', $msg = '')
     $LANG_MYACCOUNT['pe_namepass'] = $LANG_ACCESS['pe_namepass'];
     $LANG_MYACCOUNT['pe_userinfo'] = $LANG_ACCESS['pe_userinfo'];
 
-    USES_class_navbar();
-
     $userform = new Template ($_CONF['path_layout'] . 'admin/user/');
     $userform->set_file('user','adminuseredit.thtml');
 
@@ -2291,7 +2289,6 @@ function USER_importExec()
     $_CONF['usersubmission'] = 0;
 
     // First, upload the file
-    USES_class_upload();
 
     $upload = new upload ();
     $upload->setPath ($_CONF['path_data']);
@@ -2448,8 +2445,6 @@ function USER_delete($uid)
 function USER_handlePhotoUpload ($uid, $delete_photo = '')
 {
     global $_CONF, $_TABLES, $LANG24;
-
-    USES_class_upload();
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {

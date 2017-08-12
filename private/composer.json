@@ -1,0 +1,16 @@
+{
+    "require": {
+        "splitbrain/php-archive": "^1.0",
+        "openpsa/universalfeedcreator": "^1.8",
+        "geshi/geshi": "^1.0",
+        "html2text/html2text": "^4.1",
+        "james-heinrich/getid3": "^1.9",
+        "ezyang/htmlpurifier": "^4.9",
+        "phpclasses/oauth-api": "^1.0",
+        "phpmailer/phpmailer": "~5.2",
+        "pear/http_request2": "^2.3",
+        "simplepie/simplepie": "^1.5",
+        "aziraphale/email-address-validator": "2",
+        "pear/xml_rpc2": "^1.1"
+    }
+}

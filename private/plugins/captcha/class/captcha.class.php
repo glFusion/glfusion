@@ -6,7 +6,7 @@
 // |                                                                          |
 // | main CAPTCHA processing, generates CAPTCHA image / tokens                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -30,13 +30,14 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+namespace Captcha;
+
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require $_CONF['path'] . 'plugins/captcha/class/filter.class.php';
-require $_CONF['path'] . 'plugins/captcha/class/error.class.php';
+global $_CONF, $_CP_CONF;
 
 $imgSet = $_CONF['path'] . 'plugins/captcha/images/static/' . $_CP_CONF['imageset'] . '/imageset.inc';
 
@@ -296,10 +297,10 @@ class captcha {
                 }
                 break;
             case 2 :
-                header('Content-type: image/jpeg');
                 $filename = $cString[$this->CaptchaString] . '.jpg';
                 $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
                 if ( $fp != NULL ) {
+                    header('Content-type: image/jpeg');
                     while (!feof($fp)) {
                         $buf = fgets($fp, 8192);
                         echo $buf;

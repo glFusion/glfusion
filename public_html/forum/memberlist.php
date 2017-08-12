@@ -148,7 +148,6 @@ if ($_FF_CONF['usermenu'] == 'navbar') {
 if ($op == "last10posts") {
 
     USES_lib_admin();
-    USES_lib_html2text();
 
     $retval = '';
 
@@ -216,7 +215,7 @@ if ($op == "last10posts") {
                 $lastid = $P['id'];
                 $testText = FF_formatTextBlock($P['comment'],'text','text',$P['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
             } else {
@@ -232,7 +231,7 @@ if ($op == "last10posts") {
                 }
                 $testText = FF_formatTextBlock($B['comment'],'text','text',$B['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')));
             }

@@ -32,9 +32,22 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
-// 1.6.7
+// 1.7.0
+
+    'lib/email-address-validation/',
+    'lib/feedcreator/',
+    'lib/geshi/',
+    'lib/getid3/',
+    'lib/html2text/',
+    'lib/htmlpurifier/',
+    'lib/http/',
+    'lib/oauth/',
+    'lib/phpmailer/',
+    'lib/simplepie/',
+    'system/pear/',
     'lib/utf8/docs/examples/',
     'lib/utf8/docs/',
+
 
     'lib/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/',
     'system/classes/openid/',
@@ -50,6 +63,8 @@ $obsoletePrivateDir = array(
 );
 
 $obsoletePublicDir = array(
+// 1.7.0
+    'captcha/class/',
 // 1.6.3
     'ckeditor/skins/moono/',
     'layout/cms/css/ui-lightness/',
@@ -64,9 +79,17 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
-// 1.6.7
+// 1.7.0
+    'system/classes/filter.class.php',
+    'system/classes/output.class.php',
+    'system/classes/ajax.class.php',
+    'system/classes/dbadmn-utf.class.php',
+    'system/classes/oauthhelper.class.php',
     'plugins/bad_behavior2/templates/ban_entry.thtml',
     'lib/geshi/geshi/css-gen.cfg',
+
+    'plugins/captcha/class/error.class.php',
+    'plugins/captcha/class/filter.class.php',
 
 // 1.6.5
 

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Edit Media Gallery A/V Default Settings.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -55,8 +55,6 @@ function MG_editAVDefaults( ) {
     ));
 
     $T->set_var('site_url', $_MG_CONF['site_url']);
-
-    require_once $_CONF['path_system'].'classes/navbar.class.php';
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG07['wmp_options'],'showhideMGAdminEditorDiv("wmp",0);return false;',true);

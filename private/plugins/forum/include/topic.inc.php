@@ -61,10 +61,6 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
 
     $oldPost = 0;
 
-    if (!class_exists('StringParser') ) {
-        require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
-    }
-
     if ( $mode == 'preview' ) {
         $topictemplate->set_var(array(
             'lang_postpreview'  => $LANG_GF01['PREVIEW_HEADER'],

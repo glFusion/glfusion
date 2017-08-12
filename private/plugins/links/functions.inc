@@ -64,8 +64,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_LI_CONF['linksloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $li_config = config::get_instance();
     $_LI_CONF = $li_config->get_config('links');
 }
@@ -1211,8 +1209,6 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 function links_validateUrl($url)
 {
     global $_CONF, $LANG_LINKS_STATUS;
-
-    require_once $_CONF['path'].'lib/http/http.php';
 
     $retval = '';
 

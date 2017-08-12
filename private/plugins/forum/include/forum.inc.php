@@ -91,8 +91,6 @@ function FF_siteHeader($subject = '',$headercode='') {
 function FF_NavbarMenu($current='') {
     global $_FF_CONF, $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
 
-    USES_class_navbar();
-
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ( !COM_isAnonUser() ) {
