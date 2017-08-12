@@ -1236,11 +1236,11 @@ function INST_gotSiteInformation()
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
     $log_path = $dbconfig_path .'logs/';
     clearstatcache();
-    if ( !file_exists($dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php') ) {
+    if ( !file_exists($dbconfig_path.'vendor/aziraphale/email-address-validator/EmailAddressValidator.php') ) {
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
-    include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
+    include $dbconfig_path.'vendor/aziraphale/email-address-validator/EmailAddressValidator.php';
     $validator = new EmailAddressValidator;
 
     $numErrors = 0;
@@ -1341,7 +1341,7 @@ function INST_gotSiteInformation()
     }
     if ( isset($_POST['sitemail']) && $_POST['sitemail'] != '' ) {
         $site_mail = INST_stripslashes($_POST['sitemail']);
-        if ( !$validator->check_email_address( $site_mail ) ) {
+        if ( !$validator->checkEmailAddress( $site_mail ) ) {
             $numErrors++;
             $errText .= $LANG_INSTALL['site_email_notvalid'].'<br />';
         }
@@ -1352,7 +1352,7 @@ function INST_gotSiteInformation()
     }
     if ( isset($_POST['noreplymail']) && $_POST['noreplymail'] != '' ) {
         $noreply_mail = INST_stripslashes($_POST['noreplymail']);
-        if ( !$validator->check_email_address( $noreply_mail ) ) {
+        if ( !$validator->checkEmailAddress( $noreply_mail ) ) {
             $numErrors++;
             $errText .= $LANG_INSTALL['site_noreply_notvalid'].'<br />';
         }
