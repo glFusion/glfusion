@@ -7478,6 +7478,13 @@ function USES_lib_social() {
     require_once $_CONF['path_system'].'lib-social.php';
 }
 
+// legacy support
+function USES_class_navbar() { }
+function USES_class_date() { }
+function USES_class_search() { }
+function USES_class_story() { }
+function USES_class_upload() { }
+
 // load custom language file if it exists...
 if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
     include_once $_CONF['path_language'].'custom/'.$_CONF['language'].'.php';
