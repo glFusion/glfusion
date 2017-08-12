@@ -40,7 +40,13 @@ class OAuthConsumer {
     protected $consumer = NULL;
     protected $client = NULL;
     protected $debug_oauth = false;
-
+    protected $serviceMap = array('facebook' => 'Facebook',
+                                  'github' => 'github',
+                                  'google' => 'Google',
+                                  'linkedin' => 'LinkedIn',
+                                  'microsoft' => 'Microsoft',
+                                  'twitter' => 'Twitter',
+                                  );
     var $error = '';
 
     public function __construct($service) {
@@ -51,7 +57,8 @@ class OAuthConsumer {
         }
 
     	$this->client = new oauth_client_class;
-    	$this->client->server     = $service;
+    	$this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';
+    	$this->client->server     = $this->serviceMap[$service];
         $this->client->debug      = $_SYSTEM['debug_oauth'];
         $this->client->debug_http = $_SYSTEM['debug_oauth'];
         $this->debug_oauth        = $_SYSTEM['debug_oauth'];
@@ -73,27 +80,27 @@ class OAuthConsumer {
         }
 
         switch ( $this->client->server ) {
-            case 'facebook' :
+            case 'Facebook' :
                 $api_url = 'https://graph.facebook.com/me?fields=name,email,link,id,first_name,last_name,about';
                 $scope   = 'email,public_profile,user_friends';
                 $q_api   = array();
                 break;
-            case 'google' :
+            case 'Google' :
                 $api_url = 'https://www.googleapis.com/oauth2/v1/userinfo';
                 $scope   = 'https://www.googleapis.com/auth/userinfo.email '.'https://www.googleapis.com/auth/userinfo.profile';
                 $q_api   = array();
                 break;
-            case 'microsoft' :
+            case 'Microsoft' :
                 $api_url = 'https://apis.live.net/v5.0/me';
                 $scope   = 'wl.basic wl.emails';
                 $q_api   = array();
                 break;
-            case 'twitter' :
+            case 'Twitter' :
                 $api_url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
                 $scope   = '';
                 $q_api   = array('include_entities' => "true", 'skip_status' => "true", 'include_email' => "true");
                 break;
-            case 'linkedin' :
+            case 'LinkedIn' :
                 $api_url = 'http://api.linkedin.com/v1/people/~:(id,first-name,last-name,location,summary,email-address,picture-url,public-profile-url)';
                 $scope   = 'r_basicprofile r_emailaddress';
                 $q_api   = array('format'=>'json');
@@ -305,7 +312,7 @@ class OAuthConsumer {
     protected function _getUpdateUserInfo($info) {
         $userinfo = array();
         switch ( $this->client->server ) {
-            case 'facebook' :
+            case 'Facebook' :
                 if ( isset($info->about) ) {
                     $userinfo['about'] = $info->about;
                 }
@@ -313,16 +320,16 @@ class OAuthConsumer {
                     $userinfo['location'] = $info->location->name;
                 }
                 break;
-            case 'google' :
+            case 'Google' :
                 break;
-            case 'microsoft' :
+            case 'Microsoft' :
                 break;
-            case 'twitter' :
+            case 'Twitter' :
                 if ( isset($info->email ) ) {
                     $userinfo['email'] = $info->email;
                 }
                 break;
-            case 'linkedin' :
+            case 'LinkedIn' :
                 if ( isset($info->location->name) ) {
                     $userinfo['location'] = $info->location->name;
                 }
@@ -338,7 +345,7 @@ class OAuthConsumer {
     protected function _getCreateUserInfo($info) {
 
         switch ( $this->client->server ) {
-            case 'facebook' :
+            case 'Facebook' :
                 $users = array(
                     'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
                     'email'          => $info->email,
@@ -353,7 +360,7 @@ class OAuthConsumer {
                     'socialuser'     => 'app_scoped_user_id/'.$info->id,
                 );
                 break;
-            case 'google' :
+            case 'Google' :
                 $homepage = $info->link;
 
                 $plusPos = strpos($homepage,"+");
@@ -376,7 +383,7 @@ class OAuthConsumer {
                     'socialuser'     => $username,
                 );
                 break;
-            case 'twitter' :
+            case 'Twitter' :
                 $mail = '';
                 if ( isset($info->email)) {
                     $mail = $info->email;
@@ -396,7 +403,7 @@ class OAuthConsumer {
 
                 );
                 break;
-            case 'microsoft' :
+            case 'Microsoft' :
                 $users = array(
                     'loginname'      => (isset($info->first_name) ? $info->first_name : $info->id),
                     'email'          => $info->emails->preferred,
@@ -409,7 +416,7 @@ class OAuthConsumer {
                     'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
                 );
                 break;
-            case 'linkedin' :
+            case 'LinkedIn' :
                 $users = array(
                     'loginname'      => (isset($info->{'firstName'}) ? $info->{'firstName'} : $info->id),
                     'email'          => $info->{'emailAddress'},
@@ -438,7 +445,6 @@ class OAuthConsumer {
                     'remotephoto'    => $info->{'avatar_url'},
                     'socialservice'  => 'github',
                     'socialuser'     => $info->login,
-
                 );
                 break;
         }

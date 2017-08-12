@@ -1356,8 +1356,6 @@ switch ($mode) {
                     displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
                 }
 
-                require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
-
                 $consumer = new OAuthConsumer($service);
 
                 $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
