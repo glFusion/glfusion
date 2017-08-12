@@ -33,10 +33,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-//if (!class_exists('StringParser') ) {
-//    require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
-//}
-
 /*
  * the following are the configuration vars
  *

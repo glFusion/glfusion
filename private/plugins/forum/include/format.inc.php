@@ -50,10 +50,6 @@ define('DISABLE_BBCODE',1);
 define('DISABLE_SMILIES',2);
 define('DISABLE_URLPARSE',4);
 
-if (!class_exists('StringParser') ) {
-    require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
-}
-
 function convertlinebreaks ($text) {
     return preg_replace ("/\015\012|\015|\012/", "\n", $text);
 }

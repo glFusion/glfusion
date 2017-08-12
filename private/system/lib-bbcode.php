@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion bbcode processing library                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,10 +30,6 @@
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
-}
-
-if (!class_exists('StringParser') ) {
-    require_once $_CONF['path'].'lib/bbcode/stringparser_bbcode.class.php';
 }
 
 /**
