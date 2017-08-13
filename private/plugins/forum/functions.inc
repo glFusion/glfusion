@@ -1400,6 +1400,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'author' :
                 $fields[] = 'a.uid';
                 break;
+            case 'author_name' :
+                $fields[] = 'a.name';
+                break;
             case 'hits' :
                 $fields[] = 'a.views';
                 break;
@@ -1518,6 +1521,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author' :
                     $props['author'] = $A['uid'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = $A['name'];
                     break;
                 case 'hits' :
                     $props['hits'] = $A['views'];

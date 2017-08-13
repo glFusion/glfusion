@@ -1501,6 +1501,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                 $fields[] = 'a.media_id';
                 break;
             case 'author' :
+            case 'author_name' :
                 $fields[] = 'a.media_user_id';
                 break;
             case 'hits' :
@@ -1591,6 +1592,9 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                         break;
                     case 'author' :
                         $props['author'] = $A['media_user_id'];
+                        break;
+                    case 'author_name' :
+                        $props['author_name'] = COM_getDisplayName($A['media_user_id']);
                         break;
                     case 'hits' :
                         $props['hits'] = $A['media_views'];

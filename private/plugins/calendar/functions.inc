@@ -1702,6 +1702,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             $fields[] = 'status';
             break;
         case 'author' :
+        case 'author_name' :
             $fields[] = 'owner_id';
             break;
         case 'perms' :
@@ -1786,6 +1787,9 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $props['author'] = $A['owner_id'];
+                break;
+            case 'author_name' :
+                $props['author_name'] = COM_getDisplayName($A['owner_id']);
                 break;
             case 'hits' :
                 $props['hits'] = $A['hits'];

@@ -1199,6 +1199,10 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         case 'status':
             $fields[] = 'sp_status';
             break;
+        case 'author' :
+        case 'author_name' :
+            $fields[] = 'owner_id';
+            break;
         case 'perms' :
             $fields[] = 'owner_id';
             $fields[] = 'group_id';
@@ -1294,6 +1298,12 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     break;
                 case 'hits' :
                     $props['hits'] = $A['sp_hits'];
+                    break;
+                case 'author' :
+                    $props['author'] = $A['owner_id'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['owner_id']);
                     break;
                 case 'perms' :
                     $props['perms'] = array(

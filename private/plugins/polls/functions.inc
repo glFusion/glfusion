@@ -745,6 +745,7 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 $fields[] = 'hideresults';
                 break;
             case 'author' :
+            case 'author_name' :
                 $fields[] = 'owner_id';
                 break;
             case 'hits' :
@@ -837,6 +838,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author':
                     $props['author'] = $A['owner_id'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['owner_id']);
                     break;
                 case 'hits' :
                     $props['hits'] = $A['voters'];

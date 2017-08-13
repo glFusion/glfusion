@@ -1011,6 +1011,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                 $fields[] = 'detail.lid';
                 break;
             case 'author' :
+            case 'author_name' :
                 $fields[] = 'detail.submitter';
                 break;
             case 'hits' :
@@ -1093,6 +1094,9 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author' :
                     $props['author'] = $A['submitter'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['submitter']);
                     break;
                 case 'hits' :
                     $props['hits'] = $A['hits'];
