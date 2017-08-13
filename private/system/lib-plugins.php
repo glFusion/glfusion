@@ -3626,4 +3626,20 @@ function PLG_overrideSocialShare()
     return false;
 }
 
+
+/**
+* This functions allows a plugin to override a glFusion service
+*
+* @param    char     $service    Service to Override
+* @param    char     $class      Classname for plugin
+* @return   void
+*
+*/
+function PLG_registerService($service, $class )
+{
+    global $_VARS;
+
+    $_VARS['service_'.$service] = $class;
+}
+
 ?>
