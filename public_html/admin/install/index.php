@@ -814,32 +814,37 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
     $T->parse('env','envs',true);
 
-    $rg = ini_get('register_globals');
-    $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-    $T->set_var('recommended',$LANG_INSTALL['off']);
-    $T->set_var('notes',$LANG_INSTALL['register_globals']);
-    $T->parse('env','envs',true);
-
-    $sm = ini_get('safe_mode');
-    $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-    $T->set_var('recommended',$LANG_INSTALL['off']);
-    $T->set_var('notes',$LANG_INSTALL['safe_mode']);
-    $T->parse('env','envs',true);
-
-    $ob = ini_get('open_basedir');
-    if ( $ob == '' ) {
-        $open_basedir_restriction = 0;
-    } else {
-        $open_basedir_restriction = 1;
-        $open_basedir_directories = $ob;
+    if (version_compare(PHP_VERSION,'5.4.0','<')) {
+        $rg = ini_get('register_globals');
+        $T->set_var('item','register_globals');
+        $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+        $T->set_var('recommended',$LANG_INSTALL['off']);
+        $T->set_var('notes',$LANG_INSTALL['register_globals']);
+        $T->parse('env','envs',true);
     }
-    $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['enabled'].'</span>');
-    $T->set_var('notes',$LANG_INSTALL['open_basedir']);
-    $T->parse('env','envs',true);
 
+    if (version_compare(PHP_VERSION,'5.4.0','<')) {
+        $sm = ini_get('safe_mode');
+        $T->set_var('item','safe_mode');
+        $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
+        $T->set_var('recommended',$LANG_INSTALL['off']);
+        $T->set_var('notes',$LANG_INSTALL['safe_mode']);
+        $T->parse('env','envs',true);
+    }
+
+    if (version_compare(PHP_VERSION,'7.0.0','<')) {
+        $ob = ini_get('open_basedir');
+        if ( $ob == '' ) {
+            $open_basedir_restriction = 0;
+        } else {
+            $open_basedir_restriction = 1;
+            $open_basedir_directories = $ob;
+        }
+        $T->set_var('item','open_basedir');
+        $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['enabled'].'</span>');
+        $T->set_var('notes',$LANG_INSTALL['open_basedir']);
+        $T->parse('env','envs',true);
+    }
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
