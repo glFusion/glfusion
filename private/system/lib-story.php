@@ -882,6 +882,10 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
             case 'author' :
                 $fields[] = 'uid';
                 break;
+            case 'author_name' :
+                $fields[] = 'uid';
+                $fields[] = 'attribution_author';
+                break;
             case 'image_url' :
                 $fields[] = 'story_image';
                 break;
@@ -1001,6 +1005,13 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     break;
                 case 'author' :
                     $props['author'] = $A['uid'];
+                    break;
+                case 'author_name' :
+                    if ( $A['attribution_author'] != "" ) {
+                        $props['author_name'] = $A['attribution_author'];
+                    } else {
+                        $props['author_name'] = COM_getDisplayName($A['uid']);
+                    }
                     break;
                 case 'image_url' :
                     if ( $A['story_image'] != '' && $A['story_image'] != NULL ) {
