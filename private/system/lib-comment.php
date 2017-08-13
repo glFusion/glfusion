@@ -1944,6 +1944,8 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
             case 'author' :
                 $fields[] = 'uid';
                 break;
+            case 'author_name' :
+                $fields[] = 'uid';
                 break;
             default:
                 break;
@@ -2040,6 +2042,9 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author' :
                     $props['author'] = $A['uid'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['uid']);
                     break;
                 case 'hits' :
                     $props['hits'] = 0;
