@@ -820,7 +820,7 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 */
 function newuserform ($msg = '')
 {
-    global $_CONF, $LANG01, $LANG04;
+    global $_CONF, $_USER, $LANG01, $LANG04;
 
     $retval = '';
 
@@ -828,6 +828,8 @@ function newuserform ($msg = '')
         COM_setMsg($LANG04[122],'error');
         echo COM_refresh($_CONF['site_url']);
     }
+
+    if ( !COM_isAnonUser() ) echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
 
     if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
         return CUSTOM_userForm($msg);
