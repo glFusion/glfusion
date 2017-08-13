@@ -44,6 +44,8 @@ USES_lib_story();
 
 $newstories = false;
 $displayall = false;
+$limituser  = false;
+$cb         = true;
 
 if (isset ($_GET['display'])) {
     if (($_GET['display'] == 'new') && (empty ($topic))) {
@@ -51,6 +53,15 @@ if (isset ($_GET['display'])) {
     } else if (($_GET['display'] == 'all') && (empty ($topic))) {
         $displayall = true;
     }
+}
+
+if ( isset($_GET['u'])) {
+    $limituser = true;
+    $limituser_id = COM_applyFilter($_GET['u']);
+}
+
+if ( isset($_GET['ncb'])) {
+    $cb = false;
 }
 
 // Retrieve the archive topic - currently only one supported
@@ -72,7 +83,7 @@ $T = new Template($_CONF['path_layout']);
 $T->set_file('page','index.thtml');
 
 
-if (!$newstories && !$displayall) {
+if (!$newstories && !$displayall && $cb) {
     // give plugins a chance to replace this page entirely
     $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
     if (!empty ($newcontent)) {
@@ -101,7 +112,8 @@ if ( $msg > 0 ) {
 
 // Show any Plugin formatted blocks
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
-$displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
+
+if ( $cb ) $displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
 if (!empty ($displayBlock)) {
     $pageBody .= $displayBlock;
     // Check if theme has added the template which allows the centerblock
@@ -213,6 +225,10 @@ if (!empty($U['tids'])) {
 
 $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
 
+if ( $limituser ) {
+    $sql .= " AND s.uid=".$limituser_id." ";
+}
+
 if ($newstories) {
     $sql .= "AND (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
 }
@@ -282,9 +298,9 @@ if ( $A = DB_fetchArray( $result ) ) {
     // display first article
     if ($story->DisplayElements('featured') == 1) {
         $pageBody .= STORY_renderArticle ($story, 'y');
-        $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
     } else {
-        $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
         $pageBody .= STORY_renderArticle ($story, 'y');
     }
     $articleCounter++;
@@ -299,30 +315,45 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 
     // get plugin center blocks that follow articles
-    $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
             ($_CONF['hide_main_page_navigation'] == 0)) {
         if (empty ($topic)) {
+            $parm1set = false;
             $base_url = $_CONF['site_url'] . '/index.php';
             if ($newstories) {
                 $base_url .= '?display=new';
+                $parm1set = true;
+            }
+            if ( $limituser ) {
+                $base_url .= ($parm1set ? '&' : '?') . 'u=' . $limituser_id;
+                $parm1set = true;
+            }
+            if ( $cb == false ) {
+                $base_url .= ($parm1set ? '&' : '?') . 'ncb=x';
             }
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
+            if ( $limituser ) {
+                $base_url .= '&u='.$limituser_id;
+            }
+            if ( $cb == false ) {
+                $base_url .= '&ncb=x';
+            }
         }
         $pagination = COM_printPageNavigation ($base_url, $page, $num_pages);
         $T->set_var('pagination',$pagination);
     }
 } else { // no stories to display
     $cbDisplay = '';
-    $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-    $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    if ( $cb ) $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+    if ( $cb ) $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     if ( (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
         // If there's still nothing to display, show any default centerblocks.
-        $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
+        if ( $cb ) $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
         if ($cbDisplay == '') {
             // If there's *still* nothing to show, show the stock message
             $eMsg = $LANG05[2];
