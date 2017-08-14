@@ -83,9 +83,9 @@ $T = new Template($_CONF['path_layout']);
 $T->set_file('page','index.thtml');
 
 
-if (!$newstories && !$displayall && $cb) {
+if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
-    $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
+    if ( $cb ) $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
     if (!empty ($newcontent)) {
         echo $newcontent;
         exit;
