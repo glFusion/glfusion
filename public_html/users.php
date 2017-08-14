@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User authentication module.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -288,6 +288,7 @@ function userprofile()
         $commentCounter = 0;
         $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " ORDER BY date DESC";
         $result = DB_query($sql);
+
         while ( ( $row = DB_fetchArray($result) ) ) {
             if ( $commentCounter >= 10 ) break;
                 $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
@@ -329,9 +330,9 @@ function userprofile()
         $result = DB_query ($sql);
         $N = DB_fetchArray ($result);
         $user_templates->set_var ('number_comments', COM_numberFormat($N['count']));
-        $user_templates->set_var ('lang_all_postings_by',
-                                  $LANG04[86] . ' ' . $display_name);
     }
+    $user_templates->set_var ('lang_all_postings_by',
+                              $LANG04[86] . ' ' . $display_name);
     // hook to the profile icon display
 
     $profileIcons = PLG_profileIconDisplay($user);
