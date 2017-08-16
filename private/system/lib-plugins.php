@@ -1949,6 +1949,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         (($next_tag === false) OR ($end_pos < $next_tag))) {
                     $taglength = $end_pos - $start_pos + 1;
                     $tag = utf8_substr ($content, $start_pos, $taglength);
+                    $tag = str_replace("\xc2\xa0", ' ', $tag);
                     $parms = explode (' ', $tag);
 
                     // Extra test to see if autotag was entered with a space
