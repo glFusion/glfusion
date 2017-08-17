@@ -96,6 +96,11 @@
             <td class="uk-text-center"><input type="checkbox" name="keywords_active" value="1"></td>
         </tr>
         <tr>
+            <td class="uk-text-left">{lang_enable_html}</td>
+            <td class="uk-text-left">{html_select}</td>
+            <td class="uk-text-center"><input type="checkbox" name="html_active" value="1"></td>
+        </tr>
+        <tr>
             <td class="uk-text-left">{lang_image_skin}</td>
             <td class="uk-text-left">{skin_select}</td>
             <td class="uk-text-center"><input type="checkbox" name="image_skin_active" value="1"></td>

@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Update CKEditor to v4.7.2
+  - Media Gallery: Add Enable HTML in title / description field to global album attribute editor
   - Encrypt smtp passwords in DB
   - Moved most external libs to Composer / auto load
   - Environment check now ignores depreciated PHP settings based on PHP version installed
@@ -16,7 +18,6 @@
   - Update HTMLPurifier to v4.9.3
   - Updated gravatar link to be ssl / non-ssl agnostic
   - Links Plugin - link auto tag did not honor Open External URL in New Window configuration setting
-  - Update CKEditor to v4.7.1
   - Media Gallery - Removed HTML from hover caption on lightbox theme
   - Fixed search string highlighting in stories, forum and static pages
   - story rendering optimizations

@@ -1145,7 +1145,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
     }
-
+    if ( !isset($_GET['ncb'])) {
+        $theme->set_var('cb',true);
+    }
     $loggedInUser = !COM_isAnonUser();
     $theme->set_var( 'site_name', $_CONF['site_name']);
     $theme->set_var( 'background_image', $_CONF['layout_url'].'/images/bg.' . $_IMAGE_TYPE );
@@ -3153,7 +3155,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-//    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
+    $articles = array();
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
