@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Media Gallery: Add Enable HTML in title / description field to global album attribute editor
   - Encrypt smtp passwords in DB
   - Moved most external libs to Composer / auto load
   - Environment check now ignores depreciated PHP settings based on PHP version installed
