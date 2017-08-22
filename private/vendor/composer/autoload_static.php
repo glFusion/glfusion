@@ -15,6 +15,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'splitbrain\\PHPArchive\\' => 22,
         ),
+        'M' => 
+        array (
+            'Misd\\Linkify\\' => 13,
+        ),
         'H' => 
         array (
             'Html2Text\\' => 10,
@@ -25,6 +29,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'splitbrain\\PHPArchive\\' => 
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
+        ),
+        'Misd\\Linkify\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/misd/linkify/src/Misd/Linkify',
         ),
         'Html2Text\\' => 
         array (

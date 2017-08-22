@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7923a99e1addf1a0718a52fd33754681",
+    "hash": "4a2c1678cb2edb72379b434ac54e7770",
+    "content-hash": "2f5f22ff9e663c5dd40d56c19aa67607",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -42,7 +43,7 @@
             ],
             "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
             "homepage": "https://github.com/aziraphale/email-address-validator",
-            "time": "2015-01-03T12:17:43+00:00"
+            "time": "2015-01-03 12:17:43"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -89,7 +90,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2017-06-03 02:28:16"
         },
         {
             "name": "geshi/geshi",
@@ -129,7 +130,7 @@
             ],
             "description": "Generic Syntax Highlighter",
             "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05T05:51:25+00:00"
+            "time": "2017-05-05 05:51:25"
         },
         {
             "name": "html2text/html2text",
@@ -166,7 +167,7 @@
                 "GPLv2"
             ],
             "description": "Converts HTML to formatted plain text",
-            "time": "2017-05-15T01:50:59+00:00"
+            "time": "2017-05-15 01:50:59"
         },
         {
             "name": "james-heinrich/getid3",
@@ -202,7 +203,52 @@
                 "php",
                 "tags"
             ],
-            "time": "2017-03-27T21:12:55+00:00"
+            "time": "2017-03-27 21:12:55"
+        },
+        {
+            "name": "misd/linkify",
+            "version": "v1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misd-service-development/php-linkify.git",
+                "reference": "3481b148806a23b4001712de645247a1a4dcc10a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misd-service-development/php-linkify/zipball/3481b148806a23b4001712de645247a1a4dcc10a",
+                "reference": "3481b148806a23b4001712de645247a1a4dcc10a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Misd\\Linkify\\": "src/Misd/Linkify"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Converts URLs and email addresses in text into HTML links",
+            "homepage": "https://github.com/misd-service-development/php-linkify",
+            "keywords": [
+                "convert",
+                "email address",
+                "link",
+                "url"
+            ],
+            "time": "2017-08-17 08:33:35"
         },
         {
             "name": "openpsa/universalfeedcreator",
@@ -250,7 +296,7 @@
                 "pie",
                 "rss"
             ],
-            "time": "2017-05-18T08:28:48+00:00"
+            "time": "2017-05-18 08:28:48"
         },
         {
             "name": "pear/http_request2",
@@ -309,7 +355,7 @@
                 "http",
                 "request"
             ],
-            "time": "2016-02-13T20:20:39+00:00"
+            "time": "2016-02-13 20:20:39"
         },
         {
             "name": "pear/net_url2",
@@ -370,7 +416,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2016-04-18T22:24:01+00:00"
+            "time": "2016-04-18 22:24:01"
         },
         {
             "name": "pear/pear_exception",
@@ -425,7 +471,7 @@
             "keywords": [
                 "exception"
             ],
-            "time": "2015-02-10T20:07:52+00:00"
+            "time": "2015-02-10 20:07:52"
         },
         {
             "name": "pear/xml_rpc2",
@@ -480,7 +526,7 @@
                 }
             ],
             "description": "More info available on: http://pear.php.net/package/XML_RPC2",
-            "time": "2016-06-21T19:29:17+00:00"
+            "time": "2016-06-21 19:29:17"
         },
         {
             "name": "phpclasses/httpclient",
@@ -623,7 +669,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-07-26T21:00:20+00:00"
+            "time": "2017-07-26 21:00:20"
         },
         {
             "name": "simplepie/simplepie",
@@ -683,7 +729,7 @@
                 "feeds",
                 "rss"
             ],
-            "time": "2017-04-17T07:29:31+00:00"
+            "time": "2017-04-17 07:29:31"
         },
         {
             "name": "splitbrain/php-archive",
@@ -734,7 +780,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2017-06-11T06:11:38+00:00"
+            "time": "2017-06-11 06:11:38"
         }
     ],
     "packages-dev": [],
