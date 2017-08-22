@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Updated user profile preview screen to match standard user profile display
   - Update CKEditor to v4.7.2
   - Media Gallery: Add Enable HTML in title / description field to global album attribute editor
   - Encrypt smtp passwords in DB
