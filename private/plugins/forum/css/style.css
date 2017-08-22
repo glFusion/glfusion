@@ -3,6 +3,14 @@
 .tm-forum-wrapper {     /* wraps the forum topic */
 }
 
+.tm-forum-wrapper p {
+	margin:0;
+}
+
+.tm-forum-wrapper pre {
+	margin-top:5px !important;
+}
+
 .tm-forum-table th {
 	background: #325482;
 	color: #fff;

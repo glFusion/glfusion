@@ -484,6 +484,28 @@ class sanitizer
     public function linkify($value, $protocols = array('http', 'mail','twitter'), array $attributes = array())
     {
         global $_CONF;
+
+        $linkify = new \Misd\Linkify\Linkify(array('callback' => function($url, $caption, $isEmail) {
+                global $_CONF;
+                if ( !$isEmail && isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
+                    // external
+                    $target = ' target="_blank" rel="noopener noreferrer" ';
+                } else {
+                    $target = '';
+                }
+                $returnLink = '';
+                $url = $this->sanitizeUrl( $url );
+                if ( $isEmail ) {
+                    $returnLink = '<a href="mailto:'.$caption.'">'.$caption.'</a>';
+                } else {
+                    $returnLink =     '<a href="'.$url.'" ' . $target .'>'.$caption.'</a>';
+                }
+                return $returnLink;
+                return '<a href="'.$url.'" ' . $target .'>'.$caption.'</a>';
+        }));
+
+        $value = $linkify->process($value);
+
         // Link attributes
         $attr = '';
         foreach ($attributes as $key => $val) {
@@ -499,28 +521,9 @@ class sanitizer
         foreach ((array)$protocols as $protocol) {
             switch ($protocol) {
                 case 'http':
-                case 'https':   $value = preg_replace_callback('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i',
-                    function ($match) use ($protocol, &$links, $attr) {
-                        global $_CONF;
-                        if ($match[1])
-                            $protocol = $match[1];
-                        $link = $match[2] ?: $match[3];
-                        $link = $this->sanitizeUrl( $link );
-                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($protocol.'://'.$link,$_CONF['site_url']) === false ) {
-                            // external
-                            $target = ' target="_blank" rel="noopener noreferrer" ';
-                        } else {
-                            $target = '';
-                        }
-                        return '<' . array_push($links, "<a $attr href=\"$protocol://$link\" rel=\"nofollow\"".$target.">$link</a>") . '>';
-                    }, $value);
+                case 'https':
                     break;
                 case 'mail':
-                    $value = preg_replace_callback('~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~',
-                        function ($match) use (&$links, $attr) {
-                            return '<' . array_push($links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>") . '>';
-                        }, $value);
-
                     break;
                 case 'twitter':
                     $value = preg_replace_callback('~(?<!\w)[@](\w++)~',
@@ -536,18 +539,6 @@ class sanitizer
                     }, $value);
                     break;
                 default:
-                    $value = preg_replace_callback('~' . preg_quote($protocol, '~') . '://([^\s<]+?)(?<![\.,:])~i',
-                    function ($match) use ($protocol, &$links, $attr) {
-                        global $_CONF;
-                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
-                            // external
-                            $target = ' target="_blank" rel="noopener noreferrer" ';
-                        } else {
-                            $target = '';
-                        }
-                        $match[1] = $this->sanitizeUrl( $match[1] );
-                        return '<' . array_push($links, "<a $attr href=\"$protocol://{$match[1]}\" rel=\"nofollow\" ".$target.">{$match[1]}</a>") . '>';
-                    }, $value);
                     break;
             }
         }

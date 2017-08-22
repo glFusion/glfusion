@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'splitbrain\\PHPArchive\\' => array($vendorDir . '/splitbrain/php-archive/src'),
+    'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Html2Text\\' => array($vendorDir . '/html2text/html2text/src', $vendorDir . '/html2text/html2text/test'),
 );

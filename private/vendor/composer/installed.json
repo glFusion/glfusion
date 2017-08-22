@@ -24,7 +24,7 @@
             "ext-iconv": "Used for proper filename encode handling",
             "ext-mbstring": "Can be used alternatively for handling filename encoding"
         },
-        "time": "2017-06-11T06:11:38+00:00",
+        "time": "2017-06-11 06:11:38",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -73,7 +73,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2017-05-18T08:28:48+00:00",
+        "time": "2017-05-18 08:28:48",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -120,7 +120,7 @@
         "require-dev": {
             "phpunit/phpunit": "^5.7"
         },
-        "time": "2017-05-05T05:51:25+00:00",
+        "time": "2017-05-05 05:51:25",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -166,7 +166,7 @@
             "ext-mbstring": "For best performance",
             "symfony/polyfill-mbstring": "If you can't install ext-mbstring"
         },
-        "time": "2017-05-15T01:50:59+00:00",
+        "time": "2017-05-15 01:50:59",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -201,7 +201,7 @@
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2017-03-27T21:12:55+00:00",
+        "time": "2017-03-27 21:12:55",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -242,7 +242,7 @@
         "require-dev": {
             "simpletest/simpletest": "^1.1"
         },
-        "time": "2017-06-03T02:28:16+00:00",
+        "time": "2017-06-03 02:28:16",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -363,7 +363,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2015-02-10T20:07:52+00:00",
+        "time": "2015-02-10 20:07:52",
         "type": "class",
         "extra": {
             "branch-alias": {
@@ -420,7 +420,7 @@
         "require-dev": {
             "phpunit/phpunit": ">=3.3.0"
         },
-        "time": "2016-04-18T22:24:01+00:00",
+        "time": "2016-04-18 22:24:01",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -488,7 +488,7 @@
             "lib-curl": "Allows using cURL as a request backend.",
             "lib-openssl": "Allows handling SSL requests when not using cURL."
         },
-        "time": "2016-02-13T20:20:39+00:00",
+        "time": "2016-02-13 20:20:39",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -565,7 +565,7 @@
         "suggest": {
             "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
         },
-        "time": "2017-07-26T21:00:20+00:00",
+        "time": "2017-07-26 21:00:20",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -626,7 +626,7 @@
         "suggest": {
             "mf2/mf2": "Microformat module that allows for parsing HTML for microformats"
         },
-        "time": "2017-04-17T07:29:31+00:00",
+        "time": "2017-04-17 07:29:31",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -679,7 +679,7 @@
             "reference": "484d795f7f86c63cd0750553f94debd8812585f7",
             "shasum": ""
         },
-        "time": "2015-01-03T12:17:43+00:00",
+        "time": "2015-01-03 12:17:43",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -727,7 +727,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2016-06-21T19:29:17+00:00",
+        "time": "2016-06-21 19:29:17",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -760,5 +760,52 @@
             }
         ],
         "description": "More info available on: http://pear.php.net/package/XML_RPC2"
+    },
+    {
+        "name": "misd/linkify",
+        "version": "v1.1.4",
+        "version_normalized": "1.1.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/misd-service-development/php-linkify.git",
+            "reference": "3481b148806a23b4001712de645247a1a4dcc10a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/misd-service-development/php-linkify/zipball/3481b148806a23b4001712de645247a1a4dcc10a",
+            "reference": "3481b148806a23b4001712de645247a1a4dcc10a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.0 || ^5.0"
+        },
+        "time": "2017-08-17 08:33:35",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Misd\\Linkify\\": "src/Misd/Linkify"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Converts URLs and email addresses in text into HTML links",
+        "homepage": "https://github.com/misd-service-development/php-linkify",
+        "keywords": [
+            "convert",
+            "email address",
+            "link",
+            "url"
+        ]
     }
 ]

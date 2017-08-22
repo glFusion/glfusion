@@ -6682,7 +6682,7 @@ function CTL_clearCacheDirectories($path, $needle = '')
     }
     if ($dir = @opendir($path)) {
         while ($entry = readdir($dir)) {
-            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == '.git' || $entry == 'index.html') {
                 continue;
             } elseif (is_dir($path . $entry)) {
                 CTL_clearCacheDirectories($path . $entry, $needle);

@@ -11,6 +11,7 @@
         "pear/http_request2": "^2.3",
         "simplepie/simplepie": "^1.5",
         "aziraphale/email-address-validator": "2",
-        "pear/xml_rpc2": "^1.1"
+        "pear/xml_rpc2": "^1.1",
+        "misd/linkify": "^1.1"
     }
 }
