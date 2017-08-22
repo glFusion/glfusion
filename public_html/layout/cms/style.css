@@ -2594,3 +2594,130 @@ input.error {
 span.highlight {
 	background-color:chartreuse;
 }
+
+/* Geshi Code Formatting */
+pre {
+	overflow: auto;
+	word-wrap: normal;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	box-shadow: inset 0 0 .5em #ccc;
+	padding: .7em 1em;
+	margin:0;
+}
+
+.code .co0 {
+	color: #666;
+	font-style: italic;
+}
+.code .co4 {
+	color: #c00;
+	font-style: italic;
+}
+.code .es5 {
+	color: #069;
+	font-weight: bold;
+}
+.code .es6 {
+	color: #093;
+	font-weight: bold;
+}
+.code .kw2 {
+	color: #000;
+	font-weight: bold;
+}
+.code .kw5 {
+	color: #008000;
+}
+.code .kw6 {
+	color: #f08;
+	font-weight: bold;
+}
+.code .me0 {
+	color: #004000;
+}
+.code .nu0 {
+	color: #c6c;
+}
+.code .re0 {
+	color: #00f;
+}
+.code .re3 {
+	color: #f33;
+	font-weight: bold;
+}
+.code .re4 {
+	color: #099;
+}
+.code .re5 {
+	color: #603;
+}
+.code .sc-2 {
+	color: #404040;
+}
+.code .sy3 {
+	color: #000040;
+}
+.code .br0,
+.code .sy0 {
+	color: #6c6;
+}
+.code .co1,
+.code .coMULTI,
+.code .sc-1 {
+	color: #808080;
+	font-style: italic;
+}
+.code .co2,
+.code .sy1 {
+	color: #393;
+}
+.code .co3,
+.code .sy4 {
+	color: #008080;
+}
+.code .es0,
+.code .es1,
+.code .esHARD {
+	color: #009;
+	font-weight: bold;
+}
+.code .es2,
+.code .es3,
+.code .es4 {
+	color: #609;
+	font-weight: bold;
+}
+.code .kw1,
+.code .kw8 {
+	color: #b1b100;
+}
+.code .kw10,
+.code .kw11,
+.code .kw12,
+.code .kw9 {
+	color: #039;
+	font-weight: bold;
+}
+.code .kw13,
+.code .kw14,
+.code .kw15,
+.code .kw16,
+.code .me1,
+.code .me2 {
+	color: #060;
+}
+.code .kw3,
+.code .kw7,
+.code .sy2 {
+	color: #006;
+}
+.code .kw4,
+.code .re2 {
+	color: #933;
+}
+.code .re1,
+.code .st0,
+.code .st_h {
+	color: #f00;
+}
