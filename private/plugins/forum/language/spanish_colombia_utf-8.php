@@ -948,7 +948,12 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Opción Predeterminada para Smilies deshabilitada',
     'urlparse_disabled' => 'Opción Predeterminada para URL Parse deshabilitada',
     'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
-    'allowed_html' => 'HTML Permitido'
+    'allowed_html' => 'HTML Permitido',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style'
 );
 
 $LANG_configsubgroups['forum'] = array(

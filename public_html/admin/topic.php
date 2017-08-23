@@ -750,15 +750,18 @@ function TOPIC_delete($tid)
     DB_query ("UPDATE {$_TABLES['syndication']} SET topic = '::all', is_enabled = 0 WHERE topic = '$tid'");
     // remove any alternate topics
     DB_query ("UPDATE {$_TABLES['stories']} SET alternate_tid = NULL WHERE alternate_tid = '$tid'");
+    // promote stories with a different alt topic
+    $result = DB_query("SELECT sid,alternate_tid FROM {$_TABLES['stories']} WHERE tid = '$tid' AND (alternate_tid != NULL || alternate_tid != '')");
+    while ( ( $A = DB_fetchArray($result)) != NULL ) {
+        DB_query("UPDATE {$_TABLES['stories']} SET tid='".$A['alternate_tid']."', alternate_tid=NULL WHERE sid='".$A['sid']."'");
+    }
 
     // delete comments, trackbacks, images associated with stories in this topic
     $result = DB_query ("SELECT sid FROM {$_TABLES['stories']} WHERE tid = '$tid'");
     $numStories = DB_numRows ($result);
     for ($i = 0; $i < $numStories; $i++) {
         $A = DB_fetchArray ($result);
-        STORY_deleteImages ($A['sid']);
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = '{$A['sid']}' AND type = 'article'");
-        DB_query("DELETE FROM {$_TABLES['trackback']} WHERE sid = '{$A['sid']}' AND type = 'article'");
+        STORY_deleteStory($A['sid']);
     }
 
     // delete these

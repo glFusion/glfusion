@@ -428,26 +428,45 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
 }
 
 function _ff_geshi_formatted($str,$type='php') {
-    global $_CONF, $LANG_GF01;
+    global $_CONF, $_FF_CONF, $LANG_GF01;
 
     $str = @htmlspecialchars_decode($str,ENT_QUOTES);
     $str = preg_replace('/^\s*?\n|\s*?\n$/','',$str);
     $geshi = new GeSHi($str,$type);
-    $geshi->set_encoding('utf-8');
+    $geshi->set_encoding(COM_getEncodingt());
     $geshi->set_header_type(GESHI_HEADER_DIV);
     if ( $_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true ) {
         $geshi->set_link_target(true);
     }
-    $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
+    if ( isset($_FF_CONF['geshi_line_numbers']) && $_FF_CONF['geshi_line_numbers']) {
+        $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+    } else {
+        $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
+    }
     $geshi->enable_keyword_links(false);
-    $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
-    $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
-    $geshi->set_code_style('color: #000020;', 'color: #000020;');
-    $geshi->set_line_style('background: red;', true);
+    if ( isset($_FF_CONF['geshi_overall_style']) ) {
+        $geshi->set_overall_style($_FF_CONF['geshi_overall_style'],true);
+    } else {
+        $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
+    }
+    if ( isset($_FF_CONF['geshi_line_style'] ) ) {
+        $geshi->set_line_style($_FF_CONF['geshi_line_style'],true);
+    } else {
+        $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
+    }
+    if ( isset($_FF_CONF['geshi_code_style'] ) ) {
+        $geshi->set_code_style($_FF_CONF['geshi_code_style'],true);
+    } else {
+        $geshi->set_code_style('color: #000020;', 'color: #000020;');
+    }
     $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
     $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
     $geshi->set_header_content(strtoupper($type) . " " . $LANG_GF01['formatted_code']);
-    $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #808080; font-size: 90%; font-weight: bold; background-color: #f0f0ff; border-bottom: 1px solid #d0d0d0; padding: 2px;');
+    if ( isset($_FF_CONF['geshi_header_style'] ) ) {
+        $geshi->set_header_content_style($_FF_CONF['geshi_header_style'],true);
+    } else {
+        $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: bold; background-color: #325482; border-bottom: 1px solid #d0d0d0; padding: 2px;');
+    }
     return $geshi->parse_code();
 }
 

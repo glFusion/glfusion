@@ -1,4 +1,7 @@
 ## v1.7.0 (unreleased)
+  - Topic deletion now uses standard glFusion APIs to remove a story
+  - Topic Deletion now 'promotes' stories with an alternate topic. For example, if you delete a topic, generally all stories with that topic ID are also deleted. If a story that has the primary topic id of the topic being deleted and has an alternate topic, the story will be updated so the alternate topic becomes the primary topic and the story is not deleted.
+  - Forum Plugin - Allow GeSHi Code block to be styled through configuration
   - Forum Plugin - Preview did not properly parse code blocks by language
   - Forum Plugin - Updated GeShi code formatting to use syntax highlights
   - Updated Linkify to work properly with later versions of PHP

@@ -952,7 +952,12 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Standart für "Smilies deaktivieren"',
     'urlparse_disabled' => 'Standart für "URL Parse deaktivieren"',
     'use_sfs' => '"Stop Forum Spam" aktivieren',
-    'allowed_html' => 'Erlaubtes HTML'
+    'allowed_html' => 'Erlaubtes HTML',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style'
 );
 
 $LANG_configsubgroups['forum'] = array(
