@@ -765,7 +765,6 @@ function TOPIC_delete($tid)
     }
 
     // delete these
-    DB_delete ($_TABLES['stories'], 'tid', $tid);
     DB_delete ($_TABLES['storysubmission'], 'tid', $tid);
     DB_delete ($_TABLES['topics'], 'tid', $tid);
 
