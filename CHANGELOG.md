@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Forum Plugin - Preview did not properly parse code blocks by language
   - Forum Plugin - Updated GeShi code formatting to use syntax highlights
   - Updated Linkify to work properly with later versions of PHP
   - Updated user profile preview screen to match standard user profile display

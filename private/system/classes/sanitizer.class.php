@@ -245,8 +245,8 @@ class sanitizer
                 $sp->addParser(array('block'), array($this,'_cleanHTML'));
             }
         }
-        $sp->addCode ('code', 'usecontent', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
-                      'code', array ('block'), array ());
+        $sp->addCode ('code', 'usecontent?', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
+                      'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
 
         $str = $sp->parse ($str);
 
@@ -263,8 +263,8 @@ class sanitizer
         if ( $this->_postmode != 'html' ) {
             $sp->addParser(array('block'), array($this,'htmlspecialchars'));
         }
-        $sp->addCode ('code', 'usecontent', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
-                      'code', array ('block'), array ());
+        $sp->addCode ('code', 'usecontent?', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
+                      'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
 
         $str = $sp->parse ($str);
 
@@ -715,7 +715,12 @@ class sanitizer
         if ( $action == 'validate') {
             return true;
         }
-        $codeblock = '[code]'.$content.'[/code]';
+        if (!isset ($attributes['default'])) {
+            $codeblock = '[code]'.$content.'[/code]';
+        } else {
+            $lang = strip_tags($attributes['default']);
+            $codeblock = '[code='.$lang.']'.$content.'[/code]';
+        }
         return $codeblock;
     }
 
