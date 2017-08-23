@@ -242,7 +242,8 @@ $LANG_GF01 = array(
     'disable_urlparse' => 'URLs nicht analysieren:',
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
-    'all_read_success' => 'Alle Themen wurden als gelesen markiert'
+    'all_read_success' => 'Alle Themen wurden als gelesen markiert',
+    'formatted_code' => 'Formatted Code'
 );
 
 $LANG_GF02 = array(
