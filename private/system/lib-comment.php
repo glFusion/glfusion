@@ -118,7 +118,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $T->parse('textoutput','textemail');
         $msgText = $T->finish($T->get_var('textoutput'));
 
-        $html2txt = new html2text($msgText,false);
+        $html2txt = new Html2Text\Html2Text($msgText,false);
 
         $messageText = $html2txt->get_text();
         return array($message,$messageText,array());
