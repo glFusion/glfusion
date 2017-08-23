@@ -2059,7 +2059,12 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                         'perm_anon' => 1,       // fix
                     );
                     break;
-
+                case 'parent_id':
+                    $props[$p] = $A['sid'];
+                    break;
+                case 'parent_type':
+                    $props[$p] = $A['type'];
+                    break;
                 default:
                     $props[$p] = '';
                     break;
