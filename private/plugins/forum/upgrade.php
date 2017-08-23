@@ -169,6 +169,21 @@ function forum_upgrade() {
             $c->del('default_Datetime_format','forum');
             $c->del('default_Topic_Datetime_format','forum');
 
+        case '3.3.4' :
+            $_FF_DEFAULT = array();
+            $_FF_DEFAULT['geshi_line_numbers']     = false;
+            $_FF_DEFAULT['geshi_overall_style']    = 'font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #fafafa;';
+            $_FF_DEFAULT['geshi_line_style']       = 'font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;font-weight: 700; color: #006060; background: #fcfcfc;';
+            $_FF_DEFAULT['geshi_code_style']       = 'color: #000020;';
+            $_FF_DEFAULT['geshi_header_style']     = 'font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: 700; background-color: #3299D6; border-bottom: 1px solid #d0d0d0; padding: 2px;';
+
+            $c = config::get_instance();
+            $c->add('geshi_line_numbers', $_FF_DEFAULT['geshi_line_numbers'], 'select',0, 2, 0, 121, true, 'forum');
+            $c->add('geshi_line_style', $_FF_DEFAULT['geshi_line_style'], 'text',0, 2, 0, 122, true, 'forum');
+            $c->add('geshi_overall_style', $_FF_DEFAULT['geshi_overall_style'], 'text',0, 2, 0, 123, true, 'forum');
+            $c->add('geshi_code_style', $_FF_DEFAULT['geshi_code_style'], 'text',0, 2, 0, 124, true, 'forum');
+            $c->add('geshi_header_style', $_FF_DEFAULT['geshi_header_style'], 'text',0, 2, 0, 125, true, 'forum');
+
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);

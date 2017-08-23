@@ -8,7 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -187,6 +187,13 @@ $_FF_DEFAULT['inlineimageypes']    = array(
 $_FF_DEFAULT['enable_fm_integration'] = false;
 $_FF_DEFAULT['allow_memberlist']      = false;
 $_FF_DEFAULT['allowed_html'] = 'p,b,i,strong,em,br,pre,code,img[src|alt|style|title],ol,ul,li,u';
+
+$_FF_DEFAULT['geshi_line_numbers']     = false;
+$_FF_DEFAULT['geshi_overall_style']    = 'font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #fafafa;';
+$_FF_DEFAULT['geshi_line_style']       = 'font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;font-weight: 700; color: #006060; background: #fcfcfc;';
+$_FF_DEFAULT['geshi_code_style']       = 'color: #000020;';
+$_FF_DEFAULT['geshi_header_style']     = 'font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: 700; background-color: #3299D6; border-bottom: 1px solid #d0d0d0; padding: 2px;';
+
 
 /**
 * the Forum plugin's config array
@@ -369,10 +376,6 @@ function plugin_initconfig_forum()
                 0, 0, 0, 180, true, 'forum');
         $c->add('show_moderators', $_FF_DEFAULT['show_moderators'], 'select',
                 0, 0, 0, 190, true, 'forum');
-//        $c->add('default_Datetime_format', $_FF_DEFAULT['default_Datetime_format'], 'text',
-//                0, 0, 0, 200, true, 'forum');
-//        $c->add('default_Topic_Datetime_format', $_FF_DEFAULT['default_Topic_Datetime_format'], 'text',
-//                0, 0, 0, 210, true, 'forum');
         $c->add('contentinfo_numchars', $_FF_DEFAULT['contentinfo_numchars'], 'text',
                 0, 0, 0, 220, true, 'forum');
         $c->add('linkinfo_width', $_FF_DEFAULT['linkinfo_width'], 'text',
@@ -430,11 +433,8 @@ function plugin_initconfig_forum()
                 0, 2, 0, 70, true, 'forum');
         $c->add('allow_html', $_FF_DEFAULT['allow_html'], 'select',
                 0, 2, 0, 80, true, 'forum');
-
         $c->add('allowed_html', $_FF_DEFAULT['allowed_html'], 'text',
                 0, 2, 0, 82, true, 'forum');
-
-
         $c->add('use_wysiwyg_editor', false, 'select',
                 0, 2, 0, 85, true, 'forum');
         $c->add('post_htmlmode', $_FF_DEFAULT['post_htmlmode'], 'select',
@@ -443,19 +443,29 @@ function plugin_initconfig_forum()
                 0, 2, 0, 100, true, 'forum');
         $c->add('use_geshi', $_FF_DEFAULT['use_geshi'], 'select',
                 0, 2, 0, 120, true, 'forum');
-        $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',
+        $c->add('geshi_line_numbers', $_FF_DEFAULT['geshi_line_numbers'], 'select',
                 0, 2, 0, 130, true, 'forum');
-        $c->add('use_sfs', $_FF_DEFAULT['use_sfs'], 'select',
-                0, 2, 0, 135, true, 'forum');
-        $c->add('show_moods', $_FF_DEFAULT['show_moods'], 'select',
+        $c->add('geshi_line_style', $_FF_DEFAULT['geshi_line_style'], 'text',
                 0, 2, 0, 140, true, 'forum');
-        $c->add('allow_smilies', $_FF_DEFAULT['allow_smilies'], 'select',
+        $c->add('geshi_overall_style', $_FF_DEFAULT['geshi_overall_style'], 'text',
                 0, 2, 0, 150, true, 'forum');
-        $c->add('use_smilies_plugin', $_FF_DEFAULT['use_smilies_plugin'], 'select',
+        $c->add('geshi_code_style', $_FF_DEFAULT['geshi_code_style'], 'text',
                 0, 2, 0, 160, true, 'forum');
-        $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
-        $c->add('smilies_disabled', 0, 'select', 0, 2, 6, 170, true, 'forum');
-        $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
+        $c->add('geshi_header_style', $_FF_DEFAULT['geshi_header_style'], 'text',
+                0, 2, 0, 170, true, 'forum');
+        $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',
+                0, 2, 0, 180, true, 'forum');
+        $c->add('use_sfs', $_FF_DEFAULT['use_sfs'], 'select',
+                0, 2, 0, 190, true, 'forum');
+        $c->add('show_moods', $_FF_DEFAULT['show_moods'], 'select',
+                0, 2, 0, 200, true, 'forum');
+        $c->add('allow_smilies', $_FF_DEFAULT['allow_smilies'], 'select',
+                0, 2, 0, 210, true, 'forum');
+        $c->add('use_smilies_plugin', $_FF_DEFAULT['use_smilies_plugin'], 'select',
+                0, 2, 0, 220, true, 'forum');
+        $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 230, true, 'forum');
+        $c->add('smilies_disabled', 0, 'select', 0, 2, 6, 240, true, 'forum');
+        $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 250, true, 'forum');
 
         $c->add('ff_centerblock', NULL, 'fieldset', 0, 3, NULL, 0, true,
                 'forum');

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -253,7 +253,7 @@ $LANG_GF02 = array(
     'msg02' => 'You should not be here!<br/>Restricted access to this forum only',
     'msg03' => 'Permission Error.  Please contact site administrator.',
     'msg04' => '',
-    'msg05' => '<CENTER><I>Sorry, no topics have been created yet.</CENTER></I>',
+    'msg05' => 'No topics has been posted.',
     'msg06' => ' new posts since your last visit',
     'msg07' => 'Online Users:',
     'msg08' => '<br/><B>Total Registered Users to Date:</B> %s',
@@ -963,6 +963,12 @@ $LANG_confignames['forum'] = array(
     'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
     'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
     'allowed_html' => 'Allowed HTML',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style',
+
 );
 
 $LANG_configsubgroups['forum'] = array(
