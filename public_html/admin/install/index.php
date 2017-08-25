@@ -74,7 +74,7 @@ if( function_exists('set_error_handler') ) {
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8','original_version');
+$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8','original_version','securepassword');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
@@ -108,68 +108,7 @@ $php55 = (INST_phpIsGreater('5.5.0') ? true : false);
 function INST_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='')
 {
     global $_GLFUSION;
-
     $_GLFUSION['errstr'] = $errstr;
-
-/* ------------------------------------------------------------------------
-    $title = 'An Error Occurred';
-    if (!empty($_CONF['site_name'])) {
-        $title = $_CONF['site_name'] . ' - ' . $title;
-    }
-    echo("<html><head><title>$title</title></head>\n<body>\n");
-
-    echo('<h1>An error has occurred:</h1>');
-        echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                in your glFusion siteconfig.php.</h2><p>If this is a production
-                website you <strong><em>should disable</em></strong> this
-                option once you have resolved any issues you are
-                troubleshooting.</p>');
-    echo("<p>$errno - $errstr @ $errfile line $errline</p>");
-
-    if (@ini_get('xdebug.default_enable') == 1) {
-        ob_start();
-        var_dump($errcontext);
-        $errcontext = ob_get_contents();
-        ob_end_clean();
-        echo "$errcontext</body></html>";
-    } else {
-        $btr = debug_backtrace();
-        if (count($btr) > 0) {
-            if ($btr[0]['function'] == 'COM_handleError') {
-                array_shift($btr);
-            }
-        }
-        if (count($btr) > 0) {
-            echo "<font size='1'><table class='xdebug-error' dir='ltr' border='1' cellspacing='0' cellpadding='1'>\n";
-            echo "<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>\n";
-            echo "<tr><th align='right' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>File</th><th align='right' bgcolor='#eeeeec'>Line</th></tr>\n";
-            $i = 1;
-            foreach ($btr as $b) {
-                $f = '';
-                if (! empty($b['file'])) {
-                    $f = $b['file'];
-                }
-                $l = '';
-                if (! empty($b['line'])) {
-                    $l = $b['line'];
-                }
-                echo "<tr><td bgcolor='#eeeeec' align='right'>$i</td><td bgcolor='#eeeeec'>{$b['function']}</td><td bgcolor='#eeeeec'>{$f}</td><td bgcolor='#eeeeec' align='right'>{$l}</td></tr>\n";
-                $i++;
-                if ($i > 100) {
-                    echo "<tr><td bgcolor='#eeeeec' align='left' colspan='4'>Possible recursion - aborting.</td></tr>\n";
-                    break;
-                }
-            }
-            echo "</table></font>\n";
-        }
-        echo '<pre>';
-        ob_start();
-        var_dump($errcontext);
-        $errcontext = htmlspecialchars(ob_get_contents());
-        ob_end_clean();
-        echo "$errcontext</pre></body></html>";
-    }
----------------------------------------------------------------------- */
     return;
 }
 
@@ -209,7 +148,8 @@ function _buildProgressBar($currentStep, &$T)
                           'pathsetting'         => $LANG_INSTALL['path_settings'],
                           'checkenvironment'    => $LANG_INSTALL['env_check'],
                           'getsiteinformation'  => $LANG_INSTALL['site_info'],
-                          'contentplugins'      => $LANG_INSTALL['content_plugins']);
+                          'contentplugins'      => $LANG_INSTALL['content_plugins'],
+                          'complete'            => $LANG_INSTALL['complete']);
 
     $upgradeSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
                           'upgradealert'        => $LANG_INSTALL['instruction_step'],
@@ -403,7 +343,7 @@ function _displayError($error,$step,$errorText='')
  * Display initial welcome screen.
  *
  * Determine what language to use and what task to perform, i.e.;
- * New Installation, Upgrade, or Migrate a site.
+ * New Installation or Upgrade.
  *
  * @return  string          HTML
  *
@@ -457,6 +397,13 @@ function INST_getLanguageTask( )
         'hiddenfields'          => _buildHiddenFields(),
         'percent_complete'      => '10',
     ));
+
+//    if ( !isset($_GLFUSION['method'] ) ) {
+        if (@file_exists('../../siteconfig.php' ) ) {
+            $T->set_var('upgradeselected',' selected="selected"');
+            $_GLFUSION['method'] = 'upgrade';
+        }
+//    }
 
     $T->parse('output','page');
 
@@ -1685,7 +1632,9 @@ function INST_installAndContentPlugins()
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path_system'].'lib-database.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
+
     require $_CONF['path_system'].'lib-database.php';
+    require $_CONF['path_system'].'lib-security.php';
     if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
     INST_errorLog($log_path,'INSTALL: Installing Database Tables and Default Data');
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
@@ -1766,6 +1715,11 @@ function INST_installAndContentPlugins()
 
     $rk = INST_randomKey(80);
     DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')",1);
+
+    $securePassword = INST_securePassword();
+    $encryptedPassword = SEC_encryptPassword($securePassword);
+    DB_query("UPDATE {$_TABLES['users']} SET passwd='".$encryptedPassword."' WHERE uid=2",1);
+    $_GLFUSION['securepassword'] = $securePassword;
 
     INST_errorLog($log_path,'INSTALL: Completed installation of default configuration data');
     $config->_purgeCache();
@@ -1894,8 +1848,90 @@ function INST_doPluginInstall()
 
     INST_clearCache();
 
-    header('Location: success.php?type=install&language=' . $language);
-    exit;
+    return INST_complete();
+}
+
+/**
+ * Displays final install / upgrade success page
+ * with details on the process.
+ *
+ */
+function INST_complete()
+{
+    global $_GLFUSION, $_SYSTEM, $_CONF, $_TABLES, $_DB, $_DB_dbms,
+           $_DB_host, $_DB_user,$_DB_pass, $site_url,$_DB_table_prefix,
+           $LANG_INSTALL, $LANG_SUCCESS, $percent_complete;
+
+    if ( ($rc = _checkSession() ) !== 0 ) {
+        return $rc;
+    }
+
+    $_GLFUSION['currentstep'] = 'complete';
+
+    $method = $_GLFUSION['method'];
+    $method = preg_replace('/[^a-z0-9\-_]/', '', $method);
+    $templateFile = 'success_'.$method.'.thtml';
+
+    if ( isset($_GLFUSION['securepassword'])) {
+        $securepassword = $_GLFUSION['securepassword'];
+    } else {
+        $securepassword = '';
+    }
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page',$templateFile);
+
+    $T->set_var(array(
+        'securepassword'            => $securepassword,
+        'method'                    => $method,
+        'lang_success'              => $LANG_SUCCESS[1].'v' . GVERSION . $LANG_SUCCESS[2],
+        'lang_congradulations'      => $LANG_SUCCESS[3] . (($method == 'install') ? $LANG_SUCCESS[20] : $LANG_SUCCESS[21]) . $LANG_SUCCESS[4],
+        'lang_login'                => $LANG_SUCCESS[5],
+        'lang_username'             => $LANG_SUCCESS[6],
+        'lang_password'             => $LANG_SUCCESS[8],
+        'lang_sec_warning'          => $LANG_SUCCESS[10],
+        'lang_dont_forget'          => $LANG_SUCCESS[11],
+        'lang_number_of_things'     => (($method == 'upgrade') ? '2' : '3'),
+        'lang_things'               => $LANG_SUCCESS[12],
+        'lang_rename'               => $LANG_SUCCESS[13],
+        'install_directory'         => $_CONF['path_admin'] . 'install/',
+        'lang_change_password'      => $LANG_SUCCESS[14],
+        'lang_account_password'     => $LANG_SUCCESS[15],
+        'password_link'             => $_CONF['site_url'].'/usersettings.php?mode=edit',
+        'lang_set_perms'            => $LANG_SUCCESS[16],
+        'db_config_path'            => $_CONF['path'] . 'db-config.php',
+        'lang_and'                  => $LANG_SUCCESS[17],
+        'siteconfig_path'           => $_CONF['path_html'] . 'siteconfig.php',
+        'lang_backto'               => $LANG_SUCCESS[18],
+        'lang_quick_start'          => $LANG_INSTALL['quick_start'],
+        'lang_quick_start_help'     => $LANG_INSTALL['quick_start_help'],
+        'lang_remove_install_directory' => $LANG_SUCCESS[22],
+        'lang_remove_install_help'      => $LANG_SUCCESS[23],
+        'lang_remove_install_files'     => $LANG_SUCCESS[24],
+        'lang_whats_new'                => $LANG_SUCCESS[25],
+        'lang_whats_new_help'           => $LANG_SUCCESS[26],
+        'lang_goto_site'                => $LANG_SUCCESS[27],
+        'lang_button_files_removed'     => $LANG_SUCCESS[28],
+        'lang_error_removing_files'     => $LANG_SUCCESS[29],
+        'lang_error_message'            => $LANG_SUCCESS[30],
+        'new_site_url'              => $_CONF['site_url'],
+    ));
+    $alertMsg = '';
+    if ( $method == 'upgrade' ) {
+        if ( @file_exists($_CONF['path_admin'].'install/alert.html') ) {
+            $alertMsg = file_get_contents($_CONF['path_admin'].'install/alert.html');
+            if ( $alertMsg != '' ) {
+                $T->set_var('alert_message',$alertMsg);
+            }
+        }
+        $T->set_var(array(
+            'lang_version_check' => $LANG_INSTALL['version_check'],
+            'lang_check_for_updates' => $LANG_INSTALL['check_for_updates'],
+        ));
+    }
+    $percent_complete = 100;
+    $T->parse('output','page');
+    return $T->finish($T->get_var('output'));
 }
 
 /**
@@ -2044,9 +2080,6 @@ function INST_doPluginUpgrade()
         return _displayError(PLUGIN_UPGRADE_ERROR,'done',$error);
     }
 
-// do not want to do redirect here - now we need to see if there is
-// any clean up we need to do...
-
     global $obsoletePrivateDir,$obsoletePublicDir, $obsoletePrivateFiles, $obsoletePublicFiles;
 
     if ( count ($obsoletePrivateDir) > 0 ||
@@ -2056,7 +2089,8 @@ function INST_doPluginUpgrade()
     ) {
         return INST_FileCleanUp();
     }
-    header('Location: success.php?type=upgrade&language=' . $language);
+
+    return INST_complete();
 }
 
 
@@ -2109,7 +2143,8 @@ function INST_doFileCleanUp()
     global $obsoletePrivateDir,$obsoletePublicDir, $obsoletePrivateFiles, $obsoletePublicFiles, $obsoleteAdminFiles;
 
     $language = $_GLFUSION['language'];
-        $_GLFUSION['currentstep'] = 'complete';
+
+    $_GLFUSION['currentstep'] = 'cleanup';
 
     $retval       = '';
     $failure      = '';
@@ -2196,12 +2231,11 @@ function INST_doFileCleanUp()
     }
 
 // test failure message
-//$failure = '<li>DIR: Test failure message</li><li>FILE: /www/www/www/www.txt</li>';
+// $failure = '<li>DIR: Test failure message</li><li>FILE: /www/www/www/www.txt</li>';
 
     if ( $failure == '') {
         $method = $_GLFUSION['method'];
-        header('Location: success.php?type='.$method.'&language=' . $language);
-        exit;
+        return INST_complete();
     }
 
     $T = new TemplateLite('templates/');
@@ -2422,42 +2456,52 @@ if ( isset($_POST['type']) ) {
 $_GLFUSION['method'] = $method;
 
 switch($mode) {
+
     case 'installalert' :
         $pageBody = INST_installAlert();
         $percent_complete = 20;
         break;
+
     case 'upgradealert' :
         $percent_complete = 20;
         $pageBody = INST_upgradeAlert();
         break;
+
     case 'pathsetting' :
         $pageBody = INST_getPathSetting();
         $percent_complete = 30;
         break;
+
     case 'gotpathsetting':
         $pageBody =   INST_gotPathSetting();
         $percent_complete = 50;
         break;
+
     case 'checkenvironment' :
         $pageBody = INST_checkEnvironment();
         $percent_complete = 50;
         break;
+
     case 'getsiteinformation' :
         $pageBody = INST_getSiteInformation();
         $percent_complete = 70;
         break;
+
     case 'gotsiteinformation' :
         $pageBody = INST_gotSiteInformation();
         $percent_complete = 80;
         break;
+
     case 'contentplugins' :
         $pageBody = INST_installAndContentPlugins();
         $percent_complete = 90;
         break;
+
     case 'installplugins' :
         require '../../lib-common.php';
         $pageBody = INST_doPluginInstall();
         break;
+
     case 'startupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
@@ -2482,6 +2526,7 @@ switch($mode) {
             }
         }
         break;
+
     case 'doupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
@@ -2505,16 +2550,19 @@ switch($mode) {
         }
         // fall through here on purpose and process the siteconfig upgrade...
         // at this point we have a fully updated database and core environment
+
     case 'dositeconfigupgrade' :
         require '../../lib-common.php';
         INST_doSiteConfigUpgrade();
 
         // fall through here on purpose and process the plugin upgrades.....
         // at this point we have a fully updated database and core environment
+
     case 'dopluginupgrade' :
         $pageBody = INST_doPrePluginUpgrade();
         $pageBody .= INST_doPluginUpgrade();
         break;
+
     case 'dofilecleanup' :
         $action = 'cleanup';
         $percent_complete = 95;
@@ -2523,9 +2571,12 @@ switch($mode) {
         break;
 
     case 'done' :
+        require '../../lib-common.php';
+        $percent_complete = 100;
         $method = $_GLFUSION['method'];
-        header('Location: success.php?type='.$method.'&language=' . $language);
-        exit;
+        $pageBody = INST_complete($method);
+        break;
+
     default:
         $percent_complete = 10;
         $_GLFUSION['language'] = $language;

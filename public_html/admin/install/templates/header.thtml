@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="uikit/js/uikit.min.js"></script>
 		<meta name="robots" content="noindex,nofollow" />
 		<title>{page_title}</title>
+		<link rel="shortcut icon" href="../../layout/cms/images/favicon.ico" type="image/x-icon">
 	</head>
 	<body class="uk-height-1-1">
 		<div class="tm-wrapper">

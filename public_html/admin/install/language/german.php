@@ -178,7 +178,7 @@ $LANG_INSTALL = array(
     'version_check' => 'Auf Updates überprüfen',
     'check_for_updates' => "Gehe zum <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> um zu überprüfen ob es Updates für das glFusion CMS oder die Plugins gibt.",
     'quick_start' => 'Kurzanleitung ',
-    'quick_start_help' => 'Lesen sie die <a href="https://www.glfusion.org/wiki/glfusion:quickstart">Kurzanleitung</a> und die <a href="https://www.glfusion.org/wiki/">Dokumentation</a> für Hilfe zur Konfiguration deiner neuen glFusion Seite.',
+    'quick_start_help' => 'Lesen sie die <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">Kurzanleitung</a> und die <a href="https://www.glfusion.org/wiki/" target="_blank">Dokumentation</a> für Hilfe zur Konfiguration deiner neuen glFusion Seite.',
     'upgrade' => 'Upgrade',
     'support_resources' => 'Hilfe & Download',
     'plugins' => 'glFusion Plugins',
@@ -272,7 +272,16 @@ $LANG_SUCCESS = array(
     18 => 'zurücksetzen auf',
     19 => '<b>Hinweis:</b> Weil sich das Sicherheitsmodell geändert hat, haben wir einen neuen Account erstellt mit den Rechten, die zur Verwaltung des neuen Auftritts nötig sind.  Der Benutzername für diesen neuen Account ist <b>NewAdmin</b> und das Kennwort ist <b>password</b>',
     20 => 'installiert',
-    21 => 'aktualisiert'
+    21 => 'aktualisiert',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.'
 );
 
 ?>

@@ -172,9 +172,9 @@ $LANG_INSTALL = array(
     'libcustom_not_found'       => 'Unable to located lib-custom.php.dist.',
     'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check'             => 'Check For Updates',
-    'check_for_updates'         => 'Go to the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
+    'check_for_updates'         => 'Go to the Command & Control -> Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
     'quick_start'               => 'glFusion Quick Start Guide',
-    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade'                   => 'Upgrade',
     'support_resources'         => 'Support Resources',
     'plugins'                   => 'glFusion Plugins',
@@ -268,6 +268,15 @@ $LANG_SUCCESS = array(
     18 => 'back to',
     19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
     20 => 'installed',
-    21 => 'upgraded'
+    21 => 'upgraded',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
 );
 ?>

@@ -1,0 +1,61 @@
+﻿<h2>{lang_success}</h2>
+
+<p>{lang_congradulations}</p>
+
+<div class="uk-alert uk-alert-danger">
+	<h2>{lang_login}</h2>
+	<p>
+		{lang_username}: <strong>Admin</strong><br/>
+		{lang_password}: <strong>{securepassword}</strong>
+	</p>
+	<p>
+		<strong>Please make a record of the password above - you must have it to log into your new site.</strong>
+	</p>
+</div>
+
+<h2>{lang_remove_install_directory}</h2>
+
+<p>
+	{lang_remove_install_help}
+	<button id="delinstall" class="uk-button uk-button-danger">{lang_remove_install_files}</button>
+</p>
+
+<p><strong>{lang_quick_start}</strong></p>
+<p>
+	{lang_quick_start_help}
+</p>
+
+<div class="uk-panel">
+	<a href="{new_site_url}" class="uk-button uk-button-success">{lang_goto_site}</a>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$("#delinstall").click(remove_install);
+	});
+	var buttonMsg = '{lang_button_files_removed}';
+	var remove_install = function() {
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "include/ajax_controller.php",
+			data: {"action" : 'remove' },
+			timeout: 60
+		}).done(function(data) {
+			var result = $.parseJSON(data["js"]);
+			if ( result.errorCode != 0 ) {
+				buttonMsg = '{lang_error_removing_files}';
+				UIkit.modal.alert('{lang_error_message}');
+			} else {
+				UIkit.modal.alert('{lang_button_files_removed}');
+			}
+		}).fail(function(jqXHR, textStatus ) {
+			buttonMsg = '{lang_error_removing_files}';
+			UIkit.modal.alert('{lang_error_message}');
+		}).always(function( xhr, status ) {
+			$("#delinstall").html(buttonMsg);
+			$('#delinstall').prop("disabled",true);
+		});
+		return false;
+	};
+</script>

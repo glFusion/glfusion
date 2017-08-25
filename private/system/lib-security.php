@@ -1784,15 +1784,14 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 */
 function _unique_id($extra = 'c')
 {
-    static $dss_seeded = false;
     global $_SYSTEM;
-
-    $rand_seed = COM_makesid();
-
+    static $dss_seeded = false;
+    $sid = date( 'YmdHis' );
+    $sid .= mt_rand( 0, 999 );
+    $rand_seed = $sid;
     $val = $rand_seed . microtime();
     $val = md5($val);
     $rand_seed = md5($rand_seed . $val . $extra);
-
     return substr($val, 4, 16);
 }
 
