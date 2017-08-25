@@ -278,5 +278,9 @@ $LANG_SUCCESS = array(
     28 => 'Installation Files Removed',
     29 => 'Error Removing Files',
     30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel',
 );
 ?>

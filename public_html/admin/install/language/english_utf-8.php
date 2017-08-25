@@ -91,7 +91,7 @@ $LANG_INSTALL = array(
     'mbstring_support'          => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery'              => 'Load Media Gallery Plugin?',
     'mediagallery_desc'         => 'A multi-media management system. Can be used as a simple photo gallery or a robust media management system supporting audio, video, and images.',
-    'memory_limit'				=> 'It is recommended that you have at least 48M of memory enabled on your site.',
+    'memory_limit'				=> 'It is recommended that you have at least 64M of memory enabled on your site.',
     'missing_db_fields'         => 'Please enter all required database fields.',
     'new_install'               => 'New Installation',
     'next'                      => 'Next',
@@ -278,5 +278,9 @@ $LANG_SUCCESS = array(
     28 => 'Installation Files Removed',
     29 => 'Error Removing Files',
     30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel',
 );
 ?>

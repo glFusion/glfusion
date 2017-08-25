@@ -2,16 +2,16 @@
 
 <p>{lang_congradulations}</p>
 
+<h2>{lang_login}</h2>
+
 <div class="uk-alert uk-alert-danger">
-	<h2>{lang_login}</h2>
-	<p>
-		{lang_username}: <strong>Admin</strong><br/>
-		{lang_password}: <strong>{securepassword}</strong>
-	</p>
-	<p>
-		<strong>Please make a record of the password above - you must have it to log into your new site.</strong>
-	</p>
+	{lang_username}: <strong>Admin</strong><br/>
+	{lang_password}: <strong>{securepassword}</strong>
 </div>
+
+<p>
+	<strong>{lang_record_password}</strong>
+</p>
 
 <h2>{lang_remove_install_directory}</h2>
 
@@ -26,10 +26,19 @@
 </p>
 
 <div class="uk-panel">
-	<a href="{new_site_url}" class="uk-button uk-button-success">{lang_goto_site}</a>
+	<a href="{new_site_url}" class="uk-button uk-button-success" onclick="UIkit.modal.confirm('{lang_password_confirm}', function(){ actionClick('done'); },function(){ actionClick('return')},{labels:{'Ok': '{lang_continue}','Cancel': '{lang_cancel}'} });return false;" name="task" value="done">{lang_goto_site}</a>
 </div>
 
 <script>
+	function actionClick( $action ) {
+		switch ($action ) {
+			case 'done' :
+				$(location).attr('href', '{new_site_url}');
+				break;
+			default :
+				break;
+		}
+	}
 	$(document).ready(function(){
 		$("#delinstall").click(remove_install);
 	});

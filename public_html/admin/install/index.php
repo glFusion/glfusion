@@ -1914,6 +1914,10 @@ function INST_complete()
         'lang_button_files_removed'     => $LANG_SUCCESS[28],
         'lang_error_removing_files'     => $LANG_SUCCESS[29],
         'lang_error_message'            => $LANG_SUCCESS[30],
+        'lang_record_password'          => $LANG_SUCCESS[31],
+        'lang_password_confirm'         => $LANG_SUCCESS[32],
+        'lang_continue'                 => $LANG_SUCCESS[33],
+        'lang_cancel'                   => $LANG_SUCCESS[34],
         'new_site_url'              => $_CONF['site_url'],
     ));
     $alertMsg = '';
