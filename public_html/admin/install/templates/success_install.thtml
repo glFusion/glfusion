@@ -51,14 +51,20 @@
 			data: {"action" : 'remove' },
 			timeout: 60
 		}).done(function(data) {
+			console.log("AJAX Successfully Executed.");
 			var result = $.parseJSON(data["js"]);
 			if ( result.errorCode != 0 ) {
 				buttonMsg = '{lang_error_removing_files}';
 				UIkit.modal.alert('{lang_error_message}');
+				var deleteErrors = result.errors;
+				$.each( deleteErrors, function( i, val ) {
+					console.log(val);
+				});
 			} else {
 				UIkit.modal.alert('{lang_button_files_removed}');
 			}
 		}).fail(function(jqXHR, textStatus ) {
+			console.log("AJAX Execution Failed.");
 			buttonMsg = '{lang_error_removing_files}';
 			UIkit.modal.alert('{lang_error_message}');
 		}).always(function( xhr, status ) {
