@@ -178,7 +178,7 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade' => 'Upgrade',
     'support_resources' => 'Support Resources',
     'plugins' => 'glFusion Plugins',
@@ -272,7 +272,20 @@ $LANG_SUCCESS = array(
     18 => 'tillbaks till',
     19 => '<strong>Notis:</strong> Bara f&ouml;r att s&auml;kerhetsmodellen har &auml;ndrats, har vi skapat ett nytt konto med de r&auml;ttigheter du beh&ouml;ver f&ouml;r att administrera din nya sajt.  Anv&auml;ndarnamnet f&ouml;r ditt nya konto &auml;r <b>NewAdmin</b> och l&ouml;senordet &auml;r <b>password</b>',
     20 => 'installerad',
-    21 => 'uppgraderad'
+    21 => 'uppgraderad',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel'
 );
 
 ?>

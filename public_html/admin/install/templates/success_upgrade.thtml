@@ -1,0 +1,54 @@
+﻿<h2>{lang_success}</h2>
+<p>{lang_congradulations}</p>
+
+{alert_message}
+
+<h2>{lang_remove_install_directory}</h2>
+
+<p>
+	{lang_remove_install_help}
+	<button id="delinstall" class="uk-button uk-button-danger">{lang_remove_install_files}</button>
+</p>
+
+<h2>{lang_version_check}</h2>
+<p>{lang_check_for_updates}</p>
+
+<h2>{lang_whats_new}</h2>
+<p>
+	{lang_whats_new_help}
+</p>
+
+<div class="uk-panel">
+	<a href="{new_site_url}" class="uk-button uk-button-success">{lang_goto_site}</a>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$("#delinstall").click(remove_install);
+	});
+	var buttonMsg = '{lang_button_files_removed}';
+	var remove_install = function() {
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "include/ajax_controller.php",
+			data: {"action" : 'remove' },
+			timeout: 60
+		}).done(function(data) {
+			var result = $.parseJSON(data["js"]);
+			if ( result.errorCode != 0 ) {
+				buttonMsg = '{lang_error_removing_files}';
+				UIkit.modal.alert('{lang_error_message}');
+			} else {
+				UIkit.modal.alert('{lang_button_files_removed}');
+			}
+		}).fail(function(jqXHR, textStatus ) {
+			buttonMsg = '{lang_error_removing_files}';
+			UIkit.modal.alert('{lang_error_message}');
+		}).always(function( xhr, status ) {
+			$("#delinstall").html(buttonMsg);
+			$('#delinstall').prop("disabled",true);
+		});
+		return false;
+	};
+</script>

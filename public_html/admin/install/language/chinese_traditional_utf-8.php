@@ -179,7 +179,7 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade' => 'Upgrade',
     'support_resources' => 'Support Resources',
     'plugins' => 'glFusion Plugins',
@@ -273,7 +273,20 @@ $LANG_SUCCESS = array(
     18 => '的許可權設置成',
     19 => '<strong>注意:</strong> 因為安全模式已改變, 我們已建立了新的帳戶讓你管理你的新網站.  這個新的帳戶名是 <b>NewAdmin</b> 和密碼是 <b>password</b>',
     20 => '安裝',
-    21 => '升級'
+    21 => '升級',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel'
 );
 
 ?>

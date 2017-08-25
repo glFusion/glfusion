@@ -2198,6 +2198,23 @@ function INST_randomKey($length = 40 )
     return substr($random, 0, $length);
 }
 
+function INST_securePassword($length = 12) {
+    if (function_exists('openssl_random_pseudo_bytes')) {
+        $token = base64_encode(openssl_random_pseudo_bytes($length, $strong));
+        if ($strong == TRUE)
+        return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
+    }
+    //fallback to mt_rand if php < 5.3 or no openssl available
+    $characters = '0123456789';
+    $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=+?';
+    $charactersLength = strlen($characters)-1;
+    $token = '';
+    //select some random characters
+    for ($i = 0; $i < $length; $i++) {
+        $token .= $characters[mt_rand(0, $charactersLength)];
+    }
+    return $token;
+}
 
 
 function _searchForIdKey($id, $array) {
