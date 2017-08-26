@@ -94,7 +94,7 @@ function remove_files($path)
 
     if (!is_string($path) || $path == "") {
         $errorMessages[] = 'In remove_files - path is blank or not a string';
-        return false;
+        return true;
     }
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
