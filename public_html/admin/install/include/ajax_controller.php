@@ -7,14 +7,13 @@
 *
 *  Copyright (C) 2014-2017 by Mark R. Evans - mark AT glfusion DOT org
 */
+require_once '../../../lib-common.php';
 
 if (is_ajax()) {
 
-    if (!defined('GVERSION')) {
-        define('GVERSION', '1.7.0');
-    }
-
     require_once 'install.lib.php';
+
+    $errorMessages = array();
 
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
@@ -44,12 +43,11 @@ function is_ajax() {
 
 function remove_install()
 {
+    global $_CONF, $errorMessages;
+
     $errorCount = 0;
 
-    $path = __DIR__;
-
-    $pos = strripos ( $path , DIRECTORY_SEPARATOR);
-    $path = substr($path,0,$pos);
+    $path = $_CONF['path_admin'].'install';
 
     if (!is_string($path) || $path == "") die();
     if ( function_exists('set_time_limit') ) {
@@ -60,21 +58,27 @@ function remove_install()
         while (false !== ($f = readdir($dh))) {
             if ($f == '..' || $f == '.') continue;
             $rc = remove_files("$path".DIRECTORY_SEPARATOR."$f");
-            if ( $rc == false ) $errorCount++;
+            if ( $rc == false ) {
+                $errorCount++;
+                $errorMessages[] = 'remove_files (in remove_install) returned false: '."$path".DIRECTORY_SEPARATOR."$f";
+            }
         }
         closedir($dh);
         if ( @rmdir($path) == false ) {
+            $errorMessages[] = 'Failed removing directory: '.$path;
             $errorCount++;
         }
     } else {
         if ( @unlink($path) == false ) {
+            $errorMessages[] = 'Failed removing file: '.$path;
             $errorCount++;
         }
     }
     $retval = array();
     if ( $errorCount > 0 ) {
         $retval['errorCode'] = 1;
-        $retval['statusMessage'] = 'Error Removing Installation Files - Please Manually Remove the admin/install/ directory.';
+        $retval['statusMessage'] = 'Errors removing files';
+        $retval['errors'] = $errorMessages;
     } else {
         $retval['errorCode'] = 0;
         $retval['statusMessage'] = 'Installation Files Successfully Removed';
@@ -86,7 +90,12 @@ function remove_install()
 
 function remove_files($path)
 {
-    if (!is_string($path) || $path == "") return false;
+    global $errorMessages;
+
+    if (!is_string($path) || $path == "") {
+        $errorMessages[] = 'In remove_files - path is blank or not a string';
+        return false;
+    }
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
@@ -94,13 +103,30 @@ function remove_files($path)
         if (!$dh = @opendir($path)) return false;
         while (false !== ($f = readdir($dh))) {
             if ($f == '..' || $f == '.') continue;
-            remove_files("$path".DIRECTORY_SEPARATOR."$f");
+            $rc = remove_files("$path".DIRECTORY_SEPARATOR."$f");
+            if ( $rc === false ) {
+                $errorMessages[] = 'remove_files (in remove_files) returned false: '."$path".DIRECTORY_SEPARATOR."$f";
+                return false;
+            }
         }
         closedir($dh);
-        return @rmdir($path);
+        $rc = @rmdir($path);
+        if ( $rc === false ) {
+            $errorMessages[] = 'Unable to remove directory (in remove_files): '.$path;
+            return false;
+        } else {
+            return true;
+        }
     } else {
-        return @unlink($path);
+        $rc = @unlink($path);
+        if ( $rc === false ) {
+            $errorMessages[] = 'Unable to remove file (in remove_files): ' . $path;
+            return false;
+        } else {
+            return true;
+        }
     }
+    $errorMessages[] = 'ERROR - returning false from remove_files';
     return false;
 }
 
