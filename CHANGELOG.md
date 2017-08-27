@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Forum Plugin - fixed display issue with unbanning IPs
   - Installation - Generate random password on new installs - no longer default password to 'password'
   - Installation / Upgrade - Option to automatically remove installation files
   - Topic deletion now uses standard glFusion APIs to remove a story
