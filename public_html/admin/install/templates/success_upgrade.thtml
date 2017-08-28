@@ -28,12 +28,13 @@
 	});
 	var buttonMsg = '{lang_button_files_removed}';
 	var remove_install = function() {
+		console.log("Making AJAX call");
 		$.ajax({
 			type: "POST",
 			dataType: "json",
 			url: "include/ajax_controller.php",
 			data: {"action" : 'remove' },
-			timeout: 60
+			timeout: 30000
 		}).done(function(data) {
 			console.log("AJAX Successfully Executed.");
 			var result = $.parseJSON(data["js"]);
