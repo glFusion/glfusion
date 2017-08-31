@@ -36,6 +36,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once 'auth.inc.php';
 
 $display = '';
 if (!SEC_isModerator()) {
