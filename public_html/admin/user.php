@@ -1750,11 +1750,11 @@ function USER_save($uid)
         $AETIDS = explode (' ', $allowed_etids);
 
         $tids = '';
-        if (sizeof ($TIDS) > 0) {
+        if (is_array($TIDS) && sizeof ($TIDS) > 0) {
             $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
         }
         $aids = '';
-        if (sizeof ($AIDS) > 0) {
+        if (is_array($AIDS) && sizeof ($AIDS) > 0) {
             foreach ($AIDS as $key => $val) {
                 $AIDS[$key] = intval($val);
             }
@@ -1762,7 +1762,7 @@ function USER_save($uid)
         }
         $selectedblocks = '';
         $selectedBoxes = array();
-        if (count ($BOXES) > 0) {
+        if (is_array($BOXES) && count ($BOXES) > 0) {
             foreach ($BOXES AS $key => $val) {
                 $BOXES[$key] = intval($val);
             }
@@ -1783,7 +1783,7 @@ function USER_save($uid)
         }
 
         $etids = '-';
-        if (sizeof ($ETIDS) > 0) {
+        if (is_array($ETIDS) && sizeof ($ETIDS) > 0) {
             $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
         } else {
             $etids = '-';
