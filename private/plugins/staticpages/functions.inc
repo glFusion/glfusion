@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1380,15 +1380,28 @@ function SP_render_content ($sp_content, $sp_php)
 
     $retval = '';
 
-    if ($_SP_CONF['allow_php'] == 1) {
+    if ($_SP_CONF['allow_php'] == 1) { // execute PHP return
         // Check for type (ie html or php)
         if ($sp_php == 1) {
-            $retval = eval ($sp_content);
-        } else if ($sp_php == 2) {
+            try {
+                $retval = @eval ($sp_content);
+                if ( $retval == "" ) {
+                    COM_errorLog("SP PHP (return) evaluation return an error - Please check the PHP code embedded in the page");
+                }
+            } catch (Error $t) {
+                $retval = $t->getMessage();
+                COM_errorLog("SP PHP (return) evaluation return an error :: " . $t->getMessage());
+            }
+        } else if ($sp_php == 2) { // execute PHP
             ob_start ();
-            eval ($sp_content);
-            $retval = ob_get_contents ();
-            ob_end_clean ();
+            try {
+                eval($sp_content);
+                $retval = ob_get_contents ();
+                ob_end_clean ();
+            } catch (Error $t) {
+                $retval = $t->getMessage();
+                COM_errorLog("SP PHP evaluation returned an error :: " . $t->getMessage());
+            }
         } else {
             $retval = $sp_content;
         }
