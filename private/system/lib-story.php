@@ -871,7 +871,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                 break;
             case 'title':
                 $fields[] = 'title';
-                if ( $buildingSearchIndex) $fields[] = 'subtitle';
+                $fields[] = 'subtitle';
                 break;
             case 'url':
             case 'label':
