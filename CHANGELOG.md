@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Improved error handling of embedded PHP in static pages
   - Upgrade check now uses alert classes (green, yellow, red) to highlight upgrade check results
   - Forum Plugin - fixed display issue with unbanning IPs
   - Installation - Generate random password on new installs - no longer default password to 'password'
