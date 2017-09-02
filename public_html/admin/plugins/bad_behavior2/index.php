@@ -181,34 +181,19 @@ asort($LANG_BB2_RESPONSE);
 
         $dt = new Date($A['date'],$_USER['tzid']);
 
-        $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
-		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
-		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
-		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
-		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
-		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
-		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
-		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
-		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
-		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
-		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
-		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
-		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
-		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
-		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
-		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
-		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
-		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
-		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
-		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
-		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
-		$headers = str_replace("X-Http-Proto","<strong>X-Http-Proto</strong>",$headers);
-		$headers = str_replace("X-Real-Ip","<strong>X-Real-Ip</strong>",$headers);
-		$headers = str_replace("Content-Length","<strong>Content-Length</strong>",$headers);
-        $headers = str_replace("Content-Type","<strong>Content-Type</strong>",$headers);
-        $headers = str_replace("Te:","<strong>Te:</strong>",$headers);
-        $headers = str_replace("Expect:","<strong>Expect:</strong>",$headers);
-        $headers = str_replace("Dnt:","<strong>Dnt:</strong>",$headers);
+        $splitheaders = str_replace("\n", "<br/>\n", $A['http_headers']);
+        $headers = '';
+        $headArray = explode("<br/>",$splitheaders);
+        foreach ($headArray AS $headerLine) {
+            $lineArray = explode(':',$headerLine);
+            if ( isset($lineArray[1] ) ) {
+                $headers .= '<strong>'.$lineArray[0].'</strong>: '.$lineArray[1].'<br>';
+            } else {
+        		$lineArray[0] = str_replace("POST ","<strong>POST</strong> ",$lineArray[0]);
+        		$lineArray[0] = str_replace("GET ","<strong>GET</strong> ",$lineArray[0]);
+                $headers .= $lineArray[0].'<br>';
+            }
+        }
 
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
 
