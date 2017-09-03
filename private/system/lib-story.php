@@ -871,6 +871,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                 break;
             case 'title':
                 $fields[] = 'title';
+                $fields[] = 'subtitle';
                 break;
             case 'url':
             case 'label':
@@ -985,6 +986,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     break;
                 case 'title':
                     $props['title'] = $A['title'];
+                    if ( $buildingSearchIndex ) $props['title'] .= ' ' . $A['subtitle'];
                     break;
                 case 'url':
                     if (empty($A['sid'])) {

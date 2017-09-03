@@ -1248,7 +1248,7 @@ function saveuser($A)
 */
 function userprofile ($user, $msg = 0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
 
     $retval = '';
 

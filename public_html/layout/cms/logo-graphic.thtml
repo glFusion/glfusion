@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<a class="uk-navbar-brand tm-navbar-brand uk-hidden-small" href="{site_url}">
-<img class="uk-margin uk-margin-remove" src="{site_logo}" width="140" height="30" title="{site_name}" alt="{site_name}">
+<a class="uk-navbar-brand tm-navbar-brand uk-hidden-small" href="{site_url}" itemprop="url">
+<img itemprop="logo" class="uk-margin uk-margin-remove" src="{site_logo}" width="140" height="30" title="{site_name}" alt="{site_name}">
 </a>
 {# end {templatelocation} #}

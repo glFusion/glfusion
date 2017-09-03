@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | filter.cass.php                                                          |
+// | sanitizer.cass.php                                                       |
 // |                                                                          |
 // | glFusion HTML / Text Filter                                              |
 // +--------------------------------------------------------------------------+
@@ -356,9 +356,6 @@ class sanitizer
             $final[$element] = true;
         }
         $configFilter = implode(",",$filterArray);
-
-//        require_once $_CONF['path'] . 'lib/htmlpurifier/HTMLPurifier.auto.php';
-//        require_once $_CONF['path'] . 'lib/htmlpurifier/CustomFilters.php';
 
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Attr.AllowedFrameTargets', array('_blank'));

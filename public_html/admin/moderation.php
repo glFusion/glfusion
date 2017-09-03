@@ -36,6 +36,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once 'auth.inc.php';
 
 $display = '';
 if (!SEC_isModerator()) {
@@ -262,7 +263,7 @@ function MODERATE_item($action='', $type='', $id='')
                 default:
                     // plugin
                     $retval .= PLG_deleteSubmission($type, $id);
-                    DB_delete($submissiontable,"$key",$id);
+                    if ( $submissiontable != '' ) DB_delete($submissiontable,"$key",$id);
                     break;
             }
 
@@ -324,7 +325,7 @@ function MODERATE_item($action='', $type='', $id='')
 
                 default:
                     // plugin
-                    DB_copy($table,$fields,$fields,$submissiontable,$key,$id);
+                    if ( $submissiontable != '' ) DB_copy($table,$fields,$fields,$submissiontable,$key,$id);
                     $retval .= PLG_approveSubmission($type,$id);
                     break;
             }

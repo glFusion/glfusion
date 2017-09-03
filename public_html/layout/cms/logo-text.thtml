@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<a class="uk-navbar-brand tm-navbar-brand uk-hidden-small" href="{site_url}">
-	{site_name}
+<a class="uk-navbar-brand tm-navbar-brand uk-hidden-small" href="{site_url}" itemprop="url">
+	<span itemprop="name">{site_name}</span>
 </a>
 {# end {templatelocation} #}
