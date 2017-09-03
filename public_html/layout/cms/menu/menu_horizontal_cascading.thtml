@@ -3,13 +3,13 @@
 <ul id="sm-{menuname}" class="sm sm-uikit uk-navbar-nav tm-navbar-nav uk-hidden-small" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
 {!endif}
 <!-- BEGIN Elements -->
-	<li itemprop="name">
+	<li>
 {!if haschildren}
 		<a>
 {!else}
 		<a href="{url}" itemprop="url" {target}>
 {!endif}
-			{label}
+			<span itemprop="name">{label}</span>
 		</a>
 {!if haschildren}
 		<ul class="uk-nav uk-nav-navbar tm-nav-navbar uk-dropdown-navbar">
