@@ -1,15 +1,15 @@
 {# begin {templatelocation} #}
 <div class="infinite-item">
 {!!if {story_display} == 'article' !!}
-	<article class="uk-article tm-article uk-margin-small-bottom">
+	<article class="uk-article tm-article uk-margin-small-bottom" itemscope itemtype="https://schema.org/CreativeWork">
 {!else}
-		<article class="uk-article tm-article uk-margin-large-bottom">
+		<article class="uk-article tm-article uk-margin-large-bottom" itemscope itemtype="https://schema.org/CreativeWork">
 {!endif}
 			<header>
 				<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove" itemprop="headline">{story_title_link}</h1>
 {!if story_subtitle}
 	{!if story_url}
-				<a href="{story_url}">
+				<a itemprop="itemid" href="{story_url}">
 	{!endif}
 					<h4 class="uk-margin-top-remove">
 						<span class="tm-italic">{story_subtitle}</span>
@@ -42,10 +42,10 @@
 	{!else}
 		{!if story_image}
 			{!if story_url}
-					<a href="{story_url}">
+					<a itemprop="itemid" href="{story_url}">
 			{!endif}
-						<div class="uk-margin-bottom">
-							<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+						<div class="uk-margin-bottom" >
+							<img itemprop="image" class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}">
 						</div>
 			{!if story_url}
 					</a>
@@ -55,10 +55,10 @@
 {!else}
 	{!if story_image}
 		{!if story_url}
-					<a href="{story_url}">
+					<a itemprop="itemid" href="{story_url}">
 		{!endif}
 						<div class="uk-margin-bottom">
-							<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+							<img itemprop="image" class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
 						</div>
 		{!if story_url}
 					</a>
@@ -72,7 +72,9 @@
 	{!if attribution_author}
 						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{attribution_author}</span></span></li>
 	{!else}
-						<li>{lang_by} {start_contributedby_anchortag}<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{contributedby_author}</span></span>{end_contributedby_anchortag}</li>
+						<li>
+							{lang_by} {start_contributedby_anchortag}<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{contributedby_author}</span></span>{end_contributedby_anchortag}
+						</li>
 	{!endif}
 {!endif}
 {!if story_date}
