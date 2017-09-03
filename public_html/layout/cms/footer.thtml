@@ -1,31 +1,35 @@
 {# begin {templatelocation} #}
 {# END OF CONTENT AREA #}
-      </div>                              {# end of centercolumn #}
-      {left_blocks}
-    </div>                                {# end of uk-grid #}
-  </div>                                  {# end of uk-container #}
-</div>                                    {#end of tm-content #}
+					</main>
+				</div>                              {# end of centercolumn #}
+				{left_blocks}
+			</div>                                {# end of uk-grid #}
+		</div>                                  {# end of uk-container #}
+	</div>                                    {#end of tm-content #}
 
-<a href="#top" data-uk-smooth-scroll>
-  <p id="scroll-to-top" style="display:none;">
-    <i class="uk-icon-chevron-up"></i>
-  </p>
-</a>
+	<a href="#top" data-uk-smooth-scroll>
+		<p id="scroll-to-top" style="display:none;">
+			<i class="uk-icon-chevron-up"></i>
+		</p>
+	</a>
+	<footer id="tm-footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
 
-<div id="tm-footer">
-  <div id="tm-block-bottom" class="uk-clearfix">
-    {right_blocks}
-  </div>
+		<div id="tm-block-bottom" class="uk-clearfix">
+			{right_blocks}
+		</div>
 
-  <div id="tm-block-footer" class="uk-clearfix uk-text-center uk-align-center uk-margin-bottom-remove">
-    <div class="uk-margin-top uk-margin-bottom">
-      {copyright_msg}
-      <br>{powered_by} <a href="{glfusion_url}" target="_blank">glFusion CMS</a>
-    </div>
-  </div>
-</div>
-{js-footer}
-{raw-footer}
+		<div id="tm-block-footer" class="uk-clearfix uk-text-center uk-align-center uk-margin-bottom-remove">
+			<div class="uk-margin-top uk-margin-bottom">
+				<span id="copyright" itemprop="copyrightHolder" itemscope="itemscope" itemtype="http://schema.org/Organization">
+					<span itemprop="name">{copyright_msg}</span>
+				</span>
+				<br>{powered_by} <a href="{glfusion_url}" target="_blank">glFusion CMS</a>
+			</div>
+		</div>
+
+	</footer>
+	{js-footer}
+	{raw-footer}
 </body>
 </html>
 {# end {templatelocation} #}
