@@ -2005,11 +2005,12 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     $url = '';
                     $linktext = $autotag['parm2'];
                     if ($autotag['tag'] == 'story') {
+                        $parm1_parts = explode('#', $autotag['parm1']);
                         $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
                         $url = COM_buildUrl ($_CONF['site_url']
                              . '/article.php?story=' . $autotag['parm1']);
                         if (empty ($linktext)) {
-                            $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
+                             $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($parm1_parts[0])."'");
                         }
                     }
                     if (!empty ($url)) {
