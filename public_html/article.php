@@ -384,6 +384,28 @@ if ($A['count'] > 0) {
                                                         'class' => ''));
             }
         }
+        if (($_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
+                $_CONF['ping_enabled']) && SEC_hasRights('story.ping') &&
+            ($story->displayElements('draft_flag') == 0) &&
+            ($story->displayElements('day') < time()) &&
+            ($story->displayElements('perm_anon') != 0)
+        ) {
+            // also check permissions for the topic
+            $topic_anon = DB_getItem($_TABLES['topics'], 'perm_anon',
+                "tid = '" . DB_escapeString($story->displayElements('tid')) . "'");
+
+            // check special case: no link when Trackbacks are disabled for this
+            // story AND pinging weblog directories is disabled
+            if (($topic_anon != 0) &&
+                (($story->displayElements('trackbackcode') >= 0) ||
+                    $_CONF['ping_enabled'])
+            ) {
+                $url = $_CONF['site_admin_url']
+                    . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
+                $story_options[] = COM_createLink($LANG_TRB['send_trackback'],
+                    $url);
+            }
+        }
 
         $social_icons = SOC_getShareIcons($pagetitle,htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()),$permalink,'','article');
 
@@ -472,8 +494,7 @@ if ($A['count'] > 0) {
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
                                       $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode'),$story->displayElements('uid')));
         }
-        if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) &&
-                $show_comments) {
+        if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) && $show_comments) {
             if (SEC_hasRights ('story.ping')) {
                 if (($story->displayElements('draft_flag') == 0) &&
                     ($story->displayElements('day') < time ())) {

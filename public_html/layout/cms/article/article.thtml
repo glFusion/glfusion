@@ -5,9 +5,16 @@
 {social_share}
 </div>
 
-<div class="uk-clearfix uk-panel uk-panel-box uk-margin">
-			{whats_related}
+<div class="uk-clearfix uk-grid uk-grid-margin" data-uk-grid-margin data-uk-grid-match>
+	<div class="uk-width-medium-1-2">
+		{whats_related}
+	</div>
+
+	<div class="uk-width-medium-1-2">
+		{story_options}
+	</div>
 </div>
+
 <div class="uk-clearfix">{trackback}</div>
 {commentbar}
 {# end {templatelocation} #}
