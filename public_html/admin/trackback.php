@@ -77,6 +77,7 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
     USES_lib_admin();
 
     $retval = '';
+    $preview_text = '';
 
     // show preview if we have at least the URL
     if (!empty ($url)) {
@@ -90,16 +91,16 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
             $p_excerpt = utf8_substr($p_excerpt, 0, 252) . '...';
         }
 
-        $retval .= COM_startBlock($LANG_TRB['preview']);
+        $preview_text .= COM_startBlock($LANG_TRB['preview']);
 
         $preview = new Template($_CONF['path_layout'] . 'trackback');
         $preview->set_file(array ('comment' => 'trackbackcomment.thtml'));
         $comment = TRB_formatComment($url, $p_title, $p_blog, $p_excerpt);
         $preview->set_var('formatted_comment', $comment);
         $preview->parse('output', 'comment');
-        $retval .= $preview->finish($preview->get_var ('output'));
+        $preview_text = $preview->finish($preview->get_var ('output'));
 
-        $retval .= COM_endBlock ();
+        $preview_text .= COM_endBlock ();
     }
 
     if (empty($url) && empty($blog)) {
@@ -123,6 +124,8 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
         $LANG_TRB['trb_explain'],
         $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
     );
+
+    $retval .= $preview_text;
 
     $template = new Template($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file(array ('editor' => 'trackbackeditor.thtml'));
@@ -207,7 +210,7 @@ function TRACKBACK_showMessage($title, $message)
 {
     $retval = '';
 
-    $retval .= COM_showMessageText($message,$title,true);
+    $retval .= COM_showMessageText($message,$title,true,'error');
     return $retval;
 }
 
@@ -416,6 +419,7 @@ function TRACKBACK_prepAutoDetect($type, $id, $text)
     preg_match_all("/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i", $text,
                     $matches);
     $numlinks = count($matches[0]);
+
     if ($numlinks == 1) {
         // skip the link selection when there's only one link in the story
         $url = urlencode($matches[1][0]);
