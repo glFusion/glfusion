@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Improved forum formatting for lists, code, quotes
+  - Reverse proxy (i.e.; CloudFlare) support for BB2
   - Removed all dependencies on PEAR modules
   - Basic support for structure data for articles
   - Improved error handling of embedded PHP in static pages
