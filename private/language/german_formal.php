@@ -2413,6 +2413,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Da entweder <b>safe_mode</b> oder <b>open_basedir</b> Einschränkungen erkannt wurden, wurde die Überprüfung auf Grafik-Bibliotheken übersprungen.',
     'correct_perms' => 'Bitte beheben Sie die unten angegebenen Probleme und überprüfen Sie danach Ihre Hosting-Umgebung erneut.',
     'ctype_extension' => 'Ctype-Erweiterung',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Derzeit',
     'current_php_settings' => 'Aktuelle PHP-Einstellungen',
     'database_version' => 'Datenbank-Version',
