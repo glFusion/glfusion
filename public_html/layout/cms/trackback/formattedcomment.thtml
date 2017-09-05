@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<h3 class="uk-panel-title"><a href="{trackback_url}">{trackback_title}</a> {trackback_from_blog_name}</h3>
+<h3 class="uk-panel-title"><a href="{trackback_url}" target="_blank">{trackback_title}</a> {trackback_from_blog_name}</h3>
 <p>
 {trackback_excerpt_readmore}{excerpt_br}
 <div class="uk-text-small uk-text-muted">{lang_tracked_on} {trackback_date} {delete_option}</div>
