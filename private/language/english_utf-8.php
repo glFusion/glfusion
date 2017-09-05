@@ -2411,6 +2411,7 @@ $LANG_ENVCHK = array(
     'bypass_note'               => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension'           => 'Ctype Extension',
+    'curl_extension'            => 'Curl Extension',
     'current'                   => 'Current',
     'current_php_settings'      => 'Current PHP Settings',
     'database_version'          => 'Database Version',
