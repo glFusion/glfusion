@@ -103,6 +103,34 @@ function bb2_approved($settings, $package)
 	}
 }
 
+# If this is reverse-proxied or load balanced, obtain the actual client IP
+function bb2_reverse_proxy($settings, $headers_mixed)
+{
+	# Detect if option is on when it should be off
+	$header = uc_all($settings['reverse_proxy_header']);
+	if (!array_key_exists($header, $headers_mixed)) {
+		return false;
+	}
+
+	$addrs = @array_reverse(preg_split("/[\s,]+/", $headers_mixed[$header]));
+	# Skip our known reverse proxies and private addresses
+	if (isset($settings['reverse_proxy_addresses']) && !empty($settings['reverse_proxy_addresses'])) {
+		foreach ($addrs as $addr) {
+			if (!match_cidr($addr, $settings['reverse_proxy_addresses']) && !is_rfc1918($addr)) {
+				return $addr;
+			}
+		}
+	} else {
+		foreach ($addrs as $addr) {
+			if (!is_rfc1918($addr)) {
+				return $addr;
+			}
+		}
+	}
+	# If we got here, someone is playing a trick on us.
+	return false;
+}
+
 // Check the results of a particular test; see below for usage
 // Returns FALSE if test passed (yes this is backwards)
 function bb2_test($settings, $package, $result)
@@ -134,7 +162,12 @@ function bb2_start($settings)
 	// IPv6 - IPv4 compatibility mode hack
 	$_SERVER['REMOTE_ADDR'] = preg_replace("/^::ffff:/", "", $_SERVER['REMOTE_ADDR']);
 	// We use these frequently. Keep a copy close at hand.
-	$ip = $_SERVER['REMOTE_ADDR'];
+    if (isset($settings['reverse_proxy']) && $settings['reverse_proxy'] && $ip = bb2_reverse_proxy($settings, $headers_mixed)) {
+    	$headers['X-Bad-Behavior-Remote-Address'] = $_SERVER['REMOTE_ADDR'];
+    	$headers_mixed['X-Bad-Behavior-Remote-Address'] = $_SERVER['REMOTE_ADDR'];
+    } else {
+    	$ip = $_SERVER['REMOTE_ADDR'];
+    }
 	$request_method = $_SERVER['REQUEST_METHOD'];
 	$request_uri = $_SERVER['REQUEST_URI'];
 	if (!$request_uri) $request_uri = $_SERVER['SCRIPT_NAME'];	# IIS
@@ -148,7 +181,6 @@ function bb2_start($settings)
 			$request_entity[$h] = $v;
 		}
 	}
-
 	$package = array('ip' => $ip, 'headers' => $headers, 'headers_mixed' => $headers_mixed, 'request_method' => $request_method, 'request_uri' => $request_uri, 'server_protocol' => $server_protocol, 'request_entity' => $request_entity, 'user_agent' => $user_agent, 'is_browser' => false);
 
 	// Please proceed to the security checkpoint and have your

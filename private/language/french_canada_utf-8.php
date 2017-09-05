@@ -980,7 +980,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1043,7 +1045,9 @@ $LANG27 = array(
     54 => 'Bloquer Admin',
     55 => 'Syndication Admin',
     56 => 'Appuyez sur Annuler puis Modifier ce sujet pour voir les détails, y compris le nombre total d`objets dans la base de données qui sont associées à ce sujet.',
-    57 => 'Cet écran vous permet de créer ou modifier un sujet. ID Sujet ne peuvent pas contenir d`espaces.'
+    57 => 'Cet écran vous permet de créer ou modifier un sujet. ID Sujet ne peuvent pas contenir d`espaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -2835,6 +2839,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',

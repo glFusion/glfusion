@@ -3578,6 +3578,39 @@ $coreConfigData = array(
     	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 120,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy_header',
+    	'default_value' => 'X-Forwarded-For',
+    	'type' => 'text',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 130,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy_addresses',
+    	'default_value' => array(),
+    	'type' => '*text',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 140,
+    	'set' => TRUE,
+    	'group' => 'Core'
     )
 );
 ?>

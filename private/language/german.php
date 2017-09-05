@@ -981,7 +981,9 @@ $LANG24 = array(
     121 => 'Zeige Kategorie - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
     122 => 'Alle Artikel der Kategorie %s wurden in die Kategorie %s verschoben.',
     123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
-    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.'
+    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1044,7 +1046,9 @@ $LANG27 = array(
     54 => 'Admin Blöcke',
     55 => 'Syndication Admin',
     56 => 'Klicke auf "Abbrechen" und anschließend auf "Bearbeiten", um Details anzuzeigen, einschließlich der Gesamtzahl der Objekte in der Datenbank, die diesem Thema zugeordnet sind',
-    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>'
+    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -2836,6 +2840,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Endloses scrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',

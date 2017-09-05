@@ -1551,6 +1551,21 @@
 					<dd>Enable this option to alter Bad Behavior's cookie handling to conform to 2012 EU cookie regulations.</dd>
 				</dl>
 
+				<dl id="desc_bb2_reverse_proxy">
+					<dt>Reverse Proxy Support (i.e.; CloudFlare)</dt>
+					<dd>Enable this option if your website is behind a reverse proxy or load balancer. For example, if you use CloudFlare service or another proxy server, set this to True.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_header">
+					<dt>Proxy Header</dt>
+					<dd>The proxy header to add when Reverse Proxy is enabled. Generally the default of 'X-Forwarded-For' is fine.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_addresses">
+					<dt>Reverse Proxy Addresses</dt>
+					<dd>If you know the IP addresses of your proxy server(s) or the load balancers, enter them here. For services such as CloudFlare, you can leave this blank.</dd>
+				</dl>
+
 			</div>
 			<div class="tm-push"></div>
 		</div>
