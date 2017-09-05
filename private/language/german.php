@@ -981,7 +981,9 @@ $LANG24 = array(
     121 => 'Zeige Kategorie - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
     122 => 'Alle Artikel der Kategorie %s wurden in die Kategorie %s verschoben.',
     123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
-    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.'
+    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1044,7 +1046,9 @@ $LANG27 = array(
     54 => 'Admin Blöcke',
     55 => 'Syndication Admin',
     56 => 'Klicke auf "Abbrechen" und anschließend auf "Bearbeiten", um Details anzuzeigen, einschließlich der Gesamtzahl der Objekte in der Datenbank, die diesem Thema zugeordnet sind',
-    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>'
+    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -2579,8 +2583,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Pfad zum Backup',
     'path_data' => 'Pfad zu Data',
     'path_images' => 'Pfad zu Images',
-    'path_pear' => 'Pfad zu Pear',
-    'have_pear' => 'Pear vorhanden',
     'mail_settings' => 'Einstellungen ',
     'theme' => 'Design',
     'menu_elements' => 'Elemente des Menüs',
@@ -2836,6 +2838,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Endloses scrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
@@ -2864,7 +2869,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Pfade',
     'fs_theme' => 'Design',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Benutzer',
     'fs_misc' => 'Vermischtes',
     'fs_spamx' => 'Spam-X',

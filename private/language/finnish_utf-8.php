@@ -979,7 +979,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1042,7 +1044,9 @@ $LANG27 = array(
     54 => 'Lohko Admin',
     55 => 'Syndication Admin',
     56 => 'Paina Peruuta ja muokkaa sitten t&auml;t&auml; aihetta n&auml;hd&auml;ksei tietoja mukaanlukien kohteiden m&auml;&auml;r&auml;n tietokannassa jotka liittyv&auml;t t&auml;h&auml;n asiaan.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -2577,8 +2581,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Varmuuskopio',
     'path_data' => 'Data',
     'path_images' => 'Kuvat',
-    'path_pear' => 'Polku P&auml;&auml;ryn&auml;&auml;n',
-    'have_pear' => 'Onko sinulla p&auml;&auml;ryn&auml;?',
     'mail_settings' => 'Posti Asetukset',
     'theme' => 'Ulkoasu',
     'menu_elements' => 'Valikko elementit',
@@ -2834,6 +2836,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2862,7 +2867,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Polut',
     'fs_theme' => 'Ulkoasu',
     'fs_mail' => 'Posti',
-    'fs_pear' => 'Pear',
     'fs_users' => 'K&auml;ytt&auml;j&auml;t',
     'fs_misc' => 'Sekalaista',
     'fs_spamx' => 'Spam-X',

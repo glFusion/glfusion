@@ -976,7 +976,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1039,7 +1041,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -2574,8 +2578,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2831,6 +2833,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2859,7 +2864,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',

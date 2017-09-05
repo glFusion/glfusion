@@ -5,13 +5,14 @@
 {social_share}
 </div>
 
-<div class="uk-clearfix uk-grid uk-grid-margin" data-uk-grid-margin data-uk-grid-match>
-	<div class="uk-width-medium-1-2">
-		{whats_related}
-	</div>
-
-	<div class="uk-width-medium-1-2">
-		{story_options}
+<div class="uk-container uk-container-center uk-width-1-1 uk-margin-top uk-margin-large-bottom uk-clearfix">
+	<div class="uk-grid uk-width-1-1" data-uk-grid-margin>
+		<div class="uk-width-medium-1-2">
+			{whats_related}
+		</div>
+		<div class="uk-width-medium-1-2">
+			{story_options}
+		</div>
 	</div>
 </div>
 

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Configuration Defaults                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -58,6 +58,10 @@ function plugin_initconfig_bad_behavior2()
     $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,90,TRUE);
     $c->add('bb2_offsite_forms',0,'select',8,1,0,100,TRUE);
     $c->add('bb2_eu_cookie',0,'select',8,1,0,110,TRUE);
+
+    $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
+    $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);
+    $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE);
 
     return true;
 }

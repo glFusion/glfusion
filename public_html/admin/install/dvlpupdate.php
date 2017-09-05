@@ -1666,6 +1666,13 @@ function glfusion_170()
         $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
     }
 
+    $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
+    $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);
+    $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE);
+
+    $c->del('path_pear','Core');
+    $c->del('have_pear','Core');
+    $c->del('fs_pear','Core');
 
     _updateConfig();
 

@@ -105,15 +105,15 @@ function do_bbcode_list ($action, $attributes, $content, $params, $node_object) 
         return true;
     }
     if (!isset ($attributes['default'])) {
-        return '</p><ul>'.$content.'</ul><p>';
+        return '<ul>'.$content.'</ul>';
     } else {
         if ( is_numeric($attributes['default']) ) {
             return '<ol>'.$content.'</ol>';
         } else {
-            return '</p><ul>'.$content.'</ul><p>';
+            return '<ul>'.$content.'</ul>';
         }
     }
-    return '</p><ul>'.$content.'</ul><p>';
+    return '<ul>'.$content.'</ul>';
 }
 
 function do_bbcode_file ($action, $attributes, $content, $params, $node_object) {
@@ -317,16 +317,18 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
         $_ff_pm = 'html';
     }
     $filter->setPostmode($postmode);
+
     if ( $postmode == 'text') {
         // filter all code prior to replacements
         $bbcode->addFilter(STRINGPARSER_FILTER_PRE, 'bbcode_htmlspecialchars');
     }
+    $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_fixmarkup');
     if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
         $str = str_replace('<pre>','[code]',$str);
         $str = str_replace('</pre>','[/code]',$str);
     }
     if ( $postmode != 'html' && $postmode != 'HTML') {
-        $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
+        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_nl2br');
     }
 
     if ( $query != '' ) {
@@ -395,6 +397,21 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
     return $str;
 }
 
+function _ff_nl2br($str) {
+    $str = str_replace(array("\r\n", "\r", "\n"), "<br>", $str);
+    return $str;
+}
+
+function _ff_fixmarkup($str) {
+    $str = str_replace(array("[/list]\r\n", "[/list]\r", "[/list]\n","[/list] \r\n", "[/list] \r", "[/list] \n"), "[/list]", $str);
+    $str = str_replace(array("[/code]\r\n", "[/code]\r", "[/code]\n","[/code] \r\n", "[/code] \r", "[/code] \n"), "[/code]", $str);
+    $str = str_replace(array("[quote]\r\n", "[quote]\r", "[quote]\n","[quote] \r\n", "[quote] \r", "[quote] \n"), "[quote]", $str);
+    $str = str_replace(array("[/quote]\r\n", "[/quote]\r", "[/quote]\n","[/quote] \r\n", "[/quote] \r", "[/quote] \n"), "[/quote]", $str);
+    $str = str_replace(array("[QUOTE]\r\n", "[QUOTE]\r", "[QUOTE]\n","[QUOTE] \r\n", "[QUOTE] \r", "[QUOTE] \n"), "[QUOTE]", $str);
+    $str = str_replace(array("[/QUOTE]\r\n", "[/QUOTE]\r", "[/QUOTE]\n","[/QUOTE] \r\n", "[/QUOTE] \r", "[/QUOTE] \n"), "[/QUOTE]", $str);
+
+    return $str;
+}
 
 
 function FF_getSignature( $tagline, $signature, $postmode = 'html'  )

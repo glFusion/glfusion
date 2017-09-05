@@ -983,7 +983,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1046,7 +1048,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1872,7 +1876,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1947,7 +1951,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -2001,7 +2005,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-#
+# 
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -2581,8 +2585,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Foto\'s',
-    'path_pear' => 'Pad Pear',
-    'have_pear' => 'Pear Aanwezig?',
     'mail_settings' => 'Email Instellingen',
     'theme' => 'Thema',
     'menu_elements' => 'Menu Elementen',
@@ -2838,6 +2840,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2866,7 +2871,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paden',
     'fs_theme' => 'Thema\'s',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Gebruikers',
     'fs_misc' => 'Overig',
     'fs_spamx' => 'Spam-X',

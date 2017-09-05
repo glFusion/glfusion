@@ -227,18 +227,6 @@
 					<dd>Path where glFusion expects to find its images, including user photos and images for stories.</dd>
 				</dl>
 
-				<a name="site_pear" id="pear"></a><h2>Pear</h2>
-
-				<dl id="desc_have_pear">
-					<dt>Have Pear</dt>
-					<dd>Whether you have PEAR installed on your server (= true) or not (= false). When set to false, glFusion will use the PEAR packages installed in $_CONF['path_pear'] (see below)</dd>
-				</dl>
-
-				<dl id="desc_path_pear">
-					<dt>Path Pear</dt>
-					<dd>When $_CONF['have_pear'] (see above) is set to false, this is the path where glFusion expects to find the PEAR packages it requires (e.g. PEAR::Mail for sending emails). </dd>
-				</dl>
-
 				<a name="site_search" id="search"></a><h2>Search</h2>
 
 				<dl id="desc_search_style">
@@ -1549,6 +1537,21 @@
 				<dl id="desc_bb2_eu_cookie">
 					<dt>EU Cookie</dt>
 					<dd>Enable this option to alter Bad Behavior's cookie handling to conform to 2012 EU cookie regulations.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy">
+					<dt>Reverse Proxy Support (i.e.; CloudFlare)</dt>
+					<dd>Enable this option if your website is behind a reverse proxy or load balancer. For example, if you use CloudFlare service or another proxy server, set this to True.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_header">
+					<dt>Proxy Header</dt>
+					<dd>The proxy header to add when Reverse Proxy is enabled. Generally the default of 'X-Forwarded-For' is fine.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_addresses">
+					<dt>Reverse Proxy Addresses</dt>
+					<dd>If you know the IP addresses of your proxy server(s) or the load balancers, enter them here. For services such as CloudFlare, you can leave this blank.</dd>
 				</dl>
 
 			</div>

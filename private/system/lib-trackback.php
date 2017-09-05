@@ -356,7 +356,7 @@ function TRB_formatComment($url, $title = '', $blog = '', $excerpt = '', $date =
     $template->set_var('lang_readmore', $LANG_TRB['read_more']);
 
     $anchor = '<a href="' . $url . '">';
-    $readmore = COM_createLink($LANG_TRB['read_more'], $url);
+    $readmore = COM_createLink($LANG_TRB['read_more'], $url,$attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
 
     $template->set_var('readmore_link', $readmore);
     $template->set_var('start_readmore_anchortag', $anchor);
@@ -661,7 +661,7 @@ function TRB_renderTrackbackComments($sid, $type, $title, $permalink, $trackback
 {
     global $_CONF, $_TABLES, $LANG_TRB;
 
-    $link_and_title = COM_createLink($title, $permalink);
+    $link_and_title = COM_createLink($title, $permalink,$attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
     if (empty($trackback_url)) {
         $trackback_url = TRB_makeTrackbackUrl($sid, $type);
     }
