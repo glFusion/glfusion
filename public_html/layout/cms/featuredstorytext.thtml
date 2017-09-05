@@ -141,6 +141,11 @@
 		<a class="uk-button" href="{comments_url}#comments" {comments_url_extra}>{comments_count}</a>
 {!endif}
 
+{!if trackbacks_url}
+		<a class="uk-button" href="{trackbacks_url}">{trackbacks_text}</a>
+{!endif}
+
+
 <div class="uk-clearfix"></div>
 
 {!!if {story_display} == 'article' !!}
@@ -179,9 +184,6 @@
 		<div class="tm-article-footer">
 {!if page_selector}
 			<p>{page_selector}</p>
-{!endif}
-{!if trackbacks_count}
-		{trackbacks_with_count}
 {!endif}
 {!if plugin_footer_vars}
 		<div>{plugin_footer_vars}</div>
