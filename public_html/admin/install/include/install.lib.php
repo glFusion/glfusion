@@ -1483,6 +1483,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_coreCfg = $c->get_config('Core');
             $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
 
+            $c->del('path_pear','Core');
+            $c->del('have_pear','Core');
+            $c->del('fs_pear','Core');
+
             $current_fusion_version = '1.7.0';
 
         default:
