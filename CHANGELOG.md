@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Removed all dependencies on PEAR modules
+  - Basic support for structure data for articles
   - Improved error handling of embedded PHP in static pages
   - Upgrade check now uses alert classes (green, yellow, red) to highlight upgrade check results
   - Forum Plugin - fixed display issue with unbanning IPs

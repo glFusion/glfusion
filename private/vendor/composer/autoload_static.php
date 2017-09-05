@@ -15,6 +15,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'splitbrain\\PHPArchive\\' => 22,
         ),
+        'P' => 
+        array (
+            'PhpXmlRpc\\' => 10,
+        ),
         'M' => 
         array (
             'Misd\\Linkify\\' => 13,
@@ -30,6 +34,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
         ),
+        'PhpXmlRpc\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpxmlrpc/phpxmlrpc/src',
+        ),
         'Misd\\Linkify\\' => 
         array (
             0 => __DIR__ . '/..' . '/misd/linkify/src/Misd/Linkify',
@@ -42,13 +50,6 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
     );
 
     public static $prefixesPsr0 = array (
-        'X' => 
-        array (
-            'XML_RPC2' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/xml_rpc2',
-            ),
-        ),
         'S' => 
         array (
             'SimplePie' => 
@@ -56,19 +57,8 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
                 0 => __DIR__ . '/..' . '/simplepie/simplepie/library',
             ),
         ),
-        'P' => 
-        array (
-            'PEAR' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/pear_exception',
-            ),
-        ),
         'H' => 
         array (
-            'HTTP_Request2' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/http_request2',
-            ),
             'HTMLPurifier' => 
             array (
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
@@ -103,7 +93,6 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'JSCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/JSCreator.php',
         'KMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/KMLCreator.php',
         'MBOXCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/MBOXCreator.php',
-        'Net_URL2' => __DIR__ . '/..' . '/pear/net_url2/Net/URL2.php',
         'OPMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/OPMLCreator.php',
         'PHPCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/PHPCreator.php',
         'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',

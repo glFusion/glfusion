@@ -6,6 +6,9 @@
 // |                                                                          |
 // | Functions needed to handle trackback comments.                           |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2017 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
@@ -51,7 +54,7 @@ $_TRB_LOG_REJECTS = false;
  */
 function TRB_sendTrackbackResponse($error, $errormsg = '', $http_status = 200, $http_text = "OK")
 {
-    $display = '<?xml version="1.0" encoding="iso-8859-1"?>' . LB
+    $display = '<?xml version="1.0" encoding="'.COM_getCharset().'"?>' . LB
         . '<response>' . LB
         . '<error>' . $error . '</error>' . LB;
     if (($error != 0) && !empty($errormsg)) {
@@ -66,8 +69,9 @@ function TRB_sendTrackbackResponse($error, $errormsg = '', $http_status = 200, $
         header("HTTP/1.1 $http_status $http_text");
         header("Status: $http_status $http_text");
     }
-    header('Content-Type: text/xml');
+    header("Content-type: text/xml; charset=" . COM_getCharset() );
     echo $display;
+    exit;
 }
 
 /**
@@ -422,17 +426,18 @@ function TRB_containsBacklink($body, $urlToCheck)
 
     $retval = false;
 
-    preg_match_all("/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>/i",
-        $body, $matches);
-    for ($i = 0; $i < count($matches[0]); $i++) {
+    $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
+    preg_match_all("/$regexp/siU", $body, $matches);
+
+    for ($i = 0; $i < count($matches[2]); $i++) {
         if ($_CONF['check_trackback_link'] & 1) {
-            if (strpos($matches[1][$i], $urlToCheck) === 0) {
+            if (strpos($matches[2][$i], $urlToCheck) === 0) {
                 // found it!
                 $retval = true;
                 break;
             }
         } else {
-            if ($matches[1][$i] == $urlToCheck) {
+            if ($matches[2][$i] == $urlToCheck) {
                 // found it!
                 $retval = true;
                 break;
@@ -492,7 +497,7 @@ function TRB_linksToUs($sid, $type, $urlToGet)
         $http->ReadReplyHeaders($headers);
         if ( $http->response_status == 200 ) {
             $error = $http->ReadWholeReplyBody($body);
-            if ( $error == "" || strlen($body) > 0 ) {
+            if ( strlen($body) > 0 ) {
                 $retval = TRB_containsBacklink($body, $urlToCheck);
             } else {
                 COM_errorLog("Trackback verification: unable to retrieve response body");
@@ -728,7 +733,6 @@ function TRB_sendTrackbackPing($targeturl, $url, $title, $excerpt, $blog = '')
     if (empty($blog)) {
         $blog = $_CONF['site_name'];
     }
-
     $target = parse_url($targeturl);
     if (!isset ($target['query'])) {
         $target['query'] = '';
@@ -736,59 +740,65 @@ function TRB_sendTrackbackPing($targeturl, $url, $title, $excerpt, $blog = '')
         $target['query'] = '?' . $target['query'];
     }
     if (!isset ($target['port']) || !is_numeric($target['port'])) {
-        $target['port'] = 80;
+        if ( $target['scheme'] == 'https' ) {
+            $target['port'] = 443;
+        } else {
+            $target['port'] = 80;
+        }
     }
 
-    $sock = fsockopen($target['host'], $target['port']);
-    if (!is_resource($sock)) {
-        COM_errorLog('Trackback: Could not connect to ' . $targeturl);
+    $arguments = array();
+    $response = '';
 
-        return $LANG_TRB['error_socket'];
+    $http=new http_class;
+    $http->timeout=0;
+    $http->data_timeout=0;
+    $http->debug=0;
+    $http->html_debug=0;
+    $http->user_agent = 'glFusion/' . GVERSION;
+    $error = $http->GetRequestArguments($targeturl,$arguments);
+    $error=$http->Open($arguments);
+    if ( $error == "" ) {
+        $arguments['RequestMethod'] = "POST";
+        $arguments['PostValues'] = array(
+            'url' => $url,
+            'title' => $title,
+            'blog_name' => $blog,
+            'excerpt' => $excerpt,
+        );
     }
+    $error=$http->SendRequest($arguments);
+    if ( $error == "" ) {
+        $http->ReadWholeReplyBody($body);
+        if ( strlen($body) > 0 ) {
+            $res = $body;
+            // firing up the XML parser for this would be overkill ...
+            $r1 = strpos($res, '<error>');
+            $r2 = strpos($res, '</error>');
+            if (($r1 === false) || ($r2 === false)) {
+                return $LANG_TRB['error_response'];
+            }
+            $r1 += strlen('<error>');
+            $e = trim(substr($res, $r1, $r2 - $r1));
 
-    $toSend = 'url=' . rawurlencode($url) . '&title=' . rawurlencode($title)
-        . '&blog_name=' . rawurlencode($blog) . '&excerpt='
-        . rawurlencode($excerpt);
-    $charset = COM_getCharset();
+            if ($e != 0) {
+                $r1 = strpos($res, '<message>');
+                $r2 = strpos($res, '</message>');
+                $r1 += strlen('<message>');
+                if (($r1 === false) || ($r2 === false)) {
+                    return $LANG_TRB['error_unspecified'];
+                }
+                $m = trim(substr($res, $r1, $r2 - $r1));
 
-    fputs($sock, 'POST ' . $target['path'] . $target['query'] . " HTTP/1.0\r\n");
-    fputs($sock, 'Host: ' . $target['host'] . "\r\n");
-    fputs($sock, 'Content-type: application/x-www-form-urlencoded; charset='
-        . $charset . "\r\n");
-    fputs($sock, 'Content-length: ' . utf8_strlen($toSend) . "\r\n");
-    fputs($sock, 'User-Agent: glFusion/' . GVERSION . "\r\n");
-    fputs($sock, "Connection: close\r\n\r\n");
-    fputs($sock, $toSend);
-
-    $res = '';
-    while (!feof($sock)) {
-        $res .= fgets($sock, 128);
-    }
-
-    fclose($sock);
-
-    // firing up the XML parser for this would be overkill ...
-    $r1 = strpos($res, '<error>');
-    $r2 = strpos($res, '</error>');
-    if (($r1 === false) || ($r2 === false)) {
-        return $LANG_TRB['error_response'];
-    }
-    $r1 += strlen('<error>');
-    $e = trim(substr($res, $r1, $r2 - $r1));
-
-    if ($e != 0) {
-        $r1 = strpos($res, '<message>');
-        $r2 = strpos($res, '</message>');
-        $r1 += strlen('<message>');
-        if (($r1 === false) || ($r2 === false)) {
+                return $m;
+            }
+            return true;
+        } else {
             return $LANG_TRB['error_unspecified'];
         }
-        $m = trim(substr($res, $r1, $r2 - $r1));
-
-        return $m;
+    } else {
+        return $LANG_TRB['error_unspecified'];
     }
-
-    return true;
 }
 
 /**

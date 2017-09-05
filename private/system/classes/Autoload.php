@@ -72,10 +72,6 @@ class Autoload
                     include __DIR__ . '/../../lib/bbcode/'.strtolower($className).'.class.php';
                 } elseif (stripos($className, 'timerobject') === 0) {
                     include __DIR__ . '/timer.class.php';
-                } elseif (stripos($className, 'XML_RPC_Server') === 0) {
-                    include __DIR__ . '/XML/RPC/Server.php';
-                } elseif (stripos($className, 'XML_RPC_') === 0) {
-                    include __DIR__ . '/XML/RPC.php';
                 }
             }
         }

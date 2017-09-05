@@ -230,26 +230,6 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 // +--------------------------------------------------------------------------+
 
 /**
-* If needed, add our PEAR path to the list of include paths
-*
-*/
-if ( !$_CONF['have_pear'] ) {
-    $curPHPIncludePath = get_include_path();
-    if ( defined( 'PATH_SEPARATOR' )) {
-        $separator = PATH_SEPARATOR;
-    } else {
-        // prior to PHP 4.3.0, we have to guess the correct separator ...
-        $separator = ';';
-        if ( strpos( $curPHPIncludePath, $separator ) === false ) {
-            $separator = ':';
-        }
-    }
-    if ( set_include_path( $_CONF['path_pear'] . $separator.$curPHPIncludePath ) === false ) {
-        COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
-    }
-}
-
-/**
 * Include page time -- used to time how fast each page was created
 *
 */
@@ -1063,7 +1043,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $header->parse( 'index_header', 'header' );
     $retval = $header->finish( $header->get_var( 'index_header' ));
-
+    if ( defined( 'DVLP_DEBUG' )) {
+        header('X-XSS-Protection: 0');
+    }
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins

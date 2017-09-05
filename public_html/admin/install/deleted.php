@@ -33,7 +33,8 @@ if (!defined ('GVERSION')) {
 
 $obsoletePrivateDir = array(
 // 1.7.0
-
+    'vendor/pear/',
+    'system/classes/XML/',
     'lib/email-address-validation/',
     'lib/feedcreator/',
     'lib/geshi/',

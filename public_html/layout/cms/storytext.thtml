@@ -92,6 +92,9 @@
 {!if comments_url}
 						<li><a class="uk-text" href="{comments_url}#comments" {comments_url_extra}>{comments_count}</a></li>
 {!endif}
+{!if trackbacks_url}
+						<li><a class="uk-text" href="{trackbacks_url}">{trackbacks_text}</a></li>
+{!endif}
 					</ul>
 					<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
@@ -177,9 +180,6 @@
 				<div class="tm-article-footer">
 {!if page_selector}
 					<p>{page_selector}</p>
-{!endif}
-{!if trackbacks_count}
-					{trackbacks_with_count}
 {!endif}
 {!if plugin_footer_vars}
 					<div>{plugin_footer_vars}</div>

@@ -25,7 +25,6 @@ return array(
     'JSCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/JSCreator.php',
     'KMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/KMLCreator.php',
     'MBOXCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/MBOXCreator.php',
-    'Net_URL2' => $vendorDir . '/pear/net_url2/Net/URL2.php',
     'OPMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/OPMLCreator.php',
     'PHPCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/PHPCreator.php',
     'PHPMailer' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
