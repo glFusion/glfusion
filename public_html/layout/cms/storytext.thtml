@@ -98,10 +98,10 @@
 					</ul>
 					<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
-						<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope"></a></li>
+						<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope" rel="nofollow"></a></li>
 {!endif}
 {!if print_story_url}
-						<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print"></a></li>
+						<li><a href="{print_story_url}" target="_blank" rel="nofollow" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
 						<li><a href="{edit_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-edit"></a></li>
@@ -168,15 +168,11 @@
 					</header>
 				</article>
 	{!endif}
-
 {!endif}
-
 				<div class="uk-clearfix"></div>
-
 {!if rating_bar}
 				{rating_bar}
 {!endif}
-
 				<div class="tm-article-footer">
 {!if page_selector}
 					<p>{page_selector}</p>
