@@ -343,187 +343,6 @@
         }
     },
     {
-        "name": "pear/pear_exception",
-        "version": "v1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pear/PEAR_Exception.git",
-            "reference": "8c18719fdae000b690e3912be401c76e406dd13b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/8c18719fdae000b690e3912be401c76e406dd13b",
-            "reference": "8c18719fdae000b690e3912be401c76e406dd13b",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=4.4.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2015-02-10 20:07:52",
-        "type": "class",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "PEAR": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "include-path": [
-            "."
-        ],
-        "license": [
-            "BSD-2-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Helgi Thormar",
-                "email": "dufuz@php.net"
-            },
-            {
-                "name": "Greg Beaver",
-                "email": "cellog@php.net"
-            }
-        ],
-        "description": "The PEAR Exception base class.",
-        "homepage": "https://github.com/pear/PEAR_Exception",
-        "keywords": [
-            "exception"
-        ]
-    },
-    {
-        "name": "pear/net_url2",
-        "version": "v2.2.1",
-        "version_normalized": "2.2.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pear/Net_URL2.git",
-            "reference": "43a87606daf52efe6685c92131be083143108e37"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/pear/Net_URL2/zipball/43a87606daf52efe6685c92131be083143108e37",
-            "reference": "43a87606daf52efe6685c92131be083143108e37",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.1.4"
-        },
-        "require-dev": {
-            "phpunit/phpunit": ">=3.3.0"
-        },
-        "time": "2016-04-18 22:24:01",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "Net/URL2.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "David Coallier",
-                "email": "davidc@php.net"
-            },
-            {
-                "name": "Tom Klingenberg",
-                "email": "tkli@php.net"
-            },
-            {
-                "name": "Christian Schmidt",
-                "email": "chmidt@php.net"
-            }
-        ],
-        "description": "Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs.",
-        "homepage": "https://github.com/pear/Net_URL2",
-        "keywords": [
-            "PEAR",
-            "net",
-            "networking",
-            "rfc3986",
-            "uri",
-            "url"
-        ]
-    },
-    {
-        "name": "pear/http_request2",
-        "version": "v2.3.0",
-        "version_normalized": "2.3.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pear/HTTP_Request2.git",
-            "reference": "3599cf0fe455a4e281da464f6510bfc5c2ce54c4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/pear/HTTP_Request2/zipball/3599cf0fe455a4e281da464f6510bfc5c2ce54c4",
-            "reference": "3599cf0fe455a4e281da464f6510bfc5c2ce54c4",
-            "shasum": ""
-        },
-        "require": {
-            "pear/net_url2": "^2.2.0",
-            "pear/pear_exception": "^1.0.0",
-            "php": ">=5.2.0"
-        },
-        "suggest": {
-            "ext-fileinfo": "Adds support for looking up mime-types using finfo.",
-            "ext-zlib": "Allows handling gzip compressed responses.",
-            "lib-curl": "Allows using cURL as a request backend.",
-            "lib-openssl": "Allows handling SSL requests when not using cURL."
-        },
-        "time": "2016-02-13 20:20:39",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-trunk": "2.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "HTTP_Request2": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "include-path": [
-            "./"
-        ],
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Alexey Borzov",
-                "email": "avb@php.net"
-            }
-        ],
-        "description": "Provides an easy way to perform HTTP requests.",
-        "homepage": "http://pear.php.net/package/HTTP_Request2",
-        "keywords": [
-            "PEAR",
-            "curl",
-            "http",
-            "request"
-        ]
-    },
-    {
         "name": "phpmailer/phpmailer",
         "version": "v5.2.24",
         "version_normalized": "5.2.24.0",
@@ -705,63 +524,6 @@
         "homepage": "https://github.com/aziraphale/email-address-validator"
     },
     {
-        "name": "pear/xml_rpc2",
-        "version": "1.1.3",
-        "version_normalized": "1.1.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pear/XML_RPC2.git",
-            "reference": "085e9da0896e2bd4fb7479dc0d5e40f0731582f0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/pear/XML_RPC2/zipball/085e9da0896e2bd4fb7479dc0d5e40f0731582f0",
-            "reference": "085e9da0896e2bd4fb7479dc0d5e40f0731582f0",
-            "shasum": ""
-        },
-        "require": {
-            "pear/http_request2": "^2.3.0",
-            "pear/pear_exception": "^1.0.0",
-            "php": ">=5.2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2016-06-21 19:29:17",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "XML_RPC2": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "include-path": [
-            "./"
-        ],
-        "license": [
-            "LGPL-2.1"
-        ],
-        "authors": [
-            {
-                "name": "Sergio Carvalho",
-                "email": "sergiosgc@php.net",
-                "role": "Lead"
-            },
-            {
-                "name": "Fabien MARTY",
-                "email": "fab@php.net",
-                "role": "Developer"
-            },
-            {
-                "name": "Alan Langford",
-                "email": "jal@ambitonline.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "More info available on: http://pear.php.net/package/XML_RPC2"
-    },
-    {
         "name": "misd/linkify",
         "version": "v1.1.4",
         "version_normalized": "1.1.4.0",
@@ -806,6 +568,59 @@
             "email address",
             "link",
             "url"
+        ]
+    },
+    {
+        "name": "phpxmlrpc/phpxmlrpc",
+        "version": "4.2.1",
+        "version_normalized": "4.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/gggeek/phpxmlrpc.git",
+            "reference": "42c180bece13d99ca97ebe842d059d7352d8e914"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/42c180bece13d99ca97ebe842d059d7352d8e914",
+            "reference": "42c180bece13d99ca97ebe842d059d7352d8e914",
+            "shasum": ""
+        },
+        "require": {
+            "ext-xml": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "dev-master",
+            "docbook/docbook-xsl": "~1.78",
+            "ext-curl": "*",
+            "ext-mbstring": "*",
+            "indeyets/pake": "~1.99",
+            "phpunit/phpunit": ">=4.0.0, <6.0.0",
+            "phpunit/phpunit-selenium": "*",
+            "sami/sami": "~3.1"
+        },
+        "suggest": {
+            "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
+            "ext-mbstring": "Needed to allow reception of requests/responses in character sets other than ASCII,LATIN-1,UTF-8",
+            "ext-zlib": "Needed for sending compressed requests and receiving compressed responses, if cURL is not available"
+        },
+        "time": "2017-09-03 19:15:39",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PhpXmlRpc\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "A php library for building xmlrpc clients and servers",
+        "homepage": "http://gggeek.github.io/phpxmlrpc/",
+        "keywords": [
+            "webservices",
+            "xmlrpc"
         ]
     }
 ]
