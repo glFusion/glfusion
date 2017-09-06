@@ -2594,3 +2594,9 @@ input.error {
 span.highlight {
 	background-color:chartreuse;
 }
+
+.badge-notify{
+	position:relative;
+	top: -70px;
+	left: 16px;
+}

@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Add badge to moderation / submission queue icon on C&C to show items in queue
   - Improved forum formatting for lists, code, quotes
   - Reverse proxy (i.e.; CloudFlare) support for BB2
   - Removed all dependencies on PEAR modules

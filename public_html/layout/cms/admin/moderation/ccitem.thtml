@@ -1,6 +1,10 @@
 <div class="uk-align-center" style="text-align:center;float:left;height:100px;width:100px;">
-    <a href="{page_url}">
-        <img src="{page_image}" alt="{option_label}" />
-    </a><br />
-    <a href="{page_url}">{option_label}</a>
+	<a href="{page_url}">
+		<img src="{page_image}" alt="{option_label}">
+	</a>
+	<br>
+	<a href="{page_url}">{option_label}</a>
+{!if count}
+	<span class="uk-badge uk-badge-notification uk-badge-danger badge-notify">{count}</span>
+{!endif}
 </div>
