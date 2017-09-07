@@ -258,6 +258,11 @@ $LANG03 = array(
     49 => 'Comments are closed',
     50 => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to comment',
     51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+
 );
 
 ###############################################################################
