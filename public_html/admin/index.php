@@ -201,6 +201,7 @@ function commandcontrol()
         $docUrl = $_CONF['site_url'].'/docs/english/index.html';
     }
     $modnum = 0;
+
     if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
         if ( SEC_hasRights( 'story.moderate' )) {
             if ( empty( $topicsql )) {

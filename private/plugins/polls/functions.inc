@@ -146,7 +146,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/polls/index.php?pid=$id");
     }
-    CACHE_remove_instance('whatsnew_');
+    CACHE_remove_instance('whatsnew');
     return $retval;
 }
 

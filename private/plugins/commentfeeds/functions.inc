@@ -117,7 +117,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
            ." JOIN {$_TABLES['topics']} as t ON t.tid = s.tid "
            .COM_getPermSQL('WHERE', 1, 2, 's')
            .COM_getPermSQL('AND', 1, 2, 't')
-           ." AND type='article' ";
+           ." AND c.queued = 0 AND type='article' ";
 
     if( $S['topic'] != 'all' ) {
         $sql .= " AND topic='{$S['topic']}' ";
@@ -192,7 +192,7 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
            ." JOIN {$_TABLES['topics']} as t ON t.tid = s.tid "
            .COM_getPermSQL('WHERE', 1, 2, 's')
            .COM_getPermSQL('AND', 1, 2, 't')
-           ." AND type='article' ";
+           ." AND c.queued = 0 AND type='article' ";
 
     if( $topic != 'all' )
     {

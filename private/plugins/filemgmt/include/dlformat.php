@@ -128,10 +128,11 @@ $p->set_var('homepage',$homepage);
 
 if ($comments) {
     USES_lib_comments();
-    $commentCount=DB_count($_TABLES['comments'],'sid',"fileid_$lid");
+//    $commentCount=DB_count($_TABLES['comments'],'sid',"fileid_$lid");
+    $commentCount = CMT_getCount('filemgmt',"fileid_".$lid);
     $recentPostMessage =_MD_COMMENTSWANTED;
     if ($commentCount > 0) {
-        $result4 = DB_query("SELECT cid, UNIX_TIMESTAMP(date) AS day,username FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = 'fileid_$lid' ORDER BY date desc LIMIT 1");
+        $result4 = DB_query("SELECT cid, UNIX_TIMESTAMP(date) AS day,username FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = 'fileid_$lid' AND queued=0 ORDER BY date desc LIMIT 1");
         $C = DB_fetchArray($result4);
         $dt->setTimestamp($C['day']);
         $recentPostMessage = $LANG01[27].': '.$dt->format($_CONF['daytime'],true). ' ' . $LANG01[104] . ' ' . $C['username'];

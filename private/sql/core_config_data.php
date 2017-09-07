@@ -2169,13 +2169,24 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'commentssubmission',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 6,
+    	'selection_array' => 0,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'commentspeedlimit',
     	'default_value' => 45,
     	'type' => 'text',
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 40,
+    	'sort' => 50,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2186,7 +2197,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 50,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2197,7 +2208,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 11,
-    	'sort' => 60,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2208,7 +2219,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 17,
-    	'sort' => 70,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2219,7 +2230,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 80,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2230,7 +2241,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 90,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2241,7 +2252,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 5,
-    	'sort' => 100,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2252,7 +2263,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2263,7 +2274,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 120,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2274,7 +2285,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 130,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

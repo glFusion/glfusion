@@ -10,6 +10,7 @@
 <form class="uk-form uk-form-stacked" id="commentform" action="{site_url}/comment.php#comment_entry" method="post">
 	{cid}
 	<input type="hidden" name="mode" value="{mode}">
+	<input type="hidden" name="modedit" value="{modedit}">
 	<input type="hidden" name="sid" value="{sid}">
 	<input type="hidden" name="pid" value="{pid}">
 	<input type="hidden" name="type" value="{type}">

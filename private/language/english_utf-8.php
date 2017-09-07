@@ -2846,6 +2846,7 @@ $LANG_confignames['Core'] = array(
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
     'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue',
 );
 
 $LANG_configsubgroups['Core'] = array(

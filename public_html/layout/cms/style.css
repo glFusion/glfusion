@@ -22,6 +22,11 @@ set of styles.
 	margin-top:3px;
 }
 
+.uk-modal-page,
+.uk-modal-page body {
+	overflow: inherit !important;
+}
+
 #admin-side-config h3 {
 	color:#fff;
 }

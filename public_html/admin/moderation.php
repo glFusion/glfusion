@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion main administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -77,7 +77,7 @@ function MODERATE_ismoderator_user()
 }
 
 /**
-* Returns the number of user submissions
+* Returns the number of story submissions
 *
 * Similar to plugin_submissioncount_{plugin} for object type = draftstory
 *
@@ -192,6 +192,14 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 . '&amp;type=' . $A['_type_']
                 . '&amp;id=' . $A[0]
                 . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        case 'preview' :
+            $retval = '
+            <button type="button" class="uk-button uk-button-success" data-uk-modal="{target:\'#tstid'.$A['cid'].'\'}">'.$LANG_ADMIN['preview'].'</button>
+            <div id="tstid'.$A['cid'].'" class="uk-modal">
+                <div class="uk-modal-dialog uk-modal-dialog-large">
+                    <a class="uk-modal-close uk-close"></a>'.$fieldvalue.'</div></div>';
             break;
 
         default:

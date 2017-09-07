@@ -1378,8 +1378,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', false, $msgArray['type']);
-
+        if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
+        if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
+        if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
         SESS_unSet('glfusion.infoblock');
     }
     $theme->set_var('info_block',$msgTxt);
@@ -3873,9 +3875,14 @@ function COM_setMessage( $msg = 0 )
     SESS_setVar('glfusion.infomessage',$msg);
 }
 
-function COM_setMsg( $msg, $type='info' )
+function COM_setMsg( $msg, $type='info', $persist=0 )
 {
-    $msgArray = array('msg' => $msg, 'type' => $type);
+    $msgArray = array(
+                        'msg' => $msg,
+                        'type' => $type,
+                        'persist' => $persist,
+                        'title' => '',
+                    );
     SESS_setVar('glfusion.infoblock', serialize($msgArray));
 }
 
@@ -3968,7 +3975,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='inf
                     'type'          => $type,
                     'persist'       => $persist,
                     'id'            => $id,
-                    'timeout'       => $_SYSTEM['alert_timeout'],
+                    'timeout'       => (($persist) ? '0' : $_SYSTEM['alert_timeout']),
                     'position'      => $_SYSTEM['alert_position'],
         ));
         $T->parse( 'final', 'message' );
