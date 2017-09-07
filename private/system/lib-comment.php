@@ -154,6 +154,13 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $commentbar = new Template( $_CONF['path_layout'] . 'comment' );
     $commentbar->set_file( array( 'commentbar' => 'commentbar.thtml' ));
+
+    if ( SESS_isSet('glfusion.commentpostsave') ) {
+        $msg = COM_showMessageText(SESS_getVar('glfusion.commentpostsave'),'',1,'warning');
+        SESS_unSet('glfusion.commentpostsave');
+        $commentbar->set_var('info_message',$msg);
+    }
+
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
     $commentbar->set_var( 'lang_refresh', $LANG01[39] );
     $commentbar->set_var( 'lang_reply', $LANG01[60] );
@@ -547,7 +554,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     $ccode == 0 &&
                     DB_getItem($_TABLES['comments'], 'COUNT(*)', "queued = 0 AND pid = ".(int) $A['cid']) == 0) {
                 $edit_option = true;
-            } else if (SEC_inGroup('Root') ) {
+            } else if (SEC_hasRights('comment.moderate') ) {
                 $edit_option = true;
             } else {
                 $edit_option = false;
@@ -1378,9 +1385,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if (!empty ($title) && !empty ($comment)) {
         $filter = sanitizer::getInstance();
         COM_updateSpeedlimit ('comment');
-        $title = $filter->prepareForDB($title);
-        $comment = $filter->prepareForDB($comment);
-        $type = $filter->prepareForDB($type);
+//        $title = $filter->prepareForDB($title);
+//        $comment = $filter->prepareForDB($comment);
+//        $type = $filter->prepareForDB($type);
         $queued = 0;
         if ( isset($_CONF['commentssubmission']) && $_CONF['commentssubmission'] == true ) {
             if ( !SEC_hasRights('comment.submit') ) {
@@ -1399,7 +1406,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                 DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND rht >= $rht");
                 DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                        "'".DB_escapeString($sid)."',$uid,'$comment',now(),'$title',".(int) $pid.",$queued,$rht,$rht+1,$indent+1,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                        "'".DB_escapeString($sid)."',$uid,'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht,$rht+1,$indent+1,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
             } else { //replying to non-existent comment or comment in wrong article
                 COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
@@ -1411,7 +1418,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                 $rht = 0;
             }
             DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                    "'".DB_escapeString($sid)."',".(int) $uid.",'$comment',now(),'$title',".(int) $pid.",$queued,$rht+1,$rht+2,0,'$type','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                    "'".DB_escapeString($sid)."',".(int) $uid.",'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht+1,$rht+2,0,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
         }
         $cid = DB_insertId();
         //set Anonymous user name if present
@@ -1428,7 +1435,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         if ( $queued == 0 ) {
             PLG_itemSaved($cid, 'comment');
         } else {
-            COM_setMsg('Comment queued for review and approval','info',true);
+            SESS_setVar('glfusion.commentpostsave',$LANG03[52]);
         }
 
         // check to see if user has subscribed....
@@ -1448,8 +1455,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         }
         // Send notification of comment if no errors and notications enabled for comments
         if (($ret == 0) && isset ($_CONF['notification']) && in_array ('comment', $_CONF['notification'])) {
-            CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],
-                              $type, $cid);
+            CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],$type, $cid,$queued);
         }
         if ( $ret == 0 && $queued == 0) {
             PLG_sendSubscriptionNotification('comment',$type,$sid,$cid,$uid);
@@ -1474,13 +1480,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 * @param    $cid        int         comment id
 *
 */
-function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
+function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, $queued = 0)
 {
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09;
-
-    // we have to undo the DB_escapeString() call from savecomment()
-    $title = stripslashes ($title);
-    $comment = stripslashes ($comment);
 
     // strip HTML if posted in HTML mode
     if (preg_match ('/<.*>/', $comment) != 0) {
@@ -1509,18 +1511,58 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
         $mailbody .= $comment . "\n\n";
     }
 
-    $mailbody .= $LANG08[33] . ' ' . $_CONF['site_url']
-              . '/comment.php?mode=view&cid=' . $cid . "\n\n";
+    if ( $queued == 0 ) {
+        $mailbody .= $LANG08[33] . ' ' . $_CONF['site_url']
+                  . '/comment.php?mode=view&cid=' . $cid . "\n\n";
+        $mailbody .= "\n------------------------------\n";
+        $mailbody .= "$LANG08[34]";
+        $mailbody .= "\n------------------------------\n";
 
-    $mailbody .= "\n------------------------------\n";
-    $mailbody .= "\n$LANG08[34]\n";
-    $mailbody .= "\n------------------------------\n";
+        $mailsubject = $_CONF['site_name'] . ' ' . $LANG03[9];
 
-    $mailsubject = $_CONF['site_name'] . ' ' . $LANG03[9];
-
-    $to = array();
-    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
-    COM_mail ($to, $mailsubject, $mailbody);
+        $to = array();
+        $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+        COM_mail ($to, $mailsubject, $mailbody);
+    } else {
+        $mailbody = $LANG03[53].'<br><br>';
+        $mailbody .= $LANG03[16].': '. $title.'<br>';
+        $mailbody .= $LANG03[5].': '.$author.'<br><br>';
+        $mailbody .= nl2br($comment) . '<br><br>';
+        $mailbody .= sprintf($LANG03[54].'<br>',$_CONF['site_admin_url'].'/moderation.php');
+        $commentadmin_grp_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Comment Admin"');
+        if ( $commentadmin_grp_id === NULL ) return;
+        $groups = SEC_getGroupList($commentadmin_grp_id);
+        $groupList = implode(',',$groups);
+	    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email "
+	          ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
+	          ."WHERE {$_TABLES['users']}.uid > 1 "
+	          ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
+	          ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN (".$groupList."))";
+        $result = DB_query($sql);
+        $nRows = DB_numRows($result);
+        $toCount = 0;
+        $to = array();
+        $msgData = array();
+        for ($i=0;$i < $nRows; $i++ ) {
+            $row = DB_fetchArray($result);
+            if ( $row['email'] != '' ) {
+                $toCount++;
+                $to[] = array('email' => $row['email'], 'name' => $row['username']);
+            }
+        }
+        if ( $toCount > 0 ) {
+            $msgData['htmlmessage'] = $mailbody;
+            $msgData['textmessage'] = $mailbody;
+            $msgData['subject'] = $LANG03[55];
+            $msgData['from']['email'] = $_CONF['noreply_mail'];
+            $msgData['from']['name'] = $_CONF['site_name'];
+            $msgData['to'] = $to;
+            COM_emailNotification( $msgData );
+            return;
+    	} else {
+        	COM_errorLog("CMT Notification: Error - Did not find any moderators to email");
+    	}
+    }
 }
 
 /**
@@ -2235,7 +2277,7 @@ function plugin_itemlist_comment($token)
         $uid = $_USER['uid'];
     }
 
-    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['comments']} WHERE queued = 1";
+    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['comments']} WHERE queued = 1 ORDER BY date DESC";
 
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
