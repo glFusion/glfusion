@@ -936,7 +936,7 @@ function PLG_getSubmissionCount()
         }
     }
     if ( function_exists('plugin_submissioncount_comment')) {
-        $num = $num + $function();
+        $num = $num + plugin_submissioncount_comment();
     }
 
     return $num;
