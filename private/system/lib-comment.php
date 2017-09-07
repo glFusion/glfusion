@@ -1529,6 +1529,10 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
         $mailbody .= $LANG03[5].': '.$author.'<br><br>';
         $mailbody .= nl2br($comment) . '<br><br>';
         $mailbody .= sprintf($LANG03[54].'<br>',$_CONF['site_admin_url'].'/moderation.php');
+
+        $html2txt  = new Html2Text\Html2Text($mailbody,false);
+        $mailbody_text = trim($html2txt->get_text());
+
         $commentadmin_grp_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Comment Admin"');
         if ( $commentadmin_grp_id === NULL ) return;
         $groups = SEC_getGroupList($commentadmin_grp_id);
@@ -1552,7 +1556,7 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
         }
         if ( $toCount > 0 ) {
             $msgData['htmlmessage'] = $mailbody;
-            $msgData['textmessage'] = $mailbody;
+            $msgData['textmessage'] = $mailbody_text;
             $msgData['subject'] = $LANG03[55];
             $msgData['from']['email'] = $_CONF['noreply_mail'];
             $msgData['from']['name'] = $_CONF['site_name'];
@@ -2357,7 +2361,7 @@ function plugin_itemlist_comment($token)
 */
 function plugin_moderationapprove_comment($id)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG03;
 
     if ( (int) $id <= 0 ) return '';
 
@@ -2378,9 +2382,12 @@ function plugin_moderationapprove_comment($id)
     PLG_commentApproved($cid,$type,$sid);   // let plugins know they should update their counts if necessary
     CACHE_remove_instance('menu');
     CACHE_remove_instance('whatsnew');
+    if ( $type == 'article' ) {
+        CACHE_remove_instance('story__'.$sid);
+    }
     PLG_itemSaved($cid, 'comment');     // let others know we saved a comment to the prod table
 
-    COM_setMsg('Comment have been approved','warning');
+    COM_setMsg($LANG03[56],'warning');
 
     // should handle notification here if we want to.
 
