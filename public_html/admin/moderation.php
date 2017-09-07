@@ -196,10 +196,10 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'preview' :
             $retval = '
-            <button type="button" class="uk-button uk-button-success" data-uk-modal="{target:\'#tstid'.$A['cid'].'\'}">'.$LANG_ADMIN['preview'].'</button>
-            <div id="tstid'.$A['cid'].'" class="uk-modal">
-                <div class="uk-modal-dialog uk-modal-dialog-large">
-                    <a class="uk-modal-close uk-close"></a>'.$fieldvalue.'</div></div>';
+                <a href="#cmtpreview'.$A['cid'].'" rel="modal:open">'.$LANG_ADMIN['preview'].'</a>
+                <div id="cmtpreview'.$A['cid'].'" style="display:none;">
+                '.$fieldvalue.'
+                </div>';
             break;
 
         default:
@@ -666,6 +666,10 @@ function MODERATE_itemList($type='', $token)
 function MODERATE_submissions()
 {
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    $output = outputHandler::getInstance();
+    $output->addLinkScript($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.min.js');
+    $output->addLinkStyle($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.css');
 
     $pageContent = '';
     $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));
