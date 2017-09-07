@@ -483,7 +483,7 @@ class Story
 
         $alternate_topic = '';
         $alternate_topic_description = '';
-        if ( $story['alternate_tid'] != NULL && $story['alternate_tid'] != "" ) {
+        if ( isset($story['alternate_tid']) && $story['alternate_tid'] != NULL && $story['alternate_tid'] != "" ) {
             $atresult = DB_query("SELECT topic, description from {$_TABLES['topics']} WHERE tid='".DB_escapeString($story['alternate_tid']) ."'");
             if ( DB_numRows($atresult) > 0 ) {
                 $atrow = DB_fetchArray($atresult);
