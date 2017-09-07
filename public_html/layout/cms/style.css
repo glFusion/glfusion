@@ -24,7 +24,7 @@ set of styles.
 
 .uk-modal-page,
 .uk-modal-page body {
-	overflow: inherit !important;
+	overflow: hidden !important;
 }
 
 #admin-side-config h3 {
