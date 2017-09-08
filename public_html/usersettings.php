@@ -326,8 +326,8 @@ function confirmAccountDelete ($form_reqid)
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
     if (empty($_POST['passwd']) || !SEC_check_hash(trim($_POST['passwd']),$current_password)) {
-         return COM_refresh($_CONF['site_url']
-                            . '/usersettings.php?msg=84');
+         COM_setMsg( $MESSAGE[84], 'error',true );
+         return COM_refresh($_CONF['site_url'].'/usersettings.php');
     }
 
     $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
@@ -373,8 +373,8 @@ function deleteUserAccount ($form_reqid)
     if (!USER_deleteAccount ($_USER['uid'])) {
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-
-    return COM_refresh ($_CONF['site_url'] . '/index.php?msg=57');
+    COM_setMsg( $MESSAGE[57], 'error',true );
+    return COM_refresh ($_CONF['site_url'] . '/index.php');
 }
 
 /**
@@ -970,9 +970,10 @@ function saveuser($A)
                     // Need a numeric return for the default message handler
                     // - if not numeric use default message
                     if (!is_numeric($ret)) {
-                        $ret['number'] = 97;
+                        $ret = 97;
                     }
-                    return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
+                    COM_setMsg( $MESSAGE[$ret], 'error',true );
+                    return COM_refresh("{$_CONF['site_url']}/usersettings.php");
                 }
             }
         } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
@@ -983,7 +984,8 @@ function saveuser($A)
                 if (!is_numeric($ret)) {
                     $ret = 97;
                 }
-                return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
+                COM_setMsg( $MESSAGE[$ret], 'error',true );
+                return COM_refresh("{$_CONF['site_url']}/usersettings.php");
             }
         }
     }
@@ -995,7 +997,8 @@ function saveuser($A)
         if (! is_numeric($msg)) {
             $msg = 97;
         }
-        return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$msg}");
+        COM_setMsg( $MESSAGE[$msg], 'error',true );
+        return COM_refresh("{$_CONF['site_url']}/usersettings.php");
     }
 
     // no need to filter the password as it's encoded anyway
@@ -1016,7 +1019,8 @@ function saveuser($A)
                 }
                 DB_change ($_TABLES['users'], 'username', $A['new_username'],"uid", (int)$_USER['uid']);
             } else {
-                return COM_refresh ($_CONF['site_url'].'/usersettings.php?msg=51');
+                COM_setMsg( $MESSAGE[51], 'error',true );
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
             }
         }
     }
@@ -1231,8 +1235,7 @@ function saveuser($A)
             COM_setMsg($MESSAGE[$msg],'error');
         }
 
-        return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
-                            . $_USER['uid']); //  . '&amp;msg=' . $msg);
+        return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='.$_USER['uid']);
     }
 }
 
@@ -1722,8 +1725,8 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
 
     case 'savepreferences':
         savepreferences ($_POST);
-        $display .= COM_refresh ($_CONF['site_url']
-                                 . '/usersettings.php?mode=preferences&amp;msg=6');
+        COM_setMsg( $MESSAGE[6], 'info',false );
+        $display .= COM_refresh ($_CONF['site_url'].'/usersettings.php?mode=preferences');
         break;
 
     case 'confirmdelete':
@@ -1754,8 +1757,8 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
 
     case 'plugin':
         PLG_profileExtrasSave ($_POST['plugin']);
-        $display = COM_refresh ($_CONF['site_url']
-                                . '/usersettings.php?msg=5');
+        COM_setMsg( $MESSAGE[5], 'info',false );
+        $display = COM_refresh ($_CONF['site_url'].'/usersettings.php');
         break;
 
     case 'synch':
@@ -1817,10 +1820,12 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             }
 
             if ($msg == 5) {
-                $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid'] . '&amp;msg=5');
+                COM_setMsg( $MESSAGE[5], 'info',false );
+                $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid']);
             } else {
+                COM_setMsg( $MESSAGE[$msg], 'error',true );
                 COM_errorLog($MESSAGE[$msg]);
-                $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php?msg=' . $msg);
+                $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php');
             }
             break;
         }
