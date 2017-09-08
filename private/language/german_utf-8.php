@@ -260,7 +260,12 @@ $LANG03 = array(
     48 => 'Klicke <a href="javascript:history.back()">hier</a> um zurückzukehren',
     49 => 'Kommentare sind geschlossen',
     50 => "Du musst dich <a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um schreiben dürfen",
-    51 => 'Sei der erste der kommentiert'
+    51 => 'Sei der erste der kommentiert',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.'
 );
 
 ###############################################################################
@@ -2850,7 +2855,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => '404-Fehler (NotFound) aufzeichnen',
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
     'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
-    'standard_auth_first' => '"Standard Auth" als erstes in Dropdown'
+    'standard_auth_first' => '"Standard Auth" als erstes in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
