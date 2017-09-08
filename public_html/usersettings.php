@@ -315,7 +315,7 @@ function edituser()
 */
 function confirmAccountDelete ($form_reqid)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $MESSAGE;
 
     if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (DB_escapeString($form_reqid), (int) $_USER['uid'])) != 1) {
         // not found - abort
@@ -362,7 +362,7 @@ function confirmAccountDelete ($form_reqid)
 */
 function deleteUserAccount ($form_reqid)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $MESSAGE;
 
     if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'),
                   array (DB_escapeString($form_reqid), $_USER['uid'])) != 1) {
