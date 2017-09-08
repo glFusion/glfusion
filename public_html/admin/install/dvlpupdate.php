@@ -1694,7 +1694,7 @@ function glfusion_170()
     }
 
     // comments submission queue feature
-    $c->add('commentssubmission',0,'select',4,6,0,35,TRUE,'Core');
+    $c->add('commentssubmission',0,'select',4,6,31,35,TRUE,'Core');
 
     $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
     $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);

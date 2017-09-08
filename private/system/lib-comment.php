@@ -451,6 +451,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'author_name', $filter->sanitizeUsername($A['username'] ));
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
+        $template->set_var( 'pid', $A['pid'] );
         $template->set_var( 'cssid', $row % 2 );
         if ( $sid_author_id != '' && $sid_author_id != 1 && ($sid_author_id == $A['uid'] ) ) {
             $template->set_var('author_match','1');
@@ -1385,15 +1386,21 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if (!empty ($title) && !empty ($comment)) {
         $filter = sanitizer::getInstance();
         COM_updateSpeedlimit ('comment');
-//        $title = $filter->prepareForDB($title);
-//        $comment = $filter->prepareForDB($comment);
-//        $type = $filter->prepareForDB($type);
+
         $queued = 0;
-        if ( isset($_CONF['commentssubmission']) && $_CONF['commentssubmission'] == true ) {
-            if ( !SEC_hasRights('comment.submit') ) {
-                $queued = 1;
+        if ( isset($_CONF['commentssubmission'] ) && $_CONF['commentssubmission'] > 0 ) {
+            switch ( $_CONF['commentssubmission'] ) {
+                case 1 : // anonymous only
+                    if ( COM_isAnonUser() ) $queued = 1;
+                    break;
+                case 2 : // all users
+                default :
+                    $queued = 1;
+                    break;
             }
+            if ( SEC_hasRights('comment.submit') ) $queued = 0;
         }
+
         // Insert the comment into the comment table
         DB_lockTable ($_TABLES['comments']);
         if ($pid > 0) {

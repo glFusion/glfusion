@@ -2945,7 +2945,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generar Contraseña' => 0, 'Contraseña dada por el Usuario' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Diariamente' => 86400, 'Semanalmente' => 604800, 'Cada hora' => 3600, 'Siempre' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

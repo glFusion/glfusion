@@ -2949,7 +2949,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Zufälliges Passwort' => 0, 'Benutzer Passwort' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Täglich' => 86400, 'Wöchentlich' => 604800, 'Stündlich' => 3600, 'Immer' => 0),
-    30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

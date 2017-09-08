@@ -1496,6 +1496,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             if ($cmt_admin > 0) {
                 DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
             }
+            $c->add('commentssubmission',0,'select',4,6,31,35,TRUE,'Core');
 
             // site guid
             $rk = DB_getItem($_TABLES['vars'],'value','name="guid"');
