@@ -456,8 +456,6 @@ function LINK_list($validate)
                   'text' => $LANG_LINKS_ADMIN[53],'active'=>true),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
                   'text' => $LANG_LINKS_ADMIN[51]),
-//            array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-//                  'text' => $LANG_ADMIN['submissions']),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
