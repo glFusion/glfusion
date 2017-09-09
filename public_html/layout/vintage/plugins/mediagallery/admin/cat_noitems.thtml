@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-            <table border="0" width="100%" cellpadding="5">
-                <tr>
-                    <td align="center">
-                      <h1>{lang_no_cat}</h1>
-                    </td>
-                </tr>
-            </table>
-{# end {templatelocation} #}

@@ -1,4 +1,0 @@
-{# begin {templatelocation} #}
-<br /><br />
-{errormessage}
-{# end {templatelocation} #}

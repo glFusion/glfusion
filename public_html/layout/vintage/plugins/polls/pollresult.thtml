@@ -1,8 +1,0 @@
-{# begin {templatelocation} #}
-<div class="poll-topic">{poll_topic}<span class="floatright">{edit_icon}</span></div>
-{poll_questions}
-<div class="pluginTinyText">
-    {notification} <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
-</div>
-<div style="margin-bottom:10px;"></div>
-{# end {templatelocation} #}

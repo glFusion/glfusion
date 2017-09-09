@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-{embed_string}
-{# end {templatelocation} #}
