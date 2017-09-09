@@ -49,6 +49,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => '返回顶部',
     'calendar' => '加载日历插件？',
     'calendar_desc' => '在线日历/提醒系统，包括全站日历和用户日历。',
@@ -136,6 +137,8 @@ $LANG_INSTALL = array(
     'select_task' => '选择任务',
     'session_error' => '您的会话已超时。请重新开始安装过程。',
     'setting' => '设置',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => '管理员URL',
     'site_admin_url_error' => '管理员URL不能为空。',
     'site_email' => '管理员信箱',

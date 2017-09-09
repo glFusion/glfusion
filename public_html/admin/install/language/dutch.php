@@ -50,6 +50,7 @@ $LANG_CHARSET = 'iso-8859-1';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Terug naar het begin',
     'calendar' => 'Laden van Kalender Plugin?',
     'calendar_desc' => 'Online kalender / event systeem. Inclusief een website brede kalender en prive kalender voor website users.',
@@ -137,6 +138,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Selecteer Taak',
     'session_error' => 'Jou sessie is verlopen. Start de installatieprocedure opnieuw a.u.b.',
     'setting' => 'Instellingen',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'Site Admin URL',
     'site_admin_url_error' => 'Site Admin URL mag niet leeg zijn.',
     'site_email' => 'Site Email',

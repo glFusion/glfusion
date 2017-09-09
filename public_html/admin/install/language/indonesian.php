@@ -52,6 +52,7 @@ $LANG_CHARSET = 'iso-8859-1';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Kembali ke atas',
     'calendar' => 'Memuat plugin Kalender?',
     'calendar_desc' => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
@@ -139,6 +140,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Pilih Task',
     'session_error' => 'Sesi anda telah kadaluwarsa, Silahkan ulangi proses instalasi.',
     'setting' => 'Setting',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'URL Situs Admin',
     'site_admin_url_error' => 'URL Situs Admin tidak boleh dikosongkan.',
     'site_email' => 'Email Situs',

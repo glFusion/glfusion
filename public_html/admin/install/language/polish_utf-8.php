@@ -48,6 +48,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Powrót do góry',
     'calendar' => 'Załadować plugin kalendarza?',
     'calendar_desc' => 'Kalendarz online / system wydarzeń. Zawiera rozbudowany kalendarz na stronie oraz osobisty kalendarz dla każdego użytkownika.',
@@ -135,6 +136,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Wybierz zadanie',
     'session_error' => 'Twoja sesja wygasła. Ponownie uruchom proces instalacji.',
     'setting' => 'Ustawienia',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'Adres URL Admina',
     'site_admin_url_error' => 'Adres URL Admina nie może być pusty.',
     'site_email' => 'Adres Email Strony',
