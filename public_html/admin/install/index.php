@@ -1080,8 +1080,15 @@ function INST_getSiteInformation()
     $site_admin_url = (isset($_GLFUSION['site_admin_url']) ? $_GLFUSION['site_admin_url'] : INST_getSiteAdminUrl());
     $site_mail      = (isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '');
     $noreply_mail   = (isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '');
+    $securePassword = (isset($_GLFUSION['securepassword']) ? $_GLFUSION['securepassword'] : '');
     $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
     $dbconfig_path  = $_GLFUSION['dbconfig_path'];
+
+    if ( $securePassword == '' ) {
+        $securePassword = INST_securePassword(15);
+        $_GLFUSION['securepassword'] = $securePassword;
+    }
+
     clearstatcache();
     if ( !file_exists($dbconfig_path.'db-config.php') ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1144,6 +1151,8 @@ function INST_getSiteInformation()
         'site_admin_url'                => $site_admin_url,
         'site_mail'                     => $site_mail,
         'noreply_mail'                  => $noreply_mail,
+        'securepassword'                => $securePassword,
+        'lang_adminuser'                => $LANG_INSTALL['adminuser'],
         'lang_next'                     => $LANG_INSTALL['next'],
         'lang_prev'                     => $LANG_INSTALL['previous'],
         'lang_install'                  => $LANG_INSTALL['install'],
@@ -1154,6 +1163,7 @@ function INST_getSiteInformation()
         'lang_site_admin_url'           => $LANG_INSTALL['site_admin_url'],
         'lang_site_email'               => $LANG_INSTALL['site_email'],
         'lang_site_noreply_email'       => $LANG_INSTALL['site_noreply_email'],
+        'lang_securepassword'           => $LANG_INSTALL['securepassword'],
         'lang_utf8'                     => $LANG_INSTALL['use_utf8'],
         'lang_sitedata_help'            => $LANG_INSTALL['sitedata_help'],
         'hiddenfields'                  => _buildHiddenFields(),
@@ -1313,6 +1323,13 @@ function INST_gotSiteInformation()
         $numErrors++;
         $errText .= $LANG_INSTALL['site_noreply_email_error'].'<br />';
     }
+    if ( isset($_POST['securepassword']) && $_POST['securepassword'] != '' ) {
+        $securePassword = $_POST['securepassword'];
+    } else {
+        $securePassword = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['securepassword_error'].'<br>';
+    }
 
     $_GLFUSION['site_name']       = $site_name;
     $_GLFUSION['site_slogan']     = $site_slogan;
@@ -1320,6 +1337,7 @@ function INST_gotSiteInformation()
     $_GLFUSION['site_admin_url']  = $site_admin_url;
     $_GLFUSION['site_mail']       = $site_mail;
     $_GLFUSION['noreply_mail']    = $noreply_mail;
+    $_GLFUSION['securepassword']  = $securePassword;
     $_GLFUSION['utf8']            = isset($_POST['use_utf8']) ? 1 : 0;
 
     if ( $numErrors > 0 ) {
@@ -1716,7 +1734,8 @@ function INST_installAndContentPlugins()
     $rk = INST_randomKey(80);
     DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')",1);
 
-    $securePassword = INST_securePassword();
+    $securePassword = isset($_GLFUSION['securepassword']) ? $_GLFUSION['securepassword'] : INST_securePassword(15);
+
     $encryptedPassword = SEC_encryptPassword($securePassword);
     DB_query("UPDATE {$_TABLES['users']} SET passwd='".$encryptedPassword."' WHERE uid=2",1);
     $_GLFUSION['securepassword'] = $securePassword;

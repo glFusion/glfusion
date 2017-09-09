@@ -2231,9 +2231,9 @@ function INST_securePassword($length = 12) {
     if (function_exists('openssl_random_pseudo_bytes')) {
         $token = base64_encode(openssl_random_pseudo_bytes($length, $strong));
         if ($strong == TRUE)
-        return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
+            return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
     }
-    //fallback to mt_rand if php < 5.3 or no openssl available
+    //fallback to mt_rand if no openssl available
     $characters = '0123456789';
     $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=+?';
     $charactersLength = strlen($characters)-1;
