@@ -1426,7 +1426,7 @@ function MG_notifyModerators( $aid ) {
         }
         if ( $toCount > 0 ) {
             $msgData['htmlmessage'] = $body;
-            $msgData['textmessage'] = $altBody;
+            $msgData['textmessage'] = $altbody;
             $msgData['subject'] = $subject;
             $msgData['from']['email'] = $_CONF['site_mail'];
             $msgData['from']['name'] = $_CONF['site_name'];
