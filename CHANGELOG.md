@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Removed Vintage theme from core distribution
   - Visual editor buttons would display on text input for comments
   - Implemented comment moderation queue
   - Add badge to moderation / submission queue icon on C&C to show items in queue
