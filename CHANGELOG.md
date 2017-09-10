@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - Forum Plugin - Wrap breadcrumbs on small devices
+  - What's Related links now honor oepn external links setting
   - Removed Vintage theme from core distribution
   - Visual editor buttons would display on text input for comments
   - Implemented comment moderation queue
