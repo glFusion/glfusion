@@ -48,6 +48,7 @@ $LANG_CHARSET = 'windows-1251';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => '��� ������',
     'calendar' => '�������� Plugin?',
     'calendar_desc' => '����� ������������ �������� / ���� � �������� ��� ���������� �� �� ������� �������,��������� �� ����������.',
@@ -135,6 +136,8 @@ $LANG_INSTALL = array(
     'select_task' => '������ ������',
     'session_error' => "Session-� ���� ��������.  ���� �����������\n�� ������������� ������.",
     'setting' => '���������',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => '���������������� ���� (URL)',
     'site_admin_url_error' => '������ �� ����������������� ���� �� ���� �� � ������.',
     'site_email' => 'Email �� �����',

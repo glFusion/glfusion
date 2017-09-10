@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion main administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -77,7 +77,7 @@ function MODERATE_ismoderator_user()
 }
 
 /**
-* Returns the number of user submissions
+* Returns the number of story submissions
 *
 * Similar to plugin_submissioncount_{plugin} for object type = draftstory
 *
@@ -192,6 +192,14 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 . '&amp;type=' . $A['_type_']
                 . '&amp;id=' . $A[0]
                 . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        case 'preview' :
+            $retval = '
+                <a href="#cmtpreview'.$A['cid'].'" rel="modal:open">'.$LANG_ADMIN['preview'].'</a>
+                <div id="cmtpreview'.$A['cid'].'" style="display:none;">
+                '.$fieldvalue.'
+                </div>';
             break;
 
         default:
@@ -658,6 +666,10 @@ function MODERATE_itemList($type='', $token)
 function MODERATE_submissions()
 {
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    $output = outputHandler::getInstance();
+    $output->addLinkScript($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.min.js');
+    $output->addLinkStyle($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.css');
 
     $pageContent = '';
     $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));

@@ -1,4 +1,9 @@
 ## v1.7.0 (unreleased)
+  - Forum Plugin - Wrap breadcrumbs on small devices
+  - What's Related links now honor oepn external links setting
+  - Removed Vintage theme from core distribution
+  - Visual editor buttons would display on text input for comments
+  - Implemented comment moderation queue
   - Add badge to moderation / submission queue icon on C&C to show items in queue
   - Improved forum formatting for lists, code, quotes
   - Reverse proxy (i.e.; CloudFlare) support for BB2

@@ -1,32 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | core_config_data.php                                                     |
-// |                                                                          |
-// | glFusion Core Configuration                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Base Configuration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2017 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -885,7 +869,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'trackback_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 2,
@@ -954,7 +938,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'pingback_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 3,
@@ -987,7 +971,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'ping_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 3,
@@ -2169,13 +2153,24 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'commentssubmission',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 6,
+    	'selection_array' => 31,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'commentspeedlimit',
     	'default_value' => 45,
     	'type' => 'text',
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 40,
+    	'sort' => 50,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2186,7 +2181,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 50,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2197,7 +2192,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 11,
-    	'sort' => 60,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2208,7 +2203,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 17,
-    	'sort' => 70,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2219,7 +2214,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 80,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2230,7 +2225,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 90,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2241,7 +2236,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 5,
-    	'sort' => 100,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2252,7 +2247,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2263,7 +2258,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 120,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2274,7 +2269,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 130,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

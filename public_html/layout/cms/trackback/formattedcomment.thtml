@@ -1,7 +1,11 @@
 {# begin {templatelocation} #}
-<h3 class="uk-panel-title"><a href="{trackback_url}" target="_blank">{trackback_title}</a> {trackback_from_blog_name}</h3>
-<p>
-{trackback_excerpt_readmore}{excerpt_br}
-<div class="uk-text-small uk-text-muted">{lang_tracked_on} {trackback_date} {delete_option}</div>
-</p>
+<article class="uk-comment">
+	<header class="uk-comment-header">
+		<h4 class="uk-comment-title"><a href="{trackback_url}" target="_blank">{trackback_title}</a> {trackback_from_blog_name}</h4>
+	</header>
+	<div class="uk-comment-body">
+		<p>{lang_tracked_on} {trackback_date} {delete_option}		</p>
+		<p>{trackback_excerpt_readmore}{excerpt_br}</p>
+	</div>
+</article>
 {# end {templatelocation} #}

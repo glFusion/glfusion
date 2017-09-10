@@ -1378,8 +1378,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', false, $msgArray['type']);
-
+        if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
+        if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
+        if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
         SESS_unSet('glfusion.infoblock');
     }
     $theme->set_var('info_block',$msgTxt);
@@ -3670,7 +3672,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         } else {
             $stwhere .= "({$_TABLES['stories']}.perm_anon IS NOT NULL)";
         }
-        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
+
+        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
+
         $result = DB_query( $sql );
         $nrows = DB_numRows( $result );
 
@@ -3873,9 +3877,14 @@ function COM_setMessage( $msg = 0 )
     SESS_setVar('glfusion.infomessage',$msg);
 }
 
-function COM_setMsg( $msg, $type='info' )
+function COM_setMsg( $msg, $type='info', $persist=0 )
 {
-    $msgArray = array('msg' => $msg, 'type' => $type);
+    $msgArray = array(
+                        'msg' => $msg,
+                        'type' => $type,
+                        'persist' => $persist,
+                        'title' => '',
+                    );
     SESS_setVar('glfusion.infoblock', serialize($msgArray));
 }
 
@@ -3968,7 +3977,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='inf
                     'type'          => $type,
                     'persist'       => $persist,
                     'id'            => $id,
-                    'timeout'       => $_SYSTEM['alert_timeout'],
+                    'timeout'       => (($persist) ? '0' : $_SYSTEM['alert_timeout']),
                     'position'      => $_SYSTEM['alert_position'],
         ));
         $T->parse( 'final', 'message' );

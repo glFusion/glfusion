@@ -1,4 +1,0 @@
-{# begin {templatelocation} #}
-<b><label for="service">{lang_service}</label>:</b><br />
-{select_service}<br />
-{# end {templatelocation} #}

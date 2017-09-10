@@ -49,6 +49,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Ir arriba',
     'calendar' => '¿Cargar la extensión de calendario?',
     'calendar_desc' => 'Un calendario en línea / sistema de eventos. Incluye un calendario para sitios anchos y calendario personal para los usuarios.',
@@ -136,6 +137,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Seleccione la tarea',
     'session_error' => 'Su sesión ha expirado. Por favor reinicie el proceso de instalación.',
     'setting' => 'Configuraciones',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'URL de Administración del sitio',
     'site_admin_url_error' => 'La URL de Administración del sitio no puede estar en blanco.',
     'site_email' => 'Correo electrónico del sitio',

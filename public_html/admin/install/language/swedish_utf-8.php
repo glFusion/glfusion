@@ -48,6 +48,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Tillbaka till toppen',
     'calendar' => 'Ladda Kalender till&auml;gg?',
     'calendar_desc' => 'En elektronisk kalender / evenemangssystem. Inkluderar en kalender f&ouml;r hela sidan och personlig kalender f&ouml;r anv&auml;ndare.',
@@ -135,6 +136,8 @@ $LANG_INSTALL = array(
     'select_task' => 'V&auml;lj uppgift',
     'session_error' => 'Din session har passerat. V&auml;nligen starta om installations proceduren.',
     'setting' => 'Inst&auml;llningar',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'Sajt Admin URL',
     'site_admin_url_error' => 'Sajt Admin URL kan inte vara blankt.',
     'site_email' => 'Sajt Email',

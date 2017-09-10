@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-                    {!if lang_sendemail}
-                    <li>
-                        <a href="{site_url}/profiles.php?uid={user_id}">
-                            <img src="{layout_url}/images/mail.png" alt="{lang_sendemail}" title="{lang_sendemail}" />
-                        </a>
-                    </li>
-                    {!endif}
-{# end {templatelocation} #}

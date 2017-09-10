@@ -10,6 +10,7 @@
 <form class="uk-form uk-form-stacked" id="commentform" action="{site_url}/comment.php#comment_entry" method="post">
 	{cid}
 	<input type="hidden" name="mode" value="{mode}">
+	<input type="hidden" name="modedit" value="{modedit}">
 	<input type="hidden" name="sid" value="{sid}">
 	<input type="hidden" name="pid" value="{pid}">
 	<input type="hidden" name="type" value="{type}">
@@ -28,10 +29,12 @@
 		<div class="uk-form-controls">
 			<div id="text_editor">
 {!if htmlmode}
+{!if wysiwyg}
 				<div class="uk-margin-small">
 					<button id="visual" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('comment_text');$('#std').attr('class','uk-button');$('#visual').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 					<button id="std" type="button" class="uk-button" value="{html_editor}"  onclick="woff('comment_text');$('#visual').attr('class','uk-button');$('#std').attr('class','uk-button uk-button-success')">{html_editor}</button>
 				</div>
+{!endif}
 {!endif}
 				<textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
 				<input type="hidden" name="postmode" value="{postmode}" >

@@ -263,7 +263,12 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.'
 );
 
 ###############################################################################
@@ -2853,7 +2858,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2946,7 +2952,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

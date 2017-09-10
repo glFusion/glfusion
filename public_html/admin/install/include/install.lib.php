@@ -1462,7 +1462,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.6.6' :
         case '1.6.7' : // non-released development version
-            require_once $_CONF['path_system'].'classes/config.class.php';
+//            require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->del('digg_enabled','Core');
 
@@ -1471,9 +1471,34 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
 
+            // comment submission support
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+
+            $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
+            $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
+            $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.submit', 'Comments bypass submission queue', 1)";
+
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+            $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
+            $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
+            $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
+            // ties comment.moderate feature to Comment Admin group
+            if (($cmt_mod_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_mod_id, $cmt_admin)");
+            }
+            // adds comment.submit feature to comment admin group
+            if (($cmt_sub_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_sub_id, $cmt_admin)");
+            }
+            // adds comment admin group to Root group
+            if ($cmt_admin > 0) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
+            }
+            $c->add('commentssubmission',0,'select',4,6,31,35,TRUE,'Core');
+
+            // site guid
             $rk = DB_getItem($_TABLES['vars'],'value','name="guid"');
             if ( $rk === NULL || $rk === '' ) {
                 $rk = INST_randomKey(80);
@@ -2206,9 +2231,9 @@ function INST_securePassword($length = 12) {
     if (function_exists('openssl_random_pseudo_bytes')) {
         $token = base64_encode(openssl_random_pseudo_bytes($length, $strong));
         if ($strong == TRUE)
-        return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
+            return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
     }
-    //fallback to mt_rand if php < 5.3 or no openssl available
+    //fallback to mt_rand if no openssl available
     $characters = '0123456789';
     $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=+?';
     $charactersLength = strlen($characters)-1;

@@ -1064,7 +1064,7 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 break;
 
             case 'title':
-                $retval = COM_createLink($A['title'], $A['url']);
+                $retval = COM_createLink($A['title'], $A['url'],array('target'=>'_blank'));
                 break;
 
             case 'dovalidate';

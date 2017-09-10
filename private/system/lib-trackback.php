@@ -397,7 +397,7 @@ function TRB_formatComment($url, $title = '', $blog = '', $excerpt = '', $date =
                 $deloption .= ' | ' . $ipaddress;
             } else {
                 $iplookup = str_replace('*', $ipaddress, $_CONF['ip_lookup']);
-                $deloption .= ' | ' . COM_createLink($ipaddress, $iplookup);
+                $deloption .= ' | ' . COM_createLink($ipaddress, $iplookup,array('target'=>'_blank'));
             }
         }
         $deloption .= ' ]';

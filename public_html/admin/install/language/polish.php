@@ -48,6 +48,7 @@ $LANG_CHARSET = 'iso-8859-2';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Powr�t do g�ry',
     'calendar' => 'Za�adowa� plugin kalendarza?',
     'calendar_desc' => 'Kalendarz online / system wydarze�. Zawiera rozbudowany kalendarz na stronie oraz osobisty kalendarz dla ka�dego u�ytkownika.',
@@ -135,6 +136,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Wybierz zadanie',
     'session_error' => 'Twoja sesja wygas�a. Ponownie uruchom proces instalacji.',
     'setting' => 'Ustawienia',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'Adres URL Admina',
     'site_admin_url_error' => 'Adres URL Admina nie mo�e by� pusty.',
     'site_email' => 'Adres Email Strony',

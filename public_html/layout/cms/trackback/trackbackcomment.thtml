@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div>
+<div class="uk-panel">
   {formatted_comment}
 </div>
 {# end {templatelocation} #}

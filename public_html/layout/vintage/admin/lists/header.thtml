@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<th class="{class}"{th_subtags} {header_column_style}>{header_text}</th>
-{# end {templatelocation} #}

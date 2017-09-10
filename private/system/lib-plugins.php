@@ -660,6 +660,34 @@ function PLG_itemPreSave($type, $content)
     return '';
 }
 
+
+/**
+* Allows a plugin to handle a comment approval
+*
+* This will only call the plugin owning the comment.
+*
+* @author Mark Evans, mevans AT ecsnet DOT com
+* @access public
+* @param string $type Type of item, i.e.; registration, contact ...
+* @param string $cid  The comment ID
+* @param string $sid  The ID owning the comment
+* @return none
+*
+*/
+function PLG_commentApproved( $cid, $type, $sid )
+{
+    global $_PLUGINS, $_TABLES;
+
+    if ( $type == 'article') {
+        plugin_commentapproved_story($cid,$type,$sid);
+    } elseif ( in_array($type,$_PLUGINS) ) {
+        $function = 'plugin_commentapproved_' . $type;
+        if (function_exists ($function)) {
+            $function ($cid,$type,$sid);
+        }
+    }
+}
+
 /**
 * Allow a plugin to place entries into the glFusion stats page.
 *
@@ -906,6 +934,9 @@ function PLG_getSubmissionCount()
         if (function_exists($function)) {
             $num = $num + $function();
         }
+    }
+    if ( function_exists('plugin_submissioncount_comment')) {
+        $num = $num + plugin_submissioncount_comment();
     }
 
     return $num;
@@ -1161,6 +1192,7 @@ function PLG_showModerationList($token)
     // also ensures that story moderation is always first
     // here is where it might be handy to control plugin order ...
     $retval = MODERATE_itemList('story', $token);
+    $retval .= MODERATE_itemList('comment',$token);
 
     foreach ($_PLUGINS as $pi_name) {
         $retval .= MODERATE_itemList($pi_name, $token);
@@ -3223,6 +3255,19 @@ function plugin_ismoderator_story()
 }
 
 /**
+*
+* Checks that the current user has the rights to moderate a comment
+* returns true if this is the case, false otherwise
+*
+* @return        boolean       Returns true if moderator
+*
+*/
+function plugin_ismoderator_comment()
+{
+    return SEC_hasRights('comment.moderate');
+}
+
+/**
 * Returns SQL & Language texts to moderation.php
 *
 * @return   mixed   Plugin object or void if not allowed
@@ -3281,6 +3326,20 @@ function plugin_submissioncount_story()
     global $_TABLES;
 
     return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
+}
+
+/**
+* Handles a comment submission approval for a story
+*
+* @return   none
+*
+*/
+function plugin_commentapproved_story($cid,$type,$sid)
+{
+    global $_PLUGINS, $_TABLES;
+    $comments = DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $sid,0));
+    DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $sid);
+    COM_olderStuff(); // update comment count in Older Stories block
 }
 
 function plugin_user_move_story($origUID, $destUID)

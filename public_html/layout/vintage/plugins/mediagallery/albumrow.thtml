@@ -1,7 +1,0 @@
-{# begin {templatelocation} #}
-                                            <tr class="pluginRow{rowclass}">
-                                                <td style="text-align:center;width:125px">{album_begin_href}{album_cover}{album_end_href}</td>
-                                                <td style="width:35%;text-align:left;vertical-align:middle;">{album_title}</td>
-                                                <td style="width:45%;text-align:left;vertical-align:middle;">{album_desc}</td>
-                                            </tr>
-{# end {templatelocation} #}

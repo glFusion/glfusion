@@ -339,6 +339,22 @@ function plugin_savecomment_mediagallery($title,$comment,$id,$pid,$postmode)
     return _mg_savecomment($title,$comment,$id,$pid,$postmode);
 }
 
+/**
+ * Plugin function that is called after comment is approved
+ * from the moderation queue.
+ *
+ * $cid         comment id
+ * $type        type (i.e.; media gallery, etc.)
+ * $sid         ID of owning item
+ *
+ */
+function plugin_commentapproved_mediagallery($cid,$type,$sid)
+{
+    global $_TABLES;
+    $comments = DB_count ($_TABLES['comments'], array('sid','type'), array(DB_escapeString($sid), 'mediagallery'));
+    DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',DB_escapeString($sid));
+}
+
 
 function plugin_editcomment_mediagallery($cid,$id)
 {

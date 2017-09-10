@@ -48,6 +48,7 @@ $LANG_CHARSET = 'iso-8859-1';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Zurück nach oben',
     'calendar' => 'Kalender-Plugin installieren?',
     'calendar_desc' => 'Kalender-, Termin-System. Es gibt einen übergeordneten Kalender sowie persönliche Kalender für einzelne Benutzer.',
@@ -135,6 +136,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Aufgabe wählen',
     'session_error' => 'Die Sitzung ist abgelaufen. Bitte starten Sie den Installationsprozess neu .',
     'setting' => 'Einstellungen',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'URL zum Admin Verzeichnis',
     'site_admin_url_error' => 'URL zum Admin Verzeichnis darf nicht leer sein.',
     'site_email' => 'E-Mail deiner Seite',

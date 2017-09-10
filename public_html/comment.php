@@ -171,6 +171,8 @@ function handleView($view = true)
 
     $display = '';
 
+    if ( !isset($_REQUEST['cid'])) $_REQUEST['cid'] = 0;
+
     if ($view) {
         $cid = COM_applyFilter ($_REQUEST['cid'], true);
     } else {
@@ -223,7 +225,7 @@ function handleView($view = true)
  * @author Jared Wenerd <wenerd87 AT gmail DOT com>
  * @return string HTML (possibly a refresh)
  */
-function handleEdit() {
+function handleEdit($mod = false) {
     global $_TABLES, $LANG03,$_USER,$_CONF, $_PLUGINS;
 
     if ( isset($_POST['cid']) ) {
@@ -233,62 +235,80 @@ function handleEdit() {
     } else {
         $cid = -1;
     }
-    if ( isset($_POST['sid']) ) {
-        $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
-    } else if (isset($_GET['sid']) ) {
-        $sid = COM_sanitizeID(COM_applyFilter ($_GET['sid']));
-    } else {
-        $sid = '';
-    }
-    if ( isset($_POST['type']) ) {
-        $type = COM_applyFilter ($_POST['type']);
-    } else if (isset($_GET['type']) ) {
-        $type = COM_applyFilter ($_GET['type']);
-    } else {
-        $type = '';
-    }
-    if ( $type != 'article' ) {
-        if (!in_array($type,$_PLUGINS) ) {
+
+    if ( $mod == false ) {
+        if ( isset($_POST['sid']) ) {
+            $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
+        } else if (isset($_GET['sid']) ) {
+            $sid = COM_sanitizeID(COM_applyFilter ($_GET['sid']));
+        } else {
+            $sid = '';
+        }
+        if ( isset($_POST['type']) ) {
+            $type = COM_applyFilter ($_POST['type']);
+        } else if (isset($_GET['type']) ) {
+            $type = COM_applyFilter ($_GET['type']);
+        } else {
             $type = '';
         }
-    }
-
-    if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
-        COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-               . 'to edit a comment with one or more missing/bad values.');
-        echo COM_refresh($_CONF['site_url'] . '/index.php');
-        exit;
-    }
-
-    $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
-        . "WHERE cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
-    if ( DB_numRows($result) == 1 ) {
-        $A = DB_fetchArray ($result);
-        $title = $A['title'];
-        $commenttext = COM_undoSpecialChars ($A['comment']);
-
-        //remove signature
-        $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
-        if ( $pos > 0) {
-            $commenttext = substr($commenttext, 0, $pos);
+        if ( $type != 'article' ) {
+            if (!in_array($type,$_PLUGINS) ) {
+                $type = '';
+            }
         }
-
-        //get format mode
-        if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
-            $postmode = 'html';
+        if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
+            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment with one or more missing/bad values.');
+            echo COM_refresh($_CONF['site_url'] . '/index.php');
+            exit;
+        }
+        $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
+        $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
+            . "WHERE queued=0 AND cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
+        if ( DB_numRows($result) == 1 ) {
+            $A = DB_fetchArray ($result);
         } else {
-            $postmode = 'plaintext';
+            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment that doesn\'t exist as described.');
+            return COM_refresh($_CONF['site_url'] . '/index.php');
         }
-//        $postmode = $_CONF['comment_postmode'];
     } else {
-        COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-               . 'to edit a comment that doesn\'t exist as described.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    }
-    $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
+        $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $cid);
+        if ( DB_numRows($result) == 1 ) {
+            $A = DB_fetchArray ($result);
+            $sid = $A['sid'];
+            $type = $A['type'];
+            $pid = $A['pid'];
+        } else {
+            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment that doesn\'t exist.');
+            return COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+        }
 
-    return PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-           . CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'edit', $postmode);
+    }
+    $title = $A['title'];
+    $commenttext = COM_undoSpecialChars ($A['comment']);
+
+    //remove signature
+    $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
+    if ( $pos > 0) {
+        $commenttext = substr($commenttext, 0, $pos);
+    }
+
+    //get format mode
+    if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
+        $postmode = 'html';
+    } else {
+        $postmode = 'plaintext';
+    }
+
+    if ( $mod ) {
+        $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
+    } else {
+        $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
+               . CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'edit', $postmode);
+    }
+    return $retval;
 }
 
 /**
@@ -306,6 +326,10 @@ function handleEditSubmit()
     $sid        = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
+    $modedit    = COM_applyFilter ($_POST['modedit']);
+
+    $moderatorEdit = false;
+    if ( $modedit == 'x' ) $moderatorEdit = true;
 
     if ( $type != 'article' ) {
         if (!in_array($type,$_PLUGINS) ) {
@@ -328,7 +352,7 @@ function handleEditSubmit()
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
-    } elseif ( $uid != $commentuid && !SEC_inGroup( 'Root' ) ) {
+    } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
         //check permissions
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment without proper permission.');
@@ -354,7 +378,7 @@ function handleEditSubmit()
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
 
-        PLG_itemSaved((int) $cid,'comment');
+        if ( !$moderatorEdit ) PLG_itemSaved((int) $cid,'comment');
         $safecid = (int) $cid;
         $safeuid = (int) $uid;
         DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
@@ -364,8 +388,11 @@ function handleEditSubmit()
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    PLG_commentEditSave($type,$cid,$sid);
+    if ( !$moderatorEdit) PLG_commentEditSave($type,$cid,$sid);
 
+    if ( $moderatorEdit ) {
+        echo COM_refresh($_CONF['site_admin_url'].'/moderation.php');
+    }
 
     $urlArray = PLG_getCommentUrlId($type);
     if ( is_array($urlArray) ) {
@@ -474,6 +501,8 @@ if (!empty ($_REQUEST['mode'])) {
 }
 
 if ( isset($_POST['cancel'] ) ) {
+    if ( isset($_POST['modedit']) && $_POST['modedit'] == 'x' ) echo COM_refresh($_CONF['site_admin_url'].'/moderation.php');
+
     $type = COM_applyFilter($_POST['type']);
     $sid  = COM_sanitizeID(COM_applyFilter($_POST['sid']));
 
@@ -502,6 +531,12 @@ if ( isset($_POST['cancel'] ) ) {
     $postmode = COM_applyFilter($_POST['postmode']);
     $title   = strip_tags ($_POST['title']);
     $mode    = COM_applyFilter($_POST['mode']);
+    $modedit = COM_applyFilter($_POST['modedit']);
+
+    $moderatorEdit = false;
+    if ( $modedit == 'x' ) {
+        $moderatorEdit = true;
+    }
 
     if ( $type != 'article' ) {
         if (!in_array($type,$_PLUGINS) ) {
@@ -509,7 +544,9 @@ if ( isset($_POST['cancel'] ) ) {
         }
     }
 
-    if ( $mode == 'edit' ) {
+    if ( $moderatorEdit ) {
+        $previewType = 'preview_edit_mod';
+    } elseif ( $mode == 'edit' ) {
         $previewType = 'preview_edit';
     } elseif ($mode == 'new' ) {
         $previewType = 'preview_new';
@@ -517,8 +554,12 @@ if ( isset($_POST['cancel'] ) ) {
         $previewType = 'preview_new';
     }
 
-    $pageBody .=  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
+    if ( $moderatorEdit ) {
+        $pageBody .= CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
+    } else {
+        $pageBody .=  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
               . CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
+    }
 
 } elseif (isset($_POST['saveedit']) ) {
     if (SEC_checkToken()) {
@@ -609,6 +650,15 @@ if ( isset($_POST['cancel'] ) ) {
                 $pageBody .= handleEdit();
             } else {
                 echo COM_refresh($_CONF['site_url'] . '/index.php');
+                exit;
+            }
+            break;
+
+        case 'modedit' :
+            if (SEC_checkToken()) {
+                $pageBody .= handleEdit(true);
+            } else {
+                echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
                 exit;
             }
             break;

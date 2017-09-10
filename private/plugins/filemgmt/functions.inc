@@ -203,11 +203,28 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
         $retval .= CMT_commentform ($title, $comment, $id, $pid,'filemgmt', $LANG03[14], $postmode);
         return $retval;
     } else { // success
-        $comments = DB_count ($_TABLES['comments'], 'sid', DB_escapeString($id));
+        $comments = CMT_getCount('filemgmt', $id);
         DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
         echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$id"));
     }
 }
+
+/**
+ * Plugin function that is called after comment is approved
+ * from the moderation queue.
+ *
+ * $cid         comment id
+ * $type        type (i.e.; media gallery, etc.)
+ * $sid         ID of owning item
+ *
+ */
+function plugin_commentapproved_filemgmt($cid,$type,$sid)
+{
+    global $_TABLES;
+    $comments = CMT_getCount('filemgmt', $sid);
+    DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
+}
+
 function plugin_editcomment_filemgmt($cid,$id) {
     global $_CONF;
 

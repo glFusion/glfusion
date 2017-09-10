@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-<p class="breadcrumbs">
-    {breadcrumb_links}{last_label}
-</p>
-{# end {templatelocation} #}

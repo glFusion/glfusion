@@ -164,9 +164,9 @@ function bad_behavior2_upgrade ()
             }
 
             $c = config::get_instance();
-            $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
-            $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);
-            $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE);
+            $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE,'Core');
+            $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE,'Core');
+            $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE,'Core');
 
             CACHE_remove_instance('bb2_bl_data');
 

@@ -44,6 +44,7 @@ $LANG_CHARSET = 'iso-8859-1';
 // index.php
 
 $LANG_INSTALL = array(
+    'adminuser'                 => 'Admin Username',
     'back_to_top'               => 'Back to top',
     'calendar'                  => 'Load Calendar Plugin?',
     'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
@@ -131,6 +132,8 @@ $LANG_INSTALL = array(
     'select_task'               => 'Select Task',
     'session_error'             => 'Your session has expired.  Please restart the installation process.',
     'setting'                   => 'Setting',
+    'securepassword'            => 'Admin Password',
+    'securepassword_error'      => 'Admin Password cannot be blank',
     'site_admin_url'            => 'Site Admin URL',
     'site_admin_url_error'      => 'Site Admin URL cannot be blank.',
     'site_email'                => 'Site Email',
