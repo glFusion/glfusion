@@ -686,6 +686,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 */
 function STORY_extractLinks( $fulltext, $maxlength = 100 )
 {
+    global $_CONF;
+
     $rel = array();
 
     /* Only match anchor tags that contain 'href="<something>"'
@@ -702,8 +704,15 @@ function STORY_extractLinks( $fulltext, $maxlength = 100 )
         if ( ( $maxlength > 0 ) && ( utf8_strlen( $matches[2][$i] ) > $maxlength ) ) {
             $matches[2][$i] = substr( $matches[2][$i], 0, $maxlength - 3 ) . '...';
         }
-
-        $rel[] = '<a href="' . $matches[1][$i] . '">'
+        // check if local or internal...
+        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == 1 ) {
+            if ( strncasecmp ( $_CONF['site_url'],$matches[1][$i], (strlen($_CONF['site_url']) - 1) ) == 0 ) {
+                $extLink = '';
+            } else {
+                $extLink = ' target="_blank" ';
+            }
+        }
+        $rel[] = '<a href="' . $matches[1][$i] . '" '.$extLink .'>'
                . str_replace(array("\015", "\012"), '', $matches[2][$i])
                . '</a>';
     }
