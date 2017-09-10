@@ -693,23 +693,49 @@ function PLUGINS_list($token)
 */
 function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 {
-    global $_TABLES, $_PLUGIN_INFO, $_DB_table_prefix;
+    global $_TABLES, $_PLUGINS, $_PLUGIN_INFO, $_DB_table_prefix;
 
-    if (isset($pluginarray) && is_array($pluginarray) ) {
-        foreach ($pluginarray AS $plugin => $junk ) {
-            $plugin = COM_applyFilter($plugin);
-            if ( isset($plugin_name_arr[$plugin]) ) {
-                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
-                PLG_enableStateChange ($plugin, true);
-            } else {
-                $rc = PLG_enableStateChange ($plugin, false);
-                if ( $rc != 99 ) {
-                    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
-                }
+    $currentStatus = array();
+    $pluginsToProcess = array();
+
+    if (!isset($pluginarray) || !is_array($pluginarray) ) {
+        $pluginarray = array();
+    }
+    if ( !isset( $plugin_name_arr ) || !is_array( $plugin_name_arr ) ) {
+        $plugin_name_arr = array();
+    }
+
+    // get current status
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']}");
+    while ( ( $row = DB_fetchArray($result) ) != NULL ) {
+        $currentStatus[$row['pi_name']] = $row['pi_enabled'];
+    }
+    foreach( $pluginarray AS $plugin => $junk ) {
+        if ( $currentStatus[$plugin] == 1 ) { // was enabled...
+            if ( !isset($plugin_name_arr[$plugin] ) ) {
+                // was enabled - asking it to be disabled
+                $pluginsToProcess[$plugin] = 0;
             }
+        } else { // currently disabled
+            if ( isset($plugin_name_arr[$plugin] ) ) {
+                // was disabled - now marked as enable
+                $pluginsToProcess[$plugin] = 1;
+            }
+        }
+    }
+    foreach ( $pluginsToProcess AS $plugin => $status ) {
+        if ( $status == 0 ) {
+            // disable plugin
+            $rc = PLG_enableStateChange ($plugin, false);
+            if ( $rc != 99 ) {
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
+            }
+            $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
+        } else {
+            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
+            $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
+            $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
+            PLG_enableStateChange ($plugin, true);
         }
     }
     CTL_clearCache();
