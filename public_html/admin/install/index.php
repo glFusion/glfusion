@@ -661,6 +661,7 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $required_extensions = array(
         array('extension' => 'ctype',   'fail' => 1),
+        array('extension' => 'curl',    'fail' => 0),
         array('extension' => 'date',    'fail' => 1),
         array('extension' => 'filter',  'fail' => 1),
         array('extension' => 'gd',      'fail' => 0),
