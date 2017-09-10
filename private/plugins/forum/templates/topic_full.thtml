@@ -64,7 +64,7 @@
 {!if full}
 			<div class="uk-grid">
 				<div class="uk-width-medium-1-1">
-					<ul class="uk-breadcrumb uk-margin-remove  uk-text-truncate">
+					<ul class="uk-breadcrumb uk-margin-remove">
 			            <li><i class="uk-icon-home"></i></li>
 						<li><a href="{site_url}/forum/index.php">{forum_home}</a></li>
 						<li><a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a></li>
