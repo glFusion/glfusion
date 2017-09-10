@@ -1442,6 +1442,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         if ( $queued == 0 ) {
             PLG_itemSaved($cid, 'comment');
         } else {
+            CACHE_remove_instance('menu');
             SESS_setVar('glfusion.commentpostsave',$LANG03[52]);
         }
 
