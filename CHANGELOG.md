@@ -1,6 +1,8 @@
 ## v1.7.0 (unreleased)
+  - Plugin administration now only processes the Plugin selected when enabling / disabling
+  - FileMgmt Plugin - Thumbnail upload would fail when adding new file
   - Forum Plugin - Wrap breadcrumbs on small devices
-  - What's Related links now honor oepn external links setting
+  - What's Related links now honor open external links setting
   - Removed Vintage theme from core distribution
   - Visual editor buttons would display on text input for comments
   - Implemented comment moderation queue
