@@ -192,7 +192,6 @@ function plugin_deletecomment_polls($cid, $id)
 function plugin_getwhatsnewcomment_polls()
 {
     global $_CONF, $_TABLES, $_USER;
-    global $_ST_CONF;
 
     $commentrow = array();
 
@@ -229,6 +228,22 @@ function plugin_getwhatsnewcomment_polls()
         }
     }
     return $commentrow;
+}
+
+/**
+* glFusion is asking us to provide any items that show up in the type
+* drop-down on search.php.  Let's users search for events.
+*
+* @return   array   (plugin name/entry title) pair for the dropdown
+*
+*/
+
+function plugin_searchtypes_polls()
+{
+    global $LANG_POLLS;
+
+    return array('polls' => $LANG_POLLS['polls']);
+
 }
 
 
