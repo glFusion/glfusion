@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - BB2 implement improved search features in admin list
   - Plugin administration now only processes the Plugin selected when enabling / disabling
   - FileMgmt Plugin - Thumbnail upload would fail when adding new file
   - Forum Plugin - Wrap breadcrumbs on small devices
