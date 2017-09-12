@@ -234,6 +234,7 @@ $LANG_INSTALL = array(
     'ext_good' => 'properly installed.',
     'ext_heading' => 'PHP Extensions',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'date_extension' => 'Date Extension',
     'filter_extension' => 'Filter Extension',
     'gd_extension' => 'GD Graphics Extension',
