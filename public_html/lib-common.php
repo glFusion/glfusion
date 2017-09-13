@@ -165,6 +165,7 @@ $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
 }
+$_CONF['mail_smtp_password'] = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -2547,7 +2548,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
+            $mail->Password = $_CONF['mail_smtp_password'];
         }
         $mail->Mailer = "smtp";
 
@@ -2676,7 +2677,7 @@ function COM_emailNotification( $msgData = array() )
         if ( $_CONF['mail_smtp_auth'] ) {
             $mail->SMTPAuth   = true;
             $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
+            $mail->Password = $_CONF['mail_smtp_password'];
         }
         $mail->Mailer = "smtp";
 

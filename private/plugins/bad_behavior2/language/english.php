@@ -44,6 +44,7 @@ $LANG_BAD_BEHAVIOR = array (
     'auto_refresh_on'           => 'Auto Refresh On',
     'automatic_captcha'         => 'Automatically Added (CAPTCHA)',
     'automatic_token'           => 'Automatically Added (Token)',
+    'back_to_search'            => 'Back to Search List',
     'ban_ip'                    => 'Ban IPs',
     'ban_list_info'             => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans will expire after the timeout period.',
     'ban_results'               => 'IPs listed below had errors that prevented them from being added to the ban list.',
@@ -207,6 +208,7 @@ $LANG_BB2_RESPONSE = array (
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
     '96c0bd30' => 'Banned IP',
+    '96c0bd40' => 'Banned by Blacklist entry',
 );
 
 $PLG_bad_behavior_MESSAGE1  = 'If you see this message, then Bad Behavior2 is <b>not</b> installed correctly! Please read the installation instructions again carefully.';

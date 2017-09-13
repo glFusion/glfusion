@@ -1,8 +1,9 @@
 {# begin {templatelocation} #}
-<p>{lang_ip}: {start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}
-   [ <a href="{site_url}/search.php?mode=search&amp;type=bad_behavior2&amp;query={ip}">{lang_search}</a> ]<br />
-{lang_date}: {date_and_time}<br>
-{lang_denied_reason}: <span class="warningsmall">{denied_reason}</span></p>
+<p>
+	{lang_ip}: {start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}<br>
+  {lang_date}: {date_and_time}<br>
+  {lang_denied_reason}: <span class="warningsmall">{denied_reason}</span>
+</p>
 <pre>{http_headers}</pre>
 {lang_response}:<br>
 <pre>{http_response}</pre>

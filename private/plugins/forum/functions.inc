@@ -1482,7 +1482,6 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'searchidx' :
                 case 'raw-description' :
-
                     if ( $buildingSearchIndex ) {
                         DB_query("SET group_concat_max_len = 204800");
                         $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
@@ -1494,8 +1493,8 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                             }
                         }
                     }
-
-                    $props[$p] = $A['comment'];
+                    $comment = _forum_strip_bbcode($A['comment']);
+                    $props[$p] = $comment;
                     break;
                 case 'id':
                     $props['id'] = $A['id'];
@@ -2010,4 +2009,65 @@ function USES_forum_admin() {
     global $_CONF, $_FF_CONF;
     require_once $_CONF['path'].'plugins/forum/include/admin.inc.php';
 }
+
+
+function _forum_strip_bbcode($str)
+{
+    global $_CONF, $_FF_CONF;
+
+    $bbcode = new StringParser_BBCode ();
+    $bbcode->setGlobalCaseSensitive (false);
+
+    $bbcode->addCode ('code', 'usecontent?', 'getItemInfo_code', array ('usecontent_param' => 'default'),
+                      'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
+    $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('u', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('size', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('color', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('list', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('inline','block', 'listitem'), array ());
+    $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '*', 'end_tag' => ''),
+                      'listitem', array ('list'), array ());
+    $bbcode->addCode ('quote', 'usecontent', 'getItemInfo_quote', array (),
+                      'link', array ('listitem', 'block', 'inline','link'), array ());
+
+    $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
+    $bbcode->setCodeFlag ('*', 'paragraphs', true);
+    $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+    $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+
+    $bbcode->setRootParagraphHandling (false);
+
+    if ($_FF_CONF['use_censor']) {
+        $str = COM_checkWords($str);
+    }
+    $str = $bbcode->parse ($str);
+
+    return $str;
+}
+function getItemInfo_quote($action, $attributes, $content, $params, $node_object)
+{
+    if ( $action == 'validate') {
+        return true;
+    }
+    return '';
+}
+function getItemInfo_code($action, $attributes, $content, $params, $node_object)
+{
+    if ( $action == 'validate') {
+        return true;
+    }
+    return $content;
+}
+
 ?>

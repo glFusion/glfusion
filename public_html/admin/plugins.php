@@ -729,12 +729,15 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
             $rc = PLG_enableStateChange ($plugin, false);
             if ( $rc != 99 ) {
                 DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
+                $i = array_search($plugin,$_PLUGINS);
+                unset($_PLUGINS[$i]);
             }
             $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
         } else {
             DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
             $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
             $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
+            $_PLUGINS[] = $plugin;
             PLG_enableStateChange ($plugin, true);
         }
     }

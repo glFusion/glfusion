@@ -46,6 +46,7 @@ $LANG_BAD_BEHAVIOR = array(
     'auto_refresh_on' => 'Refresco Automático Sí',
     'automatic_captcha' => 'Agregada Automáticamente (CAPTCHA)',
     'automatic_token' => 'Automatically Added (Token)',
+    'back_to_search' => 'Back to Search List',
     'ban_ip' => 'Prohibir IPs',
     'ban_list_info' => 'Las IPs listadas a continuación están prohibidas en el sistema. Las prohibiciones manuales son permanentes. Las prohibiciones automáticas expiran después de 24 horas.',
     'ban_results' => 'Las IPs listadas a continuación tienen errores que impide que sean agregadas a la lista de prohibidas.',
@@ -206,7 +207,8 @@ $LANG_BB2_RESPONSE = array(
     '96c0bd29' => 'SQL Injection detected',
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
-    '96c0bd30' => 'IP Prohibida'
+    '96c0bd30' => 'IP Prohibida',
+    '96c0bd40' => 'Banned by Blacklist entry'
 );
 
 $PLG_bad_behavior_MESSAGE1 = '¡Si ves este mensaje, Bad Behavior2 <b>NO</b> esta instalado correctamente! Por favor lee cuidadosamente las instrucciones de instalación nuevamente.';

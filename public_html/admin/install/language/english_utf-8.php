@@ -227,6 +227,7 @@ $LANG_INSTALL = array(
     'ext_optional_desc'         => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
     'ext_good'                  => 'properly installed.',
     'ext_heading'               => 'PHP Extensions',
+    'curl_extension'            => 'Curl Extension',
     'ctype_extension'           => 'Ctype Extension',
     'date_extension'            => 'Date Extension',
     'filter_extension'          => 'Filter Extension',

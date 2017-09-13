@@ -602,7 +602,7 @@ class dbBackup
             if ($_CONF['mail_smtp_auth']) {
                 $mail->SMTPAuth   = true;
                 $mail->Username = $_CONF['mail_smtp_username'];
-                $mail->Password = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
+                $mail->Password = $_CONF['mail_smtp_password'];
             }
             $mail->Mailer = "smtp";
 

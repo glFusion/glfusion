@@ -192,7 +192,6 @@ function plugin_deletecomment_polls($cid, $id)
 function plugin_getwhatsnewcomment_polls()
 {
     global $_CONF, $_TABLES, $_USER;
-    global $_ST_CONF;
 
     $commentrow = array();
 
@@ -229,6 +228,74 @@ function plugin_getwhatsnewcomment_polls()
         }
     }
     return $commentrow;
+}
+
+/**
+* glFusion is asking us to provide any items that show up in the type
+* drop-down on search.php.  Let's users search for events.
+*
+* @return   array   (plugin name/entry title) pair for the dropdown
+*
+*/
+
+function plugin_searchtypes_polls()
+{
+    global $LANG_POLLS;
+
+    return array('polls' => $LANG_POLLS['polls']);
+
+}
+
+/**
+ * This searches for polls matching the user query and returns an array of
+ * for the header and table rows back to search.php where it will be formatted and
+ * printed.
+ *
+ * @param    string $query     Keywords user is looking for
+ * @param    string $dateStart Start date to get results for
+ * @param    string $dateEnd   End date to get results for
+ * @param    string $topic     The topic they were searching in
+ * @param    string $type      Type of items they are searching, or 'all' (deprecated)
+ * @param    int    $author    Get all results by this author
+ * @param    string $keyType   search key type: 'all', 'phrase', 'any'
+ * @param    int    $page      page number of current search (deprecated)
+ * @param    int    $perpage   number of results per page (deprecated)
+ * @return   SearchCriteria
+  */
+function plugin_dopluginsearch_polls($query, $dateStart, $dateEnd, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $_TABLES, $_DB_dbms, $LANG09, $LANG_POLLS, $_USER;
+
+    // Make sure the query is SQL safe
+    $query = trim(DB_escapeString($query));
+    $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
+
+    // Search polls
+    $sql = "SELECT p.pid AS id, p.topic AS title, p.description AS description, UNIX_TIMESTAMP(p.date) AS date, "
+        . " p.owner_id AS uid, p.voters AS hits, CONCAT('/polls/index.php?pid=',p.pid) AS url "
+        . " FROM {$_TABLES['polltopics']} AS p "
+        . " WHERE (p.date <= NOW()) "
+        . COM_getPermSQL('AND', 0, 2, 'p');
+
+    if (!SEC_inGroup('Root', $uid)) {
+        $sql .= " AND ((p.hideresults = 0) OR (p.owner_id = {$uid})) ";
+    }
+
+    if (!empty($author)) {
+        $sql .= "AND (p.owner_id = '{$author}') ";
+    }
+
+    $search = new SearchCriteria('polls', array($LANG_POLLS['polls']));
+
+    $columns = array('title' => 'p.topic', 'description' => 'p.description');
+    $sql .= $search->getDateRangeSQL('AND', 'p.date', $dateStart, $dateEnd);
+    list($sql, $ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
+
+    $search->setSQL($sql);
+    $search->setFTSQL($ftsql);
+    $search->setRank(2);
+
+    return $search;
 }
 
 
