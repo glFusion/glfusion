@@ -64,11 +64,11 @@
 {!if full}
 			<div class="uk-grid">
 				<div class="uk-width-medium-1-1">
-					<ul class="uk-breadcrumb uk-margin-remove">
-			            <li><i class="uk-icon-home"></i></li>
-						<li><a href="{site_url}/forum/index.php">{forum_home}</a></li>
-						<li><a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a></li>
-						<li class="uk-active"><a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></li>
+					<ul class="uk-breadcrumb uk-margin-remove" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			      <li><i class="uk-icon-home"></i></li>
+						<li><a href="{site_url}/forum/index.php" itemprop="url"><span itemprop="title">{forum_home}</span></a></li>
+						<li><a href="{site_url}/forum/index.php?cat={cat_id}" itemprop="url"><span itemprop="title">{cat_name}</span></a></li>
+						<li class="uk-active"><a href="{site_url}/forum/index.php?forum={forum_id}" itemprop="url"><span itemprop="title">{forum_name}</span></a></li>
 					</ul>
 				</div>
 			</div>
@@ -142,12 +142,12 @@
 {!endif}
 
 			<a id="{topic_id}"></a>
-			<div class="uk-panel-box uk-margin-bottom {panelrow}">
+			<div class="uk-panel-box uk-margin-bottom {panelrow}" itemscope itemtype="http://schema.org/DiscussionForumPosting">
 				<div class="uk-grid">
 					<div class="uk-width-1-1">
 
 						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
-							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}{subject}</a>
+							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}<span itemprop="headline">{subject}</span></a>
 						</div>
 
 						<div class="uk-align-right uk-text-right uk-margin-bottom-remove uk-hidden-small">
@@ -158,7 +158,7 @@
               <a class="btn" title="{$LANG_GF02[copy_to_clipboard]}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
                 <i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
               </a>
-							{$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;{posted_date}&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+							{$LANG_GF01[BY]} <span itemprop="author">{userlink}</span> ({onlinestatus})&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;<span itemprop="datePublished">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 {!if bookmark_icon}
 {!if bookmarked}
 							<i title="{$LANG_GF02[msg204]}" class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
@@ -170,7 +170,7 @@
 						<div class="uk-grid">
 							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
 								<div class="uk-text-break topic_comment_area">
-									<div>{topic_comment}</div>
+									<div itemprop="articleBody">{topic_comment}</div>
 									<div class="uk-clearfix">{attachments}</div>
 {!if sig}
 									<div class="uk-text-muted uk-clearfix" style="overflow:hidden;">

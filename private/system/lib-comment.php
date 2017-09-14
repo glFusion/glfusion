@@ -505,6 +505,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']
                 )
             );
+            $template->set_var( 'author_url', $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']);
+
 
         } else {
             $username = $filter->sanitizeUsername($A['name']);
@@ -514,6 +516,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'author', $username);
             $template->set_var( 'author_fullname', $username);
             $template->set_var( 'author_link', @htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt() ));
+            $template->unset_var( 'author_url');
 
             if( $_CONF['allow_user_photo'] ) {
                 $template->set_var( 'author_photo_raw', $_CONF['default_photo'] );
