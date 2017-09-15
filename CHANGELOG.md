@@ -1,4 +1,7 @@
 ## v1.7.0 (unreleased)
+  - Block title is now optional
+  - Calendar Plugin - fixed issue where personal events did not show properly in event block
+  - Navigation breadcrumbs in topic / story view
   - BB2 implement improved search features in admin list
   - Plugin administration now only processes the Plugin selected when enabling / disabling
   - FileMgmt Plugin - Thumbnail upload would fail when adding new file

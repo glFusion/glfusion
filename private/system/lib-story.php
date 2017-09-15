@@ -142,6 +142,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_date_short', $story->DisplayElements('shortdate'), false, true );
         $article->set_var( 'story_date_only', $story->DisplayElements('dateonly'), false, true );
     }
+    $article->set_var( 'iso8601_date', $story->DisplayElements('iso8601_date'), false, true );
 
     if ( $index == 'p' || $index == 'n') {
        $article->set_var( 'story_counter', 0 );
@@ -158,6 +159,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             break;
         case 'n' :
             $story_display = 'article';
+            $article->set_var('breadcrumbs',true);
             break;
         case 'y' :
             $story_display = 'index';
@@ -180,6 +182,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
         $article->set_var( 'story_introtext_only', $introtext,false,true );
         $article->set_var( 'story_bodytext_only', $bodytext,false,true );
+
+
+
+
     } else {
         $article->set_var( 'story_introtext', $introtext,false,true );
         $article->set_var( 'story_text_no_br', $introtext,false,true );

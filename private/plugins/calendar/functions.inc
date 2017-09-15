@@ -125,21 +125,13 @@ function phpblock_calendar( $help='', $title='' )
 
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
         . "FROM {$_TABLES['events']} ";
-        if($_DB_dbms == 'mssql') {
-            $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) AND (status = 1)";
-        } else {
-            $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
-        }
+        $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
         $eventSql .= 'ORDER BY datestart,timestart';
 
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !COM_isAnonUser() ) {
-            $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
+            $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
             . "FROM {$_TABLES['personal_events']} ";
-            if($_DB_dbms == 'mssql') {
-                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= DATEADD(hh, 24, getUTCDate())  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
-            } else {
-                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
-            }
+            $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
             $personaleventsql .= 'ORDER BY datestart, dateend';
         }
 
@@ -194,7 +186,7 @@ function phpblock_calendar( $help='', $title='' )
                     if( !$headline ) {
                         if($z == 2) {
                             if( $numRows > 0 ) {
-                                $retval .= '<p><b>' . $LANG_CAL_1[23] . '</b></p>';
+                                $retval .= '<b>' . $LANG_CAL_1[23] . '</b>';
                             }
                         } else {
                             if( $totalrows > 0 ) {

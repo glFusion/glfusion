@@ -143,10 +143,14 @@ if ($A['count'] > 0) {
         list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
         $story_template->set_var('direction', $LANG_DIRECTION);
         $story_template->set_var('css_url',$style_cache_url);
-        $story_template->set_var('page_title',
-                $_CONF['site_name'] . ': ' . $story->displayElements('title'));
+        $story_template->set_var('page_title',$_CONF['site_name'] . ': ' . $story->displayElements('title'));
         $story_template->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
         $story_template->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
+
+        $topic_name = DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($story->DisplayElements('tid'))."'");
+        $T->set_var('breadcrumbs',true);
+        $T->set_var('topic_name',$topic_name);
+
         $story_image = $story->DisplayElements('story_image');
         if ( $story_image != '' ) {
             $story_template->set_var('story_image',$story_image);

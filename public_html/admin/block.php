@@ -689,12 +689,9 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $title = DB_escapeString ($title);
     $phpblockfn = DB_escapeString (trim ($phpblockfn));
 
-    if (empty($title) || !BLOCK_validateName($name)) {
-        if ( empty($title) ) {
-            $msg = $LANG21[64];
-        } else {
-            $msg = $LANG21[70];
-        }
+    if ( !BLOCK_validateName($name) ) {
+        $msg = $LANG21[70];
+
         SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
@@ -726,7 +723,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
 
         return $retval;
-    } elseif (($type == 'normal' && !empty($title) && !empty($content)) OR ($type == 'portal' && !empty($title) && !empty($rdfurl)) OR ($type == 'gldefault' && (strlen($blockorder)>0)) OR ($type == 'phpblock' && !empty($phpblockfn) && !empty($title))) {
+    } elseif (($type == 'normal' && !empty($content)) OR ($type == 'portal' && !empty($rdfurl)) OR ($type == 'gldefault' && (strlen($blockorder)>0)) OR ($type == 'phpblock' && !empty($phpblockfn))) {
         if ($is_enabled == 'on') {
             $is_enabled = 1;
         } else {

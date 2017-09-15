@@ -247,6 +247,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $date = $dt->format($_CONF['date'],true);
     }
     $topictemplate->set_var ('posted_date', $date);
+    $topictemplate->set_var ('iso8601_date', $dt->toISO8601());
 
     if ($mode != 'preview') {
         if (!COM_isAnonUser() ) {

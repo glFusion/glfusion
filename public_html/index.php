@@ -82,6 +82,11 @@ $pageBody = '';
 $T = new Template($_CONF['path_layout']);
 $T->set_file('page','index.thtml');
 
+if ( !empty($topic) ) {
+    $T->set_var('breadcrumbs',true);
+    $T->set_var('topic',DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($topic)."'"));
+}
+
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely

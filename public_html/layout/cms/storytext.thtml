@@ -1,4 +1,15 @@
 {# begin {templatelocation} #}
+
+{!if breadcrumbs}
+	<ul class="uk-breadcrumb">
+		<li><a href="{site_url}">{$LANG01[68]}</a></li>
+		<li ><a href="{story_topic_url}" title="{story_topic_description_text}">{story_topic_name}</a></li>
+	{!if story_alternate_topic_name}
+		<li ><a href="{alt_story_topic_url}" title="{story_alternate_topic_description}">{story_alternate_topic_name}</a></li>
+	{!endif}
+	</ul>
+{!endif}
+
 <div class="infinite-item">
 {!!if {story_display} == 'article' !!}
 	<article class="uk-article tm-article uk-margin-small-bottom" itemscope itemtype="https://schema.org/CreativeWork">
@@ -78,7 +89,7 @@
 	{!endif}
 {!endif}
 {!if story_date}
-						<li itemprop="datePublished">{story_date}</li>
+						<li itemprop="datePublished" content="{iso8601_date}">{story_date}</li>
 {!endif}
 {!if lang_views}
 						<li>{lang_views} {story_hits}</li>
