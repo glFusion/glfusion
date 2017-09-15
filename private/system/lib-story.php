@@ -142,6 +142,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_date_short', $story->DisplayElements('shortdate'), false, true );
         $article->set_var( 'story_date_only', $story->DisplayElements('dateonly'), false, true );
     }
+    $article->set_var( 'iso8601_date', $story->DisplayElements('iso8601_date'), false, true );
 
     if ( $index == 'p' || $index == 'n') {
        $article->set_var( 'story_counter', 0 );

@@ -106,6 +106,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $T->set_var(array(
             'post_subject'  => $A['title'],
             'post_date'     => $date,
+            'iso8601_date'  => $dt->toISO8601(),
             'post_name'     => $name,
             'post_comment'  => $A['comment'],
             'notify_msg'    => $notifymsg,
@@ -548,6 +549,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $dtObject = new Date($A['nice_date'],$_USER['tzid']);
 
         $template->set_var( 'date', $dtObject->format($_CONF['date'],true));
+        $template->set_var( 'iso8601_date', $dtObject->toISO8601() );
         $template->set_var( 'sid', $A['sid'] );
         $template->set_var( 'type', $A['type'] );
 

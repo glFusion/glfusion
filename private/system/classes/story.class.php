@@ -1679,6 +1679,10 @@ class Story
                 $return = $dtObject->format($dtObject->getUserFormat(),true);
                 break;
 
+            case 'iso8601_date' :
+                $return = $dtObject->toISO8601();
+                break;
+
             case 'unixdate':
                 $return = $dtObject->toUnix();
                 break;
