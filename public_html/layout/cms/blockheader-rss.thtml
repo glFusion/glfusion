@@ -1,5 +1,7 @@
 {# begin {templatelocation} #}
-    <div class="">
+    <div {block_id}>
       <div class="uk-panel bottom-block">
+{!if block_title}
         <h3 class="uk-panel-title">{block_title}&nbsp;<i class="uk-icon-rss"></i></h3>
+{!endif}
 {# end {templatelocation} #}
