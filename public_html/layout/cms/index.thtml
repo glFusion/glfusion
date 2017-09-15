@@ -5,6 +5,14 @@
 {!endif}
 
 <div class="infinite-container">
+
+{!if breadcrumbs}
+<ul class="uk-breadcrumb">
+    <li><a href="{site_url}">{$LANG01[68]}</a></li>
+    <li class="uk-active"><span>{topic}</span></li>
+</ul>
+{!endif}
+
 {page_contents}
 </div>
 
