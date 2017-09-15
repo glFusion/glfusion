@@ -12,7 +12,7 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="title">{lang_blocktitle}</label>
 			<div class="uk-form-controls">
-				<input class="required uk-form-width-large" type="text" maxlength="255" id="title" name="title" value="{block_title}">
+				<input class="uk-form-width-large" type="text" maxlength="255" id="title" name="title" value="{block_title}">
 				<div class="uk-form-help-block uk-margin-small-left">
 					<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="title-count" class="uk-text-muted uk-text-small"></span></span>
 				</div>

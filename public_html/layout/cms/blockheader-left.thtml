@@ -1,5 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-margin-bottom">
-<div class="uk-panel-title">{block_title}</div>
-
+{!if block_title}
+	<div class="uk-panel-title">{block_title}</div>
+{!endif}
 {# end {templatelocation} #}
