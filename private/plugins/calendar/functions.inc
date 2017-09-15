@@ -186,7 +186,7 @@ function phpblock_calendar( $help='', $title='' )
                     if( !$headline ) {
                         if($z == 2) {
                             if( $numRows > 0 ) {
-                                $retval .= '<p><b>' . $LANG_CAL_1[23] . '</b></p>';
+                                $retval .= '<b>' . $LANG_CAL_1[23] . '</b>';
                             }
                         } else {
                             if( $totalrows > 0 ) {
