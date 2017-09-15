@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Block header templates - all updated to include block id if present
   - Block title is now optional
   - Calendar Plugin - fixed issue where personal events did not show properly in event block
   - Navigation breadcrumbs in topic / story view
