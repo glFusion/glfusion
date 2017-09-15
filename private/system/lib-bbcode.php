@@ -362,7 +362,7 @@ function _bbcode_stripcontents ($text) {
 
 function _bbcode_htmlspecialchars($text) {
 
-    return (@htmlspecialchars ($text,ENT_QUOTES, COM_getEncodingt()));
+    return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt()));
 }
 
 function _bbcode_null  ($action, $attributes, $content, $params, $node_object) {
