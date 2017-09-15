@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<div {block_id}class="block-box">
+<div {block_id} class="block-box">
 {!if block_title}
     <h2>{block_title}</h2>
 {!endif}
