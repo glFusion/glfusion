@@ -2055,7 +2055,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'הראה רק בנושא',
-    1 => 'הראה בעמוד הראשי'
+    1 => 'הראה בעמוד הראשי',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

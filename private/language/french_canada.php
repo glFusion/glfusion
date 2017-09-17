@@ -2056,7 +2056,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Afficher avec le sujet seulement',
-    1 => 'Afficher en page d\'accueil'
+    1 => 'Afficher en page d\'accueil',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

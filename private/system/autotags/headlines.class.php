@@ -162,7 +162,7 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ( $frontpage == 1 ) {
-            $sql .= " AND frontpage = 1 ";
+            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) ";
         }
 
         if ( $storyimage != 2 ) {

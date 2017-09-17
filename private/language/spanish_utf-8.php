@@ -2054,7 +2054,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Mostrar solo en tópico',
-    1 => 'Mostrar en página principal'
+    1 => 'Mostrar en página principal',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

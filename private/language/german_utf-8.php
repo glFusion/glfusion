@@ -2058,7 +2058,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Nur in der Kategorie',
-    1 => 'Auch auf der Startseite'
+    1 => 'Auch auf der Startseite',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

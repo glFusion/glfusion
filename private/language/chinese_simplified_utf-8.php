@@ -2057,7 +2057,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => '只显示标题',
-    1 => '显在首页'
+    1 => '显在首页',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

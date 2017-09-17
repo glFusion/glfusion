@@ -2056,7 +2056,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Näytä Vain Aiheessa',
-    1 => 'Näytä Etusivulla'
+    1 => 'Näytä Etusivulla',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

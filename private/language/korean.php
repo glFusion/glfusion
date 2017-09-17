@@ -2054,7 +2054,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => '해당하는 화제만을 표시',
-    1 => '첫 페이지에 표시'
+    1 => '첫 페이지에 표시',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

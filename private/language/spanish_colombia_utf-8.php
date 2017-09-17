@@ -2054,7 +2054,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Solo en el Tema',
-    1 => 'Pagina Inicial'
+    1 => 'Pagina Inicial',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

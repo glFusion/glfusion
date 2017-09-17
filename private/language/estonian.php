@@ -2054,7 +2054,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Ainult rubriigis',
-    1 => 'Avalehel ja rubriigis'
+    1 => 'Avalehel ja rubriigis',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
