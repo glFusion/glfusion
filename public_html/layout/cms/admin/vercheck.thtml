@@ -11,7 +11,7 @@
 </div>
 <div class="uk-clearfix"></div>
 {!if phpendoflife}
-<div class="uk-panel uk-panel-box uk-margin">
+<div class="uk-panel uk-panel-box uk-margin uk-alert-danger">
 	<h3 class="uk-h3">{phpeol_statusmsg}</h3>
 	<div class="uk-text-primary">
 		<i class="uk-icon uk-icon-exclamation-triangle uk-icon-large uk-text-danger"></i>
