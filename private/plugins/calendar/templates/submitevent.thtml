@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
+<script src="{site_url}/javascript/addons/datetime/datetimepicker.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
 	<!--
 	function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
@@ -85,6 +88,7 @@
 					{start_year_options}
 				</select>
 			</span>
+			<i id="start" value="" class="uk-icon uk-icon-calendar popupcal"></i>
 		</div>
 	</div>
 	<div class="uk-form-row">
@@ -115,6 +119,7 @@
 			<select name="end_year" id="end_year">
 				{end_year_options}
 			</select>
+			<i id="end" value="" class="uk-icon uk-icon-calendar popupcal"></i>
 		</div>
 	</div>
 

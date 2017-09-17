@@ -1,5 +1,9 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
+<script src="{site_url}/javascript/addons/datetime/datetimepicker.js" type="text/javascript"></script>
+
 <script language="javascript" type="text/javascript">
 	<!--
 	function update_month() { document.getElementById('end_month').value = document.getElementById('start_month').value; }
@@ -105,6 +109,7 @@
 			<select name="start_year" id="start_year" onchange="update_year()">
 				{startyear_options}
 			</select>
+			<i id="start" value="" class="uk-icon uk-icon-calendar popupcal"></i>
 		</div>
 	</div>
 	<div class="uk-form-row">
@@ -135,6 +140,7 @@
 			<select name="end_year" id="end_year">
 				{endyear_options}
 			</select>
+			<i id="end" value="" class="uk-icon uk-icon-calendar popupcal"></i>
 		</div>
 	</div>
 	<div class="uk-form-row">
