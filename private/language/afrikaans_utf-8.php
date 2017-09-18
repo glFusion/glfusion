@@ -2053,7 +2053,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Wys Slegs in Onderwerp',
-    1 => 'Wys op Voorblad'
+    1 => 'Wys op Voorblad',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

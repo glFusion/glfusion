@@ -2060,7 +2060,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Alleen in rubriek laten zien',
-    1 => 'Laat op voorpagina zien'
+    1 => 'Laat op voorpagina zien',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

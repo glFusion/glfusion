@@ -2056,7 +2056,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Pokaži le v rubriki',
-    1 => 'Pokaži na prvi strani'
+    1 => 'Pokaži na prvi strani',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

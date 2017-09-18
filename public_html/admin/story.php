@@ -1011,6 +1011,72 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var ('frontpage_options',
             COM_optionList ($_TABLES['frontpagecodes'], 'code,name',
                             $story->EditElements('frontpage')));
+    // frontpage date
+    switch ( $story->EditElements('frontpage') ) {
+        case 0 :
+            $story_templates->set_var('topiconly_checked',' checked="checked" ');
+            break;
+        case 1 :
+            $story_templates->set_var('onfrontpage_checked',' checked="checked" ');
+            break;
+        case 2 :
+            $story_templates->set_var('frontpageuntil_checked',' checked="checked" ');
+            break;
+        default :
+            $story_templates->set_var('onfrontpage_checked',' checked="checked" ');
+            break;
+    }
+    // frontpage until
+
+    $month_options = COM_getMonthFormOptions($story->EditElements('frontpage_date_month'));
+    $story_templates->set_var('frontpage_date_month_options', $month_options);
+
+    $day_options = COM_getDayFormOptions($story->EditElements('frontpage_date_day'));
+    $story_templates->set_var('frontpage_date_day_options', $day_options);
+
+    $year_options = COM_getYearFormOptions($story->EditElements('frontpage_date_year'));
+    $story_templates->set_var('frontpage_date_year_options', $year_options);
+
+    $frontpage_date_ampm = '';
+    $frontpage_date_hour = $story->EditElements('frontpage_date_hour');
+    //correct hour
+    if ($frontpage_date_hour >= 12) {
+        if ($frontpage_date_hour > 12) {
+            $frontpage_date_hour = $frontpage_date_hour - 12;
+        }
+        $ampm = 'pm';
+    } else {
+        $ampm = 'am';
+    }
+    $ampm_select = COM_getAmPmFormSelection ('frontpage_date_ampm', $ampm);
+    if (empty ($ampm_select)) {
+        // have a hidden field to 24 hour mode to prevent JavaScript errors
+        $ampm_select = '<input type="hidden" name="frontpage_date_ampm" value="" />';
+    }
+    $story_templates->set_var ('frontpage_date_ampm_selection', $ampm_select);
+
+    if ($_CONF['hour_mode'] == 24) {
+        $hour_options = COM_getHourFormOptions ($story->EditElements('frontpage_date_hour'), 24);
+    } else {
+        $hour_options = COM_getHourFormOptions ($frontpage_date_hour);
+    }
+    $story_templates->set_var('frontpage_date_hour_options', $hour_options);
+
+    $minute_options = COM_getMinuteFormOptions($story->EditElements('frontpage_date_minute'));
+    $story_templates->set_var('frontpage_date_minute_options', $minute_options);
+
+    $story_templates->set_var('frontpage_date_second', $story->EditElements('frontpage_date_second'));
+
+
+
+
+
+
+
+
+
+// end of new stuf
+
 
     $story_templates->set_var('story_introtext', $story->EditElements('introtext'));
 

@@ -1648,6 +1648,9 @@ function glfusion_170()
     $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
     $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
+
 // add comment queued field
     $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
 

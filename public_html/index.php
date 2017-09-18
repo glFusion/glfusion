@@ -211,7 +211,7 @@ if (empty ($topic)) {
 if (!empty($topic)) {
     $sql .= " AND (s.tid = '".DB_escapeString($topic)."' OR s.alternate_tid = '".DB_escapeString($topic)."') ";
 } elseif (!$newstories) {
-    $sql .= " AND frontpage = 1 ";
+    $sql .= " AND (frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW())) ";
 }
 
 if ($topic != $archivetid) {
@@ -279,6 +279,7 @@ if ( !empty($topic) ) {
 
 $msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+         . 'UNIX_TIMESTAMP(s.frontpage_date) as frontpage_date_unix, '
          . $userfields . ", t.topic, t.imageurl "
          . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
          . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid WHERE "

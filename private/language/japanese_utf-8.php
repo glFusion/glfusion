@@ -2060,7 +2060,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => '該当する話題にのみ表示',
-    1 => 'トップページに表示'
+    1 => 'トップページに表示',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

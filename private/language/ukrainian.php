@@ -2057,7 +2057,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Показувати лише в темі',
-    1 => 'Показувати на головній'
+    1 => 'Показувати на головній',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

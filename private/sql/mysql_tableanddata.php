@@ -420,6 +420,7 @@ CREATE TABLE {$_TABLES['stories']} (
   postmode varchar(10) NOT NULL default 'html',
   advanced_editor_mode tinyint(1) unsigned default '0',
   frontpage tinyint(3) unsigned default '1',
+  frontpage_date DATETIME NULL DEFAULT NULL,
   owner_id mediumint(8) NOT NULL default '1',
   group_id mediumint(8) NOT NULL default '2',
   perm_owner tinyint(1) unsigned NOT NULL default '3',
@@ -434,6 +435,7 @@ CREATE TABLE {$_TABLES['stories']} (
   INDEX stories_expire(expire),
   INDEX stories_date(date),
   INDEX stories_frontpage(frontpage),
+  INDEX stories_frontpage_date(frontpage_date),
   PRIMARY KEY  (sid)
 ) ENGINE=MyISAM
 ";

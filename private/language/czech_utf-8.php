@@ -2053,7 +2053,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Ukaž jen v sekci',
-    1 => 'Ukaž i na hlavní straně'
+    1 => 'Ukaž i na hlavní straně',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(

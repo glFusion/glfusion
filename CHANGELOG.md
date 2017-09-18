@@ -1,4 +1,6 @@
 ## v1.7.0 (unreleased)
+  - New story attribute - on front page until - YYYY.MM.DD
+  - New pop-up date / time picker for date / time fields
   - Block header templates - all updated to include block id if present
   - Block title is now optional
   - Calendar Plugin - fixed issue where personal events did not show properly in event block

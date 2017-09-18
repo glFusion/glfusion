@@ -133,6 +133,7 @@ class Story
     var $_statuscode;
     var $_expire;
     var $_frontpage;
+    var $_frontpage_date;
     var $_owner_id;
     var $_group_id;
     var $_perm_owner;
@@ -218,6 +219,7 @@ class Story
            'expire' => 1,
            'postmode' => 1,
            'frontpage' => 1,
+           'frontpage_date' => 1,
            'owner_id' => 1,
            'group_id' => 1,
            'perm_owner' => 1,
@@ -289,6 +291,11 @@ class Story
               (
                 STORY_AL_NUMERIC,
                 '_frontpage'
+              ),
+            'frontpage_date' => array
+              (
+                STORY_AL_NUMERIC,
+                '_frontpage_date'
               ),
             'comment_expire' => array
               (
@@ -480,6 +487,11 @@ class Story
         } else {
             $this->_comment_expire = 0;
         }
+        if (array_key_exists('frontpage_date_unix', $story)) {
+            $this->_frontpage_date = $story['frontpage_date_unix'];
+        } else {
+            $this->_frontpage_date = 0;
+        }
 
         $alternate_topic = '';
         $alternate_topic_description = '';
@@ -523,7 +535,7 @@ class Story
         $sid = DB_escapeString(COM_applyFilter($sid));
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
-            $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
+            $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix,UNIX_TIMESTAMP(s.frontpage_date) as frontpage_date_unix, "
                 . "u.username, u.fullname, u.photo, u.email, p.about,p.uid, t.topic, t.description AS topic_description,t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['userinfo']} AS p, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.uid = p.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
         } elseif (!empty($sid) && ($mode == 'moderate')) {
             $sql = 'SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, '
@@ -557,6 +569,7 @@ class Story
             } else {
                 $this->_comment_expire = 0;
             }
+
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_title = '';
@@ -748,14 +761,12 @@ class Story
         if ($this->_featured == '1') {
             // there can only be one non-draft featured story
             if ($this->_draft_flag == 0 AND $this->_date <= time()) {
-
-                if ($this->_frontpage == 1) {
+                if ( $this->_frontpage == 1 || $this->_frontpage == 2 ) {
                     // un-feature any featured frontpage story
-                    DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW()");
+                    DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND (frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) AND date <= NOW()");
                 }
-
                 // un-feature any featured story in the same topic
-                DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND tid = '{$this->_tid}' AND date <= NOW()");
+                DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND tid = '{$this->_tid}' AND date <= NOW()");
             }
         }
 
@@ -835,7 +846,7 @@ class Story
             if ($save === 1) {
                 $varname = '_' . $fieldname;
                 $sql .= $fieldname . ', ';
-                if (($fieldname == 'date') || ($fieldname == 'expire') || ($fieldname == 'comment_expire')) {
+                if (($fieldname == 'date') || ($fieldname == 'expire') || ($fieldname == 'comment_expire') || ($fieldname == 'frontpage_date') ) {
                     // let the DB server do this conversion
                     if (!empty($this->{$varname})) {
                         $values .= 'FROM_UNIXTIME(' . $this->{$varname} . '), ';
@@ -1465,6 +1476,12 @@ class Story
             $dtCmtClose = new Date($this->_date + ($_CONF['article_comment_close_days']*86400),$_USER['tzid']);
         }
 
+        if ( $this->_frontpage == 2 ) {
+            $dtFpUntil = new Date($this->_frontpage_date,$_USER['tzid']);
+        } else {
+            $dtFpUntil = new Date($this->_date + (180*86400),$_USER['tzid']);
+        }
+
         switch (strtolower($item)) {
             case 'unixdate':
                 $return = $dtPublish->toUnix();
@@ -1555,6 +1572,30 @@ class Story
 
             case 'cmt_close_year':
                 $return = $dtCmtClose->year;
+                break;
+
+            case 'frontpage_date_second':
+                $return = $dtFpUntil->second;
+                break;
+
+            case 'frontpage_date_minute':
+                $return = $dtFpUntil->minute;
+                break;
+
+            case 'frontpage_date_hour':
+                $return = $dtFpUntil->hour;
+                break;
+
+            case 'frontpage_date_day':
+                $return = $dtFpUntil->day;
+                break;
+
+            case 'frontpage_date_month':
+                $return = $dtFpUntil->month;
+                break;
+
+            case 'frontpage_date_year':
+                $return = $dtFpUntil->year;
                 break;
 
             case 'title':
@@ -2091,6 +2132,33 @@ class Story
             $this->_comment_expire = $cmt_close_date;
         } else {
             $this->_comment_expire = 0;
+        }
+// frontpage date
+        $dtFpUntil = new Date('now',$_USER['tzid']);
+        //frontpage date
+        if (isset($array['frontpage']) && $array['frontpage'] == 2 ) {
+            $frontpage_date_ampm = COM_applyFilter($array['frontpage_date_ampm']);
+            $frontpage_date_hour = COM_applyFilter($array['frontpage_date_hour'], true);
+            $frontpage_date_minute = COM_applyFilter($array['frontpage_date_minute'], true);
+            $frontpage_date_second = COM_applyFilter($array['frontpage_date_second'], true);
+            $frontpage_date_year = COM_applyFilter($array['frontpage_date_year'], true);
+            $frontpage_date_month = COM_applyFilter($array['frontpage_date_month'], true);
+            $frontpage_date_day = COM_applyFilter($array['frontpage_date_day'], true);
+
+            if ($frontpage_date_ampm == 'pm') {
+                if ($frontpage_date_hour < 12) {
+                    $frontpage_date_hour = $frontpage_date_hour + 12;
+                }
+            }
+
+            if ($frontpage_date_ampm == 'am' AND $frontpage_date_hour == 12) {
+                $frontpage_date_hour = '00';
+            }
+            $dtFpUntil->setDateTimestamp ( $frontpage_date_year,$frontpage_date_month,$frontpage_date_day,$frontpage_date_hour,$frontpage_date_minute,$frontpage_date_second );
+            $frontpage_date = $dtFpUntil->toUnix();
+            $this->_frontpage_date = $frontpage_date;
+        } else {
+            $this->_frontpage_date = 0;
         }
 
         /* Then grab the permissions */

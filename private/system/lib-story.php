@@ -1126,13 +1126,13 @@ function STORY_featuredCheck()
     global $_TABLES;
 
     // allow only 1 featured for frontpage
-    $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW() ORDER BY date DESC LIMIT 2";
+    $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND (frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW() ) ) AND date <= NOW() ORDER BY date DESC LIMIT 2";
     $result = DB_query($sql);
     $numrows = DB_numRows($result);
     if ($numrows > 1) {
         $F = DB_fetchArray($result);
         // un-feature all other featured frontpage story
-        $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW() AND sid <> '{$F['sid']}'";
+        $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW())) AND date <= NOW() AND sid <> '{$F['sid']}'";
         DB_query($sql);
     }
     // check all topics
@@ -1752,6 +1752,7 @@ function service_get_story($args, &$output, &$svc_msg)
                                     'expire_date',
                                     'postmode',
                                     'frontpage',
+                                    'frontpage_date',
                                     'owner_id',
                                     'group_id',
                                     'perm_owner',

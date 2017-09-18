@@ -1462,7 +1462,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.6.6' :
         case '1.6.7' : // non-released development version
-//            require_once $_CONF['path_system'].'classes/config.class.php';
+            require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->del('digg_enabled','Core');
 
@@ -1470,6 +1470,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_video` VARCHAR(255) NULL DEFAULT NULL AFTER `story_image`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
 
             // comment submission support
             $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
