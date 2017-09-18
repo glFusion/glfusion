@@ -184,7 +184,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         }
     } else {
         $uservalid = false;
-        $userlink = $LANG_GF01['ANON'].$showtopic['name'];
+//        $userlink = $LANG_GF01['ANON'].$showtopic['name'];
+        $userlink = $showtopic['name'];
     }
 
     if ($_FF_CONF['show_moods'] &&  $showtopic['mood'] != "") {
