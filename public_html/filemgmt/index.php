@@ -120,6 +120,7 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
     } else {
         $delete_option = false;
     }
+    $title = $dtitle;
     if ( !isset($title)) {
         $title = '';
     }
