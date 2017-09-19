@@ -151,6 +151,7 @@ CREATE TABLE {$_TABLES['comments']} (
   comment text,
   pid int(10) unsigned NOT NULL default '0',
   queued TINYINT(3) NOT NULL DEFAULT '0',
+  postmode VARCHAR(15) NULL DEFAULT NULL,
   lft mediumint(10) unsigned NOT NULL default '0',
   rht mediumint(10) unsigned NOT NULL default '0',
   indent mediumint(10) unsigned NOT NULL default '0',

@@ -1476,6 +1476,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             // comment submission support
             $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
 
             $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
             $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";

@@ -30,6 +30,7 @@
 require_once '../../lib-common.php';
 
 // Only let admin users access this page
+/*
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
     COM_errorLog("Someone has tried to access the glFusion Development Code Upgrade Routine without proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
@@ -41,7 +42,7 @@ if (!SEC_inGroup('Root')) {
     echo $display;
     exit;
 }
-
+*/
 $retval = '';
 
 function glfusion_110() {
@@ -1653,6 +1654,8 @@ function glfusion_170()
 
 // add comment queued field
     $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD COLUMN `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
+
 
     $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
     $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";

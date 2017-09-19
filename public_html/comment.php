@@ -259,7 +259,7 @@ function handleEdit($mod = false, $admin = false) {
             exit;
         }
         $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
-        $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
+        $result = DB_query ("SELECT * FROM {$_TABLES['comments']} "
             . "WHERE queued=0 AND cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
         if ( DB_numRows($result) == 1 ) {
             $A = DB_fetchArray ($result);
@@ -291,21 +291,23 @@ function handleEdit($mod = false, $admin = false) {
     if ( $pos > 0) {
         $commenttext = substr($commenttext, 0, $pos);
     }
-
-    //get format mode
-    if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
-        $postmode = 'html';
+    if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
+        //get format mode
+        if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
+            $postmode = 'html';
+        } else {
+            $postmode = 'plaintext';
+        }
     } else {
-        $postmode = 'plaintext';
+        $postmode = $A['postmode'];
     }
-
     if ( $mod ) {
         $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
         $edit_type = 'edit';
         if ( $admin == true ) $edit_type = 'adminedit';
-        $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-               . CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
+//        $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
+        $retval =  CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
     }
     return $retval;
 }
@@ -373,16 +375,13 @@ function handleEditSubmit()
         if ( $commentuid == 1 ) {
             $filter = sanitizer::getInstance();
             // anonymous user - so the name could have been edited.
-// need more checks here
-            $username = $_POST['username'];
-            $name = $filter->sanitizeUsername($username);
-            $name = $filter->censor($name);
+            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
 
-            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', name='".DB_escapeString($name)."'"
+            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', name='".DB_escapeString($name)."',postmode='".DB_escapeString($postmode)."'"
                     . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
         } else {
         // save the comment into the comment table
-            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
+            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', postmode='".DB_escapeString($postmode)."'"
                     . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
         }
         DB_query($sql);
@@ -554,13 +553,16 @@ if ( isset($_POST['cancel'] ) ) {
     $title   = strip_tags ($_POST['title']);
     $mode    = COM_applyFilter($_POST['mode']);
 
-
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
     $adminedit = isset($_POST['adminedit']) ? COM_applyFilter($_POST['adminedit']) : '';
 
     $moderatorEdit = false;
     if ( $modedit == 'x' ) {
         $moderatorEdit = true;
+    }
+    $administratorEdit = false;
+    if ( $adminedit  == 'x' && SEC_hasRights('comment.moderate')) {
+        $administratorEdit = true;
     }
 
     if ( $type != 'article' ) {
@@ -571,7 +573,7 @@ if ( isset($_POST['cancel'] ) ) {
 
     if ( $moderatorEdit ) {
         $previewType = 'preview_edit_mod';
-    } elseif ( $adminedit  == 'x' && SEC_hasRights('comment.moderate')) {
+    } elseif ( $administratorEdit ) {
         $previewType = 'preview_edit_admin';
     } elseif ( $mode == 'edit' ) {
         $previewType = 'preview_edit';
@@ -580,7 +582,7 @@ if ( isset($_POST['cancel'] ) ) {
     } else {
         $previewType = 'preview_new';
     }
-    if ( $moderatorEdit ) {
+    if ( $moderatorEdit || $administratorEdit || $previewType == 'preview_edit') {
         $pageBody .= CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
     } else {
         $pageBody .=  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
@@ -672,30 +674,15 @@ if ( isset($_POST['cancel'] ) ) {
             break;
 
         case 'edit':
-            if (SEC_checkToken()) {
-                $pageBody .= handleEdit();
-            } else {
-                echo COM_refresh($_CONF['site_url'] . '/index.php');
-                exit;
-            }
+            $pageBody .= handleEdit();
             break;
 
         case 'modedit' :
-            if (SEC_checkToken()) {
-                $pageBody .= handleEdit(true);
-            } else {
-                echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
-                exit;
-            }
+            $pageBody .= handleEdit(true);
             break;
 
         case 'adminedit' :
-            if (SEC_checkToken()) {
-                $pageBody .= handleEdit(false,true);
-            } else {
-                echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
-                exit;
-            }
+            $pageBody .= handleEdit(false,true);
             break;
 
         case 'subscribe' :
@@ -729,7 +716,6 @@ if ( isset($_POST['cancel'] ) ) {
                 exit;
             }
             break;
-
 
         default:  // New Comment
             // do our speed limit check here

@@ -573,12 +573,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         //edit link
         if ($edit_option && !$preview) {
-            if ( empty($token)) {
-                $token = SEC_createToken();
-            }
+//            if ( empty($token)) {
+//                $token = SEC_createToken();
+//            }
+//            $editlink = $_CONF['site_url'] . '/comment.php?mode='.$edit_type.'&amp;cid='
+//                . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
+//                . '&amp;' . CSRF_TOKEN . '=' . $token . '#comment_entry';
             $editlink = $_CONF['site_url'] . '/comment.php?mode='.$edit_type.'&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
-                . '&amp;' . CSRF_TOKEN . '=' . $token . '#comment_entry';
+                . '#comment_entry';
+
             $template->set_var('edit_link',$editlink);
             $template->set_var('lang_edit',$LANG01[4]);
             $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
@@ -1472,8 +1476,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND lft >= $rht");
                 DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND rht >= $rht");
-                DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                        "'".DB_escapeString($sid)."',$uid,'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht,$rht+1,$indent+1,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
+                        "'".DB_escapeString($sid)."',$uid,'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,'".DB_escapeString($postmode)."',$rht,$rht+1,$indent+1,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
             } else { //replying to non-existent comment or comment in wrong article
                 COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
@@ -1484,13 +1488,13 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             if ( DB_error() ) {
                 $rht = 0;
             }
-            DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                    "'".DB_escapeString($sid)."',".(int) $uid.",'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht+1,$rht+2,0,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+            DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
+                    "'".DB_escapeString($sid)."',".(int) $uid.",'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,'".DB_escapeString($postmode)."',$rht+1,$rht+2,0,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
         }
         $cid = DB_insertId();
         //set Anonymous user name if present
         if (isset($_POST['username']) ) {
-            $name = strip_tags(USER_sanitizeName ($_POST['username']));
+            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
             DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',(int) $cid);
         }
         DB_unlockTable ($_TABLES['comments']);
@@ -1867,8 +1871,10 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     $filter->setAllowedElements($AllowedElements);
     $comment = $filter->filterData($comment);  // does not censor...
     $comment = $filter->censor($comment);
-// see if we can force html mode...
-    if ( $postmode == 'html' ) { $comment = '<!-- comment -->' . $comment; }
+
+//    if ( $postmode == 'html' ) {
+//        $comment = '<!-- comment -->' . $comment;
+//    }
     if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
