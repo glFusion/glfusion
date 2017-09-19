@@ -411,6 +411,18 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $row = 1;
 
     do {
+        if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
+            //get format mode
+            if ( preg_match( '/<.*>/', $A['comment'] ) != 0 ) {
+                $postmode = 'html';
+            } else {
+                $postmode = 'plaintext';
+            }
+        } else {
+            $postmode = $A['postmode'];
+        }
+        if ( $A['postmode'] == 'plaintext' ) $A['comment'] = nl2br($A['comment']);
+
         $template->unset_var('delete_link');
         $template->unset_var('ipaddress');
         $template->unset_var('reply_link');
@@ -573,12 +585,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         //edit link
         if ($edit_option && !$preview) {
-//            if ( empty($token)) {
-//                $token = SEC_createToken();
-//            }
-//            $editlink = $_CONF['site_url'] . '/comment.php?mode='.$edit_type.'&amp;cid='
-//                . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
-//                . '&amp;' . CSRF_TOKEN . '=' . $token . '#comment_entry';
             $editlink = $_CONF['site_url'] . '/comment.php?mode='.$edit_type.'&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '#comment_entry';
@@ -652,7 +658,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         if (function_exists('msg_replaceEmoticons'))  {
             $A['comment'] = msg_replaceEmoticons($A['comment']);
         }
-
         $A['comment'] = $filter->displayText($A['comment']);
 
         // create a reply to link
@@ -1147,7 +1152,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $_POST['title']     = $title;
             $_POST['comment']   = $display_comment;
             // Preview mode:
-            if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($title) && !empty($comment) ) {
+            if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
                 $start->set_var( 'hide_if_preview', 'style="display:none"' );
@@ -1392,7 +1397,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     }
 
     // Sanity check
-    if (empty ($sid) || empty ($title) || empty ($comment) || empty ($type) ) {
+    if (empty ($sid) || empty ($comment) || empty ($type) ) {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with one or more missing values.');
        if ( SESS_isSet('glfusion.commentpresave.error') ) {
@@ -1447,7 +1452,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $pid = 0;
     }
 
-    if (!empty ($title) && !empty ($comment)) {
+    if ( !empty ($comment) ) {
         $filter = sanitizer::getInstance();
         COM_updateSpeedlimit ('comment');
 
@@ -1499,11 +1504,11 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         }
         DB_unlockTable ($_TABLES['comments']);
 
-        CACHE_remove_instance('whatsnew');
-        if ($type == 'article') {
-            CACHE_remove_instance('story_'.$sid);
-        }
         if ( $queued == 0 ) {
+            CACHE_remove_instance('whatsnew');
+            if ($type == 'article') {
+                CACHE_remove_instance('story_'.$sid);
+            }
             PLG_itemSaved($cid, 'comment');
         } else {
             CACHE_remove_instance('menu');
@@ -1872,9 +1877,6 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     $comment = $filter->filterData($comment);  // does not censor...
     $comment = $filter->censor($comment);
 
-//    if ( $postmode == 'html' ) {
-//        $comment = '<!-- comment -->' . $comment;
-//    }
     if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
@@ -1892,7 +1894,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
             if ( $postmode == 'html') {
                 $comment .= nl2br(LB . '---' . LB . $sig);
             } else {
-                $comment .=  nl2br(LB . '---' . LB . $sig);
+                $comment .=  LB . '---' . LB . $sig;
             }
         $comment .= '</div><!-- /COMMENTSIG -->';
         }
@@ -1978,7 +1980,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
             $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'),'',1,'error');
             SESS_unSet('glfusion.commentpresave.error');
         } else {
-            if ( empty($title) || empty($comment) ) {
+            if ( empty($comment) ) {
                 $msg = COM_showMessageText($LANG03[12],'',1,'error');
             }
         }
@@ -2245,7 +2247,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                     $url = PLG_getCommentUrlId($A['type']);
                     $sep = strpos($url[0], '?') ? '&' : '?';
                     $finalurl = $url[0] . $sep . $url[1].'='.$A['sid'];
-                    $props['url'] = $finalurl;
+                    $props['url'] = $finalurl.'#cid_'.$A['cid'];
                     break;
                 case 'label':
                     $props['label'] = 'Comments';

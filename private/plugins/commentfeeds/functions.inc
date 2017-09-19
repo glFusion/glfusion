@@ -75,22 +75,22 @@ function plugin_chkVersion_commentfeeds ()
 */
 function plugin_getfeednames_commentfeeds()
 {
-    global $_TABLES;
+    global $_TABLES, $_PLUGIN_INFO;
 
     $feeds = array ();
 
-    $result = DB_query ("SELECT tid, topic FROM {$_TABLES['topics']} ".COM_getPermSQL('WHERE')." ORDER BY topic ASC");
-    $num = DB_numRows ($result);
-
-    if ($num > 0) {
-        $feeds[] = array ('id' => 'all', 'name' => 'all topics');
-
-        for ($i = 0; $i < $num; $i++) {
-            $A = DB_fetchArray ($result);
-            $feeds[] = array ('id' => $A['tid'], 'name' => $A['topic']);
+    $feeds[] = array ('id' => 'all', 'name' => 'All Comments');
+    $feeds[] = array ('id' => 'article', 'name' => 'Stories');
+    foreach ( $_PLUGIN_INFO as $plugin ) {
+        if ( $plugin['pi_enabled']  == 1 ) {
+            if ( function_exists('plugin_commentsupport_'.$plugin['pi_name']) ) {
+                $function = 'plugin_commentsupport_'.$plugin['pi_name'];
+                if ( $function() == true ) {
+                    $feeds[] = array('id' => $plugin['pi_name'], 'name' => ucfirst($plugin['pi_name']));
+                }
+            }
         }
     }
-
     return $feeds;
 }
 
@@ -110,52 +110,60 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
     $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($feed)."'" );
     $S = DB_fetchArray( $result );
 
-    $sql = "SELECT c.cid, c.sid, c.title as title, c.comment, UNIX_TIMESTAMP(c.date) AS modified, "
-           ." t.topic, s.title as articleTitle, c.uid "
-           ." FROM {$_TABLES['comments']} as c "
-           ." JOIN {$_TABLES['stories']} as s ON s.sid = c.sid "
-           ." JOIN {$_TABLES['topics']} as t ON t.tid = s.tid "
-           .COM_getPermSQL('WHERE', 1, 2, 's')
-           .COM_getPermSQL('AND', 1, 2, 't')
-           ." AND c.queued = 0 AND type='article' ";
+    $sql = "SELECT * FROM {$_TABLES['comments']} where queued = 0 ";
 
     if( $S['topic'] != 'all' ) {
-        $sql .= " AND topic='{$S['topic']}' ";
+        $sql .= " AND type='{$S['topic']}' ";
     }
-    $sql .= " ORDER BY modified DESC  LIMIT 0, ".intval($S['limits'])." ";
+    $sql .= " ORDER BY date DESC ";
 
-    $result = DB_query( $sql );
+    $result = DB_query($sql);
+    $counter = 0;
+    while ( ( $row = DB_fetchArray($result)) != NULL ) {
+        $itemInfo = PLG_getItemInfo($row['type'],$row['sid'],'url,perms',1);
+        if ( isset($itemInfo['perms'] ) ) {
+            if ( $itemInfo['perms']['perm_anon'] > 0 && isset($itemInfo['url']) && $itemInfo['url'] != '' ) {
+                $cids[] = $row['cid'];
+                $title = $row['title'];
+                $body = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $row['comment']);
+                $body = str_replace('</div><!-- /COMMENTSIG -->', '', $body);
+                $body = str_replace('<div class="comment-edit">', '', $body);
+                $body = str_replace('</div><!-- /COMMENTEDIT -->', '', $body);
+                if( preg_match( '/<.*>/', $body ) == 0 ) {
+                    $body = nl2br( $body );
+                }
+                $body = str_replace('<!-- comment -->', '', $body);
 
-    $content = array();
-    $cids = array();
-    $nrows = DB_numRows( $result );
+                switch ( (int) $S['content_length'] ) {
+                    case 0 :
+                        $body = '';
+                        break;
+                    case 1 :
+                        $body = $body;
+                        break;
+                    default :
+                        $body = SYND_truncateSummary( $body, $S['content_length'] );
+                        break;
+                }
 
-    for( $i = 0; $i < $nrows; $i++ ) {
-        $row = DB_fetchArray( $result );
-        $cids[] = $row['cid'];
+                $url   = $itemInfo['url'];
+                $content[] = array( 'title'   => $title,
+                                    'summary' => $body,
+                                    'link'    => $url . '#cid_'.$row['cid'],
+                                    'uid'     => $row['uid'],
+                                    'author'  => ($row['uid'] == 1 ? $row['name'] : COM_getDisplayName( $row['uid'] )),
+                                    'date'    => $row['date'],
+                                    'format'  => 'html'
+                                  );
 
-        $title =  $row['title'];
-        $body = $row['comment'];
-        $body = SYND_truncateSummary( $body, $S['content_length'] );
-        $articleLink = COM_buildUrl( $_CONF['site_url']
-                  ."/article.php?story={$row['sid']}");
-
-        $link = $articleLink."#comments";
-        $articleTitle = $row['articleTitle'];
-        $body = sprintf($_CF_CONF['article_tag'], $articleLink, $articleTitle).$body;
-
-        $content[] = array( 'title'   => $title,
-                            'summary' => $body,
-                            'link'    => $link,
-                            'uid'     => $row['uid'],
-                            'author'  => COM_getDisplayName( $row['uid'] ),
-                            'date'    => $row['modified'],
-                            'format'  => 'html'
-                          );
+            }
+            $counter++;
+            if ( $counter > $S['limits'] )
+                break;
+        }
     }
-
     $link = $_CONF['site_url'];
-    $update = implode( ',', $cids );
+    $update = time();
 
     return $content;
 }
@@ -175,7 +183,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
 */
 function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limit, $updated_type = '', $updated_topic = '', $updated_id = '')
 {
-    global $_TABLES;
+    global $_TABLES, $_VARS;
 
     $is_current = true;
 
@@ -186,36 +194,10 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
         $updated_id = '';
     }
 
-    $sql = "SELECT c.cid, UNIX_TIMESTAMP(c.date) AS modified "
-           ." FROM {$_TABLES['comments']} as c "
-           ." JOIN {$_TABLES['stories']} as s ON s.sid = c.sid "
-           ." JOIN {$_TABLES['topics']} as t ON t.tid = s.tid "
-           .COM_getPermSQL('WHERE', 1, 2, 's')
-           .COM_getPermSQL('AND', 1, 2, 't')
-           ." AND c.queued = 0 AND type='article' ";
-
-    if( $topic != 'all' )
-    {
-        $sql .= " AND topic='".DB_escapeString($topic)."' ";
+    if ( (int) $_VARS['cmt_update'] > (int) $update_data ) {
+        return false;
     }
-    $sql .= " ORDER BY modified DESC  LIMIT 0, ".intval($limit)." ";
-    $result = DB_query ($sql);
-    $num = DB_numRows ($result);
-
-    $cids = array ();
-    for ($i = 0; $i < $num; $i++) {
-        $A = DB_fetchArray ($result);
-
-        if ($A['cid'] == $updated_id) {
-            // this feed has to be updated - no further checks needed
-            return false;
-        }
-
-        $cids[] = $A['cid'];
-    }
-    $current = implode (',', $cids);
-
-    return ($current != $update_data) ? false : true;
+    return true;
 }
 
 /**
@@ -227,5 +209,27 @@ function plugin_upgrade_commentfeeds() {
     require_once $_CONF['path'].'plugins/commentfeeds/upgrade.php';
 
     return commentfeeds_upgrade();
+}
+
+function plugin_itemsaved_commentfeeds( $id, $type )
+{
+    global $_TABLES, $_VARS;
+
+    if ( $type != 'comment' ) return;
+
+    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $id;
+    $result = DB_query($sql);
+    if ( DB_numRows( $result ) != 0 ) {
+        $row = DB_fetchArray($result);
+        $itemInfo = PLG_getItemInfo($row['type'],$row['sid'],'id,perms',1);
+        if ( isset($itemInfo['perms'] ) ) {
+            if ( $itemInfo['perms']['perm_anon'] > 0 ) {
+                $now = time();
+                DB_query("REPLACE INTO {$_TABLES['vars']} (name,value) VALUES('cmt_update','".$now."')");
+                $_VARS['cmt_update'] = $now;
+            }
+        }
+    }
+    return;
 }
 ?>

@@ -352,7 +352,7 @@ function handleEditSubmit()
     $comment = $_POST['comment_text'];
 
     //check for bad input
-    if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
+    if (empty ($sid) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');

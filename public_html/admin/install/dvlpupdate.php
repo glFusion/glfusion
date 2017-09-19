@@ -1710,6 +1710,8 @@ function glfusion_170()
     $c->del('have_pear','Core');
     $c->del('fs_pear','Core');
 
+    DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
+
     _updateConfig();
 
     // update version number

@@ -1516,6 +1516,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('have_pear','Core');
             $c->del('fs_pear','Core');
 
+            // clear out syndication updates for comments
+            DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
+
             $current_fusion_version = '1.7.0';
 
         default:
