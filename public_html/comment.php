@@ -56,11 +56,6 @@ require_once 'lib-common.php';
  */
 USES_lib_comment();
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
-
 function _getReferer()
 {
     global $_CONF;
@@ -225,7 +220,7 @@ function handleView($view = true)
  * @author Jared Wenerd <wenerd87 AT gmail DOT com>
  * @return string HTML (possibly a refresh)
  */
-function handleEdit($mod = false) {
+function handleEdit($mod = false, $admin = false) {
     global $_TABLES, $LANG03,$_USER,$_CONF, $_PLUGINS;
 
     if ( isset($_POST['cid']) ) {
@@ -236,7 +231,8 @@ function handleEdit($mod = false) {
         $cid = -1;
     }
 
-    if ( $mod == false ) {
+    if ( $mod == false && $admin == false) {
+// user edit
         if ( isset($_POST['sid']) ) {
             $sid = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
         } else if (isset($_GET['sid']) ) {
@@ -273,6 +269,7 @@ function handleEdit($mod = false) {
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
     } else {
+// moderator or admin edit
         $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $cid);
         if ( DB_numRows($result) == 1 ) {
             $A = DB_fetchArray ($result);
@@ -305,8 +302,10 @@ function handleEdit($mod = false) {
     if ( $mod ) {
         $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
+        $edit_type = 'edit';
+        if ( $admin == true ) $edit_type = 'adminedit';
         $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-               . CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'edit', $postmode);
+               . CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
     }
     return $retval;
 }
@@ -322,14 +321,18 @@ function handleEditSubmit()
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $_PLUGINS;
 
+    $modedit = false;
+    $adminedit = false;
+
     $type       = COM_applyFilter ($_POST['type']);
     $sid        = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
-    $modedit    = COM_applyFilter ($_POST['modedit']);
+    if ( isset($_POST['modedit'])) $modedit    = COM_applyFilter ($_POST['modedit']);
+    if ( isset($_POST['adminedit'])) $adminedit  = COM_applyFilter ($_POST['adminedit']);
 
     $moderatorEdit = false;
-    if ( $modedit == 'x' ) $moderatorEdit = true;
+    if ( $modedit == 'x' && SEC_hasRights('comment.moderate') ) $moderatorEdit = true;
 
     if ( $type != 'article' ) {
         if (!in_array($type,$_PLUGINS) ) {
@@ -347,8 +350,7 @@ function handleEditSubmit()
     $comment = $_POST['comment_text'];
 
     //check for bad input
-    if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid)
-            || $cid < 1 ) {
+    if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
@@ -367,9 +369,22 @@ function handleEditSubmit()
         $title   = DB_escapeString ($title);
         $comment = DB_escapeString ($comment);
 
+        // check if commentuid > 1
+        if ( $commentuid == 1 ) {
+            $filter = sanitizer::getInstance();
+            // anonymous user - so the name could have been edited.
+// need more checks here
+            $username = $_POST['username'];
+            $name = $filter->sanitizeUsername($username);
+            $name = $filter->censor($name);
+
+            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', name='".DB_escapeString($name)."'"
+                    . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
+        } else {
         // save the comment into the comment table
-        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
+            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
+                    . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
+        }
         DB_query($sql);
 
         if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
@@ -378,10 +393,17 @@ function handleEditSubmit()
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
 
-        if ( !$moderatorEdit ) PLG_itemSaved((int) $cid,'comment');
-        $safecid = (int) $cid;
-        $safeuid = (int) $uid;
-        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
+        $silentEdit = false;
+        if ( isset($_POST['silent_edit']) && SEC_hasRights('comment.moderate') ) {
+            $silentEdit = true;
+        }
+
+        if ( !$moderatorEdit && $silentEdit == false ) {
+            PLG_itemSaved((int) $cid,'comment');
+            $safecid = (int) $cid;
+            $safeuid = (int) $uid;
+            DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
+        }
     } else {
         COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
@@ -531,7 +553,10 @@ if ( isset($_POST['cancel'] ) ) {
     $postmode = COM_applyFilter($_POST['postmode']);
     $title   = strip_tags ($_POST['title']);
     $mode    = COM_applyFilter($_POST['mode']);
-    $modedit = COM_applyFilter($_POST['modedit']);
+
+
+    $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
+    $adminedit = isset($_POST['adminedit']) ? COM_applyFilter($_POST['adminedit']) : '';
 
     $moderatorEdit = false;
     if ( $modedit == 'x' ) {
@@ -546,6 +571,8 @@ if ( isset($_POST['cancel'] ) ) {
 
     if ( $moderatorEdit ) {
         $previewType = 'preview_edit_mod';
+    } elseif ( $adminedit  == 'x' && SEC_hasRights('comment.moderate')) {
+        $previewType = 'preview_edit_admin';
     } elseif ( $mode == 'edit' ) {
         $previewType = 'preview_edit';
     } elseif ($mode == 'new' ) {
@@ -553,7 +580,6 @@ if ( isset($_POST['cancel'] ) ) {
     } else {
         $previewType = 'preview_new';
     }
-
     if ( $moderatorEdit ) {
         $pageBody .= CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
     } else {
@@ -657,6 +683,15 @@ if ( isset($_POST['cancel'] ) ) {
         case 'modedit' :
             if (SEC_checkToken()) {
                 $pageBody .= handleEdit(true);
+            } else {
+                echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+                exit;
+            }
+            break;
+
+        case 'adminedit' :
+            if (SEC_checkToken()) {
+                $pageBody .= handleEdit(false,true);
             } else {
                 echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
                 exit;
