@@ -219,9 +219,13 @@
   							</div>
 {!endif}
 								<h4 class="uk-margin-bottom-remove uk-margin-small-top">
+{!if profilelink}
 									<a href="{profilelink}" class="authorname">
+{!endif}
 										<b>{user_name}</b>
+{!if profilelink}
 									</a>
+{!endif}
 								</h4>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
