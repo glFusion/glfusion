@@ -389,6 +389,15 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $disable_urlparse_val = '';
     }
 
+    if ( !COM_isAnonUser() ) {
+        if ( isset($FF_userprefs['use_wysiwyg_editor'])) {
+            if ( $FF_userprefs['use_wysiwyg_editor'] == 0 ) {
+                $_FF_CONF['post_htmlmode'] = 0;
+                $_FF_CONF['allow_html'] = 0;
+            }
+        }
+    }
+
     // check postmode
     if ( isset($postData['postmode']) ) {  // this means we are editing or previewing (or both)
         if ( isset($postData['postmode_switch']) ) { // means they selected a switch
