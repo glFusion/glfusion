@@ -2477,7 +2477,7 @@ function plugin_moderationapprove_comment($id)
     CACHE_remove_instance('menu');
     CACHE_remove_instance('whatsnew');
     if ( $type == 'article' ) {
-        CACHE_remove_instance('story__'.$sid);
+        CACHE_remove_instance('story_'.$sid);
     }
     PLG_itemSaved($cid, 'comment');     // let others know we saved a comment to the prod table
 
