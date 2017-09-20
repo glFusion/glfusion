@@ -133,16 +133,17 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
                     $body = nl2br( $body );
                 }
                 $body = str_replace('<!-- comment -->', '', $body);
+                $author = ($row['uid'] == 1 ? $row['name'] : COM_getDisplayName( $row['uid'] ));
 
                 switch ( (int) $S['content_length'] ) {
                     case 0 :
                         $body = '';
                         break;
                     case 1 :
-                        $body = $body;
+                        $body = trim($body).'<br><br>'.$author;
                         break;
                     default :
-                        $body = SYND_truncateSummary( $body, $S['content_length'] );
+                        $body = trim(SYND_truncateSummary( $body, $S['content_length'] ));
                         break;
                 }
 
@@ -151,7 +152,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
                                     'summary' => $body,
                                     'link'    => $url . '#cid_'.$row['cid'],
                                     'uid'     => $row['uid'],
-                                    'author'  => ($row['uid'] == 1 ? $row['name'] : COM_getDisplayName( $row['uid'] )),
+                                    'author'  => $author,
                                     'date'    => $row['date'],
                                     'format'  => 'html'
                                   );
