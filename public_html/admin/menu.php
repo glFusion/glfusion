@@ -212,6 +212,8 @@ function MB_saveCloneMenu( ) {
         $root       = SEC_inGroup('Root');
         $groups     = $_GROUPS;
 
+        $menuClass = menu::getInstance($menu_id);
+
         $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int)$menu;
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
