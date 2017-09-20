@@ -42,7 +42,7 @@
 				</div>
 {!endif}
 {!endif}
-				<textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
+				<textarea class="required" id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
 				<input type="hidden" name="postmode" value="{postmode}" >
 
 			</div>
@@ -85,14 +85,20 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label"></label>
 		<div class="uk-form-controls">
-			<button class="uk-button uk-button-primary" type="submit" name="preview" value="{lang_preview}">{lang_preview}</button>
+			<button class="uk-button uk-button-primary cancel" type="submit" name="preview" value="{lang_preview}">{lang_preview}</button>
 {!if save_type}
 			<button class="uk-button uk-button-success" type="submit" name="{save_type}" value="{lang_save}">{lang_save}</button>
 {!endif}
-			<button class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG32[24]}" >{$LANG32[24]}</button>
+			<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG32[24]}" >{$LANG32[24]}</button>
 		</div>
 	</div>
 </form>
 
 {end_block}
+<script>
+	$("#commentform").validate({
+		errorElement: "div",
+		errorClass: "uk-text-danger uk-text-bold"
+	});
+</script>
 {# end {templatelocation} #}
