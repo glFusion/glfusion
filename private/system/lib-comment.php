@@ -1070,24 +1070,28 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         case 'modedit' :
             if ( SEC_hasRights('comment.moderate')) {
                 $moderatorEdit = true;
+                $_CONF['skip_preview'] = 1;
             }
             $mode = 'edit';
             break;
         case 'preview_edit_mod' :
             if ( SEC_hasRights('comment.moderate')) {
                 $moderatorEdit = true;
+                $_CONF['skip_preview'] = 1;
             }
             $mode = 'preview_edit';
             break;
         case 'adminedit' :
             if ( SEC_hasRights('comment.moderate')) {
                 $adminEdit = true;
+                $_CONF['skip_preview'] = 1;
             }
             $mode = 'edit';
             break;
         case 'preview_edit_admin' :
             if ( SEC_hasRights('comment.moderate')) {
                 $adminEdit = true;
+                $_CONF['skip_preview'] = 1;
             }
             $mode = 'preview_edit';
             break;
