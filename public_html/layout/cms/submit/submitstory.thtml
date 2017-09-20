@@ -23,7 +23,7 @@
 				<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="title" type="text" name="title" value="{story_title}">
 			</div>
 			<div class="uk-width-medium-1-3">
-				<strong>{lang_topic}</strong>&nbsp;
+				<strong>{lang_topic}</strong><br>
 				<select name="tid">
 					{story_topic_options}
 				</select>
