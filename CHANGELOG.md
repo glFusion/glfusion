@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - CAPTCHA - increase the number pool for the math captcha
   - Updated comment syndication feed to pull all comments instead of just articles
   - Allow non-logged-in users to specify a 'username' when submitting a comment
   - Allow silent edit for comment moderators / admins when editing a copy - prevents the 'Edited by' line from displaying
