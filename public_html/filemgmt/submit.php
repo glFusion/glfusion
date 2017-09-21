@@ -409,6 +409,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $newid = DB_insertID();
             DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
             if ($directUploadAccess) {
+				PLG_itemSaved($newid,'filemgmt');
                 CACHE_remove_instance('whatsnew');
                 redirect_header("index.php",2,_MD_FILEAPPROVED);
             } else {
