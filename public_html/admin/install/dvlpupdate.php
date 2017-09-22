@@ -1657,31 +1657,36 @@ function glfusion_170()
     $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD COLUMN `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
 
 
-    $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
-    $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
-    $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.submit', 'Comments bypass submission queue', 1)";
+    $cmt_updates = DB_getItem($_TABLES['features'],'ft_id', 'ft_name = "comment.moderate"');
 
+    if ( $cmt_updates == '' || (int) $cmt_updates == 0 ) {
+        $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
+        $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
+        $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.submit', 'Comments bypass submission queue', 1)";
+    }
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
 
-    // comment groups and permissions
-    $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
-    $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
-    $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
+    if ( $cmt_updates == '' || (int) $cmt_updates == 0 ) {
+        // comment groups and permissions
+        $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
+        $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
+        $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
 
-    if ( DB_count($_TABLES['access'],array('acc_ft_id','acc_grp_id'),array($cmt_mod_id,$cmt_admin)) == 0 ) {
-        // ties comment.moderate feature to Comment Admin group
-        if (($cmt_mod_id > 0) && ($cmt_admin > 0)) {
-            DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_mod_id, $cmt_admin)");
-        }
-        // adds comment.submit feature to comment admin group
-        if (($cmt_sub_id > 0) && ($cmt_admin > 0)) {
-            DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_sub_id, $cmt_admin)");
-        }
-        // adds comment admin group to Root group
-        if ($cmt_admin > 0) {
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
+        if ( DB_count($_TABLES['access'],array('acc_ft_id','acc_grp_id'),array($cmt_mod_id,$cmt_admin)) == 0 ) {
+            // ties comment.moderate feature to Comment Admin group
+            if (($cmt_mod_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_mod_id, $cmt_admin)");
+            }
+            // adds comment.submit feature to comment admin group
+            if (($cmt_sub_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_sub_id, $cmt_admin)");
+            }
+            // adds comment admin group to Root group
+            if ($cmt_admin > 0) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
+            }
         }
     }
 
