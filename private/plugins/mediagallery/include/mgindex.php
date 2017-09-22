@@ -436,7 +436,7 @@ function MG_index() {
 
                     if ( $_MG_CONF['subalbum_select'] == 1 ) {
                         $subAlbumDisplay .= '</select>';
-                        $subAlbumDisplay .= '&nbsp;<button class="uk-button uk-button-small" type="submit" value="' . $LANG_MG03['go'] . '" />'.$LANG_MG03['go'].'</button>';
+//                        $subAlbumDisplay .= '&nbsp;<button class="uk-button uk-button-small" type="submit" value="' . $LANG_MG03['go'] . '" />'.$LANG_MG03['go'].'</button>';
                         $subAlbumDisplay .= '<input type="hidden" name="page" value="1"/>';
                         $subAlbumDisplay .= '</form>';
                     }
