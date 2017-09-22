@@ -1008,6 +1008,8 @@ class config
             }
         }
 
+        $this->_purgeCache();
+
         return $success_array;
     }
 
