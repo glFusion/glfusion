@@ -671,7 +671,7 @@ $_SQL['config_data']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `confi
 ('rss_anonymous_only', '1'),
 ('rss_feed_name', 'mgmedia'),
 ('postcard_retention', '7'),
-('subalbum_select', '0'),
+('subalbum_select', '1'),
 ('member_albums', '0'),
 ('member_quota', '0'),
 ('member_auto_create', '0'),
