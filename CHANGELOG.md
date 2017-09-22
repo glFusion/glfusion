@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - New [iteminfo:] auto tag
   - CAPTCHA - increase the number pool for the math captcha
   - Updated comment syndication feed to pull all comments instead of just articles
   - Allow non-logged-in users to specify a 'username' when submitting a comment
