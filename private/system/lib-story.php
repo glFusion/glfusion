@@ -182,10 +182,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
         $article->set_var( 'story_introtext_only', $introtext,false,true );
         $article->set_var( 'story_bodytext_only', $bodytext,false,true );
-
-
-
-
     } else {
         $article->set_var( 'story_introtext', $introtext,false,true );
         $article->set_var( 'story_text_no_br', $introtext,false,true );
@@ -245,6 +241,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                $topicimage_noalign, false,true );
         }
     }
+
+    PLG_templateSetVars($article_filevar,$article);
 
     $hash = CACHE_security_hash();
     $instance_id = 'story_'.$story->getSid().'_'.$index.'_'.$article_filevar.'_'.$hash.'_'.$_USER['theme'];
@@ -674,7 +672,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     }
-    PLG_templateSetVars($article_filevar,$article);
+
     $article->parse('finalstory',$article_filevar);
     SESS_clearContext();
     return $article->finish( $article->get_var( 'finalstory' ));
