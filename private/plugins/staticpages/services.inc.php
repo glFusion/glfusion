@@ -56,6 +56,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
            $LANG_LOGIN, $_GROUPS, $_SP_CONF;
 
     $output = '';
+    $svc_msg = array();
 
     if (!SEC_hasRights('staticpages.edit')) {
         $output  = COM_siteHeader('menu', $LANG_STATIC['access_denied']);
