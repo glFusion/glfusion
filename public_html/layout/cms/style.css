@@ -2605,3 +2605,7 @@ span.highlight {
 	top: -70px;
 	left: 16px;
 }
+
+.optiongroup {
+    font-weight: bold;
+}
