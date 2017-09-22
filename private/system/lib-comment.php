@@ -411,6 +411,18 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $row = 1;
 
     do {
+        if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
+            //get format mode
+            if ( preg_match( '/<.*>/', $A['comment'] ) != 0 ) {
+                $postmode = 'html';
+            } else {
+                $postmode = 'plaintext';
+            }
+        } else {
+            $postmode = $A['postmode'];
+        }
+        if ( $A['postmode'] == 'plaintext' ) $A['comment'] = nl2br($A['comment']);
+
         $template->unset_var('delete_link');
         $template->unset_var('ipaddress');
         $template->unset_var('reply_link');
@@ -554,6 +566,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'type', $A['type'] );
 
         //COMMENT edit rights
+        $edit_type = 'edit'; // normal user edit
         if ( !COM_isAnonUser() ) {
             if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
                     && ($_CONF['comment_edittime'] == 0 || ((time() - $A['nice_date']) < $_CONF['comment_edittime'] )) &&
@@ -562,6 +575,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 $edit_option = true;
             } else if (SEC_hasRights('comment.moderate') ) {
                 $edit_option = true;
+                $edit_type   = 'adminedit';
             } else {
                 $edit_option = false;
             }
@@ -571,12 +585,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         //edit link
         if ($edit_option && !$preview) {
-            if ( empty($token)) {
-                $token = SEC_createToken();
-            }
-            $editlink = $_CONF['site_url'] . '/comment.php?mode=edit&amp;cid='
+            $editlink = $_CONF['site_url'] . '/comment.php?mode='.$edit_type.'&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
-                . '&amp;' . CSRF_TOKEN . '=' . $token . '#comment_entry';
+                . '#comment_entry';
+
             $template->set_var('edit_link',$editlink);
             $template->set_var('lang_edit',$LANG01[4]);
             $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
@@ -646,7 +658,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         if (function_exists('msg_replaceEmoticons'))  {
             $A['comment'] = msg_replaceEmoticons($A['comment']);
         }
-
         $A['comment'] = $filter->displayText($A['comment']);
 
         // create a reply to link
@@ -1054,13 +1065,38 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS;
 
     $moderatorEdit = false;
-    if ($mode == 'modedit' ) {
-        $moderatorEdit = true;
-        $mode = 'edit';
-    }
-    if ( $mode == 'preview_edit_mod') {
-        $moderatorEdit = true;
-        $mode = 'preview_edit';
+    $adminEdit = false;
+    switch ( $mode ) {
+        case 'modedit' :
+            if ( SEC_hasRights('comment.moderate')) {
+                $moderatorEdit = true;
+                $_CONF['skip_preview'] = 1;
+            }
+            $mode = 'edit';
+            break;
+        case 'preview_edit_mod' :
+            if ( SEC_hasRights('comment.moderate')) {
+                $moderatorEdit = true;
+                $_CONF['skip_preview'] = 1;
+            }
+            $mode = 'preview_edit';
+            break;
+        case 'adminedit' :
+            if ( SEC_hasRights('comment.moderate')) {
+                $adminEdit = true;
+                $_CONF['skip_preview'] = 1;
+            }
+            $mode = 'edit';
+            break;
+        case 'preview_edit_admin' :
+            if ( SEC_hasRights('comment.moderate')) {
+                $adminEdit = true;
+                $_CONF['skip_preview'] = 1;
+            }
+            $mode = 'preview_edit';
+            break;
+        default :
+            break;
     }
 
     $retval = '';
@@ -1085,8 +1121,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "queued=0 AND cid = ".(int) $cid);
     }
 
-    if (COM_isAnonUser() &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
         $retval .= SEC_loginRequiredForm();
         return $retval;
     } else {
@@ -1120,9 +1155,8 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             $_POST['title']     = $title;
             $_POST['comment']   = $display_comment;
-
             // Preview mode:
-            if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($title) && !empty($comment) ) {
+            if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
                 $start->set_var( 'hide_if_preview', 'style="display:none"' );
@@ -1144,16 +1178,21 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
                 //correct time and username for edit preview
                 if ($mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') {
-                    $A['nice_date'] = DB_getItem ($_TABLES['comments'],
-                                        'UNIX_TIMESTAMP(date)', "cid = ".(int) $cid);
-                    if ($_USER['uid'] != $commentuid) {
-                        $A['username'] = DB_getItem ($_TABLES['users'],
-                                              'username', "uid = ".(int) $commentuid);
+                    $A['nice_date'] = DB_getItem ($_TABLES['comments'],'UNIX_TIMESTAMP(date)', "cid = ".(int) $cid);
+
+                    // not an anonymous user
+                    if ( $commentuid > 1 ) {
+                        // get username from DB - we don't allow
+                        // logged-in-users to set or change their name
+                        $A['username'] = DB_getItem ($_TABLES['users'],'username', "uid = ".(int) $commentuid);
+                    } else {
+                        // we have an anonymous user - so $_POST['username'] should be set
+                        // already from above
                     }
+
                 }
                 if (empty ($A['username'])) {
-                    $A['username'] = DB_getItem ($_TABLES['users'], 'username',
-                                                 "uid = ".(int) $uid);
+                    $A['username'] = DB_getItem ($_TABLES['users'], 'username',"uid = ".(int) $commentuid);
                 }
 
                 $author_id = PLG_getItemInfo($type, $sid, 'author');
@@ -1202,15 +1241,37 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
           	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
           	$comment_template->set_var('token_name', CSRF_TOKEN);
-            if (! COM_isAnonUser()) {
-                $comment_template->set_var('uid', $_USER['uid']);
-                $name = COM_getDisplayName($_USER['uid'], $_USER['username'],$_USER['fullname']);
-                $comment_template->set_var('username', $name);
-                $comment_template->set_var('action_url',$_CONF['site_url'] . '/users.php?mode=logout');
-                $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[03]);
-                $comment_template->set_var('username_disabled','disabled="disabled"');
 
-                if ( !$moderatorEdit ) {
+            if (! COM_isAnonUser()) {
+                if ( $moderatorEdit == true || $adminEdit == true ) {
+                    // we know we are editing
+                    $comment_template->set_var('uid',$commentuid);
+
+                    if  ( isset($A['username'])) {
+                        $username = $A['username'];
+                    } else {
+                        $username = DB_getItem($_TABLES['comments'],'name','cid='.(int) $cid);
+                    }
+                    if ( empty($username)) {
+                        $username = $LANG03[24]; //anonymous user
+                    }
+
+                    $comment_template->set_var('username',$username);
+                    if ( $commentuid > 1 ) {
+                        $comment_template->set_var('username_disabled','disabled="disabled"');
+                    } else {
+                        $comment_template->unset_var('username_disabled');
+                    }
+                } else {
+                    $comment_template->set_var('uid', $_USER['uid']);
+                    $name = COM_getDisplayName($_USER['uid'], $_USER['username'],$_USER['fullname']);
+                    $comment_template->set_var('username', $name);
+                    $comment_template->set_var('action_url',$_CONF['site_url'] . '/users.php?mode=logout');
+                    $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[03]);
+                    $comment_template->set_var('username_disabled','disabled="disabled"');
+                }
+
+                if ( !$moderatorEdit && !$adminEdit) {
                     $comment_template->set_var('suballowed',true);
                     $isSub = 0;
                     if ( $mode == 'preview_edit' || $mode == 'preview_new' ) {
@@ -1228,8 +1289,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             } else {
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
-                if ( isset($_POST['username']) ) {
-                    $name = $filter->sanitizeUsername(COM_applyFilter($_POST['username'])); //for preview
+
+                if ( isset($A['username'])) {
+                    $name = $A['username'];
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1239,7 +1301,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
                 $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[04]);
-                $comment_template->set_var('username_disabled','');
+                $comment_template->unset_var('username_disabled');
             }
 
             if ( $postmode == 'html' ) {
@@ -1293,7 +1355,14 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
 
             if ( $moderatorEdit == true ) {
+                $comment_template->set_var('modedit_mode','modedit');
                 $comment_template->set_var('modedit','x');
+            }
+            if ( $adminEdit == true ) {
+                $comment_template->set_var('modedit_mode','adminedit');
+                $comment_template->set_var('modedit','x');
+                $comment_template->set_var('silent_edit',true);
+                $comment_template->set_var('lang_silent_edit', $LANG03[57]);
             }
 
             $comment_template->set_var('end_block', COM_endBlock());
@@ -1332,7 +1401,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     }
 
     // Sanity check
-    if (empty ($sid) || empty ($title) || empty ($comment) || empty ($type) ) {
+    if (empty ($sid) || empty ($comment) || empty ($type) ) {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with one or more missing values.');
        if ( SESS_isSet('glfusion.commentpresave.error') ) {
@@ -1346,8 +1415,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     }
 
     // Check that anonymous comments are allowed
-    if (($uid == 1) && (($_CONF['loginrequired'] == 1)
-            || ($_CONF['commentsloginrequired'] == 1))) {
+    if (($uid == 1) && (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
         COM_errorLog("CMT_saveComment: IP address {$_SERVER['REMOTE_ADDR']} "
                    . 'attempted to save a comment with anonymous comments disabled for site.');
         return $ret = 2;
@@ -1388,7 +1456,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $pid = 0;
     }
 
-    if (!empty ($title) && !empty ($comment)) {
+    if ( !empty ($comment) ) {
         $filter = sanitizer::getInstance();
         COM_updateSpeedlimit ('comment');
 
@@ -1417,8 +1485,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND lft >= $rht");
                 DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
                        . "WHERE sid = '".DB_escapeString($sid)."' AND type = '$type' AND rht >= $rht");
-                DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                        "'".DB_escapeString($sid)."',$uid,'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht,$rht+1,$indent+1,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+                DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
+                        "'".DB_escapeString($sid)."',$uid,'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,'".DB_escapeString($postmode)."',$rht,$rht+1,$indent+1,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
             } else { //replying to non-existent comment or comment in wrong article
                 COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
@@ -1429,22 +1497,22 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             if ( DB_error() ) {
                 $rht = 0;
             }
-            DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,lft,rht,indent,type,ipaddress',
-                    "'".DB_escapeString($sid)."',".(int) $uid.",'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,$rht+1,$rht+2,0,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+            DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
+                    "'".DB_escapeString($sid)."',".(int) $uid.",'".DB_escapeString($comment)."',now(),'".DB_escapeString($title)."',".(int) $pid.",$queued,'".DB_escapeString($postmode)."',$rht+1,$rht+2,0,'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
         }
         $cid = DB_insertId();
         //set Anonymous user name if present
         if (isset($_POST['username']) ) {
-            $name = strip_tags(USER_sanitizeName ($_POST['username']));
+            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
             DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',(int) $cid);
         }
         DB_unlockTable ($_TABLES['comments']);
 
-        CACHE_remove_instance('whatsnew');
-        if ($type == 'article') {
-            CACHE_remove_instance('story_'.$sid);
-        }
         if ( $queued == 0 ) {
+            CACHE_remove_instance('whatsnew');
+            if ($type == 'article') {
+                CACHE_remove_instance('story_'.$sid);
+            }
             PLG_itemSaved($cid, 'comment');
         } else {
             CACHE_remove_instance('menu');
@@ -1503,7 +1571,13 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
     }
     $comment = str_replace('&nbsp;',' ', $comment);
 
-    $author = COM_getDisplayName ($uid);
+// need to handle anonymous names here
+    if ( $uid > 1 ) {
+        $author = COM_getDisplayName ($uid);
+    } else {
+        $author = DB_getItem($_TABLES['comments'],'name','cid='.(int) $cid);
+        if ( empty($author) ) $author = $LANG03[24];
+    }
     if (($uid <= 1) && !empty ($ipaddress)) {
         // add IP address for anonymous posters
         $author .= ' (' . $ipaddress . ')';
@@ -1806,8 +1880,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     $filter->setAllowedElements($AllowedElements);
     $comment = $filter->filterData($comment);  // does not censor...
     $comment = $filter->censor($comment);
-// see if we can force html mode...
-    if ( $postmode == 'html' ) { $comment = '<!-- comment -->' . $comment; }
+
     if (COM_isAnonUser()) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
@@ -1825,7 +1898,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
             if ( $postmode == 'html') {
                 $comment .= nl2br(LB . '---' . LB . $sig);
             } else {
-                $comment .=  nl2br(LB . '---' . LB . $sig);
+                $comment .=  LB . '---' . LB . $sig;
             }
         $comment .= '</div><!-- /COMMENTSIG -->';
         }
@@ -1862,9 +1935,6 @@ function CMT_preview( $data )
     //correct time and username for edit preview
     if ($mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') {
         $A['nice_date'] = DB_getItem ($_TABLES['comments'],'UNIX_TIMESTAMP(date)', "cid = ".(int) $data['cid']);
-        if ($_USER['uid'] != $data['uid']) {
-            $A['username'] = DB_getItem ($_TABLES['users'],'username', "uid = ".(int) $data['uid']);
-        }
     }
     if (empty ($A['username'])) {
         $A['username'] = DB_getItem ($_TABLES['users'], 'username',"uid = ".(int) $data['uid']);
@@ -1914,7 +1984,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
             $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'),'',1,'error');
             SESS_unSet('glfusion.commentpresave.error');
         } else {
-            if ( empty($title) || empty($comment) ) {
+            if ( empty($comment) ) {
                 $msg = COM_showMessageText($LANG03[12],'',1,'error');
             }
         }
@@ -2055,7 +2125,7 @@ function plugin_getcommenturlid_article( )
 */
 function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG03;
 
     $buildingSearchIndex = false;
 
@@ -2094,6 +2164,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                 break;
             case 'author_name' :
                 $fields[] = 'uid';
+                $fields[] = 'name';
                 break;
             default:
                 break;
@@ -2180,7 +2251,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                     $url = PLG_getCommentUrlId($A['type']);
                     $sep = strpos($url[0], '?') ? '&' : '?';
                     $finalurl = $url[0] . $sep . $url[1].'='.$A['sid'];
-                    $props['url'] = $finalurl;
+                    $props['url'] = $finalurl.'#cid_'.$A['cid'];
                     break;
                 case 'label':
                     $props['label'] = 'Comments';
@@ -2192,7 +2263,16 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                     $props['author'] = $A['uid'];
                     break;
                 case 'author_name' :
-                    $props['author_name'] = COM_getDisplayName($A['uid']);
+                    if ( $A['uid'] == 1 ) {
+                        // anonymous user
+                        if ( $A['name'] != NULL && $A['name'] != '' ) {
+                            $props['author_name'] = $A['name'];
+                        } else {
+                            $props['author_name'] = $LANG03[24];
+                        }
+                    } else {
+                        $props['author_name'] = COM_getDisplayName($A['uid']);
+                    }
                     break;
                 case 'hits' :
                     $props['hits'] = 0;
@@ -2294,7 +2374,7 @@ function plugin_itemlist_comment($token)
         $uid = $_USER['uid'];
     }
 
-    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['comments']} WHERE queued = 1 ORDER BY date DESC";
+    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day, name AS username FROM {$_TABLES['comments']} WHERE queued = 1 ORDER BY date DESC";
 
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
@@ -2308,6 +2388,7 @@ function plugin_itemlist_comment($token)
         $A['_type_']    = 'comment';
         $A['_key_']     = 'cid';        // name of key/id field
         $A['preview']   = CMT_preview($A); // format a comment for preview.
+        $A['username']  = $A['name'];
         $data_arr[$i]   = $A;           // push row data into array
     }
 
@@ -2356,7 +2437,7 @@ function plugin_itemlist_comment($token)
             . '<input type="hidden" name="moderation" value="x"/>' . LB
             . '<input type="hidden" name="count" value="' . $nrows . '"/>';
 
-    $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
+    $retval .= ADMIN_simpleList('CMT_getListField', $header_arr,
                               $text_arr, $data_arr, $options, $form_arr, $token);
     return $retval;
 }
@@ -2396,7 +2477,7 @@ function plugin_moderationapprove_comment($id)
     CACHE_remove_instance('menu');
     CACHE_remove_instance('whatsnew');
     if ( $type == 'article' ) {
-        CACHE_remove_instance('story__'.$sid);
+        CACHE_remove_instance('story_'.$sid);
     }
     PLG_itemSaved($cid, 'comment');     // let others know we saved a comment to the prod table
 
@@ -2440,6 +2521,126 @@ function plugin_submissioncount_comment()
     $retval = 0;
 
     $retval = DB_count ($_TABLES['comments'],'queued',1);
+
+    return $retval;
+}
+
+function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN,$LANG03, $LANG28, $LANG29, $_IMAGE_TYPE;
+
+    $retval = '';
+
+    $type = '';
+    if (isset($A['_type_']) && !empty($A['_type_'])) {
+        $type = $A['_type_'];
+    } else {
+        return $retval; // we can't work without an item type
+    }
+
+    $dt = new Date('now',$_USER['tzid']);
+
+    $field = $fieldname;
+    $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
+    $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
+    $field = ($type == 'story' && $fieldname == 3) ? 'tid' : $field;
+    $field = ($type == 'user' && $fieldname == 3) ? 'email' : $field;
+    $field = ($type <> 'user' && $fieldname == 4) ? 'uid' : $field;
+    $field = ($type == 'user' && $fieldname == 4) ? 'day' : $field;
+
+    switch ($field) {
+
+        case 'edit':
+            $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+            break;
+
+        case 'user':
+            $retval =  '<img src="' . $_CONF['layout_url']
+            . '/images/admin/user.' . $_IMAGE_TYPE
+            . '" style="vertical-align:bottom;"/>&nbsp;' . $fieldvalue;
+            break;
+
+        case 'day':
+            $dt->setTimeStamp($A['day']);
+            $retval = $dt->format($_CONF['daytime'],true);
+            break;
+
+        case 'tid':
+            $retval = DB_getItem($_TABLES['topics'], 'topic',
+                                 "tid = '".DB_escapeString($A['tid'])."'");
+            break;
+
+        case 'uid':
+            if ( !isset($A['uid']) ) {
+                $A['uid'] = 1;
+            }
+            if ( $A['uid'] == 1 ) {
+
+                if ( empty($A['name']) ) $A['name'] = $LANG03[24];
+
+                $retval = $icon_arr['greyuser']
+                            . '&nbsp;&nbsp;'
+                            . '<span style="vertical-align:top">' . $A['name'] . '</span>';
+            } else {
+                // lookup the username from the uid
+                $username = DB_getItem($_TABLES['users'], 'username',"uid = ". (int) $A['uid']);
+
+                $attr['title'] = $LANG28[108];
+                $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
+                $retval = COM_createLink($icon_arr['user'], $url, $attr);
+                $retval .= '&nbsp;&nbsp;';
+                $attr['style'] = 'vertical-align:top;';
+                $retval .= COM_createLink($username, $url, $attr);
+            }
+            break;
+
+        case 'email':
+            $url = 'mailto:' . $fieldvalue;
+            $attr['title'] = $LANG28[111];
+            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
+            $retval .= '&nbsp;&nbsp;';
+            $attr['title'] = $LANG28[99];
+            $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
+            $attr['style'] = 'vertical-align:top;';
+            $retval .= COM_createLink($fieldvalue, $url, $attr);
+            break;
+
+        case 'approve':
+            $retval = '';
+            $attr['title'] = $LANG29[1];
+            $attr['onclick'] = 'return confirm(\'' . $LANG29[48] . '\');';
+            $retval .= COM_createLink($icon_arr['accept'],
+                $_CONF['site_admin_url'] . '/moderation.php'
+                . '?approve=x'
+                . '&amp;type=' . $A['_type_']
+                . '&amp;id=' . $A[0]
+                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        case 'delete':
+            $retval = '';
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return confirm(\'' . $LANG29[49] . '\');';
+            $retval .= COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/moderation.php'
+                . '?delete=x'
+                . '&amp;type=' . $A['_type_']
+                . '&amp;id=' . $A[0]
+                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            break;
+
+        case 'preview' :
+            $retval = '
+                <a href="#cmtpreview'.$A['cid'].'" rel="modal:open">'.$LANG_ADMIN['preview'].'</a>
+                <div id="cmtpreview'.$A['cid'].'" style="display:none;">
+                '.$fieldvalue.'
+                </div>';
+            break;
+
+        default:
+            $retval = COM_makeClickableLinks($fieldvalue);
+            break;
+    }
 
     return $retval;
 }

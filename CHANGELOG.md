@@ -1,4 +1,10 @@
 ## v1.7.0 (unreleased)
+  - New [iteminfo:] auto tag
+  - CAPTCHA - increase the number pool for the math captcha
+  - Updated comment syndication feed to pull all comments instead of just articles
+  - Allow non-logged-in users to specify a 'username' when submitting a comment
+  - Allow silent edit for comment moderators / admins when editing a copy - prevents the 'Edited by' line from displaying
+  - Forum Plugin - Improvements on how anonymous (non-logged-in) info displays in topics
   - New story attribute - on front page until - YYYY.MM.DD
   - New pop-up date / time picker for date / time fields
   - Block header templates - all updated to include block id if present

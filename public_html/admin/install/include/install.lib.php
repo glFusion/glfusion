@@ -1476,6 +1476,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             // comment submission support
             $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
 
             $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
             $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
@@ -1484,6 +1485,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+
+            DB_query("INSERT INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');",1);
+
             $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
             $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
             $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
@@ -1514,6 +1518,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('path_pear','Core');
             $c->del('have_pear','Core');
             $c->del('fs_pear','Core');
+
+            // clear out syndication updates for comments
+            DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
 
             $current_fusion_version = '1.7.0';
 

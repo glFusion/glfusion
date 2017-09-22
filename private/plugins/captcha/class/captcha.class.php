@@ -186,7 +186,7 @@ class captcha {
             }
         } else if ( $this->driver == 6 ) {
             $operator_pool = array('+','-');
-            $first_number_pool = array(30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15);
+            $first_number_pool = array(40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15);
             $second_number_pool = array(1,2,3,4,5,6,8,9,10,11,12,13,14,15);
             $this->operator = $operator_pool[mt_rand(0,count($operator_pool) - 1)];
             $this->first = $first_number_pool[mt_rand(0, count($first_number_pool) - 1)];

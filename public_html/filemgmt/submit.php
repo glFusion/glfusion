@@ -341,58 +341,61 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $AddNewFile = true;
             }
         }
+
         // Upload New file snapshot image  - but only is file was uploaded ok
         $uploadfilename = DB_escapeString($_FILES['newfileshot']['name']);
-        $tmpshotname = randomfilename();
-        $tmp = $_FILES['newfileshot']['tmp_name'];    // temporary name of file in temporary directory on server
-        $pos = strrpos($uploadfilename,'.') + 1;
-        $fileExtension = strtolower(substr($uploadfilename, $pos));
-        if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
-            if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                COM_errorLOG("AddNewFile - New Upload file snapshot is rejected by config rule:$uploadfilename");
-                $eh->show("1109");
+        if ( $uploadfilename != '' ) {
+            $tmpshotname = randomfilename();
+            $tmp = $_FILES['newfileshot']['tmp_name'];    // temporary name of file in temporary directory on server
+            $pos = strrpos($uploadfilename,'.') + 1;
+            $fileExtension = strtolower(substr($uploadfilename, $pos));
+            if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
+                if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
+                    COM_errorLOG("AddNewFile - New Upload file snapshot is rejected by config rule:$uploadfilename");
+                    $eh->show("1109");
+                } else {
+                    $fileExtension = $_FMDOWNLOAD[$fileExtension];
+                    $tmpshotname = $tmpshotname . ".$fileExtension";
+                    // Need to also rename the uploaded filename or URL that will be used for the approval name
+                    // Grab the filename without extension and add the mapped extension
+                    $pos = strrpos($logourl,'.') + 1;
+                    $logourl = strtolower(substr($logourl, 0,$pos)) . $fileExtension;
+                }
             } else {
-                $fileExtension = $_FMDOWNLOAD[$fileExtension];
                 $tmpshotname = $tmpshotname . ".$fileExtension";
-                // Need to also rename the uploaded filename or URL that will be used for the approval name
-                // Grab the filename without extension and add the mapped extension
-                $pos = strrpos($logourl,'.') + 1;
-                $logourl = strtolower(substr($logourl, 0,$pos)) . $fileExtension;
+                $logourl = rawurlencode(DB_escapeString($tmpshotname));
             }
-        } else {
-            $tmpshotname = $tmpshotname . ".$fileExtension";
-            $logourl = rawurlencode(DB_escapeString($tmpshotname));
-        }
-        if ( $uploadfilename != '' AND $AddNewFile ) {
-            $upload = new upload();
-            $upload->setFieldName('newfileshot');
-            $upload->setFileNames($tmpshotname);
-            $upload->setPath($filemgmt_SnapStore);
-            $upload->setAllowAnyMimeType(false);
-            $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
-                                                 'image/jpeg'  => '.jpg,.jpeg',
-                                                 'image/pjpeg' => '.jpg,.jpeg',
-                                                 'image/x-png' => '.png',
-                                                 'image/png'   => '.png'
-                                         )      );
-            $upload->setAutomaticResize (true);
-            if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
-                $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
-                $upload->setDebug (true);
-            }
-            $upload->setMaxDimensions (640,480);
-            $upload->setAutomaticResize (true);
-            $upload->setMaxFileSize(100000000);
-            $upload->uploadFiles();
-            if ($upload->areErrors()) {
-                $errmsg = "Upload Error: " . $upload->printErrors(false);
-                COM_errorLog($errmsg);
-                $AddNewFile = false;    // Set false again - in case it was set true above for actual file
-                $eh->show("1102");
-            } else {
-                $AddNewFile = true;
+            if ( $uploadfilename != '' AND $AddNewFile ) {
+                $upload = new upload();
+                $upload->setFieldName('newfileshot');
+                $upload->setFileNames($tmpshotname);
+                $upload->setPath($filemgmt_SnapStore);
+                $upload->setAllowAnyMimeType(false);
+                $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                                     'image/jpeg'  => '.jpg,.jpeg',
+                                                     'image/pjpeg' => '.jpg,.jpeg',
+                                                     'image/x-png' => '.png',
+                                                     'image/png'   => '.png'
+                                             )      );
+                $upload->setAutomaticResize (true);
+                if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
+                    $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+                    $upload->setDebug (true);
+                }
+                $upload->setMaxDimensions (640,480);
+                $upload->setAutomaticResize (true);
+                $upload->setMaxFileSize(100000000);
+                $upload->uploadFiles();
+                if ($upload->areErrors()) {
+                    $errmsg = "Upload Error: " . $upload->printErrors(false);
+                    COM_errorLog($errmsg);
+                    $logourl = '';
+                    $AddNewFile = false;    // Set false again - in case it was set true above for actual file
+                    $eh->show("1102");
+                }
             }
         }
+
         if ($AddNewFile){
             if ($directUploadAccess) {
                 $status = 1;
@@ -406,6 +409,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $newid = DB_insertID();
             DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
             if ($directUploadAccess) {
+				PLG_itemSaved($newid,'filemgmt');
                 CACHE_remove_instance('whatsnew');
                 redirect_header("index.php",2,_MD_FILEAPPROVED);
             } else {

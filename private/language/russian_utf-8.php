@@ -276,7 +276,8 @@ $LANG03 = array(
     53 => 'A new comment has been submitted for review.',
     54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
     55 => 'A New Comment has been Submitted',
-    56 => 'Comment has been approved and is now visible.'
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
