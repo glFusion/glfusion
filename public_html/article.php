@@ -148,8 +148,8 @@ if ($A['count'] > 0) {
         $story_template->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
 
         $topic_name = DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($story->DisplayElements('tid'))."'");
-        $T->set_var('breadcrumbs',true);
-        $T->set_var('topic_name',$topic_name);
+        $story_template->set_var('breadcrumbs',true);
+        $story_template->set_var('topic_name',$topic_name);
 
         $story_image = $story->DisplayElements('story_image');
         if ( $story_image != '' ) {
