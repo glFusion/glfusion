@@ -933,6 +933,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Bestandsrechten',
     'max_uploadimage_width' => 'Max Afbeeldingsbreedte (px)',
     'max_uploadimage_height' => 'Max Afbeeldingshoogte (px)',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Inline Image Width (px)',
     'inlineimage_height' => 'Inline Image Height (px)',
     'allowablefiletypes' => 'Bestandstypen die kunnen worden toegstaan',

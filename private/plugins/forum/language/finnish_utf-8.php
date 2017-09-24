@@ -933,6 +933,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Tiedosto Oikeudet',
     'max_uploadimage_width' => 'Max Kuva Leveys (px)',
     'max_uploadimage_height' => 'Max Kuva Korkeus (px)',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Inline Kuva Leveys (px)',
     'inlineimage_height' => 'Inline Kuva Korkeus (px)',
     'allowablefiletypes' => 'Sallitut Tiedosto Tyypit',
