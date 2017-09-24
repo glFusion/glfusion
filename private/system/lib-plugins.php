@@ -3715,7 +3715,7 @@ function PLG_outputFilter($output, $templatename='')
 {
     global $_PLUGINS;
 
-    if (function_exists ('CUSTOM_templateSetVars')) {
+    if (function_exists ('CUSTOM_outputFilter')) {
         $output = CUSTOM_outputFilter($output, $templatename);
     }
 
