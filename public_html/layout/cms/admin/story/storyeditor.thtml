@@ -226,7 +226,7 @@
 									</select>
 									{frontpage_date_ampm_selection}
 									<input type="hidden" name="frontpage_date_second" value="{frontpage_date_second}" >
-									<i id="frontpage_date" value="" class="uk-icon uk-icon-calendar popupcal"></i>
+									<i id="frontpage_date" class="uk-icon uk-icon-calendar popupcal"></i>
 							</div>
 							</div>
 						</div>
