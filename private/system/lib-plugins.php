@@ -3703,4 +3703,29 @@ function PLG_registerService($service, $class )
     $_VARS['service_'.$service] = $class;
 }
 
+/**
+* This functions allows a plugin filter / modify output prior to displaying
+*
+* @param    char     $output       output to display
+* @param    char     $templatename Name of current template
+* @return   char     output to display
+*
+*/
+function PLG_outputFilter($output, $templatename='')
+{
+    global $_PLUGINS;
+
+    if (function_exists ('CUSTOM_templateSetVars')) {
+        $output = CUSTOM_outputFilter($output, $templatename);
+    }
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_outputfilter_' . $pi_name;
+        if (function_exists($function)) {
+            $output = $function ($output, $templatename);
+        }
+    }
+    return $output;
+}
+
 ?>

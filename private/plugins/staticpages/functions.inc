@@ -539,9 +539,9 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
     }
-
-    return $retval;
-}
+    $output = PLG_outputFilter($retval);
+    return $output;
+ }
 
 /**
 * Shows the statistics for the Static Pages plugin on stats.php.
