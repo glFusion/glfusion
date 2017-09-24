@@ -3707,22 +3707,22 @@ function PLG_registerService($service, $class )
 * This functions allows a plugin filter / modify output prior to displaying
 *
 * @param    char     $output       output to display
-* @param    char     $templatename Name of current template
+* @param    char     $type         content type
 * @return   char     output to display
 *
 */
-function PLG_outputFilter($output, $templatename='')
+function PLG_outputFilter($output, $type='')
 {
     global $_PLUGINS;
 
     if (function_exists ('CUSTOM_outputFilter')) {
-        $output = CUSTOM_outputFilter($output, $templatename);
+        $output = CUSTOM_outputFilter($output, $type);
     }
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_outputfilter_' . $pi_name;
         if (function_exists($function)) {
-            $output = $function ($output, $templatename);
+            $output = $function ($output, $type);
         }
     }
     return $output;

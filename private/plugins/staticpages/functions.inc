@@ -539,7 +539,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
     }
-    $output = PLG_outputFilter($retval);
+    $output = PLG_outputFilter($retval,'staticpages');
     return $output;
  }
 
