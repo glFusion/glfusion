@@ -675,7 +675,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     $article->parse('finalstory',$article_filevar);
     SESS_clearContext();
-    return $article->finish( $article->get_var( 'finalstory' ));
+    $output = $article->finish( $article->get_var( 'finalstory' ));
+    $output = PLG_outputFilter($output, 'article');
+    return $output;
 }
 
 /**

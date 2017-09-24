@@ -2,13 +2,9 @@
 $(document).ready(function(){
 	$('.popupcal').each(function(i, obj) {
 		var id = $(this).attr('id');
-		usePopupCalendar(id);
+		datetimepicker_popupcal(id);
 	});
 });
-function usePopupCalendar( selector ) {
-	$('#'+selector).on("click", function(){ datetimepicker_popupcal(selector); });
-	$('#'+selector).datetimepicker();
-}
 function selectedDate($input) {
 	var id = $input.attr('id');
 	var month = parseInt($input.val().substr(5,2),10);
@@ -43,6 +39,7 @@ function datetimepicker_popupcal( selector ) {
 	var currentDT = getCurrentDateTimeSelection( selector );
 	$('#'+selector).val( currentDT );
 	$('#'+selector).datetimepicker({
+		lazyInit: true,
 		value:currentDT,
 		format:'Y.m.d H:i',
 		onSelectDate( dp,$input ) {
