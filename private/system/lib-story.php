@@ -144,28 +144,26 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
     $article->set_var( 'iso8601_date', $story->DisplayElements('iso8601_date'), false, true );
 
-    if ( $index == 'p' || $index == 'n') {
-       $article->set_var( 'story_counter', 0 );
-    } else {
-        $storycounter++;
-        $article->set_var( 'story_counter', $storycounter, false, true );
-        $article->set_var( 'adblock',PLG_displayAdBlock('story',$storycounter), false, true);
-    }
     $topicname = $story->DisplayElements('topic');
 
     switch ($index) {
         case 'p' :
             $story_display = 'preview';
+            $article->set_var( 'story_counter', 0 );
             break;
         case 'n' :
             $story_display = 'article';
+            $article->set_var( 'story_counter', 0 );
             $article->set_var('breadcrumbs',true);
             break;
         case 'y' :
             $story_display = 'index';
-            break;
+            // fall through on purpose
         default :
             $story_display = 'index';
+            $storycounter++;
+            $article->set_var( 'story_counter', $storycounter, false, true );
+            $article->set_var( 'adblock',PLG_displayAdBlock('story',$storycounter), false, true);
             break;
     }
 
