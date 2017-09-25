@@ -19,6 +19,24 @@
 	color: #fff;
 }
 
+.tm-forum-table-centerblock {
+	*border-collapse: collapse; /* IE7 and lower */
+	border-spacing: 0;
+	table-layout:fixed !important;
+}
+
+.tm-forum-table-centerblock th:first-child {
+	border-radius: 6px 0 0 0;
+}
+
+.tm-forum-table-centerblock th:last-child {
+	border-radius: 0 6px 0 0;
+}
+
+.tm-forum-table-centerblock th:only-child{
+	border-radius: 6px 6px 0 0;
+}
+
 .tm-forum-footer { /* page footer for forum plugin */
 }
 
@@ -319,7 +337,6 @@ li.header dt, li.header dd {
 	}
 
 }
-
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
 
