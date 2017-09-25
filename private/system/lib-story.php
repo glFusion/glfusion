@@ -154,6 +154,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         case 'n' :
             $story_display = 'article';
             $article->set_var( 'story_counter', 0 );
+            $article->set_var( 'adblock',PLG_displayAdBlock('story',$storycounter), false, true);
             $article->set_var('breadcrumbs',true);
             break;
         case 'y' :
