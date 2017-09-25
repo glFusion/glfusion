@@ -66,7 +66,10 @@ function _ff_check4files($id,$tempfile=false) {
                 $filename = "{$uploadfilename}.{$ext}";
             }
             $set_chk_usefilemgmt = (isset($_POST[$chk_usefilemgmt]) ? (int) $_POST[$chk_usefilemgmt] : 0);
-            if ( _ff_uploadfile($filename,$uploadfile,$_FF_CONF['allowablefiletypes'],$set_chk_usefilemgmt) ) {
+
+            $allowableTypes = array_merge ( $_FF_CONF['allowablefiletypes'], $_FF_CONF['inlineimageypes'] );
+
+            if ( _ff_uploadfile($filename,$uploadfile,$allowableTypes,$set_chk_usefilemgmt) ) {
                 if (array_key_exists($uploadfile['type'],$_FF_CONF['inlineimageypes'])) {
                     if (isset($_POST[$chk_usefilemgmt]) && $_POST[$chk_usefilemgmt] == 1) {
                         $srcImage = "{$filemgmt_FileStore}{$filename}";
