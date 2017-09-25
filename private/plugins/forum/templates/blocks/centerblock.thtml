@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div id="forumcenterblock">
-	<table class="uk-table tm-table uk-table-hover uk-table-striped uk-table-condensed tm-forum-table" style="table-layout:fixed !important;">
+	<table class="uk-table tm-table uk-table-hover uk-table-striped uk-table-condensed tm-forum-table tm-forum-table-centerblock">
 		<tr>
 			<th class="uk-width-1-4">{LANG_FORUM}</th>
 			<th class="uk-width-2-4">{LANG_TOPIC}</th>

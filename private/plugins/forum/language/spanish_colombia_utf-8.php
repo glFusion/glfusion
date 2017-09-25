@@ -933,6 +933,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Permisos de Archivos',
     'max_uploadimage_width' => 'Máx Ancho de Imagen',
     'max_uploadimage_height' => 'Máx Alto de Imagen',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Ancho Imagen Inline',
     'inlineimage_height' => 'Alto Imagen Inline',
     'allowablefiletypes' => 'Tipo de Archivos Permitidos',

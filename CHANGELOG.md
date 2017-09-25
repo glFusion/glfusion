@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - Forum - New tm-forum-table-centerblock style to apply rounded corners to forum centerblock
   - Implemented PLG_outputFilter() API for stories and staticpages
   - Media Gallery - Improved styling on sub-album dropdown on index page
   - New [iteminfo:] auto tag
