@@ -185,6 +185,15 @@
 				</dd>
 			</dl>
 		</li>
+
+	{!if adblock}
+			<li class="row">
+				<dl>
+				<div class="uk-text-center uk-margin-top">{adblock}</div>
+				</dl>
+			</li>
+	{!endif}
+
 <!-- END topicrows -->
 	</ul>
 {!else}

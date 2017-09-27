@@ -283,6 +283,7 @@ function forum_index()
     if ($forum == 0) {
 
         $birdSeedStart = '';
+        $categorycounter = 0;
 
         $dCat = isset($_GET['cat']) ? COM_applyFilter($_GET['cat'],true) : 0;
         $groups = array ();
@@ -492,6 +493,8 @@ function forum_index()
             	    ));
                     $forumlisting->parse('frow', 'forumrows',true);
     			}
+    			$categorycounter++;
+    			$forumlisting->set_var( 'adblock',PLG_displayAdBlock('forum_category_list',$categorycounter), false, true);
             }
 
             if ($numForumsDisplayed > 0 ) {
@@ -757,6 +760,7 @@ function forum_index()
         if ( $FF_userprefs['postsperpage'] <= 0 ) {
             $FF_userprefs['postsperpage'] = 20;
         }
+        $topiccounter = 2;
         while (($record = DB_fetchArray($topicResults,false)) != NULL ) {
             if ( ( $record['replies']+1 ) <= $FF_userprefs['postsperpage'] ) {
                 $displaypageslink = "";
@@ -918,6 +922,8 @@ function forum_index()
             ));
             $topiclisting->parse('trow', 'topicrows',true);
             $displayCount++;
+    		$topiclisting->set_var( 'adblock',PLG_displayAdBlock('forum_topic_list',$topiccounter), false, true);
+       	    $topiccounter++;
         }
         $topiclisting->set_var ('pagenavigation', forum_pagination($base_url,$page, $numpages));
         $topiclisting->set_var ('page',$page);

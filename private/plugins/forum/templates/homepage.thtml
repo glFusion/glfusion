@@ -4,9 +4,9 @@
 	<h3 class="uk-h3 uk-float-left uk-margin-bottom" style="margin:0;">
 		<i class="uk-icon-folder-o"></i>&nbsp;{birdseed}
 	</h3>
-	{!if markreadlink}
+{!if markreadlink}
 	<a href="{site_url}/forum/index.php?op=markallread&amp;cat_id={cat_id}" class="uk-float-right uk-button uk-margin-bottom">{LANG_markread}</a>
-	{!endif}
+{!endif}
 	<div class="uk-clearfix"></div>
 	<ul class="topiclist tm-forum-header">
 		<li class="header">
@@ -45,6 +45,11 @@
 		<!-- END forumrows -->
 	</ul>
 	<div class="uk-margin"></div>
+{!if adblock}
+	<div class="uk-clearfix uk-text-center uk-margin">
+		{adblock}
+	</div>
+{!endif}
 	<!-- END catrows -->
 </div>
 {# end {templatelocation} #}
