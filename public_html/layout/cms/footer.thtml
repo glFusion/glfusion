@@ -18,7 +18,9 @@
 			{right_blocks}
 
 {!if adblock_footer}
-		<div class="uk-clearfix uk-text-center">{adblock_footer}</div>
+		<div class="uk-clearfix uk-text-center uk-margin">
+			{adblock_footer}
+		</div>
 {!endif}
 		</div>
 
