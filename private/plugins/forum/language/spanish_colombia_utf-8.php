@@ -484,7 +484,10 @@ $LANG_GF03 = array(
     'select' => 'Seleccionar',
     'select_forum' => 'Seleccione el Tema del Foro',
     'destination_topic' => 'ID del Mensaje de Destino:',
-    'select_topic' => 'Seleccionar Tema'
+    'select_topic' => 'Seleccionar Tema',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
 );
 
 $LANG_GF04 = array(

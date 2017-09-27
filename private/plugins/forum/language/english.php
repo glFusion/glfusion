@@ -491,6 +491,9 @@ $LANG_GF03 = array(
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
     'select_topic' => 'Select Topic',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>',
 );
 
 $LANG_GF04 = array(

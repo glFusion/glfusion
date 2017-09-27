@@ -195,7 +195,10 @@ if ( !$iframe ) {
     $topicTemplate->clear_var(array('replytopiclink','replytopiclinkimg','LANG_reply'));
     $printlink = $_CONF['site_url'].'/forum/print.php?id='.$showtopic;
     $printlinkimg = '<img src="'._ff_getImage('print').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['PRINTABLE'].'" title="'.$LANG_GF01['PRINTABLE'].'"/>';
-
+    if ( $viewtopic['locked'] == 1 ) {
+        $topicTemplate->set_var('locked',true);
+        $topicTemplate->set_var('locked_topic_msg',$LANG_GF03['locked_topic_msg']);
+    }
     if ( $canPost != 0 ) {
         $newtopiclink = $_CONF['site_url'].'/forum/createtopic.php?mode=newtopic&amp;forum='.$forum;
         $newtopiclinkimg = '<img src="'._ff_getImage('post_newtopic').'" style="border:none;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"/>';
