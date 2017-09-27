@@ -47,6 +47,18 @@
 
 		</div>
 	</li>
+
+{!if adblock}
+	<li>
+		<div class="uk-panel">
+			<div class="uk-grid uk-text-center">
+				<div class="uk-width-1-1">
+					{adblock}
+				</div>
+			</div>
+		</div>
+	</li>
+{!endif}
 		<!-- END AlbumColumn -->
 		<!-- END AlbumRow -->
 </ul>

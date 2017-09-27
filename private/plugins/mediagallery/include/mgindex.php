@@ -223,6 +223,7 @@ function MG_index() {
     $indexCounter = $begin;
     $noParse = 0;
     $needFinalParse = 0;
+    $mediaadblockcount = 0;
     if ( $nrows > 0 ) {
         $k = 0;
 
@@ -522,6 +523,9 @@ function MG_index() {
                     'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
                     'url_media_item'        => $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1',
                 ));
+                $mediaadblockcount++;
+                $T->set_var( 'adblock',PLG_displayAdBlock('mediagallery_album_list',$mediaadblockcount), false, true);
+
                 $T->parse('AColumn', 'AlbumColumn',true);
                 $indexCounter++;
             }
