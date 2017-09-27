@@ -23,6 +23,10 @@
 				</div>
 			</div>
 
+{!if adblock_header}
+			<span class="uk-align-right uk-hidden-small">{adblock_header}</span>
+{!endif}
+
 			{!!autotag uikitlogin: !!}
 
 			{!!autotag menu:navigation_mobile !!}

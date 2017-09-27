@@ -16,6 +16,10 @@
 
 		<div id="tm-block-bottom" class="uk-clearfix">
 			{right_blocks}
+
+{!if adblock_footer}
+		<div class="uk-clearfix uk-text-center">{adblock_footer}</div>
+{!endif}
 		</div>
 
 		<div id="tm-block-footer" class="uk-clearfix uk-text-center uk-align-center uk-margin-bottom-remove">

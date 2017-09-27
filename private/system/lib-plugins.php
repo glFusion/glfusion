@@ -3603,6 +3603,35 @@ function PLG_requestEditor($plugin, $feature, $template)
     return false;
 }
 
+function PLG_supportAdBlock()
+{
+    global $_PLUGINS;
+
+    $retval = array();
+
+    $retval[] = 'article';
+    $retval[] = 'header';
+    $retval[] = 'footer';
+
+    if ( is_array($_PLUGINS) ) {
+        foreach ($_PLUGINS as $pi_name) {
+            $function = 'plugin_supportAdblock_' . $pi_name;
+            if (function_exists ($function)) {
+                $rc = $function ($plugin,$counter);
+                if ( is_array($rc) ) {
+                    foreach ($rc AS $item) {
+                        $retval[] = $item;
+                    }
+                } elseif ( $rc == true ) {
+                    $retval[] = $pi_name;
+                }
+            }
+        }
+    }
+    return $retval;
+}
+
+
 function PLG_displayAdBlock($plugin, $counter)
 {
     global $_PLUGINS;

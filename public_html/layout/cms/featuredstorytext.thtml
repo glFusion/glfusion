@@ -157,6 +157,10 @@
 
 <div class="uk-clearfix"></div>
 
+{!if adblock}
+				<div class="uk-text-center">{adblock}</div>
+{!endif}
+
 {!!if {story_display} == 'article' !!}
 
   {!if attribution_url}

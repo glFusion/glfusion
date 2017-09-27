@@ -477,6 +477,12 @@ function _ff_getmodFunctions($showtopic)
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
         $options .= '<option value="editpost">' .$LANG_GF03['edit'] . '</option>';
+        if ( $showtopic['pid'] == 0 && $showtopic['locked'] == 0) {
+            $options .= '<option value="locktopic">' .$LANG_GF03['lock_topic'] . '</option>';
+        }
+        if ( $showtopic['pid'] == 0 && $showtopic['locked'] != 0) {
+            $options .= '<option value="unlocktopic">' .$LANG_GF03['unlock_topic']. '</option>';
+        }
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_delete')) {
         $options .= '<option value="deletepost">' .$LANG_GF03['delete'] . '</option>';

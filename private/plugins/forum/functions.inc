@@ -1592,6 +1592,11 @@ function plugin_getconfigelementhelp_forum($type, $option, $doclang = 'english' 
     return array($retval,0);
 }
 
+function plugin_supportadblock_forum()
+{
+    return array('forum_category_list','forum_topic_list');
+}
+
 // +---------------------------------------------------------------------------+
 // | Commmon Forum Functions                                                   |
 // +---------------------------------------------------------------------------+

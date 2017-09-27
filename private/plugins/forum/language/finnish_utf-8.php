@@ -484,7 +484,10 @@ $LANG_GF03 = array(
     'select' => 'Valitse',
     'select_forum' => 'Valitse keskustelun aihe',
     'destination_topic' => 'Kohde aiheen ID:',
-    'select_topic' => 'Valitse aihe'
+    'select_topic' => 'Valitse aihe',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
 );
 
 $LANG_GF04 = array(

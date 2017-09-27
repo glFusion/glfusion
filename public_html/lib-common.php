@@ -1391,6 +1391,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     PLG_templateSetVars( 'header', $theme );
     PLG_templateSetVars( 'footer', $theme );
 
+    $theme->set_var( 'adblock_header',PLG_displayAdBlock('header',0), false, true);
+    $theme->set_var( 'adblock_footer',PLG_displayAdBlock('footer',0), false, true);
+
     if ( function_exists('CUSTOM_preContent')) {
         $count = 0;
         $tvars = CUSTOM_preContent('get');
