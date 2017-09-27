@@ -154,7 +154,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         case 'n' :
             $story_display = 'article';
             $article->set_var( 'story_counter', 0 );
-            $article->set_var( 'adblock',PLG_displayAdBlock('article',$storycounter), false, true);
+            $article->set_var( 'adblock_content',PLG_displayAdBlock('article',0), false, true);
             $article->set_var('breadcrumbs',true);
             break;
         case 'y' :
@@ -175,8 +175,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var( 'story_introtext', $introtext,false,true );
             $article->set_var( 'story_text_no_br', $introtext,false,true );
         } else {
-            $article->set_var( 'story_introtext', $introtext . '<br />'
-                               . $bodytext,false,true );
+            $article->set_var( 'story_introtext', $introtext .'<br>'.$bodytext,false,true );
             $article->set_var( 'story_text_no_br', $introtext . $bodytext,false,true );
         }
         $article->set_var( 'story_introtext_only', $introtext,false,true );
