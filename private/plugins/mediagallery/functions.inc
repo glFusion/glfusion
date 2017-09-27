@@ -1661,6 +1661,12 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
     return $retval;
 }
 
+function plugin_supportadblock_mediagallery()
+{
+    return array('mediagallery_album_list','mediagallery_media_list');
+}
+
+
 function MG_clean_directories($path, $needle = '')
 {
     if ( $path[strlen($path)-1] != '/' ) {

@@ -1,4 +1,10 @@
 ## v1.7.0 (unreleased)
+  - New adBlock plugin api to allow plugins to integrate ads into glFusion's content - initial support for:
+     - header
+     - footer
+     - stories
+     - forum (both category list and topic lists)
+     - media gallery (both index page album list and media item album list)
   - Forum - Lock / Unlock moderation options now included in moderator dropdown
   - Forum - New tm-forum-table-centerblock style to apply rounded corners to forum centerblock
   - Implemented PLG_outputFilter() API for stories and staticpages
