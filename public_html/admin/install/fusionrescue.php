@@ -441,7 +441,7 @@ function processPlugins() {
     $result = DB_query($sql);
     if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins";
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins ORDER BY pi_name";
     $result = DB_query($sql);
     while ($plugins[] = DB_fetchArray($result) ) { }
 
