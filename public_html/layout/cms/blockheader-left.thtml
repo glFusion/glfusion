@@ -1,6 +1,12 @@
 {# begin {templatelocation} #}
 <div {block_id} class="uk-panel uk-panel-box uk-margin-bottom">
 {!if block_title}
-	<div class="uk-panel-title">{block_title}</div>
+	<div class="uk-panel-title">
+		{block_title}
+  {!if block_help}
+	  <a class="blocktitle uk-align-right block-help-icon uk-icon-hover uk-icon-question-circle" href="{help_url}" title="Help">
+	  </a>
+  {!endif}
+	</div>
 {!endif}
 {# end {templatelocation} #}
