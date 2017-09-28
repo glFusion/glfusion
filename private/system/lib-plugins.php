@@ -3617,7 +3617,7 @@ function PLG_supportAdBlock()
         foreach ($_PLUGINS as $pi_name) {
             $function = 'plugin_supportAdblock_' . $pi_name;
             if (function_exists ($function)) {
-                $rc = $function ($plugin,$counter);
+                $rc = $function ($pi_name,$counter);
                 if ( is_array($rc) ) {
                     foreach ($rc AS $item) {
                         $retval[] = $item;
