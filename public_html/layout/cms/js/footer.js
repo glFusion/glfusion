@@ -32,7 +32,7 @@ $('video,audio').mediaelementplayer({
 	// height of audio player
 	audioHeight: 30,
 	// initial volume when the player starts
-	startVolume: 0.8,
+	startVolume: 0,
 	// useful for <audio> player loops
 	loop: false,
 	// enables Flash and Silverlight to resize to content size
@@ -60,7 +60,14 @@ $('video,audio').mediaelementplayer({
 	// path to players
 	pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
 	// array of keyboard commands
-	keyActions: []
+	keyActions: [],
+	success:  function (mediaElement, domObject) {
+		mediaElement.addEventListener("ended", function(e){
+			// Revert to the poster image when ended
+			var $thisMediaElement = (mediaElement.id) ? jQuery("#"+mediaElement.id) : jQuery(mediaElement);
+			$thisMediaElement.parents(".mejs-inner").find(".mejs-poster").show();
+		});
+	}
 });
 UIkit.modal.help = function(content, options) {
 	options = UIkit.$.extend(true, {bgclose:true, keyboard:true, modal:true, labels:UIkit.modal.labels}, options);
