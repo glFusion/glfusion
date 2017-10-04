@@ -2,5 +2,9 @@
 <div {block_id} class="block-box">
 {!if block_title}
     <h2>{block_title}</h2>
+  {!if block_help}
+	  <a class="blocktitle uk-align-right block-help-icon uk-icon-hover uk-icon-question-circle" href="{help_url}" title="{$LANG01[51]}" target="_blank">
+	  </a>
+  {!endif}
 {!endif}
 {# end {templatelocation} #}

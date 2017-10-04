@@ -26,7 +26,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -139,7 +139,7 @@ $LANG_LINKS_ADMIN = array(
     9 => 'Descripción',
     10 => 'Debes indicar un Título, URL y Descripción.',
     11 => 'Listado de Enlaces',
-    12 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> correspondiente. Para crear, haz clic en la opción: "<b>Crear</b>" arriba.',
+    12 => 'Para modificar ó borrar, haz clic sobre el icono: <img src="/layout//images/admin/edit.png" /> correspondiente. Para crear, haz clic en la opción: "<b>Crear</b>" arriba.',
     14 => 'Categoría',
     16 => 'Acceso Denegado',
     17 => "Estas tratando de acceder a un enlace al que no tienes derecho. Este intento ha sido registrado. Regresa a la <a href=\"{$_CONF['site_admin_url']}/plugins/links/index.php\">administración de enlaces</a>.",
@@ -256,7 +256,7 @@ $LANG_confignames['links'] = array(
     'root' => 'ID de la Categoría Raíz',
     'default_permissions' => 'Permisos Predeterminados',
     'target_blank' => 'Abrir Enlaces en una Ventana Nueva',
-    'displayblocks' => 'Mostrar Bloques',
+    'displayblocks' => 'Mostrar Bloques'
 );
 
 $LANG_configsubgroups['links'] = array(

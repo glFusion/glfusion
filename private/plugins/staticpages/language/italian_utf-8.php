@@ -72,7 +72,7 @@ $LANG_STATIC = array(
     'no_such_page_anon' => 'Prego entra nel sito..',
     'no_page_access_msg' => "Questo potrebbe indicare che tu non sei entrato nel sito, o non sei un membro di {$_CONF['site_name']}. Prego <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> diventa un membro</a> di {$_CONF['site_name']} per ricevere pieno accesso al sito",
     'php_msg' => 'PHP: ',
-    'php_warn' => 'Attenzione: il codice PHP della tua pagina sar&agrave; valutato se abiliti questa opzione. <br' . XHTML . '><strong>Usare con cautela !!</strong>',
+    'php_warn' => 'Attenzione: il codice PHP della tua pagina sar&agrave; valutato se abiliti questa opzione. <br><strong>Usare con cautela !!</strong>',
     'exit_msg' => 'Tipo Uscita: ',
     'exit_info' => 'Abilita per Richiesta Messaggio di Login.  Lascia deselezionato per il normale controllo di sicurezza e messaggio.',
     'deny_msg' => 'Accesso a questa pagina negato.  Pu&ograve; essere che questa pagina &egrave; stata spostata/rimossa o che non hai i permessi sufficiente per visulaizzarla.',

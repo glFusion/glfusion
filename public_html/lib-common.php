@@ -1044,7 +1044,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $header->parse( 'index_header', 'header' );
     $retval = $header->finish( $header->get_var( 'index_header' ));
-    if ( defined( 'DVLP_DEBUG' )) {
+    if ( defined( 'DVLP_DEBUG' ) && !headers_sent() ) {
         header('X-XSS-Protection: 0');
     }
     echo $retval;
@@ -1463,6 +1463,7 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml',
             $help_url = $helpfile;
         }
         $help = COM_createLink($help_content, $help_url, $help_attr);
+        $block->set_var( 'help_url',$help_url);
         $block->set_var( 'block_help', $help );
     }
 

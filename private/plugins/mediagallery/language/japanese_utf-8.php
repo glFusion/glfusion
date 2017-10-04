@@ -1253,7 +1253,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'メディアギャラリプラグインは正常にインストールされました',
     'review' => '<b>設定</b>と<b>システム標準設定</b>をし、設定を完了してください。',
-    'support' => "メディアギャラリのサポートについては glFusion のホームページにお願いします。ホームページは <a href=\"http://www.glfusion.org\">www.glfusion.org</a>（英語）\n<br" . XHTML . "><br" . XHTML . ">メディアギャラリについてのサポートの追加情報:<ul><li>Wikiのドキュメント</li><li>サポートフォーラム</li><li>メーリングリストでの<b>セキュリティ情報</b>とアップデートアナウンス</li><li>... その他</li></ul>"
+    'support' => "メディアギャラリのサポートについては glFusion のホームページにお願いします。ホームページは <a href=\"http://www.glfusion.org\">www.glfusion.org</a>（英語）\n<br><br>メディアギャラリについてのサポートの追加情報:<ul><li>Wikiのドキュメント</li><li>サポートフォーラム</li><li>メーリングリストでの<b>セキュリティ情報</b>とアップデートアナウンス</li><li>... その他</li></ul>"
 );
 
 $LANG_MG09 = array(

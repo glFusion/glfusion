@@ -1149,8 +1149,8 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $edit_comment    = $filter->editableText($comment);
 
             $filter->setPostmode('text');
-            $title = $filter->displayText($title);
-            $title = $filter->editableText($title);
+//            $title = $filter->displayText($title);
+//            $title = $filter->editableText($title);
             $filter->setPostmode($postmode);
 
             $_POST['title']     = $title;

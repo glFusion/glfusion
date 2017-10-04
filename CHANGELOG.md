@@ -1,4 +1,5 @@
 ## v1.7.0 (unreleased)
+  - FileMgmt - Use file's mime type when downloading
   - New adBlock plugin api to allow plugins to integrate ads into glFusion's content - initial support for:
      - header
      - footer
@@ -46,7 +47,7 @@
   - Forum Plugin - Updated GeShi code formatting to use syntax highlights
   - Updated Linkify to work properly with later versions of PHP
   - Updated user profile preview screen to match standard user profile display
-  - Update CKEditor to v4.7.2
+  - Update CKEditor to v4.7.3
   - Media Gallery: Add Enable HTML in title / description field to global album attribute editor
   - Encrypt smtp passwords in DB
   - Moved most external libs to Composer / auto load

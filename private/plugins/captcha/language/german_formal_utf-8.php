@@ -73,7 +73,7 @@ $LANG_CP00 = array(
     'cancel' => 'Abbruch',
     'success' => 'Konfiguration erfolgreich gespeichert.',
     'reload' => 'Neues Bild',
-    'reload_failed' => "CAPTCHA-Bild kann nicht automatisch neu geladen werden. Senden Sie das Formular ab um ein neues CAPTCHA-Bild zu generieren",
+    'reload_failed' => 'CAPTCHA-Bild kann nicht automatisch neu geladen werden. Senden Sie das Formular ab um ein neues CAPTCHA-Bild zu generieren',
     'reload_too_many' => 'Sie könnent max. 5 neue Bilder generieren lassen',
     'session_expired' => 'Ihre CAPTCHA-Gültigkeit ist abgelaufen, bitte versuchen Sie es erneut',
     'picture' => 'Bild',
@@ -134,7 +134,7 @@ $LANG_configselects['captcha'] = array(
     6 => array('Hell' => 'light', 'Dunkel' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin erfolgreich installiert.';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 ?>
