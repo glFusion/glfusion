@@ -27,7 +27,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -100,13 +100,6 @@ $LANG_LINKS_SUBMIT = array(
     10 => 'Kategorie',
     11 => 'Link-Einsendungen',
     12 => 'Eingereicht von'
-);
-
-###############################################################################
-# autotag description
-
-$LANG_LI_AUTOTAG = array(
-    'desc_link'                 => 'Link: zur Link-Detail-Seite. (Standart link_text: Link-Name). Anwendung: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -238,6 +231,9 @@ $LANG_LINKS_STATUS = array(
     999 => 'Zeitüberschreitung der Verbindung'
 );
 
+$LANG_LI_AUTOTAG = array(
+    'desc_link' => 'Link: zur Link-Detail-Seite. (Standart link_text: Link-Name). Anwendung: [link:<i>link_id</i> {link_text}]'
+);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
