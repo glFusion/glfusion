@@ -32,7 +32,7 @@ $('video,audio').mediaelementplayer({
 	// height of audio player
 	audioHeight: 30,
 	// initial volume when the player starts
-	startVolume: 0,
+	startVolume: 0.8,
 	// useful for <audio> player loops
 	loop: false,
 	// enables Flash and Silverlight to resize to content size
