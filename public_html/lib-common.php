@@ -7482,6 +7482,7 @@ function USES_class_date() { }
 function USES_class_search() { }
 function USES_class_story() { }
 function USES_class_upload() { }
+function USES_lib_html2text() { }
 
 // load custom language file if it exists...
 if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {
