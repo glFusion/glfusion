@@ -878,9 +878,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     break;
                 case 'searchidx' :
                     if ( $A['description'] == '' ) {
-                        $props['searchidx'] = $A['description'];
-                    } else {
                         $props['searchidx'] = $A['topic'];
+                    } else {
+                        $props['searchidx'] = $A['topic'] . ' ' . $A['description'];
                     }
                     break;
                 case 'title':

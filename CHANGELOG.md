@@ -1,4 +1,6 @@
-## v1.7.0 (unreleased)
+## v1.7.1 (unreleased)
+
+## v1.7.0 (October 6, 2017)
   - FileMgmt - Use file's mime type when downloading
   - New adBlock plugin api to allow plugins to integrate ads into glFusion's content - initial support for:
      - header
