@@ -239,6 +239,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                $topicimage_noalign, false,true );
         }
     }
+    $article->set_var( 'story_id', $story->getSid(),false,true );
+    $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$story->getSid());
+    $article->set_var('article_url', $articleUrl,false,true );
+    $article->set_var('story_title', $story->DisplayElements('title'),false,true);
 
     PLG_templateSetVars($article_filevar,$article);
 
@@ -249,12 +253,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var('article_filevar','');
         $article->set_var( 'site_name', $_CONF['site_name'] );
 
-        $article->set_var( 'story_id', $story->getSid() );
         $article->set_var( 'lang_posted_in', $LANG01['posted_in']);
-
-        $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$story->getSid());
-        $article->set_var('article_url', $articleUrl );
-        $article->set_var('story_title', $story->DisplayElements('title'));
 
         if ($_CONF['contributedbyline'] == 1) {
             $article->set_var('lang_contributed_by', $LANG01[1]);
