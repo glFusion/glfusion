@@ -1,4 +1,6 @@
 ## v1.7.1 (unreleased)
+  - Slider widget did not use links if no caption given for a slide
+  - Fixed error where story title / url were not set in the template prior to calling PLG_templateSetVars() which caused issues with some plugins (specifically SocialShare)
 
 ## v1.7.0 (October 6, 2017)
   - FileMgmt - Use file's mime type when downloading
