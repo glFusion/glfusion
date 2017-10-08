@@ -1184,6 +1184,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
+            // reset the theme and allow-user-themes
+            $c->set("theme", "cms", "Core");
+            $c->set("allow_user_themes", 0, "Core");
+
             $current_fusion_version = '1.5.0';
 
         case '1.5.0' :
