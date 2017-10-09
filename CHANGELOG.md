@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - Fixed incorrect column name on ban removal call
   - Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
   - Slider widget did not use links if no caption given for a slide
   - Fixed error where story title / url were not set in the template prior to calling PLG_templateSetVars() which caused issues with some plugins (specifically SocialShare)
