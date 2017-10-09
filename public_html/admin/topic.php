@@ -761,7 +761,7 @@ function TOPIC_delete($tid)
     $numStories = DB_numRows ($result);
     for ($i = 0; $i < $numStories; $i++) {
         $A = DB_fetchArray ($result);
-        STORY_deleteStory($A['sid']);
+        STORY_removeStory($A['sid']);
     }
 
     // delete these
