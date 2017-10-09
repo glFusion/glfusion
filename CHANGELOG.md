@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
   - Fixed incorrect column name on ban removal call
   - Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
   - Slider widget did not use links if no caption given for a slide
