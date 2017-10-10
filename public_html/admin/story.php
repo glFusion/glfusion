@@ -476,7 +476,7 @@ function STORY_list()
         }
     } else {
         $excludetopics = " tid = '$current_topic' ";
-        $seltopics = COM_topicList ('tid,topic', $current_topic, 1, true);
+        $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
     $alltopics = '<option value="' .$LANG09[9]. '"';
@@ -680,11 +680,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story->setTid($currenttopic);
     }
     if ( SEC_hasRights('story.edit') ) {
-        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,0);
-        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,0);
+        $allowedTopicList = COM_topicList ('tid,topic,sortnum', $story->EditElements('tid'), 2, true,0);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic,sortnum', $story->EditElements('alternate_tid'), 2, true,0);
     } else {
-        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
-        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,3);
+        $allowedTopicList = COM_topicList ('tid,topic,sortnum', $story->EditElements('tid'), 2, true,3);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic,sortnum', $story->EditElements('alternate_tid'), 2, true,3);
     }
     if ( $allowedTopicList == '' ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true,'error');

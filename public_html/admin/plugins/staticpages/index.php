@@ -201,7 +201,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
         if (empty ($current_topic)) {
             $current_topic = 'none';
         }
-        $topics = COM_topicList ('tid,topic', $current_topic, 1, true);
+        $topics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
         $alltopics = '<option value="all"';
         if ($current_topic == 'all') {
             $alltopics .= ' selected="selected"';
