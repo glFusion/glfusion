@@ -245,7 +245,7 @@ function STORY_global($errorMsg = '')
 
     $current_topic = $LANG09[9];
 
-    $seltopics = COM_topicList ('tid,topic', '', 1, true);
+    $seltopics = COM_topicList ('tid,topic,sortnum', '', 2, true);
     $alltopics = '<option value="'.$LANG09[9].'"';
     if ($current_topic == 'all') {
         $alltopics .= ' selected="selected"';
@@ -455,7 +455,7 @@ function STORY_list()
     if ($current_topic == $LANG09[9]) {
         $excludetopics = '';
         $seltopics = '';
-        $topicsql = "SELECT tid,topic FROM {$_TABLES['topics']}" . COM_getPermSQL ();
+        $topicsql = "SELECT tid,topic FROM {$_TABLES['topics']}" . COM_getPermSQL () . " ORDER BY sortnum ASC";
         $tresult = DB_query( $topicsql );
         $trows = DB_numRows( $tresult );
         if( $trows > 0 ) {

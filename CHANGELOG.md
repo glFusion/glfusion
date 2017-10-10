@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - Sort topic list in Story Admin properly
   - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
   - Fixed incorrect column name on ban removal call
   - Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
