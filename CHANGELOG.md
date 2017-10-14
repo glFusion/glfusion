@@ -1,4 +1,7 @@
 ## v1.7.1 (unreleased)
+  - Media Gallery - improved handling of missing thumbnails in pop-up video player
+  - Forum - Anonymous user names were not displayed in topic view
+  - [url] bbcode has html entities in link text
   - Sort topic lists by topic sortnum (story admin, block admin, etc.)
   - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
   - Fixed incorrect column name on ban removal call
