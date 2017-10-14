@@ -380,7 +380,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $featurepage_select .= '<option value="all"' . ($A['cbpage'] == 'all' ? 'selected="selected"' : '') .'>' . $LANG_MG01['all'] . '</option>';
         $featurepage_select .= '<option value="allnhp"' . ($A['cbpage'] == 'allnhp' ? 'selected="selected"' : '') .'>' . $LANG_MG01['all_nhp'] . '</option>';
         $featurepage_select .= '<option value="none"' . ($A['cbpage'] == 'none' ? 'selected="selected"' : '') .'>' . $LANG_MG01['homepage_only'] . '</option>';
-        $featurepage_select .= COM_topicList('tid,topic,sortnum',$A['cbpage'], 2, true));
+        $featurepage_select .= COM_topicList('tid,topic,sortnum',$A['cbpage'], 2, true);
         $featurepage_select .= '</select>';
 
         // position
