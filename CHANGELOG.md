@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - Increased story text size from ~64kb to ~16mb
   - Media Gallery - improved handling of missing thumbnails in pop-up video player
   - Forum - Anonymous user names were not displayed in topic view
   - [url] bbcode has html entities in link text

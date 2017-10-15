@@ -1736,6 +1736,11 @@ function glfusion_171()
 
     $_SQL = array();
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `introtext` `introtext` MEDIUMTEXT NULL DEFAULT NULL;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `bodytext` `bodytext` MEDIUMTEXT NULL DEFAULT NULL;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `introtext` `introtext` MEDIUMTEXT NULL DEFAULT NULL;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `bodytext` `bodytext` MEDIUMTEXT NULL DEFAULT NULL;";
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
