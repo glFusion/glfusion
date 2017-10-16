@@ -205,7 +205,8 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
     } else { // success
         $comments = CMT_getCount('filemgmt', $id);
         DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
-        echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$id"));
+        $lid = (int) substr($id,7);
+        echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$lid"));
     }
 }
 
