@@ -1,4 +1,6 @@
 ## v1.7.1 (unreleased)
+  - Delete story on expire did not call proper PLG hook to alert plugins of story removal
+  - Filter queued comments from user profile list
   - Fixed redirect error after entering comments for filemgmt
   - Fixed issue where media gallery would include queued comments in the comment count
   - Increased story text size from ~64kb to ~16mb
