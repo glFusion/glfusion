@@ -2549,9 +2549,12 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $field = ($type == 'user' && $fieldname == 4) ? 'day' : $field;
 
     switch ($field) {
-
         case 'edit':
             $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+            break;
+
+        case 'title' :
+            $retval =  html_entity_decode(htmlspecialchars_decode($fieldvalue));
             break;
 
         case 'user':
