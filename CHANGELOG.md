@@ -1,4 +1,6 @@
 ## v1.7.1 (unreleased)
+  - Fixed redirect error after entering comments for filemgmt
+  - Fixed issue where media gallery would include queued comments in the comment count
   - Increased story text size from ~64kb to ~16mb
   - Media Gallery - improved handling of missing thumbnails in pop-up video player
   - Forum - Anonymous user names were not displayed in topic view
