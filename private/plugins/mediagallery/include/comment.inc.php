@@ -137,7 +137,6 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
 
     $retval = '';
 
-    $title = strip_tags ($title);
     $pid = COM_applyFilter ($pid, true);
     $postmode = COM_applyFilter ($postmode);
 
@@ -153,7 +152,6 @@ function _mg_savecomment($title,$comment,$id,$pid,$postmode)
         return $retval;
     } else {
         $comments = CMT_getCount('mediagallery', $id);
-//        $comments = DB_count ($_TABLES['comments'], array('sid','type','queued'), array(DB_escapeString($id), 'mediagallery',0));
         DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',DB_escapeString($id));
         return (COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id#comments") );
     }
