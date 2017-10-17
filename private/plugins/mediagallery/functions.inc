@@ -422,7 +422,7 @@ function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id ";
     $sql .= "LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id ";
-    $sql .= "WHERE (c.type='mediagallery') AND (u.uid = c.uid) ";
+    $sql .= "WHERE (c.type='mediagallery') AND (u.uid = c.uid) AND (c.queued = 0) ";
     $sql .= COM_getPermSQL('AND') . ' ';
 
     if (!empty($author)) {
@@ -630,7 +630,7 @@ function plugin_getheadercode_mediagallery()
 */
 function plugin_getwhatsnew_mediagallery()
 {
-    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $_USER, $LANG_MG00,$LANG_MG03, $mg_installed_version;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $_USER, $LANG_MG00,$LANG_MG03, $LANG03, $mg_installed_version;
 
     $retval = '';
 
@@ -665,7 +665,7 @@ function plugin_getwhatsnew_mediagallery()
             } else {
                 $dTitle = $title;
             }
-            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'" rel="nofollow">' . $dTitle . '</a>';
+            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.$title.'" rel="nofollow">' . $dTitle . '</a>';
             $newMediaCount++;
         }
 
@@ -675,8 +675,7 @@ function plugin_getwhatsnew_mediagallery()
     }
 
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
-        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
-
+        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' AND c.queued = 0 GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
         $result = DB_query( $sql,1);
         $nrows2 = DB_numRows( $result );
         if( $nrows2 == 0 ) {
@@ -690,8 +689,10 @@ function plugin_getwhatsnew_mediagallery()
                                          $A['perm_members'],
                                          $A['perm_anon']);
                 if ( $access > 0 ) {
-                    $titleLength = $_MG_CONF['title_length'];        // Compensate for the added HTML
-                    $title = "<b>C:</b>&nbsp;".$A['title'];
+                    if ( $A['title'] == '' ) $A['title'] = $LANG03[58];
+                    $html2txt  = new Html2Text\Html2Text($A['title'],false);
+                    $titleLength = $_MG_CONF['title_length'];
+                    $title = "<b>C:</b>&nbsp;".$html2txt->get_text();
                     $str = "<a href=\"{$_CONF['site_url']}/comment.php?mode=view&amp;cid={$A['cid']}&amp;sid={$A['sid']}&amp;type=mediagallery\" rel=\"nofollow\">";
                     $str .= substr($title,0,$titleLength);
                     $str .= '</a>';
@@ -1727,6 +1728,7 @@ function MG_deleteMemberAlbums( $album_id ){
                 DB_query( $sql );
                 DB_delete($_TABLES['comments'], 'sid', DB_escapeString($mediarow[$i]['media_id']));
                 DB_delete($_TABLES['mg_playback_options'],'media_id', DB_escapeString($mediarow[$i]['media_id']));
+                PLG_itemDeleted($mediarow[$i]['media_id'], 'mediagallery');
             }
         }
     }
