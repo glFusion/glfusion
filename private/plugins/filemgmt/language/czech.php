@@ -60,6 +60,7 @@ $LANG_FM00 = array (
     'details'           => 'Podrobnosti',
     'filename'          => 'Jméno souboru',
     'uploaded_by'       => 'Přidal',
+    'not_found'         => 'Download Not Found',
 );
 
 // Admin Navbar

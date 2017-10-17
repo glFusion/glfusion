@@ -264,6 +264,7 @@ $LANG03 = array(
     55 => 'A New Comment has been Submitted',
     56 => 'Comment has been approved and is now visible.',
     57 => 'Silent Edit',
+    58 => 'No Title Available',
 
 );
 

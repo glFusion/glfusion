@@ -274,7 +274,7 @@ function LINK_CAT_edit($cid, $pid)
     if (!isset($A['tid'])) {
         $A['tid'] = 'all';
     }
-    $topics = COM_topicList('tid,topic', $A['tid'], 1, true);
+    $topics = COM_topicList('tid,topic,sortnum', $A['tid'], 2, true);
     $T->set_var('topic_list', $topics);
     $alltopics = '<option value="all"';
     if ($A['tid'] == 'all') {

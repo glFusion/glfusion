@@ -126,9 +126,9 @@ function submitstory($topic = '')
     }
 
     if ( $_CONF['story_submit_by_perm_only'] ) {
-        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'),1,false,3);
+        $topicList = COM_topicList('tid,topic,sortnum',$story->EditElements('tid'),2,false,3);
     } else {
-        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'));
+        $topicList = COM_topicList('tid,topic,sortnum',$story->EditElements('tid'),2);
     }
 
     // no topics

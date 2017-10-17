@@ -45,8 +45,8 @@ CKEDITOR.editorConfig = function( config ) {
 		tbitems.items['tools'],
 		tbitems.items['about']
 	];
-    config.font_defaultLabel = 'Arial';
-    config.fontSize_defaultLabel = '14px';
+	config.font_defaultLabel = 'Arial';
+	config.fontSize_defaultLabel = '14px';
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
 	config.extraPlugins = 'youtube2,vimeo';

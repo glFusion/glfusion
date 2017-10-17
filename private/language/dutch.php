@@ -267,7 +267,8 @@ $LANG03 = array(
     54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
     55 => 'A New Comment has been Submitted',
     56 => 'Comment has been approved and is now visible.',
-    57 => 'Silent Edit'
+    57 => 'Silent Edit',
+    58 => 'No Title Available'
 );
 
 ###############################################################################

@@ -59,6 +59,7 @@ $LANG_FM00 = array (
     'details'           => 'Tiedoston Tiedot',
     'filename'          => 'Tiedostonimi',
     'uploaded_by'       => 'L&auml;hetti',
+    'not_found'         => 'Download Not Found',
 );
 
 // Admin Navbar

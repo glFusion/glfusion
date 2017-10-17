@@ -1,4 +1,19 @@
 ## v1.7.1 (unreleased)
+  - Handle missing files gracefully in FileMgmt
+  - Delete story on expire did not call proper PLG hook to alert plugins of story removal
+  - Filter queued comments from user profile list
+  - Fixed redirect error after entering comments for filemgmt
+  - Fixed issue where media gallery would include queued comments in the comment count
+  - Increased story text size from ~64kb to ~16mb
+  - Media Gallery - improved handling of missing thumbnails in pop-up video player
+  - Forum - Anonymous user names were not displayed in topic view
+  - [url] bbcode has html entities in link text
+  - Sort topic lists by topic sortnum (story admin, block admin, etc.)
+  - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
+  - Fixed incorrect column name on ban removal call
+  - Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
+  - Slider widget did not use links if no caption given for a slide
+  - Fixed error where story title / url were not set in the template prior to calling PLG_templateSetVars() which caused issues with some plugins (specifically SocialShare)
 
 ## v1.7.0 (October 6, 2017)
   - FileMgmt - Use file's mime type when downloading

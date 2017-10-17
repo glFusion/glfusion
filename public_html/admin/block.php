@@ -136,7 +136,7 @@ function BLOCK_editDefault($A, $access)
         $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
-                              COM_topicList ('tid,topic', $A['tid'], 1, true));
+                              COM_topicList ('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_all', $LANG21[7]);
     $block_templates->set_var('lang_side', $LANG21[39]);
     $block_templates->set_var('lang_left', $LANG21[40]);
@@ -320,7 +320,7 @@ function BLOCK_edit($bid = '', $B = array())
         $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
-                              COM_topicList('tid,topic', $A['tid'], 1, true));
+                              COM_topicList('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_side', $LANG21[39]);
     $block_templates->set_var('lang_left', $LANG21[40]);
     $block_templates->set_var('lang_right', $LANG21[41]);

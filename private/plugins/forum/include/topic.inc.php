@@ -164,6 +164,15 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             }
         }
     } else {
+        if ( isset($showtopic['name']) && $showtopic['name'] != '' ) {
+            $filter = sanitizer::getInstance();
+            $filter->setPostmode('text');
+            $username = $filter->censor($showtopic['name']);
+            $username = $filter->filterText($username);
+//            $username = @htmlspecialchars(strip_tags($showtopic['name']),ENT_QUOTES,COM_getEncodingt());
+            if ($username == '' ) unset($username);
+        }
+
         if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
             $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
         } else {

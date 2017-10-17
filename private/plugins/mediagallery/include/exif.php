@@ -1163,8 +1163,8 @@ function get35mmEquivFocalLength(&$result) {
 	}
 
 	if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
-		$ccdwidth = ($width * $unitfactor) / $xres;
-		$equivfl = $fl / $ccdwidth*36+0.5;
+		$ccdwidth = ((int)$width * (int)$unitfactor) / (int)$xres;
+		$equivfl = (float) $fl / $ccdwidth*36+0.5;
 		return $equivfl;
 	}
 	return null;
