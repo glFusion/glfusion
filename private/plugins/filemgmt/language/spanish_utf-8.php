@@ -58,7 +58,8 @@ $LANG_FM00 = array(
     'new_upload_body' => 'A new file has been submitted to the upload queue at ',
     'details' => 'File Details',
     'filename' => 'Filename',
-    'uploaded_by' => 'Uploaded By'
+    'uploaded_by' => 'Uploaded By',
+    'not_found'         => 'Download Not Found',
 );
 
 $LANG_FM02 = array(
