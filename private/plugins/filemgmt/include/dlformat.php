@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Enhancements to display formatting                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -115,12 +115,7 @@ $p->set_var('LANG_FILESIZE',_MD_FILESIZE);
 $pos = MBYTE_strpos( $url, ':' );
 if( $pos === false ) {
     $p->set_var('file_size',PrettySize($size));
-
-    if ( $_FM_CONF['outside_webroot'] == 1 ) {
-        $fullurl = $filemgmt_FileStore . rawurldecode($url);
-    } else {
-        $fullurl = $filemgmt_FileStore . rawurldecode($url);
-    }
+    $fullurl = $filemgmt_FileStore . rawurldecode($url);
     $is_found = false;
     if ( file_exists($fullurl) ) $is_found = true;
 } else {
