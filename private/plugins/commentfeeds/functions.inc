@@ -218,13 +218,13 @@ function plugin_itemsaved_commentfeeds( $id, $type )
 
     if ( $type != 'comment' ) return;
 
-    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $id;
+    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE queued = 0 AND cid=".(int) $id;
     $result = DB_query($sql);
     if ( DB_numRows( $result ) != 0 ) {
         $row = DB_fetchArray($result);
         $itemInfo = PLG_getItemInfo($row['type'],$row['sid'],'id,perms',1);
         if ( isset($itemInfo['perms'] ) ) {
-            if ( $itemInfo['perms']['perm_anon'] > 0 ) {
+            if ( isset($itemInfo['perms']['perm_anon']) && $itemInfo['perms']['perm_anon'] > 0 ) {
                 $now = time();
                 DB_query("REPLACE INTO {$_TABLES['vars']} (name,value) VALUES('cmt_update','".$now."')");
                 $_VARS['cmt_update'] = $now;

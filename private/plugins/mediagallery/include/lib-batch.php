@@ -469,7 +469,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $cmtDate = gmdate("Y-m-d H:i:s", $row2['data4']);
                     MG_saveComment($cmtTitle,$cmtText,$row2['sid'],0,$row2['type'],'plain', $cmtUid, $cmtDate,$cmtIP);
                 }
-                $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($new_media_id, 'mediagallery'));
+                $comments = CMT_getCount('mediagallery', $new_media_id);
                 DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                 DB_query("DELETE FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id']);
 
@@ -559,7 +559,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $cmtDate = $row2['data4']; // gmdate("Y-m-d H:i:s", $row2['data4']);
                         MG_saveComment($cmtTitle,$cmtText,$row2['sid'],0,$row2['type'],'plain', $cmtUid, $cmtDate,$cmtIP);
                     }
-                    $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($new_media_id, 'mediagallery'));
+                    $comments = CMT_getCount('mediagallery', $new_media_id);
                     DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                 }
                 DB_query("DELETE FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id']);
@@ -719,7 +719,6 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     MG_SortMedia( $album_id );
                     @set_time_limit($time_limit + 20);
 
-
                     $sql = "SELECT * FROM {$_TABLES['comments']} WHERE sid='" . $row['mid'] . "' AND type='inmemoriam'";
                     $inmResult2 = DB_query($sql);
                     $cRows = DB_numRows($inmResult2);
@@ -728,7 +727,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $row2['sid']  = $new_media_id;
                         $row2['type'] = 'mediagallery';
                         MG_saveComment($row2['title'],$row2['comment'],$row2['sid'],0,$row2['type'],'plain', $row2['uid'], $row2['date']);
-                        $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($new_media_id, 'mediagallery'));
+                        $comments = CMT_getCount('mediagallery', $new_media_id);
                         DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                     }
 

@@ -286,7 +286,7 @@ function userprofile()
     }
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
         $commentCounter = 0;
-        $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " ORDER BY date DESC";
+        $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " AND queued=0 ORDER BY date DESC";
         $result = DB_query($sql);
 
         while ( ( $row = DB_fetchArray($result) ) ) {
@@ -295,7 +295,7 @@ function userprofile()
                 if ( is_array($itemInfo) || $itemInfo == '' ) continue;
                 $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
                 $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
-                $row['title'] = str_replace ('$', '&#36;', $row['title']);
+                $row['title'] = html_entity_decode(str_replace ('$', '&#36;', $row['title']));
                 $comment_url = $_CONF['site_url'] .
                         '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
                 $user_templates->set_var ('comment_title',
@@ -323,7 +323,7 @@ function userprofile()
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
         $user_templates->set_var ('lang_number_comments', $LANG04[85]);
 
-        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = ".(int) $user.")";
+        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (queued = 0 AND uid = ".(int) $user.")";
         if (!empty ($sidList)) {
             $sql .= " AND (sid in ($sidList))";
         }

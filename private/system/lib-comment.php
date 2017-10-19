@@ -211,15 +211,14 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var('comment_title', $cmt_title);
 
     if( $type == 'article' ) {
-        $articleUrl = COM_buildUrl( $_CONF['site_url']
-                                    . "/article.php?story=$sid" );
+        $articleUrl = COM_buildUrl( $_CONF['site_url']."/article.php?story=$sid" );
         $commentbar->set_var( 'story_link', $articleUrl );
         $commentbar->set_var( 'article_url', $articleUrl );
 
         if( $page == 'comment.php' ) {
             $commentbar->set_var('story_link',
                 COM_createLink(
-                    @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()),
+                    $title,
                     $articleUrl,
                     array('class'=>'non-ul b')
                 )
@@ -1308,7 +1307,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('htmlmode',true);
             }
             $comment_template->set_var('lang_title', $LANG03[16]);
-            $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
+//            $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
+
+$comment_template->set_var('title', $title);
+
+
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $edit_comment);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
@@ -1447,7 +1450,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         return $someError;
     }
 
-    $title = COM_checkWords (strip_tags ($title));
+    $info = PLG_getItemInfo($type, $sid, 'id,title');
+    $title = (isset($info['title']) ? $info['title'] : 'Comment');
     $comment = CMT_prepareText($comment,$postmode);
 
     // check for non-int pid's
@@ -1583,7 +1587,9 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
         $author .= ' (' . $ipaddress . ')';
     }
 
-    $mailbody = "$LANG03[16]: $title\n"
+    $html2txt  = new Html2Text\Html2Text($title,false);
+
+    $mailbody = "$LANG03[16]: " . $html2txt->get_text() /* html_entity_decode($title)*/ ."\n"
               . "$LANG03[5]: $author\n";
 
     if (($type != 'article') && ($type != 'poll')) {
@@ -1595,7 +1601,7 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
             $comment = MBYTE_substr ($comment, 0, $_CONF['emailstorieslength'])
                      . '...';
         }
-        $mailbody .= $comment . "\n\n";
+        $mailbody .= html_entity_decode($comment) . "\n\n";
     }
 
     if ( $queued == 0 ) {
@@ -1611,8 +1617,9 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
         $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
         COM_mail ($to, $mailsubject, $mailbody);
     } else {
+        $html2txt  = new Html2Text\Html2Text($title,false);
         $mailbody = $LANG03[53].'<br><br>';
-        $mailbody .= $LANG03[16].': '. $title.'<br>';
+        $mailbody .= $LANG03[16].': '. $html2txt->get_text().'<br>';
         $mailbody .= $LANG03[5].': '.$author.'<br><br>';
         $mailbody .= nl2br($comment) . '<br><br>';
         $mailbody .= sprintf($LANG03[54].'<br>',$_CONF['site_admin_url'].'/moderation.php');
@@ -1991,7 +1998,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
         $retval .= $msg . CMT_commentForm ($title,$comment,$id,$pid,'article',$LANG03[14],$postmode);
 
     } else { // success
-        $comments = DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $id,0));
+        $comments = CMT_getCount('article',$id); // DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $id,0));
         DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $id);
         COM_olderStuff(); // update comment count in Older Stories block
         $retval = COM_refresh(COM_buildUrl($_CONF['site_url']
@@ -2549,9 +2556,12 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $field = ($type == 'user' && $fieldname == 4) ? 'day' : $field;
 
     switch ($field) {
-
         case 'edit':
             $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+            break;
+
+        case 'title' :
+            $retval =  html_entity_decode(htmlspecialchars_decode($fieldvalue));
             break;
 
         case 'user':

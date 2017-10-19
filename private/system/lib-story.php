@@ -696,8 +696,8 @@ function STORY_extractLinks( $fulltext, $maxlength = 100 )
     /* Only match anchor tags that contain 'href="<something>"'
      */
     preg_match_all( "/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i", $fulltext, $matches );
-    for ( $i=0; $i< count( $matches[0] ); $i++ )
-    {
+    for ( $i=0; $i< count( $matches[0] ); $i++ )  {
+        $extLink = '';
         $matches[2][$i] = strip_tags( $matches[2][$i] );
         if ( !utf8_strlen( trim( $matches[2][$i] ) ) ) {
             $matches[2][$i] = strip_tags( $matches[1][$i] );

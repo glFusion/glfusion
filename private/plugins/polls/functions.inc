@@ -209,7 +209,7 @@ function plugin_getwhatsnewcomment_polls()
             . COM_getPermSQL( 'AND', 0, 2, $_TABLES['polltopics'] ) .
             " AND ({$_TABLES['polltopics']}.commentcode >= 0)" .
             /* COM_getLangSQL( 'pid', 'AND', $_TABLES['polltopics'] ) .*/ ")
-            WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
             AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['polltopics']}.topic,
             {$_TABLES['polltopics']}.topic, {$_TABLES['polltopics']}.pid
             ORDER BY 4 DESC LIMIT 15";
@@ -322,7 +322,7 @@ function plugin_dopluginsearch_comment_polls($query, $datestart, $dateend, $topi
     $sql .= "CONCAT('/polls/index.php?pid=',a.pid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['polltopics']} a ON c.sid=a.pid ";
-    $sql .= "WHERE (c.type='polls') AND (u.uid = c.uid) ";
+    $sql .= "WHERE (c.type='polls' AND c.queued = 0) AND (u.uid = c.uid) ";
     $sql .= COM_getPermSQL ('AND');
 
     if (!empty($author)) {
@@ -1154,10 +1154,8 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                 $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics']);
                 $poll->set_var('poll_notification', $notification);
                 if($P['commentcode'] >= 0 ) {
-                    $num_comments = DB_count($_TABLES['comments'],
-                            array('sid', 'type'), array(DB_escapeString($pid), 'polls'));
-                    $poll->set_var('num_comments',
-                            COM_numberFormat($num_comments));
+                    $num_comments = CMT_getCount('polls',$pid);  //DB_count($_TABLES['comments'], array('sid', 'type'), array(DB_escapeString($pid), 'polls'));
+                    $poll->set_var('num_comments',COM_numberFormat($num_comments));
                     $poll->set_var('lang_comments', $LANG01[3]);
 
                     $comment_link = CMT_getCommentLinkWithCount(
@@ -1538,10 +1536,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
             }
 
             if($P['commentcode'] >= 0 ) {
-                $num_comments = DB_count($_TABLES['comments'],
-                        array('sid', 'type' ), array(DB_escapeString($pid), 'polls' ));
-                $poll->set_var('num_comments',
-                        COM_numberFormat($num_comments));
+                $num_comments = CMT_getCount('polls',$pid);
+                $poll->set_var('num_comments',COM_numberFormat($num_comments));
                 $poll->set_var('lang_comments', $LANG01[3]);
 
                 $cmtLinkArray = CMT_getCommentLinkWithCount( 'polls',$pid, $_CONF['site_url'].'/polls/index.php?pid=' . $pid,$num_comments,0);

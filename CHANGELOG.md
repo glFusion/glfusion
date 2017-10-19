@@ -1,4 +1,13 @@
 ## v1.7.1 (unreleased)
+  - Handle missing files gracefully in FileMgmt
+  - Delete story on expire did not call proper PLG hook to alert plugins of story removal
+  - Filter queued comments from user profile list
+  - Fixed redirect error after entering comments for filemgmt
+  - Fixed issue where media gallery would include queued comments in the comment count
+  - Increased story text size from ~64kb to ~16mb
+  - Media Gallery - improved handling of missing thumbnails in pop-up video player
+  - Forum - Anonymous user names were not displayed in topic view
+  - [url] bbcode has html entities in link text
   - Sort topic lists by topic sortnum (story admin, block admin, etc.)
   - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
   - Fixed incorrect column name on ban removal call

@@ -58,7 +58,8 @@ $LANG_FM00 = array (
     'new_upload_body'   => 'Ein neuer Datei-Upload wurde der Warteschlange hinzugefügt am ',
     'details'           => 'Datei-Details',
     'filename'          => 'Dateiname',
-    'uploaded_by'       => 'Hochgeladen von'
+    'uploaded_by'       => 'Hochgeladen von',
+    'not_found'         => 'Download Not Found',
 );
 
 // Admin Navbar

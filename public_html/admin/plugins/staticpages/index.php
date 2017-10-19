@@ -815,7 +815,13 @@ switch ($action) {
     case 'preview':
         $sp_php = isset($_POST['sp_php']) ? $_POST['sp_php'] : '';
         $editor_content = isset($_POST['sp_content']) ? $_POST['sp_content'] : '';
-        $preview_content = SP_render_content ($editor_content, $sp_php);
+
+        if ( isset($_POST['sp_php']) && (int) $_POST['sp_php'] > 0 && defined('DEMO_MODE') ) {
+            $preview_content = 'StaticPage Preview is disabled in Demo Mode';
+        } else {
+            $preview_content = SP_render_content ($editor_content, $sp_php);
+        }
+
         $preview_title = isset($_POST['sp_title']) ? $_POST['sp_title'] : '';
 
         $owner_id = $_POST['owner_id'];

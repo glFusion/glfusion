@@ -86,7 +86,8 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
         }
     } else if ( stristr($attributes['default'],'http') ) {
         $url = strip_tags($attributes['default']);
-        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
+//        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
+        $linktext = strip_tags($content);
     } else {
         $url = 'http://'.strip_tags($attributes['default']);
         $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
