@@ -1,9 +1,0 @@
-{# begin {templatelocation} #}
-                                            <tr class="pluginRow{rowclass}">
-                                                <td style="text-align:center;vertical-align:middle;">{mediaitem_begin_href}{mediaitem_image}{mediaitem_end_href}</td>
-                                                <td style="vertical-align:middle;text-align:left;">{mediaitem_title}</td>
-                                                <td style="vertical-align:middle;text-align:left;">{mediaitem_album_begin_href}<span style="font-weight:bold;">{mediaitem_album_title}</span>{mediaitem_end_href}</td>
-                                                <td style="vertical-align:middle;text-align:center;">{mediaitem_date}</td>
-                                            </tr>
-{# end {templatelocation} #}
-

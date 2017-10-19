@@ -44,6 +44,7 @@ $LANG_CHARSET = 'utf-8';
 // index.php
 
 $LANG_INSTALL = array(
+    'adminuser'                 => 'Admin Username',
     'back_to_top'               => 'Back to top',
     'calendar'                  => 'Load Calendar Plugin?',
     'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
@@ -91,7 +92,7 @@ $LANG_INSTALL = array(
     'mbstring_support'          => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery'              => 'Load Media Gallery Plugin?',
     'mediagallery_desc'         => 'A multi-media management system. Can be used as a simple photo gallery or a robust media management system supporting audio, video, and images.',
-    'memory_limit'				=> 'It is recommended that you have at least 48M of memory enabled on your site.',
+    'memory_limit'				=> 'It is recommended that you have at least 64M of memory enabled on your site.',
     'missing_db_fields'         => 'Please enter all required database fields.',
     'new_install'               => 'New Installation',
     'next'                      => 'Next',
@@ -112,7 +113,7 @@ $LANG_INSTALL = array(
     'path_prompt'               => 'Path to private/ directory',
     'path_settings'             => 'Path Settings',
     'perform_upgrade'			=> 'Perform Upgrade',
-    'php_req_version'			=> 'glFusion requires PHP version 5.3.0 or newer.',
+    'php_req_version'			=> 'glFusion requires PHP version 5.3.3 or newer.',
     'php_settings'				=> 'PHP Settings',
     'php_version'				=> 'PHP Version',
     'php_warning'				=> 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -131,6 +132,8 @@ $LANG_INSTALL = array(
     'select_task'               => 'Select Task',
     'session_error'             => 'Your session has expired.  Please restart the installation process.',
     'setting'                   => 'Setting',
+    'securepassword'            => 'Admin Password',
+    'securepassword_error'      => 'Admin Password cannot be blank',
     'site_admin_url'            => 'Site Admin URL',
     'site_admin_url_error'      => 'Site Admin URL cannot be blank.',
     'site_email'                => 'Site Email',
@@ -172,9 +175,9 @@ $LANG_INSTALL = array(
     'libcustom_not_found'       => 'Unable to located lib-custom.php.dist.',
     'no_db_driver'              => 'You must have the MySQL extension loaded in PHP to install glFusion',
     'version_check'             => 'Check For Updates',
-    'check_for_updates'         => 'Go to the Command & Control -Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
+    'check_for_updates'         => 'Go to the Command & Control -> Upgrade Check to see if there are any glFusion CMS or Plugin updates available.',
     'quick_start'               => 'glFusion Quick Start Guide',
-    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help'          => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade'                   => 'Upgrade',
     'support_resources'         => 'Support Resources',
     'plugins'                   => 'glFusion Plugins',
@@ -224,6 +227,7 @@ $LANG_INSTALL = array(
     'ext_optional_desc'         => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
     'ext_good'                  => 'properly installed.',
     'ext_heading'               => 'PHP Extensions',
+    'curl_extension'            => 'Curl Extension',
     'ctype_extension'           => 'Ctype Extension',
     'date_extension'            => 'Date Extension',
     'filter_extension'          => 'Filter Extension',
@@ -239,6 +243,8 @@ $LANG_INSTALL = array(
     'zlib_extension'            => 'zlib Extension',
     'required_php_ext'          => 'Required PHP Extensions',
     'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
+    'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
 );
 
 // +---------------------------------------------------------------------------+
@@ -266,6 +272,19 @@ $LANG_SUCCESS = array(
     18 => 'back to',
     19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
     20 => 'installed',
-    21 => 'upgraded'
+    21 => 'upgraded',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel',
 );
 ?>

@@ -59,7 +59,7 @@ if (!SEC_hasRights ('staticpages.edit')) {
 * @param    string  $error  Error message to display
 *
 */
-function PAGE_form($A, $error = false)
+function PAGE_form($A, $error = false, $editFlag = 0)
 {
     global $_CONF, $_TABLES, $_USER, $_GROUPS, $_SP_CONF, $action, $sp_id,
            $LANG21, $LANG_STATIC, $LANG_ACCESS, $LANG_ADMIN, $LANG24,
@@ -67,9 +67,17 @@ function PAGE_form($A, $error = false)
 
     USES_lib_admin();
 
+    if ( $editFlag ) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    }
+
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php',
               'text' => $LANG_STATIC['page_list']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
+              'text' => $lang_create_or_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -193,7 +201,7 @@ function PAGE_form($A, $error = false)
         if (empty ($current_topic)) {
             $current_topic = 'none';
         }
-        $topics = COM_topicList ('tid,topic', $current_topic, 1, true);
+        $topics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
         $alltopics = '<option value="all"';
         if ($current_topic == 'all') {
             $alltopics .= ' selected="selected"';
@@ -405,6 +413,8 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
 {
     global $_CONF, $_SP_CONF, $_TABLES, $_USER, $LANG_STATIC;
 
+    $editFlag = false;
+
     if (!empty ($sp_id) && $action == 'edit') {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);
@@ -420,7 +430,7 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
         // editing pages with PHP errors
 //        $preview_content = SP_render_content ($A['sp_content'], $A['sp_php']);
 //        $preview_title = isset($A['sp_title']) ? $A['sp_title'] : '';
-
+        $editFlag = true;
 
     } elseif ($action == 'edit') {
         // we're creating a new staticpage, set default values
@@ -469,7 +479,7 @@ function PAGE_edit($sp_id, $action = '', $editor = '',$preview_content = '')
 
     if ( $action == 'preview') { $A['show_preview'] = 1; $A['preview'] = 1; }
 
-    return PAGE_form($A);
+    return PAGE_form($A,'',$editFlag);
 }
 
 /**
@@ -675,6 +685,8 @@ function PAGE_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php',
+              'text' => $LANG_STATIC['page_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],

@@ -198,9 +198,8 @@ function plugin_showstats_bad_behavior2 ($showsitestats)
             for ($i = 0; $i < $nrows; $i++) {
                 $B = array();
                 $A = DB_fetchArray ($result);
-                $url = $_CONF['site_url']
-                     . '/search.php?mode=search&amp;type=bad_behavior2'
-                     . '&amp;query=' . urlencode ($A['key']);
+                $url = $_CONF['site_admin_url']
+                     . '/plugins/bad_behavior2/index.php?mode=search&amp;key='.urlencode ($A['key']);
                 $B['key'] = '<a href="' . $url . '">'
                                     . $LANG_BB2_RESPONSE[$A['key']] . '</a>';
                 $B['count'] = COM_numberFormat ($A['count']);
@@ -237,64 +236,7 @@ function plugin_statssummary_bad_behavior2 ()
     }
 }
 
-function plugin_searchtypes_bad_behavior2 ()
-{
-    global $LANG_BAD_BEHAVIOR;
 
-    if (SEC_inGroup('Bad Behavior2 Admin') &&
-            function_exists('bb2_insert_head')) {
-        $tmp['bad_behavior2'] = $LANG_BAD_BEHAVIOR['plugin_display_name'];
-
-        return $tmp;
-    }
-
-    return array();
-}
-
-function plugin_dopluginsearch_bad_behavior2($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page = -1, $perpage = -1)
-{
-    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
-
-    $query = DB_escapeString(trim($query));
-
-    if (empty($type)) {
-        $type = 'all';
-    }
-
-    if (!SEC_inGroup('Bad Behavior2 Admin') ||
-            (($type != 'all') && ($type != 'bad_behavior2'))) {
-        return;
-    }
-
-    // do empty queries (i.e. return everything) only when explicitly
-    // searching for Bad Behavior
-    if (empty($query) && ($type != 'bad_behavior2')) {
-        return;
-    }
-
-    // Build search SQL
-    $sql = 'SELECT id, ip AS title, http_headers AS description,UNIX_TIMESTAMP(date) AS date,"" AS uid, 0 AS hits, ';
-    $sql .= "CONCAT('{$_CONF['site_admin_url']}/plugins/bad_behavior2/index.php?mode=view&amp;id=',id) AS url ";
-    $sql .= 'FROM ' . $_TABLES['bad_behavior2'] . ' WHERE 1=1 ';
-
-    // Create a SearchCriteria instance with the name of the plugin
-    $search = new SearchCriteria('bad_behavior2', $LANG_BAD_BEHAVIOR['results']);
-
-    // These are the columns in the table that need searching
-    $columns = array('title' => 'ip', 'http_headers');
-
-    $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(date)', $datestart, $dateend);
-
-    // Get back the completed SQL query
-    list($sql, $ftsql) = $search->buildSearchSQL($keyType, $query, $columns,
-                                                 $sql);
-
-    // Set the Std. SQL Query
-    $search->setSQL($sql);
-    $search->setRank(2);
-
-    return $search;
-}
 
 function plugin_templatesetvars_bad_behavior2($name, &$template) {
     global $_CP_CONF, $_USER, $_TABLES;
@@ -309,5 +251,30 @@ function phpblock_bad_behavior2_stats() {
         return bb2_insert_stats();
     }
     return '';
+}
+
+function _validate_ip_cidr($cidr)
+{
+    $must_cidr = false;
+    if (!preg_match("/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}(\/[0-9]{1,2})?$/", $cidr)) {
+        $return = false;
+    } else {
+        $return = true;
+    }
+    if ($return == true) {
+        $parts = explode("/", $cidr);
+        $ip = @$parts[0];
+        $netmask = @$parts[1];
+        $octets = explode(".", $ip);
+        foreach ($octets as $octet) {
+            if ($octet > 255) {
+                $return = false;
+            }
+        }
+        if ((($netmask != "") && ($netmask > 32) && !$must_cidr) || (($netmask == ""||$netmask > 32) && $must_cidr)) {
+            $return = false;
+        }
+    }
+    return $return;
 }
 ?>

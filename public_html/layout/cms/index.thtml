@@ -5,6 +5,14 @@
 {!endif}
 
 <div class="infinite-container">
+
+{!if breadcrumbs}
+<ul class="uk-breadcrumb">
+    <li><a href="{site_url}">{$LANG01[68]}</a></li>
+    <li class="uk-active"><span>{topic}</span></li>
+</ul>
+{!endif}
+
 {page_contents}
 </div>
 
@@ -18,7 +26,7 @@ $(document).ready(function() {
 	var counter = 1;
 	var infinite = new Waypoint.Infinite({
   	element: $('.infinite-container')[0],
- 	  onAfterPageLoad: function() {
+ 	  onAfterPageLoad: function($item) {
  	  	counter++;
  	  	$("iframe.uk-responsive-width").each(function(i,el) {
  	  		var ele = $( el );
@@ -36,6 +44,29 @@ $(document).ready(function() {
                 var newheight= (width < iwidth) ? height : ele.data('height');
             ele.css({'height': (width < iwidth) ? height : ele.data('height')});
  	  	});
+      $('video,audio').mediaelementplayer({
+          defaultVideoWidth: 480,
+          defaultVideoHeight: 270,
+          videoWidth: -1,
+          videoHeight: -1,
+          audioWidth: 400,
+          audioHeight: 30,
+          startVolume: 0.8,
+          loop: false,
+          enableAutosize: true,
+          features: ['playpause','progress','current','duration','tracks','volume','fullscreen'],
+          alwaysShowControls: false,
+          iPadUseNativeControls: false,
+          iPhoneUseNativeControls: false,
+          AndroidUseNativeControls: false,
+          alwaysShowHours: false,
+          showTimecodeFrameCount: false,
+          framesPerSecond: 25,
+          enableKeyboard: true,
+          pauseOtherPlayers: true,
+          pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
+          keyActions: []
+      });
 {!if comment_disqus_shortname}
 			var disqus_shortname = "{comment_disqus_shortname}";
 			$(document).ready (function () {
@@ -45,6 +76,11 @@ $(document).ready(function() {
 {!if fb_comment_engine}
  	  	FB.XFBML.parse();
 {!endif}
+
+{!if plugin_scripts}
+  {plugin_scripts}
+{!endif}
+
  	  },
  	  onBeforePageLoad: function() {
  	  	if (counter > 3 ) {

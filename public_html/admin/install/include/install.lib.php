@@ -694,7 +694,7 @@ function INST_updateDB($_SQL,$use_innodb)
  */
 function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
-    global $_TABLES, $_CONF, $_SYSTEM, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
+    global $_TABLES, $_CONF, $_SYSTEM, $_VARS, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
     global $_GLFUSION;
 
@@ -1184,6 +1184,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
+            // reset the theme and allow-user-themes
+            $c->set("theme", "cms", "Core");
+            $c->set("allow_user_themes", 0, "Core");
+
             $current_fusion_version = '1.5.0';
 
         case '1.5.0' :
@@ -1459,6 +1463,73 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('standard_auth_first',1,'select',4,1,1,125,TRUE);
 
             $current_fusion_version = '1.6.6';
+
+        case '1.6.6' :
+        case '1.6.7' : // non-released development version
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->del('digg_enabled','Core');
+
+            $_SQL = array();
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_video` VARCHAR(255) NULL DEFAULT NULL AFTER `story_image`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
+
+            // comment submission support
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
+
+            $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
+            $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
+            $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.submit', 'Comments bypass submission queue', 1)";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
+            DB_query("INSERT INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');",1);
+
+            $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
+            $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
+            $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
+            // ties comment.moderate feature to Comment Admin group
+            if (($cmt_mod_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_mod_id, $cmt_admin)");
+            }
+            // adds comment.submit feature to comment admin group
+            if (($cmt_sub_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_sub_id, $cmt_admin)");
+            }
+            // adds comment admin group to Root group
+            if ($cmt_admin > 0) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
+            }
+            $c->add('commentssubmission',0,'select',4,6,31,35,TRUE,'Core');
+
+            // site guid
+            $rk = DB_getItem($_TABLES['vars'],'value','name="guid"');
+            if ( $rk === NULL || $rk === '' ) {
+                $rk = INST_randomKey(80);
+                DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".DB_escapeString($rk)."')",1);
+            }
+            $_VARS['guid'] = $rk;
+            $_coreCfg = $c->get_config('Core');
+            $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
+
+            $c->del('path_pear','Core');
+            $c->del('have_pear','Core');
+            $c->del('fs_pear','Core');
+
+            // clear out syndication updates for comments
+            DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
+
+            $current_fusion_version = '1.7.0';
+
+        case '1.7.0' :
+            $current_fusion_version = '1.7.1';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
@@ -2125,6 +2196,17 @@ function INST_deleteDirIfEmpty($path) {
     return true;
 }
 
+function INST_encrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_encrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return trim(base64_encode(openssl_encrypt($data, 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+
 function _searchForId($id, $array) {
    foreach ($array as $key => $val) {
        if ($val['name'] === $id) {
@@ -2152,6 +2234,33 @@ function INST_errorLog( $logpath, $logentry)
     return;
 }
 
+function INST_randomKey($length = 40 )
+{
+    $max = ceil($length / 40);
+    $random = '';
+    for ($i = 0; $i < $max; $i ++) {
+    $random .= sha1(microtime(true).mt_rand(10000,90000));
+    }
+    return substr($random, 0, $length);
+}
+
+function INST_securePassword($length = 12) {
+    if (function_exists('openssl_random_pseudo_bytes')) {
+        $token = base64_encode(openssl_random_pseudo_bytes($length, $strong));
+        if ($strong == TRUE)
+            return strtr(substr($token, 0, $length), '+/=', '-_,'); //base64 is about 33% longer, so we need to truncate the result
+    }
+    //fallback to mt_rand if no openssl available
+    $characters = '0123456789';
+    $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=+?';
+    $charactersLength = strlen($characters)-1;
+    $token = '';
+    //select some random characters
+    for ($i = 0; $i < $length; $i++) {
+        $token .= $characters[mt_rand(0, $charactersLength)];
+    }
+    return $token;
+}
 
 
 function _searchForIdKey($id, $array) {

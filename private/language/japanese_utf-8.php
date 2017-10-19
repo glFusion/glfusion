@@ -262,7 +262,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -468,7 +474,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -772,7 +778,7 @@ $LANG20 = array(
     3 => 'パスワードが違います。ユーザ名：',
     4 => 'ユーザ名：',
     5 => 'パスワード：',
-    6 => '管理ツールの使用は，すべてが記録されます。<br' . XHTML . '>このページは，管理者のみ使用できます。',
+    6 => '管理ツールの使用は，すべてが記録されます。<br>このページは，管理者のみ使用できます。',
     7 => 'ログイン',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -910,7 +916,7 @@ $LANG24 = array(
     48 => '画像',
     49 => '右',
     50 => '左',
-    51 => '<p>添付した画像は，自動タグで記述してください。書式は，[imageX]，[imageX_right]，[imageX_left]（Xは添付した画像の番号）（例 [image1]）。注意：添付した画像は記事内ですべて使用しなければ記事を保存できません。<br' . XHTML . '><p><strong>プレビュー</strong>: 画像付きの記事はドラフト（下書き）として保存して閲覧してください。プレビューボタンは画像が無いときにのみ利用できます。</p>',
+    51 => '<p>添付した画像は，自動タグで記述してください。書式は，[imageX]，[imageX_right]，[imageX_left]（Xは添付した画像の番号）（例 [image1]）。注意：添付した画像は記事内ですべて使用しなければ記事を保存できません。<br><p><strong>プレビュー</strong>: 画像付きの記事はドラフト（下書き）として保存して閲覧してください。プレビューボタンは画像が無いときにのみ利用できます。</p>',
     52 => '',
     53 => 'は使用されていません。保存する前に冒頭文または本文で画像を使用しなければなりません。',
     54 => '添付された画像が使用されていません。',
@@ -983,7 +989,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1046,7 +1054,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1104,7 +1114,7 @@ $LANG28 = array(
     49 => '管理者グループ',
     50 => 'このグループを管理者グループとしてフィルタリングするには，チェックしてください。',
     51 => 'オンライン期間',
-    52 => '<br' . XHTML . '>注: 「オンライン期間」とは，最初にアカウントを登録してから前回ログインした時までの日数です。',
+    52 => '<br>注: 「オンライン期間」とは，最初にアカウントを登録してから前回ログインした時までの日数です。',
     53 => '登録済み',
     54 => '一括削除',
     55 => 'この機能はコンフィギュレーションの管理パネルで「最終ログインを記録する」を有効に設定している場合にのみ動作します。',
@@ -1242,7 +1252,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'プラグインをインストールすることで，glFusionや最悪の場合はシステムに悪影響を与えることがあります。悪影響を避けるために，glFusionのホームページでは様々なOSでテストしたプラグインのみを掲載していますので，<a href="http://www.gllabs.org" target="_blank">glFusionのホームページ</a>からのみダウンロードするようにしてください。プラグインのインストールに際しては，システムのコマンドを実行する必要がありますので，特に公式サイト以外からダウンロードしたばあいは，この点に注意してください。また，これらの注意は，プラグインのインストールの成功やプラグインによる影響について我々がなんらかの保証をするものではありません。プラグインのインストール方法は，それぞれのプラグインに同梱されています。',
+    1 => 'プラグインをインストールすることで，glFusionや最悪の場合はシステムに悪影響を与えることがあります。悪影響を避けるために，glFusionのホームページでは様々なOSでテストしたプラグインのみを掲載していますので，<a href="https://www.glfusion.org" target="_blank">glFusionのホームページ</a>からのみダウンロードするようにしてください。プラグインのインストールに際しては，システムのコマンドを実行する必要がありますので，特に公式サイト以外からダウンロードしたばあいは，この点に注意してください。また，これらの注意は，プラグインのインストールの成功やプラグインによる影響について我々がなんらかの保証をするものではありません。プラグインのインストール方法は，それぞれのプラグインに同梱されています。',
     2 => 'プラグインのインストールに関する注意',
     3 => 'プラグインのインストールフォーム',
     4 => 'プラグインのファイル',
@@ -1250,8 +1260,8 @@ $LANG32 = array(
     6 => '注意：プラグインはすでにインストールされています。',
     7 => 'インストールしようとしているプラグインはすでに存在しています。再インストールする前に一旦削除してください。',
     8 => 'プラグインの互換性チェックに失敗しました。',
-    9 => 'このプラグインは新しいバージョンのglFusionが必要です。<a href=http://www.gllabs.org>glFusion</a>をアップグレードするか，新しいバージョンのプラグインを入手してください。',
-    10 => '<br' . XHTML . '><strong>プラグインはインストールされていません</strong><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'このプラグインは新しいバージョンのglFusionが必要です。<a href=https://www.glfusion.org>glFusion</a>をアップグレードするか，新しいバージョンのプラグインを入手してください。',
+    10 => '<br><strong>プラグインはインストールされていません</strong><br><br>',
     11 => 'プラグインを修正・削除するにはプラグインの編集アイコンをクリックしてください。プラグインの作者のページへのリンクも併せて表示されます。プラグインのバージョンは，インストール中のものとファイルから得られたものが表示されます。これによってプラグインの更新の必要性を判断することができます。',
     12 => 'plugineditor()にプラグイン名が渡されませんでした',
     13 => 'プラグイン編集',
@@ -1428,7 +1438,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1511,7 +1522,7 @@ $MESSAGE = array(
     74 => 'ピングバックが無事送られました。',
     75 => 'トラックバックはPOSTリクエストで送信する必要があります。',
     76 => 'この項目を削除してもよいですか？',
-    77 => '警告:<br' . XHTML . '>デフォルトのエンコーディングをUTF-8に設定していますが，サーバーがマルチバイトエンコーディングをサポートしていません。PHP用に mbstring モジュールをインストールするか，UTF-8ではないキャラクタセットないし言語に変更してください。',
+    77 => '警告:<br>デフォルトのエンコーディングをUTF-8に設定していますが，サーバーがマルチバイトエンコーディングをサポートしていません。PHP用に mbstring モジュールをインストールするか，UTF-8ではないキャラクタセットないし言語に変更してください。',
     78 => 'メールアドレスと確認用メールアドレスには同じものを入力してください。',
     79 => '開こうしたページは，このサイトにもはや存在していない関数を参照しています。',
     80 => 'このフィードを作成したプラグインは，現在無効にされています。そのプラグインを再び有効にしなければ，フィードを編集できません。',
@@ -1718,7 +1729,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2050,7 +2061,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => '該当する話題にのみ表示',
-    1 => 'トップページに表示'
+    1 => 'トップページに表示',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2410,6 +2422,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2438,6 +2451,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2577,8 +2593,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'バックアップ',
     'path_data' => 'データ',
     'path_images' => '画像',
-    'path_pear' => 'PEARのパス',
-    'have_pear' => 'PEARをインストールしている',
     'mail_settings' => 'メール設定',
     'theme' => 'テーマ',
     'menu_elements' => 'メニュー項目',
@@ -2757,7 +2771,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'RootユーザはHTMLフィルタを無効にする',
     'allowed_protocols' => '許可されたプロトコル',
     'disable_autolinks' => '自動リンクを無効にする',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'チェックモード',
     'censorreplace' => '置き換え',
     'censorlist' => 'バッドワード',
@@ -2835,6 +2848,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2843,7 +2859,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2863,7 +2880,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'パス',
     'fs_theme' => 'テーマ',
     'fs_mail' => 'メール',
-    'fs_pear' => 'PEAR',
     'fs_users' => 'ユーザ',
     'fs_misc' => 'その他',
     'fs_spamx' => 'Spam-X',
@@ -2917,7 +2933,7 @@ $LANG_configselects['Core'] = array(
     7 => array('最後のページ' => 'last', '最初のページ' => 'first', '全ページ' => 'all'),
     8 => array('右' => 'right', '左' => 'left'),
     9 => array('作成した記事を表示する' => 'item', '記事管理を表示する' => 'list', 'Homeを表示する' => 'home', '管理画面TOPを表示する' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'GDライブラリ' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'GDライブラリ' => 'gdlib'),
     11 => array('一覧' => 'flat', '入れ子' => 'nested', '表示しない' => 'nocomment'),
     12 => array('アクセス不可' => 0, '表示' => 2, '表示・編集' => 3),
     13 => array('スキップする' => 0, '許可する(速度制限あり)' => 1, '許可する(速度制限なし)' => 2),
@@ -2937,7 +2953,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

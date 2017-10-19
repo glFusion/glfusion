@@ -1,3 +1,0 @@
-{# begin {templatelocation} #}
-<span class="pluginSmallText"><span style="font-weight:bold;">{lang_keywords}</span> {media_keywords}</span>
-{# end {templatelocation} #}

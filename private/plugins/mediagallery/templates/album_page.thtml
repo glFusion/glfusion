@@ -104,6 +104,13 @@
         {CELL_DISPLAY_IMAGE}
       </div>
     </li>
+{!if adblock}
+		<li>
+			<div class="uk-panel uk-text-center uk-margin">
+				{adblock}
+			</div>
+		</li>
+{!endif}
     <!-- END ImageColumn -->
     <!-- END ImageRow -->
   </ul>

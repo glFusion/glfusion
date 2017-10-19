@@ -1,35 +1,87 @@
 {# begin {templatelocation} #}
-<table cellpadding="0" cellspacing="0" style="width:100%;border:none;margin:0px auto;">
-<tr>
-<td class="pluginRow2" style="width:75%;vertical-align:middle;padding:5px;">
-<span style="font-weight:bold;">{album_title}</span>
-</td>
-<td class="pluginRow2" style="text-align:right;vertical-align:middle;padding:5px;">
-{pagination}
-</td>
-</tr>
-</table>
-<div style="text-align:center;">
-    <br /><br />
-    <h2>{album_desc}</h2>
-    <script type="text/javascript">
-    	var flashvars = {};
-    var params = {
-    wmode: "transparent"
-    };
-    	var attributes = {};
-    	flashvars.action="play";
-    	flashvars.playlist="{site_url}/xspf.php%3Faid%3D{aid}";
-    	flashvars.folder="{site_url}/players/";
-    	flashvars.lma="yes";
-    	flashvars.loop="playlist";
-    	flashvars.display="1@. = @0@ - @";
-        swfobject.embedSWF("{site_url}/players/XSPF_EV.swf", "mp3audio2", "500", "375", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
-    </script>
-    <div id="mp3audio2">
-    	<a href="//www.adobe.com/go/getflashplayer">
-    		<img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-    	</a>
-    </div>
+<nav class="uk-navbar uk-margin-bottom">
+	<div class="uk-navbar-content uk-text-truncate">
+		<span class="uk-text-truncate">{album_title}</span>
+	</div>
+	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+		{pagination}
+	</div>
+</nav>
+
+<div class="uk-panel uk-panel-box">
+
+	<div id="jp-player_1" class="jp-jplayer"></div>
+	<div id="jp-jukebox" class="jp-audio" role="application" aria-label="media player" style="margin: auto !important;">
+		<div class="jp-type-playlist">
+			<div class="jp-gui jp-interface">
+				<div class="jp-volume-controls">
+					<button class="jp-mute" role="button" tabindex="0">mute</button>
+					<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+					<div class="jp-volume-bar">
+						<div class="jp-volume-bar-value"></div>
+					</div>
+				</div>
+				<div class="jp-controls-holder">
+					<div class="jp-controls">
+						<button class="jp-previous" role="button" tabindex="0">previous</button>
+						<button class="jp-play" role="button" tabindex="0">play</button>
+						<button class="jp-stop" role="button" tabindex="0">stop</button>
+						<button class="jp-next" role="button" tabindex="0">next</button>
+					</div>
+					<div class="jp-progress">
+						<div class="jp-seek-bar">
+							<div class="jp-play-bar"></div>
+						</div>
+					</div>
+					<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+					<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+					<div class="jp-toggles">
+						<button class="jp-repeat" role="button" tabindex="0">repeat</button>
+						<button class="jp-shuffle" role="button" tabindex="0">shuffle</button>
+					</div>
+				</div>
+			</div>
+			<div class="jp-playlist">
+				<ul>
+					<li>&nbsp;</li>
+				</ul>
+			</div>
+			<div class="jp-no-solution">
+				<span>Update Required</span>
+				To play the media you will need to either update your browser to a recent version or update your <a href="https://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+			</div>
+		</div>
+	</div>
+
 </div>
+
+<div style="clear:both;"></div>
+
+<script>
+	$(document).ready(function(){
+		new jPlayerPlaylist({
+			jPlayer: "#jp-player_1",
+			cssSelectorAncestor: "#jp-jukebox"
+		}, [
+		<!-- BEGIN playlist -->
+		{
+			title:"{audio_title}",
+			mp3:"{audio_url}",
+		},
+		<!-- END playlist -->
+		], {
+			playlistOptions: {
+				autoPlay: true,
+			},
+			swfPath: "{site_url}/players/jplayer/jplayer",
+			supplied: "mp3",
+			wmode: "window",
+			useStateClassSkin: true,
+			autoBlur: false,
+			smoothPlayBar: true,
+			keyEnabled: true,
+		});
+	});
+	//]]>
+</script>
 {# end {templatelocation} #}

@@ -128,9 +128,9 @@ $LANG25 = array(
 # autotag descriptions
 
 $LANG_PO_AUTOTAG = array(
-    'desc_poll'			=> 'Link: zu einer Umfrage dieser Seite. (Standart link_text: Umfrage-Titel). Anwendung: [poll:<i>poll_id</i> {link_text}]',
-    'desc_poll_result'	=> 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite. Anwendung: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote'	=> 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage. Anwendung: [poll_vote:<i>poll_id</i>]'
+    'desc_poll' => 'Link: zu einer Umfrage dieser Seite. (Standart link_text: Umfrage-Titel). Anwendung: [poll:<i>poll_id</i> {link_text}]',
+    'desc_poll_result' => 'HTML: zeigt die Ergebnisse einer Umfrage dieser Seite. Anwendung: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote' => 'HTML: zeigt einen Abstimmungs-Block für eine Umfrage. Anwendung: [poll_vote:<i>poll_id</i>]'
 );
 
 $PLG_polls_MESSAGE19 = 'Umfrage wurde erfolgreich gespeichert.';

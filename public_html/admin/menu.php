@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion CMS Menu Administration                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,7 +29,6 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'classes/menu.class.php';
 require_once $_CONF['path_system'] . 'lib-menu.php';
 
 USES_lib_admin();
@@ -84,6 +83,8 @@ function MB_displayMenuList( ) {
     }
 
     $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php',
+                  'text' => $LANG_MB01['menu_list'],'active'=>true),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
                   'text' => $LANG_MB01['add_newmenu']),
             array('url'  => $_CONF['site_admin_url'],
@@ -158,6 +159,8 @@ function MB_cloneMenu( $menu_id ) {
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
+                  'text' => $LANG_MB01['add_newmenu'],'active'=>true),
             array('url'  => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home']),
     );
@@ -209,6 +212,8 @@ function MB_saveCloneMenu( ) {
         $root       = SEC_inGroup('Root');
         $groups     = $_GROUPS;
 
+        $menuClass = menu::getInstance($menu_id);
+
         $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int)$menu;
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
@@ -245,6 +250,8 @@ function MB_createMenu( ) {
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
+                  'text' => $LANG_MB01['add_newmenu'],'active'=>true),
             array('url'  => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home']),
     );
@@ -394,10 +401,15 @@ function MB_displayTree( $menu_id ) {
     $menu = menu::getInstance( $menu_id );
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
-                  'text' => $LANG_MB01['create_element']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&menu='.(int) $menu_id,
+                  'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements'],'active'=>true),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
+                  'text' => $LANG_MB01['create_element']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[3],
@@ -490,18 +502,24 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
 
 function MB_createElement ( $menu_id ) {
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
-           $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION;
+           $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION, $LANG_ADMIN;
 
     $menu = menu::getInstance($menu_id);
 
     $retval = '';
     $group_select = '';
 
+
+
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
-                  'text' => $LANG_MB01['return_to'] . $menu->name),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&menu='.(int) $menu_id,
+                  'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
+                  'text' => $LANG_MB01['create_element'],'active'=>true),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['create_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[4],
@@ -764,17 +782,21 @@ function MB_saveNewMenuElement ( ) {
 
 function MB_editElement( $menu_id, $mid ) {
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN,
-           $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION;
+           $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,$LANG_ADMIN;
 
     $retval = '';
 
     $menu = menu::getInstance($menu_id);
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
-                  'text' => $LANG_MB01['return_to'] . $menu->name),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&menu='.(int) $menu_id,
+                  'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
+                  'text' => $LANG_MB01['edit_element'],'active'=>true),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[5],
@@ -1085,7 +1107,7 @@ function MB_deleteChildElements( $id, $menu_id ){
 function MB_editMenu( $mid ) {
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_MB00, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,
-           $LANG_MB_MENU_TYPES;
+           $LANG_MB_MENU_TYPES,$LANG_ADMIN;
 
     $retval = '';
     $menu_id = $mid;
@@ -1093,10 +1115,13 @@ function MB_editMenu( $mid ) {
     $menu = menu::getInstance($menu_id);
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=menu&amp;menu='.$menu_id,
-                  'text' => $LANG_MB01['return_to'] . $menu->name),
+
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
                   'text' => $LANG_MB01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=editmenu&menuid='.(int)$menu_id,
+                  'text' => $LANG_MB01['edit_menu'],'active'=>true),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_MB_ADMIN[5],

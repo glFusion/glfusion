@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Handle pingbacks for stories and plugins.                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -33,15 +33,12 @@
 
 require_once 'lib-common.php';
 
+use PhpXmlRpc\Value;
+
 // once received, we're handling pingbacks like trackbacks,
 // so we use the trackback library even when trackback may be disabled
 require_once $_CONF['path_system'] . 'lib-pingback.php';
 require_once $_CONF['path_system'] . 'lib-trackback.php';
-
-require_once $_CONF['path'] . 'lib/http/http.php';
-
-// PEAR class to handle XML-RPC
-require_once 'XML/RPC/Server.php';
 
 // Note: Error messages are hard-coded in English since there is no way of
 // knowing which language the sender of the pingback may prefer.
@@ -71,57 +68,49 @@ function PNB_handlePingback($id, $type, $url, $oururl)
 {
     global $_CONF, $_TABLES, $PNB_ERROR;
 
-    require_once 'HTTP/Request.php';
-
     if (!isset($_CONF['check_trackback_link'])) {
         $_CONF['check_trackback_link'] = 2;
     }
-
     // handle pingbacks to articles on our own site
     $skip_speedlimit = false;
-    if ($_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR']) {
+
+    if (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR']) {
         if (!isset($_CONF['pingback_self'])) {
             $_CONF['pingback_self'] = 0; // default: skip self-pingbacks
         }
-
         if ($_CONF['pingback_self'] == 0) {
-            return new XML_RPC_Response(new XML_RPC_Value($PNB_ERROR['skipped']));
+            return new PhpXmlRpc\Response(new PhpXmlRpc\Value($PNB_ERROR['skipped'], "string"));
         } elseif ($_CONF['pingback_self'] == 2) {
             $skip_speedlimit = true;
         }
     }
-
     COM_clearSpeedlimit($_CONF['commentspeedlimit'], 'pingback');
     if (!$skip_speedlimit) {
         $last = COM_checkSpeedlimit('pingback');
         if ($last > 0) {
-            return new XML_RPC_Response(0, 49,
+            return new PhpXmlRpc\Response(0, 49,
                 sprintf($PNB_ERROR['speedlimit'], $last,
                     $_CONF['commentspeedlimit']));
         }
     }
-
     // update speed limit in any case
     COM_updateSpeedlimit('pingback');
 
-    if ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR']) {
+    if (isset($_SERVER['REMOTE_ADDR']) || isset($_SERVER['SERVER_ADDR']) || $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR']) {
         if ($_CONF['check_trackback_link'] & 4) {
             $parts = parse_url($url);
             if (empty($parts['host'])) {
                 TRB_logRejected('Pingback: No valid URL', $url);
-
-                return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
+                return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
             } else {
                 $ip = gethostbyname($parts['host']);
                 if ($ip != $_SERVER['REMOTE_ADDR']) {
                     TRB_logRejected('Pingback: IP address mismatch', $url);
-
-                    return new XML_RPC_Response(0, 49, $PNB_ERROR['spam']);
+                    return new PhpXmlRpc\Response(0, 49, $PNB_ERROR['spam']);
                 }
             }
         }
     }
-
     // See if we can read the page linking to us and extract at least
     // the page's title out of it ...
     $title = '';
@@ -147,7 +136,7 @@ function PNB_handlePingback($id, $type, $url, $oururl)
                         TRB_logRejected('Pingback: No link to us', $url);
                         $comment = TRB_formatComment($url);
                         PLG_spamAction($comment, $_CONF['spamx']);
-                        return new XML_RPC_Response(0, 49, $PNB_ERROR['spam']);
+                        return new PhpXmlRpc\Response(0, 49, $PNB_ERROR['spam']);
                     }
                 }
                 preg_match(':<title>(.*)</title>:i', $body, $content);
@@ -192,7 +181,7 @@ function PNB_handlePingback($id, $type, $url, $oururl)
             // through the spam filter here ...
             } else {
                 COM_errorLog("Pingback verification: unable to retrieve response body");
-                return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
+                return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
             }
         } else {
             COM_errorLog("Pingback verification: Got HTTP response code "
@@ -202,28 +191,27 @@ function PNB_handlePingback($id, $type, $url, $oururl)
         }
     } else {
         COM_errorLog("Pingback verification: " . $error . " when requesting ".$url);
-        return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
+        return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
     }
 
     // check for spam first
     $saved = TRB_checkForSpam($url, $title, '', $excerpt);
 
     if ($saved == TRB_SAVE_SPAM) {
-        return new XML_RPC_Response(0, 49, $PNB_ERROR['spam']);
+        return new PhpXmlRpc\Response(0, 49, $PNB_ERROR['spam']);
     }
 
     // save as a trackback comment
     $saved = TRB_saveTrackbackComment($id, $type, $url, $title, '', $excerpt);
 
     if ($saved == TRB_SAVE_REJECT) {
-        return new XML_RPC_Response(0, 49, $PNB_ERROR['multiple']);
+        return new PhpXmlRpc\Response(0, 49, $PNB_ERROR['multiple']);
     }
 
     if (isset($_CONF['notification']) && in_array('pingback', $_CONF['notification']) ) {
         TRB_sendNotificationEmail($saved, 'pingback');
     }
-
-    return new XML_RPC_Response(new XML_RPC_Value($PNB_ERROR['success']));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($PNB_ERROR['success'], "string"));
 }
 
 /**
@@ -327,57 +315,49 @@ function PNB_getSid($url)
  * @param    object $params parameters of the pingback XML-RPC call
  * @return   object              XML-RPC response
  */
-function PNB_receivePing($params)
+function PNB_receivePing($req)
 {
     global $_CONF, $_TABLES, $PNB_ERROR;
 
     if (!$_CONF['pingback_enabled']) {
-        return new XML_RPC_Response(0, 33, $PNB_ERROR['disabled']);
+        return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['disabled']);
     }
-
-    $s = $params->getParam(0);
-    $p1 = $s->scalarval(); // the page linking to us
-
+    $err = "";
+    $ra = array();
+    $encoder = new PhpXmlRpc\Encoder();
+    $p1 = $encoder->decode($req->getParam(0));
     if (is_array($p1)) {
         // WordPress sends the 2 URIs as an array ...
         $sourceURI = $p1[0]->scalarval();
         $targetURI = $p1[1]->scalarval();
     } else {
         $sourceURI = $p1;
-
-        $s = $params->getParam(1);
-        $targetURI = $s->scalarval(); // the page being linked to (on our site)
+        $s = $req->getParam(1);
+        $targetURI = $s->me['string'];
     }
-
     if (!PNB_validURL($targetURI)) {
-        return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
+        return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
     }
-
     $type = PNB_getType($targetURI);
     if (empty($type)) {
-        return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
+        return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
     }
-
     if ($type === 'article') {
         $id = PNB_getSid($targetURI);
     } else {
         $id = PLG_handlePingComment($type, $targetURI, 'acceptByURI');
     }
     if (empty($id)) {
-        return new XML_RPC_Response(0, 49, $PNB_ERROR['no_access']);
+        return new PhpXmlRpc\Response(0, 49, $PNB_ERROR['no_access']);
     }
-
     return PNB_handlePingback($id, $type, $sourceURI, $targetURI);
+
 }
 
 // MAIN
-
-// fire up the XML-RPC server - it does all the work for us
-$s = new XML_RPC_Server(
-    array(
-        'pingback.ping' => array(
-            'function' => 'PNB_receivePing',
-        ),
+$s = new PhpXmlRpc\Server(array(
+    "pingback.ping" => array(
+        "function" => "PNB_receivePing",
     )
-);
+));
 ?>

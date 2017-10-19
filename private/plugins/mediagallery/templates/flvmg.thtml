@@ -1,32 +1,19 @@
 {# begin {templatelocation} #}
-<div style="width:{width}px;margin:0 auto;">
+<div class="uk-responsive-width uk-responsive-height" style="{alignment}width:{width}px;margin:0 auto;padding:5px;">
+  <video class="uk-responsive-width" width="{width}" height="{height}"
+{!if thumbnail}
+  poster="{thumbnail}"
+{!endif}
+    autoplay="{autoplay}"
+    controls="controls" preload="auto">
+    <source type="{mime_type}" src="{movie}" />
+      <object width="{resolution_x}px" height="{resolution_y}px" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+        <param name="movie" value="flashmediaelement.swf" />
+        <param name="flashvars" value="autoplay={autoplay}&controls=true&poster={thumbnail}&file={movie}" />
+        <img src="{thumbnail}" width="{width}" height="{height}" alt="No video playback capabilities" title="No video playback capabilities" />
+      </object>
+  </video>
+</div>
 
-<script type="text/javascript">
-	var flashvars = {};
-    var params = {
-    wmode: "transparent"
-    };
-	var attributes = {};
-	{streamingServerURLmg}
-	flashvars.flvUrl="{videoFile}";
-	flashvars.Width="{width}";
-	flashvars.Height="{height}";
-	flashvars.allowDl="{allowDl}";
-	flashvars.title="{title}";
-	flashvars.autoplay="{autoplay}";
-	{playButtonMG}
-	flashvars.htmlDiv="{id2}";
-	flashvars.langDownload="{lang_download}";
-	flashvars.langLarge="{lang_large}";
-	flashvars.langNormal="{lang_normal}";
-    swfobject.embedSWF("{site_url}/players/MGflv.swf", "{id}", "100%", "100%", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
-</script>
-<div id="{id2}" style="width:{resolution_x}px;height:{resolution_y}px;">
-  <div id="{id}">
-	<a href="http://www.adobe.com/go/getflashplayer">
-		<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-	</a>
-  </div>
-</div>
-</div>
+
 {# end {templatelocation} #}

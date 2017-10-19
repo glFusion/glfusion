@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	var site_url = '{site_url}';
 </script>
-<script>
+<script type="text/javascript">
 	$(document).ready(function(){
 		$("#subscribe-link").click(function(e){
 			e.preventDefault();
@@ -185,11 +185,20 @@
 				</dd>
 			</dl>
 		</li>
+
+	{!if adblock}
+			<li class="row">
+				<dl>
+				<div class="uk-text-center uk-margin-top">{adblock}</div>
+				</dl>
+			</li>
+	{!endif}
+
 <!-- END topicrows -->
 	</ul>
 {!else}
-  <div class="uk-alert uk-alert-warning uk-margin">
-    {$LANG_GF02[msg05]}
+  <div class="uk-alert uk-alert-warning uk-margin uk-text-center">
+    <em>{$LANG_GF02[msg05]}</em>
   </div>
 {!endif}
 	<div class="uk-grid uk-width-1-1 uk-margin">

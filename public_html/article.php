@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Shows articles in various formats.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,7 +70,7 @@ if (isset ($_POST['mode'])) {
         $order = COM_applyFilter ($_POST['order']);
     }
     if (isset ($_POST['query'])) {
-        $query = COM_applyFilter ($_POST['query']);
+        $query = trim(COM_applyFilter ($_POST['query']));
     }
     if (isset ($_POST['reply'])) {
         $reply = COM_applyFilter ($_POST['reply']);
@@ -83,7 +83,7 @@ if (isset ($_POST['mode'])) {
         $order = COM_applyFilter ($_GET['order']);
     }
     if (isset ($_GET['query'])) {
-        $query = COM_applyFilter ($_GET['query']);
+        $query = trim(COM_applyFilter ($_GET['query']));
     }
     if (isset ($_GET['reply'])) {
         $reply = COM_applyFilter ($_GET['reply']);
@@ -118,9 +118,8 @@ if ($A['count'] > 0) {
 
     if($result == PLG_RET_OK) {
         /* loadFromArray cannot be used, since it overwrites the timestamp */
-        reset($story->_dbFields);
 
-        while (list($fieldname,$save) = each($story->_dbFields)) {
+        foreach ( $story->_dbFields AS $fieldname => $save ) {
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $output)) {
@@ -144,10 +143,14 @@ if ($A['count'] > 0) {
         list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
         $story_template->set_var('direction', $LANG_DIRECTION);
         $story_template->set_var('css_url',$style_cache_url);
-        $story_template->set_var('page_title',
-                $_CONF['site_name'] . ': ' . $story->displayElements('title'));
+        $story_template->set_var('page_title',$_CONF['site_name'] . ': ' . $story->displayElements('title'));
         $story_template->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
         $story_template->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
+
+        $topic_name = DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($story->DisplayElements('tid'))."'");
+        $story_template->set_var('breadcrumbs',true);
+        $story_template->set_var('topic_name',$topic_name);
+
         $story_image = $story->DisplayElements('story_image');
         if ( $story_image != '' ) {
             $story_template->set_var('story_image',$story_image);
@@ -224,10 +227,9 @@ if ($A['count'] > 0) {
             }
             $pingback = true;
         }
-        USES_lib_html2text();
         $metaDesc = $story->DisplayElements('introtext');
         $metaDesc = strip_tags($metaDesc);
-        $html2txt = new html2text($metaDesc,false);
+        $html2txt = new Html2Text\Html2Text($metaDesc,false);
         $metaDesc = trim($html2txt->get_text());
         $shortComment = '';
         $metaArray = explode(' ',$metaDesc);
@@ -386,8 +388,30 @@ if ($A['count'] > 0) {
                                                         'class' => ''));
             }
         }
+        if (($_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
+                $_CONF['ping_enabled']) && SEC_hasRights('story.ping') &&
+            ($story->displayElements('draft_flag') == 0) &&
+            ($story->displayElements('day') < time()) &&
+            ($story->displayElements('perm_anon') != 0)
+        ) {
+            // also check permissions for the topic
+            $topic_anon = DB_getItem($_TABLES['topics'], 'perm_anon',
+                "tid = '" . DB_escapeString($story->displayElements('tid')) . "'");
 
-        $social_icons = SOC_getShareIcons();
+            // check special case: no link when Trackbacks are disabled for this
+            // story AND pinging weblog directories is disabled
+            if (($topic_anon != 0) &&
+                (($story->displayElements('trackbackcode') >= 0) ||
+                    $_CONF['ping_enabled'])
+            ) {
+                $url = $_CONF['site_admin_url']
+                    . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
+                $story_options[] = COM_createLink($LANG_TRB['send_trackback'],
+                    $url);
+            }
+        }
+
+        $social_icons = SOC_getShareIcons($pagetitle,htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()),$permalink,'','article');
 
         $story_template->set_var('social_share',$social_icons);
 
@@ -474,8 +498,7 @@ if ($A['count'] > 0) {
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
                                       $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode'),$story->displayElements('uid')));
         }
-        if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) &&
-                $show_comments) {
+        if ($_CONF['trackback_enabled'] && ($story->displayElements('trackbackcode') >= 0) && $show_comments) {
             if (SEC_hasRights ('story.ping')) {
                 if (($story->displayElements('draft_flag') == 0) &&
                     ($story->displayElements('day') < time ())) {

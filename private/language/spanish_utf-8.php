@@ -256,7 +256,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -462,7 +468,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -766,7 +772,7 @@ $LANG20 = array(
     3 => 'La contraseña ingresada es inválida',
     4 => 'Usuario(a):',
     5 => 'Contraseña:',
-    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br' . XHTML . '>Esta página es para uso exclusivo del personal autorizado.',
+    6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br>Esta página es para uso exclusivo del personal autorizado.',
     7 => 'Identificación',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -977,7 +983,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1040,7 +1048,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1098,7 +1108,7 @@ $LANG28 = array(
     49 => 'Grupo Admin',
     50 => 'Marcar para permitir filtrar este grupo como un grupo de uso Admin',
     51 => 'Dias conectado',
-    52 => '<br' . XHTML . '>Nota: "Dias conectado" es el número de días entre que se registró y accedió por última vez.',
+    52 => '<br>Nota: "Dias conectado" es el número de días entre que se registró y accedió por última vez.',
     53 => 'registrado',
     54 => 'Borrar muchos',
     55 => 'Solo funciona si tienes <code>$_CONF[\'lastlogin\'] = true;</code> en tu config.php',
@@ -1236,7 +1246,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'La instalación de Plug-in(s) puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instales Plug-in(s) obtenidos de <a href="http://www.gllabs.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. Es también importante que entiendas que la instalación del Plug-in requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación del Plug-in ni nos hacemos responsables por cualquier daño causado durante la instalación (o posterior a la misma). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Plug-in.',
+    1 => 'La instalación de Plug-in(s) puede dañar tu instalación de glFusion y, posiblemente, tu sistema. Es importante que sólo instales Plug-in(s) obtenidos de <a href="https://www.glfusion.org" target="_blank">glFusion</a> ya que han sido comprobados en varios entornos. Es también importante que entiendas que la instalación del Plug-in requiere la ejecución de instrucciones del sistema que pueden traer problemas de seguridad. Aún con esta advertencia, no garantizamos el éxito de la instalación del Plug-in ni nos hacemos responsables por cualquier daño causado durante la instalación (o posterior a la misma). En otras palabras, instala el Plug-in a tu propio riesgo. Las instrucciones particulares de instalación vienen dentro de cada Plug-in.',
     2 => 'Advertencia de la instalación del Plug-in',
     3 => 'Formulario de instalación del Plug-in',
     4 => 'Archivo del Plug-in',
@@ -1244,8 +1254,8 @@ $LANG32 = array(
     6 => 'Advertencia: ¡El Plug-in ya está instalado!',
     7 => 'El Plug-in que intentas instalar ya existe. Por favor borra el Plug-in antes de reinstalarlo.',
     8 => 'Falló la comprobación de compatibilidad del Plug-in',
-    9 => 'Este Plug-in requiere una versión más nueva de glFusion. Puedes obtener una copia actualizada de <a href=http://www.gllabs.org>glFusion</a> o instalar otra versión del Plug-in.',
-    10 => '<br' . XHTML . '><b>No hay Plug-in(s) instalados.</b><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'Este Plug-in requiere una versión más nueva de glFusion. Puedes obtener una copia actualizada de <a href=https://www.glfusion.org>glFusion</a> o instalar otra versión del Plug-in.',
+    10 => '<br><b>No hay Plug-in(s) instalados.</b><br><br>',
     11 => 'Para modificar o borrar un Plug-in selecciona el número a la izquierda del mismo. Para acceder a la página de sus creadores seleccione en el título del Plug-in. Para instalar un nuevo Plug-in selecciona \'Nuevo Plug-in\' más arriba.',
     12 => 'no se ha dado un nombre de plugin a la función plugineditor()',
     13 => 'Editor de Plugins',
@@ -1422,7 +1432,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1505,7 +1516,7 @@ $MESSAGE = array(
     74 => 'El pingback se ha enviado con éxito.',
     75 => 'Los seguimientos deben enviarse con un POST.',
     76 => '¿Realmente quieres borrar este ítem?',
-    77 => 'AVISO:<br' . XHTML . '>Has elegido como codificación UTF-8 pero tu servidor no soporta codificaciones multicaracter. Por favor, añade las funciones mbstring para PHP o elige un lenguaje diferente.',
+    77 => 'AVISO:<br>Has elegido como codificación UTF-8 pero tu servidor no soporta codificaciones multicaracter. Por favor, añade las funciones mbstring para PHP o elige un lenguaje diferente.',
     78 => 'Por favor, comprueba que la dirección de correo y la dirección de correo de confirmación sean la misma.',
     79 => 'La pagina que intentas abrir se refiere a una función que ya no está disponible en este servidor.',
     80 => 'El plugin que creó esta transmisión está deshabilitado. No podrás modificarla hasta que rehabilites el plug-in.',
@@ -1712,7 +1723,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2044,7 +2055,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Mostrar solo en tópico',
-    1 => 'Mostrar en página principal'
+    1 => 'Mostrar en página principal',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2404,6 +2416,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2432,6 +2445,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2571,8 +2587,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2751,7 +2765,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Skip HTML Filter for Root?',
     'allowed_protocols' => 'Allowed Protocols',
     'disable_autolinks' => 'Disable Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'Censor Mode?',
     'censorreplace' => 'Censor Replace Text',
     'censorlist' => 'Censor List',
@@ -2829,6 +2842,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2837,7 +2853,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2857,7 +2874,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',
@@ -2911,7 +2927,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2931,7 +2947,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

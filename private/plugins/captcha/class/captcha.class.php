@@ -6,7 +6,7 @@
 // |                                                                          |
 // | main CAPTCHA processing, generates CAPTCHA image / tokens                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -30,13 +30,14 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+namespace Captcha;
+
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require $_CONF['path'] . 'plugins/captcha/class/filter.class.php';
-require $_CONF['path'] . 'plugins/captcha/class/error.class.php';
+global $_CONF, $_CP_CONF;
 
 $imgSet = $_CONF['path'] . 'plugins/captcha/images/static/' . $_CP_CONF['imageset'] . '/imageset.inc';
 
@@ -185,7 +186,7 @@ class captcha {
             }
         } else if ( $this->driver == 6 ) {
             $operator_pool = array('+','-');
-            $first_number_pool = array(30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15);
+            $first_number_pool = array(40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15);
             $second_number_pool = array(1,2,3,4,5,6,8,9,10,11,12,13,14,15);
             $this->operator = $operator_pool[mt_rand(0,count($operator_pool) - 1)];
             $this->first = $first_number_pool[mt_rand(0, count($first_number_pool) - 1)];
@@ -296,10 +297,10 @@ class captcha {
                 }
                 break;
             case 2 :
-                header('Content-type: image/jpeg');
                 $filename = $cString[$this->CaptchaString] . '.jpg';
                 $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
                 if ( $fp != NULL ) {
+                    header('Content-type: image/jpeg');
                     while (!feof($fp)) {
                         $buf = fgets($fp, 8192);
                         echo $buf;

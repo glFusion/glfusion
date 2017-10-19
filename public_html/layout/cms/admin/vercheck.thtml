@@ -1,4 +1,8 @@
-<div class="uk-panel uk-panel-box">
+<div class="uk-panel uk-panel-box
+{!if uptodate} uk-alert-success {!endif}
+{!if upgradeneeded} uk-alert-danger {!endif}
+{!if warningalert} uk-alert-warning {!endif}
+">
 	<h3 class="uk-h3">{statusmsg}</h3>
 	<img class="uk-thumbnail uk-align-left" src="{alerticon}">
 	<div class="uk-text-primary">
@@ -7,7 +11,7 @@
 </div>
 <div class="uk-clearfix"></div>
 {!if phpendoflife}
-<div class="uk-panel uk-panel-box uk-margin">
+<div class="uk-panel uk-panel-box uk-margin uk-alert-danger">
 	<h3 class="uk-h3">{phpeol_statusmsg}</h3>
 	<div class="uk-text-primary">
 		<i class="uk-icon uk-icon-exclamation-triangle uk-icon-large uk-text-danger"></i>

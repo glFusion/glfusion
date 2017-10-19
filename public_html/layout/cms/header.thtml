@@ -4,44 +4,50 @@
 {js-header}
 {raw-header}
 </head>
-<body style="overflow-y: scroll;">
-{integrated_comments}
+<body style="overflow-y: scroll;" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	{integrated_comments}
+	<header role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+		<nav class="uk-navbar tm-navbar">
+			<div class="uk-hidden-small">{logo_block}</div>
 
-<nav class="uk-navbar tm-navbar">
-  <div class="uk-hidden-small">{logo_block}</div>
+			{!!autotag menu:navigation !!}
 
-  {!!autotag menu:navigation !!}
+			<div class="uk-navbar-flip">
+				<div class="uk-navbar-content uk-hidden-small">
+					<form method="get" action="{site_url}/search.php" class="uk-form uk-margin-remove uk-display-inline-block">
+						<input type="search" class="uk-form-width-small" placeholder="{$LANG09[10]}" autocomplete="off" name="query">
+						<input type="hidden" name="type" value="all">
+						<input type="hidden" name="mode" value="search">
+						<input type="hidden" name="results" value="{num_search_results}">
+					</form>
+				</div>
+			</div>
 
-  <div class="uk-navbar-flip">
-    <div class="uk-navbar-content uk-hidden-small">
-      <form method="get" action="{site_url}/search.php" class="uk-form uk-margin-remove uk-display-inline-block">
-        <input type="search" class="uk-form-width-small" placeholder="{$LANG09[10]}" autocomplete="off" name="query">
-        <input type="hidden" name="type" value="all">
-        <input type="hidden" name="mode" value="search">
-        <input type="hidden" name="results" value="{num_search_results}">
-      </form>
-    </div>
-  </div>
+{!if adblock_header}
+			<span class="uk-align-right uk-hidden-small">{adblock_header}</span>
+{!endif}
 
-  {!!autotag uikitlogin: !!}
+			{!!autotag uikitlogin: !!}
 
-	{!!autotag menu:navigation_mobile !!}
+			{!!autotag menu:navigation_mobile !!}
 
-  <div class="uk-navbar-flip uk-navbar-flip uk-visible-small">
-    <a href="{site_url}/search.php" class="tm-navbar-toggle uk-navbar-toggle uk-navbar-toggle-alt"></a>
-  </div>
+			<div class="uk-navbar-flip uk-navbar-flip uk-visible-small">
+				<a href="{site_url}/search.php" class="tm-navbar-toggle uk-navbar-toggle uk-navbar-toggle-alt"></a>
+			</div>
 
-  <div class="uk-navbar-brand tm-navbar-brand-oc uk-navbar-center uk-visible-small">
-    <a href="{site_url}">{site_name}</a>
-  </div>
-</nav>
+			<div class="uk-navbar-brand tm-navbar-brand-oc uk-navbar-center uk-visible-small">
+				<a href="{site_url}">{site_name}</a>
+			</div>
+		</nav>
+	</header>
 
-{!!autotag staticpage_content:homepage-header where:home !!}
+	{!!autotag staticpage_content:homepage-header where:home !!}
 
-<div class="tm-content">
-  <div class="uk-container tm-container uk-container-center uk-margin-large-bottom">
-    <div class="uk-grid uk-margin-top uk-margin-large-bottom" data-uk-grid-margin>
-      <div class="{centercolumn}">
-        {info_block}
-        {content}
-{# end {templatelocation} #}
+	<div class="tm-content">
+		<div class="uk-container tm-container uk-container-center uk-margin-large-bottom">
+			<div class="uk-grid uk-margin-top uk-margin-large-bottom" data-uk-grid-margin>
+				<div class="{centercolumn}">
+					<main id="main-content" role="main" itemscope="itemscope" itemprop="mainContentOfPage" itemtype="http://schema.org/WebPageElement">
+						{info_block}
+						{content}
+						{# end {templatelocation} #}

@@ -874,7 +874,7 @@ $LANG_MG03 = array(
     'click_here' => 'clic aquí',
     'published' => 'Publicado por',
     'on' => 'Encendido',
-    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Al parecer usted no tiene el Flash Plugin instalado, o la version con la que cuenta esta caduca y no puede mostrar el contenido.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Obtener Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">Al parecer usted no tiene el Flash Plugin instalado, o la version con la que cuenta esta caduca y no puede mostrar el contenido.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Obtener Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Galería  powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Descargar<a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Descargar <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -891,7 +891,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

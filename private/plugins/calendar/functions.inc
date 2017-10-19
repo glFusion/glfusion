@@ -60,8 +60,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_CA_CONF['calendarloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $ca_config = config::get_instance();
     $_CA_CONF = $ca_config->get_config('calendar');
 }
@@ -127,21 +125,13 @@ function phpblock_calendar( $help='', $title='' )
 
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
         . "FROM {$_TABLES['events']} ";
-        if($_DB_dbms == 'mssql') {
-            $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) AND (status = 1)";
-        } else {
-            $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
-        }
+        $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
         $eventSql .= 'ORDER BY datestart,timestart';
 
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !COM_isAnonUser() ) {
-            $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
+            $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
             . "FROM {$_TABLES['personal_events']} ";
-            if($_DB_dbms == 'mssql') {
-                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= DATEADD(hh, 24, getUTCDate())  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
-            } else {
-                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
-            }
+            $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
             $personaleventsql .= 'ORDER BY datestart, dateend';
         }
 
@@ -196,7 +186,7 @@ function phpblock_calendar( $help='', $title='' )
                     if( !$headline ) {
                         if($z == 2) {
                             if( $numRows > 0 ) {
-                                $retval .= '<p><b>' . $LANG_CAL_1[23] . '</b></p>';
+                                $retval .= '<b>' . $LANG_CAL_1[23] . '</b>';
                             }
                         } else {
                             if( $totalrows > 0 ) {
@@ -372,7 +362,7 @@ function plugin_moderationvalues_calendar()
     return array (
         'eid',
         $_TABLES['events'],
-        "eid,status,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
+        "eid,status,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url",
         $_TABLES['eventsubmission']
     );
 }
@@ -1677,8 +1667,12 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+        case 'date' :
+            $fields[] = 'UNIX_TIMESTAMP(datestart) AS unixdate';
+            break;
         case 'description':
         case 'excerpt':
+        case 'searchidx' :
             $fields[] = 'description';
             break;
         case 'raw-description' :
@@ -1700,7 +1694,19 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             $fields[] = 'status';
             break;
         case 'author' :
+        case 'author_name' :
             $fields[] = 'owner_id';
+            break;
+        case 'perms' :
+            $fields[] = 'owner_id';
+            $fields[] = 'group_id';
+            $fields[] = 'perm_owner';
+            $fields[] = 'perm_group';
+            $fields[] = 'perm_members';
+            $fields[] = 'perm_anon';
+            break;
+        case 'hits' :
+            $fields[] = 'hits';
             break;
         default:
             break;
@@ -1741,8 +1747,12 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+            case 'date' :
+                $props[$p] = $A['unixdate'];
+                break;
             case 'description':
             case 'excerpt':
+            case 'searchidx' :
                 $props[$p] = PLG_replaceTags($A['description'],'calendar','description');
                 break;
             case 'raw-description' :
@@ -1769,6 +1779,22 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $props['author'] = $A['owner_id'];
+                break;
+            case 'author_name' :
+                $props['author_name'] = COM_getDisplayName($A['owner_id']);
+                break;
+            case 'hits' :
+                $props['hits'] = $A['hits'];
+                break;
+            case 'perms' :
+                $props['perms'] = array(
+                    'owner_id' => $A['owner_id'],
+                    'group_id' => $A['group_id'],
+                    'perm_owner' => $A['perm_owner'],
+                    'perm_group' => $A['perm_group'],
+                    'perm_members' => $A['perm_members'],
+                    'perm_anon' => $A['perm_anon'],
+                );
                 break;
             default:
                 $props[$p] = '';

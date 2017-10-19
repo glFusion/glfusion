@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.6.6');
+define('GVERSION','1.7.0');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
@@ -441,7 +441,7 @@ function processPlugins() {
     $result = DB_query($sql);
     if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins";
+    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins ORDER BY pi_name";
     $result = DB_query($sql);
     while ($plugins[] = DB_fetchArray($result) ) { }
 

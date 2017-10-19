@@ -389,6 +389,15 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $disable_urlparse_val = '';
     }
 
+    if ( !COM_isAnonUser() ) {
+        if ( isset($FF_userprefs['use_wysiwyg_editor'])) {
+            if ( $FF_userprefs['use_wysiwyg_editor'] == 0 ) {
+                $_FF_CONF['post_htmlmode'] = 0;
+                $_FF_CONF['allow_html'] = 0;
+            }
+        }
+    }
+
     // check postmode
     if ( isset($postData['postmode']) ) {  // this means we are editing or previewing (or both)
         if ( isset($postData['postmode_switch']) ) { // means they selected a switch
@@ -660,7 +669,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         } else {
             $notifyTopicid = $postData['id'];
         }
-
         if ( !isset($postData['forum']) ) {
             $postData['forum'] = '';
         }
@@ -668,9 +676,8 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             $postData['notify'] = 'on';
             // check and see if user has un-subscribed to this topic
             $nid = -$notifyTopicid;
-            if ($notifyTopicid > 0 AND (DB_getItem($_TABLES['subscriptions'],'id', "type='forum' AND category=".(int)$postData['forum']." AND id=$nid AND uid=$uid") > 1)) {
-                $postData['notify'] = '';
-            }
+            $isExcluded = PLG_isSubscribed( 'forum', DB_escapeString($postData['forum']), DB_escapeString($nid), (int) $uid );
+            if ( $isExcluded == true ) $postData['notify'] = '';
         } else {
             $postData['notify'] = '';
         }
@@ -1235,24 +1242,23 @@ function FF_saveTopic( $forumData, $postData, $action )
         if ( !COM_isAnonUser() ) {
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
             $nid = -$topicPID;
-            $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id=0 AND uid=".(int) $uid);
-            $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id='".DB_escapeString($topicPID)."' AND uid=".(int) $uid);
-            $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['subscriptions'],'sub_id', "type='forum' AND category='".DB_escapeString($forum)."' AND id='".DB_escapeString($nid)."' AND uid=".(int) $uid);
+            $currentForumNotifyRecID = PLG_isSubscribed( 'forum', DB_escapeString($forum), 0, (int) $uid );
+            $currentTopicNotifyRecID = PLG_isSubscribed( 'forum', DB_escapeString($forum), DB_escapeString($topicPID), (int) $uid );
+            $currentTopicUnNotifyRecID = PLG_isSubscribed( 'forum', DB_escapeString($forum), DB_escapeString($nid), (int) $uid );
+
             $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$forum);
             $topic_name = $subject;
 
-            if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
-                $sql = "INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) ";
-                $sql .= "VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($topicPID)."','".$subject."',".(int) $uid .",now() )";
-                DB_query($sql);
-            } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
-                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE sub_id=".(int) $currentTopicUnNotifyRecID);
-            } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
-                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $uid." AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($topicPID)."'");
-            } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
-                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $uid." AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($topicPID)."'");
-                DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".(int) $uid." AND category='".DB_escapeString($forum)."' and id = '".DB_escapeString($nid)."'");
-                DB_query("INSERT INTO {$_TABLES['subscriptions']} (type,category,category_desc,id,id_desc,uid,date_added) VALUES ('forum','".DB_escapeString($forum)."','".DB_escapeString($forum_name)."','".DB_escapeString($nid)."','".$subject."',".(int)$uid.",now() )");
+            if ($notify == 'on' AND ($currentForumNotifyRecID == false && $currentTopicNotifyRecID == false ) ) {
+                PLG_subscribe('forum',DB_escapeString($forum),DB_escapeString($topicPID),(int) $uid,DB_escapeString($forum_name), $subject );
+            } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID == true) { // Had un-subcribed to topic and now wants to subscribe
+                PLG_unsubscribe('forum',DB_escapeString($forum),DB_escapeString($nid),(int) $uid);
+            } elseif ($notify == '' && $currentTopicNotifyRecID == true) { // Subscribed to topic - but does not want to be notified anymore
+                PLG_unSubscribe( 'forum', DB_escapeString($forum), DB_escapeString($topicPID), (int) $uid );
+            } elseif ($notify == '' && $currentForumNotifyRecID == true) { // Subscribed to forum - but does not want to be notified about this topic
+                PLG_unSubscribe( 'forum', DB_escapeString($forum), DB_escapeString($topicPID), (int) $uid );
+                PLG_unSubscribe( 'forum', DB_escapeString($forum), DB_escapeString($nid), (int) $uid );
+                PLG_subscribe('forum',DB_escapeString($forum),DB_escapeString($nid),(int) $uid,DB_escapeString($forum_name), $subject );
             }
         }
         if ( $action != 'saveedit' ) {
@@ -1400,7 +1406,6 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
             $digestSubject = $forum_name;
             $digestSubject .= ": ";
             $digestSubject .= $A['subject'];
-            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
             $last_reply_rec = DB_getItem($_TABLES['ff_forums'],'last_post_rec',"forum_id=".(int) $forumid);
         } else {
             if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
@@ -1411,17 +1416,13 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
             $digestSubject = $forum_name;
             $digestSubject .= ": RE: ";
             $digestSubject .= $A['subject'];
-            $messageBody .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
-//            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
-            $messageBody .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
         }
-        $messageBody .= $LANG_GF02['msg26'];
-        $messageBody .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
-        $messageBody .= "{$LANG_GF02['msg25']}{$_CONF['site_name']} {$LANG_GF01['ADMIN']}\n";
         list($digestMessage,$digestMessageText) = gfm_getoutput($last_reply_rec);
+        list($messageBody,$messageBodyText)     = gfm_getoutput($last_reply_rec,'summary');
     } else {
         return;
     }
+
     $msgDataDigest['subject']     = $digestSubject;
     $msgDataDigest['from']        = $_CONF['noreply_mail'];
     $msgDataDigest['htmlmessage'] = $digestMessage;
@@ -1430,7 +1431,8 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
 
     $msgDataNotify['subject'] = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
     $msgDataNotify['from']    = $_CONF['noreply_mail'];
-    $msgDataNotify['textmessage'] = $messageBody;
+    $msgDataNotify['htmlmessage'] = $messageBody;
+    $msgDataNotify['textmessage'] = $messageBodyText;
     $toNotify = array();
 
     for ($i =1; $i <= $nrows; $i++) {
@@ -1438,7 +1440,9 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
         // Don't need to send a notification to the user that posted this message and users with NOTIFY disabled
         if ( $N['uid'] > 1 AND $N['uid'] != $userid ) {
             // if the topic_id is 0 for this record - user has subscribed to complete forum. Check if they have opted out of this forum topic.
-            if (DB_count($_TABLES['subscriptions'],array('type','uid','category','id'),array('forum',$N['uid'],$forumid,-$topicid)) == 0) {
+            $nid = -$topicid;
+            $isExcluded = PLG_isSubscribed( 'forum', DB_escapeString($forumid), DB_escapeString($nid), (int) $N['uid'] );
+            if ($isExcluded == false ) {
                 // Check if user does not want to receive multiple notifications for same topic and already has been notified
                 $userNotifyOnceOption = DB_getItem($_TABLES['ff_userprefs'],'notify_once',"uid=".(int)$N['uid']);
                 // Retrieve the log record for this user if it exists then check if user has viewed this topic yet
@@ -1452,7 +1456,7 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
                     $logtime = 0;
                 }
 
-                if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
+                if  ($userNotifyOnceOption == 0 || ($userNotifyOnceOption == 1 && ($nologRecord || $logtime != 0)) ) {
                     $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid=".(int)$N['uid']);
                     $B = DB_fetchArray($userrec);
 
@@ -1468,14 +1472,17 @@ function _ff_chknotifications($forumid,$topicid,$userid,$type='topic') {
                         }
                     } else {
                         // remove the watch entry since this user can no longer access the forum.
-                        DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND uid=".$N['uid']." AND ((id=".(int) $pid.") OR ((category=".(int) $forumid.") AND (id=0) ))");
+                        PLG_unsubscribe('forum',(int) $forumid,(int) $pid,(int)$N['uid']);
+                        PLG_unsubscribe('forum',(int) $forumid,0,(int) $N['uid']);
                     }
                 }
             }
         }
     }
+
     $msgDataDigest['to'] = $toDigest;
     $msgDataNotify['to'] = $toNotify;
+
     COM_emailNotification($msgDataDigest);
     COM_emailNotification($msgDataNotify);
 }

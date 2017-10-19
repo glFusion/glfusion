@@ -782,6 +782,42 @@ function SEC_getFeatureGroup ($feature, $uid = '')
     return $group;
 }
 
+
+/**
+* Get an array of all groups this group belongs to.
+*
+* @param   basegroup   int     id of group
+* @return              array   array of all groups 'basegroup' belongs to
+*
+*/
+function SEC_getGroupList ($basegroup)
+{
+    global $_TABLES;
+
+    $to_check = array ();
+    array_push ($to_check, $basegroup);
+
+    $checked = array ();
+
+    while (sizeof ($to_check) > 0) {
+        $thisgroup = array_pop ($to_check);
+        if ($thisgroup > 0) {
+            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
+            $numGroups = DB_numRows ($result);
+            for ($i = 0; $i < $numGroups; $i++) {
+                $A = DB_fetchArray ($result);
+                if (!in_array ($A['ug_grp_id'], $checked)) {
+                    if (!in_array ($A['ug_grp_id'], $to_check)) {
+                        array_push ($to_check, $A['ug_grp_id']);
+                    }
+                }
+            }
+            $checked[] = $thisgroup;
+        }
+    }
+    return $checked;
+}
+
 /**
 * Attempt to login a user.
 *
@@ -1374,7 +1410,7 @@ function _sec_checkToken($ajax=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckToken: Token failed - no token found in database");
+                COM_errorLog("CheckToken: Token failed - no token found in database - " . $referCheck);
             } else {
                 COM_errorLog("CheckToken: Token failed - more than 1 token found in database");
             }
@@ -1479,7 +1515,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database");
+                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
             } else {
                 COM_errorLog("CheckTokenGeneral: Token failed - more than one token found in the database");
             }
@@ -1784,15 +1820,14 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 */
 function _unique_id($extra = 'c')
 {
-    static $dss_seeded = false;
     global $_SYSTEM;
-
-    $rand_seed = COM_makesid();
-
+    static $dss_seeded = false;
+    $sid = date( 'YmdHis' );
+    $sid .= mt_rand( 0, 999 );
+    $rand_seed = $sid;
     $val = $rand_seed . microtime();
     $val = md5($val);
     $rand_seed = md5($rand_seed . $val . $extra);
-
     return substr($val, 4, 16);
 }
 

@@ -91,7 +91,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
         $where .= " AND (tid IN ($tlist) OR alternate_tid IN ($tlist))";
     }
     if ($frontpage_only) {
-        $where .= ' AND frontpage = 1';
+        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW() ) ) ';
     }
     $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
     $nrows = DB_numRows( $result );
@@ -365,7 +365,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
         $where .= " AND (tid IN ($tlist))";
     }
     if ($frontpage_only) {
-        $where .= ' AND frontpage = 1';
+        $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) ';
     }
     $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
 
@@ -449,8 +449,6 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    require_once $_CONF['path'].'/lib/feedcreator/feedcreator.class.php';
-
     $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($fid)."'");
     $A = DB_fetchArray( $result );
 
@@ -462,7 +460,7 @@ function SYND_updateFeed( $fid )
             $rss->descriptionTruncSize = $A['content_length'];
         }
         $rss->descriptionHtmlSyndicated = false;
-        $rss->encoding = $A['charset'];
+//        $rss->encoding = $A['charset'];
         $rss->language = $A['language'];
         $rss->title = $A['title'];
         $rss->description = $A['description'];

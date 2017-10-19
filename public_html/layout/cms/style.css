@@ -1,4 +1,4 @@
-/*@ glFusion CMS Theme 1.6.6 | https://www.glfusion.org
+/*@ glFusion CMS Theme 1.7.1 | https://www.glfusion.org
 (c) 2017 glFusion | GNU GPLv2 License */
 /* ========================================================================
 This should contain site wide styles that augment the UIKIT styles
@@ -20,6 +20,11 @@ set of styles.
 
 .uk-form-controls input[type='checkbox'] {
 	margin-top:3px;
+}
+
+.uk-modal-page,
+.uk-modal-page body {
+	overflow: hidden !important;
 }
 
 #admin-side-config h3 {
@@ -2578,4 +2583,33 @@ input.error {
 .slider_checkbox.slider_reverse input[type='checkbox']:checked:after {
 	left: 0%;
 	content:"\f00d";
+}
+
+/* glFusion generated checkbox lists */
+.checkboxes-list {
+	list-style-type: none;
+	padding:5px;
+}
+.checkboxes-list input {
+	padding:5px;
+	margin-right: 10px;
+}
+
+/* search highlight */
+span.highlight {
+	background-color:chartreuse;
+}
+
+.badge-notify{
+	position:relative;
+	top: -70px;
+	left: 16px;
+}
+
+.optiongroup {
+    font-weight: bold;
+}
+
+.popupcal {
+		cursor: pointer;
 }

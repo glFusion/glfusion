@@ -33,7 +33,7 @@
 				<div class="uk-form-controls">
 					<select name="type">
 						<option value="install">{lang_new_install}</option>
-						<option value="upgrade">{lang_site_upgrade}</option>
+						<option value="upgrade" {upgradeselected}>{lang_site_upgrade}</option>
 					</select>
 				</div>
 			</div>

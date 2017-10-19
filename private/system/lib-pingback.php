@@ -6,6 +6,9 @@
 // |                                                                          |
 // | Functions needed to handle pingbacks.                                    |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2015-2017 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
@@ -31,11 +34,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
-
-require_once $_CONF['path'] . 'lib/http/http.php';
-
-// PEAR class to handle XML-RPC
-require_once 'XML/RPC.php';
 
 /**
  * Get the Pingback URL for a given URL
@@ -121,6 +119,8 @@ function PNB_sendPingback($sourceURI, $targetURI)
 {
     global $LANG_TRB;
 
+    PhpXmlRpc\Autoloader::register();
+
     $retval = '';
 
     $pingback = PNB_getPingbackUrl($targetURI);
@@ -132,34 +132,39 @@ function PNB_sendPingback($sourceURI, $targetURI)
     if (empty ($parts['port'])) {
         if (strcasecmp($parts['scheme'], 'https') == 0) {
             $parts['port'] = 443;
+            $prefix = 'https://';
         } else {
             $parts['port'] = 80;
+            $prefix = 'http://';
         }
     }
     if (!empty ($parts['query'])) {
         $parts['path'] .= '?' . $parts['query'];
     }
+    $server = $prefix.$parts['host'].$parts['path'];
 
-    $client = new XML_RPC_Client ($parts['path'], $parts['host'], $parts['port']);
-    //$client->setDebug (1);
+    $retval = '';
 
-    $msg = new XML_RPC_Message ('pingback.ping',
-        array(new XML_RPC_Value ($sourceURI, 'string'),
-            new XML_RPC_Value ($targetURI, 'string')));
-
-    $response = $client->send($msg, 0, $parts['scheme']);
-    if (!is_object($response) && ($response == 0)) {
-        $retval = $client->errstring;
-    } else if ($response->faultCode() != 0) {
-        $retval = $response->faultString();
+    $encoder = new PhpXmlRpc\Encoder();
+    $req = new PhpXmlRpc\Request('pingback.ping',
+        array(
+            $encoder->encode($sourceURI),
+            $encoder->encode($targetURI)
+        )
+    );
+    $client = new PhpXmlRpc\Client($server);
+    $client->setDebug(0);
+    $r = $client->send($req);
+    if ($r->faultCode()) {
+        $retval = $r->faultString();
     }
-
     return $retval;
 }
 
 /**
  * Send a standard ping to a weblog directory service
  * The "classic" ping, originally invented for weblogs.com
+ * Sends to services
  *
  * @param    string $url        URL to ping
  * @param    string $blogname   name of our site
@@ -169,32 +174,24 @@ function PNB_sendPingback($sourceURI, $targetURI)
  */
 function PNB_sendPing($url, $blogname, $blogurl, $changedurl)
 {
+    PhpXmlRpc\Autoloader::register();
+
     $retval = '';
 
-    $parts = parse_url($url);
-    if (empty ($parts['port'])) {
-        if (strcasecmp($parts['scheme'], 'https') == 0) {
-            $parts['port'] = 443;
-        } else {
-            $parts['port'] = 80;
-        }
+    $encoder = new PhpXmlRpc\Encoder();
+    $req = new PhpXmlRpc\Request('weblogUpdates.ping',
+        array(
+            $encoder->encode($blogname),
+            $encoder->encode($blogurl),
+            $encoder->encode($changedurl),
+        )
+    );
+    $client = new PhpXmlRpc\Client($url);
+    $client->setDebug(0);
+    $r = $client->send($req);
+    if ($r->faultCode()) {
+        $retval = $r->faultString();
     }
-    $client = new XML_RPC_Client ($parts['path'], $parts['host'], $parts['port']);
-    //$client->setDebug (1);
-
-    $msg = new XML_RPC_Message ('weblogUpdates.ping',
-        array(new XML_RPC_Value ($blogname, 'string'),
-            new XML_RPC_Value ($blogurl, 'string'),
-            new XML_RPC_Value ($changedurl, 'string')));
-
-    $response = $client->send($msg, 0, $parts['scheme']);
-
-    if (!is_object($response) && ($response == 0)) {
-        $retval = $client->errstring;
-    } else if ($response->faultCode() != 0) {
-        $retval = $response->faultString();
-    }
-
     return $retval;
 }
 
@@ -211,30 +208,25 @@ function PNB_sendPing($url, $blogname, $blogurl, $changedurl)
  */
 function PNB_sendExtendedPing($url, $blogname, $blogurl, $changedurl, $feedurl)
 {
-    $parts = parse_url($url);
-    if (empty ($parts['port'])) {
-        if (strcasecmp($parts['scheme'], 'https') == 0) {
-            $parts['port'] = 443;
-        } else {
-            $parts['port'] = 80;
-        }
+    PhpXmlRpc\Autoloader::register();
+
+    $retval = '';
+
+    $encoder = new PhpXmlRpc\Encoder();
+    $req = new PhpXmlRpc\Request('weblogUpdates.extendedPing',
+        array(
+            $encoder->encode($blogname),
+            $encoder->encode($blogurl),
+            $encoder->encode($changedurl),
+            $encoder->encode($feedurl)
+        )
+    );
+    $client = new PhpXmlRpc\Client($url);
+    $client->setDebug(0);
+    $r = $client->send($req);
+    if ($r->faultCode()) {
+        $retval = $r->faultString();
     }
-    $client = new XML_RPC_Client ($parts['path'], $parts['host'], $parts['port']);
-    //$client->setDebug (1);
-
-    $msg = new XML_RPC_Message ('weblogUpdates.extendedPing',
-        array(new XML_RPC_Value ($blogname, 'string'),
-            new XML_RPC_Value ($blogurl, 'string'),
-            new XML_RPC_Value ($changedurl, 'string'),
-            new XML_RPC_Value ($feedurl, 'string')));
-
-    $response = $client->send($msg, 0, $parts['scheme']);
-    if (!is_object($response) && ($response == 0)) {
-        $retval = $client->errstring;
-    } else if ($response->faultCode() != 0) {
-        $retval = $response->faultString();
-    }
-
     return $retval;
 }
 

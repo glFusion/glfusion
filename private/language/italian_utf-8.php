@@ -131,9 +131,9 @@ $LANG01 = array(
     82 => 'ore',
     83 => 'COMMENTI',
     84 => '',
-    85 => '<br' . XHTML . '>nelle ultime 48 ore',
+    85 => '<br>nelle ultime 48 ore',
     86 => 'Nessun nuovo commento',
-    87 => '<br' . XHTML . '>nelle ultime 2 settimane',
+    87 => '<br>nelle ultime 2 settimane',
     88 => '',
     89 => '',
     90 => 'Home',
@@ -256,7 +256,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -462,7 +468,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -484,7 +490,7 @@ $LANG_MYACCOUNT = array(
 
 $LANG05 = array(
     1 => 'Non ci sono News da visualizzare',
-    2 => '<br' . XHTML . '>Non ci sono nuovi articoli da visualizzare. Questo perch&egrave; o non ci sono nuovi articoli relativi a questo argomento o le tue preferenze utente sono troppo restrittive ',
+    2 => '<br>Non ci sono nuovi articoli da visualizzare. Questo perch&egrave; o non ci sono nuovi articoli relativi a questo argomento o le tue preferenze utente sono troppo restrittive ',
     3 => 'per l\'argomento <b>%s</b>',
     4 => 'Articolo del giorno',
     5 => 'Successivo',
@@ -766,7 +772,7 @@ $LANG20 = array(
     3 => 'Password non valida per l\'utente',
     4 => 'Nome Utente:',
     5 => 'Password:',
-    6 => 'Tutti gli accessi alle parti amministrative di questo sito sono registrate e controllate.<br' . XHTML . '>Questa pagina e per il solo personale autorizzato.',
+    6 => 'Tutti gli accessi alle parti amministrative di questo sito sono registrate e controllate.<br>Questa pagina e per il solo personale autorizzato.',
     7 => 'Entra',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -800,12 +806,12 @@ $LANG21 = array(
     22 => '',
     23 => 'Ordine Blocco',
     24 => '',
-    25 => 'Per modificare o eliminare un blocco, fai clic sul blocco selezionato. <br' . XHTML . '>Per creare un nuovo blocco fai clic su [ Nuovo Blocco ] sopra.',
+    25 => 'Per modificare o eliminare un blocco, fai clic sul blocco selezionato. <br>Per creare un nuovo blocco fai clic su [ Nuovo Blocco ] sopra.',
     26 => 'Impaginazione Blocco',
     27 => 'Blocco PHP',
     28 => 'Opzioni Blocco PHP',
     29 => 'Funzione Blocco',
-    30 => 'Se desideri avere un blocco che usi il codice PHP, inserisci il nome della funzione sotto.  Il nome della tua funzione deve iniziare con il prefisso "phpblock_" (es. phpblock_getweather).  Se non ha questo prefisso, la tua funzione NON verr&agrave; richiamata.  Questo per evitare che altre persone possano hackerare la vostra installazione di glFusion inserendo funzioni di chiamate a codice arbitrario che possa danneggiare il vostro sistema.  Assicuratevi di inserire le parentesi vuote "()" dopo il vostro nome della funzione.  <br' . XHTML . '><br' . XHTML . '>Per ultimo, &egrave; raccomandabile mettere tutto il codice del Blocco in /path/to/glfusion/system/lib-custom.php.  <br' . XHTML . '><b>Questo permette di registrare il tuo codice nel caso di aggiornamenti di glFusion.</b>',
+    30 => 'Se desideri avere un blocco che usi il codice PHP, inserisci il nome della funzione sotto.  Il nome della tua funzione deve iniziare con il prefisso "phpblock_" (es. phpblock_getweather).  Se non ha questo prefisso, la tua funzione NON verr&agrave; richiamata.  Questo per evitare che altre persone possano hackerare la vostra installazione di glFusion inserendo funzioni di chiamate a codice arbitrario che possa danneggiare il vostro sistema.  Assicuratevi di inserire le parentesi vuote "()" dopo il vostro nome della funzione.  <br><br>Per ultimo, &egrave; raccomandabile mettere tutto il codice del Blocco in /path/to/glfusion/system/lib-custom.php.  <br><b>Questo permette di registrare il tuo codice nel caso di aggiornamenti di glFusion.</b>',
     31 => 'Errore nel Blocco PHP.  La Funzione, %s, non esiste.',
     32 => 'Errore Campo(i) Mancante(i)',
     33 => 'Devi inserire la URL del file .rdf per il blocco portale',
@@ -876,7 +882,7 @@ $LANG24 = array(
     20 => 'Ping',
     21 => 'Send Ping',
     22 => 'Lista Articoli',
-    23 => 'Per modificare o eliminare un articolo, fai clic sul numero dell\'articolo. <br' . XHTML . '>Per visualizzare un articolo, fai clic sul titolo dell\'articolo desiderato. <br' . XHTML . '>Per creare un nuovo articolo fai clic su [ Nuovo Articolo ] sopra.',
+    23 => 'Per modificare o eliminare un articolo, fai clic sul numero dell\'articolo. <br>Per visualizzare un articolo, fai clic sul titolo dell\'articolo desiderato. <br>Per creare un nuovo articolo fai clic su [ Nuovo Articolo ] sopra.',
     24 => 'L\'ID da te scelto per questo articolo &egrave; gi&agrave; in uso. Prego scegli un altro ID.',
     25 => 'Error when saving story',
     26 => 'Anteprima Articolo',
@@ -904,7 +910,7 @@ $LANG24 = array(
     48 => 'image',
     49 => 'right',
     50 => 'left',
-    51 => 'Per aggiungere una delle immagini in allegato a questo articolo devi inserire del codice di testo speciale. Questo codice speciale &egrave; [imageX], [imageX_right] o [imageX_left] dove X &egrave; il numero della immagine allegata.  <br' . XHTML . '>NOTA: Devi utilizzare le immagini allegate. Altrimenti non sarai in grado di registrare il tuo articolo.<br' . XHTML . '><p><b>ANTEPRIMA</b>: L\'Anteprima di un articolo con immagini allegate risulta pi&ugrave; agevole da realizzare registrandolo come bozza AL POSTO di fare clic sul bottone anteprima. Usare il bottone anteprima solo con immagini che non sono allegate.',
+    51 => 'Per aggiungere una delle immagini in allegato a questo articolo devi inserire del codice di testo speciale. Questo codice speciale &egrave; [imageX], [imageX_right] o [imageX_left] dove X &egrave; il numero della immagine allegata.  <br>NOTA: Devi utilizzare le immagini allegate. Altrimenti non sarai in grado di registrare il tuo articolo.<br><p><b>ANTEPRIMA</b>: L\'Anteprima di un articolo con immagini allegate risulta pi&ugrave; agevole da realizzare registrandolo come bozza AL POSTO di fare clic sul bottone anteprima. Usare il bottone anteprima solo con immagini che non sono allegate.',
     52 => '',
     53 => 'non &egrave; utilizzata.  Devi includere questa immagine nell\'intro o nel corpo per poter registrare le tue modifiche',
     54 => 'Immagini in Allegato Non Usate',
@@ -977,7 +983,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -992,7 +1000,7 @@ $LANG27 = array(
     6 => 'Eliminando un argomento eliminerai anche gli articoli e i blocchi ad esso associati',
     7 => 'Prego compila i campi ID Argomento e Nome Argomento',
     8 => 'Manager Argomenti',
-    9 => 'Per modificare o eliminare un argomento, fai clic sull\'argomento selezionato. <br' . XHTML . '>Per creare un nuovo argomento fai clic sul [ Nuovo Argomento ] in alto. <br' . XHTML . '>Dovresti trovare il tuoi permessi di accesso per ogni argomento elencati fra parentesi. L\'Asterisco (*) indica l\'argomento di default.',
+    9 => 'Per modificare o eliminare un argomento, fai clic sull\'argomento selezionato. <br>Per creare un nuovo argomento fai clic sul [ Nuovo Argomento ] in alto. <br>Dovresti trovare il tuoi permessi di accesso per ogni argomento elencati fra parentesi. L\'Asterisco (*) indica l\'argomento di default.',
     10 => 'Ordinamento',
     11 => 'Articoli/Pagina',
     12 => 'Accesso negato',
@@ -1040,7 +1048,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1058,7 +1068,7 @@ $LANG28 = array(
     9 => '(non utilizzare spazi)',
     10 => 'Prego compila i campi Nome Utente e Indirizzo E-mail',
     11 => 'Manager Utenti',
-    12 => 'Per modificare o eliminare un utente, fai clic su un utente qu&igrave; sotto. <br' . XHTML . '>Per creare un nuovo utente fai clic sul bottone [ Nuovo Utente ] in alto. <br' . XHTML . '>Per eseguire una ricerca semplice inserisci parti di nome utente,indirizzo e-mail o nome completo (es.*son* or *.edu) nel form sottostante.',
+    12 => 'Per modificare o eliminare un utente, fai clic su un utente qu&igrave; sotto. <br>Per creare un nuovo utente fai clic sul bottone [ Nuovo Utente ] in alto. <br>Per eseguire una ricerca semplice inserisci parti di nome utente,indirizzo e-mail o nome completo (es.*son* or *.edu) nel form sottostante.',
     13 => 'Liv. Sic.',
     14 => 'Data Reg.',
     15 => 'New User',
@@ -1098,7 +1108,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1236,7 +1246,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'L\'Installazione di plug-in potrebbe provocare danni alla tua installazione di glFusion ed eventualmente anche il tuo sistema. &Egrave; importante che tu installi solo i plug-in scaricati dalla <a href="http://www.gllabs.org" target="_blank">Homepage di glFusion</a> in quanto questi plug-in vengono regolarmente testati da noi su numerosi sistemi operativi. E\' altres&igrave; importante che tu capisca che il processo di installazione richiede l\'esecuzione di alcuni comandi di sistema che potrebbero intaccare la sicurezza del sistema stesso (in particolare se utilizzi plug-in di terze parti). Anche con questo avvertenza che ti diamo, noi non garantiamo il successo della installazione e non siamo responsabili di eventuali danni causati dall\'installazione di plug-in. In altre parole, installa a tuo rischio!. Per gli amanti del rischio,  indicazioni su come installare manualmente un plug-in sono incluse in ogni pacchetto plug-in.',
+    1 => 'L\'Installazione di plug-in potrebbe provocare danni alla tua installazione di glFusion ed eventualmente anche il tuo sistema. &Egrave; importante che tu installi solo i plug-in scaricati dalla <a href="https://www.glfusion.org" target="_blank">Homepage di glFusion</a> in quanto questi plug-in vengono regolarmente testati da noi su numerosi sistemi operativi. E\' altres&igrave; importante che tu capisca che il processo di installazione richiede l\'esecuzione di alcuni comandi di sistema che potrebbero intaccare la sicurezza del sistema stesso (in particolare se utilizzi plug-in di terze parti). Anche con questo avvertenza che ti diamo, noi non garantiamo il successo della installazione e non siamo responsabili di eventuali danni causati dall\'installazione di plug-in. In altre parole, installa a tuo rischio!. Per gli amanti del rischio,  indicazioni su come installare manualmente un plug-in sono incluse in ogni pacchetto plug-in.',
     2 => 'Note di Installazione Plug-in',
     3 => 'Form Installazione Plug-in',
     4 => 'Plug-in File',
@@ -1244,9 +1254,9 @@ $LANG32 = array(
     6 => 'Attenzione: Plug-in gi&agrave; installato!',
     7 => 'Il plug-in che vuoi installare &egrave; gia installato nel sistema. Elimina il plug-in esistente prima di reinstallare la nuova versione',
     8 => 'Controllo Compatibilit&agrave; Plug-in Fallita',
-    9 => 'Questo plug-in richiede una nuova versione di glFusion. Puoi aggiornare la tua copia di <a href=http://www.gllabs.org>glFusion</a> o prendere una nuova versione del plug-in.',
-    10 => '<br' . XHTML . '><b>Al momento nessun plug-in risulta installato.</b><br' . XHTML . '><br' . XHTML . '>',
-    11 => 'Per modificare o eliminare un plug-in, fai clic sul numero del plug-in dalla lista sottostante. <br' . XHTML . '>Per apprendere su come usare il plug-in, fai clic sul nome del plug-in e sarai redirezionato direttamente al sito del plug-in. <br' . XHTML . '>Per installare o aggiornare un plug-in fai clic su nuovo-plug-in sopra.',
+    9 => 'Questo plug-in richiede una nuova versione di glFusion. Puoi aggiornare la tua copia di <a href=https://www.glfusion.org>glFusion</a> o prendere una nuova versione del plug-in.',
+    10 => '<br><b>Al momento nessun plug-in risulta installato.</b><br><br>',
+    11 => 'Per modificare o eliminare un plug-in, fai clic sul numero del plug-in dalla lista sottostante. <br>Per apprendere su come usare il plug-in, fai clic sul nome del plug-in e sarai redirezionato direttamente al sito del plug-in. <br>Per installare o aggiornare un plug-in fai clic su nuovo-plug-in sopra.',
     12 => 'nessun nome di plug-in fornito da plugineditor()',
     13 => 'Editor Plug-in',
     14 => 'Nuovo Plug-in',
@@ -1422,7 +1432,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1505,7 +1516,7 @@ $MESSAGE = array(
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
-    77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
+    77 => 'WARNING:<br>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the email address and the confirmation email address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
     80 => 'The plugin that created this feed is currently disabled. You will not be able to edit this feed until you re-enable the parent plugin.',
@@ -1586,7 +1597,7 @@ $LANG_ACCESS = array(
     'missingfields' => 'Campi Mancanti',
     'missingfieldsmsg' => 'Devi fornire un nome e una descrizione per il gruppo',
     'groupmanager' => 'Manager Gruppi',
-    'newgroupmsg' => 'Per modificare o eliminare un gruppo, selezionalo dalla lista sottostante. <br' . XHTML . '>Per creare un nuovo gruppo fai clic su [ Nuovo Gruppo ] sopra. <br' . XHTML . '>Considera che il gruppo principale non pu&ograve; essere eliminato in quanto usato dal sistema.',
+    'newgroupmsg' => 'Per modificare o eliminare un gruppo, selezionalo dalla lista sottostante. <br>Per creare un nuovo gruppo fai clic su [ Nuovo Gruppo ] sopra. <br>Considera che il gruppo principale non pu&ograve; essere eliminato in quanto usato dal sistema.',
     'groupname' => 'Nome Gruppo',
     'coregroup' => 'Gruppo Principale',
     'yes' => 'Si',
@@ -1712,7 +1723,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2044,7 +2055,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Show Only in Topic',
-    1 => 'Show on Front Page'
+    1 => 'Show on Front Page',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2404,6 +2416,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2432,6 +2445,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2571,8 +2587,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2751,7 +2765,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Skip HTML Filter for Root?',
     'allowed_protocols' => 'Allowed Protocols',
     'disable_autolinks' => 'Disable Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'Censor Mode?',
     'censorreplace' => 'Censor Replace Text',
     'censorlist' => 'Censor List',
@@ -2829,6 +2842,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2837,7 +2853,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2857,7 +2874,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',
@@ -2911,7 +2927,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2931,7 +2947,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

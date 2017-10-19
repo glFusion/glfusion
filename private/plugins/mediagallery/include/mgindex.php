@@ -223,6 +223,7 @@ function MG_index() {
     $indexCounter = $begin;
     $noParse = 0;
     $needFinalParse = 0;
+    $mediaadblockcount = 0;
     if ( $nrows > 0 ) {
         $k = 0;
 
@@ -391,9 +392,10 @@ function MG_index() {
                 // pull the sub-album info here
                 $subAlbumDisplay = '';
                 if ( isset($_MG_CONF['subalbum_select']) && $_MG_CONF['subalbum_select'] == 1  ) {
-                    $subAlbumDisplay = '<form name="subalbums' . $MG_albums[$achild[$indexCounter]]->id . '" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0">';
+                    $subAlbumDisplay = '<form class="uk-form uk-form-horizontal" name="subalbums' . $MG_albums[$achild[$indexCounter]]->id . '" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0">';
                     $subAlbumDisplay .= '<select name="aid" onchange="forms[\'subalbums' . $MG_albums[$achild[$indexCounter]]->id . '\'].submit()">';
-                    $subAlbumDisplay .= '<optgroup label="' . $LANG_MG01['select_subalbum'] . '">' . LB;
+//                    $subAlbumDisplay .= '<optgroup label="' . $LANG_MG01['select_subalbum'] . '">' . LB;
+                    $subAlbumDisplay .= '<option class="optiongroup" value="0">'.$LANG_MG01['select_subalbum'] . '</option>' . LB;
                 }
                 $saRows = 0;
                 $T->clear_var(array('lang_subalbums','subalbumcount','subalbumlist'));
@@ -434,8 +436,8 @@ function MG_index() {
                     }
 
                     if ( $_MG_CONF['subalbum_select'] == 1 ) {
-                        $subAlbumDisplay .= '</optgroup></select>';
-                        $subAlbumDisplay .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '" />';
+                        $subAlbumDisplay .= '</select>';
+//                        $subAlbumDisplay .= '&nbsp;<button class="uk-button uk-button-small" type="submit" value="' . $LANG_MG03['go'] . '" />'.$LANG_MG03['go'].'</button>';
                         $subAlbumDisplay .= '<input type="hidden" name="page" value="1"/>';
                         $subAlbumDisplay .= '</form>';
                     }
@@ -521,6 +523,9 @@ function MG_index() {
                     'frHeight'              =>  $newheight - $MG_albums[0]->afrHeight,
                     'url_media_item'        => $_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$achild[$indexCounter]]->id . '&amp;page=1',
                 ));
+                $mediaadblockcount++;
+                $T->set_var( 'adblock',PLG_displayAdBlock('mediagallery_album_list',$mediaadblockcount), false, true);
+
                 $T->parse('AColumn', 'AlbumColumn',true);
                 $indexCounter++;
             }

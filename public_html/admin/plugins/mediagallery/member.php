@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Edit Media Gallery Member Albums defaults.                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2015 by the following authors:                        |
+// | Copyright (C) 2005-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -58,8 +58,6 @@ function MG_editMemberDefaults( ) {
         'admin'         =>  'editmember.thtml',
         'admin_formats' =>  'editalbum_formats.thtml',
     ));
-
-    include_once($_CONF['path_system']."classes/navbar.class.php");
 
     $navbar = new navbar;
     $navbar->add_menuitem($LANG_MG01['member_albums'],'showhideMGAdminEditorDiv("members",0);return false;',true);
@@ -327,7 +325,7 @@ function MG_saveMemberDefaults( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'member_perm_anon','$perm_anon'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'member_valid_formats','$member_valid_formats'");
 
-    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('menu');
 
     echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=12');
     exit;

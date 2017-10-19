@@ -51,7 +51,7 @@ $_TABLES['pollvoters']          = $_DB_table_prefix . 'pollvoters';
 
 $_PO_CONF['pi_name']            = 'polls';
 $_PO_CONF['pi_display_name']    = 'Polls';
-$_PO_CONF['pi_version']         = '2.2.2';
-$_PO_CONF['gl_version']         = '1.6.6';
+$_PO_CONF['pi_version']         = '2.2.3';
+$_PO_CONF['gl_version']         = '1.7.0';
 $_PO_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>

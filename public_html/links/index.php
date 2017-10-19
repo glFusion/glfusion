@@ -356,18 +356,24 @@ function prepare_link_item ($A, &$template)
     $linkDesc = PLG_replaceTags(nl2br($A['description']),'links','description');
 
     $template->set_var ('link_description',$linkDesc);
-//                        PLG_replaceTags(nl2br($A['description']),'links','description'));
+
     $content = $A['title'];
 
     if ( $_LI_CONF['target_blank'] == 1 ) {
         $attr = array(
             'title' => $A['url'],
             'class' => 'ext-link',
-            'target' => '_blank');
+            'target' => '_blank',
+            'rel' => 'noopener noreferrer');
     } else {
         $attr = array(
             'title' => $A['url'],
-            'class' => 'ext-link');
+            'class' => 'ext-link'
+        );
+        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($A['url'],$_CONF['site_url']) === false ) {
+            $attr['target'] = '_blank';
+            $attr['rel'] = 'noopener noreferrer';
+        }
     }
     $html = COM_createLink($content, $url, $attr);
     $template->set_var ('link_html', $html);

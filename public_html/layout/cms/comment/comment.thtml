@@ -1,6 +1,10 @@
 {# begin {templatelocation} #}
 {!if preview_mode}
 <div class="uk-panel uk-panel-box uk-margin-bottom">
+{!else}
+<a name="cid_{cid}"></a>
+<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+	<div class="uk-panel uk-panel-box uk-margin-small-bottom">
 {!endif}
 <div class="uk-flex uk-comment tm-comment uk-visible-hover" style="padding-left:{indent}px;">
 	<div class="uk-margin-right uk-hidden-small">
@@ -10,8 +14,15 @@
 	</div>
 	<div class="uk-flex-item-1">
 		<div class="uk-position-relative">
-			<h4 class="uk-comment-title tm-comment-title">
-				{author_link}
+			<h4 class="uk-comment-title tm-comment-title" itemprop="author" itemscope itemtype="https://schema.org/Person">
+{!if author_url}
+				<a href="{author_url}">
+{!endif}
+					<span itemprop="name">{author_fullname}</span>
+{!if author_url}
+				</a>
+{!endif}
+
 {!if ipaddress}
   {!if iplookup_link}
 				<a href="{iplookup_link}">{ipaddress}</a>
@@ -20,8 +31,11 @@
   {!endif}
 {!endif}
 			</h4>
-			<div class="uk-comment-meta tm-comment-meta">{date}</div>
-
+			<div class="uk-comment-meta tm-comment-meta">
+				<time class="comment-time" datetime="{iso8601_date}" itemprop="datePublished">
+					{date}
+				</time>
+			</div>
 {!if preview_mode}
 {!else}
 			<div class="uk-position-top-right uk-hidden">
@@ -37,13 +51,16 @@
 			</div>
 {!endif}
 		</div>
-		<div class="uk-comment-body tm-comment-body uk-text-break">
+		<div class="uk-comment-body tm-comment-body uk-text-break" itemprop="text">
 			{comments}
 		</div>
 	</div>
 </div>
 {!if preview_mode}
 </div>
+{!else}
+</div>
+</article>
 {!endif}
 <div class="uk-clearfix"></div>
 {# end {templatelocation} #}

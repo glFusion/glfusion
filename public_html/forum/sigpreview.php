@@ -6,7 +6,7 @@
 // |                                                                          |
 // | returns preview of user signature to AJAX routine                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2013 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -49,8 +49,12 @@ if ( isset($_POST['signature']) ) {
 } else {
     $signature = '';
 }
-
-$preview_sig = BBC_formatTextBlock($signature,'text');
+if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+    $exclude = array('img');
+} else {
+    $exclude = array();
+}
+$preview_sig = BBC_formatTextBlock($signature,'text',array(),array(),$exclude);
 
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("content-type: text/xml");

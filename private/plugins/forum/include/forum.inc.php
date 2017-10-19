@@ -91,8 +91,6 @@ function FF_siteHeader($subject = '',$headercode='') {
 function FF_NavbarMenu($current='') {
     global $_FF_CONF, $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
 
-    USES_class_navbar();
-
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ( !COM_isAnonUser() ) {
@@ -639,12 +637,14 @@ function forum_showBlocks($showblocks)
         $noboxes = $_USER['noboxes'];
     }
 
-    foreach($showblocks as $block) {
-        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
-        $result = DB_query($sql);
-        if (DB_numRows($result) == 1) {
-            $A = DB_fetchArray($result);
-            $retval .= COM_formatBlock($A,$noboxes);
+    if ( is_array($showblocks)) {
+        foreach($showblocks as $block) {
+            $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".DB_escapeString($block)."'";
+            $result = DB_query($sql);
+            if (DB_numRows($result) == 1) {
+                $A = DB_fetchArray($result);
+                $retval .= COM_formatBlock($A,$noboxes);
+            }
         }
     }
 

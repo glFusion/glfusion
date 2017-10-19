@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 var tbitems = {
@@ -26,6 +26,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbar_basic = [
 		tbitems.items['source'],
 		tbitems.items['undo'],
+		tbitems.items['editing'],
 		tbitems.items['basicstyles_basic'],
 		tbitems.items['links'],
 		tbitems.items['paragraph_basic'],
@@ -41,13 +42,16 @@ CKEDITOR.editorConfig = function( config ) {
 		tbitems.items['paragraph'],
 		tbitems.items['styles'],
 		tbitems.items['colors'],
-		tbitems.items['tools']
+		tbitems.items['tools'],
+		tbitems.items['about']
 	];
+	config.font_defaultLabel = 'Arial';
+	config.fontSize_defaultLabel = '14px';
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
 	config.extraPlugins = 'youtube2,vimeo';
-	config.autoParagraph = false;
 	config.entities_latin = false;
+	config.scayt_autoStartup = true;
 
     // FileMan
 	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/fileman/index.html?type=file';

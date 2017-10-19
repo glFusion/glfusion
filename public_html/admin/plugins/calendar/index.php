@@ -47,7 +47,7 @@ if (!SEC_hasRights('calendar.edit')) {
     $display .= COM_siteFooter();
 
     // Log attempt to error.log
-    COM_accessLog("User {$_USER['username']} tried to illegally access the event administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the event administration screen.");
 
     echo $display;
 
@@ -73,17 +73,7 @@ function CALENDAR_edit($action, $A, $msg = '')
     USES_lib_admin();
 
     $retval = '';
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
-              'text' => $LANG_CAL_ADMIN[40]),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
-        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
-              'text' => $LANG_CAL_ADMIN[38]),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
+    $editEvent = false;
 
     switch ($action) {
 
@@ -152,11 +142,6 @@ function CALENDAR_edit($action, $A, $msg = '')
         $event_templates->set_var('post_options', COM_optionList($_TABLES['postmodes'],'code,name',$A['postmode']));
     }
 
-    $retval .= COM_startBlock($blocktitle, '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-
-    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[41], plugin_geticon_calendar());
-
     if (!empty($A['eid'])) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="delete"%s/>';
@@ -170,6 +155,7 @@ function CALENDAR_edit($action, $A, $msg = '')
             $event_templates->set_var('submission_option',
                 '<input type="hidden" name="type" value="submission"/>');
         }
+        $editEvent = true;
     } else { // new event
         $A['eid'] = COM_makesid ();
         $A['status'] = 1;
@@ -195,6 +181,27 @@ function CALENDAR_edit($action, $A, $msg = '')
         $A['zipcode'] = '';
         $A['allday'] = 0;
     }
+    if ( $editEvent == true ) {
+        $lang_edit_or_create = $LANG_ADMIN['edit'];
+    } else {
+        $lang_edit_or_create = $LANG_ADMIN['create_new'];
+    }
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
+              'text' => $LANG_CAL_ADMIN[40]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?edit=x',
+              'text' => $lang_edit_or_create,'active'=>true),
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
+              'text' => $LANG_CAL_ADMIN[38]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+    $retval .= COM_startBlock($blocktitle, '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[41], plugin_geticon_calendar());
 
     $event_templates->set_var('event_id', $A['eid']);
     $event_templates->set_var('lang_eventtitle', $LANG_ADMIN['title']);
@@ -536,7 +543,7 @@ function CALENDAR_save( $eid, $C )
     $state       = DB_escapeString (COM_checkHTML (COM_checkWords ($state)));
     $zipcode     = DB_escapeString (COM_checkHTML (COM_checkWords ($zipcode)));
     $event_type  = DB_escapeString (strip_tags (COM_checkWords ($event_type)));
-    $url         = DB_escapeString (strip_tags ($url));
+    $url         = DB_escapeString (COM_sanitizeURL ($url));
 
     if ($allday == 0) {
         // Add 12 to make time on 24 hour clock if needed
@@ -807,10 +814,12 @@ function CALENDAR_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
+              'text' => $LANG_CAL_ADMIN[40],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
               'text' => $LANG_CAL_ADMIN[38]),
         array('url' => $_CONF['site_admin_url'],
@@ -894,6 +903,10 @@ function CALENDAR_listBatch()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php',
             'text' => $LANG_CAL_ADMIN[39]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/calendar/index.php?batchadmin=x',
+              'text' => $LANG_CAL_ADMIN[38],'active'=>true),
         array('url' => $_CONF['site_admin_url'],
             'text' => $LANG_ADMIN['admin_home'])
     );
@@ -909,7 +922,9 @@ function CALENDAR_listBatch()
     $cal_templates->parse('form', 'form');
     $desc = $cal_templates->finish($cal_templates->get_var('form'));
 
-    $display .= ADMIN_createMenu($menu_arr, $desc, plugin_geticon_calendar());
+    $display .= ADMIN_createMenu($menu_arr, '', plugin_geticon_calendar());
+
+    $display .= '<div class="batch-admin_filter">'.$desc.'</div>';
 
     $header_arr = array(      # display 'text' and use table field 'field'
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
@@ -1133,7 +1148,6 @@ switch ($action) {
             $display .= COM_siteFooter();
         }
         break;
-
 }
 
 echo $display;

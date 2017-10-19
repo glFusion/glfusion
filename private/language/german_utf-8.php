@@ -260,7 +260,13 @@ $LANG03 = array(
     48 => 'Klicke <a href="javascript:history.back()">hier</a> um zurückzukehren',
     49 => 'Kommentare sind geschlossen',
     50 => "Du musst dich <a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um schreiben dürfen",
-    51 => 'Sei der erste der kommentiert'
+    51 => 'Sei der erste der kommentiert',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -289,8 +295,7 @@ $LANG04 = array(
     20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein',
     21 => 'Fehler',
     22 => "Registrieren bei {$_CONF['site_name']}!",
-    23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />
-\nÜbrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
+    23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
     24 => 'Dein Passwort wird Dir an die angegebene E-Mail Adresse gesendet.',
     25 => 'Passwort vergessen?',
     26 => 'Gib <b>entweder</b> Deinen Benutzernamen <b>oder</b> Deine E-Mail Adresse ein, mit der Du Dich registriert hast, und klicke auf Passwort senden. Eine E-Mail mit einer Anleitung, wie Du ein neues Passwort eingeben kannst, wird dann an die gespeicherte E-Mail Adresse gesendet.',
@@ -356,7 +361,7 @@ $LANG04 = array(
     86 => 'Alle Artikel und Kommentare von',
     87 => 'Dein Benutzername',
     88 => "Jemand (höchstwahrscheinlich Du selbst) hat ein neues Passwort für Dein Konto \"%s\" auf {$_CONF['site_name']} <{$_CONF['site_url']}> angefordert.<br /><br />Wenn Du tatsächlich ein neues Passwort benötigst, klicke bitte auf den folgenden Link:<br /><br />",
-    89 => "Möchtest Du Dein Passwort nicht ändern, so kannst Du diese E-Mail einfach ignorieren (Dein bisheriges Passwort bleibt dann unverändert gültig).\n\n",
+    89 => 'Möchtest Du Dein Passwort nicht ändern, so kannst Du diese E-Mail einfach ignorieren (Dein bisheriges Passwort bleibt dann unverändert gültig).',
     90 => 'Du kannst hier jetzt ein neues Passwort für Deinen Konto eingeben. Dein altes Passwort bleibt noch solange gültig, bis Du dieses Formular absendest.',
     91 => 'Neues Passwort',
     92 => 'Neues Passwort eingeben',
@@ -982,7 +987,9 @@ $LANG24 = array(
     121 => 'Zeige Kategorie - Einstellungen für Artikel in der ausgewählte Kategorie wurden geändert.',
     122 => 'Alle Artikel der Kategorie %s wurden in die Kategorie %s verschoben.',
     123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
-    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.'
+    124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1045,7 +1052,9 @@ $LANG27 = array(
     54 => 'Admin Blöcke',
     55 => 'Syndication Admin',
     56 => 'Klicke auf "Abbrechen" und anschließend auf "Bearbeiten", um Details anzuzeigen, einschließlich der Gesamtzahl der Objekte in der Datenbank, die diesem Thema zugeordnet sind',
-    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>'
+    57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1427,7 +1436,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Netzwerk URL',
     'site_username' => 'Netzwerk Benutzername',
     'additional_html' => 'Zusätzliches HTML nach den "Folge mir" Knöpfen',
-    'saved_msg' => 'Verknüpfungen wurden gespeichert.'
+    'saved_msg' => 'Verknüpfungen wurden gespeichert.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1870,7 +1880,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1945,7 +1955,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1999,7 +2009,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-#
+# 
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -2049,7 +2059,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Nur in der Kategorie',
-    1 => 'Auch auf der Startseite'
+    1 => 'Auch auf der Startseite',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2409,6 +2420,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Da entweder <b>safe_mode</b> oder <b>open_basedir</b> Einschränkungen erkannt wurden, wurde die Überprüfung auf Grafik-Bibliotheken übersprungen.',
     'correct_perms' => 'Bitte behebe die unten angegebenen Probleme und überprüfe danach deine Hosting-Umgebung erneut.',
     'ctype_extension' => 'Ctype-Erweiterung',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Derzeit',
     'current_php_settings' => 'Aktuelle PHP-Einstellungen',
     'database_version' => 'Datenbank-Version',
@@ -2437,6 +2449,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
     'im_ok' => 'Die Datei <b>convert</b> scheint vorhanden zu sein.',
     'imagemagick' => 'ImageMagick-Erweiterung',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' optional',
     'is_required' => ' erforderlich',
     'jhead' => 'Jhead-Erweiterung',
@@ -2576,8 +2591,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Pfad zum Backup',
     'path_data' => 'Pfad zu Data',
     'path_images' => 'Pfad zu Images',
-    'path_pear' => 'Pfad zu Pear',
-    'have_pear' => 'Pear vorhanden',
     'mail_settings' => 'Einstellungen ',
     'theme' => 'Design',
     'menu_elements' => 'Elemente des Menüs',
@@ -2756,7 +2769,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'HTML des Root nicht filtern',
     'allowed_protocols' => 'Erlaubte Protokolle',
     'disable_autolinks' => 'Autolinks ausschalten',
-    'digg_enabled' => 'Digg.com Links anzeigen',
     'censormode' => 'Zensur-Modus',
     'censorreplace' => 'Zensurwort ersetzen mit',
     'censorlist' => 'Liste zensierter Wörter',
@@ -2834,6 +2846,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Endloses scrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
@@ -2842,7 +2857,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => '404-Fehler (NotFound) aufzeichnen',
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
     'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
-    'standard_auth_first' => '"Standard Auth" als erstes in Dropdown'
+    'standard_auth_first' => '"Standard Auth" als erstes in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2862,7 +2878,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Pfade',
     'fs_theme' => 'Design',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Benutzer',
     'fs_misc' => 'Vermischtes',
     'fs_spamx' => 'Spam-X',
@@ -2916,7 +2931,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Letzte Seite' => 'last', 'Erste Seite' => 'first', 'Jede Seite' => 'all'),
     8 => array('Rechts' => 'right', 'Links' => 'left'),
     9 => array('Auf Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite anzeigen' => 'home', 'Admin anzeigen' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Der Reihe nach' => 'flat', 'Verschachtelt' => 'nested', 'Keine Kommentare' => 'nocomment'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-schreiben' => 3),
     13 => array('Uberspringen' => 0, 'Erlauben mit Speed-Limit' => 1, 'Erlauben ohne Speed-Limit' => 2),
@@ -2936,7 +2951,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Zufälliges Passwort' => 0, 'Benutzer Passwort' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Täglich' => 86400, 'Wöchentlich' => 604800, 'Stündlich' => 3600, 'Immer' => 0),
-    30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

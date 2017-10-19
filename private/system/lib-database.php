@@ -285,11 +285,13 @@ function DB_delete($table,$id,$value,$return_page='')
 function DB_getItem($table,$what,$selection='')
 {
     if (!empty($selection)) {
-        $result = DB_query("SELECT $what FROM $table WHERE $selection");
+        $sql = "SELECT $what FROM $table WHERE $selection";
+        $result = DB_query($sql);
     } else {
-        $result = DB_query("SELECT $what FROM $table");
+        $sql = "SELECT $what FROM $table";
+        $result = DB_query($sql);
     }
-	if ($result === NULL || DB_error() ) {
+	if ($result === NULL || DB_error($sql) ) {
 		return NULL;
 	} else if (DB_numRows($result) == 0) {
 		return NULL;
@@ -511,11 +513,11 @@ function DB_insertId($link_identifier = '')
 * @return   string  Returns database error message
 *
 */
-function DB_error()
+function DB_error($sql = '')
 {
     global $_DB;
 
-    return $_DB->dbError();
+    return $_DB->dbError($sql);
 }
 
 /**

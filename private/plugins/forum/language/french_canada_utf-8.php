@@ -238,7 +238,8 @@ $LANG_GF01 = array(
     'disable_urlparse' => 'Ne pas analyser les URL:',
     'features' => 'Caractéristiques:',
     'rss_link' => 'Subscribe to this forum\'s RSS feed.',
-    'all_read_success' => 'All topics have been marked as read'
+    'all_read_success' => 'All topics have been marked as read',
+    'formatted_code' => 'Formatted Code'
 );
 
 $LANG_GF02 = array(
@@ -451,7 +452,11 @@ $LANG_GF02 = array(
     'spam_detected' => 'Your post has been identified as a spam message',
     'invalid_email' => 'Email empty or not a valid email address',
     'invalid_name' => 'No name or name blank',
-    'last_edited' => 'Last Edited'
+    'last_edited' => 'Last Edited',
+    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
+    'post_ctc' => 'Permalink Copied to Clipboard',
+    'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
 );
 
 $LANG_GF03 = array(
@@ -479,7 +484,10 @@ $LANG_GF03 = array(
     'select' => 'Sélectionner',
     'select_forum' => 'Sélectionner le Forum Discussion',
     'destination_topic' => 'Destinations Rubrique ID:',
-    'select_topic' => 'Choisir un Sujet'
+    'select_topic' => 'Choisir un Sujet',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
 );
 
 $LANG_GF04 = array(
@@ -928,6 +936,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Autorisations de Fichier',
     'max_uploadimage_width' => 'Image Max Largeur (px)',
     'max_uploadimage_height' => 'Max Hauteur de l`image (px)',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Inline Largeur de l`image (px)',
     'inlineimage_height' => 'Inline Hauteur de l`image (px)',
     'allowablefiletypes' => 'Types de Fichiers Autorisés',
@@ -943,7 +952,12 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Réglage par Défaut pour Smileys Box Handicapés',
     'urlparse_disabled' => 'Réglage par Défaut pour l`URL Parse Box Handicapés',
     'use_sfs' => 'Activer Contrôles Arrêter Forum Spam pour de Nouveaux Messages',
-    'allowed_html' => 'Permis HTML'
+    'allowed_html' => 'Permis HTML',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style'
 );
 
 $LANG_configsubgroups['forum'] = array(

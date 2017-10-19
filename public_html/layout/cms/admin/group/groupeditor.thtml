@@ -28,7 +28,7 @@
 			</div>
 		</div>
 
-		<div class="uk-form-row {hide_defaultoption}">
+		<div class="uk-form-row" {hide_defaultoption}>
 			<label class="uk-form-label" for="chk_grpdefault">{lang_defaultgroup}</label>
 			<div class="uk-form-controls">
 				<input type="checkbox" id="chk_grpdefault" name="chk_grpdefault" value="1" {chk_defaultuse}>

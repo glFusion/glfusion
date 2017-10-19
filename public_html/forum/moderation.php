@@ -854,6 +854,31 @@ if ($forum_id == 0) {
 
             $pageBody .= moderator_banIP($topic_id,$topic_parent_id,$forum_id, $hostip);
             break;
+
+        case 'locktopic' :
+            if ( !forum_modPermission($forum_id,$_USER['uid'],'mod_edit') ) {
+                moderator_error(ACCESS_DENIED);
+            }
+            if ( $topic_id == 0 ) {
+                moderator_error(ERROR_TOPIC_ID);
+            }
+            $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=1 WHERE id=".(int) $topic_id;
+            DB_query($sql);
+            echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
+            break;
+        case 'unlocktopic' :
+            if ( !forum_modPermission($forum_id,$_USER['uid'],'mod_edit') ) {
+                moderator_error(ACCESS_DENIED);
+            }
+            if ( $topic_id == 0 ) {
+                moderator_error(ERROR_TOPIC_ID);
+            }
+            $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=0 WHERE id=".(int) $topic_id;
+            DB_query($sql);
+            echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
+            break;
+
+
         default :
             $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
             break;

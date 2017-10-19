@@ -227,18 +227,6 @@
 					<dd>Path where glFusion expects to find its images, including user photos and images for stories.</dd>
 				</dl>
 
-				<a name="site_pear" id="pear"></a><h2>Pear</h2>
-
-				<dl id="desc_have_pear">
-					<dt>Have Pear</dt>
-					<dd>Whether you have PEAR installed on your server (= true) or not (= false). When set to false, glFusion will use the PEAR packages installed in $_CONF['path_pear'] (see below)</dd>
-				</dl>
-
-				<dl id="desc_path_pear">
-					<dt>Path Pear</dt>
-					<dd>When $_CONF['have_pear'] (see above) is set to false, this is the path where glFusion expects to find the PEAR packages it requires (e.g. PEAR::Mail for sending emails). </dd>
-				</dl>
-
 				<a name="site_search" id="search"></a><h2>Search</h2>
 
 				<dl id="desc_search_style">
@@ -334,7 +322,7 @@
 
 				<dl id="desc_hidestorydate">
 					<dt>Hide Story Date</dt>
-					<dd>If True, the publish date for the story will appear in the story header. If False, the date will not be displayed.</dd>
+					<dd>If False, the publish date for the story will appear in the story header. If True, the date will not be displayed.</dd>
 				</dl>
 
 				<dl id="desc_hideviewscount">
@@ -956,6 +944,11 @@
 					<dd>The Facebook App ID you have setup for your site.  See <a href="https://developers.facebook.com/" target="_blank">the Facebook Developers Page</a> for details on registering and setting up your site.</dd>
 				</dl>
 
+				<dl id="desc_commentssubmission">
+					<dt>Enable Comment Submission Queue</dt>
+					<dd>If using the Internal comment engine, setting Comment Submission Queue to Anonymous Only or All Users will queue user submitted comments for moderator review before being published.</dd>
+				</dl>
+
 				<dl id="desc_commentspeedlimit">
 					<dt>Comment Speed Limit</dt>
 					<dd>Number of seconds between posting a comment for the user </dd>
@@ -1019,12 +1012,12 @@
 
 				<dl id="desc_image_lib">
 					<dt>Image Library</dt>
-					<dd>Set this to either 'imagemagick', 'netpbm', or 'gdlib' if images should be resized during upload.</dd>
+					<dd>Set this to either 'graphicsmagick', 'imagemagick', 'netpbm', or 'gdlib' if images should be resized during upload.</dd>
 				</dl>
 
 				<dl id="desc_path_to_mogrify">
-					<dt>Path to ImageMagick</dt>
-					<dd>If you chose 'imagemagick' for the Image Library above, then this should hold the full path to the <span style="font-weight: bold;">convert</span> executable (from the ImageMagick package), e.g. '/usr/bin/'. You will need a fairly recent version of ImageMagick for this to work (version 5.4.9 or newer is recommended). </dd>
+					<dt>Path to GraphicsMagick / ImageMagick Executables</dt>
+					<dd>If you chose 'graphicsmagick' or 'imagemagick' for the Image Library above, then this should hold the full path to the <span style="font-weight: bold;">convert</span> executable (from the ImageMagick package), e.g. '/usr/bin/'. You will need a fairly recent version of GraphicsMagick or ImageMagick for this to work (version 5.4.9 or newer is recommended). </dd>
 				</dl>
 
 				<dl id="desc_path_to_netpbm">
@@ -1549,6 +1542,21 @@
 				<dl id="desc_bb2_eu_cookie">
 					<dt>EU Cookie</dt>
 					<dd>Enable this option to alter Bad Behavior's cookie handling to conform to 2012 EU cookie regulations.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy">
+					<dt>Reverse Proxy Support (i.e.; CloudFlare)</dt>
+					<dd>Enable this option if your website is behind a reverse proxy or load balancer. For example, if you use CloudFlare service or another proxy server, set this to True.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_header">
+					<dt>Proxy Header</dt>
+					<dd>The proxy header to add when Reverse Proxy is enabled. Generally the default of 'X-Forwarded-For' is fine.</dd>
+				</dl>
+
+				<dl id="desc_bb2_reverse_proxy_addresses">
+					<dt>Reverse Proxy Addresses</dt>
+					<dd>If you know the IP addresses of your proxy server(s) or the load balancers, enter them here. For services such as CloudFlare, you can leave this blank.</dd>
 				</dl>
 
 			</div>

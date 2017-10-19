@@ -58,4 +58,28 @@ $_SQL['bad_behavior2_ban'] = "CREATE TABLE {$_TABLES['bad_behavior2_ban']} (
     INDEX type (type),
     INDEX timestamp (timestamp)
 ) ENGINE=MyISAM;";
+
+$_SQL['bad_behavior2_whitelist'] = "CREATE TABLE {$_TABLES['bad_behavior2_whitelist']} (
+    `id` smallint(5) unsigned NOT NULL auto_increment,
+    `item` varchar(254) NOT NULL DEFAULT '',
+    `type` varchar(128) NOT NULL DEFAULT 'IP',
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
+    `timestamp` int(8) NOT NULL DEFAULT '0',
+    PRIMARY KEY  (id),
+    INDEX type (type),
+    INDEX timestamp (timestamp)
+) ENGINE=MyISAM;";
+
+$_SQL['bad_behavior2_blacklist'] = "CREATE TABLE {$_TABLES['bad_behavior2_blacklist']} (
+    `id` smallint(5) unsigned NOT NULL auto_increment,
+    `item` varchar(254) NOT NULL DEFAULT '',
+    `type` varchar(128) NOT NULL DEFAULT 'IP',
+    `autoban` tinyint(3) unsigned NOT NULL DEFAULT 0,
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
+    `timestamp` int(8) NOT NULL DEFAULT '0',
+    PRIMARY KEY  (id),
+    INDEX type (type),
+    INDEX timestamp (timestamp)
+) ENGINE=MyISAM;";
+
 ?>

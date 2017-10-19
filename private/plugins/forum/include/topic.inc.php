@@ -41,9 +41,8 @@ if (!defined ('GVERSION')) {
 
 USES_lib_user();
 
-function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) {
+function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$query='') {
     global $_FF_CONF,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02,$_SYSTEM;
-    global $highlight;
     global $forumfiles;
     global $canPost;
 
@@ -61,10 +60,6 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     static $_user_already_voted = array();
 
     $oldPost = 0;
-
-    if (!class_exists('StringParser') ) {
-        require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
-    }
 
     if ( $mode == 'preview' ) {
         $topictemplate->set_var(array(
@@ -147,7 +142,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                         $min_height = $min_height + 10;
                     }
                 }
-                if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
+                if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
                     $min_height = $min_height + 5;
                 }
                 $udt = new Date(strtotime($userarray['regdate']),$_USER['tzid']);
@@ -189,7 +184,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         }
     } else {
         $uservalid = false;
-        $userlink = $LANG_GF01['ANON'].$showtopic['name'];
+//        $userlink = $LANG_GF01['ANON'].$showtopic['name'];
+        $userlink = $showtopic['name'];
     }
 
     if ($_FF_CONF['show_moods'] &&  $showtopic['mood'] != "") {
@@ -197,7 +193,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $min_height = $min_height + 30;
     }
 
-    $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
+    $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status'],$query);
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
     $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
@@ -229,9 +225,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
                 'LANG_edit' => ''));
     }
 
-    if ( $highlight != '' ) {
-        $showtopic['subject'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['subject']);
-        $showtopic['comment'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['comment']);
+    if ( $query != '' ) {
+        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
     }
 
     if ($showtopic['pid'] == 0) {
@@ -253,6 +248,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
         $date = $dt->format($_CONF['date'],true);
     }
     $topictemplate->set_var ('posted_date', $date);
+    $topictemplate->set_var ('iso8601_date', $dt->toISO8601());
 
     if ($mode != 'preview') {
         if (!COM_isAnonUser() ) {
@@ -365,14 +361,16 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate) 
     } elseif ($uniqueid > 0) {
         $topictemplate->set_var('attachments',_ff_showattachments((int) $uniqueid));
     }
-
-    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
-        $iplink = '<a href="' . $_CONF['site_admin_url'] . '/plugins/nettools/whois.php?domain=' . $showtopic['ip'] . '" target="_new">' . $showtopic['ip'] . '</a>';
-        $topictemplate->set_var('ipaddress',$iplink);
+    if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
+        if( !empty( $_CONF['ip_lookup'] )) {
+            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
+            $topictemplate->set_var('ipaddress',$iplink);
+        } else {
+            $topictemplate->set_var('ipaddress',$showtopic['ip']);
+        }
     } else {
         $topictemplate->set_var('ipaddress','');
     }
-
     $voteHTML = '';
     if ( $_FF_CONF['enable_user_rating_system']) {
         if ( $showtopic['uid'] > 1 ) { //not an anonymous poster
@@ -479,6 +477,12 @@ function _ff_getmodFunctions($showtopic)
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
         $options .= '<option value="editpost">' .$LANG_GF03['edit'] . '</option>';
+        if ( $showtopic['pid'] == 0 && $showtopic['locked'] == 0) {
+            $options .= '<option value="locktopic">' .$LANG_GF03['lock_topic'] . '</option>';
+        }
+        if ( $showtopic['pid'] == 0 && $showtopic['locked'] != 0) {
+            $options .= '<option value="unlocktopic">' .$LANG_GF03['unlock_topic']. '</option>';
+        }
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_delete')) {
         $options .= '<option value="deletepost">' .$LANG_GF03['delete'] . '</option>';

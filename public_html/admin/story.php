@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion story administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -221,8 +221,12 @@ function STORY_global($errorMsg = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/story.php',
               'text' => $LANG_ADMIN['story_list']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
+       array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
+//        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
+//              'text' => $LANG_ADMIN['submissions']),
+        array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
+                      'text' => $LANG24[111],'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']),
     );
@@ -241,7 +245,7 @@ function STORY_global($errorMsg = '')
 
     $current_topic = $LANG09[9];
 
-    $seltopics = COM_topicList ('tid,topic', '', 1, true);
+    $seltopics = COM_topicList ('tid,topic,sortnum', '', 2, true);
     $alltopics = '<option value="'.$LANG09[9].'"';
     if ($current_topic == 'all') {
         $alltopics .= ' selected="selected"';
@@ -451,7 +455,7 @@ function STORY_list()
     if ($current_topic == $LANG09[9]) {
         $excludetopics = '';
         $seltopics = '';
-        $topicsql = "SELECT tid,topic FROM {$_TABLES['topics']}" . COM_getPermSQL ();
+        $topicsql = "SELECT tid,topic FROM {$_TABLES['topics']}" . COM_getPermSQL () . " ORDER BY sortnum ASC";
         $tresult = DB_query( $topicsql );
         $trows = DB_numRows( $tresult );
         if( $trows > 0 ) {
@@ -472,7 +476,7 @@ function STORY_list()
         }
     } else {
         $excludetopics = " tid = '$current_topic' ";
-        $seltopics = COM_topicList ('tid,topic', $current_topic, 1, true);
+        $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
     $alltopics = '<option value="' .$LANG09[9]. '"';
@@ -504,10 +508,11 @@ function STORY_list()
     $defsort_arr = array('field' => 'unixdate', 'direction' => 'desc');
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/story.php',
+              'text' => $LANG_ADMIN['story_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']));
+        );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
@@ -578,6 +583,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     USES_lib_admin();
 
     $display = '';
+    $editStory = false;
 
     switch ($action) {
         case 'clone' :
@@ -631,11 +637,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $story = new Story();
     if ($action == 'preview' || $action == 'error') {
-        while (list($key, $value) = each($_POST)) {
+        foreach ( $_POST AS $key => $value ) {
             if (!is_array($value)) {
                 $_POST[$key] = $value;
             } else {
-                while (list($subkey, $subvalue) = each($value)) {
+                foreach ( $value AS $subkey => $subvalue ) {
                     $value[$subkey] = $subvalue;
                 }
             }
@@ -674,11 +680,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story->setTid($currenttopic);
     }
     if ( SEC_hasRights('story.edit') ) {
-        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,0);
-        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,0);
+        $allowedTopicList = COM_topicList ('tid,topic,sortnum', $story->EditElements('tid'), 2, true,0);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic,sortnum', $story->EditElements('alternate_tid'), 2, true,0);
     } else {
-        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
-        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic', $story->EditElements('alternate_tid'), 1, true,3);
+        $allowedTopicList = COM_topicList ('tid,topic,sortnum', $story->EditElements('tid'), 2, true,3);
+        $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic,sortnum', $story->EditElements('alternate_tid'), 2, true,3);
     }
     if ( $allowedTopicList == '' ) {
         $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true,'error');
@@ -689,16 +695,15 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/story.php',
               'text' => $LANG_ADMIN['story_list']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']));
+        array('url' => $_CONF['site_admin_url'] . '/story.php?edit=x',
+              'text' => $LANG24[5],'active'=>true),
+        );
         if ( SEC_inGroup('Root')) {
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
-                      'text' => 'Global Settings');
+                      'text' => $LANG24[111]);
         }
         $menu_arr[] = array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']);
-
-    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
 
     $story_templates->set_var ('hour_mode',      $_CONF['hour_mode']);
 
@@ -919,6 +924,12 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var('show_topic_icon_checked', '');
     }
     $story_templates->set_var('story_image_url',$story->EditElements('story_image'));
+    $story_templates->set_var('story_video_url',$story->EditElements('story_video'));
+    if ($story->EditElements('sv_autoplay')) {
+        $story_templates->set_var('autoplay_is_checked', 'checked="checked"');
+    } else {
+        $story_templates->set_var('autoplay_is_checked', '');
+    }
 
     $story_templates->set_var('lang_draft', $LANG24[34]);
     if ($story->EditElements('draft_flag')) {
@@ -1000,6 +1011,72 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var ('frontpage_options',
             COM_optionList ($_TABLES['frontpagecodes'], 'code,name',
                             $story->EditElements('frontpage')));
+    // frontpage date
+    switch ( $story->EditElements('frontpage') ) {
+        case 0 :
+            $story_templates->set_var('topiconly_checked',' checked="checked" ');
+            break;
+        case 1 :
+            $story_templates->set_var('onfrontpage_checked',' checked="checked" ');
+            break;
+        case 2 :
+            $story_templates->set_var('frontpageuntil_checked',' checked="checked" ');
+            break;
+        default :
+            $story_templates->set_var('onfrontpage_checked',' checked="checked" ');
+            break;
+    }
+    // frontpage until
+
+    $month_options = COM_getMonthFormOptions($story->EditElements('frontpage_date_month'));
+    $story_templates->set_var('frontpage_date_month_options', $month_options);
+
+    $day_options = COM_getDayFormOptions($story->EditElements('frontpage_date_day'));
+    $story_templates->set_var('frontpage_date_day_options', $day_options);
+
+    $year_options = COM_getYearFormOptions($story->EditElements('frontpage_date_year'));
+    $story_templates->set_var('frontpage_date_year_options', $year_options);
+
+    $frontpage_date_ampm = '';
+    $frontpage_date_hour = $story->EditElements('frontpage_date_hour');
+    //correct hour
+    if ($frontpage_date_hour >= 12) {
+        if ($frontpage_date_hour > 12) {
+            $frontpage_date_hour = $frontpage_date_hour - 12;
+        }
+        $ampm = 'pm';
+    } else {
+        $ampm = 'am';
+    }
+    $ampm_select = COM_getAmPmFormSelection ('frontpage_date_ampm', $ampm);
+    if (empty ($ampm_select)) {
+        // have a hidden field to 24 hour mode to prevent JavaScript errors
+        $ampm_select = '<input type="hidden" name="frontpage_date_ampm" value="" />';
+    }
+    $story_templates->set_var ('frontpage_date_ampm_selection', $ampm_select);
+
+    if ($_CONF['hour_mode'] == 24) {
+        $hour_options = COM_getHourFormOptions ($story->EditElements('frontpage_date_hour'), 24);
+    } else {
+        $hour_options = COM_getHourFormOptions ($frontpage_date_hour);
+    }
+    $story_templates->set_var('frontpage_date_hour_options', $hour_options);
+
+    $minute_options = COM_getMinuteFormOptions($story->EditElements('frontpage_date_minute'));
+    $story_templates->set_var('frontpage_date_minute_options', $minute_options);
+
+    $story_templates->set_var('frontpage_date_second', $story->EditElements('frontpage_date_second'));
+
+
+
+
+
+
+
+
+
+// end of new stuf
+
 
     $story_templates->set_var('story_introtext', $story->EditElements('introtext'));
 
@@ -1145,11 +1222,11 @@ function STORY_submit($type='')
 
     $args = &$_POST;
 
-    while (list($key, $value) = each($args)) {
+    foreach ( $args AS $key => $value ) {
         if (!is_array($value)) {
             $args[$key] = $value;
         } else {
-            while (list($subkey, $subvalue) = each($value)) {
+            foreach ($value AS $subkey => $subvalue ) {
                 $value[$subkey] = $subvalue;
             }
         }

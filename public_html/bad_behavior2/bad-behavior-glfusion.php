@@ -32,7 +32,7 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-global $_DB_table_prefix, $_CONF;
+global $_DB_table_prefix;
 
 define('BB2_CWD', dirname(__FILE__));
 
@@ -41,6 +41,8 @@ define('BB2_CWD', dirname(__FILE__));
 $bb2_settings_defaults = array(
     'log_table'     => $_DB_table_prefix . 'bad_behavior2',
     'ban_table'     => $_DB_table_prefix . 'bad_behavior2_ban',
+    'wl_table'      => $_DB_table_prefix . 'bad_behavior2_whitelist',
+    'bl_table'      => $_DB_table_prefix . 'bad_behavior2_blacklist',
     'display_stats' => 0,
     'strict'        => $_CONF['bb2_strict'],
     'verbose'       => $_CONF['bb2_verbose'],
@@ -51,6 +53,9 @@ $bb2_settings_defaults = array(
     'offsite_forms' => $_CONF['bb2_offsite_forms'],
     'eu_cookie'     => $_CONF['bb2_eu_cookie'],
     'secure_cookie' => $_CONF['cookiesecure'],
+    'reverse_proxy' => isset($_CONF['bb2_reverse_proxy']) ? $_CONF['bb2_reverse_proxy'] : 0,
+    'reverse_proxy_header' => isset($_CONF['bb2_reverse_proxy_header']) ? $_CONF['bb2_reverse_proxy_header'] : 'X-Forwarded-For',
+    'reverse_proxy_addresses' => isset($_CONF['bb2_reverse_proxy_addresses']) ? $_CONF['bb2_reverse_proxy_addresses'] : array(),
 );
 
 // Bad Behavior callback functions.
@@ -110,12 +115,100 @@ function bb2_email() {
 }
 
 // retrieve settings from database
-// Settings are hard-coded for non-database use
 function bb2_read_settings() {
     global $_TABLES, $_CONF, $bb2_settings_defaults;
 
+    // blacklisted data
+    $_CONF['bb2_spambot_ip'] =    array();
+    $_CONF['bb2_spambots_0'] =    array();
+    $_CONF['bb2_spambots'] =      array();
+    $_CONF['bb2_spambots_regex'] =array();
+    $_CONF['bb2_spambots_url'] =  array();
+    $_CONF['bb2_spambot_referer'] = array();
+    $cacheInstance = 'bb2_bl_data';
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+        $bb2_bl_tmp = unserialize($retval);
+        if ( isset($bb2_bl_tmp['spambot_ip']))
+            $_CONF['bb2_spambot_ip'] = $bb2_bl_tmp['spambot_ip'];
+        if ( isset($bb2_bl_tmp['spambots_0']))
+            $_CONF['bb2_spambots_0']  = $bb2_bl_tmp['spambots_0'];
+        if ( isset($bb2_bl_tmp['spambots']))
+            $_CONF['bb2_spambots']    = $bb2_bl_tmp['spambots'];
+        if ( isset($bb2_bl_tmp['spambots_regex']))
+            $_CONF['bb2_spambots_regex']  = $bb2_bl_tmp['spambots_regex'];
+        if ( isset($bb2_bl_tmp['spambots_url']))
+           $_CONF['bb2_spambots_url']  = $bb2_bl_tmp['spambots_url'];
+        if ( isset($bb2_bl_tmp['spambot_referer']))
+            $_CONF['bb2_spambot_referer']  = $bb2_bl_tmp['spambot_referer'];
+    } else {
+        $bb2_bl_tmp = array();
+        $bb2_bl_tmp['spambot_ip'] = array();
+        $bb2_bl_tmp['spambots_0'] = array();
+        $bb2_bl_tmp['spambots'] = array();
+        $bb2_bl_tmp['spambots_regex'] = array();
+        $bb2_bl_tmp['spambots_url'] = array();
+        $bb2_bl_tmp['spambot_referer'] = array();
+        $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['bl_table']}",1);
+        if ( $result !== false ) {
+            while ( ($row = DB_fetchArray($result)) != NULL  ) {
+                $bb2_bl_tmp[$row['type']][] = $row['item'];
+            }
+            if ( isset($bb2_bl_tmp['spambot_ip']))
+                $_CONF['bb2_spambot_ip'] =     $bb2_bl_tmp['spambot_ip'];
+            if ( isset($bb2_bl_tmp['spambots_0']))
+                $_CONF['bb2_spambots_0'] =      $bb2_bl_tmp['spambots_0'];
+            if ( isset($bb2_bl_tmp['spambots']))
+                $_CONF['bb2_spambots'] =        $bb2_bl_tmp['spambots'];
+            if ( isset($bb2_bl_tmp['spambots_regex']))
+                $_CONF['bb2_spambots_regex'] =  $bb2_bl_tmp['spambots_regex'];
+            if ( isset($bb2_bl_tmp['spambots_url']))
+                $_CONF['bb2_spambots_url'] =    $bb2_bl_tmp['spambots_url'];
+            if ( isset($bb2_bl_tmp['spambot_referer']))
+                $_CONF['bb2_spambot_referer'] = $bb2_bl_tmp['spambot_referer'];
+            $cache_bb2_bl_data = serialize($bb2_bl_tmp);
+            CACHE_create_instance($cacheInstance, $cache_bb2_bl_data, 0);
+        }
+    }
+
+    // whitelisted data
+    $cacheInstance = 'bb2_wl_data';
+    $_CONF['bb2_whitelist_ip_ranges'] = array();
+    $_CONF['bb2_whitelist_user_agents'] = array();
+    $_CONF['bb2_whitelist_urls'] = array();
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+        $bb2_wl_tmp = unserialize($retval);
+        if ( isset($bb2_wl_tmp['ip']))
+            $_CONF['bb2_whitelist_ip_ranges']  = $bb2_wl_tmp['ip'];
+        if ( isset($bb2_wl_tmp['ua']))
+            $_CONF['bb2_whitelist_user_agents']  = $bb2_wl_tmp['ua'];
+        if ( isset($bb2_wl_tmp['url']))
+            $_CONF['bb2_whitelist_urls'] = $bb2_wl_tmp['url'];
+    } else {
+        $bb2_wl_tmp = array();
+        $bb2_wl_tmp['ip'] = array();
+        $bb2_wl_tmp['ua'] = array();
+        $bb2_wl_tmp['url'] = array();
+        $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['wl_table']}",1);
+        if ( $result !== false ) {
+            while ( ($row = DB_fetchArray($result)) != NULL  ) {
+                $bb2_wl_tmp[$row['type']][] = $row['item'];
+            }
+            if ( isset($bb2_wl_tmp['ip']))
+                $_CONF['bb2_whitelist_ip_ranges']  = $bb2_wl_tmp['ip'];
+            if ( isset($bb2_wl_tmp['ua']))
+                $_CONF['bb2_whitelist_user_agents']  = $bb2_wl_tmp['ua'];
+            if ( isset($bb2_wl_tmp['url']))
+                $_CONF['bb2_whitelist_urls'] = $bb2_wl_tmp['url'];
+            $cache_bb2_wl_data = serialize($bb2_wl_tmp);
+            CACHE_create_instance($cacheInstance, $cache_bb2_wl_data, 0);
+        }
+    }
+
     return array('log_table'      => $bb2_settings_defaults['log_table'],
                  'ban_table'      => $bb2_settings_defaults['ban_table'],
+                 'wl_table'      => $bb2_settings_defaults['wl_table'],
                  'display_stats' => 0,
                  'strict'        => $_CONF['bb2_strict'],
                  'verbose'       => $_CONF['bb2_verbose'],
@@ -126,7 +219,8 @@ function bb2_read_settings() {
                  'offsite_forms' => $_CONF['bb2_offsite_forms'],
                  'eu_cookie'     => $_CONF['bb2_eu_cookie'],
                  'secure_cookie' => $_CONF['cookiesecure'],
-                 'is_installed'  => true);
+                 'is_installed'  => true
+                 );
 }
 
 // write settings to database
@@ -196,7 +290,7 @@ function bb2_ban_check($ip)
 {
     global $_TABLES;
 
-    $sql = "SELECT id FROM {$_TABLES['bad_behavior2_ban']} WHERE ip = INET_ATON('".DB_escapeString($ip)."')";
+    $sql = "SELECT id FROM {$_TABLES['bad_behavior2_blacklist']} WHERE item = '".DB_escapeString($ip)."'";
     $result = DB_query($sql);
     if ( DB_numRows($result) > 0 ) return true;
     return false;
@@ -205,15 +299,17 @@ function bb2_ban_check($ip)
 function bb2_ban_remove($ip)
 {
     global $_TABLES;
-
-    $sql = "DELETE FROM {$_TABLES['bad_behavior2_ban']} WHERE ip = INET_ATON('".DB_escapeString($ip)."')";
+    $sql = "DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE item = '".DB_escapeString($ip)."'";
     $result = DB_query($sql,1);
+    if ( $result !== false ) {
+        CACHE_remove_instance('bb2_bl_data');
+    }
     return true;
 }
 
 
 function bb2_ban($ip,$type = 1,$reason = '') {
-    global $_CONF,$LANG_BAD_BEHAVIOR;
+    global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR;
     if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
     }
@@ -223,9 +319,11 @@ function bb2_ban($ip,$type = 1,$reason = '') {
             break;
         case 2 :
             COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
+            $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
             break;
         case 3 :
             COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
+            $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
             break;
         default :
             COM_errorLog("Banning " . $ip . " for type " . $type );
@@ -233,20 +331,25 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     }
     $settings = bb2_read_settings();
     $timestamp = time();
-    $sql = "INSERT INTO {$settings['ban_table']}
-           (ip,type,reason,timestamp) VALUE (INET_ATON('".DB_escapeString($ip)."'),".$type.",'".DB_escapeString($reason)."', ".$timestamp.")";
-    DB_query($sql,1);
+    $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']}
+           (item,type,autoban,reason,timestamp) VALUE ('".DB_escapeString($ip)."','spambot_ip',".(int) $type.",'".DB_escapeString($reason)."', ".$timestamp.")";
+    $result = DB_query($sql,1);
+    if ( $result !== false ) {
+        CACHE_remove_instance('bb2_bl_data');
+    }
     if ( $type != 0 ) echo COM_refresh($_CONF['site_url']);
     return true;
 }
 
+
 function bb2_expireBans() {
-    global $_CONF;
+    global $_CONF, $_TABLES;
     if ( !isset($_CONF['bb2_ban_timeout']) ) $_CONF['bb2_ban_timeout'] = 24;
     if ($_CONF['bb2_ban_timeout'] == 0 ) return;
     $settings = bb2_read_settings();
     $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
-    DB_query("DELETE FROM {$settings['ban_table']} WHERE type != 0 AND timestamp < " . $oldBans,1);
+    $result = DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE autoban != 0 AND timestamp < " . $oldBans,1);
+    if ( $result !== false ) CACHE_remove_instance('bb2_bl_data');
     return;
 }
 

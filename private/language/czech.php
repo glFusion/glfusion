@@ -70,7 +70,7 @@ $LANG01 = array(
     23 => 'Úroveò práv',
     24 => 'Anonymní host',
     25 => 'Odpovìï',
-    26 => ' Následující komentáøe jsou názorem jejich vkladatele. <br' . XHTML . '>Weblog neruèí za to co je zde napsáno.',
+    26 => ' Následující komentáøe jsou názorem jejich vkladatele. <br>Weblog neruèí za to co je zde napsáno.',
     27 => 'Naposledy pøidáno',
     28 => 'Smazat',
     29 => 'Nejsou ¾ádné komentáøe.',
@@ -254,7 +254,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -283,7 +289,7 @@ $LANG04 = array(
     20 => 'Email se zdá být v nesprávném formátu',
     21 => 'Chyba',
     22 => "Registrace na {$_CONF['site_name']}!",
-    23 => "Anonymní u¾ivatelé - Hosté nemohou napøíklad komentovat èi pøidávat èlánky.<br" . XHTML . ">Vytvoøení úètu Vám umo¾ní vyu¾ívat v¹ech funkcí na {$_CONF['site_name']}. <br" . XHTML . ">Va¹e emailová adresa nebude <b><i>nikdy a nikde</i></b> zveøejnìna na tìchto stránkách.",
+    23 => "Anonymní u¾ivatelé - Hosté nemohou napøíklad komentovat èi pøidávat èlánky.<br>Vytvoøení úètu Vám umo¾ní vyu¾ívat v¹ech funkcí na {$_CONF['site_name']}. <br>Va¹e emailová adresa nebude <b><i>nikdy a nikde</i></b> zveøejnìna na tìchto stránkách.",
     24 => 'Va¹e heslo bude posláno na vámi zadanou emailovou adresu.',
     25 => 'Zapomenuté heslo?',
     26 => 'Vlo¾te Va¹e pøihla¹ovací jméno a klepnìte na Poslat-heslo a nové heslo Vám bude zasláno na Vámi zadanou emailovou adresu.',
@@ -331,7 +337,7 @@ $LANG04 = array(
     68 => 'Pamatovat si mne',
     69 => 'Jak dlouho si Vás systém bude pamatovat.',
     70 => "Pøizpùsobení vzhledu a obsahu {$_CONF['site_name']}",
-    71 => "Pøizpùsobení vzhledu na {$_CONF['site_name']} vám umo¾ní nastavit si vlastní vzhled a øazení polo¾ek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">pøihlásit</a> na {$_CONF['site_name']}. <br" . XHTML . "> Jste u¾ivatelem?  Pak pou¾ijte pøihla¹ovací formuláø vlevo!",
+    71 => "Pøizpùsobení vzhledu na {$_CONF['site_name']} vám umo¾ní nastavit si vlastní vzhled a øazení polo¾ek nezávisle na nastavení pro hosty.  Pro tato nastavení se musíte <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">pøihlásit</a> na {$_CONF['site_name']}. <br> Jste u¾ivatelem?  Pak pou¾ijte pøihla¹ovací formuláø vlevo!",
     72 => 'Grafické téma',
     73 => 'Jazyk',
     74 => 'Vyberte jak má weblog vypadat',
@@ -460,7 +466,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -510,7 +516,7 @@ $LANG08 = array(
     12 => 'Poslat na:',
     13 => 'Hlavièka:',
     14 => 'Zpráva:',
-    15 => 'Pou¾ité HTML tagy nebudou zmìnìny.<br' . XHTML . '>',
+    15 => 'Pou¾ité HTML tagy nebudou zmìnìny.<br>',
     16 => 'Poslat zprávu',
     17 => 'Poslat èlánek mailem',
     18 => 'Komu',
@@ -520,7 +526,7 @@ $LANG08 = array(
     22 => 'Prosím vyplòte v¹echna pole formuláøe.',
     23 => "Tento email Vám byl poslán %s z %s proto¾e si tento u¾ivatel myslí, ¾e by Vás mohl zaujmut.  Bylo publikováno na {$_CONF['site_url']}.   Toto NENÍ SPAM a Va¹e emailová adresa nebyla nikde ulo¾ena a nebude tudí¾ pou¾ita k jakýmkoli úèelùm.",
     24 => 'Komentáø k èlánku na',
-    25 => 'Musíte být pøihlá¹en jako u¾ivatel pro pou¾ití této funkce weblogu.<br' . XHTML . '>  Touto restrikcí se pøedchází zneu¾ití systému k spammingu!',
+    25 => 'Musíte být pøihlá¹en jako u¾ivatel pro pou¾ití této funkce weblogu.<br>  Touto restrikcí se pøedchází zneu¾ití systému k spammingu!',
     26 => 'Tento formuláø umo¾òuje zaslat email vybranému u¾ivateli.  Vyplòte prosím v¹echna pole.',
     27 => 'Krátká zpráva',
     28 => '%s napsáno: ',
@@ -764,7 +770,7 @@ $LANG20 = array(
     3 => 'Neplatné heslo pro u¾ivatele',
     4 => 'U¾ivatel:',
     5 => 'Heslo:',
-    6 => 'Ka¾dý pøístup do administrátorské èásti stránek je zapisován do log_file a je tam také kontrolován.<br' . XHTML . '>Tato stránka je jen pro autorizované u¾ivatele s administrátorskými právy.',
+    6 => 'Ka¾dý pøístup do administrátorské èásti stránek je zapisován do log_file a je tam také kontrolován.<br>Tato stránka je jen pro autorizované u¾ivatele s administrátorskými právy.',
     7 => 'Pøihlásit',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -902,7 +908,7 @@ $LANG24 = array(
     48 => 'obrázek',
     49 => 'vpravo',
     50 => 'vlevo',
-    51 => 'k pøidání obrázkù (max. velikost 200x200px) do èlánku musíte vlo¾it speciálnì formátovaný text.<br' . XHTML . '>Tento text vypadá takto: [imageX](systém umístí sám), [imageX_right](systém umístí vpravo od textu) nebo [imageX_left](systém umístí vlevo od textu) - kde X je èíslo obrázku je¾ je pøidáván.<br' . XHTML . '>PAMATUJTE: musíte pou¾ít obrázky je¾ jsou pøidávány.  V opaèném pøípadì nebude mo¾no publikovat èlánek.<BR><P><B>NÁHLED</B>: Pro náhled èlánku s obrázky je nejlépe pou¾ít náhled Verze pro tiskárnu.  Tlaèítko <i>náhled</i> prosím pou¾ívejte jen pro prohlí¾ení èlánkù bez obrázkù.',
+    51 => 'k pøidání obrázkù (max. velikost 200x200px) do èlánku musíte vlo¾it speciálnì formátovaný text.<br>Tento text vypadá takto: [imageX](systém umístí sám), [imageX_right](systém umístí vpravo od textu) nebo [imageX_left](systém umístí vlevo od textu) - kde X je èíslo obrázku je¾ je pøidáván.<br>PAMATUJTE: musíte pou¾ít obrázky je¾ jsou pøidávány.  V opaèném pøípadì nebude mo¾no publikovat èlánek.<BR><P><B>NÁHLED</B>: Pro náhled èlánku s obrázky je nejlépe pou¾ít náhled Verze pro tiskárnu.  Tlaèítko <i>náhled</i> prosím pou¾ívejte jen pro prohlí¾ení èlánkù bez obrázkù.',
     52 => '',
     53 => ' nepou¾ito.  Pøed ulo¾ením zmìn musíte vlo¾it obrázek do Intro textu nebo textu.',
     54 => 'Pøidaný obrázek nepou¾it',
@@ -975,7 +981,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1038,7 +1046,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1096,7 +1106,7 @@ $LANG28 = array(
     49 => 'Admin Group',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online Days',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Delete',
     55 => 'This only works if you have <code>$_CONF[\'lastlogin\'] = true;</code> in your config.php',
@@ -1234,7 +1244,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.gllabs.org" target="_blank">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
+    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="https://www.glfusion.org" target="_blank">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
     2 => 'Plug-in Installation Disclaimer',
     3 => 'Plug-in Installation Form',
     4 => 'Plug-in File',
@@ -1242,8 +1252,8 @@ $LANG32 = array(
     6 => 'Warning: Plug-in Already Installed!',
     7 => 'The plug-in you are trying to install already exists.  Please delete the plugin before re-installing it',
     8 => 'Plugin Compatibility Check Failed',
-    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="http://www.gllabs.org">glFusion</a> or get a newer version of the plug-in.',
-    10 => '<br' . XHTML . '><b>There are no plugins currently installed.</b><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="https://www.glfusion.org">glFusion</a> or get a newer version of the plug-in.',
+    10 => '<br><b>There are no plugins currently installed.</b><br><br>',
     11 => 'To modify or delete a plug-in, click on that plug-in\'s number below. To learn more about a plug-in, click the plug-in name and you will be directed to that plug-in\'s website. To install or upgrade a plug-in please consult it\'s documentation.',
     12 => 'no plugin name provided to plugineditor()',
     13 => 'Plugin Editor',
@@ -1420,7 +1430,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1503,7 +1514,7 @@ $MESSAGE = array(
     74 => 'The pingback has been successfully sent.',
     75 => 'Trackbacks must be sent using a POST request.',
     76 => 'Do you really want to delete this item?',
-    77 => 'WARNING:<br' . XHTML . '>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
+    77 => 'WARNING:<br>You have set your default encoding to UTF-8. However, your server does not support multibyte encodings. Please install mbstring functions for PHP or choose a different character set/language.',
     78 => 'Please make sure that the email address and the confirmation email address are the same.',
     79 => 'The page you have been trying to open refers to a function that no longer exists on this site.',
     80 => 'The plugin that created this feed is currently disabled. You will not be able to edit this feed until you re-enable the parent plugin.',
@@ -1710,7 +1721,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2042,7 +2053,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Show Only in Topic',
-    1 => 'Show on Front Page'
+    1 => 'Show on Front Page',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2402,6 +2414,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2430,6 +2443,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2569,8 +2585,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2749,7 +2763,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Skip HTML Filter for Root?',
     'allowed_protocols' => 'Allowed Protocols',
     'disable_autolinks' => 'Disable Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'Censor Mode?',
     'censorreplace' => 'Censor Replace Text',
     'censorlist' => 'Censor List',
@@ -2827,6 +2840,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2835,7 +2851,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2855,7 +2872,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',
@@ -2909,7 +2925,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2929,7 +2945,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

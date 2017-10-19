@@ -126,9 +126,9 @@ function submitstory($topic = '')
     }
 
     if ( $_CONF['story_submit_by_perm_only'] ) {
-        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'),1,false,3);
+        $topicList = COM_topicList('tid,topic,sortnum',$story->EditElements('tid'),2,false,3);
     } else {
-        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'));
+        $topicList = COM_topicList('tid,topic,sortnum',$story->EditElements('tid'),2);
     }
 
     // no topics
@@ -234,10 +234,9 @@ function sendNotification($table, $story)
     $postmode = $story->displayElements('postmode');
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
     if ($postmode == 'html') {
-        USES_lib_html2text();
         $introtext = str_replace("\\r","",$introtext);
         $introtext = $introtext;
-        $html2txt  = new html2text($introtext,false);
+        $html2txt  = new Html2Text\Html2Text($introtext,false);
         $introtext = trim($html2txt->get_text());
     }
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );
@@ -290,8 +289,7 @@ function savestory($A)
 
     // pseudo-formatted story text for the spam check
     $result = PLG_checkforSpam ($story->GetSpamCheckFormat(), $_CONF['spamx']);
-    if ($result > 0)
-    {
+    if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
@@ -299,19 +297,16 @@ function savestory($A)
     COM_updateSpeedlimit ('submit');
 
     $result = $story->saveSubmission();
-    if( $result == STORY_NO_ACCESS_TOPIC )
-    {
+    if( $result == STORY_NO_ACCESS_TOPIC ) {
         // user doesn't have access to this topic - bail
         $retval = COM_refresh ($_CONF['site_url'] . '/index.php');
     } elseif( ( $result == STORY_SAVED ) || ( $result == STORY_SAVED_SUBMISSION ) ) {
-        if (isset ($_CONF['notification']) &&
-                in_array ('story', $_CONF['notification']))
-        {
+        if (isset ($_CONF['notification']) && in_array ('story', $_CONF['notification'])) {
             sendNotification ($_TABLES['storysubmission'], $story);
         }
-
-        if( $result == STORY_SAVED )
-        {
+        CACHE_remove_instance('menu');
+        CACHE_remove_instance('whatsnew');
+        if ( $result == STORY_SAVED ) {
             $retval = COM_refresh( COM_buildUrl( $_CONF['site_url']
                                . '/article.php?story=' . $story->getSid() ) );
         } else {

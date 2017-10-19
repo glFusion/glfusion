@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion menu library.                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -53,15 +53,6 @@ define('TOPIC_MENU',3);
 define('STATICPAGE_MENU',4);
 define('PLUGIN_MENU',5);
 define('HEADER_MENU',6);
-
-require_once $_CONF['path_system'] . 'classes/menu.class.php';
-
-// new code here
-
-/* reconsider the heirarchy on caching and calling each function in the tree
- * as we want to leverage building admin menus, users menus, topic menus, etc
- * throughout the system.
- */
 
 /*
  * pull the data for a specific menu from the DB

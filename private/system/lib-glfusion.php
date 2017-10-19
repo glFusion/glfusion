@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Enhancement Library                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,43 +32,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-$TEMPLATE_OPTIONS['hook']['set_root'] = '_template_set_root';
-
-function _template_set_root($root) {
-    global $_CONF, $_USER;
-
-    $retval = array();
-
-    if (!is_array($root)) {
-        $root = array($root);
-    }
-
-    foreach ($root as $r) {
-
-        if (substr($r, -1) == '/') {
-            $r = substr($r, 0, -1);
-        }
-        if ( strpos($r,"plugins") != 0 ) {
-            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_USER['theme'] . '/', $r);
-            $x = str_replace("/templates", "",$p);
-            $retval[] = $x;
-        }
-        if ( strpos($r,"autotags") != 0 ) {
-            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_USER['theme'] . '/', $r);
-            $x = str_replace("/system", "",$p);
-            $retval[] = $x;
-        }
-        if ( $r != '' ) {
-            $retval[] = $r . '/custom';
-            $retval[] = $r;
-            if ( $_USER['theme'] != 'cms' ) {
-                $retval[] = $_CONF['path_themes'] . 'cms/' .substr($r, strlen($_CONF['path_layout']));
-            }
-        }
-    }
-    return $retval;
-}
-
 function glfusion_UpgradeCheck() {
     global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
 
@@ -81,7 +44,7 @@ function glfusion_UpgradeCheck() {
 
     $dbversion = $_VARS['glfusion'];
     $comparison = version_compare( GVERSION, $dbversion );
-    $install_url = $_CONF['site_url'] . '/admin/install/index.php';
+    $install_url = $_CONF['site_admin_url'] . '/install/index.php';
 
     switch ($comparison) {
         case 1:
@@ -107,7 +70,7 @@ function glfusion_SecurityCheck() {
 
     $retval = '';
     $msg = '';
-    if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
+    if ( file_exists($_CONF['path_admin'] . 'install/') ) {
         $msg .= $LANG01[500].'<br>';
     }
     if ( $_SYSTEM['rootdebug'] ) {
@@ -337,8 +300,6 @@ function _checkVersion()
     global $_CONF, $_USER, $_PLUGIN_INFO;
 
     // build XML request
-
-    require_once $_CONF['path'].'lib/http/http.php';
 
     $result = '';
 

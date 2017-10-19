@@ -54,9 +54,7 @@ if (file_exists($langfile)) {
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
 
 if (!isset($_CP_CONF['gfxDriver'])) {
-    require_once $_CONF['path_system'].'classes/config.class.php';
-
-    $cp_config = config::get_instance();
+    $cp_config = \config::get_instance();
     $_CP_CFG = $cp_config->get_config('captcha');
 
     if ( is_array($_CP_CONF)  && is_array($_CP_CFG) ) {
@@ -81,6 +79,21 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
 }
 if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 5 ) {
     $_CP_CONF['gfxDriver'] = 2;
+}
+
+/* Auto loader */
+
+spl_autoload_register('autoloader_captcha');
+
+function autoloader_captcha($class) {
+    global $_CONF;
+    if (strpos($class, 'Captcha\\') === 0) {
+        $class = str_replace('Captcha\\', '', $class);
+    }
+    $path = $_CONF['path'].'plugins/captcha/class/' . $class . '.class.php';
+    if (file_exists($path)) {
+        include $path;
+    }
 }
 
 /**
@@ -485,7 +498,7 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
 
     $retval = '';
 
-    $T = new Template($_CONF['path'] . 'plugins/captcha/templates');
+    $T = new \Template($_CONF['path'] . 'plugins/captcha/templates');
     switch ( $ctype ) {
         case 'comment' :
             $T->set_file('page', 'captcha_comment.thtml');
@@ -735,8 +748,7 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
         return;
     }
 
-    USES_class_date();
-    $dt = new Date('now',$_CONF['timezone']);
+    $dt = new \Date('now',$_CONF['timezone']);
 
     if( !empty( $logentry )) {
         $timestamp = $dt->format('d M Y H:i:s',true);

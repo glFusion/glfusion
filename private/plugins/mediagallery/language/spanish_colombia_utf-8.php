@@ -58,8 +58,8 @@ $LANG_MG00 = array(
     'media_col_header' => 'Media Item',
     'stats_title' => 'Top Ten Viewed Media Items',
     'items_in' => 'Items en',
-    'no_album_objects' => '<br' . XHTML . '>No hay Álbumes Disponibles<br' . XHTML . '><br' . XHTML . '>There are no álbumes to display.  There may be no álbumes or your user preferences may be too restrictive for this album.',
-    'no_media_objects' => '<br' . XHTML . '>There are no media items in this album.',
+    'no_album_objects' => '<br>No hay Álbumes Disponibles<br><br>There are no álbumes to display.  There may be no álbumes or your user preferences may be too restrictive for this album.',
+    'no_media_objects' => '<br>There are no media items in this album.',
     'results' => 'Media Gallery Search Results',
     'titlemsg' => 'Título',
     'urlmsg' => 'Fecha',
@@ -94,10 +94,10 @@ $LANG_MG00 = array(
     'ml_ok' => 'php.ini <strong>memory_limit</strong> is 48M or greater.',
     'recheck_env' => 'Recheck Environment',
     'fix_install' => 'Please fix the issues above before installing.',
-    'need_cache' => 'Media Gallery v1.6 requires that you have the <a href="http://www.gllabs.org/filemgmt/index.php?id=156">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
+    'need_cache' => 'Media Gallery v1.6 requires that you have the <a href="https://www.glfusion.org/filemgmt/index.php?id=156">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
     'need_memory' => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you' => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
-    'support' => 'For support, questions or enhancement requests, please visit <a href="http://www.gllabs.org">gl Labs</a>.  For the latest documentation, please visist the <a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery16:start">gl Labs Wiki</a>.',
+    'support' => 'For support, questions or enhancement requests, please visit <a href="https://www.glfusion.org">gl Labs</a>.  For the latest documentation, please visist the <a href="https://www.glfusion.org/wiki/doku.php?id=mediagallery16:start">gl Labs Wiki</a>.',
     'success_upgrade' => 'Media Gallery Successfully Upgraded',
     'instructions' => 'Esta pantalla te permite configurar y administrar el módulo de Galería de Medios.'
 );
@@ -600,7 +600,7 @@ $LANG_MG01 = array(
     'replace_file' => 'Reemplazar Archivo',
     'autotag_caption' => 'Use media / álbum title as caption for autotags',
     'popup_from_album' => 'Play audio / video media directly from álbum view',
-    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.gllabs.org">http://www.gllabs.org/</a> to obtain the latest version.<br' . XHTML . '><br' . XHTML . '>The latest available version is Media Gallery %s You are running Media Gallery %s',
+    'out_of_date' => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="https://www.glfusion.org">https://www.glfusion.org/</a> to obtain the latest version.<br><br>The latest available version is Media Gallery %s You are running Media Gallery %s',
     'jpg_quality' => 'Display JPG Quality',
     'js_slideshow' => 'JavaScript',
     'lightbox' => 'Lightbox',
@@ -738,7 +738,7 @@ $LANG_MG02 = array(
 $LANG_MG03 = array(
     'featured_album' => 'Álbum Destacado',
     'updated_prompt' => 'Actualizado ',
-    'no_album_objects' => '<br' . XHTML . '>No hay Álbumes Disponibles<br' . XHTML . '><br' . XHTML . '>No hay álbumes disponibles. Puede que sus preferencias de usuario sean muy restrictivas para este álbum.',
+    'no_album_objects' => '<br>No hay Álbumes Disponibles<br><br>No hay álbumes disponibles. Puede que sus preferencias de usuario sean muy restrictivas para este álbum.',
     'no_media_objects' => '<h2>Este álbum no contiene medios</h2>',
     'next' => 'Siguiente',
     'previous' => 'Anterior',
@@ -878,8 +878,8 @@ $LANG_MG03 = array(
     'click_here' => 'click here',
     'published' => 'Published by',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline' => 'Gallery powered by <a href="http://www.gllabs.org" target="_new">Media Gallery</a>',
+    'no_flash' => '<div style="width:200px;border:1px solid;text-align:center;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'tagline' => 'Gallery powered by <a href="https://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Descargar: <a href="%s">xppubwiz.reg (Windows Vista)</a>',
     'votes' => 'votos',
@@ -895,7 +895,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

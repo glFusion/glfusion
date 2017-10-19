@@ -1,3 +1,6 @@
 {# begin {templatelocation} #}
+<div {block_id}>
+{!if block_title}
 <h3>{block_title}</h3>
+{!endif}
 {# end {templatelocation} #}

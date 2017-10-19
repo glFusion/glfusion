@@ -194,7 +194,7 @@
                         <option value="45" > 45 {seconds}</option>
                         <option value="60" > 60 {seconds}</option>
                     </select>
-                    &nbsp;|&nbsp;&nbsp;{loop}:<input type="checkbox" name="loopCheck"  onclick='toggleLoop();'>
+                    &nbsp;|&nbsp;&nbsp;<label for "loopCheck">{loop}:</label>&nbsp;<input type="checkbox" id="loopCheck" name="loopCheck"  onclick='toggleLoop();'>
                 </div>
             </div>
             <div class="uk-panel uk-align-center uk-text-center">

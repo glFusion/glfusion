@@ -1,39 +1,45 @@
 {# begin {templatelocation} #}
 <script type="text/JavaScript" src="{site_url}/javascript/moveusers.js"></script>
-<div style="border: 1px solid grey">
-    <form name="groupusers" action="{phpself}" method="post" style="margin:0px;">
-        <table width="99%" cellspacing="0" cellpadding="0" class="pluginBG" style="padding:15px;">
-            <tr>
-                <td class="blocktitle alignright" style="padding:5px 40px 5px 5px;">{LANG_sitemembers}</td>
-                <td>&nbsp;</td>
-                <td class="blocktitle alignleft" style="padding:5px 5px 5px 20px;">{LANG_grpmembers}</td>
-            </tr>
-            <tr>
-                <td class="alignright" width="40%" style="padding-right:5px;">
-                    <select multiple="multiple" size="10" name="fieldFrom" style="width: 15em; height: 20em; padding: 2px;" ondblclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false)">{sitemembers}</select>
-                </td>
-                <td class="aligncenter">
-                    <input type="button" name="right" value="{LANG_add}" onclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false)" />
-                    <br /><br />
-                    <input type="button" name="left"  value="{LANG_remove}" onclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)" />
-                    <br /><br />
-                </td>
-                <td width="40%" class="alignleft" style="padding-left:5px;">
-                    <select multiple="multiple" size="10" name="fieldTo" style="width: 15em; height: 20em; padding: 2px;" ondblclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)">{group_list}</select>
-                </td>
-            </tr>
-            <tr>
-                <td class="aligncenter" colspan="3"><br />
-                    <input type="hidden" name="savegroup" value="x" />
-                    <input type="hidden" name="groupmembers" />
-                    <input type="hidden" name="grp_id" value="{group_id}" />
-                    <input type="hidden" name="chk_showall" value="{show_all}" />
-                    <input type="button" value="{lang_cancel}" onclick="javascript:history.go(-1)" />&nbsp;&nbsp;
-                    <input type="submit" value="{lang_save}" onclick="return setUsers(this.form)" />
-                    <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
-                </td>
-            </tr>
-        </table>
-    </form>
+<div class="uk-panel uk-panel-box uk-container-center">
+	<form class="uk-form uk-form-horizontal" action="{phpself}" method="post">
+		<input type="hidden" name="savegroup" value="x">
+		<input type="hidden" name="groupmembers">
+		<input type="hidden" name="grp_id" value="{group_id}"">
+		<input type="hidden" name="chk_showall" value="{show_all}">
+		<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+		<fieldset data-uk-margins>
+			<div class="uk-form-row uk-margin-large-bottom">
+				<div class="uk-grid uk-container-center" data-uk-grid-match="{row: false}">
+					<div class="uk-width-medium-2-5 uk-text-center">
+						<h3>{LANG_sitemembers}</h3>
+						<select multiple="multiple" size="10" name="fieldFrom"
+							style="width: 15em; height: 20em; padding: 2px;"
+							ondblclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false)">
+							{sitemembers}
+						</select>
+					</div>
+					<div class="uk-width-medium-1-5 uk-text-center uk-vertical-align">
+						<div class="uk-vertical-align-middle">
+							<button class="uk-button uk-button-success uk-form-width-small" name="right" onclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false);return false;">{LANG_add}&nbsp;<i class="uk-icon-angle-double-right"></i></button>
+							<br><br>
+							<button class="uk-button uk-button-primary uk-form-width-small" name="left" onclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false);return false;"><i class="uk-icon-angle-double-left"></i>&nbsp;{LANG_remove}</button>
+						</div>
+					</div>
+					<div class="uk-width-medium-2-5 uk-text-center">
+						<h3>{LANG_grpmembers}</h3>
+						<select multiple="multiple" size="10" name="fieldTo"
+							style="width: 15em; height: 20em; padding: 2px;"
+							ondblclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)">
+							{group_list}
+						</select>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<div class="uk-form-row uk-align-center uk-text-center">
+			<button class="uk-button uk-button-success uk-form-width-small " type="submit" value="{lang_save}" name="save" onclick="return setUsers(this.form)">{lang_save}</button>
+			<button class="uk-button uk-button-danger uk-form-width-small" type="submit" value="{lang_cancel}" name="cancel" onclick="javascript:history.go(-1)">{lang_cancel}</button>
+		</div>
+	</form>
 </div>
 {# end {templatelocation} #}

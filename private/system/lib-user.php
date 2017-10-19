@@ -387,9 +387,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     $fields .= ',account_type';
     $values .= ','.$account_type;
 
-    $result = DB_query ("INSERT INTO {$_TABLES['users']} ($fields) VALUES ($values)");
-    if (DB_error() != '' ) {
-        COM_errorLog("Error inserting user into USERS table : " . DB_error());
+    $sql = "INSERT INTO {$_TABLES['users']} (".$fields.") VALUES (".$values.")";
+    $result = DB_query ($sql);
+    $dbError = DB_error($sql);
+    if ($dbError != '' ) {
+        COM_errorLog("Error inserting user into USERS table : " . $dbError);
         return NULL;
     }
     // Get the uid of the user, possibly given a service:
@@ -542,7 +544,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         if (empty ($photo) || ($photo == '(none)') || $photo == '' ) {
            // no photo - try gravatar.com, if allowed
             if ($_CONF['use_gravatar']) {
-                $img = 'http://www.gravatar.com/avatar/'.md5( $email );
+                $img = '//www.gravatar.com/avatar/'.md5( $email );
                 $url_parms = array();
                 if ($width > 0) {
                     $url_parms[] = 's=' . $width;

@@ -764,7 +764,7 @@ function MG_upgrade_120() {
     DB_query("REPLACE INTO {$_TABLES['mg_config']} (config_name, config_value) VALUES ('up_av_playback_enabled',    '1')");
     DB_query("REPLACE INTO {$_TABLES['mg_config']} (config_name, config_value) VALUES ('up_thumbnail_size_enabled', '0')");
 
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.gllabs.org' WHERE pi_name='mediagallery'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='https://www.glfusion.org' WHERE pi_name='mediagallery'",1);
 
     //
     // Perform data conversion
@@ -1558,7 +1558,7 @@ function MG_upgrade_148() {
         }
         DB_query("UPDATE {$_TABLES['mg_media']} set mime_type='" . $mimeType . "' WHERE media_id='" . $M['media_id'] . "'");
     }
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.gllabs.org' WHERE pi_name='mediagallery'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='https://www.glfusion.org' WHERE pi_name='mediagallery'",1);
 }
 
 function MG_upgrade_150() {

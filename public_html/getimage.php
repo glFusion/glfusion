@@ -39,8 +39,6 @@
 
 require_once 'lib-common.php';
 
-require_once $_CONF['path_system'] . 'classes/downloader.class.php';
-
 $downloader = new downloader();
 
 $downloader->setLogFile($_CONF['path_log'] . 'error.log');

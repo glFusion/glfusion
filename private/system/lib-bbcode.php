@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion bbcode processing library                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,10 +30,6 @@
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
-}
-
-if (!class_exists('StringParser') ) {
-    require_once $_CONF['path'].'lib/bbcode/stringparser_bbcode.class.php';
 }
 
 /**
@@ -125,7 +121,7 @@ function FUSION_formatTextBlock( $str, $postmode='html', $parser = array(), $cod
  * @param   array   $code       Additional bbcodes
  * @return  string              the formatted string
  */
-function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code = array() )
+function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code = array(), $exclude = array() )
 {
     global $_CONF;
 
@@ -183,8 +179,13 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', '_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
-    $bbcode->addCode ('img', 'usecontent', '_bbcode_img', array (),
-                      'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    if ( in_array('img',$exclude ) ) {
+        $bbcode->addCode ('img', 'usecontent', '_bbcode_null', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    } else {
+        $bbcode->addCode ('img', 'usecontent', '_bbcode_img', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+    }
     $bbcode->addCode ('code', 'usecontent', '_bbcode_code', array ('usecontent_param' => 'default'),
                       'code', array ('listitem', 'block', 'inline', 'link'), array ());
 
@@ -361,13 +362,21 @@ function _bbcode_stripcontents ($text) {
 
 function _bbcode_htmlspecialchars($text) {
 
-    return (@htmlspecialchars ($text,ENT_QUOTES, COM_getEncodingt()));
+    return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt()));
+}
+
+function _bbcode_null  ($action, $attributes, $content, $params, $node_object) {
+    if ( $action == 'validate') {
+        return true;
+    }
+    return '';
 }
 
 function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     global $_CONF;
 
     $target = '';
+	$retval = '';
 
     if ($action == 'validate') {
         return true;
@@ -391,9 +400,11 @@ function _bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
 
     if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
-        $target = ' target="_blank" ';
+        $target = ' target="_blank" rel="noopener noreferrer" ';
     }
-    return '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$content.'</a>';
+    $url = COM_sanitizeUrl( $url );
+    $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$content.'</a>';
+	return $retval;
 }
 
 function _bbcode_list ($action, $attributes, $content, $params, $node_object) {
@@ -505,9 +516,7 @@ function _bbcode_replaceTags($text) {
 function _geshi($str,$type='PHP') {
     global $_CONF, $LANG_BBCODE;
 
-    include_once($_CONF['path'].'lib/geshi/geshi.php');
-
-    $geshi = new Geshi($str,$type,$_CONF['path'].'lib/geshi');
+    $geshi = new GeSHi($str,$type);
     $geshi->set_header_type(GESHI_HEADER_DIV);
     $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS, 5);
     $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);

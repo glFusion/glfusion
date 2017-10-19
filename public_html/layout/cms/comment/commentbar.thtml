@@ -1,6 +1,11 @@
 {# begin {templatelocation} #}
 <a id="comments"></a>
 
+{!if info_message}
+	<div class="uk-margin">&nbsp;</div>
+	{info_message}
+{!endif}
+
 <div class="uk-text-center uk-margin-bottom">
 	<ul class="tm-article-meta uk-text-center">
 		<li>{start_storylink_anchortag}<strong>{story_title}</strong>{end_storylink_anchortag}</li>

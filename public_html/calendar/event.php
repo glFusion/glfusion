@@ -38,8 +38,6 @@ if (!in_array('calendar', $_PLUGINS)) {
     exit;
 }
 
-require_once $_CONF['path_system'] . 'classes/calendar.class.php';
-
 $display = '';
 
 if (COM_isAnonUser() &&
@@ -81,8 +79,8 @@ function CALENDAR_addUserEvent($eid)
         $event_title = $A['title'];
 
         if (!empty ($A['url']) && ($A['url'] != 'http://')) {
-            $cal_template->set_var ('event_url', $A['url']);
-            $event_title = COM_createLink($event_title, $A['url']);
+            $cal_template->set_var ('event_url', COM_sanitizeURL($A['url']));
+            $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
         } else {
             $cal_template->set_var ('event_url', '');
         }
@@ -328,7 +326,7 @@ function CALENDAR_editPersonalEvent($A)
     $cal_templates->set_var('event_zipcode', $A['zipcode']);
 
     $cal_templates->set_var('lang_link', $LANG_CAL_1[43]);
-    $cal_templates->set_var('event_url', $A['url']);
+    $cal_templates->set_var('event_url', COM_sanitizeURL($A['url']));
 
     $cal_templates->set_var('lang_description', $LANG_CAL_1[5]);
     $cal_templates->set_var('event_description',
@@ -573,7 +571,7 @@ default:
                 $cal_templates->set_var('layout_url', $_CONF['layout_url']);
                 $event_title = $A['title'];
                 if (!empty($A['url'])) {
-                    $event_title = COM_createLink($event_title, $A['url']);
+                    $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
                 }
                 $cal_templates->set_var('event_title', $event_title);
                 if (($_CA_CONF['personalcalendars'] == 1)

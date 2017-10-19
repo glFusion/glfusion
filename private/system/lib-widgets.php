@@ -6,7 +6,7 @@
 // |                                                                          |
 // | A place for widget functions, jquery based or otherwise                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -230,7 +230,7 @@ function WIDGET_UIKITslider( $dataArray )
         $page_ids = $dataArray['pages'];
 
 	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-	         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
+	         . implode(', ', array_map(function($a) { return "'".htmlspecialchars($a)."'"; } , $page_ids))
 	         . ')' . COM_getPermSQL('AND');
 
 	    $res = DB_query($sql);
@@ -584,7 +584,7 @@ function WIDGET_tabslide( $dataArray )
 	if (!is_array($page_ids[0])) {
 	//we are in Static Pages Mode
 	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-	         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
+	         . implode(', ', array_map(function($a) { return "'".htmlspecialchars($a)."'"; } , $page_ids))
 	         . ')' . COM_getPermSQL('AND');
 
 	    $res = DB_query($sql);
@@ -676,8 +676,6 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
 
     $optionsArray = array_merge($defaultOptions, $options);
 
-    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
-
     $outputHandle = outputHandler::getInstance();
 
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/webticker/jquery.webticker.min.js');
@@ -721,9 +719,9 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
             $enclosure = $item->get_enclosure();
 
             if ($link != '') {
-                $content = COM_createLink($title, $link, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $link, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } elseif ($enclosure != '') {
-                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } else {
                 $content = $title;
             }
@@ -818,7 +816,7 @@ EOJ;
 	if (!is_array($page_ids[0])) {
 	//we are in Static Pages Mode
 	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-	         . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
+	         . implode(', ', array_map(function($a) { return "'".htmlspecialchars($a)."'"; } , $page_ids))
 	         . ')' . COM_getPermSQL('AND');
 
 	    $res = DB_query($sql);

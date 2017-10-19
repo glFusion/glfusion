@@ -65,7 +65,7 @@ if (!SEC_hasRights ('links.edit')) {
     $display .= $MESSAGE[34];
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the links administration screen.");
+    COM_accessLog ("User {$_USER['username']} tried to access the links administration screen.");
     echo $display;
     exit;
 }
@@ -93,6 +93,7 @@ function LINK_edit($action, $lid = '')
     USES_lib_admin();
 
     $retval = '';
+    $editFlag = false;
 
     switch ($action) {
         case 'edit':
@@ -104,15 +105,6 @@ function LINK_edit($action, $lid = '')
             $saveoption = $LANG_ADMIN['moderate'];  // Save & Approve
             break;
     }
-
-
-    $menu_arr = array(
-        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
-        'text' => $LANG_LINKS_ADMIN[53]),
-        array('url' => $_CONF['site_admin_url'],
-          'text' => $LANG_ADMIN['admin_home'])
-    );
-
 
     $link_templates = new Template($_CONF['path'] . 'plugins/links/templates/admin/');
     $link_templates->set_file('editor','linkeditor.thtml');
@@ -145,6 +137,7 @@ function LINK_edit($action, $lid = '')
             COM_accessLog("User {$_USER['username']} tried to illegally submit or edit link $lid.");
             return $retval;
         }
+        $editFlag = true;
     } else {
         if ($action == 'moderate') {
             $result = DB_query ("SELECT * FROM {$_TABLES['linksubmission']} WHERE lid = '$lid'");
@@ -168,6 +161,26 @@ function LINK_edit($action, $lid = '')
     }
     $retval .= COM_startBlock ($blocktitle, '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
+
+    if ( $editFlag ) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_LINKS_ADMIN[51];
+    }
+    $menu_arr = array(
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+                'text' => $LANG_LINKS_ADMIN[53]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
+                'text' => $lang_create_or_edit,'active'=>true),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+                'text' => $LANG_LINKS_ADMIN[50]),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
+            'text' => $LANG_LINKS_ADMIN[26]),
+        array('url' => $_CONF['site_admin_url'],
+                'text' => $LANG_ADMIN['admin_home'])
+    );
+
+
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_LINKS_ADMIN[66], plugin_geticon_links());
 
@@ -390,14 +403,14 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
 function LINK_list($validate)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LINKS_ADMIN, $LANG_ACCESS,
-           $_IMAGE_TYPE;
+           $_IMAGE_TYPE, $_SYSTEM;
 
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
     $retval = '';
     $token = SEC_createToken();
 
-    $header_arr = array(      # display 'text' and use table field 'field'
+    $header_arr = array(
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_LINKS_ADMIN[2], 'field' => 'lid', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
@@ -410,14 +423,25 @@ function LINK_list($validate)
 
     if ($validate) {
         $menu_arr = array(
-            array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
-            'text' => $LANG_LINKS_ADMIN[53]),
-            array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
+           array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+                 'text' => $LANG_LINKS_ADMIN[53]),
+            array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
+                  'text' => $LANG_LINKS_ADMIN[51]),
+            array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
+                  'text' => $LANG_LINKS_ADMIN[50]),
+            array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
+              'text' => $LANG_LINKS_ADMIN[26],'active'=>true),
+           array('url' => $_CONF['site_admin_url'],
+                 'text' => $LANG_ADMIN['admin_home'])
         );
         $dovalidate_url = $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=validate' . '&amp;'.CSRF_TOKEN.'='.$token;
         $dovalidate_text = $LANG_LINKS_ADMIN[58];
-        $validate_link = '<span style="padding-right:20px;">' . COM_createLink($dovalidate_text, $dovalidate_url) . '</span>';
+        if ( $_SYSTEM['framework'] == 'uikit' ) {
+            $validate_link = '<a href="'.$dovalidate_url.'" class="uk-button uk-button-success">'.$dovalidate_text.'</a>';
+        } else {
+            $validate_link = '<span style="padding-right:20px;">' . COM_createLink($dovalidate_text, $dovalidate_url) . '</span>';
+        }
+
         if ($_GET['validate'] == 'enabled') {
             $header_arr[] = array('text' => $LANG_LINKS_ADMIN[27], 'field' => 'beforevalidate', 'sort' => false, 'align' => 'center');
             $validate = '?validate=enabled';
@@ -428,10 +452,10 @@ function LINK_list($validate)
         $validate_help = $LANG_LINKS_ADMIN[59];
     } else {
         $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php',
+                  'text' => $LANG_LINKS_ADMIN[53],'active'=>true),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x',
                   'text' => $LANG_LINKS_ADMIN[51]),
-            array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-                  'text' => $LANG_ADMIN['submissions']),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/category.php',
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',

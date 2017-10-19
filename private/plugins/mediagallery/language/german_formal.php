@@ -882,7 +882,7 @@ $LANG_MG03 = array(
     'click_here' => 'Hier klicken',
     'published' => 'Veröffentlicht von',
     'on' => 'An',
-    'no_flash' => '<div style="width:200px;">Es scheint, dass Sie Flash-Plugin nicht installiert haben, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhalte nicht wiedergegeben werden können.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">Es scheint, dass Sie Flash-Plugin nicht installiert haben, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhalte nicht wiedergegeben werden können.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
     'tagline' => '<a href="http://www.glfusion.org" target="_new">Galerie powered by MediaGallery</a>',
     'xp_pub_url' => '<a href="%s">xppubwiz.reg (Windows XP) herunterladen</a>',
     'vista_pub_url' => '<a href="%s">xppubwiz.reg (Windows Vista) herunteladen</a>',
@@ -899,7 +899,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Mit Ihrer IP-Address wurde dieses Objekt bereits bewertet.',
     'uid_rated' => 'Mit Ihre Benutzer-ID wurde dieses Objekt bereits bewertet.',
     'media_id' => 'Medien-ID',
-    'all_media' => 'Alle Medien'
+    'all_media' => 'Alle Medien',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

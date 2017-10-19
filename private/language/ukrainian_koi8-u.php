@@ -259,7 +259,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -465,7 +471,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -769,7 +775,7 @@ $LANG20 = array(
     3 => 'Неправильний пароль користувача',
     4 => '╤м\'я користувача:',
     5 => 'Пароль:',
-    6 => 'Доступ до адм╕н╕стративних функц╕й цього сайта запису╓ться ╕ перегляда╓ться. <br' . XHTML . '>Ця стор╕нка лише для авторизованого персоналу сайту.',
+    6 => 'Доступ до адм╕н╕стративних функц╕й цього сайта запису╓ться ╕ перегляда╓ться. <br>Ця стор╕нка лише для авторизованого персоналу сайту.',
     7 => 'ув╕йти',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -980,7 +986,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1043,7 +1051,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1101,7 +1111,7 @@ $LANG28 = array(
     49 => 'Адм╕н╕стративна група',
     50 => 'В╕дм╕тьте, щоб ф╕льтрувати цю групу як адм╕н╕стративну',
     51 => 'Дн╕в онлайн',
-    52 => '<br' . XHTML . '>Зауважте: "Дн╕в онлайн" - це к╕льк╕сть дн╕в м╕ж першою ре╓страц╕╓ю та останн╕м входом до системи.',
+    52 => '<br>Зауважте: "Дн╕в онлайн" - це к╕льк╕сть дн╕в м╕ж першою ре╓страц╕╓ю та останн╕м входом до системи.',
     53 => 'заре╓стровано',
     54 => 'Масове вилучення',
     55 => 'Це працб╓ лише у випадку, коли ви встановили <code>$_CONF[\'lastlogin\'] = true;</code> у вашому файл╕ config.php',
@@ -1239,7 +1249,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Встановлення модуля може пошкодити glFusion або нав╕ть ваш╕й систем╕. Важливо, щоб ви встановлювали лише модул╕, завантажен╕ з <a href="http://www.gllabs.org" target="_blank">Домашньо╖ стор╕нки glFusion</a>, оск╕льки ми тесту╓мо вс╕ модул╕, що нам присилають, на р╕зних операц╕йних системах. Важливо, щоб ви розум╕ли, що встановлення модул╕в вимага╓ виконання деяких системних команд, як╕ можуть викликати проблеми з безпекою, особливо це стосу╓ться модул╕в, завантажених не з нашого сайту. Якщо нав╕ть п╕сля цього попередження ви все ж продовжите, ми не можемо гарантувати усп╕шн╕сть ╕нсталяц╕╖ ╕ не несемо в╕дпов╕дальност╕ за проблеми, викликан╕ встановленням модуля glFusion. ╤накше кажучи, ви встановлю╓те модуль на св╕й ризик. Кер╕вництво з ручного встановлення модуля включено в кожний ╕нсталяц╕йний пакет.',
+    1 => 'Встановлення модуля може пошкодити glFusion або нав╕ть ваш╕й систем╕. Важливо, щоб ви встановлювали лише модул╕, завантажен╕ з <a href="https://www.glfusion.org" target="_blank">Домашньо╖ стор╕нки glFusion</a>, оск╕льки ми тесту╓мо вс╕ модул╕, що нам присилають, на р╕зних операц╕йних системах. Важливо, щоб ви розум╕ли, що встановлення модул╕в вимага╓ виконання деяких системних команд, як╕ можуть викликати проблеми з безпекою, особливо це стосу╓ться модул╕в, завантажених не з нашого сайту. Якщо нав╕ть п╕сля цього попередження ви все ж продовжите, ми не можемо гарантувати усп╕шн╕сть ╕нсталяц╕╖ ╕ не несемо в╕дпов╕дальност╕ за проблеми, викликан╕ встановленням модуля glFusion. ╤накше кажучи, ви встановлю╓те модуль на св╕й ризик. Кер╕вництво з ручного встановлення модуля включено в кожний ╕нсталяц╕йний пакет.',
     2 => 'Попередження про встановлення модул╕в',
     3 => 'Форма встановлення модул╕в',
     4 => 'Файл модуля',
@@ -1247,8 +1257,8 @@ $LANG32 = array(
     6 => 'Попередження: Модуль вже встановлено!',
     7 => 'Модуль, який Ви намага╓тесь встановити, вже ╕сну╓. Перед тим, як перевстановити модуль, вилуч╕ть старий',
     8 => 'Модуль не пройшов перев╕рку сум╕сност╕ верс╕╖',
-    9 => 'Модуль потребу╓ б╕льш ново╖ верс╕╖ glFusion. Онов╕ть Вашу коп╕ю <a href="http://www.gllabs.org">glFusion</a> або спробуйте знайти ╕ншу верс╕ю модуля.',
-    10 => '<br' . XHTML . '><b>В систем╕ нема╓ встановлених модул╕в.</b><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'Модуль потребу╓ б╕льш ново╖ верс╕╖ glFusion. Онов╕ть Вашу коп╕ю <a href="https://www.glfusion.org">glFusion</a> або спробуйте знайти ╕ншу верс╕ю модуля.',
+    10 => '<br><b>В систем╕ нема╓ встановлених модул╕в.</b><br><br>',
     11 => 'Щоб зм╕нити чи вилучити модуль, натисн╕ть його ╕конку редагування нижче. Буде виведено детал╕ про модуль, включаючи домашню стор╕нку автора. Виводиться як ╕нстальована верс╕я, так ╕ верс╕я з коду модуля. Це дасть вам знати, коли варто оновлювати модуль. Щоб встановити чи оновити модуль, будь-ласка, зверн╕ться до його документац╕╖.',
     12 => '╕м\'я модуля не передано в plugineditor()',
     13 => 'Редактор модул╕в',
@@ -1425,7 +1435,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1508,7 +1519,7 @@ $MESSAGE = array(
     74 => 'П╕нгбек усп╕шно в╕дправлено.',
     75 => 'Трекбеки повинн╕ в╕дправлятись через POST запит.',
     76 => 'Ви впевнен╕, що хочете вилучити цей елемент?',
-    77 => 'ПОПЕРЕДЖЕННЯ:<br' . XHTML . '>Ваше кодування символ╕в за замовчуванням - UTF-8. Проте ваш сервер не п╕дтриму╓ багатобайтов╕ кодування. Будь-ласка, встанов╕ть функц╕╖ mbstring для PHP або обер╕ть ╕нше кодування/мову.',
+    77 => 'ПОПЕРЕДЖЕННЯ:<br>Ваше кодування символ╕в за замовчуванням - UTF-8. Проте ваш сервер не п╕дтриму╓ багатобайтов╕ кодування. Будь-ласка, встанов╕ть функц╕╖ mbstring для PHP або обер╕ть ╕нше кодування/мову.',
     78 => 'Будь-ласка, переконайтеся, що електронна адреса та ╖╖ п╕дтвердження сп╕впадають.',
     79 => 'Стор╕нка, яку ви намагалися в╕дкрити, посила╓ться на функц╕ю, якою вже нема╓ на цьому сайт╕.',
     80 => 'Модуль, що створив цю стр╕чку, нараз╕ вимкнено. Ви не зможете редагувати цю стр╕чку, поки не ув╕мкнете в╕дпов╕дний батьк╕вський модуль.',
@@ -1715,7 +1726,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2047,7 +2058,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Показувати лише в тем╕',
-    1 => 'Показувати на головн╕й'
+    1 => 'Показувати на головн╕й',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2407,6 +2419,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2435,6 +2448,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2574,8 +2590,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear?',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2754,7 +2768,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Skip HTML Filter for Root?',
     'allowed_protocols' => 'Allowed Protocols',
     'disable_autolinks' => 'Disable Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'Censor Mode?',
     'censorreplace' => 'Censor Replace Text',
     'censorlist' => 'Censor List',
@@ -2832,6 +2845,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2840,7 +2856,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2860,7 +2877,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',
@@ -2914,7 +2930,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2934,7 +2950,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

@@ -43,7 +43,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 
 // we must have PHP v5.3 or greater
 if (version_compare(PHP_VERSION,'5.3.3','<')) {
-    die('Sorry, glFusion requires PHP version 5.3.3 or greater.');
+    die('glFusion requires PHP version 5.3.3 or greater.');
 }
 
 /**
@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.6.6');
+    define('GVERSION', '1.7.1');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -122,7 +122,9 @@ if ( function_exists('set_error_handler') ) {
   *
   */
 require_once 'siteconfig.php' ;
-require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+require_once $_CONF['path_system'] . 'classes/Autoload.php';
+glFusion\Autoload::initialize();
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -137,10 +139,23 @@ if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
+$adminurl = $_CONF['site_admin_url'];
+if (strrpos ($adminurl, '/') == strlen ($adminurl) - 1) {
+    $adminurl = substr ($adminurl, 0, -1);
+}
+$pos = strrpos ($adminurl, '/');
+if ($pos === false) {
+    $_CONF['path_admin'] = $_CONF['path_html'] . 'admin/';
+} else {
+    $_CONF['path_admin'] = $_CONF['path_html'] . substr ($adminurl, $pos + 1).'/';
+}
+
 @date_default_timezone_set('America/Chicago');
 
 $charset = COM_getCharset();
 if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
+
+require_once $_CONF['path_system'].'/lib-cache.php';
 
 if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
     require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
@@ -150,7 +165,7 @@ $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
 }
-
+if ( isset($_VARS['guid'])) $_CONF['mail_smtp_password'] = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',
@@ -215,58 +230,19 @@ mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
 
-require_once($_CONF['path'].'vendor/autoload.php');
-
-/**
-* If needed, add our PEAR path to the list of include paths
-*
-*/
-if ( !$_CONF['have_pear'] ) {
-    $curPHPIncludePath = get_include_path();
-    if ( defined( 'PATH_SEPARATOR' )) {
-        $separator = PATH_SEPARATOR;
-    } else {
-        // prior to PHP 4.3.0, we have to guess the correct separator ...
-        $separator = ';';
-        if ( strpos( $curPHPIncludePath, $separator ) === false ) {
-            $separator = ':';
-        }
-    }
-    if ( set_include_path( $_CONF['path_pear'] . $separator.$curPHPIncludePath ) === false ) {
-        COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
-    }
-}
-
 /**
 * Include page time -- used to time how fast each page was created
 *
 */
 
-require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
 /**
-* Include URL class
-*
-* This provides optional URL rewriting functionality.
+* Initialize $_URL globa
 */
 
-require_once $_CONF['path_system'].'classes/url.class.php';
 $_URL = new url( $_CONF['url_rewrite'] );
-
-/**
-* This is our HTML template class.
-*
-*/
-
-require_once $_CONF['path_system'].'classes/template.class.php';
-
-/**
-* This is our HTML filter / sanitization class.
-*
-*/
-require_once $_CONF['path_system'].'classes/filter.class.php';
 
 /**
 * This is the database library.
@@ -275,17 +251,6 @@ require_once $_CONF['path_system'].'classes/filter.class.php';
 
 require_once $_CONF['path_system'].'lib-database.php';
 
-/**
-* This is the date / time library used for formatting
-*
-*/
-require_once $_CONF['path_system'] . 'classes/date.class.php';
-
-/**
-* This is the output library used to control JS / CSS
-*
-*/
-require_once $_CONF['path_system'].'classes/output.class.php';
 
 /**
 * Buffer all enabled plugins
@@ -1079,7 +1044,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $header->parse( 'index_header', 'header' );
     $retval = $header->finish( $header->get_var( 'index_header' ));
-
+    if ( defined( 'DVLP_DEBUG' ) && !headers_sent() ) {
+        header('X-XSS-Protection: 0');
+    }
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
@@ -1161,7 +1128,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
     }
-
+    if ( !isset($_GET['ncb'])) {
+        $theme->set_var('cb',true);
+    }
     $loggedInUser = !COM_isAnonUser();
     $theme->set_var( 'site_name', $_CONF['site_name']);
     $theme->set_var( 'background_image', $_CONF['layout_url'].'/images/bg.' . $_IMAGE_TYPE );
@@ -1410,8 +1379,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( SESS_isSet('glfusion.infoblock') ) {
         $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', false, $msgArray['type']);
-
+        if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
+        if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
+        if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
+        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
         SESS_unSet('glfusion.infoblock');
     }
     $theme->set_var('info_block',$msgTxt);
@@ -1419,6 +1390,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // Call to plugins to set template variables in the footer
     PLG_templateSetVars( 'header', $theme );
     PLG_templateSetVars( 'footer', $theme );
+
+    $theme->set_var( 'adblock_header',PLG_displayAdBlock('header',0), false, true);
+    $theme->set_var( 'adblock_footer',PLG_displayAdBlock('footer',0), false, true);
 
     if ( function_exists('CUSTOM_preContent')) {
         $count = 0;
@@ -1489,6 +1463,7 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml',
             $help_url = $helpfile;
         }
         $help = COM_createLink($help_content, $help_url, $help_attr);
+        $block->set_var( 'help_url',$help_url);
         $block->set_var( 'block_help', $help );
     }
 
@@ -2475,12 +2450,12 @@ function COM_isEmail( $email )
 {
     global $_CONF;
 
-    if (!class_exists('EmailAddressValidator') ) {
-        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
-    }
+//    if (!class_exists('EmailAddressValidator') ) {
+//        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
+//    }
 
     $validator = new EmailAddressValidator;
-    return ( $validator->check_email_address( $email ) ? true : false );
+    return ( $validator->checkEmailAddress( $email ) ? true : false );
 }
 
 
@@ -2554,7 +2529,7 @@ function COM_formatEmailAddress( $name, $address )
 */
 function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '', $altBody = '' )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
     $subject = COM_emailEscape( $subject );
@@ -2563,10 +2538,8 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (https://www.glfusion.org)';
     if ($_CONF['mail_backend'] == 'smtp' ) {
@@ -2671,7 +2644,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
  */
 function COM_emailNotification( $msgData = array() )
 {
-    global $_CONF;
+    global $_CONF, $_VARS;
 
     // define the maximum number of emails allowed per bcc
     $maxEmailsPerSend = 10;
@@ -2695,10 +2668,8 @@ function COM_emailNotification( $msgData = array() )
     $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
-    require_once $_CONF['path'] . 'lib/phpmailer/PHPMailerAutoload.php';
-
     $mail = new PHPMailer();
-    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->SetLanguage('en');
     $mail->CharSet = COM_getCharset();
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
@@ -2811,7 +2782,7 @@ function COM_olderStuff()
 {
     global $_TABLES, $_CONF;
 
-    $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND (frontpage = 1) AND (date <= NOW()) AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
+    $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW()))) AND (date <= NOW()) AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
@@ -3058,6 +3029,7 @@ function COM_formatBlock( $A, $noboxes = false )
     }
 
     if ( $A['type'] == 'portal' ) {
+        if ( !isset($A['date'])) $A['date'] = 0;
         if ( COM_rdfCheck( $A['bid'], $A['rdfurl'], $A['date'], $A['rdflimit'] )) {
             $A['content'] = DB_getItem( $_TABLES['blocks'], 'content',
                                         "bid = '{$A['bid']}'");
@@ -3172,7 +3144,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 {
     global $_CONF, $_TABLES, $LANG21;
 
-    require_once $_CONF['path'].'/lib/simplepie/autoloader.php';
+    $articles = array();
 
     $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".(int)$bid);
     list($last_modified, $etag) = DB_fetchArray($result);
@@ -3221,9 +3193,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
             $enclosure = $item->get_enclosure();
 
             if ($link != '') {
-                $content = COM_createLink($title, $link, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $link, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } elseif ($enclosure != '') {
-                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank'));
+                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
             } else {
                 $content = $title;
             }
@@ -3313,8 +3285,9 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($loginname)."'" );
-    $tmp = DB_error();
+    $sql = "SELECT passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($loginname)."'";
+    $result = DB_query($sql);
+    $tmp = DB_error($sql);
     $nrows = DB_numRows( $result );
 
     if (( $tmp == 0 ) && ( $nrows == 1 )) {
@@ -3663,7 +3636,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         if ( $nrows > 0 ) {
             // Any late breaking news stories?
             $T->set_var('section_title',$LANG01[99]);
-            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newcommentsinterval'] ));
+            $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newstoriesinterval'] ));
 
             $newstory = array();
 
@@ -3704,7 +3677,9 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         } else {
             $stwhere .= "({$_TABLES['stories']}.perm_anon IS NOT NULL)";
         }
-        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
+
+        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
+
         $result = DB_query( $sql );
         $nrows = DB_numRows( $result );
 
@@ -3864,7 +3839,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 
     // This is the amount you have to divide the previous by to get the
     // different time intervals: hour, day, week, months
-    $time_divider = array( 60, 60, 24, 7, 4 );
+    $time_divider = array( 60, 60, 24, 7, 52 );
 
     // These are the respective strings to the numbers above. They have to match
     // the strings in $LANG_WHATSNEW (i.e. these are the keys for the array -
@@ -3887,7 +3862,7 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
                 $time_str = $times_description[$s];
             }
             $fields = array( '%n', '%i', '%t', '%s' );
-            $values = array( $amount, $type, $time, $LANG_WHATSNEW[$time_str] );
+            $values = array( $amount, $type, round($time), $LANG_WHATSNEW[$time_str] );
             $retval = str_replace( $fields, $values, $retval );
             break;
         }
@@ -3907,9 +3882,14 @@ function COM_setMessage( $msg = 0 )
     SESS_setVar('glfusion.infomessage',$msg);
 }
 
-function COM_setMsg( $msg, $type='info' )
+function COM_setMsg( $msg, $type='info', $persist=0 )
 {
-    $msgArray = array('msg' => $msg, 'type' => $type);
+    $msgArray = array(
+                        'msg' => $msg,
+                        'type' => $type,
+                        'persist' => $persist,
+                        'title' => '',
+                    );
     SESS_setVar('glfusion.infoblock', serialize($msgArray));
 }
 
@@ -4002,7 +3982,7 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='inf
                     'type'          => $type,
                     'persist'       => $persist,
                     'id'            => $id,
-                    'timeout'       => $_SYSTEM['alert_timeout'],
+                    'timeout'       => (($persist) ? '0' : $_SYSTEM['alert_timeout']),
                     'position'      => $_SYSTEM['alert_position'],
         ));
         $T->parse( 'final', 'message' );
@@ -5138,20 +5118,20 @@ function COM_makeClickableLinks( $text )
 {
     // Matches http:// or https:// or ftp:// or ftps://
     $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:(?:ht|f)tps?:\/{2})(?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)+)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
-    $replace = create_function(
-        '$match',
-        'return COM_makeClickableLinksCallback(\'\', $match[1]);'
-    );
 
-    $text = preg_replace_callback($regex, $replace, $text);
+    $text = preg_replace_callback($regex,
+        function($match) {
+            return COM_makeClickableLinksCallback('', $match[1]);
+        },
+        $text);
 
     $regex = '/(?<=^|[\n\r\t\s\(\)\[\]<>";])((?:[a-z0-9]+\.)*[a-z0-9-]+\.(?:[a-z]{2,}|xn--[0-9a-z]+)(?:[\/?#](?:[^\n\r\t\s\(\)\[\]<>"&]+(?:&amp;)?)*)?)(?=[\n\r\t\s\(\)\[\]<>"&]|$)/i';
-    $replace = create_function(
-        '$match',
-        'return COM_makeClickableLinksCallback(\'http://\', $match[1]);'
-    );
 
-    $text = preg_replace_callback($regex, $replace, $text);
+    $text = preg_replace_callback($regex,
+        function($match) {
+            return COM_makeClickableLinksCallback('http://', $match[1]);
+        },
+        $text);
 
     return $text;
 }
@@ -5624,7 +5604,7 @@ function COM_createLink($content, $url, $attr = array())
 {
     $retval = '';
 
-    $attr_str = 'href="' . $url . '"';
+    $attr_str = 'href="' . COM_sanitizeURL($url) . '"';
     foreach ($attr as $key => $value) {
         $attr_str .= " $key=\"$value\"";
     }
@@ -6193,7 +6173,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 function COM_rootDebugClean($array, $blank=false)
 {
     $blankField = false;
-    while (list($key, $value) = each($array)) {
+    foreach ($array AS $key => $value ) {
         $lkey = strtolower($key);
         if ((strpos($lkey, 'pass') !== false) || (strpos($lkey, 'cookie')!== false)) {
             $blankField = true;
@@ -6698,7 +6678,7 @@ function CTL_clearCacheDirectories($path, $needle = '')
     }
     if ($dir = @opendir($path)) {
         while ($entry = readdir($dir)) {
-            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == '.git' || $entry == 'index.html') {
                 continue;
             } elseif (is_dir($path . $entry)) {
                 CTL_clearCacheDirectories($path . $entry, $needle);
@@ -7399,6 +7379,47 @@ function phpblock_whosonline()
     return $retval;
 }
 
+/**
+* Encrypt string using key
+* @return   string  encrypted string
+*/
+function COM_encrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_encrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return trim(base64_encode(openssl_encrypt($data, 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Decrypts string encrypted with COM_encrypt
+* @return   string  decrypted string
+*/
+function COM_decrypt($data,$key = '')
+{
+    global $_VARS;
+    if ( !function_exists('openssl_decrypt')) return $data;
+    if ( $key == '' && !isset($_VARS['guid'])) return $data;
+    if ( $key == '' ) $key = $_VARS['guid'];
+    $iv = substr($key,0,16);
+    return (trim(openssl_decrypt(base64_decode($data), 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+}
+
+/**
+* Random key generator
+* @return   string  random key of length $length
+*/
+function COM_randomKey($length = 40 )
+{
+    $max = ceil($length / 40);
+    $random = '';
+    for ($i = 0; $i < $max; $i ++) {
+    $random .= sha1(microtime(true).mt_rand(10000,90000));
+    }
+    return substr($random, 0, $length);
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
@@ -7421,10 +7442,6 @@ function USES_lib_comment() {
 function USES_lib_comments() {  // depreciated
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
-}
-function USES_lib_html2text() {
-    global $_CONF;
-    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
 }
 function USES_lib_image() {
     global $_CONF;
@@ -7454,30 +7471,18 @@ function USES_lib_widgets() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-widgets.php';
 }
-function USES_class_navbar() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
-}
-function USES_class_date() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/date.class.php';
-}
-function USES_class_search() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/search.class.php';
-}
-function USES_class_story() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/story.class.php';
-}
-function USES_class_upload() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
-}
 function USES_lib_social() {
     global $_CONF;
     require_once $_CONF['path_system'].'lib-social.php';
 }
+
+// legacy support
+function USES_class_navbar() { }
+function USES_class_date() { }
+function USES_class_search() { }
+function USES_class_story() { }
+function USES_class_upload() { }
+function USES_lib_html2text() { }
 
 // load custom language file if it exists...
 if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') ) {

@@ -65,6 +65,10 @@ function calendar_upgrade()
         case '1.0.9' :
         case '1.1.0' :
             // no changes in db / configuration
+
+		case '1.1.1' :
+			DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD `owner_id` MEDIUMINT(8) NOT NULL DEFAULT '1' AFTER `timeend`;",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CA_CONF['pi_version']."',pi_gl_version='".$_CA_CONF['gl_version']."' WHERE pi_name='calendar' LIMIT 1");
             break;

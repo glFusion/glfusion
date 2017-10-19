@@ -64,7 +64,7 @@ if ( isset($_PLUGIN_INFO['forum']) ) {
 } else {
     $pi_version = $_FF_CONF['pi_version'];
 }
-require_once $_CONF['path_system'] . 'classes/config.class.php';
+
 $ff_config = config::get_instance();
 $_FF_FORUM = $ff_config->get_config('forum');
 if ( is_array($_FF_FORUM) && is_array($_FF_CONF) ) {
@@ -1062,7 +1062,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             return $retval;
         }
 
-        USES_lib_html2text();
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file ('block','centerblock.thtml');
         $block->set_var (array(
@@ -1117,7 +1116,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $lastid = $A['id'];
                 $testText = FF_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1147,7 +1146,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = FF_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1364,16 +1363,28 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG_GF00;
 
+    $buildingSearchIndex = false;
+    $batchreindex = false;
+
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+            case 'search_index' :
+                $buildingSearchIndex = true;
+                break;
+            case 'reindex' :
+                $batchreindex = true;
+                break;
+            case 'date' :
             case 'date-modified':
-                $fields[] = 'UNIX_TIMESTAMP(a.date) AS unixdate';
+            case 'date-created' :
+                $fields[] = 'a.date AS unixdate';
                 break;
             case 'description':
             case 'excerpt':
             case 'raw-description' :
+            case 'searchidx' :
                 $fields[] = 'a.comment';
                 break;
             case 'id':
@@ -1388,6 +1399,12 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 break;
             case 'author' :
                 $fields[] = 'a.uid';
+                break;
+            case 'author_name' :
+                $fields[] = 'a.name';
+                break;
+            case 'hits' :
+                $fields[] = 'a.views';
                 break;
             default:
                 break;
@@ -1404,9 +1421,26 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     USES_forum_format();
 
     if ($id == '*') {
-        $where = '';
-        $permOp = ' WHERE ';
+        if ( $buildingSearchIndex ) {
+            $where = " WHERE a.pid=0 ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = ' WHERE ';
+        }
     } else {
+        // but I don't want to call this when doing batch reindexing...
+        if ( $buildingSearchIndex == true && $batchreindex == false) {
+            // check to see if we have the PID or a reply ID
+            // query the record for PID
+            // if it is 0 - we are good
+            // if it is not 0 - update ID to PID
+            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
+            if ( $pid != 0 && $pid != NULL) {
+                $id = $pid;
+            }
+        }
+
         $where = " WHERE id = '" . DB_escapeString($id) . "'";
         $permOp = ' AND ';
     }
@@ -1418,14 +1452,13 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     }
     $grouplist = implode(',',$groups);
 
-    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status ";
+    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status, b.* ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
     $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
-
     }
 
     $result = DB_query($sql);
@@ -1438,15 +1471,30 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                case 'date-created' :
                 case 'date-modified':
-                    $props['date-modified'] = $A['unixdate'];
+                    $props[$p] = $A['unixdate'];
                     break;
                 case 'description':
                 case 'excerpt':
-                    $prop[$p] = FF_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
+                    $props[$p] = FF_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
                     break;
+                case 'searchidx' :
                 case 'raw-description' :
-                    $props[$p] = $A['comment'];
+                    if ( $buildingSearchIndex ) {
+                        DB_query("SET group_concat_max_len = 204800");
+                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
+                        $childres = DB_query($sql);
+                        if ( DB_numRows($childres) > 0 ) {
+                            $B = DB_fetchArray($childres);
+                            if ( isset($B['comment'])) {
+                                $A['comment'] = $A['comment'] . $B['comment'];
+                            }
+                        }
+                    }
+                    $comment = _forum_strip_bbcode($A['comment']);
+                    $props[$p] = $comment;
                     break;
                 case 'id':
                     $props['id'] = $A['id'];
@@ -1473,6 +1521,23 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'author' :
                     $props['author'] = $A['uid'];
                     break;
+                case 'author_name' :
+                    $props['author_name'] = $A['name'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['views'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => 2,
+                        'group_id' => $A['grp_id'],
+                        'perm_owner' => 3,
+                        'perm_group' => 3,
+                        'perm_members' => 1,    // fix
+                        'perm_anon' => 1,       // fix
+                    );
+                    break;
+
                 default:
                     $props[$p] = '';
                     break;
@@ -1504,6 +1569,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $tRet = array_values($retval);
         $retval = $tRet[0];
     }
+    if ( $retval === '' || count($retval) == 0 ) return NULL;
 
     return $retval;
 }
@@ -1524,6 +1590,11 @@ function plugin_getconfigelementhelp_forum($type, $option, $doclang = 'english' 
     $retval = $descUrl;
 
     return array($retval,0);
+}
+
+function plugin_supportadblock_forum()
+{
+    return array('forum_category_list','forum_topic_list');
 }
 
 // +---------------------------------------------------------------------------+
@@ -1850,10 +1921,20 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file ('signature','signature_profile.thtml');
 
+    if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+        $exclude = array('img');
+        $img_tag = false;
+        $T->unset_var('img_tag_allowed');
+    } else {
+        $exclude = array();
+        $T->set_var('img_tag_allowed',true);
+    }
+
     $T->set_var(array(
         'signature'   => $signature,
-        'preview_signature' => BBC_formatTextBlock($signature,'text'),
+        'preview_signature' => BBC_formatTextBlock($signature,'text',array(),array(), $exclude),
     ));
+
     $error_message = '';
     if ( count($errors) > 0 ) {
         foreach($errors AS $error) {
@@ -1933,4 +2014,65 @@ function USES_forum_admin() {
     global $_CONF, $_FF_CONF;
     require_once $_CONF['path'].'plugins/forum/include/admin.inc.php';
 }
+
+
+function _forum_strip_bbcode($str)
+{
+    global $_CONF, $_FF_CONF;
+
+    $bbcode = new StringParser_BBCode ();
+    $bbcode->setGlobalCaseSensitive (false);
+
+    $bbcode->addCode ('code', 'usecontent?', 'getItemInfo_code', array ('usecontent_param' => 'default'),
+                      'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
+    $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('u', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('size', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('color', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('list', 'simple_replace', null, array('start_tag' => '', 'end_tag' => ''),
+                      'inline', array ('inline','block', 'listitem'), array ());
+    $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '*', 'end_tag' => ''),
+                      'listitem', array ('list'), array ());
+    $bbcode->addCode ('quote', 'usecontent', 'getItemInfo_quote', array (),
+                      'link', array ('listitem', 'block', 'inline','link'), array ());
+
+    $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
+    $bbcode->setCodeFlag ('*', 'paragraphs', true);
+    $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+    $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+
+    $bbcode->setRootParagraphHandling (false);
+
+    if ($_FF_CONF['use_censor']) {
+        $str = COM_checkWords($str);
+    }
+    $str = $bbcode->parse ($str);
+
+    return $str;
+}
+function getItemInfo_quote($action, $attributes, $content, $params, $node_object)
+{
+    if ( $action == 'validate') {
+        return true;
+    }
+    return '';
+}
+function getItemInfo_code($action, $attributes, $content, $params, $node_object)
+{
+    if ( $action == 'validate') {
+        return true;
+    }
+    return $content;
+}
+
 ?>

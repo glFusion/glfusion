@@ -47,8 +47,6 @@ function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
     global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $_FF_CONF,$_SYSTEM,$LANG_GF02, $LANG_GF03;
 
-    USES_lib_html2text();
-
     $dt = new Date('now',$_USER['tzid']);
 
     $retval = '';
@@ -68,7 +66,7 @@ function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
         case 'subject':
             $testText        = FF_formatTextBlock($A['comment'],'text','text',$A['status']);
             $testText        = strip_tags($testText);
-            $html2txt        = new html2text($testText,false);
+            $html2txt        = new Html2Text\Html2Text($testText,false);
             $testText        = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$_FF_CONF['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<span class="'.COM_getTooltipStyle().'" style="text-decoration:none;" title="' . $A['subject'] . '::' . $lastpostinfogll . '">' . $fieldvalue . '</span>';

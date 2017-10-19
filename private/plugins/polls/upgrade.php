@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -75,6 +75,9 @@ function polls_upgrade()
         case '2.2.1' :
             DB_query("ALTER TABLE {$_TABLES['pollvoters']} ADD INDEX(`pid`);",1);
             DB_query("ALTER TABLE {$_TABLES['polltopics']} ADD `description` TEXT NULL DEFAULT NULL AFTER `topic`;",1);
+
+        case '2.2.2' :
+            // no changes
 
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_PO_CONF['pi_version']."',pi_gl_version='".$_PO_CONF['gl_version']."' WHERE pi_name='polls' LIMIT 1");

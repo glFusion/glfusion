@@ -693,23 +693,52 @@ function PLUGINS_list($token)
 */
 function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 {
-    global $_TABLES, $_PLUGIN_INFO, $_DB_table_prefix;
+    global $_TABLES, $_PLUGINS, $_PLUGIN_INFO, $_DB_table_prefix;
 
-    if (isset($pluginarray) && is_array($pluginarray) ) {
-        foreach ($pluginarray AS $plugin => $junk ) {
-            $plugin = COM_applyFilter($plugin);
-            if ( isset($plugin_name_arr[$plugin]) ) {
-                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
-                PLG_enableStateChange ($plugin, true);
-            } else {
-                $rc = PLG_enableStateChange ($plugin, false);
-                if ( $rc != 99 ) {
-                    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
-                $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
-                }
+    $currentStatus = array();
+    $pluginsToProcess = array();
+
+    if (!isset($pluginarray) || !is_array($pluginarray) ) {
+        $pluginarray = array();
+    }
+    if ( !isset( $plugin_name_arr ) || !is_array( $plugin_name_arr ) ) {
+        $plugin_name_arr = array();
+    }
+
+    // get current status
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']}");
+    while ( ( $row = DB_fetchArray($result) ) != NULL ) {
+        $currentStatus[$row['pi_name']] = $row['pi_enabled'];
+    }
+    foreach( $pluginarray AS $plugin => $junk ) {
+        if ( $currentStatus[$plugin] == 1 ) { // was enabled...
+            if ( !isset($plugin_name_arr[$plugin] ) ) {
+                // was enabled - asking it to be disabled
+                $pluginsToProcess[$plugin] = 0;
             }
+        } else { // currently disabled
+            if ( isset($plugin_name_arr[$plugin] ) ) {
+                // was disabled - now marked as enable
+                $pluginsToProcess[$plugin] = 1;
+            }
+        }
+    }
+    foreach ( $pluginsToProcess AS $plugin => $status ) {
+        if ( $status == 0 ) {
+            // disable plugin
+            $rc = PLG_enableStateChange ($plugin, false);
+            if ( $rc != 99 ) {
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
+                $i = array_search($plugin,$_PLUGINS);
+                unset($_PLUGINS[$i]);
+            }
+            $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
+        } else {
+            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
+            $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
+            $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
+            $_PLUGINS[] = $plugin;
+            PLG_enableStateChange ($plugin, true);
         }
     }
     CTL_clearCache();
@@ -733,7 +762,6 @@ function PLUGINS_processUpload()
     $upgrade = false;
 
     if (count($_FILES) > 0 && $_FILES['pluginfile']['error'] != UPLOAD_ERR_NO_FILE) {
-        require_once($_CONF['path_system'] . 'classes/upload.class.php');
         $upload = new upload();
 
         if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
@@ -895,7 +923,7 @@ function PLUGINS_processUpload()
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -1048,7 +1076,7 @@ function PLUGINS_post_uploadProcess() {
         @set_time_limit( 30 );
     }
     if ( file_exists($pluginTmpDir.'admin/') ) {
-        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
+        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -1158,13 +1186,13 @@ function PLUGINS_post_uploadProcess() {
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
-                if ( !file_exists($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
-                    $rc = @copy ($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                if ( !file_exists($_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName) ) {
+                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                         $masterErrorCount++;
-                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].$pathTo.$fileName);
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     }
                 }
             } elseif (strncmp($fileToRename,'public_html',10) == 0 ) {

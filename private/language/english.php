@@ -177,7 +177,7 @@ $LANG01 = array(
     128 => '',
     129 => 'Configuration',
     130 => 'Webservices',
-    500 => 'Please remember to remove the admin/install/ directory after installing or upgrading your site!',
+    500 => 'Please remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
@@ -258,6 +258,13 @@ $LANG03 = array(
     49 => 'Comments are closed',
     50 => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to comment',
     51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit',
+
 );
 
 ###############################################################################
@@ -840,7 +847,7 @@ $LANG21 = array(
     61 => 'No Title',
     62 => 'Article Limit',
     63 => 'Bad Block Title',
-    64 => 'Your Title must not be empty and cannot contain HTML!',
+    64 => 'Your Title must not be empty.',
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
@@ -979,6 +986,8 @@ $LANG24 = array(
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play',
 );
 
 ###############################################################################
@@ -1042,6 +1051,8 @@ $LANG27 = array(
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
     57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description',
 );
 
 ###############################################################################
@@ -1237,7 +1248,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.gllabs.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not guarantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
+    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="https://www.glfusion.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not guarantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
     2 => 'Plugin Installation Disclaimer',
     3 => 'Plugin Installation Form',
     4 => 'Plugin File',
@@ -1245,7 +1256,7 @@ $LANG32 = array(
     6 => 'Warning: Plugin Already Installed!',
     7 => 'The plugin you are trying to install already exists.  Please delete the plugin before re-installing it',
     8 => 'Plugin Compatibility Check Failed',
-    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="http://www.gllabs.org">glFusion</a> or get a newer version of the plugin.',
+    9 => 'This plugin requires a newer version of glFusion. Either upgrade your copy of <a href="https://www.glfusion.org">glFusion</a> or get a newer version of the plugin.',
     10 => '<br/><b>There are no plugins currently installed.</b><br/><br/>',
     11 => 'To enable or disable installed plugins, click the associated checkbox in the Control column.  Plugins that have been uploaded to your system may be installed by clicking the Install icon in the Control column.  To update a plugin, click the Update icon that is displayed in the Version column.  To uninstall a plugin, click the icon in the UnPlug column.',
     12 => 'No plugin name provided to plugineditor()',
@@ -1424,6 +1435,7 @@ $LANG_SOCIAL = array(
     'site_username'         => 'Site Username',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
+    'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
 );
 
 
@@ -1577,7 +1589,7 @@ $LANG_ACCESS = array(
     'accessrights' => 'Access Rights',
     'owner' => 'Owner',
     'grantgrouplabel' => 'Grant Above Group Edit Rights',
-    'permmsg' => 'Members = All logged-in members of the site.<br />Anonymous = All users browsing the site that aren\'t logged in.',
+    'permmsg' => 'Members = All logged-in members of the site.<br />Anonymous = All users browsing the site that are not logged in.',
     'securitygroups' => 'Security Groups',
     'editrootmsg' => "Even though you are a User Administrator, you can't edit a root user without first being a root user yourself.  You can edit all other users except root users. Please note that all attempts to illegally edit root users are logged.  Please go back to the <a href=\"{$_CONF['site_admin_url']}/user.php\">User Administration page</a>.",
     'securitygroupsmsg' => 'Select the checkboxes for the groups you want the user to belong to.',
@@ -1606,7 +1618,7 @@ $LANG_ACCESS = array(
     'edit' => 'Edit',
     'none' => 'None',
     'accessdenied' => 'Access Denied',
-    'storydenialmsg' => "You do not have access to view this story.  This could be because you aren't a member of {$_CONF['site_name']}.  Please <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">become a member</a> of {$_CONF['site_name']} to receive full membership access!",
+    'storydenialmsg' => "You do not have access to view this story.  This could be because you are not a member of {$_CONF['site_name']}.  Please <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">become a member</a> of {$_CONF['site_name']} to receive full membership access!",
     'nogroupsforcoregroup' => 'This group doesn\'t belong to any of the other groups',
     'grouphasnorights' => 'This group doesn\'t have access to any of the administrative features of this site',
     'newgroup' => 'New Group',
@@ -1657,7 +1669,7 @@ $LANG_ACCESS = array(
 # admin/database.php
 
 $LANG_DB_ADMIN = array(
-    'database_admin'      => 'Database Administration',
+    'database_admin'      => 'DB Admin',
     'last_ten_backups'    => 'Database Backups',
     'create_backup'       => 'Backup Database',
     'do_backup'           => 'Do Backup',
@@ -2046,7 +2058,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Show Only in Topic',
-    1 => 'Show on Front Page'
+    1 => 'Show on Front Page',
+    2 => 'Show on Front Page Until',
 );
 
 $LANG_postmodes = array(
@@ -2406,6 +2419,7 @@ $LANG_ENVCHK = array(
     'bypass_note'               => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension'           => 'Ctype Extension',
+    'curl_extension'            => 'Curl Extension',
     'current'                   => 'Current',
     'current_php_settings'      => 'Current PHP Settings',
     'database_version'          => 'Database Version',
@@ -2434,6 +2448,9 @@ $LANG_ENVCHK = array(
     'im_not_found'              => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok'                     => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick'               => 'ImageMagick Programs',
+    'gm_not_found'              => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok'                     => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick'            => 'GraphicsMagick Programs',
     'is_optional'               => ' is optional',
     'is_required'               => ' is required',
     'jhead'                     => 'jhead Program',
@@ -2494,8 +2511,8 @@ $LANG_UPGRADE = array(
     'uptodate'      => 'Your current glFusion CMS installation is running the latest production release. We do recommend that you subscribe to the <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">glFusion Announcements Mailing List</a> to receive immediate information about updates and security issues.',
     'unknown_title' => 'Unable to determine glFusion version status',
     'unknown'       => 'We were unable to match your current glFusion version of %s to any released versions. If you are running a development snapshot, we recommend subscribing to the <a href="http://www.freelists.org/list/glfusion-development" target="_blank">glFusion Development Mailing List</a>. If you are are not running a development snapshot, please use the <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">glFusion Support Forums</a> for assistance.',
-    'error_title'   => 'An error has occurred while processing your request.',
-    'error'         => 'We were unable to retrieve the version data from glFusion.org. If this problem persists, please visit <a href="http://www.glfusion.org/forum/index.php?forum=28" target="blank">the glFusion CMS Support Forum</a> to discover how you can get support.',
+    'error_title'   => 'Communication Error',
+    'error'         => 'Unable to reach glfusion.org website to retrieve current version data. Please try again later...',
     'was_released'  => 'Version %s was released on %s.',
     'plugin_uptodate' => 'Up To Date',
     'plugin_newer'  => 'You are running a newer version of the plugin.',
@@ -2570,8 +2587,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Images',
-    'path_pear' => 'Path Pear',
-    'have_pear' => 'Have Pear',
     'mail_settings' => 'Mail Settings',
     'theme' => 'Theme',
     'menu_elements' => 'Menu Elements',
@@ -2717,7 +2732,7 @@ $LANG_confignames['Core'] = array(
     'syndication_max_headlines' => 'Max. Number of Headlines (portal blocks)',
     'copyrightyear' => 'Copyright Year',
     'image_lib' => 'Image Library',
-    'path_to_mogrify' => 'Path to ImageMagick',
+    'path_to_mogrify' => 'Path to GraphicsMagick / ImageMagick executables',
     'path_to_netpbm' => 'Path to Netpbm',
     'debug_image_upload' => 'Debug Image Uploading',
     'keep_unscaled_image' => 'Keep Unscaled Image',
@@ -2750,7 +2765,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Skip HTML Filter for Root',
     'allowed_protocols' => 'Allowed Protocols',
     'disable_autolinks' => 'Disable Autolinks',
-    'digg_enabled' => 'Show Digg.com Links',
     'censormode' => 'Censor Mode',
     'censorreplace' => 'Censor Replace Text',
     'censorlist' => 'Censor List',
@@ -2828,6 +2842,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header'  => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine'    => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2837,6 +2854,7 @@ $LANG_confignames['Core'] = array(
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
     'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2856,7 +2874,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paths',
     'fs_theme' => 'Theme',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Users',
     'fs_misc' => 'Miscellaneous',
     'fs_spamx' => 'Spam-X',
@@ -2910,7 +2927,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib' ),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2931,6 +2948,7 @@ $LANG_configselects['Core'] = array(
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
     30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
 );
 
 ?>

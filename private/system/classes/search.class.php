@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion search class.                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,10 +36,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-require_once $_CONF['path_system'] . 'classes/plugin.class.php';
-require_once $_CONF['path_system'] . 'classes/searchcriteria.class.php';
-require_once $_CONF['path_system'] . 'classes/listfactory.class.php';
 
 /**
 * glFusion Search Class
@@ -265,7 +261,7 @@ class Search {
         $searchform->set_var('lang_topic', $LANG09[3]);
         $searchform->set_var('lang_all', $LANG09[4]);
         $searchform->set_var('topic_option_list',
-                            COM_topicList ('tid,topic', $this->_topic));
+                            COM_topicList ('tid,topic,sortnum', $this->_topic,2,true));
         $searchform->set_var('lang_type', $LANG09[5]);
         $searchform->set_var('lang_results', $LANG09[59]);
         $searchform->set_var('lang_per_page', $LANG09[60]);
@@ -579,7 +575,7 @@ class Search {
             $this->_wordlength = 7;
         } else if ($style == 'google') {
             $obj->setStyle('inline');
-            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.</span>');
+            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.&nbsp;</span>');
             $obj->setField($LANG09[16], 'title',       true,       true,  '<span style="font-size:larger; font-weight:bold;">%s</span><br/>');
             $obj->setField('',          'description', true,       false, '%s<br/>');
             $obj->setField('',          '_html',       true,       false, '<span style="color:green;">');
@@ -780,9 +776,22 @@ class Search {
         } else {
             $row[SQL_TITLE] = COM_createLink($row[SQL_TITLE], $this->_searchURL.'&amp;type='.$row[SQL_NAME].'&amp;mode=search');
 
-            $row['url'] = ($row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
+            $row['url'] = (isset($row['url'][0]) && $row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
             if (isset($this->_url_rewrite[$row[SQL_NAME]]) && $this->_url_rewrite[$row[SQL_NAME]])
                 $row['url'] = COM_buildUrl($row['url']);
+
+            $query_sep = (strpos($row['url'],'?')) ? '&' : '?';
+
+            if ( strpos($row['url'],'#') != 0 ) {
+                $pos = strpos($row['url'],'#');
+                $begin_url = substr($row['url'],0,$pos);
+                $end_url  = substr($row['url'],$pos);
+            } else {
+                $begin_url = $row['url'];
+                $end_url = '';
+            }
+            $this->_query = trim($this->_query);
+            $row['url'] = $begin_url . $query_sep . 'query=' . urlencode($this->_query) . $end_url;
 
             if ( $row['title'] == '' ) {
                 $row['title'] = $LANG21[61];

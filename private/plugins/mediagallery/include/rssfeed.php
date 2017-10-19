@@ -32,8 +32,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'] . 'lib/feedcreator/feedcreator.class.php';
-
 MG_initAlbums();
 
 function MG_buildAlbumRSS( $aid ) {
@@ -55,7 +53,7 @@ function MG_buildAlbumRSS( $aid ) {
     $rss->descriptionTruncSize = 500;
     $rss->descriptionHtmlSyndicated = true;
 
-    $rss->encoding = strtoupper ($_CONF['default_charset']);
+//    $rss->encoding = strtoupper ($_CONF['default_charset']);
 
     $imgurl = '';
 
@@ -383,7 +381,7 @@ function MG_buildFullRSS( ) {
     $rss->description = $_CONF['site_slogan'];
     $rss->descriptionTruncSize = 500;
     $rss->descriptionHtmlSyndicated = true;
-    $rss->encoding = strtoupper ($_CONF['default_charset']);
+//    $rss->encoding = strtoupper ($_CONF['default_charset']);
     $rss->link = $_CONF['site_url'];
     $feedurl = SYND_getFeedUrl ();
     $rss->syndicationURL = $feedurl. $_MG_CONF['rss_feed_name'] . '.rss';

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the admin index page that does nothing more that login you in.   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Joe Mucchiello         joe AT throwingdice DOT com                       |
@@ -73,13 +73,18 @@ function _checkUpgrades()
 * @return   void
 *
 */
-function render_cc_item (&$template, $url = '', $image = '', $label = '')
+function render_cc_item (&$template, $url = '', $image = '', $label = '', $count = 0)
 {
     if (!empty ($url)) {
         $template->set_var ('page_url', $url);
         $template->set_var ('page_image', $image);
         $template->set_var ('option_label', $label);
         $template->set_var ('cell_width', ((int)(100 / ICONS_PER_ROW)) . '%');
+        if ( $count > 0 ) {
+            $template->set_var('count',$count);
+        } else {
+            $template->unset_var('count');
+        }
 
         return $template->parse ('cc_main_options', 'ccitem', false);
     }
@@ -195,6 +200,36 @@ function commandcontrol()
     } else {
         $docUrl = $_CONF['site_url'].'/docs/english/index.html';
     }
+    $modnum = 0;
+
+    if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
+        if ( SEC_hasRights( 'story.moderate' )) {
+            if ( empty( $topicsql )) {
+                $modnum += DB_count( $_TABLES['storysubmission'] );
+            } else {
+                $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
+                $S = DB_fetchArray( $sresult );
+                $modnum += $S['count'];
+            }
+        }
+        if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
+            $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
+            if ( !empty( $topicsql )) {
+                $sql .= ' AND' . $topicsql;
+            }
+            $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
+            $A = DB_fetchArray( $result );
+            $modnum += $A['count'];
+        }
+
+        if ( $_CONF['usersubmission'] == 1 ) {
+            if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
+                $modnum += DB_count( $_TABLES['users'], 'status', '2' );
+            }
+        }
+    }
+    // now handle submissions for plugins
+    $modnum += PLG_getSubmissionCount();
 
     $cc_arr = array(
         array('condition' => SEC_inGroup ('Root'),
@@ -212,14 +247,24 @@ function commandcontrol()
             'lang' => $LANG01[129], 'image' => '/images/icons/configuration.'),
         array('condition' => SEC_isModerator(),
             'url'=>$_CONF['site_admin_url'] . '/moderation.php',
-            'lang' => $LANG01[10], 'image' => '/images/icons/moderation.'),
+            'lang' => $LANG01[10], 'image' => '/images/icons/moderation.',
+            'count' => $modnum
+            ),
     );
 
     for ($i = 0; $i < count ($cc_arr); $i++) {
         if ($cc_arr[$i]['condition']) {
-            $item = render_cc_item ($admin_templates, $cc_arr[$i]['url'],
-                    $_CONF['layout_url'] . $cc_arr[$i]['image'] . $_IMAGE_TYPE,
-                    $cc_arr[$i]['lang']);
+            if ( isset($cc_arr[$i]['count'] ) ) {
+                $count = $cc_arr[$i]['count'];
+            } else {
+                $count = 0;
+            }
+            $item = render_cc_item ($admin_templates,
+                                    $cc_arr[$i]['url'],
+                                    $_CONF['layout_url'] . $cc_arr[$i]['image'] . $_IMAGE_TYPE,
+                                    $cc_arr[$i]['lang'],
+                                    $count
+                                   );
             $items[$cc_arr[$i]['lang']] = $item;
         }
     }

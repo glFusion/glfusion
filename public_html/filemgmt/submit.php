@@ -244,8 +244,8 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         if ($_FILES['newfile']['name'] != '') {
             $name = ($_FILES['newfile']['name']);
             $url = rawurlencode($name);
-            $name = $myts->makeTboxData4Save($name);
-            $url = $myts->makeTboxData4Save($url);
+            $name = DB_escapeString($name);
+            $url = DB_escapeString($url);
         } else {
             $eh->show("1016");
         }
@@ -255,7 +255,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $eh->show("1008");
         }
 
-        $uploadfilename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
+        $uploadfilename = DB_escapeString($_FILES['newfile']['name']);
 
         // Check if file is already on file
         if (DB_COUNT($_TABLES['filemgmt_filedetail'], 'url', $uploadfilename) > 0) {
@@ -270,10 +270,10 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
 
         $AddNewFile = false;    // Set true if fileupload was sucessfull
-        $name = $myts->makeTboxData4Save($name);
-        $title = $myts->makeTboxData4Save($_POST['title']);
-        $homepage = $myts->makeTboxData4Save($_POST['homepage']);
-        $version = $myts->makeTboxData4Save($_POST['version']);
+        $name = DB_escapeString($name);
+        $title = DB_escapeString($_POST['title']);
+        $homepage = DB_escapeString($_POST['homepage']);
+        $version = DB_escapeString($_POST['version']);
         $size = intval($_FILES['newfile']['size']);
         $description = $myts->makeTareaData4Save($_POST['description']);
         $comments = (int) COM_applyFilter($_POST['commentoption'],true);
@@ -343,18 +343,12 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
 
         // Upload New file snapshot image  - but only is file was uploaded ok
-        $uploadfilename = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
-        if ( $uploadfilename != '' AND $AddNewFile ) {
-            $shotname = $uploadfilename;
-            $logourl = rawurlencode($shotname);
-            $shotname = $myts->makeTboxData4Save($shotname);
-            $logourl = $myts->makeTboxData4Save($logourl);
+        $uploadfilename = DB_escapeString($_FILES['newfileshot']['name']);
+        if ( $uploadfilename != '' ) {
             $tmpshotname = randomfilename();
-
             $tmp = $_FILES['newfileshot']['tmp_name'];    // temporary name of file in temporary directory on server
             $pos = strrpos($uploadfilename,'.') + 1;
             $fileExtension = strtolower(substr($uploadfilename, $pos));
-
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
                     COM_errorLOG("AddNewFile - New Upload file snapshot is rejected by config rule:$uploadfilename");
@@ -362,30 +356,42 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
                     $tmpshotname = $tmpshotname . ".$fileExtension";
-
-                    /* Need to also rename the uploaded filename or URL that will be used for the approval name */
-                    /* Grab the filename without extension and add the mapped extension */
+                    // Need to also rename the uploaded filename or URL that will be used for the approval name
+                    // Grab the filename without extension and add the mapped extension
                     $pos = strrpos($logourl,'.') + 1;
                     $logourl = strtolower(substr($logourl, 0,$pos)) . $fileExtension;
                 }
             } else {
                 $tmpshotname = $tmpshotname . ".$fileExtension";
+                $logourl = rawurlencode(DB_escapeString($tmpshotname));
             }
-            // Append the temporary name for the file, using a ; as delimiter. We will be able to store both names in one field
-            $tmpfilename .= ';'.$tmpshotname;
-
-            if (is_uploaded_file ($tmp)) {
-                if ($directUploadAccess) {
-                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_SnapStore}{$tmpshotname}");    // move temporary snapfile to your upload directory
-                } else {
-                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_SnapStore}tmp/{$tmpshotname}");    // move temporary snapfile to your upload directory
+            if ( $uploadfilename != '' AND $AddNewFile ) {
+                $upload = new upload();
+                $upload->setFieldName('newfileshot');
+                $upload->setFileNames($tmpshotname);
+                $upload->setPath($filemgmt_SnapStore);
+                $upload->setAllowAnyMimeType(false);
+                $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                                     'image/jpeg'  => '.jpg,.jpeg',
+                                                     'image/pjpeg' => '.jpg,.jpeg',
+                                                     'image/x-png' => '.png',
+                                                     'image/png'   => '.png'
+                                             )      );
+                $upload->setAutomaticResize (true);
+                if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
+                    $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+                    $upload->setDebug (true);
                 }
-                if (!$returnMove) {
-                    COM_errorLOG("Filemgmt submit error: Temporary file could not be created: ".$tmp." to ".$filemgmt_SnapStore."tmp/".$tmpshotname);
+                $upload->setMaxDimensions (640,480);
+                $upload->setAutomaticResize (true);
+                $upload->setMaxFileSize(100000000);
+                $upload->uploadFiles();
+                if ($upload->areErrors()) {
+                    $errmsg = "Upload Error: " . $upload->printErrors(false);
+                    COM_errorLog($errmsg);
+                    $logourl = '';
                     $AddNewFile = false;    // Set false again - in case it was set true above for actual file
                     $eh->show("1102");
-                } else {
-                    $AddNewFile = true;
                 }
             }
         }
@@ -403,6 +409,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $newid = DB_insertID();
             DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
             if ($directUploadAccess) {
+				PLG_itemSaved($newid,'filemgmt');
                 CACHE_remove_instance('whatsnew');
                 redirect_header("index.php",2,_MD_FILEAPPROVED);
             } else {

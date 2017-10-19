@@ -98,9 +98,11 @@
     <div class="uk-width-medium-2-3">
     	<nav  class="uk-navbar">
     		<div class="uk-navbar-content uk-navbar-flip">
+{!!if {number_stories} > 0 !!}
     			<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
     				{lang_number_stories} {number_stories}
     			</a>
+{!endif}
     		</div>
     		<div class="uk-navbar-content">
     			{headline_last10stories}

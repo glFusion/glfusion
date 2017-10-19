@@ -44,8 +44,6 @@ if (!SEC_inGroup ('Root')) {
     exit;
 }
 
-require_once $_CONF['path'] . 'lib/http/http.php';
-
 $failed_tests = 0;
 
 /**
@@ -210,20 +208,7 @@ function checkInstallDir ()
 
     $retval = '';
 
-    // we don't have the path to the admin directory, so try to figure it out
-    // from $_CONF['site_admin_url']
-    $adminurl = $_CONF['site_admin_url'];
-    if (strrpos ($adminurl, '/') == strlen ($adminurl)) {
-        $adminurl = substr ($adminurl, 0, -1);
-    }
-    $pos = strrpos ($adminurl, '/');
-    if ($pos === false) {
-        // only guessing ...
-        $installdir = $_CONF['path_html'] . 'admin/install';
-    } else {
-        $installdir = $_CONF['path_html'] . substr ($adminurl, $pos + 1)
-                    . '/install';
-    }
+    $installdir = $_CONF['path_admin'].'install';
 
     if (is_dir ($installdir)) {
         $retval .= '<li>You should remove the install directory <b>' . $installdir .'</b> once you have your site up and running without any errors.';

@@ -78,7 +78,7 @@ $LANG01 = array(
     28 => 'מחיקה',
     29 => 'לא נרשמו תגובות',
     30 => 'מאמרים ישנים',
-    31 => 'פקודות HTML מורשות:<br' . XHTML . '>',
+    31 => 'פקודות HTML מורשות:<br>',
     32 => 'הודעת שגיאה, חסר שם משתמש!',
     33 => 'הודעת שגיאה, לא מצליח לכתוב לקובץ log',
     34 => 'שגיאה',
@@ -257,7 +257,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -463,7 +469,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -767,7 +773,7 @@ $LANG20 = array(
     3 => 'הסיסמה לא נכונה למשתמש',
     4 => 'שם משתמש',
     5 => 'סיסמה',
-    6 => 'כל נסיונות הגישה לאיזורים הניהוליים של אתר זה נרשמים ביומן ונבדקים.<br' . XHTML . '>עמוד זה נועד לשימושם של אנשים מאושרים בלבד.',
+    6 => 'כל נסיונות הגישה לאיזורים הניהוליים של אתר זה נרשמים ביומן ונבדקים.<br>עמוד זה נועד לשימושם של אנשים מאושרים בלבד.',
     7 => 'כניסה למערכת',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -821,7 +827,7 @@ $LANG21 = array(
     42 => 'הנכם חייבים להכניס את כותרות קוביות המידע ואת הסדר שלהן בשביל קוביות ברירת המחדל',
     43 => 'דף בית בלבד',
     44 => 'All Except Homepage',
-    45 => "הינכם מנסים לגשת לקוביית מידע שאין לכם אישור לגביה. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_url']}/admin/block.php\">חיזרו לחלון ניהול קוביות המידע</a>.",
+    45 => "הינכם מנסים לגשת לקוביית מידע שאין לכם אישור לגביה. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_admin_url']}/block.php\">חיזרו לחלון ניהול קוביות המידע</a>.",
     46 => 'הזיזו',
     47 => '',
     48 => 'שם קוביה',
@@ -895,8 +901,8 @@ $LANG24 = array(
     38 => 'עוד מ:',
     39 => 'שליחות אימייל',
     40 => '',
-    41 => "הנכם מנסים לגשת למאמר שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. הינכם רשאים לצפות במאמר שלהלן במצב קריאה בלבד. אנא <a href=\"{$_CONF['site_url']}/admin/story.php\">חיזרו לחלון ניהול המאמרים</a> לאחר שתסיימו.",
-    42 => "הינכם מנסים לגשת למאמר שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_url']}/admin/story.php\">חיזרו לחלון ניהול המאמרים</a>.",
+    41 => "הנכם מנסים לגשת למאמר שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. הינכם רשאים לצפות במאמר שלהלן במצב קריאה בלבד. אנא <a href=\"{$_CONF['site_admin_url']}/story.php\">חיזרו לחלון ניהול המאמרים</a> לאחר שתסיימו.",
+    42 => "הינכם מנסים לגשת למאמר שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_admin_url']}/story.php\">חיזרו לחלון ניהול המאמרים</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -905,7 +911,7 @@ $LANG24 = array(
     48 => 'תמונה',
     49 => 'ימין (שמאל במצב שפה RTL)',
     50 => 'שמאל (ימין במצב שפה RTL)',
-    51 => 'כדי להוסיף את אחת מהתמונות שהינכם מצרפים למאמר זה עליכם להכניס טקסט מפורמט באופן מיוחד. הטקסט המפורמט באופן מיוחד הוא [imageX], [imageX_right] או [imageX_left] כאשר X הוא מספר התמונה שצירפתם. *שימו לב:* הינכם חייבים להשתמש בתמונות שצירפתם. אם לא תעשו זאת לא תוכלו לשמור את מאמרכם.<br' . XHTML . '>',
+    51 => 'כדי להוסיף את אחת מהתמונות שהינכם מצרפים למאמר זה עליכם להכניס טקסט מפורמט באופן מיוחד. הטקסט המפורמט באופן מיוחד הוא [imageX], [imageX_right] או [imageX_left] כאשר X הוא מספר התמונה שצירפתם. *שימו לב:* הינכם חייבים להשתמש בתמונות שצירפתם. אם לא תעשו זאת לא תוכלו לשמור את מאמרכם.<br>',
     52 => '',
     53 => 'לא הייתה בשימוש. הנכם חייבים להוסיף את התמונה לטקסט הפתיחה או לטקסט ההמשך לפני שתוכלו לשמור את השינויים שביצעתם.',
     54 => 'לא היה שימוש בתמונות המצורפות',
@@ -978,7 +984,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -997,7 +1005,7 @@ $LANG27 = array(
     10 => 'סדר מיון',
     11 => 'מאמרים/עמוד',
     12 => 'הגישה לא אושרה',
-    13 => "הינכם מנסים לגשת לנושא שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_url']}/admin/topic.php\">חיזרו לחלון ניהול הנושאים</a>.",
+    13 => "הינכם מנסים לגשת לנושא שאין לכם זכויות לגביו. ניסיון זה נרשם ביומן. אנא <a href=\"{$_CONF['site_admin_url']}/topic.php\">חיזרו לחלון ניהול הנושאים</a>.",
     14 => 'שיטת מיון',
     15 => 'לפי הא-ב',
     16 => 'ברירת המחדל היא',
@@ -1041,7 +1049,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1099,7 +1109,7 @@ $LANG28 = array(
     49 => 'קבוצת ניהול',
     50 => 'הפעילו כדי לאפשר סינון של קבוצה זו כקבוצה שמשמשת מנהלים',
     51 => 'ימי שימוש',
-    52 => '<br' . XHTML . '>הערה: "ימי שימוש" הם מספר הימים מאז ההרשמה הראשונית ועד ההתחברות האחרונה.',
+    52 => '<br>הערה: "ימי שימוש" הם מספר הימים מאז ההרשמה הראשונית ועד ההתחברות האחרונה.',
     53 => 'רשום',
     54 => 'ניהול קבוצתי',
     55 => 'פונקציה זו עובדת רק אם הפעלתם את האפשרות \'תיעוד הזדהות אחרונה במערכת\' בפאנל הניהול',
@@ -1217,10 +1227,10 @@ $LANG31 = array(
     14 => 'התעלם מהגדרות משתמש',
     15 => 'אירעה שגיעה במשלוח ההודעה ל: ',
     16 => 'ההודעה נשלחה בהצלחה ל: ',
-    17 => "<a href={$_CONF['site_url']}/admin/mail.php>שילחו הודעה נוספת</a>",
+    17 => "<a href={$_CONF['site_admin_url']}/mail.php>שילחו הודעה נוספת</a>",
     18 => 'עבור',
     19 => '*שימו לב:* אם ברצונכם לשלוח הודעה לכל משתמשי האתר, ביחרו את קבוצת ה-Logged-in Users מתיבת הבחירה.',
-    20 => "<successcount> הודעות נשלחו בהצלחה ונכשלו <failcount>. אם הינכם זקוקים לכך, להלן הפרטים של כל הנסיונות. אם לא, הינכם יכולים <a href=\"{$_CONF['site_url']}/admin/mail.php\">לשלוח הודעה נוספת</a> או <a href=\"{$_CONF['site_url']}/admin/moderation.php\">לחזור למסך הניהול</a>.",
+    20 => "<successcount> הודעות נשלחו בהצלחה ונכשלו <failcount>. אם הינכם זקוקים לכך, להלן הפרטים של כל הנסיונות. אם לא, הינכם יכולים <a href=\"{$_CONF['site_admin_url']}/mail.php\">לשלוח הודעה נוספת</a> או <a href=\"{$_CONF['site_admin_url']}/moderation.php\">לחזור למסך הניהול</a>.",
     21 => 'כשלונות',
     22 => 'הצלחות',
     23 => 'אין כשלונות',
@@ -1245,8 +1255,8 @@ $LANG32 = array(
     6 => 'אזהרה: ה-Plug-in כבר מותקן!',
     7 => 'ה-plug-in שהנכם מנסה להתקין כבר קיים. אנא מיחקו את ה-plugin לפני התקנתו מחדש.',
     8 => 'בדיקת התאמת Plugin נכשלה',
-    9 => 'ה-plugin דורש גירסה חדשה יותר של glFusion. שדרגו את העותק שלכם של <a href="http://www.gllabs.org">glFusion</a> או השיגו גירסה חדשה יותר של ה-plugin.',
-    10 => '<br' . XHTML . '><b>אין plugins מותקנים כרגע.</b><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'ה-plugin דורש גירסה חדשה יותר של glFusion. שדרגו את העותק שלכם של <a href="https://www.glfusion.org">glFusion</a> או השיגו גירסה חדשה יותר של ה-plugin.',
+    10 => '<br><b>אין plugins מותקנים כרגע.</b><br><br>',
     11 => 'כדי לערוך או למחוק plug-in, ליחצו על אייקון העריכה מתחת. זה יראה את פרטי ה-plugin כולל האתר של יוצריו. גם הגירסה המותקנת וגם הגירסה שמוחזרת מקוד ה-plugin מוצגות. זה יעזור לכם לדעת ה-plugin צריך לעבור שידרוג. כדי להתקין או לשדרג plugin אנא עיברו על הדוקומנטציה שלו.',
     12 => 'שום שם של plugin לא ניתן ל-plugineditor()',
     13 => 'עורך Plugins',
@@ -1423,7 +1433,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1506,7 +1517,7 @@ $MESSAGE = array(
     74 => 'הפינג החוזר נשלח בהצלחה.',
     75 => 'הפניות חיבות להישלח בעזרת בקשת POST.',
     76 => 'האם הנכם באמת מעוניינים למחוק פריט זה',
-    77 => 'אזהרה:<br' . XHTML . '>קבעתם את קידוד ברירת המחדל שלכם ל-UTF-8. לעומת זאת, השרת שלכם לא תומך בקידודי multibyte. אנא התקינו את פונקציות ה-mbstring של PHP או ביחרו בקידוד/שפה אחרים.',
+    77 => 'אזהרה:<br>קבעתם את קידוד ברירת המחדל שלכם ל-UTF-8. לעומת זאת, השרת שלכם לא תומך בקידודי multibyte. אנא התקינו את פונקציות ה-mbstring של PHP או ביחרו בקידוד/שפה אחרים.',
     78 => 'אנא ודאו שכתובת האימייל וכתובת אימות האימייל הן זהות.',
     79 => 'העמוד שניסיתם לפתוח מתייחס לפונקציה שכבר לא קיימת באתר זה.',
     80 => 'ה-plugin שיצר הזנה זו כרגע מנוטרל. לא תוכלו לערוך הזנה זו עד שתפעילו מחדש את ה-plugin האחראי.',
@@ -1713,7 +1724,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2045,7 +2056,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'הראה רק בנושא',
-    1 => 'הראה בעמוד הראשי'
+    1 => 'הראה בעמוד הראשי',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2405,6 +2417,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2433,6 +2446,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2572,8 +2588,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'גיבוי',
     'path_data' => 'נתונים',
     'path_images' => 'תמונות',
-    'path_pear' => 'נתיב ל-Pear',
-    'have_pear' => 'יש Pear?',
     'mail_settings' => 'הגדרות דואר',
     'theme' => 'נושא עיצובי',
     'menu_elements' => 'פריטי תפריט',
@@ -2752,7 +2766,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'דילוג על פילטר HTML למנהלים ראשיים?',
     'allowed_protocols' => 'פרוטוקולים מאופשרים',
     'disable_autolinks' => 'ביטול Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'הפעלת צנזורה?',
     'censorreplace' => 'צנזורת החלפת טקסט',
     'censorlist' => 'רשימת צנזורה',
@@ -2830,6 +2843,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2838,7 +2854,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2858,7 +2875,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'נתיבים',
     'fs_theme' => 'נושא עיצובי',
     'fs_mail' => 'דואר',
-    'fs_pear' => 'Pear',
     'fs_users' => 'משתמשים',
     'fs_misc' => 'שונות',
     'fs_spamx' => 'Spam-X',
@@ -2912,7 +2928,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('שטוחות' => 'flat', 'בצורת עץ' => 'nested', 'ללא תגובות' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2932,7 +2948,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

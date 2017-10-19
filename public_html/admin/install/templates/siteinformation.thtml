@@ -1,3 +1,4 @@
+<script type="text/javascript" src="js/pwd_strength.js"></script>
 <form class="uk-form" name="sitedata" id="sitedata" action="index.php" method="post">
 	{hiddenfields}
 	<div class="uk-grid">
@@ -71,6 +72,21 @@
 			</div>
 
 			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_adminuser}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" name="adminuser" value="Admin" disabled="disabled">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">{lang_securepassword}</label>
+				<div class="uk-form-controls">
+					<input class="uk-width-1-1" type="text" id="securepassword" name="securepassword" value="{securepassword}" onkeyup="runPassword(this.value, 'pwd_strength');">
+					<div id="pwd_strength_text" style="font-size:normal;"></div>
+					<div id="pwd_strength_bar" style="display:display;" ></div>
+				</div>
+			</div>
+
+			<div class="uk-form-row">
 				<label class="uk-form-label">{lang_site_name}</label>
 				<div class="uk-form-controls">
 					<input class="uk-width-1-1" type="text" name="sitename" value="{site_name}">
@@ -115,3 +131,9 @@
 
 	</div>
 </form>
+<script>
+	$(document).ready(function() {
+		var securePwd = $('#securepassword').val();
+		runPassword(securePwd, 'pwd_strength');
+	});
+</script>

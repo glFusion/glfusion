@@ -1,0 +1,23 @@
+{
+    "name": "aziraphale/email-address-validator",
+    "version": "2.0.0",
+    "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
+    "homepage": "https://github.com/aziraphale/email-address-validator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dave Child",
+            "email": "dave@addedbytes.com"
+        },
+        {
+            "name": "Andrew Gillard",
+            "email": "andrew@lorddeath.net"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "EmailAddressValidator": ""
+        }
+    }
+}

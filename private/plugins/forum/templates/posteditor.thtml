@@ -102,17 +102,22 @@
 
 						<label class="uk-form-label" for="name">{LANG_NAME}</label>
 						<div class="uk-form-controls">
-							<input type="text" id="name" name="name" value="{name}" maxlength="50" tabindex="1">
-							<div class="uk-form-help-block uk-margin-small-left">
-						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="name-count" class="uk-text-muted uk-text-small"></span></span>
-</div>
+							<div class="uk-grid">
+								<div class="uk-width-medium-1-2">
+									<input type="text" id="name" name="name" value="{name}" maxlength="50" tabindex="1">
+									<div class="uk-form-help-block uk-margin-small-left">
+										<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="name-count" class="uk-text-muted uk-text-small"></span></span>
+									</div>
+								</div>
 {!if LANG_MOOD}
-							<div class="uk-form-controls uk-align-right">
-								<span class="uk-text-bold">{LANG_MOOD}</span>
+							<div class="uk-width-medium-1-2">
+							<div class="uk-align-right">
+								{LANG_MOOD}
 								<select  id="mood" name="mood">{moodoptions}</select>
 							</div>
+							</div>
 {!endif}
-
+						</div>
 						</div>
 					</div>
 {!endif}
@@ -424,17 +429,18 @@ $(document).ready(function() {
 	$('#comment').keyup(function() {
 		lastActivity = new Date().getTime();
 	});
+});
+$(function(){
+{!if anonymous_user}
+	$("#name").characterCounter({
+		limit: '50',
+		counterSelector: '#name-count'
 	});
-	$(function(){
-            {!if anonymous_user}
-            $("#name").characterCounter({
-            limit: '50',
-            counterSelector: '#name-count'
-            });{!endif}
-            $("#subject").characterCounter({
-			limit: '100',
-			counterSelector: '#subject-count'
-		});
+{!endif}
+	$("#subject").characterCounter({
+		limit: '100',
+		counterSelector: '#subject-count'
+	});
 });
 </script>
 <script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>

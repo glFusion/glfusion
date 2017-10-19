@@ -49,6 +49,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => '返回頂部',
     'calendar' => '載入日曆插件？',
     'calendar_desc' => '線上日曆/提醒系統，包括全站日曆和用戶日曆。',
@@ -96,7 +97,7 @@ $LANG_INSTALL = array(
     'mbstring_support' => 'It is recommended that you have the multi-byte string extension loaded (enabled). Without multi-byte string support, some features will be automatically disabled. Specifically, the File Browser in the story WYSIWYG editor will not work.',
     'mediagallery' => '載入多媒體管理插件？',
     'mediagallery_desc' => '<br />一個多媒體管理系統，不僅可以配置成一個簡單的相冊，還能支援音樂和電影。',
-    'memory_limit' => '推薦您至少有48M的記憶體來運行您的網站。',
+    'memory_limit' => '推薦您至少有64M的記憶體來運行您的網站。',
     'missing_db_fields' => '請將所有必填的資料庫欄位填寫完整。',
     'new_install' => '全新安裝',
     'next' => '下一步',
@@ -117,7 +118,7 @@ $LANG_INSTALL = array(
     'path_prompt' => '指向private/目錄的路徑',
     'path_settings' => '路徑設置',
     'perform_upgrade' => '執行升級',
-    'php_req_version' => 'glFusion要求PHP版本不低於5.3.0.',
+    'php_req_version' => 'glFusion要求PHP版本不低於5.3.3.',
     'php_settings' => 'PHP配置',
     'php_version' => 'PHP版本',
     'php_warning' => '如果下面有任何一處被標記為<span class="no">紅色</span>，您的glFusion網站就可能遇到問題。請聯繫您的伺服器提供商來改變這些PHP配置項。',
@@ -136,6 +137,8 @@ $LANG_INSTALL = array(
     'select_task' => '選擇任務',
     'session_error' => '您的會話已超時。請重新開始安裝過程。',
     'setting' => '設置',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => '管理員URL',
     'site_admin_url_error' => '管理員URL不能為空。',
     'site_email' => '管理員信箱',
@@ -179,7 +182,7 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade' => 'Upgrade',
     'support_resources' => 'Support Resources',
     'plugins' => 'glFusion Plugins',
@@ -230,6 +233,7 @@ $LANG_INSTALL = array(
     'ext_good' => 'properly installed.',
     'ext_heading' => 'PHP Extensions',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'date_extension' => 'Date Extension',
     'filter_extension' => 'Filter Extension',
     'gd_extension' => 'GD Graphics Extension',
@@ -243,7 +247,9 @@ $LANG_INSTALL = array(
     'xml_extension' => 'XML Extension',
     'zlib_extension' => 'zlib Extension',
     'required_php_ext' => 'Required PHP Extensions',
-    'all_ext_present' => 'All required and optional PHP extensions are properly installed.'
+    'all_ext_present' => 'All required and optional PHP extensions are properly installed.',
+    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
 );
 
 // +---------------------------------------------------------------------------+
@@ -271,7 +277,20 @@ $LANG_SUCCESS = array(
     18 => '的許可權設置成',
     19 => '<strong>注意:</strong> 因為安全模式已改變, 我們已建立了新的帳戶讓你管理你的新網站.  這個新的帳戶名是 <b>NewAdmin</b> 和密碼是 <b>password</b>',
     20 => '安裝',
-    21 => '升級'
+    21 => '升級',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel'
 );
 
 ?>

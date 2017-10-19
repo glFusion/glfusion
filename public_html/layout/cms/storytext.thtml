@@ -1,150 +1,209 @@
 {# begin {templatelocation} #}
+
+{!if breadcrumbs}
+	<ul class="uk-breadcrumb">
+		<li><a href="{site_url}">{$LANG01[68]}</a></li>
+		<li ><a href="{story_topic_url}" title="{story_topic_description_text}">{story_topic_name}</a></li>
+	{!if story_alternate_topic_name}
+		<li ><a href="{alt_story_topic_url}" title="{story_alternate_topic_description}">{story_alternate_topic_name}</a></li>
+	{!endif}
+	</ul>
+{!endif}
+
 <div class="infinite-item">
 {!!if {story_display} == 'article' !!}
-	<article class="uk-article tm-article uk-margin-small-bottom">
+	<article class="uk-article tm-article uk-margin-small-bottom" itemscope itemtype="https://schema.org/CreativeWork">
 {!else}
-	<article class="uk-article tm-article uk-margin-large-bottom">
+		<article class="uk-article tm-article uk-margin-large-bottom" itemscope itemtype="https://schema.org/CreativeWork">
 {!endif}
-		<header>
-			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove">{story_title_link}</h1>
+			<header>
+				<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove" itemprop="headline">{story_title_link}</h1>
 {!if story_subtitle}
-  {!if story_url}
-			<a href="{story_url}">
-  {!endif}
-				<h4 class="uk-margin-top-remove">
-					<span class="tm-italic">{story_subtitle}</span>
-				</h4>
-  {!if story_url}
-			</a>
-  {!endif}
-{!endif}
-{!if story_image}
 	{!if story_url}
-			<a href="{story_url}">
+				<a itemprop="itemid" href="{story_url}">
 	{!endif}
-				<div class="uk-margin-bottom">
-					<img class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
-				</div>
+					<h4 class="uk-margin-top-remove">
+						<span class="tm-italic">{story_subtitle}</span>
+					</h4>
 	{!if story_url}
-			</a>
+				</a>
 	{!endif}
 {!endif}
-				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
+
+{# begin story image / video #}
+{!!if {story_display} == 'article' !!}
+	{!if story_video}
+				<video class="uk-responsive-width uk-margin-bottom" controls="controls" preload="auto"
+		{!if story_image}
+					poster="{story_image}"
+		{!endif}
+		{!if autoplay}
+					autoplay="{autoplay}"
+		{!endif}
+					>
+					<source type="video/mp4" src="{story_video}"/>
+					<!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+					<object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+						<param name="movie" value="{player_url}flashmediaelement.swf" />
+						<param name="flashvars" value="controls=true&file={story_video}" />
+						<!-- Image as a last resort -->
+						<img src="{story_image}" width="320" height="160" title="No video playback capabilities" />
+					</object>
+				</video>
+	{!else}
+		{!if story_image}
+			{!if story_url}
+					<a itemprop="itemid" href="{story_url}">
+			{!endif}
+						<div class="uk-margin-bottom" >
+							<img itemprop="image" class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}">
+						</div>
+			{!if story_url}
+					</a>
+			{!endif}
+		{!endif}
+	{!endif}
+{!else}
+	{!if story_image}
+		{!if story_url}
+					<a itemprop="itemid" href="{story_url}">
+		{!endif}
+						<div class="uk-margin-bottom">
+							<img itemprop="image" class="uk-thumbnail uk-thumbnail-expand" alt="" src="{story_image}" />
+						</div>
+		{!if story_url}
+					</a>
+		{!endif}
+	{!endif}
+{!endif}
+{# end of story video / image #}
+
+					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
- {!if attribution_author}
- 				<li>{lang_by} {attribution_author}</li>
- {!else}
-					<li>{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</li>
- {!endif}
+	{!if attribution_author}
+						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{attribution_author}</span></span></li>
+	{!else}
+						<li>
+							{lang_by} {start_contributedby_anchortag}<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{contributedby_author}</span></span>{end_contributedby_anchortag}
+						</li>
+	{!endif}
 {!endif}
 {!if story_date}
-					<li>{story_date}</li>
+						<li itemprop="datePublished" content="{iso8601_date}">{story_date}</li>
 {!endif}
 {!if lang_views}
-        <li>{lang_views} {story_hits}</li>
+						<li>{lang_views} {story_hits}</li>
 {!endif}
-					<li>
-						{lang_posted_in} <a href="{story_topic_url}">{story_topic_name}</a>
+						<li>
+							{lang_posted_in} <a href="{story_topic_url}" title="{story_topic_description_text}">{story_topic_name}</a>
 {!if story_alternate_topic_name}
-						, <a href="{alt_story_topic_url}">{story_alternate_topic_name}</a>
+							, <a href="{alt_story_topic_url}" title="{story_alternate_topic_description}">{story_alternate_topic_name}</a>
 {!endif}
-					</li>
+						</li>
 {!if comments_url}
-					<li><a class="uk-text" href="{comments_url}#comments" {comments_url_extra}>{comments_count}</a></li>
+						<li><a class="uk-text" href="{comments_url}#comments" {comments_url_extra}>{comments_count}</a></li>
 {!endif}
-				</ul>
-				<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
+{!if trackbacks_url}
+						<li><a class="uk-text" href="{trackbacks_url}">{trackbacks_text}</a></li>
+{!endif}
+					</ul>
+					<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
-					<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope"></a></li>
+						<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope" rel="nofollow"></a></li>
 {!endif}
 {!if print_story_url}
-					<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print"></a></li>
+						<li><a href="{print_story_url}" target="_blank" rel="nofollow" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
-					<li><a href="{edit_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-edit"></a></li>
+						<li><a href="{edit_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-edit"></a></li>
 {!endif}
 {!if plugin_meta_vars}
-					{plugin_meta_vars}
+						{plugin_meta_vars}
 {!endif}
 
-					{plugin_icon_vars}
+						{plugin_icon_vars}
 
 {!if feed_icon}
-					<li><a href="{feed_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-rss"></a></li>
+						<li><a href="{feed_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-rss"></a></li>
 {!endif}
-				</ul>
+					</ul>
 
-			<div class="uk-clearfix"></div>
+					<div class="uk-clearfix"></div>
 
-<hr>
+					<hr>
 
-		</header>
+				</header>
 
-		<div class="uk-clearfix"></div>
+				<div class="uk-clearfix"></div>
 
 {!if story_topic_image_url}
-		<a href="{topic_url}">
-			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
-		</a>
+				<a href="{topic_url}">
+					<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
+				</a>
 {!endif}
-		{story_text_no_br}
+				<span itemprop="description">
+					{story_introtext_only}
+{!if adblock_content}
+					<div class="uk-panel uk-text-center">
+						{adblock_content}
+					</div>
+{!endif}
+					{story_bodytext_only}
+				</span>
 
 {!if plugin_body_vars}
-		{plugin_body_vars}
+				{plugin_body_vars}
 {!endif}
 
 {!if readmore_url}
-		<p class="tm-article-links">
-			<a class="uk-text" href="{readmore_url}">{lang_continue_reading} <i class="uk-icon-angle-double-right"></i></a>
-		</p>
+				<p class="tm-article-links">
+					<a class="uk-text" href="{readmore_url}">{lang_continue_reading} <i class="uk-icon-angle-double-right"></i></a>
+				</p>
 {!endif}
 
-<div class="uk-clearfix"></div>
+				<div class="uk-clearfix"></div>
+
+{!if adblock}
+				<div class="uk-text-center">{adblock}</div>
+{!endif}
 
 {!!if {story_display} == 'article' !!}
 
-  {!if attribution_url}
-	<div class="uk-panel uk-margin">
-		<span class="uk-badge uk-badge-success uk-text-medium">{lang_source}</span>&nbsp;
-		<span class=""><a href="{attribution_url}" target="_blank">{attribution_name}</a></span>
-	</div>
-  {!endif}
-
-	{!if author_about}
-		<hr>
-		<article class="uk-comment tm-about-author uk-margin-small">
-			<header class="uk-comment-header tm-about-author-header uk-margin-top">
-				<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
-				<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
-				<div class="tm-about-author-bio">
-					{author_about}
-					<div class="uk-container uk-container-center uk-text-center">
-					{follow_me}
-				  </div>
+	{!if attribution_url}
+				<div class="uk-panel uk-margin">
+					<span class="uk-badge uk-badge-success uk-text-medium">{lang_source}</span>&nbsp;
+					<span class=""><a href="{attribution_url}" target="_blank">{attribution_name}</a></span>
 				</div>
-			</header>
-		</article>
 	{!endif}
 
+	{!if author_about}
+				<hr>
+				<article class="uk-comment tm-about-author uk-margin-small">
+					<header class="uk-comment-header tm-about-author-header uk-margin-top">
+						<img class="uk-comment-avatar tm-about-author-avatar uk-hidden-small" src="{author_photo_raw}" width="50" height="50" alt="">
+						<h4 class="uk-comment-title tm-about-author-title">{lang_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</h4>
+						<div class="tm-about-author-bio">
+							{author_about}
+							<div class="uk-container uk-container-center uk-text-center">
+								{follow_me}
+							</div>
+						</div>
+					</header>
+				</article>
+	{!endif}
 {!endif}
-
-		<div class="uk-clearfix"></div>
-
+				<div class="uk-clearfix"></div>
 {!if rating_bar}
-		{rating_bar}
+				{rating_bar}
 {!endif}
-
-		<div class="tm-article-footer">
+				<div class="tm-article-footer">
 {!if page_selector}
-			<p>{page_selector}</p>
-{!endif}
-{!if trackbacks_count}
-			{trackbacks_with_count}
+					<p>{page_selector}</p>
 {!endif}
 {!if plugin_footer_vars}
-			<div>{plugin_footer_vars}</div>
+					<div>{plugin_footer_vars}</div>
 {!endif}
+				</div>
+			</article>
 		</div>
-	</article>
-</div>
 {# end {templatelocation} #}

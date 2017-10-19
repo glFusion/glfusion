@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Administrative Functions                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,7 +39,6 @@ include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
-USES_class_navbar() ;
 USES_lib_admin();
 
 $op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
@@ -60,21 +59,47 @@ function filemgmt_navbar($selected='') {
     global $_CONF,$LANG_FM02,$_TABLES, $LANG_ADMIN,$LANG_FILEMGMT;
 
     $retval = '';
+    $selected_addfile = 0;
+    $selected_category = 0;
+    $selected_listbroken = 0;
+    $selected_listnewdownloads = 0;
+    $selected_main = 0;
+    $selected_modcat = 0;
+    switch($selected) {
+        case 'listnewdownloads' :
+            $selected_listnewdownloads = 1;
+            break;
+        case 'category' :
+            $selected_category = 1;
+            break;
+        case 'addfile' :
+            $selected_addfile = 1;
+            break;
+        case 'listbroken' :
+            $selected_listbroken = 1;
+            break;
+        case 'modcat' :
+            $selected_modcat = 1;
+            break;
+        default :
+            $selected_main = 1;
+            break;
+    }
 
     $totalnewdownloads = DB_count($_TABLES['filemgmt_filedetail'],'status',0);
     $totalbrokendownloads = DB_count($_TABLES['filemgmt_brokenlinks']);
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php',
-              'text' => $LANG_FILEMGMT['Filelisting']),
+              'text' => $LANG_FILEMGMT['Filelisting'],'active'=>$selected_main),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=categoryConfigAdmin',
-              'text' => $LANG_FM02['nav2']),
+              'text' => $LANG_FM02['nav2'],'active'=>$selected_category),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=newfileConfigAdmin',
-              'text' => $LANG_FM02['nav3']),
+              'text' => $LANG_FM02['nav3'],'active'=>$selected_addfile),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=listNewDownloads',
-              'text' => sprintf($LANG_FM02['nav4'],$totalnewdownloads)),
+              'text' => sprintf($LANG_FM02['nav4'],$totalnewdownloads),'active'=>$selected_listnewdownloads),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=listBrokenDownloads',
-              'text' => sprintf($LANG_FM02['nav5'],$totalbrokendownloads)),
+              'text' => sprintf($LANG_FM02['nav5'],$totalbrokendownloads),'active'=>$selected_listbroken),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -88,7 +113,6 @@ function filemgmt_navbar($selected='') {
     $retval .= '<br />';
 
     return $retval;
-
 }
 
 $myts = new MyTextSanitizer;
@@ -237,7 +261,7 @@ function listNewDownloads(){
     $numrows = DB_numRows($result);
     $display = COM_siteHeader('menu');
 //    $display .= COM_startBlock('<b>'._MD_ADMINTITLE.'</b>');
-    $display .= filemgmt_navbar($LANG_FM02['nav4']);
+    $display .= filemgmt_navbar('listnewdownloads');
 
     $i = 1;
     if ($numrows > 0) {
@@ -336,7 +360,7 @@ function categoryConfigAdmin(){
 
     $display = COM_siteHeader('menu');
 //    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
-    $display .= filemgmt_navbar($LANG_FM02['nav2']);
+    $display .= filemgmt_navbar('category');
     $display .= '<!-- Begin Category -->';
     $display .= '<!-- Add MAIN Category-->';
     $display .= '<table class="uk-width-1-1" cellpadding="0" cellspacing="0"><tr><td class="uk-width-1-1">';
@@ -406,7 +430,7 @@ function newfileConfigAdmin(){
     }
 
     $display = COM_siteHeader('menu');
-    $display .= filemgmt_navbar($LANG_FM02['nav3']);
+    $display .= filemgmt_navbar('addfile');
     $display .= '<!--begin File Management Administration -->';
     $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
     $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
@@ -629,7 +653,7 @@ function listBrokenDownloads() {
     $totalbrokendownloads = DB_numRows($result);
 
     $display = COM_siteHeader('menu');
-    $display .= filemgmt_navbar($LANG_FM02['nav5']);
+    $display .= filemgmt_navbar('listbroken');
 
     if ($totalbrokendownloads==0) {
         $display .= '<div style="padding:20px">' . _MD_NOBROKEN . '</div>';
@@ -739,7 +763,6 @@ function modDownloadS() {
     $newfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
 
     if ( $newfile != '' ) {
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
         $upload->setFieldName('newfile');
         $upload->setPath($filemgmt_FileStore);
@@ -796,7 +819,6 @@ function modDownloadS() {
     $newsnapfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfileshot']['name']));
 
     if ( $newsnapfile != '' ) {
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
         $upload->setFieldName('newfileshot');
         $upload->setPath($filemgmt_SnapStore);
@@ -903,7 +925,7 @@ function modCat() {
     $cid = COM_applyFilter($_POST["cid"]);
     $display = COM_siteHeader('menu');
 //    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
-    $display .= filemgmt_navbar($LANG_FM02['nav2']);
+    $display .= filemgmt_navbar('modcat');
     $display .= '<form class="uk-form" action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
     $display .= '<input type="hidden" name="op" value="modCatS">';
     $display .= '<input type="hidden" name="cid" value="'.$cid.'">';
@@ -984,8 +1006,6 @@ function modCatS() {
         $write_access = 2;  // All Users Group
     }
     if ($_FILES['imgurl']['name']!='') {
-
-        require_once $_CONF['path_system'] . 'classes/upload.class.php';
 
         $upload = new upload();
 
@@ -1134,7 +1154,6 @@ function addCat() {
             $tmp  = $_FILES["uploadfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $imgurl = rawurlencode($myts->makeTboxData4Save($name));
 
-            require_once $_CONF['path_system'] . 'classes/upload.class.php';
             $upload = new upload();
 
             $upload->setAutomaticResize (true);
@@ -1227,7 +1246,6 @@ function addDownload() {
     $snapfilename = '';// = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
     $logourl = '';//$myts->makeTboxData4Save(rawurlencode($snapfilename));
 
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
     $upload = new upload();
     $upload->setFieldName('newfile');
     $upload->setPath($filemgmt_FileStore);

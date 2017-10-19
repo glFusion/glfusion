@@ -6,7 +6,7 @@
 // |                                                                          |
 // | batch process management                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -805,7 +805,6 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
                 require_once $_CONF['path_system'] . 'lib-story.php';
-                require_once $_CONF['path_system'] . 'classes/story.class.php';
 
                 $album_id = $row['aid'];
                 $srcFile  = $row['data'];

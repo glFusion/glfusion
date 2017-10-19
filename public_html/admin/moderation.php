@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion main administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -36,6 +36,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
+require_once 'auth.inc.php';
 
 $display = '';
 if (!SEC_isModerator()) {
@@ -76,7 +77,7 @@ function MODERATE_ismoderator_user()
 }
 
 /**
-* Returns the number of user submissions
+* Returns the number of story submissions
 *
 * Similar to plugin_submissioncount_{plugin} for object type = draftstory
 *
@@ -193,6 +194,14 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
+        case 'preview' :
+            $retval = '
+                <a href="#cmtpreview'.$A['cid'].'" rel="modal:open">'.$LANG_ADMIN['preview'].'</a>
+                <div id="cmtpreview'.$A['cid'].'" style="display:none;">
+                '.$fieldvalue.'
+                </div>';
+            break;
+
         default:
             $retval = COM_makeClickableLinks($fieldvalue);
             break;
@@ -262,7 +271,7 @@ function MODERATE_item($action='', $type='', $id='')
                 default:
                     // plugin
                     $retval .= PLG_deleteSubmission($type, $id);
-                    DB_delete($submissiontable,"$key",$id);
+                    if ( $submissiontable != '' ) DB_delete($submissiontable,"$key",$id);
                     break;
             }
 
@@ -324,7 +333,7 @@ function MODERATE_item($action='', $type='', $id='')
 
                 default:
                     // plugin
-                    DB_copy($table,$fields,$fields,$submissiontable,$key,$id);
+                    if ( $submissiontable != '' ) DB_copy($table,$fields,$fields,$submissiontable,$key,$id);
                     $retval .= PLG_approveSubmission($type,$id);
                     break;
             }
@@ -569,7 +578,7 @@ function MODERATE_itemList($type='', $token)
                     $result = DB_query($sql, 1);
                 }
 
-                if (empty($sql) || DB_error()) {
+                if (empty($sql) || DB_error($sql)) {
                     $nrows = 0; // more than likely a plugin that doesn't need moderation
                 } else {
                     $nrows = DB_numRows($result);
@@ -657,6 +666,10 @@ function MODERATE_itemList($type='', $token)
 function MODERATE_submissions()
 {
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    $output = outputHandler::getInstance();
+    $output->addLinkScript($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.min.js');
+    $output->addLinkStyle($_CONF['site_url'].'/javascript/addons/modal/jquery.modal.css');
 
     $pageContent = '';
     $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));

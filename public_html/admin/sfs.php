@@ -34,7 +34,6 @@ require_once 'auth.inc.php';
 //define('DVLP_VERSION', 'Y');
 
 USES_lib_admin();
-require_once $_CONF['path'] . 'lib/http/http.php';
 
 // MAIN
 if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {

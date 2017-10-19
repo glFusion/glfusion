@@ -36,9 +36,9 @@
 				<header>
 					<h4 class="uk-margin-remove" style="font-weight:700;">
 {!if titlelink}
-						<a href="{url}">
+						<a href="{url}" itemprop="url">
 {!endif}
-							{title}
+							<span itemprop="headline">{title}</span>
 {!if subtitle}
 							<h3>{subtitle}</h3>
 {!endif}
@@ -48,8 +48,8 @@
 					</h4>
 {!if meta}
 					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-top-remove uk-margin-bottom">
-						<li>{lang_by} {author}</li>
-						<li><time datetime="{time}">{date}</time></li>
+						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{author}</span></span></li>
+						<li itemprop="datePublished"><time datetime="{time}">{date}</time></li>
 						<li>{lang_posted_in} <a href="{story_topic_url}">{topic}</a></li>
 {!if comments_url}
 						<li><a class="uk-text" href="{comments_url}" {comments_url_extra}>{comments_count}</a></li>
@@ -58,7 +58,7 @@
 {!endif}
 				</header>
 				<div class="uk-clearfix"></div>
-				{text}
+				<span itemprop="description">{text}</span>
 {!if readmore_url}
 				<br><a class="uk-text" href="{readmore_url}">{lang_readmore} <i class="uk-icon-angle-double-right"></i></a>
 {!endif}

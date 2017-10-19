@@ -49,6 +49,7 @@ $LANG_CHARSET = 'utf-8';
 // install.php
 
 $LANG_INSTALL = array(
+    'adminuser' => 'Admin Username',
     'back_to_top' => 'Ir arriba',
     'calendar' => '¿Cargar la extensión de calendario?',
     'calendar_desc' => 'Un calendario en línea / sistema de eventos. Incluye un calendario para sitios anchos y calendario personal para los usuarios.',
@@ -117,7 +118,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Ruta al directorio private/ ',
     'path_settings' => 'Configuraciones de la ruta',
     'perform_upgrade' => 'Realizar actualización',
-    'php_req_version' => 'glFusion requiere PHP en su versión 5.3.0 o superior.',
+    'php_req_version' => 'glFusion requiere PHP en su versión 5.3.3 o superior.',
     'php_settings' => 'Configuraciones de PHP',
     'php_version' => 'Versión de PHP',
     'php_warning' => 'Si alguno de los objetos en listados a continuación, aparecen marcados en color <span class="no">rojo</span>, significa que encontrarás problemas con tu sitio glFusion. Verifique con su proveedor de Alojamiento acerca de cómo cambiar alguna de las configuraciones de PHP.',
@@ -136,6 +137,8 @@ $LANG_INSTALL = array(
     'select_task' => 'Seleccione la tarea',
     'session_error' => 'Su sesión ha expirado. Por favor reinicie el proceso de instalación.',
     'setting' => 'Configuraciones',
+    'securepassword' => 'Admin Password',
+    'securepassword_error' => 'Admin Password cannot be blank',
     'site_admin_url' => 'URL de Administración del sitio',
     'site_admin_url_error' => 'La URL de Administración del sitio no puede estar en blanco.',
     'site_email' => 'Correo electrónico del sitio',
@@ -179,7 +182,7 @@ $LANG_INSTALL = array(
     'version_check' => 'Check For Updates',
     'check_for_updates' => "Goto the <a href=\"{$_CONF['site_admin_url']}/vercheck.php\">Upgrade Checker</a> to see if there are any glFusion CMS or Plugin updates available.",
     'quick_start' => 'glFusion Quick Start Guide',
-    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
+    'quick_start_help' => 'Please review  the <a href="https://www.glfusion.org/wiki/glfusion:quickstart" target="_blank">glFusion CMS Quick Start Guide</a> and the full <a href="https://www.glfusion.org/wiki/" target="_blank">glFusion CMS Documentation</a> site for details on configurating your new glFusion site.',
     'upgrade' => 'Upgrade',
     'support_resources' => 'Support Resources',
     'plugins' => 'glFusion Plugins',
@@ -230,6 +233,7 @@ $LANG_INSTALL = array(
     'ext_good' => 'properly installed.',
     'ext_heading' => 'PHP Extensions',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'date_extension' => 'Date Extension',
     'filter_extension' => 'Filter Extension',
     'gd_extension' => 'GD Graphics Extension',
@@ -243,7 +247,9 @@ $LANG_INSTALL = array(
     'xml_extension' => 'XML Extension',
     'zlib_extension' => 'zlib Extension',
     'required_php_ext' => 'Required PHP Extensions',
-    'all_ext_present' => 'All required and optional PHP extensions are properly installed.'
+    'all_ext_present' => 'All required and optional PHP extensions are properly installed.',
+    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
 );
 
 // +---------------------------------------------------------------------------+
@@ -271,7 +277,20 @@ $LANG_SUCCESS = array(
     18 => 'retroceder',
     19 => '<strong>Nota:</strong> Debido a que el modelo de seguridad ha cambiado, hemos creado una nueva cuenta con los privilegios necesarios para que usted administre su nuevo sitio. El nombre de usuario para esta nueva cuenta es <b>NuevoAdministrador/b> y la contraseña es <b>contraseña</b>',
     20 => 'instalado',
-    21 => 'actualizado'
+    21 => 'actualizado',
+    22 => 'Remove Installation Directory',
+    23 => 'It is important to either remove or rename the install/ directory on your site. Leaving the installation files in place is a security issue. Please select the <strong>Remove Install Files</strong> button to automatically remove all the Installation files. If you choose to not remove the installation files - please manually rename the <strong>admin/install/</strong> directory to something that is not easily guessed.',
+    24 => 'Remove Install Files',
+    25 => 'What\'s New',
+    26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
+    27 => 'Goto Your Site',
+    28 => 'Installation Files Removed',
+    29 => 'Error Removing Files',
+    30 => 'Error Removing Installations Files - Please remove them manually.',
+    31 => 'Please make a record of the password above - you must have it to log into your new site.',
+    32 => 'Did you make note of your password?',
+    33 => 'Continue to Site',
+    34 => 'Cancel'
 );
 
 ?>

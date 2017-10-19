@@ -50,12 +50,6 @@ define('DISABLE_BBCODE',1);
 define('DISABLE_SMILIES',2);
 define('DISABLE_URLPARSE',4);
 
-USES_lib_html2text();
-
-if (!class_exists('StringParser') ) {
-    require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
-}
-
 function convertlinebreaks ($text) {
     return preg_replace ("/\015\012|\015|\012/", "\n", $text);
 }
@@ -77,6 +71,7 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
         return true;
     }
 
+	$retval = '';
     $url = '';
     $linktext = '';
     $target = '';
@@ -98,10 +93,11 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
 
     if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
-        $target = ' target="_blank" ';
+        $target = ' target="_blank" rel="noopener noreferrer" ';
     }
-
-    return '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
+	$url = COM_sanitizeUrl( $url );
+    $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
+	return $retval;
 }
 
 function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {
@@ -109,15 +105,15 @@ function do_bbcode_list ($action, $attributes, $content, $params, $node_object) 
         return true;
     }
     if (!isset ($attributes['default'])) {
-        return '</p><ul>'.$content.'</ul><p>';
+        return '<ul>'.$content.'</ul>';
     } else {
         if ( is_numeric($attributes['default']) ) {
             return '<ol>'.$content.'</ol>';
         } else {
-            return '</p><ul>'.$content.'</ul><p>';
+            return '<ul>'.$content.'</ul>';
         }
     }
-    return '</p><ul>'.$content.'</ul><p>';
+    return '<ul>'.$content.'</ul>';
 }
 
 function do_bbcode_file ($action, $attributes, $content, $params, $node_object) {
@@ -261,7 +257,6 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
     if ( $action == 'validate') {
         return true;
     }
-
     if ($_FF_CONF['use_geshi']) {
         /* Support for formatting various code types : [code=java] for example */
         if (!isset ($attributes['default'])) {
@@ -307,7 +302,7 @@ function bbcode_cleanHTML($str) {
 }
 
 /* for display */
-function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
+function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query = '') {
     global $_CONF, $_FF_CONF, $_ff_pm;
 
     $bbcode = new StringParser_BBCode ();
@@ -322,16 +317,23 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
         $_ff_pm = 'html';
     }
     $filter->setPostmode($postmode);
+
     if ( $postmode == 'text') {
         // filter all code prior to replacements
         $bbcode->addFilter(STRINGPARSER_FILTER_PRE, 'bbcode_htmlspecialchars');
     }
+    $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_fixmarkup');
     if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
         $str = str_replace('<pre>','[code]',$str);
         $str = str_replace('</pre>','[/code]',$str);
     }
     if ( $postmode != 'html' && $postmode != 'HTML') {
-        $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
+        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_nl2br');
+    }
+
+    if ( $query != '' ) {
+        $filter->query = $query;
+        $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
     }
 
     if ( ! ($status & DISABLE_SMILIES ) ) {
@@ -345,8 +347,8 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
 
     if ( ! ( $status & DISABLE_BBCODE ) ) {
         $bbcode->addParser ('list', 'bbcode_stripcontents');
-        $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
-                          'code', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('code', 'usecontent?', 'do_bbcode_code', array ('usecontent_param' => 'default'),
+                          'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
 
         $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
                           'inline', array ('listitem', 'block', 'inline', 'link'), array ());
@@ -395,6 +397,21 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     return $str;
 }
 
+function _ff_nl2br($str) {
+    $str = str_replace(array("\r\n", "\r", "\n"), "<br>", $str);
+    return $str;
+}
+
+function _ff_fixmarkup($str) {
+    $str = str_replace(array("[/list]\r\n", "[/list]\r", "[/list]\n","[/list] \r\n", "[/list] \r", "[/list] \n"), "[/list]", $str);
+    $str = str_replace(array("[/code]\r\n", "[/code]\r", "[/code]\n","[/code] \r\n", "[/code] \r", "[/code] \n"), "[/code]", $str);
+    $str = str_replace(array("[quote]\r\n", "[quote]\r", "[quote]\n","[quote] \r\n", "[quote] \r", "[quote] \n"), "[quote]", $str);
+    $str = str_replace(array("[/quote]\r\n", "[/quote]\r", "[/quote]\n","[/quote] \r\n", "[/quote] \r", "[/quote] \n"), "[/quote]", $str);
+    $str = str_replace(array("[QUOTE]\r\n", "[QUOTE]\r", "[QUOTE]\n","[QUOTE] \r\n", "[QUOTE] \r", "[QUOTE] \n"), "[QUOTE]", $str);
+    $str = str_replace(array("[/QUOTE]\r\n", "[/QUOTE]\r", "[/QUOTE]\n","[/QUOTE] \r\n", "[/QUOTE] \r", "[/QUOTE] \n"), "[/QUOTE]", $str);
+
+    return $str;
+}
 
 
 function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
@@ -407,7 +424,12 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
     $sig    = '';
 
     if ( $_FF_CONF['bbcode_signature'] && $signature != '') {
-        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text').'</div><div style="clear:both;"></div>';
+        if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+            $exclude = array('img');
+        } else {
+            $exclude = array();
+        }
+        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text',array(),array(), $exclude).'</div><div style="clear:both;"></div>';
     } else {
         if (!empty ($tagline)) {
             if ( $postmode == 'html' ) {
@@ -422,25 +444,46 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
     return $retval;
 }
 
-function _ff_geshi_formatted($str,$type='PHP') {
-    global $_CONF;
+function _ff_geshi_formatted($str,$type='php') {
+    global $_CONF, $_FF_CONF, $LANG_GF01;
+
     $str = @htmlspecialchars_decode($str,ENT_QUOTES);
-    include_once($_CONF['path'].'lib/geshi/geshi.php');
-    $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
+    $str = preg_replace('/^\s*?\n|\s*?\n$/','',$str);
+    $geshi = new GeSHi($str,$type);
+    $geshi->set_encoding(COM_getEncodingt());
     $geshi->set_header_type(GESHI_HEADER_DIV);
-    //$geshi->enable_strict_mode(true);
-    //$geshi->enable_classes();
-    $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS, 5);
-    $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
-    // Note the use of set_code_style to revert colours...
-    $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
-    $geshi->set_code_style('color: #000020;', 'color: #000020;');
-    $geshi->set_line_style('background: red;', true);
+    if ( $_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true ) {
+        $geshi->set_link_target(true);
+    }
+    if ( isset($_FF_CONF['geshi_line_numbers']) && $_FF_CONF['geshi_line_numbers']) {
+        $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+    } else {
+        $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
+    }
+    $geshi->enable_keyword_links(false);
+    if ( isset($_FF_CONF['geshi_overall_style']) ) {
+        $geshi->set_overall_style($_FF_CONF['geshi_overall_style'],true);
+    } else {
+        $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
+    }
+    if ( isset($_FF_CONF['geshi_line_style'] ) ) {
+        $geshi->set_line_style($_FF_CONF['geshi_line_style'],true);
+    } else {
+        $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
+    }
+    if ( isset($_FF_CONF['geshi_code_style'] ) ) {
+        $geshi->set_code_style($_FF_CONF['geshi_code_style'],true);
+    } else {
+        $geshi->set_code_style('color: #000020;', 'color: #000020;');
+    }
     $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
     $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
-
-    $geshi->set_header_content("$type Formatted Code");
-    $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #808080; font-size: 90%; font-weight: bold; background-color: #f0f0ff; border-bottom: 1px solid #d0d0d0; padding: 2px;');
+    $geshi->set_header_content(strtoupper($type) . " " . $LANG_GF01['formatted_code']);
+    if ( isset($_FF_CONF['geshi_header_style'] ) ) {
+        $geshi->set_header_content_style($_FF_CONF['geshi_header_style'],true);
+    } else {
+        $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: bold; background-color: #325482; border-bottom: 1px solid #d0d0d0; padding: 2px;');
+    }
     return $geshi->parse_code();
 }
 
@@ -458,7 +501,7 @@ function _ff_FormatForEmail( $str, $postmode='html' ) {
     return $str;
 }
 
-function gfm_getoutput( $id ) {
+function gfm_getoutput( $id, $type = 'digest' ) {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$_FF_CONF,$_USER;
 
     $dt = new Date('now',$_USER['tzid']);
@@ -466,6 +509,8 @@ function gfm_getoutput( $id ) {
     $id = COM_applyFilter($id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $id);
     $A = DB_fetchArray($result);
+
+    $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name',"forum_id=". (int) $A['forum']);
 
     if ( $A['pid'] == 0 ) {
         $pid = $id;
@@ -495,12 +540,22 @@ function gfm_getoutput( $id ) {
         'post_subject'  => $A['subject'],
         'post_date'     => $date,
         'post_name'     => $A['name'],
-        'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
         'online_version' => sprintf($LANG_GF02['view_online'],$permalink),
         'permalink'     => $permalink,
+        'forum_name'    => $forum_name,
     ));
+
+    if ( $type == 'digest' ) {
+        $T->set_var('post_comment',$A['comment']);
+    } else {
+        $notify_msg = sprintf($LANG_GF02['html_notify_message'],
+            $A['subject'],$A['name'],$forum_name,$_CONF['site_name'],$permalink,$A['subject']);
+        $T->set_var('post_notify', $notify_msg);
+        $T->unset_var('post_comment');
+    }
+
     $T->parse('output','email');
     $message = $T->finish($T->get_var('output'));
 
@@ -513,15 +568,26 @@ function gfm_getoutput( $id ) {
         'post_subject'  => $A['subject'],
         'post_date'     => $date,
         'post_name'     => $A['name'],
-        'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
         'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$A['id']),
+        'permalink'     => $permalink,
+        'forum_name'    => $forum_name,
     ));
+
+    if ( $type == 'digest' ) {
+        $T->set_var('post_comment',$A['comment']);
+    } else {
+        $notify_msg = sprintf($LANG_GF02['text_notify_message'],
+            $A['subject'],$A['name'],$forum_name,$_CONF['site_name'],$permalink);
+        $T->set_var('post_notify', $notify_msg);
+        $T->unset_var('post_comment');
+    }
+
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));
 
-    $html2txt = new html2text($msgText,false);
+    $html2txt = new Html2Text\Html2Text($msgText,false);
 
     $messageText = $html2txt->get_text();
     return array($message,$messageText);

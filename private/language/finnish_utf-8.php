@@ -258,7 +258,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -464,7 +470,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -768,7 +774,7 @@ $LANG20 = array(
     3 => 'V&auml;&auml;r&auml; salasana k&auml;ytt&auml;j&auml;lle',
     4 => 'K&auml;ytt&auml;j&auml;tunnus:',
     5 => 'Salasana:',
-    6 => 'Kaikki yll&auml;pidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br' . XHTML . '>Sivu on tarkoitettu vain sallitulle henkil&ouml;kunnalle.',
+    6 => 'Kaikki yll&auml;pidon osioiden liikenne sivustolla kirjataan ja tarkistetaan. <br>Sivu on tarkoitettu vain sallitulle henkil&ouml;kunnalle.',
     7 => 'kirjaudu',
     8 => 'Aikakatkaisu - Tunnistaudu uudelleen',
     9 => 'Admin toimintoihin p&auml;&auml;sy vaatii uudelleen tunnistautumisen'
@@ -979,7 +985,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -1042,7 +1050,9 @@ $LANG27 = array(
     54 => 'Lohko Admin',
     55 => 'Syndication Admin',
     56 => 'Paina Peruuta ja muokkaa sitten t&auml;t&auml; aihetta n&auml;hd&auml;ksei tietoja mukaanlukien kohteiden m&auml;&auml;r&auml;n tietokannassa jotka liittyv&auml;t t&auml;h&auml;n asiaan.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1100,7 +1110,7 @@ $LANG28 = array(
     49 => 'Admin Ruhm&auml;',
     50 => 'Check to allow filtering this group as an Admin Use Group',
     51 => 'Online P&auml;iv&auml;t',
-    52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
+    52 => '<br>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'rekiste&ouml;rityi',
     54 => 'Joukko Poisto',
     55 => 'T&auml;m&auml; toimii vain jos sinulla on <code>$_CONF[\'lastlogin\'] = true;</code> config.php tiedostossa',
@@ -1238,7 +1248,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="http://www.gllabs.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
+    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j&auml;rjestelm&auml;&auml;si. K&auml;yt&auml; vain <a href="https://www.glfusion.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l&auml;hetetyt laajennukset usealla k&auml;ytt&ouml;j&auml;rjestelm&auml;ll&auml;. On t&auml;rke&auml;&auml; ymm&auml;rt&auml;&auml; laajennuksien asentamisen vaativan joidenkin k&auml;ytt&ouml;j&auml;rjestelmi&auml;k&auml;skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k&auml;ytt&auml;ji&auml; laajennuksista, emme takaa asennuksen onnistumista emmek&auml; ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n&auml;it&auml; omalla vastuullasi. Varovaisille; k&auml;sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
     2 => 'Huomioi laajennuksia asentaessasi',
     3 => 'Laajennuksien asentamislomake',
     4 => 'Laajennustiedosto',
@@ -1246,8 +1256,8 @@ $LANG32 = array(
     6 => 'Varoitus: laajennus on jo asennettu!',
     7 => 'Laajennus jonka asentamista yrit&auml;t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep&auml;onnistui',
-    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="http://www.gllabs.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
-    10 => '<br' . XHTML . '><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'Laajennus vaatii uudemman version glFusionista. P&auml;ivit&auml; <a href="https://www.glfusion.org">glFusion-j&auml;rjestelm&auml;si</a> tai hanki uudempi versio laajennuksesta.',
+    10 => '<br><b>Laajennuksia ei ole t&auml;ll&auml; hetkell&auml; asennettuna.</b><br><br>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis&auml;tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p&auml;ivitt&auml;&auml;ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime&auml; ei ole l&auml;hetetty plugineditor()',
     13 => 'Laajennusten muokkain',
@@ -1424,7 +1434,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1507,7 +1518,7 @@ $MESSAGE = array(
     74 => 'Pingback L&auml;hetetty.',
     75 => 'Paluuviitteet t&auml;ytyy l&auml;hett&auml;&auml; k&auml;ytt&auml;m&auml;ll&auml; POST requestia.',
     76 => 'Haluatko varmasti poistaa t&auml;m&auml;n?',
-    77 => 'Varoitus:<br' . XHTML . '>Olet asettanut oletukseksi UTF-8 Merkist&ouml;n. Mutta serverisi ei tue t&auml;t&auml;. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkist&ouml;/Kieli.',
+    77 => 'Varoitus:<br>Olet asettanut oletukseksi UTF-8 Merkist&ouml;n. Mutta serverisi ei tue t&auml;t&auml;. Asenna PHP mbstring toiminnot tai valitse jokin muu Merkist&ouml;/Kieli.',
     78 => 'Varmista ett&auml; s&auml;hk&ouml;postiosoite ja vahvistus s&auml;hk&ouml;postiosoite ovat samat.',
     79 => 'Sivu jota yrit&auml;t avata liittyy toimintoon jota t&auml;ll&auml; sivustolla ei ole en&auml;&auml;.',
     80 => 'Lis&auml;osa joka loi t&auml;m&auml;n sy&ouml;tteen ei ole en&auml;&auml; toiminnassa. Et voi muokata t&auml;t&auml; sy&ouml;tett&auml; ennenkuin ota lis&auml;osan uudestaan k&auml;ytt&ouml;&ouml;n.',
@@ -1714,7 +1725,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2046,7 +2057,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'N&auml;yt&auml; Vain Aiheessa',
-    1 => 'N&auml;yt&auml; Etusivulla'
+    1 => 'N&auml;yt&auml; Etusivulla',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2406,6 +2418,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2434,6 +2447,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2573,8 +2589,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Varmuuskopio',
     'path_data' => 'Data',
     'path_images' => 'Kuvat',
-    'path_pear' => 'Polku P&auml;&auml;ryn&auml;&auml;n',
-    'have_pear' => 'Onko sinulla p&auml;&auml;ryn&auml;?',
     'mail_settings' => 'Posti Asetukset',
     'theme' => 'Ulkoasu',
     'menu_elements' => 'Valikko elementit',
@@ -2753,7 +2767,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Ohita HTML Suodatin juurelta?',
     'allowed_protocols' => 'Sallitut Protokollit',
     'disable_autolinks' => 'Autolinkit Pois P&auml;&auml;lt&auml;?',
-    'digg_enabled' => 'N&auml;yt&auml; Digg.com Linkit?',
     'censormode' => 'Sensuuri Moodi?',
     'censorreplace' => 'Sensuroidun Tekstin Korvaava Teksti',
     'censorlist' => 'Sensuuri Lista',
@@ -2831,6 +2844,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2839,7 +2855,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2859,7 +2876,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Polut',
     'fs_theme' => 'Ulkoasu',
     'fs_mail' => 'Posti',
-    'fs_pear' => 'Pear',
     'fs_users' => 'K&auml;ytt&auml;j&auml;t',
     'fs_misc' => 'Sekalaista',
     'fs_spamx' => 'Spam-X',
@@ -2913,7 +2929,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
     8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
@@ -2933,7 +2949,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

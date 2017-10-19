@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User authentication module.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -288,6 +288,7 @@ function userprofile()
         $commentCounter = 0;
         $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " ORDER BY date DESC";
         $result = DB_query($sql);
+
         while ( ( $row = DB_fetchArray($result) ) ) {
             if ( $commentCounter >= 10 ) break;
                 $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
@@ -329,9 +330,9 @@ function userprofile()
         $result = DB_query ($sql);
         $N = DB_fetchArray ($result);
         $user_templates->set_var ('number_comments', COM_numberFormat($N['count']));
-        $user_templates->set_var ('lang_all_postings_by',
-                                  $LANG04[86] . ' ' . $display_name);
     }
+    $user_templates->set_var ('lang_all_postings_by',
+                              $LANG04[86] . ' ' . $display_name);
     // hook to the profile icon display
 
     $profileIcons = PLG_profileIconDisplay($user);
@@ -820,7 +821,7 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 */
 function newuserform ($msg = '')
 {
-    global $_CONF, $LANG01, $LANG04;
+    global $_CONF, $_USER, $LANG01, $LANG04;
 
     $retval = '';
 
@@ -828,6 +829,8 @@ function newuserform ($msg = '')
         COM_setMsg($LANG04[122],'error');
         echo COM_refresh($_CONF['site_url']);
     }
+
+    if ( !COM_isAnonUser() ) echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
 
     if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
         return CUSTOM_userForm($msg);
@@ -1325,15 +1328,14 @@ switch ($mode) {
                     $local_login = true;
                 }
             } else {
+                COM_errorLog("ERROR: Username and Password were posted, but local authenticatio is disabled - check configuration settings");
                 $status = -2;
             }
 
         // begin distributed (3rd party) remote authentication method
 
         } elseif (!empty($loginname) && $_CONF['user_login_method']['3rdparty'] &&
-            ($_CONF['usersubmission'] == 0) &&
-            ($service != '')) {
-
+            ($_CONF['usersubmission'] == 0) && ($service != '')) {
             COM_updateSpeedlimit('login');
             //pass $loginname by ref so we can change it ;-)
             $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
@@ -1356,8 +1358,6 @@ switch ($mode) {
                 if ( COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0 ) {
                     displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
                 }
-
-                require_once $_CONF['path_system'] . 'classes/oauthhelper.class.php';
 
                 $consumer = new OAuthConsumer($service);
 

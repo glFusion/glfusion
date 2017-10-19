@@ -5,7 +5,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2015 by Mark R. Evans - mark AT glfusion DOT org
+*  Copyright (C) 2014-2017 by Mark R. Evans - mark AT glfusion DOT org
 */
 
 require_once '../lib-common.php';
@@ -54,7 +54,7 @@ function subscribe_topic() {
 
     global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01, $LANG_GF02;
 
-    $retval = '';
+    $retval = array();
 
     if (COM_isAnonUser()) {
         $retval['statusMessage'] = 'Invalid Request';
@@ -121,7 +121,7 @@ function unsubscribe_topic() {
 
     global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01, $LANG_GF02;
 
-    $retval = '';
+    $retval = array();
 
     if (COM_isAnonUser()) {
         $retval['statusMessage'] = 'Invalid Request';
@@ -160,7 +160,7 @@ function unsubscribe_topic() {
 function subscribe() {
     global $_USER, $_TABLES, $_FF_CONF, $_CONF, $LANG_GF01, $LANG_GF02;
 
-    $retval = '';
+    $retval = array();
 
     if (COM_isAnonUser()) {
         $retval['statusMessage'] = 'Invalid Request';
@@ -193,7 +193,7 @@ function subscribe() {
 function unsubscribe() {
     global $_USER, $_TABLES, $_FF_CONF, $_CONF, $LANG_GF01, $LANG_GF02;
 
-    $retval = '';
+    $retval = array();
 
     if (COM_isAnonUser()) {
         $retval['statusMessage'] = 'Invalid Request';

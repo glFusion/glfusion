@@ -242,7 +242,8 @@ $LANG_GF01 = array(
     'disable_urlparse' => 'URLs nicht analysieren:',
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
-    'all_read_success' => 'Alle Themen wurden als gelesen markiert'
+    'all_read_success' => 'Alle Themen wurden als gelesen markiert',
+    'formatted_code' => 'Formatted Code'
 );
 
 $LANG_GF02 = array(
@@ -449,13 +450,17 @@ $LANG_GF02 = array(
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
     'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schauen Sie sie Online an</a>.',
-	'invalid_token' => 'Sicherheits Schlüssel ist ungültig - Möglicherweise ist Deine Sitzung abgelaufen',
+    'invalid_token' => 'Sicherheits Schlüssel ist ungültig - Möglicherweise ist Deine Sitzung abgelaufen',
     'edit_time_passed' => 'Die erlaubte Zeit, um Deinen Beitrag bearbeiten zu dürfen, ist leider abgelaufen',
     'not_your_post' => 'Du scheinst nicht der Verfasser dieses Beitrags zu sein.',
     'spam_detected' => 'Dein Beitrag wurde als Spam-Nachricht identifiziert',
     'invalid_email' => 'Deine E-Mail-Adresse scheint leer oder ungültig zu sein',
     'invalid_name' => 'Dein Name scheint leer oder ungültig zu sein',
-    'last_edited' => 'Zuletzt bearbeitet'
+    'last_edited' => 'Zuletzt bearbeitet',
+    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
+    'post_ctc' => 'Permalink Copied to Clipboard',
+    'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
 );
 
 $LANG_GF03 = array(
@@ -483,7 +488,10 @@ $LANG_GF03 = array(
     'select' => 'Auswählen',
     'select_forum' => 'Ziel-Thema auswählen',
     'destination_topic' => 'Id des Ziel-Themas:',
-    'select_topic' => '(Themen-Liste)'
+    'select_topic' => '(Themen-Liste)',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
 );
 
 $LANG_GF04 = array(
@@ -582,7 +590,7 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum-Einstellungen',
     'forumprefs_help_title' => 'Forum-Einstellungen: Hilfe',
     'forumprefs_help' => 'Forum-Plugin: Benutzer-Einstellungen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
-	'topicspp_help' => 'Anzahl der anzuzeigenden Themen im Forenindex.',
+    'topicspp_help' => 'Anzahl der anzuzeigenden Themen im Forenindex.',
     'postspp_help' => 'Anzahl der Beiträge pro Seite.',
     'anonymous_help' => 'Gast-Beiträge ausblenden.',
     'notify_help' => 'Automatische Benachrichtigung aktivieren.',
@@ -753,7 +761,7 @@ $LANG_GF93 = array(
     'hideposts' => 'Neue Beiträge verstecken',
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
     'attachaccess' => 'Möglichkeit, Anhänge hinzuzufügen',
-	'name_blank' => 'Name darf nicht leer sein',
+    'name_blank' => 'Name darf nicht leer sein',
     'desc_blank' => 'Beschreibung darf nicht leer sein',
     'category_resynced' => 'Alle Foren in der Kategorie wurden neu abgeglichen',
     'forum_resynced' => 'Das Forum wurden neu abgeglichen',
@@ -932,6 +940,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Dateiberechtigungen',
     'max_uploadimage_width' => 'Max. Bild-Breite (px)',
     'max_uploadimage_height' => 'Max. Bild-Höhe (px)',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Inline-Bild-Breite (px)',
     'inlineimage_height' => 'Inline-Bild-Höhe (px)',
     'allowablefiletypes' => 'Erlaubte Dateitypen',
@@ -947,7 +956,12 @@ $LANG_confignames['forum'] = array(
     'smilies_disabled' => 'Standart für "Smilies deaktivieren"',
     'urlparse_disabled' => 'Standart für "URL Parse deaktivieren"',
     'use_sfs' => '"Stop Forum Spam" aktivieren',
-    'allowed_html' => 'Erlaubtes HTML'
+    'allowed_html' => 'Erlaubtes HTML',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style'
 );
 
 $LANG_configsubgroups['forum'] = array(

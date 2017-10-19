@@ -36,7 +36,15 @@ install, extend and use the glFusion CMS.
 ## Support
 
 The best support method for glFusion CMS is the glFusion Web Site located at
-<a href="http://www.glfusion.org" target="_blank">http://www.glfusion.org</a>.  There is an active community ready to help out.
+<a href="https://www.glfusion.org" target="_blank">https://www.glfusion.org</a>.  There is an active community ready to help out.
+
+Please do not email the developers directly - there is a good chance the email will be
+missed due to the high volume of email they receive.
+The <a href="https://www.glfusion.org" target="_blank">glFusion Website</a>
+and <a href="https://gitter.im/glFusion/glfusion" target="_blank">Gitter Room</a>
+are the best methods to receive support. The goal is to have questions asked and
+answered in a publicly available place so everyone can benefit from the answer
+and other experienced users can provide insight and answers.
 
 The glFusion CMS documentation is located at <a href="https://www.glfusion.org/wiki/doku.php" target="_blank">
 https://www.glfusion.org/wiki/doku.php</a>.
@@ -51,7 +59,7 @@ glfusion-development@freelists.org. You can subscribe at
 
 ## System Requirements and Installation
 
-Visit the glFusion Wiki at http://www.glfusion.org/wiki/glfusion:start for the
+Visit the glFusion Wiki at https://www.glfusion.org/wiki/glfusion:start for the
 latest in requirements, installation, and upgrade documentation.
 
 ## Demo
@@ -59,7 +67,7 @@ latest in requirements, installation, and upgrade documentation.
 You can visit our demo site to become familiar with the basic features of
 glFusion.
 
-<a href="http://demo.glfusion.org" target="_blank">http://demo.glfusion.org</a>
+<a href="https://demo.glfusion.org" target="_blank">https://demo.glfusion.org</a>
 
 ## License
 glFusion is licensed under the terms of the GNU General Public License

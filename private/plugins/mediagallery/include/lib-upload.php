@@ -1164,6 +1164,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        					media_mime_ext='".DB_escapeString($mimeExt)."',
 	        					mime_type='".DB_escapeString($mimeType)."',
 	        					media_time='".DB_escapeString($media_time)."',
+	        					media_exif=1,
 	        					media_user_id='".DB_escapeString($media_user_id)."',
 	        					media_type='".DB_escapeString($mediaType)."',
 	        					media_upload_time='".DB_escapeString($media_upload_time)."',
@@ -1425,7 +1426,7 @@ function MG_notifyModerators( $aid ) {
         }
         if ( $toCount > 0 ) {
             $msgData['htmlmessage'] = $body;
-            $msgData['textmessage'] = $altBody;
+            $msgData['textmessage'] = $altbody;
             $msgData['subject'] = $subject;
             $msgData['from']['email'] = $_CONF['site_mail'];
             $msgData['from']['name'] = $_CONF['site_name'];

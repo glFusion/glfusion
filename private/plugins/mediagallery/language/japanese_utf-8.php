@@ -874,7 +874,7 @@ $LANG_MG03 = array(
     'click_here' => 'click here',
     'published' => 'Published by',
     'on' => 'On',
-    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -891,7 +891,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(
@@ -1251,7 +1253,7 @@ $LANG_MG07 = array(
 $LANG_MG08 = array(
     'success' => 'メディアギャラリプラグインは正常にインストールされました',
     'review' => '<b>設定</b>と<b>システム標準設定</b>をし、設定を完了してください。',
-    'support' => "メディアギャラリのサポートについては glFusion のホームページにお願いします。ホームページは <a href=\"http://www.glfusion.org\">www.glfusion.org</a>（英語）\n<br" . XHTML . "><br" . XHTML . ">メディアギャラリについてのサポートの追加情報:<ul><li>Wikiのドキュメント</li><li>サポートフォーラム</li><li>メーリングリストでの<b>セキュリティ情報</b>とアップデートアナウンス</li><li>... その他</li></ul>"
+    'support' => "メディアギャラリのサポートについては glFusion のホームページにお願いします。ホームページは <a href=\"http://www.glfusion.org\">www.glfusion.org</a>（英語）\n<br><br>メディアギャラリについてのサポートの追加情報:<ul><li>Wikiのドキュメント</li><li>サポートフォーラム</li><li>メーリングリストでの<b>セキュリティ情報</b>とアップデートアナウンス</li><li>... その他</li></ul>"
 );
 
 $LANG_MG09 = array(

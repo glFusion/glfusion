@@ -64,16 +64,10 @@ function GROUP_edit($grp_id = '')
            $LANG28, $VERBOSE, $_IMAGE_TYPE;
 
     USES_lib_admin();
+    $editMode = false;
 
     $retval = '';
     $form_url = '';
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/group.php',
-              'text' => $LANG28[38]),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
 
     $thisUsersGroups = SEC_getUserGroups();
     if (!empty ($grp_id) &&
@@ -94,16 +88,13 @@ function GROUP_edit($grp_id = '')
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
 
-    $retval .= ADMIN_createMenu(
-        $menu_arr,
-        $LANG_ACCESS['groupeditmsg'],
-        $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
-    );
+
 
     $group_templates = new Template($_CONF['path_layout'] . 'admin/group');
     $group_templates->set_file('editor','groupeditor.thtml');
 
     if (!empty ($grp_id) && $grp_id != 0 ) {
+        $editMode = true;
         $result = DB_query("SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default FROM {$_TABLES['groups']} WHERE grp_id = ".(int)$grp_id);
         $A = DB_fetchArray ($result);
         if ($A['grp_gl_core'] > 0) {
@@ -124,6 +115,26 @@ function GROUP_edit($grp_id = '')
     } else {
         $disable_edit = 0;
     }
+    if ( $editMode ) {
+        $lang_create_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_edit = $LANG_ADMIN['create_new'];
+    }
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/group.php',
+              'text' => $LANG28[38]),
+        array('url' => $_CONF['site_admin_url'] . '/group.php?edit=x',
+              'text' => $lang_create_edit,'active' => true),
+        array('url' => $_CONF['site_admin_url'] . '/user.php',
+              'text' => $LANG_ADMIN['admin_users']),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $LANG_ACCESS['groupeditmsg'],
+        $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
+    );
 
     $group_templates->set_var('site_url', $_CONF['site_url']);
     $group_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -880,6 +891,8 @@ function GROUP_list($show_all_groups = false)
     $form_url .= ($show_all_groups) ? '?chk_showall=1' : '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/group.php',
+              'text' => $LANG28[38],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/group.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
@@ -1038,6 +1051,8 @@ function GROUP_editUsers($grp_id)
     $menu_arr = array(
                     array('url'  => $form_url,
                           'text' => $LANG28[38]),
+                    array('url' => $_CONF['site_admin_url'] . '/user.php',
+                          'text' => $LANG_ADMIN['admin_users']),
                     array('url'  => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home'])
                 );

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -245,6 +245,7 @@ $LANG_GF01 = array(
     /* --- rss feature --- */
     'rss_link' => 'Subscribe to this forum\'s RSS feed.',
     'all_read_success' => 'All topics have been marked as read',
+    'formatted_code' => 'Formatted Code',
 );
 
 $LANG_GF02 = array(
@@ -252,7 +253,7 @@ $LANG_GF02 = array(
     'msg02' => 'You should not be here!<br/>Restricted access to this forum only',
     'msg03' => 'Permission Error.  Please contact site administrator.',
     'msg04' => '',
-    'msg05' => '<CENTER><I>Sorry, no topics have been created yet.</CENTER></I>',
+    'msg05' => 'No topics has been posted.',
     'msg06' => ' new posts since your last visit',
     'msg07' => 'Online Users:',
     'msg08' => '<br/><B>Total Registered Users to Date:</B> %s',
@@ -439,7 +440,7 @@ $LANG_GF02 = array(
     'msg199' => 'View or remove forum notifications',
     'msg200' => 'Site Members',
     'msg201' => 'Popular Topics',
-    'msg202' => 'No new posts',
+    'msg202' => 'No Unread Posts Available',
     'msg203' => 'Click to add bookmark',
     'msg204' => 'Click to remove bookmark',
     'msg205' => 'You have not posts bookmarked',
@@ -458,6 +459,10 @@ $LANG_GF02 = array(
     'invalid_email' => 'Email empty or not a valid email address',
     'invalid_name'  => 'No name or name blank',
     'last_edited'   => 'Last Edited',
+    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
+    'post_ctc'      => 'Permalink Copied to Clipboard',
+    'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
 );
 
 $LANG_GF03 = array(
@@ -486,6 +491,9 @@ $LANG_GF03 = array(
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
     'select_topic' => 'Select Topic',
+    'lock_topic' => 'Lock Topic',
+    'unlock_topic' => 'Unlock Topic',
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>',
 );
 
 $LANG_GF04 = array(
@@ -942,6 +950,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'File Permissions',
     'max_uploadimage_width' => 'Max Image Width (px)',
     'max_uploadimage_height' => 'Max Image Height (px)',
+    'max_uploadimage_size' => 'Max Image Size (bytes)',
     'inlineimage_width' => 'Inline Image Width (px)',
     'inlineimage_height' => 'Inline Image Height (px)',
     'allowablefiletypes' => 'Allowable File Types',
@@ -958,6 +967,12 @@ $LANG_confignames['forum'] = array(
     'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
     'use_sfs' => 'Enable Stop Forum Spam Checks for new posts',
     'allowed_html' => 'Allowed HTML',
+    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
+    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
+    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_code_style' => 'GeSHi Code Block Style',
+    'geshi_header_style' => 'GeSHi Header Block Style',
+
 );
 
 $LANG_configsubgroups['forum'] = array(

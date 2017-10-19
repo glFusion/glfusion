@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Global album edit/perm administration routines                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -241,6 +241,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $A['enable_shutterfly']  = 0;
     $A['enable_views']       = 0;
     $A['enable_keywords']    = 0;
+    $A['enable_html']        = 0;
     $A['enable_sort']        = 0;
     $A['enable_rating']      = 0;
     $A['albums_first']       = 0;
@@ -302,6 +303,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
 //    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" />';
     $views_select   = '<input type="checkbox" name="enable_views" value="1" />';
     $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" />';
+    $html_select = '<input type="checkbox" name="enable_html" value="1" />';
     $sort_select    = '<input type="checkbox" name="enable_sort" value="1" />';
     $afirst_select  = '<input type="checkbox" name="albums_first" value="1" />';
     $album_views_select   = '<input type="checkbox" name="enable_album_views" value="1" />';
@@ -406,6 +408,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'postcard_select'       => $postcard_select,
         'views_select'          => $views_select,
         'keywords_select'       => $keywords_select,
+        'html_select'           => $html_select,
         'album_theme_select'    => $album_theme_select,
         'display_album_desc_select' => $display_album_desc_select,
         'album_views_select'    => $album_views_select,
@@ -475,6 +478,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'lang_update'           => $LANG_MG01['update'],
         'lang_enable_views'     => $LANG_MG01['enable_views'],
         'lang_enable_keywords'  => $LANG_MG01['enable_keywords'],
+        'lang_enable_html'      => $LANG_MG01['htmlallowed'],
         'lang_enable_album_views' => $LANG_MG01['enable_album_views'],
         'lang_enable_sort'      => $LANG_MG01['enable_sort'],
         'lang_albums_first'     => $LANG_MG01['albums_first'],
@@ -547,6 +551,7 @@ function MG_saveGlobalAlbumAttr() {
     $A['enable_shutterfly'] = isset($_POST['enable_shutterfly']) ? COM_applyFilter($_POST['enable_shutterfly'],true) : 0;
     $A['enable_views']      = isset($_POST['enable_views']) ? COM_applyFilter($_POST['enable_views'],true) : 0;
     $A['enable_keywords']   = isset($_POST['enable_keywords']) ? COM_applyFilter($_POST['enable_keywords'],true) : 0;
+    $A['enable_html']       = isset($_POST['enable_html']) ? COM_applyFilter($_POST['enable_html'],true) : 0;
     $A['enable_sort']       = isset($_POST['enable_sort']) ? COM_applyFilter($_POST['enable_sort'],true) : 0;
     $A['albums_first']      = isset($_POST['albums_first']) ? COM_applyFilter($_POST['albums_first'],true) : 0;
     $A['tn_size']           = isset($_POST['tn_size']) ? COM_applyFilter($_POST['tn_size'],true) : 0;
@@ -609,6 +614,7 @@ function MG_saveGlobalAlbumAttr() {
     $shutterfly_active      = isset($_POST['shutterfly_active']) ? COM_applyFilter($_POST['shutterfly_active'],true) : 0;
     $views_active           = isset($_POST['views_active']) ? COM_applyFilter($_POST['views_active'],true) : 0;
     $keywords_active        = isset($_POST['keywords_active']) ? COM_applyFilter($_POST['keywords_active'],true) : 0;
+    $html_active            = isset($_POST['html_active']) ? COM_applyFilter($_POST['html_active'],true) : 0;
     $sort_active            = isset($_POST['sort_active']) ? COM_applyFilter($_POST['sort_active'],true) : 0;
     $afirst_active          = isset($_POST['afirst_active']) ? COM_applyFilter($_POST['afirst_active'],true) : 0;
     $thumbnail_active       = isset($_POST['thumbnail_active']) ? COM_applyFilter($_POST['thumbnail_active'],true) : 0;
@@ -653,6 +659,7 @@ function MG_saveGlobalAlbumAttr() {
     $updateSQL .= ($random_active ? ($updateSQL != '' ? ',' : '') . "enable_random={$A['enable_random']}" : '');
     $updateSQL .= ($shutterfly_active ? ($updateSQL != '' ? ',' : '') . "enable_shutterfly={$A['enable_shutterfly']}" : '');
     $updateSQL .= ($views_active ? ($updateSQL != '' ? ',' : '') . "enable_views={$A['enable_views']}" : '');
+    $updateSQL .= ($html_active ? ($updateSQL != '' ? ',' : '') . "enable_html={$A['enable_html']}" : '');
     $updateSQL .= ($keywords_active ? ($updateSQL != '' ? ',' : '') . "enable_keywords={$A['enable_keywords']}" : '');
     $updateSQL .= ($sort_active ? ($updateSQL != '' ? ',' : '') . "enable_sort={$A['enable_sort']}" : '');
     $updateSQL .= ($afirst_active ? ($updateSQL != '' ? ',' : '') . "albums_first={$A['albums_first']}" : '');

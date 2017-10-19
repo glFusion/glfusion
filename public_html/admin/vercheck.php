@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Version Check                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2016 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -44,7 +44,7 @@ if (!SEC_inGroup ('Root')) {
 
 function _displayVersionData()
 {
-    global $_CONF, $_USER, $LANG01, $LANG_UPGRADE, $LANG01, $LANG_FILECHECK, $LANG_ADMIN, $_PLUGIN_INFO;
+    global $_CONF, $_USER, $LANG01, $LANG_UPGRADE, $LANG_ENVCHK, $LANG01, $LANG_FILECHECK, $LANG_ADMIN, $_PLUGIN_INFO;
 
     $retval = '';
     $upToDate = 0;
@@ -74,25 +74,35 @@ function _displayVersionData()
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     switch ( $upToDate ) {
+        case -1 :
+            $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
+            $statusMsg  = $LANG_UPGRADE['error_title'];
+            $statusText = $LANG_UPGRADE['error'];
+            $T->set_var('warningalert',true);
+            break;
         case 0 :
             $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
             $statusMsg  = $LANG_UPGRADE['upgrade_title'];
             $statusText = sprintf($LANG_UPGRADE['upgrade'],$pluginData['glfusioncms']['installed_version'],$pluginData['glfusioncms']['latest_version']);
+            $T->set_var('upgradeneeded',true);
             break;
         case 1 :
             $alertIcon  = $_CONF['layout_url'].'/images/check.png';
             $statusMsg  = $LANG_UPGRADE['uptodate_title'];
             $statusText = $LANG_UPGRADE['uptodate'];
+            $T->set_var('uptodate',true);
             break;
         case 2 :
             $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
             $statusMsg  = $LANG_UPGRADE['unknown_title'];
             $statusText = sprintf($LANG_UPGRADE['unknown'],$pluginData['glfusioncms']['installed_version']);
+            $T->set_var('warningalert',true);
             break;
         default :
-            $alertIcon = $_CONF['layout_url'].'/images/alert.png';
-            $statusMsg = $LANG_UPGRADE['error_title'];
+            $alertIcon  = $_CONF['layout_url'].'/images/alert.png';
+            $statusMsg  = $LANG_UPGRADE['error_title'];
             $statusText = $LANG_UPGRADE['error'];
+            $T->set_var('warningalert',true);
             break;
     }
 
@@ -106,7 +116,7 @@ function _displayVersionData()
         $T->set_var(array(
             'phpendoflife' => true,
             'phpeol_statusmsg' => $LANG_UPGRADE['phpeol'],
-            'phpeol_statustext' => $LANG01['phpendoflife'],
+            'phpeol_statustext' => $LANG_ENVCHK['phpendoflife'],
         ));
     }
 

@@ -167,7 +167,7 @@ function forum_index()
             $returnPostfix = '?cat='.$dCat;
         }
 
-        $html_query = strip_tags($_REQUEST['query']);
+        $html_query = trim(strip_tags($_REQUEST['query']));
         $query = DB_escapeString($_REQUEST['query']);
         $report->set_var (array(
                 'form_action'   => $_CONF['site_url'] . '/forum/index.php?op=search',
@@ -224,7 +224,7 @@ function forum_index()
                         $P['subject'] = COM_checkWords($P['subject']);
                     }
                     $postdate = COM_getUserDateTimeFormat($P['date']);
-                    $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;highlight='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
+                    $link = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?forum='.$P['forum'].'&amp;showtopic='.$P['id'].'&amp;query='.htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . '">';
                     if ( $P['pid'] != 0 ) {
                         $pResult = DB_query("SELECT views, replies FROM {$_TABLES['ff_topic']} WHERE id=".(int) $P['pid']);
                         list($views,$replies) = DB_fetchArray($pResult);
@@ -283,6 +283,7 @@ function forum_index()
     if ($forum == 0) {
 
         $birdSeedStart = '';
+        $categorycounter = 0;
 
         $dCat = isset($_GET['cat']) ? COM_applyFilter($_GET['cat'],true) : 0;
         $groups = array ();
@@ -492,6 +493,8 @@ function forum_index()
             	    ));
                     $forumlisting->parse('frow', 'forumrows',true);
     			}
+    			$categorycounter++;
+    			$forumlisting->set_var( 'adblock',PLG_displayAdBlock('forum_category_list',$categorycounter), false, true);
             }
 
             if ($numForumsDisplayed > 0 ) {
@@ -757,6 +760,7 @@ function forum_index()
         if ( $FF_userprefs['postsperpage'] <= 0 ) {
             $FF_userprefs['postsperpage'] = 20;
         }
+        $topiccounter = 2;
         while (($record = DB_fetchArray($topicResults,false)) != NULL ) {
             if ( ( $record['replies']+1 ) <= $FF_userprefs['postsperpage'] ) {
                 $displaypageslink = "";
@@ -918,6 +922,8 @@ function forum_index()
             ));
             $topiclisting->parse('trow', 'topicrows',true);
             $displayCount++;
+    		$topiclisting->set_var( 'adblock',PLG_displayAdBlock('forum_topic_list',$topiccounter), false, true);
+       	    $topiccounter++;
         }
         $topiclisting->set_var ('pagenavigation', forum_pagination($base_url,$page, $numpages));
         $topiclisting->set_var ('page',$page);

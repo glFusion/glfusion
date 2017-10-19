@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -57,8 +57,6 @@ if (@file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_SP_CONF['allow_php'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $sp_config = config::get_instance();
     $_SP_CONF = $sp_config->get_config('staticpages');
 }
@@ -157,7 +155,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 
     $retval = '';
 
-    $retval = SP_returnStaticpage($id,'autotag', $order,$format);
+    $retval = SP_returnStaticpage($id,'comment', $order,$format);
     return $retval;
 }
 
@@ -530,6 +528,9 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
             $retval = SP_printPage($page, $retval);
         } else if ($mode =='autotag') {
             $retval = SP_render_content($retval['sp_content'], $retval['sp_php']);
+        } else if ( $mode == 'comment' ) {
+            $retval['sp_format'] = 'blankpage';
+            $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         } else {
             $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         }
@@ -538,9 +539,9 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
     }
-
-    return $retval;
-}
+    $output = PLG_outputFilter($retval,'staticpages');
+    return $output;
+ }
 
 /**
 * Shows the statistics for the Static Pages plugin on stats.php.
@@ -1164,17 +1165,24 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
 {
     global $_CONF, $_TABLES, $LANG_STATIC;
 
+    $buildingSearchIndex = false;
+
     // parse $what to see what we need to pull from the database
     $properties = explode(',', $what);
     $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
+        case 'search_index' :
+            $buildingSearchIndex = true;
+            break;
+        case 'date' :
         case 'date-modified':
             $fields[] = 'UNIX_TIMESTAMP(sp_date) AS unixdate';
             break;
         case 'description':
         case 'excerpt':
         case 'raw-description':
+        case 'searchidx' :
             $fields[] = 'sp_content';
             $fields[] = 'sp_php';
             break;
@@ -1191,6 +1199,21 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         case 'status':
             $fields[] = 'sp_status';
             break;
+        case 'author' :
+        case 'author_name' :
+            $fields[] = 'owner_id';
+            break;
+        case 'perms' :
+            $fields[] = 'owner_id';
+            $fields[] = 'group_id';
+            $fields[] = 'perm_owner';
+            $fields[] = 'perm_group';
+            $fields[] = 'perm_members';
+            $fields[] = 'perm_anon';
+            break;
+        case 'hits' :
+            $fields[] = 'sp_hits';
+            break;
         default:
             break;
         }
@@ -1205,8 +1228,13 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
     }
 
     if ($id == '*') {
-        $where = '';
-        $permOp = 'WHERE';
+        if ( $buildingSearchIndex ) {
+            $where = " WHERE (sp_php <> 1) AND (sp_search = 1) AND (sp_status = 1) ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = 'WHERE';
+        }
     } else {
         $where = " WHERE sp_id = '" . DB_escapeString($id) . "'";
         $permOp = 'AND';
@@ -1231,9 +1259,17 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
+                case 'date' :
+                    $props['date'] = $A['unixdate'];
+                    break;
                 case 'date-modified':
                     $props['date-modified'] = $A['unixdate'];
                     break;
+                case 'searchidx' :
+// check if searchable first
+                    $props[$p] = SP_render_content($A['sp_content'],$A['sp_php']);
+                    break;
+
                 case 'description':
                 case 'excerpt':
                     $props[$p] = SP_render_content($A['sp_content'],$A['sp_php']);
@@ -1259,6 +1295,25 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     break;
                 case 'status':
                     $props['status'] = $A['sp_status'];
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['sp_hits'];
+                    break;
+                case 'author' :
+                    $props['author'] = $A['owner_id'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['owner_id']);
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
                 default:
                     $props[$p] = '';
@@ -1325,15 +1380,28 @@ function SP_render_content ($sp_content, $sp_php)
 
     $retval = '';
 
-    if ($_SP_CONF['allow_php'] == 1) {
+    if ($_SP_CONF['allow_php'] == 1) { // execute PHP return
         // Check for type (ie html or php)
         if ($sp_php == 1) {
-            $retval = eval ($sp_content);
-        } else if ($sp_php == 2) {
+            try {
+                $retval = @eval ($sp_content);
+                if ( $retval == "" ) {
+                    COM_errorLog("SP PHP (return) evaluation return an error - Please check the PHP code embedded in the page");
+                }
+            } catch (Error $t) {
+                $retval = $t->getMessage();
+                COM_errorLog("SP PHP (return) evaluation return an error :: " . $t->getMessage());
+            }
+        } else if ($sp_php == 2) { // execute PHP
             ob_start ();
-            eval ($sp_content);
-            $retval = ob_get_contents ();
-            ob_end_clean ();
+            try {
+                eval($sp_content);
+                $retval = ob_get_contents ();
+                ob_end_clean ();
+            } catch (Error $t) {
+                $retval = $t->getMessage();
+                COM_errorLog("SP PHP evaluation returned an error :: " . $t->getMessage());
+            }
         } else {
             $retval = $sp_content;
         }
@@ -1345,6 +1413,12 @@ function SP_render_content ($sp_content, $sp_php)
         } else {
             $retval .= PLG_replacetags ($sp_content,'staticpages','page');
         }
+    }
+
+    // check for query here...
+    $highlight = isset($_GET['query']) ? trim(COM_applyFilter($_GET['query'])) : '';
+    if ( $highlight != '' ) {
+        $retval = COM_highlightQuery($retval,$highlight);
     }
 
     return $retval;

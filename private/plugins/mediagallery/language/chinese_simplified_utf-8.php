@@ -874,7 +874,7 @@ $LANG_MG03 = array(
     'click_here' => '点击此处',
     'published' => '上载于',
     'on' => '在',
-    'no_flash' => '<div style="width:200px;">你没有安装 Flash Plugin, 或者你的版本已经太老而不能播放此媒体.请点击下面来安装新的 Flash Plugin.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash' => '<div style="width:200px;">你没有安装 Flash Plugin, 或者你的版本已经太老而不能播放此媒体.请点击下面来安装新的 Flash Plugin.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
     'tagline' => '这媒体文库动力于 <a href="http://www.glfusion.org" target="_new">媒体画廊</a>',
     'xp_pub_url' => '下载 <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url' => '下载 <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -891,7 +891,9 @@ $LANG_MG03 = array(
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'media_id' => 'Media ID',
-    'all_media' => 'All Media'
+    'all_media' => 'All Media',
+    'copy_to_clipboard' => 'Copy to Clipboard',
+    'media_id_ctc' => 'Media ID Copied to Clipboard'
 );
 
 $LANG_MG04 = array(

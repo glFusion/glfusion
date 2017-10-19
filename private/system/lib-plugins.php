@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This file implements plugin support in glFusion.                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -43,8 +43,6 @@ if (!defined ('GVERSION')) {
 * See each function for more details.
 *
 */
-
-require_once $_CONF['path_system'] . 'classes/plugin.class.php';
 
 global $autoTagUsage;
 
@@ -333,7 +331,6 @@ function PLG_uninstall ($type)
         // remove config table data for this plugin
 
         COM_errorLog ("Attempting to remove config table records for group_name: $type", 1);
-        require_once $_CONF['path_system'] . 'classes/config.class.php';
 
         $c = config::get_instance();
         if ($c->group_exists($type)) {
@@ -349,6 +346,9 @@ function PLG_uninstall ($type)
         DB_query("DELETE FROM {$_TABLES['rating_votes']} WHERE type='".$type."'");
 
         COM_errorLog ('...success', 1);
+
+        // tell other plugins we are removing all content
+        PLG_itemDeleted('*', $type);
 
         // uninstall the plugin
         COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
@@ -387,7 +387,7 @@ function PLG_uninstall ($type)
 */
 function PLG_enableStateChange ($type, $enable)
 {
-   global $_CONF, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
+   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
 
     $args[1] = $enable;
 
@@ -660,6 +660,34 @@ function PLG_itemPreSave($type, $content)
     return '';
 }
 
+
+/**
+* Allows a plugin to handle a comment approval
+*
+* This will only call the plugin owning the comment.
+*
+* @author Mark Evans, mevans AT ecsnet DOT com
+* @access public
+* @param string $type Type of item, i.e.; registration, contact ...
+* @param string $cid  The comment ID
+* @param string $sid  The ID owning the comment
+* @return none
+*
+*/
+function PLG_commentApproved( $cid, $type, $sid )
+{
+    global $_PLUGINS, $_TABLES;
+
+    if ( $type == 'article') {
+        plugin_commentapproved_story($cid,$type,$sid);
+    } elseif ( in_array($type,$_PLUGINS) ) {
+        $function = 'plugin_commentapproved_' . $type;
+        if (function_exists ($function)) {
+            $function ($cid,$type,$sid);
+        }
+    }
+}
+
 /**
 * Allow a plugin to place entries into the glFusion stats page.
 *
@@ -907,6 +935,9 @@ function PLG_getSubmissionCount()
             $num = $num + $function();
         }
     }
+    if ( function_exists('plugin_submissioncount_comment')) {
+        $num = $num + plugin_submissioncount_comment();
+    }
 
     return $num;
 }
@@ -955,9 +986,10 @@ function PLGINT_getOptionsforMenus($var_names, $required_names, $function_name)
         $function = $function_name . $pi_name;
         if (function_exists ($function)) {
             $plg_array = $function();
-            if (($plg_array !== false) && (count ($plg_array) > 0)) {
+            if (($plg_array !== false) && (is_array($plg_array) && count ($plg_array) > 0)) {
                 // Check if plugin is returning a single record array or multiple records
-                $entries = @count ($plg_array[0]);
+                $entries = 1;
+                if ( is_array($plg_array[0]) ) $entries = count ($plg_array[0]);
                 $sets_array = array();
                 if ($entries == 1) {
                     // Single record - so we need to prepare the sets_array;
@@ -1160,6 +1192,7 @@ function PLG_showModerationList($token)
     // also ensures that story moderation is always first
     // here is where it might be handy to control plugin order ...
     $retval = MODERATE_itemList('story', $token);
+    $retval .= MODERATE_itemList('comment',$token);
 
     foreach ($_PLUGINS as $pi_name) {
         $retval .= MODERATE_itemList($pi_name, $token);
@@ -1949,7 +1982,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                         (($next_tag === false) OR ($end_pos < $next_tag))) {
                     $taglength = $end_pos - $start_pos + 1;
                     $tag = utf8_substr ($content, $start_pos, $taglength);
-                    $parms = explode (' ', $tag);
+                    $parms = explode (' ', str_replace("\xc2\xa0", ' ', $tag));
 
                     // Extra test to see if autotag was entered with a space
                     // after the module name
@@ -2004,11 +2037,12 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     $url = '';
                     $linktext = $autotag['parm2'];
                     if ($autotag['tag'] == 'story') {
+                        $parm1_parts = explode('#', $autotag['parm1']);
                         $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
                         $url = COM_buildUrl ($_CONF['site_url']
                              . '/article.php?story=' . $autotag['parm1']);
                         if (empty ($linktext)) {
-                            $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($autotag['parm1'])."'");
+                             $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($parm1_parts[0])."'");
                         }
                     }
                     if (!empty ($url)) {
@@ -3221,6 +3255,19 @@ function plugin_ismoderator_story()
 }
 
 /**
+*
+* Checks that the current user has the rights to moderate a comment
+* returns true if this is the case, false otherwise
+*
+* @return        boolean       Returns true if moderator
+*
+*/
+function plugin_ismoderator_comment()
+{
+    return SEC_hasRights('comment.moderate');
+}
+
+/**
 * Returns SQL & Language texts to moderation.php
 *
 * @return   mixed   Plugin object or void if not allowed
@@ -3279,6 +3326,20 @@ function plugin_submissioncount_story()
     global $_TABLES;
 
     return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
+}
+
+/**
+* Handles a comment submission approval for a story
+*
+* @return   none
+*
+*/
+function plugin_commentapproved_story($cid,$type,$sid)
+{
+    global $_PLUGINS, $_TABLES;
+    $comments = DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $sid,0));
+    DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $sid);
+    COM_olderStuff(); // update comment count in Older Stories block
 }
 
 function plugin_user_move_story($origUID, $destUID)
@@ -3415,8 +3476,6 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
 {
     global $_CONF, $_TABLES, $LANG04;
 
-    USES_lib_html2text();
-
     $function = 'plugin_subscription_email_format_' . $type;
     if ( function_exists($function) ) {
         $args[1] = $category;
@@ -3484,7 +3543,7 @@ function PLG_remove($pi_name)
     global $_CONF;
 
     $p = array();
-    $p['admin'] = $_CONF['path_html'] . 'admin/plugins/' . $pi_name;
+    $p['admin'] = $_CONF['path_admin'] . 'plugins/' . $pi_name;
     $p['public'] = $_CONF['path_html'] . $pi_name;
     $p['private'] =  $_CONF['path'] . 'plugins/' . $pi_name;
 
@@ -3544,6 +3603,35 @@ function PLG_requestEditor($plugin, $feature, $template)
     return false;
 }
 
+function PLG_supportAdBlock()
+{
+    global $_PLUGINS;
+
+    $retval = array();
+
+    $retval[] = 'article';
+    $retval[] = 'header';
+    $retval[] = 'footer';
+
+    if ( is_array($_PLUGINS) ) {
+        foreach ($_PLUGINS as $pi_name) {
+            $function = 'plugin_supportadblock_' . $pi_name;
+            if (function_exists ($function)) {
+                $rc = $function ();
+                if ( is_array($rc) ) {
+                    foreach ($rc AS $item) {
+                        $retval[] = $item;
+                    }
+                } elseif ( $rc == true ) {
+                    $retval[] = $pi_name;
+                }
+            }
+        }
+    }
+    return $retval;
+}
+
+
 function PLG_displayAdBlock($plugin, $counter)
 {
     global $_PLUGINS;
@@ -3562,4 +3650,111 @@ function PLG_displayAdBlock($plugin, $counter)
     }
     return $retval;
 }
+
+/**
+* Allow plugins to add JavaScript to execute on page load for infinite scroll
+*
+* @return   string  JavaScript to include in afterPageLoad function
+* @since    glFusion v1.6.6
+*
+*/
+function PLG_isOnPageLoad()
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_isOnPageLoad_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ();
+        }
+    }
+    return $retval;
+}
+
+/**
+* Allow a plugin to override glFusion's social share icons
+*
+* @param    string  $type    plugin name or article
+* @param    string  $title   title of item to share
+* @param    string  $url     permalink URL for item to share
+* @param    string  $desc    description of item to share
+* @return   string           HTML of the social share icons
+* @since    glFusion v1.6.6
+*
+*/
+function PLG_replaceSocialShare($type='article',$title='',$url='',$desc='')
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_social_share_replacement_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ($type,$title,$url,$desc);
+            break; //first one wins!
+        }
+    }
+    return $retval;
+}
+
+function PLG_overrideSocialShare()
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_social_share_override_' . $pi_name;
+        if (function_exists($function)) {
+            $retval = $function ();
+            if ( $retval != '' ) return $retval;
+        }
+    }
+    return false;
+}
+
+
+/**
+* This functions allows a plugin to override a glFusion service
+*
+* @param    char     $service    Service to Override
+* @param    char     $class      Classname for plugin
+* @return   void
+*
+*/
+function PLG_registerService($service, $class )
+{
+    global $_VARS;
+
+    $_VARS['service_'.$service] = $class;
+}
+
+/**
+* This functions allows a plugin filter / modify output prior to displaying
+*
+* @param    char     $output       output to display
+* @param    char     $type         content type
+* @return   char     output to display
+*
+*/
+function PLG_outputFilter($output, $type='')
+{
+    global $_PLUGINS;
+
+    if (function_exists ('CUSTOM_outputFilter')) {
+        $output = CUSTOM_outputFilter($output, $type);
+    }
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_outputfilter_' . $pi_name;
+        if (function_exists($function)) {
+            $output = $function ($output, $type);
+        }
+    }
+    return $output;
+}
+
 ?>

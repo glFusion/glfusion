@@ -54,7 +54,7 @@
 	<tr>
 		<td class="uk-text-left uk-table-top">
 			{start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}
-			&nbsp;&nbsp;[<a href="{site_url}/search.php?mode=search&amp;type=bad_behavior2&amp;query={ip}">{lang_search}</a>]
+			&nbsp;&nbsp;[<a href="{site_admin_url}/plugins/bad_behavior2/index.php?mode=search&amp;ip={ip}">{lang_search}</a>]
 			<br/><br/>
 			{date_and_time}<br/><br/>
 			<span class="uk-text-danger uk-text-bold">{reason}</span>

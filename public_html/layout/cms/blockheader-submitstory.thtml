@@ -1,5 +1,7 @@
 {# begin {templatelocation} #}
-<div class="uk-alert uk-alert-info" data-uk-alert>
+<div {block_id} class="uk-alert uk-alert-info" data-uk-alert>
 	<a href="" class="uk-alert-close uk-close"></a>
+{!if block_title}
 	<div class="uk-panel-title">{block_title}</div>
+{!endif}
 	{# end {templatelocation} #}

@@ -1,0 +1,76 @@
+﻿<h2>{lang_success}</h2>
+
+<p>{lang_congradulations}</p>
+
+<h2>{lang_login}</h2>
+
+<div class="uk-alert uk-alert-danger">
+	{lang_username}: <strong>Admin</strong><br/>
+	{lang_password}: <strong>{securepassword}</strong>
+</div>
+
+<p>
+	<strong>{lang_record_password}</strong>
+</p>
+
+<h2>{lang_remove_install_directory}</h2>
+
+<p>
+	{lang_remove_install_help}
+	<button id="delinstall" class="uk-button uk-button-danger">{lang_remove_install_files}</button>
+</p>
+
+<p><strong>{lang_quick_start}</strong></p>
+<p>
+	{lang_quick_start_help}
+</p>
+
+<div class="uk-panel">
+	<a href="{new_site_url}" class="uk-button uk-button-success" onclick="UIkit.modal.confirm('{lang_password_confirm}', function(){ actionClick('done'); },function(){ actionClick('return')},{labels:{'Ok': '{lang_continue}','Cancel': '{lang_cancel}'} });return false;" name="task" value="done">{lang_goto_site}</a>
+</div>
+
+<script>
+	function actionClick( $action ) {
+		switch ($action ) {
+			case 'done' :
+				$(location).attr('href', '{new_site_url}');
+				break;
+			default :
+				break;
+		}
+	}
+	$(document).ready(function(){
+		$("#delinstall").click(remove_install);
+	});
+	var buttonMsg = '{lang_button_files_removed}';
+	var remove_install = function() {
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "include/ajax_controller.php",
+			data: {"action" : 'remove' },
+			timeout: 30000
+		}).done(function(data) {
+			console.log("AJAX Successfully Executed.");
+			var result = $.parseJSON(data["js"]);
+			if ( result.errorCode != 0 ) {
+				buttonMsg = '{lang_error_removing_files}';
+				UIkit.modal.alert('{lang_error_message}');
+				var deleteErrors = result.errors;
+				$.each( deleteErrors, function( i, val ) {
+					console.log(val);
+				});
+			} else {
+				UIkit.modal.alert('{lang_button_files_removed}');
+			}
+		}).fail(function(jqXHR, textStatus ) {
+			console.log("AJAX Execution Failed.");
+			buttonMsg = '{lang_error_removing_files}';
+			UIkit.modal.alert('{lang_error_message}');
+		}).always(function( xhr, status ) {
+			$("#delinstall").html(buttonMsg);
+			$('#delinstall').prop("disabled",true);
+		});
+		return false;
+	};
+</script>

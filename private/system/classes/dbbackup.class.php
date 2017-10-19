@@ -584,15 +584,13 @@ class dbBackup
         $altBody = '',
         $attachments = array()
     ) {
-        global $_CONF;
+        global $_CONF, $_VARS;
 
         $subject = substr($subject, 0, strcspn($subject, "\r\n"));
         $subject = COM_emailEscape($subject);
 
-        require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
-
         $mail = new PHPMailer();
-        $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+        $mail->SetLanguage('en');
         $mail->CharSet = COM_getCharset();
         if ($_CONF['mail_backend'] == 'smtp') {
             $mail->IsSMTP();

@@ -4,10 +4,16 @@ function bb2_blacklist($settings,$package) {
 
     global $_CONF;
 
+    // should not need to edit this file - all additions are handled via online configuration
+
+    $bb2_blacklist_cidrs = array();
+
 	// Blacklisted user agents
 	// These user agent strings occur at the beginning of the line.
 	$bb2_spambots_0 = array(
+		"-",	// brute force password attempts, malicious botnet
 		"8484 Boston Project",	// video poker/porn spam
+		"ArchiveTeam",	// ignores robots.txt and hammers server
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
@@ -37,7 +43,6 @@ function bb2_blacklist($settings,$package) {
 		"MJ12bot/v1.0.8",	// malicious botnet
 		"Morfeus",		// vulnerability scanner
 		"Movable Type",		// customised spambots
-		//"Mozilla ",		// malicious software
 		"Mozilla/0",		// malicious software
 		"Mozilla/1",		// malicious software
 		"Mozilla/2",		// malicious software
@@ -58,8 +63,6 @@ function bb2_blacklist($settings,$package) {
 		"PycURL",		// misc comment spam
 		"Python-urllib",	// commonly abused
 		"revolt",		// vulnerability scanner
-//		WP 2.5 now has Flash; FIXME
-//		"Shockwave Flash",	// spam harvester
 		"sqlmap/",		// SQL injection
 		"Super Happy Fun ",	// spam harvester
 		"TrackBack/",		// trackback spam
@@ -78,7 +81,10 @@ function bb2_blacklist($settings,$package) {
 		"\r",			// A really dumb bot
 		"<sc",			// XSS exploit attempts
 		"; Widows ",		// misc comment/email spam
+		": ;",			// shellshock
+		":;",			// shellshock
 		"a href=",		// referrer spam
+		"ArchiveBot",	// ignores robots.txt and hammers server
 		"Bad Behavior Test",	// Add this to your user-agent to test BB
 		"compatible ; MSIE",	// misc comment/email spam
 		"compatible-",		// misc comment/email spam
@@ -116,6 +122,7 @@ function bb2_blacklist($settings,$package) {
 		"Windows 98",		// too old; assumed robot
 		"Windows NT 4",		// too old; assumed robot
 		"Windows NT;",		// too old; assumed robot
+		#"Windows NT 4.0;)",	// wikispam bot
 		"Windows NT 5.0;)",	// wikispam bot
 		"Windows NT 5.1;)",	// wikispam bot
 		"Windows XP 5",		// spam harvester
@@ -123,17 +130,14 @@ function bb2_blacklist($settings,$package) {
 		"Xedant Human Emulator",// spammer script engine
 		"ZmEu",			// exploit scanner
 		"\\\\)",		// spam harvester
-		"Bot Banned",   // Adsense blocker bot
 	);
 
 	// These are regular expression matches.
 	$bb2_spambots_regex = array(
 		"/^[A-Z]{10}$/",	// misc email spam
-// msnbot is using this fake user agent string now
-//		"/^Mozilla...[05]$/i",	// fake user agent/email spam
 		"/[bcdfghjklmnpqrstvwxz ]{8,}/",
 //		"/(;\){1,2}$/",		// misc spammers/harvesters
-//		"/MSIE.*Windows XP/",	// misc comment spam
+		"/MSIE.*Windows XP/",	// misc comment spam
 		"/MSIE [2345]/",	// too old; assumed robot
 	);
 
@@ -145,10 +149,6 @@ function bb2_blacklist($settings,$package) {
 		"..\\",				// path traversal
 		"%60information_schema%60",	// SQL injection probe
 		"+%2F*%21",			// SQL injection probe
-		"+and+%",			// SQL injection probe
-		"+and+1%",			// SQL injection probe
-		"+and+if",			// SQL injection probe
-		"%27--",			// SQL injection
 		"%27--",			// SQL injection
 		"%27 --",			// SQL injection
 		"%27%23",			// SQL injection
@@ -166,22 +166,36 @@ function bb2_blacklist($settings,$package) {
 	$bb2_spambot_refer = array(
 	    "gamesthelife.tr.gg",
     );
-
-    if ( @file_exists($_CONF['path_data'].'bb2_ip_ban.php')) {
-        require_once $_CONF['path_data'].'bb2_ip_ban.php';
-    } else {
-        $bb2_blacklist_cidrs = array();
-    }
-
 	// Do not edit below this line.
+
+	if ( isset($_CONF['bb2_spambot_ip'] ) && is_array($_CONF['bb2_spambot_ip'] ) ) {
+	    $bb2_blacklist_cidrs = array_merge($bb2_blacklist_cidrs,$_CONF['bb2_spambot_ip']);
+	}
+	if ( isset($_CONF['bb2_spambots_0'] ) && is_array($_CONF['bb2_spambots_0'] ) ) {
+	    $bb2_spambots_0 = array_merge($bb2_spambots_0,$_CONF['bb2_spambots_0']);
+	}
+	if ( isset($_CONF['bb2_spambots'] ) && is_array($_CONF['bb2_spambots'] ) ) {
+	    $bb2_spambots = array_merge($bb2_spambots,$_CONF['bb2_spambots']);
+	}
+	if ( isset($_CONF['bb2_spambots_regex'] ) && is_array($_CONF['bb2_spambots_regex'] ) ) {
+	    $bb2_spambots_regex = array_merge($bb2_spambots_regex,$_CONF['bb2_spambots_regex']);
+	}
+	if ( isset($_CONF['bb2_spambots_url'] ) && is_array($_CONF['bb2_spambots_url'] ) ) {
+	    $bb2_spambots_url = array_merge($bb2_spambots_url,$_CONF['bb2_spambots_url']);
+	}
+	if ( isset($_CONF['bb2_spambot_refer'] ) && is_array($_CONF['bb2_spambot_refer'] ) ) {
+	    $bb2_spambot_refer = array_merge($bb2_spambot_refer,$_CONF['bb2_spambot_refer']);
+	}
 
 	@$ua = $package['headers_mixed']['User-Agent'];
 	@$uri = $package['request_uri'];
 	@$refer = $package['Referer'];
 
-    if ( bb2_check_bl_cidr($package['ip'],$bb2_blacklist_cidrs) ) {
-        return "96c0bd30";
-    }
+	if (!empty($bb2_blacklist_cidrs)) {
+		foreach ($bb2_blacklist_cidrs as $range) {
+			if (match_cidr($package['ip'], $range)) return "96c0bd30";
+		}
+	}
 
 	foreach ($bb2_spambots_0 as $spambot) {
 		$pos = strpos($ua, $spambot);
@@ -189,7 +203,7 @@ function bb2_blacklist($settings,$package) {
 			return "17f4e8c8";
 		}
 	}
-// custom check for known refers
+
 	foreach ($bb2_spambot_refer AS $spambot ) {
 	    if ( strpos($refer,$spambot) != FALSE) {
 	        return "174e8c9";
@@ -210,36 +224,10 @@ function bb2_blacklist($settings,$package) {
 
 	foreach ($bb2_spambots_url as $spambot) {
 		if (stripos($uri, $spambot) !== FALSE) {
-			return "96c0bd29";
+			return "96c0bd40";
 		}
 	}
-
-// do our DB check here
-    $ip = $package['ip'];
-    $sql = "SELECT * FROM ".$settings['ban_table']." WHERE ip = INET_ATON('".bb2_db_escape($ip)."')";
-    $result = bb2_db_query($sql);
-    if ( bb2_db_num_rows($result) > 0 ) {
-        return "96c0bd30";
-    }
-
 	return FALSE;
 }
 
-function bb2_check_bl_cidr($user_ip, $cidrs) {
-    $ipu = explode('.', $user_ip);
-    foreach ($ipu as &$v)
-    $v = str_pad(decbin($v), 8, '0', STR_PAD_LEFT);
-    $ipu = join('', $ipu);
-    $res = false;
-    foreach ($cidrs as $cidr) {
-        $parts = explode('/', $cidr);
-        $ipc = explode('.', $parts[0]);
-        foreach ($ipc as &$v) $v = str_pad(decbin($v), 8, '0', STR_PAD_LEFT);
-        $ipc = substr(join('', $ipc), 0, $parts[1]);
-        $ipux = substr($ipu, 0, $parts[1]);
-        $res = ($ipc === $ipux);
-        if ($res) break;
-    }
-    return $res;
-}
 ?>

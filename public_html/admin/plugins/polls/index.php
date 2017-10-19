@@ -72,11 +72,19 @@ function POLLS_edit($pid = '')
 
     $retval = '';
 
+    if (!empty ($pid)) {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    }
+
     // writing the menu on top
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
               'text' => $LANG_ADMIN['list_all']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
+              'text' => $lang_create_or_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 
@@ -203,7 +211,6 @@ function POLLS_edit($pid = '')
     $question_sql = "SELECT question,qid "
         . "FROM {$_TABLES['pollquestions']} WHERE pid='$pid' ORDER BY qid;";
     $questions = DB_query($question_sql);
-    include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navbar = new navbar;
 
     $poll_templates->set_block('editor','questiontab','qt');
@@ -331,11 +338,9 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
     }
 
     // check if any question was entered
-    if (empty($topic) or (count($Q) == 0) or (strlen($Q[0]) == 0) or
-            (strlen($A[0][0]) == 0)) {
+    if (empty($topic) || (count($Q) == 0) || (strlen($Q[0]) == 0) || (strlen($A[0][0]) == 0)) {
         $retval .= COM_siteHeader ('menu', $LANG25[5]);
-        $retval .= COM_startBlock ($LANG21[32], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'));
+        $retval .= COM_startBlock ($LANG21[32], '',COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $LANG25[2];
         $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
         $retval .= COM_siteFooter ();
@@ -369,13 +374,11 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $display .= COM_startBlock ($MESSAGE[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
+        $display .= COM_startBlock ($MESSAGE[30], '',COM_getBlockTemplate ('_msg_block', 'header'));
         $display .= $MESSAGE[31];
         $display .= COM_endBlock ();
-        $display .= COM_siteFooter (COM_getBlockTemplate ('_msg_block',
-                                                          'footer'));
-        COM_accessLog("User {$_USER['username']} tried to illegally submit or edit poll $pid.");
+        $display .= COM_siteFooter (COM_getBlockTemplate ('_msg_block','footer'));
+        COM_accessLog("User {$_USER['username']} tried to submit or edit poll $pid.");
         echo $display;
         exit;
     }
@@ -409,9 +412,11 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
     $v = 0; // re-count votes sine they might have been changed
     // first dimension of array are the questions
     $num_questions = count($Q);
+    $total_questions = 0;
     for ($i = 0; $i < $num_questions; $i++) {
         $Q[$i] = $Q[$i];
         if (strlen($Q[$i]) > 0) { // only insert questions that exist
+            $total_questions++;
             $Q[$i] = DB_escapeString($Q[$i]);
             DB_save($_TABLES['pollquestions'], 'qid, pid, question',
                                                "'$k', '$pid', '$Q[$i]'");
@@ -435,8 +440,14 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
             $k++;
         }
     }
+    if ( $total_questions > 0 ) {
+        $numVoters = (int) ($v / $total_questions);
+    } else {
+        $numVoters = $v;
+    }
+
     // save topics after the questions so we can include question count into table
-    $sql = "'$pid','$topic','$description',$v, $k, '" . date ('Y-m-d H:i:s');
+    $sql = "'$pid','$topic','$description',$numVoters, $k, '" . date ('Y-m-d H:i:s');
 
     if ($mainpage == 'on') {
         $sql .= "',1";
@@ -530,6 +541,8 @@ function POLLS_list()
     $retval = '';
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
+              'text' => $LANG_ADMIN['list_all'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
@@ -614,7 +627,9 @@ function POLLS_listVotes($pid)
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php',
-              'text' => 'Poll List'),
+              'text' => $LANG_ADMIN['list_all']),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
+              'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 

@@ -30,6 +30,7 @@
 require_once '../../lib-common.php';
 
 // Only let admin users access this page
+/*
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
     COM_errorLog("Someone has tried to access the glFusion Development Code Upgrade Routine without proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
@@ -41,6 +42,7 @@ if (!SEC_inGroup('Root')) {
     echo $display;
     exit;
 }
+*/
 $retval = '';
 
 function glfusion_110() {
@@ -1611,7 +1613,7 @@ function glfusion_165()
 
 function glfusion_166()
 {
-    global $_TABLES, $_CONF, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF, $_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1630,6 +1632,119 @@ function glfusion_166()
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.6',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.6' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_170()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+    $c->del('digg_enabled','Core');
+
+    $_SQL = array();
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `story_video` VARCHAR(255) NULL DEFAULT NULL AFTER `story_image`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
+
+// add comment queued field
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD queued TINYINT(3) NOT NULL DEFAULT '0' AFTER pid;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['comments']} ADD COLUMN `postmode` VARCHAR(15) NULL DEFAULT NULL AFTER `queued`;";
+
+
+    $cmt_updates = DB_getItem($_TABLES['features'],'ft_id', 'ft_name = "comment.moderate"');
+
+    if ( $cmt_updates == '' || (int) $cmt_updates == 0 ) {
+        $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Comment Admin', 'Can moderate comments', 1)";
+        $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.moderate', 'Ability to moderate comments', 1)";
+        $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('comment.submit', 'Comments bypass submission queue', 1)";
+    }
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    if ( $cmt_updates == '' || (int) $cmt_updates == 0 ) {
+        // comment groups and permissions
+        $cmt_mod_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.moderate'");
+        $cmt_sub_id     = DB_getItem($_TABLES['features'], 'ft_id',"ft_name = 'comment.submit'");
+        $cmt_admin      = DB_getItem($_TABLES['groups'], 'grp_id',"grp_name = 'Comment Admin'");
+
+        if ( DB_count($_TABLES['access'],array('acc_ft_id','acc_grp_id'),array($cmt_mod_id,$cmt_admin)) == 0 ) {
+            // ties comment.moderate feature to Comment Admin group
+            if (($cmt_mod_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_mod_id, $cmt_admin)");
+            }
+            // adds comment.submit feature to comment admin group
+            if (($cmt_sub_id > 0) && ($cmt_admin > 0)) {
+                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($cmt_sub_id, $cmt_admin)");
+            }
+            // adds comment admin group to Root group
+            if ($cmt_admin > 0) {
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES ($cmt_admin,NULL,1)");
+            }
+        }
+    }
+
+    // add new configuration items
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // encrypt
+    if ( !isset($_VARS['guid'])) {
+        $rk = COM_randomKey(80);
+        DB_query("INSERT INTO {$_TABLES['vars']} (name,value) VALUES ('guid','".$rk."')");
+        $_VARS['guid'] = $rk;
+        // encrypt mail_smtp_password
+        $_coreCfg = $c->get_config('Core');
+        $c->set('mail_smtp_password', $_coreCfg['mail_smtp_password'],'Core');
+    }
+
+    // comments submission queue feature
+    $c->add('commentssubmission',0,'select',4,6,31,35,TRUE,'Core');
+
+    $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
+    $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);
+    $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE);
+
+    $c->del('path_pear','Core');
+    $c->del('have_pear','Core');
+    $c->del('fs_pear','Core');
+
+    DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
+
+    DB_query("INSERT INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');",1);
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.0' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_171()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    $_SQL = array();
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.1',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.1' WHERE name='glfusion'",1);
 
 }
 
@@ -1856,7 +1971,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_166();
+glfusion_171();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

@@ -55,6 +55,7 @@ function _checkEnvironment()
 
     $required_extensions = array(
         array('extension' => 'ctype',   'fail' => 1),
+        array('extension' => 'curl',    'fail' => 0),
         array('extension' => 'date',    'fail' => 1),
         array('extension' => 'filter',  'fail' => 1),
         array('extension' => 'gettext', 'fail' => 0),
@@ -125,40 +126,51 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
-    $rg = ini_get('register_globals');
-    $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
-    $T->set_var('class',$rg == 1 ? 'tm-fail' : 'tm-pass');
-    $T->set_var('recommended',$LANG_ENVCHK['off']);
-    $T->set_var('notes',$LANG_ENVCHK['register_globals']);
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('env','envs',true);
-    $classCounter++;
-
-    $sm = ini_get('safe_mode');
-    $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
-    $T->set_var('class',$sm == 1 ? 'tm-fmail' : 'tm-pass');
-    $T->set_var('recommended',$LANG_ENVCHK['off']);
-    $T->set_var('notes',$LANG_ENVCHK['safe_mode']);
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('env','envs',true);
-    $classCounter++;
-
-    $ob = ini_get('open_basedir');
-    if ( $ob == '' ) {
-        $open_basedir_restriction = 0;
+    if (version_compare(PHP_VERSION,'5.4.0','<')) {
+        $rg = ini_get('register_globals');
+        $T->set_var('item','register_globals');
+        $T->set_var('status',$rg == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+        $T->set_var('class',$rg == 1 ? 'tm-fail' : 'tm-pass');
+        $T->set_var('recommended',$LANG_ENVCHK['off']);
+        $T->set_var('notes',$LANG_ENVCHK['register_globals']);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+        $classCounter++;
     } else {
-        $open_basedir_restriction = 1;
-        $open_basedir_directories = $ob;
+        $rg = 0;
     }
-    $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? $LANG_ENVCHK['off'] : $LANG_ENVCHK['enabled']);
-    $T->set_var('class', $ob == '' ? 'tm-pass' : 'tm-fail');
-    $T->set_var('notes',$LANG_ENVCHK['open_basedir']);
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('env','envs',true);
-    $classCounter++;
+
+    if (version_compare(PHP_VERSION,'5.4.0','<')) {
+        $sm = ini_get('safe_mode');
+        $T->set_var('item','safe_mode');
+        $T->set_var('status',$sm == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
+        $T->set_var('class',$sm == 1 ? 'tm-fmail' : 'tm-pass');
+        $T->set_var('recommended',$LANG_ENVCHK['off']);
+        $T->set_var('notes',$LANG_ENVCHK['safe_mode']);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+        $classCounter++;
+    } else {
+        $sm = 0;
+    }
+    if (version_compare(PHP_VERSION,'7.0.0','<')) {
+        $ob = ini_get('open_basedir');
+        if ( $ob == '' ) {
+            $open_basedir_restriction = 0;
+        } else {
+            $open_basedir_restriction = 1;
+            $open_basedir_directories = $ob;
+        }
+        $T->set_var('item','open_basedir');
+        $T->set_var('status',$ob == '' ? $LANG_ENVCHK['off'] : $LANG_ENVCHK['enabled']);
+        $T->set_var('class', $ob == '' ? 'tm-pass' : 'tm-fail');
+        $T->set_var('notes',$LANG_ENVCHK['open_basedir']);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+        $classCounter++;
+    } else {
+        $open_basedir_restriction = 0;
+    }
 
     $memory_limit = _return_bytes(ini_get('memory_limit'));
     $memory_limit_print = _bytes_to_mg($memory_limit); //  / 1024) / 1024;
@@ -221,6 +233,18 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
+    if (defined ('DVLP_DEBUG')) {
+        $errorReportingLevel = error_level_tostring(error_reporting(), ' ');
+        $T->set_var('item', 'error_reporting');
+        $T->set_var('status', '');
+        $T->set_var('class', 'tm-pass');
+        $T->set_var('recommended', '');
+        $T->set_var('notes',$errorReportingLevel);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+        $classCounter++;
+    }
+
     $mysql_version = DB_getVersion();
     $T->set_var('mysql', $LANG_ENVCHK['database_version']);
     $T->set_var('mysql_version',$mysql_version);
@@ -255,6 +279,29 @@ function _checkEnvironment()
 
     if ( $sm != 1 && $open_basedir_restriction != 1 ) {
         switch ( $_CONF['image_lib'] ) {
+            case 'graphicsmagick' :    // GraphicsMagick
+                if (PHP_OS == "WINNT") {
+                    $binary = "/gm.exe";
+                } else {
+                    $binary = "/gm";
+                }
+                clearstatcache();
+                if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
+                    $T->set_var(array(
+                        'item'   =>  $LANG_ENVCHK['graphicsmagick'],
+                        'status' =>  $LANG_ENVCHK['not_found'],
+                        'class' =>  'tm-fail',
+                        'notes'  => $LANG_ENVCHK['gm_not_found'],
+                    ));
+                } else {
+                    $T->set_var(array(
+                        'item'   => $LANG_ENVCHK['graphicsmagick'],
+                        'status' => $LANG_ENVCHK['ok'],
+                        'class' => 'tm-pass',
+                        'notes'  => $LANG_ENVCHK['gm_ok'],
+                    ));
+                }
+                break;
             case 'imagemagick' :    // ImageMagick
                 if (PHP_OS == "WINNT") {
                     $binary = "/convert.exe";
@@ -812,6 +859,9 @@ function gdVersion($user_ver = 0) {
 
 function _phpinfo()
 {
+    if (preg_match('/phpinfo/', ini_get('disable_functions'))) {
+        return '';
+    }
     ob_start();
     phpinfo();
 
@@ -820,10 +870,9 @@ function _phpinfo()
     $retval = "<div class='phpinfodisplay' style=\"font-size:1.2em;width:100%\"><style type='text/css'>\n" .
         join( "\n",
             array_map(
-                create_function(
-                    '$i',
-                    'return ".phpinfodisplay " . preg_replace( "/,/", ",.phpinfodisplay ", $i );'
-                    ),
+                function($i) {
+                    return ".phpinfodisplay " . preg_replace( "/,/", ",.phpinfodisplay ", $i );
+                },
                 preg_split( '/\n/', trim(preg_replace( "/\nbody/", "\n", $matches[1])) )
                 )
             ) .
@@ -835,8 +884,39 @@ function _phpinfo()
 
 }
 
+function error_level_tostring($intval, $separator = ',')
+{
+    $errorlevels = array(
+        E_ALL => 'E_ALL',
+        E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+        E_DEPRECATED => 'E_DEPRECATED',
+        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+        E_STRICT => 'E_STRICT',
+        E_USER_NOTICE => 'E_USER_NOTICE',
+        E_USER_WARNING => 'E_USER_WARNING',
+        E_USER_ERROR => 'E_USER_ERROR',
+        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+        E_CORE_WARNING => 'E_CORE_WARNING',
+        E_CORE_ERROR => 'E_CORE_ERROR',
+        E_NOTICE => 'E_NOTICE',
+        E_PARSE => 'E_PARSE',
+        E_WARNING => 'E_WARNING',
+        E_ERROR => 'E_ERROR');
+    $result = '';
+    foreach($errorlevels as $number => $name) {
+        if (($intval & $number) == $number) {
+            $result .= ($result != '' ? $separator : '').$name;
+            if ( $name == 'E_ALL' ) break;
+        }
+    }
+    return $result;
+}
+
+$page = _checkEnvironment();
+
 $display  = COM_siteHeader();
-$display .= _checkEnvironment();
+$display .= $page;
 $display .= COM_siteFooter();
 echo $display;
 ?>

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user administration page.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -43,6 +43,7 @@ require_once 'auth.inc.php';
 
 USES_lib_user();
 USES_lib_social();
+USES_lib_admin();
 
 $display = '';
 
@@ -86,23 +87,6 @@ function USER_edit($uid = '', $msg = '')
     // language overrides
     $LANG_MYACCOUNT['pe_namepass'] = $LANG_ACCESS['pe_namepass'];
     $LANG_MYACCOUNT['pe_userinfo'] = $LANG_ACCESS['pe_userinfo'];
-
-    USES_class_navbar();
-    USES_lib_admin();
-
-
-    $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/user.php',
-              'text' => $LANG28[11]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
-              'text' => $LANG28[23]),
-        array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
-              'text' => $LANG28[54]),
-        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
-              'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
-              'text' => $LANG_ADMIN['admin_home'])
-    );
 
     $userform = new Template ($_CONF['path_layout'] . 'admin/user/');
     $userform->set_file('user','adminuseredit.thtml');
@@ -276,6 +260,27 @@ function USER_edit($uid = '', $msg = '')
     if (!empty ($msg)) {
         $retval .= COM_showMessageText($MESSAGE[$msg],$LANG28[22],false);
     }
+
+    if ( $newuser == 1 ) {
+        $lang_create_or_edit = $LANG_ADMIN['create_new'];
+    } else {
+        $lang_create_or_edit = $LANG_ADMIN['edit'];
+    }
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/user.php',
+              'text' => $LANG_ADMIN['admin_users']),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
+              'text' => $lang_create_or_edit,'active'=>true),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
+              'text' => $LANG28[23]),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
+              'text' => $LANG28[54]),
+        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+              'text' => $LANG28[95]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
 
     $retval .= ADMIN_createMenu(
         $menu_arr,
@@ -512,8 +517,6 @@ function USER_groupPanel($U, $newuser = 0)
     $form_url = '';
 
     $uid = $U['uid'];
-
-    USES_lib_admin();
 
     // set template
     $userform = new Template ($_CONF['path_layout'] . 'admin/user/');
@@ -782,7 +785,7 @@ function USER_layoutPanel($U, $newuser = 0)
             $usertheme = $U['theme'];
         }
         $themeFiles = COM_getThemes ();
-        usort ($themeFiles,create_function ('$a,$b', 'return strcasecmp($a,$b);'));
+        usort ($themeFiles,function ($a,$b) { return strcasecmp($a,$b); } );
 
         foreach ($themeFiles as $theme) {
             $selection .= '<option value="' . $theme . '"';
@@ -1340,8 +1343,6 @@ function USER_list($grp_id)
 {
     global $_CONF, $_TABLES, $LANG_ACCESS, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
-    USES_lib_admin();
-
     $retval = '';
     $group_all = '';
 
@@ -1387,12 +1388,10 @@ function USER_list($grp_id)
                          'direction' => 'ASC');
 
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/user.php',
+              'text' => $LANG_ADMIN['admin_users'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'] . '/moderation.php',
-              'text' => $LANG_ADMIN['submissions']),
-        array('url' => $_CONF['site_admin_url'] . '/group.php',
-              'text' => $LANG_ADMIN['admin_groups']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
         array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
@@ -1472,6 +1471,7 @@ function USER_save($uid)
     global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE;
 
     $retval = '';
+    $sql = '';
     $userChanged = false;
 
     if ($_USER_VERBOSE) COM_errorLog("**** entering USER_save()****",1);
@@ -1750,11 +1750,11 @@ function USER_save($uid)
         $AETIDS = explode (' ', $allowed_etids);
 
         $tids = '';
-        if (sizeof ($TIDS) > 0) {
+        if (is_array($TIDS) && sizeof ($TIDS) > 0) {
             $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
         }
         $aids = '';
-        if (sizeof ($AIDS) > 0) {
+        if (is_array($AIDS) && sizeof ($AIDS) > 0) {
             foreach ($AIDS as $key => $val) {
                 $AIDS[$key] = intval($val);
             }
@@ -1762,7 +1762,7 @@ function USER_save($uid)
         }
         $selectedblocks = '';
         $selectedBoxes = array();
-        if (count ($BOXES) > 0) {
+        if (is_array($BOXES) && count ($BOXES) > 0) {
             foreach ($BOXES AS $key => $val) {
                 $BOXES[$key] = intval($val);
             }
@@ -1783,7 +1783,7 @@ function USER_save($uid)
         }
 
         $etids = '-';
-        if (sizeof ($ETIDS) > 0) {
+        if (is_array($ETIDS) && sizeof ($ETIDS) > 0) {
             $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
         } else {
             $etids = '-';
@@ -1892,7 +1892,9 @@ function USER_save($uid)
             PLG_userInfoChanged ($uid);
         }
         CACHE_remove_instance('menu');
-        $errors = DB_error();
+//@TODO - this error check does not seem correct
+//      - this only checks the last SQL
+        $errors = DB_error($sql);
         if (empty($errors)) {
             echo PLG_afterSaveSwitch (
                 $_CONF['aftersave_user'],
@@ -1938,8 +1940,6 @@ function USER_batchAdmin()
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG01, $LANG28, $_IMAGE_TYPE;
 
     $display = '';
-
-    USES_lib_admin();
 
     $usr_type = '';
     if (isset($_REQUEST['usr_type'])) {
@@ -2098,13 +2098,15 @@ function USER_batchAdmin()
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
-              'text' => $LANG28[11]),
+              'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
               'text' => $LANG28[23]),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
+              'text' => $LANG28[54],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
-                          'text' => $LANG28[95]),
+              'text' => $LANG28[95]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -2287,7 +2289,6 @@ function USER_importExec()
     $_CONF['usersubmission'] = 0;
 
     // First, upload the file
-    USES_class_upload();
 
     $upload = new upload ();
     $upload->setPath ($_CONF['path_data']);
@@ -2402,14 +2403,14 @@ function USER_import()
     global $_CONF, $LANG28;
 
     $token = SEC_createToken();
-    $retval = '<form action="' . $_CONF['site_admin_url']
+    $retval = '<form class="uk-form" action="' . $_CONF['site_admin_url']
             . '/user.php" method="post" enctype="multipart/form-data"><div>'
             . $LANG28[29]
             . ': <input type="file" dir="ltr" name="importfile" size="40"'
             . '/>'
             . '<input type="hidden" name="importexec" value="x" />'
-            . '<input type="submit" name="submit" value="' . $LANG28[30]
-            . '"' . '/><input type="hidden" name="' . CSRF_TOKEN
+            . '<button class="uk-button uk-button-primary" type="submit" name="submit" value="' . $LANG28[30]
+            . '"' . '/>'.$LANG28[30].'</button><input type="hidden" name="' . CSRF_TOKEN
             . "\" value=\"{$token}\"" . '/></div></form>';
 
     return $retval;
@@ -2444,8 +2445,6 @@ function USER_delete($uid)
 function USER_handlePhotoUpload ($uid, $delete_photo = '')
 {
     global $_CONF, $_TABLES, $LANG24;
-
-    USES_class_upload();
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
@@ -2613,8 +2612,27 @@ switch($action) {
 
     case 'import':
         $display .= COM_siteHeader('menu', $LANG28[24]);
+        $menu_arr = array (
+            array('url' => $_CONF['site_admin_url'] . '/user.php',
+                  'text' => $LANG_ADMIN['admin_users']),
+            array('url' => $_CONF['site_admin_url'] . '/user.php?edit=x',
+                  'text' => $LANG_ADMIN['create_new']),
+            array('url' => $_CONF['site_admin_url'] . '/user.php?import=x',
+                  'text' => $LANG28[23],'active'=>true),
+            array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
+                  'text' => $LANG28[54]),
+            array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+                  'text' => $LANG28[95]),
+            array('url' => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home'])
+        );
         $display .= COM_startBlock ($LANG28[24], '',
                             COM_getBlockTemplate ('_admin_block', 'header'));
+        $display .= ADMIN_createMenu(
+            $menu_arr,
+            '',
+            $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE
+        );
         $display .= $LANG28[25] . '<br/><br/>';
         $display .= USER_import();
         $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));

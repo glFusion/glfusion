@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user preference editor.                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2015 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -42,7 +42,7 @@ if (!SEC_hasRights('user.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the user administration screen.");
+    COM_accessLog("User {$_USER['username']} tried to access the user administration screen.");
     echo $display;
     exit;
 }
@@ -62,6 +62,8 @@ function editPreferences()
               'text' => $LANG28[23]),
         array('url' => $_CONF['site_admin_url'] . '/user.php?batchadmin=x',
               'text' => $LANG28[54]),
+        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+                          'text' => $LANG28[95],'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -112,7 +114,7 @@ function editPreferences()
         $selection = '<select id="theme" name="theme">' . LB;
         $usertheme = $_CONF['theme'];
         $themeFiles = COM_getThemes ();
-        usort ($themeFiles,create_function ('$a,$b', 'return strcasecmp($a,$b);'));
+        usort ($themeFiles,function ($a,$b) {return strcasecmp($a,$b);});
         foreach ($themeFiles as $theme) {
             $selection .= '<option value="' . $theme . '"';
             if ($usertheme == $theme) {

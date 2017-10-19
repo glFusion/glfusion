@@ -10,35 +10,50 @@
 <form class="uk-form uk-form-stacked" id="commentform" action="{site_url}/comment.php#comment_entry" method="post">
 	{cid}
 	<input type="hidden" name="mode" value="{mode}">
+	<input type="hidden" name="{modedit_mode}" value="{modedit}">
 	<input type="hidden" name="sid" value="{sid}">
 	<input type="hidden" name="pid" value="{pid}">
 	<input type="hidden" name="type" value="{type}">
 	<input type="hidden" name="{token_name}" value="{CSRF_TOKEN}">
 	<input type="hidden" name="uid" value="{uid}">
-
+	<input type="hidden" name="title" value="{title}">
+{!if username_disabled}
+  <input type="hidden" name="username" value="{username}">
+{!else}
 	<div class="uk-form-row">
-		<label class="uk-form-label" for="title">{lang_title}</label>
+		<label class="uk-form-label" for="title">{lang_username}</label>
 		<div class="uk-form-controls">
-			<input type="text" id="title" name="title" size="64" value="{title}" maxlength="96">
+			<input class="required" type="text" id="username" name="username" size="32" value="{username}" maxlength="32">
 		</div>
 	</div>
+{!endif}
 
 	<div class="uk-form-row">
-		<label class="uk-form-label" for="comment_text">{lang_comment}</label>
+		<label class="uk-form-label" for="comment_text">
+			{lang_comment} {!if htmlmode} ({$LANG_postmodes[html]}){!else} ({$LANG_postmodes[plaintext]}){!endif}
+		</label>
 		<div class="uk-form-controls">
 			<div id="text_editor">
 {!if htmlmode}
+{!if wysiwyg}
 				<div class="uk-margin-small">
 					<button id="visual" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('comment_text');$('#std').attr('class','uk-button');$('#visual').attr('class','uk-button uk-button-success');">{visual_editor}</button>
 					<button id="std" type="button" class="uk-button" value="{html_editor}"  onclick="woff('comment_text');$('#visual').attr('class','uk-button');$('#std').attr('class','uk-button uk-button-success')">{html_editor}</button>
 				</div>
 {!endif}
-				<textarea id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
+{!endif}
+				<textarea class="required" id="comment_text" name="comment_text" cols="60" rows="10" style="width:90%;">{comment}</textarea>
 				<input type="hidden" name="postmode" value="{postmode}" >
 
 			</div>
 		</div>
 	</div>
+
+{!if silent_edit}
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="silent_edit">{lang_silent_edit} &nbsp;&nbsp;<input type="checkbox" id="silent_edit" name="silent_edit" value="1"></label>
+	</div>
+{!endif}
 
 	<div class="uk-form-row">
 		<label class="uk-form-label"></label>
@@ -70,14 +85,20 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label"></label>
 		<div class="uk-form-controls">
-			<button class="uk-button uk-button-primary" type="submit" name="preview" value="{lang_preview}">{lang_preview}</button>
+			<button class="uk-button uk-button-primary cancel" type="submit" name="preview" value="{lang_preview}">{lang_preview}</button>
 {!if save_type}
 			<button class="uk-button uk-button-success" type="submit" name="{save_type}" value="{lang_save}">{lang_save}</button>
 {!endif}
-			<button class="uk-button uk-button-danger" type="submit" name="cancel" value="{$LANG32[24]}" >{$LANG32[24]}</button>
+			<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG32[24]}" >{$LANG32[24]}</button>
 		</div>
 	</div>
 </form>
 
 {end_block}
+<script>
+	$("#commentform").validate({
+		errorElement: "div",
+		errorClass: "uk-text-danger uk-text-bold"
+	});
+</script>
 {# end {templatelocation} #}

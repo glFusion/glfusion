@@ -1,5 +1,12 @@
 {# begin {templatelocation} #}
-<div class="uk-panel uk-panel-box uk-margin-bottom">
-<div class="uk-panel-title">{block_title}</div>
-
+<div {block_id} class="uk-panel uk-panel-box uk-margin-bottom">
+{!if block_title}
+	<div class="uk-panel-title">
+		{block_title}
+  {!if block_help}
+	  <a class="blocktitle uk-align-right block-help-icon uk-icon-hover uk-icon-question-circle" href="{help_url}" title="{$LANG01[51]}" target="_blank">
+	  </a>
+  {!endif}
+	</div>
+{!endif}
 {# end {templatelocation} #}

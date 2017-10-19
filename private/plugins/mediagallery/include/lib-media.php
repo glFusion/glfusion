@@ -112,9 +112,6 @@ function MG_displayASF( $aid, $I, $full ) {
         $resolution_y = $I['media_resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -302,9 +299,6 @@ function MG_displayMOV( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -473,7 +467,6 @@ function MG_displayMP4( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -661,9 +654,6 @@ function MG_displaySWF( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -746,6 +736,7 @@ function MG_displaySWF( $aid, $I, $full ) {
                 'id'        => 'swf' . rand(),
                 'id2'       => 'swf2' . rand(),
                 'movie'     => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
+                'mime_type' => 'application/x-shockwave-flash',
             ));
 
             $flasharray = array();
@@ -835,9 +826,6 @@ function MG_displayFLV ( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 && $I['remote_media'] == 0 ) {
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-            // Needed for windows only
-
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -987,6 +975,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
     			$streamingServerURLmg = '';
     			$streamingServer      = '';
     			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
+                $movie                = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
   			}
   			$width  = $playback_options['width'];
   			$height = $playback_options['height'];
@@ -1017,6 +1006,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'site_url'  	=> $_MG_CONF['site_url'],
                 'lang_noflash'  => $LANG_MG03['no_flash'],
                 'play'          => $autoplay,
+                'autoplay_text' => true,
                 'autoplay'      => $autoplay,
                 'menu'          => ($playback_options['menu'] ? 'true' : 'false'),
                 'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
@@ -1039,6 +1029,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 'lang_normal'   => $LANG_MG03['normal'],
                 'resolution_x'  => $resolution_x,
                 'resolution_y'  => $resolution_y,
+                'mime_type'     => 'video/x-flv',
             ));
     		$F->parse('output','player');
     		$flv_player = $F->finish($F->get_var('output'));
@@ -1182,7 +1173,6 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
 
-            require_once $_CONF['path'] . '/lib/getid3/getid3.php';
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -2075,10 +2065,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
     if ( strlen($media_desc) > 0 ) {
-        USES_lib_html2text();
         $metaDesc = $media_desc;
         $metaDesc = strip_tags($metaDesc);
-        $html2txt = new html2text($metaDesc,false);
+        $html2txt = new Html2Text\Html2Text($metaDesc,false);
         $metaDesc = trim($html2txt->get_text());
         $shortComment = '';
         $metaArray = explode(' ',$metaDesc);
@@ -2190,6 +2179,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $outputHandle->addMeta('property','og:image:height',$raw_image_height);
     $outputHandle->addMeta('property','og:image:type',$media[$mediaObject]['mime_type']);
 
+    $shareImage = '';
+
     // look for twitter social site config
     if ( $media[$mediaObject]['media_type'] == 0 ) { // only for images
         $twitterSiteUser = '';
@@ -2207,10 +2198,11 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $imageDesc = (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '';
             $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($imageDesc,ENT_QUOTES,COM_getEncodingt()));
             $outputHandle->addMeta('property','twitter:image',$raw_image);
+            $shareImage = $raw_image;
         }
     }
 
-    $social_icons = SOC_getShareIcons();
+    $social_icons = SOC_getShareIcons($ptitle,'',$permalink,$shareImage,'mediagallery');
     $T->set_var('social_share',$social_icons);
 
     $getid3link = '';

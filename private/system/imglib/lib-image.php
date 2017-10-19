@@ -40,6 +40,9 @@ switch ( $_CONF['image_lib'] ) {
     case 'imagemagick' :    // ImageMagick...
         require_once($_CONF['path_system'] . 'imglib/im_image.php');
         break;
+    case 'graphicsmagick' : // GraphicsMagick...
+        require_once($_CONF['path_system'] . 'imglib/gm_image.php');
+        break;
     case 'netpbm' :    // NetPBM
         require_once($_CONF['path_system'] . 'imglib/pbm_image.php');
         break;
@@ -93,13 +96,6 @@ function UTL_execWrapper($cmd) {
 function IMG_getMediaMetaData( $filename ) {
     global $_CONF;
 
-    // include getID3() library
-    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
-    // Needed for windows only
-    if ( !defined('GETID3_HELPERAPPSDIR') ) {
-        define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-    }
-
     $getID3 = new getID3;
 
     // Analyze file and store returned data in $ThisFileInfo
@@ -115,20 +111,7 @@ function IMG_getMediaMetaData( $filename ) {
             $ThisFileInfo['mime_type'] = 'video/mp4';
         }
     }
-/* ---
-    if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_getMediaMetaData: getID3 analyzing file: " . $filename);
-        COM_errorLog("IMG_getMediaMetaData: getID3 found mime_type: " . $ThisFileInfo['mime_type']);
 
-        if ( isset($ThisFileInfo['error']) ) {
-            if ( is_array($ThisFileInfo['error']) ) {
-                foreach ($ThisFileInfo['error'] AS $error ) {
-                    COM_errorLog("IMG_getMediaMetaData: " . $error);
-                }
-            }
-        }
-    }
---- */
     return $ThisFileInfo;
 }
 

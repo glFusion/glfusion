@@ -98,10 +98,13 @@ function _bb_listEntries ($page = 1, $msg = '')
 
     // writing the menu on top
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php',
-              'text' => $LANG_BAD_BEHAVIOR['list_ips']),
-        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/ban.php?mode=add',
-              'text' => $LANG_BAD_BEHAVIOR['ban_ip']),
+        array('url' => '#',
+              'text' => $LANG_BAD_BEHAVIOR['log_entries'], 'active' => true),
+
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/blacklist.php',
+              'text' => $LANG_BAD_BEHAVIOR['blacklist']),
+        array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/whitelist.php',
+              'text' => $LANG_BAD_BEHAVIOR['whitelist']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -145,6 +148,11 @@ function _bb_listEntries ($page = 1, $msg = '')
         $filter_select .= ' selected="selected" ';
     }
     $filter_select .= '>'.$LANG_BAD_BEHAVIOR['no_filter'].'</option>';
+
+//$tmpArr = $LANG_BB2_RESPONSE;
+asort($LANG_BB2_RESPONSE);
+
+
     foreach ($LANG_BB2_RESPONSE AS $code => $text ) {
         $filter_select .= '<option value="'.$code.'"';
         if ( $filter == $code ) {
@@ -173,34 +181,19 @@ function _bb_listEntries ($page = 1, $msg = '')
 
         $dt = new Date($A['date'],$_USER['tzid']);
 
-        $headers = str_replace("\n", "<br/>\n", $A['http_headers']);
-		$headers = str_replace("User-Agent:","<strong>User-Agent:</strong>",$headers);
-		$headers = str_replace("Host:","<strong>Host:</strong>",$headers);
-		$headers = str_replace("POST ","<strong>POST</strong> ",$headers);
-		$headers = str_replace("GET ","<strong>GET</strong> ",$headers);
-		$headers = str_replace("Accept-Language:","<strong>Accept-Language:</strong> ",$headers);
-		$headers = str_replace("Accept-Encoding:","<strong>Accept-Encoding:</strong> ",$headers);
-		$headers = str_replace("Accept-Charset:","<strong>Accept-Charset:</strong> ",$headers);
-		$headers = str_replace("X-Forwarded-For:","<strong>X-Forwarded-For:</strong> ",$headers);
-		$headers = str_replace("Cookie:","<strong>Cookie:</strong> ",$headers);
-		$headers = str_replace("Via:","<strong>Via:</strong> ",$headers);
-		$headers = str_replace("Connection:","<strong>Connection:</strong>",$headers);
-		$headers = str_replace("Accept:","<strong>Accept:</strong>",$headers);
-		$headers = str_replace("Cache-Control:","<strong>Cache-Control:</strong>",$headers);
-		$headers = str_replace("Referer:","<strong>Referer:</strong>",$headers);
-		$headers = str_replace("Pragma:","<strong>Pragma:</strong>",$headers);
-		$headers = str_replace("Proxy-","<strong>Proxy-</strong>",$headers);
-		$headers = str_replace("Cf-Connecting-Ip","<strong>Cf-Connecting-Ip</strong>",$headers);
-		$headers = str_replace("Cf-Ipcountry","<strong>Cf-Ipcountry</strong>",$headers);
-		$headers = str_replace("X-Forwarded-Proto","<strong>X-Forwarded-Proto</strong>",$headers);
-		$headers = str_replace("Cf-Visitor","<strong>Cf-Visitor</strong>",$headers);
-		$headers = str_replace("X-Http-Proto","<strong>X-Http-Proto</strong>",$headers);
-		$headers = str_replace("X-Real-Ip","<strong>X-Real-Ip</strong>",$headers);
-		$headers = str_replace("Content-Length","<strong>Content-Length</strong>",$headers);
-        $headers = str_replace("Content-Type","<strong>Content-Type</strong>",$headers);
-        $headers = str_replace("Te:","<strong>Te:</strong>",$headers);
-        $headers = str_replace("Expect:","<strong>Expect:</strong>",$headers);
-        $headers = str_replace("Dnt:","<strong>Dnt:</strong>",$headers);
+        $splitheaders = str_replace("\n", "<br/>\n", $A['http_headers']);
+        $headers = '';
+        $headArray = explode("<br/>",$splitheaders);
+        foreach ($headArray AS $headerLine) {
+            $lineArray = explode(':',$headerLine);
+            if ( isset($lineArray[1] ) ) {
+                $headers .= '<strong>'.$lineArray[0].'</strong>: '.$lineArray[1].'<br>';
+            } else {
+        		$lineArray[0] = str_replace("POST ","<strong>POST</strong> ",$lineArray[0]);
+        		$lineArray[0] = str_replace("GET ","<strong>GET</strong> ",$lineArray[0]);
+                $headers .= $lineArray[0].'<br>';
+            }
+        }
 
 		$entity = str_replace("\n", "<br/>\n", $A["request_entity"]);
 
@@ -272,6 +265,14 @@ function _bb_viewEntry ($id, $page = 1)
 
     $retval = '';
 
+    $id = DB_escapeString ($id);
+    $result = DB_query ("SELECT ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " WHERE id = '$id'");
+    $A = DB_fetchArray ($result);
+
+    foreach ($A as $key => $val) {
+        $A[$key] = htmlspecialchars ($val);
+    }
+
     $donate = $LANG_BAD_BEHAVIOR['description'];
 
     if (DB_getItem ($_TABLES['vars'], 'value',"name = 'bad_behavior2.donate'") == 1) {
@@ -284,10 +285,23 @@ function _bb_viewEntry ($id, $page = 1)
         $backlink .= '&amp;page=' . $page;
     }
 
+    if ( isset($_GET['ip'] ) ) {
+        $ip = COM_applyFilter($_GET['ip']);
+        $returnURL = $_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php?mode=search&amp;ip='.urlencode($ip);
+    } elseif ( isset($_GET['key'] ) ) {
+        $key = COM_applyFilter($_GET['key']);
+        $returnURL = $_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php?mode=search&amp;key='.urlencode($key);
+    } else {
+        $ip = $A['ip'];
+        $returnURL = $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list';
+    }
+
     // writing the menu on top
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list',
-              'text' => 'Log Entries'),
+              'text' => $LANG_BAD_BEHAVIOR['block_title_list']),
+        array('url' => $returnURL,
+              'text' => $LANG_BAD_BEHAVIOR['back_to_search']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -316,13 +330,6 @@ function _bb_viewEntry ($id, $page = 1)
     $templates->set_var ('lang_denied_reason', $LANG_BAD_BEHAVIOR['denied_reason']);
     $templates->set_var ('lang_search', $LANG_BAD_BEHAVIOR['search']);
 
-    $id = DB_escapeString ($id);
-    $result = DB_query ("SELECT ip,date,request_method,request_uri,server_protocol,http_headers,user_agent,request_entity,`key` FROM " . WP_BB_LOG . " WHERE id = '$id'");
-    $A = DB_fetchArray ($result);
-
-    foreach ($A as $key => $val) {
-        $A[$key] = htmlspecialchars ($val);
-    }
 
     $templates->set_var ('ip', $A['ip']);
     $templates->set_var ('request_method', $A['request_method']);
@@ -353,6 +360,152 @@ function _bb_viewEntry ($id, $page = 1)
     return $retval;
 }
 
+/*
+ * Display search list
+*/
+function searchList()
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_BAD_BEHAVIOR;
+
+    $retval = '';
+    $ip = '';
+    $key = '';
+
+    if ( isset($_GET['ip'] ) ) {
+        $ip = COM_applyFilter($_GET['ip']);
+    } elseif ( isset($_GET['key'] ) ) {
+        $key = COM_applyFilter($_GET['key']);
+    } else {
+        return _bb_listEntries();
+    }
+
+    // writing the menu on top
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list',
+              'text' => 'Log Entries'),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
+
+    $retval .= COM_startBlock ($LANG_BAD_BEHAVIOR['plugin_display_name'] . ' - ' . $LANG_BAD_BEHAVIOR['search'], '',
+                               COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        $_CONF['site_url'] . '/bad_behavior2/images/bad_behavior2.png'
+    );
+    $retval .= '<br>';
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+            array('text' => 'ID', 'field' => 'id', 'sort' => false, 'align' => 'left'),
+            array('text' => $LANG_BAD_BEHAVIOR['row_ip'],   'field' => 'ip', 'sort' => false, 'align' => 'left'),
+            array('text' => $LANG_BAD_BEHAVIOR['row_date'],   'field' => 'date', 'sort' => false, 'align' => 'center'),
+            array('text' => $LANG_BAD_BEHAVIOR['url'], 'field' => 'request_uri', 'sort' => true, 'align' => 'left'),
+            array('text' => $LANG_BAD_BEHAVIOR['row_reason'], 'field' => 'key', 'sort' => true, 'align' => 'left'),
+    );
+    $defsort_arr = array('field'     => 'date',
+                         'direction' => 'DESC');
+
+    $whereClause = '';
+    if ( $ip != '' ) {
+        $whereClause = "ip = '".DB_escapeString(trim($ip))."'";
+        $formURL = 'ip='.urlencode(trim($ip));
+    } else {
+        $whereClause = "`key`='".DB_escapeString(trim($key))."'";
+        $formURL = 'key='.urlencode(trim($key));
+    }
+
+
+    $text_arr = array(
+            'form_url'      => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=search&amp;'.$formURL,
+            'help_url'      => '',
+            'has_search'    => true,
+            'has_limit'     => true,
+            'has_paging'    => true,
+            'no_data'       => "No data Found",
+    );
+
+    $sql = "SELECT * FROM {$_TABLES['bad_behavior2']} WHERE " . $whereClause;
+
+    $query_arr = array('table' => 'bad_behavior2',
+                        'sql' => $sql,
+                        'query_fields' => array('ip','request_uri'),
+                        'default_filter' => "",
+                        'group_by' => "");
+
+    $filter = '';
+
+    $option_arr = array('chkselect' => false,
+            'chkfield' => 'id',
+            'chkname' => 'ip',
+            'chkminimum' => 0,
+            'chkall' => true,
+            'chkactions' => ''
+    );
+
+    $token = SEC_createToken();
+
+    $formfields = '
+        <input name="action" type="hidden" value="delete">
+        <input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'">
+    ';
+
+    $form_arr = array(
+        'top' => $formfields,
+        'bottom' => '<a href="'.$_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php">'.$LANG_BAD_BEHAVIOR['link_back'].'</a>'
+
+    );
+
+    $retval .= ADMIN_list('bad_behavior2', 'bb2_adminList', $header_arr,
+        $text_arr, $query_arr, $defsort_arr, $filter, "", $option_arr, $form_arr);
+
+    return $retval;
+}
+
+function bb2_adminList($fieldname, $fieldvalue, $A, $icon_arr, $token = "")
+{
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
+
+    $retval = '';
+
+    switch ($fieldname) {
+        case 'key' :
+            $retval = $LANG_BB2_RESPONSE[$fieldvalue];
+            break;
+
+        case 'ip' :
+            if (!empty ($_CONF['ip_lookup'])) {
+                $iplookup = str_replace ('*', $fieldvalue, $_CONF['ip_lookup']);
+                $retval = '<a href="'.$iplookup.'" title="'.$LANG_BAD_BEHAVIOR['title_lookup_ip'] . '" target="_new">'.$fieldvalue.'</a>';
+            } else {
+                $retval = $fieldvalue;
+            }
+            break;
+
+        case 'id' :
+            if ( isset($_GET['ip'] ) ) {
+                $ip = COM_applyFilter($_GET['ip']);
+                $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php?mode=view&ip='.urlencode($ip).'&amp;id='.urlencode($fieldvalue).'" title="'.$LANG_BAD_BEHAVIOR['block_title_entry'].'">'.$fieldvalue.'</a>';
+            } elseif ( isset($_GET['key'] ) ) {
+                $key = COM_applyFilter($_GET['key']);
+                $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php?mode=view&key='.urlencode($key).'&amp;id='.urlencode($fieldvalue).'" title="'.$LANG_BAD_BEHAVIOR['block_title_entry'].'">'.$fieldvalue.'</a>';
+            } else {
+                $ip = $A['ip'];
+                $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/bad_behavior2/index.php?mode=view&ip='.urlencode($ip).'&amp;id='.urlencode($fieldvalue).'" title="'.$LANG_BAD_BEHAVIOR['block_title_entry'].'">'.$fieldvalue.'</a>';
+            }
+            break;
+
+        case 'url' :
+            $retval = '<span class="uk-text-break">'.$fieldvalue.'</span>';
+
+        default :
+            $retval = $fieldvalue;
+            break;
+    }
+    return $retval;
+}
+
+
 // MAIN
 $rightblocks = false;
 $display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
@@ -370,6 +523,8 @@ if ($mode == 'list') {
     $id = isset($_GET['id']) ? COM_applyFilter ($_GET['id'], true) : 0;
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
     $display .= _bb_viewEntry ($id, $page);
+} else if ( $mode == 'search' ) {
+    $display = searchList();
 } else {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
     $display .= _bb_listEntries ($page);

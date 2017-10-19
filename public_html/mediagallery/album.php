@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Displays the contents of a MG album                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -594,6 +594,7 @@ if ( $total_media == 0 ) {
 
 $noParse = 0;
 $needFinalParse = 0;
+$adblockcounter = 0;
 
 if ( $total_media > 0 ) {
     $k = 0;
@@ -653,8 +654,12 @@ if ( $total_media > 0 ) {
             $T->set_var(array(
                 'CELL_DISPLAY_IMAGE'  =>  $celldisplay,
             ));
+            $adblockcounter++;
+            $T->set_var( 'adblock',PLG_displayAdBlock('mediagallery_media_list',$adblockcounter), false, true);
             $T->parse('IColumn', 'ImageColumn',true);
+            $T->unset_var('adblock');
         }
+
         if ( $noParse == 1 ) {
             break;
         }
@@ -678,7 +683,6 @@ if ( $fCSS != '' ) {
 if ( $MG_albums[$album_id]->enable_slideshow == 2 && ($_MG_CONF['disable_lightbox'] == true || $_SYSTEM['disable_jquery_slimbox'] == true)) {
     $outputHandle->addLinkScript($_CONF['site_url'].'/javascript/addons/slimbox/slimbox2.min.js');
 }
-
 
 $display = MG_siteHeader(strip_tags($MG_albums[$album_id]->title),'');
 

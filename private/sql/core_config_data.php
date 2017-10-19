@@ -1,32 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | core_config_data.php                                                     |
-// |                                                                          |
-// | glFusion Core Configuration                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Base Configuration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2017 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -461,42 +445,6 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
 
-    // pear fieldset - site tab
-
-    array(
-    	'name' => 'fs_pear',
-    	'default_value' => NULL,
-    	'type' => 'fieldset',
-    	'subgroup' => 0,
-    	'fieldset' => 4,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'have_pear',
-    	'default_value' => '',
-    	'type' => 'select',
-    	'subgroup' => 0,
-    	'fieldset' => 4,
-    	'selection_array' => 1,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_pear',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 4,
-    	'selection_array' => NULL,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-
     // search fieldset - site tab
 
     array(
@@ -504,7 +452,7 @@ $coreConfigData = array(
     	'default_value' => NULL,
     	'type' => 'fieldset',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => NULL,
     	'sort' => 0,
     	'set' => TRUE,
@@ -515,7 +463,7 @@ $coreConfigData = array(
     	'default_value' => 'google',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 18,
     	'sort' => 10,
     	'set' => TRUE,
@@ -526,7 +474,7 @@ $coreConfigData = array(
     	'default_value' => '10,25,50,100',
     	'type' => 'text',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => NULL,
     	'sort' => 20,
     	'set' => TRUE,
@@ -537,7 +485,7 @@ $coreConfigData = array(
     	'default_value' => 10,
     	'type' => 'text',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => NULL,
     	'sort' => 30,
     	'set' => TRUE,
@@ -548,7 +496,7 @@ $coreConfigData = array(
     	'default_value' => '1',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 1,
     	'sort' => 40,
     	'set' => TRUE,
@@ -559,7 +507,7 @@ $coreConfigData = array(
     	'default_value' => '1',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 1,
     	'sort' => 50,
     	'set' => TRUE,
@@ -570,7 +518,7 @@ $coreConfigData = array(
     	'default_value' => '1',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 1,
     	'sort' => 60,
     	'set' => TRUE,
@@ -581,7 +529,7 @@ $coreConfigData = array(
     	'default_value' => '1',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 1,
     	'sort' => 70,
     	'set' => TRUE,
@@ -592,7 +540,7 @@ $coreConfigData = array(
     	'default_value' => 'Not available...',
     	'type' => 'text',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => NULL,
     	'sort' => 80,
     	'set' => TRUE,
@@ -603,7 +551,7 @@ $coreConfigData = array(
     	'default_value' => ' > ',
     	'type' => 'text',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => NULL,
     	'sort' => 90,
     	'set' => TRUE,
@@ -614,7 +562,7 @@ $coreConfigData = array(
     	'default_value' => 'phrase',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 5,
+    	'fieldset' => 4,
     	'selection_array' => 19,
     	'sort' => 100,
     	'set' => TRUE,
@@ -628,7 +576,7 @@ $coreConfigData = array(
     	'default_value' => NULL,
     	'type' => 'fieldset',
     	'subgroup' => 0,
-    	'fieldset' => 6,
+    	'fieldset' => 5,
     	'selection_array' => NULL,
     	'sort' => 0,
     	'set' => TRUE,
@@ -639,7 +587,7 @@ $coreConfigData = array(
     	'default_value' => 86400,
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 6,
+    	'fieldset' => 5,
     	'selection_array' => 29,
     	'sort' => 10,
     	'set' => TRUE,
@@ -650,7 +598,7 @@ $coreConfigData = array(
     	'default_value' => '1',
     	'type' => 'select',
     	'subgroup' => 0,
-    	'fieldset' => 6,
+    	'fieldset' => 5,
     	'selection_array' => 1,
     	'sort' => 20,
     	'set' => TRUE,
@@ -783,17 +731,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'digg_enabled',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 100,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+
     array(
     	'name' => 'rating_enabled',
     	'default_value' => 1,
@@ -801,7 +739,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 24,
-    	'sort' => 110,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -812,7 +750,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 120,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -823,7 +761,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 7,
-    	'sort' => 130,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -834,7 +772,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 8,
-    	'sort' => 140,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -845,7 +783,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 150,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -856,7 +794,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 160,
+    	'sort' => 150,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -867,7 +805,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 170,
+    	'sort' => 160,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -878,7 +816,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 180,
+    	'sort' => 170,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -889,7 +827,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 190,
+    	'sort' => 180,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -900,7 +838,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 200,
+    	'sort' => 190,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -911,7 +849,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 9,
-    	'sort' => 210,
+    	'sort' => 200,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -931,7 +869,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'trackback_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 2,
@@ -1000,7 +938,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'pingback_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 3,
@@ -1033,7 +971,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'ping_enabled',
-    	'default_value' => '1',
+    	'default_value' => '0',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 3,
@@ -2215,13 +2153,24 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'commentssubmission',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 6,
+    	'selection_array' => 31,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'commentspeedlimit',
     	'default_value' => 45,
     	'type' => 'text',
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 40,
+    	'sort' => 50,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2232,7 +2181,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 50,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2243,7 +2192,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 11,
-    	'sort' => 60,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2254,7 +2203,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 17,
-    	'sort' => 70,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2265,7 +2214,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 80,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2276,7 +2225,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 90,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2287,7 +2236,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 5,
-    	'sort' => 100,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2298,7 +2247,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2309,7 +2258,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 120,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -2320,7 +2269,7 @@ $coreConfigData = array(
     	'subgroup' => 4,
     	'fieldset' => 6,
     	'selection_array' => NULL,
-    	'sort' => 130,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3283,7 +3232,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'htmlfilter_comment',
-    	'default_value' => 'p,b,a,i,strong,em,br,tt,hr,li,ol,ul,code,pre',
+    	'default_value' => 'p,b,a[href|title|target],i,strong,em,br,tt,hr,li,ol,ul,code,pre',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 5,
@@ -3586,6 +3535,39 @@ $coreConfigData = array(
     	'fieldset' => 1,
     	'selection_array' => 0,
     	'sort' => 110,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 120,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy_header',
+    	'default_value' => 'X-Forwarded-For',
+    	'type' => 'text',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 130,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'bb2_reverse_proxy_addresses',
+    	'default_value' => array(),
+    	'type' => '*text',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     )

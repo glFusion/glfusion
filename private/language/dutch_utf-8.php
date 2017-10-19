@@ -111,7 +111,7 @@ $LANG01 = array(
     56 => 'Stem',
     57 => 'Wachtwoord',
     58 => 'Aanmelden',
-    59 => "Heeft u nog geen profiel? <br" . XHTML . "> Meld u dan <strong>nu</strong> aan als <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">nieuwe gebruiker</a>",
+    59 => "Heeft u nog geen profiel? <br> Meld u dan <strong>nu</strong> aan als <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">nieuwe gebruiker</a>",
     60 => 'Reageer',
     61 => 'Aanmelden nieuwe Gebruiker',
     62 => 'woorden',
@@ -262,7 +262,13 @@ $LANG03 = array(
     48 => 'Click <a href="javascript:history.back()">here</a> to return',
     49 => 'Comments are closed',
     50 => 'Login required to comment',
-    51 => 'Be the first to comment'
+    51 => 'Be the first to comment',
+    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
+    53 => 'A new comment has been submitted for review.',
+    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
+    55 => 'A New Comment has been Submitted',
+    56 => 'Comment has been approved and is now visible.',
+    57 => 'Silent Edit'
 );
 
 ###############################################################################
@@ -468,7 +474,7 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br' . XHTML . '>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
 );
 
 ###############################################################################
@@ -772,7 +778,7 @@ $LANG20 = array(
     3 => 'Geen juist wachtwoord voor gebruiker',
     4 => 'Gebruikersnaam:',
     5 => 'Wachtwoord:',
-    6 => 'Alle toegang tot administratieve functies van het portaal wordt vastgelegd en later bekeken.<br' . XHTML . '>Deze pagina is alleen voor geautoriseerde gebruikers.',
+    6 => 'Alle toegang tot administratieve functies van het portaal wordt vastgelegd en later bekeken.<br>Deze pagina is alleen voor geautoriseerde gebruikers.',
     7 => 'Aanmelden',
     8 => 'Session Timeout - Please re-authenticate',
     9 => 'Access to Administration Features requires re-authentication'
@@ -811,7 +817,7 @@ $LANG21 = array(
     27 => 'PHP Blok',
     28 => 'PHP Blok opties',
     29 => 'Blok Menu',
-    30 => 'Indien u PHP code wenst te gebruiken in een van de blokken, vul dan de naam van de php-funktie hierboven in. Deze naam moet beginnen met de prefix \'phpblock_\' (e.g. phpblock_hello_world). Zonder deze prefix wordt de funktie NIET aangeroepen. Dit is een beveiligingsmaatregel om niet zomaar willekeurige kode te moeten accepteren, die wellicht de integriteit kunnen schaden.<br' . XHTML . '>Zorg er ook voor dat er \'lege haakjes\' \'()\' staan achter de funktienaam in de broncode.<br' . XHTML . '>Tenslotte: het wordt aanbevolen dat alle PHP-blok-code in /pad/naar/glfusion/system/lib-custom.php wordt opgenomen. Bij nieuwe versies blijft de code gehandhaafd.',
+    30 => 'Indien u PHP code wenst te gebruiken in een van de blokken, vul dan de naam van de php-funktie hierboven in. Deze naam moet beginnen met de prefix \'phpblock_\' (e.g. phpblock_hello_world). Zonder deze prefix wordt de funktie NIET aangeroepen. Dit is een beveiligingsmaatregel om niet zomaar willekeurige kode te moeten accepteren, die wellicht de integriteit kunnen schaden.<br>Zorg er ook voor dat er \'lege haakjes\' \'()\' staan achter de funktienaam in de broncode.<br>Tenslotte: het wordt aanbevolen dat alle PHP-blok-code in /pad/naar/glfusion/system/lib-custom.php wordt opgenomen. Bij nieuwe versies blijft de code gehandhaafd.',
     31 => 'Fout in PHP Blok. Funktie, %s, bestaat niet.',
     32 => 'Fout: niet alle velden doorgegeven.',
     33 => 'Er wordt een URL gevraagd voor het .rdf bestand (website blokken)',
@@ -826,7 +832,7 @@ $LANG21 = array(
     42 => 'Gelieve de bloktitel en de blokvolgorde op te geven (standaard blokken).',
     43 => 'Alleen Hoofdpagina',
     44 => 'All Except Homepage',
-    45 => "U heeft geprobeerd een blok op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/block.php\'>Terug naar de blok administratie pagina</a>.",
+    45 => "U heeft geprobeerd een blok op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/block.php\'>Terug naar de blok administratie pagina</a>.",
     46 => 'Nieuw blok',
     47 => '',
     48 => 'Blok Naam',
@@ -900,8 +906,8 @@ $LANG24 = array(
     38 => 'Meer van..',
     39 => 'Emails',
     40 => '',
-    41 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. Het Artikel is hieronder weergegeven. <a href=\'{$_CONF['site_url']}/admin/story.php\'>Terug naar de artikel beheerpagina</a>.",
-    42 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/story.php\'>Terug naar de artikel beheerpagina</a>.",
+    41 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. Het Artikel is hieronder weergegeven. <a href=\'{$_CONF['site_admin_url']}/story.php\'>Terug naar de artikel beheerpagina</a>.",
+    42 => "U heeft geprobeerd een artikel op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/story.php\'>Terug naar de artikel beheerpagina</a>.",
     43 => '',
     44 => '',
     45 => '',
@@ -910,7 +916,7 @@ $LANG24 = array(
     48 => 'beeld',
     49 => 'rechts',
     50 => 'links',
-    51 => 'Om de beelden die hier ingesloten zijn, in het Artikel op te nemen is speciaal geformatteerde tekst nodig. Kies uit: [imageX], [imageX_right] or [imageX_left] en vervang de X door het nummer van het beeld dat u bijsluit. NOTE: Bijgesloten beelden MOETEN gebruikt worden. Indien u dat vergeet kan het Artikel niet opgeslagen worden.<br' . XHTML . '><p><strong>PREVIEW</strong>: Het is gemakkelijker een Voorbeeld van een Artikel met beelden op te roepen NADAT het opgeslagen is in draft-vorm, IN PLAATS VAN direkt de "voorbeeld" knop aan te klikken. Gebruik de "voorbeeld" knop alleen indien er geen beelden bijgesloten zijn.',
+    51 => 'Om de beelden die hier ingesloten zijn, in het Artikel op te nemen is speciaal geformatteerde tekst nodig. Kies uit: [imageX], [imageX_right] or [imageX_left] en vervang de X door het nummer van het beeld dat u bijsluit. NOTE: Bijgesloten beelden MOETEN gebruikt worden. Indien u dat vergeet kan het Artikel niet opgeslagen worden.<br><p><strong>PREVIEW</strong>: Het is gemakkelijker een Voorbeeld van een Artikel met beelden op te roepen NADAT het opgeslagen is in draft-vorm, IN PLAATS VAN direkt de "voorbeeld" knop aan te klikken. Gebruik de "voorbeeld" knop alleen indien er geen beelden bijgesloten zijn.',
     52 => '',
     53 => 'werd niet vermeld. Dit beeld MOET opgenomen worden in de inleiding of Body voordat uw werk opgeslagen kan worden.',
     54 => 'Bijgesloten afbeeldingen zijn niet opgenomen in tekst',
@@ -983,7 +989,9 @@ $LANG24 = array(
     121 => 'Changed show topic setting for stories in selected topic',
     122 => 'Moved all stories in topic %s to topic %s',
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
-    124 => 'Are you sure you want to cancel? Any changes will not be saved.'
+    124 => 'Are you sure you want to cancel? Any changes will not be saved.',
+    125 => 'Story Video',
+    126 => 'Auto Play'
 );
 
 ###############################################################################
@@ -998,11 +1006,11 @@ $LANG27 = array(
     6 => 'Het verwijderen van een Rubriek is recursief. Alle bijbehorende Artikelen en Blokken worden tevens verwijderd',
     7 => 'Gelieve het Rubriek ID en de Rubriek Naam in te vullen.',
     8 => 'Rubrieken Beheer',
-    9 => 'Om een Rubriek te wijzigen of te verwijderen, klik op de betreffende Rubriek. Uw toegangsniveau voor iedere Rubriek staat daar tussen haakjes.<br' . XHTML . '>Om een nieuwe Rubriek aan te leggen, klik op \'Nieuwe Rubriek\' hierboven.',
+    9 => 'Om een Rubriek te wijzigen of te verwijderen, klik op de betreffende Rubriek. Uw toegangsniveau voor iedere Rubriek staat daar tussen haakjes.<br>Om een nieuwe Rubriek aan te leggen, klik op \'Nieuwe Rubriek\' hierboven.',
     10 => 'Sortering',
     11 => 'Artikelen/Pagina',
     12 => 'Geen toegang',
-    13 => "U heeft geprobeerd een Rubriek op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_url']}/admin/topic.php\'>Terug naar de Rubrieken Beheerpagina</a>.",
+    13 => "U heeft geprobeerd een Rubriek op te roepen zonder geldige autorisatie. De poging is vastgelegd. <a href=\'{$_CONF['site_admin_url']}/topic.php\'>Terug naar de Rubrieken Beheerpagina</a>.",
     14 => 'Sorteer Methode',
     15 => 'Alfabetisch',
     16 => 'standaard is',
@@ -1046,7 +1054,9 @@ $LANG27 = array(
     54 => 'Block Admin',
     55 => 'Syndication Admin',
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
-    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.'
+    57 => 'This screen allows you to create or edit a topic. Topic IDs cannot contain spaces.',
+    58 => 'First Position',
+    59 => 'Description'
 );
 
 ###############################################################################
@@ -1104,7 +1114,7 @@ $LANG28 = array(
     49 => 'Beheerdersgroepen',
     50 => 'Aanvinken om toe te staan dat deze groep als een Beheerdersgroep wordt gefilterd',
     51 => 'Dagen online',
-    52 => '<br' . XHTML . '>NB.: "Dagen online" is het aantal dagen tussen de registratie en de laatste keer aangemeld.',
+    52 => '<br>NB.: "Dagen online" is het aantal dagen tussen de registratie en de laatste keer aangemeld.',
     53 => 'geregistreerd',
     54 => 'Batch leegmaken',
     55 => 'Dit zal alleen werken als u <code>$_CONF[\'lastlogin\'] = true;</code> in uw config.php heeft staan',
@@ -1222,10 +1232,10 @@ $LANG31 = array(
     14 => 'Instellingen van de gebruiker negeren',
     15 => 'Probleem tijdens verzending naar: ',
     16 => 'Bericht met succes gezonden naar: ',
-    17 => "<a href=\'{$_CONF['site_url']}/admin/mail.php\'>Stuur nog een bericht</a>",
+    17 => "<a href=\'{$_CONF['site_admin_url']}/mail.php\'>Stuur nog een bericht</a>",
     18 => 'Aan',
     19 => 'Let Op: Indien u een bericht wilt sturen aan alle portaal leden, kies dan de \'Logged-in\' groep.',
-    20 => "<successcount> berichten verstuurd en <failcount> fouten. Onderstaand vindt u de details van elk bericht ter controle. U kunt nu ook <a href=\'{$_CONF['site_url']}/admin/mail.php\'>nog een bericht versturen</a> of <a href=\'{$_CONF['site_url']}/admin/moderation.php\'>terug gaan naar de administratie pagina</a>.",
+    20 => "<successcount> berichten verstuurd en <failcount> fouten. Onderstaand vindt u de details van elk bericht ter controle. U kunt nu ook <a href=\'{$_CONF['site_admin_url']}/mail.php\'>nog een bericht versturen</a> of <a href=\'{$_CONF['site_admin_url']}/moderation.php\'>terug gaan naar de administratie pagina</a>.",
     21 => 'Fouten',
     22 => 'Succes',
     23 => 'Geen fouten',
@@ -1242,7 +1252,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Het installeren van plugins kan de website als geheel beschadigen en, mogelijk ook, de achterliggende databases. Het is zeer belangrijk dat u alleen plugins van <a href="http://www.gllabs.org">glFusion Homepage</a> instaleerd, omdat deze degelijk getest zijn. Het is ook belangrijk dat u inziet dat de installatie enige \'onveilige\' commando\'s bevat die kunnen leiden tot beveiligingsproblemen. Dit vergt bijzondere aandacht voor plugins van derden. Zelfs indien u deze waarschuwing ter harte neemt, kan de veiligheid en correctheid van de installatieprocedure niet gegarandeerd worden. De verantwoordelijkheid ligt exclusief bij U! Anders gezegd: installeer op eigen risico. Wees voorzichtig en lees de installatievoorschriften die bij elke plugin meekomen. Tenslotte: volg deze op.',
+    1 => 'Het installeren van plugins kan de website als geheel beschadigen en, mogelijk ook, de achterliggende databases. Het is zeer belangrijk dat u alleen plugins van <a href="https://www.glfusion.org">glFusion Homepage</a> instaleerd, omdat deze degelijk getest zijn. Het is ook belangrijk dat u inziet dat de installatie enige \'onveilige\' commando\'s bevat die kunnen leiden tot beveiligingsproblemen. Dit vergt bijzondere aandacht voor plugins van derden. Zelfs indien u deze waarschuwing ter harte neemt, kan de veiligheid en correctheid van de installatieprocedure niet gegarandeerd worden. De verantwoordelijkheid ligt exclusief bij U! Anders gezegd: installeer op eigen risico. Wees voorzichtig en lees de installatievoorschriften die bij elke plugin meekomen. Tenslotte: volg deze op.',
     2 => 'Plugin Installatie Disclaimer',
     3 => 'Plugin Installatie Formulier',
     4 => 'Plugin File',
@@ -1250,8 +1260,8 @@ $LANG32 = array(
     6 => 'Waarschuwing: Deze plugin is al Actief!',
     7 => 'De plugin die u probeert te installeren is er al. gelieve eerst deze plugin te verwijderen voordat u de installatie opnieuw probeert.',
     8 => 'Plugin Compatibility Controle Mislukt',
-    9 => 'Deze plugin vereist een latere versie van glFusion. Gelieve deze versie van <a href=http://www.gllabs.org>glFusion</a> te upgraden of een nieuwere versie op te halen van deze plugin.',
-    10 => '<br' . XHTML . '><strong>Er zijn geen plugins actief op dit moment.</strong><br' . XHTML . '><br' . XHTML . '>',
+    9 => 'Deze plugin vereist een latere versie van glFusion. Gelieve deze versie van <a href=https://www.glfusion.org>glFusion</a> te upgraden of een nieuwere versie op te halen van deze plugin.',
+    10 => '<br><strong>Er zijn geen plugins actief op dit moment.</strong><br><br>',
     11 => 'Om een plugin te wijzigen of te verwijderen, klik op het nummer van deze plugin\'s hieronder. Dit laat u de detailles zien, inclusief de website van de auteur. Tevens worden de versies van de plugins getoond. Dit helpt u bij de vraag of plugin\'s ge-upgrade moeten worden. Raadpleeg de documentatie voordat u een plugin installeert of upgrade. Om een introductie over deze plugin op te vragen, klik op de naam van de plugin, dit brengt u naar de website van de plugin.',
     12 => 'Geen Naam voor de plugin gevonden door de plugineditor()',
     13 => 'Plugin Editor',
@@ -1428,7 +1438,8 @@ $LANG_SOCIAL = array(
     'service_url' => 'Service URL',
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
-    'saved_msg' => 'Social Integrations successfully saved.'
+    'saved_msg' => 'Social Integrations successfully saved.',
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
 );
 
 ###############################################################################
@@ -1511,7 +1522,7 @@ $MESSAGE = array(
     74 => 'De pingback is succesvol verstuurd.',
     75 => 'Trackbacks moeten worden verstuurd met behulp van een POST request.',
     76 => 'Weet u zeker dat u dit item wilt verwijderen?',
-    77 => 'WAASCHUWING:<br' . XHTML . '>U heeft uw standaard encoding ingesteld op UTF-8. Hoedanook, uw server ondersteunt geen multibyte encodings. Installeer A.U.B. mbstring functies voor PHP of kies een andere karalterset of taal.',
+    77 => 'WAASCHUWING:<br>U heeft uw standaard encoding ingesteld op UTF-8. Hoedanook, uw server ondersteunt geen multibyte encodings. Installeer A.U.B. mbstring functies voor PHP of kies een andere karalterset of taal.',
     78 => 'Maak u er zeker van dat het e-mailadres en het bevestigende emailadres hetzelfde zijn.',
     79 => 'De pagina die u probeert te openen verwijst naar een functie die niet langer op deze website bestaat.',
     80 => 'De plugin die deze feed heeft gemaakt is momenteel geblokkeerd. U bent niet gemachtigd om deze feed te bewerken totdat deze u opnieuw toestemming tot de ouderlijke plugin geeft.',
@@ -1718,7 +1729,7 @@ $LANG_DB_ADMIN = array(
     'configure' => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title' => 'UTF8MB4 Upgrade',
-    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br' . XHTML . '><br' . XHTML . '>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions' => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success' => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables' => 'Retrieving Table List',
     'error_heading' => 'Errors',
@@ -2050,7 +2061,8 @@ $LANG_featurecodes = array(
 
 $LANG_frontpagecodes = array(
     0 => 'Alleen in rubriek laten zien',
-    1 => 'Laat op voorpagina zien'
+    1 => 'Laat op voorpagina zien',
+    2 => 'Show on Front Page Until'
 );
 
 $LANG_postmodes = array(
@@ -2410,6 +2422,7 @@ $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension' => 'Ctype Extension',
+    'curl_extension' => 'Curl Extension',
     'current' => 'Current',
     'current_php_settings' => 'Current PHP Settings',
     'database_version' => 'Database Version',
@@ -2438,6 +2451,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick' => 'ImageMagick Programs',
+    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
+    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
+    'graphicsmagick' => 'GraphicsMagick Programs',
     'is_optional' => ' is optional',
     'is_required' => ' is required',
     'jhead' => 'jhead Program',
@@ -2577,8 +2593,6 @@ $LANG_confignames['Core'] = array(
     'backup_path' => 'Backup',
     'path_data' => 'Data',
     'path_images' => 'Foto\'s',
-    'path_pear' => 'Pad Pear',
-    'have_pear' => 'Pear Aanwezig?',
     'mail_settings' => 'Email Instellingen',
     'theme' => 'Thema',
     'menu_elements' => 'Menu Elementen',
@@ -2757,7 +2771,6 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'HTML Filter bij Root overslaan?',
     'allowed_protocols' => 'Toegestane Protocollen',
     'disable_autolinks' => 'Autolinks Uitschakelen?',
-    'digg_enabled' => 'Digg.com Links Tonen?',
     'censormode' => 'Censuur Mode?',
     'censorreplace' => 'Censuur Tekst',
     'censorlist' => 'Censuur Lijst',
@@ -2835,6 +2848,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Allow offsite forms',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Number of hours to ban IP',
+    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy_header' => 'Proxy Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
     'infinite_scroll' => 'Enable Infinite Scroll',
     'comment_engine' => 'Comment Engine',
     'comment_disqus_shortname' => 'Disqus Shortname',
@@ -2843,7 +2859,8 @@ $LANG_confignames['Core'] = array(
     'enable_404_logging' => 'Log 404 - Not Found Errors',
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
-    'standard_auth_first' => 'Display Standard Auth First in Dropdown'
+    'standard_auth_first' => 'Display Standard Auth First in Dropdown',
+    'commentssubmission' => 'Enable Comment Submission Queue'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2863,7 +2880,6 @@ $LANG_fs['Core'] = array(
     'fs_paths' => 'Paden',
     'fs_theme' => 'Thema\'s',
     'fs_mail' => 'Mail',
-    'fs_pear' => 'Pear',
     'fs_users' => 'Gebruikers',
     'fs_misc' => 'Overig',
     'fs_spamx' => 'Spam-X',
@@ -2917,7 +2933,7 @@ $LANG_configselects['Core'] = array(
     7 => array('Laatste Pagina' => 'last', 'Eerste Pagina' => 'first', 'Elke Pagina' => 'all'),
     8 => array('Rechts' => 'right', 'Links' => 'left'),
     9 => array('Ga naar Pagina' => 'item', 'Toon Lijst' => 'list', 'Toon Startpagina' => 'home', 'Toon Beheerpagina' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
     11 => array('Vlak' => 'flat', 'Genest' => 'nested', 'Geen Reacties' => 'nocomment'),
     12 => array('Geen Toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3),
     13 => array('Overslaan' => 0, 'Toestaan met Snelheidslimiet' => 1, 'Toestaan zonder Snelheidslimiet' => 2),
@@ -2937,7 +2953,8 @@ $LANG_configselects['Core'] = array(
     27 => array('Generate Password' => 0, 'User Enters Password' => 1),
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook')
+    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
 );
 
 ?>

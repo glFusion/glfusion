@@ -60,8 +60,6 @@ if (file_exists($langfile)) {
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_PO_CONF['pollsloginrequired'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
-
     $po_config = config::get_instance();
     $_PO_CONF = $po_config->get_config('polls');
 }
@@ -148,7 +146,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/polls/index.php?pid=$id");
     }
-    CACHE_remove_instance('whatsnew_');
+    CACHE_remove_instance('whatsnew');
     return $retval;
 }
 
@@ -194,7 +192,6 @@ function plugin_deletecomment_polls($cid, $id)
 function plugin_getwhatsnewcomment_polls()
 {
     global $_CONF, $_TABLES, $_USER;
-    global $_ST_CONF;
 
     $commentrow = array();
 
@@ -231,6 +228,74 @@ function plugin_getwhatsnewcomment_polls()
         }
     }
     return $commentrow;
+}
+
+/**
+* glFusion is asking us to provide any items that show up in the type
+* drop-down on search.php.  Let's users search for events.
+*
+* @return   array   (plugin name/entry title) pair for the dropdown
+*
+*/
+
+function plugin_searchtypes_polls()
+{
+    global $LANG_POLLS;
+
+    return array('polls' => $LANG_POLLS['polls']);
+
+}
+
+/**
+ * This searches for polls matching the user query and returns an array of
+ * for the header and table rows back to search.php where it will be formatted and
+ * printed.
+ *
+ * @param    string $query     Keywords user is looking for
+ * @param    string $dateStart Start date to get results for
+ * @param    string $dateEnd   End date to get results for
+ * @param    string $topic     The topic they were searching in
+ * @param    string $type      Type of items they are searching, or 'all' (deprecated)
+ * @param    int    $author    Get all results by this author
+ * @param    string $keyType   search key type: 'all', 'phrase', 'any'
+ * @param    int    $page      page number of current search (deprecated)
+ * @param    int    $perpage   number of results per page (deprecated)
+ * @return   SearchCriteria
+  */
+function plugin_dopluginsearch_polls($query, $dateStart, $dateEnd, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $_TABLES, $_DB_dbms, $LANG09, $LANG_POLLS, $_USER;
+
+    // Make sure the query is SQL safe
+    $query = trim(DB_escapeString($query));
+    $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
+
+    // Search polls
+    $sql = "SELECT p.pid AS id, p.topic AS title, p.description AS description, UNIX_TIMESTAMP(p.date) AS date, "
+        . " p.owner_id AS uid, p.voters AS hits, CONCAT('/polls/index.php?pid=',p.pid) AS url "
+        . " FROM {$_TABLES['polltopics']} AS p "
+        . " WHERE (p.date <= NOW()) "
+        . COM_getPermSQL('AND', 0, 2, 'p');
+
+    if (!SEC_inGroup('Root', $uid)) {
+        $sql .= " AND ((p.hideresults = 0) OR (p.owner_id = {$uid})) ";
+    }
+
+    if (!empty($author)) {
+        $sql .= "AND (p.owner_id = '{$author}') ";
+    }
+
+    $search = new SearchCriteria('polls', array($LANG_POLLS['polls']));
+
+    $columns = array('title' => 'p.topic', 'description' => 'p.description');
+    $sql .= $search->getDateRangeSQL('AND', 'p.date', $dateStart, $dateEnd);
+    list($sql, $ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
+
+    $search->setSQL($sql);
+    $search->setFTSQL($ftsql);
+    $search->setRank(2);
+
+    return $search;
 }
 
 
@@ -727,10 +792,16 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     foreach ($properties as $p) {
         switch ($p) {
             case 'date-modified':
+            case 'date' :
                 $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
                 break;
             case 'id':
                 $fields[] = 'pid';
+                break;
+            case 'description' :
+            case 'searchidx' :
+                $fields[] = 'description';
+                $fields[] = 'topic';
                 break;
             case 'title':
                 $fields[] = 'topic';
@@ -741,7 +812,19 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 $fields[] = 'hideresults';
                 break;
             case 'author' :
+            case 'author_name' :
                 $fields[] = 'owner_id';
+                break;
+            case 'hits' :
+                $fields[] = 'voters';
+                break;
+            case 'perms' :
+                $fields[] = 'owner_id';
+                $fields[] = 'group_id';
+                $fields[] = 'perm_owner';
+                $fields[] = 'perm_group';
+                $fields[] = 'perm_members';
+                $fields[] = 'perm_anon';
                 break;
             default:
                 break;
@@ -784,10 +867,21 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
         foreach ($properties as $p) {
             switch ($p) {
                 case 'date-modified':
-                    $props['date-modified'] = $A['unixdate'];
+                case 'date' :
+                    $props[$p] = $A['unixdate'];
                     break;
                 case 'id':
                     $props['id'] = $A['pid'];
+                    break;
+                case 'description' :
+                    $props['description'] = $A['description'];
+                    break;
+                case 'searchidx' :
+                    if ( $A['description'] == '' ) {
+                        $props['searchidx'] = $A['topic'];
+                    } else {
+                        $props['searchidx'] = $A['topic'] . ' ' . $A['description'];
+                    }
                     break;
                 case 'title':
                     $props['title'] = $A['topic'];
@@ -811,6 +905,22 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author':
                     $props['author'] = $A['owner_id'];
+                    break;
+                case 'author_name' :
+                    $props['author_name'] = COM_getDisplayName($A['owner_id']);
+                    break;
+                case 'hits' :
+                    $props['hits'] = $A['voters'];
+                    break;
+                case 'perms' :
+                    $props['perms'] = array(
+                        'owner_id' => $A['owner_id'],
+                        'group_id' => $A['group_id'],
+                        'perm_owner' => $A['perm_owner'],
+                        'perm_group' => $A['perm_group'],
+                        'perm_members' => $A['perm_members'],
+                        'perm_anon' => $A['perm_anon'],
+                    );
                     break;
                 default:
                     $props[$p] = '';
@@ -1134,7 +1244,6 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
 
     $retval = '';
     $is_open = 0;
-
     // housekeeping - delete old anonymous voting data
     if ( !isset($_PO_CONF['polladdresstime']) ) {
         $polladdresstime = 86400; // 24 hours
@@ -1235,7 +1344,6 @@ function POLLS_saveVote($pid, $aid)
     if (POLLS_ipAlreadyVoted ($pid)) {
         exit;
     }
-
     DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',DB_escapeString($pid),'',true);
     // This call to DB-change will properly supress the insertion of quotes around $value in the sql
     $answers = count($aid);
@@ -1415,7 +1523,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     if ($scale < 120) {
                         $poll->parse('poll_votes', 'votes_num', true );
                     } else {
-                        $width = (int)($percent * $scale);
+                        $width = (int) ($percent * 100 );
                         $poll->set_var('bar_width', $width);
                         $poll->parse('poll_votes', 'votes_bar', true);
                     }

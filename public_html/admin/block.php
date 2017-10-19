@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion block administration.                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2016 by the following authors:                        |
+// | Copyright (C) 2010-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -47,7 +47,7 @@ if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[33],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the block administration screen");
+    COM_accessLog ("User {$_USER['username']} tried to access the block administration screen");
     echo $display;
     exit;
 }
@@ -136,7 +136,7 @@ function BLOCK_editDefault($A, $access)
         $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
-                              COM_topicList ('tid,topic', $A['tid'], 1, true));
+                              COM_topicList ('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_all', $LANG21[7]);
     $block_templates->set_var('lang_side', $LANG21[39]);
     $block_templates->set_var('lang_left', $LANG21[40]);
@@ -198,8 +198,10 @@ function BLOCK_edit($bid = '', $B = array())
 
     $retval = '';
     $A = array();
+    $editMode = false;
 
     if (!empty($bid)) {
+        $editMode = true;
         $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE bid ='".DB_escapeString($bid)."'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -248,10 +250,17 @@ function BLOCK_edit($bid = '', $B = array())
         }
         $access = 3;
     }
+    if ( $editMode ) {
+        $lang_menu_edit = $LANG01[4];
+    } else {
+        $lang_menu_edit = $LANG_ADMIN['create_new'];
+    }
 
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/block.php',
               'text' => $LANG_ADMIN['block_list']),
+        array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
+              'text' => $lang_menu_edit,'active'=>true),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -311,7 +320,7 @@ function BLOCK_edit($bid = '', $B = array())
         $block_templates->set_var('nohomepage_selected','selected="selected"');
     }
     $block_templates->set_var('topic_options',
-                              COM_topicList('tid,topic', $A['tid'], 1, true));
+                              COM_topicList('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_side', $LANG21[39]);
     $block_templates->set_var('lang_left', $LANG21[40]);
     $block_templates->set_var('lang_right', $LANG21[41]);
@@ -507,6 +516,8 @@ function BLOCK_list()
 
     // writing the menu on top
     $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/block.php',
+              'text' => $LANG_ADMIN['block_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
@@ -678,12 +689,9 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $title = DB_escapeString ($title);
     $phpblockfn = DB_escapeString (trim ($phpblockfn));
 
-    if (empty($title) || !BLOCK_validateName($name)) {
-        if ( empty($title) ) {
-            $msg = $LANG21[64];
-        } else {
-            $msg = $LANG21[70];
-        }
+    if ( !BLOCK_validateName($name) ) {
+        $msg = $LANG21[70];
+
         SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
                         time() + 1200, $_CONF['cookie_path'],
                         $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
@@ -715,7 +723,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         COM_accessLog("User {$_USER['username']} tried to illegally create or edit block $bid.");
 
         return $retval;
-    } elseif (($type == 'normal' && !empty($title) && !empty($content)) OR ($type == 'portal' && !empty($title) && !empty($rdfurl)) OR ($type == 'gldefault' && (strlen($blockorder)>0)) OR ($type == 'phpblock' && !empty($phpblockfn) && !empty($title))) {
+    } elseif (($type == 'normal' && !empty($content)) OR ($type == 'portal' && !empty($rdfurl)) OR ($type == 'gldefault' && (strlen($blockorder)>0)) OR ($type == 'phpblock' && !empty($phpblockfn))) {
         if ($is_enabled == 'on') {
             $is_enabled = 1;
         } else {

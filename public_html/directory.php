@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Directory of all the stories on a glFusion site.                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -215,7 +215,7 @@ function DIR_displayMonth(&$template, $dir_topic, $year, $month)
 
     $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     if ($dir_topic != 'all') {
-        $sql .= " AND (tid = '".DB_escapeString($dir_topic)."')";
+        $sql .= " AND ((tid = '".DB_escapeString($dir_topic)."') || alternate_tid= '".DB_escapeString($dir_topic)."')";
     }
     $sql .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
          . COM_getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
@@ -287,7 +287,7 @@ function DIR_displayYear(&$template,$topic, $year, $main = false)
     $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
 
     if ($topic != 'all') {
-        $monthsql['mysql'] .= " AND (tid = '".DB_escapeString($topic)."')";
+        $monthsql['mysql'] .= " AND ((tid = '".DB_escapeString($topic)."') || alternate_tid = '".DB_escapeString($topic). "' )";
     }
     $monthsql['mysql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
               . COM_getLangSQL ('sid', 'AND');
@@ -400,7 +400,7 @@ function DIR_canonicalLink($dir_topic, $year = 0, $month = 0)
     }
     $url = COM_buildUrl($script . $tp . $parts);
 
-    return '<link rel="canonical" href="' . $url . '"' . XHTML . '>' . LB;
+    return '<link rel="canonical" href="' . $url . '">' . LB;
 }
 
 

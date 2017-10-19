@@ -2,11 +2,11 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | menu2.class.php                                                          |
+// | menu.class.php                                                           |
 // |                                                                          |
 // | Menu elements class / functions                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2016 by the following authors:                       |
+// | Copyright (C)  2008-2017 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -535,6 +535,7 @@ class menuElement {
                         if ( count( $plugin_menu ) == 0 ) {
                             $this->access = 0;
                         } else {
+                            ksort($plugin_menu);
                             for( $i = 1; $i <= count( $plugin_menu ); $i++ ) {
                                 $url = current($plugin_menu);
                                 $label = key($plugin_menu);

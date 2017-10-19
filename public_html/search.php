@@ -30,9 +30,17 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'classes/search.class.php';
 
-$searchObj = new Search();
+if ( isset($_VARS['service_search'] ) ) {
+    if ( class_exists ( $_VARS['service_search'],true) ) {
+        $className = $_VARS['service_search'];
+    } else {
+        $className = 'Search';
+    }
+} else {
+    $className = 'Search';
+}
+$searchObj = new $className;
 
 if (isset ($_GET['mode']) && ($_GET['mode'] == 'search')) {
     $display = COM_siteHeader('menu', $LANG09[11]);
