@@ -1,4 +1,6 @@
 ## v1.7.1 (unreleased)
+  - PM link was missing from Forum topic view
+  - Disable SP preview in Demo Mode (only when execute PHP enabled)
   - Handle missing files gracefully in FileMgmt
   - Delete story on expire did not call proper PLG hook to alert plugins of story removal
   - Filter queued comments from user profile list
