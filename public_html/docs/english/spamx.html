@@ -1,3 +1,4 @@
+<!doctype html>
 <html class="uk-height-1-1">
 	<head>
 		<meta charset="utf-8">
@@ -27,10 +28,7 @@
 			</nav>
 
 			<div class="uk-container uk-container-center uk-margin-bottom">
-
-
 				<h1>Spam-X</h1>
-
 				<p>
 					glFusion includes multiple layers of defense against spam, the Spam-X plugin is one of the key defenses. It has a modular architecture that allows it to be extended with new modules to fight the spammer's latest tricks, should the need arise.
 				</p>
@@ -52,7 +50,7 @@
 				</ul>
 
 
-			<h1>Module Types</a></h1>
+			<h1>Module Types</h1>
 
 				<p>
 					The Spam-X plugin was built to be expandable to easily adapt to
@@ -313,50 +311,50 @@
 					<dd>This only exists as a fallback in case $_CONF['spamx'] in glFusion's main configuration is not set. (i.e. $_CONF['spamx'] takes precedence). </dd>
 				</dl>
 
-        <dl id="desc_sfs_username_check">
+				<dl id="desc_sfs_username_check">
 					<dt>Username Check</dt>
 					<dd>True will pass, and check, the username against a list of known spammer usernames. Be careful with this one, as generic names lib 'Bob' will probably match.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_sfs_email_check">
+				<dl id="desc_sfs_email_check">
 					<dt>Email Check</dt>
 					<dd>True will pass, and check, the email of the user against a list of known spammer emails.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_sfs_ip_check">
+				<dl id="desc_sfs_ip_check">
 					<dt>IP Address Check</dt>
 					<dd>True will pass, and check, the IP address of the user against a list of known spammer IP addresses.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_sfs_username_confidence">
+				<dl id="desc_sfs_username_confidence">
 					<dt>Username Confidence</dt>
 					<dd>SFS will return a confidence indicator for each match. Setting this value to a higher number will allow post through that do not have a high confidence that the user is a spammer. Recommended value is 99.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_sfs_email_confidence">
+				<dl id="desc_sfs_email_confidence">
 					<dt>Email Confidence</dt>
 					<dd>SFS will return a confidence indicator for each match. Setting this value to a lower number will block more posts. Recommended value is 50.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_sfs_ip_confidence">
+				<dl id="desc_sfs_ip_confidence">
 					<dt>Email Confidence</dt>
 					<dd>SFS will return a confidence indicator for each match. Setting this value to a lower number will block more posts. Recommended value is 25.</dd>
-        </dl>
+				</dl>
 
-        <dl id="desc_slc_max_links">
+				<dl id="desc_slc_max_links">
 					<dt>Maximum Allowed Links</dt>
 					<dd>The maximum number of links allowed in a post. Anything above this number will be flagged as spam.</dd>
-        </dl>
+				</dl>
 
 			</div>
 			<div class="tm-push"></div>
 		</div>
-	</div>
-	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
-		<div class="uk-hidden-small" style="padding-top:5px;"></div>
-		<div>
-			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
-		</div>
-	</footer>
-</body>
+
+		<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+			<div class="uk-hidden-small" style="padding-top:5px;"></div>
+			<div>
+				<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+			</div>
+		</footer>
+	</body>
 </html>
