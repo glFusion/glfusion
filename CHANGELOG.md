@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - German Language updates from Matrox66
   - Bundled documentation formatting updates
   - PM link was missing from Forum topic view
   - Disable SP preview in Demo Mode (only when execute PHP enabled)
