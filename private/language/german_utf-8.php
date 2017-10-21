@@ -9,7 +9,7 @@
 # Author:		Dirk Haun <dirk AT haun-online DOT de>
 #				Markus Wollschlaeger
 # Modifiziert:	Tony Kluever (August 2009)
-#				Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>
+#				Siegfried Gutschi (Oktober 2017) <sigi AT modellbaukalender DOT info>
 # Based on the original english.php, started by Jason Whittenburg.
 #
 # This program is free software; you can redistribute it and/or
@@ -261,13 +261,13 @@ $LANG03 = array(
     49 => 'Kommentare sind geschlossen',
     50 => "Du musst dich <a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Anmelden</a> um schreiben dürfen",
     51 => 'Sei der erste der kommentiert',
-    52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
-    53 => 'A new comment has been submitted for review.',
-    54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
-    55 => 'A New Comment has been Submitted',
-    56 => 'Comment has been approved and is now visible.',
-    57 => 'Silent Edit',
-    58 => 'No Title Available'
+    52 => 'Dein Kommentar wurde erfolgreich eingesendet und muss nur noch von unseren Moderatoren überprüft und genehmigt werden.',
+    53 => 'Ein neuer Kommentar wurde zur Überprüfung eingereicht.',
+    54 => 'Neue Kommentare in der <a href="%s">Warteschlange</a> prüfen bzw. löschen.',
+    55 => 'Ein neuer Kommentar wurde eingesendet.',
+    56 => 'Kommentar wurde überprüft und veröffentlicht.',
+    57 => 'Stilles bearbeiten',
+    58 => 'Kein Titel verfügbar'
 );
 
 ###############################################################################
@@ -296,7 +296,7 @@ $LANG04 = array(
     20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein',
     21 => 'Fehler',
     22 => "Registrieren bei {$_CONF['site_name']}!",
-    23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
+    23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
     24 => 'Dein Passwort wird Dir an die angegebene E-Mail Adresse gesendet.',
     25 => 'Passwort vergessen?',
     26 => 'Gib <b>entweder</b> Deinen Benutzernamen <b>oder</b> Deine E-Mail Adresse ein, mit der Du Dich registriert hast, und klicke auf Passwort senden. Eine E-Mail mit einer Anleitung, wie Du ein neues Passwort eingeben kannst, wird dann an die gespeicherte E-Mail Adresse gesendet.',
@@ -1054,8 +1054,8 @@ $LANG27 = array(
     55 => 'Syndication Admin',
     56 => 'Klicke auf "Abbrechen" und anschließend auf "Bearbeiten", um Details anzuzeigen, einschließlich der Gesamtzahl der Objekte in der Datenbank, die diesem Thema zugeordnet sind',
     57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>',
-    58 => 'First Position',
-    59 => 'Description'
+    58 => 'Erste Position',
+    59 => 'Beschreibung'
 );
 
 ###############################################################################
@@ -1314,7 +1314,7 @@ $LANG32 = array(
     61 => 'Aktualisieren',
     62 => 'wurde erfolgreich hochgeladen und ist jetzt bereit zur Weiterverarbeitung.',
     63 => 'Beschreibung',
-    64 => 'Das Plugin scheint zu sein',
+    64 => 'Es scheint so als wäre das Plugin',
     65 => 'Dieses Plugin wurde schon installiert.',
     66 => 'Die gegenwärtig installierte Version ist',
     67 => 'Wenn die Version, die hochgeladen wurde, nicht neuer ist als die installierte Version, dann <b>Abbrechen</b> wählen um die Aktualisierung zu unterbrechen.',
@@ -1438,7 +1438,7 @@ $LANG_SOCIAL = array(
     'site_username' => 'Netzwerk Benutzername',
     'additional_html' => 'Zusätzliches HTML nach den "Folge mir" Knöpfen',
     'saved_msg' => 'Verknüpfungen wurden gespeichert.',
-    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
+    'overridden' => 'glFusion\'s Soziale Netzwerke wurde deaktiviert. Soziale Netzwerke werden durch das %s Plugin verwaltet.'
 );
 
 ###############################################################################
@@ -2061,7 +2061,7 @@ $LANG_featurecodes = array(
 $LANG_frontpagecodes = array(
     0 => 'Nur in der Kategorie',
     1 => 'Auch auf der Startseite',
-    2 => 'Show on Front Page Until'
+    2 => 'Auf der Startseite anzeigen bis'
 );
 
 $LANG_postmodes = array(
@@ -2450,9 +2450,9 @@ $LANG_ENVCHK = array(
     'im_not_found' => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
     'im_ok' => 'Die Datei <b>convert</b> scheint vorhanden zu sein.',
     'imagemagick' => 'ImageMagick-Erweiterung',
-    'gm_not_found' => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
-    'gm_ok' => 'The <strong>gm</strong> executable appears to be valid.',
-    'graphicsmagick' => 'GraphicsMagick Programs',
+    'gm_not_found' => 'Die Datei <b>gm</b> für GraphicsMagick kann nicht gefunden werden.',
+    'gm_ok' => 'Die Datei <b>gm</b> scheint vorhanden zu sein.',
+    'graphicsmagick' => 'GraphicsMagick-Erweiterung',
     'is_optional' => ' optional',
     'is_required' => ' erforderlich',
     'jhead' => 'Jhead-Erweiterung',
@@ -2859,7 +2859,7 @@ $LANG_confignames['Core'] = array(
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
     'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
     'standard_auth_first' => '"Standard Auth" als erstes in Dropdown',
-    'commentssubmission' => 'Enable Comment Submission Queue'
+    'commentssubmission' => 'Warteschlange für Kommentare'
 );
 
 $LANG_configsubgroups['Core'] = array(

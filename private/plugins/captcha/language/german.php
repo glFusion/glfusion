@@ -6,7 +6,7 @@
 // |                                                                          |
 // | German language file, addressing the user as "Du"                        |
 // | Modifiziert: August 09 Tony Kluever                                      |
-// | Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>   |
+// | Siegfried Gutschi (Oktober 2017) <sigi AT modellbaukalender DOT info>    |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
@@ -81,7 +81,7 @@ $LANG_CP00 = array(
     'ayah_error' => 'Sorry, aber wir waren nicht in der Lage Dich als Mensch zu identifizieren. Bitte versuche es erneut.',
     'captcha_math' => 'Gib die Antwort ein',
     'captcha_prompt' => 'Bist Du ein Mensch?',
-    'recaptcha_entry_error' => 'The CAPTCHA verification failed. Please try again.'
+    'recaptcha_entry_error' => 'Die CAPTCHA-Überprüfung ist fehlgeschlagen. Bitte versuche es erneut.'
 );
 
 // Localization of the Admin Configuration UI
@@ -110,7 +110,7 @@ $LANG_confignames['captcha'] = array(
     'enable_links' => 'Für Link-Einsendung',
     'enable_calendar' => 'Für Kalender-Einsendung',
     'expire' => 'Gültigkeit des CAPTCHA in Sek.',
-    'publickey' => 'reCAPTCHA Öffentlicher-Schlüssel<br /><a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA Anmeldung</a>',
+    'publickey' => '<a href="https://www.google.com/recaptcha/admin/create">reCAPTCHA</a> Öffentlicher-Schlüssel',
     'privatekey' => 'reCAPTCHA Privater-Schlüssel',
     'recaptcha_theme' => 'reCAPTCHA Oberfläche'
 );
@@ -128,13 +128,13 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Stat. Bilder' => 2, 'reCAPTCHA' => 3, 'Rechnung' => 6),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('Hell' => 'light', 'Dunkel' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin erfolgreich installiert';
+$PLG_captcha_MESSAGE3 = 'CAPTCHA-Plugin erfolgreich installiert';
 
 ?>
