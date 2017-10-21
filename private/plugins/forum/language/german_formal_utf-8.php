@@ -19,7 +19,7 @@
 // |                                                                          |
 // | Translation by Dirk Haun <dirk AT haun-online DOT de>                    |
 // | Modifiziert: August 09 Tony Kluever			                     	  |
-// | Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>   |
+// | Siegfried Gutschi (Oktober 2017) <sigi AT modellbaukalender DOT info>    |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -243,7 +243,7 @@ $LANG_GF01 = array(
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
     'all_read_success' => 'Alle Themen wurden als gelesen markiert',
-    'formatted_code' => 'Formatted Code'
+    'formatted_code' => 'Formatierter Code'
 );
 
 $LANG_GF02 = array(
@@ -457,10 +457,10 @@ $LANG_GF02 = array(
     'invalid_email' => 'Deine E-Mail-Adresse scheint leer oder ungültig zu sein',
     'invalid_name' => 'Dein Name scheint leer oder ungültig zu sein',
     'last_edited' => 'Zuletzt bearbeitet',
-    'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
-    'post_ctc' => 'Permalink Copied to Clipboard',
-    'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
-    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
+    'copy_to_clipboard' => 'Permalink in die Zwischenablage kopieren.',
+    'post_ctc' => 'Permalink wurde in die Zwischenablage kopiert',
+    'text_notify_message' => 'Der neuen Beitrag "%s"", geschrieben von %s im Forum %s auf der Seite %s, interessiert dich vielleicht. Hier gehts sum Beitrag: %s',
+    'html_notify_message' => 'Der neuen Beitrag "%s"", geschrieben von %s im Forum %s auf der Seite %s, interessiert dich vielleicht. Hier gehts sum Beitrag: <a href="%s">%s</a>'
 );
 
 $LANG_GF03 = array(
@@ -489,9 +489,9 @@ $LANG_GF03 = array(
     'select_forum' => 'Ziel-Thema auswählen',
     'destination_topic' => 'Id des Ziel-Themas:',
     'select_topic' => '(Themen-Liste)',
-    'lock_topic' => 'Lock Topic',
-    'unlock_topic' => 'Unlock Topic',
-    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
+    'lock_topic' => 'Thema sperren',
+    'unlock_topic' => 'Thema öffnen',
+    'locked_topic_msg' => 'Status: <span style="font-weight:700;">Nur lesen</span>'
 );
 
 $LANG_GF04 = array(
@@ -900,7 +900,7 @@ $LANG_confignames['forum'] = array(
     'post_speedlimit' => 'Min. Sek. zwischen den Beiträgen',
     'use_smilies_plugin' => 'Smilies-Plugin installiert',
     'use_pm_plugin' => 'Private-Nachrichten-Plugin installiert',
-    'use_spamx_filter' => 'Beiträge mit Spam-X-Plugin filtern',
+    'use_spamx_filter' => 'Beiträge mit Spam-X filtern',
     'show_centerblock' => 'Zentrumsblock aktivieren',
     'centerblock_homepage' => 'Nur auf Startseite',
     'centerblock_where' => 'Platzierung auf der Seite',
@@ -952,14 +952,14 @@ $LANG_confignames['forum'] = array(
     'enable_user_rating_system' => 'Benutzer Bewertungs-System',
     'bbcode_signature' => 'Eigene BBcode-Signatur',
     'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor',
-    'bbcode_disabled' => 'Standart für "BBCode deaktivieren"',
-    'smilies_disabled' => 'Standart für "Smilies deaktivieren"',
-    'urlparse_disabled' => 'Standart für "URL Parse deaktivieren"',
+    'bbcode_disabled' => 'Standart für BBCode',
+    'smilies_disabled' => 'Standart für Smilies',
+    'urlparse_disabled' => 'Standart für URL Parse',
     'use_sfs' => '"Stop Forum Spam" aktivieren',
     'allowed_html' => 'Erlaubtes HTML',
-    'geshi_line_numbers' => 'GeSHi Use Line Numbers?',
-    'geshi_overall_style' => 'GeSHi Overall Code Block Style',
-    'geshi_line_style' => 'GeSHi Line Number Style',
+    'geshi_line_numbers' => 'GeSHi Zeilennummern verwenden',
+    'geshi_overall_style' => 'GeSHi allgemeiner Style',
+    'geshi_line_style' => 'GeSHi Zeilennummern Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
     'geshi_header_style' => 'GeSHi Header Block Style'
 );
