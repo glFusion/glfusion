@@ -397,7 +397,7 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var('lang_header_none', $LANG33[44]);
     $feed_template->set_var('lang_header_topic', $LANG33[45]);
     $feed_template->set_var('header_topic_options',
-                        COM_topicList('tid,topic', $A['header_tid'], 1, true));
+                        COM_topicList('tid,topic,sortnum', $A['header_tid'], 2, true));
     $feed_template->set_var('lang_save', $LANG_ADMIN['save']);
     $feed_template->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     if ($A['fid'] > 0) {

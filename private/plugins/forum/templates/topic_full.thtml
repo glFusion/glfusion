@@ -213,6 +213,12 @@
 													<i class="uk-icon-home" title="{LANG_website}"></i>
 												</a>
 {!endif}
+{!if pmlink}
+												<a href="{pmlink}" rel="nofollow">
+													<i class="uk-icon-commenting" title="{LANG_pm}"></i>
+												</a>
+{!endif}
+
 											</div>
 										</div>
 									</div>

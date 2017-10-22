@@ -1184,6 +1184,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
+            // reset the theme and allow-user-themes
+            $c->set("theme", "cms", "Core");
+            $c->set("allow_user_themes", 0, "Core");
+
             $current_fusion_version = '1.5.0';
 
         case '1.5.0' :
@@ -1523,6 +1527,23 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['syndication']} SET update_info = '0' WHERE type='commentfeeds'",1);
 
             $current_fusion_version = '1.7.0';
+
+        case '1.7.0' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+
+            $_SQL = array();
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `introtext` `introtext` MEDIUMTEXT NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} CHANGE `bodytext` `bodytext` MEDIUMTEXT NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `introtext` `introtext` MEDIUMTEXT NULL DEFAULT NULL;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['storysubmission']} CHANGE `bodytext` `bodytext` MEDIUMTEXT NULL DEFAULT NULL;";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
+            $current_fusion_version = '1.7.1';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);

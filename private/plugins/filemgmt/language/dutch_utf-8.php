@@ -59,6 +59,7 @@ $LANG_FM00 = array (
     'details'           => 'Bestandsdetails',
     'filename'          => 'Bestandsnaam',
     'uploaded_by'       => 'Aangeleverd door',
+    'not_found'         => 'Download Not Found',
 );
 
 // Admin Navbar

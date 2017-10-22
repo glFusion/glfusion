@@ -239,6 +239,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                                $topicimage_noalign, false,true );
         }
     }
+    $article->set_var( 'story_id', $story->getSid(),false,true );
+    $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$story->getSid());
+    $article->set_var('article_url', $articleUrl,false,true );
+    $article->set_var('story_title', $story->DisplayElements('title'),false,true);
 
     PLG_templateSetVars($article_filevar,$article);
 
@@ -249,12 +253,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var('article_filevar','');
         $article->set_var( 'site_name', $_CONF['site_name'] );
 
-        $article->set_var( 'story_id', $story->getSid() );
         $article->set_var( 'lang_posted_in', $LANG01['posted_in']);
-
-        $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$story->getSid());
-        $article->set_var('article_url', $articleUrl );
-        $article->set_var('story_title', $story->DisplayElements('title'));
 
         if ($_CONF['contributedbyline'] == 1) {
             $article->set_var('lang_contributed_by', $LANG01[1]);
@@ -697,8 +696,8 @@ function STORY_extractLinks( $fulltext, $maxlength = 100 )
     /* Only match anchor tags that contain 'href="<something>"'
      */
     preg_match_all( "/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i", $fulltext, $matches );
-    for ( $i=0; $i< count( $matches[0] ); $i++ )
-    {
+    for ( $i=0; $i< count( $matches[0] ); $i++ )  {
+        $extLink = '';
         $matches[2][$i] = strip_tags( $matches[2][$i] );
         if ( !utf8_strlen( trim( $matches[2][$i] ) ) ) {
             $matches[2][$i] = strip_tags( $matches[1][$i] );
@@ -1093,6 +1092,8 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
 *
 * This is used to delete a story from the list of stories.
 *
+* NOTE: See STORY_removeStory() below - it removes and returns
+*
 * @param    string  $sid    ID of the story to delete
 * @return   string          HTML, e.g. a meta redirect
 *
@@ -1108,6 +1109,42 @@ function STORY_deleteStory($sid)
     PLG_invokeService('story', 'delete', $args, $output, $svc_msg);
 
     return $output;
+}
+
+/**
+ * Remove (delete) an existing story
+ *
+ * @param   array   args    Contains all the data provided by the client
+ * @param   string  &output OUTPUT parameter containing the returned text
+ * @return  int		    Response code as defined in lib-plugins.php
+ */
+function STORY_removeStory($sid)
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $result = DB_query ("SELECT tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($sid)."'");
+    $A = DB_fetchArray ($result);
+    $access = SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
+                             $A['perm_group'], $A['perm_members'], $A['perm_anon']);
+    $access = min ($access, SEC_hasTopicAccess ($A['tid']));
+    if ($access < 3) {
+        COM_accessLog ("User {$_USER['username']} tried to illegally delete story $sid.");
+        $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php');
+        if ($_USER['uid'] > 1) {
+            return PLG_RET_PERMISSION_DENIED;
+        } else {
+            return PLG_RET_AUTH_FAILED;
+        }
+    }
+    STORY_deleteImages ($sid);
+    DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = '".DB_escapeString($sid)."' AND type = 'article'");
+    DB_delete ($_TABLES['stories'], 'sid', DB_escapeString($sid));
+    // delete Trackbacks
+    DB_query ("DELETE FROM {$_TABLES['trackback']} WHERE sid = '".DB_escapeString($sid)."' AND type = 'article';");
+
+    PLG_itemDeleted($sid, 'article');
+
+    return PLG_RET_OK;
 }
 
 /**

@@ -3,11 +3,21 @@
 
 <!-- BEGIN images -->
 
+{!if !caption}
+{!if link}
+		<a href="{link}">
+{!endif}
+{!endif}
 		<img src="{imageurl}" alt=""
 		{!if caption}
 		  title="#slider-{rand}-slide{slidecounter}-caption"
 		{!endif}
 		>
+{!if !caption}
+{!if link}
+		</a>
+{!endif}
+{!endif}
 
 <!-- END images -->
 

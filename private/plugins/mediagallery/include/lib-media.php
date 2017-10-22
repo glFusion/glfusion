@@ -2332,7 +2332,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             } else {
                 $delete_option = false;
             }
-            if ( DB_count($_TABLES['comments'],'sid',$mid) > 0  || $_MG_CONF['commentbar'] ) {
+            if ( CMT_getCount('mediagallery', $mid) > 0  || $_MG_CONF['commentbar'] ) {
                 $cid        = $mid;
                 $page       = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
                 if ( isset($_POST['order']) ) {

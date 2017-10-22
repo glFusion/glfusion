@@ -76,6 +76,13 @@ class mgFrame {
             }
         } else {
             $this->_valid = 0;
+            $this->name = $name;
+            $this->frame['wHL'] = 0;
+            $this->frame['wHR'] = 0;
+            $this->frame['hVT'] = 0;
+            $this->frame['hVB'] = 0;
+            $this->frame['rowspan'] = 1;
+            $this->frame['colspan'] = 1;
             // fall back to our default...
         }
     }

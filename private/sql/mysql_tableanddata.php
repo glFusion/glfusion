@@ -399,8 +399,8 @@ CREATE TABLE {$_TABLES['stories']} (
   date datetime default NULL,
   title varchar(128) default NULL,
   subtitle varchar(128) default NULL,
-  introtext text,
-  bodytext text,
+  introtext mediumtext,
+  bodytext mediumtext,
   hits mediumint(8) unsigned NOT NULL default '0',
   rating float NOT NULL DEFAULT '0',
   votes int(11) NOT NULL DEFAULT '0',
@@ -447,8 +447,8 @@ CREATE TABLE {$_TABLES['storysubmission']} (
   uid mediumint(8) NOT NULL default '1',
   tid varchar(128) NOT NULL default 'General',
   title varchar(128) default NULL,
-  introtext text,
-  bodytext text,
+  introtext mediumtext,
+  bodytext mediumtext,
   date datetime default NULL,
   postmode varchar(10) NOT NULL default 'html',
   PRIMARY KEY  (sid)
@@ -915,7 +915,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.7.0') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.7.1') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";

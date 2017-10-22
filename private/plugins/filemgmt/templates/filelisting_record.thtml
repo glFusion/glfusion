@@ -7,9 +7,19 @@
         <td class="uk-width-2-4 uk-text-right">{LANG_SUBMITTEDBY}{submitter_name}</td>
       </tr>
       <tr>
-        <td colspan="3" style="width:500px;"><b><a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
-          <img src="{site_url}/filemgmt/images/download.gif" title="{LANG_DLNOW}" alt="{LANG_DLNOW}" /></a>&nbsp;
-          <a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">{dtitle}</a></b>
+        <td colspan="3" style="width:500px;">
+        	<b>
+{!if is_found}
+        		<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
+              <img src="{site_url}/filemgmt/images/download.gif" title="{LANG_DLNOW}" alt="{LANG_DLNOW}" />
+            </a>&nbsp;
+            <a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
+            	{dtitle}
+            </a>
+{!else}
+            	{dtitle}
+{!endif}
+          </b>
           &nbsp;&nbsp;&nbsp;{image_newdownload}{image_popular}
         </td>
       </tr>
@@ -41,7 +51,11 @@
 {!if show_comments}
           {comment_link}&nbsp;|&nbsp;
 {!endif}
+{!if is_found}
           <a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow">{LANG_DOWNLOAD}</a>&nbsp;|&nbsp;
+{!else}
+					{$LANG_FM00[not_found]}&nbsp;|&nbsp;
+{!endif}
           <a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow">{LANG_FILELINK}</a>&nbsp;|&nbsp;
           <a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a>
           <span style="display:{show_editlink};">&nbsp;|&nbsp;<a href="{site_admin_url}/plugins/filemgmt/index.php?lid={lid}&amp;op=modDownload" rel="nofollow">{LANG_EDIT}</a></span>

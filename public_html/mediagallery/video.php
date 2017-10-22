@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Displays video in pop-up window                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -682,10 +682,16 @@ if ( $nRows > 0 ) {
                         break;
                     }
                 }
-                $border_width = $media_size_disp[0] + 15;
-                $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"></div></div>';
-                $playback_options['height'] = $media_size_disp[1] + 40;
-                $playback_options['width']  = 300;
+                if ( !isset($media_size_orig) || $media_size_orig === false ) {
+                    $u_pic = $u_tn = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                    $playback_options['height'] = 200;
+                    $playback_options['width'] = 300;
+                } else {
+                    $border_width = $media_size_disp[0] + 15;
+                    $u_pic = '<div class=out style="width:' . $border_width . 'px"><div class="in ltin tpin"><img src="' . $u_tn . '"></div></div>';
+                    $playback_options['height'] = $media_size_disp[1] + 40;
+                    $playback_options['width']  = 300;
+                }
             } else {
                 $u_pic = $u_tn = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
                 $playback_options['height'] = 200;

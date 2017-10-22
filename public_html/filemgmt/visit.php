@@ -106,7 +106,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                         ob_end_flush();
                         header('Pragma: public'); 	// required
                         header('Expires: 0');		// no cache
-//                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                         header('Last-Modified: '.gmdate ('D, d M Y H:i:s', @filemtime ($fullurl)).' GMT');
                         header('Cache-Control: private',false);
                         header('Content-Type: application/force-download');
@@ -130,14 +130,14 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
             } else {
                 $fullurl = $filemgmt_FileStore . rawurldecode($url);
                 $fullurl = $fullurl;
-
+/*
                 $mimeInfo = IMG_getMediaMetaData( $fullurl );
                 if ( !isset($mimeInfo['mime_type']) || $mimeInfo['mime_type'] == '' ) {
                     $mt = 'application/force-download';
                 } else {
                   $mt = $mimeInfo['mime_type'];
                 }
-
+*/
                 if(ini_get('zlib.output_compression')) {
                     @ini_set('zlib.output_compression', 'Off');
                 }
@@ -145,11 +145,11 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 ob_end_flush();
                 header('Pragma: public'); 	// required
                 header('Expires: 0');		// no cache
-//                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                 header('Last-Modified: '.gmdate ('D, d M Y H:i:s', @filemtime ($fullurl)).' GMT');
                 header('Cache-Control: private',false);
-                header('Content-Type: ' . $mt);
-//                header('Content-Type: application/force-download');
+//                header('Content-Type: ' . $mt);
+                header('Content-Type: application/force-download');
                 header('Content-Disposition: attachment; filename="'.basename($fullurl).'"');
                 header('Content-Transfer-Encoding: binary');
                 if (!$_CONF['cookiesecure']) {

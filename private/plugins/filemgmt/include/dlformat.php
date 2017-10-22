@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Enhancements to display formatting                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -115,20 +115,24 @@ $p->set_var('LANG_FILESIZE',_MD_FILESIZE);
 $pos = MBYTE_strpos( $url, ':' );
 if( $pos === false ) {
     $p->set_var('file_size',PrettySize($size));
+    $fullurl = $filemgmt_FileStore . rawurldecode($url);
+    $is_found = false;
+    if ( file_exists($fullurl) ) $is_found = true;
 } else {
     if ( $size != 0 ) {
         $p->set_var('file_size',PrettySize($size));
     } else {
         $p->set_var('file_size','Remote');
     }
+    $is_found = true;
 }
+$p->set_var('is_found',$is_found);
 $p->set_var('homepage_url',$homepage);
 $p->set_var('LANG_HOMEPAGE',_MD_HOMEPAGE);
 $p->set_var('homepage',$homepage);
 
 if ($comments) {
     USES_lib_comments();
-//    $commentCount=DB_count($_TABLES['comments'],'sid',"fileid_$lid");
     $commentCount = CMT_getCount('filemgmt',"fileid_".$lid);
     $recentPostMessage =_MD_COMMENTSWANTED;
     if ($commentCount > 0) {

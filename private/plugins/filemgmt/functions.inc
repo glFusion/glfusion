@@ -205,7 +205,8 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
     } else { // success
         $comments = CMT_getCount('filemgmt', $id);
         DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
-        echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$id"));
+        $lid = (int) substr($id,7);
+        echo COM_refresh (COM_buildUrl ($_CONF['site_url']."/filemgmt/index.php?id=$lid"));
     }
 }
 
@@ -526,7 +527,7 @@ function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $t
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "WHERE (c.type='filemgmt') AND (u.uid = c.uid) ";
+    $sql .= "WHERE (c.type='filemgmt' AND c.queued = 0) AND (u.uid = c.uid) ";
     $sql .= filemgmt_buildAccessSql('AND');
     $sql .= " AND a.status > 0 ";
 
@@ -804,7 +805,7 @@ function plugin_getwhatsnew_filemgmt() {
             $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
-            $sql .= " AND c.date >=  DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' ";
+            $sql .= " AND c.date >=  DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' AND c.queued = 0 ";
             $sql .= "GROUP BY c.sid ORDER  BY c.date DESC LIMIT 15 ";
 
             $result = DB_query($sql);

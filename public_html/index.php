@@ -192,9 +192,7 @@ if ( $_VARS['totalhits'] % 50 === 0 ) {
             }
         } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
             COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
-            STORY_deleteImages ($sid);
-            DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".DB_escapeString($sid)."' AND type = 'article'");
-            DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".DB_escapeString($sid)."'");
+            STORY_removeStory($sid);
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }

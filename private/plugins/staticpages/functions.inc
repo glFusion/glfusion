@@ -253,7 +253,7 @@ function plugin_getwhatsnewcomment_staticpages()
             . COM_getPermSQL( 'AND', 0, 2, $_TABLES['staticpage'] ) .
             " AND ({$_TABLES['staticpage']}.commentcode >= 0)" .
             COM_getLangSQL( 'sp_id', 'AND', $_TABLES['staticpage'] ) . ")
-            WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
             AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['staticpage']}.sp_title,
             {$_TABLES['staticpage']}.sp_title, {$_TABLES['staticpage']}.sp_id
             ORDER BY 4 DESC LIMIT 15";
@@ -475,8 +475,7 @@ function SP_printPage ($page, $A)
     $print->set_var('printable_url', $printable);
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
-        $comments = (int) DB_count($_TABLES['comments'],
-                             array('sid', 'type'), array(DB_escapeString($page), 'staticpages'));
+        $comments = CMT_getCount('staticpages', $page);
         if ($comments > 0 ) {
             $numComments = COM_numberFormat ($comments);
             $print->set_var ('story_comments', $numComments);
@@ -685,7 +684,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $sql .= "CONCAT('/page.php?page=', c.sid,'#comments') AS url ";
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.sid=s.sp_id ";
-    $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
+    $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) AND (c.queued = 0 ) ";
     $sql .= COM_getPermSQL('AND',0,2,'s') . COM_getLangSQL('sp_id', 'AND', 's') . ' ';
 
     if (!empty($author)) {

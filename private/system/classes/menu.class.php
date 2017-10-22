@@ -490,7 +490,6 @@ class menuElement {
                         }
 
                         $item_array = getUserMenu();
-                        $this->label = $LANG01[47];
                         break;
 
                     case ADMIN_MENU :

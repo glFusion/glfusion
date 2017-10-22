@@ -299,8 +299,7 @@ function bb2_ban_check($ip)
 function bb2_ban_remove($ip)
 {
     global $_TABLES;
-
-    $sql = "DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE ip = '".DB_escapeString($ip)."'";
+    $sql = "DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE item = '".DB_escapeString($ip)."'";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
         CACHE_remove_instance('bb2_bl_data');

@@ -1,3 +1,4 @@
+<!doctype html>
 <html class="uk-height-1-1">
 	<head>
 		<meta charset="utf-8">
@@ -37,11 +38,11 @@
 					Configuration. The Configuration Manager is separated into logical sections.
 				</p>
 
-				<a name="site"></a><h2>Site Configuration Section</h2>
+				<h2>Site Configuration Section</h2>
 
 				<p>The Site Configuration section allows you to configure the site URL, name, mail settings, paths and other site related options. Generally, these options should not change often.</p>
 
-				<a name="site" id="site"></a><h2>Site Tab</h2>
+				<h2>Site Tab</h2>
 				<p>Set the site URL, name, slogan, etc. You can also disable the site or put it into maintenance mode from this section.</p>
 
 				<dl id="desc_site_url">
@@ -51,7 +52,7 @@
 
 				<dl id="desc_site_admin_url">
 					<dt>Admin URL</dt>
-					<dd>Base URL of the admin area of your site (no trailing slash). You won't have to change this normally, but some hosting services use a predefined &#8220;admin&#8221; directory for other purposes. In this case, you can rename glFusion's admin directory and adjust the <acronym title="Uniform Resource Locator">URL</acronym> accordingly to avoid conflicts.</dd>
+					<dd>Base URL of the admin area of your site (no trailing slash). You won't have to change this normally, but some hosting services use a predefined &#8220;admin&#8221; directory for other purposes. In this case, you can rename glFusion's admin directory and adjust the <abbr title="Uniform Resource Locator">URL</abbr> accordingly to avoid conflicts.</dd>
 				</dl>
 
 				<dl id="desc_site_name">
@@ -71,7 +72,7 @@
 
 				<dl id="desc_maintenance_mode">
 					<dt>Enable Maintenance Mode</dt>
-					<dd>Setting this to TRUE will block all non-admin users from using the site. All non-admin users will see the Site Disabled Message or URL. Admin users will still be able to access all features of the site. This is useful when you need to perform maintenance on the site and do not want any users to access during the maintenance.<br/><br/><span class="uk-text-bold">You must login as an admin user before setting this to true!</span></dd>
+					<dd>Setting this to TRUE will block all non-admin users from using the site. All non-admin users will see the Site Disabled Message or URL. Admin users will still be able to access all features of the site. This is useful when you need to perform maintenance on the site and do not want any users to access during the maintenance.<br><br><span class="uk-text-bold">You must login as an admin user before setting this to true!</span></dd>
 				</dl>
 
 				<dl id="desc_copyrightyear">
@@ -89,7 +90,7 @@
 					<dd>If you have a Facebook page for your site, enter your Facebook App ID here. This will enable Domain Insights on your Facebook Dashboard. Domain Insights lets you view analytics for traffic to your site from Facebook. Find the app ID in your App Dashboard.</dd>
 				</dl>
 
-				<a name="mail" id="mail"></a><h2>Mail</h2>
+				<h2>Mail</h2>
 
 				<p>This is where you configure how your site will send email.</p>
 
@@ -154,12 +155,12 @@
 					<dd>Force the From address to be your site email address. This is useful for hosting providers that do not allow email from addresses that are not from your domain. &nbsp;This will force the Reply-To address to be the email address of the user.</dd>
 				</dl>
 
-				<a name="syndication" id="syndication"></a><h2>Syndication</h2>
+				<h2>Syndication</h2>
 
 				<p>
 					glFusion can export its headlines to a news feed in various
-					formats (<acronym title="Rich Site Summary">RSS</acronym>,
-					<acronym title="Resource Description Framework">RDF</acronym>,
+					formats (<abbr title="Rich Site Summary">RSS</abbr>,
+					<abbr title="Resource Description Framework">RDF</abbr>,
 					and Atom). This will let you share your news with other sites (Hint:
 					Create a Portal block from glFusion's Block menu to import news feeds
 					from other sites).
@@ -195,7 +196,7 @@
 					<dd>Upper limit for the max. number of headlines when importing a feed (into a portal block). The limit can also be set for each individual portal block in the block menu. When set to 0, all headlines are imported. </dd>
 				</dl>
 
-				<a name="site_paths" id="paths"></a><h2>Paths</h2>
+				<h2>Paths</h2>
 
 				<dl id="desc_path_html">
 					<dt>HTML Path</dt>
@@ -227,11 +228,11 @@
 					<dd>Path where glFusion expects to find its images, including user photos and images for stories.</dd>
 				</dl>
 
-				<a name="site_search" id="search"></a><h2>Search</h2>
+				<h2>Search</h2>
 
 				<dl id="desc_search_style">
 					<dt>Results List Style</dt>
-					<dd>Defines the format of the search results page:<br>Google Style - Presents the results in a Google Style format<br/>Table Style - Presents the results in a tabular format.</dd>
+					<dd>Defines the format of the search results page:<br>Google Style - Presents the results in a Google Style format<br>Table Style - Presents the results in a tabular format.</dd>
 				</dl>
 
 				<dl id="desc_search_limits">
@@ -279,7 +280,7 @@
 					<dd>Default Search Method:<br>&nbsp;-&nbsp;all of the words<br>&nbsp;-&nbsp;any of the words<br>&nbsp;-&nbsp;exact phrase</dd>
 				</dl>
 
-				<a name="site_update" id="update"></a><h2>Update Checker</h2>
+				<h2>Update Checker</h2>
 
 				<dl id="desc_update_check_interval">
 					<dt>Update Check Interval</dt>
@@ -291,9 +292,9 @@
 					<dd>When glFusion checks for updates, if this is enabled, it will also pass the site URL, PHP version and Database version to the glFusion.org site. This data is only used by the glFusion team to gain a better understanding of how many sites are running glFusion. This data is never sold or shared with any other source. If disabled, no information is passed during the upgrade check.</dd>
 				</dl>
 
-				<a name="stories" id="stories_and_trackback"></a><h2>Stories and Trackback</h2>
+				<h2>Stories and Trackback</h2>
 
-				<a name="stories_story" id="story"></a><h2>Story</h2>
+				<h2>Story</h2>
 
 				<dl id="desc_maximagesperarticle">
 					<dt>Max Images per Article</dt>
@@ -401,7 +402,7 @@
 					<dd>Page to land on after saving a story. </dd>
 				</dl>
 
-				<a name="stories_trackback" id="trackback"></a><h2>Trackback</h2>
+				<h2>Trackback</h2>
 
 				<dl id="desc_trackback_enabled">
 					<dt>Trackback Enabled</dt>
@@ -420,15 +421,15 @@
 
 				<dl id="desc_check_trackback_link">
 					<dt>Check Trackbacks</dt>
-					<dd>This option can be used to check the validity of a trackback. You can check if the URL in the trackback actually contains a link back to your site (otherwise, it's probably spam). You can also check if the trackback was sent from the proper IP address, (i.e. the IP of the site in the trackback URL. Again, if they don't match, it's probably spam). Note that you can add up the values below to do more than one check (but using option 1 and 2 doesn't make sense and will be treated as if you requested option 2). Options are: <br/><br/>&nbsp;* Check against Site URL<br/>&nbsp;* Check against Site URL	and full URL<br/>&nbsp;* Check full URL<br/>&nbsp;* Check IP against Site IP <br/>&nbsp;* Check IP and Full URL<br/>&nbsp;* Check IP and Site URL<br/>&nbsp;* Check IP, Full URL and Site URL<br/>&nbsp;* Don't Check Anything </dd>
+					<dd>This option can be used to check the validity of a trackback. You can check if the URL in the trackback actually contains a link back to your site (otherwise, it's probably spam). You can also check if the trackback was sent from the proper IP address, (i.e. the IP of the site in the trackback URL. Again, if they don't match, it's probably spam). Note that you can add up the values below to do more than one check (but using option 1 and 2 doesn't make sense and will be treated as if you requested option 2). Options are: <br><br>&nbsp;* Check against Site URL<br>&nbsp;* Check against Site URL	and full URL<br>&nbsp;* Check full URL<br>&nbsp;* Check IP against Site IP <br>&nbsp;* Check IP and Full URL<br>&nbsp;* Check IP and Site URL<br>&nbsp;* Check IP, Full URL and Site URL<br>&nbsp;* Don't Check Anything </dd>
 				</dl>
 
 				<dl id="desc_multiple_trackbacks">
 					<dt>Multiple Trackbacks</dt>
-					<dd>How to handle multiple trackbacks and pingbacks from the same source. Options are:<br/><br/>&nbsp;* Allow multiple posts <br/>&nbsp;* Only keep latest (overwrite previous entries from this site) <br/>&nbsp;* Reject </dd>
+					<dd>How to handle multiple trackbacks and pingbacks from the same source. Options are:<br><br>&nbsp;* Allow multiple posts <br>&nbsp;* Only keep latest (overwrite previous entries from this site) <br>&nbsp;* Reject </dd>
 				</dl>
 
-				<a name="stories_pingback" id="pingback"></a><h2>Pingback</h2>
+				<h2>Pingback</h2>
 
 				<dl id="desc_pingback_enabled">
 					<dt>Pingback Enabled</dt>
@@ -441,7 +442,7 @@
 				</dl>
 				<dl id="desc_pingback_self">
 					<dt>Pingback Self</dt>
-					<dd>Pingbacks are sent out automatically to all the URLs linked from a story - which includes stories on your own site that you may have linked in the article. This option lets you specify how these &#8220;self pingbacks&#8221; are to be handled: Skip them, (i.e. don't send pingbacks to stories on your own site). Allow them, but obey the speed limit. Allow them and ignore the speed limit. <br/>If your article contains more than one link to other stories on your site, then option 2 is probably of limited use, as it would only pingback the first linked story and run into the speed limit for the others. </dd>
+					<dd>Pingbacks are sent out automatically to all the URLs linked from a story - which includes stories on your own site that you may have linked in the article. This option lets you specify how these &#8220;self pingbacks&#8221; are to be handled: Skip them, (i.e. don't send pingbacks to stories on your own site). Allow them, but obey the speed limit. Allow them and ignore the speed limit. <br>If your article contains more than one link to other stories on your site, then option 2 is probably of limited use, as it would only pingback the first linked story and run into the speed limit for the others. </dd>
 				</dl>
 
 				<dl id="desc_ping_enabled">
@@ -450,9 +451,9 @@
 				</dl>
 
 
-				<a name="theme" id="theme"></a><h2>Theme</h2>
+				<h2>Theme</h2>
 
-				<a name="theme_theme" id="theme1"></a><h2>Theme</h2>
+				<h2>Theme</h2>
 
 				<dl id="desc_theme">
 					<dt>Theme</dt>
@@ -464,7 +465,7 @@
 					<dd>Directory where all themes reside </dd>
 				</dl>
 
-				<a name="theme_advanced"></a><h2>Advanced Settings</h2>
+				<h2>Advanced Settings</h2>
 
 				<dl id="desc_show_right_blocks">
 					<dt>Always Show Right Blocks</dt>
@@ -495,8 +496,8 @@
 				</dl>
 
 
-				<a name="blocks" id="blocks"></a><h2>Blocks</h2>
-				<a name="blocks_admin" id="admin_block"></a><h2>Admin Block</h2>
+				<h2>Blocks</h2>
+				<h2>Admin Block</h2>
 
 				<dl id="desc_sort_admin">
 					<dt>Sort Links</dt>
@@ -518,11 +519,11 @@
 					<dd>When set to "True" this will disable the Admins Only block from showing unless you are on any of the Admin pages.</dd>
 				</dl>
 
-				<a name="blocks_topics" id="topic_blocks"></a><h2>Topic Blocks</h2>
+				<h2>Topic Blocks</h2>
 
 				<dl id="desc_sortmethod">
 					<dt>Sort Topics</dt>
-					<dd> alpha = Sort topics in topic list alphabetically <br/> sortnum = Sort topics in topic list by sort number </dd>
+					<dd> alpha = Sort topics in topic list alphabetically <br> sortnum = Sort topics in topic list by sort number </dd>
 				</dl>
 
 				<dl id="desc_showstorycount">
@@ -541,7 +542,7 @@
 				</dl>
 
 
-				<a name="blocks_who" id="who_s_online_block"></a><h2>Who's Online Block</h2>
+				<h2>Who's Online Block</h2>
 
 				<dl id="desc_whosonline_threshold">
 					<dt>Session Threshold</dt>
@@ -558,7 +559,7 @@
 					<dd>If enabled (i.e. set to 1), and a photo exists for the user, a thumbnail of that photo will be displayed, otherwise a photo icon will be displayed.</dd>
 				</dl>
 
-				<a name="blocks_what" id="what_s_new_block"></a><h2>What's New Block</h2>
+				<h2>What's New Block</h2>
 
 				<dl id="desc_newstoriesinterval">
 					<dt>New Stories Interval</dt>
@@ -610,9 +611,9 @@
 					<dd>The number of seconds that the cache file for What's New will live. For example, if you set this to 3600, this is 60 minutes - which means the What's New block will be rebuilt every hour.</dd>
 				</dl>
 
-				<a name="users" id="users_and_submissions"></a><h2>Users and Submissions</h2>
+				<h2>Users and Submissions</h2>
 
-				<a name="users_users" id="users"></a><h2>Users</h2>
+				<h2>Users</h2>
 
 				<dl id="desc_disable_new_user_registration">
 					<dt>Disable New User Registration</dt>
@@ -781,17 +782,17 @@
 
 				<dl id="desc_aftersave_user">
 					<dt>After Saving User</dt>
-					<dd>Which page to go to after a user has been saved: <br/><br/>* 'item': display the user's profile <br/>* 'list': show admin's list of users (default) <br/>* 'home': display the site's homepage <br/>* 'admin': go to the &#8220;Admin Home&#8221; page, i.e. Command &amp; Control </dd>
+					<dd>Which page to go to after a user has been saved: <br><br>* 'item': display the user's profile <br>* 'list': show admin's list of users (default) <br>* 'home': display the site's homepage <br>* 'admin': go to the &#8220;Admin Home&#8221; page, i.e. Command &amp; Control </dd>
 				</dl>
 
-				<a name="users_spamx" id="spam-x"></a><h2>Spam-X</h2>
+				<h2>Spam-X</h2>
 
 				<dl id="desc_spamx">
 					<dt>Spam-X Actions</dt>
 					<dd>Tells glFusion's Spam-X plugin what to do when a spam post has been detected. The value is the sum of all values that uniquely identify the Spam-X modules that should be executed. E.g. the &#8220;delete&#8221; action module uses 128, the &#8220;email admin&#8221; module uses 8, so if both modules should be executed, this option should be set to 128 + 8 = 136. </dd>
 				</dl>
 
-				<a name="users_login" id="login_settings"></a><h2>Login Settings</h2>
+				<h2>Login Settings</h2>
 
 				<dl id="desc_lastlogin">
 					<dt>Record Last Login</dt>
@@ -858,7 +859,7 @@
 					<dd>How many seconds have to pass before another login attempt can be made after <b>Max Login Attempts</b> (see above) login attempts have failed. </dd>
 				</dl>
 
-				<a name="users_usersub" id="user_submission"></a><h2>User Submission</h2>
+				<h2>User Submission</h2>
 
 				<dl id="desc_usersubmission">
 					<dt>User Submission Queue</dt>
@@ -872,17 +873,17 @@
 
 				<dl id="desc_allow_domains">
 					<dt>Automatic Allow Domains</dt>
-					<dd>When the user submission queue is enabled this can contain a comma-separated list of domain names from which user submissions will not be queued (but approved automatically). Regular expressions are also allowed and interpreted.<br/><br/>Example: 'mycompany.com,myothercompany.com' </dd>
+					<dd>When the user submission queue is enabled this can contain a comma-separated list of domain names from which user submissions will not be queued (but approved automatically). Regular expressions are also allowed and interpreted.<br><br>Example: 'mycompany.com,myothercompany.com' </dd>
 				</dl>
 
 				<dl id="desc_disallow_domains">
 					<dt>Automatic Disallow Domains</dt>
-					<dd>This is the opposite of <b>Automatic Allow Domains</b> (see above): A list of domain names that are not allowed in email addresses of new users. Note that this list is always used, even when the user submission queue has been switched off. Again, regular expression can be used.<br/><br/>Example disallow email addresses with a certain domain name and from any &#8221;.edu&#8221; domain: 'somebaddomain.com,\.edu$' </dd>
+					<dd>This is the opposite of <b>Automatic Allow Domains</b> (see above): A list of domain names that are not allowed in email addresses of new users. Note that this list is always used, even when the user submission queue has been switched off. Again, regular expression can be used.<br><br>Example disallow email addresses with a certain domain name and from any &#8221;.edu&#8221; domain: 'somebaddomain.com,\.edu$' </dd>
 				</dl>
 
 				<dl id="desc_user_reg_fullname">
 					<dt>Full Name option on registration form?</dt>
-					<dd>This controls whether there will be a "Full Name" field shown on the user registration form. The options are:<br/><ul><li>No: The new user will not be able to enter a full name during registration. This matches the method used by glFusion.</li><li>Optional: The user will be able to enter a full name during registration, but is not required to do so.</li><li>Required: The user will be required to enter a full name before submitting the registration form.</li></ul></dd>
+					<dd>This controls whether there will be a "Full Name" field shown on the user registration form. The options are:<br><ul><li>No: The new user will not be able to enter a full name during registration. This matches the method used by glFusion.</li><li>Optional: The user will be able to enter a full name during registration, but is not required to do so.</li><li>Required: The user will be required to enter a full name before submitting the registration form.</li></ul></dd>
 				</dl>
 
 				<dl id="desc_min_username_length">
@@ -890,7 +891,7 @@
 					<dd>The minimum allowed length of a username.</dd>
 				</dl>
 
-				<a name="users_submission" id="submission_settings"></a><h2>Submission Settings</h2>
+				<h2>Submission Settings</h2>
 
 				<dl id="desc_storysubmission">
 					<dt>Story Submission Queue</dt>
@@ -927,11 +928,11 @@
 					<dd>If TRUE, allows submission of stories and comments without previewing (i.e. the submission form will always have a Preview and a Submit button). </dd>
 				</dl>
 
-				<a name="users_comments" id="comments"></a><h2>Comments</h2>
+				<h2>Comments</h2>
 
 				<dl id="desc_comment_engine">
 					<dt>Comment Engine</dt>
-					<dd>Select which comment system to use on your site: <b>Internal</b> - Uses glFusion's built in comment system.<br/<br/>&nbsp;- Disqus - Uses the Disqus Service to provide comments<br/><br/>&nbsp;- Facebook Comments - Uses the Facebook Comment Plugin</dd>
+					<dd>Select which comment system to use on your site: <b>Internal</b> - Uses glFusion's built in comment system.<br><br>&nbsp;- Disqus - Uses the Disqus Service to provide comments<br><br>&nbsp;- Facebook Comments - Uses the Facebook Comment Plugin</dd>
 				</dl>
 
 				<dl id="desc_comment_disqus_shortname">
@@ -999,16 +1000,16 @@
 					<dd>If this number is greater than 0, it becomes the number of active stories to allow comments. &nbsp;For example, if set to 5, the 6th and older stories on your site will automatically have the comment closed setting applied.</dd>
 				</dl>
 
-				<a name="users_rating" id="rating"></a><h2>Rating Options</h2>
+				<h2>Rating Options</h2>
 
 				<dl id="desc_rating_speedlimit">
 					<dt>Rating Speed Limit</dt>
 					<dd>Number of seconds a user must wait between each rating</dd>
 				</dl>
 
-				<a name="images" id="images"></a><h1>Images</h2>
+				<h1>Images</h1>
 
-				<a name="images_imagelib" id="image_library"></a><h2>Image Library</h2>
+				<h2>Image Library</h2>
 
 				<dl id="desc_image_lib">
 					<dt>Image Library</dt>
@@ -1045,7 +1046,7 @@
 					<dd>This is the absolute path on your server where the jpegtrans binary on your server.</dd>
 				</dl>
 
-				<a name="images_upload" id="upload"></a><h2>Upload</h2>
+				<h2>Upload</h2>
 
 				<dl id="desc_keep_unscaled_image">
 					<dt>Keep Unscaled Image</dt>
@@ -1067,7 +1068,7 @@
 					<dd>When set to true, this option enables debugging output to be written into glFusion's error.log file during the upload of an image. This is useful to track down problems with the image upload. </dd>
 				</dl>
 
-				<a name="images_articles" id="images_in_articles"></a><h2>Images in Articles</h2>
+				<h2>Images in Articles</h2>
 
 				<dl id="desc_max_image_width">
 					<dt>Max. Image Width</dt>
@@ -1084,7 +1085,7 @@
 					<dd>Maximum size of an image in bytes. If it exceeds this, it is rejected (even if you're using a graphics package to resize images). </dd>
 				</dl>
 
-				<a name="images_topic" id="topic_icons"></a><h2>Topic Icons</h2>
+				<h2>Topic Icons</h2>
 
 				<dl id="desc_max_topicicon_width">
 					<dt>Max Topic Icon Width</dt>
@@ -1101,7 +1102,7 @@
 					<dd>Maximum size of a topic icon in bytes. If it exceeds this, it is rejected (even if you're using a graphics package to resize images). </dd>
 				</dl>
 
-				<a name="images_photos" id="photos"></a><h2>Photos</h2>
+				<h2>Photos</h2>
 
 				<dl id="desc_max_photo_width">
 					<dt>Max Photo Width</dt>
@@ -1128,7 +1129,7 @@
 					<dd>When enabled, this option should point to an image (full URL required!) that should be displayed for users without a user photo. When this option is not set and a user does not have a user photo (or an avatar) then glFusion will simply not display anything. </dd>
 				</dl>
 
-				<a name="images_gravatar" id="gravatar"></a><h2>Gravatar</h2>
+				<h2>Gravatar</h2>
 
 				<dl id="desc_use_gravatar">
 					<dt>User Gravatar</dt>
@@ -1150,9 +1151,9 @@
 					<dd>Maximum width, in pixels, of the logo image. If a logo is larger than this setting, it will be rejected.</dd>
 				</dl>
 
-				<a name="languages" id="languages_and_locale"></a><h2>Languages and Locale</h2>
+				<h2>Languages and Locale</h2>
 
-				<a name="languages_language" id="language"></a><h2>Language</h2>
+				<h2>Language</h2>
 
 				<dl id="desc_language">
 					<dt>Language</dt>
@@ -1169,7 +1170,7 @@
 					<dd>For multi-lingual setups only: A list mapping language shortcuts ('en', 'de', etc.) to the language's native name (&#8220;English&#8221;, &#8220;Deutsch&#8221;, etc.). See <a href="http://www.glfusion.org/wiki/glfusion:language" class="wikilink1" title="glfusion:language">language</a> for more information.</dd>
 				</dl>
 
-				<a name="languages_locale" id="locale"></a><h2>Locale</h2>
+				<h2>Locale</h2>
 
 				<dl id="desc_locale">
 					<dt>Locale</dt>
@@ -1231,8 +1232,8 @@
 					<dd>If your server is located in a different timezone, use this option to set your local (i.e. your own) timezone, so that the time and date on the site match your own. This option is known as the &#8220;timezone hack&#8221; and may not work on some servers. </dd>
 				</dl>
 
-				<a name="misc" id="miscellaneous"></a><h2>Miscellaneous</h2>
-				<a name="misc_cookies" id="cookies"></a><h2>Cookies</h2>
+				<h2>Miscellaneous</h2>
+				<h2>Cookies</h2>
 
 				<p>
 					These variables define the names of all of glFusion's cookies. They
@@ -1305,16 +1306,16 @@
 					<dd>Only set to TRUE if your site uses HTTPS.</dd>
 				</dl>
 
-				<a name="misc_misc" id="miscellaneous1"></a><h2>Miscellaneous</h2>
+				<h2>Miscellaneous</h2>
 
 				<dl id="desc_notification">
 					<dt>Notifications</dt>
-					<dd>Send an email notification to <b>site_email</b> when a new story, comment, trackback or pingback has been submitted or a new user has registered with the site. The array() can hold any combination of the strings 'story', 'comment', 'trackback', 'pingback', and 'user' (separated by commas), depending on which notification(s) you want.<br/><br/>In this web-based configuration tool, click the '+' button to add each item as an individual element. Do not include single or double quotes. </dd>
+					<dd>Send an email notification to <b>site_email</b> when a new story, comment, trackback or pingback has been submitted or a new user has registered with the site. The array() can hold any combination of the strings 'story', 'comment', 'trackback', 'pingback', and 'user' (separated by commas), depending on which notification(s) you want.<br><br>In this web-based configuration tool, click the '+' button to add each item as an individual element. Do not include single or double quotes. </dd>
 				</dl>
 
 				<dl id="desc_cron_schedule_interval">
 					<dt>Cron Schedule Interval</dt>
-					<dd>glFusion can emulate a cronjob, i.e. trigger a certain action at a given time. The code to be executed can be provided by a plugin or through the CUSTOM_runScheduledTask function in your lib-custom.php. The value given is in seconds and specifies the interval in which the code should be executed.<br/><br/>Please note that to trigger this action, you will need to have someone visit your site at around the specified time. On a site with few visitors, the code may only be executed with considerable delay. Set to 0 to disable. </dd>
+					<dd>glFusion can emulate a cronjob, i.e. trigger a certain action at a given time. The code to be executed can be provided by a plugin or through the CUSTOM_runScheduledTask function in your lib-custom.php. The value given is in seconds and specifies the interval in which the code should be executed.<br><br>Please note that to trigger this action, you will need to have someone visit your site at around the specified time. On a site with few visitors, the code may only be executed with considerable delay. Set to 0 to disable. </dd>
 				</dl>
 
 				<dl id="desc_disable_autolinks">
@@ -1327,7 +1328,7 @@
 					<dd>If set to TRUE, external links used in Forum posts, BBCode [url] tags or automatically generated links will open in a new window.  </dd>
 				</dl>
 
-				<a name="misc_debug" id="debug"></a><h2>Debug</h2>
+				<h2>Debug</h2>
 
 				<dl id="desc_rootdebug">
 					<dt>Root Debugging</dt>
@@ -1349,7 +1350,7 @@
 					<dd>If this is set to true - the HTML filter will log details on which HTML elements and attributes are filtered. Debug information is logged in the error.log file.</dd>
 				</dl>
 
-				<a name="misc_digest" id="daily_digest"></a><h2>Daily Digest</h2>
+				<h2>Daily Digest</h2>
 
 				<dl id="desc_emailstories">
 					<dt>Daily Digest Enabled</dt>
@@ -1366,7 +1367,7 @@
 					<dd>When set to TRUE, new users will be subscribed to the daily digest automatically when they register with the site. </dd>
 				</dl>
 
-				<a name="misc_html" id="html_filtering"></a><h2>HTML Filtering</h2>
+				<h2>HTML Filtering</h2>
 
 				<dl id="desc_allow_embed_object">
 					<dt>Allow EMBED Object</dt>
@@ -1398,7 +1399,7 @@
 					<dd>Additional HTML tags that are only allowed for Root users - a comma separated list.</dd>
 				</dl>
 
-				<a name="misc_censoring" id="censoring"></a><h2>Censoring</h2>
+				<h2>Censoring</h2>
 
 				<dl id="desc_censormode">
 					<dt>Censor Mode</dt>
@@ -1415,14 +1416,14 @@
 					<dd>List of words to remove and replace with the <b>replacement text.</b></dd>
 				</dl>
 
-				<a name="misc_ip_lookup" id="ip_lookup"></a><h2>IP Lookup</h2>
+				<h2>IP Lookup</h2>
 
 				<dl id="desc_ip_lookup">
 					<dt>IP Lookup</dt>
 					<dd>The IP addresses of comment posters are logged and displayed for admin users. When this variable is set to point to a service that can do IP address lookups, it's possible to lookup the owner of an IP address by clicking on it, making it easier to report abuse to ISPs, etc. This setting should hold the complete URL to the lookup service, with a '*' marking the place where the IP address should go. It's also possible to use Tom Willet's NetTools package, in which case the correct setting would be this setting should be set to "$_CONF['site_url'] . '/nettools/whois.php?domain=*';"</dd>
 				</dl>
 
-				<a name="desc_default_permissions_story" id="desc_default_permissions_story"></a><h2>Story Default Permission</h2>
+				<h2>Story Default Permission</h2>
 
 				<dl id="desc_default_permissions_story_0">
 					<dt>Story Default Permissions[0] (Owner Permissions)</dt>
@@ -1444,7 +1445,7 @@
 					<dd>The default Anonymous permissions for the Story editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Story editor. Options are No access, Read only, or Read/Write.</dd>
 				</dl>
 
-				<a name="desc_default_permissions_topic"></a><h2>Topic Default Permission</h2>
+				<h2>Topic Default Permission</h2>
 
 				<dl id="desc_default_permissions_topic_0">
 					<dt>Topic Default Permissions[0]</dt>
@@ -1466,7 +1467,7 @@
 					<dd>The default Anonymous permissions for the Topic editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Topic editor. Options are No access, Read only, or Read/Write.</dd>
 				</dl>
 
-				<a name="desc_default_permissions_block"></a><h2>Block Default Permission</h2>
+				<h2>Block Default Permission</h2>
 
 				<dl id="desc_default_permissions_block_0">
 					<dt>Block Default Permissions[0]</dt>
@@ -1488,7 +1489,7 @@
 					<dd>The default Anonymous permissions for the Block editor. The settings here will determine what permissions are checked (Read only, or Read/Write), or unchecked (No access) by default in the Anonymous box of the Permissions panel in the Block editor. Options are No access, Read only, or Read/Write.</dd>
 				</dl>
 
-				<a name="spam_bot_protection"></a><h2>Spam / Bot Protection</h2>
+				<h2>Spam / Bot Protection</h2>
 				<dl id="desc_bb2_enabled">
 					<dt>BB2 Enabled</dt>
 					<dd>Set this to true to enable Bad Behavior 2 plugin protection. </dd>
@@ -1562,12 +1563,12 @@
 			</div>
 			<div class="tm-push"></div>
 		</div>
-	</div>
-	<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
-		<div class="uk-hidden-small" style="padding-top:5px;"></div>
-		<div>
-			<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
-		</div>
-	</footer>
-</body>
+
+		<footer class="tm-footer uk-width-1-1 uk-text-center uk-margin-bottom-remove">
+			<div class="uk-hidden-small" style="padding-top:5px;"></div>
+			<div>
+				<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>
+			</div>
+		</footer>
+	</body>
 </html>

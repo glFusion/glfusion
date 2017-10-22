@@ -261,7 +261,7 @@ class Search {
         $searchform->set_var('lang_topic', $LANG09[3]);
         $searchform->set_var('lang_all', $LANG09[4]);
         $searchform->set_var('topic_option_list',
-                            COM_topicList ('tid,topic', $this->_topic));
+                            COM_topicList ('tid,topic,sortnum', $this->_topic,2,true));
         $searchform->set_var('lang_type', $LANG09[5]);
         $searchform->set_var('lang_results', $LANG09[59]);
         $searchform->set_var('lang_per_page', $LANG09[60]);
