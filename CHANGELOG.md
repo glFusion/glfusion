@@ -1,4 +1,5 @@
 ## v1.7.1 (unreleased)
+  - Don't override the label for User Menu in menu builder (Lee)
   - German Language updates from Matrox66
   - Bundled documentation formatting updates
   - PM link was missing from Forum topic view
