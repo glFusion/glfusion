@@ -1,4 +1,4 @@
-## v1.7.1 (unreleased)
+## v1.7.1 (October 22, 2017)
   - Don't override the label for User Menu in menu builder (Lee)
   - German Language updates from Matrox66
   - Bundled documentation formatting updates
