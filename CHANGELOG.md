@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - mailto: links in user administration list were incorrect.
 
 ## v1.7.1 (October 22, 2017)
   - Don't override the label for User Menu in menu builder (Lee)

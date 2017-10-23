@@ -1301,10 +1301,13 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'email':
-            $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[111];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
-            $retval .= '&nbsp;&nbsp;';
+            if (COM_isEmail($fieldvalue)) {
+                $url = 'mailto:' . $fieldvalue;
+                $retval = '<a href="' . $url . '" title="' . $LANG28[111] . '">' .
+                        $icon_arr['mail'] . '</a>&nbsp;&nbsp;';
+            } else {
+                $retval = $icon_arr['mail'] . '&nbsp;&nbsp;';
+            }
             $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
             $attr['style'] = 'vertical-align:top;';
