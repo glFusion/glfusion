@@ -1,4 +1,6 @@
 ## v1.7.2 (Unreleased)
+  - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
+  - Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
   - mailto: links in user administration list were incorrect.
 
 ## v1.7.1 (October 22, 2017)
