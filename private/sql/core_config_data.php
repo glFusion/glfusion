@@ -2274,6 +2274,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'comment_indent',
+    	'default_value' => 15,
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 6,
+    	'selection_array' => NULL,
+    	'sort' => 150,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_rating',
     	'default_value' => NULL,
     	'type' => 'fieldset',

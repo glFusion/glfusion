@@ -1760,6 +1760,10 @@ function glfusion_172()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
+    if (!isset($_CONF['comment_indent'])) {
+        $c->add('comment_indent',15,'text',4,6,NULL,150,TRUE,'Core');
+    }
+
     $_SQL = array();
 
     foreach ($_SQL as $sql) {

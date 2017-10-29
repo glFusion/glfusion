@@ -2777,6 +2777,7 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'article_comment_close_days' => 'Days to close comments (default)',
     'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'comment_indent' => 'Number of pixels to indent each child comment',
     'use_safe_html' => 'Use Safe HTML Mode',
     'jhead_enabled' => 'Enable JHEAD',
     'jpegtrans_enabled' => 'Enable jpegtrans',

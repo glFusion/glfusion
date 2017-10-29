@@ -1548,6 +1548,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.7.1' :
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
+            
+            $c->add('comment_indent',15,'text',4,6,NULL,150,TRUE,'Core');
 
             $_SQL = array();
 
