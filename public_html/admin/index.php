@@ -340,7 +340,9 @@ if ($msg > 0) {
     $display .= COM_showMessage($msg, $plugin);
 }
 
-$display .= _checkUpgrades();
+if ( !isset($_SYSTEM['skip_upgrade_check'] ) || $_SYSTEM['skip_upgrade_check'] == false ) {
+    $display .= _checkUpgrades();
+}
 
 $display .= security_check_reminder();
 $display .= commandcontrol();

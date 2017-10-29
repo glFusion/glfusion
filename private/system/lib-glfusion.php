@@ -230,10 +230,10 @@ function xml2array($contents, $get_attributes = 1, $priority = 'tag')
             }
         } elseif ($type == "complete") {
             if (!isset ($current[$tag])) {
-                $current[$tag] = $result;
+                @$current[$tag] = @$result;
                 $repeated_tag_index[$tag . '_' . $level] = 1;
                 if ($priority == 'tag' and $attributes_data)
-                    $current[$tag . '_attr'] = $attributes_data;
+                    @$current[$tag . '_attr'] = @$attributes_data;
             } else {
                 if (isset ($current[$tag][0]) and is_array($current[$tag])) {
                     $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
@@ -341,6 +341,7 @@ function _checkVersion()
 
     $response = xml2array($result);
 
+    $latest = 'unknown';
     if ( isset( $response['response'] ) ) {
         if ( isset($response['response']['glfusion'] ) ) {
             $latest = $response['response']['glfusion']['version'];
@@ -352,6 +353,8 @@ function _checkVersion()
         } else {
             $releaseDate = 'unknown';
         }
+    } else {
+        return array(-1,-1,array());
     }
 
     // check glFusion CMS version
@@ -393,7 +396,7 @@ function _checkVersion()
     $pluginsUpToDate = 1;
     $done = 0;
 
-    if ( is_array($response['response']['plugin'] ) ) {
+    if ( isset($response['response']) && is_array($response['response']['plugin'] ) ) {
         foreach ($_PLUGIN_INFO AS $iPlugin ) {
             if ( $iPlugin['pi_enabled'] ) {
                 $upToDate = 0;
@@ -508,6 +511,7 @@ function _doSiteConfigUpgrade() {
         'db_backup_rows'              => 10000,
         'style_type'                  => 'undefined',
         'sp_pages_in_plugin_menu'     => false,
+        'skip_upgrade_check'          => false,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -570,6 +574,7 @@ function _doSiteConfigUpgrade() {
         'style_type'                  => $_NEWSYSTEM['style_type'],
         'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
         'sp_pages_in_plugin_menu'     => $_NEWSYSTEM['sp_pages_in_plugin_menu']  ? 'true' : 'false',
+        'skip_upgrade_check'          => $_NEWSYSTEM['skip_upgrade_check'] ? 'true' : 'false',
         'beginphp'                    => '<?php',
         'endphp'                      => '?>',
     ));

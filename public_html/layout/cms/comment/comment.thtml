@@ -4,14 +4,16 @@
 {!else}
 <a name="cid_{cid}"></a>
 <article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
-	<div class="uk-panel uk-panel-box uk-margin-small-bottom">
+	<div class="uk-panel uk-panel-box uk-margin-small-bottom" style="margin-left:{indent}px;">
 {!endif}
-<div class="uk-flex uk-comment tm-comment uk-visible-hover" style="padding-left:{indent}px;">
+<div class="uk-flex uk-comment tm-comment uk-visible-hover">
+{!if author_photo_raw}
 	<div class="uk-margin-right uk-hidden-small">
 		<div class="user-avatar online">
 			<img alt="" class="uk-thumbnail" src="{author_photo_raw}" width="72" height="72">
 		</div>
 	</div>
+{!endif}
 	<div class="uk-flex-item-1">
 		<div class="uk-position-relative">
 			<h4 class="uk-comment-title tm-comment-title" itemprop="author" itemscope itemtype="https://schema.org/Person">
