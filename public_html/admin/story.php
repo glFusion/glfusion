@@ -834,8 +834,9 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $day_options = COM_getDayFormOptions($story->EditElements('publish_day'));
     $story_templates->set_var('publish_day_options', $day_options);
+    $goBack = ((int) date('Y', time()) - 2000) * -1;
 
-    $year_options = COM_getYearFormOptions($story->EditElements('publish_year'));
+    $year_options = COM_getYearFormOptions($story->EditElements('publish_year'),$goBack);
     $story_templates->set_var('publish_year_options', $year_options);
 
     if ($_CONF['hour_mode'] == 24) {
