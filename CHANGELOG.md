@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Improved error checking when retrieving group list for user
   - Added missing comment_indent configuration option
   - If 'Allow User Photo' was set to false, comments display had a broken image
   - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
