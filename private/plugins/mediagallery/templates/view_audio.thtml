@@ -15,7 +15,13 @@
 </ul>
 <nav class="uk-navbar uk-margin-bottom">
 	<div class="uk-navbar-content uk-width-small-3-4 uk-text-truncate">
-		<span class="uk-text-truncate">{album_title}</span>
+{!if album_link}
+	{album_link}
+{!endif}
+	<span class="uk-text-truncate">{album_title}</span>
+{!if album_link}
+	</a>
+{!endif}
 	</div>
 	<div class="uk-navbar-content uk-navbar-flip uk-width-small-1-4 uk-text-right uk-hidden-small">
 		<form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
