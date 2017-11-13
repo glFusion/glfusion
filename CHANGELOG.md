@@ -1,4 +1,6 @@
 ## v1.7.2 (Unreleased)
+  - Make album name in view media nav bar a link back to the album
+  - Do not allow emojis in usernames
   - Improved error checking when retrieving group list for user
   - Added missing comment_indent configuration option
   - If 'Allow User Photo' was set to false, comments display had a broken image
