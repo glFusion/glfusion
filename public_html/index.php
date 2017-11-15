@@ -152,8 +152,8 @@ if ( !empty($topic) ) {
         list($topiclimit, $story_sort, $story_sort_dir, $topic_desc) = DB_fetchArray($result);
         if (!empty($topic_desc)) {
             $outputHandle = \outputHandler::getInstance();
-            $outputHandle->AddMeta('name', 'description', @htmlspecialchars($topic_desc,ENT_QUOTES,COM_getEncodingt()), HEADER_PRIO_NORMAL);
-            $outputHandle->AddMeta('property', 'og:description', @htmlspecialchars($topic_desc,ENT_QUOTES,COM_getEncodingt()), HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
         }
     }
 }
