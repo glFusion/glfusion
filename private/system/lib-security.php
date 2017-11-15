@@ -611,11 +611,15 @@ function SEC_getUserPermissions($grp_id='',$uid='')
         $groups = SEC_getUserGroups ($uid);
     }
 
-    $glist = join(',', $groups);
-    $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
-                     . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
+    if ( count($groups) > 0 ) {
+        $glist = join(',', $groups);
+        $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
+                         . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
 
-    $nrows = DB_numrows($result);
+        $nrows = DB_numrows($result);
+    } else  {
+        $nrows = 0;
+    }
     for ($j = 1; $j <= $nrows; $j++) {
         $A = DB_fetchArray($result);
         if ($_SEC_VERBOSE) {

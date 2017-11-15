@@ -1933,7 +1933,8 @@ function CMT_preview( $data )
             // these have already been filtered above
             $A[$key] = $data[$key];
         } else if ($key == 'username') {
-            $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($data[$key])),ENT_QUOTES,COM_getEncodingt());
+            $A[$key] = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($data[$key])))),ENT_QUOTES,COM_getEncodingt());
+//            $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($data[$key])),ENT_QUOTES,COM_getEncodingt());
         } else {
             $A[$key] = COM_applyFilter($data[$key]);
         }

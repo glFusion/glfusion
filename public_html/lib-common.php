@@ -34,7 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -4458,12 +4458,6 @@ function COM_getYearFormOptions($selected = '', $startoffset = -1, $endoffset = 
     $start_year  = date('Y') + $startoffset;
     $cur_year    = date('Y', time());
     $finish_year = $cur_year + $endoffset;
-
-    if (!empty($selected)) {
-        if ($selected < $cur_year) {
-            $start_year = $selected;
-        }
-    }
 
     for ($i = $start_year; $i <= $finish_year; $i++) {
         $year_options .= '<option value="' . $i . '"';

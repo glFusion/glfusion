@@ -1,9 +1,13 @@
 ## v1.7.2 (Unreleased)
+  - Make album name in view media nav bar a link back to the album
+  - Do not allow emojis in usernames
+  - Improved error checking when retrieving group list for user
   - Added missing comment_indent configuration option
   - If 'Allow User Photo' was set to false, comments display had a broken image
   - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
   - Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
   - mailto: links in user administration list were incorrect.
+  - New theme class - .tm-list to allow more control over lists such as What's New or upcoming events
 
 ## v1.7.1 (October 22, 2017)
   - Don't override the label for User Menu in menu builder (Lee)
