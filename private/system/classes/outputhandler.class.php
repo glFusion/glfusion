@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Browser Output Handler                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -312,6 +312,8 @@ class outputHandler {
 
     public function addMeta($type, $name, $content, $priority = HEADER_PRIO_VERYLOW)
     {
+        if ( trim($content) == '' ) return;
+
         //$this->_header['meta'][] = $link = '<meta '.$type.'="' .  $name . '" content="' . $content . '"/>' . LB;
         // This blocks any duplicate "<meta name=..." tags, as well as any in
         // the $norepeat array
