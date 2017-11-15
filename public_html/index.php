@@ -147,9 +147,14 @@ $story_sort = 'date';
 $story_sort_dir = 'DESC';
 
 if ( !empty($topic) ) {
-    $result = DB_query("SELECT limitnews,sort_by,sort_dir FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
+    $result = DB_query("SELECT limitnews,sort_by,sort_dir,description FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
     if ( $result ) {
-        list($topiclimit, $story_sort, $story_sort_dir) = DB_fetchArray($result);
+        list($topiclimit, $story_sort, $story_sort_dir, $topic_desc) = DB_fetchArray($result);
+        if (!empty($topic_desc)) {
+            $outputHandle = \outputHandler::getInstance();
+            $outputHandle->AddMeta('name', 'description', @htmlspecialchars($topic_desc,ENT_QUOTES,COM_getEncodingt()), HEADER_PRIO_NORMAL);
+            $outputHandle->AddMeta('property', 'og:description', @htmlspecialchars($topic_desc,ENT_QUOTES,COM_getEncodingt()), HEADER_PRIO_NORMAL);
+        }
     }
 }
 
