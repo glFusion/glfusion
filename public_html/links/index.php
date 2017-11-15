@@ -406,7 +406,7 @@ function prepare_link_item ($A, &$template)
 
     if ( $_LI_CONF['linksperpage'] == 1 ) {
         $outputHandle = outputHandler::getInstance();
-        $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+        $outputHandle->addMeta('property','og:site_name',$_CONF['site_name']);
         $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
         $outputHandle->addMeta('property','og:title',$A['title']);
         $outputHandle->addMeta('property','og:type','website');

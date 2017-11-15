@@ -246,7 +246,7 @@ if ($A['count'] > 0) {
         }
         $metaDesc = trim($shortComment).$tailString;
 
-        $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+        $outputHandle->addMeta('property','og:site_name',$_CONF['site_name']);
         $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
         $outputHandle->addMeta('property','og:title',$pagetitle);
         $outputHandle->addMeta('property','og:type','article');
@@ -276,12 +276,12 @@ if ($A['count'] > 0) {
             }
         }
         if ( $story->DisplayElements('subtitle') != "" ) {
-            $outputHandle->addMeta('property','og:description',@htmlspecialchars($story->DisplayElements('subtitle'),ENT_QUOTES,COM_getEncodingt()));
+            $outputHandle->addMeta('property','og:description',$story->DisplayElements('subtitle'));
         } else {
-            $outputHandle->addMeta('property','og:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+            $outputHandle->addMeta('property','og:description',$metaDesc);
         }
 
-        $outputHandle->addMeta('name','description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+        $outputHandle->addMeta('name','description',$metaDesc);
 
         // look for twitter social site config
 
@@ -303,9 +303,9 @@ if ($A['count'] > 0) {
             $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
             $outputHandle->addMeta('property','twitter:title',$pagetitle);
             if ( $story->DisplayElements('subtitle') != "" ) {
-                $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($story->DisplayElements('subtitle'),ENT_QUOTES,COM_getEncodingt()));
+                $outputHandle->addMeta('property','twitter:description',$story->DisplayElements('subtitle'));
             } else {
-                $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+                $outputHandle->addMeta('property','twitter:description',$metaDesc);
             }
             if ( $metaStoryImage != '' ) {
                 $outputHandle->addMeta('property','twitter:image',$metaStoryImage . '?' . rand());

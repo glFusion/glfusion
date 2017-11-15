@@ -322,7 +322,7 @@ class outputHandler {
             return;
         }
         $this->_header['meta'][$type][$name] = array(
-            'content' => $content,
+            'content' => @htmlspecialchars($content,ENT_QUOTES,COM_getEncodingt(),false),
             'priority' => $priority,
         );
     }
