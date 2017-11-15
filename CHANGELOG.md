@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Add topic description (if exists) as the og:description meta data when viewing index page by topic (Lee)
   - Make album name in view media nav bar a link back to the album
   - Do not allow emojis in usernames
   - Improved error checking when retrieving group list for user
