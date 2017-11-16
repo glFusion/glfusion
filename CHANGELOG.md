@@ -1,4 +1,6 @@
 ## v1.7.2 (Unreleased)
+  - If topic description is set - display the description below the breadcrumbs
+  - New class .tm-topic-desc which can be used to style the topic description display
   - Consistency updates in how meta data was being populated
   - Add topic description (if exists) as the og:description meta data when viewing index page by topic (Lee)
   - Make album name in view media nav bar a link back to the album

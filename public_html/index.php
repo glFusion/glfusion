@@ -154,6 +154,7 @@ if ( !empty($topic) ) {
             $outputHandle = \outputHandler::getInstance();
             $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
             $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
+            $T->set_var('topic_desc',$topic_desc);
         }
     }
 }
