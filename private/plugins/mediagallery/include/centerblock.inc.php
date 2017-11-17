@@ -34,6 +34,8 @@ require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
 function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
     global $_CONF, $_MG_CONF, $MG_albums, $_TABLES, $_USER, $LANG_MG00, $LANG_MG01, $LANG_MG03,$mg_installed_version;
 
+    static $mgCBdata = array();
+
     $pi_name = 'mediagallery';     // Plugin name
     $retval = '';
 
@@ -250,10 +252,23 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
         }
     }
 
-    $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . DB_escapeString($sTopic) . "' OR cbpage='all' OR cbpage='allnhp') " . COM_getPermSQL('and') . " LIMIT 1");
-
-    if (DB_numRows($result) == 1) {
-        list($album_id,$cbpage,$cbpos) = DB_fetchArray($result);
+    if ( $mgCBdata == null ) {
+        $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . DB_escapeString($sTopic) . "' OR cbpage='all' OR cbpage='allnhp') " . COM_getPermSQL('and') . " LIMIT 1");
+        $mgCBdata = array();
+        while ( ($row = DB_fetchArray($result))!= NULL ) {
+            $mgCBdata[$row['cbposition']] = $row;
+        }
+        if ( isset($mgCBdata[$where] ) ) {
+            $centerblocks = count($mgCBdata[$where]);
+        } else {
+            $centerblocks = 0;
+        }
+    }
+    if ( isset($mgCBdata[$where] ) ) {
+        $record = $mgCBdata[$where];
+        $album_id = $record['album_id'];
+        $cbpage   = $record['cbpage'];
+        $cbpos    = $record['cbposition'];
 
         // If enabled only for homepage and this is not page 1 or a topic page, then set disable flag
         if ($cbpage == 'none' && ($page > 1 OR $topic != "")){
