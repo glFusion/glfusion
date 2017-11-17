@@ -1192,6 +1192,9 @@ function STORY_featuredCheck()
  * Inserts image HTML into the place of Image Placeholders
  *
  * @return string   Text with image placeholders removed
+ *
+ * NOTE: A duplicate function is in the story class (for performance reasons) - any updates
+ *       here need to be replicated there as well...
  */
 function STORY_renderImages($sid, $text)
 {
