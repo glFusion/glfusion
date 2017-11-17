@@ -640,10 +640,14 @@ $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
 require_once $_CONF['path_system'].'lib-menu.php';
 
+// Set the current topic in both the global var and Topic class
+// during transition
 if ( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
+    Topic::setCurrent($_GET['topic']);
 } else if ( isset( $_POST['topic'] )) {
     $topic = COM_applyFilter( $_POST['topic'] );
+    Topic::setCurrent($_POST['topic']);
 } else {
     $topic = '';
 }
