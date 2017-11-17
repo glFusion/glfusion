@@ -534,16 +534,23 @@ class config
 
     function _get_groups()
     {
-        global $_TABLES;
+        global $_TABLES, $_PLUGIN_INFO;
 
         $groups = array_keys($this->config_array);
         $num_groups = count($groups);
         for ($i = 0; $i < $num_groups; $i++) {
             $g = $groups[$i];
             if ($g != 'Core') {
-                $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',
-                                      "pi_name = '$g'");
-                if (isset($enabled) && ($enabled == 0)) {
+                if ( isset($_PLUGIN_INFO) && count($_PLUGIN_INFO) > 0 ) {
+                    if ( isset($_PLUGIN_INFO[$g]) && $_PLUGIN_INFO[$g]['pi_enabled'] == 1 ) {
+                        $enabled = 1;
+                    } else {
+                        $enabled = 0;
+                    }
+                } else {
+                    $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',"pi_name = '$g'");
+                }
+                if ( !isset($enabled) || $enabled != 1 ) {
                     unset($groups[$i]);
                 }
             }
