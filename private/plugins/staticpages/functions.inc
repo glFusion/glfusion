@@ -807,10 +807,10 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     static $spData = null;
 
     $retval = '';
-
+    $dt = new Date('now',$_USER['tzid']);
     if ( $spData == null ) {
         $moresql = "(sp_where IN (0,1,2,3)) AND (sp_status = 1) AND ";
-        $dt = new Date('now',$_USER['tzid']);
+
         if( !COM_onFrontpage() ) {
             $hpsql = " OR (sp_tid = 'allnhp') ";
         } else {
