@@ -461,7 +461,9 @@ class Topic
     */
     public function Edit($A = array())
     {
-        global $_CONF, $_TABLES, $LANG27;;
+        global $_CONF, $_TABLES, $LANG27;
+
+        $retval = '';
 
         if (!SEC_hasRights('topic.edit')) COM_404();
 
@@ -564,9 +566,13 @@ class Topic
             ) );
             $T->parse('sortsel', 'sort_selection', true);
         }
+
+        $T->set_var('gltoken_name', CSRF_TOKEN);
+        $T->set_var('gltoken', SEC_createToken());
+
         $T->parse('output', 'editor');
         $retval .= $T->finish($T->get_var('output'));
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+
         return $retval;
     }
 
@@ -576,7 +582,7 @@ class Topic
     *
     *   @return boolean     True on success, False on SQL error
     */
-    public function ReOrder()
+    public static function ReOrder()
     {
         global $_TABLES;
 
@@ -659,22 +665,32 @@ class Topic
         // Typically this will be $_POST
         if (!empty($A)) $this->setVars($A);
 
+        // Check that required fields are not empty
+        if (!$this->isValidRecord()) {
+            COM_setMsg('Some required fields are missing', 'error');
+            return false;
+        }
+
         // Set up SQL query depending on whether this is a new or edited
         // topic. Also, check if the TID has changed and is possibly a duplicate.
-        $tid_count = DB_count($_TABLES['topics'], 'tid', $this->tid);
-        if ($this->isNew) {
+        if ($this->old_tid == '') {
+            // Empty old_tid indicates a new topic
             $max_existing_tids = 0;
-            $sql1 = "INSERT INTO {$_TABLES['topics']} SET tid = '{$this->tid}', ";
+            $sql1 = "INSERT INTO {$_TABLES['topics']} SET ";
             $sql3 = '';
         } else {
+            // Updating an existing topic, maybe with a new tid
             $max_existing_tids = $this->tid == $this->old_tid ? 1 : 0;
             $sql1 = "UPDATE {$_TABLES['topics']} SET ";
             $sql3 = " WHERE tid = '{$this->old_tid}'";
         }
-        if ($tid_count > $max_existing_tids) {
-            // TODO: If changing the TID is allowed, this should be a language string.
-            COM_setMsg("Duplicate Topic ID is not allowed.", '', 'error');
-            return false;
+        if ($max_existing_tids == 0) {
+            $tid_count = DB_count($_TABLES['topics'], 'tid', $this->tid);
+            if ($tid_count > $max_existing_tids) {
+                // TODO: If changing the TID is allowed, this should be a language string.
+                COM_setMsg("Duplicate Topic ID is not allowed.", '', 'error');
+                return false;
+            }
         }
 
         // Upload a new icon if selected
@@ -693,40 +709,11 @@ class Topic
         // increment it to sort after that topic.
         $this->sortnum = $this->sortnum + 1;
 
-        // Setting this topic as default, unset all others.
-        if ($this->is_default) {
-            DB_query("UPDATE {$_TABLES['topics']}
-                    SET is_default = 0
-                    WHERE is_default = 1");
-        }
-
+        // Find this first in case this topic becomes the new archive
         $archivetid = self::archiveID();
-        if ($this->archive_flag) {
-            if ($archivetid != $this->tid) {
-                // This is the archive topic, but it wasn't before
-                // Update all stories with archive settings
-                DB_query("UPDATE {$_TABLES['stories']} SET
-                        featured = 0,
-                        frontpage = 0,
-                        statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
-                    " WHERE tid = '{$this->tid}'");
-                DB_query("UPDATE {$_TABLES['topics']}
-                    SET archive_flag = 0
-                    WHERE archive_flag = 1");
-            }
-        } else {
-           if ($archivetid == $this->tid) {
-                // This is not the archive topic, but it used to be
-                DB_query("UPDATE {$_TABLES['stories']}
-                    SET statuscode = 0
-                    WHERE tid = '$tid'");
-                DB_query("UPDATE {$_TABLES['topics']}
-                    SET archive_flag = 0
-                    WHERE archive_flag = 1");
-            }
-        }
 
-        $sql2 = "topic = '" . DB_escapeString($this->topic) . "',
+        $sql2 = "tid = '{$this->tid}',
+                topic = '" . DB_escapeString($this->topic) . "',
                 description = '" . DB_escapeString($this->description) . "',
                 imageurl = '" . DB_escapeString($this->imageurl) . "',
                 sortnum = '{$this->sortnum}',
@@ -741,43 +728,75 @@ class Topic
                 perm_group = '{$this->perm_group}',
                 perm_members = '{$this->perm_members}',
                 perm_anon = '{$this->perm_anon}'";
-
-        DB_query($sql1 . $sql2 . $sql3);
-        if (!DB_error()) {
-            self::ReOrder();
-
-            // TID has changed and is confirmed OK (not duplicate).
-            // Now update all other content items that have the old TID.
-            if ($this->tid != $this->old_tid) {
-                DB_query("UPDATE {$_TABLES['stories']}
-                        SET tid = '{$this->tid}'
-                        WHERE tid = '{$this->old_tid}'");
-                DB_query("UPDATE {$_TABLES['stories']}
-                        SET alternate_tid = '{$this->tid}'
-                        WHERE alternate_tid = '{$this->old_tid}'");
-                DB_query("UPDATE {$_TABLES['storysubmission']}
-                        SET tid = '{$this->tid}'
-                        WHERE tid = '{$this->old_tid}'");
-                DB_query("UPDATE {$_TABLES['syndication']}
-                        SET topic = '{$this->tid}'
-                        WHERE topic = '{$this->old_tid}'");
-                DB_query("UPDATE {$_TABLES['syndication']}
-                        SET header_tid = '{$this->tid}'
-                        WHERE header_tid = '{$this->old_tid}'");
-                DB_query("UPDATE {$_TABLES['blocks']}
-                        SET tid = '{$this->tid}'
-                        WHERE tid = '{$this->old_tid}'");
-            }
-
-            // update feed(s) and Older Stories block
-            COM_rdfUpToDateCheck('article', $this->tid);
-            COM_olderStuff();
-            CACHE_remove_instance('menu');
-            COM_setMessage(13);
-            return true;
-        } else {
+        $sql = $sql1 . $sql2 . $sql3;
+        DB_query($sql, 1);
+        if (DB_error()) {
+            // TODO: Language string
+            COM_setMsg('Error saving topic. Check for duplicate Topic ID', 'error');
+            COM_errorLog("Topic::Save() Error: $sql");
             return false;
         }
+
+        self::ReOrder();
+
+        // Setting this topic as default, unset all others.
+        if ($this->is_default) {
+            DB_query("UPDATE {$_TABLES['topics']}
+                    SET is_default = 0
+                    WHERE is_default = 1 AND tid <> '{$this->tid}'");
+        }
+
+        if ($this->archive_flag) {
+            if ($archivetid != $this->tid) {
+                // This is the archive topic, but it wasn't before
+                // Update all stories with archive settings
+                DB_query("UPDATE {$_TABLES['stories']} SET
+                        featured = 0,
+                        frontpage = 0,
+                        statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
+                    " WHERE tid = '{$this->tid}'");
+                DB_query("UPDATE {$_TABLES['topics']}
+                    SET archive_flag = 0
+                    WHERE archive_flag = 1 AND tid <> '{$this->tid}'");
+            }
+        } else {
+           if ($archivetid == $this->tid) {
+                // This is not the archive topic, but it used to be
+                DB_query("UPDATE {$_TABLES['stories']}
+                    SET statuscode = 0
+                    WHERE tid = '$tid'");
+            }
+        }
+
+        // TID has changed and is confirmed OK (not duplicate).
+        // Now update all other content items that have the old TID.
+        if ($this->tid != $this->old_tid) {
+            DB_query("UPDATE {$_TABLES['stories']}
+                    SET tid = '".DB_escapeString($this->tid)."'
+                    WHERE tid = '".DB_escapeString($this->old_tid)."'");
+            DB_query("UPDATE {$_TABLES['stories']}
+                    SET alternate_tid = '".DB_escapeString($this->tid)."'
+                    WHERE alternate_tid = '".DB_escapeString($this->old_tid)."'");
+            DB_query("UPDATE {$_TABLES['storysubmission']}
+                    SET tid = '".DB_escapeString($this->tid)."'
+                    WHERE tid = '".DB_escapeString($this->old_tid)."'");
+            DB_query("UPDATE {$_TABLES['syndication']}
+                    SET topic = '".DB_escapeString($this->tid)."'
+                    WHERE topic = '".DB_escapeString($this->old_tid)."'");
+            DB_query("UPDATE {$_TABLES['syndication']}
+                    SET header_tid = '".DB_escapeString($this->tid)."'
+                    WHERE header_tid = '".DB_escapeString($this->old_tid)."'");
+            DB_query("UPDATE {$_TABLES['blocks']}
+                    SET tid = '".DB_escapeString($this->tid)."'
+                    WHERE tid = '".DB_escapeString($this->old_tid)."'");
+        }
+
+        // update feed(s) and Older Stories block
+        COM_rdfUpToDateCheck('article', $this->tid);
+        COM_olderStuff();
+        CACHE_remove_instance('menu');
+        COM_setMessage(13);
+        return true;
     }
 
 
@@ -798,25 +817,25 @@ class Topic
         // Don't delete topic blocks - assign them to 'all' and disable them
         $sql = "UPDATE {$_TABLES['blocks']}
                 SET tid = 'all', is_enabled = 0
-                WHERE tid = '{$this->tid}'";
+                WHERE tid = '".DB_escapeString($this->tid)."'";
         DB_query($sql);
 
         // Same with feeds
         $sql = "UPDATE {$_TABLES['syndication']}
                 SET topic = '::all', is_enabled = 0
-                WHERE topic = '{$this->tid}'";
+                WHERE topic = '".DB_escapeString($this->tid)."'";
         DB_query($sql);
 
         // Remove any alternate topics
         $sql = "UPDATE {$_TABLES['stories']}
                 SET alternate_tid = NULL
-                WHERE alternate_tid = '{$this->tid}'";
+                WHERE alternate_tid = '".DB_escapeString($this->tid)."'";
         DB_query($sql);
 
         // Promote stories with a different alt topic
         $sql = "SELECT sid,alternate_tid
                FROM {$_TABLES['stories']}
-               WHERE tid = '{$this->tid}'
+               WHERE tid = '".DB_escapeString($this->tid)."'
                AND (alternate_tid IS NOT NULL || alternate_tid != '')";
         $result = DB_query($sql);
         while ($A = DB_fetchArray($result, false)) {
@@ -828,15 +847,15 @@ class Topic
 
         // Delete stories and related comments, trackbacks, images in this topic
         $sql = "SELECT sid FROM {$_TABLES['stories']}
-                    WHERE tid = '{$this->tid}'";
+                    WHERE tid = '".DB_escapeString($this->tid)."'";
         $result = DB_query($sql);
         while ($A = DB_fetchArray($result, false)) {
             STORY_removeStory($A['sid']);
         }
 
         // Delete submissions and this topic
-        DB_delete($_TABLES['storysubmission'], 'tid', $this->tid);
-        DB_delete($_TABLES['topics'], 'tid', $this->tid);
+        DB_delete($_TABLES['storysubmission'], 'tid', DB_escapeString($this->tid));
+        DB_delete($_TABLES['topics'], 'tid', DB_escapeString($this->tid));
 
         // Update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article');
@@ -914,6 +933,20 @@ class Topic
             $filename = self::$def_imageurl . $filename;
         }
         return $filename;
+    }
+
+
+    /**
+    *   Check the record before saving for valid fields
+    *
+    *   @return boolean     True if valid, False if not
+    */
+    private function isValidRecord()
+    {
+        if ($this->tid == '') return false;
+        if ($this->topic == '') return false;
+
+        return true;
     }
 
 }
