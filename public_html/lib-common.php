@@ -7419,6 +7419,39 @@ function COM_randomKey($length = 40 )
     return substr($random, 0, $length);
 }
 
+
+/**
+*   Reorder a table based on a sort value column
+*
+*   @param  string  $table      Index into $_TABLES array
+*   @param  string  $key_fld    Name of key field
+*   @param  string  $sort_fld   Name of sort value field
+*   @param  integer $interval   Sort value interval, default "10"
+*/
+function COM_reorder($table, $key_fld, $sort_fld, $interval = 10)
+{
+    global $_TABLES;
+
+    $interval = (int)$interval;
+    if ($interval < 1) $interval = 10;
+    $key_fld = DB_escapeString($key_fld);
+    $sort_fld = DB_escapeString($sort_fld);
+    $orderCount = $interval;
+
+    $sql = "SELECT `$key_fld`,`$sort_fld` FROM {$_TABLES[$table]} ORDER BY `$sort_fld` ASC";
+    $result = DB_query($sql);
+    while ($A = DB_fetchArray($result, false)) {
+        if ($A[$sort_fld] != $orderCount) {
+            // Only update fields that are out of order
+            DB_query("UPDATE {$_TABLES[$table]}
+                    SET `$sort_fld` = $orderCount
+                    WHERE `$key_fld` = '".$A[$key_fld]."'");
+        }
+        $orderCount += $interval;
+    }
+}
+
+ 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
  *

@@ -80,9 +80,10 @@ function initMenu($menuname, $skipCache=false) {
         $uid = 1;
     } else {
         $uid = $_USER['uid'];
-    }
-    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1 AND menu_name='".DB_escapeString($menuname)."'",1);
+   }
+   $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1 AND menu_name='".DB_escapeString($menuname)."'",1);
     $menuRow = DB_fetchArray($result);
+
     if ( $menuRow ) {
         $menu = new menu();
 
