@@ -857,6 +857,8 @@ class Topic
         DB_delete($_TABLES['storysubmission'], 'tid', DB_escapeString($this->tid));
         DB_delete($_TABLES['topics'], 'tid', DB_escapeString($this->tid));
 
+        self::ReOrder();
+
         // Update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article');
         COM_olderStuff();
