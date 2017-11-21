@@ -58,6 +58,9 @@ if (!SEC_hasRights('topic.edit')) {
 */
 function TOPIC_edit ($tid = '', $T = array(), $msg = '')
 {
+    $top = new Topic($tid);
+    return $top->Edit($T);
+
     global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG27, $LANG_ACCESS,
            $LANG_ADMIN, $MESSAGE, $_IMAGE_TYPE;
 
@@ -554,11 +557,13 @@ function TOPIC_save($T)
  * return a field value for the topic administration list
  *
  */
-function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
+function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
 {
     global $_CONF, $LANG_ADMIN, $LANG27, $_IMAGE_TYPE;
 
     $retval = false;
+    $token = $extra['token'];
+    $topic_count = $extra['topic_count'];
 
     $access = (SEC_inGroup('Topic Admin')) ? 3 : SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 
@@ -595,6 +600,29 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                     $retval = $LANG27[$sortByLang]; // 30+$fieldvalue];
                 } else {
                     $retval = 'undefined';
+                }
+                break;
+
+            case 'sortnum':
+                if ($fieldvalue > 10) {
+                    $retval .= COM_createLink(
+                        '<img src="' . $_CONF['layout_url'] .
+                        '/images/up.png" height="16" width="16" border="0" />',
+                        $_CONF['site_admin_url'] . '/topic.php?move=up&tid=' . $A['tid']
+                    );
+                } else {
+                    $retval .= '<img src="' . $_CONF['layout_url'] .
+                        '/images/blank.gif" height="16" width="16" border="0" />';
+                }
+                if ($fieldvalue < $topic_count) {
+                    $retval .= COM_createLink(
+                        '<img src="' . $_CONF['layout_url'] .
+                            '/images/down.png" height="16" width="16" border="0" />',
+                        $_CONF['site_admin_url'] . '/topic.php?move=down&tid=' . $A['tid']
+                        );
+                } else {
+                    $retval .= '<img src="' . $_CONF['layout_url'] .
+                        '/images/blank.gif" height="16" width="16" border="0" />';
                 }
                 break;
 
@@ -704,13 +732,17 @@ function TOPIC_list()
         'default_filter' => COM_getPermSql ('AND')
     );
 
-    $token = SEC_createToken();
+    //$token = SEC_createToken();
     $form_arr = array(
         'bottom'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
     );
+    $extra = array(
+        'token' => SEC_createToken(),
+        'topic_count' => count(Topic::All()) * 10,
+    );
 
     $retval .= ADMIN_list('topics','TOPIC_getListField',
-        $header_arr,$text_arr,$query_arr,$defsort_arr,'',$token,'',$form_arr);
+        $header_arr,$text_arr,$query_arr,$defsort_arr,'',$extra,'', $form_arr);
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
@@ -878,7 +910,7 @@ function TOPIC_reorderTopics()
 $display = '';
 
 $action = '';
-$expected = array('edit','save','delete','cancel');
+$expected = array('edit','save','delete','cancel','move');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -898,11 +930,25 @@ switch ($action) {
 
     case 'edit':
         $display .= COM_siteHeader('menu', $LANG27[1]);
-        $display .= TOPIC_edit($tid);
+        $T = new Topic($tid);
+        $display .= $T->Edit();
         $display .= COM_siteFooter();
         break;
 
     case 'save':
+        if (!empty($tid)) {
+            $T = new Topic($tid);
+            $status = $T->Save($_POST);
+            if (!$status) {
+                $display .= COM_siteHeader('menu', $LANG27[1]);
+                $display .= $T->Edit($_POST);
+                $display .= COM_siteFooter();
+                break;
+            }
+        }
+        echo COM_refresh($_CONF['site_admin_url'] . '/topic.php');
+        break;
+
         $T = array();
 
         $T['tid']           = (isset($_POST['tid']) ? $_POST['tid'] : '');
@@ -935,6 +981,15 @@ switch ($action) {
         break;
 
     case 'delete':
+        if (!empty($tid)) {
+            $T = new Topic($tid);
+            if ($T) {
+                $T->Delete();
+            }
+        }
+        COM_refresh($_CONF['site_admin_url'] . '/topic.php');
+        break;
+
         if (!isset($tid) || empty($tid)) {
             COM_errorLog('Attempted to delete topic, tid empty or null, value = ' . $tid);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/topic.php');
@@ -944,6 +999,12 @@ switch ($action) {
             COM_accessLog("User {$_USER['username']} tried to delete topic $tid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
+        break;
+
+    case 'move':
+        $dir = $_GET['move'];
+        Topic::Move($tid, $dir);
+        COM_refresh($_CONF['site_admin_url'] . '/topic.php');
         break;
 
     default:
