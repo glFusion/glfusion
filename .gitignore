@@ -47,3 +47,32 @@ public_html/forum/media/
 .DS_Store
 
 # local items
+.gitignore
+public_html/sitemap.xml
+public_html/mobile.xml
+**/metatags/
+**/lglib/
+**/library/
+**/locator/
+**/mailchimp/
+**/membership/
+**/paypal/
+**/photocomp/
+**/profile/
+**/qrcode/
+**/searcher/
+**/sitemap/
+**/subscription/
+**/weather/
+**/banner/
+**/blog/
+**/classifieds/
+**/dailyquote/
+**/dokuwiki/
+**/evlist/
+**/forms/
+private/logs/error.log
+public_html/backend/
+**/wikka/
+private/logs
+**/donation/

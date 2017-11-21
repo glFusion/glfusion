@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="FeedCreator 1.8" -->
+<rss version="0.91">
+    <channel xmlns:g="http://base.google.com/ns/1.0">
+        <title>glFusion Site</title>
+        <description>Fusing Technology with Style</description>
+        <link>https://gldev.leegarner.com</link>
+        <lastBuildDate>Tue, 21 Nov 2017 00:29:25 +0000</lastBuildDate>
+        <generator>FeedCreator 1.8</generator>
+        <language>en-gb</language>
+        <copyright>Copyright 2017 DEV glFusion site</copyright>
+        <managingEditor>admin@leegarner.com</managingEditor>
+        <item>
+            <title>TEMP INDEXING STORY</title>
+            <link>https://gldev.leegarner.com/article.php/20170823153154766</link>
+            <description>&lt;p&gt;Just a temporary story&lt;/p&gt;
+</description>
+            <pubDate>Wed, 23 Aug 2017 01:31:54 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/20170823153154766</guid>
+        </item>
+        <item>
+            <title>Another index test</title>
+            <link>https://gldev.leegarner.com/article.php/20170813190616362a</link>
+            <description>&lt;p&gt;index test story&lt;/p&gt;
+
+&lt;p&gt;Click Here to Submit&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;/images/library/Image/400_Tara_sm.jpg&quot; style=&quot;width: 150px; height: 188px;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the end of the intro&lt;/p&gt;
+
+&lt;p&gt;[astore:B000JWT7P8]&lt;/p&gt;
+</description>
+            <pubDate>Sun, 13 Aug 2017 05:06:16 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/20170813190616362a</guid>
+        </item>
+        <item>
+            <title>Test index story</title>
+            <link>https://gldev.leegarner.com/article.php/20170813182646468a</link>
+            <description>&lt;p&gt;this is a test just for the index&lt;/p&gt;
+</description>
+            <pubDate>Sun, 13 Aug 2017 04:26:46 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/20170813182646468a</guid>
+        </item>
+        <item>
+            <title>Vulcan Seat on a Mean Streak</title>
+            <link>https://gldev.leegarner.com/article.php/vulcan-mean-streak-seat</link>
+            <description>&lt;p&gt;Can you modify a Vulcan seat to fit the Mean Streak? Apparently you can. While this mod is specifically to get a Vulcan Classic seat to fit a Mean Streak, perhaps it will help others make similar mods...&lt;/p&gt;
+
+&lt;p&gt;&amp;quot;Mulefeathers&amp;quot; writes:&lt;/p&gt;
+
+&lt;p&gt;I want to document and share my steps in the conversation of a 2007 Vulcan Classic to my 2003 Mean Streak.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=&quot;vulcan seat mod1&quot; height=&quot;200&quot; src=&quot;/images/library/gadget/seat_mod/vulcan_seat_mod1.jpg&quot; width=&quot;113&quot; /&gt;The first thing I had to fix was the tab on the Vulcan is quite a bit larger than the mean streak so I had to sand down and resize. I have not sanded down the bumpers. I might after I ride for a little while but as of now, no.&lt;/p&gt;
+</description>
+            <pubDate>Thu, 03 Aug 2017 00:55:40 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/vulcan-mean-streak-seat</guid>
+        </item>
+        <item>
+            <title>glFusion v1.6.0 - The Evolution Continues...</title>
+            <link>https://gldev.leegarner.com/article.php/20080824115808580</link>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.glfusion.org&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;glFusion&lt;/a&gt;, the next generation content management system built on the foundation of synergy, stability, and style.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;uk-grid&quot;&gt;
+&lt;div class=&quot;uk-width-medium-1-2&quot;&gt;
+&lt;h2&gt;&lt;img width=&quot;160&quot; height=&quot;71&quot; class=&quot;floatright&quot; src=&quot;https://gldev.leegarner.com/images/articles/20080824115808580_1.jpeg&quot; alt=&quot;&quot;&gt;&lt;/h2&gt;
+
+&lt;h2&gt;Better Style&lt;/h2&gt;
+
+&lt;ul&gt;&lt;li&gt;The CMS Theme - A versitile and flexible UIKIT based layout.&lt;/li&gt;
+	&lt;li&gt;Improved WYSIWYG editor integration - See the styles available from the theme in the editor.&lt;/li&gt;
+	&lt;li&gt;Pure CSS driven layout - Seach Engine friendly and provides a more accessible web site, aiding visually impaired users.&lt;/li&gt;
+	&lt;li&gt;HTML5 Compliant&lt;/li&gt;
+	&lt;li&gt;Additional authoring styles - Improves the look and feel of your stories.&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+
+&lt;div class=&quot;uk-width-medium-1-2&quot;&gt;
+&lt;h2&gt;Better Usability&lt;/h2&gt;
+
+&lt;ul&gt;&lt;li&gt;Caching Template Library - Speed and Scalability&lt;/li&gt;
+	&lt;li&gt;Integrated Menu Builder&lt;/li&gt;
+	&lt;li&gt;Integrated Logo management&lt;/li&gt;
+	&lt;li&gt;Integrated Security Features
+	&lt;ul&gt;&lt;li&gt;CAPTCHA Plugin&lt;/li&gt;
+		&lt;li&gt;Bad Behavior2 Plugin&lt;/li&gt;
+	&lt;/ul&gt;&lt;/li&gt;
+	&lt;li&gt;Integrated Collaboration Tools
+	&lt;ul&gt;&lt;li&gt;Forum Plugin&lt;/li&gt;
+		&lt;li&gt;File Management Plugin&lt;/li&gt;
+		&lt;li&gt;Media Management Plugin&lt;/li&gt;
+	&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.glfusion.org&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;&lt;strong&gt;&lt;em&gt;glFusion&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;, the next generation content management system built on the foundation of synergy, stability, and style. It provides a complete content management solution in a single package that lets you get your site up and running quickly, without having to search for 3rd party plugins or components.&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;div class=&quot;uk-alert uk-alert-danger&quot;&gt;&lt;b&gt;Don't forget to change your password after logging in!&lt;/b&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;!--  begin /var/www/sites/dev/private/plugins/classifieds/templates/autotag.thtml  --&gt;&lt;div style=&quot;clear:both;&quot;&gt;
+  &lt;div style=&quot;float:left;padding:10px;&quot;&gt;
+    &lt;a href=&quot;https://gldev.leegarner.com/lglib/data/imgcache/2/21b1ec35115dbb96cd8785804869735b.jpg&quot; data-uk-lightbox=&quot;{group:'ad'}&quot;&gt;
+      &lt;img src=&quot;https://gldev.leegarner.com/lglib/data/imgcache/6/6ac8d52eef54495aafa61c6b1bd28551.jpg&quot; border=&quot;0&quot; 
+          alt=&quot;Click to enlarge&quot; 
+          title=&quot;Click to enlarge&quot;
+          class=&quot;gl_mootip&quot; data-uk-tooltip /&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div style=&quot;float:left;&quot;&gt;
+    &lt;a href=&quot;https://gldev.leegarner.com/classifieds/index.php/detail/&quot;&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div style=&quot;clear:both;&quot;&gt;
+  &lt;div style=&quot;float:left;padding:10px;&quot;&gt;
+    &lt;a href=&quot;https://gldev.leegarner.com/lglib/data/imgcache/7/72dc1ef315dff617b9486d9921951bf2.jpg&quot; data-uk-lightbox=&quot;{group:'ad'}&quot;&gt;
+      &lt;img src=&quot;https://gldev.leegarner.com/lglib/data/imgcache/b/bbbd7d21e1dbcebd2829e5721bf33e8f.jpg&quot; border=&quot;0&quot; 
+          alt=&quot;Click to enlarge&quot; 
+          title=&quot;Click to enlarge&quot;
+          class=&quot;gl_mootip&quot; data-uk-tooltip /&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div style=&quot;float:left;&quot;&gt;
+    &lt;a href=&quot;https://gldev.leegarner.com/classifieds/index.php/detail/&quot;&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;!--  end /var/www/sites/dev/private/plugins/classifieds/templates/autotag.thtml  --&gt;
+&lt;/p&gt;
+</description>
+            <pubDate>Wed, 01 Jun 2016 08:26:28 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/20080824115808580</guid>
+        </item>
+        <item>
+            <title>What Can You Do with glFusion?</title>
+            <link>https://gldev.leegarner.com/article.php/glfusion</link>
+            <description>&lt;p&gt;&lt;strong&gt;&lt;em&gt;glFusion&lt;/em&gt;&lt;/strong&gt; gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.  Check out the &lt;a href=&quot;http://www.glfusion.org/wiki/doku.php?id=glfusion:quickstart&quot;&gt;Quick Start Guide&lt;/a&gt; for more information. Features of your glFusion site include:&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;Integrated Menu Builder - Allowing you to change the site menu using an online editor.&lt;/li&gt;
+	&lt;li&gt;Direct integration of the FCKeditor WYSIWYG editor with your theme's styles.  See exactly how your story will look as you type it.&lt;/li&gt;
+	&lt;li&gt;Pre-installed plugins, bringing additional functionality and enhanced security:
+	&lt;ul&gt;&lt;li&gt;Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet.&lt;/li&gt;
+		&lt;li&gt;CAPTCHA - Ensures that humans are the only ones entering content on your site.&lt;/li&gt;
+		&lt;li&gt;Forum - A community collaboration and discussion tool.&lt;/li&gt;
+		&lt;li&gt;FileMgmt - A complete File Manager for your site.&lt;/li&gt;
+		&lt;li&gt;Media Gallery - A complete multi-media manager.&lt;/li&gt;
+	&lt;/ul&gt;&lt;/li&gt;
+	&lt;li&gt;glFusion gives you a true XHTML compliant site with a pure CSS driven layout.  The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.&lt;/li&gt;
+	&lt;li&gt;Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online &lt;a href=&quot;http://www.glfusion.org/wiki/doku.php?id=glfusion:start&quot;&gt;wiki&lt;/a&gt; at &lt;a href=&quot;http://www.glfusion.org&quot;&gt;http://www.glfusion.org&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!&lt;/p&gt;
+
+&lt;p&gt;The glFusion Team&lt;/p&gt;
+</description>
+            <pubDate>Wed, 01 Jun 2016 08:26:28 +0000</pubDate>
+            <guid>https://gldev.leegarner.com/article.php/glfusion</guid>
+        </item>
+    </channel>
+</rss>
