@@ -665,13 +665,21 @@ class Topic
         // Typically this will be $_POST
         if (!empty($A)) $this->setVars($A);
 
+        // Check that required fields are not empty
+        if (!$this->isValidRecord()) {
+            COM_setMsg('Some required fields are missing', 'error');
+            return false;
+        }
+
         // Set up SQL query depending on whether this is a new or edited
         // topic. Also, check if the TID has changed and is possibly a duplicate.
-        if ($this->isNew) {
+        if ($this->old_tid == '') {
+            // Empty old_tid indicates a new topic
             $max_existing_tids = 0;
-            $sql1 = "INSERT INTO {$_TABLES['topics']} SET tid = '{$this->tid}', ";
+            $sql1 = "INSERT INTO {$_TABLES['topics']} SET ";
             $sql3 = '';
         } else {
+            // Updating an existing topic, maybe with a new tid
             $max_existing_tids = $this->tid == $this->old_tid ? 1 : 0;
             $sql1 = "UPDATE {$_TABLES['topics']} SET ";
             $sql3 = " WHERE tid = '{$this->old_tid}'";
@@ -704,7 +712,8 @@ class Topic
         // Find this first in case this topic becomes the new archive
         $archivetid = self::archiveID();
 
-        $sql2 = "topic = '" . DB_escapeString($this->topic) . "',
+        $sql2 = "tid = '{$this->tid}',
+                topic = '" . DB_escapeString($this->topic) . "',
                 description = '" . DB_escapeString($this->description) . "',
                 imageurl = '" . DB_escapeString($this->imageurl) . "',
                 sortnum = '{$this->sortnum}',
@@ -722,6 +731,7 @@ class Topic
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql, 1);
         if (DB_error()) {
+            // TODO: Language string
             COM_setMsg('Error saving topic. Check for duplicate Topic ID', 'error');
             COM_errorLog("Topic::Save() Error: $sql");
             return false;
@@ -923,6 +933,20 @@ class Topic
             $filename = self::$def_imageurl . $filename;
         }
         return $filename;
+    }
+
+
+    /**
+    *   Check the record before saving for valid fields
+    *
+    *   @return boolean     True if valid, False if not
+    */
+    private function isValidRecord()
+    {
+        if ($this->tid == '') return false;
+        if ($this->topic == '') return false;
+
+        return true;
     }
 
 }
