@@ -142,21 +142,14 @@ if (!COM_isAnonUser()) {
     $U['tids'] = '';
 }
 
-$topiclimit = 0;
-$story_sort = 'date';
-$story_sort_dir = 'DESC';
-
-if ( !empty($topic) ) {
-    $result = DB_query("SELECT limitnews,sort_by,sort_dir,description FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
-    if ( $result ) {
-        list($topiclimit, $story_sort, $story_sort_dir, $topic_desc) = DB_fetchArray($result);
-        if (!empty($topic_desc)) {
-            $outputHandle = \outputHandler::getInstance();
-            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
-            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
-            $T->set_var('topic_desc',$topic_desc);
-        }
-    }
+$topiclimit = Topic::Current('limitnews', 0);
+$story_sort = Topic::Current('sort_by', 'date');
+$story_sort_dir = Topic::Current('sort_dir', 'DESC');
+$topic_desc = Topic::Current()->description;
+if (!empty($topic_desc)) {
+    $outputHandle = \outputHandler::getInstance();
+    $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
 }
 
 $maxstories = 0;
