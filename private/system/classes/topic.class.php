@@ -332,6 +332,10 @@ class Topic
         case 'sort_dir':
             $this->properties[$key] = $value == 'ASC' ? 'ASC' : 'DESC';
             break;
+        case 'sort_by':
+            if ($value < 0 || $value > 2) $value = 0;
+            $this->properties[$key] = (int)$value;
+            break;
         case 'tid':
         case 'old_tid':
             $this->properties[$key] = COM_sanitizeID($value, false);
