@@ -287,7 +287,7 @@ class Topic
         } else {
             $this->old_tid  = $A['old_tid'];
             $this->tid      = $A['tid'];
-            $this->topic    = $A['topic'];
+            $this->topic    = $A['topic_name'];
             $this->description = $A['description'];
             $this->imageurl = $A['imageurl'];
             $this->sortnum  = $A['sortnum'];
