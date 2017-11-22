@@ -260,10 +260,10 @@ class Topic
                 // A single topic ID passed in as a string
                 // Gets the info from self::Get() to ensure properties array
                 // is populated.
-                $obj = self::Get($tid);
-                if ($obj) {
+                $props = self::Read($tid);
+                if ($props) {
+                    $this->setVars($props, true);
                     $this->isNew = false;
-                    $this->setVars($obj->properties, true);
                 }
             }
         }
@@ -287,7 +287,7 @@ class Topic
         } else {
             $this->old_tid  = $A['old_tid'];
             $this->tid      = $A['tid'];
-            $this->topic    = $A['topic'];
+            $this->topic    = $A['topic_name'];
             $this->description = $A['description'];
             $this->imageurl = $A['imageurl'];
             $this->sortnum  = $A['sortnum'];
@@ -360,16 +360,42 @@ class Topic
 
 
     /**
+    *   Read a single topic from the database
+    *
+    *   @param  string  $tid    Topic ID
+    *   @param  mixed       Array of values, or NULL if not found
+    */
+    private static function Read($tid)
+    {
+        global $_TABLES;
+
+        $tid = COM_sanitizeID($tid, false);
+        if (empty($tid)) return NULL;
+
+        $sql = "SELECT * FROM {$_TABLES['topics']} WHERE tid = '$tid'";
+        $res = DB_query($sql, 1);
+        if (DB_error()) {
+            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
+            return NULL;
+        } elseif (DB_numRows($res) == 0) {
+            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
+            return NULL;;
+        } else {
+            return DB_fetchArray($res, false);
+        }
+    }
+
+
+    /**
     *   Wrapper to get a value and return a default for empty topics.
     *
+    *   @uses   self::Read()
     *   @param  string  $key        Name of value
     *   @param  mixed   $default    Default value, NULL to use class default
     *   @return mixed               Value of field
     */
     public static function Get($tid, $key = NULL, $default = NULL)
     {
-        global $_TABLES;
-
         $obj = NULL;
         $tid = COM_sanitizeID($tid, false);
         if (empty($tid)) return NULL;
@@ -377,22 +403,13 @@ class Topic
         // Get the topic object, first checking cache then the DB
         if (isset(self::$cache[$tid])) {
             $obj = self::$cache[$tid];
-        } else {    // Attempt to read the topic
-            $sql = "SELECT * FROM {$_TABLES['topics']} WHERE tid = '$tid'";
-            $res = DB_query($sql, 1);
-            if (DB_error()) {
-                COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
-                return NULL;
-            } elseif (DB_numRows($res) == 0) {
-                COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
-                return NULL;;
-            } else {
-                $A = DB_fetchArray($res, false);
-                self::$cache[$A['tid']] = new self($A);
-                $obj = self::$cache[$A['tid']];
+        } else {
+            $props = self::Read($tid);
+            if (!empty($props)) {
+                self::$cache[$tid] = new self($props);
+                $obj = self::$cache[$tid];
             }
         }
-
         if ($obj === NULL) {
             if ($key !== NULL) {
                 // Bad topic, key requested, return default or NULL if none

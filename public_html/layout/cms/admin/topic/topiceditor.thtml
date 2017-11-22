@@ -6,7 +6,7 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label">{$LANG27[3]}</label>
 			<div class="uk-form-controls">
-				<input class="required" type="text" size="48" name="topic" id="topic" value="{topic}">
+				<input class="required" type="text" size="48" name="topic_name" id="topic" value="{topic}">
 			</div>
 		</div>
 		<div class="uk-form-row">
