@@ -238,8 +238,8 @@ class Topic
 
     /**
     *   Constructor.
-    *   Reads the topic into the object variables.
-    *   Does not set the current topic.
+    *   Gets the object properties from cache if found, otherwise
+    *   reads data from the DB and caches the new object.
     *
     *   @param  mixed   $tid    Topic ID, or complete topic record from DB
     */
@@ -258,12 +258,17 @@ class Topic
                 $this->setVars($tid, true);
             } else {
                 // A single topic ID passed in as a string
-                // Gets the info from self::Get() to ensure properties array
+                // Gets the info from self::Read() to ensure properties array
                 // is populated.
-                $props = self::Read($tid);
-                if ($props) {
+                if (isset(self::$cache[$tid])) {
+                    $props = self::$cache[$tid]->properties;
+                } else {
+                    $props = self::Read($tid);
+                }
+                if (!empty($props)) {
                     $this->setVars($props, true);
                     $this->isNew = false;
+                    self::$cache[$tid] = $this;
                 }
             }
         }
@@ -387,9 +392,8 @@ class Topic
 
 
     /**
-    *   Wrapper to get a value and return a default for empty topics.
+    *   Wrapper to get an object or specific value
     *
-    *   @uses   self::Read()
     *   @param  string  $key        Name of value
     *   @param  mixed   $default    Default value, NULL to use class default
     *   @return mixed               Value of field
@@ -404,11 +408,7 @@ class Topic
         if (isset(self::$cache[$tid])) {
             $obj = self::$cache[$tid];
         } else {
-            $props = self::Read($tid);
-            if (!empty($props)) {
-                self::$cache[$tid] = new self($props);
-                $obj = self::$cache[$tid];
-            }
+            $obj = new self($tid);
         }
         if ($obj === NULL) {
             if ($key !== NULL) {
