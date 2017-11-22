@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - New topic.class.php to streamline backend topic administration (Lee)
   - Several performance tweaks to SQL queries - removed several duplicate calls
   - If topic description is set - display the description below the breadcrumbs
   - New class .tm-topic-desc which can be used to style the topic description display
