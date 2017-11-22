@@ -960,7 +960,8 @@ switch ($action) {
         break;
 
     case 'save':
-        if (!empty($tid) && SEC_checkToken()) {
+        if (SEC_checkToken()) {
+            $tid = isset($_POST['old_tid']) ? $_POST['old_tid'] : '';
             $T = new Topic($tid);
             $status = $T->Save($_POST);
             if ( !$status ) {
