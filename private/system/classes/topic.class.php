@@ -726,9 +726,6 @@ class Topic
         // increment it to sort after that topic.
         $this->sortnum = $this->sortnum + 1;
 
-        // Find this first in case this topic becomes the new archive
-        $archivetid = self::archiveID();
-
         $sql2 = "tid = '{$this->tid}',
                 topic = '" . DB_escapeString($this->topic) . "',
                 description = '" . DB_escapeString($this->description) . "',
@@ -754,36 +751,9 @@ class Topic
             return false;
         }
 
+        self::setArchive($this->tid, $this->archive_flag);
+        self::setDefault($this->tid, $this->is_default);
         self::ReOrder();
-
-        // Setting this topic as default, unset all others.
-        if ($this->is_default) {
-            DB_query("UPDATE {$_TABLES['topics']}
-                    SET is_default = 0
-                    WHERE is_default = 1 AND tid <> '{$this->tid}'");
-        }
-
-        if ($this->archive_flag) {
-            if ($archivetid != $this->tid) {
-                // This is the archive topic, but it wasn't before
-                // Update all stories with archive settings
-                DB_query("UPDATE {$_TABLES['stories']} SET
-                        featured = 0,
-                        frontpage = 0,
-                        statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
-                    " WHERE tid = '{$this->tid}'");
-                DB_query("UPDATE {$_TABLES['topics']}
-                    SET archive_flag = 0
-                    WHERE archive_flag = 1 AND tid <> '{$this->tid}'");
-            }
-        } else {
-           if ($archivetid == $this->tid) {
-                // This is not the archive topic, but it used to be
-                DB_query("UPDATE {$_TABLES['stories']}
-                    SET statuscode = 0
-                    WHERE tid = '$tid'");
-            }
-        }
 
         // TID has changed and is confirmed OK (not duplicate).
         // Now update all other content items that have the old TID.
@@ -966,6 +936,82 @@ class Topic
         if ($this->topic == '') return false;
 
         return true;
+    }
+
+
+    /**
+    *   Clear all cached topic elements.
+    *   Used after updates to force All() to re-read from the DB
+    */
+    private static function clearCache()
+    {
+        self::$cache = array();
+        self::$all = NULL;
+    }
+
+
+    /**
+    *   Set the default topic.
+    *   Unsets the is_default flag from all other topics and
+    *   sets it for the specified topic.
+    *
+    *   @param  string  $tid        New default topic ID
+    *   @param  integer $is_default 1 = Set, 0 = Unset as default
+    */
+    public static function setDefault($tid, $is_default = 1)
+    {
+        global $_TABLES;
+
+        $tid = DB_escapeString($tid);
+        $is_default = $is_default ? 1 : 0;
+        if ($is_default) {
+            DB_query("UPDATE {$_TABLES['topics']}
+                    SET is_default = CASE
+                        WHEN tid = '$tid' THEN 1 ELSE 0 END");
+        } else {
+            DB_query("UPDATE {$_TABLES['topics']}
+                    SET is_default = $is_default
+                    WHERE tid = '$tid'");
+        }
+        // Clear the cache to force All() to re-read it.
+        self::clearCache();
+    }
+
+
+    /**
+    *   Set or unset the archive topic
+    *
+    *   @param  string  $tid            Topic ID
+    *   @param  boolean $archive_flag   True to set archive topic, False to unset
+    */
+    public static function setArchive($tid, $archive_flag = true)
+    {
+        global $_TABLES;
+
+        $old_tid = self::archiveID();
+        $tid = DB_escapeString($tid);
+        if ($old_tid = $tid) return;    // No change
+
+        if ($archive_flag) {
+            // This is the archive topic, but it wasn't before
+            // Update all stories with archive settings
+            DB_query("UPDATE {$_TABLES['stories']} SET
+                        featured = 0,
+                        frontpage = 0,
+                        statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
+                    " WHERE tid = '{$tid}'");
+            DB_query("UPDATE {$_TABLES['topics']}
+                    SET archive_flag = CASE
+                        WHEN tid = '$tid' THEN 1 ELSE 0 END");
+        } else {
+            // This is not the archive topic, but it used to be
+            DB_query("UPDATE {$_TABLES['stories']}
+                    SET statuscode = 0
+                    WHERE tid = '$tid'");
+            DB_query("UPDATE {$_TABLES['topics']}
+                    SET archive_flag = 0
+                    WHERE tid = '{$tid}'");
+        }
     }
 
 }
