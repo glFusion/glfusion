@@ -482,7 +482,7 @@ class Topic
 
         $retval = '';
 
-        if (!SEC_hasRights('topic.edit')) COM_404();
+        if (!self::isAdmin()) COM_404();
 
         // Load previous field values if array is not empty
         if (!empty($A)) $this->setVars($A, false);
@@ -677,7 +677,7 @@ class Topic
         global $_TABLES;
 
         // Make sure this is a topic admin
-        if (!SEC_hasRights('topic.edit')) COM_404();
+        if (!self::isAdmin()) COM_404();
 
         // Typically this will be $_POST
         if (!empty($A)) $this->setVars($A);
@@ -799,7 +799,7 @@ class Topic
     {
         global $_TABLES;
 
-        if (!SEC_hasRights('topic.edit')) COM_404();
+        if (!self::isAdmin()) COM_404();
 
         // Don't delete topic blocks - assign them to 'all' and disable them
         $sql = "UPDATE {$_TABLES['blocks']}
@@ -955,26 +955,45 @@ class Topic
     *   Unsets the is_default flag from all other topics and
     *   sets it for the specified topic.
     *
-    *   @param  string  $tid        New default topic ID
+    *   @param  string  $tid        New default topic ID, empty to unset all
     *   @param  integer $is_default 1 = Set, 0 = Unset as default
+    *   @return string      New Default TID, empty string if unsetting
     */
-    public static function setDefault($tid, $is_default = 1)
+    public static function setDefault($tid = '', $is_default = 1)
     {
         global $_TABLES;
 
-        $tid = DB_escapeString($tid);
+        $default_tid = self::defaultID();
+
+        // Shouldn't be here, but just return the current TID
+        if (!self::isAdmin()) return $default_tid;
+
         $is_default = $is_default ? 1 : 0;
-        if ($is_default) {
+        if (empty($tid)) {
+            // Just removing any default
+            DB_query("UPDATE {$_TABLES['topics']} SET is_default = 0");
+            if (!DB_error()) {
+                $default_tid = '';
+            }
+        } elseif ($is_default) {
             DB_query("UPDATE {$_TABLES['topics']}
                     SET is_default = CASE
-                        WHEN tid = '$tid' THEN 1 ELSE 0 END");
+                        WHEN tid = '" . DB_escapeString($tid) .
+                        "' THEN 1 ELSE 0 END");
+            if (!DB_error()) {
+                $default_tid = $tid;
+            }
         } else {
             DB_query("UPDATE {$_TABLES['topics']}
                     SET is_default = $is_default
-                    WHERE tid = '$tid'");
+                    WHERE tid = '" . DB_escapeString($tid) . "'");
+            if (!DB_error()) {
+                $default_tid = '';
+            }
         }
         // Clear the cache to force All() to re-read it.
         self::clearCache();
+        return $default_tid;
     }
 
 
@@ -983,35 +1002,74 @@ class Topic
     *
     *   @param  string  $tid            Topic ID
     *   @param  boolean $archive_flag   True to set archive topic, False to unset
+    *   @return string      New Archive TID, empty string if unsetting
     */
-    public static function setArchive($tid, $archive_flag = true)
+    public static function setArchive($tid = '', $archive_flag = true)
     {
         global $_TABLES;
 
-        $old_tid = self::archiveID();
-        $tid = DB_escapeString($tid);
-        if ($old_tid = $tid) return;    // No change
+        $archive_tid = self::archiveID();
 
-        if ($archive_flag) {
-            // This is the archive topic, but it wasn't before
-            // Update all stories with archive settings
-            DB_query("UPDATE {$_TABLES['stories']} SET
-                        featured = 0,
-                        frontpage = 0,
-                        statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
-                    " WHERE tid = '{$tid}'");
+        // Shouldn't be here, but just return the current TID
+        if (!self::isAdmin()) return $archive_tid;
+
+        $db_tid = DB_escapeString($tid);
+
+        if (empty($tid)) {
+            // Just unsetting any archive topic.
+            DB_query("UPDATE {$_TABLES['topics']} SET archive_flag = 0");
+            if (!DB_error()) {
+                $archive_tid = '';
+            }
+        } elseif ($archive_flag) {
+            if ($archive_tid != $tid) {
+                // This is the archive topic, but it wasn't before
+                // Update all stories with archive settings
+                DB_query("UPDATE {$_TABLES['stories']} SET
+                            featured = 0,
+                            frontpage = 0,
+                            statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
+                        " WHERE tid = '{$db_tid}'");
+            }
             DB_query("UPDATE {$_TABLES['topics']}
                     SET archive_flag = CASE
-                        WHEN tid = '$tid' THEN 1 ELSE 0 END");
+                        WHEN tid = '$db_tid' THEN 1 ELSE 0 END");
+            if (!DB_error()) {
+                $archive_tid = $tid;
+            }
         } else {
-            // This is not the archive topic, but it used to be
-            DB_query("UPDATE {$_TABLES['stories']}
-                    SET statuscode = 0
-                    WHERE tid = '$tid'");
+            // Unsetting this tid as the archive
+            if ($archive_tid == $tid) {
+                // This is not the archive topic, but it used to be
+                DB_query("UPDATE {$_TABLES['stories']}
+                        SET statuscode = 0
+                        WHERE tid = '$db_tid'");
+            }
             DB_query("UPDATE {$_TABLES['topics']}
                     SET archive_flag = 0
-                    WHERE tid = '{$tid}'");
+                    WHERE tid = '{$db_tid}'");
+            if (!DB_error()) {
+                $archive_tid = '';
+            }
         }
+        self::clearCache();
+        return $archive_tid;
+    }
+
+
+    /**
+    *   Provides a shortcut to check if the current user is a topic admin.
+    *   Caches the status in case it gets called multiple times.
+    *
+    *   @return boolean     True if the user is an admin, False if not
+    */
+    public static function isAdmin()
+    {
+        static $isAdmin = NULL;
+        if ($isAdmin === NULL) {
+            $isAdmin = SEC_hasRights('topic.edit');
+        }
+        return $isAdmin;
     }
 
 }
