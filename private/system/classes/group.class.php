@@ -249,20 +249,25 @@ class Group
     *   SEC_getFeatureGroup().
     *
     *   @param  string  $feature    Feature name, e.g. "story.edit"
+    *   @param  integer $uid        User ID to check, may be empty
     *   @return array       Array of group IDs
     */
-    public static function withFeature($feature)
+    public static function withFeature($feature, $uid = '')
     {
         global $_TABLES;
 
         static $groups = array();
         if (!isset($groups[$feature])) {
             $groups[$feature] = array();
+            $ugroups = self::getAll($uid);
+
             $ft_id = (int)DB_getItem($_TABLES['features'], 'ft_id',
                     "ft_name = '".DB_escapeString($feature)."'");
-            if ($ft_id > 0) {
+            if ($ft_id > 0 && count($ugroups) > 0) {
+                $grouplist = implode (',', $ugroups);
                 $sql = "SELECT * FROM {$_TABLES['access']}
                         WHERE acc_ft_id = $ft_id
+                        AND acc_grp_id IN ($grouplist)
                         ORDER BY acc_grp_id";
                 $res = DB_query($sql, 1);
                 if ($res) {
