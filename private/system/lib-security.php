@@ -107,87 +107,7 @@ if (!defined('CSRF_TOKEN')) {
 */
 function SEC_getUserGroups($uid='')
 {
-    global $_TABLES, $_USER, $_SEC_VERBOSE;
-    static $runonce = array();
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("****************in getusergroups(uid=$uid,usergroups=$usergroups,cur_grp_id=$cur_grp_id)***************",1);
-    }
-    $cache = false;
-    $groups = array();
-
-    if (empty($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    } else {
-        $uid = (int) $uid;
-    }
-    if ($uid > 0 ) $cache = true;
-
-    if (array_key_exists($uid, $runonce)) {
-        return $runonce[$uid];
-    }
-//    if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
-//        return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
-//    }
-
-    $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES['group_assignments']},{$_TABLES['groups']}"
-            . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".(int) $uid,1);
-
-    if ($result == FALSE) {
-        $runonce[$uid] = $groups;
-        return $groups;
-    }
-
-    $nrows = DB_numRows($result);
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("got $nrows rows",1);
-    }
-
-    while ($nrows > 0) {
-        $cgroups = array();
-
-        for ($i = 1; $i <= $nrows; $i++) {
-            $A = DB_fetchArray($result);
-
-            if ($_SEC_VERBOSE) {
-                COM_errorLog('user is in group ' . $A['grp_name'],1);
-            }
-            if (!in_array($A['ug_main_grp_id'], $groups)) {
-                array_push($cgroups, $A['ug_main_grp_id']);
-                $groups[ucfirst($A['grp_name'])] = $A['ug_main_grp_id'];
-            }
-        }
-
-        if (sizeof ($cgroups) > 0) {
-            $glist = join(',', $cgroups);
-            $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES["group_assignments"]},{$_TABLES["groups"]}"
-                    . " WHERE grp_id = ug_main_grp_id AND ug_grp_id IN ($glist)",1);
-            $nrows = DB_numRows($result);
-        } else {
-            $nrows = 0;
-        }
-
-    }
-    if ( count($groups) == 0 ) {
-        $groups = array('All Users' => 2);
-    }
-
-    ksort($groups);
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("****************leaving getusergroups(uid=$uid)***************",1);
-    }
-
-    $runonce[$uid] = $groups;
-//    if ( $cache ) {
-//        SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
-//    }
-    return $groups;
+    return \Group::getAll($uid);
 }
 
 /**
@@ -243,44 +163,7 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 */
 function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
 {
-    global $_TABLES, $_USER, $_SEC_VERBOSE, $_GROUPS;
-
-    if (empty ($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    }
-
-    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
-        if (empty ($_GROUPS)) {
-            $_GROUPS = SEC_getUserGroups ($uid);
-        }
-        $groups = $_GROUPS;
-    } else {
-        $groups = SEC_getUserGroups ($uid);
-    }
-    if (is_numeric($grp_to_verify)) {
-        if (in_array($grp_to_verify, $groups)) {
-           return true;
-        } else {
-           return false;
-        }
-    } else {
-        // perform case-insensitive comparison
-        $lgroups = array();
-        foreach ($groups as $key => $value) {
-            $lkey = strtolower($key);
-            $lgroups[$lkey] = $value;
-        }
-        $grp_to_verify = strtolower($grp_to_verify);
-        if (!empty($lgroups[$grp_to_verify])) {
-            return true;
-        } else {
-            return false;
-        }
-   }
+    return \Group::inGroup($grp_to_verify, $uid);
 }
 
 /**
@@ -750,40 +633,7 @@ function SEC_getPermissionValue($perm_x)
 */
 function SEC_getFeatureGroup ($feature, $uid = '')
 {
-    global $_GROUPS, $_TABLES, $_USER;
-
-    $ugroups = array ();
-
-    if (empty ($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    }
-
-    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
-        if (empty ($_GROUPS)) {
-            $_GROUPS = SEC_getUserGroups ($uid);
-        }
-        $ugroups = $_GROUPS;
-    } else {
-        $ugroups = SEC_getUserGroups ($uid);
-    }
-
-    $group = 0;
-
-    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '".DB_escapeString($feature)."'");
-    if (($ft_id > 0) && (sizeof ($ugroups) > 0)) {
-        $grouplist = implode (',', $ugroups);
-        $result = DB_query ("SELECT acc_grp_id FROM {$_TABLES['access']} WHERE (acc_ft_id = $ft_id) AND (acc_grp_id IN ($grouplist)) ORDER BY acc_grp_id LIMIT 1");
-        $A = DB_fetchArray ($result);
-        if (isset ($A['acc_grp_id'])) {
-            $group = $A['acc_grp_id'];
-        }
-    }
-
-    return $group;
+    return \Group::withFeature($feature, $uid)[0];
 }
 
 
