@@ -728,7 +728,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $showall = (isset($_REQUEST['chk_showall']) );
 
-    if (in_array ($A['grp_id'], $thisUsersGroups ) ||
+    if (SEC_inGroup('Root') || in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
 
         switch($fieldname) {
