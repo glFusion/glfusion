@@ -70,7 +70,7 @@ function GROUP_edit($grp_id = '')
     $form_url = '';
 
     $thisUsersGroups = SEC_getUserGroups();
-    if (!empty ($grp_id) &&
+    if (!SEC_ingroup(1) && !empty ($grp_id) &&
         ($grp_id > 0) &&
         !in_array ($grp_id, $thisUsersGroups) &&
         !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups)) {
@@ -728,7 +728,7 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $showall = (isset($_REQUEST['chk_showall']) );
 
-    if (in_array ($A['grp_id'], $thisUsersGroups ) ||
+    if (SEC_inGroup('Root') || in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
 
         switch($fieldname) {
@@ -1028,7 +1028,7 @@ function GROUP_editUsers($grp_id)
     $thisUsersGroups = SEC_getUserGroups();
     $grp_name = DB_getItem($_TABLES['groups'], 'grp_name', "grp_id = '$grp_id'");
 
-    if ((!empty($grp_id) && ($grp_id > 0) &&
+    if ((!SEC_inGroup(1) && !empty($grp_id) && ($grp_id > 0) &&
                 !in_array($grp_id, $thisUsersGroups) &&
                 !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups))
             || (($grp_name == 'All Users') ||

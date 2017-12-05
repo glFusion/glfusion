@@ -540,12 +540,15 @@ function USER_groupPanel($U, $newuser = 0)
                 $selected .= DB_getItem($_TABLES['groups'],'grp_id',"grp_name='Logged-in Users'");
             }
         }
-        $thisUsersGroups = SEC_getUserGroups ();
-        $remoteGroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name='Remote Users'");
-        if (!empty ($remoteGroup)) {
-            $thisUsersGroups[] = $remoteGroup;
+        if (SEC_inGroup('Root')) {
+            $where = '1=1';
+        } else {
+            $thisUsersGroups = SEC_getUserGroups ();
+            $remoteGroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name='Remote Users'");
+            if (!empty ($remoteGroup)) {
+                $thisUsersGroups[] = $remoteGroup;
+            }
         }
-        $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
 
         $header_arr = array(
                         array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
@@ -1143,7 +1146,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
         $uid      = (int) $al_selected[0];
     }
 
-    if (in_array($A['grp_id'], $thisUsersGroups ) ||
+    if (SEC_inGroup('Root') || in_array($A['grp_id'], $thisUsersGroups ) ||
           SEC_groupIsRemoteUserAndHaveAccess($A['grp_id'], $thisUsersGroups)) {
         switch($fieldname) {
         case 'checkbox':
