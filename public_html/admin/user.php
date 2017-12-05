@@ -548,6 +548,7 @@ function USER_groupPanel($U, $newuser = 0)
             if (!empty ($remoteGroup)) {
                 $thisUsersGroups[] = $remoteGroup;
             }
+            $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
         }
 
         $header_arr = array(
