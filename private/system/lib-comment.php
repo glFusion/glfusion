@@ -2186,8 +2186,6 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
         return $retval;
     }
 
-    USES_forum_format();
-
     if ($id == '*') {
         if ( $buildingSearchIndex ) {
             $where = " WHERE queued = 0 AND pid=0 ";
