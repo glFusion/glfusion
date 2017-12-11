@@ -33,12 +33,12 @@
 {# begin story image / video #}
 {!!if {story_display} == 'article' !!}
 	{!if story_video}
-				<video class="uk-responsive-width uk-margin-bottom" controls="controls" preload="auto"
+				<video class="uk-responsive-width uk-margin-bottom" controls preload="auto"
 		{!if story_image}
 					poster="{story_image}"
 		{!endif}
 		{!if autoplay}
-					autoplay="{autoplay}"
+					autoplay
 		{!endif}
 					>
 					<source type="video/mp4" src="{story_video}"/>
