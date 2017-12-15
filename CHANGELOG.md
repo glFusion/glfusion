@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Updated CKEditor to v4.8.0
   - New topic.class.php to streamline backend topic administration (Lee)
   - Several performance tweaks to SQL queries - removed several duplicate calls
   - If topic description is set - display the description below the breadcrumbs
