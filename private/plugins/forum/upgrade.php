@@ -44,7 +44,7 @@ require_once $_CONF['path'].'plugins/forum/forum.php';
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function forum_upgrade() {
-    global $_CONF, $_TABLES, $_FF_CONF, $_FF_CONF;
+    global $_CONF, $_TABLES, $_FF_CONF, $_FF_CONF, $_DB_dbms;
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -183,6 +183,37 @@ function forum_upgrade() {
             $c->add('geshi_overall_style', $_FF_DEFAULT['geshi_overall_style'], 'text',0, 2, 0, 123, true, 'forum');
             $c->add('geshi_code_style', $_FF_DEFAULT['geshi_code_style'], 'text',0, 2, 0, 124, true, 'forum');
             $c->add('geshi_header_style', $_FF_DEFAULT['geshi_header_style'], 'text',0, 2, 0, 125, true, 'forum');
+
+        case '3.3.5' :
+            $_SQL = array();
+
+            $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
+              `fb_id` int(11) NOT NULL AUTO_INCREMENT,
+              `fb_grp` varchar(20) NOT NULL DEFAULT '',
+              `fb_order` int(3) NOT NULL DEFAULT '99',
+              `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+              `fb_gl_grp` varchar(60) NOT NULL DEFAULT '',
+              `fb_image` varchar(60) NOT NULL DEFAULT '',
+              PRIMARY KEY (`fb_id`),
+              KEY `grp` (`fb_grp`,`fb_order`)
+            ) ENGINE=MyISAM;";
+
+            $_SQL['ff_badges_defaults'] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
+                (2,'site',20,1,'13','forum_user.png'),
+                (3,'site',10,1,'1','siteadmin_badge.png');";
+
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
 
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
