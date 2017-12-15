@@ -199,8 +199,8 @@ function forum_upgrade() {
             ) ENGINE=MyISAM;";
 
             $_SQL['ff_badges_defaults'] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
-                (2,'site',20,1,'13','forum_user.png'),
-                (3,'site',10,1,'1','siteadmin_badge.png');";
+                (0,'site',20,1,'13','forum_user.png'),
+                (0,'site',10,1,'1','siteadmin_badge.png');";
 
             if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
                 $use_innodb = true;
