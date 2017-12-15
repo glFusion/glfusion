@@ -62,4 +62,6 @@ $_TABLES['ff_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
 $_TABLES['ff_attachments']  = $_DB_table_prefix . 'forum_attachments';
 $_TABLES['ff_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 $_TABLES['ff_rating_assoc']	= $_DB_table_prefix . 'forum_rating_assoc';
+
+$_TABLES['ff_badges'] = $_DB_table_prefix . 'forum_badges';
 ?>

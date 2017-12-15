@@ -121,6 +121,17 @@ if ( empty( $LANG_CHARSET )) {
     $_FF_CONF['charset'] = $LANG_CHARSET;
 }
 
+spl_autoload_register(function ($class)
+{
+    if (strpos($class, 'Forum\\') === 0) {
+        $class = str_replace('Forum\\', '', $class);
+        $path = __DIR__ . '/classes/' . strtolower($class) . '.class.php';
+        if (file_exists($path)) {
+            include $path;
+        }
+    }
+});
+
 // PLG APIs
 
 function plugin_getmenuitems_forum()
@@ -1798,22 +1809,49 @@ function forumPLG_getMemberBadge($uid) {
     global $_CONF,$_FF_CONF;
 
     $retval = '';
+    static $cache = array();
+    if (array_key_exists($uid, $cache)) {
+        return $cache[$uid];
+    }
 
-    if ( $uid > 1 ) {
-        if (!SEC_inGroup('Root',$uid)) {
+    $badges = Forum\Badge::getUserBadges($uid);
+    $badge_urls = array();
+    $paths = array(
+        $_CONF['path_layout'] . 'plugins/' => $_CONF['layout_url'] . '/plugins',
+        $_CONF['path_html'] => $_CONF['site_url'],
+    );
+    foreach ($badges as $badge) {
+        foreach ($paths as $path=>$url) {
+            if (file_exists($path . 'forum/images/badges/' . $badge->fb_image)) {
+                $url .= '/forum/images/badges/' . $badge->fb_image;
+                $attrs = array(
+                    'data-uk-tooltip' => "{pos:'right'}",
+                    'title' => $badge->fb_name,
+                );
+                $badge_urls[] = COM_createImage($url, $badge->fb_name, $attrs);
+            }
+        }
+    }
+    $retval .= implode('<br />', $badge_urls);
+
+    /*if ( $uid > 1 ) {
+        //if (!SEC_inGroup('Root',$uid)) {
             foreach ($_FF_CONF['grouptags'] as $groupid => $buttonimg) {
-                if (SEC_inGroup($groupid,$uid)) {
+                //if (SEC_inGroup($groupid,$uid)) {
+                if ($groupid == 'Logged-in Users' && Group::inGroup('Root', $uid)) continue;
+                if (Group::isAssigned($groupid, $uid)) {
                     $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$buttonimg.'" alt=""/><br/>';
                 }
             }
-        } else {
+        /*} else {
             $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$_FF_CONF['grouptags']['Root'].'" alt=""/><br/>';
-        }
+        }*/
         if ( function_exists('plugin_getmedals_medals') ) {
             $retval .= plugin_getmedals_medals($uid);
         }
-    }
-    return $retval;
+    //}
+    $cache[$uid] = $retval;
+    return $cache[$uid];
 }
 
 function phpblock_forum_menu() {
