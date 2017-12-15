@@ -534,6 +534,7 @@ $LANG_GF06 = array(
     8 => 'Community Moderation',
     9 => 'Import',
     10 => 'Forum Administration',
+    11 => 'Badges',
 );
 
 // User Functions Navbar
