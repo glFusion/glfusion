@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
+ * @li, 'Achor'cense Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 var tbitems = {
@@ -7,7 +7,7 @@ var tbitems = {
 		'clipboard'     : ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
 		'undo'          : ['Undo', 'Redo'],
 		'editing'       : ['Find', 'Replace', '-',  'Scayt'],
-		'links'         : ['Link', 'Unlink'],
+		'links'         : ['Link', 'Unlink', 'Anchor'],
 		'basicstyles'   : ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
 		'insert'        : ['Image', 'Mediagallery', 'Youtube2', 'Vimeo','Table', 'HorizontalRule', 'SpecialChar'],
 		'paragraph'     : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
