@@ -2,14 +2,13 @@
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | rating.php                                                               |
+// | badges.php                                                               |
 // |                                                                          |
-// | Forum Plugin Community Moderation Setting administration                 |
+// | Forum Plugin Badges administration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2016-2017 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |
+// | Lee Garner             lee AT leegarner DOT com                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -37,6 +36,7 @@ if (!SEC_hasRights('forum.edit')) {
     COM_404();
     exit;
 }
+$action = 'list';
 
 $expected = array(
     'save', 'delete', 'cancel', 'move', 'delete', 'delitem',
@@ -85,9 +85,9 @@ case 'move':
 case 'save':
     $B = new \Forum\Badge($_POST['fb_id']);
     if ($B->Save($_POST)) {
-        COM_setMsg('Badge updated');
+        COM_setMsg($LANG_GF01['badge_updated']);
     } else {
-        COM_setMsg('Error saving badge', 'error');
+        COM_setMsg($LANG_GF01['badge_save_error'], 'error');
     }
     echo COM_refresh($self);
     exit;
@@ -102,9 +102,8 @@ default:
 $display = FF_siteHeader();
 $display .= FF_navbar($navbarMenu, 'Badges');
 $display .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
-    '/plugins/forum/badges.php?edit">Add Badge</a> ]</p>';
+    '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
 $display .= $content;
-//$display .= FF_adminfooter();
 $display .= FF_siteFooter();
 echo $display;
 exit;
@@ -114,7 +113,7 @@ exit;
 */
 function FF_badge_AdminList()
 {
-    global $LANG_ADMIN, $_TABLES, $_CONF;
+    global $LANG_ADMIN, $_TABLES, $_CONF, $_USER;
 
     USES_lib_admin();
 
@@ -123,34 +122,36 @@ function FF_badge_AdminList()
     $form_arr = array();
 
     $header_arr = array(
-        array(  'text' => $LANG_ADMIN['edit'],
+        array(  'text'  => $LANG_ADMIN['edit'],
                 'field' => 'edit',
-                'sort' => false,
+                'sort'  => false,
                 'align' => 'center'),
-        array(  'text' => $LANG_ADMIN['enabled'],
+        array(  'text'  => $LANG_ADMIN['enabled'],
                 'field' => 'fb_enabled',
                 'align' => 'center',
-                'sort' => false),
-        array(  'text' => 'Order',
+                'sort'  => false),
+        array(  'text'  => 'Order',
                 'field' => 'fb_order',
-                 'sort' => false),
-        array(  'text' => 'Badge Grouping',
+                'sort'  => false),
+        array(  'text'  => 'Badge Grouping',
                 'field' => 'fb_grp',
-                'sort' => false),
-        array(  'text' => 'Site Group',
+                'sort'  => false),
+        array(  'text'  => 'Site Group',
                 'field' => 'grp_name',
-                'sort' => false),
-        array(  'text' => 'Image',
+                'sort'  => false),
+        array(  'text'  => 'Image',
                 'field' => 'fb_image',
-                'sort' => false),
-        array(  'text' => $LANG_ADMIN['delete'],
+                'sort'  => false),
+        array(  'text'  => $LANG_ADMIN['delete'],
                 'field' => 'delete',
-                'sort' => false,
+                'sort'  => false,
                 'align' => 'center'),
     );
 
     $options = array('chkdelete' => 'true', 'chkfield' => 'fb_id');
-    //$defsort_arr = array('field' => 'b.fb_grp,b.fb_order', 'direction' => 'asc');
+
+    $defsort_arr = array('field' => '', 'direction' => 'asc');
+
     $query_arr = array('table' => 'ff_badges',
             'sql' => "SELECT b.*, g.grp_name
                     FROM {$_TABLES['ff_badges']} b

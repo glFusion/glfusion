@@ -295,17 +295,19 @@ class Badge
     {
         global $_TABLES;
 
+        $retval = '';
+
         $T = new \Template(__DIR__ . '/../templates/admin/');
         $T->set_file('editform', 'editbadge.thtml');
         $T->set_var(array(
             'fb_id'     => $this->fb_id,
             'fb_grp'    => $this->fb_grp,
-            'grp_select' => COM_optionList($_TABLES['groups'], 'grp_id,grp_name', 
+            'grp_select' => COM_optionList($_TABLES['groups'], 'grp_id,grp_name',
                             $this->fb_gl_grp),
             'fb_image'  => $this->fb_image,
             'fb_order'  => $this->fb_order,
             'fb_grp_sel' => COM_optionList(
-                        $_TABLES['ff_badges'], 
+                        $_TABLES['ff_badges'],
                         'DISTINCT fb_grp,fb_grp',
                         $this->fb_grp, 0,
                         "fb_grp <> ''"

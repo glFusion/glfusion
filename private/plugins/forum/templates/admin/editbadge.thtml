@@ -1,98 +1,97 @@
 {# begin {templatelocation} #}
 <form action="{site_admin_url}/plugins/forum/badges.php" method="post"
-   class="uk-form uk-form-horizontal">
-  <input type="hidden" name="fb_id" value="{fb_id}" />
-  <fieldset>
+	class="uk-form uk-form-horizontal">
+	<input type="hidden" name="fb_id" value="{fb_id}" />
 
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="fb_grp">Badge Group
-      <span id="fb_grp_hlp" class="tooltip_cfg tooltipstered"></span>
-    </label>
-    <div class="uk-form-controls">
-      <select id="fb_grp" name="fb_grp">
-        <option value="">--None--</option>
-        {fb_grp_sel}
-      </select>
-      <input type="text" id="fb_grp_txt" name="fb_grp_txt" value="" placeholder="Create New"/>
-    </div>
-  </div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_grp">Badge Group
+			<span id="fb_grp_hlp" class="tooltip_cfg tooltipstered"></span>
+		</label>
+		<div class="uk-form-controls">
+			<select id="fb_grp" name="fb_grp">
+				<option value="">--None--</option>
+				{fb_grp_sel}
+			</select>
+			<input type="text" id="fb_grp_txt" name="fb_grp_txt" value="" placeholder="Create New"/>
+		</div>
+	</div>
 
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="fb_grp">Order
-      <span id="fb_order_hlp" class="tooltip_cfg tooltipstered"></span>
-    </label>
-    <div class="uk-form-controls">
-      <input type="text" id="fb_order" name="fb_order" value="{fb_order}" />
-    </div>
-  </div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_grp">Order
+			<span id="fb_order_hlp" class="tooltip_cfg tooltipstered"></span>
+		</label>
+		<div class="uk-form-controls">
+			<input type="text" id="fb_order" name="fb_order" value="{fb_order}" />
+		</div>
+	</div>
 
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="fb_gl_grp">Site Group Name
-      <span id="fb_gl_grp_hlp" class="tooltip_cfg tooltipstered"></span>
-    </label>
-    <div class="uk-form-controls">
-      <select name="fb_gl_grp">
-        {grp_select}
-      </select>
-    </div>
-  </div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_gl_grp">Site Group Name
+			<span id="fb_gl_grp_hlp" class="tooltip_cfg tooltipstered"></span>
+		</label>
+		<div class="uk-form-controls">
+			<select name="fb_gl_grp">
+				{grp_select}
+			</select>
+		</div>
+	</div>
 
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="fb_image">Badge Image
-      <span id="fb_image_hlp" class="tooltip_cfg tooltipstered"></span>
-    </label>
-    <div class="uk-form-controls">
-      <input type="text" id="fb_image" name="fb_image" value="{fb_image}" />
-    </div>
-  </div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_image">Badge Image
+			<span id="fb_image_hlp" class="tooltip_cfg tooltipstered"></span>
+		</label>
+		<div class="uk-form-controls">
+			<input type="text" id="fb_image" name="fb_image" value="{fb_image}" />
+		</div>
+	</div>
 
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="fb_enabled">{$LANG_ADMIN['enabled']}
-      <span id="fb_enabled_hlp" class="tooltip_cfg tooltipstered"></span>
-    </label>
-    <div class="uk-form-controls">
-      <input type="checkbox" id="fb_enabled" name="fb_enabled" value="1" {ena_chk}" />
-    </div>
-  </div>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_enabled">{$LANG_ADMIN['enabled']}
+			<span id="fb_enabled_hlp" class="tooltip_cfg tooltipstered"></span>
+		</label>
+		<div class="uk-form-controls">
+			<input type="checkbox" id="fb_enabled" name="fb_enabled" value="1" {ena_chk}" />
+		</div>
+	</div>
 
-  <div class="uk-form-row" align="center">
-    <div class="uk-form-controls">
-      <button type="submit" class="uk-button uk-button-success" name="save" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
-      <button type="reset" class="uk-button">{$LANG_MEMBERSHIP['reset']}</button>
-      <button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
-        onclick="return confirm('{$LANG_MEMBERSHIP['q_del_item']}');">{$LANG_ADMIN['delete']}</button>
-      <button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
-    </div>
-  </div>
+	<div class="uk-form-row" align="center">
+		<div class="uk-form-controls">
+			<button type="submit" class="uk-button uk-button-success" name="save" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
+			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
+			onclick="return confirm('{$LANG_GF01['q_del_item']}');">{$LANG_ADMIN['delete']}</button>
+			<button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+		</div>
+	</div>
 
 </form>
 <script type="text/javascript">
-var ConfigDocUrl = '{doc_url}';
-$(document).ready(function() {
-    $('.tooltip_cfg').tooltipster({
-        contentAsHTML: true,
-        animation: 'fade',
-        trigger: 'click',
-        iconDesktop: true,
-        iconTouch: true,
-        functionBefore: function(origin, continueTooltip) {
-            continueTooltip();
-            var attrHref = ConfigDocUrl;
-            var ajobj = $(this);
-            $.get(attrHref, function(data) {
-                var confVar = ajobj.attr('id');
-                if (data.indexOf(confVar) > 0) {
-                    var a = $(data).find('a[name=desc_' + confVar + ']');
-                    var tds = a.parent().parent().children("td");
-                    var desc = tds.eq(1).html();
-                    origin.tooltipster('content', desc);
-                } else {
-                    origin.tooltipster('content', 'No Help Text Found');
-                    console.log('Unable to find help text for desc_%s',confVar);
-                }
-            });
-        }
-    });
-});
+	var ConfigDocUrl = '{doc_url}';
+	$(document).ready(function() {
+		$('.tooltip_cfg').tooltipster({
+			contentAsHTML: true,
+			animation: 'fade',
+			trigger: 'click',
+			iconDesktop: true,
+			iconTouch: true,
+			functionBefore: function(origin, continueTooltip) {
+				continueTooltip();
+				var attrHref = ConfigDocUrl;
+				var ajobj = $(this);
+				$.get(attrHref, function(data) {
+					var confVar = ajobj.attr('id');
+					if (data.indexOf(confVar) > 0) {
+						var a = $(data).find('a[name=desc_' + confVar + ']');
+						var tds = a.parent().parent().children("td");
+						var desc = tds.eq(1).html();
+						origin.tooltipster('content', desc);
+					} else {
+						origin.tooltipster('content', 'No Help Text Found');
+						console.log('Unable to find help text for desc_%s',confVar);
+					}
+				});
+			}
+		});
+	});
 </script>
 {# end {templatelocation} #}
