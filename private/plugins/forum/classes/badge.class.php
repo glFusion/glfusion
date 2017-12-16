@@ -360,7 +360,6 @@ class Badge
     public static function Delete($fb_id)
     {
         global $_TABLES;
-echo "here: $fb_id";
         DB_delete($_TABLES['ff_badges'], 'fb_id', (int)$fb_id);
     }
 
