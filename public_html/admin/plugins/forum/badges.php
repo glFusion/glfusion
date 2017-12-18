@@ -100,7 +100,7 @@ default:
 }
 
 $display = FF_siteHeader();
-$display .= FF_navbar($navbarMenu, 'Badges');
+$display .= FF_navbar($navbarMenu, $LANG_GF01['badges']);
 $display .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
     '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
 $display .= $content;
@@ -113,7 +113,7 @@ exit;
 */
 function FF_badge_AdminList()
 {
-    global $LANG_ADMIN, $_TABLES, $_CONF, $_USER;
+    global $LANG_ADMIN, $_TABLES, $_CONF, $_USER, $LANG_GF01, $LANG_GF93;
 
     USES_lib_admin();
 
@@ -130,16 +130,16 @@ function FF_badge_AdminList()
                 'field' => 'fb_enabled',
                 'align' => 'center',
                 'sort'  => false),
-        array(  'text'  => 'Order',
+        array(  'text'  => $LANG_GF93['order'],
                 'field' => 'fb_order',
                 'sort'  => false),
-        array(  'text'  => 'Badge Grouping',
+        array(  'text'  => $LANG_GF01['badge_grp'],
                 'field' => 'fb_grp',
                 'sort'  => false),
-        array(  'text'  => 'Site Group',
+        array(  'text'  => $LANG_GF01['site_grp'],
                 'field' => 'grp_name',
                 'sort'  => false),
-        array(  'text'  => 'Image',
+        array(  'text'  => $LANG_GF01['badge_img'],
                 'field' => 'fb_image',
                 'sort'  => false),
         array(  'text'  => $LANG_ADMIN['delete'],
@@ -182,7 +182,7 @@ function FF_badge_AdminList()
 */
 function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $LANG_ACCESS;
+    global $_CONF, $LANG_ACCESS, $LANG_GF01;
 
     $retval = '';
 
@@ -228,7 +228,7 @@ function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
         $retval = COM_createLink('<i class="uk-icon uk-icon-trash" style="color:red;"></i>',
                 "$base_url?fb_id={$A['fb_id']}&delete",
                 array(
-                     'onclick' => "return confirm('Do you really want to delete this item?');",
+                     'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');",
                 ) );
         break;
 
