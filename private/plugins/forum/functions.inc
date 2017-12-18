@@ -1816,21 +1816,12 @@ function forumPLG_getMemberBadge($uid) {
 
     $badges = Forum\Badge::getUserBadges($uid);
     $badge_urls = array();
-    $paths = array(
-        $_CONF['path_layout'] . 'plugins/' => $_CONF['layout_url'] . '/plugins',
-        $_CONF['path_html'] => $_CONF['site_url'],
-    );
     foreach ($badges as $badge) {
-        foreach ($paths as $path=>$url) {
-            if (file_exists($path . 'forum/images/badges/' . $badge->fb_image)) {
-                $url .= '/forum/images/badges/' . $badge->fb_image;
-                $attrs = array(
-                    'data-uk-tooltip' => "{pos:'right'}",
-                    'title' => $badge->fb_name,
-                );
-                $badge_urls[] = COM_createImage($url, $badge->fb_name, $attrs);
-            }
-        }
+        $attrs = array(
+            'data-uk-tooltip' => "{pos:'right'}",
+            'title' => $badge->fb_name,
+        );
+        $badge_urls[] = COM_createImage($badge->url, $badge->fb_name, $attrs);
     }
     $retval .= implode('<br />', $badge_urls);
 
