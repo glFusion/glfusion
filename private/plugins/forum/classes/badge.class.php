@@ -38,7 +38,18 @@ class Badge
             $this->setVars($A, true);
         } else {
             $A = (int)$A;
-            $this->Read($A);
+            $this->fb_id = $A;
+            if ($this->fb_id > 0) {
+                $this->Read($this->fb_id);
+            } else {
+                // Set reasonable defaults
+                $this->fb_id = 0;
+                $this->fb_enabled = 1;  // enable new badges
+                $this->fb_order = 999;  // set to last in list
+                $this->fb_grp = '';
+                $this->fb_gl_grp = '';
+                $this->fb_image = '';
+            }
         }
     }
 
@@ -183,37 +194,29 @@ class Badge
         global $_CONF;
 
         static $retval = array();
-        $badge_groups = self::getAll();
+
         $uid = (int)$uid;
         if (array_key_exists($uid, $retval)) {
             return $retval[$uid];
         }
 
-        $paths = array(
-            $_CONF['path_layout'] . 'plugins/' => $_CONF['layout_url'] . '/plugins',
-            $_CONF['path_html'] => $_CONF['site_url'],
-        );
+        $badge_groups = self::getAll();
         $retval[$uid] = array();
         $grps = \Group::getAll($uid);
         foreach ($badge_groups as $badge_group) {
             foreach ($badge_group as $badge) {
                 //if (array_key_exists($badge->fb_gl_grp, $grps)) {
                 if (in_array($badge->fb_gl_grp, $grps)) {
-                    $badge->url = '';
-                    foreach ($paths as $path=>$url) {
-                        if (file_exists($path . 'forum/images/badges/' . $badge->fb_image)) {
-                            $url .= '/forum/images/badges/' . $badge->fb_image;
-                            $attrs = array(
+                    $badge->url = self::getImageUrl($badge->fb_image);
+                    if ($badge->url != '') {
+                        $attrs = array(
                                 'data-uk-tooltip' => "{pos:'right'}",
                                 'title' => $badge->grp_name,
-                            );
-                            $badge->url = $url;
-                            break;
-                        }
-                    }
-                    if ($badge->url != '') {
+                        );
                         $badge->html = COM_createImage($url, $badge->grp_name, $attrs);
                         $retval[$uid][] = $badge;
+                    } else {
+                        $badge->html = '';
                     }
                     if ($badge->fb_grp != '') break;
                 }
@@ -223,7 +226,35 @@ class Badge
     }
 
 
-    /*
+    /**
+    *   Get the image URL for a badge.
+    *   Looks first in the current theme, then in the plugin's html directory.
+    *
+    *   @param  string  $img    Image filename
+    *   @return string          URL to image
+    */
+    public static function getImageUrl($img)
+    {
+        global $_CONF;
+
+        $retval = '';
+        $paths = array(
+            $_CONF['path_layout'] . 'plugins/' => $_CONF['layout_url'] . '/plugins',
+            $_CONF['path_html'] => $_CONF['site_url'],
+        );
+
+        foreach ($paths as $path=>$url) {
+            if (file_exists($path . 'forum/images/badges/' . $img)) {
+                $url .= '/forum/images/badges/' . $img;
+                $retval = $url;
+                break;
+            }
+        }
+        return $retval;
+    }
+
+
+    /**
     *   Reset all the order fields to increment by 10
     */
     public static function reOrder()
