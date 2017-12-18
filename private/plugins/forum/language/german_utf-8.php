@@ -243,7 +243,17 @@ $LANG_GF01 = array(
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
     'all_read_success' => 'Alle Themen wurden als gelesen markiert',
-    'formatted_code' => 'Formatierter Code'
+    'formatted_code' => 'Formatierter Code',
+    'reset' => 'Reset',
+    'q_del_item' => 'Are you sure you want to delete this badge?',
+    'badge_updated' => 'Badge Updated',
+    'badge_save_error' => 'Error saving badge',
+    'add_badge' => 'Add Badge',
+    'badge_grp' => 'Badge Group',
+    'site_grp' => 'Site Group Name',
+    'badge_img' => 'Badge Image',
+    'create_new' => 'Create New',
+    'badges' => 'Badges'
 );
 
 $LANG_GF02 = array(
@@ -530,7 +540,8 @@ $LANG_GF06 = array(
     7 => 'IP-Verwaltung',
     8 => 'Bewertungs-System',
     9 => 'Importieren',
-    10 => 'Forum Administration'
+    10 => 'Forum Administration',
+    11 => 'Badges'
 );
 
 $LANG_GF07 = array(

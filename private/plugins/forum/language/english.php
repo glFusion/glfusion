@@ -251,6 +251,11 @@ $LANG_GF01 = array(
     'badge_updated' => 'Badge Updated',
     'badge_save_error' => 'Error saving badge',
     'add_badge'         => 'Add Badge',
+    'badge_grp' => 'Badge Group',
+    'site_grp'  => 'Site Group Name',
+    'badge_img' => 'Badge Image',
+    'create_new' => 'Create New',
+    'badges' => 'Badges',
 );
 
 $LANG_GF02 = array(
@@ -539,6 +544,7 @@ $LANG_GF06 = array(
     8 => 'Community Moderation',
     9 => 'Import',
     10 => 'Forum Administration',
+    11 => 'Badges',
 );
 
 // User Functions Navbar

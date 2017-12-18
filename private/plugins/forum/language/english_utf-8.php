@@ -247,6 +247,7 @@ $LANG_GF01 = array(
     'all_read_success' => 'All topics have been marked as read',
     'formatted_code' => 'Formatted Code',
     'reset' => 'Reset',
+    'q_del_item' => 'Are you sure you want to delete this badge?',
     'badge_updated' => 'Badge Updated',
     'badge_save_error' => 'Error saving badge',
     'add_badge'         => 'Add Badge',
