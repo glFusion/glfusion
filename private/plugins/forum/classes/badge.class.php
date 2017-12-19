@@ -312,7 +312,7 @@ class Badge
         //echo $sql;die;
         DB_query($sql, 1);
         if (!DB_error()) {
-            self::ReOrder();
+            self::reOrder();
         } else {
             COM_errorLog("Badge::moveRow() SQL error: $sql", 1);
         }
@@ -420,7 +420,12 @@ class Badge
                 fb_image = '" . DB_escapeString($this->fb_image) . "'";
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
-        return DB_error() ? $LANG_GF01['badge_save_error'] : '';
+        if (DB_error())  {
+            return $LANG_GF01['badge_save_error'];
+        } else {
+            self::reOrder();
+            return '';
+        }
     }
 
 
