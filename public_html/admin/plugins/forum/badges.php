@@ -96,14 +96,14 @@ case 'save':
 
 case 'list':
 default:
+    $content .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
+    '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
     $content .= FF_badge_AdminList();
     break;
 }
 
 $display = FF_siteHeader();
 $display .= FF_navbar($navbarMenu, $LANG_GF01['badges']);
-$display .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
-    '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
 $display .= $content;
 $display .= FF_siteFooter();
 echo $display;
