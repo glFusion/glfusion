@@ -84,10 +84,11 @@ case 'move':
 
 case 'save':
     $B = new \Forum\Badge($_POST['fb_id']);
-    if ($B->Save($_POST)) {
+    $errors = $B->Save($_POST);
+    if (empty($errors)) {
         COM_setMsg($LANG_GF01['badge_updated']);
     } else {
-        COM_setMsg($LANG_GF01['badge_save_error'], 'error');
+        COM_setMsg($errors, 'error');
     }
     echo COM_refresh($self);
     exit;

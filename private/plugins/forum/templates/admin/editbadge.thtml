@@ -1,5 +1,6 @@
 {# begin {templatelocation} #}
 <form action="{site_admin_url}/plugins/forum/badges.php" method="post"
+    enctype="multipart/form-data"
 	class="uk-form uk-form-horizontal">
 	<input type="hidden" name="fb_id" value="{fb_id}" />
 
@@ -33,7 +34,12 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="fb_image">{$LANG_GF01['badge_img']}</label>
 		<div class="uk-form-controls">
-			<input type="text" id="fb_image" name="fb_image" value="{fb_image}" />
+{!if fb_image_sel}
+            <select name="fb_image">
+			{fb_image_sel}
+            </select>
+{!endif}
+            <input id="fb_imgfile" name="fb_imgfile"type="file" accept="image/*" />
 		</div>
 	</div>
 
