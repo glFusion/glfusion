@@ -1,4 +1,9 @@
 ## v1.7.2 (Unreleased)
+  - Forum: New badge manager
+  - Set proper cookie attributes on session cookie
+  - CAPTCHA Updates to support CAPTCHA for login and lost password screens
+  - CAPTCHA - fixed static image refresh
+  - New API to support adding JavaScript to footer of page
   - Updated CKEditor to v4.8.0
   - New topic.class.php to streamline backend topic administration (Lee)
   - Several performance tweaks to SQL queries - removed several duplicate calls
