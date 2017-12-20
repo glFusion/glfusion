@@ -68,7 +68,6 @@ if ( !COM_isAnonUser() ) {
 } else {
     $currentUID = 1;
 }
-
 // is user sending credentials?
 if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['passwd']) && !empty($_POST['passwd']) ) {
     COM_updateSpeedlimit('login');
