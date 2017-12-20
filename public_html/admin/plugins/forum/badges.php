@@ -54,12 +54,13 @@ foreach ($expected as $provided) {
     }
 }
 
-$fb_id = isset($_GET['fb_id']) ? (int)$_GET['fb_id'] : 0;
+// Badge ID can come from $_POST or $_GET
+$fb_id = isset($_REQUEST['fb_id']) ? (int)$_REQUEST['fb_id'] : 0;
 $self = $_CONF['site_admin_url'] . '/plugins/forum/badges.php';
 $content = '';
 switch ($action) {
 case 'delete':
-    \Forum\Badge::Delete($_POST['fb_id']);
+    \Forum\Badge::Delete($fb_id);
     echo COM_refresh($self);
     break;
 
