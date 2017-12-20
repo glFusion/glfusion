@@ -124,32 +124,6 @@ function plugin_install_forum()
 
 
 /**
-*   Perform post-installation functions specific to this plugin
-*/
-function plugin_postinstall_forum()
-{
-    global $_CONF;
-
-    // Copy badge images from the distribution directory to the
-    // new location under public_html/images
-    $dst = $_CONF['path_html'] . 'images/forum/badges';
-    if (!is_dir($dst)) {
-        $status = @mkdir($dst, 0755, true);
-    }
-    if (is_dir($dst) && is_writable($dst)) {
-        $src = $_CONF['path_html'] . 'forum/images/badges';
-        $dir = opendir($src);
-        while(false !== ($file = readdir($dir))) {
-            if ($file != '.' && $file != '..' ) {
-                copy($src . '/' . $file, $dst . '/' . $file);
-            }
-        }
-        closedir($dir);
-    }
-}
-
-
-/**
 * Loads the configuration records for the Online Config Manager
 *
 * @return   boolean     true = proceed with install, false = an error occured
