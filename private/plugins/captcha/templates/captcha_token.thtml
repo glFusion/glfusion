@@ -1,55 +1,55 @@
 {# begin {templatelocation} #}
 {!if recaptcha}
-<script type="text/javascript">
-//<![CDATA[
-var RecaptchaOptions = {
-   theme : '{recaptcha_theme}'
-};
-//]]>
-</script>
-<div class="uk-form-row uk-margin-top uk-vertical-align">
-  <label class="uk-form-label uk-vertical-align-middle">{lang_are_you_human}</label>
-  <div class="uk-form-controls">
-   {recaptcha}
-    <input type="text" name="validation_field" value="" style="display:none;">
-    <input type="hidden" name="csidt" value="{csid}">
-  </div>
-</div>
+	<script type="text/javascript">
+		//<![CDATA[
+		var RecaptchaOptions = {
+			theme : '{recaptcha_theme}'
+		};
+		//]]>
+	</script>
+	<div class="uk-form-row uk-margin-top uk-vertical-align">
+		<label class="uk-form-label uk-vertical-align-middle">{lang_are_you_human}</label>
+		<div class="uk-form-controls">
+			{recaptcha}
+			<input type="text" name="validation_field" value="" style="display:none;">
+			<input type="hidden" name="csidt" value="{csid}">
+		</div>
+	</div>
 {!else}
-<script type="text/javascript">
-//<![CDATA[
-var counter = 0;
-function new_captcha()
-{
-    // loads new CAPTCHA image
-    if(document.getElementById)
-    {
-        counter = counter + 1;
-        if ( counter > 5 ) {
-            alert("{lang_too_many}");
-        } else {
-            // extract image name from image source (i.e. cut off ?randomness)
-            thesrc = document.getElementById("captcha_image").src;
-            thesrc = thesrc.substring(0,thesrc.lastIndexOf(".")+4);
-            // add ?(random) to prevent browser/isp caching
-            document.getElementById("captcha_image").src = thesrc+"&"+Math.round(Math.random()*100000);
-        }
-    } else {
-         alert("{lang_reload_failed}");
-    }
-}
-//]]>
-</script>
-<div class="uk-form-row">
-  <label class="uk-form-label" for="captcha">{lang_are_you_human}</label>
-  <div class="uk-form-controls">
-    <img id="captcha_image" src="{captcha_image}" alt="{lang_alt}" style="padding:5px;"><br/>
-    <input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';">
-    <a href="javascript:new_captcha();" style="text-decoration:none;">
-      <img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}" />
-    </a>
-    <input type="hidden" name="csidt" value="{csid}">
-  </div>
-</div>
+	<script type="text/javascript">
+		//<![CDATA[
+		var counter = 0;
+		function new_captcha_{counter}()
+		{
+			// loads new CAPTCHA image
+			if(document.getElementById)
+			{
+				counter = counter + 1;
+				if ( counter > 5 ) {
+					alert("{lang_too_many}");
+				} else {
+					// extract image name from image source (i.e. cut off ?randomness)
+					thesrc = document.getElementById("captcha_image_{counter}").src;
+					thesrc = thesrc.substring(0,thesrc.lastIndexOf(".")+4);
+					// add ?(random) to prevent browser/isp caching
+					document.getElementById("captcha_image_{counter}").src = thesrc+"&"+Math.round(Math.random()*100000);
+				}
+			} else {
+				alert("{lang_reload_failed}");
+			}
+		}
+		//]]>
+	</script>
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="captcha">{lang_are_you_human}</label>
+		<div class="uk-form-controls">
+			<img id="captcha_image_{counter}" src="{captcha_image}" alt="{lang_alt}" style="padding:5px;"><br/>
+			<input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';" />
+			<a href="javascript:new_captcha_{counter}();" style="text-decoration:none;">
+				<img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}" />
+			</a>
+			<input type="hidden" name="csidt" value="{csid}">
+		</div>
+	</div>
 {!endif}
 {# end {templatelocation} #}

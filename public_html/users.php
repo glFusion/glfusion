@@ -920,6 +920,9 @@ function getpasswordform()
         'lang_emailpassword'            => $LANG04[28],
         'end_block'                     => COM_endBlock()
     ));
+
+    PLG_templateSetVars('forgotpassword',$user_templates);
+
     $user_templates->parse('output', 'form');
 
     $retval .= $user_templates->finish($user_templates->get_var('output'));
@@ -1129,6 +1132,12 @@ function _userEmailpassword()
         $retval .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error');
         $retval .= getpasswordform();
     } else {
+        // Validate captcha
+        $msg = PLG_itemPreSave ('forgotpassword', '');
+        if (!empty ($msg)) {
+            COM_setMsg($msg,'error');
+            echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
+        }
         $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
@@ -1138,7 +1147,6 @@ function _userEmailpassword()
         if (!empty ($username)) {
             $retval .= requestpassword ($username, 55);
         } else {
-
             echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
         }
     }
@@ -1322,10 +1330,18 @@ switch ($mode) {
         $uid = '';
         if (!empty($loginname) && !empty($passwd) && empty($service)) {
             if (empty($service) && $_CONF['user_login_method']['standard']) {
-                COM_updateSpeedlimit('login');
-                $status = SEC_authenticate($loginname, $passwd, $uid);
-                if ($status == USER_ACCOUNT_ACTIVE) {
-                    $local_login = true;
+
+                // check captcha here
+                $msg = PLG_itemPreSave ('loginform', $loginname);
+                if (!empty ($msg)) {
+                    COM_setMsg($msg,'error');
+                    $status = -2;
+                } else {
+                    COM_updateSpeedlimit('login');
+                    $status = SEC_authenticate($loginname, $passwd, $uid);
+                    if ($status == USER_ACCOUNT_ACTIVE) {
+                        $local_login = true;
+                    }
                 }
             } else {
                 COM_errorLog("ERROR: Username and Password were posted, but local authenticatio is disabled - check configuration settings");

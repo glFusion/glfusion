@@ -37,6 +37,7 @@ class autotag_uikitlogin extends BaseAutotag {
             $options = array(
                 'hide_forgotpw_link' => false,
                 'form_action'        => $_CONF['site_url'].'/users.php',
+                'plugin_vars'        => true,
             );
             $options['title']   = $LANG04[65]; // log in to {site_name}
             $options['message'] = ''; //$LANG04[66]; // please enter your user name and password below

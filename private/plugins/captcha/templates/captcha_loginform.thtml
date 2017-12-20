@@ -7,8 +7,8 @@
 		};
 		//]]>
 	</script>
-	<div class="uk-form-row uk-margin-top">
-		<label class="uk-form-label">{lang_are_you_human}</label>
+	<div class="uk-form-row uk-margin-top uk-vertical-align">
+		<label class="uk-form-label uk-vertical-align-middle">{lang_are_you_human}</label>
 		<div class="uk-form-controls">
 			{recaptcha}
 			<input type="text" name="validation_field" value="" style="display:none;">
@@ -41,7 +41,7 @@
 		//]]>
 	</script>
 
-	<div class="uk-form-row">
+	<div class="uk-form-row uk-margin-top">
 		<label class="uk-form-label" for="captcha">{lang_are_you_human}</label>
 		<div class="uk-form-controls">
 			<img id="captcha_image_{counter}" src="{captcha_image}" alt="{lang_alt}" style="padding:5px;"><br/>
