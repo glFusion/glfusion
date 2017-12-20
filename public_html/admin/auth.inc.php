@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion admin authentication module                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2015 by the following authors:                        |
+// | Copyright (C) 2011-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -265,9 +265,12 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     if ( isset($_POST['token_filedata']) ) {
         $filedata = urldecode($_POST['token_filedata']);
     }
-
     $display .= COM_siteHeader('menu');
-    $display .= SEC_reauthform($destination,$LANG20[9],$method,$postdata,$getdata,$filedata);
+    $options = array(
+        'title'   => $LANG_LOGIN[1],
+        'message' => $LANG20[9]
+    );
+    $display .=  SEC_loginForm($options);
     $display .= COM_siteFooter();
     echo $display;
     exit;
