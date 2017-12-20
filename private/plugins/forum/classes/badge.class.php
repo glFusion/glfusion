@@ -213,7 +213,7 @@ class Badge
                                 'data-uk-tooltip' => "{pos:'right'}",
                                 'title' => $badge->grp_name,
                         );
-                        $badge->html = COM_createImage($url, $badge->grp_name, $attrs);
+                        $badge->html = COM_createImage($badge->url, $badge->grp_name, $attrs);
                         $retval[$uid][] = $badge;
                     } else {
                         $badge->html = '';
