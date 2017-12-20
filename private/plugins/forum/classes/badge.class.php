@@ -239,13 +239,15 @@ class Badge
 
         $retval = '';
         $paths = array(
-            $_CONF['path_layout'] . 'plugins/' => $_CONF['layout_url'] . '/plugins',
-            $_CONF['path_html'] => $_CONF['site_url'],
+            $_CONF['path_layout'] . 'plugins/forum/images/badges/' =>
+                    $_CONF['layout_url'] . '/plugins/forum/images/badges/',
+            $_CONF['path_html'] . 'images/forum/badges/' =>
+                    $_CONF['site_url'] . '/images/forum/badges/',
         );
 
         foreach ($paths as $path=>$url) {
-            if (file_exists($path . 'forum/images/badges/' . $img)) {
-                $url .= '/forum/images/badges/' . $img;
+            if (file_exists($path . $img)) {
+                $url .= $img;
                 $retval = $url;
                 break;
             }
@@ -310,7 +312,7 @@ class Badge
         //echo $sql;die;
         DB_query($sql, 1);
         if (!DB_error()) {
-            self::ReOrder();
+            self::reOrder();
         } else {
             COM_errorLog("Badge::moveRow() SQL error: $sql", 1);
         }
@@ -335,7 +337,7 @@ class Badge
             'fb_grp'    => $this->fb_grp,
             'grp_select' => COM_optionList($_TABLES['groups'], 'grp_id,grp_name',
                             $this->fb_gl_grp),
-            'fb_image'  => $this->fb_image,
+            'fb_image_sel' => $this->_getImageSelection($this->fb_image),
             'fb_order'  => $this->fb_order,
             'fb_grp_sel' => COM_optionList(
                         $_TABLES['ff_badges'],
@@ -351,17 +353,56 @@ class Badge
 
 
     /**
+    *   Create an option list of the available badge images.
+    *
+    *   @param  string  $selected   Selected image name
+    *   @return string      Option elements for the images
+    */
+    private function _getImageSelection($selected='')
+    {
+        global $_CONF;
+
+        $retval = '';
+        $path = $_CONF['path_html'] . 'images/forum/badges';
+        if (!is_dir($path) || !is_readable($path)) {
+            return '';
+        }
+        $dir = opendir($path);
+        while(false !== ($file = readdir($dir))) {
+            if ($file == '.' || $file == '..' || $file == 'index.html') continue;
+            $sel = $file == $selected ? 'selected="selected"' : '';
+            $retval .= '<option value="' . $file . '" ' . $sel . '>' .
+                    $file . '</option>' . LB;
+        }
+        closedir($dir);
+        return $retval;
+    }
+
+
+    /**
     *   Save a badge from the edit form
     *
     *   @param  array   $A      Array of fields, e.g. $_POST
-    *   @return boolean     True on success, False on error
+    *   @return string      Error messages, empty string on success
     */
     public function Save($A = array())
     {
-        global $_TABLES;
+        global $_TABLES, $LANG_GF01;
 
         if (!empty($A)) {
             $this->setVars($A, false);
+        }
+
+        // Handle the file upload, if any. The _handleUpload() function
+        // should return the filename. If it is empty then an error occurred.
+        if (isset($_FILES['fb_imgfile']['name']) &&
+                !empty($_FILES['fb_imgfile']['name'])) {
+            $errors = $this->_handleUpload($_FILES['fb_imgfile']['name']);
+            if (!empty($errors)) {
+                return $LANG_GF01['badge_save_error'] . ':<br />' . $errors;
+            } else {
+                $this->fb_image = $_FILES['fb_imgfile']['name'];
+            }
         }
 
         if ($this->fb_id > 0) {
@@ -379,7 +420,46 @@ class Badge
                 fb_image = '" . DB_escapeString($this->fb_image) . "'";
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
-        return DB_error() ? false : true;
+        if (DB_error())  {
+            return $LANG_GF01['badge_save_error'];
+        } else {
+            self::reOrder();
+            return '';
+        }
+    }
+
+
+    /**
+    *   Handle the image file upload.
+    *
+    *   @return string  Error messages, or empty string on success
+    */
+    private function _handleUpload($filename)
+    {
+        global $_CONF;
+
+        $path = $_CONF['path_html'] . '/images/forum/badges';
+
+        $Upload = new \upload();
+        $Upload->setContinueOnError(true);
+        $Upload->setpath($path);
+        $Upload->setAllowedMimeTypes(array(
+                'image/pjpeg' => '.jpg,.jpeg',
+                'image/jpeg'  => '.jpg,.jpeg',
+                'image/png'   => '.png',
+                'image/x-png' => '.png',
+                'image/gif'   => '.gif',
+        ));
+        $Upload->setMaxFileSize($_CONF['max_image_size']);
+        $Upload->setAutomaticResize(false);
+        $Upload->setFieldName('fb_imgfile');
+        $Upload->setFileNames($filename);
+        $Upload->uploadFiles();
+        if ($Upload->areErrors() > 0) {
+            return $Upload->printErrors(false);
+        } else {
+            return '';
+        }
     }
 
 

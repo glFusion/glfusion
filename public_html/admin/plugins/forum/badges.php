@@ -84,10 +84,11 @@ case 'move':
 
 case 'save':
     $B = new \Forum\Badge($_POST['fb_id']);
-    if ($B->Save($_POST)) {
+    $errors = $B->Save($_POST);
+    if (empty($errors)) {
         COM_setMsg($LANG_GF01['badge_updated']);
     } else {
-        COM_setMsg($LANG_GF01['badge_save_error'], 'error');
+        COM_setMsg($errors, 'error');
     }
     echo COM_refresh($self);
     exit;
@@ -95,14 +96,14 @@ case 'save':
 
 case 'list':
 default:
+    $content .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
+    '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
     $content .= FF_badge_AdminList();
     break;
 }
 
 $display = FF_siteHeader();
 $display .= FF_navbar($navbarMenu, $LANG_GF01['badges']);
-$display .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
-    '/plugins/forum/badges.php?edit">'.$LANG_GF01['add_badge'].'</a> ]</p>';
 $display .= $content;
 $display .= FF_siteFooter();
 echo $display;

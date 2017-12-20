@@ -202,6 +202,23 @@ function forum_upgrade() {
                 (0,'site',20,1,'13','forum_user.png'),
                 (0,'site',10,1,'1','siteadmin_badge.png');";
 
+            // Copy existing badge images from the original directory to the
+            // new location under public_html/images
+            $dst = $_CONF['path_html'] . 'images/forum/badges';
+            if (!is_dir($dst)) {
+                $status = @mkdir($dst, 0755, true);
+            }
+            if (is_dir($dst) && is_writable($dst)) {
+                $src = $_CONF['path_html'] . 'forum/images/badges';
+                $dir = opendir($src);
+                while(false !== ($file = readdir($dir))) {
+                    if ($file != '.' && $file != '..' ) {
+                        copy($src . '/' . $file, $dst . '/' . $file);
+                    }
+                }
+                closedir($dir);
+            }
+
             if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
                 $use_innodb = true;
             } else {
