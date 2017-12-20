@@ -52,6 +52,8 @@ if (empty ($_CONF['cookiedomain'])) {
     }
 }
 
+session_set_cookie_params ( 0, $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+
 // Need to destroy any existing sessions started with session.auto_start
 if (session_id()) {
 	session_unset();
@@ -94,7 +96,6 @@ function SESS_sessionCheck()
     $_USER = $userdata;
 
     $userid = 0;
-
     $mintime = time() - $_CONF['session_cookie_timeout'];
     $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
@@ -110,6 +111,7 @@ function SESS_sessionCheck()
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
                     $_SERVER['REMOTE_USER'] = $_USER['username'];
+                    // cycle session
                 }
             } else {
                 $userid = 0;
