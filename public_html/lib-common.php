@@ -1362,6 +1362,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 break;
          }
     }
+
+    $jsFooter .= $outputHandle->renderFooter('script');
     $theme->set_var('js-footer',$jsFooter);
 
     $theme->set_var(array(
@@ -2129,6 +2131,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         } else {
             $login->set_var( 'lang_signup', $LANG01[59] );
         }
+        PLG_templateSetVars('loginform', $login);
 
         // 3rd party remote authentication.
         if ($_CONF['user_login_method']['3rdparty'] && !$_CONF['usersubmission']) {
@@ -6707,7 +6710,7 @@ function CTL_clearCache($plugin='')
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 
-    if ( empty($plugin) ) {
+    if ( $plugin == '' || empty($plugin) ) {
         if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
             foreach (glob($_CONF['path_layout'].$_CONF['css_cache_filename']."*.*") as $filename) {
                 @unlink($filename);

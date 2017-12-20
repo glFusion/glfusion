@@ -100,6 +100,14 @@ class outputHandler {
                                      HEADER_PRIO_VERYLOW => array()),
                     );
 
+    private $_footer = array(
+                    'script' => array(HEADER_PRIO_VERYHIGH => array(),
+                                     HEADER_PRIO_HIGH => array(),
+                                     HEADER_PRIO_NORMAL => array(),
+                                     HEADER_PRIO_LOW => array(),
+                                     HEADER_PRIO_VERYLOW => array()),
+                    );
+
 
     /**************************************************************************/
     // Public Methods:
@@ -329,6 +337,60 @@ class outputHandler {
         );
     }
 
+
+	/**
+	 * Add a JavaScript source footer section of page
+	 *
+	 * This adds a javascript source file to a page - The URL should not have
+	 * the <link> attribute.
+	 *
+	 * @param  string   $href       The URL to the javascript file
+	 * @param  int      $priority   Load priority
+	 * @param  string   $mime       The mime type of the stylesheet, 'text/css'
+	 *                              used if no other type passed.
+	 * @param  boolean  $async      true - load script asynchronously
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function addLinkScriptFooter($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript',$async = false)
+    {
+        $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
+        if ( $async ) $link .= ' async';
+        $link .= "></script>" . LB;
+
+        $this->_footer['script'][$priority][] = $link;
+    }
+
+	/**
+	 * Add JavaScript to footer section of page
+	 *
+	 * This adds raw JavaScript, it should not be wrapped in a <script> tag.
+	 *
+	 * @param  string   $code       The JavaScript code
+	 * @param  int      $priority   Load priority
+	 * @param  string   $mime       The mime type of the JS, 'text/javascript'
+	 *                              used if no other type passed.
+	 * @access public
+	 * @return nothing
+	 */
+    public function addScriptFooter($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
+    {
+        if ($code != '') {
+            $this->_footer['script'][$priority][] = '<script type="' . $mime . "\">".LB."" . LB . $code . LB ."</script>" . LB;
+        }
+    }
+
+    public function renderFooter($type)
+    {
+        switch ($type) {
+        case 'script':
+            return $this->_array_concat_recursive($this->_footer[$type]);
+            break;
+        default:
+            return '';
+        }
+    }
 
 	/**
 	 * Add Meta data to header
