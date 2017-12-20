@@ -263,7 +263,7 @@ class Badge
     {
         global $_TABLES;
 
-        $badge_groups = self::getAll();
+        $badge_groups = self::getAll(false);
         $stepNumber = 10;
         foreach ($badge_groups as $grp) {
             $order = 10;
