@@ -48,9 +48,8 @@ class Badge
                 $this->fb_order = 999;  // set to last in list
                 $this->fb_grp = '';
                 $this->fb_gl_grp = '';
-                $this->fb_image = '';
-                $this->type = 'img';
-                $this->css = '';
+                $this->fb_data = '';
+                $this->fb_type = 'img';
             }
         }
     }
@@ -96,7 +95,6 @@ class Badge
             $this->properties[$key] = $value == 1 ? 1 : 0;
             break;
         case 'fb_gl_grp':
-        case 'fb_image':
         case 'fb_grp':
         case 'url':
         case 'html':
@@ -382,7 +380,7 @@ class Badge
             'fb_grp'    => $this->fb_grp,
             'grp_select' => COM_optionList($_TABLES['groups'], 'grp_id,grp_name',
                             $this->fb_gl_grp),
-            'fb_image_sel' => $this->_getImageSelection($this->fb_image),
+            'fb_image_sel' => $this->_getImageSelection($this->fb_data),
             'fb_order'  => $this->fb_order,
             'fb_grp_sel' => COM_optionList(
                         $_TABLES['ff_badges'],
@@ -451,7 +449,7 @@ class Badge
             if (!empty($errors)) {
                 return $LANG_GF01['badge_save_error'] . ':<br />' . $errors;
             } else {
-                $this->fb_image = $_FILES['fb_imgfile']['name'];
+                $this->fb_data = $_FILES['fb_imgfile']['name'];
             }
         }
 
