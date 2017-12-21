@@ -62,8 +62,6 @@
 						</div>
 					</div>
 					{plugin_namepass_pwdemail}
-
-					{delete_account_option}
 				</div>
 
 			</fieldset>
@@ -157,6 +155,14 @@
 			<button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
 			<button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
 		</div>
+
+{!if delete_account_option}
+		<div id="pe_delete" class="jsenabled_hide">
+			{delete_account_option}
+		</div>
+{!endif}
+
+
 	</form>
 </div>
 <!-- end needs fixing -->

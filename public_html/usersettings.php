@@ -75,7 +75,15 @@ function edituser()
                 $cnt++;
             }
         }
-        $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
+        if ($_CONF['allow_account_delete'] == 1) {
+            $navbar->add_menuitem($LANG04[156],'showhideProfileEditorDiv("pe_delete",'.$cnt.');return false;',true);
+            $cnt++;
+        }
+        if ( isset($_GET['mode']) && $_GET['mode'] == 'delete' && $_CONF['allow_account_delete'] == 1 ) {
+            $navbar->set_selected($LANG04[156]);
+        } else {
+            $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
+        }
     }
     $preferences->set_var ('navbar', $navbar->generate());
 
@@ -325,10 +333,12 @@ function confirmAccountDelete ($form_reqid)
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
-    if (empty($_POST['passwd']) || !SEC_check_hash(trim($_POST['passwd']),$current_password)) {
+    if (empty($_POST['current_password']) || !SEC_check_hash(trim($_POST['current_password']),$current_password)) {
          COM_setMsg( $MESSAGE[84], 'error',true );
-         return COM_refresh($_CONF['site_url'].'/usersettings.php');
+         return COM_refresh($_CONF['site_url'].'/usersettings.php?mode=delete');
     }
+
+    $token = SEC_createToken();
 
     $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
     DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
@@ -339,10 +349,9 @@ function confirmAccountDelete ($form_reqid)
     $retval .= COM_startBlock ($LANG04[97], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
     $retval .= '<p>' . $LANG04[98] . '</p>' . LB;
-    $retval .= '<form action="' . $_CONF['site_url']
+    $retval .= '<form class="uk-form" action="' . $_CONF['site_url']
             . '/usersettings.php" method="post"><div>' . LB;
-    $retval .= '<p align="center"><input type="submit" name="btnsubmit" value="'
-            . $LANG04[96] . '" /></p>' . LB;
+    $retval .= '<p align="center"><button type="submit" class="uk-button uk-button-danger" name="btnsubmit" value="'.$LANG04[96].'">'.$LANG04[96].'</button></p>'.LB;
     $retval .= '<input type="hidden" name="mode" value="deleteconfirmed" />' . LB;
     $retval .= '<input type="hidden" name="account_id" value="' . $reqid
             . '" />' . LB;
@@ -1732,6 +1741,9 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     case 'confirmdelete':
         if (($_CONF['allow_account_delete'] == 1) && ($_USER['uid'] > 1)) {
             $accountId = COM_applyFilter ($_POST['account_id']);
+
+            $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
+//            if (!empty ($accountId) && !empty($_POST['current_password']) && SEC_check_hash(trim($_POST['current_password']),$current_password)) {
             if (!empty ($accountId)) {
                 $display .= confirmAccountDelete ($accountId);
             } else {

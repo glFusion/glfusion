@@ -57,5 +57,9 @@ function showhideProfileEditorDiv(selected, selindex) {
         if (preview) document.getElementById('pe_preview').style.display = '';
         document.getElementById('save_button').style.display = 'none';
     }
+		if ( selected == 'pe_delete' ) {
+	    		document.getElementById('pe_delete').style.display = '';
+	        document.getElementById('save_button').style.display = 'none';
+	 	}
     pf();
 }
