@@ -142,7 +142,7 @@ function FF_badge_AdminList()
                 'field' => 'grp_name',
                 'sort'  => false),
         array(  'text'  => $LANG_GF01['badge_img'],
-                'field' => 'fb_image',
+                'field' => 'fb_data',
                 'sort'  => false),
         array(  'text'  => $LANG_ADMIN['delete'],
                 'field' => 'delete',

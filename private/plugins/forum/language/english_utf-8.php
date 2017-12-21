@@ -253,9 +253,11 @@ $LANG_GF01 = array(
     'add_badge'         => 'Add Badge',
     'badge_grp' => 'Badge Group',
     'site_grp'  => 'Site Group Name',
-    'badge_img' => 'Badge Image',
+    'badge_img' => 'Image',
     'create_new' => 'Create New',
     'badges' => 'Badges',
+    'badge_css' => 'CSS Class',
+    'badge_type' => 'Badge Type',
 );
 
 $LANG_GF02 = array(

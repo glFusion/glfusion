@@ -1817,30 +1817,13 @@ function forumPLG_getMemberBadge($uid) {
     $badges = Forum\Badge::getUserBadges($uid);
     $badge_urls = array();
     foreach ($badges as $badge) {
-        $attrs = array(
-            'data-uk-tooltip' => "{pos:'right'}",
-            'title' => $badge->fb_name,
-        );
-        $badge_urls[] = COM_createImage($badge->url, $badge->fb_name, $attrs);
+        $badge_urls[] = $badge->html;
     }
     $retval .= implode('<br />', $badge_urls);
 
-    /*if ( $uid > 1 ) {
-        //if (!SEC_inGroup('Root',$uid)) {
-            foreach ($_FF_CONF['grouptags'] as $groupid => $buttonimg) {
-                //if (SEC_inGroup($groupid,$uid)) {
-                if ($groupid == 'Logged-in Users' && Group::inGroup('Root', $uid)) continue;
-                if (Group::isAssigned($groupid, $uid)) {
-                    $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$buttonimg.'" alt=""/><br/>';
-                }
-            }
-        /*} else {
-            $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$_FF_CONF['grouptags']['Root'].'" alt=""/><br/>';
-        }*/
-        if ( function_exists('plugin_getmedals_medals') ) {
-            $retval .= plugin_getmedals_medals($uid);
-        }
-    //}
+    if ( function_exists('plugin_getmedals_medals') ) {
+        $retval .= plugin_getmedals_medals($uid);
+    }
     $cache[$uid] = $retval;
     return $cache[$uid];
 }
