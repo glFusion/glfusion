@@ -242,7 +242,7 @@ $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
   `fb_grp` varchar(20) NOT NULL DEFAULT '',
   `fb_order` int(3) NOT NULL DEFAULT '99',
   `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `fb_gl_grp` varchar(60) NOT NULL DEFAULT '',
+  `fb_gl_grp` mediumint(8) NOT NULL,
   `fb_image` varchar(60) NOT NULL DEFAULT '',
   PRIMARY KEY (`fb_id`),
   KEY `grp` (`fb_grp`,`fb_order`)

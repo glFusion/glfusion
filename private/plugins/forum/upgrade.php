@@ -192,15 +192,11 @@ function forum_upgrade() {
               `fb_grp` varchar(20) NOT NULL DEFAULT '',
               `fb_order` int(3) NOT NULL DEFAULT '99',
               `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
-              `fb_gl_grp` varchar(60) NOT NULL DEFAULT '',
+              `fb_gl_grp` MEDIUMINT(8) NOT NULL,
               `fb_image` varchar(60) NOT NULL DEFAULT '',
               PRIMARY KEY (`fb_id`),
               KEY `grp` (`fb_grp`,`fb_order`)
             ) ENGINE=MyISAM;";
-
-            $_SQL['ff_badges_defaults'] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
-                (0,'site',20,1,'13','forum_user.png'),
-                (0,'site',10,1,'1','siteadmin_badge.png');";
 
             // Copy existing badge images from the original directory to the
             // new location under public_html/images
@@ -231,6 +227,19 @@ function forum_upgrade() {
                 }
                 DB_query($sql,1);
             }
+
+            $counter = 10;
+            $groupTags = $_FF_CONF['grouptags'];
+            foreach ($groupTags AS $group => $badge ) {
+                $groupID = DB_getItem($_TABLES['groups'],'grp_id','grp_name="'.DB_escapeString($group).'"');
+                if ( $groupID != '' && $groupID != 0 ) {
+                    $sql = "INSERT INTO {$_TABLES['ff_badges']} (fb_grp,fb_order,fb_enabled,fb_gl_grp,fb_image) VALUES ('site',{$counter},1,'{$groupID}','{$badge}' )";
+                    DB_query($sql);
+                }
+                $counter += 10;
+            }
+            $c = config::get_instance();
+            $c->del('grouptags','forum');
 
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
