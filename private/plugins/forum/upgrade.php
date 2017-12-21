@@ -235,7 +235,9 @@ function forum_upgrade() {
             foreach ($groupTags AS $group => $badge ) {
                 $groupID = DB_getItem($_TABLES['groups'],'grp_id','grp_name="'.DB_escapeString($group).'"');
                 if ( $groupID != '' && $groupID != 0 ) {
-                    $sql = "INSERT INTO {$_TABLES['ff_badges']} (fb_grp,fb_order,fb_enabled,fb_gl_grp,fb_image) VALUES ('site',{$counter},1,'{$groupID}','{$badge}' )";
+                    $sql = "INSERT INTO {$_TABLES['ff_badges']}
+                        (fb_grp,fb_order,fb_enabled,fb_gl_grp,fb_type,fb_data)
+                        VALUES ('site',{$counter},1,'{$groupID}','img','{$badge}' )";
                     DB_query($sql);
                 }
                 $counter += 10;
