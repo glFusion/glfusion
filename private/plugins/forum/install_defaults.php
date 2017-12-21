@@ -384,8 +384,8 @@ function plugin_initconfig_forum()
                 0, 0, 0, 240, true, 'forum');
         $c->add('show_last_post_count', $_FF_DEFAULT['show_last_post_count'], 'text',
                 0, 0, 0, 260, true, 'forum');
-        $c->add('grouptags',$_FF_DEFAULT['grouptags'],'*text',
-                0,0,NULL,280,true,'forum');
+//        $c->add('grouptags',$_FF_DEFAULT['grouptags'],'*text',
+//                0,0,NULL,280,true,'forum');
 
         $c->add('ff_attachments_settings', NULL, 'fieldset', 0, 1, NULL, 0, true,'forum');
 
