@@ -265,7 +265,7 @@ class Badge
             'alt'   => $dscp,
             'dscp'  => $dscp,
             'badge_url' => $this->url,
-            'badge_css' => $this_>fb_data,
+            'badge_css' => $this->fb_data,
         ) );
         $T->parse('output','badge');
         $this->html = $T->finish($T->get_var('output'));
@@ -393,7 +393,7 @@ class Badge
             'ena_chk'   => $this->fb_enabled ? 'checked="checked"' : '',
             'chk_' . $this->fb_type => 'checked="checked"',
             'sel_' . $this->fb_data => 'selected="selected"',
-            'fb_dscp'   => $this->dscp,
+            'fb_dscp'   => $this->fb_dscp,
             'fb_type'   => $this->fb_type,
          ) );
         $T->parse('output','editform');
