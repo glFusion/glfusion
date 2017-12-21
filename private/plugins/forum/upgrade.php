@@ -193,7 +193,9 @@ function forum_upgrade() {
               `fb_order` int(3) NOT NULL DEFAULT '99',
               `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
               `fb_gl_grp` MEDIUMINT(8) NOT NULL,
-              `fb_image` varchar(60) NOT NULL DEFAULT '',
+              `fb_type` varchar(10) DEFAULT 'img',
+              `fb_data` varchar(255) DEFAULT NULL,
+              `fb_dscp` varchar(40) DEFAULT NULL,
               PRIMARY KEY (`fb_id`),
               KEY `grp` (`fb_grp`,`fb_order`)
             ) ENGINE=MyISAM;";

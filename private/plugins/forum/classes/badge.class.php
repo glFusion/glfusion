@@ -49,6 +49,8 @@ class Badge
                 $this->fb_grp = '';
                 $this->fb_gl_grp = '';
                 $this->fb_image = '';
+                $this->type = 'img';
+                $this->css = '';
             }
         }
     }
@@ -98,6 +100,9 @@ class Badge
         case 'fb_grp':
         case 'url':
         case 'html':
+        case 'fb_type':
+        case 'fb_data':
+        case 'fb_dscp':
             $this->properties[$key] = trim($value);
             break;
         case 'grp_name':
@@ -130,6 +135,7 @@ class Badge
         foreach ($A as $key=>$value) {
             $this->$key = $value;
         }
+
         if (!$from_db) {
             if (isset($A['fb_grp_txt']) && !empty($A['fb_grp_txt'])) {
                 // form may override gl_grp selection
@@ -138,6 +144,14 @@ class Badge
             if (!isset($A['fb_enabled'])) {
                 // checkboxes are unset, force a value
                 $this->fb_enabled = 0;
+            }
+            switch ($this->fb_type) {
+            case 'img':
+                $this->fb_data = $A['fb_image'];
+                break;
+            case 'css':
+                $this->fb_data = $A['css'];
+                break;
             }
         }
         return true;
@@ -205,24 +219,57 @@ class Badge
         $grps = \Group::getAll($uid);
         foreach ($badge_groups as $badge_group) {
             foreach ($badge_group as $badge) {
-                //if (array_key_exists($badge->fb_gl_grp, $grps)) {
                 if (in_array($badge->fb_gl_grp, $grps)) {
-                    $badge->url = self::getImageUrl($badge->fb_image);
-                    if ($badge->url != '') {
-                        $attrs = array(
-                                'data-uk-tooltip' => "{pos:'right'}",
-                                'title' => $badge->grp_name,
-                        );
-                        $badge->html = COM_createImage($badge->url, $badge->grp_name, $attrs);
+                    $badge->_getBadgeHTML();
+                    if ($badge->html != '') {
                         $retval[$uid][] = $badge;
-                    } else {
-                        $badge->html = '';
                     }
                     if ($badge->fb_grp != '') break;
                 }
             }
         }
         return $retval[$uid];
+    }
+
+
+    /**
+    *   Get the final HTML to display the badge.
+    *   Returns the HTML and also sets $this->html as a cache.
+    *
+    *   @return string  HTML for badge
+    */
+    private function _getBadgeHTML()
+    {
+        // If html is defined at all, return it.
+        if ($this->html !== NULL) {
+            return $this->html;
+        }
+
+        // Description for title and display text, fallback to GL group name
+        $dscp = $this->fb_dscp == '' ? $this->grp_name : $this->fb_dscp;
+        $this->html = '';
+        switch ($this->fb_type) {
+        case 'css':
+            $tpl_filename = 'badge_css.thtml';
+            $this->url = '';
+            break;
+        case 'img':
+            $tpl_filename = 'badge_img.thtml';
+            $this->url = self::getImageUrl($this->fb_data);
+            break;
+        }
+        $T = new \Template(__DIR__ . '/../templates/');
+        $T->set_file('badge', $tpl_filename);
+        $T->set_var(array(
+            'title' => $dscp,
+            'alt'   => $dscp,
+            'dscp'  => $dscp,
+            'badge_url' => $this->url,
+            'badge_css' => $this->fb_data,
+        ) );
+        $T->parse('output','badge');
+        $this->html = $T->finish($T->get_var('output'));
+        return $this->html;
     }
 
 
@@ -328,8 +375,6 @@ class Badge
     {
         global $_TABLES;
 
-        $retval = '';
-
         $T = new \Template(__DIR__ . '/../templates/admin/');
         $T->set_file('editform', 'editbadge.thtml');
         $T->set_var(array(
@@ -346,9 +391,13 @@ class Badge
                         "fb_grp <> ''"
                 ),
             'ena_chk'   => $this->fb_enabled ? 'checked="checked"' : '',
+            'chk_' . $this->fb_type => 'checked="checked"',
+            'sel_' . $this->fb_data => 'selected="selected"',
+            'fb_dscp'   => $this->fb_dscp,
+            'fb_type'   => $this->fb_type,
          ) );
-        $retval .= $T->parse('output', 'editform');
-        return $retval;
+        $T->parse('output','editform');
+        return $T->finish($T->get_var('output'));
     }
 
 
@@ -395,7 +444,8 @@ class Badge
 
         // Handle the file upload, if any. The _handleUpload() function
         // should return the filename. If it is empty then an error occurred.
-        if (isset($_FILES['fb_imgfile']['name']) &&
+        if ($this->fb_type == 'img' &&
+                isset($_FILES['fb_imgfile']['name']) &&
                 !empty($_FILES['fb_imgfile']['name'])) {
             $errors = $this->_handleUpload($_FILES['fb_imgfile']['name']);
             if (!empty($errors)) {
@@ -417,7 +467,9 @@ class Badge
                 fb_order = '{$this->fb_order}',
                 fb_enabled = {$this->fb_enabled},
                 fb_gl_grp = '" . DB_escapeString($this->fb_gl_grp) . "',
-                fb_image = '" . DB_escapeString($this->fb_image) . "'";
+                fb_data = '" . DB_escapeString($this->fb_data) . "',
+                fb_type = '" . DB_escapeString($this->fb_type) . "',
+                fb_dscp = '" . DB_escapeString($this->fb_dscp) . "'";
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
         if (DB_error())  {

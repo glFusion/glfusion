@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<span class="uk-badge {badge_css}" data-uk-tooltip="{pos:'right'}" title="{title}">{dscp}</span>
+{# end {templatelocation} #}
