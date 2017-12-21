@@ -64,6 +64,9 @@ $obsoletePrivateDir = array(
 );
 
 $obsoletePublicDir = array(
+// 1.7.2
+    'forum/images/badges/',
+
 // 1.7.0
     'captcha/class/',
 // 1.6.3
