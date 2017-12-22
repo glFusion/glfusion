@@ -193,7 +193,11 @@
 </script>
 <script>
 	$( document ).ready(function() {
-		showhideProfileEditorDiv("pe_namepass", 1);
+{!if delete_active}
+		showhideProfileEditorDiv('pe_delete', {delete_idx});
+{!else}
+		showhideProfileEditorDiv('pe_namepass', 1);
+{!endif}
 	});
 </script>
 {# end {templatelocation} #}

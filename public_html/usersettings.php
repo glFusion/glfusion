@@ -81,8 +81,11 @@ function edituser()
         }
         if ( isset($_GET['mode']) && $_GET['mode'] == 'delete' && $_CONF['allow_account_delete'] == 1 ) {
             $navbar->set_selected($LANG04[156]);
+            $preferences->set_var('delete_active',true);
+            $preferences->set_var('delete_idx',$cnt-1);
         } else {
             $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
+            $preferences->unset_var('delete_active');
         }
     }
     $preferences->set_var ('navbar', $navbar->generate());
