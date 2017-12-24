@@ -642,7 +642,7 @@ CREATE TABLE {$_TABLES['users']} (
   act_token varchar(32) NOT NULL default '',
   act_time datetime NOT NULL default '1000-01-01 00:00:00.000000',
   tfa_enabled tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
-  tfa_secret varchar(128) NOT NULL DEFAULT NULL,
+  tfa_secret varchar(128) NULL DEFAULT NULL,
   status smallint(5) unsigned NOT NULL default '1',
   account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,

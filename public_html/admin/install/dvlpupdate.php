@@ -1776,7 +1776,7 @@ function glfusion_172()
     ";
 
     $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `act_time`;";
-    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NOT NULL DEFAULT NULL AFTER `tfa_enabled`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NULL DEFAULT NULL AFTER `tfa_enabled`;";
 
     if ($use_innodb) {
         $statements = count($_SQL);
