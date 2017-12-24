@@ -1770,6 +1770,8 @@ $LANG_TFA = array(
     'enter_secret'          => 'Or enter the secret:',
     'enroll_enter_code'     => 'And enter the code the application gives you:',
     'general_error'         => 'There was an error in processing your request. Please have the system administrator check the error.log for details.',
+    'copy_success'          => 'Two Factor Token copied to clipboard',
+    'copy_to_clipboard'     => 'Copy to Clipboard',
 );
 
 

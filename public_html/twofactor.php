@@ -154,6 +154,8 @@ function tfaEnroll()
         'lang_enroll_enter_code' => $LANG_TFA['enroll_enter_code'],
         'lang_auth_code' => $LANG_TFA['auth_code'],
         'lang_verify' => $LANG_TFA['verify'],
+        'lang_copy_success' => $LANG_TFA['copy_success'],
+        'lang_copy_to_clipboard' => $LANG_TFA['copy_to_clipboard'],
         'token_name'    => "_sectoken",
         'token_value'   => $secToken,
     ));

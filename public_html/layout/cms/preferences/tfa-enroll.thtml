@@ -1,10 +1,19 @@
+<script src="../javascript/addons/clipboard/clipboard.min.js"></script>
 <div class="uk-panel-title">{lang_enroll_title}</div>
 
 <div id="tfa-error" class="uk-margin">
 	{lang_scan_qrcode}
 </div>
 
-<img src="{tfa-qrcode}">
+<img class="uk-thumbnail" src="{tfa-qrcode}">
+
+<p>
+	{lang_enter_secret} {tfa-secret}
+	<a class="cpybtn" title="{lang_copy_to_clipboard}" data-clipboard-text="{tfa-secret}">
+		<i class="uk-icon-clipboard uk-icon-hover"></i>
+	</a>
+
+</p>
 
 <p>
 	{lang_enroll_enter_code}
@@ -17,3 +26,10 @@
 	<input type="hidden" id="tfasecret" name="tfasecret" value="{tfa-secret}">
 	<input type="hidden" id="{token_name}" name="{token_name}" value="{token_value}">
 </div>
+<script>
+	var clipboard = new Clipboard('.cpybtn');
+	clipboard.on('success', function(e) {
+		e.clearSelection();
+		UIkit.notify('{lang_copy_success}',{timeout: 300});
+	});
+</script>

@@ -1683,7 +1683,7 @@ $LANG_ACCESS = array(
 # admin/database.php
 
 $LANG_DB_ADMIN = array(
-    'database_admin' => 'Database Administration',
+    'database_admin' => 'DB Admin',
     'last_ten_backups' => 'Database Backups',
     'create_backup' => 'Backup Database',
     'do_backup' => 'Do Backup',
@@ -1781,7 +1781,9 @@ $LANG_DB_ADMIN = array(
     'scan_qrcode' => 'Scan the image with your authentication application',
     'enter_secret' => 'Or enter the secret:',
     'enroll_enter_code' => 'And enter the code the application gives you:',
-    'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.'
+    'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.',
+    'copy_success' => 'Two Factor Token copied to clipboard',
+    'copy_to_clipboard' => 'Copy to Clipboard'
 );
 
 ###############################################################################
