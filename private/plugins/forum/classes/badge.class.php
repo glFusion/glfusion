@@ -252,6 +252,7 @@ class Badge
             $this->url = '';
             break;
         case 'img':
+        default:
             $tpl_filename = 'badge_img.thtml';
             $this->url = self::getImageUrl($this->fb_data);
             break;
