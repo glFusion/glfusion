@@ -109,7 +109,7 @@ class TwoFactor
         global $_CONF;
 
         if (empty($this->tfa)) {
-            $this->tfa = new RobThree\Auth\TwoFactorAuth($_CONF['site_name'], self::NUM_DIGITS,30,'sha256');
+            $this->tfa = new RobThree\Auth\TwoFactorAuth($_CONF['site_name'], self::NUM_DIGITS,30);
         }
 
         return $this->tfa;
