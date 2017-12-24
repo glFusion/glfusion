@@ -106,6 +106,7 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['usercomment'], 'uid', $uid);
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
     DB_delete ($_TABLES['social_follow_user'], 'uid', $uid);
+    DB_delete ($_TABLES['tfa_backup_codes'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
     DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");

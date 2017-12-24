@@ -2049,4 +2049,46 @@ function SEC_collectRemoteOAuthModules()
     }
     return $modules;
 }
+
+function SEC_validate2FACode($code)
+{
+    global $_USER;
+    $tfa = \TwoFactor::getInstance($_USER['uid']);
+    return $tfa->validateCode($code);
+}
+
+/**
+* Displays the Two Factor Auth token entry form
+*
+* @return   no return
+*
+*/
+function SEC_2FAForm($uid)
+{
+    global $_CONF, $_USER, $LANG_TFA;
+
+    $retval = '';
+
+    $T = new Template($_CONF['path_layout'] . 'users');
+    $T->set_file('tfa', 'tfa-entry-form.thtml');
+
+    $T->set_var(array(
+        'uid'           => $uid,
+        'token_name'    => CSRF_TOKEN,
+        'token_value'   => SEC_createToken(),
+        'lang_two_factor'   => $LANG_TFA['two_factor'],
+        'lang_auth_code'    => $LANG_TFA['auth_code'],
+        'lang_verify'       => $LANG_TFA['verify'],
+    ));
+
+    $T->parse('output', 'tfa');
+
+    $retval .= $T->finish($T->get_var('output'));
+
+    $display = COM_siteHeader();
+    $display .= $retval;
+    $display .= COM_siteFooter();
+    echo $display;
+    exit;
+}
 ?>

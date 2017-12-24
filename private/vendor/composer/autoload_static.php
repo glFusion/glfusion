@@ -15,6 +15,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'splitbrain\\PHPArchive\\' => 22,
         ),
+        'R' => 
+        array (
+            'RobThree\\Auth\\' => 14,
+        ),
         'P' => 
         array (
             'PhpXmlRpc\\' => 10,
@@ -33,6 +37,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'splitbrain\\PHPArchive\\' => 
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
+        ),
+        'RobThree\\Auth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/robthree/twofactorauth/lib',
         ),
         'PhpXmlRpc\\' => 
         array (

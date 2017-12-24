@@ -98,6 +98,7 @@ $_TABLES['userinfo']            = $_DB_table_prefix . 'userinfo';
 $_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
 $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
+$_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
 
 // These tables aren't used by glFusion any more, but the table names are still
 // needed when upgrading from old versions

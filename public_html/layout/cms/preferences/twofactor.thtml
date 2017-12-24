@@ -1,0 +1,13 @@
+{# begin {templatelocation} #}
+<div id="pe_twofactor" class="jsenabled_hide">
+	<fieldset>
+		<div id="tfa-panel" class="uk-panel uk-panel-box uk-margin-top">
+			{content}
+		</div>
+	</fieldset>
+</div>
+<script>
+	var lang_disable_warning = '{lang_disable_warning}';
+	var lang_ajax_error = '{lang_ajax_error}';
+</script>
+{# end {templatelocation} #}

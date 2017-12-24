@@ -68,6 +68,8 @@
 			{plugin_namepass}
 		</div>
 
+		{twofactor}
+
 		<!--below needs fixing for mobile-->
 
 		<div id="pe_userinfo" class="jsenabled_hide">

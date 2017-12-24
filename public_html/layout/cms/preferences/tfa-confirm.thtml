@@ -1,0 +1,12 @@
+<div class="uk-panel-title">{lang_two_factor_enabled}</div>
+{lang_enroll_success}
+<p>
+	<ul class="uk-list" style="font-family: monospace;">
+		<!-- BEGIN backupcodes -->
+		<li>{backup_code}</li>
+		<!-- END backupcodes -->
+	</ul>
+	<a href="{site_url}/twofactor.php?action=download_tfa_codes&amp;{token_name}={token_value}" rel="nofollow">
+		{lang_download_backup}
+	</a>
+</p>

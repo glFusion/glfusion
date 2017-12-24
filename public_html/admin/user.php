@@ -106,6 +106,8 @@ function USER_edit($uid = '', $msg = '')
             }
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
                 continue;
+            } elseif ($id == 'pe_twofactor' ) {
+                continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
                 $cnt++;
@@ -321,7 +323,7 @@ function USER_edit($uid = '', $msg = '')
 
 function USER_accountPanel($U,$newuser = 0)
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04,$LANG28;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG_TFA, $LANG04,$LANG28;
 
     $uid = $U['uid'];
 
@@ -500,6 +502,16 @@ function USER_accountPanel($U,$newuser = 0)
     }
     $statusselect .= '</select><input type="hidden" name="oldstatus" value="'.$U['status'] . '"/>';
     $userform->set_var('user_status', $statusselect);
+
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && $U['tfa_enabled']) {
+        $userform->set_var('twofactor',true);
+        $userform->set_var(array(
+            'lang_two_factor' => $LANG_TFA['two_factor'],
+            'lang_disable_tfa' => $LANG_TFA['disable_tfa'],
+        ));
+    } else {
+        $userform->unset_var('twofactor');
+    }
 
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_namepass_name',PLG_profileEdit($uid,'namepass','name'));
@@ -1707,6 +1719,12 @@ function USER_save($uid)
             }
         }
 
+        $disableTFA = '';
+        if ( isset($_POST['disable_tfa'])) {
+            $disableTFA = "tfa_enabled = 0,tfa_secret=NULL,";
+            DB_delete ($_TABLES['tfa_backup_codes'], 'uid', $uid);
+        }
+
         // update users table
 
         $sql = "UPDATE {$_TABLES['users']} SET ".
@@ -1720,6 +1738,7 @@ function USER_save($uid)
             "cookietimeout = $cooktime,".
             "theme    = '".DB_escapeString($theme)."',".
             "language = '".DB_escapeString($language)."',".
+            $disableTFA .
             "status   = $userstatus WHERE uid = $uid;";
 
         DB_query($sql);

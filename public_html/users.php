@@ -1247,6 +1247,33 @@ function _userGetnewtoken()
     return $retval;
 }
 
+function validateTFA()
+{
+    global $_CONF, $LANG12, $LANG04;
+
+    if (!isset($_CONF['enable_twofactor']) || !$_CONF['enable_twofactor']) {
+        return true;
+    }
+    $_USER['uid'] = (int) COM_applyFilter($_POST['uid'],true);
+    if ( _sec_checkToken() ) {
+        // Check login speed limit
+        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
+        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+            displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+        } else {
+            COM_updateSpeedlimit('login');
+            $tfaCode = COM_applyFilter($_POST['tfacode']);
+            $tfa = \TwoFactor::getInstance($_USER['uid']);
+            if ($tfa->validateCode($tfaCode)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 
 // MAIN
 if ( isset($_POST['mode']) ) {
@@ -1299,11 +1326,12 @@ switch ($mode) {
     case 'mergeacct' :
         $pageBody .= USER_mergeAccounts();
         break;
+
     default:
         $status = -2;
         $local_login = false;
         $newTwitter  = false;
-
+        $authenticated = 0;
         // prevent dictionary attacks on passwords
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
         if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -1395,12 +1423,29 @@ switch ($mode) {
 
         //  end OAuth authentication method(s)
 
+        } elseif ($mode == 'tfa' ) {
+            if ( !validateTFA() ) {
+                $authenticated = 0;
+                COM_setMsg($LANG_TFA['error_invalid_code'],'error',true);
+            } else {
+                $authenticated = 1;
+            }
+            $uid = (int) $_POST['uid'];
+            $sql = "SELECT status,account_type FROM {$_TABLES['users']} WHERE uid=".(int) $uid;
+            $result = DB_query($sql);
+            if ( DB_numRows($result) == 1 ) {
+                $row = DB_fetchArray($result);
+                $status = $row['status'];
+                $local_login = $row['account_type'] & LOCAL_USER;
+            } else {
+                $status = -2;
+            }
         } else {
             $status = -2;
         }
 
         if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
-            SESS_completeLogin($uid);
+            SESS_completeLogin($uid,$authenticated);
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
             if ($_SYSTEM['admin_session'] > 0 && $local_login ) {

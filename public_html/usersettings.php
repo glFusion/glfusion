@@ -50,7 +50,7 @@ $_US_VERBOSE = false;
 */
 function edituser()
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN, $LANG_TFA;
 
     $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
     $A = DB_fetchArray ($result);
@@ -64,11 +64,14 @@ function edituser()
                                    'resynch'            => 'resynch.thtml',
                                    'deleteaccount'      => 'deleteaccount.thtml'));
 
+
     $navbar = new navbar;
     $cnt = 0;
     if ( is_array($LANG_MYACCOUNT) ) {
         foreach ($LANG_MYACCOUNT as $id => $label) {
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
+                continue;
+            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) ) {
                 continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
@@ -255,6 +258,50 @@ function edituser()
 
     $preferences->set_var('plugin_namepass_pwdemail',PLG_profileEdit($_USER['uid'],'namepass','pwdemail'));
     $preferences->set_var('plugin_namepass',PLG_profileEdit($_USER['uid'],'namepass'));
+
+
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] == 1 ) {
+        $outputHandler = outputHandler::getInstance();
+        $outputHandler->addLinkScript($_CONF['site_url'].'/javascript/twofactor.js');
+        $tfaMaster = new \Template ($_CONF['path_layout'] . 'preferences');
+        $tfaMaster->set_file('tfa_panel','twofactor.thtml');
+        if ( isset($_USER['tfa_enabled']) && $_USER['tfa_enabled'] == 1 ) {
+            $tfaTemplate = new \Template ($_CONF['path_layout'] . 'preferences');
+            $tfaTemplate->set_file('tfa_panel','tfa-enrolled.thtml');
+            $tfaTemplate->set_var(array(
+                'lang_two_factor'   => $LANG_TFA['two_factor'],
+                'lang_enrolled'     => $LANG_TFA['enrolled'],
+                'lang_regenerate_backup' => $LANG_TFA['regenerate_backup'],
+                'lang_regenerate_button' => $LANG_TFA['regenerate_button'],
+                'lang_download_backup'  => $LANG_TFA['download_backup'],
+                'sectoken_name'    => CSRF_TOKEN,
+                'sectoken_value'   => SEC_createToken(),
+                'lang_disable_tfa_help' => $LANG_TFA['disable_tfa_help'],
+                'lang_disable_tfa_button' => $LANG_TFA['disable_tfa_button'],
+            ));
+            $tfaTemplate->parse('tfapanel','tfa_panel');
+            $tfaPanelContent = $tfaTemplate->finish($tfaTemplate->get_var('tfapanel'));
+        } else {
+            $tfaTemplate = new \Template ($_CONF['path_layout'] . 'preferences');
+            $tfaTemplate->set_file('tfa_panel','tfa-notenrolled.thtml');
+            $tfaTemplate->set_var(array(
+                'lang_two_factor'   => $LANG_TFA['two_factor'],
+                'lang_not_enrolled' => $LANG_TFA['not_enrolled'],
+                'lang_enroll_button'=> $LANG_TFA['enroll_button'],
+            ));
+            $tfaTemplate->parse('tfapanel','tfa_panel');
+            $tfaPanelContent = $tfaTemplate->finish($tfaTemplate->get_var('tfapanel'));
+        }
+        $tfaMaster->set_var(array(
+            'lang_disable_warning'  => $LANG_TFA['disable_warning'],
+        ));
+        $tfaMaster->set_var('content',$tfaPanelContent);
+        $tfaPanel = $tfaMaster->finish($tfaMaster->parse('output','tfa_panel'));
+
+        $preferences->set_var('twofactor', $tfaPanel);
+    }
+
+    $preferences->parse ('twofactor', 'twofactor', false);
 
     $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid=".(int)$_USER['uid']);
     $A = DB_fetchArray($result);

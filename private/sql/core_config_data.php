@@ -1393,6 +1393,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
     array(
     	'name' => 'sg_users',
     	'default_value' => NULL,
@@ -1525,237 +1526,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'custom_registration',
-    	'default_value' => '',
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 110,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'user_login_method',
-    	'default_value' => array('standard' => true,'3rdparty' => false,'oauth' => false),
-    	'type' => '@select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 120,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'standard_auth_first',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 130,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'facebook_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 140,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'facebook_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 150,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'facebook_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 160,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'linkedin_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 170,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'linkedin_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 180,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'linkedin_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 190,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'twitter_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 200,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'twitter_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 210,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'twitter_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 220,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'google_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 230,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'google_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 240,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'google_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 250,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'microsoft_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 260,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'microsoft_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 270,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'microsoft_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 280,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'github_login',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 1,
-    	'sort' => 290,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'github_consumer_key',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 300,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'github_consumer_secret',
-    	'default_value' => 'not configured yet',
-    	'type' => 'text',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 310,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+
     array(
     	'name' => 'aftersave_user',
     	'default_value' => 'item',
@@ -1767,8 +1538,12 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+
+
+// new stuff
     array(
-    	'name' => 'fs_spamx',
+    	'name' => 'fs_authentication',
     	'default_value' => NULL,
     	'type' => 'fieldset',
     	'subgroup' => 4,
@@ -1778,17 +1553,254 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
     array(
-    	'name' => 'spamx',
-    	'default_value' => 128,
-    	'type' => 'text',
+    	'name' => 'enable_twofactor',
+    	'default_value' => '0',
+    	'type' => 'select',
     	'subgroup' => 4,
     	'fieldset' => 2,
-    	'selection_array' => NULL,
+    	'selection_array' => 0,
     	'sort' => 10,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+
+    array(
+    	'name' => 'custom_registration',
+    	'default_value' => '',
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 110,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'user_login_method',
+    	'default_value' => array('standard' => true,'3rdparty' => false,'oauth' => false),
+    	'type' => '@select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 120,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'standard_auth_first',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 130,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'facebook_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 140,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'facebook_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 150,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'facebook_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 160,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'linkedin_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 170,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'linkedin_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 180,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'linkedin_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 190,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'twitter_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 200,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'twitter_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 210,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'twitter_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 220,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'google_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 230,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'google_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 240,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'google_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 250,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'microsoft_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 260,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'microsoft_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 270,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'microsoft_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 280,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'github_login',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => 1,
+    	'sort' => 290,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'github_consumer_key',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 300,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'github_consumer_secret',
+    	'default_value' => 'not configured yet',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 310,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+// end of reorg
+
     array(
     	'name' => 'fs_login',
     	'default_value' => NULL,
@@ -2306,6 +2318,32 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+    array(
+    	'name' => 'fs_spamx',
+    	'default_value' => NULL,
+    	'type' => 'fieldset',
+    	'subgroup' => 4,
+    	'fieldset' => 8,
+    	'selection_array' => NULL,
+    	'sort' => 0,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'spamx',
+    	'default_value' => 128,
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 8,
+    	'selection_array' => NULL,
+    	'sort' => 10,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+
     array(
     	'name' => 'sg_images',
     	'default_value' => NULL,

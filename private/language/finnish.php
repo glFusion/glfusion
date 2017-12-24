@@ -481,6 +481,7 @@ $LANG04 = array(
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Esikatsele',
     'pe_namepass' => 'Käyttäjänimi &amp; Salasana',
+    'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'Infoa sinusta',
     'pe_layout' => 'Ulkoasu &amp; Kieli',
     'pe_content' => 'Sisältö',
@@ -1742,6 +1743,35 @@ $LANG_DB_ADMIN = array(
 );
 
 ###############################################################################
+# Two Factor Authentication
+
+$LANG_DB_ADMIN = array(
+    'error_invalid_code' => 'Two Factor Authenication Code was incorrect, please enter a valid code from your authenticator app or use a backup code.',
+    'two_factor' => 'Two Factor Authentication',
+    'two_factor_enabled' => 'Two Factor Authentication Enabled',
+    'disable_tfa' => 'Disable Two Factor Authentication',
+    'enroll_tfa' => 'Enroll into Two Factor Authentication',
+    'auth_code' => 'Authentication Code',
+    'verify' => 'Verify',
+    'disable_warning' => 'Disabling two-factor authentication will make your account less secure. Are you sure you want to continue?',
+    'ajax_error' => 'Error completing the requested operation. Please try again later.',
+    'download_backup' => 'Download Backup Codes',
+    'enrolled' => '<p>This site supports two-factor authentication to enhance the security of your account.</p><p>Your account is currently <strong>enrolled</strong> in two-factor authentication.</p>',
+    'regenerate_backup' => '<p>If you misplaced your backup codes, or have already used them to login, you can reset them here.</p><p><strong>Regenerating Backup Codes will invalidate previously generated codes.</strong></p>',
+    'regenerate_button' => 'Regenerate Backup Codes',
+    'disable_tfa_help' => 'If needed, you can disable two-factor authentication.',
+    'disable_tfa_button' => 'Disabled two-factor authentication',
+    'not_enrolled' => '<p>This site supports two-factor authentication to enhance the security of your account.</p><p>Your account is not currently enrolled in two-factor authentication.</p>',
+    'enroll_button' => 'Enroll into two-factor authentication',
+    'error_verify_failed' => 'The code was not correct - Please enter the code provided by your authenticator app',
+    'enroll_success' => '<p>Congradulations, you have enabled Two Factor Authentication for your account.</p><p>Below are backup codes that can be used to log into the site if you do not have access to your authenticator application. Please store these in a secure location.</p>',
+    'scan_qrcode' => 'Scan the image with your authentication application',
+    'enter_secret' => 'Or enter the secret:',
+    'enroll_enter_code' => 'And enter the code the application gives you:',
+    'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.'
+);
+
+###############################################################################
 
 $LANG_BUTTONS = array(
     1 => 'Etusivu',
@@ -2779,6 +2809,7 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Aiheen Oletusoikeudet',
     'article_comment_close_days' => 'Päivien määrä ennenkuin kommentointi suljetaan (oletus)',
     'comment_close_rec_stories' => 'Uusien juttujen määrä jossa kommentointi sallittu',
+    'comment_indent' => 'Number of pixels to indent each child comment',
     'use_safe_html' => 'Käytä Safe HTML Moodia?',
     'jhead_enabled' => 'Ota Käyttöön JHEAD?',
     'jpegtrans_enabled' => 'Ota Käyttöön jpegtrans?',
@@ -2857,7 +2888,8 @@ $LANG_confignames['Core'] = array(
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
     'standard_auth_first' => 'Display Standard Auth First in Dropdown',
-    'commentssubmission' => 'Enable Comment Submission Queue'
+    'commentssubmission' => 'Enable Comment Submission Queue',
+    'enable_twofactor' => 'Enable Two Factor Authentication'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2916,7 +2948,8 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
-    'fs_spam_config' => 'Configuration'
+    'fs_spam_config' => 'Configuration',
+    'fs_authentication' => 'Authentication'
 );
 
 $LANG_configselects['Core'] = array(

@@ -1,0 +1,9 @@
+<div id="panel-title" class="uk-panel-title">{lang_two_factor}</div>
+
+<div id="tfa-error"></div>
+
+{lang_not_enrolled}
+
+<button id="tfa-enroll" class="uk-button uk-button-success">
+	{lang_enroll_button}
+</button>

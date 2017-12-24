@@ -497,6 +497,16 @@ CREATE TABLE {$_TABLES['syndication']} (
 ";
 
 $_SQL[] = "
+CREATE TABLE {$_TABLES['tfa_backup_codes']} (
+  uid MEDIUMINT(8) NULL DEFAULT NULL,
+  code VARCHAR(128) NULL DEFAULT NULL,
+  used TINYINT(4) NULL DEFAULT '0',
+  INDEX `uid` (`uid`),
+  INDEX `code` (`code`)
+) ENGINE=MyISAM
+";
+
+$_SQL[] = "
 CREATE TABLE {$_TABLES['tokens']} (
   token varchar(32) NOT NULL,
   created datetime NOT NULL,
@@ -631,6 +641,8 @@ CREATE TABLE {$_TABLES['users']} (
   pwrequestid varchar(16) default NULL,
   act_token varchar(32) NOT NULL default '',
   act_time datetime NOT NULL default '1000-01-01 00:00:00.000000',
+  tfa_enabled tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+  tfa_secret varchar(128) NOT NULL DEFAULT NULL,
   status smallint(5) unsigned NOT NULL default '1',
   account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,

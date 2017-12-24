@@ -1766,6 +1766,25 @@ function glfusion_172()
 
     $_SQL = array();
 
+    $_SQL[] = "CREATE TABLE {$_TABLES['tfa_backup_codes']} (
+    	`uid` MEDIUMINT(8) NULL DEFAULT NULL,
+    	`code` VARCHAR(128) NULL DEFAULT NULL,
+    	`used` TINYINT(4) NULL DEFAULT '0',
+    	INDEX `uid` (`uid`),
+    	INDEX `code` (`code`)
+    ) ENGINE=MyISAM
+    ";
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `act_time`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NOT NULL DEFAULT NULL AFTER `tfa_enabled`;";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
+
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }

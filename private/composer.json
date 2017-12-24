@@ -11,6 +11,7 @@
         "simplepie/simplepie": "^1.5",
         "aziraphale/email-address-validator": "2",
         "misd/linkify": "^1.1",
-        "phpxmlrpc/phpxmlrpc": "^4.2"
+        "phpxmlrpc/phpxmlrpc": "^4.2",
+        "robthree/twofactorauth": "^1.6"
     }
 }

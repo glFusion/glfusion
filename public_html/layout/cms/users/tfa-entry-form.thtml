@@ -1,0 +1,22 @@
+{# begin {templatelocation} #}
+<div class="uk-vertical-align uk-text-center">
+	<div class="uk-grid uk-vertical-align-middle uk-margin-top-remove">
+		<div class="uk-width-medium-4-4">
+			<p class="uk-text-bold uk-text-large">
+				{lang_two_factor}
+			</p>
+			<form id="login" action="{site_url}/users.php" method="post" class="uk-panel uk-panel-box uk-form uk-align-center tm-loginform" style="max-width:250px;">
+				<input type="hidden" name="uid" value="{uid}">
+				<input type="hidden" name="{token_name}" value="{token_value}">
+				<input type="hidden" name="mode" value="tfa">
+				<div class="uk-form-row">
+					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_auth_code}" id="tfacode" name="tfacode" value="" required autofocus>
+				</div>
+				<div class="uk-form-row uk-margin">
+					<button type="submit" id="loginbutton" class="uk-width-1-1 uk-button uk-button-success uk-button-large">{lang_verify}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{# end {templatelocation} #}

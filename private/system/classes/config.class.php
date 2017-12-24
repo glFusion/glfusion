@@ -1325,7 +1325,7 @@ class config
     /**
      * This function builds the JavaScript array of configuration items
      * for the configuration search.
-s     */
+     */
     function _get_autocompletedata()
     {
         global $_PLUGINS, $_TABLES, $_CONF, $LANG_CONFIG,
