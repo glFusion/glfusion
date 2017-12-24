@@ -1,0 +1,25 @@
+{# begin {templatelocation} #}
+<div title="{txt}" data-uk-tooltip style="cursor:default;">
+{!if loopfilled}
+{!!set count {loopfilled} !!}
+{!while loopfilled}
+{!if isAdmin}
+    <i class="uk-icon uk-icon-circle uk-text-danger" style="display:inline-block;"></i>
+{!elseif isMod}
+    <i class="uk-icon uk-icon-circle uk-text-success" style="display:inline-block;"></i>
+{!else}
+    <i class="uk-icon uk-icon-circle uk-text-primary" style="display:inline-block;"></i>
+{!endif}
+   {!dec loopfilled}
+{!endwhile}
+{!endif}
+{!if loopopen}
+{!!set count {loopopen} !!}
+{!while loopopen}
+    <i class="uk-icon uk-icon-circle-o" style="color:#999;display:inline-block"></i>
+   {!dec loopopen}
+{!endwhile}
+{!endif}
+</div>
+{txt}
+{# end {templatelocation} #}
