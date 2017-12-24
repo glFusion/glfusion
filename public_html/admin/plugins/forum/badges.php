@@ -234,6 +234,11 @@ function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
                 ) );
         break;
 
+    case 'fb_data':
+        $badge = new \Forum\Badge($A);
+        $retval = $badge->getBadgeHTML();
+        break;
+
     default:
         $retval = $fieldvalue;
         break;

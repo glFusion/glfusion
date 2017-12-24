@@ -218,7 +218,7 @@ class Badge
         foreach ($badge_groups as $badge_group) {
             foreach ($badge_group as $badge) {
                 if (in_array($badge->fb_gl_grp, $grps)) {
-                    $badge->_getBadgeHTML();
+                    $badge->getBadgeHTML();
                     if ($badge->html != '') {
                         $retval[$uid][] = $badge;
                     }
@@ -236,7 +236,7 @@ class Badge
     *
     *   @return string  HTML for badge
     */
-    private function _getBadgeHTML()
+    public function getBadgeHTML()
     {
         // If html is defined at all, return it.
         if ($this->html !== NULL) {
