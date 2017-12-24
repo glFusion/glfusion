@@ -12,11 +12,10 @@
 	<a class="cpybtn" title="{lang_copy_to_clipboard}" data-clipboard-text="{tfa-secret}">
 		<i class="uk-icon-clipboard uk-icon-hover"></i>
 	</a>
-
 </p>
 
 <p>
-	{lang_enroll_enter_code}
+ 	{lang_enroll_enter_code}
 </p>
 
 <div class="uk-form-row">
