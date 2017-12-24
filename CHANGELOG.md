@@ -1,6 +1,7 @@
 ## v1.7.2 (Unreleased)
   - Reworked My Account account deletion - moved to its own tab with improved confirmation
   - Forum: New badge manager
+  - Implement Two Factor Authentication
   - Set proper cookie attributes on session cookie
   - CAPTCHA Updates to support CAPTCHA for login and lost password screens
   - CAPTCHA - fixed static image refresh
