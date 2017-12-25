@@ -107,9 +107,11 @@ class TwoFactor
     private function getTFAObject()
     {
         global $_CONF;
+        static $mp;
 
         if (empty($this->tfa)) {
-            $this->tfa = new RobThree\Auth\TwoFactorAuth($_CONF['site_name'], self::NUM_DIGITS,30);
+            $mp = new RobThree\Auth\Providers\Qr\glFusionQRProvider();
+            $this->tfa = new RobThree\Auth\TwoFactorAuth($_CONF['site_name'], self::NUM_DIGITS,30,'sha1', $mp);
         }
 
         return $this->tfa;
