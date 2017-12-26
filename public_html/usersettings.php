@@ -177,6 +177,7 @@ function edituser()
 
     if ( $A['account_type'] & LOCAL_USER ) {
         $preferences->set_var ('password_value', '');
+        $preferences->set_var ('password_help',SEC_showPasswordHelp());
         $preferences->parse ('current_password_option', 'current_password', true);
         $preferences->parse ('password_option', 'password', true);
         $preferences->set_var ('resynch_option', '');
@@ -1018,8 +1019,7 @@ function saveuser($A)
     $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
     $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
     if ( $current_password != '' && $current_password != NULL ) {
-        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) ||
-                ($A['cooktime'] != $_USER['cookietimeout'])) {
+        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) || ($A['cooktime'] != $_USER['cookietimeout'])) {
             if (empty($A['passwd']) || !SEC_check_hash($A['passwd'],$current_password)) {
                 COM_setMsg($MESSAGE[83],'error');
                 return COM_refresh ($_CONF['site_url'].'/usersettings.php');
@@ -1033,6 +1033,13 @@ function saveuser($A)
                     }
                     COM_setMsg( $MESSAGE[$ret], 'error',true );
                     return COM_refresh("{$_CONF['site_url']}/usersettings.php");
+                }
+            } else {
+                $err = SEC_checkPwdComplexity($A['newp']);
+                if ( count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    COM_setMsg($msg,'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 }
             }
         } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {

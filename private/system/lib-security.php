@@ -2091,4 +2091,123 @@ function SEC_2FAForm($uid)
     echo $display;
     exit;
 }
+
+/**
+* Checks password complexity to ensure it meets the configured rules
+*
+* @return   array of errors or empty array if no errors
+*
+*/
+function SEC_checkPwdComplexity($pwd)
+{
+    global $_CONF, $LANG_PWD;
+
+    $errors = array();
+
+    if ((!isset($_CONF['pwd_min_length'])  || $_CONF['pwd_min_length'] == 0) &&
+        (!isset($_CONF['pwd_max_length'])  || $_CONF['pwd_max_length'] == 0 ) &&
+        (!isset($_CONF['pwd_req_num'])     || $_CONF['pwd_req_num']    == 0 ) &&
+        (!isset($_CONF['pwd_req_letter'])  || $_CONF['pwd_req_letter'] == 0 ) &&
+        (!isset($_CONF['pwd_req_cap'])     || $_CONF['pwd_req_cap']    == 0 ) &&
+        (!isset($_CONF['pwd_req_lower'])   || $_CONF['pwd_req_lower']  == 0 ) &&
+        (!isset($_CONF['pwd_req_symbol'])  || $_CONF['pwd_req_symbol'] == 0 )
+        ) {
+        return array();
+    }
+
+    if ( isset($_CONF['pwd_min_length']) && $_CONF['pwd_min_length'] > 0 ) {
+        if ( strlen($pwd) < $_CONF['pwd_min_length'] ) {
+           $errors[] = $LANG_PWD['error_too_short'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_max_length']) && $_CONF['pwd_max_length'] > 0 ) {
+        if ( strlen($pwd) > $_CONF['pwd_max_length'] ) {
+            $errors[] = $LANG_PWD['error_too_long'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_num']) && $_CONF['pwd_req_num'] == 1 ) {
+        if ( !preg_match("#[0-9]+#", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_number'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_letter']) && $_CONF['pwd_req_letter'] == 1) {
+        if ( !preg_match("/[A-za-z]+/", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_letter'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_cap']) && $_CONF['pwd_req_cap'] == 1) {
+        if ( !preg_match('/[A-Z]/', $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_cap'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_lower']) && $_CONF['pwd_req_lower'] == 1) {
+        if ( !preg_match('/[a-z]/', $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_lower'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_symbol']) && $_CONF['pwd_req_symbol'] == 1 ) {
+        if ( !preg_match("#\W+#", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_symbol'];
+        }
+    }
+
+    return $errors;
+}
+
+/**
+* Builds the password requirements help widget
+*
+* @return   HTML
+*
+*/
+function SEC_showPasswordHelp()
+{
+    global $_CONF, $LANG_PWD;
+
+    $retval = '';
+
+    if ((!isset($_CONF['pwd_min_length'])  || $_CONF['pwd_min_length'] == 0) &&
+        (!isset($_CONF['pwd_max_length'])  || $_CONF['pwd_max_length'] == 0 ) &&
+        (!isset($_CONF['pwd_req_num'])     || $_CONF['pwd_req_num']    == 0 ) &&
+        (!isset($_CONF['pwd_req_letter'])  || $_CONF['pwd_req_letter'] == 0 ) &&
+        (!isset($_CONF['pwd_req_cap'])     || $_CONF['pwd_req_cap']    == 0 ) &&
+        (!isset($_CONF['pwd_req_lower'])   || $_CONF['pwd_req_lower']  == 0 ) &&
+        (!isset($_CONF['pwd_req_symbol'])  || $_CONF['pwd_req_symbol'] == 0 )
+        ) {
+        return '';
+    }
+
+    $retval .= '<strong>'.$LANG_PWD['title'].'</strong>';
+    $retval .= '<br>';
+
+    if ( $_CONF['pwd_min_length'] > 0 ) {
+        $retval .= sprintf('<li>'.$LANG_PWD['min_length'].'</li>',$_CONF['pwd_min_length']);
+    }
+    if ( $_CONF['pwd_max_length'] > 0 ) {
+        $retval .= sprintf('<li>'.$LANG_PWD['max_length'].'</li>',$_CONF['pwd_max_length']);
+    }
+    if ( $_CONF['pwd_req_num'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_num'].'</li>';
+    }
+    if ( $_CONF['pwd_req_letter'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_letter'].'</li>';
+    }
+    if ( $_CONF['pwd_req_cap'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_cap'].'</li>';
+    }
+    if ( $_CONF['pwd_req_lower'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_lower'].'</li>';
+    }
+    if ( $_CONF['pwd_req_symbol'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_symbol'].'</li>';
+    }
+    $retval .'</ul>';
+    return $retval;
+}
 ?>

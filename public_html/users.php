@@ -513,6 +513,7 @@ function newpasswordform ($uid, $requestid)
             'user_id'       => $uid,
             'user_name'     => DB_getItem ($_TABLES['users'], 'username',"uid = ".(int)$uid),
             'request_id'    => $requestid,
+            'password_help' => SEC_showPasswordHelp(),
             'lang_explain'  => $LANG04[90],
             'lang_username' => $LANG04[2],
             'lang_newpassword'  => $LANG04[4],
@@ -728,6 +729,12 @@ function createuser ( )
                 return $retval;
             }
             if ( $_CONF['registration_type'] == 1 && !empty($passwd) ) {
+                $err = SEC_checkPwdComplexity($passwd);
+                if (count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    $retval .= newuserform ($msg);
+                    return $retval;
+                }
                 $encryptedPasswd = SEC_encryptPassword($passwd);
             } else {
                 $encryptedPasswd = '';
@@ -891,6 +898,7 @@ function newuserform ($msg = '')
     }
     $user_templates->set_var ('email_conf', $email_conf);
 
+    $user_templates->set_var ('password_help', SEC_showPasswordHelp());
 
     $user_templates->parse('output', 'regform');
     $retval .= $user_templates->finish($user_templates->get_var('output'));
@@ -1086,26 +1094,30 @@ function _userSetnewpwd()
     global $_CONF, $_TABLES, $_USER, $LANG04;
 
     $retval = '';
-    if ( (empty ($_POST['passwd']))
-            || ($_POST['passwd'] != $_POST['passwd_conf']) ) {
+    if ( (empty ($_POST['passwd'])) || ($_POST['passwd'] != $_POST['passwd_conf']) ) {
         echo COM_refresh ($_CONF['site_url']
                  . '/users.php?mode=newpwd&amp;uid=' . COM_applyFilter($_POST['uid'],true)
                  . '&amp;rid=' . COM_applyFilter($_POST['rid']));
     } else {
         $uid = COM_applyFilter ($_POST['uid'], true);
         $reqid = COM_sanitizeID(COM_applyFilter ($_POST['rid']));
-        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
-                !empty ($reqid) && (strlen ($reqid) == 16)) {
+        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
             $uid = (int) $uid;
             $safereqid = DB_escapeString($reqid);
-            $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
-                               array ($uid, $safereqid));
+            $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),array ($uid, $safereqid));
             if ($valid == 1) {
-                $passwd = SEC_encryptPassword($_POST['passwd']);
-                DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
-                DB_delete ($_TABLES['sessions'], 'uid', $uid);
-                DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
-                echo COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
+                $err = SEC_checkPwdComplexity($_POST['passwd']);
+                if ( count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    $retval .= COM_showMessageText($msg,'',true,'error');
+                    $retval .= newpasswordform($uid,$reqid);
+                } else {
+                    $passwd = SEC_encryptPassword($_POST['passwd']);
+                    DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
+                    DB_delete ($_TABLES['sessions'], 'uid', $uid);
+                    DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
+                    echo COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
+                }
             } else { // request invalid or expired
                 $retval .= COM_showMessage (54,'','',1,'error');
                 $retval .= getpasswordform ();
@@ -1115,6 +1127,7 @@ function _userSetnewpwd()
             echo COM_refresh ($_CONF['site_url']);
         }
     }
+    return $retval;
 }
 
 function _userEmailpassword()
