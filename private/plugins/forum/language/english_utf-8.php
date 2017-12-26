@@ -249,7 +249,7 @@ $LANG_GF01 = array(
     'reset' => 'Reset',
     'q_del_item' => 'Are you sure you want to delete this badge?',
     'badge_updated' => 'Badge Updated',
-    'badge_save_error' => 'Error saving badge',
+    'badge_save_error' => 'Error saving item.',
     'add_badge'         => 'Add Badge',
     'badge_grp' => 'Badge Group',
     'site_grp'  => 'Site Group Name',
@@ -258,6 +258,7 @@ $LANG_GF01 = array(
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
     'badge_type' => 'Badge Type',
+    'add_rank' => 'Add Rank',
 );
 
 $LANG_GF02 = array(
@@ -547,6 +548,7 @@ $LANG_GF06 = array(
     9 => 'Import',
     10 => 'Forum Administration',
     11 => 'Badges',
+    12 => 'Ranks',
 );
 
 // User Functions Navbar

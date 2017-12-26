@@ -44,7 +44,7 @@ require_once $_CONF['path'].'plugins/forum/forum.php';
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function forum_upgrade() {
-    global $_CONF, $_TABLES, $_FF_CONF, $_FF_CONF, $_DB_dbms;
+    global $_CONF, $_TABLES, $_FF_CONF, $_DB_dbms;
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -199,6 +199,11 @@ function forum_upgrade() {
               PRIMARY KEY (`fb_id`),
               KEY `grp` (`fb_grp`,`fb_order`)
             ) ENGINE=MyISAM;";
+            $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
+              `posts` int(11) unsigned NOT NULL DEFAULT '0',
+              `dscp` varchar(40) NOT NULL DEFAULT '',
+              PRIMARY KEY (`posts`)
+            ) ENGINE=MyISAM;";
 
             // Copy existing badge images from the original directory to the
             // new location under public_html/images
@@ -244,6 +249,19 @@ function forum_upgrade() {
             }
             $c = config::get_instance();
             $c->del('grouptags','forum');
+
+            for ($i = 1; $i < 6; $i++) {
+                $lvl = 'level' . $i;
+                if (!isset($_FF_CONF[$lvl]) || !isset($_FF_CONF[$lvl . 'name'])) continue;
+                $posts = (int)$_FF_CONF[$lvl];
+                $dscp = DB_escapeString($_FF_CONF[$lvl . 'name']);
+                $sql = "INSERT INTO {$_TABLES['ff_ranks']}
+                        (posts, dscp) VALUES ($posts, '$dscp')";
+                DB_query($sql);
+                $c->del($lvl, 'forum');
+                $c->del($lvl . 'name', 'forum');
+            }
+            $c->del('ff_rank_settings', 'forum');
 
         default :
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);

@@ -130,7 +130,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
                 } else {
                     $admin_lvl = 0;
                 }
-                list($user_level, $user_levelname) = getRank($posts, $admin_lvl);
+                list($user_level, $user_levelname) = \Forum\Rank::getRank($posts, $admin_lvl);
                 $userarray['user_level'] = $user_level;
                 $userarray['user_levelname'] = $user_levelname;
 
@@ -563,79 +563,6 @@ function _ff_chkpostmode($postmode,$postmode_switch)
         }
     }
     return $postmode;
-}
-
-
-/**
-*   Get the user ranking stars and display text.
-*   Caches the output for repeated display
-*
-*   @param  integer $posts  Number of posts
-*   @param  integer $admin_lvl  0=None, 1=Moderator, 2=Forum Admin
-*   @rturn  array   Array of (image display, level description)
-*/
-function getRank($posts, $admin_lvl = 0)
-{
-    global $_CONF, $_FF_CONF;
-    static $cache = array();
-
-    $_FF_CONF['ranks'] = array(
-        1 => 'Newbie',
-        15 => 'Junior',
-        35 => 'Chatty',
-        70 => 'Regular Member',
-        120 => 'Active Member',
-    );
-    $total_ranks = count($_FF_CONF['ranks']);
-    $rank = 0;
-    $txt = '';
-    $isAdmin = false;
-    $isMod = false;
-
-    switch ($admin_lvl) {
-    case 2:
-        $rank = $total_ranks;
-        $txt = 'Site Admin';
-        $isAdmin = true;
-        break;
-    case 1:
-        $rank = $total_ranks;
-        $txt = 'Moderator';
-        $isMod = true;
-        break;
-    default:
-        $i = 0;
-        foreach ($_FF_CONF['ranks'] as $count=>$text) {
-            if ($posts < $count) break;;
-            $txt = $text;
-            $i++;
-        }
-        $rank = $i;
-        break;
-    }
-
-    // Initialize the cache if needed.
-    if (!isset($cache[$admin_lvl])) {
-        $cache[$admin_lvl] = array();
-    }
-    // Return cached userlevel if set.
-    if (array_key_exists($rank, $cache[$admin_lvl])) {
-        return array($cache[$admin_lvl][$rank], $txt);
-    }
-
-    // Create a new userlevel display from template if needed.
-    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
-    $T->set_file('stars', 'rank.thtml');
-    $T->set_var(array(
-        'loopfilled'  => $rank,
-        'loopopen'  => max(($total_ranks - $rank),0),
-        'txt'   => $txt,
-        'isAdmin' => $isAdmin,
-        'isMod' => $isMod,
-    ) );
-    $T->parse('output', 'stars');
-    $cache[$admin_lvl][$rank] = $T->finish($T->get_var('output'));
-    return array($cache[$admin_lvl][$rank], $txt);
 }
 
 ?>

@@ -85,16 +85,16 @@ $_FF_DEFAULT['sb_subject_size']        = 20;
 $_FF_DEFAULT['sb_latestpostonly']      = false;
 $_FF_DEFAULT['sideblock_numposts']     = 5;
 $_FF_DEFAULT['allowed_editwindow']     = 0;
-$_FF_DEFAULT['level1']                 = 1;
-$_FF_DEFAULT['level2']                 = 15;
-$_FF_DEFAULT['level3']                 = 35;
-$_FF_DEFAULT['level4']                 = 70;
-$_FF_DEFAULT['level5']                 = 120;
-$_FF_DEFAULT['level1name']             = 'Newbie';
-$_FF_DEFAULT['level2name']             = 'Junior';
-$_FF_DEFAULT['level3name']             = 'Chatty';
-$_FF_DEFAULT['level4name']             = 'Regular Member';
-$_FF_DEFAULT['level5name']             = 'Active Member';
+//$_FF_DEFAULT['level1']                 = 1;
+//$_FF_DEFAULT['level2']                 = 15;
+//$_FF_DEFAULT['level3']                 = 35;
+//$_FF_DEFAULT['level4']                 = 70;
+//$_FF_DEFAULT['level5']                 = 120;
+//$_FF_DEFAULT['level1name']             = 'Newbie';
+//$_FF_DEFAULT['level2name']             = 'Junior';
+//$_FF_DEFAULT['level3name']             = 'Chatty';
+//$_FF_DEFAULT['level4name']             = 'Regular Member';
+//$_FF_DEFAULT['level5name']             = 'Active Member';
 $_FF_DEFAULT['showblocks']              = 'leftblocks';     // noblocks, leftblocks, rightblocks
 $_FF_DEFAULT['usermenu']                = 'navbar';         // blockmenu, navbar, none
 $_FF_DEFAULT['silent_edit_default']     = true;
@@ -491,6 +491,7 @@ function plugin_initconfig_forum()
         $c->add('sb_latestpostonly', $_FF_DEFAULT['sb_latestpostonly'], 'select',
                 0, 4, 0, 20, true, 'forum');
 
+/*
         $c->add('ff_rank_settings', NULL, 'fieldset', 0, 5, NULL, 0, true,
                 'forum');
         $c->add('level1', $_FF_DEFAULT['level1'], 'text',
@@ -513,6 +514,7 @@ function plugin_initconfig_forum()
                 0, 5, 0, 90, true, 'forum');
         $c->add('level5name', $_FF_DEFAULT['level5name'], 'text',
                 0, 5, 0, 100, true, 'forum');
+*/
     }
 
     return true;

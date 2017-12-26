@@ -250,6 +250,12 @@ $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
   KEY `grp` (`fb_grp`,`fb_order`)
 ) ENGINE=MyISAM;";
 
+$_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
+  `posts` int(11) unsigned NOT NULL DEFAULT '0',
+  `dscp` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`posts`)
+) ENGINE=MyISAM;";
+
 $_SQL['d1'] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
 $_SQL['d2'] = "INSERT INTO {$_TABLES['ff_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
 $_SQL['d3'] = "INSERT INTO {$_TABLES['ff_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
@@ -257,5 +263,7 @@ $_SQL['d4'] = "INSERT INTO {$_TABLES['ff_topic']} (`id`, `forum`, `pid`, `uid`, 
 $_SQL['d5'] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
     (0,'1_site',20,1,'13','img','forum_user.png','Forum User'),
     (0,'1_site',10,1,'1','img','siteadmin_badge.png','Site Admin');";
+$_SQL['d6'] = "INSERT INTO {$_TABLES['ff_ranks']} VALUES
+    (1, 'Newbie'), (15, 'Junior'), (35, 'Chatty'), (70, 'Regular Member'), (120, 'Active Member');";
 
 ?>
