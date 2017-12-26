@@ -1,14 +1,14 @@
 {# begin {templatelocation} #}
-<div title="{txt}" data-uk-tooltip style="cursor:default;">
+<div title="{txt}" class="rankicons">
 {!if loopfilled}
 {!!set count {loopfilled} !!}
 {!while loopfilled}
 {!if isAdmin}
-    <i class="uk-icon uk-icon-circle uk-text-danger" style="display:inline-block;"></i>
+    <i class="uk-icon uk-icon-circle uk-text-danger"></i>
 {!elseif isMod}
-    <i class="uk-icon uk-icon-circle uk-text-success" style="display:inline-block;"></i>
+    <i class="uk-icon uk-icon-circle uk-text-success"></i>
 {!else}
-    <i class="uk-icon uk-icon-circle uk-text-primary" style="display:inline-block;"></i>
+    <i class="uk-icon uk-icon-circle uk-text-primary"></i>
 {!endif}
    {!dec loopfilled}
 {!endwhile}
@@ -16,7 +16,7 @@
 {!if loopopen}
 {!!set count {loopopen} !!}
 {!while loopopen}
-    <i class="uk-icon uk-icon-circle-o" style="color:#999;display:inline-block"></i>
+    <i class="uk-icon uk-icon-circle-o"></i>
    {!dec loopopen}
 {!endwhile}
 {!endif}

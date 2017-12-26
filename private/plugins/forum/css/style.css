@@ -413,3 +413,10 @@ li.header dt, li.header dd {
 	color:#000;
 	text-decoration:underline;
 }
+
+div.rankicons {
+    cursor:default;
+}
+div.rankicons i {
+    display:inline-block;
+}
