@@ -23,7 +23,7 @@
 			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
 			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
 			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{$LANG_ADMIN['delete']}</button>
-			<button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+			<button type="submit" class="uk-button uk-button-primary cancel" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
 		</div>
 	</div>
 
