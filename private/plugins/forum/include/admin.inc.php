@@ -49,6 +49,7 @@ $navbarMenu = array(
     $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
     $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
     $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
+    $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
 );
 if ( $_FF_CONF['enable_user_rating_system'] ) {
     $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
@@ -69,6 +70,7 @@ function FF_adminNav( $selected = '' )
         $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
         $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
         $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
+        $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
     );
     if ( $_FF_CONF['enable_user_rating_system'] ) {
         $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
