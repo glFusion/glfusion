@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <form id="rankedit" action="{site_admin_url}/plugins/forum/ranks.php" method="post"
 	class="uk-form uk-form-horizontal">
-	<input type="hidden" name="orig_posts" value="{posts}" />
+	<input type="hidden" name="orig_posts" value="{orig_posts}" />
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="fb_grp">{$LANG_GF93['posts']}</label>
