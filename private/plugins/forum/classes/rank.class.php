@@ -233,6 +233,7 @@ class Rank
         $txt = '';
         $isAdmin = false;
         $isMod = false;
+        $have_rank = true;
 
         switch ($admin_lvl) {
         case 2:
@@ -268,20 +269,20 @@ class Rank
         }
 
         if ($have_rank) {
-        // Create a new userlevel display from template if needed.
-        $T = new \Template($_CONF['path'] . 'plugins/forum/templates');
-        $T->set_file('stars', 'rank.thtml');
-        $T->set_var(array(
-            'loopfilled'  => $rank,
-            'loopopen'  => max(($total_ranks - $rank),0),
-            'txt'   => $txt,
-            'isAdmin' => $isAdmin,
-            'isMod' => $isMod,
-        ) );
-        $T->parse('output', 'stars');
-        $cache[$admin_lvl][$rank] = $T->finish($T->get_var('output'));
+            // Create a new userlevel display from template if needed.
+            $T = new \Template($_CONF['path'] . 'plugins/forum/templates');
+            $T->set_file('stars', 'rank.thtml');
+            $T->set_var(array(
+                'loopfilled'  => $rank,
+                'loopopen'  => max(($total_ranks - $rank),0),
+                'txt'   => $txt,
+                'isAdmin' => $isAdmin,
+                'isMod' => $isMod,
+            ) );
+            $T->parse('output', 'stars');
+            $cache[$admin_lvl][$rank] = $T->finish($T->get_var('output'));
         } else {
-        $cache[$admin_lvl][$rank] = '';
+            $cache[$admin_lvl][$rank] = '';
         }
         return array($cache[$admin_lvl][$rank], $txt);
     }
