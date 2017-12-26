@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<form action="{site_admin_url}/plugins/forum/ranks.php" method="post"
+<form id="rankedit" action="{site_admin_url}/plugins/forum/ranks.php" method="post"
 	class="uk-form uk-form-horizontal">
 	<input type="hidden" name="orig_posts" value="{posts}" />
 
@@ -28,4 +28,14 @@
 	</div>
 
 </form>
+<script type="text/javascript">
+$("#rankedit").validate({
+    rules: {
+        posts: {
+            required: true,
+            min: 1
+        }
+    }
+});
+</script>
 {# end {templatelocation} #}

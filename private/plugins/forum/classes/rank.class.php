@@ -37,7 +37,7 @@ class Rank
                 $this->Read($this->posts);
             } else {
                 // Set reasonable defaults
-                $this->posts = 0;
+                $this->posts = 1;
                 $this->dscp = '';
             }
         }
@@ -172,8 +172,17 @@ class Rank
         if (!empty($A)) {
             $this->setVars($A, false);
         }
+        if ($this->posts < 1) { // should be caught by JS validator
+            return $LANG_GF01['err_rank_zero'];
+        }
         if ($A['orig_posts'] > 0) {
             // updating an existing record
+            if ($this->posts != $A['old_posts']) {
+                // if changing the post count, make sure it doesn't exist
+                if (DB_count($_TABLES['ff_ranks'], 'posts', $this->posts) > 0) {
+                    return $LANG_GF01['err_rank_key_exists'];
+                }
+            }
             $sql1 = "UPDATE {$_TABLES['ff_ranks']} SET ";
             $sql3 = " WHERE posts = " . (int)$A['orig_posts'];
         } else {
@@ -274,7 +283,6 @@ class Rank
         } else {
         $cache[$admin_lvl][$rank] = '';
         }
-            
         return array($cache[$admin_lvl][$rank], $txt);
     }
 

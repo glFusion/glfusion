@@ -82,11 +82,12 @@ case 'save':
     $errors = $B->Save($_POST);
     if (empty($errors)) {
         COM_setMsg($LANG_GF01['rank_updated']);
+        echo COM_refresh($self);
+        exit;
     } else {
         COM_setMsg($errors, 'error');
+        $content .= $B->Edit();
     }
-    echo COM_refresh($self);
-    exit;
     break;
 
 case 'list':
@@ -96,7 +97,6 @@ default:
     $content .= FF_rank_AdminList();
     break;
 }
-
 $display = FF_siteHeader();
 $display .= FF_navbar($navbarMenu, $LANG_GF01['ranks']);
 $display .= $content;
