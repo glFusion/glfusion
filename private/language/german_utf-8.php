@@ -1747,7 +1747,7 @@ $LANG_DB_ADMIN = array(
 ###############################################################################
 # Two Factor Authentication
 
-$LANG_DB_ADMIN = array(
+$LANG_TFA = array(
     'error_invalid_code' => 'Two Factor Authenication Code was incorrect, please enter a valid code from your authenticator app or use a backup code.',
     'two_factor' => 'Two Factor Authentication',
     'two_factor_enabled' => 'Two Factor Authentication Enabled',
@@ -1773,6 +1773,27 @@ $LANG_DB_ADMIN = array(
     'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.',
     'copy_success' => 'Two Factor Token copied to clipboard',
     'copy_to_clipboard' => 'Copy to Clipboard'
+);
+
+###############################################################################
+# Password Rules
+
+$LANG_PWD = array(
+    'title' => 'Passwords must meet the follow rules',
+    'min_length' => 'Must be longer than %s characters',
+    'max_length' => 'Must not be longer than %s characters',
+    'req_num' => 'Must contain at least 1 number',
+    'req_letter' => 'Must contain at least 1 letter',
+    'req_cap' => 'Must contain at least 1 upper case letter',
+    'req_lower' => 'Must contain at least 1 lower case letter',
+    'req_symbol' => 'Must contain at least 1 special character such as ! $ % * & ^',
+    'error_too_short' => 'Password is too short',
+    'error_too_long' => 'Password is too long',
+    'error_no_number' => 'Password must contain at least one number',
+    'error_no_letter' => 'Password must contain at least one letter',
+    'error_no_cap' => 'Password must contain at least one upper case letter',
+    'error_no_lower' => 'Password must contain at least one lower case letter',
+    'error_no_symbol' => 'Password must contain at least one special character'
 );
 
 ###############################################################################
@@ -2893,7 +2914,14 @@ $LANG_confignames['Core'] = array(
     'debug_html_filter' => 'HTML-Filter Fehler aufzeichnen',
     'standard_auth_first' => '"Standard Auth" als erstes in Dropdown',
     'commentssubmission' => 'Warteschlange für Kommentare',
-    'enable_twofactor' => 'Enable Two Factor Authentication'
+    'enable_twofactor' => 'Enable Two Factor Authentication',
+    'pwd_min_length' => 'Minimum password length (0 to disable)',
+    'pwd_max_length' => 'Maximum password length (0 to disable)',
+    'pwd_req_num' => 'Require number in password',
+    'pwd_req_letter' => 'Require letter in password',
+    'pwd_req_cap' => 'Required upper case letter in password',
+    'pwd_req_lower' => 'Require lower case letter in password',
+    'pwd_req_symbol' => 'Require special character in password'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2953,7 +2981,8 @@ $LANG_fs['Core'] = array(
     'fs_update' => 'Aktualisierungs-Manager',
     'fs_rating' => 'Bewertungs-Optionen',
     'fs_spam_config' => 'Konfiguration',
-    'fs_authentication' => 'Authentication'
+    'fs_authentication' => 'Authentication',
+    'fs_pwd_complexity' => 'Password Rules'
 );
 
 $LANG_configselects['Core'] = array(
