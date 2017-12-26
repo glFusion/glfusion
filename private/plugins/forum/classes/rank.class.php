@@ -39,6 +39,7 @@ class Rank
                 // Set reasonable defaults
                 $this->posts = 1;
                 $this->dscp = '';
+                $this->orig_posts = 0;
             }
         }
     }
@@ -77,6 +78,7 @@ class Rank
     {
         switch ($key) {
         case 'posts':
+        case 'orig_posts':
             $this->properties[$key] = (int)$value;
             break;
         case 'dscp':
@@ -106,8 +108,12 @@ class Rank
     */
     public function setVars($A, $from_db = true)
     {
-        foreach ($A as $key=>$value) {
-            $this->$key = $value;
+        $this->posts = $A['posts'];
+        $this->dscp = $A['dscp'];
+        if ($from_db) {
+            $this->orig_posts = $this->posts;
+        } else {
+            $this->orig_posts = $A['orig_posts'];
         }
     }
 
@@ -153,6 +159,7 @@ class Rank
         $T->set_var(array(
             'posts'     => $this->posts,
             'dscp'      => $this->dscp,
+            'orig_posts' => $this->orig_posts,
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -175,16 +182,16 @@ class Rank
         if ($this->posts < 1) { // should be caught by JS validator
             return $LANG_GF01['err_rank_zero'];
         }
-        if ($A['orig_posts'] > 0) {
+        if ($this->orig_posts > 0) {
             // updating an existing record
-            if ($this->posts != $A['orig_posts']) {
+            if ($this->posts != $this->orig_posts) {
                 // if changing the post count, make sure it doesn't exist
                 if (DB_count($_TABLES['ff_ranks'], 'posts', $this->posts) > 0) {
                     return $LANG_GF01['err_rank_key_exists'];
                 }
             }
             $sql1 = "UPDATE {$_TABLES['ff_ranks']} SET ";
-            $sql3 = " WHERE posts = " . (int)$A['orig_posts'];
+            $sql3 = " WHERE posts = {$this->orig_posts}";
         } else {
             // inserting a new record
             $sql1 = "INSERT INTO {$_TABLES['ff_ranks']} SET ";
