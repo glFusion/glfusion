@@ -177,7 +177,7 @@ class Rank
         }
         if ($A['orig_posts'] > 0) {
             // updating an existing record
-            if ($this->posts != $A['old_posts']) {
+            if ($this->posts != $A['orig_posts']) {
                 // if changing the post count, make sure it doesn't exist
                 if (DB_count($_TABLES['ff_ranks'], 'posts', $this->posts) > 0) {
                     return $LANG_GF01['err_rank_key_exists'];
