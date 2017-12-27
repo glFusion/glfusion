@@ -613,12 +613,8 @@
 
 				<h2>Users and Submissions</h2>
 
-				<h2>Users</h2>
+				<h2>User Capabilities</h2>
 
-				<dl id="desc_disable_new_user_registration">
-					<dt>Disable New User Registration</dt>
-					<dd>When set to true completely disables all options to sign up as a new user. </dd>
-				</dl>
 
 				<dl id="desc_allow_user_themes">
 					<dt>Allow User Themes</dt>
@@ -665,14 +661,16 @@
 					<dd>When set to true, glFusion will hide the Content tab in the user profile screen. This tab allows users to block certain content and content authors, but it can also cause some confusion with site users.</dd>
 				</dl>
 
+				<dl id="desc_aftersave_user">
+					<dt>After Saving User</dt>
+					<dd>Which page to go to after a user has been saved: <br><br>* 'item': display the user's profile <br>* 'list': show admin's list of users (default) <br>* 'home': display the site's homepage <br>* 'admin': go to the &#8220;Admin Home&#8221; page, i.e. Command &amp; Control </dd>
+				</dl>
+
+				<h2>Authentication</h2>
+
 				<dl id="desc_enable_twofactor">
 					<dt>Enable Two Factor Authentication</dt>
 					<dd>Two Factor Authentication, also known as 2FA, is an extra layer of security that is known as "multi factor authentication" that requires not only a password and username but also a six-digit code supplied from your phone or an external app. If enabled, users will have the option to enroll their account into Two Factor Authentication for additional security.</dd>
-				</dl>
-
-				<dl id="desc_custom_registration">
-					<dt>Enable Custom Registration</dt>
-					<dd>When set to true, glFusion will let you use your own signup form for new user registrations. Please see the file lib-custom.php that ships with glFusion for an example. </dd>
 				</dl>
 
 				<dl id="desc_user_login_method_standard">
@@ -785,10 +783,7 @@
 					<dd>Required to use the GitHub login method. Please visit the <a href="https://github.com/settings/applications/new" target="_blank">GitHub Application Page </a>to create the Client Secret.</dd>
 				</dl>
 
-				<dl id="desc_aftersave_user">
-					<dt>After Saving User</dt>
-					<dd>Which page to go to after a user has been saved: <br><br>* 'item': display the user's profile <br>* 'list': show admin's list of users (default) <br>* 'home': display the site's homepage <br>* 'admin': go to the &#8220;Admin Home&#8221; page, i.e. Command &amp; Control </dd>
-				</dl>
+				<h2>Password Rules</h2>
 
 				<dl id="desc_pwd_min_length">
 					<dt>Minimum Password Length</dt>
@@ -823,13 +818,6 @@
 				<dl id="desc_pwd_req_symbol">
 					<dt>Require Special Character</dt>
 					<dd>If set to TRUE, passwords will be required to contain at least 1 special character such as ! # $ % ^ & *.</dd>
-				</dl>
-
-				<h2>Spam-X</h2>
-
-				<dl id="desc_spamx">
-					<dt>Spam-X Actions</dt>
-					<dd>Tells glFusion's Spam-X plugin what to do when a spam post has been detected. The value is the sum of all values that uniquely identify the Spam-X modules that should be executed. E.g. the &#8220;delete&#8221; action module uses 128, the &#8220;email admin&#8221; module uses 8, so if both modules should be executed, this option should be set to 128 + 8 = 136. </dd>
 				</dl>
 
 				<h2>Login Settings</h2>
@@ -900,6 +888,16 @@
 				</dl>
 
 				<h2>User Submission</h2>
+
+				<dl id="desc_disable_new_user_registration">
+					<dt>Disable New User Registration</dt>
+					<dd>When set to true completely disables all options to sign up as a new user. </dd>
+				</dl>
+
+				<dl id="desc_custom_registration">
+					<dt>Enable Custom Registration</dt>
+					<dd>When set to true, glFusion will let you use your own signup form for new user registrations. Please see the file lib-custom.php that ships with glFusion for an example. </dd>
+				</dl>
 
 				<dl id="desc_usersubmission">
 					<dt>User Submission Queue</dt>
@@ -1050,6 +1048,13 @@
 				<dl id="desc_rating_speedlimit">
 					<dt>Rating Speed Limit</dt>
 					<dd>Number of seconds a user must wait between each rating</dd>
+				</dl>
+
+				<h2>Spam-X</h2>
+
+				<dl id="desc_spamx">
+					<dt>Spam-X Actions</dt>
+					<dd>Tells glFusion's Spam-X plugin what to do when a spam post has been detected. The value is the sum of all values that uniquely identify the Spam-X modules that should be executed. E.g. the &#8220;delete&#8221; action module uses 128, the &#8220;email admin&#8221; module uses 8, so if both modules should be executed, this option should be set to 128 + 8 = 136. </dd>
 				</dl>
 
 				<h1>Images</h1>
