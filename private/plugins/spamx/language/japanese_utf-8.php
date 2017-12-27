@@ -159,7 +159,10 @@ $LANG_confignames['spamx'] = array(
     'sfs_username_confidence' => 'Minimum confidence level on Username match to trigger spam block',
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
     'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
-    'slc_max_links' => 'Maximum Links allowed in post'
+    'slc_max_links' => 'Maximum Links allowed in post',
+    'debug' => 'Debug Logging',
+    'akismet_enabled' => 'Akismet Module Enabled',
+    'akismet_api_key' => 'Akismet API Key (Required)'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -169,7 +172,8 @@ $LANG_configsubgroups['spamx'] = array(
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-Xの設定',
     'fs_sfs' => 'Stop Forum Spam Settings',
-    'fs_slc' => 'Spam Link Counter'
+    'fs_slc' => 'Spam Link Counter',
+    'fs_akismet' => 'Akismet'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

@@ -67,6 +67,7 @@
 				<ul>
 					<li>Stop Forum Spam (SFS)</li>
 					<li>Spam Link Counter (SLC)</li>
+					<li>Akismet</li>
 					<li>Personal Blacklist</li>
 					<li>IP Filter</li>
 					<li>IP of URL Filter</li>
@@ -119,6 +120,13 @@
 					spam and rejected.
 				</p>
 
+				<h2>Akismet</h2>
+
+				<p>
+ 					Used by millions of websites, Akismet filters out hundreds of millions of spam comments from the Web every day.
+ 					Sign up and get your Akismet Key at https://akismet.com/account/
+
+				</p>
 
 				<h2>Personal Blacklist</h2>
 
@@ -291,6 +299,11 @@
 					<dd>Whether to log recognized spam posts in the spamx.log logfile (if set to True) or not (False).</dd>
 				</dl>
 
+				<dl id="desc_debug">
+					<dt>Enable Debug Logging</dt>
+					<dd>Debug logging will enable additional logging on the StopForumSpam module, where it will log the return values and how they compare the the thresholds you have configured. Will create a log entry in spamx.log for every post.</dd>
+				</dl>
+
 				<dl id="desc_admin_override">
 					<dt>Don't Filter Admin Posts</dt>
 					<dd>The Spam-X plugin will filter posts by any user - even site admins. This can be a problem sometimes, e.g. when you want to post a note about spam that itself contains &ldquo;spammy&rdquo; URLs or keywords. When this option is set to True then posts made by users in the 'spamx Admin' group are not checked for spam. </dd>
@@ -344,6 +357,16 @@
 				<dl id="desc_slc_max_links">
 					<dt>Maximum Allowed Links</dt>
 					<dd>The maximum number of links allowed in a post. Anything above this number will be flagged as spam.</dd>
+				</dl>
+
+				<dl id="desc_akismet_enable">
+					<dt>Enable Akismet</dt>
+					<dd>Whether or not to enable the Akismet module.</dd>
+				</dl>
+
+				<dl id="desc_akismet_api_key">
+					<dt>Akismet API key</dt>
+					<dd>To utilize the Akismet Module, you must have a valid Akismet API key. You can obtain a key at https://akismet.com/account/.</dd>
 				</dl>
 
 			</div>
