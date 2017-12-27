@@ -157,7 +157,10 @@ $LANG_confignames['spamx'] = array(
     'sfs_username_confidence' => 'Schwellwert Benutzer-Name',
     'sfs_email_confidence' => 'Schwellwert E-Mail',
     'sfs_ip_confidence' => 'Schwellwert IP-Adresse',
-    'slc_max_links' => 'Maximale Links in Beiträgen'
+    'slc_max_links' => 'Maximale Links in Beiträgen',
+    'debug' => 'Debug Logging',
+    'akismet_enabled' => 'Akismet Module Enabled',
+    'akismet_api_key' => 'Akismet API Key (Required)'
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -167,7 +170,8 @@ $LANG_configsubgroups['spamx'] = array(
 $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Haupteinstellungen',
     'fs_sfs' => 'Stop Forum Spam Einstellungen',
-    'fs_slc' => 'Spam Link Zähler'
+    'fs_slc' => 'Spam Link Zähler',
+    'fs_akismet' => 'Akismet'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']

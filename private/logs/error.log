@@ -1,1 +1,39 @@
 *** dummy entry ***
+27 Dec 2017 18:10:35 - 204.128.192.31: Email Error: You must provide at least one recipient email address. 
+27 Dec 2017 18:10:36 - 204.128.192.31: SocialShare: Running refresh cache 
+27 Dec 2017 18:35:25 - 204.128.192.31: Email Error: You must provide at least one recipient email address. 
+27 Dec 2017 18:39:19 - 204.128.192.31: Email Error: You must provide at least one recipient email address. 
+27 Dec 2017 19:05:33 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/Item.class.php 
+27 Dec 2017 19:05:33 - 204.128.192.31: /var/www/sites/dev/private/plugins/astoreclasses/phpFastCache/CacheManager.php 
+27 Dec 2017 19:05:45 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/Item.class.php 
+27 Dec 2017 19:05:45 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/CacheManager.php 
+27 Dec 2017 19:14:36 - 204.128.192.31: Astore\Item 
+27 Dec 2017 19:14:36 - 204.128.192.31: phpFastCache\CacheManager 
+27 Dec 2017 19:15:13 - 204.128.192.31: Astore\Item 
+27 Dec 2017 19:15:44 - 204.128.192.31: phpFastCache\CacheManager 
+27 Dec 2017 19:15:56 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/CacheManager.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/CacheManager.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Drivers/Files/Driver.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/DriverBaseTrait.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolTrait.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/CacheItemPoolTrait.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Util/ClassNamespaceResolverTrait.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/IO/IOHelperTrait.php 
+27 Dec 2017 19:18:09 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolInterface.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/CacheManager.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Drivers/Files/Driver.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/DriverBaseTrait.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolTrait.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/CacheItemPoolTrait.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Util/ClassNamespaceResolverTrait.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/IO/IOHelperTrait.php 
+27 Dec 2017 19:18:52 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolInterface.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/CacheManager.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Drivers/Files/Driver.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/DriverBaseTrait.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolTrait.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/CacheItemPoolTrait.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Util/ClassNamespaceResolverTrait.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/IO/IOHelperTrait.php 
+27 Dec 2017 19:19:17 - 204.128.192.31: /var/www/sites/dev/private/plugins/astore/classes/phpFastCache/phpFastCache/Core/Pool/ExtendedCacheItemPoolInterface.php 
+27 Dec 2017 19:38:10 - 77.88.47.66: 2 - fopen(/var/www/sites/dev/private/logs/404.log): failed to open stream: Permission denied @ /var/www/sites/dev/public_html/lib-common.php line 6359 

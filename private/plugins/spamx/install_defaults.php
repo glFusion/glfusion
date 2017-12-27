@@ -76,6 +76,9 @@ $_SPX_DEFAULT['sfs_email_confidence'] = (float) 50.00;
 $_SPX_DEFAULT['sfs_ip_confidence'] = (float) 25.00;
 
 
+$_SPX_DEFAULT['akismet_enabled'] = false;
+$_SPX_DEFAULT['akismet_api_key'] = '';
+
 /**
 * Initialize Spam-X plugin configuration
 *
@@ -104,16 +107,12 @@ function plugin_initconfig_spamx()
 
         $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'spamx');
         $c->add('fs_main', NULL, 'fieldset', 0, 0, NULL, 0, true, 'spamx');
-        $c->add('logging', $_SPX_DEFAULT['logging'], 'select',
-                0, 0, 1, 10, true, 'spamx');
-        $c->add('admin_override', $_SPX_DEFAULT['admin_override'], 'select',
-                0, 0, 1, 20, true, 'spamx');
-        $c->add('timeout', $_SPX_DEFAULT['timeout'], 'text',
-                0, 0, null, 30, true, 'spamx');
-        $c->add('notification_email', $_SPX_DEFAULT['notification_email'],
-                'text', 0, 0, null, 40, $enable_email, 'spamx');
-        $c->add('action', $_SPX_DEFAULT['action'], 'text',
-                0, 0, null, 50, false, 'spamx');
+        $c->add('logging', $_SPX_DEFAULT['logging'], 'select',0, 0, 1, 10, true, 'spamx');
+        $c->add('debug', 0, 'select',0, 0, 1, 20, true, 'spamx');
+        $c->add('admin_override', $_SPX_DEFAULT['admin_override'], 'select',0, 0, 1, 30, true, 'spamx');
+        $c->add('timeout', $_SPX_DEFAULT['timeout'], 'text',0, 0, null, 40, true, 'spamx');
+        $c->add('notification_email', $_SPX_DEFAULT['notification_email'],'text', 0, 0, null, 50, $enable_email, 'spamx');
+        $c->add('action', $_SPX_DEFAULT['action'], 'text',0, 0, null, 60, false, 'spamx');
 
         $c->add('fs_sfs', NULL, 'fieldset', 0, 1, NULL, 0, true, 'spamx');
         $c->add('sfs_username_check', $_SPX_DEFAULT['sfs_username_check'], 'select',0, 1, 1, 10, true, 'spamx');
@@ -124,7 +123,12 @@ function plugin_initconfig_spamx()
         $c->add('sfs_ip_confidence', $_SPX_DEFAULT['sfs_ip_confidence'], 'text',0, 1, 1, 60, true, 'spamx');
 
         $c->add('fs_slc', NULL, 'fieldset', 0, 2, NULL, 0, true, 'spamx');
-        $c->add('slc_max_links', 5, 'text',0, 1, 1, 10, true, 'spamx');
+        $c->add('slc_max_links', 5, 'text',0, 2, 1, 10, true, 'spamx');
+
+        $c->add('fs_akismet', NULL, 'fieldset', 0, 3, NULL, 0, true, 'spamx');
+        $c->add('akismet_enabled', 0, 'select',0, 3, 1, 10, true, 'spamx');
+        $c->add('akismet_api_key', '', 'text',0, 3, NULL, 20, true, 'spamx');
+
     }
 
     return true;

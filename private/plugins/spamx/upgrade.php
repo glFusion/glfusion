@@ -68,6 +68,13 @@ function spamx_upgrade()
             $c->add('fs_slc', NULL, 'fieldset', 0, 2, NULL, 0, true, 'spamx');
             $c->add('slc_max_links', 5, 'text',0, 2, 1, 10, true, 'spamx');
 
+        case '1.2.2' :
+            $c = config::get_instance();
+            $c->add('debug', 0, 'select',0, 0, 1, 15, true, 'spamx');
+            $c->add('fs_akismet', NULL, 'fieldset', 0, 3, NULL, 0, true, 'spamx');
+            $c->add('akismet_enabled', 0, 'select',0, 3, 1, 10, true, 'spamx');
+            $c->add('akismet_api_key', '', 'text',0, 3, NULL, 20, true, 'spamx');
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
             break;

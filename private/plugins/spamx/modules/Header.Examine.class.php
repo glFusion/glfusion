@@ -39,7 +39,7 @@ class Header extends BaseCommand {
     /**
      * Here we do the work
      */
-    function execute($comment)
+    function execute($comment,$data)
     {
         global $_CONF, $_TABLES, $_USER, $LANG_SX00, $result;
 

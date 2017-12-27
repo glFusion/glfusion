@@ -1098,7 +1098,15 @@ function saveuser($A)
     }
     $profile .= $A['location'] . '<br />' . $A['sig'] . '<br />'
                 . PLG_replaceTags($A['about']) . '<br />' . $A['pgpkey'] . '</p>';
-    $result = PLG_checkforSpam ($profile, $_CONF['spamx']);
+
+    $spamData = array(
+        'username'  => $A['username'],
+        'email'     => $A['email'],
+        'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'      => 'profile'
+    );
+
+    $result = PLG_checkforSpam ($profile, $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }

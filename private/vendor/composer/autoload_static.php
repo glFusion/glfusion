@@ -15,12 +15,18 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'splitbrain\\PHPArchive\\' => 22,
         ),
+        'p' => 
+        array (
+            'phpFastCache\\' => 13,
+        ),
         'R' => 
         array (
             'RobThree\\Auth\\' => 14,
         ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
+            'Psr\\Cache\\' => 10,
             'PhpXmlRpc\\' => 10,
         ),
         'M' => 
@@ -38,9 +44,21 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
         ),
+        'phpFastCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpfastcache/phpfastcache/src/phpFastCache',
+        ),
         'RobThree\\Auth\\' => 
         array (
             0 => __DIR__ . '/..' . '/robthree/twofactorauth/lib',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'PhpXmlRpc\\' => 
         array (

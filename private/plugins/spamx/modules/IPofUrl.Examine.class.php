@@ -38,7 +38,7 @@ class IPofUrl extends BaseCommand {
     /**
      * Here we do the work
      */
-    function execute($comment)
+    function execute($comment,$data)
     {
         global $_CONF, $_TABLES, $_USER, $LANG_SX00, $result;
 
@@ -52,10 +52,9 @@ class IPofUrl extends BaseCommand {
          * Check for IP of url in blacklist
          */
         /*
-        * regex to find urls $2 = fqd
+        * regex to find urls $1 = fqd
         */
-        $regx = '(ftp|http|file)://([^/\\s]+)';
-        $num = preg_match_all ("#{$regx}#", html_entity_decode ($comment), $urls);
+        $num = preg_match_all("/<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"/", $comment, $urls);
 
         $result = DB_query ("SELECT value FROM {$_TABLES['spamx']} WHERE name='IPofUrl'", 1);
         $nrows = DB_numRows ($result);
@@ -64,17 +63,22 @@ class IPofUrl extends BaseCommand {
         for ($j = 1; $j <= $nrows; $j++) {
             list ($val) = DB_fetchArray ($result);
             for ($i = 0; $i < $num; $i++) {
-              $ip = gethostbyname ($urls[2][$i]);
-              if ($val == $ip) {
-                $ans = 1; // quit on first positive match
-                SPAMX_log ($LANG_SX00['foundspam'] . $urls[2][$i] .
-                           $LANG_SX00['foundspam2'] . $uid .
-                           $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
-                break;
-              }
+                $url = $urls[1][$i];
+                if ($url === "" || strpos($url, $_CONF['site_url']) !== false) {
+                    continue;
+                }
+                $parsedURL = parse_url($url);
+                $ip = gethostbyname ($parsedURL['host']);
+                if ($val == $ip) {
+                    $ans = 1; // quit on first positive match
+                    SPAMX_log ($LANG_SX00['foundspam'] . $urls[2][$i] .
+                               $LANG_SX00['foundspam2'] . $uid .
+                               $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                    break;
+                }
             }
             if ($ans == 1) {
-              break;
+                break;
             }
         }
         return $ans;

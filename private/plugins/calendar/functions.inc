@@ -557,7 +557,23 @@ function plugin_savesubmission_calendar($A)
                . $A['address1'] . '<br/>' . $A['address2']
                . '<br/>' . $A['city'] . ', ' . $A['zipcode']
                . '<br/>' . $A['description'] . '</p>';
-    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
+
+    if ( COM_isAnonUser() ) {
+        $uname = '';
+        $email = '';
+    } else {
+        $uname = $_USER['username'];
+        $email = $_USER['email'];
+    }
+
+    $spamData = array(
+        'username' => '',
+        'email' => '',
+        'ip'    => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type' => 'event',
+    );
+
+    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');

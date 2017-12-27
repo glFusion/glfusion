@@ -230,7 +230,15 @@ function TRB_checkForSpam($url, $title = '', $blog = '', $excerpt = '')
     global $_CONF;
 
     $comment = TRB_formatComment($url, $title, $blog, $excerpt);
-    $result = PLG_checkforSpam($comment, $_CONF['spamx']);
+
+    $spamData = array(
+        'username' => '',
+        'email'    => '',
+        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'     => 'trackback'
+    );
+
+    $result = PLG_checkforSpam($comment, $_CONF['spamx'],$spamData);
 
     if ($result > 0) {
         return TRB_SAVE_SPAM;

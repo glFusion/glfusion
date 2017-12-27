@@ -39,7 +39,7 @@ class SFS extends BaseCommand {
     /**
      * Here we do the work
      */
-    function execute ($comment)
+    function execute ($comment,$data)
     {
         global $_USER, $LANG_SX00;
 
@@ -52,7 +52,7 @@ class SFS extends BaseCommand {
         }
 
         $sfs = new SFSbase();
-        if ($sfs->CheckForSpam ($comment)) {
+        if ($sfs->CheckForSpam ($comment,$data)) {
             $ans = 1;
             SPAMX_log ($LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
                        $LANG_SX00['foundspam2'] . $uid .

@@ -2,7 +2,7 @@
     <id>spamx</id>
     <name>SPAM-X</name>
     <description>SPAM Prevention</description>
-    <version>1.2.2</version>
+    <version>1.3.0</version>
     <glfusionversion>1.7.2</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
