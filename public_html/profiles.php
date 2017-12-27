@@ -107,7 +107,15 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
             // do a spam check with the unfiltered message text and subject
             $mailtext = $subject . "\n" . $message . $sig;
-            $result = PLG_checkforSpam ($mailtext, $_CONF['spamx']);
+
+            $spamData = array(
+                'username' => $author,
+                'email'     => $authoremail,
+                'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+                'type'      => 'message'
+            );
+
+            $result = PLG_checkforSpam ($mailtext, $_CONF['spamx'],$spamData);
             if ($result > 0) {
                 COM_updateSpeedlimit ('mail');
                 COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -369,7 +377,14 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $A['story_image'] = $story->DisplayElements('story_image');
     $A['day'] = $story->DisplayElements('date');
 
-    $result = PLG_checkforSpam ($shortmsg, $_CONF['spamx']);
+    $spamData = array(
+        'username'  => $from,
+        'email'     => $fromemail,
+        'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'      => 'message'
+    );
+
+    $result = PLG_checkforSpam ($shortmsg, $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_updateSpeedlimit ('mail');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');

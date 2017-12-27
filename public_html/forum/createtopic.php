@@ -1048,12 +1048,16 @@ function FF_saveTopic( $forumData, $postData, $action )
     // spamx check
     if ($_FF_CONF['use_spamx_filter'] == 1 && $okToSave == true) {
         SESS_unSet('spamx_msg'); // clear out the message.
-        // Check for SPAM
         $spamcheck = '<h1>' . $postData['subject'] . '</h1><p>' . FF_formatTextBlock($postData['comment'],$postData['postmode'],'preview',$status) . '</p>';
-        $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
+        $spamCheckData = array(
+            'username'  => $postData['name'],
+            'email'     => $email,
+            'ip'        => $REMOTE_ADDR,
+            'type'      => 'forum-post');
+
+        $result = PLG_checkforSpam($spamcheck, $_CONF['spamx'],$spamCheckData);
         // Now check the result and redirect to index.php if spam action was taken
         if ($result > 0) {
-            // then tell them to get lost ...
             $errorMessages .= $LANG_GF02['spam_detected'];
             if ( SESS_isSet('spamx_msg')) {
                 $errorMessages .= '<br>'. SESS_getVar('spamx_msg'). '<br>';
@@ -1063,6 +1067,8 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
 
+// no longer need to do this since we have updates spam-x to handle all the data
+/*
     if ( $_FF_CONF['use_sfs'] == 1 && COM_isAnonUser() && function_exists('plugin_itemPreSave_spamx')) {
        $spamCheckData = array(
             'username'  => $postData['name'],
@@ -1075,7 +1081,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             $okToSave = false;
         }
     }
-
+*/
     if ( $okToSave == false ) {
         $retval .= _ff_alertMessage($errorMessages,$LANG_GF01['ERROR'],'&nbsp;');
         return array(false,$retval);

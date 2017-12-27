@@ -889,7 +889,22 @@ function plugin_save_submit_links($A)
     $spamcheck = '<p>'. COM_createLink($A['title'], $A['url']) .' ('
                . $A['categorydd'] . ')<br/>' . $A['description']
                . '</p>';
-    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
+
+    if ( COM_isAnonUser() ) {
+        $uname = '';
+        $email = '';
+    } else {
+        $uname = $_USER['username'];
+        $email = $_USER['email'];
+    }
+    $spamData = array(
+        'username' => $uname,
+        'email'    => $email,
+        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'     => 'link',
+    );
+
+    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_updateSpeedlimit('submit');
         COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');

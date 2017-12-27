@@ -1392,7 +1392,7 @@ $comment_template->set_var('title', $title);
  */
 function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $REMOTE_ADDR;
 
     $ret = 0;
 
@@ -1435,7 +1435,24 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Let plugins have a chance to check for spam
     $spamcheck = '<h1>' . $title . '</h1><p>' . $comment . '</p>';
-    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx']);
+    if ( COM_isAnonUser() ) {
+        if (isset($_POST['username']) ) {
+            $uname = $_POST['username'];
+        } else {
+            $uname = '';
+        }
+        $email = '';
+    } else {
+        $uname = $_USER['username'];
+        $email = $_USER['email'];
+    }
+    $spamData = array(
+        'username' => $uname,
+        'email'    => $email,
+        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'     => 'comment'
+    );
+    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx'],$spamData);
     // Now check the result and display message if spam action was taken
     if ($result > 0) {
         // update speed limit nonetheless

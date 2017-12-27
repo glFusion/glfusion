@@ -288,7 +288,12 @@ function savestory($A)
     $story->loadSubmission();
 
     // pseudo-formatted story text for the spam check
-    $result = PLG_checkforSpam ($story->GetSpamCheckFormat(), $_CONF['spamx']);
+    $spamData = array(
+        'ip'    => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'  => 'blog-post'
+    );
+
+    $result = PLG_checkforSpam ($story->GetSpamCheckFormat(), $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
