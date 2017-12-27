@@ -383,7 +383,7 @@ class Topic
             COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
             return NULL;
         } elseif (DB_numRows($res) == 0) {
-            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
+//            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
             return NULL;;
         } else {
             return DB_fetchArray($res, false);
