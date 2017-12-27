@@ -172,7 +172,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         // no need to update password
     } else {
         if ( $passwd == '' ) {
-            $passwd = USER_createPassword(8);
+            $passwd = SEC_generateStrongPassword(12,'lud');
         }
         $passwd2 = SEC_encryptPassword($passwd);
         DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
