@@ -251,7 +251,14 @@ $LANG_GF01 = array(
     'site_grp' => 'Site Group Name',
     'badge_img' => 'Badge Image',
     'create_new' => 'Create New',
-    'badges' => 'Badges'
+    'badges' => 'Badges',
+    'badge_css' => 'CSS Class',
+    'badge_type' => 'Badge Type',
+    'add_rank' => 'Add Rank',
+    'err_rank_zero' => 'Post count must be greater than zero.',
+    'err_rank_key_exists' => 'A rank for this post count already exists.',
+    'ranks' => 'Forum Ranks',
+    'rank_updated' => 'Rank Updated'
 );
 
 $LANG_GF02 = array(
@@ -539,7 +546,8 @@ $LANG_GF06 = array(
     8 => 'Moderación de la Comunidad',
     9 => 'Importar',
     10 => 'Forum Administration',
-    11 => 'Badges'
+    11 => 'Badges',
+    12 => 'Ranks'
 );
 
 $LANG_GF07 = array(

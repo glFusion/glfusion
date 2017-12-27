@@ -249,11 +249,11 @@ $LANG_GF01 = array(
     'reset' => 'Reset',
     'q_del_item' => 'Are you sure you want to delete this badge?',
     'badge_updated' => 'Badge Updated',
-    'badge_save_error' => 'Error saving item.',
+    'badge_save_error' => 'Error saving badge',
     'add_badge'         => 'Add Badge',
     'badge_grp' => 'Badge Group',
     'site_grp'  => 'Site Group Name',
-    'badge_img' => 'Image',
+    'badge_img' => 'Badge Image',
     'create_new' => 'Create New',
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
@@ -261,6 +261,8 @@ $LANG_GF01 = array(
     'add_rank' => 'Add Rank',
     'err_rank_zero' => 'Post count must be greater than zero.',
     'err_rank_key_exists' => 'A rank for this post count already exists.',
+    'ranks' => 'Forum Ranks',
+    'rank_updated' => 'Rank Updated',
 );
 
 $LANG_GF02 = array(

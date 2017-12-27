@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Implemented password complexity rules
   - Reworked My Account account deletion - moved to its own tab with improved confirmation
   - Forum: New badge manager
   - Implement Two Factor Authentication
@@ -21,7 +22,7 @@
   - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
   - Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
   - mailto: links in user administration list were incorrect.
-  - New theme class - .tm-list to allow more control over lists such as What's New or upcoming events
+  - New theme style class - .tm-list to allow more control over lists such as What's New or upcoming events
 
 ## v1.7.1 (October 22, 2017)
   - Don't override the label for User Menu in menu builder (Lee)
