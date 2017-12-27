@@ -46,7 +46,7 @@ class BlackList extends BaseCommand
     /**
      * Here we do the work
      */
-    public function execute($comment)
+    public function execute($comment,$data)
     {
         global $_CONF, $_TABLES, $_USER, $LANG_SX00;
 

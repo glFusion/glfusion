@@ -41,7 +41,7 @@ class DeleteComment extends BaseCommand {
         $num = 128;
     }
 
-    function execute($comment)
+    function execute($comment,$data)
     {
         global $result, $_CONF, $_TABLES, $LANG_SX00;
         $result = 128;

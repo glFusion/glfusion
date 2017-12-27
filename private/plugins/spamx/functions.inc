@@ -210,7 +210,7 @@ function plugin_upgrade_spamx()
  * @return  int                 > 0: spam detected, == 0: no spam
  *
  */
-function plugin_checkforSpam_spamx ($comment, $action = -1)
+function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
 {
     global $_CONF, $_SPX_CONF;
 
@@ -242,7 +242,7 @@ function plugin_checkforSpam_spamx ($comment, $action = -1)
         $filename = $Examine . '.Examine.class.php';
         require_once ($spamx_path . $filename);
         $EX = new $Examine;
-        $res = $EX->execute ($comment);
+        $res = $EX->execute ($comment, $data);
         if ($res == 1) {
             break;
         }
@@ -259,7 +259,7 @@ function plugin_checkforSpam_spamx ($comment, $action = -1)
  * @return  int                 number of message to display to the spammer
  *
  */
-function plugin_spamaction_spamx ($comment, $action)
+function plugin_spamaction_spamx ($comment, $action,$data)
 {
     global $_CONF, $_SPX_CONF;
 
@@ -290,7 +290,7 @@ function plugin_spamaction_spamx ($comment, $action)
     foreach ($Spamx_Action as $Act => $Num) {
         if (($action & $Num) == $Num) {
             $AC = new $Act;
-            $AC->execute ($comment);
+            $AC->execute ($comment,$data);
 
             $res = max ($res, $AC->result ());
         }
@@ -337,41 +337,6 @@ function plugin_geticon_spamx ()
     global $_CONF;
 
     return $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png';
-}
-
-function plugin_itemPreSave_spamx($type, $data)
-{
-    global $_CONF, $REMOTE_ADDR, $_SPX_CONF, $LANG_SX00;
-
-    if ( !isset($_SPX_CONF['sfs_username_check']) ) $_SPX_CONF['sfs_username_check'] = false;
-    if ( !isset($_SPX_CONF['sfs_email_check']) ) $_SPX_CONF['sfs_email_check'] = true;
-    if ( !isset($_SPX_CONF['sfs_ip_check']) ) $_SPX_CONF['sfs_ip_check'] = true;
-
-    $username = '';
-    $email    = '';
-    $ip       = '';
-
-    if (isset($data['username']) && $_SPX_CONF['sfs_username_check'] == true ) {
-        $username = $data['username'];
-    }
-    if ( isset($data['email']) && $_SPX_CONF['sfs_email_check'] == true ) {
-        $email = $data['email'];
-    }
-    if ( isset($data['ip']) && $_SPX_CONF['sfs_ip_check'] == true) {
-        $ip = $data['ip'];
-    }
-
-    if ( $username == '' && $email =='' && $ip == '' ) return '';
-
-    if ( @file_exists($_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php') ) {
-        require_once $_CONF['path'].'/plugins/spamx/modules/SFS.Misc.class.php';
-        $EX = new SFSreg;
-        $res = $EX->execute($type, $email, $REMOTE_ADDR, $username);
-        if ($res > 0) {
-            return $LANG_SX00['invalid_email_or_ip'];
-        }
-    }
-    return '';
 }
 
 function plugin_getconfigelementhelp_spamx($type, $option, $doclang = 'english' )

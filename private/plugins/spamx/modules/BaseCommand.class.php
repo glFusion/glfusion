@@ -28,7 +28,7 @@ class BaseCommand {
     {
     }
 
-    function execute($comment)
+    function execute($comment,$data)
     {
         return 0;
     }

@@ -50,16 +50,40 @@ class SFSbase {
     *       Error messages are logged in glFusion's error.log
     *
     */
-    function CheckForSpam ($post)
+    function CheckForSpam ($post,$data)
     {
         global $_SPX_CONF, $REMOTE_ADDR;
 
         $retval = false;
-        $ip = $REMOTE_ADDR;
 
-        if ( empty ($post) || $ip == '' ) {
-            return $retval;
+        if ( !isset($_SPX_CONF['sfs_username_check']) ) $_SPX_CONF['sfs_username_check'] = false;
+        if ( !isset($_SPX_CONF['sfs_email_check']) ) $_SPX_CONF['sfs_email_check'] = true;
+        if ( !isset($_SPX_CONF['sfs_ip_check']) ) $_SPX_CONF['sfs_ip_check'] = true;
+
+        $username = '';
+        $email    = '';
+        $ip       = '';
+        $type     = '';
+
+        if (isset($data['username']) && $_SPX_CONF['sfs_username_check'] == true ) {
+            $username = $data['username'];
         }
+        if ( isset($data['email']) && $_SPX_CONF['sfs_email_check'] == true ) {
+            $email = $data['email'];
+        }
+        if ( isset($data['ip']) && $_SPX_CONF['sfs_ip_check'] == true) {
+            $ip = $data['ip'];
+        }
+
+        if ( isset($data['type']) ) {
+            $type = $data['type'];
+        } else {
+            $type = 'comment';
+        }
+
+        if ( $ip == '' ) $ip = $REMOTE_ADDR;
+
+        if ( $post == '' && $username == '' && $email =='' && $ip == '' ) return $retval;
 
         $arguments = array();
         $response = '';
@@ -76,6 +100,12 @@ class SFSbase {
         if ( $ip != '' ) {
             $requestArgs .= 'ip='.$ip.'&';
         }
+        if ( $email != '' ) {
+            $requestArgs .= 'email='.urlencode($email).'&';
+        }
+        if ( $username != '' ) {
+            $requestArgs .= 'username='.urlencode($username).'&';
+        }
         $requestArgs .= 'cmd=display';
         $url = $url . $requestArgs;
         $error = $http->GetRequestArguments($url,$arguments);
@@ -86,12 +116,35 @@ class SFSbase {
             if ( $error == "" || strlen($body) > 0 ) {
                 $response = $response . $body;
                 $result = @unserialize($response);
-
-                if (!$result) return 0;     // invalid data, assume ok
-
-                if (isset($result['ip']) && $result['ip']['appears'] == 1 && $result['ip']['confidence'] > (float) 25) {
-                    $retval = true;
-                    SPAMX_log ("SFS: spam detected");
+                if (!$result) {
+                    return $retval;     // invalid data, assume ok
+                }
+                if ( isset($result['ip']) && $result['ip']['appears'] == 1 ) {
+                    if ( $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
+                        $retval = true;
+                        SPAMX_log ("SFS: spam detected on " . $type);
+                        SPAMX_log("SFS: found match on IP (".$ip."), confidence level was " . $result['ip']['confidence']);
+                    } else {
+                        SPAMX_log("SFS: " . $type . "found match on IP (".$ip."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_ip_confidence']);
+                    }
+                }
+                if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
+                    if ( $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
+                        $retval = true;
+                        SPAMX_log ("SFS: spam detected on " . $type);
+                        SPAMX_log("SFS: found match on email (".$email."), confidence level was " . $result['ip']['confidence']);
+                    } else {
+                        SPAMX_log("SFS: " . $type . " found match on email (".$email."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_email_confidence']);
+                    }
+                }
+                if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
+                    if ( $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
+                        $retval = true;
+                        SPAMX_log ("SFS: spam detected on " . $type);
+                        SPAMX_log("SFS: found match on username (".$username."), confidence level was " . $result['username']['confidence']);
+                    } else {
+                        SPAMX_log("SFS: ". $type . " found match on username (".$username."), confidence level was " . $result['username']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_username_confidence']);
+                    }
                 }
             }
         }

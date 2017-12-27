@@ -2550,18 +2550,16 @@ function PLG_getWhatsNewComment()
 * @return   int                 > 0: spam detected, == 0: no spam detected
 *
 */
-function PLG_checkforSpam($content, $action = -1)
+function PLG_checkforSpam($content, $action = -1, $data = array() )
 {
     global $_PLUGINS;
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_checkforSpam_' . $pi_name;
         if (function_exists($function)) {
-            $result = $function($content, $action);
+            $result = $function($content, $action, $data);
             if ($result > 0) { // Plugin found a match for spam
-
-                $result = PLG_spamAction($content, $action);
-
+                $result = PLG_spamAction($content, $action,$data);
                 return $result;
             }
         }
@@ -2569,11 +2567,9 @@ function PLG_checkforSpam($content, $action = -1)
 
     $function = 'CUSTOM_checkforSpam';
     if (function_exists($function)) {
-        $result = $function($content, $action);
+        $result = $function($content, $action,$data);
         if ($result > 0) { // Plugin found a match for spam
-
-            $result = PLG_spamAction($content, $action);
-
+            $result = PLG_spamAction($content, $action,$data);
             return $result;
         }
     }
@@ -2595,7 +2591,7 @@ function PLG_checkforSpam($content, $action = -1)
 * @see      PLG_checkforSpam
 *
 */
-function PLG_spamAction($content, $action = -1)
+function PLG_spamAction($content, $action = -1,$data = array())
 {
     global $_PLUGINS;
 
@@ -2604,14 +2600,14 @@ function PLG_spamAction($content, $action = -1)
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_spamaction_' . $pi_name;
         if (function_exists($function)) {
-            $res = $function($content, $action);
+            $res = $function($content, $action,$data);
             $result = max($result, $res);
         }
     }
 
     $function = 'CUSTOM_spamaction';
     if (function_exists($function)) {
-        $res = $function($content, $action);
+        $res = $function($content, $action,$data);
         $result = max($result, $res);
     }
 

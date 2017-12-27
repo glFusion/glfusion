@@ -39,7 +39,7 @@ class SLC extends BaseCommand {
     /**
      * Here we do the work
      */
-    function execute ($comment)
+    function execute ($comment,$data)
     {
         global $_USER, $_SPX_CONF, $LANG_SX00;
 

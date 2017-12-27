@@ -42,7 +42,7 @@ class IP extends BaseCommand {
      * @param   string  $comment    Comment text to examine
      * @return  int                 0: no spam, else: spam detected
      */
-    function execute($comment)
+    function execute($comment,$data)
     {
         return $this->_process($_SERVER['REMOTE_ADDR']);
     }
