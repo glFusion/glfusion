@@ -58,8 +58,7 @@
 								{avatar}
 							</div>
 							<div class="uk-text-muted uk-text-small">
-								{user_level}<br>
-								{user_levelname}
+								{user_level}
 							</div>
 
 							<div class="uk-text-muted uk-text-small">
