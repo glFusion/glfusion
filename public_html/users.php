@@ -716,13 +716,17 @@ function createuser ( )
                 }
             }
 
-            // Let plugins have a chance to decide what to do before creating the user, return errors.
-
             $spamCheckData = array(
                 'username'  => $username,
                 'email'     => $email,
-                'ip'        => $REMOTE_ADDR);
+                'ip'        => $REMOTE_ADDR,
+                'type'      => 'registration');
 
+            $result = PLG_checkforSpam($username, $_CONF['spamx'],$spamCheckData);
+            if ($result > 0) {
+                COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
+            }
+            // Let plugins have a chance to decide what to do before creating the user, return errors.
             $msg = PLG_itemPreSave ('registration', $spamCheckData);
             if (!empty ($msg)) {
                 $retval .= newuserform ($msg);

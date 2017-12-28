@@ -124,8 +124,10 @@ class AkismetBase {
 			$this->comment['user_ip'] = getenv('HTTP_X_FORWARDED_FOR');
 		}
 
-//testing
-$this->comment['is_test'] =1;
+// test code
+        if ( defined( 'DVLP_DEBUG' ) ) {
+            $this->comment['is_test'] =1;
+        }
 //$this->comment['user_role'] = 'administrator';
 	}
 

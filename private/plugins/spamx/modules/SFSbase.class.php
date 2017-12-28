@@ -120,7 +120,7 @@ class SFSbase {
                     return $retval;     // invalid data, assume ok
                 }
                 if ( isset($result['ip']) && $result['ip']['appears'] == 1 ) {
-                    if ( $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
+                    if ( (float) $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
                         SPAMX_log("SFS: found match on IP (".$ip."), confidence level was " . $result['ip']['confidence']);
@@ -131,10 +131,10 @@ class SFSbase {
                     }
                 }
                 if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
-                    if ( $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
+                    if ( (float) $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
-                        SPAMX_log("SFS: found match on email (".$email."), confidence level was " . $result['ip']['confidence']);
+                        SPAMX_log("SFS: found match on email (".$email."), confidence level was " . $result['email']['confidence']);
                     } else {
                         if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
                             SPAMX_log("SFS: " . $type . " found match on email (".$email."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_email_confidence']);
@@ -142,7 +142,7 @@ class SFSbase {
                     }
                 }
                 if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
-                    if ( $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
+                    if ( (float) $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
                         SPAMX_log("SFS: found match on username (".$username."), confidence level was " . $result['username']['confidence']);

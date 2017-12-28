@@ -36,7 +36,7 @@ class Akismet extends BaseCommand
      */
     public function execute($comment, $data)
     {
-        global $_CONF, $_SPX_CONF, $LANG_SX00;
+        global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00, $REMOTE_ADDR;
 
         $retval = false;
 
@@ -70,11 +70,12 @@ class Akismet extends BaseCommand
             $retval = $akismet->isCommentSpam();
 
             if ($retval == true) {
-                SPAMX_log ("Akismet: spam detected");
-// log info and return false while testing
-                SPAMX_log ("Akismet: Testing Data " . print_r($data,true) . '<br>'.htmlspecialchars($comment));
-                $retval = false;
-            }
+                $spamType = isset($data['type']) ? $data['type'] : ' unknown ';
+                SPAMX_log ("Akismet: spam detected on " . $spamType);
+                SPAMX_log ($LANG_SX00['foundspam'] . 'Akismet'.
+                           $LANG_SX00['foundspam2'] . $_USER['uid'] .
+                           $LANG_SX00['foundspam3'] . $REMOTE_ADDR);
+             }
         }
 
         return $retval;
