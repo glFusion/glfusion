@@ -478,7 +478,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'upvote_vis'    => $can_voteup ? '' : 'hidden',
             'vote_mode'     => (int)($can_voteup && $can_votedn),
             'vote_lang'     => $vote_language,
-            'user_rep'      => sprintf('%+d', $Poster->rating),
+            'user_rep'      => $Poster->rating ? sprintf('%+d', $Poster->rating) : $Poster->rating,
             'is_online'     => $Poster->isOnline(),
             'is_anon'       => $Poster->isAnon() ? true : false,
             'sig'           => PLG_replaceTags($Poster->tagline, 'forum', 'signature'),
