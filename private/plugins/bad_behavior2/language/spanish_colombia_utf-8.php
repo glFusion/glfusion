@@ -46,6 +46,7 @@ $LANG_BAD_BEHAVIOR = array(
     'auto_refresh_on' => 'Refresco Automático Sí',
     'automatic_captcha' => 'Agregada Automáticamente (CAPTCHA)',
     'automatic_token' => 'Automatically Added (Token)',
+    'automatic_hp' => 'Automatically Added (FormCheck)',
     'back_to_search' => 'Back to Search List',
     'ban_ip' => 'Prohibir IPs',
     'ban_list_info' => 'Las IPs listadas a continuación están prohibidas en el sistema. Las prohibiciones manuales son permanentes. Las prohibiciones automáticas expiran después de 24 horas.',

@@ -50,6 +50,7 @@ $LANG_BAD_BEHAVIOR = array(
     'auto_refresh_on' => 'Aktualisierung Ein',
     'automatic_captcha' => 'Automatisch blockiert (CAPTCHA)',
     'automatic_token' => 'Automatisch hinzugefügt (Token)',
+    'automatic_hp' => 'Automatically Added (FormCheck)',
     'back_to_search' => 'Zurück zur Suchliste',
     'ban_ip' => 'Blockiere IPs',
     'ban_list_info' => 'Die unten aufgeführten IPs sind blockiert. Manuelle Blockaden sind dauerhaft. Automatische Blockaden erlöschen nach dem Timeout-Zeitraum.',
