@@ -20,7 +20,7 @@ class User
     private $properties = array();
 
     /**
-    *   Cache of badge objects
+    *   Cache of user objects
     *   @var array() */
     private static $cache = array();
 
@@ -28,7 +28,7 @@ class User
     /**
     *   Constructor.
     *   Sets the field values from the supplied array, or reads the record
-    *   if $A is a badge ID.
+    *   if $A is a user ID.
     *
     *   @param  mixed   $A  Array of properties or group ID
     */
@@ -52,7 +52,7 @@ class User
         }
     }
 
-
+    // TODO: remove? See getInstance()
     public static function Get($uid, $forum)
     {
         if (!array_key_exists($uid, self::$cache)) {
@@ -64,9 +64,11 @@ class User
 
 
     /**
-    *   Read a single badge record into an instantiated object.
+    *   Read a single forum user record into an instantiated object.
+    *   Collects information from the system and forum user tables, as well
+    *   as post count, online session count, and reputation rating.
     *
-    *   @param  integer $fb_id  Badge record ID
+    *   @param  integer $uid    User ID
     *   @return boolean     True on success, False on error or not found
     */
     public function Read($uid)
@@ -185,9 +187,6 @@ class User
 
         if ($this->photo != '') {
             $this->avatar = USER_getPhoto($this->uid,'','','','0');
-            /*$avatar = '<img src="' . USER_getPhoto($this->uid,'','','','0') .
-                '" alt="" title="" class="forum-userphoto" style="width:' .
-                $_FF_CONF['avatar_width'] . 'px;"/>';*/
         } elseif (!isset($_CONF['default_photo']) || $_CONF['default_photo'] == '') {
             $this->avatar = $_CONF['site_url'] . '/images/userphotos/default.jpg';
         } else {
@@ -197,8 +196,6 @@ class User
         if ($this->uid > 1) {
             $udt = new \Date(strtotime($this->regdate), $this->tzid);
             $this->regdate = $udt->format($_CONF['shortdate'],true);
-            //if ( DB_count( $_TABLES['sessions'], 'uid', $this->uid) > 0 &&
-                //$this->showonline == 1) {
             if ($this->sessions > 0) {
                 $this->onlinestatus = $LANG_GF01['ONLINE'];
             } else {
@@ -232,6 +229,12 @@ class User
     }
 
 
+    /**
+    *   Get the object instance for a specific poster.
+    *
+    *   @param  integer $uid    Poster user ID
+    *   @return object          Poser object instance
+    */
     public static function getInstance($uid)
     {
         static $cache = array();
@@ -244,6 +247,12 @@ class User
     }
 
 
+    /**
+    *   Determine if the user is online.
+    *   Used to display the "online" or "offline" indicator in the posts.
+    *
+    *   @return boolean     True if user is online, False if not.
+    */
     public function isOnline()
     {
         if ($this->uid == 1) {      // anonymous never online
@@ -253,17 +262,37 @@ class User
         }
     }
 
+
+    /**
+    *   Check if this user is valid.
+    *   This can happen if a post belongs to a deleted user account.
+    *
+    *   @return boolean     True if a valid user, False if not
+    */
     public function isValid()
     {
         return $this->uid > 0 ? true : false;
     }
 
+
+    /**
+    *   Check if this user is anonymous (or invalid)
+    *
+    *   @return boolean     True if anonymous, False if registered
+    */
     public function isAnon()
     {
         return $this->uid < 2 ? true : false;
     }
 
 
+    /**
+    *   Get the poster's username.
+    *   Allows for a user name to be entered in the post by anonymous
+    *   posters, falls back to the actual user name or "Anonymous"
+    *
+    *   @return string  Poster's display name
+    */
     public function UserName($default='')
     {
         global $LANG_GF01;
@@ -283,10 +312,6 @@ class User
             }
         }
         return $username;
-    }
-
-    public function Signature()
-    {
     }
 
 
@@ -321,9 +346,10 @@ class User
 
 
     /**
-    *   Delete a single badge record. Does not delete the image.
+    *   Delete a single userinfo record. Does not delete the image.
+    *   TODO: Not used, not needed?
     *
-    *   @param  integer $fb_id  Badge ID to delete
+    *   @param  integer $uid    ID of user to delete
     */
     public static function Delete($uid)
     {
@@ -333,6 +359,13 @@ class User
     }
 
 
+    /**
+    *   Check if the current user is allowed to vote for this poster.
+    *   Anonymous can't give or receive votes, and users can't vote for
+    *   themselves.
+    *
+    *   @return boolean     True if vote can be given, False if not.
+    */
     public function okToVote()
     {
         global $_USER;
@@ -348,6 +381,11 @@ class User
     }
 
 
+    /**
+    *   Check if the current user can post to the forum at all.
+    *
+    *   @return boolean     True if ok to post, False if not.
+    */
     public static function canPost($uid)
     {
         global $_TABLES, $_FF_CONF, $LANG_GF00, $LANG_GF02, $_CONF;
@@ -393,6 +431,14 @@ class User
     }
 
 
+    /**
+    *   Get the current user's moderator options to a topic.
+    *   TODO: Experimental, relies on a Moderator object not yet
+    *       committed to Git.
+    *
+    *   @param  integer $topic  Topic ID
+    *   @return array       Array of moderator options for this user
+    */
     public static function getModOpts($topic)
     {
         global $_USER, $LANG_GF03;
