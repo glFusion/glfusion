@@ -27,6 +27,7 @@
 				<input class="required email" type="text" id="email_conf" name="email_conf" value="{email_conf}">
 			</div>
 		</div>
+
 {!if lang_passwd}
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="passwd">{lang_passwd}</label>
@@ -57,6 +58,7 @@
 		</div>
 {!endif}
 		{plugin_fields}
+		{spamx}
 {!if captcha}
 		{captcha}
 {!endif}

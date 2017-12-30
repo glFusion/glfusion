@@ -715,7 +715,6 @@ function createuser ( )
                     return $retval;
                 }
             }
-
             $spamCheckData = array(
                 'username'  => $username,
                 'email'     => $email,

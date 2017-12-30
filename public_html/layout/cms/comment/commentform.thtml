@@ -28,6 +28,8 @@
 	</div>
 {!endif}
 
+	{spamx}
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="comment_text">
 			{lang_comment} {!if htmlmode} ({$LANG_postmodes[html]}){!else} ({$LANG_postmodes[plaintext]}){!endif}

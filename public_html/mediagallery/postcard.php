@@ -272,11 +272,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
         'ccself_checked'    =>  (isset($_POST['ccself']) ? ' checked="checked"' : ''),
     ));
 
-    if ( function_exists('plugin_templatesetvars_captcha') ) {
-        plugin_templatesetvars_captcha('mediagallery', $T);
-    } else {
-        $T->set_var ('captcha','');
-    }
+    PLG_templateSetVars ('mediagallery', $T);
 
     $T->parse('output','postcard');
     $retval .= $T->finish($T->get_var('output'));

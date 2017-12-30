@@ -325,6 +325,10 @@ function bb2_ban($ip,$type = 1,$reason = '') {
             COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
             $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
             break;
+        case 4 :
+            COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
+            $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
+            break;
         default :
             COM_errorLog("Banning " . $ip . " for type " . $type );
             break;

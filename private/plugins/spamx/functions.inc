@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the functions.inc for the glFusion Spam-X plugin                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -225,12 +225,17 @@ function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
 
     // Set up Spamx_Examine array
     $Spamx_Examine = array ();
+    if ( @file_exists($spamx_path.'Formcheck.Examine.class.php')) {
+        $Spamx_Examine[] = 'Formcheck';
+    }
     if ($dir = @opendir ($spamx_path)) {
         while (($file = readdir ($dir)) !== false) {
             if (is_file ($spamx_path . $file)) {
                 if (substr ($file, -18) == '.Examine.class.php') {
                     $sfile = str_replace ('.Examine.class.php', '', $file);
-                    $Spamx_Examine[] = $sfile;
+                    if ( $sfile != 'Formcheck') {
+                        $Spamx_Examine[] = $sfile;
+                    }
                 }
             }
         }
@@ -355,5 +360,25 @@ function plugin_getconfigelementhelp_spamx($type, $option, $doclang = 'english' 
     $retval = $descUrl;
 
     return array($retval,0);
+}
+
+function plugin_templatesetvars_spamx($ctype, &$template)
+{
+    global $_CONF;
+
+    // support for comment, story, registration, forum, contact, mail story
+
+    $rand = str_pad(rand(0, pow(10, 4)-1), 4, '0', STR_PAD_LEFT);
+    $html = '<div class="form-check">';
+    $html .= '<input type="hidden" name="fcfield" value="'.$rand.'">';
+    $html .= '<label>Enter Email<input type="text" name="fc_email_'.$rand.'" value="" /></label></div>';
+    $template->set_var('spamx', $html,false,true);
+}
+
+function plugin_getheadercode_spamx()
+{
+    $retval = '<style type="text/css">div.form-check {display: none;}</style>';
+    return $retval;
+
 }
 ?>
