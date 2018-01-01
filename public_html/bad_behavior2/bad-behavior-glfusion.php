@@ -341,7 +341,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     if ( $result !== false ) {
         CACHE_remove_instance('bb2_bl_data');
     }
-    if ( $type != 0 ) echo COM_refresh($_CONF['site_url']);
+    if ( $type != 0 && $type != 4 ) echo COM_refresh($_CONF['site_url']);
     return true;
 }
 
