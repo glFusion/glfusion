@@ -58,7 +58,7 @@ class EditIPofUrl extends BaseAdmin {
         } elseif (($action == $LANG_SX00['addentry']) && SEC_checkToken()) {
             if (!empty($entry)) {
                 $entry = DB_escapeString($entry);
-                $result = DB_query("INSERT INTO {$_TABLES['spamx']} VALUES ('IPofUrl', '$entry')");
+                $result = DB_query("INSERT INTO {$_TABLES['spamx']} (name,value) VALUES ('IPofUrl', '$entry')");
             }
         }
 
