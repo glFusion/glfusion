@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 function spamx_upgrade()
 {
-    global $_TABLES, $_CONF, $_SPX_CONF;
+    global $_TABLES, $_CONF, $_DB_dbms, $_SPX_CONF;
 
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='spamx'");
 
@@ -75,7 +75,41 @@ function spamx_upgrade()
             $c->add('akismet_enabled', 0, 'select',0, 3, 1, 10, true, 'spamx');
             $c->add('akismet_api_key', '', 'text',0, 3, NULL, 20, true, 'spamx');
 
+        case '1.3.0' :
+            $_SQL = array();
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['spamx']} ADD COLUMN id INT(10) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id)";
+
+            $_SQL[] = "
+            CREATE TABLE {$_TABLES['spamx_stats']} (
+              `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `module` VARCHAR(128) NOT NULL DEFAULT '',
+              `type` VARCHAR(50) NOT NULL DEFAULT '',
+              `blockdate` DATETIME,
+              `ip` VARCHAR(50) NOT NULL DEFAULT '',
+              `email` VARCHAR(50) NOT NULL DEFAULT '',
+              `username` VARCHAR(50) NOT NULL DEFAULT '',
+              PRIMARY KEY (`id`),
+              INDEX `type` (`type`),
+              INDEX `blockdate` (`blockdate`)
+            ) ENGINE=MyISAM
+            ";
+
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
+
         default :
+            spamx_update_config();
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
             break;
     }
@@ -84,5 +118,100 @@ function spamx_upgrade()
     } else {
         return false;
     }
+}
+
+function spamx_update_config()
+{
+    global $_CONF, $_AC_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/spamx/sql/spamx_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='spamx'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$spamxConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='spamx'");
+        } else {
+            $spamxConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($spamxConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('spamx');
+    // sync up sequence, etc.
+    foreach ( $spamxConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
+function _searchForId($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $array[$key];
+       }
+   }
+   return null;
+}
+
+function _searchForIdKey($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $key;
+       }
+   }
+   return null;
+}
+
+function _addConfigItem($data = array() )
+{
+    global $_TABLES;
+
+    $Qargs = array(
+                   $data['name'],
+                   $data['set'] ? serialize($data['default_value']) : 'unset',
+                   $data['type'],
+                   $data['subgroup'],
+                   $data['group'],
+                   $data['fieldset'],
+                   ($data['selection_array'] === null) ?
+                    -1 : $data['selection_array'],
+                   $data['sort'],
+                   $data['set'],
+                   serialize($data['default_value']));
+    $Qargs = array_map('DB_escapeString', $Qargs);
+
+    $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+        "subgroup, group_name, selectionArray, sort_order,".
+        " fieldset, default_value) VALUES ("
+        ."'{$Qargs[0]}',"   // name
+        ."'{$Qargs[1]}',"   // value
+        ."'{$Qargs[2]}',"   // type
+        ."{$Qargs[3]},"     // subgroup
+        ."'{$Qargs[4]}',"   // groupname
+        ."{$Qargs[6]},"     // selection array
+        ."{$Qargs[7]},"     // sort order
+        ."{$Qargs[5]},"     // fieldset
+        ."'{$Qargs[9]}')";  // default value
+
+    DB_query($sql);
 }
 ?>

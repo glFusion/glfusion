@@ -4,7 +4,7 @@
 * File: SLC.Examine.class.php
 * This is the Spam Link Counter Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2016 by the following authors:
+* Copyright (C) 2016-2018 by the following authors:
 * Author        Mark R. Evans       mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -42,6 +42,10 @@ class SLC extends BaseCommand {
     function execute ($comment,$data)
     {
         global $_USER, $_SPX_CONF, $LANG_SX00;
+
+        if ( !isset($_SPX_CONF['slc_enable']) || $_SPX_CONF['slc_enable'] == 0 ) {
+            return false;
+        }
 
         if ( !isset($_SPX_CONF['slc_max_links'])) {
             $_SPX_CONF['slc_max_links'] = 5;

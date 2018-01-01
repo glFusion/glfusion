@@ -4,7 +4,7 @@
 * File: SFSbase.class.php
 * Stop Forum Spam (SFS) Base Class
 *
-* Copyright (C) 2011 by the following authors:
+* Copyright (C) 2011-2018 by the following authors:
 * Author        Mark R. Evans   mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -124,10 +124,8 @@ class SFSbase {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
                         SPAMX_log("SFS: found match on IP (".$ip."), confidence level was " . $result['ip']['confidence']);
-                    } else {
-                        if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
-                            SPAMX_log("SFS: " . $type . "found match on IP (".$ip."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_ip_confidence']);
-                        }
+                    } else if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
+                        SPAMX_log("SFS: " . $type . "found match on IP (".$ip."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_ip_confidence']);
                     }
                 }
                 if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
@@ -135,10 +133,8 @@ class SFSbase {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
                         SPAMX_log("SFS: found match on email (".$email."), confidence level was " . $result['email']['confidence']);
-                    } else {
-                        if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
-                            SPAMX_log("SFS: " . $type . " found match on email (".$email."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_email_confidence']);
-                        }
+                    } else if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
+                        SPAMX_log("SFS: " . $type . " found match on email (".$email."), confidence level was " . $result['ip']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_email_confidence']);
                     }
                 }
                 if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
@@ -146,10 +142,8 @@ class SFSbase {
                         $retval = true;
                         SPAMX_log ("SFS: spam detected on " . $type);
                         SPAMX_log("SFS: found match on username (".$username."), confidence level was " . $result['username']['confidence']);
-                    } else {
-                        if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
-                            SPAMX_log("SFS: ". $type . " found match on username (".$username."), confidence level was " . $result['username']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_username_confidence']);
-                        }
+                    } else if ( isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
+                        SPAMX_log("SFS: ". $type . " found match on username (".$username."), confidence level was " . $result['username']['confidence'] . " which is below the configured threshold of " . $_SPX_CONF['sfs_username_confidence']);
                     }
                 }
             }

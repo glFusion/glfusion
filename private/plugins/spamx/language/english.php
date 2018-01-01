@@ -165,6 +165,11 @@ $LANG_confignames['spamx'] = array(
     'debug' => 'Debug Logging',
     'akismet_enabled' => 'Akismet Module Enabled',
     'akismet_api_key' => 'Akismet API Key (Required)',
+    'fc_enable' => 'Enable Form Check',
+    'sfs_enable' => 'Enable Stop Forum Spam',
+    'slc_enable' => 'Enable Spam Link Counter',
+    'action_delete' => 'Delete Identified Spam',
+    'action_mail' => 'Mail Admin when Spam Caught',
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -176,6 +181,7 @@ $LANG_fs['spamx'] = array(
     'fs_sfs'  => 'Stop Forum Spam',
     'fs_slc'  => 'Spam Link Counter',
     'fs_akismet' => 'Akismet',
+    'fs_formcheck' => 'Form Check',
 );
 
 $LANG_configselects['spamx'] = array(

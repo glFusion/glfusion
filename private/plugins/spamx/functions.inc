@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the functions.inc for the glFusion Spam-X plugin                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -63,6 +63,12 @@ if (!isset($_SPX_CONF['timeout'])) {
 }
 
 require_once $_CONF['path'].'plugins/spamx/spamx.php';
+
+if ( isset($_SPX_CONF['action_delete'])) {
+    $_CONF['spamx'] = (int) $_SPX_CONF['action_delete'] + (int) $_SPX_CONF['action_mail'];
+} else {
+    $_CONF['spamx'] = 128;
+}
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementations                                       |
@@ -212,7 +218,7 @@ function plugin_upgrade_spamx()
  */
 function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
 {
-    global $_CONF, $_SPX_CONF;
+    global $_CONF, $_TABLES, $_USER, $_SPX_CONF, $REMOTE_ADDR;
 
     // skip spam check for members of the 'spamx Admin' group, if enabled
     if (isset ($_SPX_CONF['admin_override']) && $_SPX_CONF['admin_override']) {
@@ -249,6 +255,21 @@ function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
         $EX = new $Examine;
         $res = $EX->execute ($comment, $data);
         if ($res == 1) {
+            $module = $Examine;
+            $dt = new Date('now',$_USER['tzid']);
+            $datetime = $dt->toMySQL(true);
+            $ip = (isset($data['ip']) ? $data['ip'] : $REMOTE_ADDR);
+            $email = (isset($data['email']) ? $data['email'] : '' );
+            $type  = (isset($data['type']) ? $data['type'] : 'other');
+            $username = (isset($data['username']) ? $data['username'] : '');
+            $sql =  "INSERT INTO {$_TABLES['spamx_stats']} (module, blockdate, ip, username, email, type) VALUES (";
+            $sql .= "'".DB_escapeString($module)."',";
+            $sql .= "'".DB_escapeString($datetime)."',";
+            $sql .= "'".DB_escapeString($ip)."',";
+            $sql .= "'".DB_escapeString($username)."',";
+            $sql .= "'".DB_escapeString($email)."',";
+            $sql .= "'".DB_escapeString($type)."');";
+            DB_query($sql,1);
             break;
         }
     }

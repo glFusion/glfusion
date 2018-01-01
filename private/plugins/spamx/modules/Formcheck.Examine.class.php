@@ -3,7 +3,7 @@
 * File: Formcheck.class.php
 * Formcheck Examine Class
 *
-* Copyright (C) 2017 by the following authors:
+* Copyright (C) 2017=2018 by the following authors:
 * Author        Mark R. Evans   mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -36,6 +36,11 @@ class Formcheck extends BaseCommand
     public function execute($comment, $data)
     {
         global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00, $REMOTE_ADDR;
+
+        if ( !isset($_SPX_CONF['fc_enable']) || $_SPX_CONF['fc_enable'] == 0 ) {
+            return false;
+        }
+
         $retval = false;
         if ( isset($_POST['fcfield'] ) ) {
             $rand = COM_applyFilter($_POST['fcfield']);

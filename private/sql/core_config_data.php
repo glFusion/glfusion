@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2017 by the following authors:
+*  Copyright (C) 2016-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -2405,7 +2405,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-
+/*
     array(
     	'name' => 'fs_spamx',
     	'default_value' => NULL,
@@ -2429,8 +2429,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-
-
+*/
     array(
     	'name' => 'sg_images',
     	'default_value' => NULL,

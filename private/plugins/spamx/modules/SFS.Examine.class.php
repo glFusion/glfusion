@@ -4,7 +4,7 @@
 * File: SFS.Examine.class.php
 * This is the Stop Forum Spam Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2011 by the following authors:
+* Copyright (C) 2011-2018 by the following authors:
 * Author        Mark R. Evans       mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -41,7 +41,11 @@ class SFS extends BaseCommand {
      */
     function execute ($comment,$data)
     {
-        global $_USER, $LANG_SX00;
+        global $_USER, $_SPX_CONF, $LANG_SX00;
+
+        if ( !isset($_SPX_CONF['sfs_enable']) || $_SPX_CONF['sfs_enable'] == 0 ) {
+            return false;
+        }
 
         $ans = 0;
 
