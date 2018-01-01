@@ -64,9 +64,14 @@ if (!isset($_SPX_CONF['timeout'])) {
 
 require_once $_CONF['path'].'plugins/spamx/spamx.php';
 
-if ( isset($_SPX_CONF['action_delete'])) {
-    $_CONF['spamx'] = (int) $_SPX_CONF['action_delete'] + (int) $_SPX_CONF['action_mail'];
-} else {
+$_CONF['spamx'] = 0;
+if ( isset($_SPX_CONF['action_delete']) && $_SPX_CONF['action_delete'] == 1 ) {
+    $_CONF['spamx'] += 128;
+}
+if ( isset($_SPX_CONF['action_mail']) && $_SPX_CONF['action_mail'] == 1 ) {
+    $_CONF['spamx'] += 8;
+}
+if ( $_CONF['spamx'] == 0 ) {
     $_CONF['spamx'] = 128;
 }
 
@@ -292,11 +297,9 @@ function plugin_spamaction_spamx ($comment, $action,$data)
     $res = 0;
 
     $spamx_path = $_CONF['path'] . 'plugins/spamx/modules/';
-
     if (($action == -1) || ($action == '')) {
         $action = $_SPX_CONF['action'];
     }
-
     // Set up Spamx_Action array
     $Spamx_Action = array ();
     if ($dir = @opendir ($spamx_path)) {

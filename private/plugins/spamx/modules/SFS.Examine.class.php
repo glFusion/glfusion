@@ -63,10 +63,6 @@ class SFS extends BaseCommand {
                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
             SESS_setVar('spamx_msg','Failed Stop Forum Spam IP / username check');
         }
-
-        // tell the Action module that we've already been triggered
-        $GLOBALS['sfs_triggered'] = true;
-
         return $ans;
     }
 }
