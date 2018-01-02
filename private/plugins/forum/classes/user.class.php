@@ -373,10 +373,11 @@ class User
     {
         global $_USER;
 
-        if ($this->isAnon() ||
-            $_USER['uid'] == $this->uid
+        if (COM_isAnonUser() ||     // current user can't be anonymous
+            $this->isAnon() ||      // poster can't be anonymous
+            $_USER['uid'] == $this->uid     // can't vote for yourself
         ) {
-            return false;   //Can't vote for yourself & must be logged in
+            return false;
         } else {
             return true;
         }
