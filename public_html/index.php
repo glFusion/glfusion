@@ -195,12 +195,14 @@ if ( $_VARS['totalhits'] % 50 === 0 ) {
                 DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
                 CACHE_remove_instance('story_'.$sid);
                 CACHE_remove_instance('whatsnew');
+                CACHE_remove_instance('menu');
             }
         } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
             COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
             STORY_removeStory($sid);
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
+            CACHE_remove_instance('menu');
         }
     }
 }
