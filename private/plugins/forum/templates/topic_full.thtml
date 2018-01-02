@@ -136,15 +136,15 @@
 			&nbsp;<strong>{$LANG_GF02['msg145']}</strong>
 		</div>
 {!endif}
+
+			{# start of the topics #}
+
+			<!-- BEGIN topicrow -->
 {!if is_online}
 {!!set online_icon "uk-text-success" !!}
 {!else}
 {!!set online_icon "uk-text-muted" !!}
 {!endif}
-
-			{# start of the topics #}
-
-			<!-- BEGIN topicrow -->
 
 {!!if {csscode} == 2 !!}
 			{!!set panelrow "uk-panel-box-secondary" !!}
@@ -160,7 +160,7 @@
 						<div class="uk-grid">
 							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
 						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
-							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}<span itemprop="headline">{subject}</span></a>
+							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" data-uk-tooltip>{prefix}<span itemprop="headline">{disp_subject}</span></a>
 						</div>
 						<div class="forum_author_line uk-margin-bottom">
                             <span class="uk-hidden-medium uk-hidden-large">
