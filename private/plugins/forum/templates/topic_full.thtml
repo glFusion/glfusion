@@ -170,14 +170,14 @@
 							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}<span itemprop="headline">{subject}</span></a>
 						</div>
 						<div class="forum_author_line uk-margin-bottom">
-							<a class="btn" data-uk-tooltip title="{$LANG_GF02[copy_to_clipboard]}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
-							</a>
 {!if 0}
 							{$LANG_GF01[BY]} <span itemprop="author">{userlink}</span>
                             {!if onlinestatus}({onlinestatus}){!endif}&nbsp;
 {!endif}
                             <span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+							<a class="btn" data-uk-tooltip title="{$LANG_GF02[copy_to_clipboard]}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+								<i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
+							</a>
 
 {!if bookmark_icon}
 	{!if bookmarked}
