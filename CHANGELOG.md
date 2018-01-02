@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Spam-X stats collection
   - Implemented password complexity rules
   - Reworked My Account account deletion - moved to its own tab with improved confirmation
   - Forum: New badge manager

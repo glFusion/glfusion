@@ -2,15 +2,13 @@
 // +--------------------------------------------------------------------------+
 // | Spam-X Plugin - glFusion CMS                                             |
 // +--------------------------------------------------------------------------+
-// | index.php                                                                |
+// | dashboard.php                                                            |
 // |                                                                          |
-// | Administration Page.                                                     |
+// | Spam-X Dashbaord                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2016-2018 by the following authors:                        |
 // |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Tom Willett       - twillett@users.sourceforge.net              |
-// |          Blaine Lang       - langmail@sympatico.ca                       |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -50,65 +48,117 @@ if (!SEC_hasRights ('spamx.admin')) {
 
 USES_lib_admin();
 
-$retval = '';
+$page = '';
 
 $menu_arr = array (
-    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['plugin_name']),
+    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['plugin_name'],'active'=>true),
+    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/filters.php','text' => $LANG_SX00['filters']),
+//    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_comments']),
+//    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_trackbacks']),
     array('url' => $_CONF['site_admin_url'] . '/index.php','text' => $LANG_ADMIN['admin_home']),
 );
 
-$retval .= ADMIN_createMenu($menu_arr, $LANG_SX00['instructions'],$_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png');
+$T = new Template($_CONF['path'].'plugins/spamx/templates');
+$T->set_file('page','dashboard.thtml');
 
-$files = array ();
-if ($dir = @opendir ($_CONF['path'] . 'plugins/spamx/modules/')) {
-    while (($file = readdir ($dir)) !== false) {
-        if (is_file ($_CONF['path'] . 'plugins/spamx/modules/' . $file)) {
-            if (substr ($file, -16) == '.Admin.class.php') {
-                $tmp = str_replace ('.Admin.class.php', '', $file);
-                array_push ($files, $tmp);
+$T->set_var('admin_menu',
+    ADMIN_createMenu($menu_arr, $LANG_SX00['instructions'],
+                     $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png'));
+
+// summary by module only
+$sql = "select module,count(*) AS count from {$_TABLES['spamx_stats']} GROUP BY module";
+$result = DB_query($sql);
+$spamstats = array();
+while ( ( $row = DB_fetchArray($result)) != NULL ) {
+    $spamstats[$row['module']] = $row['count'];
+}
+
+$T->set_block('page','spamxmodule','spamxmoduleblock');
+foreach($spamstats AS $mod => $blocked ) {
+    $T->set_var('smodule',$mod);
+    $T->set_var('sblocked',$blocked);
+    $T->parse('spamxmoduleblock','spamxmodule',true);
+}
+
+// end of summary by module
+
+$stats = array(
+                'Akismet' => array(),
+                'Formcheck' => array(),
+                'SFS' => array(),
+                'SLC' => array(),
+                'BlackList' => array(),
+                'Header' => array(),
+                'IP' => array(),
+                'IPofURL' => array(),
+         );
+
+$sql = "select *,count(*) AS count from {$_TABLES['spamx_stats']} GROUP BY module, type";
+$result = DB_query($sql);
+while ( ( $row = DB_fetchArray($result)) != NULL ) {
+    $stats[$row['module']][$row['type']] = $row['count'];
+}
+
+$T->set_var(array(
+    'lang_spamx'            => $LANG_SX00['plugin_name'],
+    'lang_auto_refresh_on'  => $LANG_SX00['auto_refresh_on'],
+    'lang_auto_refresh_off' => $LANG_SX00['auto_refresh_off'],
+    'lang_spamx_title'      => $LANG_SX00['stats_headline'],
+    'lang_type'             => $LANG_SX00['type'],
+    'lang_blocked'          => $LANG_SX00['blocked'],
+    'lang_no_blocked'       => $LANG_SX00['no_blocked'],
+));
+
+$T->set_block('page', 'module', 'moduleblock');
+
+foreach ($stats AS $module => $statistics) {
+    $process = 0;
+    switch ($module) {
+        case 'Akismet' :
+            if ( isset($_SPX_CONF['akismet_enable']) && $_SPX_CONF['akismet_enable'] == 1) {
+                $process = 1;
             }
-        }
+            break;
+        case 'SFS' :
+            if ( isset($_SPX_CONF['sfs_enable']) && $_SPX_CONF['sfs_enable'] == 1) {
+                $process = 1;
+            }
+            break;
+        case 'SLC' :
+            if ( isset($_SPX_CONF['slc_enable']) && $_SPX_CONF['slc_enable'] == 1) {
+                $process = 1;
+            }
+            break;
+        default :
+            $process = 1;
+            break;
     }
-    closedir ($dir);
+    if ( $process == 1 ) {
+        $T->set_var('module',$module);
+
+        if ( is_array($statistics) && count($statistics) > 0 ) {
+            foreach ($statistics AS $type => $num) {
+                $T->set_block('page', 'type', 'typeblock');
+                $T->set_var('type',$type);
+                $T->set_var('count',$num);
+                $T->parse('typeblock', 'type',true);
+            }
+        } else {
+            $T->set_block('page','type','typeblock');
+            $T->set_var('no_blocks','none');
+            $T->parse('typeblock', 'type',true);
+        }
+        $T->parse('moduleblock','module',true);
+        $T->unset_var('no_blocks');
+        $T->unset_var('typeblock');
+    }
 }
 
-$header_arr = array(
-    array(
-        'text'  => $LANG_confignames['spamx']['action'],
-        'field' => 'title',
-    ),
-);
-
-$data_arr = array();
-
-foreach ($files as $file) {
-    require_once ($_CONF['path'] . 'plugins/spamx/modules/' . $file . '.Admin.class.php');
-    $CM = new $file;
-    $data_arr[] = array(
-        'title'    => COM_createLink(
-            $CM->link(),
-            $_CONF['site_admin_url'] . '/plugins/spamx/index.php?command=' . $file
-        ),
-    );
-}
-$data_arr[] = array(
-    'title'    => COM_createLink(
-                    $LANG_SX00['documentation'],
-                    $_CONF['site_url'] . '/docs/english/spamx.html',
-                    array('target'=>'_blank')
-                  ),
-);
-$retval .= ADMIN_simpleList(null, $header_arr, null, $data_arr);
+$T->parse( 'output', 'page' );
+$page .= $T->finish( $T->get_var( 'output' ));
 
 $display = COM_siteHeader ('menu', $LANG_SX00['plugin_name']);
-
-$display .= $retval;
-
-if (isset ($_REQUEST['command'])) {
-    $CM = new $_REQUEST['command'];
-    $display .= $CM->display();
-}
-
+$display .= $page;
 $display .= COM_siteFooter();
 echo $display;
 ?>

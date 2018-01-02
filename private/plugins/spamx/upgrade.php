@@ -85,7 +85,7 @@ function spamx_upgrade()
               `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `module` VARCHAR(128) NOT NULL DEFAULT '',
               `type` VARCHAR(50) NOT NULL DEFAULT '',
-              `blockdate` DATETIME,
+              `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
               `ip` VARCHAR(50) NOT NULL DEFAULT '',
               `email` VARCHAR(50) NOT NULL DEFAULT '',
               `username` VARCHAR(50) NOT NULL DEFAULT '',

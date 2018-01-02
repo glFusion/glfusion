@@ -123,19 +123,6 @@ $spamxConfigData = array(
         'set' => true,
         'group' => 'spamx'
     ),
-/*
-    array(
-        'name' => 'action',
-        'default_value' => 128,
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => NULL,
-        'sort' => 130,
-        'set' => FALSE,
-        'group' => 'spamx'
-    ),
-*/
 
 //formcheck
     array(

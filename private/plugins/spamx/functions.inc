@@ -91,13 +91,14 @@ if ( $_CONF['spamx'] == 0 ) {
 */
 function plugin_showstats_spamx($showsitestats)
 {
-    global $_CONF, $_TABLES, $LANG_SX00;
+    global $_CONF, $_SPX_CONF, $_TABLES, $LANG_SX00;
+
+    USES_lib_admin();
 
     $retval = '';
 
     if (SEC_hasRights('spamx.admin')) {
         // detailed stats are only visible to Spam-X admins
-        require_once( $_CONF['path_system'] . 'lib-admin.php' );
         $header_arr = array(
             array('text' => $LANG_SX00['stats_page_title'], 'field' => 'label', 'header_class' => 'stats-header-title'),
             array('text' => $LANG_SX00['stats_entries'], 'field' => 'stats', 'header_class' => 'stats-header-count', 'field_class' => 'stats-list-count'),
@@ -106,16 +107,13 @@ function plugin_showstats_spamx($showsitestats)
         $text_arr = array('has_menu'     => false,
                           'title'        => $LANG_SX00['stats_headline'],
         );
-        $data_arr = array(
-            array('label' => $LANG_SX00['stats_pblacklist'],
-                'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'Personal'))),
-            array('label' => $LANG_SX00['stats_ip'],
-                'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'IP'))),
-            array('label' => $LANG_SX00['stats_ipofurl'],
-                'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'IPofUrl'))),
-            array('label' => $LANG_SX00['stats_header'],
-                'stats' => COM_numberFormat (DB_count ($_TABLES['spamx'], 'name', 'HTTPHeader'))),
-        );
+
+        // summary by module only
+        $sql = "select module,count(*) AS count from {$_TABLES['spamx_stats']} GROUP BY module";
+        $result = DB_query($sql);
+        while ( ( $row = DB_fetchArray($result)) != NULL ) {
+            $data_arr[] = array('label'=> $row['module'],'stats' => $row['count']);
+        }
         $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
     }
 
@@ -337,20 +335,16 @@ function plugin_spamaction_spamx ($comment, $action,$data)
  */
 function SPAMX_log ($logentry)
 {
-    global $_CONF, $LANG01, $_SPX_CONF;
+    global $_CONF, $_USER, $LANG01, $_SPX_CONF;
 
-    if ((!isset ($_SPX_CONF['logging']) || ($_SPX_CONF['logging'] === true)) &&
-            !empty ($logentry)) {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
-                                 $logentry );
-
-        $timestamp = strftime ('%c');
+    if ((!isset ($_SPX_CONF['logging']) || ($_SPX_CONF['logging'] === true)) && !empty ($logentry)) {
+        $dt = new \Date('now',$_USER['tzid']);
+        $timestamp = $dt->format("D d M Y H:i:s T",true);
+        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
         $logfile = $_CONF['path_log'] . 'spamx.log';
-
         if (!$file = fopen ($logfile, 'a')) {
             COM_errorLog ($LANG01[33] . $logfile . ' (' . $timestamp . ')', 1);
         }
-
         fputs ($file, "$timestamp - $logentry \n");
     }
 }
@@ -386,23 +380,29 @@ function plugin_getconfigelementhelp_spamx($type, $option, $doclang = 'english' 
     return array($retval,0);
 }
 
-function plugin_templatesetvars_spamx($ctype, &$template)
+function plugin_templatesetvars_spamx($type, &$template)
 {
-    global $_CONF;
+    global $_CONF, $_SPX_CONF;
 
     // support for comment, story, registration, forum, contact, mail story
-
-    $rand = str_pad(rand(0, pow(10, 4)-1), 4, '0', STR_PAD_LEFT);
-    $html = '<div class="form-check">';
-    $html .= '<input type="hidden" name="fcfield" value="'.$rand.'">';
-    $html .= '<label>Enter Email<input type="text" name="fc_email_'.$rand.'" value="" /></label></div>';
-    $template->set_var('spamx', $html,false,true);
+    if ( isset($_SPX_CONF['fc_enable']) && $_SPX_CONF['fc_enable'] == 1) {
+        $rand = str_pad(rand(0, pow(10, 4)-1), 4, '0', STR_PAD_LEFT);
+        $html = '<div class="form-check">';
+        $html .= '<input type="hidden" name="fcfield" value="'.$rand.'">';
+        $html .= '<label>Enter Email<input type="text" name="fc_email_'.$rand.'" value="" /></label></div>';
+        $template->set_var('spamx', $html,false,true);
+    }
 }
 
 function plugin_getheadercode_spamx()
 {
-    $retval = '<style type="text/css">div.form-check {display: none;}</style>';
-    return $retval;
+    global $_SPX_CONF;
 
+    $retval = '';
+
+    if ( isset($_SPX_CONF['fc_enable']) && $_SPX_CONF['fc_enable'] == 1) {
+        $retval = '<style type="text/css">div.form-check {display: none;}</style>';
+    }
+    return $retval;
 }
 ?>

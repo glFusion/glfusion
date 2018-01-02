@@ -75,6 +75,10 @@ class Akismet extends BaseCommand
                 SPAMX_log ($LANG_SX00['foundspam'] . 'Akismet'.
                            $LANG_SX00['foundspam2'] . $_USER['uid'] .
                            $LANG_SX00['foundspam3'] . $REMOTE_ADDR);
+                if ( function_exists('bb2_ban') ) {
+                    bb2_ban($REMOTE_ADDR,4);
+                }
+
              }
         }
 
