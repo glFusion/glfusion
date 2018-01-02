@@ -55,7 +55,7 @@
 					<div class="uk-width-medium-2-10 uk-hidden-small uk-align-center" style="border-left:1px solid #ccc;">
 						<div class="meta-goes-here uk-text-center">
 							<div class="uk-thumbnail uk-hidden-small">
-								{avatar}
+								<img src="{avatar}" alt="" title="" class="forum-userphoto" style="width:{avatar_width}px;"/>
 							</div>
 							<div class="uk-text-muted uk-text-small">
 								{user_level}
@@ -69,9 +69,9 @@
 							<div  class="uk-text-muted uk-text-small">
 								{member_badge}
 							</div>
-							<div  class="uk-text-muted uk-text-small uk-margin-remove">
+							<div  class="uk-text-muted uk-text-small uk-margin-remove uk-text-left">
 {!if regdate}
-								<strong>{$LANG_GF01[REGISTERED]}: </strong>{regdate}
+								<strong>{$LANG_GF01[REGISTERED]}: </strong>{regdate}<br />
 {!endif}
 {!if numposts}
 								<strong>{$LANG_GF01[POSTS]}: </strong>{numposts}<br/>

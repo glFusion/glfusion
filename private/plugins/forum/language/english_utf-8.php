@@ -226,9 +226,9 @@ $LANG_GF01 = array(
     'smiley' => 'Smileys',
 
     /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
-    'grade_user'    => '<br /><b>Evaluate User</b>',
-    'retract_grade' => '<br /><b>Retract Evaluation</b>',
+    'grade'         => 'Reputation',
+    'grade_user'    => 'Evaluate User',
+    'retract_grade' => 'Retract Evaluation',
     'rate_too_low'  => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
