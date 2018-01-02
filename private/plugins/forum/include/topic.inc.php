@@ -230,8 +230,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
 
     $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status'],$query);
 
-    $showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
+    //$showtopic['subject'] = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
     $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
+    $disp_subject = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
 
     if ($mode != 'preview' && $uservalid && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
@@ -469,6 +470,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'mod_functions' => isset($mod_functions) ? $mod_functions : '',
             'topic_comment' => $showtopic['comment'],
             'subject'       => $showtopic['subject'],
+            'disp_subject'  => $disp_subject,
             //'comment_minheight' => "min-height:{$min_height}px",
             'forumid'       => $showtopic['forum'],
             'topic_id'      => $showtopic['id'],
