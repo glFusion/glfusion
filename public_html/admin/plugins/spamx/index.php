@@ -115,7 +115,7 @@ foreach ($stats AS $module => $statistics) {
     $process = 0;
     switch ($module) {
         case 'Akismet' :
-            if ( isset($_SPX_CONF['akismet_enable']) && $_SPX_CONF['akismet_enable'] == 1) {
+            if ( isset($_SPX_CONF['akismet_enabled']) && $_SPX_CONF['akismet_enabled'] == 1) {
                 $process = 1;
             }
             break;
