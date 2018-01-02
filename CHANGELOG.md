@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Display Alternate Topic (if any) in the story admin list
   - Spam-X stats collection
   - Implemented password complexity rules
   - Reworked My Account account deletion - moved to its own tab with improved confirmation
