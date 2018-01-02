@@ -221,8 +221,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
     }*/
 
     if ($_FF_CONF['show_moods'] &&  $showtopic['mood'] != "") {
-        $moodimage = '<img style="vertical-align:middle;" src="'._ff_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
-        $min_height = $min_height + 30;
+        //$moodimage = '<img style="vertical-align:middle;" src="'._ff_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""/><br/>';
+        //$min_height = $min_height + 30;
+        $moodimage = _ff_getImage($showtopic['mood'],'moods');
+    } else {
+        $moodimage = false;
     }
 
     $showtopic['comment'] = FF_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status'],$query);
@@ -448,7 +451,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             //'lang_forum'    => $LANG_GF01['FORUM'],
             //'user_levelname'=> isset($user_levelname) ? $user_levelname : '',
             'user_level'    => isset($user_level) ? $user_level : '',
-            'magical_image' => isset($moodimage) ? $moodimage : '',
+            //'magical_image' => isset($moodimage) ? $moodimage : '',
+            'moodimage'     => $moodimage,
+            'moodtitle'     => $showtopic['mood'],
             //'avatar'        => isset($avatar) ? $avatar : '',
             'avatar'        => $Poster->avatar,
             'avatar_width'  => $_FF_CONF['avatar_width'],

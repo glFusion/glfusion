@@ -162,6 +162,10 @@
 						<div class="uk-clearfix"></div>
 						<div class="uk-grid">
 							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
+{!if moodimage}
+                            <div class="uk-align-right uk-text-right"><img style="vertical-align:middle;" src="{moodimage}" title="{moodtitle}" alt="{moodtitle}" data-uk-tooltip/></div>
+{!endif}
+
 						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
 							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}<span itemprop="headline">{subject}</span></a>
 						</div>
@@ -274,7 +278,7 @@ Reputation: {user_rep}
 {!endif}
 
 {!if regdate}
-									<div>{$LANG_GF01[REGISTERED]}:: {regdate}</div>
+									<div>{$LANG_GF01[REGISTERED]}: {regdate}</div>
 {!endif}
 {!if numposts}
 									<div>{$LANG_GF01[POSTS]}: {numposts}</div>
