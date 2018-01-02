@@ -300,10 +300,11 @@ class User
     {
         global $LANG_GF01;
 
-        if ($this->isValid()) {
+        if (!$this->isAnon()) {
+            // Valid, registered username already set to COM_getDisplayName()
             return $this->username;
         } else {
-            $username = '';
+            $username = $this->isValid() ? $this->username : '';
             if ($default != '' ) {
                 $filter = \sanitizer::getInstance();
                 $filter->setPostmode('text');
@@ -311,6 +312,8 @@ class User
                 $username = $filter->filterText($username);
             }
             if ($username == '') {
+                // If the above filters removed everything, or no default was
+                // given for an invalid (removed) user, then return "Anonymous"
                 $username = $LANG_GF01['ANON'];
             }
         }
