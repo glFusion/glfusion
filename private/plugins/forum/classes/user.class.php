@@ -16,13 +16,18 @@ class User
 {
     /**
     *   Properties of the instantiated object
-    *   @var array() */
+    *   @var array */
     private $properties = array();
 
     /**
     *   Cache of user objects
-    *   @var array() */
+    *   @var array */
     private static $cache = array();
+
+    /**
+    *   Array of admin levels by forum
+    *   @var array */
+    private $admin_lvl = array();
 
 
     /**
@@ -201,9 +206,7 @@ class User
             } else {
                 $this->onlinestatus = $LANG_GF01['OFFLINE'];
             }
-            $this->numposts = DB_count($_TABLES['ff_topic'], 'uid', $this->uid);
         } else {
-            $this->numposts = 0;
             $this->onlinestatus = '';
             $this->showonline = 0;
             $this->regdate = '';
@@ -370,14 +373,35 @@ class User
     {
         global $_USER;
 
-    	if (COM_isAnonUser() ||
-            $this->isAnon() ||
+        if ($this->isAnon() ||
             $_USER['uid'] == $this->uid
         ) {
             return false;   //Can't vote for yourself & must be logged in
         } else {
             return true;
         }
+    }
+
+
+    /**
+    *   Get the poster's level for a given forum.
+    *   Caches value in $this->admin_lvl
+    *
+    *   @param  integer $forum  ID of forum
+    *   @return integer     Admin level (2 = admin, 1 = moderator, 0 = none)
+    */
+    public function adminLevel($forum)
+    {
+        if (!array_key_exists($forum, $this->admin_lvl)) {
+            if (SEC_inGroup(1, $this->uid)) {
+                $this->admin_lvl[$forum] = 2;
+            } elseif (forum_modPermission($forum, $this->uid)) {
+                $this->admin_lvl[$forum] = 1;
+            } else {
+                $this->admin_lvl[$forum] = 0;
+            }
+        }
+        return $this->admin_lvl[$forum];
     }
 
 

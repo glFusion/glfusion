@@ -195,15 +195,16 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $min_height = $min_height + 150;
     }
 */
-    if (SEC_inGroup(1, $showtopic['uid'])) {
+    /*if (SEC_inGroup(1, $showtopic['uid'])) {
         $admin_lvl = 2;
     } elseif (forum_modPermission($showtopic['forum'],$showtopic['uid'])) {
         $admin_lvl = 1;
     } else {
         $admin_lvl = 0;
-    }
-    list($user_level, $user_levelname) = \Forum\Rank::getRank($posts, $admin_lvl);
-  
+    }*/
+
+    list($user_level, $user_levelname) = \Forum\Rank::getRank($Poster->posts, $Poster->adminLevel($showtopic['forum']));
+
     /*if ( $foundUser ) {
         $userlink = '<a href="'.$_CONF['site_url'].'/users.php?mode=profile&amp;uid='.$showtopic['uid'].'" ';
         $userlink .= 'class="authorname '.$onetwo.'" rel="nofollow"><strong>'.$username.'</strong></a>';
@@ -446,7 +447,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             //'userlink'      => $userlink,
             //'lang_forum'    => $LANG_GF01['FORUM'],
             //'user_levelname'=> isset($user_levelname) ? $user_levelname : '',
-            //'user_level'    => isset($user_level) ? $user_level : '',
+            'user_level'    => isset($user_level) ? $user_level : '',
             'magical_image' => isset($moodimage) ? $moodimage : '',
             //'avatar'        => isset($avatar) ? $avatar : '',
             'avatar'        => $Poster->avatar,
