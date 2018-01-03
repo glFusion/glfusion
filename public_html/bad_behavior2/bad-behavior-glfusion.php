@@ -310,9 +310,13 @@ function bb2_ban_remove($ip)
 
 function bb2_ban($ip,$type = 1,$reason = '') {
     global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR;
+
     if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
     }
+
+    if ( $ip == '' ) return;
+
     switch ( $type ) {
         case 0 :
             COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
@@ -335,6 +339,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     }
     $settings = bb2_read_settings();
     $timestamp = time();
+
     $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']}
            (item,type,autoban,reason,timestamp) VALUE ('".DB_escapeString($ip)."','spambot_ip',".(int) $type.",'".DB_escapeString($reason)."', ".$timestamp.")";
     $result = DB_query($sql,1);
