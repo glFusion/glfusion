@@ -14,10 +14,10 @@
 		<body class="sitebody">
 {!endif}
 {!if full}
-	<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 	<script type="text/javascript">
 		var site_url = '{site_url}';
 	</script>
+	<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_vote.js"></script>
@@ -93,7 +93,6 @@
 						<i class="uk-icon-mail-reply"></i>&nbsp;&nbsp;{LANG_reply}
 					</a>
 		{!endif}
-
 					<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
 						<button class="uk-button uk-button-small"><i class="uk-icon-cog"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
 						<div class="uk-dropdown uk-dropdown-small">
@@ -141,30 +140,36 @@
 
 			<!-- BEGIN topicrow -->
 {!if is_online}
-{!!set online_icon "uk-text-success" !!}
+	{!!set online_icon "uk-icon-toggle-on uk-text-success" !!}
 {!else}
-{!!set online_icon "uk-text-muted" !!}
+	{!!set online_icon "uk-icon-toggle-off uk-text-muted" !!}
+{!endif}
+{!!if {csscode} == 2 !!}
+	{!!set panelrow "uk-panel-box-secondary" !!}
+{!else}
+	{!!set panelrow "" !!}
 {!endif}
 
-{!!if {csscode} == 2 !!}
-			{!!set panelrow "uk-panel-box-secondary" !!}
-{!else}
-			{!!set panelrow "" !!}
-{!endif}
+{!!set tooltip "data-uk-tooltip=\"{delay:'300'}\"" !!}
+{!!set positive_rating "plus-circle" !!}
+{!!set negative_rating "minus-circle" !!}
 
 			<a id="{topic_id}"></a>
 			<div class="uk-panel-box uk-margin-bottom {panelrow}" itemscope itemtype="http://schema.org/DiscussionForumPosting">
 				<div class="uk-grid">
 					<div class="uk-width-1-1">
-						<div class="uk-clearfix"></div>
-						<div class="uk-grid">
+						<div class="uk-grid uk-clearfix">
 							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
-						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
-							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" data-uk-tooltip>{prefix}<span itemprop="headline">{disp_subject}</span></a>
-						</div>
-						<div class="forum_author_line uk-margin-bottom">
-							<span class="uk-hidden-medium uk-hidden-large">
-								{$LANG_GF01[BY]} <span itemprop="author">
+								<div class="uk-align-leftXX uk-text-left uk-text-large uk-margin-bottom-remove uk-text-truncate">
+									<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" {tooltip}>{prefix}
+										<span itemprop="headline">{subject}</span>
+									</a>
+								</div>
+							<div class="forum_author_line uk-margin-bottom">
+
+								<span class="uk-hidden-medium uk-hidden-large">
+
+									{$LANG_GF01[BY]} <span itemprop="author">
 {!if profilelink}
 									<a href="{profilelink}" class="authorname"><b>{user_name}</b></a>
 {!else}
@@ -172,19 +177,22 @@
 {!endif}
 								</span>
 {!if onlinestatus}
-								<i class="uk-icon {online_icon}" title="{onlinestatus}" data-uk-tooltip></i><br />
+								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i><br />
 {!endif}
 							</span>
-							<span class="uk-text-small">{$LANG_GF01['ON3']}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
-							<a class="btn" data-uk-tooltip title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
+
+							<a class="btn" {tooltip} title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+								<i class="uk-icon uk-icon-mini uk-icon-clipboard uk-hidden-small uk-icon-hover"></i>
 							</a>
+
+
+							<span class="uk-text-small">{$LANG_GF01['ON3']}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 
 {!if bookmark_icon}
 	{!if bookmarked}
-							<i title="{$LANG_GF02['msg204']}" data-uk-tooltip class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02['msg204']}" {tooltip} class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
 	{!else}
-							<i title="{$LANG_GF02['msg203']}" data-uk-tooltip class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02['msg203']}" {tooltip} class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
 	{!endif}
 {!endif}
 						</div> {# end of forum_author_line #}
@@ -195,7 +203,8 @@
 									<div class="uk-text-muted uk-clearfix" style="overflow:hidden;">
 										<hr style="width:50%;" class="uk-align-left uk-text-left uk-clearfix">
 										<div style="clear:both;"></div>
-										<div class="signature">{sig}</div><div style="clear:both;"></div>
+										<div class="signature">{sig}</div>
+										<div style="clear:both;"></div>
 									</div> {# end of signature #}
 {!endif}
 								</div> {# end of comment area #}
@@ -238,10 +247,12 @@
 										</div>
 									</div>
 								</div>
+{!if !is_anon}
 {!if user_level}
 								<div class="uk-text-muted uk-text-small">
 									{user_level}
 								</div>
+{!endif}
 {!endif}
 								<span itemprop="author">
 									<h4 class="uk-margin-bottom-remove uk-margin-small-top">
@@ -253,23 +264,33 @@
 										</a>
 {!endif}
 {!if onlinestatus}
-										<i class="uk-icon {online_icon}" title="{onlinestatus}" data-uk-tooltip></i>
+										<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
 {!endif}
 									</h4>
 								</span>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
 {!if moodimage}
-									<div><img src="{moodimage}" title="{moodtitle}" alt="{moodtitle}" data-uk-tooltip/></div>
+									<div>
+										<img src="{moodimage}" title="{moodtitle}" alt="{moodtitle}" {tooltip}/>
+									</div>
 {!endif}
-									<div style="text-align:left;margin-top:5px;">
+									<div style="text-align:center;margin-top:5px;">
 {!if can_vote}
 									{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
-									<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" data-uk-tooltip title="{vote_lang}"><a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;"><i class="uk-icon uk-icon-thumbs-up uk-icon-small uk-text-success" alt="plus"></i></a></span>
-									<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" data-uk-tooltip title="{vote_lang}"><a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;"><i class="uk-icon uk-icon-thumbs-down uk-icon-small uk-text-danger" alt="{vote_lang}""></i></a></span>
+									<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" {tooltip} title="{vote_lang}">
+										<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;">
+											<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
+										</a>
+									</span>
+
+									<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
+										<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
+											<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
+										</a>
+									</span>
 {!else}
-{!if is_anon}
-{!else}
+{!if !is_anon}
 									{$LANG_GF01['grade']}: {user_rep}
 {!endif}
 {!endif}
@@ -289,18 +310,21 @@
 						</div>
 						<div class="uk-grid">
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
+
+{!if last_edited}
+								<div class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</div>
+{!endif}
+
+
 {!if ipaddress}
-								<div class="uk-text-small uk-text-muted" style="float:left;">
+								<div class="uk-clearfix uk-text-small uk-text-muted" style="margin-top:4px;float:left;">
 									{ipaddress}
 								</div>
+{!endif}
 								<div class="uk-align-left uk-text-left uk-margin-bottom-remove uk-hidden-small" style="padding-left:25px;">
 									{mod_functions}
 								</div>
 
-{!endif}
-{!if last_edited}
-								<span class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</span>
-{!endif}
 							</div>
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta" style="width:100%;">
