@@ -831,7 +831,7 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
     $dt = new \Date('now',$_CONF['timezone']);
 
     if( !empty( $logentry )) {
-        $timestamp = $dt->format('d M Y H:i:s',true);
+        $timestamp = $dt->format("d M Y H:i:s T",false);
         $logfile = $_CONF['path_log'] . 'captcha.log';
 
         if( $file = fopen( $logfile, 'a' )) {
