@@ -48,9 +48,6 @@ class DeleteComment extends BaseCommand {
 
         // update count of deleted spam posts
         DB_change ($_TABLES['vars'], 'value', 'value + 1', 'name', 'spamx.counter', '', true);
-
-        SPAMX_log($LANG_SX00['spamdeleted']);
-
         return 1;
     }
 }
