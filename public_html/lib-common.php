@@ -1838,7 +1838,10 @@ function COM_errorLog( $logentry, $actionid = '' )
     global $_CONF, $LANG01, $REMOTE_ADDR;
 
     $retval = '';
-    $timestamp = date('d M Y H:i:s');
+
+    $dt = new \Date('now',$_CONF['timezone']);
+    $timestamp = $dt->format("d M Y H:i:s T",false);
+
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
         $ipaddress = $REMOTE_ADDR;
@@ -1913,7 +1916,9 @@ function COM_accessLog( $logentry )
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
                                  $logentry );
 
-        $timestamp = strftime( '%c' );
+        $dt = new \Date('now',$_CONF['timezone']);
+        $timestamp = $dt->format("d M Y H:i:s T",false);
+
         $logfile = $_CONF['path_log'] . 'access.log';
 
         if ( !$file = fopen( $logfile, 'a' )) {
@@ -6348,7 +6353,10 @@ function COM_404()
         if ( isset($_SERVER['HTTP_REFERER'])) {
             $refUrl = $_SERVER['HTTP_REFERER'];
         }
-        $timestamp = @strftime('%c');
+
+        $dt = new \Date('now',$_CONF['timezone']);
+        $timestamp = $dt->format("d M Y H:i:s T",false);
+
         $logEntry = "404 :: $byUser :: URL: $url";
         if (!empty($refUrl)) {
             $logEntry .= " :: Referer: $refUrl";
