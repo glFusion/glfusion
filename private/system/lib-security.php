@@ -1119,7 +1119,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
 
     static $_tokenKey;
 
-    if ( $ttl == -1 ) {
+    if ( $ttl == -1 || COM_isAnonUser() ) {
         $tokenKey = '';
         return;
     }
@@ -1175,11 +1175,17 @@ function SEC_createToken($ttl = TOKEN_TTL)
 */
 function SEC_checkToken()
 {
-    global $_CONF, $LANG20, $LANG_ADMIN;
+    global $_CONF, $_USER, $LANG20, $LANG_ADMIN;
 
     if (_sec_checkToken()) {
         SEC_createToken(-1);
         return true;
+    }
+
+    if ( COM_isAnonUser() ) return false;
+
+    if ( !SEC_isLocalUser($_USER['uid']) ) {
+        return false;
     }
 
     // determine the destination of this request
@@ -1244,6 +1250,8 @@ function _sec_checkToken($ajax=0)
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
+
+    if ( COM_isAnonUser() ) return true;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REMOTE_ADDR'];
