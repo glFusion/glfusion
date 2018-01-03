@@ -1,4 +1,6 @@
 ## v1.7.2 (Unreleased)
+  - Standardized the date/time format across all log files
+  - Added token timeout protection to comment form
   - Display Alternate Topic (if any) in the story admin list
   - Spam-X stats collection
   - Implemented password complexity rules
