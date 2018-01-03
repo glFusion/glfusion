@@ -122,7 +122,7 @@ function spamx_upgrade()
 
 function spamx_update_config()
 {
-    global $_CONF, $_AC_CONF, $_TABLES;
+    global $_CONF, $_SPX_CONF, $_TABLES;
 
     $c = config::get_instance();
 
