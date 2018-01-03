@@ -1755,7 +1755,7 @@ function glfusion_171()
 
 function glfusion_172()
 {
-    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -1777,6 +1777,7 @@ function glfusion_172()
 
     $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `act_time`;";
     $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NULL DEFAULT NULL AFTER `tfa_enabled`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD INDEX `uid` (`uid`);";
 
     if ($use_innodb) {
         $statements = count($_SQL);
@@ -1878,12 +1879,82 @@ function glfusion_172()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
     // end of forum plugin updates
 
+    // spam-x updates
+    $_SQL = array();
+    $_SQL[] = "ALTER TABLE {$_TABLES['spamx']} ADD COLUMN id INT(10) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id)";
+    $_SQL[] = "
+    CREATE TABLE {$_TABLES['spamx_stats']} (
+      `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `module` VARCHAR(128) NOT NULL DEFAULT '',
+      `type` VARCHAR(50) NOT NULL DEFAULT '',
+      `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `ip` VARCHAR(50) NOT NULL DEFAULT '',
+      `email` VARCHAR(50) NOT NULL DEFAULT '',
+      `username` VARCHAR(50) NOT NULL DEFAULT '',
+      PRIMARY KEY (`id`),
+      INDEX `type` (`type`),
+      INDEX `blockdate` (`blockdate`)
+    ) ENGINE=MyISAM
+    ";
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
+        }
+        DB_query($sql,1);
+    }
+    _spamx_update_config();
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
+    // end of spam-x
+
     _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
 
+}
+
+function _spamx_update_config()
+{
+    global $_CONF, $_SPX_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/spamx/sql/spamx_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='spamx'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$spamxConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='spamx'");
+        } else {
+            $spamxConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($spamxConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('spamx');
+    // sync up sequence, etc.
+    foreach ( $spamxConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
 }
 
 function _updateConfig() {
