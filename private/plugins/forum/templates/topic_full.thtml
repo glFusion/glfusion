@@ -163,18 +163,18 @@
 							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" data-uk-tooltip>{prefix}<span itemprop="headline">{disp_subject}</span></a>
 						</div>
 						<div class="forum_author_line uk-margin-bottom">
-                            <span class="uk-hidden-medium uk-hidden-large">
-                                {$LANG_GF01[BY]} <span itemprop="author">
+							<span class="uk-hidden-medium uk-hidden-large">
+								{$LANG_GF01[BY]} <span itemprop="author">
 {!if profilelink}
 									<a href="{profilelink}" class="authorname"><b>{user_name}</b></a>
 {!else}
 									<b>{user_name}</b>
 {!endif}
-                                </span>
+								</span>
 {!if onlinestatus}
-        						<i class="uk-icon uk-icon-circle {online_icon}" title="{onlinestatus}" data-uk-tooltip></i><br />
+								<i class="uk-icon {online_icon}" title="{onlinestatus}" data-uk-tooltip></i><br />
 {!endif}
-                            </span>
+							</span>
 							<span class="uk-text-small">{$LANG_GF01['ON3']}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 							<a class="btn" data-uk-tooltip title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
 								<i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
@@ -243,26 +243,26 @@
 									{user_level}
 								</div>
 {!endif}
-                                <span itemprop="author">
-    								<h4 class="uk-margin-bottom-remove uk-margin-small-top">
+								<span itemprop="author">
+									<h4 class="uk-margin-bottom-remove uk-margin-small-top">
 {!if profilelink}
-	    								<a href="{profilelink}" class="authorname">
+										<a href="{profilelink}" class="authorname">
 {!endif}
-		    								{user_name}
+											{user_name}
 {!if profilelink}
-    									</a>
+										</a>
 {!endif}
 {!if onlinestatus}
-	    								<i class="uk-icon uk-icon-circle {online_icon}" title="{onlinestatus}" data-uk-tooltip></i>
+										<i class="uk-icon {online_icon}" title="{onlinestatus}" data-uk-tooltip></i>
 {!endif}
-		    						</h4>
-                                </span>
+									</h4>
+								</span>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
 {!if moodimage}
 									<div><img src="{moodimage}" title="{moodtitle}" alt="{moodtitle}" data-uk-tooltip/></div>
 {!endif}
-                                <div style="text-align:left;margin-top:5px;">
+									<div style="text-align:left;margin-top:5px;">
 {!if can_vote}
 									{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
 									<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" data-uk-tooltip title="{vote_lang}"><a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;"><i class="uk-icon uk-icon-thumbs-up uk-icon-small uk-text-success" alt="plus"></i></a></span>
