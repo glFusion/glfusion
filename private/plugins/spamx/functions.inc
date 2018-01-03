@@ -64,14 +64,11 @@ if (!isset($_SPX_CONF['timeout'])) {
 
 require_once $_CONF['path'].'plugins/spamx/spamx.php';
 
-$_CONF['spamx'] = 0;
-if ( isset($_SPX_CONF['action_delete']) && $_SPX_CONF['action_delete'] == 1 ) {
-    $_CONF['spamx'] += 128;
-}
+$_CONF['spamx'] = 128;
 if ( isset($_SPX_CONF['action_mail']) && $_SPX_CONF['action_mail'] == 1 ) {
     $_CONF['spamx'] += 8;
 }
-if ( $_CONF['spamx'] == 0 ) {
+if ( !isset($_CONF['spamx']) || $_CONF['spamx'] == 0 ) {
     $_CONF['spamx'] = 128;
 }
 
@@ -98,7 +95,6 @@ function plugin_showstats_spamx($showsitestats)
     $retval = '';
 
     if (SEC_hasRights('spamx.admin')) {
-        // detailed stats are only visible to Spam-X admins
         $header_arr = array(
             array('text' => $LANG_SX00['stats_page_title'], 'field' => 'label', 'header_class' => 'stats-header-title'),
             array('text' => $LANG_SX00['stats_entries'], 'field' => 'stats', 'header_class' => 'stats-header-count', 'field_class' => 'stats-list-count'),
@@ -339,7 +335,7 @@ function SPAMX_log ($logentry)
 
     if ((!isset ($_SPX_CONF['logging']) || ($_SPX_CONF['logging'] === true)) && !empty ($logentry)) {
         $dt = new \Date('now',$_USER['tzid']);
-        $timestamp = $dt->format("D d M Y H:i:s T",true);
+        $timestamp = $dt->format("d M Y H:i:s T",false);
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
         $logfile = $_CONF['path_log'] . 'spamx.log';
         if (!$file = fopen ($logfile, 'a')) {
@@ -384,7 +380,6 @@ function plugin_templatesetvars_spamx($type, &$template)
 {
     global $_CONF, $_SPX_CONF;
 
-    // support for comment, story, registration, forum, contact, mail story
     if ( isset($_SPX_CONF['fc_enable']) && $_SPX_CONF['fc_enable'] == 1) {
         $rand = str_pad(rand(0, pow(10, 4)-1), 4, '0', STR_PAD_LEFT);
         $html = '<div class="form-check">';

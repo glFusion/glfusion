@@ -102,24 +102,13 @@ $spamxConfigData = array(
     ),
 
     array(
-        'name' => 'action_delete',
-        'default_value' => true,
-        'type' => 'select',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 1,
-        'sort' => 110,
-        'set' => true,
-        'group' => 'spamx'
-    ),
-    array(
         'name' => 'action_mail',
         'default_value' => true,
         'type' => 'select',
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 1,
-        'sort' => 120,
+        'sort' => 110,
         'set' => true,
         'group' => 'spamx'
     ),

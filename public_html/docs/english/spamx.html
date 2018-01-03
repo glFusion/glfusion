@@ -218,38 +218,6 @@
 					&ldquo;libwww-perl&rdquo;.
 				</p>
 
-				<h2>Action Modules</h2>
-
-				<p>
-					Once one of the examine modules detects a spam post, the action
-					modules will decide what to do with the spam. Most of the time, you
-					will simply want to delete the post then, so this is what the Delete
-					Action module does.
-				</p>
-
-				<p>
-					As the name implies, the Mail Admin Action module sends an email to
-					the site admin when a spam post is encountered. Since this can cause
-					quite a lot of emails being sent, it is disabled by default.
-				</p>
-
-				<p>
-					Action modules have to be enabled specifically before they are used
-					(examine modules, on the other hand, are activated by simply dropping
-					them into the Spam-X directory). For this, every action module has a
-					unique number that needs to be added up with the number of the other
-					action modules you want to enable and entered as the value for the
-					spamx config variable in glFusion's main configuration.
-				</p>
-
-				<h2>Example</h2>
-
-				<p>
-					The Delete Action module has the value 128, while the Mail Admin
-					Action module has the value 8. So to activate both modules, add 128 + 8
-					= 136 and enter that in the Configuration admin panel.
-				</p>
-
 				<h2>Admin Modules</h2>
 
 				<p>
@@ -301,7 +269,7 @@
 
 				<dl id="desc_debug">
 					<dt>Enable Debug Logging</dt>
-					<dd>Debug logging will enable additional logging on the StopForumSpam module, where it will log the return values and how they compare the the thresholds you have configured. Will create a log entry in spamx.log for every post.</dd>
+					<dd>Debug logging will enable additional logging on the StopForumSpam module, where it will log the return values and how they compare to the thresholds you have configured. Will create a log entry in spamx.log for every post.</dd>
 				</dl>
 
 				<dl id="desc_admin_override">
@@ -319,9 +287,19 @@
 					<dd>Email address to which spam notifications are sent when the Mail Admin action module is enabled. </dd>
 				</dl>
 
-				<dl id="desc_action">
-					<dt>Spam-X Actions</dt>
-					<dd>This only exists as a fallback in case $_CONF['spamx'] in glFusion's main configuration is not set. (i.e. $_CONF['spamx'] takes precedence). </dd>
+				<dl id="desc_action_mail">
+					<dt>Mail Admin when Spam Caught</dt>
+					<dd>If set to TRUE, Spam-X will email the Notification Email or the Site Admin email for every spam detection. This can generate a significant amount of email, so the default setting is False.</dd>
+				</dl>
+
+				<dl id="desc_fc_enable">
+					<dt>Formcheck Enabled</dt>
+					<dd>If set to True, this will enable the Formcheck module.</dd>
+				</dl>
+
+				<dl id="desc_sfs_enable">
+					<dt>Stop Forum Spam Module Enabled</dt>
+					<dd>If set to True, this will enable the Stop Forum Spam module.</dd>
 				</dl>
 
 				<dl id="desc_sfs_username_check">
