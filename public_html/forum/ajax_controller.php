@@ -19,6 +19,9 @@ if (is_ajax()) {
         $action = $_POST["action"];
 
         switch ( $action ) {
+            case 'thank':
+                user_thank();
+                break;
             case 'vote':
                 user_vote();
                 break;
@@ -356,6 +359,83 @@ function user_vote()
         'rating' => $user_rating,
         'statusMessage' => '',
     ) );
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    echo $retval;
+    exit;
+}
+
+function user_thank()
+{
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01;
+
+    if ( !$_FF_CONF['enable_user_thanks'] ) {
+        exit;
+    }
+
+    $v_uid = isset($_POST['v_uid']) ? COM_applyFilter($_POST['v_uid'],true) : 0;
+    $t_uid = isset($_POST['t_uid']) ? COM_applyFilter($_POST['t_uid'],true) : 0;
+    $t_id  = isset($_POST['t_id']) ? COM_applyFilter($_POST['t_id'],true) : 0;
+    $vote  = isset($_POST['vote']) ? COM_applyFilter($_POST['vote'],true) : 0;
+    $vote  = $vote > 0 ? 1 : 0;
+
+    // Can't vote if:
+    //      Anonymous
+    //      current user doesn't match supplied user ID,
+    //      topic ID is invalid
+    //      current user is also the topic poster
+    if (
+        COM_isAnonUser() || $_USER['uid'] != $v_uid || $t_id < 1 ||
+            $_USER['uid'] == $t_uid
+    ) {
+        echo json_encode(array(
+            'statusMessage' => 'Cannot vote',
+        ) );
+        exit;
+    }
+
+    $existing_vote = DB_count($_TABLES['ff_thanks_assoc'],
+            array('poster_id', 'voter_id', 'topic_id'),
+            array($t_uid, $v_uid, $t_id));
+
+    if (!$existing_vote && $vote == 1) {       // Normal voting
+        DB_query("INSERT INTO {$_TABLES['ff_thanks_assoc']}
+                    (poster_id, voter_id, topic_id)
+        		VALUES ($t_uid, $v_uid, $t_id)");
+    } else {    // retract vote
+        //Delete Their vote in the associative table
+        DB_delete($_TABLES['ff_thanks_assoc'],
+                array('poster_id', 'voter_id', 'topic_id'),
+                array($t_uid, $v_uid, $t_id));
+        $vote = 0;
+    }
+
+    if ($vote == 0) {
+    	// retracted thanks
+    } else {
+        // user has already voted for this poster
+        $vote_language = $LANG_GF01['retract_grade'];
+        if ($vote > 0) {
+            // gave a +1 show the minus to retract
+            $plus_vote = false;
+            $minus_vote = true;
+		} else {
+            // gave a -1 show the plus to retract
+            $minus_vote = false;
+            $plus_vote = true;
+		}
+	}
+
+    $retval = json_encode(array(
+        't_id' => $t_id,
+        't_uid' => $t_uid,
+        'v_uid' => $v_uid,
+        'vote'  => $vote,
+        'vote_count' => (int)DB_count($_TABLES['ff_thanks_assoc'],
+                        array('poster_id'),
+                        array($t_uid)),
+        'statusMessage' => '',
+    ) );
+
     header("Cache-Control: no-store, no-cache, must-revalidate");
     echo $retval;
     exit;

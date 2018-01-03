@@ -64,4 +64,8 @@ $_TABLES['ff_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 $_TABLES['ff_rating_assoc']	= $_DB_table_prefix . 'forum_rating_assoc';
 $_TABLES['ff_badges']       = $_DB_table_prefix . 'forum_badges';
 $_TABLES['ff_ranks']        = $_DB_table_prefix . 'forum_ranks';
+$_TABLES['ff_thanks_assoc'] = $_DB_table_prefix . 'forum_thanks_assoc';
+
+$_FF_CONF['enable_user_thanks'] = true;
+
 ?>

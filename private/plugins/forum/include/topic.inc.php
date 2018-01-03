@@ -290,6 +290,20 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $topictemplate->unset_var('last_edited');
     }
 
+    $can_thank = false;
+    $thanked = 0;
+    if ($_FF_CONF['enable_user_thanks']) {
+        if (!$Poster->isAnon() &&           // poster is not anonymous
+            !COM_isAnonUser() &&            // current user is not anonymous
+            $Poster->uid != $_USER['uid']   // current user is not the poster
+        ) {
+            $can_thank = true;
+            $thanked = DB_count($_TABLES['ff_thanks_assoc'],
+                    array('poster_id', 'voter_id', 'topic_id'),
+                    array($Poster->uid, $_USER['uid'], $showtopic['id']));
+        }
+    }
+
     $topictemplate->set_var (array(
             'user_name'     => $Poster->UserName($showtopic['name']),
             'csscode'       => $onetwo,
@@ -326,6 +340,15 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'is_online'     => $Poster->isOnline(),
             'is_anon'       => $Poster->isAnon() ? true : false,
             'sig'           => PLG_replaceTags($Poster->tagline, 'forum', 'signature'),
+            'thanks_enabled' => $_FF_CONF['enable_user_thanks'] ? true : false,
+            'can_thank'     => $can_thank,
+            'thanked'       => $thanked ? true : false,
+            'thank_lang'    => sprintf($LANG_GF01['thank_lang'], $Poster->username),
+            'unthank_lang'  => sprintf($LANG_GF01['unthank_lang'], $Poster->username),
+            'thank_vis'     => $thanked ? 'none' : '',
+            'unthank_vis'   => $thanked ? '' : 'none',
+            'thank_lang_vis' => $Poster->thanks ? '' : 'none',
+            'thanked_times' => sprintf($LANG_GF01['thanked_times'], $Poster->thanks, $Poster->uid),
     ));
 
     if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {
