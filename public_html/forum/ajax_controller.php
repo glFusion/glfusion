@@ -356,7 +356,6 @@ function user_vote()
         'rating' => $user_rating,
         'statusMessage' => '',
     ) );
-COM_errorLog(print_r($retval,true));
     header("Cache-Control: no-store, no-cache, must-revalidate");
     echo $retval;
     exit;
