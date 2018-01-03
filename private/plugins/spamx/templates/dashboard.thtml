@@ -3,7 +3,7 @@
 	var refresh = 0;
 	function checkReloading() {
 		if (window.location.hash=="#autoreload") {
-			reloading=setTimeout("window.location.reload();", 30000);
+			reloading=setTimeout("window.location.reload();", 300000);
 			$('#refresh-button').html("{lang_auto_refresh_on}");
 			$('#refresh-button').attr("class","uk-button uk-button-success");
 			refresh = 1;
@@ -16,7 +16,7 @@
 	function toggleAutoRefresh(cb) {
 		if ( refresh == 0 ) {
 			window.location.replace("#autoreload");
-			reloading=setTimeout("window.location.reload();", 30000);
+			reloading=setTimeout("window.location.reload();", 300000);
 			$('#refresh-button').html('{lang_auto_refresh_on}');
 			$('#refresh-button').attr("class","uk-button uk-button-success");
 			refresh = 1;
@@ -38,7 +38,7 @@
 <div class="uk-panel uk-panel-box">
 
 	<div class="uk-align-left">
-		<h2>{lang_spamx_title}</h2>
+		<h2>{lang_spamx_title} - {lang_spamx_history}</h2>
 	</div>
 	<div class="uk-align-right">
 		<button id="refresh-button" class="uk-button" type="submit" id="autorefresh" value="{lang_auto_refresh_on}" onclick="toggleAutoRefresh(this);">{lang_auto_refresh_off}</button>

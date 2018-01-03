@@ -164,7 +164,8 @@ $LANG_SX00 = array(
     'blacklist_success_delete' => 'Selected items successfully deleted',
     'invalid_item_id' => 'Invalid ID',
     'edit_filter_entry' => 'Edit Filter',
-    'spamx_filters' => 'Spam-X Filters'
+    'spamx_filters' => 'Spam-X Filters',
+    'history' => 'Past 3 Months'
 );
 
 // Define Messages that are shown when Spam-X module action is taken

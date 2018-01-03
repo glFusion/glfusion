@@ -42,6 +42,19 @@ if (!SEC_hasRights ('spamx.admin')) {
     exit;
 }
 
+function spamx_purge_stats()
+{
+    global $_CONF, $_TABLES;
+    COM_errorLog("Spam-x: Purging Spam-X stats");
+    $mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
+    $dt = new \Date($mo3,$_CONF['timezone']);
+    $maxAge = $dt->toMySQL();
+    $now = time();
+    $sql = "DELETE FROM {$_TABLES['spamx_stats']} WHERE blockdate < '".$maxAge."'";
+    DB_query($sql,1);
+    DB_query("REPLACE INTO {$_TABLES['vars']} (name,value) VALUES ('spamxstats','".$now."');",1);
+}
+
 /**
 * Main
 */
@@ -49,6 +62,12 @@ if (!SEC_hasRights ('spamx.admin')) {
 USES_lib_admin();
 
 $page = '';
+
+if ( !isset($_VARS['spamxstats'])) $_VARS['spamxstats'] = 0;
+
+if ( $_VARS['spamxstats'] + 2592000 < time() ) {
+    spamx_purge_stats();
+}
 
 $menu_arr = array (
     array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['plugin_name'],'active'=>true),
@@ -65,6 +84,7 @@ $T->set_var('admin_menu',
     ADMIN_createMenu($menu_arr, $LANG_SX00['instructions'],
                      $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png'));
 
+/* ---------------------------------
 // summary by module only
 $sql = "select module,count(*) AS count from {$_TABLES['spamx_stats']} GROUP BY module";
 $result = DB_query($sql);
@@ -79,7 +99,7 @@ foreach($spamstats AS $mod => $blocked ) {
     $T->set_var('sblocked',$blocked);
     $T->parse('spamxmoduleblock','spamxmodule',true);
 }
-
+------------------------------------------------------- */
 // end of summary by module
 
 $stats = array(
@@ -93,7 +113,11 @@ $stats = array(
                 'IPofURL' => array(),
          );
 
-$sql = "select *,count(*) AS count from {$_TABLES['spamx_stats']} GROUP BY module, type";
+$mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
+$dt = new \Date($mo3,$_CONF['timezone']);
+$maxAge = $dt->toMySQL();
+
+$sql = "SELECT *,COUNT(*) AS count from {$_TABLES['spamx_stats']} WHERE blockdate > '".$maxAge."' GROUP BY module, type";
 $result = DB_query($sql);
 while ( ( $row = DB_fetchArray($result)) != NULL ) {
     $stats[$row['module']][$row['type']] = $row['count'];
@@ -104,6 +128,7 @@ $T->set_var(array(
     'lang_auto_refresh_on'  => $LANG_SX00['auto_refresh_on'],
     'lang_auto_refresh_off' => $LANG_SX00['auto_refresh_off'],
     'lang_spamx_title'      => $LANG_SX00['stats_headline'],
+    'lang_spamx_history'    => $LANG_SX00['history'],
     'lang_type'             => $LANG_SX00['type'],
     'lang_blocked'          => $LANG_SX00['blocked'],
     'lang_no_blocked'       => $LANG_SX00['no_blocked'],

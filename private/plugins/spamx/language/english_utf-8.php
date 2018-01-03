@@ -168,6 +168,7 @@ $LANG_SX00 = array (
     'invalid_item_id' => 'Invalid ID',
     'edit_filter_entry' => 'Edit Filter',
     'spamx_filters' => 'Spam-X Filters',
+    'history' => 'Past 3 Months',
 );
 
 
