@@ -141,9 +141,9 @@
 
 			<!-- BEGIN topicrow -->
 {!if is_online}
-{!!set online_icon "uk-icon-toggle-on uk-text-success" !!}
+{!!set online_icon "uk-text-success" !!}
 {!else}
-{!!set online_icon "uk-icon-toggle-off uk-text-muted" !!}
+{!!set online_icon "uk-text-muted" !!}
 {!endif}
 
 {!!if {csscode} == 2 !!}
