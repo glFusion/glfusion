@@ -1707,15 +1707,11 @@ function USER_save($uid)
                 // user has been renamed - rename the photo, too
                 $newphoto = preg_replace ('/' . $curusername . '/', $username, $curphoto, 1);
                 $imgpath = $_CONF['path_images'] . 'userphotos/';
-                if (rename ($imgpath . $curphoto,
-                            $imgpath . $newphoto) === false) {
-                    $display = COM_siteHeader ('menu', $LANG28[22]);
-                    $display .= COM_errorLog ('Could not rename userphoto "'
-                                    . $curphoto . '" to "' . $newphoto . '".');
-                    $display .= COM_siteFooter ();
-                    return $display;
+                if (@rename ($imgpath . $curphoto,$imgpath . $newphoto) === false) {
+                    COM_errorLog ('Could not rename userphoto "'.$curphoto . '" to "' . $newphoto . '".');
+                } else {
+                    $curphoto = $newphoto;
                 }
-                $curphoto = $newphoto;
             }
         }
 
