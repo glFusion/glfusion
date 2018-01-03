@@ -82,7 +82,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
     $showtopic['subject'] = @htmlspecialchars(strip_tags($showtopic['subject']),ENT_QUOTES,COM_getEncodingt());
     $disp_subject = COM_truncate($showtopic['subject'],$_FF_CONF['show_subject_length'],'...');
 
-    if ($mode != 'preview' && $uservalid && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
+    if ($mode != 'preview'  && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
         $editAllowed = false;
         if ($_FF_CONF['allowed_editwindow'] > 0) {
@@ -196,7 +196,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
                     'LANG_email'    => $LANG_GF01['EmailLink']));
         }
         $topictemplate->clear_var(array('websitelink','websitelinkimg','LANG_website'));
-        
+
         if ($Poster->homepage != '') {
             //$homepage = trim($userarray['homepage']);
             $homepage = $Poster->homepage;
@@ -258,9 +258,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
     } else {
         $topictemplate->set_var('ipaddress','');
     }
+    $can_voteup = false;
+    $can_votedn = false;
+    $vote_language = '';
 
     if ( $_FF_CONF['enable_user_rating_system'] && $Poster->okToVote()) {
-        $min_height += 10;
         if ($Poster->votes == 0) {
         	// user has never voted for this poster
             $can_voteup = true;
