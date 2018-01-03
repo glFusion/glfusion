@@ -323,7 +323,8 @@ CREATE TABLE {$_TABLES['sessions']} (
   md5_sess_id varchar(128) NOT NULL default '',
   PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
-  KEY remote_ip (remote_ip)
+  KEY remote_ip (remote_ip),
+  KEY uid (uid)
 ) ENGINE=MyISAM
 ";
 
