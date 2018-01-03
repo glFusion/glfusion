@@ -129,6 +129,7 @@ class User
         case 'forum':
         case 'sessions':
         case 'votes':
+        case 'showonline':
             $this->properties[$key] = (int)$value;
             break;
         case 'location':
@@ -201,7 +202,7 @@ class User
         if ($this->uid > 1) {
             $udt = new \Date(strtotime($this->regdate), $this->tzid);
             $this->regdate = $udt->format($_CONF['shortdate'],true);
-            if ($this->sessions > 0) {
+            if ($this->sessions > 0 && (int) $this->showonline == 1 ) {
                 $this->onlinestatus = $LANG_GF01['ONLINE'];
             } else {
                 $this->onlinestatus = $LANG_GF01['OFFLINE'];
@@ -258,10 +259,14 @@ class User
     */
     public function isOnline()
     {
+
         if ($this->uid == 1) {      // anonymous never online
             return false;
         } else {
-            return $this->sessions > 0 ? true : false;
+            if ( $this->showonline ) {
+                return $this->sessions > 0 ? true : false;
+            }
+            return false;
         }
     }
 
