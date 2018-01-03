@@ -1061,7 +1061,7 @@ function CMT_getCount($type, $sid, $queued = 0)
 */
 function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS, $LANG_ADMIN;
 
     $moderatorEdit = false;
     $adminEdit = false;
@@ -1311,6 +1311,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             $comment_template->set_var('title', $title);
 
+            $comment_template->set_var('lang_timeout',$LANG_ADMIN['timeout_msg']);
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $edit_comment);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
