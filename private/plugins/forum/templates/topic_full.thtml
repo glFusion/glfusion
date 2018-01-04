@@ -287,6 +287,12 @@
 											<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
 										</a>
 									</span>
+
+									<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
+										<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
+											<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
+										</a>
+									</span>
 {!else}
 {!if !is_anon}
 									{$LANG_GF01['grade']}: {user_rep}
