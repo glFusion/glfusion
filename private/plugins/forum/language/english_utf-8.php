@@ -263,9 +263,11 @@ $LANG_GF01 = array(
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
     'rank_updated' => 'Rank Updated',
-    'thank_lang' => 'Thank %s for this post',
-    'unthank_lang' => 'Remove thanks for this post',
-    'thanked_times' => 'Thanked <span class="thank_cnt_%2$d">%1$d</span> times',
+    'like' => 'Like',
+    'unlike' => 'Unlike',
+    'like_tooltip' => 'Like this post',
+    'unlike_tooltip' => 'Unlike this post',
+    'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
 );
 
 $LANG_GF02 = array(

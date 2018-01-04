@@ -21,8 +21,8 @@
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_vote.js"></script>
-{!if thanks_enabled}
-	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_thank.js"></script>
+{!if likes_enabled}
+	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_like.js"></script>
 {!endif}
 {!endif}
 	<script>
@@ -156,8 +156,8 @@
 {!!set tooltip "data-uk-tooltip=\"{delay:'300'}\"" !!}
 {!!set positive_rating "plus-circle" !!}
 {!!set negative_rating "minus-circle" !!}
-{!!set thanks_icon "thumbs-up" !!}
-{!!set nothanks_icon "thumbs-down" !!}
+{!!set like_icon "thumbs-up" !!}
+{!!set unlike_icon "thumbs-down" !!}
 			<a id="{topic_id}"></a>
 			<div class="uk-panel-box uk-margin-bottom {panelrow}" itemscope itemtype="http://schema.org/DiscussionForumPosting">
 				<div class="uk-grid">
@@ -298,8 +298,8 @@
 									{$LANG_GF01['grade']}: {user_rep}
 {!endif}
 {!endif}
-{!if thanks_enabled}
-									<div class="thank_lang_{topic_uid}" style="display:{thank_lang_vis};">{thanked_times}</div>
+{!if likes_enabled}
+									<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
 {!endif}
 
 {!if regdate}
@@ -335,15 +335,15 @@
 							</div>
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta" style="width:100%;">
-{!if can_thank}
-									<span style="float:left;display:{unthank_vis}" id="unthank_{topic_id}_{topic_uid}" {tooltip} title="{unthank_lang}">
-										<a href="#" onclick="forum_ajaxthank({current_uid},{topic_uid},{topic_id},0);return false;">
-											<i class="uk-icon uk-icon-{nothanks_icon} uk-icon-small uk-text-danger" alt="plus"></i>
+{!if can_like}
+									<span style="display:{unlike_vis}" id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
+										<a class="uk-button uk-button-primary uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
+											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" alt="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
 										</a>
 									</span>
-									<span style="float:left;display:{thank_vis}" id="thank_{topic_id}_{topic_uid}" {tooltip} title="{thank_lang}">
-										<a href="#" onclick="forum_ajaxthank({current_uid},{topic_uid},{topic_id},1);return false;">
-											<i class="uk-icon uk-icon-{thanks_icon} uk-icon-small uk-text-success" alt="plus"></i>
+									<span style="display:{like_vis}" id="like_{topic_id}_{topic_uid}" {tooltip} title="{like_tooltip}">
+										<a class="uk-button uk-button-primary uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},1);return false;">
+											<i class="uk-icon uk-icon-{like_icon} uk-icon-small" alt="plus"></i>&nbsp;{$LANG_GF01['like']}
 										</a>
 									</span>
 {!endif}

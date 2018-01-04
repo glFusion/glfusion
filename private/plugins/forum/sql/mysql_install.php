@@ -260,9 +260,9 @@ $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
 ) ENGINE=MyISAM;";
 
 #
-# Table structures for table 'forum_thanks_assoc'
+# Table structures for table 'forum_likes_assoc'
 #
-$_SQL['ff_thanks_assoc'] = "CREATE TABLE `{$_TABLES['ff_thanks_assoc']}` (
+$_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
   `poster_id` mediumint(9) NOT NULL,
   `voter_id` mediumint(9) NOT NULL,
   `topic_id` int(11) NOT NULL,

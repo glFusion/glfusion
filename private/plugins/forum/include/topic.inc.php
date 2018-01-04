@@ -290,18 +290,14 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $topictemplate->unset_var('last_edited');
     }
 
-    $can_thank = false;
-    $thanked = 0;
-    if ($_FF_CONF['enable_user_thanks']) {
-        if (!$Poster->isAnon() &&           // poster is not anonymous
-            !COM_isAnonUser() &&            // current user is not anonymous
-            $Poster->uid != $_USER['uid']   // current user is not the poster
-        ) {
-            $can_thank = true;
-            $thanked = DB_count($_TABLES['ff_thanks_assoc'],
-                    array('poster_id', 'voter_id', 'topic_id'),
-                    array($Poster->uid, $_USER['uid'], $showtopic['id']));
-        }
+    if ($_FF_CONF['enable_likes'] && $Poster->okToVote()) {
+        $can_like = true;
+        $post_liked = (int)DB_count($_TABLES['ff_likes_assoc'],
+                array('poster_id', 'voter_id', 'topic_id'),
+                array($Poster->uid, $_USER['uid'], $showtopic['id']));
+    } else {
+        $can_like = false;
+        $post_liked = 0;
     }
 
     $topictemplate->set_var (array(
@@ -340,15 +336,15 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'is_online'     => $Poster->isOnline(),
             'is_anon'       => $Poster->isAnon() ? true : false,
             'sig'           => PLG_replaceTags($Poster->tagline, 'forum', 'signature'),
-            'thanks_enabled' => $_FF_CONF['enable_user_thanks'] ? true : false,
-            'can_thank'     => $can_thank,
-            'thanked'       => $thanked ? true : false,
-            'thank_lang'    => sprintf($LANG_GF01['thank_lang'], $Poster->username),
-            'unthank_lang'  => sprintf($LANG_GF01['unthank_lang'], $Poster->username),
-            'thank_vis'     => $thanked ? 'none' : '',
-            'unthank_vis'   => $thanked ? '' : 'none',
-            'thank_lang_vis' => $Poster->thanks ? '' : 'none',
-            'thanked_times' => sprintf($LANG_GF01['thanked_times'], $Poster->thanks, $Poster->uid),
+            'likes_enabled' => $_FF_CONF['enable_likes'] ? true : false,
+            'can_like'      => $can_like,
+            'liked'         => $liked ? true : false,
+            'like_tooltip'  => sprintf($LANG_GF01['like_tooltip'], $Poster->username),
+            'unlike_tooltip' => sprintf($LANG_GF01['unlike_tooltip'], $Poster->username),
+            'like_vis'     => $post_liked ? 'none' : '',
+            'unlike_vis'   => $post_liked ? '' : 'none',
+            'like_lang_vis' => $Poster->likes > 0 ? '' : 'none',
+            'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->likes, $Poster->uid),
     ));
 
     if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {

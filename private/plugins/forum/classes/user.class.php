@@ -86,7 +86,7 @@ class User
                     count(distinct topic.id) as posts,
                     count(distinct sessions.sess_id) as sessions,
                     count(distinct rating.user_id) as votes,
-                    count(distinct thanks.topic_id) as thanks
+                    count(distinct likes.topic_id) as likes
                 FROM {$_TABLES['users']} users
                 LEFT JOIN {$_TABLES['userprefs']} userprefs
                     ON users.uid=userprefs.uid
@@ -100,8 +100,8 @@ class User
                     ON sessions.uid = users.uid
                 LEFT JOIN {$_TABLES['ff_rating_assoc']} rating
                     ON (rating.user_id = users.uid AND rating.voter_id = {$_USER['uid']})
-                LEFT JOIN {$_TABLES['ff_thanks_assoc']} thanks
-                    ON thanks.poster_id = users.uid
+                LEFT JOIN {$_TABLES['ff_likes_assoc']} likes
+                    ON likes.poster_id = users.uid
                 WHERE users.uid = $uid
                 GROUP BY users.uid";
         //echo $sql;die;
@@ -133,7 +133,7 @@ class User
         case 'sessions':
         case 'votes':
         case 'showonline':
-        case 'thanks':
+        case 'likes':
             $this->properties[$key] = (int)$value;
             break;
         case 'location':

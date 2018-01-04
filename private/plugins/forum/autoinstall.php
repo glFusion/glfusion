@@ -68,7 +68,7 @@ $INSTALL_plugin['forum'] = array(
   array('type' => 'table', 'table' => $_TABLES['ff_rating_assoc'], 'sql' => $_SQL['ff_rating_assoc']),
   array('type' => 'table', 'table' => $_TABLES['ff_badges'], 'sql' => $_SQL['ff_badges']),
   array('type' => 'table', 'table' => $_TABLES['ff_ranks'], 'sql' => $_SQL['ff_ranks']),
-  array('type' => 'table', 'table' => $_TABLES['ff_thanks_assoc'], 'sql' => $_SQL['ff_thanks_assoc']),
+  array('type' => 'table', 'table' => $_TABLES['ff_likes_assoc'], 'sql' => $_SQL['ff_likes_assoc']),
 
   array('type' => 'group', 'group' => 'forum Admin', 'desc' => 'Users in this group can administer the Forum plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
@@ -157,7 +157,7 @@ function plugin_autouninstall_forum ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('ff_topic','ff_categories','ff_forums','ff_settings','ff_moderators','ff_banned_ip', 'ff_log', 'ff_userprefs','ff_userinfo','ff_attachments','ff_bookmarks','ff_rating_assoc', 'ff_badges', 'ff_ranks', 'ff_thanks_assoc'),
+        'tables' => array('ff_topic','ff_categories','ff_forums','ff_settings','ff_moderators','ff_banned_ip', 'ff_log', 'ff_userprefs','ff_userinfo','ff_attachments','ff_bookmarks','ff_rating_assoc', 'ff_badges', 'ff_ranks', 'ff_likes_assoc'),
         /* give the full name of the group, as in the db */
         'groups' => array('forum Admin'),
         /* give the full name of the feature, as in the db */

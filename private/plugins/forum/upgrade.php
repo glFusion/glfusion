@@ -204,7 +204,7 @@ function forum_upgrade() {
               `dscp` varchar(40) NOT NULL DEFAULT '',
               PRIMARY KEY (`posts`)
             ) ENGINE=MyISAM;";
-            $_SQL['ff_thanks_assoc'] = "CREATE TABLE `{$_TABLES['ff_thanks_assoc']}` (
+            $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
               `poster_id` mediumint(9) NOT NULL,
               `voter_id` mediumint(9) NOT NULL,
               `topic_id` int(11) NOT NULL,
