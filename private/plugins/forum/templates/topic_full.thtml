@@ -181,11 +181,14 @@
 {!endif}
 								</span>
 {!if onlinestatus}
-								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i><br />
+								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
+{!endif}
+{!if likes_enabled}
+								<span class="uk-text-small">{liked_times}</span>
 {!endif}
 							</span>
 
-							<a class="btn" {tooltip} title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+							<br /><a class="btn" {tooltip} title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
 								<i class="uk-icon uk-icon-mini uk-icon-clipboard uk-hidden-small uk-icon-hover"></i>
 							</a>
 
