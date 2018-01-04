@@ -14,7 +14,6 @@ var forum_ajaxlike = function(v_uid, t_uid, t_id, vote) {
         data: data,
         success: function(result) {
             try {
-console.log(result);
                 var span_id = result.t_id + "_" + result.t_uid;
                 var div_cls = "like_lang"+result.t_uid;
                 if (result.vote == 1) {     // user was likeed
@@ -24,6 +23,7 @@ console.log(result);
                     document.getElementById("like_" + span_id).style.display = "";
                     document.getElementById("unlike_" + span_id).style.display = "none";
                 }
+                document.getElementById("likes_text_" + result.t_id).innerHTML = result.likes_text;
                 var like_lang = document.getElementsByClassName("like_lang_"+result.t_uid);
                 var like_cnt = document.getElementsByClassName("like_cnt_"+result.t_uid);
                 var like_lang_vis = result.vote_count > 0 ? "" : "none";

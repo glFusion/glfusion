@@ -272,6 +272,8 @@ $LANG_GF01 = array(
     // The span is required as below.
     // "%1$d" is replaced with the number of likes.
     'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
+    'likes_title_plural' => 'Liked by %s.',
+    'likes_title_single' => '%s likes this',
 );
 
 $LANG_GF02 = array(

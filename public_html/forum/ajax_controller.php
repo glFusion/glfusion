@@ -393,46 +393,28 @@ function user_like()
         exit;
     }
 
-    $existing_vote = DB_count($_TABLES['ff_likes_assoc'],
-            array('poster_id', 'voter_id', 'topic_id'),
-            array($t_uid, $v_uid, $t_id));
-
-    if (!$existing_vote && $vote == 1) {       // Normal voting
-        DB_query("INSERT INTO {$_TABLES['ff_likes_assoc']}
-                    (poster_id, voter_id, topic_id)
-        		VALUES ($t_uid, $v_uid, $t_id)");
-    } else {    // retract vote
-        //Delete Their vote in the associative table
-        DB_delete($_TABLES['ff_likes_assoc'],
-                array('poster_id', 'voter_id', 'topic_id'),
-                array($t_uid, $v_uid, $t_id));
+    if ($vote == 1) {
+        \Forum\Like::addLike($v_uid, $t_uid, $t_id);
+    } else {
         $vote = 0;
+        \Forum\Like::remLike($v_uid, $t_uid, $t_id);
     }
 
-    if ($vote == 0) {
-        // retracted like
+    $likers = \Forum\Like::LikerNames($t_id, !$_CONF['profileloginrequired'] || !COM_isAnonUser());
+    if (count($likers) > 1) {
+        $likes_format = $LANG_GF01['likes_title_plural'];
     } else {
-        // user has already voted for this poster
-        $vote_language = $LANG_GF01['retract_grade'];
-        if ($vote > 0) {
-            // gave a +1 show the minus to retract
-            $plus_vote = false;
-            $minus_vote = true;
-		} else {
-            // gave a -1 show the plus to retract
-            $minus_vote = false;
-            $plus_vote = true;
-		}
-	}
+        $likes_format = $LANG_GF01['likes_title_single'];
+    }
+    $likers = implode(', ', $likers);    // reformat to a single string
 
     $retval = json_encode(array(
         't_id' => $t_id,
         't_uid' => $t_uid,
         'v_uid' => $v_uid,
         'vote'  => $vote,
-        'vote_count' => (int)DB_count($_TABLES['ff_likes_assoc'],
-                        array('poster_id'),
-                        array($t_uid)),
+        'vote_count' => \Forum\Like::CountLikesReceived($t_uid),
+        'likes_text' => empty($likers) ? '' : sprintf($likes_format, $likers),
         'statusMessage' => '',
     ) );
 

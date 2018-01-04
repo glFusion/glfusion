@@ -290,14 +290,25 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $topictemplate->unset_var('last_edited');
     }
 
-    if ($_FF_CONF['enable_likes'] && $Poster->okToVote()) {
-        $can_like = true;
-        $post_liked = (int)DB_count($_TABLES['ff_likes_assoc'],
-                array('poster_id', 'voter_id', 'topic_id'),
-                array($Poster->uid, $_USER['uid'], $showtopic['id']));
+    $can_like = false;
+    if ($_FF_CONF['enable_likes']) {
+        if ($Poster->okToVote()) {
+            $can_like = true;
+        }
+        $likers = \Forum\Like::LikerNames($showtopic['id'], !$_CONF['profileloginrequired'] || !COM_isAnonUser());
+        $total_post_likes = count($likers);
+        if ($total_post_likes > 1) {
+            $likes_format = $LANG_GF01['likes_title_plural'];
+        } else {
+            $likes_format = $LANG_GF01['likes_title_single'];
+        }
+        $likers = implode(', ', $likers);
+        $post_liked = \Forum\Like::LikedByUser($showtopic['id']);
     } else {
-        $can_like = false;
-        $post_liked = 0;
+        $post_liked = false;
+        $total_post_likes = 0;
+        $likers = '';
+        $likes_format = $LANG_GF01['likes_title_single'];
     }
 
     $topictemplate->set_var (array(
@@ -338,13 +349,15 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'sig'           => PLG_replaceTags($Poster->tagline, 'forum', 'signature'),
             'likes_enabled' => $_FF_CONF['enable_likes'] ? true : false,
             'can_like'      => $can_like,
-            'liked'         => $liked ? true : false,
+            'liked'         => $post_liked,
             'like_tooltip'  => sprintf($LANG_GF01['like_tooltip'], $Poster->username),
             'unlike_tooltip' => sprintf($LANG_GF01['unlike_tooltip'], $Poster->username),
             'like_vis'     => $post_liked ? 'none' : '',
             'unlike_vis'   => $post_liked ? '' : 'none',
-            'like_lang_vis' => $Poster->likes > 0 ? '' : 'none',
-            'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->likes, $Poster->uid),
+            'like_lang_vis' => $Poster->Likes() > 0 ? '' : 'none',
+            'total_post_likes' => $total_post_likes,
+            'likes_title'   => empty($likers) ? '' : sprintf($likes_format, $likers),
+            'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->Likes(), $Poster->uid),
     ));
 
     if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {
