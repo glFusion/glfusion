@@ -19,8 +19,8 @@ if (is_ajax()) {
         $action = $_POST["action"];
 
         switch ( $action ) {
-            case 'thank':
-                user_thank();
+            case 'like':
+                user_like();
                 break;
             case 'vote':
                 user_vote();
@@ -364,11 +364,11 @@ function user_vote()
     exit;
 }
 
-function user_thank()
+function user_like()
 {
     global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01;
 
-    if ( !$_FF_CONF['enable_user_thanks'] ) {
+    if ( !$_FF_CONF['enable_likes'] ) {
         exit;
     }
 
@@ -393,24 +393,24 @@ function user_thank()
         exit;
     }
 
-    $existing_vote = DB_count($_TABLES['ff_thanks_assoc'],
+    $existing_vote = DB_count($_TABLES['ff_likes_assoc'],
             array('poster_id', 'voter_id', 'topic_id'),
             array($t_uid, $v_uid, $t_id));
 
     if (!$existing_vote && $vote == 1) {       // Normal voting
-        DB_query("INSERT INTO {$_TABLES['ff_thanks_assoc']}
+        DB_query("INSERT INTO {$_TABLES['ff_likes_assoc']}
                     (poster_id, voter_id, topic_id)
         		VALUES ($t_uid, $v_uid, $t_id)");
     } else {    // retract vote
         //Delete Their vote in the associative table
-        DB_delete($_TABLES['ff_thanks_assoc'],
+        DB_delete($_TABLES['ff_likes_assoc'],
                 array('poster_id', 'voter_id', 'topic_id'),
                 array($t_uid, $v_uid, $t_id));
         $vote = 0;
     }
 
     if ($vote == 0) {
-    	// retracted thanks
+        // retracted like
     } else {
         // user has already voted for this poster
         $vote_language = $LANG_GF01['retract_grade'];
@@ -430,7 +430,7 @@ function user_thank()
         't_uid' => $t_uid,
         'v_uid' => $v_uid,
         'vote'  => $vote,
-        'vote_count' => (int)DB_count($_TABLES['ff_thanks_assoc'],
+        'vote_count' => (int)DB_count($_TABLES['ff_likes_assoc'],
                         array('poster_id'),
                         array($t_uid)),
         'statusMessage' => '',
