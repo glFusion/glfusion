@@ -2140,7 +2140,7 @@ function INST_resyncConfig() {
     $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='Core'");
     while ( $row = DB_fetchArray($result) ) {
         $item = $row['name'];
-        if ( ($key = _searchForIdKey($item,$coreConfigData)) === NULL ) {
+        if ( ($key = INST_searchForIdKey($item,$coreConfigData)) === NULL ) {
             DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='Core'");
         } else {
             $coreConfigData[$key]['indb'] = 1;
@@ -2148,7 +2148,7 @@ function INST_resyncConfig() {
     }
     foreach ($coreConfigData AS $cfgItem ) {
         if (!isset($cfgItem['indb']) ) {
-            _addConfigItem( $cfgItem );
+            INST_addConfigItem( $cfgItem );
         }
     }
     $c = config::get_instance();
@@ -2255,7 +2255,7 @@ function INST_encrypt($data,$key = '')
 }
 
 
-function _searchForId($id, $array) {
+function INST_searchForId($id, $array) {
    foreach ($array as $key => $val) {
        if ($val['name'] === $id) {
            return $array[$key];
@@ -2311,7 +2311,7 @@ function INST_securePassword($length = 12) {
 }
 
 
-function _searchForIdKey($id, $array) {
+function INST_searchForIdKey($id, $array) {
    foreach ($array as $key => $val) {
        if ($val['name'] === $id) {
            return $key;
@@ -2320,7 +2320,7 @@ function _searchForIdKey($id, $array) {
    return null;
 }
 
-function _addConfigItem($data = array() )
+function INST_addConfigItem($data = array() )
 {
     global $_TABLES;
 
