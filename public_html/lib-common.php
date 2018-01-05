@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1840,7 +1840,7 @@ function COM_errorLog( $logentry, $actionid = '' )
     $retval = '';
 
     $dt = new \Date('now',$_CONF['timezone']);
-    $timestamp = $dt->format("d M Y H:i:s T",false);
+    $timestamp = $dt->format("d M Y H:i:s T",true);
 
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
@@ -1917,7 +1917,7 @@ function COM_accessLog( $logentry )
                                  $logentry );
 
         $dt = new \Date('now',$_CONF['timezone']);
-        $timestamp = $dt->format("d M Y H:i:s T",false);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
 
         $logfile = $_CONF['path_log'] . 'access.log';
 
@@ -6355,7 +6355,7 @@ function COM_404()
         }
 
         $dt = new \Date('now',$_CONF['timezone']);
-        $timestamp = $dt->format("d M Y H:i:s T",false);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
 
         $logEntry = "404 :: $byUser :: URL: $url";
         if (!empty($refUrl)) {

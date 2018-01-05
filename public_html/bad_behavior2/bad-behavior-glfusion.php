@@ -62,6 +62,10 @@ $bb2_settings_defaults = array(
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
+    global $_CONF;
+    $dt = new \Date('now',$_CONF['timezone']);
+    $timestamp = $dt->format("Y-m-d H:i:s",true);
+    return $timestamp;
 
     return date("Y-m-d H:i:s");
 }

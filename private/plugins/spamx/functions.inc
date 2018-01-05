@@ -334,8 +334,8 @@ function SPAMX_log ($logentry)
     global $_CONF, $_USER, $LANG01, $_SPX_CONF;
 
     if ((!isset ($_SPX_CONF['logging']) || ($_SPX_CONF['logging'] === true)) && !empty ($logentry)) {
-        $dt = new \Date('now',$_USER['tzid']);
-        $timestamp = $dt->format("d M Y H:i:s T",false);
+        $dt = new \Date('now',$_CONF['timezone']);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
         $logfile = $_CONF['path_log'] . 'spamx.log';
         if (!$file = fopen ($logfile, 'a')) {
