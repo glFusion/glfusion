@@ -381,7 +381,21 @@ class Like
         $extra_count = count(array_slice($likers, $threshold));
         return sprintf($fmt, $str, $total_likes, $extra_count);
     }
- 
+
+
+    /**
+    *   Import Community Moderation votes as Likes
+    */
+    public function importFromModeration()
+    {
+        global $_TABLES;
+        $sql = "INSERT IGNORE INTO {$_TABLES['ff_likes_assoc']}
+                    (poster_id, voter_id, topic_id)
+                SELECT user_id, voter_id, topic_id FROM {$_TABLES['ff_rating_assoc']}
+                WHERE grade = 1";
+        DB_query($sql);
+    }
+
 }
 
 ?>
