@@ -283,6 +283,7 @@ $LANG_GF01 = array(
         1 => 'Liked by %1$s.',          // multiple likes, up to threshold
         2 => '%1$s and %3$d others like this.', // threshold and beyond
     ),
+    'unk_username' => 'unknown',
 );
 
 $LANG_GF02 = array(

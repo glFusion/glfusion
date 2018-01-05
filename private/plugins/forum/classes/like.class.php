@@ -26,10 +26,11 @@ class Like
     *   Sets the field values from the supplied array, or reads the record
     *   if $A is a rank ID.
     *
-    *   @param  mixed   $A  Array of properties or group ID
+    *   @param  array   $A  Array of properties
     */
     public function __construct($A)
     {
+        if (is_null($A['username'])) $A['username'] = $LANG_GF01['unk_username'];
         foreach ($A as $key => $value) {
             $this->$key = $value;
         }
@@ -127,7 +128,7 @@ class Like
     */
     public static function TopicLikes($parent_id)
     {
-        global $_TABLES;
+        global $_TABLES, $LANG_GF01;
 
         $topics = self::_getAllTopics($parent_id);
         // All topics go into the cache array whether they have likes or not.
@@ -169,9 +170,7 @@ class Like
             $likers = array();
             $lk_res = DB_query($sql);
             while ($A = DB_fetchArray($lk_res, false)) {
-                if (!is_null($A['username'])) {
-                    $likers[$A['voter_id']] = new self($A);
-                }
+                $likers[$A['voter_id']] = new self($A);
             }
             self::$cache[$post_id] = $likers;
         }
