@@ -64,8 +64,8 @@ $order = '';
 $query = '';
 $reply = '';
 if (isset ($_POST['mode'])) {
-    $sid = COM_sanitizeID(COM_applyFilter ($_POST['story']));
-    $mode = COM_applyFilter ($_POST['mode']);
+    $sid = isset($_POST['story']) ? COM_sanitizeID(COM_applyFilter ($_POST['story'])) : '';
+    $mode = isset($_POST['mode']) ? COM_applyFilter ($_POST['mode']) : '';
     if (isset ($_POST['order'])) {
         $order = COM_applyFilter ($_POST['order']);
     }

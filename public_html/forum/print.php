@@ -58,7 +58,7 @@ function ff_FormatForPrint( $str, $postmode='html', $status=0 ) {
     return $str;
 }
 
-$id = COM_applyFilter($_REQUEST['id'],true);
+$id = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
 
 if ($_FF_CONF['registration_required'] && COM_isAnonUser()) {
     echo COM_siteHeader();

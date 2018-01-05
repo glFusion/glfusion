@@ -770,7 +770,7 @@ switch ($what) {
         break;
 
     case 'emailstory':
-        $sid = COM_sanitizeID(COM_applyFilter ($_GET['sid']));
+        $sid = isset($_GET['sid']) ? COM_sanitizeID(COM_applyFilter ($_GET['sid'])) : '';
         if (empty ($sid)) {
             $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else if ($_CONF['hideemailicon'] == 1) {
