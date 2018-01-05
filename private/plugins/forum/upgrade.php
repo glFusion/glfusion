@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -264,6 +264,7 @@ function forum_upgrade() {
             $c->del('ff_rank_settings', 'forum');
 
         default :
+            forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
@@ -476,4 +477,16 @@ function _forum_cvt_watch() {
 
     return $converted;
 }
+
+function forum_update_config()
+{
+    global $_CONF, $_FF_CONF, $_TABLES;
+
+    USES_lib_install();
+
+    require_once $_CONF['path'].'plugins/forum/sql/forum_config_data.php';
+    _update_config('forum', $forumConfigData);
+
+}
+
 ?>
