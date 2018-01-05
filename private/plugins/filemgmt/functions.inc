@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin interface to glFusion                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -272,7 +272,7 @@ function plugin_deletecomment_filemgmt($cid,$id) {
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
     global $_USER, $_FM_CONF, $filemgmt_FileSnapURL, $FilemgmtAdmin ,$mydownloads_dlreport ,$mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG01,$_DB_name;
-
+    global $filemgmt_FileStore;
 
     if ( COM_isAnonUser() && $mydownloads_publicpriv != 1 )  {
         return '';

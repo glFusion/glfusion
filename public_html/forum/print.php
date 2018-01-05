@@ -72,7 +72,7 @@ if ($_FF_CONF['registration_required'] && COM_isAnonUser()) {
 //Check is anonymous users can access
 if ($id == 0 OR DB_count($_TABLES['ff_topic'],"id",(int) $id) == 0) {
     echo COM_siteHeader();
-    echo FF_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
+    echo FF_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php",$LANG_GF02['msg166']);
     echo COM_siteFooter();
     exit;
 }
