@@ -295,20 +295,11 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         if ($Poster->okToVote()) {
             $can_like = true;
         }
-        $likers = \Forum\Like::LikerNames($showtopic['id'], !$_CONF['profileloginrequired'] || !COM_isAnonUser());
-        $total_post_likes = count($likers);
-        if ($total_post_likes > 1) {
-            $likes_format = $LANG_GF01['likes_title_plural'];
-        } else {
-            $likes_format = $LANG_GF01['likes_title_single'];
-        }
-        $likers = implode(', ', $likers);
-        $post_liked = \Forum\Like::LikedByUser($showtopic['id']);
+        $post_liked = \Forum\Like::isLikedByUser($showtopic['id']);
+        $total_post_likes = \Forum\Like::CountPostLikes($showtopic['id']);
     } else {
         $post_liked = false;
         $total_post_likes = 0;
-        $likers = '';
-        $likes_format = $LANG_GF01['likes_title_single'];
     }
 
     $topictemplate->set_var (array(
@@ -356,7 +347,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'unlike_vis'   => $post_liked ? '' : 'none',
             'like_lang_vis' => $Poster->Likes() > 0 ? '' : 'none',
             'total_post_likes' => $total_post_likes,
-            'likes_title'   => empty($likers) ? '' : sprintf($likes_format, $likers),
+            'likes_text'    => \Forum\Like::getLikesText($showtopic['id']),
             'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->Likes(), $Poster->uid),
     ));
 

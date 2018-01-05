@@ -400,21 +400,13 @@ function user_like()
         \Forum\Like::remLike($v_uid, $t_uid, $t_id);
     }
 
-    $likers = \Forum\Like::LikerNames($t_id, !$_CONF['profileloginrequired'] || !COM_isAnonUser());
-    if (count($likers) > 1) {
-        $likes_format = $LANG_GF01['likes_title_plural'];
-    } else {
-        $likes_format = $LANG_GF01['likes_title_single'];
-    }
-    $likers = implode(', ', $likers);    // reformat to a single string
-
     $retval = json_encode(array(
         't_id' => $t_id,
         't_uid' => $t_uid,
         'v_uid' => $v_uid,
         'vote'  => $vote,
         'vote_count' => \Forum\Like::CountLikesReceived($t_uid),
-        'likes_text' => empty($likers) ? '' : sprintf($likes_format, $likers),
+        'likes_text' => \Forum\Like::getLikesText($t_id),
         'statusMessage' => '',
     ) );
 

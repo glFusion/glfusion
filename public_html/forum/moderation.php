@@ -80,6 +80,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
             }
             PLG_itemDeleted($A['id'],'forum');
         }
+        \Forum\Like::remAllLikes($topic_id, true);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE (type='forum' AND id=".(int)$topic_id.")");
@@ -99,6 +100,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
             }
         }
         DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int) $topicparent);
+        \Forum\Like::remAllLikes($topic_id, false);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
         $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
         DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count=".(int) $postCount." WHERE forum_id=".(int) $forum_id);

@@ -71,6 +71,34 @@ class Like
 
 
     /**
+    *   Helper function to get all children under a parent topic.
+    *
+    *   @see    self::TopicLikes()
+    *   @see    self::remAllLikes()
+    *   @param  integer $parent_id  ID of parent topic
+    */
+    private static function _getAllTopics($parent_id)
+    {
+        global $_TABLES;
+
+        $parent_id = (int)$parent_id;
+        if ($parent_id == 0) return array();
+
+        // include the parent
+        $topics = array($parent_id);
+
+        // Now get all the children
+        $sql = "SELECT id FROM {$_TABLES['ff_topic']}
+                WHERE pid = '$parent_id'";
+        $res = DB_query($sql);
+        while ($A = DB_fetchArray($res, false)) {
+            $topics[] = (int)$A['id'];
+        }
+        return $topics;
+    }
+
+
+    /**
     *   Return a count of all the likes given by a specific user.
     *
     *   @param  integer $uid    User ID
@@ -86,6 +114,36 @@ class Like
             $cache[$uid] = (int)DB_count($_TABLES['ff_likes_assoc'], 'voter_id', $uid);
         }
         return $cache[$uid];
+    }
+
+
+    /**
+    *   Get all the likes for all posts under a specified parent ID
+    *   This is to be called by the topic display to get all likes
+    *   at once. All likes for all posts under the parent ID are cached.
+    *
+    *   @param  integer $parent_id  Parent ID
+    *   @return void
+    */
+    public static function TopicLikes($parent_id)
+    {
+        global $_TABLES;
+
+        $topics = self::_getAllTopics($parent_id);
+        // All topics go into the cache array whether they have likes or not.
+        foreach ($topics as $topic_id) {
+            self::$cache[$topic_id] = array();
+        }
+        $topics = implode(',', $topics);
+        $sql = "SELECT u.username, lk.*
+                FROM {$_TABLES['ff_likes_assoc']} lk
+                LEFT JOIN {$_TABLES['users']} u
+                    ON u.uid = lk.voter_id
+                WHERE lk.topic_id IN ($topics)";
+        $res = DB_query($sql);
+        while ($A = DB_fetchArray($res, false)) {
+            self::$cache[$A['topic_id']][$A['voter_id']] = new self($A);
+        }
     }
 
 
@@ -128,7 +186,7 @@ class Like
     *   @param  integer $uid        User ID, default is current user
     *   @return boolean     True if the user has liked the post
     */
-    public static function LikedByUser($post_id, $uid = 0)
+    public static function isLikedByUser($post_id, $uid = 0)
     {
         global $_USER;
 
@@ -204,10 +262,37 @@ class Like
 
 
     /**
+    *   Remove all entries from the Likes table for a topic.
+    *   Used when a topic is deleted by the moderator.
+    *   If this is a parent topic, then all likes for the child topics
+    *   are also removed.
+    *
+    *   @param  integer $topic_id   ID of topic
+    *   @param  boolean $is_parent  True if this is a parent topic.
+    */
+    public static function remAllLikes($topic_id, $is_parent = false)
+    {
+        global $_TABLES;
+
+        $topic_id = (int)$topic_id;
+
+        if ($is_parent) {
+            $like_topics = self::_getAllTopics($topic_id);
+            $like_topics = implode(',', $like_topics);
+        } else {
+            $like_topics = $topic_id;
+        }
+        $sql = "DELETE FROM {$_TABLES['ff_likes_assoc']}
+                WHERE topic_id IN ($like_topics)";  
+        DB_query($sql);
+    }
+
+
+    /**
     *   Return the count of likes given for a post.
     *
     *   @param  integer $post_id    ID of post
-    *   @retur  integer     Total count of likes for the post
+    *   @return integer     Total count of likes for the post
     */
     public static function CountPostLikes($post_id)
     {
@@ -242,9 +327,14 @@ class Like
     *   @param  boolean $link       True to wrap the usernames in a link
     *   @return array       Array of usernames
     */
-    public static function LikerNames($post_id, $link = false)
+    public static function LikerNames($post_id, $link = true)
     {
         global $_CONF;
+
+        // Override link request if condition for showing profile link isn't met.
+        if ($link && ($_CONF['profileloginrequired'] && COM_isAnonUser())) {
+            $link = false;
+        }
 
         $likers = array();
         foreach (self::PostLikes($post_id) as $like) {
@@ -259,6 +349,39 @@ class Like
         return $likers;
      }
 
+
+    /**
+    *   Get the text to appear in the posts.
+    *   This is the "Liked by user1, user2,..." text line.
+    *
+    *   @param  integer $post_id    Post ID
+    *   @return string      Formatted text string
+    */
+    public static function getLikesText($post_id)
+    {
+        global $LANG_GF01;
+
+        $likers = self::LikerNames($post_id);
+        $total_likes = count($likers);
+        $threshold = 3;
+
+        if ($total_likes == 0) {
+            return '';      // No likes, no text
+        } elseif ($total_likes == 1) {
+            // Singular format, e.g. "User1 like this"
+            $fmt = $LANG_GF01['likes_formats'][0];
+        } elseif ($total_likes <= $threshold) {
+            // Format for small number, e.g. "Liked by user1, user2, user3"
+            $fmt = $LANG_GF01['likes_formats'][1];
+        } else {
+            // Format for large number, e.g. "user1, user2 and 3 others"
+            $fmt = $LANG_GF01['likes_formats'][2];
+        }
+        $str = implode(', ', array_slice($likers, 0, $threshold));
+        $extra_count = count(array_slice($likers, $threshold));
+        return sprintf($fmt, $str, $total_likes, $extra_count);
+    }
+ 
 }
 
 ?>
