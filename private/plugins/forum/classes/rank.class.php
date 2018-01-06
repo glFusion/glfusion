@@ -236,6 +236,13 @@ class Rank
 
         $ranks = self::getAll();
         $total_ranks = count($ranks);
+
+        // If there are no ranks configured, show nothing.
+        // Not even "admin" or "moderator" text
+        if (empty($ranks)) {
+            return array('', '');
+        }
+
         $rank = 0;
         $txt = '';
         $isAdmin = false;
