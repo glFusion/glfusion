@@ -69,6 +69,10 @@ define('PATCHLEVEL','.pl0');
 
 //define('DVLP_DEBUG',true);
 
+if (!defined ('OPENSSL_RAW_DATA')) {
+    define('OPENSSL_RAW_DATA', 1);
+}
+
 /**
 * Turn this on to get various debug messages from the code in this library
 * @global Boolean $_COM_VERBOSE
