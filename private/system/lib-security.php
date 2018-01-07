@@ -633,7 +633,8 @@ function SEC_getPermissionValue($perm_x)
 */
 function SEC_getFeatureGroup ($feature, $uid = '')
 {
-    return \Group::withFeature($feature, $uid)[0];
+    $grpFeature = \Group::withFeature($feature, $uid);
+    return $grpFeature[0];
 }
 
 
