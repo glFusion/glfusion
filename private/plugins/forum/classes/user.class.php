@@ -81,9 +81,9 @@ class User
         global $_TABLES, $_USER;
 
         $uid = (int)$uid;
-        $sql = "SELECT users.*, userprefs.*, userinfo.*,
+
+        $sql = "SELECT (SELECT COUNT(DISTINCT id) FROM {$_TABLES['ff_topic']} WHERE uid=$uid) as posts, users.*, userprefs.*, userinfo.*,
                     gf_userinfo.rating, gf_userinfo.signature,
-                    count(distinct topic.id) as posts,
                     count(distinct sessions.sess_id) as sessions,
                     count(distinct rating.user_id) as votes
                 FROM {$_TABLES['users']} users
@@ -93,14 +93,11 @@ class User
                      ON users.uid=userinfo.uid
                 LEFT JOIN {$_TABLES['ff_userinfo']} gf_userinfo
                     ON users.uid=gf_userinfo.uid
-                LEFT JOIN {$_TABLES['ff_topic']} topic
-                    ON topic.uid = users.uid
                 LEFT JOIN {$_TABLES['sessions']} sessions
                     ON sessions.uid = users.uid
                 LEFT JOIN {$_TABLES['ff_rating_assoc']} rating
                     ON (rating.user_id = users.uid AND rating.voter_id = {$_USER['uid']})
-                WHERE users.uid = $uid
-                GROUP BY users.uid";
+                WHERE users.uid = $uid";
         //echo $sql;die;
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
