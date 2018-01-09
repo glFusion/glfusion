@@ -10,6 +10,8 @@
 db-config.php
 siteconfig.php
 lib-custom.php
+custom.css
+404.log
 
 public_html/.htaccess
 public_html/web.config
@@ -24,6 +26,7 @@ public_html/images/
 public_html/images/articles/
 public_html/images/userphotos/
 public_html/images/topics/
+public_html/images/forum/
 public_html/backend/
 
 public_html/jscache_*.js
@@ -31,14 +34,21 @@ public_html/stylecache_*.css
 style.cache.css
 js.cache.js
 
+sitemap.xml
+mobile.xml
+
 # Media Gallery
 private/plugins/mediagallery/config.php
 public_html/mediagallery/mediaobjects/tn/
 public_html/mediagallery/mediaobjects/orig/
 public_html/mediagallery/mediaobjects/disp/
+private/plugins/mediagallery/uploads/
 
 # Forum
 public_html/forum/media/
+
+# FileMgmt
+public_html/filemgmt_data/files/
 
 # ignore thumbnails created by Windows
 **/Thumbs.db
