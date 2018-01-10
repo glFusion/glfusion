@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -169,6 +169,15 @@ function bad_behavior2_upgrade ()
             $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE,'Core');
 
             CACHE_remove_instance('bb2_bl_data');
+
+        case '2.0.53' :
+            $_SQL = array();
+            $_SQL[] = "INSERT INTO {$_TABLES['bad_behavior2_whitelist']} (`item`, `type`, `reason`, `timestamp`) VALUES
+            ('paypal/ipn/paypal_ipn.php', 'url', 'PayPal IPN does not return any headers - whitelist to allow to pass', UNIX_TIMESTAMP());";
+
+            foreach ($_SQL AS $sql ) {
+                DB_query($sql,1);
+            }
 
         default:
             break;
