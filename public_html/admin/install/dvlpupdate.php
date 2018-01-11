@@ -1849,20 +1849,36 @@ function glfusion_172()
 
     $_SQL = array();
 
+    $buildRanks = false;
+    $buildLikes = false;
+
     if ( !DB_checkTableExists('ff_ranks') ) {
         $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
           `posts` int(11) unsigned NOT NULL DEFAULT '0',
           `dscp` varchar(40) NOT NULL DEFAULT '',
           PRIMARY KEY (`posts`)
         ) ENGINE=MyISAM;";
+        $buildRanks = true;
+    }
 
-        foreach ($_SQL AS $sql) {
-            if ($use_innodb) {
-                $sql = str_replace('MyISAM', 'InnoDB', $sql);
-            }
-            DB_query($sql,1);
+    if ( !DB_checkTableExists('ff_likes_assoc') ) {
+        $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+          `poster_id` mediumint(9) NOT NULL,
+          `voter_id` mediumint(9) NOT NULL,
+          `topic_id` int(11) NOT NULL,
+          PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
+        ) ENGINE=MyISAM;";
+        $buildLikes = true;
+    }
+
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
         }
+        DB_query($sql,1);
+    }
 
+    if ( $buildRanks == true ) {
         for ($i = 1; $i < 6; $i++) {
             $lvl = 'level' . $i;
             if (!isset($_FF_CONF[$lvl]) || !isset($_FF_CONF[$lvl . 'name'])) continue;
@@ -1876,6 +1892,7 @@ function glfusion_172()
         }
         $c->del('ff_rank_settings', 'forum');
     }
+    _forum_update_config();
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
     // end of forum plugin updates
 
@@ -1956,6 +1973,51 @@ function _spamx_update_config()
         );
     }
 }
+
+
+function _forum_update_config()
+{
+    global $_CONF, $_FF_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/forum/sql/forum_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='forum'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$forumConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='forum'");
+        } else {
+            $forumConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($forumConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('forum');
+    // sync up sequence, etc.
+    foreach ( $forumConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
 
 function _updateConfig() {
     global $_CONF, $_TABLES, $coreConfigData;

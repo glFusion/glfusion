@@ -199,11 +199,13 @@ function forum_upgrade() {
               PRIMARY KEY (`fb_id`),
               KEY `grp` (`fb_grp`,`fb_order`)
             ) ENGINE=MyISAM;";
+
             $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
               `posts` int(11) unsigned NOT NULL DEFAULT '0',
               `dscp` varchar(40) NOT NULL DEFAULT '',
               PRIMARY KEY (`posts`)
             ) ENGINE=MyISAM;";
+
             $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
               `poster_id` mediumint(9) NOT NULL,
               `voter_id` mediumint(9) NOT NULL,

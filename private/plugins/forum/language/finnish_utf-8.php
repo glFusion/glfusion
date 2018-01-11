@@ -972,6 +972,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Ota k&auml;ytt&ouml;&ouml;n FileMgmt Integraatio Liite Tiedostoille',
     'max_uploadfile_size' => 'Max Koko Liitteille (tavua)',
     'enable_user_rating_system' => 'Ota K&auml;ytt&ouml;&ouml;n K&auml;ytt&auml;jien Arviointi',
+    'enable_likes' => 'Enable Likes System',
     'bbcode_signature' => 'Ota k&auml;ytt&ouml;&ouml;n BBcode Allekirjoitus',
     'use_wysiwyg_editor' => 'Ota k&auml;ytt&ouml;&ouml;n WYSIWYG HTML Editori',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',

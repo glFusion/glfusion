@@ -976,6 +976,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'FileMgmt für Anhänge',
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Benutzer Bewertungs-System',
+    'enable_likes' => 'Enable Likes System',
     'bbcode_signature' => 'Eigene BBcode-Signatur',
     'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor',
     'bbcode_disabled' => 'Standart für BBCode',

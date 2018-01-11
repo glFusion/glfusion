@@ -972,6 +972,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
     'max_uploadfile_size' => 'Max Grootte van Bijlagen (bytes)',
     'enable_user_rating_system' => 'Gebruiker Waarderingsysteem Inschakelen',
+    'enable_likes' => 'Enable Likes System',
     'bbcode_signature' => 'BBcode Ondertekening Inschakelen',
     'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',

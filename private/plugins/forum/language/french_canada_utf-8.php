@@ -972,6 +972,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Activer FileMgmt Intégration pour les Pièces Jointes',
     'max_uploadfile_size' => 'Taille Maximale pour les Pièces Jointes (bytes)',
     'enable_user_rating_system' => 'Activer Système d`Évaluation de l`Utilisateur',
+    'enable_likes' => 'Enable Likes System',
     'bbcode_signature' => 'Activer BBcode Signature',
     'use_wysiwyg_editor' => 'Activer un Éditeur HTML WYSIWYG',
     'bbcode_disabled' => 'Réglage par Défaut pour BBCode Box Handicapés',
