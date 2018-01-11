@@ -284,37 +284,48 @@
 {!endif}
 									<div style="text-align:center;margin-top:5px;">
 {!if can_vote}
-									{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
-									<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" {tooltip} title="{vote_lang}">
-										<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;">
-											<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
-										</a>
-									</span>
+										{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
+										<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" {tooltip} title="{vote_lang}">
+											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;">
+												<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
+											</a>
+										</span>
 
-									<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
-										<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
-											<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
-										</a>
-									</span>
+										<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
+											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
+												<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
+											</a>
+										</span>
 {!else}
 {!if !is_anon}
-									{$LANG_GF01['grade']}: {user_rep}
+										{$LANG_GF01['grade']}: {user_rep}
 {!endif}
 {!endif}
+
 {!if likes_enabled}
-									<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
+										<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
 {!endif}
 
 {!if regdate}
-									<div>{$LANG_GF01['REGISTERED']}: {regdate}</div>
+										<div>{$LANG_GF01['REGISTERED']}: {regdate}</div>
 {!endif}
+
 {!if numposts}
-									<div>{$LANG_GF01['POSTS']}: {numposts}</div>
+										<div>{$LANG_GF01['POSTS']}: {numposts}</div>
 {!endif}
+
 {!if location}
-									<div>{$LANG_GF04['label_location']}: {location}</div>
+										<div>{$LANG_GF04['label_location']}: {location}</div>
 {!endif}
-</div>
+
+{!if ipaddress}
+										<div>{ipaddress}</div>
+{!endif}
+{!if mod_functions}
+										<div class="uk-margin">{mod_functions}</div>
+{!endif}
+
+									</div>
 								</div>
 							</div>
 						</div>
@@ -329,17 +340,6 @@
 {!if last_edited}
 								<div class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</div>
 {!endif}
-
-{!if ipaddress}
-								<div class="uk-clearfix uk-text-small uk-text-muted" style="margin-top:4px;float:left;">
-									{ipaddress}
-								</div>
-{!endif}
-
-								<div class="uk-align-left uk-text-left uk-margin-bottom-remove uk-hidden-small" style="padding-left:25px;">
-									{mod_functions}
-								</div>
-
 							</div>
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta" style="width:100%;">
@@ -356,7 +356,7 @@
 									</span>
 {!endif}
 
-									{!if editlink}
+{!if editlink}
 									<a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
 										<i class="uk-icon-edit"></i>&nbsp;{$LANG_GF01['EDITICON']}
 									</a>
@@ -366,6 +366,7 @@
 										<i class="uk-icon-mail-reply"></i>&nbsp;{$LANG_GF01['QUOTEICON']}
 									</a>
 {!endif}
+
 								</div> {# end of bottom meta #}
 							</div> {# end of bottom line 1/1 #}
 						</div> {# end of uk-grid #2 #}
