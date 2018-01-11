@@ -218,21 +218,21 @@ class Like
         $poster_id = (int)$poster_id;
         $topic_id = (int)$topic_id;
         self::PostLikes($topic_id); // populate the cache array
-            if (!array_key_exists($voter_id, self::$cache[$topic_id])) {
-                $sql = "INSERT IGNORE INTO {$_TABLES['ff_likes_assoc']}
+        if (!array_key_exists($voter_id, self::$cache[$topic_id])) {
+            $sql = "INSERT IGNORE INTO {$_TABLES['ff_likes_assoc']}
                         (voter_id, poster_id, topic_id)
                         VALUES ($voter_id, $poster_id, $topic_id)";
-                DB_query($sql,1);
-                if (!DB_error()) {
-                    $A = array(
-                        'voter_id' => $voter_id,
-                        'poster_id' => $poster_id,
-                        'topic_id' => $topic_id,
-                        'username' => DB_getItem($_TABLES['users'], 'username', "uid = $voter_id"),
-                    );
-                    self::$cache[$topic_id][$poster_id] = new self($A);
-                }
+            DB_query($sql,1);
+            if (!DB_error()) {
+                $A = array(
+                    'voter_id' => $voter_id,
+                    'poster_id' => $poster_id,
+                    'topic_id' => $topic_id,
+                    'username' => DB_getItem($_TABLES['users'], 'username', "uid = $voter_id"),
+                );
+                self::$cache[$topic_id][$poster_id] = new self($A);
             }
+        }
     }
 
 
