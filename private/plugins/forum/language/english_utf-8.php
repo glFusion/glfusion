@@ -1000,6 +1000,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
+    'enable_likes' => 'Enable Like System',
     'bbcode_signature' => 'Enable BBcode Signature',
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
