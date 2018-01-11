@@ -3575,13 +3575,24 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'bb2_ban_log',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 8,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 30,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'bb2_ban_timeout',
     	'default_value' => 24,
     	'type' => 'text',
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 30,
+    	'sort' => 40,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3592,7 +3603,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 40,
+    	'sort' => 50,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3603,7 +3614,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 50,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3614,7 +3625,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 60,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3625,7 +3636,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 70,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3636,7 +3647,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 80,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3647,7 +3658,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 90,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3658,7 +3669,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 100,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3669,7 +3680,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3680,7 +3691,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 120,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3691,7 +3702,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 130,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3702,7 +3713,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 140,
+    	'sort' => 150,
     	'set' => TRUE,
     	'group' => 'Core'
     )

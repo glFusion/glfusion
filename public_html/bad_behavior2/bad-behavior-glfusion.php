@@ -321,25 +321,27 @@ function bb2_ban($ip,$type = 1,$reason = '') {
 
     if ( $ip == '' ) return;
 
-    switch ( $type ) {
-        case 0 :
-            COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
-            break;
-        case 2 :
-            COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
-            $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
-            break;
-        case 3 :
-            COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
-            $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
-            break;
-        case 4 :
-            COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
-            $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
-            break;
-        default :
-            COM_errorLog("Banning " . $ip . " for type " . $type );
-            break;
+    if ( isset($_CONF['bb2_ban_log']) && $_CONF['bb2_ban_log'] == 1 ) {
+        switch ( $type ) {
+            case 0 :
+                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
+                break;
+            case 2 :
+                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
+                break;
+            case 3 :
+                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
+                break;
+            case 4 :
+                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
+                break;
+            default :
+                COM_errorLog("Banning " . $ip . " for type " . $type );
+                break;
+        }
     }
     $settings = bb2_read_settings();
     $timestamp = time();

@@ -2874,6 +2874,7 @@ $LANG_confignames['Core'] = array(
     'min_username_length' => 'Minimum Username Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
+    'bb2_ban_log' => 'Log Automatic Ban Actions',
     'bb2_display_stats' => 'Display Stats',
     'bb2_strict' => 'Strict Checking',
     'bb2_verbose' => 'Verbose Logging',
