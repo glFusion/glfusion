@@ -66,6 +66,4 @@ $_TABLES['ff_badges']       = $_DB_table_prefix . 'forum_badges';
 $_TABLES['ff_ranks']        = $_DB_table_prefix . 'forum_ranks';
 $_TABLES['ff_likes_assoc']  = $_DB_table_prefix . 'forum_likes_assoc';
 
-$_FF_CONF['enable_likes'] = true;
-
 ?>
