@@ -78,6 +78,18 @@ $forumConfigData = array(
     ),
 
     array(
+        'name' => 'enable_likes',
+        'default_value' => false,
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,
+        'sort' => 35,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
         'name' => 'allow_memberlist',
         'default_value' => false,
         'type' => 'select',
