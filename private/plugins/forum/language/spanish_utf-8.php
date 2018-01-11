@@ -258,7 +258,14 @@ $LANG_GF01 = array(
     'err_rank_zero' => 'Post count must be greater than zero.',
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
-    'rank_updated' => 'Rank Updated'
+    'rank_updated' => 'Rank Updated',
+    'like' => 'Like',
+    'unlike' => 'Unlike',
+    'like_tooltip' => 'Like this post',
+    'unlike_tooltip' => 'Unlike this post',
+    'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
+    'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
+    'unk_username' => 'unknown'
 );
 
 $LANG_GF02 = array(

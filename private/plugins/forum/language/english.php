@@ -226,9 +226,9 @@ $LANG_GF01 = array(
     'smiley' => 'Smileys',
 
     /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
-    'grade_user'    => '<br /><b>Evaluate User</b>',
-    'retract_grade' => '<br /><b>Retract Evaluation</b>',
+    'grade'         => 'Reputation',
+    'grade_user'    => 'Evaluate User',
+    'retract_grade' => 'Retract Evaluation',
     'rate_too_low'  => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
@@ -263,6 +263,27 @@ $LANG_GF01 = array(
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
     'rank_updated' => 'Rank Updated',
+    /* --- Like system --- */
+    'like' => 'Like',
+    'unlike' => 'Unlike',
+    // In tooltips, add "%s" to include the user display name.
+    'like_tooltip' => 'Like this post',
+    'unlike_tooltip' => 'Unlike this post',
+    // "Liked X Times" in the user profile area.
+    // The span is required exactly as below.
+    // "%1$d" is replaced with the number of likes.
+    'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
+    // Formats for the text string in each post. The key indicates the minimum
+    // number of likes to use that string.
+    // %1$s is the comma-separated string containing <key> likers
+    // %2$d is the total number of likes
+    // %3$d is the number of liker names not shown, used with "X others...."
+    'likes_formats' => array(
+        0 => '%1$s likes this.',        // single like
+        1 => 'Liked by %1$s.',          // multiple likes, up to threshold
+        2 => '%1$s and %3$d others like this.', // threshold and beyond
+    ),
+    'unk_username' => 'unknown',
 );
 
 $LANG_GF02 = array(
