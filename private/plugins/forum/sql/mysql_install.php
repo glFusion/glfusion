@@ -250,10 +250,23 @@ $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
   KEY `grp` (`fb_grp`,`fb_order`)
 ) ENGINE=MyISAM;";
 
+#
+# Table structures for table 'forum_ranks'
+#
 $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
   `posts` int(11) unsigned NOT NULL DEFAULT '0',
   `dscp` varchar(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`posts`)
+) ENGINE=MyISAM;";
+
+#
+# Table structures for table 'forum_likes_assoc'
+#
+$_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+  `poster_id` mediumint(9) NOT NULL,
+  `voter_id` mediumint(9) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
 ) ENGINE=MyISAM;";
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";

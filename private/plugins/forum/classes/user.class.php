@@ -29,6 +29,7 @@ class User
     *   @var array */
     private $admin_lvl = array();
 
+    private $total_likes = NULL;
 
     /**
     *   Constructor.
@@ -225,7 +226,6 @@ class User
         } elseif ($this->sig != '') {
             $this->tagline = nl2br($this->sig);
         }
-
         return true;
     }
 
@@ -320,6 +320,23 @@ class User
             }
         }
         return $username;
+    }
+
+
+    /**
+    *   Get the total likes for this poster
+    *
+    *   @return integer     Total likes given to this poster
+    */
+    public function Likes()
+    {
+        global $_TABLES;
+
+        if ($this->total_likes === NULL) {
+            $this->total_likes = (int)DB_count($_TABLES['ff_likes_assoc'],
+                                'poster_id', $this->uid);
+        }
+        return $this->total_likes;
     }
 
 

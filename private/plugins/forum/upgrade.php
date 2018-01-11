@@ -204,6 +204,12 @@ function forum_upgrade() {
               `dscp` varchar(40) NOT NULL DEFAULT '',
               PRIMARY KEY (`posts`)
             ) ENGINE=MyISAM;";
+            $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+              `poster_id` mediumint(9) NOT NULL,
+              `voter_id` mediumint(9) NOT NULL,
+              `topic_id` int(11) NOT NULL,
+              PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
+            ) ENGINE=MyISAM;";
 
             // Copy existing badge images from the original directory to the
             // new location under public_html/images

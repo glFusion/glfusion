@@ -19,6 +19,9 @@ if (is_ajax()) {
         $action = $_POST["action"];
 
         switch ( $action ) {
+            case 'like':
+                user_like();
+                break;
             case 'vote':
                 user_vote();
                 break;
@@ -356,6 +359,57 @@ function user_vote()
         'rating' => $user_rating,
         'statusMessage' => '',
     ) );
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    echo $retval;
+    exit;
+}
+
+function user_like()
+{
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01;
+
+    if ( !$_FF_CONF['enable_likes'] ) {
+        exit;
+    }
+
+    $v_uid = isset($_POST['v_uid']) ? COM_applyFilter($_POST['v_uid'],true) : 0;
+    $t_uid = isset($_POST['t_uid']) ? COM_applyFilter($_POST['t_uid'],true) : 0;
+    $t_id  = isset($_POST['t_id']) ? COM_applyFilter($_POST['t_id'],true) : 0;
+    $vote  = isset($_POST['vote']) ? COM_applyFilter($_POST['vote'],true) : 0;
+    $vote  = $vote > 0 ? 1 : 0;
+
+    // Can't vote if:
+    //      Anonymous
+    //      current user doesn't match supplied user ID,
+    //      topic ID is invalid
+    //      current user is also the topic poster
+    if (
+        COM_isAnonUser() || $_USER['uid'] != $v_uid || $t_id < 1 ||
+            $_USER['uid'] == $t_uid
+    ) {
+        echo json_encode(array(
+            'statusMessage' => 'Cannot vote',
+        ) );
+        exit;
+    }
+
+    if ($vote == 1) {
+        \Forum\Like::addLike($v_uid, $t_uid, $t_id);
+    } else {
+        $vote = 0;
+        \Forum\Like::remLike($v_uid, $t_uid, $t_id);
+    }
+
+    $retval = json_encode(array(
+        't_id' => $t_id,
+        't_uid' => $t_uid,
+        'v_uid' => $v_uid,
+        'vote'  => $vote,
+        'vote_count' => \Forum\Like::CountLikesReceived($t_uid),
+        'likes_text' => \Forum\Like::getLikesText($t_id),
+        'statusMessage' => '',
+    ) );
+
     header("Cache-Control: no-store, no-cache, must-revalidate");
     echo $retval;
     exit;

@@ -290,6 +290,18 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $topictemplate->unset_var('last_edited');
     }
 
+    $can_like = false;
+    if ($_FF_CONF['enable_likes']) {
+        if ($Poster->okToVote()) {
+            $can_like = true;
+        }
+        $post_liked = \Forum\Like::isLikedByUser($showtopic['id']);
+        $total_post_likes = \Forum\Like::CountPostLikes($showtopic['id']);
+    } else {
+        $post_liked = false;
+        $total_post_likes = 0;
+    }
+
     $topictemplate->set_var (array(
             'user_name'     => $Poster->UserName($showtopic['name']),
             'csscode'       => $onetwo,
@@ -326,6 +338,17 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'is_online'     => $Poster->isOnline(),
             'is_anon'       => $Poster->isAnon() ? true : false,
             'sig'           => PLG_replaceTags($Poster->tagline, 'forum', 'signature'),
+            'likes_enabled' => $_FF_CONF['enable_likes'] ? true : false,
+            'can_like'      => $can_like,
+            'liked'         => $post_liked,
+            'like_tooltip'  => sprintf($LANG_GF01['like_tooltip'], $Poster->username),
+            'unlike_tooltip' => sprintf($LANG_GF01['unlike_tooltip'], $Poster->username),
+            'like_vis'     => $post_liked ? 'none' : '',
+            'unlike_vis'   => $post_liked ? '' : 'none',
+            'like_lang_vis' => $Poster->Likes() > 0 ? '' : 'none',
+            'total_post_likes' => $total_post_likes,
+            'likes_text'    => \Forum\Like::getLikesText($showtopic['id']),
+            'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->Likes(), $Poster->uid),
     ));
 
     if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {

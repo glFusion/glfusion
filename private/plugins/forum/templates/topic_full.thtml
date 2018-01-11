@@ -21,6 +21,9 @@
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_vote.js"></script>
+{!if likes_enabled}
+	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_like.js"></script>
+{!endif}
 {!endif}
 	<script>
 		$(document).ready(function(){
@@ -153,7 +156,8 @@
 {!!set tooltip "data-uk-tooltip=\"{delay:'300'}\"" !!}
 {!!set positive_rating "plus-circle" !!}
 {!!set negative_rating "minus-circle" !!}
-
+{!!set like_icon "thumbs-up" !!}
+{!!set unlike_icon "thumbs-down" !!}
 			<a id="{topic_id}"></a>
 			<div class="uk-panel-box uk-margin-bottom {panelrow}" itemscope itemtype="http://schema.org/DiscussionForumPosting">
 				<div class="uk-grid">
@@ -177,14 +181,16 @@
 {!endif}
 								</span>
 {!if onlinestatus}
-								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i><br />
+								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
+{!endif}
+{!if likes_enabled}
+								<span class="uk-text-small">{liked_times}</span>
 {!endif}
 							</span>
-
+<div>
 							<a class="btn" {tooltip} title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
 								<i class="uk-icon uk-icon-mini uk-icon-clipboard uk-hidden-small uk-icon-hover"></i>
 							</a>
-
 
 							<span class="uk-text-small">{$LANG_GF01['ON3']}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
 
@@ -195,6 +201,7 @@
 							<i title="{$LANG_GF02['msg203']}" {tooltip} class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
 	{!endif}
 {!endif}
+</div>
 						</div> {# end of forum_author_line #}
 								<div class="uk-text-break topic_comment_area">
 									<div itemprop="articleBody">{topic_comment}</div>
@@ -294,6 +301,9 @@
 									{$LANG_GF01['grade']}: {user_rep}
 {!endif}
 {!endif}
+{!if likes_enabled}
+									<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
+{!endif}
 
 {!if regdate}
 									<div>{$LANG_GF01['REGISTERED']}: {regdate}</div>
@@ -310,17 +320,22 @@
 						</div>
 						<div class="uk-grid">
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
+{!if likes_enabled}
+								<span id="likes_text_{topic_id}" class="uk-text-primary uk-clearfix" style="overflow:hidden;font-style:italic;">
+									{likes_text}
+								</span>
+{!endif}
 
 {!if last_edited}
 								<div class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</div>
 {!endif}
-
 
 {!if ipaddress}
 								<div class="uk-clearfix uk-text-small uk-text-muted" style="margin-top:4px;float:left;">
 									{ipaddress}
 								</div>
 {!endif}
+
 								<div class="uk-align-left uk-text-left uk-margin-bottom-remove uk-hidden-small" style="padding-left:25px;">
 									{mod_functions}
 								</div>
@@ -328,6 +343,19 @@
 							</div>
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta" style="width:100%;">
+{!if can_like}
+									<span style="display:{unlike_vis}" id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
+										<a class="uk-button uk-button-primary uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
+											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" alt="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
+										</a>
+									</span>
+									<span style="display:{like_vis}" id="like_{topic_id}_{topic_uid}" {tooltip} title="{like_tooltip}">
+										<a class="uk-button uk-button-success uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},1);return false;">
+											<i class="uk-icon uk-icon-{like_icon} uk-icon-small" alt="plus"></i>&nbsp;{$LANG_GF01['like']}
+										</a>
+									</span>
+{!endif}
+
 									{!if editlink}
 									<a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
 										<i class="uk-icon-edit"></i>&nbsp;{$LANG_GF01['EDITICON']}
