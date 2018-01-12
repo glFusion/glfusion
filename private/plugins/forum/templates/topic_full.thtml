@@ -308,7 +308,9 @@
 										</span>
 {!else}
 {!if !is_anon}
+{!if user_rep}
 										{$LANG_GF01['grade']}: {user_rep}
+{!endif}
 {!endif}
 {!endif}
 
