@@ -164,6 +164,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
                 'topic_post_link_end'   => '</a>'));
 
         $mod_functions = _ff_getmodFunctions($showtopic);
+        $mod_perms = Forum\Moderator::getPerms($showtopic['forum']);
         $topictemplate->clear_var(array('profilelink','profilelinkimg','LANG_profile'));
         $topictemplate->clear_var(array('pmlink','pmlinkimg','LANG_pm'));
         if ($Poster->uid > 1) {
@@ -349,6 +350,14 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             'total_post_likes' => $total_post_likes,
             'likes_text'    => \Forum\Like::getLikesText($showtopic['id']),
             'liked_times' => sprintf($LANG_GF01['liked_times'], $Poster->Likes(), $Poster->uid),
+            'mod_edit'      => $mod_perms['mod_edit'],
+            'mod_delete'    => $mod_perms['mod_delete'],
+            'mod_move'      => $mod_perms['mod_move'],
+            'mod_ban'       => $mod_perms['mod_ban'],
+            'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
+            'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
+            'has_mod_perms' => Forum\Moderator::hasPerm($showtopic['forum']),
+            'topic_parent_id' => $showtopic['pid'],
     ));
 
     if ( $replytopicid != 0 && $showtopic['pid'] != 0 ) {
