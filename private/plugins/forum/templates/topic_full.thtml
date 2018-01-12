@@ -385,7 +385,7 @@
 {!endif}
 {!if mod_move}
   {!if topic_parent_id}
-                                                          </li><li><button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-share"></i>&nbsp;{$LANG_GF03['split']}</button>
+                                                          </li><li><button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-expand"></i>&nbsp;{$LANG_GF03['split']}</button>
                                                         </li><li><button name="modfunction" value="mergetopic"><i class="uk-icon uk-icon-compress"></i>&nbsp;{$LANG_GF03['merge_post']}</button>
   {!else}
                                                           </li><li><button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-share"></i>&nbsp;{$LANG_GF03['move']}</button>
