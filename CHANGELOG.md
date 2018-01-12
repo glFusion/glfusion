@@ -1,4 +1,7 @@
 ## v1.7.2 (Unreleased)
+  - Forum: Moderator functions now in dropdown button
+  - Forum: New Likes Feature
+  - Configuration option to enable / disable BB2 auto ban logging
   - Standardized the date/time format across all log files
   - Added token timeout protection to comment form
   - Display Alternate Topic (if any) in the story admin list
