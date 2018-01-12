@@ -321,10 +321,6 @@
 {!if ipaddress}
 										<div>{ipaddress}</div>
 {!endif}
-{!if mod_functions}
-										<div class="uk-margin">{mod_functions}</div>
-{!endif}
-
 									</div>
 								</div>
 							</div>
@@ -366,18 +362,50 @@
 										<i class="uk-icon-mail-reply"></i>&nbsp;{$LANG_GF01['QUOTEICON']}
 									</a>
 {!endif}
-
+{!if has_mod_perms}
+                                    <div style="float:right; margin-left:2px;">
+                                        <form class="uk-form" action="{site_url}/forum/moderation.php" method="post" style="margin:0px;">
+                                            <input type="hidden" name="topic_id" value="{topic_id}">
+                                            <input type="hidden" name="forum_id" value="{forum_id}">
+                                            <input type="hidden" name="topic_parent_id" value="{topic_parent_id}">
+                                            <input type="hidden" name="top" value="no">
+                                            <input type="hidden" name="page" value="{page}">
+                                            <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}" aria-haspopup="true" aria-expanded="false">
+                                                <button class="uk-button uk-button-mini"><i class="uk-icon-cog"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
+                                                <div class="uk-dropdown uk-dropdown-small uk-dropdown-bottom" aria-hidden="true" style="top: 21px; left: 0px;">
+                                                    <ul class="uk-nav ff-uk-nav uk-nav-dropdown">
+{!if mod_edit}
+                                                        <li><button name="modfunction" value="editpost"><i class="uk-icon uk-icon-edit"></i>&nbsp;{$LANG_GF03['edit']}</button></li>
+{!endif}
+{!if mod_delete}
+                                                        <li><button name="modfunction" value="deletepost"><i class="uk-icon uk-icon-trash-o"></i>&nbsp;{$LANG_GF03['delete']}</button></li>
+{!endif}
+{!if mod_ban}
+                                                        <li><button name="modfunction" value="banip"><i class="uk-icon uk-icon-ban"></i>&nbsp;{$LANG_GF03['ban']}</button>
+{!endif}
+{!if mod_move}
+  {!if topic_parent_id}
+                                                          </li><li><button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-share"></i>&nbsp;{$LANG_GF03['split']}</button>
+                                                        </li><li><button name="modfunction" value="mergetopic"><i class="uk-icon uk-icon-compress"></i>&nbsp;{$LANG_GF03['merge_post']}</button>
+  {!else}
+                                                          </li><li><button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-share"></i>&nbsp;{$LANG_GF03['move']}</button>
+                                                        </li><li><button name="modfunction" value="mergetopic"><i class="uk-icon uk-icon-compress"></i>&nbsp;{$LANG_GF03['merge_topic']}</button>
+  {!endif}
+{!endif}
+{!if mod_lock}
+                                                          </li><li><button name="modfunction" value="locktopic"><i class="uk-icon uk-icon-lock"></i>&nbsp;{$LANG_GF03['lock_topic']}</button>
+{!endif}
+{!if mod_unlock}
+                                                          </li><li><button name="modfunction" value="unlocktopic"><i class="uk-icon uk-icon-unlock"></i>&nbsp;{$LANG_GF03['unlock_topic']}</button>
+{!endif}
+                                                    </li></ul>
+                                                </div>
+                                            </div>
+                                    </div>
+{!endif}
 								</div> {# end of bottom meta #}
 							</div> {# end of bottom line 1/1 #}
 						</div> {# end of uk-grid #2 #}
-
-						<div class="uk-grid uk-margin-small uk-visible-small">
-							<div class="uk-width-1-1 uk-visible-small">
-								<div class="uk-align-right uk-text-right uk-margin-remove uk-visible-small">
-									{mod_functions}
-								</div>
-							</div>
-						</div>
 
 					</div> {# end of uk-margin 1 - 1 #}
 				</div> {# end of uk-grid main #}

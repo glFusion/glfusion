@@ -420,3 +420,13 @@ div.rankicons {
 div.rankicons i {
     display:inline-block;
 }
+
+.ff-uk-nav li > button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display:block;
+  padding: 5px 15px;
+  font-size: 12px;
+}
