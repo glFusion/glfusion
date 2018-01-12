@@ -353,7 +353,7 @@
 								<div class="bottom_meta" style="width:100%;">
 {!if can_like}
 									<span style="display:{unlike_vis}" id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
-										<a class="uk-button uk-button-primary uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
+										<a class="uk-button uk-button-danger uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
 											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" alt="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
 										</a>
 									</span>
