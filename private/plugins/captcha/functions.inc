@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -240,6 +240,13 @@ function plugin_templatesetvars_captcha($ctype, &$template)
     }
     if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
 
+        if ( $_CP_CONF['gfxDriver'] == 3 && $jsLoaded == false ) {
+            $outputHandle = outputHandler::getInstance();
+            $outputHandle->addLinkScriptFooter('https://www.google.com/recaptcha/api.js?onload=onloadCallbackRC&render=explicit&hl='.$_CONF['iso_lang'],HEADER_PRIO_VERYLOW,'text/javascript',true);
+            $outputHandle->addLinkScript($_CONF['site_url'].'/captcha/recaptcha.js');
+            $jsLoaded = true;
+        }
+
         // expire stale CAPTCHA sessions
         CAPTCHA_expireSessions();
 
@@ -249,6 +256,8 @@ function plugin_templatesetvars_captcha($ctype, &$template)
         // and the format of the challenge is controlled by template selected by content type (ctype)
         $captcha = CAPTCHA_getHTML($csid, $ctype);
 
+        if ( $_CP_CONF['gfxDriver'] == 3 ) $template->set_var('recaptcha',true);
+
         // if our content type (ctype) was specified as 'general'
         if ( $ctype == 'general' ) {
             return $captcha;
@@ -256,17 +265,9 @@ function plugin_templatesetvars_captcha($ctype, &$template)
 
         $template->set_var('captcha', $captcha,false,true);
 
-        if ( $_CP_CONF['gfxDriver'] == 3 ) $template->set_var('recaptcha',true);
 
     } else {
         $template->set_var('captcha', '');
-    }
-
-    if ( $_CP_CONF['gfxDriver'] == 3 && $jsLoaded == false ) {
-        $outputHandle = outputHandler::getInstance();
-        $outputHandle->addLinkScriptFooter('https://www.google.com/recaptcha/api.js?onload=onloadCallbackRC&render=explicit&hl='.$_CONF['iso_lang'],HEADER_PRIO_VERYLOW,'text/javascript',true);
-        $outputHandle->addLinkScript($_CONF['site_url'].'/captcha/recaptcha.js');
-        $jsLoaded = true;
     }
 
     return '';
