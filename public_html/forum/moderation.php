@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Moderation routines                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -585,7 +585,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
     $destination_forum_select .= '</select>';
 
     if ($target == 0) {
-        $retval = alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
+        $retval = _ff_alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
         return $retval;
     } else {
         $T->set_var('destination_forum_select',$destination_forum_select);
@@ -628,7 +628,7 @@ function moderator_confirmBan($topic_id,$topic_parent_id,$forum_id)
     $iptobansql = DB_query("SELECT ip FROM {$_TABLES['ff_topic']} WHERE id=".(int)$topic_id);
     $forumpostipnum = DB_fetchArray($iptobansql);
     if ($forumpostipnum['ip'] == '') {
-        $retval .= alertMessage($LANG_GF02['msg174'],'','',true);
+        $retval .= _ff_alertMessage($LANG_GF02['msg174'],'','',true);
         exit;
     }
 
@@ -705,7 +705,7 @@ function moderator_error($type)
     }
     $display  = FF_siteHeader();
     $display .= FF_ForumHeader($forum_id,'');
-    $display .= alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
+    $display .= _ff_alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
     $display .= FF_siteFooter();
     echo $display;
     exit;
@@ -744,7 +744,7 @@ if (isset($_POST['cancel']) ) {
 }
 
 if ($forum_id == 0) {
-    $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
+    $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);
 } else {
     switch ( $modfunction ) {
         case 'deletepost' :
@@ -882,7 +882,7 @@ if ($forum_id == 0) {
 
 
         default :
-            $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
+            $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);
             break;
     }
 }
