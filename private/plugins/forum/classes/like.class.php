@@ -282,7 +282,7 @@ class Like
             $like_topics = $topic_id;
         }
         $sql = "DELETE FROM {$_TABLES['ff_likes_assoc']}
-                WHERE topic_id IN ($like_topics)";  
+                WHERE topic_id IN ($like_topics)";
         DB_query($sql);
     }
 
@@ -339,7 +339,7 @@ class Like
         foreach (self::PostLikes($post_id) as $like) {
             if ($link) {
                 $likers[] = COM_createLink($like->username,
-                        COM_buildUrl($_CONF['site_url'] . '/users.php?mode=profile&uid=' . $like->voter_id)
+                        $_CONF['site_url'] . '/users.php?mode=profile&uid=' . $like->voter_id
                     );
             } else {
                 $likers[] = $like->username;
