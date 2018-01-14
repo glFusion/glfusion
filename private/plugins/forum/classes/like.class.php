@@ -179,7 +179,7 @@ class Like
                     FROM {$_TABLES['ff_likes_assoc']} as likes
                     LEFT JOIN {$_TABLES['ff_topic']} as topic
                         ON likes.topic_id = topic.id
-                    WHERE likes.{$field} = {$uid}";
+                    WHERE likes.{$field} = {$uid} ORDER BY likes.like_date DESC";
             $res = DB_query($sql);
             while ($A = DB_fetchArray($res, false)) {
                 $cache[$field][] = $A;
