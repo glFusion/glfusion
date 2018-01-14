@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
   - Forum: Moderator functions now in dropdown button
   - Forum: New Likes Feature
   - Configuration option to enable / disable BB2 auto ban logging
