@@ -220,6 +220,7 @@ function plugin_user_changed_forum( $uid )
 
     $curusername = DB_getItem ($_TABLES['users'], 'username',"uid = $uid");
     DB_query("UPDATE {$_TABLES['ff_topic']} SET name='".DB_escapeString($curusername)."' WHERE uid=".(int) $uid);
+    Forum\Like::updateUsername($uid, $curusername);
 }
 
 function plugin_user_move_forum($origUID, $destUID)

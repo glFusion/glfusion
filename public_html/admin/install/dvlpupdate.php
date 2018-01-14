@@ -1874,6 +1874,9 @@ function glfusion_172()
         ADD `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         ADD KEY `voter_id` (`voter_id`),
         ADD KEY `poster_id` (`poster_id`)";
+    
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_likes_assoc']}
+        ADD `username` varchar(40) AFTER topic_id";
 
     foreach ($_SQL AS $sql) {
         if ($use_innodb) {

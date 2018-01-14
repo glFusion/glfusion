@@ -266,6 +266,7 @@ $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
   `poster_id` mediumint(9) NOT NULL,
   `voter_id` mediumint(9) NOT NULL,
   `topic_id` int(11) NOT NULL,
+  `username` varchar(40),
   `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
   KEY `voter_id` (`voter_id`),
