@@ -2127,6 +2127,8 @@ function plugin_profileblocksdisplay_forum( $uid )
         'lang_liked_thread' => $LANG_GF01['liked_thread'],
     ));
 
+    $receivedCounter = 0;
+
     if ( count($likesReceived) == 0 ) {
         $T->set_var('no_likes_received','No Likes Received');
     } else {
@@ -2134,6 +2136,7 @@ function plugin_profileblocksdisplay_forum( $uid )
         $T->set_block('userlikes', 'likes', 'likesblock');
 
         foreach( $likesReceived AS $row ) {
+            if ( $receivedCounter > 20 ) break;
             $testText = FF_formatTextBlock($row['comment'],'text','noquote',0);
             $testText = strip_tags($testText);
             $html2txt = new Html2Text\Html2Text($testText,false);
@@ -2169,15 +2172,18 @@ function plugin_profileblocksdisplay_forum( $uid )
                 'postinfo' => $postinfo,
             ));
             $T->parse('likesblock','likes',true);
+            $receivedCounter++;
         }
     }
+
+    $givenCounter = 0;
     if ( count($likesGiven) == 0 ) {
         $T->set_var('no_likes_given','No Likes Given');
     } else {
         $T->unset_var('no_likes_given');
         $T->set_block('userlikes', 'givenlikes', 'givenlikesblock');
         foreach ( $likesGiven AS $row ) {
-
+            if ( $givenCounter > 20 ) break;
             if ( $row['like_date'] == '' ) $row['like_date'] = $dt->toRFC822();
 
             $dt->setTimestamp(strtotime($row['like_date']));
@@ -2215,6 +2221,7 @@ function plugin_profileblocksdisplay_forum( $uid )
                 'postinfo' => $postinfo,
             ));
             $T->parse('givenlikesblock','givenlikes',true);
+            $givenCounter++;
         }
     }
     $T->parse( 'block', 'userlikes' );
