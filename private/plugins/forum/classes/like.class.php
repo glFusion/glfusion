@@ -100,25 +100,6 @@ class Like
 
 
     /**
-    *   Return a count of all the likes given by a specific user.
-    *
-    *   @param  integer $uid    User ID
-    *   @return integer         Count of likes given
-    */
-    public static function CountLikesGiven($uid)
-    {
-        global $_TABLES;
-        static $cache = array();
-
-        $uid = (int)$uid;
-        if (!array_key_exists($uid, $cache)) {
-            $cache[$uid] = (int)DB_count($_TABLES['ff_likes_assoc'], 'voter_id', $uid);
-        }
-        return $cache[$uid];
-    }
-
-
-    /**
     *   Get all the likes for all posts under a specified parent ID
     *   This is to be called by the topic display to get all likes
     *   at once. All likes for all posts under the parent ID are cached.
@@ -175,6 +156,60 @@ class Like
             self::$cache[$post_id] = $likers;
         }
         return self::$cache[$post_id];
+    }
+
+
+    private static function _getUserLikes($field, $uid)
+    {
+        global $_TABLES;
+        static $cache = array();
+
+        switch ($field) {
+        case 'voter_id':
+        case 'poster_id':
+            $uid = (int)$uid;
+            break;
+        default:
+            return array();
+        }
+
+        if (!array_key_exists($field, $cache)) {
+            $cache[$field] = array();
+            $sql = "SELECT likes.*, topic.subject, topic.comment
+                    FROM {$_TABLES['ff_likes_assoc']} as likes
+                    LEFT JOIN {$_TABLES['ff_topic']} as topic
+                        ON likes.topic_id = topic.id
+                    WHERE likes.{$field} = {$uid}";
+            $res = DB_query($sql);
+            while ($A = DB_fetchArray($res, false)) {
+                $cache[$field][] = $A;
+            }
+        }
+        return $cache[$field];
+    }
+
+
+    /**
+    *   Get all the likes given by a specific user ID
+    *
+    *   @param  integer $post_id    ID of post
+    *   @return array       Array of Like objects
+    */
+    public static function LikesGiven($uid = 0)
+    {
+        return self::_getUserLikes('voter_id', $uid);
+    }
+
+
+    /**
+    *   Get all the likes received by a specific user ID
+    *
+    *   @param  integer $post_id    ID of post
+    *   @return array       Array of Like objects
+    */
+    public static function LikesReceived($uid = 0)
+    {
+        return self::_getUserLikes('poster_id', $uid);
     }
 
 
@@ -300,20 +335,28 @@ class Like
 
 
     /**
+    *   Return a count of all the likes given by a specific user.
+    *
+    *   @uses   self::LikesGiven()
+    *   @param  integer $uid    User ID
+    *   @return integer         Count of likes given by the user
+    */
+    public static function countLikesGiven($uid)
+    {
+        return count(self::LikesGiven($uid));
+    }
+
+
+    /**
     *   Count the likes received by a specific user
     *
-    *   @param  integer $poster_id  ID of the user
-    *   @return integer     Total cound of likes received by the user
+    *   @uses   self::LikesReceived()
+    *   @param  integer $uid    ID of the user
+    *   @return integer     Total count of likes received by the user
     */
-    public static function CountLikesReceived($poster_id)
+    public static function countLikesReceived($uid)
     {
-        global $_TABLES;
-        static $cache = array();
-
-        if (!array_key_exists($poster_id, $cache)) {
-            $cache[$poster_id] = DB_count($_TABLES['ff_likes_assoc'], 'poster_id', $poster_id);
-        }
-        return $cache[$poster_id];
+        return count(self::LikesReceived($uid));
     }
 
 
