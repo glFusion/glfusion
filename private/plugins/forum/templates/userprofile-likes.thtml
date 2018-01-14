@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<ul class="uk-tab" data-uk-tab="{connect:'#likes'}">
+<ul class="uk-tab uk-margin" data-uk-tab="{connect:'#likes'}">
 	<li><a href="">{lang_likes_received}</a></li>
 	<li><a href="">{lang_likes_given}</a></li>
 </ul>
