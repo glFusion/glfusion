@@ -30,6 +30,7 @@ class Like
     */
     public function __construct($A)
     {
+        global $LANG_GF01;
         if (is_null($A['username'])) $A['username'] = $LANG_GF01['unk_username'];
         foreach ($A as $key => $value) {
             $this->$key = $value;
@@ -50,10 +51,11 @@ class Like
         case 'topic_id':
         case 'voter_id':
         case 'likers':
+        case 'gl_uid':
             $this->properties[$key] = (int)$value;
             break;
         case 'username':
-            $this->properties[$key] = trim($value);
+            $this->properties[$key] = $value !== NULL ? trim($value) : $value;
             break;
         }
     }
@@ -117,7 +119,7 @@ class Like
             self::$cache[$topic_id] = array();
         }
         $topics = implode(',', $topics);
-        $sql = "SELECT u.username, lk.*
+        $sql = "SELECT u.uid as gl_uid, lk.*
                 FROM {$_TABLES['ff_likes_assoc']} lk
                 LEFT JOIN {$_TABLES['users']} u
                     ON u.uid = lk.voter_id
@@ -143,7 +145,7 @@ class Like
 
         $post_id = (int)$post_id;
         if (!array_key_exists($post_id, self::$cache)) {
-            $sql = "SELECT u.username, lk.*
+            $sql = "SELECT u.uid as gl_uid, lk.*
                     FROM {$_TABLES['ff_likes_assoc']} lk
                     LEFT JOIN {$_TABLES['users']} u
                         ON u.uid = lk.voter_id
@@ -159,6 +161,13 @@ class Like
     }
 
 
+    /**
+    *   Get all the likes for a given user or poster.
+    *
+    *   @param  string  $field  Field to check (poster or voter)
+    *   @param  integer $uid    User ID
+    *   @return array           Array of likes with topic subject and comment
+    */
     private static function _getUserLikes($field, $uid)
     {
         global $_TABLES;
@@ -244,28 +253,31 @@ class Like
     *   @param  integer $voter_id   User ID of the voter
     *   @param  integer $poster_id  User ID of the topic poster
     *   @param  integer $topic_id   Topic ID
+    *   @param  string  $username   Username of the voter
     */
-    public static function addLike($voter_id, $poster_id, $topic_id)
+    public static function addLike($voter_id, $poster_id, $topic_id, $username)
     {
         global $_TABLES;
 
         $voter_id = (int)$voter_id;
         $poster_id = (int)$poster_id;
         $topic_id = (int)$topic_id;
+        $username = DB_escapeString($username);
         self::PostLikes($topic_id); // populate the cache array
         if (!array_key_exists($voter_id, self::$cache[$topic_id])) {
             $sql = "INSERT IGNORE INTO {$_TABLES['ff_likes_assoc']}
-                        (voter_id, poster_id, topic_id)
-                        VALUES ($voter_id, $poster_id, $topic_id)";
+                        (voter_id, poster_id, topic_id, username)
+                        VALUES ($voter_id, $poster_id, $topic_id, '$username')";
             DB_query($sql,1);
             if (!DB_error()) {
                 $A = array(
                     'voter_id' => $voter_id,
                     'poster_id' => $poster_id,
                     'topic_id' => $topic_id,
-                    'username' => DB_getItem($_TABLES['users'], 'username', "uid = $voter_id"),
+                    'username' => $username,
+                    'gl_uid' => $voter_id,
                 );
-                self::$cache[$topic_id][$poster_id] = new self($A);
+                self::$cache[$topic_id][$voter_id] = new self($A);
             }
         }
     }
@@ -380,7 +392,7 @@ class Like
 
         $likers = array();
         foreach (self::PostLikes($post_id) as $like) {
-            if ($link) {
+            if ($link && $like->gl_uid > 0) {
                 $likers[] = COM_createLink($like->username,
                         $_CONF['site_url'] . '/users.php?mode=profile&uid=' . $like->voter_id
                     );
@@ -426,9 +438,25 @@ class Like
 
 
     /**
+    *   Update the username when changed in the user's profile
+    *
+    *   @param  integer $uid        User ID
+    *   @param  string  $username   New username
+    */
+    public static function updateUsername($uid, $username)
+    {
+        global $_TABLES;
+
+        DB_query("UPDATE {$_TABLES['ff_likes_assoc']}
+                    SET username = '" . DB_escapeString($username) . "'
+                    WHERE voter_id = " . (int)$uid);
+    }
+
+
+    /**
     *   Import Community Moderation votes as Likes
     */
-    public function importFromModeration()
+    public static function importFromModeration()
     {
         global $_TABLES;
         $sql = "INSERT IGNORE INTO {$_TABLES['ff_likes_assoc']}

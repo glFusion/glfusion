@@ -394,7 +394,7 @@ function user_like()
     }
 
     if ($vote == 1) {
-        \Forum\Like::addLike($v_uid, $t_uid, $t_id);
+        \Forum\Like::addLike($v_uid, $t_uid, $t_id, $_USER['username']);
     } else {
         $vote = 0;
         \Forum\Like::remLike($v_uid, $t_uid, $t_id);
