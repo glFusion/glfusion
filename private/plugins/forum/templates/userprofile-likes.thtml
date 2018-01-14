@@ -1,0 +1,52 @@
+{# begin {templatelocation} #}
+<ul class="uk-tab" data-uk-tab="{connect:'#likes'}">
+	<li><a href="">{lang_likes_received}</a></li>
+	<li><a href="">{lang_likes_given}</a></li>
+</ul>
+<ul id="likes" class="uk-switcher uk-margin">
+	<li>
+		<table class="uk-table uk-table-hover">
+
+{!if no_likes_received}
+			<tr>
+				<td>
+					{lang_no_likes_received}
+				</td>
+			</tr>
+{!endif}
+			<!-- BEGIN likes -->
+			<tr>
+				<td>
+				<span style="font-size:1.2em;"><a href="{site_url}/users.php?mode=profile&uid={liker-id}">{user}</a></></span> - <span style="font-size:.85em;">{post-date}</span>
+					<div>
+						{lang_liked} {liked-user} {lang_liked_thread} <a class="{tooltip_style}" href="{forum-thread-link}" title="{forum-thread}::{postinfo}" rel="nofollow">{forum-thread}</a>
+					</div>
+				</td>
+			</tr>
+			<!-- END likes -->
+		</table>
+	</li>
+
+	<li>
+		<table class="uk-table uk-table-hover">
+{!if no_likes_given}
+			<tr>
+				<td>
+					{lang_no_likes_given}
+				</td>
+			</tr>
+{!endif}
+			<!-- BEGIN givenlikes -->
+			<tr>
+				<td>
+				<span style="font-size:1.1em;">{user}</span> - <span style="font-size:.85em;">{post-date}</span>
+					<div>
+						{lang_liked} <a href="{site_url}/users.php?mode=profile&uid={liked-user-id}">{liked-user}</a> {lang_liked_thread} <a class="{tooltip_style}" href="{forum-thread-link}" title="{forum-thread}::{postinfo}" rel="nofollow">{forum-thread}</a>
+					</div>
+				</td>
+			</tr>
+			<!-- END givenlikes -->
+		</table>
+	</li>
+</ul>
+{# end {templatelocation} #}

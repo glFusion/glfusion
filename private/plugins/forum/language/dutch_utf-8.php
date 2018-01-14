@@ -263,7 +263,13 @@ $LANG_GF01 = array(
     'unlike_tooltip' => 'Unlike this post',
     'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
     'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
-    'unk_username' => 'unknown'
+    'unk_username' => 'unknown',
+    'likes_received' => 'Likes Received',
+    'likes_given' => 'Likes Given',
+    'no_likes_received' => 'No Likes Received',
+    'no_likes_given' => 'No Likes Given',
+    'liked' => 'Liked',
+    'liked_thread' => 'post in thread'
 );
 
 $LANG_GF02 = array(

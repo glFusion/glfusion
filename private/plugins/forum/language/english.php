@@ -284,6 +284,12 @@ $LANG_GF01 = array(
         2 => '%1$s and %3$d others like this.', // threshold and beyond
     ),
     'unk_username' => 'unknown',
+    'likes_received' => 'Likes Received',
+    'likes_given' => 'Likes Given',
+    'no_likes_received' => 'No Likes Received',
+    'no_likes_given' => 'No Likes Given',
+	'liked' => 'Liked',
+	'liked_thread' => 'post in thread',
 );
 
 $LANG_GF02 = array(

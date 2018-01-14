@@ -799,9 +799,19 @@ function forum_xchsmilies($message,$reverse=false) {
 function FF_statusMessage($message,$url,$prompt,$post=false,$forum='',$autorefresh = 1) {
     global $_CONF,$_TABLES,$_USER,$LANG_GF02,$_FF_CONF;
 
-    if ($prompt=="") {
-        $prompt = $LANG_GF02['msg140'];
+    COM_setMsg($message,'info',0);
+    if ( $url == '') {
+        if ( $forum != '' ) {
+            $url = $_CONF['site_url'].'/forum/index.php?forum='.(int) $forum;
+        } else {
+            $url = $_CONF['site_url'].'/forum/index.php';
+        }
     }
+    echo COM_refresh($url);
+    exit;
+
+    // legacy code - no longer used...
+
     $statusmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $statusmsg->set_file ('statusmsg','statusmessage.thtml');
     $statusmsg->set_var (array(
@@ -2085,6 +2095,133 @@ function getItemInfo_code($action, $attributes, $content, $params, $node_object)
         return true;
     }
     return $content;
+}
+
+function plugin_profileblocksdisplay_forum( $uid )
+{
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01;
+
+    $retval = '';
+
+    if ( !isset($_FF_CONF['enable_likes_profile']) || $_FF_CONF['enable_likes_profile'] != true ) return $retval;
+
+    $likesReceived = Forum\Like::LikesReceived($uid);
+    $likesGiven    = Forum\Like::LikesGiven($uid);
+
+    if ( count($likesReceived) == 0 && count($likesGiven) == 0 ) return $retval;
+
+    USES_forum_format();
+
+    $dt = new Date('now',$_USER['tzid']);
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('userlikes','userprofile-likes.thtml');
+
+    $T->set_var(array(
+        'tooltip_style' => COM_getToolTipStyle(),
+        'lang_likes_given' => $LANG_GF01['likes_given'],
+        'lang_likes_received' => $LANG_GF01['likes_received'],
+        'lang_no_likes_givent' => $LANG_GF01['no_likes_given'],
+        'lang_no_likes_received' => $LANG_GF01['no_likes_received'],
+        'lang_liked' => $LANG_GF01['liked'],
+        'lang_liked_thread' => $LANG_GF01['liked_thread'],
+    ));
+
+    if ( count($likesReceived) == 0 ) {
+        $T->set_var('no_likes_received','No Likes Received');
+    } else {
+        $T->unset_var('no_likes_received');
+        $T->set_block('userlikes', 'likes', 'likesblock');
+
+        foreach( $likesReceived AS $row ) {
+            $testText = FF_formatTextBlock($row['comment'],'text','noquote',0);
+            $testText = strip_tags($testText);
+            $html2txt = new Html2Text\Html2Text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $shortComment = '';
+            $commentArray = explode(' ',$testText);
+            $wordCount = count($commentArray);
+            $lengthCount = 0;
+            $tailString = '';
+            foreach ($commentArray AS $word) {
+                $lengthCount = $lengthCount + strlen($word);
+                $shortComment .= $word.' ';
+                if ( $lengthCount >= $_FF_CONF['contentinfo_numchars'] ) {
+                    $tailString = '...';
+                    break;
+                }
+            }
+            $shortComment = trim($shortComment).$tailString;
+            $postinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+            $postinfo = stripBBCode($postinfo);
+
+            if ( $row['like_date'] == '' ) $row['like_date'] = $dt->toRFC822();
+
+            $dt->setTimestamp(strtotime($row['like_date']));
+            $T->set_var(array(
+                'user'  => COM_getDisplayName($row['voter_id']),
+                'liker-id' => $row['voter_id'],
+                'post-date' => $dt->format($_CONF['date'],true),
+                'liked-user' => COM_getDisplayName($row['poster_id']),
+                'forum-thread' => $row['subject'],
+                'forum-snippit' => $row['comment'],
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'],
+                'postinfo' => $postinfo,
+            ));
+            $T->parse('likesblock','likes',true);
+        }
+    }
+    if ( count($likesGiven) == 0 ) {
+        $T->set_var('no_likes_given','No Likes Given');
+    } else {
+        $T->unset_var('no_likes_given');
+        $T->set_block('userlikes', 'givenlikes', 'givenlikesblock');
+        foreach ( $likesGiven AS $row ) {
+
+            if ( $row['like_date'] == '' ) $row['like_date'] = $dt->toRFC822();
+
+            $dt->setTimestamp(strtotime($row['like_date']));
+
+            $testText = FF_formatTextBlock($row['comment'],'text','noquote',0);
+            $testText = strip_tags($testText);
+            $html2txt = new Html2Text\Html2Text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $shortComment = '';
+            $commentArray = explode(' ',$testText);
+            $wordCount = count($commentArray);
+            $lengthCount = 0;
+            $tailString = '';
+            foreach ($commentArray AS $word) {
+                $lengthCount = $lengthCount + strlen($word);
+                $shortComment .= $word.' ';
+                if ( $lengthCount >= $_FF_CONF['contentinfo_numchars'] ) {
+                    $tailString = '...';
+                    break;
+                }
+            }
+            $shortComment = trim($shortComment).$tailString;
+            $postinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+            $postinfo = stripBBCode($postinfo);
+
+            $T->set_var(array(
+                'user'  => COM_getDisplayName($row['voter_id']),
+                'liker-id' => $row['voter_id'],
+                'post-date' => $dt->format($_CONF['date'],true),
+                'liked-user' => COM_getDisplayName($row['poster_id']),
+                'liked-user-id' => $row['poster_id'],
+                'forum-thread' => $row['subject'],
+                'forum-snippit' => $row['comment'],
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'],
+                'postinfo' => $postinfo,
+            ));
+            $T->parse('givenlikesblock','givenlikes',true);
+        }
+    }
+    $T->parse( 'block', 'userlikes' );
+    $retval .= $T->finish( $T->get_var( 'block' ));
+
+    return $retval;
+
 }
 
 ?>

@@ -284,6 +284,12 @@ $LANG_GF01 = array(
         2 => '%1$s and %3$d others like this.', // threshold and beyond
     ),
     'unk_username' => 'unknown',
+    'likes_received' => 'Likes Received',
+    'likes_given' => 'Likes Given',
+    'no_likes_received' => 'No Likes Received',
+    'no_likes_given' => 'No Likes Given',
+	'liked' => 'Liked',
+	'liked_thread' => 'post in thread',
 );
 
 $LANG_GF02 = array(
@@ -1001,6 +1007,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
     'enable_likes' => 'Enable Likes System',
+    'enable_likes_profile' => 'Display User\'s likes received and given on User Profile',
     'bbcode_signature' => 'Enable BBcode Signature',
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
