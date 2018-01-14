@@ -81,14 +81,14 @@ $query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
     echo COM_siteHeader();
-    echo _ff_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo _ff_alertMessage($LANG_GF02['msg03'],$LANG_GF02['msg171']);
     echo COM_siteFooter();
     exit;
 }
 
 if (!_ff_canUserViewRating($forum)) {
     echo COM_siteHeader();
-    echo _ff_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo _ff_alertMessage($LANG_GF02['msg03'],$LANG_GF02['msg171']);
     echo COM_siteFooter();
     exit;
 }
