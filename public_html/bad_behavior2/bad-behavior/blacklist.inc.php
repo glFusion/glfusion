@@ -205,8 +205,8 @@ function bb2_blacklist($settings,$package) {
 	}
 
 	foreach ($bb2_spambot_refer AS $spambot ) {
-	    if ( strpos($refer,$spambot) != FALSE) {
-	        return "174e8c9";
+	    if ( stripos($refer,$spambot) !== false) {
+	        return "174e8c8";
 	    }
 	}
 
