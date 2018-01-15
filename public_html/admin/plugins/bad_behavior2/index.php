@@ -186,8 +186,17 @@ asort($LANG_BB2_RESPONSE);
         $headArray = explode("<br/>",$splitheaders);
         foreach ($headArray AS $headerLine) {
             $lineArray = explode(':',$headerLine);
-            if ( isset($lineArray[1] ) ) {
-                $headers .= '<strong>'.$lineArray[0].'</strong>: '.$lineArray[1].'<br>';
+            if ( count($lineArray) > 1 ) {
+                $laCounter = 0;
+                foreach ( $lineArray AS $line) {
+                    if ( $laCounter == 0 ) {
+                        $headers .= '<strong>'.$line.'</strong>';
+                    } else {
+                        $headers .= ':' . $line;
+                    }
+                    $laCounter++;
+                }
+                $headers .= '<br>';
             } else {
         		$lineArray[0] = str_replace("POST ","<strong>POST</strong> ",$lineArray[0]);
         		$lineArray[0] = str_replace("GET ","<strong>GET</strong> ",$lineArray[0]);
