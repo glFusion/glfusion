@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -343,9 +343,8 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $icon_url = $_CONF['layout_url'] . '/images/print.' . $_IMAGE_TYPE;
             $attr = array('title' => $LANG_STATIC['printable_format']);
             $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
-            $print_url = COM_buildURL ($_CONF['site_url']
-                . '/page.php?page=' . $page . '&amp;disp_mode=print');
-            $icon = COM_createLink($printicon, $print_url,array('rel' => 'nofollow'));
+            $print_url = COM_buildURL ($_CONF['site_url'].'/page.php?page=' . $page . '&amp;disp_mode=print');
+            $icon = COM_createLink($printicon, $print_url,array('rel' => 'nofollow', 'target' => '_blank'));
             $spage->set_var('print_icon', $icon);
             $spage->set_var('link_print',$print_url);
         }
@@ -461,17 +460,17 @@ function SP_printPage ($page, $A)
     $print->set_var ('site_name', $_CONF['site_name']);
     $print->set_var ('site_slogan', $_CONF['site_slogan']);
 
-    $print->set_var ('page_title', $_CONF['site_name'] . ' - '
-                                   . $A['sp_title']);
-    $sp_url = COM_buildUrl ($_CONF['site_url']
-                               . '/page.php?page=' . $page);
+    list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
+    $print->set_var('css_url',$style_cache_url);
+
+
+    $print->set_var ('page_title', $_CONF['site_name'] . ' - ' . $A['sp_title']);
+    $sp_url = COM_buildUrl ($_CONF['site_url'].'/page.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
     $print->set_var ('sp_title', $A['sp_title']);
-    $print->set_var ('sp_content',
-            SP_render_content ($A['sp_content'], $A['sp_php']));
+    $print->set_var ('sp_content', SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
-    $printable = COM_buildURL($_CONF['site_url']
-               . '/page.php?page=' . $page . '&amp;mode=print');
+    $printable = COM_buildURL($_CONF['site_url'].'/page.php?page=' . $page . '&amp;mode=print');
     $print->set_var('printable_url', $printable);
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
@@ -891,7 +890,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
                 $print_url = COM_buildURL ($_CONF['site_url']
                 . '/page.php?page=' . $S['sp_id'] . '&amp;mode=print');
-                $icon = COM_createLink($printicon, $print_url,array('rel'=>'nofollow'));
+                $icon = COM_createLink($printicon, $print_url,array('rel'=>'nofollow','target'=>'_blank'));
                 $spage->set_var('print_icon', $icon);
             }
             if ((SEC_hasAccess ($S['owner_id'], $S['group_id'], $S['perm_owner'],
