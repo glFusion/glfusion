@@ -200,6 +200,9 @@ function ff_addForum($name,$category,$dscp="",$order="",$grp_id=2,$is_readonly=0
 */
 function ff_deleteForum($id) {
     global $_TABLES;
+    // Delete the likes. This must be done first as it relies on the topics
+    // still existing in the table
+    Forum\Like::deleteForum($id);
     DB_query("DELETE FROM {$_TABLES['ff_forums']} WHERE forum_id=".(int) $id);
     DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $id);
     DB_query("DELETE FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $id);

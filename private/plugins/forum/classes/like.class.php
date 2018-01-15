@@ -335,6 +335,25 @@ class Like
 
 
     /**
+    *   Delete all likes for topics under a forum that is being deleted.
+    *
+    *   @param  integer $forum_id   ID of forum
+    */
+    public static function deleteForum($forum_id)
+    {
+        global $_TABLES;
+
+        $forum_id = (int)$forum_id;
+        $sql = "DELETE FROM {$_TABLES['ff_likes_assoc']}
+                WHERE topic_id IN (
+                    SELECT id FROM {$_TABLES['ff_topic']}
+                    WHERE forum = $forum_id
+                )";
+        DB_query($sql, 1);
+    }
+
+
+    /**
     *   Return the count of likes given for a post.
     *
     *   @param  integer $post_id    ID of post
