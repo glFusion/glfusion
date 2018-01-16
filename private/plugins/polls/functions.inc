@@ -1534,15 +1534,18 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     break;
                 }
             }
-
             if($P['commentcode'] >= 0 ) {
-                $num_comments = CMT_getCount('polls',$pid);
+                $num_comments = CMT_getCount('polls',$pid);  //DB_count($_TABLES['comments'], array('sid', 'type'), array(DB_escapeString($pid), 'polls'));
                 $poll->set_var('num_comments',COM_numberFormat($num_comments));
                 $poll->set_var('lang_comments', $LANG01[3]);
-
-                $cmtLinkArray = CMT_getCommentLinkWithCount( 'polls',$pid, $_CONF['site_url'].'/polls/index.php?pid=' . $pid,$num_comments,0);
-                $commentsUrl = $cmtLinkArray['url'];
-                $poll->set_var('poll_comments_url', $commentsUrl);
+                $comment_link = CMT_getCommentLinkWithCount(
+                        'polls',
+                        $pid,
+                        $_CONF['site_url'].'/polls/index.php?pid=' . $pid,
+                        $num_comments,
+                        0
+                    );
+                $poll->set_var('poll_comments_url', $comment_link['link_with_count']);
                 $poll->parse('poll_comments', 'comments', true);
             } else {
                 $poll->set_var('poll_comments_url', '');

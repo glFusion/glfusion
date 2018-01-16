@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Polls: Comment link did not correctly display when showing poll results in Polls block
   - Open print window in new window when printing static pages
   - Fixed incorrect variable reference in referer ban list
   - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
