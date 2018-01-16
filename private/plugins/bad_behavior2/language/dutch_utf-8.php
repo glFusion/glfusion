@@ -170,6 +170,7 @@ $LANG_BB2_RESPONSE = array(
     '136673cd' => 'IP adres gevonden die op de externe zwarte lijst staat',
     '17566707' => 'Required header \'Accept\' missing',
     '17f4e8c8' => 'User-Agent staat op de zwarte lijst',
+    '17f4e8c9' => 'Referer was found on blacklist',
     '21f11d3f' => 'User-Agent claimed to be AvantGo, claim appears false',
     '2b021b1f' => 'IP adres op de http:BL zwarte lijst gevonden',
     '2b90f772' => 'Connection: TE present, not supported by MSIE',

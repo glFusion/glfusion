@@ -174,6 +174,7 @@ $LANG_BB2_RESPONSE = array(
     '136673cd' => 'IP-Adresse in externer Blacklist gefunden',
     '17566707' => 'Benötigte Header \'Accept \' fehlt',
     '17f4e8c8' => 'User-Agent wurde in Blacklist gefunden',
+    '17f4e8c9' => 'Referer was found on blacklist',
     '21f11d3f' => 'User-Agent gibt vor AvantGo zu sein',
     '2b021b1f' => 'IP-Adresse auf http:BL Blacklist gefunden',
     '2b90f772' => 'Anschluss: TE vorhanden, wird nicht von MSIE unterstützt',

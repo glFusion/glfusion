@@ -170,6 +170,7 @@ $LANG_BB2_RESPONSE = array(
     '136673cd' => 'IP addresa nalezena v externím blacklistu',
     '17566707' => 'Požadovaná hlavièka \'Accept\' chybí',
     '17f4e8c8' => 'Prohlížeè byl nalezen v blacklistu',
+    '17f4e8c9' => 'Referer was found on blacklist',
     '21f11d3f' => 'Prohlížeè se tváøil, že je AvantGo, byl však falešný',
     '2b021b1f' => 'IP adaresa nalezena v http:BL blacklistu',
     '2b90f772' => 'Pøipojení: pøítomný TE, není podporován MSIE',

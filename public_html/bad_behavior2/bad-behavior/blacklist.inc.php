@@ -204,10 +204,11 @@ function bb2_blacklist($settings,$package) {
 			return "17f4e8c8";
 		}
 	}
+
 	if ( $refer != '' ) {
     	foreach ($bb2_spambot_refer AS $spambot ) {
     	    if ( stripos($refer,$spambot) !== false) {
-    	        return "174e8c8";
+    	        return "17f4e8c9";
     	    }
     	}
     }
