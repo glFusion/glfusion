@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
   - Polls: Comment link did not correctly display when showing poll results in Polls block
   - Open print window in new window when printing static pages
   - Fixed incorrect variable reference in referer ban list
@@ -12,7 +13,8 @@
   - Spam-X stats collection
   - Implemented password complexity rules
   - Reworked My Account account deletion - moved to its own tab with improved confirmation
-  - Forum: New badge manager
+  - Forum: New badge manager by Lee Garner
+  - Forum: New ranks manager by Lee Garner
   - Implement Two Factor Authentication
   - Set proper cookie attributes on session cookie
   - CAPTCHA Updates to support CAPTCHA for login and lost password screens
