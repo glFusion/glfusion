@@ -1504,19 +1504,12 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'searchidx' :
                 case 'raw-description' :
-                    if ( $buildingSearchIndex ) {
-                        DB_query("SET group_concat_max_len = 204800");
-                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
-                        $childres = DB_query($sql);
-                        if ( DB_numRows($childres) > 0 ) {
-                            $B = DB_fetchArray($childres);
-                            if ( isset($B['comment'])) {
-                                $A['comment'] = $A['comment'] . ' ' . $B['comment'];
-                            }
-                        }
-                    }
                     $comment = _forum_strip_bbcode($A['comment']);
                     $props[$p] = $comment;
+                    break;
+                case 'parent_id':
+                case 'pid':
+                    $props[$p] = $A['pid'];
                     break;
                 case 'id':
                     $props['id'] = $A['id'];
