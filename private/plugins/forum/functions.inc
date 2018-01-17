@@ -2126,6 +2126,7 @@ function plugin_profileblocksdisplay_forum( $uid )
         'lang_no_likes_received' => $LANG_GF01['no_likes_received'],
         'lang_liked' => $LANG_GF01['liked'],
         'lang_liked_thread' => $LANG_GF01['liked_thread'],
+        'lang_likes' => $LANG_GF01['likes'],
     ));
 
     $receivedCounter = 0;

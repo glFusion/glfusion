@@ -290,6 +290,7 @@ $LANG_GF01 = array(
     'no_likes_given' => 'No Likes Given',
 	'liked' => 'Liked',
 	'liked_thread' => 'post in thread',
+	'likes' => 'Likes',
 );
 
 $LANG_GF02 = array(
