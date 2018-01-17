@@ -2789,11 +2789,12 @@ function PLG_itemSaved($id, $type, $old_id = '')
 *
 * @param    string  $id     ID of the item
 * @param    string  $type   type of the item, e.g. 'article'
+* @param    string  $children  comma separated list of children ids to delete
 * @return   void
 * @since    glFusion v1.1.6
 *
 */
-function PLG_itemDeleted($id, $type)
+function PLG_itemDeleted($id, $type, $children = null)
 {
     global $_PLUGINS;
 
@@ -2805,13 +2806,13 @@ function PLG_itemDeleted($id, $type)
         if ($_PLUGINS[$del] != $plg_type) {
             $function = 'plugin_itemdeleted_' . $_PLUGINS[$del];
             if (function_exists($function)) {
-                $function($id, $type);
+                $function($id, $type, $children);
             }
         }
     }
 
     if (function_exists('CUSTOM_itemdeleted')) {
-        CUSTOM_itemdeleted($id, $type);
+        CUSTOM_itemdeleted($id, $type, $children);
     }
 }
 
