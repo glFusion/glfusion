@@ -4,7 +4,7 @@
   - Fixed incorrect variable reference in referer ban list
   - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
   - Forum: Moderator functions now in dropdown button
-  - Forum: New Likes Feature
+  - Forum: New Likes Feature by Lee Garner
   - Configuration option to enable / disable BB2 auto ban logging
   - Standardized the date/time format across all log files
   - Added token timeout protection to comment form
