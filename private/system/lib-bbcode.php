@@ -362,7 +362,8 @@ function _bbcode_stripcontents ($text) {
 
 function _bbcode_htmlspecialchars($text) {
 
-    return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt()));
+    $text = @htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt(),true);
+    return str_replace('&amp;','&',$text);
 }
 
 function _bbcode_null  ($action, $attributes, $content, $params, $node_object) {
@@ -510,6 +511,7 @@ function _bbcode_cleanHTML($str) {
 }
 
 function _bbcode_replaceTags($text) {
+return $text;
     return PLG_replaceTags($text,'bbcode','post');
 }
 
