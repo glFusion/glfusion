@@ -1,7 +1,5 @@
 ## glFusion CMS
 
-[![Join the chat at https://gitter.im/glFusion/glfusion](https://badges.gitter.im/glFusion/glfusion.svg)](https://gitter.im/glFusion/glfusion?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 glFusion CMS is a content management and publishing system. It can be utilized as a content publishing system, a collaboration system, and even an application development framework. Regardless how you use it, glFusion CMS provides all the tools necessary to quickly create and maintain a content driven web site. glFusion CMS also provides a rich application development environment.
 
 glFusion CMS is well organized and provides a very powerful system that is extremely easy to use. glFusion CMS powers everything from personal blogs, to high volume community discussion sites, and almost everything in between.
@@ -41,7 +39,7 @@ The best support method for glFusion CMS is the glFusion Web Site located at
 Please do not email the developers directly - there is a good chance the email will be
 missed due to the high volume of email they receive.
 The <a href="https://www.glfusion.org" target="_blank">glFusion Website</a>
-and <a href="https://gitter.im/glFusion/glfusion" target="_blank">Gitter Room</a>
+and <a href="https://discord.gg/aESFqh6" target="_blank">glFusion Online Chat hosted by Discord</a>
 are the best methods to receive support. The goal is to have questions asked and
 answered in a publicly available place so everyone can benefit from the answer
 and other experienced users can provide insight and answers.
