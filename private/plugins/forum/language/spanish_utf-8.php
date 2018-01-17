@@ -160,6 +160,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Suscripciones',
     'TOP' => 'Top of Post',
     'PRINTABLE' => 'Versión Imprimible',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Opciones del Foro',
     'USERPREFS' => 'Preferencias de Usuario',
     'SPEEDLIMIT' => '"Tu último comentario se realizó hace %s segundos.<br>Este sitio requiere al menos %s segundos entre Posts."',

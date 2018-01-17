@@ -162,6 +162,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Abonnements',
     'TOP' => 'Nach oben',
     'PRINTABLE' => 'Druckfähige Version',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Forum-Optionen',
     'USERPREFS' => 'Forum-Einstellungen',
     'SPEEDLIMIT' => '"Dein letzter Kommentar ist %s Sekunden her.<br />Zwischen den Forenbeiträgen müssen aber mindestens %s Sekunden liegen."',

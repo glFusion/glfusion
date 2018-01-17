@@ -158,6 +158,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Abonnements',
     'TOP' => 'Haut de la Poste',
     'PRINTABLE' => 'Version imprimable',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Options du forum',
     'USERPREFS' => 'Préférences de l`utilisateur',
     'SPEEDLIMIT' => 'Votre commentaire a été il ya %s secondes. <br/> Ce site nécessite les secondes au moins %s entre messages du forum.',

@@ -158,6 +158,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Suscripciones',
     'TOP' => 'Mensaje de arriba',
     'PRINTABLE' => 'Versión para imprimir',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Opciones de Foro',
     'USERPREFS' => 'Preferencias del Usuario',
     'SPEEDLIMIT' => '"Tu última respuesta fue hace %s segundos.<br>Este sitio requiere que transcurra al menos %s segundos entre cada envío de respuestas."',

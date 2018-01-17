@@ -158,6 +158,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Tilatut ilmoitukset',
     'TOP' => 'Viestin yl&ouml;s',
     'PRINTABLE' => 'Tulostus versio',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Foorumi valinnat',
     'USERPREFS' => 'K&auml;ytt&auml;j&auml; asetukset',
     'SPEEDLIMIT' => '"Viimeisin kommenttisi oli %s sekuntia sitten.<br>V&auml;hint&auml;&auml;n %s sekuntia t&auml;ytyy odottaa ennekuin voi l&auml;hett&auml;&auml; uudestaan."',

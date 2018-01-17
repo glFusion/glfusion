@@ -159,6 +159,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Odběry',
     'TOP' => 'Top zalaných',
     'PRINTABLE' => 'Pro tisk',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Forum Options',
     'USERPREFS' => 'Uživatelova práva',
     'SPEEDLIMIT' => '"Tvůj poslední komentář byl poslán před %s s.<br>Tato stránka vyžaduje prodlevu %s s."',

@@ -158,6 +158,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Favorieten',
     'TOP' => 'Bovenaan Bericht',
     'PRINTABLE' => 'Printbare Versie',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Forum Opties',
     'USERPREFS' => 'Gebruiker Voorkeuren',
     'SPEEDLIMIT' => '"Uw laatste reactie was %s seconden geleden.<br>De website vereist dat er minimaal %s seconden wordt gewacht met het plaatsen van een nieuw bericht."',

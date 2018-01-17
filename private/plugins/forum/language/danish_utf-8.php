@@ -159,6 +159,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Abonnement',
     'TOP' => 'Top af Svar',
     'PRINTABLE' => 'printervenlig Version',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Forum valgmuligheder',
     'USERPREFS' => 'Bruger Præferencer',
     'SPEEDLIMIT' => '"Din sidste kommentar var %s sek. siden.<br>Denne side kræver at der går %s sek. mellem du skriver."',
