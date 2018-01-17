@@ -1511,7 +1511,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                         if ( DB_numRows($childres) > 0 ) {
                             $B = DB_fetchArray($childres);
                             if ( isset($B['comment'])) {
-                                $A['comment'] = $A['comment'] . $B['comment'];
+                                $A['comment'] = $A['comment'] . ' ' . $B['comment'];
                             }
                         }
                     }
