@@ -109,9 +109,9 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
                 'LANG_edit' => ''));
     }
 
-    if ( $query != '' ) {
-        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
-    }
+//    if ( $query != '' ) {
+//        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
+//    }
 
     if ($showtopic['pid'] == 0) {
         $replytopicid = $showtopic['id'];
