@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Forum admin program to view all messages in a compressed format          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -202,7 +202,7 @@ if ($num_messages == 0) {
     $report->set_var('endblock', COM_endBlock());
     $numpages = ceil($num_messages / $show);
     $offset = ($page - 1) * $show;
-    $base_url = $_CONF['site_admin_url'] . '/plugins/forum/messages.php?forum='.$forum;
+    $base_url = $_CONF['site_admin_url'] . '/plugins/forum/messages.php?forum='.$forum.'&amp;member='.$member.'&amp;parentonly='.$parentonly;
     $report->set_var ('pagenav', COM_printPageNavigation($base_url,$page, $numpages));
 
     $query = DB_query("SELECT * FROM {$_TABLES['ff_topic']} $whereSQL ORDER BY id DESC LIMIT $offset, $show");

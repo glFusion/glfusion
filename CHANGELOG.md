@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Forum: Admin message management did not page properly - lost selections on pagination
   - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
   - Polls: Comment link did not correctly display when showing poll results in Polls block
   - Open print window in new window when printing static pages
