@@ -1442,29 +1442,12 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     USES_forum_format();
 
-    if ($id == '*') {
-        if ( $buildingSearchIndex ) {
-            $where = " WHERE a.pid=0 ";
-            $permOp = " AND ";
-        } else {
-            $where = '';
-            $permOp = ' WHERE ';
-        }
+    $where = ' WHERE ';
+    if ($id != '*') {
+        $where .= " id = '" . DB_escapeString($id) . "' AND ";
+        $limit = ' LIMIT 1';
     } else {
-        // but I don't want to call this when doing batch reindexing...
-        if ( $buildingSearchIndex == true && $batchreindex == false) {
-            // check to see if we have the PID or a reply ID
-            // query the record for PID
-            // if it is 0 - we are good
-            // if it is not 0 - update ID to PID
-            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
-            if ( $pid != 0 && $pid != NULL) {
-                $id = $pid;
-            }
-        }
-
-        $where = " WHERE id = '" . DB_escapeString($id) . "'";
-        $permOp = ' AND ';
+        $limit = '';
     }
 
     $groups = array ();
@@ -1477,11 +1460,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status, b.* ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
-    $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
-
-    if ($id != '*') {
-        $sql .= ' LIMIT 1';
-    }
+    $sql .= "$where b.grp_id IN ($grouplist) $limit";
 
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
