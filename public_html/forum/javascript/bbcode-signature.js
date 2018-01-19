@@ -229,32 +229,18 @@ function getCaretPosition(txtarea)
 	return caretPos;
 }
 
-var xmlhttp = null;
-
-function ajax_previewsig() {
-
-    xmlhttp = new XMLHttpRequest();
-
-    var qs = '';
-    var signature = document.profileform.signature.value;
-    var params = "signature=" + signature;
-
-    xmlhttp.open('POST', site_url + '/forum/sigpreview.php', true);
-    //Send the proper header information along with the request
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//    xmlhttp.setRequestHeader("Content-length", params.length);
-//    xmlhttp.setRequestHeader("Connection", "close");
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-            receiveSigPreview(xmlhttp.responseText);
-        }
-    };
-    xmlhttp.send(params);
-
-}
-function receiveSigPreview(signature) {
-
-    if (signature != '') {
-        document.getElementById("sigpreview").innerHTML = signature;
-    }
+function ajax_previewsig()
+{
+		var signature = $('textarea#signature').val();
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: site_url + '/forum/sigpreview.php',
+        data: {"signature" : signature },
+        timeout: 3000,
+    }).done(function(data) {
+        var result = $.parseJSON(data["js"]);
+        var sigpreview = result.signature;
+        $("#sigpreview").html(sigpreview);
+    });
 }

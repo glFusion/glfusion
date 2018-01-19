@@ -6,7 +6,7 @@
 // |                                                                          |
 // | returns preview of user signature to AJAX routine                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,6 +29,8 @@
 
 require_once '../lib-common.php';
 
+if ( !COM_isAjax()) die();
+
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
@@ -42,7 +44,7 @@ USES_forum_functions();
 USES_forum_format();
 USES_lib_bbcode();
 
-$retval = '';
+$retval = array();
 
 if ( isset($_POST['signature']) ) {
     $signature = $_POST['signature'];
@@ -54,10 +56,13 @@ if ( $_FF_CONF['allow_img_bbcode'] != true ) {
 } else {
     $exclude = array();
 }
+
 $preview_sig = BBC_formatTextBlock($signature,'text',array(),array(),$exclude);
 
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("content-type: text/xml");
-
-print $preview_sig;
+$retval['errorCode'] = 0;
+$retval['signature'] = $preview_sig;
+$retval['statusMessage'] = '';
+$return["js"] = json_encode($retval);
+echo json_encode($return);
+exit;
 ?>
