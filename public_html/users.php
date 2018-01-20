@@ -1486,6 +1486,9 @@ switch ($mode) {
                     }
                 }
             }
+            SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],false);
             COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....

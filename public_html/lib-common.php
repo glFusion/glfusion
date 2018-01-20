@@ -137,7 +137,11 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
-
+@date_default_timezone_set($_CONF['timezone']);
+if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
+    setlocale( LC_TIME, $_CONF['locale'] );
+}
+require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
@@ -153,8 +157,6 @@ if ($pos === false) {
 } else {
     $_CONF['path_admin'] = $_CONF['path_html'] . substr ($adminurl, $pos + 1).'/';
 }
-
-@date_default_timezone_set('America/Chicago');
 
 $charset = COM_getCharset();
 if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
@@ -228,7 +230,6 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
-@date_default_timezone_set('America/Chicago');
 
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
@@ -243,7 +244,7 @@ $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
 /**
-* Initialize $_URL globa
+* Initialize $_URL global
 */
 
 $_URL = new url( $_CONF['url_rewrite'] );
@@ -303,7 +304,6 @@ require_once $_CONF['path_system'].'lib-glfusion.php';
 */
 
 require_once $_CONF['path_system'].'lib-plugins.php';
-
 
 /**
 * Multibyte functions
@@ -421,7 +421,7 @@ if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
 *
 */
 
-require_once $_CONF['path_language'] . $_CONF['language'] . '.php';
+include $_CONF['path_language'] . $_CONF['language'] . '.php';
 
 if (empty($LANG_DIRECTION)) {
     // default to left-to-right
@@ -613,12 +613,6 @@ if (empty($_IMAGE_TYPE)) {
 }
 
 COM_switchLocaleSettings();
-
-if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
-    setlocale( LC_TIME, $_CONF['locale'] );
-}
-
-@date_default_timezone_set($_CONF['timezone']);
 
 /**
 * Global array of groups current user belongs to

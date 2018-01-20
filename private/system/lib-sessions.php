@@ -111,6 +111,9 @@ function SESS_sessionCheck()
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
                     $_SERVER['REMOTE_USER'] = $_USER['username'];
+                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],false);
                     // cycle session
                 }
             } else {
@@ -131,6 +134,9 @@ function SESS_sessionCheck()
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
                     $_SERVER['REMOTE_USER'] = $_USER['username'];
+                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],false);
                     // Create new session and write cookie
                     $sessid = SESS_newSession($userid,$request_ip, $_CONF['session_cookie_timeout']);
                     if ( $sessid === false ) {
