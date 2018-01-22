@@ -65,14 +65,17 @@ function initMenu($menuname, $skipCache=false) {
 
     $menu = NULL;
 
-    $cacheInstance = 'menuobject_' .$menuname . '_' . CACHE_security_hash() . '__data';
+    $c = glFusion\Cache::getInstance();
+    $key = 'menu_'.$menuname . '_' . $c->securityHash();
+
     if ( $skipCache == false ) {
-        $retval = CACHE_check_instance($cacheInstance, 0);
-        if ( $retval ) {
+        $retval = $c->get($key);
+        if ($retval !== null) {
             $menu = unserialize($retval);
             return $menu ;
         }
     }
+
     $mbadmin = SEC_hasRights('menu.admin');
     $root    = SEC_inGroup('Root');
 
@@ -113,7 +116,8 @@ function initMenu($menuname, $skipCache=false) {
         $menu->getElements();
 
         $cacheMenu = serialize($menu);
-        CACHE_create_instance($cacheInstance, $cacheMenu, 0);
+
+        $c->set($key,$cacheMenu,'menu');
     }
 
     return $menu;
@@ -140,22 +144,27 @@ function assembleMenu($name, $skipCache=false) {
         $menuName = $name;
     }
 
-    $cacheInstance = 'menudata_' .$menuName . '_' . CACHE_security_hash() . '__data';
-
     if ( $skipCache == false ) {
-        $cacheCheck = CACHE_check_instance($cacheInstance, 0);
-        if ( $cacheCheck ) {
-            $menuData = unserialize($cacheCheck);
+        $c = glFusion\Cache::getInstance();
+        $key = 'menu_'.$menuName.'_'.$c->securityHash();
+        $menuDataSerialized = $c->get($key);
+        if ( $menuDataSerialized !== null ) {
+            $menuData = unserialize($menuDataSerialized);
             return $menuData;
         }
     }
+if ( $menuName != 'header' && $menuName != 'footer') {
+COM_errorLog("CACHE: Rebuilding cache for menu ". $menuName);
+}
 
     $menuObject = initMenu($menuName, $skipCache);
     if ( $menuObject != NULL ) {
         $menuData = $menuObject->_parseMenu();
         $menuData['type'] = $menuObject->type;
         $cacheMenu = serialize($menuData);
-        CACHE_create_instance($cacheInstance, $cacheMenu, 0);
+        if ( $skipCache == false ) {
+            $c->set($key,$cacheMenu,'menu');
+        }
     }
 
     return $menuData;
