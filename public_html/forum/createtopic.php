@@ -1229,7 +1229,9 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
         COM_updateSpeedLimit('forum');
         PLG_itemSaved($savedPostID,'forum');
-        CACHE_remove_instance('forumcb');
+
+        $c = glFusion\Cache::getInstance();
+        $c->deleteItemsByTag('forum');
 
         if ( !COM_isAnonUser() ) {
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
