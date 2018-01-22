@@ -137,6 +137,16 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
+
+//@@ Temporary Cache Driver Configuration
+$_CONF['cache']['driver'] = 'files';
+$_CONF['cache']['host'] = '127.0.0.1';
+$_CONF['cache']['port'] = '11211';
+$_CONF['cache']['password'] = 'password';
+$_CONF['cache']['database'] = 'glfusion';
+$_CONF['cache']['timeout'] = 60;
+//@@ end of tempoary settings
+
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
@@ -1410,6 +1420,15 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
     }
 
+    if (defined ('DVLP_DEBUG')) {
+        if ( function_exists('xdebug_peak_memory_usage') ) {
+            $debugger = '<div class="uk-alert uk-alert-danger uk-margin-remove uk-align-center uk-text-center">';
+            $debugger .= '<span class="uk-text-bold">Peak Memory: ' . (xdebug_peak_memory_usage() / 1024) / 1024 . ' mb :: Execution Time : '. xdebug_time_index() . ' sec</span>';
+            $debugger .= '</div>';
+            $theme->set_var('debugger',$debugger);
+        }
+    }
+
     // Actually parse the template and make variable substitutions
     $theme->parse( 'index_footer', 'footer' );
 
@@ -1418,8 +1437,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
+
+
     _js_out();
     _css_out();
+
 
     return $retval;
 }
@@ -1831,7 +1853,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 *
 */
 
-function COM_errorLog( $logentry, $actionid = '' )
+function COM_errorLog( $logentry, $actionid = 1 )
 {
     global $_CONF, $LANG01, $REMOTE_ADDR;
 
@@ -3596,16 +3618,13 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $_CONF['whatsnew_cache_time'] = 3600;
     }
 
-    $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_USER['theme'];
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
-        $lu = CACHE_get_instance_update($cacheInstance, 0);
-        $now = time();
-        if (( $now - $lu ) < $_CONF['whatsnew_cache_time'] ) {
-            return $retval;
-        }
+    $c = glFusion\Cache::getInstance();
+    $final = $c->get('whatsnew');
+    if ( $final !== null ) {
+        return $final;
     }
 
+COM_errorLog("CACHE: Rebuilding whatsnew cache");
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
 
@@ -3615,8 +3634,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                        COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $T->set_var('block_start',$header);
-
-
     $topicsql = '';
     if (( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
             || ( $_CONF['trackback_enabled']
@@ -3827,7 +3844,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $final = '';
     }
 
-    CACHE_create_instance($cacheInstance, $final, 0);
+    // cache it
+    $c->set('whatsnew',$final,'whatsnew',$_CONF['whatsnew_cache_time']);
 
     return $final;
 }
