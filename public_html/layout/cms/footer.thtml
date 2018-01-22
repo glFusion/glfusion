@@ -36,6 +36,7 @@
 	</footer>
 	{js-footer}
 	{raw-footer}
+	{debugger}
 </body>
 </html>
 {# end {templatelocation} #}
