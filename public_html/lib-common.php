@@ -33,8 +33,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-// Prevent PHP from reporting uninitialized variables
-error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
+// PHP error reporting
+error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_RECOVERABLE_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -140,11 +140,18 @@ if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 
 //@@ Temporary Cache Driver Configuration
 $_CONF['cache']['driver'] = 'files';
+
+// redis takes a host / port / password / database
 $_CONF['cache']['host'] = '127.0.0.1';
-$_CONF['cache']['port'] = '11211';
+$_CONF['cache']['port'] = '6379';
 $_CONF['cache']['password'] = 'password';
 $_CONF['cache']['database'] = 'glfusion';
 $_CONF['cache']['timeout'] = 60;
+
+// memcache settings - needs servers array
+$_CONF['cache']['servers'][0]['host'] = '127.0.0.1';
+$_CONF['cache']['servers'][0]['port'] = '11211';
+
 //@@ end of tempoary settings
 
 @date_default_timezone_set($_CONF['timezone']);
@@ -3619,12 +3626,13 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     }
 
     $c = glFusion\Cache::getInstance();
-    $final = $c->get('whatsnew');
+    $key = 'whatsnew__'.$c->securityHash(true,true);
+    $final = $c->get($key);
     if ( $final !== null ) {
+COM_errorLog("cache hit on whats new");
         return $final;
     }
-
-//COM_errorLog("CACHE: Rebuilding whatsnew cache");
+COM_errorLog("cache miss on whatsnew");
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
 
@@ -3844,8 +3852,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $final = '';
     }
 
-    // cache it
-    $c->set('whatsnew',$final,'whatsnew',$_CONF['whatsnew_cache_time']);
+    $c->set($key,$final,'whatsnew',$_CONF['whatsnew_cache_time']);
 
     return $final;
 }
