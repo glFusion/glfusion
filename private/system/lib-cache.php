@@ -154,7 +154,7 @@ function CACHE_cleanup_plugin($plugin)
 function CACHE_remove_instance($iid)
 {
     global $TEMPLATE_OPTIONS;
-COM_errorLog("CACHE_remove_instance on " . $iid);
+//COM_errorLog("CACHE_remove_instance on " . $iid);
     $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
     $iid = str_replace('-','_',$iid);
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
@@ -189,7 +189,7 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
     $c = glFusion\Cache::getInstance();
     $c->set($iid,$data);
 
-COM_errorLog("CACHE: rebuilding cache for " . $iid);
+//COM_errorLog("CACHE: rebuilding cache for " . $iid);
     return;
 }
 
