@@ -139,7 +139,7 @@ $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 
 //@@ Temporary Cache Driver Configuration
-$_CONF['cache']['driver'] = 'files';
+$_CONF['cache']['driver'] = 'memcache';
 $_CONF['cache']['host'] = '127.0.0.1';
 $_CONF['cache']['port'] = '11211';
 $_CONF['cache']['password'] = 'password';
@@ -3624,7 +3624,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         return $final;
     }
 
-COM_errorLog("CACHE: Rebuilding whatsnew cache");
+//COM_errorLog("CACHE: Rebuilding whatsnew cache");
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
 
@@ -6743,11 +6743,14 @@ function CTL_clearCache($plugin='')
                 @unlink($filename);
             }
         }
-        if ( defined('DVLP_DEBUG') ) {
-            COM_errorLog("DEBUG: Cache has been cleared");
-        }
-
     }
+    $c = glFusion\Cache::getInstance();
+    $c->clear();
+
+    if ( defined('DVLP_DEBUG') ) {
+        COM_errorLog("DEBUG: Cache has been cleared");
+    }
+
 }
 
 function _css_out()
