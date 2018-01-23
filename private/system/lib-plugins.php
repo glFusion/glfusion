@@ -1894,9 +1894,11 @@ function PLG_autoTagPerms()
         return $autoTagUsage;
     }
 
-    $cacheInstance = 'atperm__' . CACHE_security_hash();
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+    $c = glFusion\Cache::getInstance();
+    $key = 'atperm__'.$c->securityHash();
+    $retval = $c->get($key);
+
+    if ( $retval !== null ) {
         $autoTagUsage = unserialize($retval);
         $atp_initialized = 1;
         return $retval;
@@ -1916,7 +1918,8 @@ function PLG_autoTagPerms()
     $atp_initialized = 1;
     $autoTagUsage = $autoTagArray;
 
-    CACHE_create_instance($cacheInstance, serialize($autoTagArray), 0);
+    $c->set($key,serialize($autoTagArray));
+//    CACHE_create_instance($cacheInstance, serialize($autoTagArray), 0);
 
     return $autoTagArray;
 }
