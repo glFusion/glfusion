@@ -139,7 +139,7 @@ $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 
 //@@ Temporary Cache Driver Configuration
-$_CONF['cache']['driver'] = 'memcache';
+$_CONF['cache']['driver'] = 'files';
 $_CONF['cache']['host'] = '127.0.0.1';
 $_CONF['cache']['port'] = '11211';
 $_CONF['cache']['password'] = 'password';
