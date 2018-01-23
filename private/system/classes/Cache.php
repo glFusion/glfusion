@@ -14,6 +14,13 @@
 namespace glFusion;
 
 use \phpFastCache\CacheManager;
+use \phpFastCache\Core\Item\ExtendedCacheItemInterface;
+use \phpFastCache\Core\Pool\ExtendedCacheItemPoolInterface;
+use \phpFastCache\Exceptions\phpFastCacheDriverCheckException;
+use \phpFastCache\Exceptions\phpFastCacheInvalidArgumentException;
+use \phpFastCache\Exceptions\phpFastCacheRootException;
+use \phpFastCache\Exceptions\phpFastCacheSimpleCacheException;
+use \Psr\SimpleCache\CacheInterface;
 
 /**
  * Class Cache
@@ -251,20 +258,32 @@ final class Cache
         }
     }
 
+    /**
+     * @param string $tag
+     * @return mixed items
+     */
     public function getItemsByTag($tag)
     {
         return $this->internalCacheInstance->getItemsByTag($tag);
     }
 
+    /**
+     * @param string $tag
+     * @return string unique key
+     */
     public function createKey($tag)
     {
         global $_USER;
 
-        $key = $tag.'__' . $this->securityHash() . '__' . $_USER['theme'];
+        $key = $tag.'__' . $this->securityHash(true);
         return $key;
     }
 
-    public function securityHash()
+    /**
+     * @param boolean $byTheme
+     * @return string
+     */
+    public function securityHash($byTheme = false)
     {
         global $_GROUPS, $_USER;
 
@@ -276,6 +295,9 @@ final class Cache
             if ( !empty($_USER['tzid']) ) {
                 $hash .= 'tz'.md5($_USER['tzid']);
             }
+        }
+        if ( $byTheme ) {
+            $hash .= '_'.$_USER['theme'];
         }
         return $hash;
     }
