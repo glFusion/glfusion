@@ -129,9 +129,12 @@ function bb2_read_settings() {
     $_CONF['bb2_spambots_regex'] =array();
     $_CONF['bb2_spambots_url'] =  array();
     $_CONF['bb2_spambot_referer'] = array();
-    $cacheInstance = 'bb2_bl_data';
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+
+    $c = glFusion\Cache::getInstance();
+    $key = 'bb2_bl_data';
+    $retval = $c->get($key);
+
+    if ( $retval !== null ) {
         $bb2_bl_tmp = unserialize($retval);
         if ( isset($bb2_bl_tmp['spambot_ip']))
             $_CONF['bb2_spambot_ip'] = $bb2_bl_tmp['spambot_ip'];
@@ -171,17 +174,19 @@ function bb2_read_settings() {
             if ( isset($bb2_bl_tmp['spambot_referer']))
                 $_CONF['bb2_spambot_referer'] = $bb2_bl_tmp['spambot_referer'];
             $cache_bb2_bl_data = serialize($bb2_bl_tmp);
-            CACHE_create_instance($cacheInstance, $cache_bb2_bl_data, 0);
+
+            $c->set($key,$cache_bb2_bl_data);
         }
     }
 
     // whitelisted data
-    $cacheInstance = 'bb2_wl_data';
     $_CONF['bb2_whitelist_ip_ranges'] = array();
     $_CONF['bb2_whitelist_user_agents'] = array();
     $_CONF['bb2_whitelist_urls'] = array();
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+
+    $key = 'bb2_wl_data';
+    $retval = $c->get($key);
+    if ( $retval !== null ) {
         $bb2_wl_tmp = unserialize($retval);
         if ( isset($bb2_wl_tmp['ip']))
             $_CONF['bb2_whitelist_ip_ranges']  = $bb2_wl_tmp['ip'];
@@ -206,7 +211,8 @@ function bb2_read_settings() {
             if ( isset($bb2_wl_tmp['url']))
                 $_CONF['bb2_whitelist_urls'] = $bb2_wl_tmp['url'];
             $cache_bb2_wl_data = serialize($bb2_wl_tmp);
-            CACHE_create_instance($cacheInstance, $cache_bb2_wl_data, 0);
+
+            $c->set($key,$cache_bb2_wl_data);
         }
     }
 
