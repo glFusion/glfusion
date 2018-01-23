@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion menu library.                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -153,9 +153,9 @@ function assembleMenu($name, $skipCache=false) {
             return $menuData;
         }
     }
-if ( $menuName != 'header' && $menuName != 'footer') {
-COM_errorLog("CACHE: Rebuilding cache for menu ". $menuName);
-}
+//if ( $menuName != 'header' && $menuName != 'footer') {
+//COM_errorLog("CACHE: Rebuilding cache for menu ". $menuName);
+//}
 
     $menuObject = initMenu($menuName, $skipCache);
     if ( $menuObject != NULL ) {
