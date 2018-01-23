@@ -138,22 +138,6 @@ $config->initConfig();
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 
-//@@ Temporary Cache Driver Configuration
-$_CONF['cache']['driver'] = 'files';
-
-// redis takes a host / port / password / database
-$_CONF['cache']['host'] = '127.0.0.1';
-$_CONF['cache']['port'] = '6379';
-$_CONF['cache']['password'] = 'password';
-$_CONF['cache']['database'] = 'glfusion';
-$_CONF['cache']['timeout'] = 60;
-
-// memcache settings - needs servers array
-$_CONF['cache']['servers'][0]['host'] = '127.0.0.1';
-$_CONF['cache']['servers'][0]['port'] = '11211';
-
-//@@ end of tempoary settings
-
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );

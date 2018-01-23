@@ -330,4 +330,30 @@ function CACHE_sanitizeFilename($filename, $allow_dots = true)
 
     return trim($filename);
 }
+
+function configmanager_select_cache_driver_helper($index = '')
+{
+    $retval = array();
+
+    $retval = array(
+        'Files'     => 'files'
+    );
+    if (extension_loaded('apcu')) {
+        $retval['APCU'] = 'apcu';
+    }
+    if (extension_loaded('memcache')) {
+        $retval['Memcache'] = 'memcache';
+    }
+    if (extension_loaded('memcached')) {
+        $retval['Memcached'] = 'memcached';
+    }
+    if (extension_loaded('redis')) {
+        $retval['Redis'] = 'redis';
+    }
+    if (extension_loaded('wincache')) {
+        $retval['Wincache'] = 'wincache';
+    }
+    return $retval;
+}
+
 ?>

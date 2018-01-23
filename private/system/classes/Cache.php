@@ -55,15 +55,34 @@ final class Cache
     {
         global $_CONF;
 
+        // validations
+        if (!isset($_CONF['cache_driver'])) $_CONF['cache_driver'] = 'files';
+        if (!isset($_CONF['cache_host'])) $_CONF['cache_host'] = '127.0.0.1';
+        if (!isset($_CONF['cache_port'])) $_CONF['cache_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+        if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = 'password';
+        if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = 'glfusion';
+        if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 60;
+
+        $validArray = configmanager_select_cache_driver_helper();
+        if (!in_array($_CONF['cache_driver'],$validArray)) {
+            $_CONF['cache_driver'] = 'files';
+        }
+
         $config = array(
+            'driver' => $_CONF['cache_driver'],
+            'host' => $_CONF['cache_host'],
+            'port' => $_CONF['cache_port'],
+            'password' => $_CONF['cache_password'],
+            'database' => $_CONF['cache_database'],
+            'servers' => array(
+                            0 => array('host' => $_CONF['cache_host'], 'port' => $_CONF['cache_port'])
+                         ),
             'fallback' => 'files',
             'path' => $_CONF['path'].'data/cache/',
             'itemDetailedDate' => true
         );
-        foreach($_CONF['cache'] AS $item => $value ) {
-            $config[$item] = $value;
-        }
-        $this->internalCacheInstance = CacheManager::getInstance($_CONF['cache']['driver'], $config);
+
+        $this->internalCacheInstance = CacheManager::getInstance($_CONF['cache_driver'], $config);
     }
 
 
@@ -106,7 +125,7 @@ final class Cache
                 $cacheItem->expiresAt((new \DateTime('@0')));
             } elseif (is_int($ttl) || $ttl instanceof \DateInterval) {
                 $cacheItem->expiresAfter($ttl);
-            } else if (strtolower($_CONF['cache']['driver']) != 'files') {
+            } else if (strtolower($_CONF['cache_driver']) != 'files') {
                 $cacheItem->expiresAfter(86400);
             }
             if ($tag != '' ) {
@@ -288,7 +307,7 @@ final class Cache
      * @param boolean $byLang
      * @return string
      */
-    public function securityHash($bylang = false, $byTheme = false)
+    public function securityHash($byLang = false, $byTheme = false)
     {
         global $_GROUPS, $_RIGHTS, $_USER;
 

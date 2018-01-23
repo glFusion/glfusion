@@ -2919,6 +2919,12 @@ $LANG_confignames['Core'] = array(
     'pwd_req_cap' => 'Required upper case letter in password',
     'pwd_req_lower' => 'Require lower case letter in password',
     'pwd_req_symbol' => 'Require special character in password',
+    'cache_driver' => 'Cache Driver',
+    'cache_host' => 'Cache Server',
+    'cache_port' => 'Cache Server Port',
+    'cache_password' => 'Password (needed for Redis driver)',
+    'cache_database' => 'Database (needed for Redis driver)',
+    'cache_timeout' => 'Connection Timeout',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2930,7 +2936,9 @@ $LANG_configsubgroups['Core'] = array(
     'sg_images' => 'Images',
     'sg_locale' => 'Languages and Locale',
     'sg_misc' => 'Miscellaneous',
-    'sg_spam' => 'Spam / Bot Protection'
+    'sg_spam' => 'Spam / Bot Protection',
+    'sg_cache' => 'Caching',
+
 );
 
 $LANG_fs['Core'] = array(
@@ -2980,6 +2988,8 @@ $LANG_fs['Core'] = array(
     'fs_spam_config' => 'Configuration',
     'fs_authentication' => 'Authentication',
     'fs_pwd_complexity' => 'Password Rules',
+    'fs_cache_template' => 'Templates',
+    'fs_cache_backend' => 'Cache Options',
 );
 
 $LANG_configselects['Core'] = array(
