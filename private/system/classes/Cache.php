@@ -96,6 +96,8 @@ final class Cache
      */
     public function set($key, $value, $tag = '', $ttl = null)
     {
+        global $_CONF;
+
         try {
             $cacheItem = $this->internalCacheInstance
               ->getItem($key)
@@ -104,6 +106,8 @@ final class Cache
                 $cacheItem->expiresAt((new \DateTime('@0')));
             } elseif (is_int($ttl) || $ttl instanceof \DateInterval) {
                 $cacheItem->expiresAfter($ttl);
+            } else if (strtolower($_CONF['cache']['driver']) != 'files') {
+                $cacheItem->expiresAfter(86400);
             }
             if ($tag != '' ) {
                 $cacheItem->addTag($tag);
@@ -281,23 +285,25 @@ final class Cache
 
     /**
      * @param boolean $byTheme
+     * @param boolean $byLang
      * @return string
      */
-    public function securityHash($byTheme = false)
+    public function securityHash($bylang = false, $byTheme = false)
     {
-        global $_GROUPS, $_USER;
+        global $_GROUPS, $_RIGHTS, $_USER;
 
         static $hash = NULL;
 
         if (empty($hash)) {
             $groups = implode(',',$_GROUPS);
-            $hash = strtolower(md5($groups));
-            if ( !empty($_USER['tzid']) ) {
-                $hash .= 'tz'.md5($_USER['tzid']);
-            }
+            $rights = implode(',',$_RIGHTS);
+            $hash = strtolower(md5($groups).md5($rights));
         }
-        if ( $byTheme ) {
+        if ($byTheme) {
             $hash .= '_'.$_USER['theme'];
+        }
+        if ($byLang) {
+            $hash .= '_'.$_USER['language'];
         }
         return $hash;
     }
