@@ -128,7 +128,9 @@ final class Cache
             } else if (strtolower($_CONF['cache_driver']) != 'files') {
                 $cacheItem->expiresAfter(86400);
             }
-            if ($tag != '' ) {
+            if ( is_array($tag) ) {
+                $cacheItem->addTags($tag);
+            } elseif ($tag != '' ) {
                 $cacheItem->addTag($tag);
             }
             return $this->internalCacheInstance->save($cacheItem);
