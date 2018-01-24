@@ -3613,10 +3613,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     $key = 'whatsnew__'.$c->securityHash(true,true);
     $final = $c->get($key);
     if ( $final !== null ) {
-COM_errorLog("cache hit on whats new");
         return $final;
     }
-COM_errorLog("cache miss on whatsnew");
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
 
