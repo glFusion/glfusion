@@ -1078,7 +1078,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     if (($cb_enable && ($cb_where == $where)) || $where == CENTERBLOCK_FORCE) {
 
         $c = glFusion\Cache::getInstance();
-        $key = 'forumcb__'.$c->securityHash();
+        $key = 'forumcb__'.$c->securityHash(true,true);
         $retval = $c->get($key);
 
         if ( $retval !== null ) {
