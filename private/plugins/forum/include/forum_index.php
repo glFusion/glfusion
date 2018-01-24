@@ -281,7 +281,6 @@ function forum_index()
 
     //Display Categories
     if ($forum == 0) {
-
         $birdSeedStart = '';
         $categorycounter = 0;
 
@@ -294,222 +293,231 @@ function forum_index()
         $groupAccessList = implode(',',$groups);
 
         if ( $dCat > 0 ) {
-            $categoryQuery = DB_query("SELECT * FROM {$_TABLES['ff_categories']} WHERE id=". (int) $dCat . " ORDER BY cat_order ASC");
+            $sql = "SELECT * FROM {$_TABLES['ff_categories']} WHERE id=". (int) $dCat . " ORDER BY cat_order ASC";
             $birdSeedStart = '<a href="'.$_CONF['site_url'].'/forum/index.php">Forum Index</a> :: ';
         } else {
-            $categoryQuery = DB_query("SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC");
+            $sql = "SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC";
         }
-        $numCategories = DB_numRows($categoryQuery);
 
-        $forumlisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
-        $forumlisting->set_file ('forumlisting','homepage.thtml');
+        $c = glFusion\Cache::getInstance();
+        $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
+        $cacheTest = $c->get($key);
+        if ( $cacheTest !== null ) {
+            $pageBody = $cacheTest;
+        } else {
+            $categoryQuery = DB_query($sql);
 
-        $forumlisting->set_var (array(
-                'forumindeximg' => '<img src="'._ff_getImage('forumindex').'" alt=""/>',
-                'phpself'       => $_CONF['site_url'] .'/forum/index.php',
-                'layout_url'    => $_CONF['layout_url'],
-                'forum_home'    => 'Forum Index'
-        ));
-        for ($i = 1; $i <= $numCategories; $i++) {
-            $A = DB_fetchArray($categoryQuery,false);
+            $numCategories = DB_numRows($categoryQuery);
 
-            $forumlisting->set_block('forumlisting', 'catrows', 'crow');
-            $forumlisting->clear_var('frow');
-            if ( $birdSeedStart == '' ) {
-                $birdseed = $birdSeedStart . '<a href="'.$_CONF['site_url'].'/forum/index.php?cat='.$A['id'].'">'.$A['cat_name'].'</a>';
-            } else {
-                $birdseed = $birdSeedStart . $A['cat_name'];
-            }
+            $forumlisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
+            $forumlisting->set_file ('forumlisting','homepage.thtml');
+
             $forumlisting->set_var (array(
-                'cat_name'  => $A['cat_name'],
-                'cat_desc'  => $A['cat_dscp'],
-                'cat_id'    => $A['id'],
-                'birdseed'  => $birdseed,
+                    'forumindeximg' => '<img src="'._ff_getImage('forumindex').'" alt=""/>',
+                    'phpself'       => $_CONF['site_url'] .'/forum/index.php',
+                    'layout_url'    => $_CONF['layout_url'],
+                    'forum_home'    => 'Forum Index'
             ));
+            for ($i = 1; $i <= $numCategories; $i++) {
+                $A = DB_fetchArray($categoryQuery,false);
 
-            if (!COM_isAnonUser()) {
-                $link = 'href="'.$_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$A['id'].'">';
+                $forumlisting->set_block('forumlisting', 'catrows', 'crow');
+                $forumlisting->clear_var('frow');
+                if ( $birdSeedStart == '' ) {
+                    $birdseed = $birdSeedStart . '<a href="'.$_CONF['site_url'].'/forum/index.php?cat='.$A['id'].'">'.$A['cat_name'].'</a>';
+                } else {
+                    $birdseed = $birdSeedStart . $A['cat_name'];
+                }
                 $forumlisting->set_var (array(
-                        'markreadlink'  => $link,
-                        'LANG_markread' => $LANG_GF02['msg84']
+                    'cat_name'  => $A['cat_name'],
+                    'cat_desc'  => $A['cat_dscp'],
+                    'cat_id'    => $A['id'],
+                    'birdseed'  => $birdseed,
                 ));
-                if ($i == 1) {
-                    $newpostslink = 'href="'.$_CONF['site_url'] .'/forum/list.php?op=newposts">';
+
+                if (!COM_isAnonUser()) {
+                    $link = 'href="'.$_CONF['site_url'].'/forum/index.php?op=markallread&amp;cat_id='.$A['id'].'">';
                     $forumlisting->set_var (array(
-                        'newpostslink'  => $newpostslink,
-                        'LANG_newposts' => $LANG_GF02['msg112'],
+                            'markreadlink'  => $link,
+                            'LANG_markread' => $LANG_GF02['msg84']
                     ));
-                    $viewnewpostslink = true;
-               } else {
+                    if ($i == 1) {
+                        $newpostslink = 'href="'.$_CONF['site_url'] .'/forum/list.php?op=newposts">';
+                        $forumlisting->set_var (array(
+                            'newpostslink'  => $newpostslink,
+                            'LANG_newposts' => $LANG_GF02['msg112'],
+                        ));
+                        $viewnewpostslink = true;
+                   } else {
+                        $forumlisting->clear_var ('newpostslink');
+                   }
+                } else {
                     $forumlisting->clear_var ('newpostslink');
-               }
-            } else {
-                $forumlisting->clear_var ('newpostslink');
-                $forumlisting->clear_var ('markreadlink');
-            }
+                    $forumlisting->clear_var ('markreadlink');
+                }
 
-            $forumlisting->set_var (array(
-                            'LANGGF91_forum'    => $LANG_GF91['forum'],
-                            'LANGGF01_TOPICS'   => $LANG_GF01['TOPICS'],
-                            'LANGGF01_POSTS'    => $LANG_GF01['POSTS'],
-                            'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST']
-            ));
+                $forumlisting->set_var (array(
+                                'LANGGF91_forum'    => $LANG_GF91['forum'],
+                                'LANGGF01_TOPICS'   => $LANG_GF01['TOPICS'],
+                                'LANGGF01_POSTS'    => $LANG_GF01['POSTS'],
+                                'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST']
+                ));
 
-            //Display all forums under each cat
-            $sql = "SELECT * FROM {$_TABLES['ff_forums']} AS f "
-                 . "LEFT JOIN {$_TABLES['ff_topic']} AS t ON f.last_post_rec=t.id "
-                 . "WHERE forum_cat=" . (int) $A['id']." "
-                 . "AND grp_id IN ($groupAccessList) AND is_hidden=0 ORDER BY forum_order ASC";
+                //Display all forums under each cat
+                $sql = "SELECT * FROM {$_TABLES['ff_forums']} AS f "
+                     . "LEFT JOIN {$_TABLES['ff_topic']} AS t ON f.last_post_rec=t.id "
+                     . "WHERE forum_cat=" . (int) $A['id']." "
+                     . "AND grp_id IN ($groupAccessList) AND is_hidden=0 ORDER BY forum_order ASC";
 
-            $forumQuery = DB_query($sql);
-            $numForums = DB_numRows($forumQuery);
+                $forumQuery = DB_query($sql);
+                $numForums = DB_numRows($forumQuery);
 
-            $numForumsDisplayed = 0;
+                $numForumsDisplayed = 0;
 
-            $forumlisting->set_block('forumlisting', 'forumrows', 'frow');
+                $forumlisting->set_block('forumlisting', 'forumrows', 'frow');
 
-            while ($B = DB_FetchArray($forumQuery)) {
-    			if ( _ff_canUserViewRating($B['forum_id'] ) ) {
-                	$lastforum_noaccess = false;
-            	    $topicCount = $B['topic_count'];
-                	$postCount = $B['post_count'];
-                	if ( $_FF_CONF['show_moderators'] ) {
-                    	$modsql = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $B['forum_id']);
-                   	 	$moderatorcnt = 1;
-                    	if (DB_numRows($modsql) > 0) {
-                        	while($showmods = DB_fetchArray($modsql,false)) {
-                            	if ($showmods['mod_uid'] == '0') {
-                                	if ($showmods['mod_groupid'] > 0) {
-                                        $showmods['mod_username'] = _ff_getGroup($showmods['mod_groupid']);
-                                	}
-    	                            if($moderatorcnt == 1 OR $moderators == '') {
-        	                            $moderators = $showmods['mod_username'];
-            	                    } else {
-                	                    $moderators .= ', ' . $showmods['mod_username'];
-                    	            }
-                        	    } else {
-                            	    if($moderatorcnt == 1 OR $moderators == '') {
-    	                                $moderators = COM_getDisplayName($showmods['mod_uid']);
-        	                        } else {
-            	                        $moderators .= ', ' . COM_getDisplayName($showmods['mod_uid']);
-                	                }
-                    	        }
-                        	    $moderatorcnt++;
-    	                    }
+                while ($B = DB_FetchArray($forumQuery)) {
+        			if ( _ff_canUserViewRating($B['forum_id'] ) ) {
+                    	$lastforum_noaccess = false;
+                	    $topicCount = $B['topic_count'];
+                    	$postCount = $B['post_count'];
+                    	if ( $_FF_CONF['show_moderators'] ) {
+                        	$modsql = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $B['forum_id']);
+                       	 	$moderatorcnt = 1;
+                        	if (DB_numRows($modsql) > 0) {
+                            	while($showmods = DB_fetchArray($modsql,false)) {
+                                	if ($showmods['mod_uid'] == '0') {
+                                    	if ($showmods['mod_groupid'] > 0) {
+                                            $showmods['mod_username'] = _ff_getGroup($showmods['mod_groupid']);
+                                    	}
+        	                            if($moderatorcnt == 1 OR $moderators == '') {
+            	                            $moderators = $showmods['mod_username'];
+                	                    } else {
+                    	                    $moderators .= ', ' . $showmods['mod_username'];
+                        	            }
+                            	    } else {
+                                	    if($moderatorcnt == 1 OR $moderators == '') {
+        	                                $moderators = COM_getDisplayName($showmods['mod_uid']);
+            	                        } else {
+                	                        $moderators .= ', ' . COM_getDisplayName($showmods['mod_uid']);
+                    	                }
+                        	        }
+                            	    $moderatorcnt++;
+        	                    }
+            	            } else {
+                	            $moderators = $LANG_GF01['no_one'];
+                    	    }
+                        	$forumlisting->set_var ('moderator', sprintf($LANG_GF01['MODERATED'],$moderators));
         	            } else {
-            	            $moderators = $LANG_GF01['no_one'];
+            	            $forumlisting->set_var ('moderator', '');
                 	    }
-                    	$forumlisting->set_var ('moderator', sprintf($LANG_GF01['MODERATED'],$moderators));
-    	            } else {
-        	            $forumlisting->set_var ('moderator', '');
-            	    }
-               		$numForumsDisplayed ++;
-               		$busyforum = 0;
-               		$quietforum = 1;
-                	if ($postCount > 0) {
-                	    $B['subject'] = COM_truncate($B['subject'],40);
-            	        if ($_FF_CONF['use_censor']) {
-                	        $B['subject'] = COM_checkWords($B['subject']);
-                    	}
-    	                if (!COM_isAnonUser()) {
-        	                // Determine if there are new topics since last visit for this user.
-                            $tcount = (int) DB_result(DB_query("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0"),0,0);
-                            if ($topicCount > $tcount ) {
-                                $busyforum = 1;
-                                $quietforum = 0;
-                    	        $folderimg = '<img src="'._ff_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"/>';
-                    	        $folder_icon = _ff_getImage('busyforum');
-                    	        $folder_msg = $LANG_GF02['msg111'];
-                    	    } else {
-                    	        $busyforum = 0;
-                    	        $quietforum = 1;
-                        	    $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
-                        	    $folder_icon = _ff_getImage('quietforum');
-                        	    $folder_msg = $LANG_GF02['quietforum'];
+                   		$numForumsDisplayed ++;
+                   		$busyforum = 0;
+                   		$quietforum = 1;
+                    	if ($postCount > 0) {
+                    	    $B['subject'] = COM_truncate($B['subject'],40);
+                	        if ($_FF_CONF['use_censor']) {
+                    	        $B['subject'] = COM_checkWords($B['subject']);
                         	}
-    	                } else {
+        	                if (!COM_isAnonUser()) {
+            	                // Determine if there are new topics since last visit for this user.
+                                $tcount = (int) DB_result(DB_query("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0"),0,0);
+                                if ($topicCount > $tcount ) {
+                                    $busyforum = 1;
+                                    $quietforum = 0;
+                        	        $folderimg = '<img src="'._ff_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"/>';
+                        	        $folder_icon = _ff_getImage('busyforum');
+                        	        $folder_msg = $LANG_GF02['msg111'];
+                        	    } else {
+                        	        $busyforum = 0;
+                        	        $quietforum = 1;
+                            	    $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
+                            	    $folder_icon = _ff_getImage('quietforum');
+                            	    $folder_msg = $LANG_GF02['quietforum'];
+                            	}
+        	                } else {
+            	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
+            	                $folder_icon = _ff_getImage('quietforum');
+            	                $folder_msg = $LANG_GF02['quietforum'];
+        	                }
+        	                $dt->setTimestamp($B['date']);
+                            $lastdate1 = $dt->format($_CONF['shortdate'],true);
+                            $dtNow = new Date('now',$_USER['tzid']);
+                	        if ($dt->isToday()) {
+                                $lasttime = $dt->format($_CONF['timeonly'],true);
+                        	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
+        	                } elseif ($_FF_CONF['allow_user_dateformat']) {
+            	                $lastdate = $dt->format($dt->getUserFormat(),$B['date'],true);
+                    	    } else {
+                                $lastdate = $dt->format($_CONF['daytime'],true);
+        	                }
+
+            	            $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
+                	        if($B['uid'] > 1) {
+                                $lastposterName = $B['name'];
+                        	    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
+        	                } else {
+            	                $by = $B['name'];
+                	        }
+                    	    $lastpostmsgBy = $LANG_GF01['BY']. $by;
+                        	$forumlisting->set_var (array(
+                        	                'lastpostmsgDate'   => $lastpostmsgDate,
+                        	                'lastPostDate'      => $lastdate,
+        	                                'lastpostmsgTopic'  => $B['subject'],
+            	                            'lastpostmsgBy'     => $lastpostmsgBy
+            	            ));
+            	        }  else {
+                	        $forumlisting->set_var (array(
+                	                        'lastpostmsgDate'   => $LANG_GF01['nolastpostmsg'],
+                    	                    'lastpostmsgTopic'  => '',
+                        	                'lastpostmsgBy'     => '',
+                        	                'lastPostDate'      => $LANG_GF01['nolastpostmsg'],
+                        	));
         	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
         	                $folder_icon = _ff_getImage('quietforum');
         	                $folder_msg = $LANG_GF02['quietforum'];
-    	                }
-    	                $dt->setTimestamp($B['date']);
-                        $lastdate1 = $dt->format($_CONF['shortdate'],true);
-                        $dtNow = new Date('now',$_USER['tzid']);
-            	        if ($dt->isToday()) {
-                            $lasttime = $dt->format($_CONF['timeonly'],true);
-                    	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
-    	                } elseif ($_FF_CONF['allow_user_dateformat']) {
-        	                $lastdate = $dt->format($dt->getUserFormat(),$B['date'],true);
-                	    } else {
-                            $lastdate = $dt->format($_CONF['daytime'],true);
-    	                }
-
-        	            $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
-            	        if($B['uid'] > 1) {
-                            $lastposterName = $B['name'];
-                    	    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
-    	                } else {
-        	                $by = $B['name'];
             	        }
-                	    $lastpostmsgBy = $LANG_GF01['BY']. $by;
-                    	$forumlisting->set_var (array(
-                    	                'lastpostmsgDate'   => $lastpostmsgDate,
-                    	                'lastPostDate'      => $lastdate,
-    	                                'lastpostmsgTopic'  => $B['subject'],
-        	                            'lastpostmsgBy'     => $lastpostmsgBy
-        	            ));
-        	        }  else {
-            	        $forumlisting->set_var (array(
-            	                        'lastpostmsgDate'   => $LANG_GF01['nolastpostmsg'],
-                	                    'lastpostmsgTopic'  => '',
-                    	                'lastpostmsgBy'     => '',
-                    	                'lastPostDate'      => $LANG_GF01['nolastpostmsg'],
-                    	));
-    	                $folderimg = '<img src="'._ff_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"/>';
-    	                $folder_icon = _ff_getImage('quietforum');
-    	                $folder_msg = $LANG_GF02['quietforum'];
-        	        }
 
-        	        if ($B['pid'] == 0) {
-            	        $topicparent = $B['id'];
-                	} else {
-    	                $topicparent = $B['pid'];
-        	        }
+            	        if ($B['pid'] == 0) {
+                	        $topicparent = $B['id'];
+                    	} else {
+        	                $topicparent = $B['pid'];
+            	        }
 
-    	            $forumlisting->set_var (array(
-    	                            'folderimg'     => $folderimg,
-    	                            'folder_icon'   => $folder_icon,
-    	                            'folder_msg'    => $folder_msg,
-        	                        'forum_id'      => $B['forum_id'],
-            	                    'forum_name'    => $B['forum_name'],
-    	                            'forum_desc'    => $B['forum_dscp'],
-        	                        'topics'        => $topicCount,
-            	                    'posts'         =>  $postCount,
-    	                            'topic_id'      => $topicparent,
-        	                        'lastpostid'    => $B['id'],
-            	                    'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST'],
-            	                    'quietforum'    => $quietforum,
-            	                    'busyforum'     => $busyforum,
-            	    ));
-                    $forumlisting->parse('frow', 'forumrows',true);
-    			}
-    			$categorycounter++;
-    			$forumlisting->set_var( 'adblock',PLG_displayAdBlock('forum_category_list',$categorycounter), false, true);
+        	            $forumlisting->set_var (array(
+        	                            'folderimg'     => $folderimg,
+        	                            'folder_icon'   => $folder_icon,
+        	                            'folder_msg'    => $folder_msg,
+            	                        'forum_id'      => $B['forum_id'],
+                	                    'forum_name'    => $B['forum_name'],
+        	                            'forum_desc'    => $B['forum_dscp'],
+            	                        'topics'        => $topicCount,
+                	                    'posts'         =>  $postCount,
+        	                            'topic_id'      => $topicparent,
+            	                        'lastpostid'    => $B['id'],
+                	                    'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST'],
+                	                    'quietforum'    => $quietforum,
+                	                    'busyforum'     => $busyforum,
+                	    ));
+                        $forumlisting->parse('frow', 'forumrows',true);
+        			}
+        			$categorycounter++;
+        			$forumlisting->set_var( 'adblock',PLG_displayAdBlock('forum_category_list',$categorycounter), false, true);
+                }
+
+                if ($numForumsDisplayed > 0 ) {
+                    $forumlisting->parse('crow', 'catrows',true);
+                }
             }
 
-            if ($numForumsDisplayed > 0 ) {
-                $forumlisting->parse('crow', 'catrows',true);
+            if ($numCategories == 0 ) {         // Do we have any categories defined yet
+                $pageBody .= '<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>';
             }
+            $forumlisting->parse ('output', 'forumlisting');
+            $pageBody .= $forumlisting->finish ($forumlisting->get_var('output'));
+            $c->set($key,$pageBody,'forum');
         }
-
-        if ($numCategories == 0 ) {         // Do we have any categories defined yet
-            $pageBody .= '<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>';
-        }
-
         $DisplayTime = $mytimer->stopTimer();
-
-        $forumlisting->parse ('output', 'forumlisting');
-        $pageBody .= $forumlisting->finish ($forumlisting->get_var('output'));
     }
 
     // Display Forums
