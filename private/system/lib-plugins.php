@@ -192,7 +192,7 @@ function PLG_callFunctionForOnePlugin($function, $args='')
 */
 function PLG_install($type)
 {
-    CACHE_remove_instance('atperm');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
     return PLG_callFunctionForOnePlugin('plugin_install_' . $type);
 }
 
@@ -205,7 +205,7 @@ function PLG_install($type)
 */
 function PLG_upgrade($type)
 {
-    CACHE_remove_instance('atperm');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
     return PLG_callFunctionForOnePlugin('plugin_upgrade_' . $type);
 }
 
@@ -236,7 +236,8 @@ function PLG_uninstall ($type)
     if (empty ($type)) {
         return false;
     }
-    CACHE_remove_instance('atperm');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
+
     if (function_exists('plugin_autouninstall_' . $type)) {
         COM_errorLog ("Auto-uninstalling plugin $type:", 1);
         $function = 'plugin_autouninstall_' . $type;
@@ -1918,8 +1919,7 @@ function PLG_autoTagPerms()
     $atp_initialized = 1;
     $autoTagUsage = $autoTagArray;
 
-    $c->set($key,serialize($autoTagArray));
-//    CACHE_create_instance($cacheInstance, serialize($autoTagArray), 0);
+    $c->set($key,serialize($autoTagArray),'atperm');
 
     return $autoTagArray;
 }

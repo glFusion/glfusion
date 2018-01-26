@@ -116,11 +116,10 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
     }
 
     if ( $uid == -1 ) { // site social followme
-        $hash = CACHE_security_hash() . md5($templateFile);
-        $instance_id = 'social_site_followme__'.$_USER['theme'];
-
-        if ( ($cache = CACHE_check_instance($instance_id, 0)) !== FALSE ) {
-            return $cache;
+        $c = glFusion\Cache::getInstance();
+        $key = 'site_follow__'.md5($templateFile).'_'.$c->securityHash(true,true);
+        if ( $c->has($key) ) {
+            return $c->get($key);
         }
     }
 
@@ -167,7 +166,7 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
         $retval = $T->finish ($T->parse('output','links'));
     }
     if ( $uid == -1 ) {
-        CACHE_create_instance($instance_id, $retval, 0);
+        $c->set($key,$retval,array('social','social_site'));
     }
     return $retval;
 }

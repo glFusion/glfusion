@@ -188,11 +188,11 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
     } else { // success
         $url = COM_buildUrl($_CONF['site_url'] . '/page.php?page='
                             . $id);
-		CACHE_remove_instance('whatsnew_');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
 		echo COM_refresh($url);
 		exit;
     }
-    CACHE_remove_instance('whatsnew_');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     return $retval;
 }
 
@@ -226,7 +226,7 @@ function plugin_deletecomment_staticpages($cid, $id)
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-    CACHE_remove_instance('whatsnew_');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     echo $retval;
     exit;
 }

@@ -781,7 +781,7 @@ class Topic
         // update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article', $this->tid);
         COM_olderStuff();
-        CACHE_remove_instance('menu');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
         COM_setMessage(13);
         return true;
     }
@@ -849,7 +849,7 @@ class Topic
         // Update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article');
         COM_olderStuff();
-        CACHE_remove_instance('menu');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
         COM_setMessage(14);
         return true;
     }

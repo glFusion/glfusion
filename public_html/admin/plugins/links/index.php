@@ -365,7 +365,7 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
         // Get category for rdf check
         $category = DB_getItem ($_TABLES['linkcategories'],"category","cid='{$cid}'");
         COM_rdfUpToDateCheck ('links', $category, $lid);
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
 
         if ($type == 'submission') {
             return COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
@@ -524,7 +524,7 @@ function LINK_delete($lid, $type = '')
 
         DB_delete($_TABLES['links'], 'lid', $lid);
         PLG_itemDeleted($lid, 'links');
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         return COM_refresh($_CONF['site_admin_url']
                            . '/plugins/links/index.php?msg=3');
     } elseif ($type == 'submission') {

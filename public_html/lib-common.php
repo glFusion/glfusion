@@ -6661,7 +6661,7 @@ function CMT_updateCommentcodes()
             $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
             $result = DB_query($sql,1);
             if ( DB_affectedRows($result) > 0 ) {
-                CACHE_remove_instance('story_');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
                 $cleared = 1;
             }
         }
@@ -6670,7 +6670,7 @@ function CMT_updateCommentcodes()
     $result = DB_query($sql,1);
     if ( $cleared == 0 ) {
         if ( DB_affectedRows($result) > 0 ) {
-            CACHE_remove_instance('story_');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
         }
     }
 }

@@ -325,7 +325,7 @@ function MG_saveMemberDefaults( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'member_perm_anon','$perm_anon'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'member_valid_formats','$member_valid_formats'");
 
-    CACHE_remove_instance('menu');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
 
     echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=12');
     exit;

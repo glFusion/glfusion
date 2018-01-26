@@ -232,7 +232,7 @@ function MB_saveCloneMenu( ) {
     }
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-    CACHE_remove_instance('css');
+    $c->deleteItemsByTag('css');    
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
 }
@@ -345,8 +345,7 @@ function MB_saveNewMenu( ) {
 
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-
-    CACHE_remove_instance('css');
+    $c->deleteItemsByTag('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     return '';
@@ -387,8 +386,7 @@ function MB_saveEditMenu( ) {
 
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-
-    CACHE_remove_instance('css');
+    $c->deleteItemsByTag('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     return '';
@@ -1087,7 +1085,7 @@ function MB_deleteMenu($menu_id) {
     DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-    CACHE_remove_instance('css');
+    $c->deleteItemsByTag('css');    
 }
 
 

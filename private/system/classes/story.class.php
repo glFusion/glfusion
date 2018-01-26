@@ -739,6 +739,8 @@ class Story
     {
         global $_TABLES, $_CONF;
 
+        $c = glFusion\Cache::getInstance();
+
         if (DB_getItem($_TABLES['topics'], 'tid', "archive_flag=1") == $this->_tid) {
             $this->_featured = 0;
             $this->_frontpage = 0;
@@ -811,7 +813,7 @@ class Story
                 $sql = "UPDATE {$_TABLES['rating_votes']} SET item_id='{$newsid}' WHERE item_id='{$checksid}' AND type='article'";
                 DB_query($sql);
 
-                CACHE_remove_instance('story_'.$this->_originalSid);
+                $c->deleteItemsByTag('story_'.$this->_originalSid);
             }
         }
 
@@ -864,13 +866,13 @@ class Story
         $sql .= ') ' . $values . ')';
 
         DB_query($sql);
-        CACHE_remove_instance('story_'.$this->_sid);
+        $c->deleteItemsByTag('story_'.$this->_sid);
 
         /* Clean up the old story */
         if ($oldArticleExists && !empty($checksid)) {
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";
             DB_query($sql);
-            CACHE_remove_instance('story_'.$this->_originalSid);
+            $c->deleteItemsByTag('story_'.$this->_originalSid);
         }
         if ( $this->type == 'submission' ) {
             if ( !empty($checksid) ) {
@@ -880,8 +882,8 @@ class Story
             }
         }
 
-        CACHE_remove_instance('whatsnew');
-        CACHE_remove_instance('menu');
+        $c->deleteItemsByTag('whatsnew');
+        $c->deleteItemsByTag('menu');
         return STORY_SAVED;
     }
 

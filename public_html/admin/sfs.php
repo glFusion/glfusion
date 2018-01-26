@@ -270,7 +270,7 @@ function SFS_delUsers()
             }
         }
     }
-    CACHE_remove_instance('mbmenu');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
     return $LANG_SFS['confirmation_del'] . '<br />' . $msg;
 }
 

@@ -1209,7 +1209,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $block->parse ('output', 'block');
         $retval .= $block->finish ($block->get_var ('output'));
 
-        $c->set($key,$retval,'forum');
+        $c->set($key,$retval,array('forum','forumcb'));
     }
     return $retval;
 }

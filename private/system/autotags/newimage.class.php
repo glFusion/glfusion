@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2016 by the following authors
+ * @copyright   Copyright (C) 2014-2018 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -72,13 +72,11 @@ class autotag_newimage extends BaseAutotag {
         $outputHandle->addLinkScript($_CONF['site_url'].'/mediagallery/js/jquery.flex-images.js');
         $outputHandle->addLinkStyle($_CONF['site_url'].'/mediagallery/js/jquery.flex-images.css');
 
-        $hash = CACHE_security_hash();
-        $instance_id = 'whatsnew_newimages_'.$uniqueID.'_'.$hash.'_'.$_USER['theme'];
-
-        if ( ($cache = CACHE_check_instance($instance_id, 0)) !== FALSE ) {
-            return $cache;
+        $c = glFusion\Cache::getInstance();
+        $key = 'newimages__'.$uniqueID.'_'.$c->securityHash(true,true);
+        if ( $c->hit($key)) {
+            return $c->get($key);
         }
-
         $imageArray = array();
 
         require_once $_CONF['path'].'plugins/mediagallery/include/init.php';
@@ -139,7 +137,7 @@ class autotag_newimage extends BaseAutotag {
         }
         $retval .= '</div>';
         $retval .= '<script>$(\'.flex-images\').flexImages({rowHeight: 200, truncate:'.$truncate_word.'});</script>';
-        CACHE_create_instance($instance_id, $retval, 0);
+        $c->set($key,$retval,'whatsnew');
         return $retval;
     }
 }

@@ -478,7 +478,7 @@ function SI_save_site()
         $cfg->set('social_site_extra', $extra, 'social_internal');
     }
 
-    CACHE_remove_instance('social_site');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('social_site');
 
     return $retval;
 }

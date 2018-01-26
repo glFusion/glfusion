@@ -1771,7 +1771,7 @@ function savepreferences($A)
             DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
         }
     }
-    CACHE_remove_instance('story');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
     PLG_userInfoChanged ($_USER['uid']);
 }
 

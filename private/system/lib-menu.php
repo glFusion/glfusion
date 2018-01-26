@@ -739,9 +739,10 @@ function MB_changeActiveStatusElement ($element_arr)
             DB_query($sql);
         }
     }
-    CACHE_remove_instance('menu');
-    CACHE_remove_instance('css');
-    CACHE_remove_instance('js');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('menu');
+    $c->deleteItemsByTag('css');
+    $c->deleteItemsByTag('js');
 
     return;
 }
@@ -759,7 +760,7 @@ function MB_changeActiveStatusMenu ($menu_arr)
             DB_query($sql);
         }
     }
-    CACHE_remove_instance('menu');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
 
     return;
 }

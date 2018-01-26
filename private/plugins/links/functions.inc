@@ -984,7 +984,7 @@ function plugin_save_submit_links($A)
             LINKS_sendNotification($_TABLES['links'], $A);
         }
         COM_rdfUpToDateCheck('links', $A['cid'], $A['lid']);
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         $retval = COM_refresh($_CONF['site_url']
                               . '/links/index.php?msg=4&amp;plugin=links');
     }
