@@ -1,4 +1,5 @@
 ## v1.7.2 (Unreleased)
+  - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
   - Forum: Fixed issue where signature preview would not work consistently
   - Forum: Admin message management did not page properly - lost selections on pagination
   - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
