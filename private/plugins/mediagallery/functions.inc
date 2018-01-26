@@ -564,21 +564,12 @@ function plugin_getheadercss_mediagallery()
 	}
 	$styles[] = $styleFile;
 
-
-    // check for random skin css
-    $cacheInstance = 'mgrs' . $_MG_CONF['random_skin'] . '__' . $_USER['theme'];
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval !== false) {
-        $styles[] = CACHE_instance_filename($cacheInstance,0);
-    } else {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
-        $nFrame = new mgFrame();
-        $nFrame->constructor( $_MG_CONF['random_skin'] );
-        $fCSS= $nFrame->getCSS();
-        CACHE_create_instance($cacheInstance, $fCSS, 0);
-        $styles[] = CACHE_instance_filename($cacheInstance,0);
-    }
-
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+    $nFrame = new mgFrame();
+    $nFrame->constructor( $_MG_CONF['random_skin'] );
+    $fCSS= $nFrame->getCSS();
+    $outputHandle = outputHandler::getInstance();
+    $outputHandle->addStyle($fCSS);
 	return ($styles);
 }
 
@@ -1179,7 +1170,7 @@ function plugin_moderationapprove_mediagallery($id)
                 DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . DB_escapeString($media_filename) . "'" .
                          " WHERE album_id=" . (int) $row['album_id'] );
             }
-            CACHE_remove_instance('whatsnew');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
             // email the owner / uploader that the item has been approved.
 
             COM_clearSpeedlimit(600,'mgapprove');

@@ -888,7 +888,7 @@ function ATP_permSave()
                     DB_query($sqlUpdate);
                 }
             }
-            CACHE_remove_instance('atperm');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
             $retval .= COM_showMessageText($LANG_AM['perm_saved'],'',false,'info');
         }
     } else {

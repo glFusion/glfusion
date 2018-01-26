@@ -719,9 +719,27 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
             $enclosure = $item->get_enclosure();
 
             if ($link != '') {
-                $content = COM_createLink($title, $link, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
+                if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == 1 ) {
+                    if ( strncasecmp ( $_CONF['site_url'],$link, (strlen($_CONF['site_url']) - 1) ) == 0 ) {
+                        $attr = array('rel' => 'noopener noreferrer');
+                    } else {
+                        $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer');
+                    }
+                } else {
+                    $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer');
+                }
+                $content = COM_createLink($title, $link, $attr);
             } elseif ($enclosure != '') {
-                $content = COM_createLink($title, $enclosure, $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
+                if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == 1 ) {
+                    if ( strncasecmp ( $_CONF['site_url'],$enclosure, (strlen($_CONF['site_url']) - 1) ) == 0 ) {
+                        $attr = array('rel' => 'noopener noreferrer');
+                    } else {
+                        $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer');
+                    }
+                } else {
+                    $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer');
+                }
+                $content = COM_createLink($title, $enclosure, $attr);
             } else {
                 $content = $title;
             }

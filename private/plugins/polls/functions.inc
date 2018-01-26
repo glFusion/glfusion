@@ -146,7 +146,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/polls/index.php?pid=$id");
     }
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     return $retval;
 }
 
@@ -185,7 +185,7 @@ function plugin_deletecomment_polls($cid, $id)
                     . "tried to illegally delete comment $cid from poll $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-    CACHE_remove_instance('whatsnew_');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     return $retval;
 }
 

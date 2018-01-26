@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | list.php                                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -60,6 +60,13 @@ function FF_newPosts($forum = 0)
 
     if ( COM_isAnonUser() ) {
         $retval .= SEC_loginRequiredForm();
+        return array($pageTitle,$retval);
+    }
+
+    $c = glFusion\Cache::getInstance();
+    $key = 'forum'.$forum.'__'.$c->securityHash(true);
+    $retval = $c->get($key);
+    if ( $retval !== null ) {
         return array($pageTitle,$retval);
     }
 
@@ -193,6 +200,8 @@ function FF_newPosts($forum = 0)
 
     $T->parse ('output', 'list');
     $retval = $T->finish($T->get_var('output'));
+
+    $c->set($key,$retval,'forum',3600); // 1 hours
 
     return array($pageTitle,$retval);
 }
@@ -332,6 +341,13 @@ function FF_lastx()
     $retval = '';
     $pageTitle = $LANG_GF01['LASTX'];
 
+    $c = glFusion\Cache::getInstance();
+    $key = 'forum_lastx__'.$c->securityHash(true);
+    $retval = $c->get($key);
+    if ( $retval !== null ) {
+        return array($pageTitle,$retval);
+    }
+
     USES_lib_admin();
 
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -467,6 +483,8 @@ function FF_lastx()
 
     $T->parse ('output', 'list');
     $retval = $T->finish($T->get_var('output'));
+
+    $c->set($key,$retval,'forum',3600);
 
     return array($pageTitle,$retval);
 }

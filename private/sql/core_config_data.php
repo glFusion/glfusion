@@ -1097,17 +1097,6 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'cache_templates',
-    	'default_value' => '1',
-    	'type' => 'select',
-    	'subgroup' => 2,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'sg_blocks',
     	'default_value' => NULL,
     	'type' => 'subgroup',
@@ -3716,6 +3705,119 @@ $coreConfigData = array(
     	'sort' => 150,
     	'set' => TRUE,
     	'group' => 'Core'
-    )
+    ),
+
+    array(
+    	'name' => 'sg_cache',
+    	'default_value' => NULL,
+    	'type' => 'subgroup',
+    	'subgroup' => 9,
+    	'fieldset' => 0,
+    	'selection_array' => NULL,
+    	'sort' => 0,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'fs_cache_template',
+    	'default_value' => NULL,
+    	'type' => 'fieldset',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 0,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'cache_templates',
+    	'default_value' => '1',
+    	'type' => 'select',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 10,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'fs_cache_backend',
+    	'default_value' => NULL,
+    	'type' => 'fieldset',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 0,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_driver',
+    	'default_value' => 'files',
+    	'type' => 'select',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => 0,
+    	'sort' => 10,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_host',
+    	'default_value' => '127.0.0.1',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 20,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_port',
+    	'default_value' => '11211',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 30,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+     array(
+    	'name' => 'cache_password',
+    	'default_value' => 'password',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_database',
+    	'default_value' => 'glfusion',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 50,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_timeout',
+    	'default_value' => '60',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 60,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
 );
 ?>

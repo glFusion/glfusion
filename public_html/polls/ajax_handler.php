@@ -72,9 +72,7 @@ if ( $pid == '' || $aid == 0 ) {
         $retval['html'] = POLLS_showPoll('400', $pid, true, 2);
     }
 }
-
-CACHE_remove_instance('story_');
-CACHE_remove_instance('whatsnew_headlines_');
+$c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
 
 $return["json"] = json_encode($retval);
 echo json_encode($return);

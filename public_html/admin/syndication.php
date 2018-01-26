@@ -68,7 +68,7 @@ function FEED_toggleStatus($fid_arr, $feedarray)
                 DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = ".(int) $feed);
             }
         }
-        CACHE_remove_instance('story');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
     }
     return;
 }
@@ -648,7 +648,7 @@ function FEED_save($A)
         $A['fid'] = DB_insertId ();
     }
     SYND_updateFeed ($A['fid']);
-    CACHE_remove_instance('story');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
     COM_setMessage(58);
     return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
 }
@@ -671,7 +671,7 @@ function FEED_delete($fid)
             @unlink(SYND_getFeedPath($feedfile));
         }
         DB_delete($_TABLES['syndication'], 'fid', $fid);
-        CACHE_remove_instance('story');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
         COM_setMessage(59);
         return COM_refresh ($_CONF['site_admin_url']
                             . '/syndication.php');

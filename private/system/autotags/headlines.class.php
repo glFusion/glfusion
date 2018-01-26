@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2017 by the following authors
+ * @copyright   Copyright (C) 2014-2018 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -137,11 +137,10 @@ class autotag_headlines extends BaseAutotag {
 
         if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) $storyimage = 2;
 
-        $hash = CACHE_security_hash();
-        $instance_id = 'whatsnew_headlines_'.$uniqueID.'_'.$hash.'_'.$_USER['theme'];
-
-        if ( ($cache = CACHE_check_instance($instance_id, 0)) !== FALSE ) {
-            return $cache;
+        $c = glFusion\Cache::getInstance();
+        $key = 'headlines__'.$uniqueID.'_'.$c->securityHash(true,true);
+        if ( $c->has($key) ) {
+            return $c->get($key);
         }
 
         $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
@@ -319,7 +318,7 @@ class autotag_headlines extends BaseAutotag {
                 $T->parse('hl','headlines',true);
             }
             $retval = $T->finish($T->parse('output','page'));
-            CACHE_create_instance($instance_id, $retval, 0);
+            $c->set($key,$retval,array('whatsnew','story'));
         }
         return $retval;
     }

@@ -189,7 +189,7 @@ function TRACKBACK_delete($id)
         TRB_deleteTrackbackComment($id);
         if ($type == 'article') {
             DB_query("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks - 1 WHERE (sid = '".DB_escapeString($sid)."')");
-            CACHE_remove_instance('story_'.$sid);
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('story_'.$sid);
         }
         $msg = 62;
     } else {

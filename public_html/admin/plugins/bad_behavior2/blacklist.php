@@ -473,7 +473,7 @@ function BB2_process_blacklist($editsave = 0)
                 $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']} (item,type,reason,timestamp) VALUE ('".DB_escapeString($bl_item)."','".DB_escapeString($bl_type)."','".DB_escapeString($reason)."',".$timestamp.")";
             }
             DB_query($sql);
-            CACHE_remove_instance('bb2_bl_data');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
         }
     } else {
         $errors++;
@@ -502,7 +502,7 @@ function BB2_blacklist_delete()
             $id = COM_applyFilter($actionitem);
             DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE id=".(int) $id);
         }
-        CACHE_remove_instance('bb2_bl_data');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
         COM_setMsg( $LANG_BAD_BEHAVIOR['blacklist_success_delete'],'info' );
     }
     return;

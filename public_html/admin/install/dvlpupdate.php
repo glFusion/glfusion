@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1874,7 +1874,7 @@ function glfusion_172()
         ADD `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         ADD KEY `voter_id` (`voter_id`),
         ADD KEY `poster_id` (`poster_id`)";
-    
+
     $_SQL[] = "ALTER TABLE {$_TABLES['ff_likes_assoc']}
         ADD `username` varchar(40) AFTER topic_id";
 
@@ -1929,6 +1929,21 @@ function glfusion_172()
     _spamx_update_config();
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
     // end of spam-x
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_180()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
 
     _updateConfig();
 
@@ -2250,6 +2265,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 $retval .= 'Performing database upgrades if necessary...<br />';
 
 glfusion_172();
+glfusion_180();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

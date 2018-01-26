@@ -1529,13 +1529,14 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         DB_unlockTable ($_TABLES['comments']);
 
         if ( $queued == 0 ) {
-            CACHE_remove_instance('whatsnew');
+            $c = glFusion\Cache::getInstance();
+            $c->deleteItemsByTag('whatsnew');
             if ($type == 'article') {
-                CACHE_remove_instance('story_'.$sid);
+                $c->deleteItemsByTag('story_'.$sid);
             }
             PLG_itemSaved($cid, 'comment');
         } else {
-            CACHE_remove_instance('menu');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
             SESS_setVar('glfusion.commentpostsave',$LANG03[52]);
         }
 
@@ -1733,8 +1734,9 @@ function CMT_deleteComment ($cid, $sid, $type)
     DB_unlockTable ($_TABLES['comments']);
     PLG_itemDeleted((int) $cid, 'comment');
 
-    CACHE_remove_instance('whatsnew');
-    CACHE_remove_instance('story_');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('whatsnew');
+    $c->deleteItemsByTag('story');
 
     return $ret;
 }
@@ -2050,7 +2052,7 @@ function plugin_deletecomment_article($cid, $id)
         CMT_deleteComment($cid, $id, 'article');
         $comments = DB_count ($_TABLES['comments'], array('sid','queued'), array(DB_escapeString($id),0));
         DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', DB_escapeString($id));
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
                  . "/article.php?story=$id") . '#comments');
     } else {
@@ -2496,10 +2498,11 @@ function plugin_moderationapprove_comment($id)
     $sid  = $row['sid'];
     // now we need to alert everyone a comment has been saved.
     PLG_commentApproved($cid,$type,$sid);   // let plugins know they should update their counts if necessary
-    CACHE_remove_instance('menu');
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('whatsnew');
+    $c->deleteItemsByTag('menu');
     if ( $type == 'article' ) {
-        CACHE_remove_instance('story_'.$sid);
+        $c->deleteItemsByTag('story_'.$sid);
     }
     PLG_itemSaved($cid, 'comment');     // let others know we saved a comment to the prod table
 
@@ -2526,7 +2529,7 @@ function plugin_moderationdelete_comment($id)
 
     $sql = "DELETE FROM {$_TABLES['comments']} WHERE cid=".(int) $id . " AND queued=1";
     DB_query($sql);
-    CACHE_remove_instance('menu'); // update menus to reflect new queued counts
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
     return;
 }
 

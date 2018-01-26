@@ -40,7 +40,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '5.3.3');
+    define('SUPPORTED_PHP_VER', '5.6.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.0.15');
@@ -1578,6 +1578,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
 
             $current_fusion_version = '1.7.2';
+
+        case '1.7.2' :
+
+            $current_fusion_version = '1.8.0';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);

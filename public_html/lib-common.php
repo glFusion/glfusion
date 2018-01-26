@@ -33,8 +33,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-// Prevent PHP from reporting uninitialized variables
-error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
+// PHP error reporting
+error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_RECOVERABLE_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.3 or greater
-if (version_compare(PHP_VERSION,'5.3.3','<')) {
-    die('glFusion requires PHP version 5.3.3 or greater.');
+if (version_compare(PHP_VERSION,'5.6.0','<')) {
+    die('glFusion requires PHP version 5.6.0 or greater.');
 }
 
 /**
@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.7.2');
+    define('GVERSION', '1.8.0');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -137,6 +137,7 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
+
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
@@ -1410,6 +1411,15 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
     }
 
+    if (defined ('DVLP_DEBUG')) {
+        if ( function_exists('xdebug_peak_memory_usage') ) {
+            $debugger = '<div class="uk-alert uk-alert-danger uk-margin-remove uk-align-center uk-text-center">';
+            $debugger .= '<span class="uk-text-bold">Peak Memory: ' . (xdebug_peak_memory_usage() / 1024) / 1024 . ' mb :: Execution Time : '. xdebug_time_index() . ' sec</span>';
+            $debugger .= '</div>';
+            $theme->set_var('debugger',$debugger);
+        }
+    }
+
     // Actually parse the template and make variable substitutions
     $theme->parse( 'index_footer', 'footer' );
 
@@ -1418,8 +1428,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
+
+
     _js_out();
     _css_out();
+
 
     return $retval;
 }
@@ -1831,7 +1844,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 *
 */
 
-function COM_errorLog( $logentry, $actionid = '' )
+function COM_errorLog( $logentry, $actionid = 1 )
 {
     global $_CONF, $LANG01, $REMOTE_ADDR;
 
@@ -3596,16 +3609,12 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $_CONF['whatsnew_cache_time'] = 3600;
     }
 
-    $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_USER['theme'];
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
-        $lu = CACHE_get_instance_update($cacheInstance, 0);
-        $now = time();
-        if (( $now - $lu ) < $_CONF['whatsnew_cache_time'] ) {
-            return $retval;
-        }
+    $c = glFusion\Cache::getInstance();
+    $key = 'whatsnew__'.$c->securityHash(true,true);
+    $final = $c->get($key);
+    if ( $final !== null ) {
+        return $final;
     }
-
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
 
@@ -3615,8 +3624,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                        COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $T->set_var('block_start',$header);
-
-
     $topicsql = '';
     if (( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
             || ( $_CONF['trackback_enabled']
@@ -3827,7 +3834,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $final = '';
     }
 
-    CACHE_create_instance($cacheInstance, $final, 0);
+    $c->set($key,$final,'whatsnew',$_CONF['whatsnew_cache_time']);
 
     return $final;
 }
@@ -6654,7 +6661,7 @@ function CMT_updateCommentcodes()
             $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
             $result = DB_query($sql,1);
             if ( DB_affectedRows($result) > 0 ) {
-                CACHE_remove_instance('story_');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
                 $cleared = 1;
             }
         }
@@ -6663,7 +6670,7 @@ function CMT_updateCommentcodes()
     $result = DB_query($sql,1);
     if ( $cleared == 0 ) {
         if ( DB_affectedRows($result) > 0 ) {
-            CACHE_remove_instance('story_');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
         }
     }
 }
@@ -6725,11 +6732,14 @@ function CTL_clearCache($plugin='')
                 @unlink($filename);
             }
         }
-        if ( defined('DVLP_DEBUG') ) {
-            COM_errorLog("DEBUG: Cache has been cleared");
-        }
-
     }
+    $c = glFusion\Cache::getInstance();
+    $c->clear();
+
+    if ( defined('DVLP_DEBUG') ) {
+        COM_errorLog("DEBUG: Cache has been cleared");
+    }
+
 }
 
 function _css_out()

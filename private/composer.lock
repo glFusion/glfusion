@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d480622be730f722a6cffd3a3d7d2b1e",
+    "hash": "f3509f1cdcfcb484537383f9264052a0",
+    "content-hash": "ac195d8cbc3309d546dd8e7a80eefac0",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -42,7 +43,7 @@
             ],
             "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
             "homepage": "https://github.com/aziraphale/email-address-validator",
-            "time": "2015-01-03T12:17:43+00:00"
+            "time": "2015-01-03 12:17:43"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -89,7 +90,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2017-06-03 02:28:16"
         },
         {
             "name": "geshi/geshi",
@@ -129,7 +130,7 @@
             ],
             "description": "Generic Syntax Highlighter",
             "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05T05:51:25+00:00"
+            "time": "2017-05-05 05:51:25"
         },
         {
             "name": "html2text/html2text",
@@ -166,7 +167,7 @@
                 "GPLv2"
             ],
             "description": "Converts HTML to formatted plain text",
-            "time": "2017-05-15T01:50:59+00:00"
+            "time": "2017-05-15 01:50:59"
         },
         {
             "name": "james-heinrich/getid3",
@@ -202,7 +203,7 @@
                 "php",
                 "tags"
             ],
-            "time": "2017-03-27T21:12:55+00:00"
+            "time": "2017-03-27 21:12:55"
         },
         {
             "name": "misd/linkify",
@@ -247,7 +248,7 @@
                 "link",
                 "url"
             ],
-            "time": "2017-08-17T08:33:35+00:00"
+            "time": "2017-08-17 08:33:35"
         },
         {
             "name": "openpsa/universalfeedcreator",
@@ -295,7 +296,7 @@
                 "pie",
                 "rss"
             ],
-            "time": "2017-05-18T08:28:48+00:00"
+            "time": "2017-05-18 08:28:48"
         },
         {
             "name": "phpclasses/httpclient",
@@ -362,6 +363,102 @@
                     "digest_sasl_client.php"
                 ]
             }
+        },
+        {
+            "name": "phpfastcache/phpfastcache",
+            "version": "6.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
+                "reference": "606c29476bd21d907dcd535716d66b31aa999538"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/606c29476bd21d907dcd535716d66b31aa999538",
+                "reference": "606c29476bd21d907dcd535716d66b31aa999538",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^5.6 || ^7.0 || ^7.1 || ^7.2",
+                "psr/cache": "~1.0.0",
+                "psr/simple-cache": "~1.0.0"
+            },
+            "conflict": {
+                "doctrine/couchdb": "*"
+            },
+            "suggest": {
+                "ext-apc": "*",
+                "ext-intl": "*",
+                "ext-leveldb": "*",
+                "ext-memcache": "*",
+                "ext-memcached": "*",
+                "ext-redis": "*",
+                "ext-sqlite": "*",
+                "ext-wincache": "*",
+                "ext-xcache": "*",
+                "mongodb/mongodb": "^1.1",
+                "phpfastcache/couchdb": "~1.0.0",
+                "phpfastcache/phpssdb": "~1.0.0",
+                "predis/predis": "~1.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpFastCache\\": "src/phpFastCache/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Khoa Bui",
+                    "email": "khoaofgod@gmail.com",
+                    "homepage": "http://www.phpfastcache.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Georges.L",
+                    "email": "contact@geolim4.com",
+                    "homepage": "https://github.com/Geolim4",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Cache Class - Reduce your database call using cache system. PhpFastCache handles a lot of drivers such as Apc(u), Cassandra, CouchBase, Couchdb, Mongodb, Files, (P)redis, Leveldb, Memcache(d), Ssdb, Sqlite, Wincache, Xcache, Zend Data Cache.",
+            "homepage": "http://www.phpfastcache.com",
+            "keywords": [
+                "LevelDb",
+                "apc",
+                "apcu",
+                "cache",
+                "cache class",
+                "caching",
+                "cassandra",
+                "cookie",
+                "couchbase",
+                "couchdb",
+                "files cache",
+                "memcache",
+                "memcached",
+                "mongodb",
+                "mysql cache",
+                "pdo cache",
+                "php cache",
+                "predis",
+                "redis",
+                "ssdb",
+                "wincache",
+                "xcache",
+                "zend",
+                "zend data cache",
+                "zend disk cache",
+                "zend memory cache",
+                "zend server"
+            ],
+            "time": "2017-12-15 22:11:25"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -438,7 +535,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-08-28T11:12:07+00:00"
+            "time": "2017-08-28 11:12:07"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
@@ -489,7 +586,101 @@
                 "webservices",
                 "xmlrpc"
             ],
-            "time": "2017-09-03T19:15:39+00:00"
+            "time": "2017-09-03 19:15:39"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06 20:24:11"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-01-02 13:31:39"
         },
         {
             "name": "robthree/twofactorauth",
@@ -540,7 +731,7 @@
                 "php",
                 "tfa"
             ],
-            "time": "2017-11-06T17:55:56+00:00"
+            "time": "2017-11-06 17:55:56"
         },
         {
             "name": "simplepie/simplepie",
@@ -600,7 +791,7 @@
                 "feeds",
                 "rss"
             ],
-            "time": "2017-04-17T07:29:31+00:00"
+            "time": "2017-04-17 07:29:31"
         },
         {
             "name": "splitbrain/php-archive",
@@ -651,7 +842,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2017-06-11T06:11:38+00:00"
+            "time": "2017-06-11 06:11:38"
         }
     ],
     "packages-dev": [],
