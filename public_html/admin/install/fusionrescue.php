@@ -45,7 +45,7 @@ require_once $_CONF['path_system'].'lib-database.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','cache_driver');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -608,7 +608,37 @@ function getNewPaths( $group = 'Core') {
     ';
 
     foreach ($config as $option => $value) {
-        if ( is_bool(@unserialize($value)) ) {
+        if ( $option === 'cache_driver' ) {
+            $retval .= '
+                <div class="uk-form-row">
+                <label class="uk-form-label">'.$option.'</label>
+                <div class="uk-form-controls">
+                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                <select name="cfgvalue[' . $option . ']">
+                <option ' . ( @unserialize($value) == 'Devnull' ? ' selected="selected"' : '') . ' value="Devnull">Disabled</option>
+                <option ' . ( @unserialize($value) == 'files' ? ' selected="selected"' : '') . ' value=\'files\'>Files</option>
+            ';
+            if (extension_loaded('apcu')) {
+                $retval .= '<option ' . ( @unserialize($value) == 'apcu' ? ' selected="selected"' : '') . ' value="apcu">APCu</option>';
+            }
+            if (extension_loaded('memcache')) {
+                $retval .= '<option ' . ( @unserialize($value) == 'memcache' ? ' selected="selected"' : '') . ' value="memcache">Memcache</option>';
+            }
+            if (extension_loaded('memcached')) {
+                $retval .= '<option ' . ( @unserialize($value) == 'memcached' ? ' selected="selected"' : '') . ' value="memcached">Memcached</option>';
+            }
+            if (extension_loaded('redis')) {
+                $retval .= '<option ' . ( @unserialize($value) == 'redis' ? ' selected="selected"' : '') . ' value="redis">Redis</option>';
+            }
+            if (extension_loaded('wincache')) {
+                $retval .= '<option ' . ( @unserialize($value) == 'wincache' ? ' selected="selected"' : '') . ' value="wincache">Wincache</option>';
+            }
+            $retval .= '
+                </select>
+                </div>
+                </div>
+            ';
+        } elseif ( is_bool(@unserialize($value)) ) {
             $retval .= '
                 <div class="uk-form-row">
                 <label class="uk-form-label">'.$option.'</label>
