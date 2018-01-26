@@ -41,7 +41,7 @@ if (!defined ('GVERSION')) {
 $_SPX_CONF['pi_name']            = 'spamx';
 $_SPX_CONF['pi_display_name']    = 'SpamX';
 $_SPX_CONF['pi_version']         = '2.0.0';
-$_SPX_CONF['gl_version']         = '1.7.2';
+$_SPX_CONF['gl_version']         = '1.8.0';
 $_SPX_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 $_TABLES['spamx']               = $_DB_table_prefix . 'spamx';

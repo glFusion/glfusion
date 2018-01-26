@@ -3755,7 +3755,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'cache_driver',
-    	'default_value' => '1',
+    	'default_value' => 'files',
     	'type' => 'select',
     	'subgroup' => 9,
     	'fieldset' => 2,
