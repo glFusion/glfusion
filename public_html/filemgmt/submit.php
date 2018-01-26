@@ -410,7 +410,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
             if ($directUploadAccess) {
 				PLG_itemSaved($newid,'filemgmt');
-                CACHE_remove_instance('whatsnew');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 redirect_header("index.php",2,_MD_FILEAPPROVED);
             } else {
                 redirect_header("index.php",2,_MD_RECEIVED."<br>"._MD_WHENAPPROVED."");

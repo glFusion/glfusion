@@ -145,7 +145,7 @@ function handleDelete()
     }
 
     if (!($retval = PLG_commentDelete($type,$cid,$sid))) {
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
     }

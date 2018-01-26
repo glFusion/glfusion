@@ -54,6 +54,9 @@ if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
     $referer = $_CONF['site_url'];
 }
 
+$c = glFusion\Cache::getInstance();
+$c->clear();
+
 CTL_clearCache();
 COM_setMessage(500);
 echo COM_refresh($referer);

@@ -307,8 +307,9 @@ function TRB_saveTrackbackComment($sid, $type, $url, $title = '', $blog = '', $e
     if ($type == 'article') {
         DB_query("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '$sid')");
     }
-    CACHE_remove_instance('whatsnew');
-    CACHE_remove_instance('story_'.$sid);
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('whatsnew');
+    $c->deleteItemsByTag('story_'.$sid);
     return $comment_id;
 }
 
@@ -325,7 +326,7 @@ function TRB_deleteTrackbackComment($cid)
 
     $cid = DB_escapeString($cid);
     DB_delete($_TABLES['trackback'], 'cid', $cid);
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
 }
 
 /**

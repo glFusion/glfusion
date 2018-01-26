@@ -305,7 +305,7 @@ switch ($action) {
                 $page = $T->Edit($_POST);
                 break;
             }
-            CACHE_remove_instance('story');
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
             echo COM_refresh($_CONF['site_admin_url'] . '/topic.php');
         } else {
             $page = $T->Edit($_POST);

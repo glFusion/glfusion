@@ -129,9 +129,12 @@ function bb2_read_settings() {
     $_CONF['bb2_spambots_regex'] =array();
     $_CONF['bb2_spambots_url'] =  array();
     $_CONF['bb2_spambot_referer'] = array();
-    $cacheInstance = 'bb2_bl_data';
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+
+    $c = glFusion\Cache::getInstance();
+    $key = 'bb2_bl_data';
+    $retval = $c->get($key);
+
+    if ( $retval !== null ) {
         $bb2_bl_tmp = unserialize($retval);
         if ( isset($bb2_bl_tmp['spambot_ip']))
             $_CONF['bb2_spambot_ip'] = $bb2_bl_tmp['spambot_ip'];
@@ -171,17 +174,19 @@ function bb2_read_settings() {
             if ( isset($bb2_bl_tmp['spambot_referer']))
                 $_CONF['bb2_spambot_referer'] = $bb2_bl_tmp['spambot_referer'];
             $cache_bb2_bl_data = serialize($bb2_bl_tmp);
-            CACHE_create_instance($cacheInstance, $cache_bb2_bl_data, 0);
+
+            $c->set($key,$cache_bb2_bl_data);
         }
     }
 
     // whitelisted data
-    $cacheInstance = 'bb2_wl_data';
     $_CONF['bb2_whitelist_ip_ranges'] = array();
     $_CONF['bb2_whitelist_user_agents'] = array();
     $_CONF['bb2_whitelist_urls'] = array();
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+
+    $key = 'bb2_wl_data';
+    $retval = $c->get($key);
+    if ( $retval !== null ) {
         $bb2_wl_tmp = unserialize($retval);
         if ( isset($bb2_wl_tmp['ip']))
             $_CONF['bb2_whitelist_ip_ranges']  = $bb2_wl_tmp['ip'];
@@ -206,7 +211,8 @@ function bb2_read_settings() {
             if ( isset($bb2_wl_tmp['url']))
                 $_CONF['bb2_whitelist_urls'] = $bb2_wl_tmp['url'];
             $cache_bb2_wl_data = serialize($bb2_wl_tmp);
-            CACHE_create_instance($cacheInstance, $cache_bb2_wl_data, 0);
+
+            $c->set($key,$cache_bb2_wl_data);
         }
     }
 
@@ -306,7 +312,7 @@ function bb2_ban_remove($ip)
     $sql = "DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE item = '".DB_escapeString($ip)."'";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
-        CACHE_remove_instance('bb2_bl_data');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     }
     return true;
 }
@@ -350,7 +356,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
            (item,type,autoban,reason,timestamp) VALUE ('".DB_escapeString($ip)."','spambot_ip',".(int) $type.",'".DB_escapeString($reason)."', ".$timestamp.")";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
-        CACHE_remove_instance('bb2_bl_data');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     }
     if ( $type != 0 && $type != 4 ) echo COM_refresh($_CONF['site_url']);
     return true;
@@ -364,7 +370,7 @@ function bb2_expireBans() {
     $settings = bb2_read_settings();
     $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
     $result = DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE autoban != 0 AND timestamp < " . $oldBans,1);
-    if ( $result !== false ) CACHE_remove_instance('bb2_bl_data');
+    if ( $result !== false ) $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     return;
 }
 

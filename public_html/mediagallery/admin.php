@@ -349,7 +349,7 @@ if ( $mode == 'cancel' ) {
             case 'album' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
                 $retval .= MG_saveAlbum( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
-                CACHE_remove_instance('whatsnew');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 break;
             case 'remoteupload' :
             	require_once $_CONF['path'] . 'plugins/mediagallery/include/remote.php';
@@ -382,7 +382,7 @@ if ( $mode == 'cancel' ) {
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
                 $retval .= MG_saveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
-                CACHE_remove_instance('whatsnew');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 break;
             case 'albumsort' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
@@ -404,7 +404,7 @@ if ( $mode == 'cancel' ) {
             case 'globalperm' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
                 $retval .= MG_saveGlobalAlbumPerm();
-                CACHE_remove_instance('whatsnew');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 break;
             case 'watermark' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
@@ -434,7 +434,7 @@ if ( $mode == 'cancel' ) {
             case 'media' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                 $retval .= MG_batchDeleteMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
-                CACHE_remove_instance('whatsnew');
+                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 break;
             case 'album' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
@@ -445,7 +445,7 @@ if ( $mode == 'cancel' ) {
                     require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                     $target_id = COM_applyFilter($_POST['target'], true);
                     $retval .= MG_deleteAlbum($album_id, $target_id, $_MG_CONF['site_url'] . '/index.php');
-                    CACHE_remove_instance('whatsnew');
+                    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
                 } else {
                     $retval .= MG_errorHandler( $LANG_MG02['no_target_album']);
                 }

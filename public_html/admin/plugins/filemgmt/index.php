@@ -875,7 +875,7 @@ function modDownloadS() {
 	}
     DB_query("UPDATE {$_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid=".$lid);
     PLG_itemSaved($lid,'filemgmt');
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
 }
@@ -914,7 +914,7 @@ function delDownload() {
             $err=@unlink ($tmpsnap);
         }
     }
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_FILEDELETED);
     exit();
 }
@@ -980,7 +980,7 @@ function delNewDownload() {
             $err=@unlink ($tmpshotname);
             //COM_errorLOG("Delete submitted snapshot: ".$tmpshotname." Return status of unlink is: ".$err);
         }
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         redirect_header("index.php?op=listNewDownloads",1,_MD_FILEDELETED);
     } else {
         redirect_header("index.php?op=listNewDownloads",1,_MD_ERRORNOFILE);
@@ -1056,7 +1056,7 @@ function modCatS() {
     $sql .= "SET title='$title', imgurl='$imgurl', pid='$sid', grp_access=$grp_access, grp_writeaccess=$write_access ";
     $sql .= "where cid='$cid'";
     DB_query($sql);
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
 }
@@ -1127,7 +1127,7 @@ function delCat() {
         }
     }
     DB_query("DELETE FROM {$_TABLES['filemgmt_cat']} WHERE cid='$cid'");
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=categoryConfigAdmin",2,_MD_CATDELETED);
     exit();
 
@@ -1196,7 +1196,7 @@ function addCat() {
         $sql .= "VALUES ('".DB_escapeString($pid)."', '".DB_escapeString($title)."', '".DB_escapeString($imgurl)."',".(int)$grp_access.",".(int)$write_access.")";
         DB_query($sql);
     }
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=categoryConfigAdmin",2,_MD_NEWCATADDED);
     exit();
 }
@@ -1334,7 +1334,7 @@ function addDownload() {
         $newid = DB_insertID();
         DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '".$description."')");
         PLG_itemSaved($newid,'filemgmt');
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         if (isset($duplicatefile) && $duplicatefile) {
             redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
         } elseif (isset($duplicatesnap) && $duplicatesnap) {
@@ -1441,7 +1441,7 @@ function approve(){
         DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', logourl='$logourl', status=1, date=".time() .", comments=$commentoption where lid='$lid'");
         DB_query("UPDATE {$_TABLES['filemgmt_filedesc']} SET description='$description' where lid='$lid'");
         PLG_itemSaved($lid,'filemgmt');
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
         // Send a email to submitter notifying them that file was approved
         if ($filemgmt_Emailoption) {
             $result = DB_query("SELECT username, email FROM {$_TABLES['users']} a, {$_TABLES['filemgmt_filedetail']} b WHERE a.uid=b.submitter and b.lid='$lid'");
@@ -1456,7 +1456,7 @@ function approve(){
             COM_mail($to,_MD_APPROVED,$mailtext);
          }
     }
-    CACHE_remove_instance('whatsnew');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=listNewDownloads",2,_MD_NEWDLADDED);
     exit();
 }

@@ -1076,11 +1076,12 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     }
 
     if (($cb_enable && ($cb_where == $where)) || $where == CENTERBLOCK_FORCE) {
-        $cacheInstance = 'forumcb__' . CACHE_security_hash() . '__' . $_USER['theme'];
 
-        $retval = '';
-        $retval = CACHE_check_instance($cacheInstance, 0);
-        if ( $retval ) {
+        $c = glFusion\Cache::getInstance();
+        $key = 'forumcb__'.$c->securityHash(true,true);
+        $retval = $c->get($key);
+
+        if ( $retval !== null ) {
             return $retval;
         }
 
@@ -1208,7 +1209,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $block->parse ('output', 'block');
         $retval .= $block->finish ($block->get_var ('output'));
 
-        CACHE_create_instance($cacheInstance, $retval, 0);
+        $c->set($key,$retval,array('forum','forumcb'));
     }
     return $retval;
 }

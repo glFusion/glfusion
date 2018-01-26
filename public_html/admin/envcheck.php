@@ -243,6 +243,16 @@ function _checkEnvironment()
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('env','envs',true);
         $classCounter++;
+// Cache Driver
+        $T->set_var('item', 'Cache Driver');
+        $T->set_var('status', $_CONF['cache_driver']);
+        $T->set_var('class', 'tm-pass');
+        $T->set_var('recommended', '');
+        $T->set_var('notes','Will fall back to using Files if primary driver unavailable');
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+        $classCounter++;
+
     }
 
     $mysql_version = DB_getVersion();

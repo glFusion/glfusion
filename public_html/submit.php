@@ -309,8 +309,9 @@ function savestory($A)
         if (isset ($_CONF['notification']) && in_array ('story', $_CONF['notification'])) {
             sendNotification ($_TABLES['storysubmission'], $story);
         }
-        CACHE_remove_instance('menu');
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance();
+        $c->deleteItemsByTag('menu');
+        $c->deleteItemsByTag('whatsnew');
         if ( $result == STORY_SAVED ) {
             $retval = COM_refresh( COM_buildUrl( $_CONF['site_url']
                                . '/article.php?story=' . $story->getSid() ) );

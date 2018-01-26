@@ -89,17 +89,19 @@
 			<div class="uk-width-medium-1-3">
 				<div class="uk-text-right">
 					<a class="uk-button uk-button-small" href="{printlink}" rel="nofollow" target="_blank" rel="noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;&nbsp;{$LANG_GF01[PRINT]}</a>
+  {!if notifylink}
 					<a class="uk-button uk-button-small" id="subscribe-link" href="{notifylink}" rel="nofollow">
 						<input type="hidden" id="forum_id" value="{forum}">
 						<input type="hidden" id="suboption" value="{suboption}">
 						<input type="hidden" id="topic_id" value="{topic_id}">
 						<input type="hidden" id="notify_id" value="{notify_id}">
-	{!if topic_subscribed}
+	  {!if topic_subscribed}
 						<i id="subscribe-icon" class="uk-icon-bookmark" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
-	{!else}
+	  {!else}
 						<i id="subscribe-icon" class="uk-icon-bookmark-o" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
-	{!endif}
+	  {!endif}
 					</a>
+  {!endif}
 				</div>
 			</div>
 

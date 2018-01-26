@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This file implements the services provided by the 'Static Pages' plugin. |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2013-2017 by the following authors:                        |
+// | Copyright (C) 2013-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -339,7 +339,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             $sp_content = COM_checkHTML ($sp_content,'staticpages.edit');
         }
         $sp_title = strip_tags ($sp_title);
-        $sp_label = strip_tags ($sp_label);
+        $sp_label = strip_tags ($sp_label,'<i>');
 
         $sp_content = DB_escapeString ($sp_content);
         $sp_title = DB_escapeString ($sp_title);
@@ -388,12 +388,14 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             DB_change($_TABLES['comments'], 'sid', DB_escapeString($sp_id),
                       array('sid', 'type'),
                       array(DB_escapeString($sp_old_id), 'staticpages'));
+            $c = glFusion\Cache::getInstance()->deleteItemsByTag('sp_'.md5($sp_old_id));
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('sp_'.md5($sp_id));
         PLG_itemSaved($sp_id,'staticpages');
         COM_setMsg( $LANG_STATIC['page_saved'], 'info' );
-        CACHE_remove_instance('menu');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
         $url = COM_buildURL($_CONF['site_url'] . '/page.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,
@@ -529,25 +531,36 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $error = 1;
         }
         $perms = SP_getPerms ();
-        if (!empty ($perms)) {
-            $perms = ' AND ' . $perms;
-        }
-        $sql          = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
-                      . "commentcode,sp_uid,owner_id,group_id,perm_owner,perm_group,"
-                      . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
-                      . "sp_inblock FROM {$_TABLES['staticpage']} "
-                      . "WHERE (sp_id = '".DB_escapeString($page)."') AND (sp_status = 1)" . $perms;
 
-        $result = DB_query ($sql);
-        $count = DB_numRows ($result);
+        $c = glFusion\Cache::getInstance();
+        $key = 'sp__' . md5($args['sp_id']) . '_'.md5($perms) . '_' . $c->securityHash();
+        $cacheCheck = $c->get($key);
+        if ( $cacheCheck !== null ) {
+            $output = unserialize($cacheCheck);
+        } else {
+            if (!empty ($perms)) {
+                $perms = ' AND ' . $perms;
+            }
+            $sql          = "SELECT sp_title,sp_content,sp_hits,sp_date,sp_format,"
+                          . "commentcode,sp_uid,owner_id,group_id,perm_owner,perm_group,"
+                          . "perm_members,perm_anon,sp_tid,sp_help,sp_php,"
+                          . "sp_inblock FROM {$_TABLES['staticpage']} "
+                          . "WHERE (sp_id = '".DB_escapeString($page)."') AND (sp_status = 1)" . $perms;
 
-        if ($count == 0 || $count > 1) {
-            $error = 1;
+            $result = DB_query ($sql);
+            $count = DB_numRows ($result);
+
+            if ($count == 0 || $count > 1) {
+                $error = 1;
+            } else {
+                $output = DB_fetchArray($result,false);
+                $c->set($key,serialize($output),array('staticpage','sp_'.md5($args['sp_id'])));
+            }
         }
 
         if (!($error)) {
-            $output = DB_fetchArray ($result, false);
-            // WE ASSUME $output doesn't have any confidential fields
+            // output now filled above...
+//           $output = DB_fetchArray ($result, false);
 
             if ( $mode !== 'autotag' ) $_CONF['pagetitle'] = $output['sp_title'];
 

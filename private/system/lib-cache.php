@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion caching library                                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2017 by the following authors:                        |
+// | Copyright (C) 2007-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
@@ -159,6 +159,9 @@ function CACHE_remove_instance($iid)
     $iid = str_replace('-','_',$iid);
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
     CACHE_clean_directories($path_cache, 'instance__'.$iid);
+
+    $c = glFusion\Cache::getInstance();
+    $c->delete($iid);
 }
 
 
@@ -183,16 +186,9 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
         return;
     }
 
-    if ($TEMPLATE_OPTIONS['cache_by_language']) {
-        if (!is_dir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'])) {
-            @mkdir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language']);
-            @touch($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'] . '/index.html');
-        }
-    }
-
-    $filename = CACHE_instance_filename($iid, $bypass_lang);
-    file_put_contents($filename, $data,LOCK_EX);
-
+    $c = glFusion\Cache::getInstance();
+    $c->set($iid,$data);
+    return;
 }
 
 /******************************************************************************
@@ -233,9 +229,9 @@ function CACHE_check_instance($iid, $bypass_lang = false)
         return false;
     }
 
-    $filename = CACHE_instance_filename($iid, $bypass_lang);
-    if (file_exists($filename)) {
-        $str = @file_get_contents($filename);
+    $c = glFusion\Cache::getInstance();
+    $str = $c->get($iid);
+    if ( $str !== null ) {
         return $str === FALSE ? false : $str;
     }
     return false;
@@ -261,9 +257,8 @@ function CACHE_get_instance_update($iid, $bypass_lang = false)
         return;
     }
 
-    $filename = CACHE_instance_filename($iid, $bypass_lang);
-    return @filemtime($filename);
-
+    $c = glFusion\Cache::getInstance();
+    return $c->getModificationDate($iid);
 }
 
 /******************************************************************************
@@ -335,4 +330,31 @@ function CACHE_sanitizeFilename($filename, $allow_dots = true)
 
     return trim($filename);
 }
+
+function configmanager_select_cache_driver_helper($index = '')
+{
+    $retval = array();
+
+    $retval = array(
+        'Disabled'  => 'Devnull',
+        'Files'     => 'files'
+    );
+    if (extension_loaded('apcu')) {
+        $retval['APCU'] = 'apcu';
+    }
+    if (extension_loaded('memcache')) {
+        $retval['Memcache'] = 'memcache';
+    }
+    if (extension_loaded('memcached')) {
+        $retval['Memcached'] = 'memcached';
+    }
+    if (extension_loaded('redis')) {
+        $retval['Redis'] = 'redis';
+    }
+    if (extension_loaded('wincache')) {
+        $retval['Wincache'] = 'wincache';
+    }
+    return $retval;
+}
+
 ?>
