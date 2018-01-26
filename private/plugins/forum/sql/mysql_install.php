@@ -268,7 +268,7 @@ $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
   `topic_id` int(11) NOT NULL,
   `username` varchar(40),
   `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
+  PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`),
   KEY `voter_id` (`voter_id`),
   KEY `poster_id` (`poster_id`)
 ) ENGINE=MyISAM;";
