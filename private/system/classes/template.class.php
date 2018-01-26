@@ -1623,7 +1623,7 @@ class Template
 
         $tmplt = $this->compile_template_code($tmplt,true);
         $c = glFusion\Cache::getInstance();
-        $c->set($iid,$tmplt,'instance',true,true);
+        $c->set($iid,$tmplt,array('story','story_'.$this->varvals['story_id']));
         $this->instance[$filevar] = $tmplt;
 
         $this->unknowns = $old_unknowns;
@@ -1756,9 +1756,10 @@ class Template
 
         if ($template_fstat > $cache_fstat ) {
             $str = @file_get_contents($filename);
-
+            // cache_write will compile the template prior to creating the cache file
             $tmplt= $this->cache_write($phpfile, $str);
         } else {
+            // read the pre-compiled template into memory
             $tmplt = @file_get_contents($phpfile);
         }
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
