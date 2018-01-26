@@ -139,7 +139,7 @@ class autotag_headlines extends BaseAutotag {
 
         $c = glFusion\Cache::getInstance();
         $key = 'headlines__'.$uniqueID.'_'.$c->securityHash(true,true);
-        if ( $c->hit($key) {
+        if ( $c->has($key) ) {
             return $c->get($key);
         }
 
