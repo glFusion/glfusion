@@ -1255,7 +1255,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
         MG_buildFullRSS( );
         MG_buildAlbumRSS( $albums );
-        CACHE_remove_instance('whatsnew');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     }
     COM_errorLog("MG Upload: Successfully uploaded a media object");
 

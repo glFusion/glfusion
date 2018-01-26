@@ -395,7 +395,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $c = glFusion\Cache::getInstance()->deleteItemsByTag('sp_'.md5($sp_id));
         PLG_itemSaved($sp_id,'staticpages');
         COM_setMsg( $LANG_STATIC['page_saved'], 'info' );
-        CACHE_remove_instance('menu');
+        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
         $url = COM_buildURL($_CONF['site_url'] . '/page.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,
