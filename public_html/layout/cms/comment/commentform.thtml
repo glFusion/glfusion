@@ -1,4 +1,9 @@
 {# begin {templatelocation} #}
+<script type="text/javascript">
+	var editor_type = 'commenteditor';
+	var lang_timer  = "{lang_timeout}";
+	var lastActivity = 0;
+</script>
 {!if htmlmode}
 {wysiwyg}
 {!endif}
@@ -14,7 +19,7 @@
 	<input type="hidden" name="sid" value="{sid}">
 	<input type="hidden" name="pid" value="{pid}">
 	<input type="hidden" name="type" value="{type}">
-	<input type="hidden" name="{token_name}" value="{CSRF_TOKEN}">
+	<input type="hidden" id="sectoken" name="{token_name}" value="{CSRF_TOKEN}">
 	<input type="hidden" name="uid" value="{uid}">
 	<input type="hidden" name="title" value="{title}">
 {!if username_disabled}
@@ -27,6 +32,8 @@
 		</div>
 	</div>
 {!endif}
+
+	{spamx}
 
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="comment_text">
@@ -95,10 +102,19 @@
 </form>
 
 {end_block}
+
 <script>
+$(document).ready(function() {
+	lastActivity = new Date().getTime();
+	$('#comment_text').keyup(function() {
+		lastActivity = new Date().getTime();
+	});
+});
+
 	$("#commentform").validate({
 		errorElement: "div",
 		errorClass: "uk-text-danger uk-text-bold"
 	});
 </script>
+<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
 {# end {templatelocation} #}

@@ -50,7 +50,7 @@ $_US_VERBOSE = false;
 */
 function edituser()
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN, $LANG_TFA;
 
     $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
     $A = DB_fetchArray ($result);
@@ -64,18 +64,32 @@ function edituser()
                                    'resynch'            => 'resynch.thtml',
                                    'deleteaccount'      => 'deleteaccount.thtml'));
 
+
     $navbar = new navbar;
     $cnt = 0;
     if ( is_array($LANG_MYACCOUNT) ) {
         foreach ($LANG_MYACCOUNT as $id => $label) {
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
                 continue;
+            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) ) {
+                continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
                 $cnt++;
             }
         }
-        $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
+        if ($_CONF['allow_account_delete'] == 1) {
+            $navbar->add_menuitem($LANG04[156],'showhideProfileEditorDiv("pe_delete",'.$cnt.');return false;',true);
+            $cnt++;
+        }
+        if ( isset($_GET['mode']) && $_GET['mode'] == 'delete' && $_CONF['allow_account_delete'] == 1 ) {
+            $navbar->set_selected($LANG04[156]);
+            $preferences->set_var('delete_active',true);
+            $preferences->set_var('delete_idx',$cnt-1);
+        } else {
+            $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
+            $preferences->unset_var('delete_active');
+        }
     }
     $preferences->set_var ('navbar', $navbar->generate());
 
@@ -163,6 +177,7 @@ function edituser()
 
     if ( $A['account_type'] & LOCAL_USER ) {
         $preferences->set_var ('password_value', '');
+        $preferences->set_var ('password_help',SEC_showPasswordHelp());
         $preferences->parse ('current_password_option', 'current_password', true);
         $preferences->parse ('password_option', 'password', true);
         $preferences->set_var ('resynch_option', '');
@@ -245,6 +260,50 @@ function edituser()
     $preferences->set_var('plugin_namepass_pwdemail',PLG_profileEdit($_USER['uid'],'namepass','pwdemail'));
     $preferences->set_var('plugin_namepass',PLG_profileEdit($_USER['uid'],'namepass'));
 
+
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] == 1 ) {
+        $outputHandler = outputHandler::getInstance();
+        $outputHandler->addLinkScript($_CONF['site_url'].'/javascript/twofactor.js');
+        $tfaMaster = new \Template ($_CONF['path_layout'] . 'preferences');
+        $tfaMaster->set_file('tfa_panel','twofactor.thtml');
+        if ( isset($_USER['tfa_enabled']) && $_USER['tfa_enabled'] == 1 ) {
+            $tfaTemplate = new \Template ($_CONF['path_layout'] . 'preferences');
+            $tfaTemplate->set_file('tfa_panel','tfa-enrolled.thtml');
+            $tfaTemplate->set_var(array(
+                'lang_two_factor'   => $LANG_TFA['two_factor'],
+                'lang_enrolled'     => $LANG_TFA['enrolled'],
+                'lang_regenerate_backup' => $LANG_TFA['regenerate_backup'],
+                'lang_regenerate_button' => $LANG_TFA['regenerate_button'],
+                'lang_download_backup'  => $LANG_TFA['download_backup'],
+                'sectoken_name'    => CSRF_TOKEN,
+                'sectoken_value'   => SEC_createToken(),
+                'lang_disable_tfa_help' => $LANG_TFA['disable_tfa_help'],
+                'lang_disable_tfa_button' => $LANG_TFA['disable_tfa_button'],
+            ));
+            $tfaTemplate->parse('tfapanel','tfa_panel');
+            $tfaPanelContent = $tfaTemplate->finish($tfaTemplate->get_var('tfapanel'));
+        } else {
+            $tfaTemplate = new \Template ($_CONF['path_layout'] . 'preferences');
+            $tfaTemplate->set_file('tfa_panel','tfa-notenrolled.thtml');
+            $tfaTemplate->set_var(array(
+                'lang_two_factor'   => $LANG_TFA['two_factor'],
+                'lang_not_enrolled' => $LANG_TFA['not_enrolled'],
+                'lang_enroll_button'=> $LANG_TFA['enroll_button'],
+            ));
+            $tfaTemplate->parse('tfapanel','tfa_panel');
+            $tfaPanelContent = $tfaTemplate->finish($tfaTemplate->get_var('tfapanel'));
+        }
+        $tfaMaster->set_var(array(
+            'lang_disable_warning'  => $LANG_TFA['disable_warning'],
+        ));
+        $tfaMaster->set_var('content',$tfaPanelContent);
+        $tfaPanel = $tfaMaster->finish($tfaMaster->parse('output','tfa_panel'));
+
+        $preferences->set_var('twofactor', $tfaPanel);
+    }
+
+    $preferences->parse ('twofactor', 'twofactor', false);
+
     $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid=".(int)$_USER['uid']);
     $A = DB_fetchArray($result);
 
@@ -325,10 +384,12 @@ function confirmAccountDelete ($form_reqid)
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
-    if (empty($_POST['passwd']) || !SEC_check_hash(trim($_POST['passwd']),$current_password)) {
+    if (empty($_POST['current_password']) || !SEC_check_hash(trim($_POST['current_password']),$current_password)) {
          COM_setMsg( $MESSAGE[84], 'error',true );
-         return COM_refresh($_CONF['site_url'].'/usersettings.php');
+         return COM_refresh($_CONF['site_url'].'/usersettings.php?mode=delete');
     }
+
+    $token = SEC_createToken();
 
     $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
     DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
@@ -339,10 +400,9 @@ function confirmAccountDelete ($form_reqid)
     $retval .= COM_startBlock ($LANG04[97], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
     $retval .= '<p>' . $LANG04[98] . '</p>' . LB;
-    $retval .= '<form action="' . $_CONF['site_url']
+    $retval .= '<form class="uk-form" action="' . $_CONF['site_url']
             . '/usersettings.php" method="post"><div>' . LB;
-    $retval .= '<p align="center"><input type="submit" name="btnsubmit" value="'
-            . $LANG04[96] . '" /></p>' . LB;
+    $retval .= '<p align="center"><button type="submit" class="uk-button uk-button-danger" name="btnsubmit" value="'.$LANG04[96].'">'.$LANG04[96].'</button></p>'.LB;
     $retval .= '<input type="hidden" name="mode" value="deleteconfirmed" />' . LB;
     $retval .= '<input type="hidden" name="account_id" value="' . $reqid
             . '" />' . LB;
@@ -959,8 +1019,7 @@ function saveuser($A)
     $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
     $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
     if ( $current_password != '' && $current_password != NULL ) {
-        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) ||
-                ($A['cooktime'] != $_USER['cookietimeout'])) {
+        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) || ($A['cooktime'] != $_USER['cookietimeout'])) {
             if (empty($A['passwd']) || !SEC_check_hash($A['passwd'],$current_password)) {
                 COM_setMsg($MESSAGE[83],'error');
                 return COM_refresh ($_CONF['site_url'].'/usersettings.php');
@@ -974,6 +1033,13 @@ function saveuser($A)
                     }
                     COM_setMsg( $MESSAGE[$ret], 'error',true );
                     return COM_refresh("{$_CONF['site_url']}/usersettings.php");
+                }
+            } else {
+                $err = SEC_checkPwdComplexity($A['newp']);
+                if ( count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    COM_setMsg($msg,'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
                 }
             }
         } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
@@ -1032,7 +1098,15 @@ function saveuser($A)
     }
     $profile .= $A['location'] . '<br />' . $A['sig'] . '<br />'
                 . PLG_replaceTags($A['about']) . '<br />' . $A['pgpkey'] . '</p>';
-    $result = PLG_checkforSpam ($profile, $_CONF['spamx']);
+
+    $spamData = array(
+        'username'  => $A['username'],
+        'email'     => $A['email'],
+        'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'      => 'profile'
+    );
+
+    $result = PLG_checkforSpam ($profile, $_CONF['spamx'],$spamData);
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
@@ -1732,6 +1806,9 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     case 'confirmdelete':
         if (($_CONF['allow_account_delete'] == 1) && ($_USER['uid'] > 1)) {
             $accountId = COM_applyFilter ($_POST['account_id']);
+
+            $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
+//            if (!empty ($accountId) && !empty($_POST['current_password']) && SEC_check_hash(trim($_POST['current_password']),$current_password)) {
             if (!empty ($accountId)) {
                 $display .= confirmAccountDelete ($accountId);
             } else {

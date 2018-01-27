@@ -1,0 +1,41 @@
+{# begin {templatelocation} #}
+<form id="rankedit" action="{site_admin_url}/plugins/forum/ranks.php" method="post"
+	class="uk-form uk-form-horizontal">
+	<input type="hidden" name="orig_posts" value="{orig_posts}" />
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="fb_grp">{$LANG_GF93['posts']}</label>
+		<div class="uk-form-controls">
+			<input type="text" id="posts" name="posts" value="{posts}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="dscp">{$LANG_GF01['DESCRIPTION']}</label>
+		<div class="uk-form-controls">
+			<input type="text" id="dscp" name="dscp" value="{dscp}" size="40" />
+		</div>
+	</div>
+
+	<div class="uk-form-row" align="center">
+		<div class="uk-form-controls">
+			<button type="submit" class="uk-button uk-button-success" name="save" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
+			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
+			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{$LANG_ADMIN['delete']}</button>
+			<button type="submit" class="uk-button uk-button-primary cancel" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+		</div>
+	</div>
+
+</form>
+<script type="text/javascript">
+$("#rankedit").validate({
+    rules: {
+        posts: {
+            required: true,
+            min: 1
+        }
+    }
+});
+</script>
+{# end {templatelocation} #}

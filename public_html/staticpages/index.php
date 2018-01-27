@@ -79,8 +79,8 @@ if (isset($_POST['order'])) {
 
 }
 $valid_modes = array('threaded','nested','flat','nocomment');
-if ( in_array($mode,$valid_modes) === false ) {
-    $mode = '';
+if ( in_array($comment_mode,$valid_modes) === false ) {
+    $comment_mode = '';
 }
 
 if ($display_mode != 'print') {

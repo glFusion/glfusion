@@ -117,6 +117,18 @@
     {plugin_namepass_pwdemail}
   </fieldset>
 
+{!if twofactor}
+	<fieldset class="uk-margin-top">
+		<legend>{lang_two_factor}</legend>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_disable_tfa}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" name="disable_tfa">
+			</div>
+		</div>
+	</fieldset>
+{!endif}
+
   {plugin_namepass}
 
 </div>

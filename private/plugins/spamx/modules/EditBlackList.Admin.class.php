@@ -63,7 +63,7 @@ class EditBlackList extends BaseAdmin {
         } elseif (($action == $LANG_SX00['addcen']) && SEC_checkToken()) {
             foreach ($_CONF['censorlist'] as $entry) {
                 $entry = DB_escapeString($entry);
-                $result = DB_query("INSERT INTO {$_TABLES['spamx']} VALUES ('Personal', '$entry')");
+                $result = DB_query("INSERT INTO {$_TABLES['spamx']} (name,value) VALUES ('Personal', '$entry')");
             }
         }
 

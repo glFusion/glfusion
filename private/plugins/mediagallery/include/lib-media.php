@@ -1783,7 +1783,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     $permalink = $_MG_CONF['site_url'] . '/media.php?s='.$srcID;
     $outputHandle->addLink("canonical",$permalink);
 
-    $outputHandle->addMeta('property','og:site_name',urlencode($_CONF['site_name']));
+    $outputHandle->addMeta('property','og:site_name',$_CONF['site_name']);
     $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
 
     $outputHandle->addMeta('property','og:title',$ptitle);
@@ -2083,7 +2083,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
         }
         $metaDesc = trim($shortComment).$tailString;
-        $outputHandle->addMeta('name','description',htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()));
+        $outputHandle->addMeta('name','description',$metaDesc);
         $media_desc .= '<br/><br/>';
     }
 
@@ -2196,7 +2196,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
             $outputHandle->addMeta('property','twitter:title',$ptitle);
             $imageDesc = (isset($media[$mediaObject]['media_desc']) && $media[$mediaObject]['media_desc'] != ' ' ) ? $media_desc : '';
-            $outputHandle->addMeta('property','twitter:description',@htmlspecialchars($imageDesc,ENT_QUOTES,COM_getEncodingt()));
+            $outputHandle->addMeta('property','twitter:description',$imageDesc);
             $outputHandle->addMeta('property','twitter:image',$raw_image);
             $shareImage = $raw_image;
         }

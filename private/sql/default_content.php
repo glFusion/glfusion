@@ -29,6 +29,9 @@ $_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_
 $_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
 $_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
 $_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_topic']} (`id`, `forum`, `pid`, `uid`, `name`, `date`, `lastupdated`, `last_reply_rec`, `email`, `website`, `subject`, `comment`, `postmode`, `replies`, `views`, `attachments`,`ip`, `mood`, `sticky`, `moved`, `locked`) VALUES (1,1,0,2,'Admin',UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),0,NULL,'','Welcome to glFusion','Welcome to glFusion!  We hope you enjoy using your new glFusion site.\r\n\r\nglFusion is designed to provide you with features, functionality, and style, all in an easy to use package.\r\n\r\nYou can visit the [url=https://www.glfusion.org/wiki/]glFusion Wiki[/url] for the latest information on features and how to use them.\r\n\r\nThanks and enjoy!\r\nThe glFusion Team\r\n','text',0,1,0,'127.0.0.1','',0,0,0);";
+$_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
+    (2,'site',20,1,'13','forum_user.png'),
+    (3,'site',10,1,'1','siteadmin_badge.png');";
 
 // Links Default Data
 

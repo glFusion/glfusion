@@ -534,16 +534,23 @@ class config
 
     function _get_groups()
     {
-        global $_TABLES;
+        global $_TABLES, $_PLUGIN_INFO;
 
         $groups = array_keys($this->config_array);
         $num_groups = count($groups);
         for ($i = 0; $i < $num_groups; $i++) {
             $g = $groups[$i];
             if ($g != 'Core') {
-                $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',
-                                      "pi_name = '$g'");
-                if (isset($enabled) && ($enabled == 0)) {
+                if ( isset($_PLUGIN_INFO) && count($_PLUGIN_INFO) > 0 ) {
+                    if ( isset($_PLUGIN_INFO[$g]) && $_PLUGIN_INFO[$g]['pi_enabled'] == 1 ) {
+                        $enabled = 1;
+                    } else {
+                        $enabled = 0;
+                    }
+                } else {
+                    $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',"pi_name = '$g'");
+                }
+                if ( !isset($enabled) || $enabled != 1 ) {
                     unset($groups[$i]);
                 }
             }
@@ -590,6 +597,8 @@ class config
         if (!SEC_inGroup('Root')) {
             return config::_UI_perm_denied();
         }
+
+        include_once $_CONF['path_system'] . 'demo-mode.php';
 
         if (!isset($sg) OR empty($sg)) {
             $sg = '0';
@@ -690,7 +699,7 @@ class config
                 $fs_contents = '';
                 foreach ($params as $name => $e) {
                     if ( defined('DEMO_MODE') ) {
-                        if ( in_array($name,array('facebook_login','facebook_consumer_key','facebook_consumer_secret','linkedin_login','linkedin_consumer_key','linkedin_consumer_secret','twitter_login','twitter_consumer_key','twitter_consumer_secret','google_login','google_consumer_key','google_consumer_secret','microsoft_login','microsoft_consumer_key','microsoft_consumer_secret','github_consumer_secret','github_consumer_key','path_html','path_log','path_language','backup_path','path_data','path_pear','path_themes','path_images','uploadpath','rdf_file','site_url','site_admin_url','FileStore','SnapStore','SnapCat','FileStoreURL','SnapCatURL','FileSnapURL','bb2_enabled','bb2_httpbl_key','1203495882994835','comment_disqus_shortname','fb_appid'))) {
+                        if ( in_array($name,$demoConfigVars)) {
                             continue;
                         }
                     }
@@ -1318,7 +1327,7 @@ class config
     /**
      * This function builds the JavaScript array of configuration items
      * for the configuration search.
-s     */
+     */
     function _get_autocompletedata()
     {
         global $_PLUGINS, $_TABLES, $_CONF, $LANG_CONFIG,

@@ -48,6 +48,8 @@ $navbarMenu = array(
     $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
     $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
     $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
+    $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
+    $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
 );
 if ( $_FF_CONF['enable_user_rating_system'] ) {
     $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
@@ -67,6 +69,8 @@ function FF_adminNav( $selected = '' )
         $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
         $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
         $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
+        $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
+        $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
     );
     if ( $_FF_CONF['enable_user_rating_system'] ) {
         $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
@@ -182,7 +186,7 @@ function ff_addForum($name,$category,$dscp="",$order="",$grp_id=2,$is_readonly=0
     $query = DB_query("SELECT max(forum_id) FROM {$_TABLES['ff_forums']} ");
     list ($forumid) = DB_fetchArray($query);
     $modquery = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_uid='{$_USER['uid']}' AND mod_forum='$forumid'");
-    if (DB_numrows($modquery) < 1){
+    if (DB_numrows($modquery) < 1) {
         $fields = 'mod_uid,mod_username,mod_forum,mod_delete,mod_ban,mod_edit,mod_move,mod_stick';
         DB_query("INSERT INTO {$_TABLES['ff_moderators']} ($fields) VALUES ('{$_USER['uid']}','{$_USER['username']}', '$forumid','1','1','1','1','1')");
     }
@@ -196,10 +200,23 @@ function ff_addForum($name,$category,$dscp="",$order="",$grp_id=2,$is_readonly=0
 */
 function ff_deleteForum($id) {
     global $_TABLES;
+
+    // pull all topic ids for the forum being deleted.
+    $totalTopics = DB_count($_TABLES['ff_topic'],'forum',(int) $id);
+    $bufferSize = (int) ($totalTopics * 6);
+    if ( $bufferSize < 1024) $bufferSize = 1024;
+    DB_query("SET group_concat_max_len = " . $bufferSize);
+    $ids = DB_getItem($_TABLES['ff_topic'],'GROUP_CONCAT(id SEPARATOR \',\')', 'forum='.(int) $id);
+    // Delete the likes. This must be done first as it relies on the topics
+    // still existing in the table
+    Forum\Like::deleteForum($id);
     DB_query("DELETE FROM {$_TABLES['ff_forums']} WHERE forum_id=".(int) $id);
     DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $id);
     DB_query("DELETE FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $id);
     DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND category=".(int)$id);
+
+    PLG_itemDeleted($id, 'forum', $ids);
+
     return true;
 }
 ?>

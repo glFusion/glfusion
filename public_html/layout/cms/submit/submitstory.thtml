@@ -15,8 +15,7 @@
 			{story_username} [ <a href="{status_url}" rel="nofollow">{lang_loginout}</a>{separator}{create_account} ]
 		</div>
 	</div>
-
-
+	{spamx}
 	<div id="story_id" class="uk-panel uk-panel-box uk-margin">
 		<div class="uk-grid ">
 			<div class="uk-width-medium-2-3">

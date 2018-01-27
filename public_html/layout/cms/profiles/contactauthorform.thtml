@@ -67,7 +67,7 @@
 				<textarea id="shortmsg" name="shortmsg" cols="60" rows="10" style="width:90%;">{shortmsg}</textarea>
 			</div>
 		</div>
-
+		{spamx}
 		<div class="uk-alert-warning">{lang_warning}</div>
 		<div>{captcha}</div>
 		<div class="uk-margin">

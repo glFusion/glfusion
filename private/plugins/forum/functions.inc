@@ -121,6 +121,17 @@ if ( empty( $LANG_CHARSET )) {
     $_FF_CONF['charset'] = $LANG_CHARSET;
 }
 
+spl_autoload_register(function ($class)
+{
+    if (strpos($class, 'Forum\\') === 0) {
+        $class = str_replace('Forum\\', '', $class);
+        $path = __DIR__ . '/classes/' . strtolower($class) . '.class.php';
+        if (file_exists($path)) {
+            include $path;
+        }
+    }
+});
+
 // PLG APIs
 
 function plugin_getmenuitems_forum()
@@ -209,6 +220,7 @@ function plugin_user_changed_forum( $uid )
 
     $curusername = DB_getItem ($_TABLES['users'], 'username',"uid = $uid");
     DB_query("UPDATE {$_TABLES['ff_topic']} SET name='".DB_escapeString($curusername)."' WHERE uid=".(int) $uid);
+    Forum\Like::updateUsername($uid, $curusername);
 }
 
 function plugin_user_move_forum($origUID, $destUID)
@@ -788,9 +800,19 @@ function forum_xchsmilies($message,$reverse=false) {
 function FF_statusMessage($message,$url,$prompt,$post=false,$forum='',$autorefresh = 1) {
     global $_CONF,$_TABLES,$_USER,$LANG_GF02,$_FF_CONF;
 
-    if ($prompt=="") {
-        $prompt = $LANG_GF02['msg140'];
+    COM_setMsg($message,'info',0);
+    if ( $url == '') {
+        if ( $forum != '' ) {
+            $url = $_CONF['site_url'].'/forum/index.php?forum='.(int) $forum;
+        } else {
+            $url = $_CONF['site_url'].'/forum/index.php';
+        }
     }
+    echo COM_refresh($url);
+    exit;
+
+    // legacy code - no longer used...
+
     $statusmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $statusmsg->set_file ('statusmsg','statusmessage.thtml');
     $statusmsg->set_var (array(
@@ -1420,29 +1442,12 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     USES_forum_format();
 
-    if ($id == '*') {
-        if ( $buildingSearchIndex ) {
-            $where = " WHERE a.pid=0 ";
-            $permOp = " AND ";
-        } else {
-            $where = '';
-            $permOp = ' WHERE ';
-        }
+    $where = ' WHERE ';
+    if ($id != '*') {
+        $where .= " id = '" . DB_escapeString($id) . "' AND ";
+        $limit = ' LIMIT 1';
     } else {
-        // but I don't want to call this when doing batch reindexing...
-        if ( $buildingSearchIndex == true && $batchreindex == false) {
-            // check to see if we have the PID or a reply ID
-            // query the record for PID
-            // if it is 0 - we are good
-            // if it is not 0 - update ID to PID
-            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
-            if ( $pid != 0 && $pid != NULL) {
-                $id = $pid;
-            }
-        }
-
-        $where = " WHERE id = '" . DB_escapeString($id) . "'";
-        $permOp = ' AND ';
+        $limit = '';
     }
 
     $groups = array ();
@@ -1455,11 +1460,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status, b.* ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
-    $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
-
-    if ($id != '*') {
-        $sql .= ' LIMIT 1';
-    }
+    $sql .= "$where b.grp_id IN ($grouplist) $limit";
 
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
@@ -1482,19 +1483,12 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'searchidx' :
                 case 'raw-description' :
-                    if ( $buildingSearchIndex ) {
-                        DB_query("SET group_concat_max_len = 204800");
-                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['ff_topic']} WHERE pid=".$id." GROUP BY pid";
-                        $childres = DB_query($sql);
-                        if ( DB_numRows($childres) > 0 ) {
-                            $B = DB_fetchArray($childres);
-                            if ( isset($B['comment'])) {
-                                $A['comment'] = $A['comment'] . $B['comment'];
-                            }
-                        }
-                    }
                     $comment = _forum_strip_bbcode($A['comment']);
                     $props[$p] = $comment;
+                    break;
+                case 'parent_id':
+                case 'pid':
+                    $props[$p] = $A['pid'];
                     break;
                 case 'id':
                     $props['id'] = $A['id'];
@@ -1798,22 +1792,23 @@ function forumPLG_getMemberBadge($uid) {
     global $_CONF,$_FF_CONF;
 
     $retval = '';
-
-    if ( $uid > 1 ) {
-        if (!SEC_inGroup('Root',$uid)) {
-            foreach ($_FF_CONF['grouptags'] as $groupid => $buttonimg) {
-                if (SEC_inGroup($groupid,$uid)) {
-                    $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$buttonimg.'" alt=""/><br/>';
-                }
-            }
-        } else {
-            $retval .= '<img src="'.$_CONF['site_url'].'/forum/images/badges/'.$_FF_CONF['grouptags']['Root'].'" alt=""/><br/>';
-        }
-        if ( function_exists('plugin_getmedals_medals') ) {
-            $retval .= plugin_getmedals_medals($uid);
-        }
+    static $cache = array();
+    if (array_key_exists($uid, $cache)) {
+        return $cache[$uid];
     }
-    return $retval;
+
+    $badges = Forum\Badge::getUserBadges($uid);
+    $badge_urls = array();
+    foreach ($badges as $badge) {
+        $badge_urls[] = $badge->html;
+    }
+    $retval .= implode('<br />', $badge_urls);
+
+    if ( function_exists('plugin_getmedals_medals') ) {
+        $retval .= plugin_getmedals_medals($uid);
+    }
+    $cache[$uid] = $retval;
+    return $cache[$uid];
 }
 
 function phpblock_forum_menu() {
@@ -2073,6 +2068,141 @@ function getItemInfo_code($action, $attributes, $content, $params, $node_object)
         return true;
     }
     return $content;
+}
+
+function plugin_profileblocksdisplay_forum( $uid )
+{
+    global $_CONF, $_FF_CONF, $_TABLES, $_USER, $LANG_GF01;
+
+    $retval = '';
+
+    if ( !isset($_FF_CONF['enable_likes_profile']) || $_FF_CONF['enable_likes_profile'] != true ) return $retval;
+
+    $likesReceived = Forum\Like::LikesReceived($uid);
+    $likesGiven    = Forum\Like::LikesGiven($uid);
+
+    if ( count($likesReceived) == 0 && count($likesGiven) == 0 ) return $retval;
+
+    USES_forum_format();
+
+    $dt = new Date('now',$_USER['tzid']);
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file('userlikes','userprofile-likes.thtml');
+
+    $T->set_var(array(
+        'tooltip_style' => COM_getToolTipStyle(),
+        'lang_likes_given' => $LANG_GF01['likes_given'],
+        'lang_likes_received' => $LANG_GF01['likes_received'],
+        'lang_no_likes_given' => $LANG_GF01['no_likes_given'],
+        'lang_no_likes_received' => $LANG_GF01['no_likes_received'],
+        'lang_liked' => $LANG_GF01['liked'],
+        'lang_liked_thread' => $LANG_GF01['liked_thread'],
+        'lang_likes' => $LANG_GF01['likes'],
+    ));
+
+    $receivedCounter = 0;
+
+    if ( count($likesReceived) == 0 ) {
+        $T->set_var('no_likes_received','No Likes Received');
+    } else {
+        $T->unset_var('no_likes_received');
+        $T->set_block('userlikes', 'likes', 'likesblock');
+
+        foreach( $likesReceived AS $row ) {
+            if ( $receivedCounter > 20 ) break;
+            $testText = FF_formatTextBlock($row['comment'],'text','noquote',0);
+            $testText = strip_tags($testText);
+            $html2txt = new Html2Text\Html2Text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $shortComment = '';
+            $commentArray = explode(' ',$testText);
+            $wordCount = count($commentArray);
+            $lengthCount = 0;
+            $tailString = '';
+            foreach ($commentArray AS $word) {
+                $lengthCount = $lengthCount + strlen($word);
+                $shortComment .= $word.' ';
+                if ( $lengthCount >= $_FF_CONF['contentinfo_numchars'] ) {
+                    $tailString = '...';
+                    break;
+                }
+            }
+            $shortComment = trim($shortComment).$tailString;
+            $postinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+            $postinfo = stripBBCode($postinfo);
+
+            if ( $row['like_date'] == '' ) $row['like_date'] = $dt->toRFC822();
+
+            $dt->setTimestamp(strtotime($row['like_date']));
+            $T->set_var(array(
+                'user'  => COM_getDisplayName($row['voter_id']),
+                'liker-id' => $row['voter_id'],
+                'post-date' => $dt->format($_CONF['date'],true),
+                'liked-user' => COM_getDisplayName($row['poster_id']),
+                'forum-thread' => @htmlspecialchars($row['subject'],ENT_COMPAT,COM_getEncodingt()),
+                'forum-snippit' => @htmlspecialchars($row['comment'],ENT_COMPAT,COM_getEncodingt()),
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'],
+                'postinfo' => $postinfo,
+            ));
+            $T->parse('likesblock','likes',true);
+            $receivedCounter++;
+        }
+    }
+
+    $givenCounter = 0;
+    if ( count($likesGiven) == 0 ) {
+        $T->set_var('no_likes_given','No Likes Given');
+    } else {
+        $T->unset_var('no_likes_given');
+        $T->set_block('userlikes', 'givenlikes', 'givenlikesblock');
+        foreach ( $likesGiven AS $row ) {
+            if ( $givenCounter > 20 ) break;
+            if ( $row['like_date'] == '' ) $row['like_date'] = $dt->toRFC822();
+
+            $dt->setTimestamp(strtotime($row['like_date']));
+
+            $testText = FF_formatTextBlock($row['comment'],'text','noquote',0);
+            $testText = strip_tags($testText);
+            $html2txt = new Html2Text\Html2Text($testText,false);
+            $testText = trim($html2txt->get_text());
+            $shortComment = '';
+            $commentArray = explode(' ',$testText);
+            $wordCount = count($commentArray);
+            $lengthCount = 0;
+            $tailString = '';
+            foreach ($commentArray AS $word) {
+                $lengthCount = $lengthCount + strlen($word);
+                $shortComment .= $word.' ';
+                if ( $lengthCount >= $_FF_CONF['contentinfo_numchars'] ) {
+                    $tailString = '...';
+                    break;
+                }
+            }
+            $shortComment = trim($shortComment).$tailString;
+            $postinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
+            $postinfo = stripBBCode($postinfo);
+
+            $T->set_var(array(
+                'user'  => COM_getDisplayName($row['voter_id']),
+                'liker-id' => $row['voter_id'],
+                'post-date' => $dt->format($_CONF['date'],true),
+                'liked-user' => COM_getDisplayName($row['poster_id']),
+                'liked-user-id' => $row['poster_id'],
+                'forum-thread' => @htmlspecialchars($row['subject'],ENT_COMPAT,COM_getEncodingt()),
+                'forum-snippit' => @htmlspecialchars($row['comment'],ENT_COMPAT,COM_getEncodingt()),
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'],
+                'postinfo' => $postinfo,
+            ));
+            $T->parse('givenlikesblock','givenlikes',true);
+            $givenCounter++;
+        }
+    }
+    $T->parse( 'block', 'userlikes' );
+    $retval .= $T->finish( $T->get_var( 'block' ));
+
+    return $retval;
+
 }
 
 ?>

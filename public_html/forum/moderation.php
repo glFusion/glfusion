@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Moderation routines                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -80,6 +80,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
             }
             PLG_itemDeleted($A['id'],'forum');
         }
+        \Forum\Like::remAllLikes($topic_id, true);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE (type='forum' AND id=".(int)$topic_id.")");
@@ -99,6 +100,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
             }
         }
         DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int) $topicparent);
+        \Forum\Like::remAllLikes($topic_id, false);
         DB_query("DELETE FROM {$_TABLES['ff_topic']} WHERE id=".(int) $topic_id);
         $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $forum_id);
         DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count=".(int) $postCount." WHERE forum_id=".(int) $forum_id);
@@ -273,6 +275,7 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
             gf_updateLastPost($forum_id,$curpostpid);
             gf_updateLastPost($move_to_forum,$topicparent);
         }
+        CACHE_remove_instance('forumcb');
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= FF_statusMessage(sprintf($LANG_GF02['msg183'],$move_to_forum),$link,$LANG_GF02['msg183'],false,'',true);
     } else {  // Move complete topic
@@ -306,10 +309,10 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
         DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topic_id);
+        CACHE_remove_instance('forumcb');        
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
-    CACHE_remove_instance('forumcb');
 
     return $retval;
 
@@ -412,6 +415,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
         DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int)$topic_id);
+        CACHE_remove_instance('forumcb');        
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     } else {
@@ -461,11 +465,10 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         // Update the Forum and topic indexes
         gf_updateLastPost($forum_id,$curpostpid);
         gf_updateLastPost($move_to_forum, $move_to_topic);
-
+        CACHE_remove_instance('forumcb');
         $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
-    CACHE_remove_instance('forumcb');
     return $retval;
 }
 
@@ -583,7 +586,7 @@ function moderator_confirmMove($topic_id,$topic_parent_id,$forum_id)
     $destination_forum_select .= '</select>';
 
     if ($target == 0) {
-        $retval = alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
+        $retval = _ff_alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING'],'',true);
         return $retval;
     } else {
         $T->set_var('destination_forum_select',$destination_forum_select);
@@ -626,7 +629,7 @@ function moderator_confirmBan($topic_id,$topic_parent_id,$forum_id)
     $iptobansql = DB_query("SELECT ip FROM {$_TABLES['ff_topic']} WHERE id=".(int)$topic_id);
     $forumpostipnum = DB_fetchArray($iptobansql);
     if ($forumpostipnum['ip'] == '') {
-        $retval .= alertMessage($LANG_GF02['msg174'],'','',true);
+        $retval .= _ff_alertMessage($LANG_GF02['msg174'],'','',true);
         exit;
     }
 
@@ -703,7 +706,7 @@ function moderator_error($type)
     }
     $display  = FF_siteHeader();
     $display .= FF_ForumHeader($forum_id,'');
-    $display .= alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
+    $display .= _ff_alertMessage($LANG_GF02['msg166'],$LANG_GF01['WARNING'],'',true);
     $display .= FF_siteFooter();
     echo $display;
     exit;
@@ -742,7 +745,7 @@ if (isset($_POST['cancel']) ) {
 }
 
 if ($forum_id == 0) {
-    $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
+    $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);
 } else {
     switch ( $modfunction ) {
         case 'deletepost' :
@@ -880,7 +883,7 @@ if ($forum_id == 0) {
 
 
         default :
-            $pageBody .= alertMessage($LANG_GF02['msg71'],'','',true);
+            $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);
             break;
     }
 }

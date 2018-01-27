@@ -4,7 +4,7 @@
 * File: SFS.Examine.class.php
 * This is the Stop Forum Spam Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2011 by the following authors:
+* Copyright (C) 2011-2018 by the following authors:
 * Author        Mark R. Evans       mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -39,9 +39,13 @@ class SFS extends BaseCommand {
     /**
      * Here we do the work
      */
-    function execute ($comment)
+    function execute ($comment,$data)
     {
-        global $_USER, $LANG_SX00;
+        global $_USER, $_SPX_CONF, $LANG_SX00;
+
+        if ( !isset($_SPX_CONF['sfs_enable']) || $_SPX_CONF['sfs_enable'] == 0 ) {
+            return false;
+        }
 
         $ans = 0;
 
@@ -52,17 +56,16 @@ class SFS extends BaseCommand {
         }
 
         $sfs = new SFSbase();
-        if ($sfs->CheckForSpam ($comment)) {
+        if ($sfs->CheckForSpam ($comment,$data)) {
             $ans = 1;
             SPAMX_log ($LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
                        $LANG_SX00['foundspam2'] . $uid .
                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
             SESS_setVar('spamx_msg','Failed Stop Forum Spam IP / username check');
+            if ( function_exists('bb2_ban') ) {
+                bb2_ban($REMOTE_ADDR,4);
+            }
         }
-
-        // tell the Action module that we've already been triggered
-        $GLOBALS['sfs_triggered'] = true;
-
         return $ans;
     }
 }

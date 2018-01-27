@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -81,6 +81,9 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 5 ) {
     $_CP_CONF['gfxDriver'] = 2;
 }
 
+if ( !isset($_CP_CONF['enable_loginform'])) $_CP_CONF['enable_loginform'] = 0;
+if ( !isset($_CP_CONF['enable_forgotpassword'])) $_CP_CONF['enable_forgotpassword'] = 0;
+
 /* Auto loader */
 
 spl_autoload_register('autoloader_captcha');
@@ -140,7 +143,9 @@ function plugin_enablestatechange_captcha($enable) {
  */
 function plugin_templatesetvars_captcha($ctype, &$template)
 {
-    global $_CP_CONF, $_USER, $_TABLES;
+    global $_CONF, $_CP_CONF, $_USER, $_TABLES;
+
+    static $jsLoaded = false;
 
     // establish whether we are offering the challenge for this content type
     // and if so, initially clear the 'captcha' template var
@@ -164,6 +169,20 @@ function plugin_templatesetvars_captcha($ctype, &$template)
                 return;
             }
             break;
+        case 'loginform' :
+            if ( $_CP_CONF['enable_loginform'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+
+        case 'forgotpassword' :
+            if ( $_CP_CONF['enable_forgotpassword'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+
         case 'contact' :
             if ( $_CP_CONF['enable_contact'] != 1 ) {
                 $template->set_var('captcha', '');
@@ -210,7 +229,7 @@ function plugin_templatesetvars_captcha($ctype, &$template)
 
         // the content type was null, or unrecognizable, so therefore there can be no plugin config
         // option controlling it, and we should just clear the 'captcha' template var
-        case 'loginform' :
+
         default :
             return;
             break;
@@ -219,27 +238,33 @@ function plugin_templatesetvars_captcha($ctype, &$template)
     if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
-
     if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+
+        if ( $_CP_CONF['gfxDriver'] == 3 && $jsLoaded == false ) {
+            $outputHandle = outputHandler::getInstance();
+            $outputHandle->addLinkScriptFooter('https://www.google.com/recaptcha/api.js?onload=onloadCallbackRC&render=explicit&hl='.$_CONF['iso_lang'],HEADER_PRIO_VERYLOW,'text/javascript',true);
+            $outputHandle->addLinkScript($_CONF['site_url'].'/captcha/recaptcha.js');
+            $jsLoaded = true;
+        }
 
         // expire stale CAPTCHA sessions
         CAPTCHA_expireSessions();
 
         // create a CAPTCHA session, or use the existing session if user entry failed
         $csid = CAPTCHA_getSession($ctype);
-
         // retrieve the CAPTCHA challenge in HTML form.  pass the CAPTCHA session id (csid)
         // and the format of the challenge is controlled by template selected by content type (ctype)
         $captcha = CAPTCHA_getHTML($csid, $ctype);
+
+        if ( $_CP_CONF['gfxDriver'] == 3 ) $template->set_var('recaptcha',true);
 
         // if our content type (ctype) was specified as 'general'
         if ( $ctype == 'general' ) {
             return $captcha;
         }
 
-        $template->set_var('captcha', $captcha);
+        $template->set_var('captcha', $captcha,false,true);
 
-        if ( $_CP_CONF['gfxDriver'] == 3 ) $template->set_var('recaptcha',true);
 
     } else {
         $template->set_var('captcha', '');
@@ -318,11 +343,22 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
             }
             break;
         case 'registration' :
-        case 'loginform' :
             if ( $_CP_CONF['enable_registration'] != 1 ) {
                 return '';
             }
             break;
+        case 'loginform' :
+            if ( $_CP_CONF['enable_loginform'] != 1 ) {
+                return '';
+            }
+            break;
+
+        case 'forgotpassword' :
+            if ( $_CP_CONF['enable_forgotpassword'] != 1 ) {
+                return '';
+            }
+            break;
+
         case 'contact' :
             if ( $_CP_CONF['enable_contact'] != 1 ) {
                 return '';
@@ -416,13 +452,51 @@ function plugin_getconfigelementhelp_captcha($type, $option, $doclang = 'english
     return array($retval,0);
 }
 
+function plugin_getheaderjs_captcha()
+{
+    global $_CONF, $_CP_CONF;
+
+    $js = array();
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+//        $js[] = $_CONF['path'].'plugins/captcha/recaptcha.js';
+    }
+	return ($js);
+}
+
+function plugin_getheadercode_captcha()
+{
+    global $_CONF, $_CP_CONF;
+/*
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+        $outputHandle = outputHandler::getInstance();
+        $outputHandle->addLinkScriptFooter('https://www.google.com/recaptcha/api.js?onload=onloadCallbackRC&render=explicit&hl='.$_CONF['iso_lang'],HEADER_PRIO_VERYLOW,'text/javascript',true);
+        $outputHandle->addLinkScript($_CONF['site_url'].'/captcha/recaptcha.js');
+    }
+*/
+}
 /**
  * Create unique session id for CAPTCHA
  *
  * @return  string   session id
  */
 function CAPTCHA_sid() {
-    return dechex(time()).dechex(mt_rand(1,65535));
+
+    if (function_exists('openssl_random_pseudo_bytes')) {
+        return substr(bin2hex(openssl_random_pseudo_bytes(32)),3,24);
+    } else {
+        $sid = date( 'YmdHis' );
+        $sid .= mt_rand( 0, 999 );
+
+        $val = $sid . microtime();
+        $val = md5($val);
+        $rand_seed = md5($sid . $val);
+        $id = substr($val, 3, 18);
+
+        return $id;
+    }
+
+
+//    return dechex(time()).dechex(mt_rand(1,65535));
 }
 
 /**
@@ -431,7 +505,7 @@ function CAPTCHA_sid() {
  * @return  string   session id
  */
 function CAPTCHA_getSession($ctype = '') {
-    global $_TABLES, $REMOTE_ADDR;
+    global $_CP_CONF, $_TABLES, $REMOTE_ADDR;
 
     $counter = 0;
 
@@ -448,27 +522,22 @@ function CAPTCHA_getSession($ctype = '') {
         if ( isset($_POST['csid']) ) {
             $csid = COM_applyFilter($_POST['csid']);
             $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
-        } else {
-            // check to see if there is one for this IP?
-            $csid = DB_getItem($_TABLES['cp_sessions'],'session_id',"{$_TABLES['cp_sessions']}.ip='".DB_escapeString($REMOTE_ADDR)."'");
-            if ( $csid == '' || $csid == NULL ) {
-                $csid    = CAPTCHA_sid();
-                $counter = 0;
-            } else {
-                $counter = (int) DB_getItem($_TABLES['cp_sessions'],'counter','session_id="'.DB_escapeString($csid).'"');
-            }
+        } else  {
+            $csid    = CAPTCHA_sid();
+            $counter = 0;
         }
     }
-
     // set the current time
     $time    = time();
 
     // this will be filled in by the CAPTCHA
     $validation = '';
     $ip = $REMOTE_ADDR;
-    // update the session table
-    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter,ip","'".DB_escapeString($csid)."','$time','',$counter,'$ip'");
 
+    // update the session table
+    if ( $_CP_CONF['gfxDriver'] != 3 ) {
+        DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter,ip","'".DB_escapeString($csid)."','$time','',$counter,'$ip'");
+    }
     // return the CAPTCHA session identifier
     return $csid;
 }
@@ -480,6 +549,7 @@ function CAPTCHA_getSession($ctype = '') {
  */
 function CAPTCHA_expireSessions() {
     global $_CP_CONF, $_TABLES;
+    if ( $_CP_CONF['gfxDriver'] == 3 ) return;
     $oldSessions = time() - ($_CP_CONF['expire']+3600);
     DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE cptime < " . $oldSessions,1);
     return;
@@ -498,6 +568,8 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
 
     $retval = '';
 
+    static $captchaCounter = 0;
+
     $T = new \Template($_CONF['path'] . 'plugins/captcha/templates');
     switch ( $ctype ) {
         case 'comment' :
@@ -507,8 +579,13 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
             $T->set_file('page', 'captcha_story.thtml');
             break;
         case 'registration' :
-        case 'loginform' :
             $T->set_file('page', 'captcha_registration.thtml');
+            break;
+        case 'loginform' :
+            $T->set_file('page', 'captcha_loginform.thtml');
+            break;
+        case 'forgotpassword' :
+            $T->set_file('page', 'captcha_forgotpassword.thtml');
             break;
         case 'contact' :
             $T->set_file('page', 'captcha_contact.thtml');
@@ -538,7 +615,6 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
             return '';
             break;
     }
-
     $T->set_var(array(
         'lang_refresh'          => $LANG_CP00['reload'],
         'lang_alt'              => $LANG_CP00['captcha_alt'],
@@ -548,7 +624,11 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         'lang_too_many'         => $LANG_CP00['reload_too_many'],
         'csid'                  => $csid,
         'lang_are_you_human'    => $LANG_CP00['captcha_prompt'],
-    ));
+        'counter'               => $captchaCounter,
+    ),false,true);
+
+    $captchaCounter++;
+
     if ( $_CP_CONF['gfxDriver'] == 6 ) {
         $T->set_var('lang_captcha_help', $LANG_CP00['captcha_math']);
     } else {
@@ -569,12 +649,14 @@ function recaptcha_get_html($pkey,$theme = 'light')
 {
     global $_CONF;
 
+    static $recaptchaCounter = 0;
+
     $retval = '';
-    $retval .= '<div class="g-recaptcha" data-sitekey="'
-             . $pkey . '" data-callback="cp_enable" data-theme="'.$theme.'"></div>'
-             . '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='.$_CONF['iso_lang'].'">'
-             . '</script>'
-             . '<br>';
+    $retval .= '<div class="g-recaptcha" id="recaptcha_'.$recaptchaCounter.'" data-sitekey="'
+             . $pkey . '" data-callback="cp_enable" data-theme="'.$theme.'"></div>';
+
+    $recaptchaCounter++;
+
     return $retval;
 }
 
@@ -609,7 +691,6 @@ function CAPTCHA_checkRetries( $csid )
  */
 function CAPTCHA_checkInput( $response, $ctype='general' ) {
     global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
-
     // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
     $rc = 0;
@@ -724,7 +805,7 @@ function recaptcha_check_answer()
     $error = null;
     $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\SocketPost());
     // Was there a reCAPTCHA response?
-    if ($_POST["g-recaptcha-response"]) {
+    if (isset($_POST["g-recaptcha-response"]) && $_POST["g-recaptcha-response"]) {
         $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REMOTE_ADDR"]);
     }
     return $resp;
@@ -751,7 +832,7 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
     $dt = new \Date('now',$_CONF['timezone']);
 
     if( !empty( $logentry )) {
-        $timestamp = $dt->format('d M Y H:i:s',true);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
         $logfile = $_CONF['path_log'] . 'captcha.log';
 
         if( $file = fopen( $logfile, 'a' )) {

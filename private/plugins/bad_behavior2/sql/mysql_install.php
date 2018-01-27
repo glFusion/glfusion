@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -81,5 +81,8 @@ $_SQL['bad_behavior2_blacklist'] = "CREATE TABLE {$_TABLES['bad_behavior2_blackl
     INDEX type (type),
     INDEX timestamp (timestamp)
 ) ENGINE=MyISAM;";
+
+$_SQL['bb2_default_data'] = "INSERT INTO {$_TABLES['bad_behavior2_whitelist']} (`item`, `type`, `reason`, `timestamp`) VALUES
+('paypal/ipn/paypal_ipn.php', 'url', 'PayPal IPN does not return any headers - whitelist to allow to pass', UNIX_TIMESTAMP());";
 
 ?>

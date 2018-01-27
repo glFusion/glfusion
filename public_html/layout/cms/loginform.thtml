@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<form class="uk-form uk-form-stacked" action="{site_url}/users.php" method="post">
+<form class="uk-form uk-form-stacked tm-loginform" action="{site_url}/users.php" method="post">
 	<div class="uk-form-row">
 		<div class="uk-form-controls uk-text-center">
 			<div class="uk-form-icon">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</div>
-
+	{captcha}
 {!if services}
 	<div class="uk-form-row uk-text-left">
 		{services}

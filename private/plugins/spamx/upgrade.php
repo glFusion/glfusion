@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 
 function spamx_upgrade()
 {
-    global $_TABLES, $_CONF, $_SPX_CONF;
+    global $_TABLES, $_CONF, $_DB_dbms, $_SPX_CONF;
 
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='spamx'");
 
@@ -68,7 +68,48 @@ function spamx_upgrade()
             $c->add('fs_slc', NULL, 'fieldset', 0, 2, NULL, 0, true, 'spamx');
             $c->add('slc_max_links', 5, 'text',0, 2, 1, 10, true, 'spamx');
 
+        case '1.2.2' :
+            $c = config::get_instance();
+            $c->add('debug', 0, 'select',0, 0, 1, 15, true, 'spamx');
+            $c->add('fs_akismet', NULL, 'fieldset', 0, 3, NULL, 0, true, 'spamx');
+            $c->add('akismet_enabled', 0, 'select',0, 3, 1, 10, true, 'spamx');
+            $c->add('akismet_api_key', '', 'text',0, 3, NULL, 20, true, 'spamx');
+
+        case '1.3.0' :
+            $_SQL = array();
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['spamx']} ADD COLUMN id INT(10) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id)";
+
+            $_SQL[] = "
+            CREATE TABLE {$_TABLES['spamx_stats']} (
+              `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `module` VARCHAR(128) NOT NULL DEFAULT '',
+              `type` VARCHAR(50) NOT NULL DEFAULT '',
+              `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `ip` VARCHAR(50) NOT NULL DEFAULT '',
+              `email` VARCHAR(50) NOT NULL DEFAULT '',
+              `username` VARCHAR(50) NOT NULL DEFAULT '',
+              PRIMARY KEY (`id`),
+              INDEX `type` (`type`),
+              INDEX `blockdate` (`blockdate`)
+            ) ENGINE=MyISAM
+            ";
+
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
+
         default :
+            spamx_update_config();
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
             break;
     }
@@ -77,5 +118,16 @@ function spamx_upgrade()
     } else {
         return false;
     }
+}
+
+function spamx_update_config()
+{
+    global $_CONF, $_SPX_CONF, $_TABLES;
+
+    USES_lib_install();
+
+    require_once $_CONF['path'].'plugins/spamx/sql/spamx_config_data.php';
+    _update_config('spamx', $spamxConfigData);
+
 }
 ?>

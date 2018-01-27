@@ -30,7 +30,7 @@
 require_once '../../lib-common.php';
 
 // Only let admin users access this page
-/*
+
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
     COM_errorLog("Someone has tried to access the glFusion Development Code Upgrade Routine without proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
@@ -42,7 +42,7 @@ if (!SEC_inGroup('Root')) {
     echo $display;
     exit;
 }
-*/
+
 $retval = '';
 
 function glfusion_110() {
@@ -1753,6 +1753,279 @@ function glfusion_171()
 
 }
 
+function glfusion_172()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    if (!isset($_CONF['comment_indent'])) {
+        $c->add('comment_indent',15,'text',4,6,NULL,150,TRUE,'Core');
+    }
+
+    $_SQL = array();
+
+    $_SQL[] = "CREATE TABLE {$_TABLES['tfa_backup_codes']} (
+    	`uid` MEDIUMINT(8) NULL DEFAULT NULL,
+    	`code` VARCHAR(128) NULL DEFAULT NULL,
+    	`used` TINYINT(4) NULL DEFAULT '0',
+    	INDEX `uid` (`uid`),
+    	INDEX `code` (`code`)
+    ) ENGINE=MyISAM
+    ";
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `act_time`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NULL DEFAULT NULL AFTER `tfa_enabled`;";
+    $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD INDEX `uid` (`uid`);";
+
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+        }
+    }
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+// forum plugin
+
+    if ( !DB_checkTableExists('ff_badges') ) {
+        $_SQL = array();
+
+        $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
+          `fb_id` int(11) NOT NULL AUTO_INCREMENT,
+          `fb_grp` varchar(20) NOT NULL DEFAULT '',
+          `fb_order` int(3) NOT NULL DEFAULT '99',
+          `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+          `fb_gl_grp` MEDIUMINT(8) NOT NULL,
+          `fb_type` varchar(10) DEFAULT 'img',
+          `fb_data` varchar(255) DEFAULT NULL,
+          `fb_dscp` varchar(40) DEFAULT NULL,
+          PRIMARY KEY (`fb_id`),
+          KEY `grp` (`fb_grp`,`fb_order`)
+        ) ENGINE=MyISAM;";
+
+        // Copy existing badge images from the original directory to the
+        // new location under public_html/images
+        $dst = $_CONF['path_html'] . 'images/forum/badges';
+        if (!is_dir($dst)) {
+            $status = @mkdir($dst, 0755, true);
+        }
+        if (is_dir($dst) && is_writable($dst)) {
+            $src = $_CONF['path_html'] . 'forum/images/badges';
+            $dir = opendir($src);
+            while(false !== ($file = readdir($dir))) {
+                if ($file != '.' && $file != '..' ) {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+            closedir($dir);
+        }
+
+        foreach ($_SQL AS $sql) {
+            if ($use_innodb) {
+                $sql = str_replace('MyISAM', 'InnoDB', $sql);
+            }
+            DB_query($sql,1);
+        }
+
+        $counter = 10;
+        $groupTags = $_FF_CONF['grouptags'];
+        foreach ($groupTags AS $group => $badge ) {
+            $groupID = DB_getItem($_TABLES['groups'],'grp_id','grp_name="'.DB_escapeString($group).'"');
+            if ( $groupID != '' && $groupID != 0 ) {
+                $sql = "INSERT INTO {$_TABLES['ff_badges']}
+                    (fb_grp,fb_order,fb_enabled,fb_gl_grp,fb_type,fb_data)
+                    VALUES ('site',{$counter},1,'{$groupID}','img','{$badge}' )";
+                DB_query($sql);
+            }
+            $counter += 10;
+        }
+        $c->del('grouptags','forum');
+    }
+
+    $_SQL = array();
+
+    $buildRanks = false;
+    $buildLikes = false;
+
+    if ( !DB_checkTableExists('ff_ranks') ) {
+        $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
+          `posts` int(11) unsigned NOT NULL DEFAULT '0',
+          `dscp` varchar(40) NOT NULL DEFAULT '',
+          PRIMARY KEY (`posts`)
+        ) ENGINE=MyISAM;";
+        $buildRanks = true;
+    }
+
+    if ( !DB_checkTableExists('ff_likes_assoc') ) {
+        $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+          `poster_id` mediumint(9) NOT NULL,
+          `voter_id` mediumint(9) NOT NULL,
+          `topic_id` int(11) NOT NULL,
+          PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
+        ) ENGINE=MyISAM;";
+        $buildLikes = true;
+    }
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_likes_assoc']}
+        ADD `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        ADD KEY `voter_id` (`voter_id`),
+        ADD KEY `poster_id` (`poster_id`)";
+    
+    $_SQL[] = "ALTER TABLE {$_TABLES['ff_likes_assoc']}
+        ADD `username` varchar(40) AFTER topic_id";
+
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
+        }
+        DB_query($sql,1);
+    }
+
+    if ( $buildRanks == true ) {
+        for ($i = 1; $i < 6; $i++) {
+            $lvl = 'level' . $i;
+            if (!isset($_FF_CONF[$lvl]) || !isset($_FF_CONF[$lvl . 'name'])) continue;
+            $posts = (int)$_FF_CONF[$lvl];
+            $dscp = DB_escapeString($_FF_CONF[$lvl . 'name']);
+            $sql = "INSERT INTO {$_TABLES['ff_ranks']}
+                    (posts, dscp) VALUES ($posts, '$dscp')";
+            DB_query($sql);
+            $c->del($lvl, 'forum');
+            $c->del($lvl . 'name', 'forum');
+        }
+        $c->del('ff_rank_settings', 'forum');
+    }
+    _forum_update_config();
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
+    // end of forum plugin updates
+
+    // spam-x updates
+    $_SQL = array();
+    $_SQL[] = "ALTER TABLE {$_TABLES['spamx']} ADD COLUMN id INT(10) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id)";
+    $_SQL[] = "
+    CREATE TABLE {$_TABLES['spamx_stats']} (
+      `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `module` VARCHAR(128) NOT NULL DEFAULT '',
+      `type` VARCHAR(50) NOT NULL DEFAULT '',
+      `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `ip` VARCHAR(50) NOT NULL DEFAULT '',
+      `email` VARCHAR(50) NOT NULL DEFAULT '',
+      `username` VARCHAR(50) NOT NULL DEFAULT '',
+      PRIMARY KEY (`id`),
+      INDEX `type` (`type`),
+      INDEX `blockdate` (`blockdate`)
+    ) ENGINE=MyISAM
+    ";
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
+        }
+        DB_query($sql,1);
+    }
+    _spamx_update_config();
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
+    // end of spam-x
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
+
+}
+
+function _spamx_update_config()
+{
+    global $_CONF, $_SPX_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/spamx/sql/spamx_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='spamx'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$spamxConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='spamx'");
+        } else {
+            $spamxConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($spamxConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('spamx');
+    // sync up sequence, etc.
+    foreach ( $spamxConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
+
+function _forum_update_config()
+{
+    global $_CONF, $_FF_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/forum/sql/forum_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='forum'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$forumConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='forum'");
+        } else {
+            $forumConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($forumConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('forum');
+    // sync up sequence, etc.
+    foreach ( $forumConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
+
 function _updateConfig() {
     global $_CONF, $_TABLES, $coreConfigData;
 
@@ -1976,7 +2249,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_171();
+glfusion_172();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

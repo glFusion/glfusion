@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -44,7 +44,7 @@ require_once $_CONF['path'].'plugins/forum/forum.php';
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function forum_upgrade() {
-    global $_CONF, $_TABLES, $_FF_CONF, $_FF_CONF;
+    global $_CONF, $_TABLES, $_FF_CONF, $_DB_dbms;
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -184,7 +184,99 @@ function forum_upgrade() {
             $c->add('geshi_code_style', $_FF_DEFAULT['geshi_code_style'], 'text',0, 2, 0, 124, true, 'forum');
             $c->add('geshi_header_style', $_FF_DEFAULT['geshi_header_style'], 'text',0, 2, 0, 125, true, 'forum');
 
+        case '3.3.5' :
+            $_SQL = array();
+
+            $_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
+              `fb_id` int(11) NOT NULL AUTO_INCREMENT,
+              `fb_grp` varchar(20) NOT NULL DEFAULT '',
+              `fb_order` int(3) NOT NULL DEFAULT '99',
+              `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+              `fb_gl_grp` MEDIUMINT(8) NOT NULL,
+              `fb_type` varchar(10) DEFAULT 'img',
+              `fb_data` varchar(255) DEFAULT NULL,
+              `fb_dscp` varchar(40) DEFAULT NULL,
+              PRIMARY KEY (`fb_id`),
+              KEY `grp` (`fb_grp`,`fb_order`)
+            ) ENGINE=MyISAM;";
+
+            $_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
+              `posts` int(11) unsigned NOT NULL DEFAULT '0',
+              `dscp` varchar(40) NOT NULL DEFAULT '',
+              PRIMARY KEY (`posts`)
+            ) ENGINE=MyISAM;";
+
+            $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+              `poster_id` mediumint(9) NOT NULL,
+              `voter_id` mediumint(9) NOT NULL,
+              `topic_id` int(11) NOT NULL,
+              `username` varchar(40),
+              `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`),
+              KEY `voter_id` (`voter_id`),
+              KEY `poster_id` (`poster_id`)
+            ) ENGINE=MyISAM;";
+
+            // Copy existing badge images from the original directory to the
+            // new location under public_html/images
+            $dst = $_CONF['path_html'] . 'images/forum/badges';
+            if (!is_dir($dst)) {
+                $status = @mkdir($dst, 0755, true);
+            }
+            if (is_dir($dst) && is_writable($dst)) {
+                $src = $_CONF['path_html'] . 'forum/images/badges';
+                $dir = opendir($src);
+                while(false !== ($file = readdir($dir))) {
+                    if ($file != '.' && $file != '..' ) {
+                        copy($src . '/' . $file, $dst . '/' . $file);
+                    }
+                }
+                closedir($dir);
+            }
+
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
+
+            $counter = 10;
+            $groupTags = $_FF_CONF['grouptags'];
+            foreach ($groupTags AS $group => $badge ) {
+                $groupID = DB_getItem($_TABLES['groups'],'grp_id','grp_name="'.DB_escapeString($group).'"');
+                if ( $groupID != '' && $groupID != 0 ) {
+                    $sql = "INSERT INTO {$_TABLES['ff_badges']}
+                        (fb_grp,fb_order,fb_enabled,fb_gl_grp,fb_type,fb_data)
+                        VALUES ('site',{$counter},1,'{$groupID}','img','{$badge}' )";
+                    DB_query($sql);
+                }
+                $counter += 10;
+            }
+            $c = config::get_instance();
+            $c->del('grouptags','forum');
+
+            for ($i = 1; $i < 6; $i++) {
+                $lvl = 'level' . $i;
+                if (!isset($_FF_CONF[$lvl]) || !isset($_FF_CONF[$lvl . 'name'])) continue;
+                $posts = (int)$_FF_CONF[$lvl];
+                $dscp = DB_escapeString($_FF_CONF[$lvl . 'name']);
+                $sql = "INSERT INTO {$_TABLES['ff_ranks']}
+                        (posts, dscp) VALUES ($posts, '$dscp')";
+                DB_query($sql);
+                $c->del($lvl, 'forum');
+                $c->del($lvl . 'name', 'forum');
+            }
+            $c->del('ff_rank_settings', 'forum');
+
         default :
+            forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['ff_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
@@ -397,4 +489,16 @@ function _forum_cvt_watch() {
 
     return $converted;
 }
+
+function forum_update_config()
+{
+    global $_CONF, $_FF_CONF, $_TABLES;
+
+    USES_lib_install();
+
+    require_once $_CONF['path'].'plugins/forum/sql/forum_config_data.php';
+    _update_config('forum', $forumConfigData);
+
+}
+
 ?>

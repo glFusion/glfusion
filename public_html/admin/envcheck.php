@@ -759,7 +759,8 @@ function _isWritable($path) {
 function _return_bytes($val)
 {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower(substr($val, -1));
+    $val = (int) substr($val, 0, -1);
     switch($last) {
         case 'g':
             $val = (int) $val * pow(1024,2);

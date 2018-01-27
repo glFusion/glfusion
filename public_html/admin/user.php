@@ -106,6 +106,8 @@ function USER_edit($uid = '', $msg = '')
             }
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
                 continue;
+            } elseif ($id == 'pe_twofactor' ) {
+                continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
                 $cnt++;
@@ -321,7 +323,7 @@ function USER_edit($uid = '', $msg = '')
 
 function USER_accountPanel($U,$newuser = 0)
 {
-    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04,$LANG28;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG_TFA, $LANG04,$LANG28;
 
     $uid = $U['uid'];
 
@@ -501,6 +503,16 @@ function USER_accountPanel($U,$newuser = 0)
     $statusselect .= '</select><input type="hidden" name="oldstatus" value="'.$U['status'] . '"/>';
     $userform->set_var('user_status', $statusselect);
 
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && $U['tfa_enabled']) {
+        $userform->set_var('twofactor',true);
+        $userform->set_var(array(
+            'lang_two_factor' => $LANG_TFA['two_factor'],
+            'lang_disable_tfa' => $LANG_TFA['disable_tfa'],
+        ));
+    } else {
+        $userform->unset_var('twofactor');
+    }
+
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_namepass_name',PLG_profileEdit($uid,'namepass','name'));
         $userform->set_var('plugin_namepass_pwdemail',PLG_profileEdit($uid,'namepass','pwdemail'));
@@ -540,12 +552,16 @@ function USER_groupPanel($U, $newuser = 0)
                 $selected .= DB_getItem($_TABLES['groups'],'grp_id',"grp_name='Logged-in Users'");
             }
         }
-        $thisUsersGroups = SEC_getUserGroups ();
-        $remoteGroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name='Remote Users'");
-        if (!empty ($remoteGroup)) {
-            $thisUsersGroups[] = $remoteGroup;
+        if (SEC_inGroup('Root')) {
+            $where = '1=1';
+        } else {
+            $thisUsersGroups = SEC_getUserGroups ();
+            $remoteGroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name='Remote Users'");
+            if (!empty ($remoteGroup)) {
+                $thisUsersGroups[] = $remoteGroup;
+            }
+            $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
         }
-        $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
 
         $header_arr = array(
                         array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
@@ -1143,7 +1159,7 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
         $uid      = (int) $al_selected[0];
     }
 
-    if (in_array($A['grp_id'], $thisUsersGroups ) ||
+    if (SEC_inGroup('Root') || in_array($A['grp_id'], $thisUsersGroups ) ||
           SEC_groupIsRemoteUserAndHaveAccess($A['grp_id'], $thisUsersGroups)) {
         switch($fieldname) {
         case 'checkbox':
@@ -1301,10 +1317,13 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'email':
-            $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[111];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
-            $retval .= '&nbsp;&nbsp;';
+            if (COM_isEmail($fieldvalue)) {
+                $url = 'mailto:' . $fieldvalue;
+                $retval = '<a href="' . $url . '" title="' . $LANG28[111] . '">' .
+                        $icon_arr['mail'] . '</a>&nbsp;&nbsp;';
+            } else {
+                $retval = $icon_arr['mail'] . '&nbsp;&nbsp;';
+            }
             $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
             $attr['style'] = 'vertical-align:top;';
@@ -1688,16 +1707,18 @@ function USER_save($uid)
                 // user has been renamed - rename the photo, too
                 $newphoto = preg_replace ('/' . $curusername . '/', $username, $curphoto, 1);
                 $imgpath = $_CONF['path_images'] . 'userphotos/';
-                if (rename ($imgpath . $curphoto,
-                            $imgpath . $newphoto) === false) {
-                    $display = COM_siteHeader ('menu', $LANG28[22]);
-                    $display .= COM_errorLog ('Could not rename userphoto "'
-                                    . $curphoto . '" to "' . $newphoto . '".');
-                    $display .= COM_siteFooter ();
-                    return $display;
+                if (@rename ($imgpath . $curphoto,$imgpath . $newphoto) === false) {
+                    COM_errorLog ('Could not rename userphoto "'.$curphoto . '" to "' . $newphoto . '".');
+                } else {
+                    $curphoto = $newphoto;
                 }
-                $curphoto = $newphoto;
             }
+        }
+
+        $disableTFA = '';
+        if ( isset($_POST['disable_tfa'])) {
+            $disableTFA = "tfa_enabled = 0,tfa_secret=NULL,";
+            DB_delete ($_TABLES['tfa_backup_codes'], 'uid', $uid);
         }
 
         // update users table
@@ -1713,6 +1734,7 @@ function USER_save($uid)
             "cookietimeout = $cooktime,".
             "theme    = '".DB_escapeString($theme)."',".
             "language = '".DB_escapeString($language)."',".
+            $disableTFA .
             "status   = $userstatus WHERE uid = $uid;";
 
         DB_query($sql);

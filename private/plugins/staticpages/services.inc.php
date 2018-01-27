@@ -339,7 +339,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             $sp_content = COM_checkHTML ($sp_content,'staticpages.edit');
         }
         $sp_title = strip_tags ($sp_title);
-        $sp_label = strip_tags ($sp_label);
+        $sp_label = strip_tags ($sp_label,'<i>');
 
         $sp_content = DB_escapeString ($sp_content);
         $sp_title = DB_escapeString ($sp_title);

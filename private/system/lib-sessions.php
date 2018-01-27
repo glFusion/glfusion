@@ -52,6 +52,8 @@ if (empty ($_CONF['cookiedomain'])) {
     }
 }
 
+session_set_cookie_params ( 0, $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+
 // Need to destroy any existing sessions started with session.auto_start
 if (session_id()) {
 	session_unset();
@@ -94,7 +96,6 @@ function SESS_sessionCheck()
     $_USER = $userdata;
 
     $userid = 0;
-
     $mintime = time() - $_CONF['session_cookie_timeout'];
     $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
@@ -110,6 +111,10 @@ function SESS_sessionCheck()
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
                     $_SERVER['REMOTE_USER'] = $_USER['username'];
+                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],false);
+                    // cycle session
                 }
             } else {
                 $userid = 0;
@@ -129,6 +134,9 @@ function SESS_sessionCheck()
                 if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                     $_USER = $userdata;
                     $_SERVER['REMOTE_USER'] = $_USER['username'];
+                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],false);
                     // Create new session and write cookie
                     $sessid = SESS_newSession($userid,$request_ip, $_CONF['session_cookie_timeout']);
                     if ( $sessid === false ) {
@@ -300,9 +308,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
             die("Delete failed in new_session()");
         }
     }
-
-    // Create new session
-    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, browser,md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '".DB_escapeString($browser)."', '".DB_escapeString($md5_sessid)."', ". (int) $userid .", '$currtime', '".DB_escapeString($remote_ip)."')";
+    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, browser,md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '".DB_escapeString($browser)."', '".DB_escapeString($md5_sessid)."', ". (int) $userid .",'$currtime', '".DB_escapeString($remote_ip)."')";
 
     $result = DB_query($sql);
     if ($result) {
@@ -514,7 +520,7 @@ function SESS_getUserDataFromId($userid)
 * @return   none
 *
 */
-function SESS_completeLogin($uid)
+function SESS_completeLogin($uid, $authenticated = 1)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER;
 
@@ -522,7 +528,17 @@ function SESS_completeLogin($uid)
 
     // build the $_USER array
     $userdata = SESS_getUserDataFromId($uid);
+
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($userdata['tfa_enabled']) && $userdata['tfa_enabled'] && $authenticated == 0 ) {
+        if ( !SESS_isSet('login_referer')) {
+            if ( isset($_SERVER['HTTP_REFERER'])) {
+                SESS_setVar('login_referer',$_SERVER['HTTP_REFERER']);
+            }
+        }
+        SEC_2FAForm($uid);
+    }
     $_USER = $userdata;
+
     // save old session data
     $savedSessionData = json_encode($_SESSION);
 

@@ -62,13 +62,13 @@
 						</div>
 					</div>
 					{plugin_namepass_pwdemail}
-
-					{delete_account_option}
 				</div>
 
 			</fieldset>
 			{plugin_namepass}
 		</div>
+
+		{twofactor}
 
 		<!--below needs fixing for mobile-->
 
@@ -157,6 +157,14 @@
 			<button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
 			<button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
 		</div>
+
+{!if delete_account_option}
+		<div id="pe_delete" class="jsenabled_hide">
+			{delete_account_option}
+		</div>
+{!endif}
+
+
 	</form>
 </div>
 <!-- end needs fixing -->
@@ -187,7 +195,11 @@
 </script>
 <script>
 	$( document ).ready(function() {
-		showhideProfileEditorDiv("pe_namepass", 1);
+{!if delete_active}
+		showhideProfileEditorDiv('pe_delete', {delete_idx});
+{!else}
+		showhideProfileEditorDiv('pe_namepass', 1);
+{!endif}
 	});
 </script>
 {# end {templatelocation} #}

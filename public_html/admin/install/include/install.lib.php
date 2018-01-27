@@ -1545,6 +1545,40 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.7.1';
 
+        case '1.7.1' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+
+            $c->add('comment_indent',15,'text',4,6,NULL,150,TRUE,'Core');
+
+            $_SQL = array();
+
+            $_SQL[] = "CREATE TABLE {$_TABLES['tfa_backup_codes']} (
+            	`uid` MEDIUMINT(8) NULL DEFAULT NULL,
+            	`code` VARCHAR(128) NULL DEFAULT NULL,
+            	`used` TINYINT(4) NULL DEFAULT '0',
+            	INDEX `uid` (`uid`),
+            	INDEX `code` (`code`)
+            ) ENGINE=MyISAM
+            ";
+
+            $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `act_time`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD COLUMN `tfa_secret` VARCHAR(128) NOT NULL DEFAULT NULL AFTER `tfa_enabled`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} ADD INDEX `uid` (`uid`);";
+
+            if ($use_innodb) {
+                $statements = count($_SQL);
+                for ($i = 0; $i < $statements; $i++) {
+                    $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+                }
+            }
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
+            $current_fusion_version = '1.7.2';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
@@ -2106,7 +2140,7 @@ function INST_resyncConfig() {
     $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='Core'");
     while ( $row = DB_fetchArray($result) ) {
         $item = $row['name'];
-        if ( ($key = _searchForIdKey($item,$coreConfigData)) === NULL ) {
+        if ( ($key = INST_searchForIdKey($item,$coreConfigData)) === NULL ) {
             DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='Core'");
         } else {
             $coreConfigData[$key]['indb'] = 1;
@@ -2114,7 +2148,7 @@ function INST_resyncConfig() {
     }
     foreach ($coreConfigData AS $cfgItem ) {
         if (!isset($cfgItem['indb']) ) {
-            _addConfigItem( $cfgItem );
+            INST_addConfigItem( $cfgItem );
         }
     }
     $c = config::get_instance();
@@ -2221,7 +2255,7 @@ function INST_encrypt($data,$key = '')
 }
 
 
-function _searchForId($id, $array) {
+function INST_searchForId($id, $array) {
    foreach ($array as $key => $val) {
        if ($val['name'] === $id) {
            return $array[$key];
@@ -2277,7 +2311,7 @@ function INST_securePassword($length = 12) {
 }
 
 
-function _searchForIdKey($id, $array) {
+function INST_searchForIdKey($id, $array) {
    foreach ($array as $key => $val) {
        if ($val['name'] === $id) {
            return $key;
@@ -2286,7 +2320,7 @@ function _searchForIdKey($id, $array) {
    return null;
 }
 
-function _addConfigItem($data = array() )
+function INST_addConfigItem($data = array() )
 {
     global $_TABLES;
 

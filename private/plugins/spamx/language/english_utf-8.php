@@ -9,7 +9,6 @@
  *
  * Licensed under GNU General Public License
  *
- * $Id$
  */
 
 if (!defined ('GVERSION')) {
@@ -131,6 +130,45 @@ $LANG_SX00 = array (
     'slvwhitelist' => 'SLV Whitelist',
     'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
     'invalid_email_or_ip'   => 'Invalid e-mail address or IP address has been blocked',
+
+    'filters'       => 'Filters',
+    'edit_filters' => 'Edit Filters',
+    'scan_comments' => 'Scan Comments',
+    'scan_trackbacks' => 'Scan Trackbacks',
+    'auto_refresh_on' => 'Auto Refresh On',
+    'auto_refresh_off' => 'Auto Refresh Off',
+    'type'  => 'Type',
+    'blocked'   => 'Blocked',
+    'no_blocked' => 'No spam has been blocked by this module',
+
+    'filter'    => 'Filter',
+    'all'       => 'All',
+    'blacklist' => 'Blacklist',
+    'http_header'   => 'HTTP Header',
+    'ip_blacklist'  => 'IP Blacklist',
+    'ipofurl'   => 'IP of URL',
+    'filter_instruction' => 'Here you can define filters which will be applied to each registration and post on the site. If any of the checks return true, the registration / post will be blocked as spam',
+    'value' => 'Value',
+    'no_filter_data' => 'No filters have been defined',
+    'delete'    => 'Delete',
+    'delete_confirm' => 'Are you sure you want to delete this item?',
+    'delete_confirm_2' => 'Are you REALLY SURE you want to delete this item',
+    'new_entry' => 'New Entry',
+    'blacklist_prompt' => 'Enter words to trigger spam',
+    'http_header_prompt' => 'Header',
+    'ip_prompt' => 'Enter IP to block',
+    'ipofurl_prompt' => 'Enter IP of links to block',
+    'content'   => 'Content',
+    'new_filter_entry' => 'New Filter Entry',
+    'cancel'    => 'Cancel',
+    'ip_error'  => 'The entry does not appear to be a valid IP or IP range',
+    'no_bl_data_error' => 'No errors',
+    'blacklist_success_save' => 'Spam-X Filter Saved Successfully',
+    'blacklist_success_delete' => 'Selected items successfully deleted',
+    'invalid_item_id' => 'Invalid ID',
+    'edit_filter_entry' => 'Edit Filter',
+    'spamx_filters' => 'Spam-X Filters',
+    'history' => 'Past 3 Months',
 );
 
 
@@ -162,6 +200,14 @@ $LANG_confignames['spamx'] = array(
     'sfs_email_confidence' => 'Minimum confidence level on Email match to trigger spam block',
     'sfs_ip_confidence' => 'Minimum confidence level on IP address match to trigger spam block',
     'slc_max_links' => 'Maximum Links allowed in post',
+    'debug' => 'Debug Logging',
+    'akismet_enabled' => 'Akismet Module Enabled',
+    'akismet_api_key' => 'Akismet API Key (Required)',
+    'fc_enable' => 'Enable Form Check',
+    'sfs_enable' => 'Enable Stop Forum Spam',
+    'slc_enable' => 'Enable Spam Link Counter',
+    'action_delete' => 'Delete Identified Spam',
+    'action_mail' => 'Mail Admin when Spam Caught',
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -172,6 +218,8 @@ $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Main Settings',
     'fs_sfs'  => 'Stop Forum Spam',
     'fs_slc'  => 'Spam Link Counter',
+    'fs_akismet' => 'Akismet',
+    'fs_formcheck' => 'Form Check',
 );
 
 $LANG_configselects['spamx'] = array(

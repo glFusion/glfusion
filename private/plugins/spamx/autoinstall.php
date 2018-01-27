@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -54,6 +54,7 @@ $INSTALL_plugin['spamx'] = array(
         'url' => $_SPX_CONF['pi_url'], 'display' => $_SPX_CONF['pi_display_name']),
 
   array('type' => 'table', 'table' => $_TABLES['spamx'], 'sql' => $_SQL['spamx']),
+  array('type' => 'table', 'table' => $_TABLES['spamx_stats'], 'sql' => $_SQL['spamx_stats']),
 
   array('type' => 'group', 'group' => 'spamx Admin', 'desc' => 'Users in this group can administer the Spamx plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
@@ -132,7 +133,7 @@ function plugin_autouninstall_spamx ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('spamx'),
+        'tables' => array('spamx','spamx_stats'),
         /* give the full name of the group, as in the db */
         'groups' => array('spamx Admin'),
         /* give the full name of the feature, as in the db */

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display Forum post in a printable format                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -58,21 +58,20 @@ function ff_FormatForPrint( $str, $postmode='html', $status=0 ) {
     return $str;
 }
 
-$id = COM_applyFilter($_REQUEST['id'],true);
+$id = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
 
 if ($_FF_CONF['registration_required'] && COM_isAnonUser()) {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg01'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
+    $display  = COM_siteHeader();
+    $display .= SEC_loginRequiredForm();
+    $display .= COM_siteFooter();
+    echo $display;
     exit;
 }
 
 //Check is anonymous users can access
 if ($id == 0 OR DB_count($_TABLES['ff_topic'],"id",(int) $id) == 0) {
     echo COM_siteHeader();
-    echo FF_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
+    echo FF_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php",$LANG_GF02['msg166']);
     echo COM_siteFooter();
     exit;
 }
@@ -82,14 +81,14 @@ $query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
     echo COM_siteHeader();
-    echo FF_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo _ff_alertMessage($LANG_GF02['msg03'],$LANG_GF02['msg171']);
     echo COM_siteFooter();
     exit;
 }
 
 if (!_ff_canUserViewRating($forum)) {
     echo COM_siteHeader();
-    echo FF_alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+    echo _ff_alertMessage($LANG_GF02['msg03'],$LANG_GF02['msg171']);
     echo COM_siteFooter();
     exit;
 }

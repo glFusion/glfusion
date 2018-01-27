@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
+ * @li, 'Achor'cense Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 var tbitems = {
@@ -8,6 +8,7 @@ var tbitems = {
 		'undo'          : ['Undo', 'Redo'],
 		'editing'       : ['Find', 'Replace', '-',  'Scayt'],
 		'links'         : ['Link', 'Unlink'],
+		'anchor'				: ['Anchor'],
 		'basicstyles'   : ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
 		'insert'        : ['Image', 'Mediagallery', 'Youtube2', 'Vimeo','Table', 'HorizontalRule', 'SpecialChar'],
 		'paragraph'     : ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
@@ -37,6 +38,7 @@ CKEDITOR.editorConfig = function( config ) {
 		tbitems.items['undo'],
 		tbitems.items['editing'],
 		tbitems.items['links'],
+		tbitems.items['anchor'],
 		tbitems.items['insert'],
 		tbitems.items['basicstyles'],
 		tbitems.items['paragraph'],
@@ -52,8 +54,20 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'youtube2,vimeo';
 	config.entities_latin = false;
 	config.scayt_autoStartup = true;
+	config.allowedContent = {
+	    $1: {
+	        // Use the ability to specify elements as an object.
+	        elements: CKEDITOR.dtd,
+	        attributes: true,
+	        styles: true,
+	        classes: true
+	    }
+	};
+	config.disallowedContent = 'table[cellspacing,cellpadding,border]';
 
     // FileMan
 	config.filebrowserBrowseUrl =  site_url + '/ckeditor/plugins/fileman/index.html?type=file';
 	config.filebrowserImageBrowseUrl = site_url + '/ckeditor/plugins/fileman/index.html?type=image';
+
+	config.customConfig = site_url+'/ckeditor/custom_config.js';
 };

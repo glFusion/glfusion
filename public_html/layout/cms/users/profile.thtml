@@ -7,144 +7,122 @@
 		return false;
 	}
 </script>
-{start_block_userprofile}
-<div class="uk-grid">
-	<div class="uk-width-medium-1-3">
-{!if user_photo}
-		<img class="{tooltip} uk-thumbnail uk-text-center uk-align-center" src="{user_photo}" alt="" title="
-{!if user_fullname}
-		{username} - {user_fullname}
-{!else}
-		{username}
-{!endif}
-		:: {lang_membersince}<br>{user_regdate}
-{!if user_lastlogin}
-		<br><br>{$LANG28[35]}<br>{user_lastlogin}
-{!else}
-		&nbsp;
-{!endif}
-		" />
-{!else}
-		<div class="profile-image"><span class="b">
-{!if user_fullname}
-			{username} - {user_fullname}
-{!else}
-			{username}
-{!endif}
-		</span><br><br>{lang_membersince}<br>{user_regdate}
-{!if user_lastlogin}
-		<br><br>{$LANG28[35]}<br>{user_lastlogin}
-{!else}
-		&nbsp;
-{!endif}
-	</div>
-{!endif}
-	<div class="profile-meta">
-		<ul class="uk-list">
-{!if user_edit}
-			<li>
-				<a class="tm-meta-icon uk-icon-edit uk-icon-hover uk-icon-small" href="{user_edit}" title="{$LANG_ADMIN[edit]}"></a>
-			</li>
-{!endif}
-			{email_option}
-{!if user_homepage}
-			<li>
-				<a class="tm-meta-icon uk-icon-home uk-icon-hover uk-icon-small" href="{user_homepage}" title="{lang_homepage}: {user_homepage}" target="_blank"></a>
-			</li>
-{!endif}
-{!if user_location}
-			<li>
-				<i class="tm-meta-icon uk-icon-globe uk-icon-hover uk-icon-small" title="{lang_location}: {user_location}"></i>
-			</li>
-{!endif}
-{!if user_pgp}
-			<li>
-				<a class="tm-meta-icon uk-icon-key uk-icon-hover uk-icon-small" title="{lang_pgpkey}" href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
-				</a>
-			</li>
-{!endif}
-{!if online}
-			<li>
-				<i class="tm-meta-icon uk-icon-wifi uk-icon-hover uk-icon-small" title="{lang_online}"></i>
-			</li>
-{!endif}
-			<!-- BEGIN profileicon -->
-			<li>
-				<a href="{profile_icon_url}">
-					<img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}" />
-				</a>
-			</li>
-			<!-- END profileicon -->
-		</ul>
-	</div> {# end profile-meta #}
 
-	<div class="uk-clearfix"></div>
-{!if user_bio}
-	<div class="uk-panel uk-panel-box">
-		<div class="uk-panel-title">{lang_bio} {username}</div>
-		<div class="uk-text-left">{user_bio}</div>
-	</div>
+<div class="uk-panel uk-panel-box uk-margin">
+	<div class="uk-grid">
+		<div class="uk-width-1-3 uk-text-center uk-align-center">
+{!if user_photo}
+			<img class="uk-thumbnail uk-border-circle uk-text-center uk-align-center" src="{user_photo}" alt="" title="">
 {!endif}
+			<div class="uk-clearfix"></div>
+			<div class="profile-meta">
+				<ul class="uk-list">
+					{email_option}
+{!if user_pgp}
+					<li>
+						<a class="tm-meta-icon uk-icon-key uk-icon-hover uk-icon-small" title="{lang_pgpkey}" href="#" onclick="return popitup('{site_url}/pgp.php?uid={user_id}')">
+						</a>
+					</li>
+{!endif}
+					<!-- BEGIN profileicon -->
+					<li>
+						<a href="{profile_icon_url}">
+							<img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}" />
+						</a>
+					</li>
+					<!-- END profileicon -->
+{!if online}
+					<li>
+						<i class="tm-meta-icon uk-icon-wifi uk-icon-hover uk-icon-small" title="{lang_online}"></i>
+					</li>
+{!endif}
+				</ul>
+			</div> {# end profile-meta #}
+
+			<div class="uk-clearfix"></div>
+
+		</div>
+
+		<div class="uk-width-2-3">
+			<h2>
+{!if user_fullname}
+				{username} - {user_fullname}
+{!else}
+				{username}
+{!endif}
+
+{!if user_edit}
+				<a class="tm-meta-icon uk-icon-edit uk-icon-hover uk-icon-mini" href="{user_edit}" title="{$LANG_ADMIN[edit]}"></a>
+{!endif}
+			</h2>
+
+			<div>
+				{lang_membersince} {user_regdate}
+			</div>
+
+{!if user_lastlogin}
+			<div>
+				{$LANG28[35]} {user_lastlogin}
+			</div>
+{!endif}
+
+{!if user_location}
+			<div>
+				{lang_location}: {user_location}
+			</div>
+{!endif}
+
+{!if user_homepage}
+			<div>
+				{lang_homepage}	<a href="{user_homepage}"target="_blank" rel="nofollow">{user_homepage}</a>
+			</div>
+{!endif}
+			<div class="uk-clearfix uk-margin"></div>
+
+{!!if {number_stories} > 0 !!}
+			<div>
+				<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+					{lang_number_stories} {number_stories}
+				</a>
+			</div>
+{!endif}
+
+{!!if {number_comments} > 0 !!}
+			<div>
+				<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+					{lang_number_comments} {number_comments}
+				</a>
+			</div>
+{!endif}
+
+			<div>
+				<a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search" title="{lang_all_postings_by}">
+					{lang_all_postings_by}
+				</a>
+			</div>
+
+			<div class="uk-clearfix"></div>
 
 {!if follow_me}
-	<div class="uk-panel uk-panel-box">
-		<div class="uk-panel-title">{$LANG04[202]}</div>
-		<div class="uk-text-left">{follow_me}</div>
+			<div class="uk-width-1-1 uk-margin">
+				<div class="uk-text-left">{follow_me}</div>
+			</div>
+{!endif}
+
+		</div>
 	</div>
-{!endif}
-
-</div> {# end profile-col1 #}
-
-    <div class="uk-width-medium-2-3">
-    	<nav  class="uk-navbar">
-    		<div class="uk-navbar-content uk-navbar-flip">
-{!!if {number_stories} > 0 !!}
-    			<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
-    				{lang_number_stories} {number_stories}
-    			</a>
-{!endif}
-    		</div>
-    		<div class="uk-navbar-content">
-    			{headline_last10stories}
-    		</div>
-    	</nav>
-    	<div class="uk-clearfix"></div>
-    	<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
-    		{story_row}
-    	</table>
-{!if lang_number_comments}
-    	<nav class="uk-navbar">
-    		<div class="uk-navbar-content uk-navbar-flip">
-    			<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
-    				{lang_number_comments} {number_comments}
-    			</a>
-    		</div>
-    		<div class="uk-navbar-content">
-    			{headline_last10comments}
-    		</div>
-    	</nav>
-    	<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
-    		{comment_row}
-    	</table>
-{!endif}
-    	<nav class="uk-navbar">
-    		<div class="uk-navbar-content uk-navbar-flip">
-    			<a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search" title="{lang_all_postings_by}">
-    				{lang_all_postings_by}
-    			</a>
-    		</div>
-    		<div class="uk-navbar-content">
-    			{headline_postingstats}
-    		</div>
-    	</nav>
-
-    	<ul class="uk-list">
-    		<li>{lang_number_stories} {number_stories}</li>
-    		<li>{lang_number_comments} {number_comments}</li>
-    	</ul>
-    </div> {# end profile-col2 #}
 </div>
-{end_block}
+
+<div class="uk-grid">
+	<div class="uk-width-1-1">
+{!if user_bio}
+		<div class="uk-panel uk-panel-box uk-width-1-1 uk-margin">
+			<div class="uk-panel-title">{lang_bio} {username}</div>
+			<div class="uk-text-left">{user_bio}</div>
+		</div>
+{!endif}
+	</div>
+</div>
 
 <div style="uk-clearfix"></div>
 

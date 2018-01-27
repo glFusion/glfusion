@@ -106,6 +106,7 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['usercomment'], 'uid', $uid);
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
     DB_delete ($_TABLES['social_follow_user'], 'uid', $uid);
+    DB_delete ($_TABLES['tfa_backup_codes'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
     DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");
@@ -171,7 +172,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         // no need to update password
     } else {
         if ( $passwd == '' ) {
-            $passwd = USER_createPassword(8);
+            $passwd = SEC_generateStrongPassword(12,'lud');
         }
         $passwd2 = SEC_encryptPassword($passwd);
         DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
@@ -805,9 +806,16 @@ function USER_validateUsername($username, $existing_user = 0)
 	if (strpos($username, '&quot;') !== false || strpos($username, '"') !== false ) {
 		return false;
 	}
-
 	if (preg_match('/' . $regex . '/u', $username)) {
     	return false;
+	}
+	$retgex = "[\x{10000}-\x{10FFFF}]";
+	if ( preg_match('/' . $regex . '/u', $username)) {
+	    return false;
+	}
+    $regex = "([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{200D}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F9FF}][\x{FE00}-\x{FEFF}]?";
+	if ( preg_match('/' . $regex . '/u', $username)) {
+	    return false;
 	}
 	return true;
 }
@@ -824,8 +832,8 @@ function USER_validateUsername($username, $existing_user = 0)
 */
 function USER_sanitizeName($text)
 {
-    $result = (string) preg_replace( '/[\x00-\x1F\x7F<>"%&*\/\\\\]/', '', $text );
-
+    $filter = \sanitizer::getInstance();
+    $result = $filter->sanitizeUsername($text);
     return $result;
 }
 

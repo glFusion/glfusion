@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Allows users to report broken file links                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -40,7 +40,10 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'] .'plugins/filemgmt/include/functions.php';
 
-$lid = COM_applyFilter($_REQUEST['lid'],true);
+$lid = 0;
+if ( isset($_REQUEST['lid'])) {
+    $lid = COM_applyFilter($_REQUEST['lid'],true);
+}
 if ($lid == 0) {
     echo COM_refresh($_CONF['site_url'] .'/filemgmt/index.php');
     exit;

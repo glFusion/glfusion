@@ -221,6 +221,17 @@ $_SYSTEM['db_backup_rows'] = {db_backup_rows};
 $_SYSTEM['sp_pages_in_plugin_menu'] = {sp_pages_in_plugin_menu};
 
 // +--------------------------------------------------------------------------+
+// | Skip upgrade check in Command & Control                                  |
+// |                                                                          |
+// | If this is set to true, glFusion will NOT check to see if any            |
+// | updates are available when on the Command & Control page.                |
+// |                                                                          |
+// | You can still run the Upgarde Checker in Command & Control manually.     |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['skip_upgrade_check'] = {skip_upgrade_check};
+
+// +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |
 // | When running multiple sites off the same code base, having the ability   |

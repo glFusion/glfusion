@@ -1061,7 +1061,7 @@ function CMT_getCount($type, $sid, $queued = 0)
 */
 function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS, $LANG_ADMIN;
 
     $moderatorEdit = false;
     $adminEdit = false;
@@ -1309,9 +1309,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('lang_title', $LANG03[16]);
 //            $comment_template->set_var('title', @htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
 
-$comment_template->set_var('title', $title);
+            $comment_template->set_var('title', $title);
 
-
+            $comment_template->set_var('lang_timeout',$LANG_ADMIN['timeout_msg']);
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $edit_comment);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
@@ -1392,7 +1392,7 @@ $comment_template->set_var('title', $title);
  */
 function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $REMOTE_ADDR;
 
     $ret = 0;
 
@@ -1432,10 +1432,26 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                    . 'to submit a comment before the speed limit expired');
         return $ret = 3;
     }
-
     // Let plugins have a chance to check for spam
     $spamcheck = '<h1>' . $title . '</h1><p>' . $comment . '</p>';
-    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx']);
+    if ( COM_isAnonUser() ) {
+        if (isset($_POST['username']) ) {
+            $uname = $_POST['username'];
+        } else {
+            $uname = '';
+        }
+        $email = '';
+    } else {
+        $uname = $_USER['username'];
+        $email = $_USER['email'];
+    }
+    $spamData = array(
+        'username' => $uname,
+        'email'    => $email,
+        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'type'     => 'comment'
+    );
+    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx'],$spamData);
     // Now check the result and display message if spam action was taken
     if ($result > 0) {
         // update speed limit nonetheless
@@ -1933,7 +1949,8 @@ function CMT_preview( $data )
             // these have already been filtered above
             $A[$key] = $data[$key];
         } else if ($key == 'username') {
-            $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($data[$key])),ENT_QUOTES,COM_getEncodingt());
+            $A[$key] = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($data[$key])))),ENT_QUOTES,COM_getEncodingt());
+//            $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($data[$key])),ENT_QUOTES,COM_getEncodingt());
         } else {
             $A[$key] = COM_applyFilter($data[$key]);
         }
@@ -2184,8 +2201,6 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
         $retval = array();
         return $retval;
     }
-
-    USES_forum_format();
 
     if ($id == '*') {
         if ( $buildingSearchIndex ) {

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -54,6 +54,9 @@ $INSTALL_plugin['bad_behavior2'] = array(
     array('type' => 'table', 'table' => $_TABLES['bad_behavior2'], 'sql' => $_SQL['bad_behavior2']),
     array('type' => 'table', 'table' => $_TABLES['bad_behavior2_whitelist'], 'sql' => $_SQL['bad_behavior2_whitelist']),
     array('type' => 'table', 'table' => $_TABLES['bad_behavior2_blacklist'], 'sql' => $_SQL['bad_behavior2_blacklist']),
+
+    array('type' => 'sql', 'sql' => $_SQL['bb2_default_data'] ),
+
 );
 
 

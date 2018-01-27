@@ -1,3 +1,45 @@
+## v1.7.2 (January 27, 2018)
+  - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
+  - Forum: Fixed issue where signature preview would not work consistently
+  - Forum: Admin message management did not page properly - lost selections on pagination
+  - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
+  - Polls: Comment link did not correctly display when showing poll results in Polls block
+  - Open print window in new window when printing static pages
+  - Fixed incorrect variable reference in referer ban list
+  - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
+  - Forum: Moderator functions now in dropdown button
+  - Forum: New Likes Feature by Lee Garner
+  - Configuration option to enable / disable BB2 auto ban logging
+  - Standardized the date/time format across all log files
+  - Added token timeout protection to comment form
+  - Display Alternate Topic (if any) in the story admin list
+  - Spam-X stats collection
+  - Implemented password complexity rules
+  - Reworked My Account account deletion - moved to its own tab with improved confirmation
+  - Forum: New badge manager by Lee Garner
+  - Forum: New ranks manager by Lee Garner
+  - Implement Two Factor Authentication
+  - Set proper cookie attributes on session cookie
+  - CAPTCHA Updates to support CAPTCHA for login and lost password screens
+  - CAPTCHA - fixed static image refresh
+  - New API to support adding JavaScript to footer of page
+  - Updated CKEditor to v4.8.0
+  - New topic.class.php to streamline backend topic administration (Lee)
+  - Several performance tweaks to SQL queries - removed several duplicate calls
+  - If topic description is set - display the description below the breadcrumbs
+  - New class .tm-topic-desc which can be used to style the topic description display
+  - Consistency updates in how meta data was being populated
+  - Add topic description (if exists) as the og:description meta data when viewing index page by topic (Lee)
+  - Make album name in view media nav bar a link back to the album
+  - Do not allow emojis in usernames
+  - Improved error checking when retrieving group list for user
+  - Added missing comment_indent configuration option
+  - If 'Allow User Photo' was set to false, comments display had a broken image
+  - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
+  - Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
+  - mailto: links in user administration list were incorrect.
+  - New theme style class - .tm-list to allow more control over lists such as What's New or upcoming events
+
 ## v1.7.1 (October 22, 2017)
   - Don't override the label for User Menu in menu builder (Lee)
   - German Language updates from Matrox66

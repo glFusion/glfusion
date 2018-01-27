@@ -545,14 +545,14 @@ if ( isset($_POST['cancel'] ) ) {
     $pageTitle = $LANG03[14];
     $comment = '';
 
-    $comment = $_POST['comment_text'];
+    $comment = isset($_POST['comment_text']) ? $_POST['comment_text'] : '';
 
-    $type    = COM_applyFilter ($_POST['type']);
-    $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
-    $pid     = COM_applyFilter ($_POST['pid'],true);
-    $postmode = COM_applyFilter($_POST['postmode']);
-    $title   = strip_tags ($_POST['title']);
-    $mode    = COM_applyFilter($_POST['mode']);
+    $type    = isset($_POST['type']) ? COM_applyFilter ($_POST['type']) : '';
+    $sid     = isset($_POST['sid']) ? COM_sanitizeID(COM_applyFilter ($_POST['sid'])) : '';
+    $pid     = isset($_POST['pid']) ? COM_applyFilter ($_POST['pid'],true) : 0;
+    $postmode = isset($_POST['postmode']) ? COM_applyFilter($_POST['postmode']) : 'text';
+    $title   = isset($_POST['title']) ? strip_tags ($_POST['title']) : '';
+    $mode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
 
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
     $adminedit = isset($_POST['adminedit']) ? COM_applyFilter($_POST['adminedit']) : '';

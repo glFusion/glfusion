@@ -1,0 +1,3 @@
+{# begin {templatelocation} #}
+<span class="uk-badge {badge_css}">{dscp}</span>
+{# end {templatelocation} #}

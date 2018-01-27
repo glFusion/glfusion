@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -34,7 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.7.1');
+    define('GVERSION', '1.7.2');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -68,6 +68,10 @@ define('PATCHLEVEL','.pl0');
 //define('DEMO_MODE',true);
 
 //define('DVLP_DEBUG',true);
+
+if (!defined ('OPENSSL_RAW_DATA')) {
+    define('OPENSSL_RAW_DATA', 1);
+}
 
 /**
 * Turn this on to get various debug messages from the code in this library
@@ -133,7 +137,11 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
-
+@date_default_timezone_set($_CONF['timezone']);
+if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
+    setlocale( LC_TIME, $_CONF['locale'] );
+}
+require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
@@ -149,8 +157,6 @@ if ($pos === false) {
 } else {
     $_CONF['path_admin'] = $_CONF['path_html'] . substr ($adminurl, $pos + 1).'/';
 }
-
-@date_default_timezone_set('America/Chicago');
 
 $charset = COM_getCharset();
 if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
@@ -224,7 +230,6 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
-@date_default_timezone_set('America/Chicago');
 
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
@@ -239,7 +244,7 @@ $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
 /**
-* Initialize $_URL globa
+* Initialize $_URL global
 */
 
 $_URL = new url( $_CONF['url_rewrite'] );
@@ -299,7 +304,6 @@ require_once $_CONF['path_system'].'lib-glfusion.php';
 */
 
 require_once $_CONF['path_system'].'lib-plugins.php';
-
 
 /**
 * Multibyte functions
@@ -417,7 +421,7 @@ if ( isset( $_COOKIE[$_CONF['cookie_language']] ) ) {
 *
 */
 
-require_once $_CONF['path_language'] . $_CONF['language'] . '.php';
+include $_CONF['path_language'] . $_CONF['language'] . '.php';
 
 if (empty($LANG_DIRECTION)) {
     // default to left-to-right
@@ -610,12 +614,6 @@ if (empty($_IMAGE_TYPE)) {
 
 COM_switchLocaleSettings();
 
-if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
-    setlocale( LC_TIME, $_CONF['locale'] );
-}
-
-@date_default_timezone_set($_CONF['timezone']);
-
 /**
 * Global array of groups current user belongs to
 *
@@ -640,10 +638,14 @@ $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
 require_once $_CONF['path_system'].'lib-menu.php';
 
+// Set the current topic in both the global var and Topic class
+// during transition
 if ( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
+    Topic::setCurrent($_GET['topic']);
 } else if ( isset( $_POST['topic'] )) {
     $topic = COM_applyFilter( $_POST['topic'] );
+    Topic::setCurrent($_POST['topic']);
 } else {
     $topic = '';
 }
@@ -1358,6 +1360,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 break;
          }
     }
+
+    $jsFooter .= $outputHandle->renderFooter('script');
     $theme->set_var('js-footer',$jsFooter);
 
     $theme->set_var(array(
@@ -1832,7 +1836,10 @@ function COM_errorLog( $logentry, $actionid = '' )
     global $_CONF, $LANG01, $REMOTE_ADDR;
 
     $retval = '';
-    $timestamp = date('d M Y H:i:s');
+
+    $dt = new \Date('now',$_CONF['timezone']);
+    $timestamp = $dt->format("d M Y H:i:s T",true);
+
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
         $ipaddress = $REMOTE_ADDR;
@@ -1907,7 +1914,9 @@ function COM_accessLog( $logentry )
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
                                  $logentry );
 
-        $timestamp = strftime( '%c' );
+        $dt = new \Date('now',$_CONF['timezone']);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
+
         $logfile = $_CONF['path_log'] . 'access.log';
 
         if ( !$file = fopen( $logfile, 'a' )) {
@@ -2125,6 +2134,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         } else {
             $login->set_var( 'lang_signup', $LANG01[59] );
         }
+        PLG_templateSetVars('loginform', $login);
 
         // 3rd party remote authentication.
         if ($_CONF['user_login_method']['3rdparty'] && !$_CONF['usersubmission']) {
@@ -4459,12 +4469,6 @@ function COM_getYearFormOptions($selected = '', $startoffset = -1, $endoffset = 
     $cur_year    = date('Y', time());
     $finish_year = $cur_year + $endoffset;
 
-    if (!empty($selected)) {
-        if ($selected < $cur_year) {
-            $start_year = $selected;
-        }
-    }
-
     for ($i = $start_year; $i <= $finish_year; $i++) {
         $year_options .= '<option value="' . $i . '"';
 
@@ -6347,7 +6351,10 @@ function COM_404()
         if ( isset($_SERVER['HTTP_REFERER'])) {
             $refUrl = $_SERVER['HTTP_REFERER'];
         }
-        $timestamp = @strftime('%c');
+
+        $dt = new \Date('now',$_CONF['timezone']);
+        $timestamp = $dt->format("d M Y H:i:s T",true);
+
         $logEntry = "404 :: $byUser :: URL: $url";
         if (!empty($refUrl)) {
             $logEntry .= " :: Referer: $refUrl";
@@ -6709,7 +6716,7 @@ function CTL_clearCache($plugin='')
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 
-    if ( empty($plugin) ) {
+    if ( $plugin == '' || empty($plugin) ) {
         if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
             foreach (glob($_CONF['path_layout'].$_CONF['css_cache_filename']."*.*") as $filename) {
                 @unlink($filename);

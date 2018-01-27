@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1a30aac7545250e2653a99834bcca831",
-    "content-hash": "4650ab0bc4e58d7e537a6645e36f36d0",
+    "content-hash": "d480622be730f722a6cffd3a3d7d2b1e",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -43,7 +42,7 @@
             ],
             "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
             "homepage": "https://github.com/aziraphale/email-address-validator",
-            "time": "2015-01-03 12:17:43"
+            "time": "2015-01-03T12:17:43+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -90,7 +89,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03 02:28:16"
+            "time": "2017-06-03T02:28:16+00:00"
         },
         {
             "name": "geshi/geshi",
@@ -130,7 +129,7 @@
             ],
             "description": "Generic Syntax Highlighter",
             "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05 05:51:25"
+            "time": "2017-05-05T05:51:25+00:00"
         },
         {
             "name": "html2text/html2text",
@@ -167,7 +166,7 @@
                 "GPLv2"
             ],
             "description": "Converts HTML to formatted plain text",
-            "time": "2017-05-15 01:50:59"
+            "time": "2017-05-15T01:50:59+00:00"
         },
         {
             "name": "james-heinrich/getid3",
@@ -203,7 +202,7 @@
                 "php",
                 "tags"
             ],
-            "time": "2017-03-27 21:12:55"
+            "time": "2017-03-27T21:12:55+00:00"
         },
         {
             "name": "misd/linkify",
@@ -248,7 +247,7 @@
                 "link",
                 "url"
             ],
-            "time": "2017-08-17 08:33:35"
+            "time": "2017-08-17T08:33:35+00:00"
         },
         {
             "name": "openpsa/universalfeedcreator",
@@ -296,7 +295,7 @@
                 "pie",
                 "rss"
             ],
-            "time": "2017-05-18 08:28:48"
+            "time": "2017-05-18T08:28:48+00:00"
         },
         {
             "name": "phpclasses/httpclient",
@@ -439,7 +438,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-08-28 11:12:07"
+            "time": "2017-08-28T11:12:07+00:00"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
@@ -490,7 +489,58 @@
                 "webservices",
                 "xmlrpc"
             ],
-            "time": "2017-09-03 19:15:39"
+            "time": "2017-09-03T19:15:39+00:00"
+        },
+        {
+            "name": "robthree/twofactorauth",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobThree/TwoFactorAuth.git",
+                "reference": "a77e7d822343bb88112baef808839cfae7bc5abb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/a77e7d822343bb88112baef808839cfae7bc5abb",
+                "reference": "a77e7d822343bb88112baef808839cfae7bc5abb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RobThree\\Auth\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Janssen",
+                    "homepage": "http://robiii.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Two Factor Authentication",
+            "homepage": "https://github.com/RobThree/TwoFactorAuth",
+            "keywords": [
+                "Authentication",
+                "MFA",
+                "Multi Factor Authentication",
+                "Two Factor Authentication",
+                "authenticator",
+                "authy",
+                "php",
+                "tfa"
+            ],
+            "time": "2017-11-06T17:55:56+00:00"
         },
         {
             "name": "simplepie/simplepie",
@@ -550,7 +600,7 @@
                 "feeds",
                 "rss"
             ],
-            "time": "2017-04-17 07:29:31"
+            "time": "2017-04-17T07:29:31+00:00"
         },
         {
             "name": "splitbrain/php-archive",
@@ -601,7 +651,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2017-06-11 06:11:38"
+            "time": "2017-06-11T06:11:38+00:00"
         }
     ],
     "packages-dev": [],

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion story administration page.                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -154,6 +154,12 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',"tid = '".DB_escapeString($A['tid'])."'");
             }
             $retval = $topics[$A['tid']];
+            break;
+        case 'alternate_tid' :
+            if (!isset ($topics[$A['alternate_tid']])) {
+                $topics[$A['alternate_tid']] = DB_getItem ($_TABLES['topics'], 'topic',"tid = '".DB_escapeString($A['alternate_tid'])."'");
+            }
+            $retval = $topics[$A['alternate_tid']];
             break;
 
         case "draft_flag":
@@ -494,7 +500,8 @@ function STORY_list()
     $header_arr[] = array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false, 'align' => 'center', 'width' => '35px');
     $header_arr[] = array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true);
     $header_arr[] = array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true);
-    $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center');
+    $header_arr[] = array('text' => $LANG_ADMIN['alt_topic'], 'field' => 'alternate_tid', 'sort' => true);
+//    $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[34], 'field' => 'draft_flag', 'sort' => true, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[32], 'field' => 'featured', 'sort' => true, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[7], 'field' => 'username', 'sort' => true); //author
@@ -545,7 +552,7 @@ function STORY_list()
     $query_arr = array(
         'table' => 'stories',
         'sql' => $sql,
-        'query_fields' => array('title', 'introtext', 'bodytext', 'sid', 'tid'),
+        'query_fields' => array('title', 'introtext', 'bodytext', 'sid', 'tid', 'alternate_tid'),
         'default_filter' => $excludetopics . COM_getPermSQL ('AND')
     );
 
@@ -834,8 +841,9 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     $day_options = COM_getDayFormOptions($story->EditElements('publish_day'));
     $story_templates->set_var('publish_day_options', $day_options);
+    $goBack = ((int) date('Y', time()) - 2000) * -1;
 
-    $year_options = COM_getYearFormOptions($story->EditElements('publish_year'));
+    $year_options = COM_getYearFormOptions($story->EditElements('publish_year'),$goBack);
     $story_templates->set_var('publish_year_options', $year_options);
 
     if ($_CONF['hour_mode'] == 24) {

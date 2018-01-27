@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2017 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -44,6 +44,7 @@ $LANG_BAD_BEHAVIOR = array (
     'auto_refresh_on'           => 'Auto Refresh On',
     'automatic_captcha'         => 'Automatically Added (CAPTCHA)',
     'automatic_token'           => 'Automatically Added (Token)',
+    'automatic_hp'              => 'Automatically Added (Spam-X)',
     'back_to_search'            => 'Back to Search List',
     'ban_ip'                    => 'Ban IPs',
     'ban_list_info'             => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans will expire after the timeout period.',
@@ -169,6 +170,7 @@ $LANG_BB2_RESPONSE = array (
     '136673cd' => 'IP address found on external blacklist',
     '17566707' => 'Required header \'Accept\' missing',
     '17f4e8c8' => 'User-Agent was found on blacklist',
+    '17f4e8c9' => 'Referer was found on blacklist',
     '21f11d3f' => 'User-Agent claimed to be AvantGo, claim appears false',
     '2b021b1f' => 'IP address found on http:BL blacklist',
     '2b90f772' => 'Connection: TE present, not supported by MSIE',

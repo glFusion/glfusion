@@ -5,7 +5,7 @@
 		<head>
 			<meta charset="{charset}">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title>{$LANG_GF02[msg145]}</title>
+			<title>{$LANG_GF02['msg145']}</title>
 			<link rel="shortcut icon" href="{layout_url}/images/favicon.ico" type="image/x-icon">
 			<link rel="apple-touch-icon-precomposed" href="{layout_url}/images/apple-touch-icon.png">
 			<link rel="stylesheet" type="text/css" href="{csslink}">
@@ -14,12 +14,16 @@
 		<body class="sitebody">
 {!endif}
 {!if full}
-	<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 	<script type="text/javascript">
 		var site_url = '{site_url}';
 	</script>
+	<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
 	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
+	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_vote.js"></script>
+{!if likes_enabled}
+	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_like.js"></script>
+{!endif}
 {!endif}
 	<script>
 		$(document).ready(function(){
@@ -60,10 +64,20 @@
 			});
 		});
 	</script>
+	<style>
+		.uk-nav-dropdown > li > button:hover {
+		  width:100%;
+		  text-align:left;
+		  background: #00a8e6;
+		  color: #fff;
+		  /* 2 */
+		  outline: none;
+		}
+	</style>
 	<div class="tm-forum-wrapper uk-margin-bottom">
 {!if full}
 		<div class="uk-grid">
-			<div class="uk-width-medium-1-1">
+			<div class="uk-width-medium-2-3">
 				<ul class="uk-breadcrumb uk-margin-remove" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
 					<li><i class="uk-icon-home"></i></li>
 					<li><a href="{site_url}/forum/index.php" itemprop="url"><span itemprop="title">{forum_home}</span></a></li>
@@ -71,12 +85,32 @@
 					<li class="uk-active"><a href="{site_url}/forum/index.php?forum={forum_id}" itemprop="url"><span itemprop="title">{forum_name}</span></a></li>
 				</ul>
 			</div>
+
+			<div class="uk-width-medium-1-3">
+				<div class="uk-text-right">
+					<a class="uk-button uk-button-small" href="{printlink}" rel="nofollow" target="_blank" rel="noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;&nbsp;{$LANG_GF01[PRINT]}</a>
+  {!if notifylink}
+					<a class="uk-button uk-button-small" id="subscribe-link" href="{notifylink}" rel="nofollow">
+						<input type="hidden" id="forum_id" value="{forum}">
+						<input type="hidden" id="suboption" value="{suboption}">
+						<input type="hidden" id="topic_id" value="{topic_id}">
+						<input type="hidden" id="notify_id" value="{notify_id}">
+	  {!if topic_subscribed}
+						<i id="subscribe-icon" class="uk-icon-bookmark" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
+	  {!else}
+						<i id="subscribe-icon" class="uk-icon-bookmark-o" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
+	  {!endif}
+					</a>
+  {!endif}
+				</div>
+			</div>
+
 		</div>
 
 	{!if locked}
-					<div class="uk-alert uk-alert-warning uk-width-1-1 uk-margin-small">
-						{locked_topic_msg}
-					</div>
+		<div class="uk-alert uk-alert-warning uk-width-1-1 uk-margin-small">
+			{locked_topic_msg}
+		</div>
 	{!endif}
 		<div class="uk-grid uk-margin-small-top">
 			<div class="uk-width-1-1 uk-margin-small">
@@ -93,29 +127,6 @@
 					</a>
 		{!endif}
 
-					<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-						<button class="uk-button uk-button-small"><i class="uk-icon-cog"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
-						<div class="uk-dropdown uk-dropdown-small">
-							<ul class="uk-nav uk-nav-dropdown">
-								<li><a href="{printlink}" rel="nofollow" target="_blank" rel="noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;{$LANG_GF01[PRINTABLE]}</a></li>
-		{!if notifylink}
-								<li>
-									<a id="subscribe-link" href="{notifylink}" rel="nofollow">
-										<input type="hidden" id="forum_id" value="{forum}">
-										<input type="hidden" id="suboption" value="{suboption}">
-										<input type="hidden" id="topic_id" value="{topic_id}">
-										<input type="hidden" id="notify_id" value="{notify_id}">
-			{!if topic_subscribed}
-										<i id="subscribe-icon" class="uk-icon-bookmark" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
-			{!else}
-										<i id="subscribe-icon" class="uk-icon-bookmark-o" title="{LANG_notify}"></i>&nbsp;<span id="subscribe-text">{LANG_notify}</span>
-			{!endif}
-									</a>
-								</li>
-		{!endif}
-							</ul>
-						</div>
-					</div>
 	{!endif}
 				</div> {# end of reply link #}
 
@@ -132,55 +143,83 @@
 
 {!if iframe}
 		<div class="topic-navigation">
-			&nbsp;<strong>{$LANG_GF02[msg145]}</strong>
+			&nbsp;<strong>{$LANG_GF02['msg145']}</strong>
 		</div>
 {!endif}
 
 			{# start of the topics #}
 
 			<!-- BEGIN topicrow -->
-
-{!!if {csscode} == 2 !!}
-			{!!set panelrow "uk-panel-box-secondary" !!}
+{!if is_online}
+	{!!set online_icon "uk-icon-toggle-on uk-text-success" !!}
 {!else}
-			{!!set panelrow "" !!}
+	{!!set online_icon "uk-icon-toggle-off uk-text-muted" !!}
+{!endif}
+{!!if {csscode} == 2 !!}
+	{!!set panelrow "uk-panel-box-secondary" !!}
+{!else}
+	{!!set panelrow "" !!}
 {!endif}
 
+{!!set tooltip "data-uk-tooltip=\"{delay:'300'}\"" !!}
+{!!set positive_rating "plus-circle" !!}
+{!!set negative_rating "minus-circle" !!}
+{!!set like_icon "thumbs-up" !!}
+{!!set unlike_icon "thumbs-down" !!}
 			<a id="{topic_id}"></a>
 			<div class="uk-panel-box uk-margin-bottom {panelrow}" itemscope itemtype="http://schema.org/DiscussionForumPosting">
 				<div class="uk-grid">
 					<div class="uk-width-1-1">
+						<div class="uk-grid uk-clearfix">
+							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
+								<div class="uk-align-leftXX uk-text-left uk-text-large uk-margin-bottom-remove uk-text-truncate">
+									<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" {tooltip}>{prefix}
+										<span itemprop="headline">{subject}</span>
+									</a>
+								</div>
+							<div class="forum_author_line uk-margin-bottom">
 
-						<div class="uk-align-left uk-text-left uk-text-large uk-margin-bottom-remove">
-							<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{prefix}<span itemprop="headline">{subject}</span></a>
-						</div>
+								<span class="uk-hidden-medium uk-hidden-large">
 
-						<div class="uk-align-right uk-text-right uk-margin-bottom-remove uk-hidden-small">
-							{mod_functions}
-						</div>
-						<div class="uk-clearfix"></div>
-						<div class="forum_author_line uk-margin-bottom">
-							<a class="btn" title="{$LANG_GF02[copy_to_clipboard]}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
-								<i class="uk-icon-clipboard uk-icon-hidden-small uk-icon-hover"></i>
+									{$LANG_GF01[BY]} <span itemprop="author">
+{!if profilelink}
+									<a href="{profilelink}" class="authorname"><b>{user_name}</b></a>
+{!else}
+									<b>{user_name}</b>
+{!endif}
+								</span>
+{!if onlinestatus}
+								<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
+{!endif}
+{!if likes_enabled}
+								<span class="uk-text-small">{liked_times}</span>
+{!endif}
+							</span>
+<div>
+							<a class="btn" {tooltip} title="{$LANG_GF02['copy_to_clipboard']}" data-clipboard-text="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}">
+								<i class="uk-icon uk-icon-mini uk-icon-clipboard uk-hidden-small uk-icon-hover"></i>
 							</a>
-							{$LANG_GF01[BY]} <span itemprop="author">{userlink}</span> {!if onlinestatus}({onlinestatus}){!endif}&nbsp;<span class="uk-text-small">{$LANG_GF01[ON3]}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+
+							<span class="uk-text-small">{$LANG_GF01['ON3']}&nbsp;<span itemprop="datePublished" content="{iso8601_date}">{posted_date}</span>&nbsp;{read_msg}&nbsp;{locked_icon}</span>
+
 {!if bookmark_icon}
 	{!if bookmarked}
-							<i title="{$LANG_GF02[msg204]}" class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02['msg204']}" {tooltip} class="tm-forum-bookmark uk-icon-star" id="bm{topic_id}"></i>
 	{!else}
-							<i title="{$LANG_GF02[msg203]}" class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
+							<i title="{$LANG_GF02['msg203']}" {tooltip} class="tm-forum-bookmark uk-icon-star-o" id="bm{topic_id}"></i>
 	{!endif}
 {!endif}
+</div>
 						</div> {# end of forum_author_line #}
-						<div class="uk-grid">
-							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
 								<div class="uk-text-break topic_comment_area">
 									<div itemprop="articleBody">{topic_comment}</div>
 									<div class="uk-clearfix">{attachments}</div>
 {!if sig}
 									<div class="uk-text-muted uk-clearfix" style="overflow:hidden;">
 										<hr style="width:50%;" class="uk-align-left uk-text-left uk-clearfix">
-										<div style="clear:both;"></div>{sig}
+										<div style="clear:both;"></div>
+										<div class="signature">{sig}</div>
+										<div style="clear:both;"></div>
 									</div> {# end of signature #}
 {!endif}
 								</div> {# end of comment area #}
@@ -193,7 +232,7 @@
 							<div class="uk-width-medium-2-10 uk-hidden-small uk-align-center uk-text-center" style="border-left:1px solid #ccc;">
 								<div class="uk-thumbnail uk-overlay-toggle">
 									<div class="uk-overlay">
-										{avatar}
+										<img src="{avatar}" alt="" title="" class="forum-userphoto" style="width:{avatar_width}px;"/>
 										<div class="uk-overlay-area">
 											<div class="uk-overlay-area-content">
 {!if profilelink}
@@ -223,74 +262,181 @@
 										</div>
 									</div>
 								</div>
+{!if !is_anon}
 {!if user_level}
 								<div class="uk-text-muted uk-text-small">
-									{user_level}<br>
-									{user_levelname}
+									{user_level}
 								</div>
 {!endif}
-								<h4 class="uk-margin-bottom-remove uk-margin-small-top">
-{!if profilelink}
-									<a href="{profilelink}" class="authorname">
 {!endif}
-										<b>{user_name}</b>
+								<span itemprop="author">
+									<h4 class="uk-margin-bottom-remove uk-margin-small-top">
 {!if profilelink}
-									</a>
+										<a href="{profilelink}" class="authorname">
 {!endif}
-								</h4>
+											{user_name}
+{!if profilelink}
+										</a>
+{!endif}
+{!if onlinestatus}
+										<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
+{!endif}
+									</h4>
+								</span>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
-									{magical_image}
-									<div>{vote_html}</div>
-{!if regdate}
-									<div>{$LANG_GF01[REGISTERED]}:: {regdate}</div>
-{!endif}
-{!if numposts}
-									<div>{$LANG_GF01[POSTS]}: {numposts}</div>
-{!endif}
-									{grade}
-{!if location}
-									<div><strong>{$LANG_GF04[label_location]}: </strong>{location}</div>
-{!endif}
-{!if ipaddress}
+{!if moodimage}
 									<div>
-										{ipaddress}
+										<img src="{moodimage}" title="{moodtitle}" alt="{moodtitle}" {tooltip}/>
 									</div>
 {!endif}
+									<div style="text-align:center;margin-top:5px;">
+{!if can_vote}
+										{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
+										<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" {tooltip} title="{vote_lang}">
+											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;">
+												<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
+											</a>
+										</span>
+
+										<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
+											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
+												<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
+											</a>
+										</span>
+{!else}
+{!if !is_anon}
+{!if user_rep}
+										{$LANG_GF01['grade']}: {user_rep}
+{!endif}
+{!endif}
+{!endif}
+
+{!if likes_enabled}
+										<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
+{!endif}
+
+{!if regdate}
+										<div>{$LANG_GF01['REGISTERED']}: {regdate}</div>
+{!endif}
+
+{!if numposts}
+										<div>{$LANG_GF01['POSTS']}: {numposts}</div>
+{!endif}
+
+{!if location}
+										<div>{$LANG_GF04['label_location']}: {location}</div>
+{!endif}
+
+{!if ipaddress}
+										<div>{ipaddress}</div>
+{!endif}
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="uk-grid">
-{!if last_edited}
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
-								<span class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02[last_edited]} {last_edited}</span>
-							</div>
-{!else}
-							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left"></div>
+{!if likes_enabled}
+								<span id="likes_text_{topic_id}" class="uk-text-primary uk-clearfix" style="overflow:hidden;font-style:italic;">
+									{likes_text}
+								</span>
 {!endif}
+
+{!if last_edited}
+								<div class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</div>
+{!endif}
+							</div>
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
-								<div class="bottom_meta">
-									{!if editlink}
+								<div class="bottom_meta" style="width:100%;">
+{!if can_like}
+									<span style="display:{unlike_vis}" id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
+										<a class="uk-button uk-button-danger uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
+											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" alt="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
+										</a>
+									</span>
+									<span style="display:{like_vis}" id="like_{topic_id}_{topic_uid}" {tooltip} title="{like_tooltip}">
+										<a class="uk-button uk-button-success uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},1);return false;">
+											<i class="uk-icon uk-icon-{like_icon} uk-icon-small" alt="plus"></i>&nbsp;{$LANG_GF01['like']}
+										</a>
+									</span>
+{!endif}
+
+{!if editlink}
 									<a href="{editlink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
-										<i class="uk-icon-edit"></i>&nbsp;{$LANG_GF01[EDITICON]}
+										<i class="uk-icon-edit"></i>&nbsp;{$LANG_GF01['EDITICON']}
 									</a>
 {!endif}
 {!if quotelink}
 									<a href="{quotelink}" rel="nofollow" class="uk-button uk-button-mini uk-button-primary">
-										<i class="uk-icon-mail-reply"></i>&nbsp;{$LANG_GF01[QUOTEICON]}
+										<i class="uk-icon-mail-reply"></i>&nbsp;{$LANG_GF01['QUOTEICON']}
 									</a>
+{!endif}
+{!if has_mod_perms}
+									<div class="uk-align-right" style="margin-left:2px;">
+										<form id="modform_{topic_id}" class="uk-form uk-margin-remove" action="{site_url}/forum/moderation.php" method="post">
+											<input type="hidden" name="topic_id" value="{topic_id}">
+											<input type="hidden" name="forum_id" value="{forum_id}">
+											<input type="hidden" name="topic_parent_id" value="{topic_parent_id}">
+											<input type="hidden" name="top" value="no">
+											<input type="hidden" name="page" value="{page}">
+											<div class="uk-button-dropdown uk-text-left" data-uk-dropdown="{mode:'click'}">
+												<button type="button" class="uk-button uk-button-mini"><i class="uk-icon-cog uk-icon-mini"></i>&nbsp;<i class="uk-icon-caret-down"></i></button>
+												<div class="uk-dropdown uk-dropdown-small uk-dropdown-bottom">
+													<ul class="uk-nav ff-uk-nav uk-nav-dropdown uk-text-left">
+{!if mod_edit}
+														<li>
+															<button name="modfunction" value="editpost" ><i class="uk-icon uk-icon-edit"></i>&nbsp;{$LANG_GF03['edit']}</button>
+														</li>
+{!endif}
+{!if mod_delete}
+														<li>
+															<button name="modfunction" value="deletepost"><i class="uk-icon uk-icon-trash-o"></i>&nbsp;{$LANG_GF03['delete']}</button>
+														</li>
+{!endif}
+{!if mod_ban}
+														<li>
+															<button name="modfunction" value="banip">
+																<i class="uk-icon uk-icon-ban"></i>&nbsp;{$LANG_GF03['ban']}
+															</button>
+														</li>
+{!endif}
+{!if mod_move}
+	{!if topic_parent_id}
+														<li>
+															<button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-expand"></i>&nbsp;{$LANG_GF03['split']}</button>
+														</li>
+														<li>
+															<button name="modfunction" value="mergetopic"><i class="uk-icon uk-icon-compress"></i>&nbsp;{$LANG_GF03['merge_post']}</button>
+														</li>
+	{!else}
+														<li>
+															<button name="modfunction" value="movetopic"><i class="uk-icon uk-icon-share"></i>&nbsp;{$LANG_GF03['move']}</button>
+														</li>
+														<li>
+															<button name="modfunction" value="mergetopic"><i class="uk-icon uk-icon-compress"></i>&nbsp;{$LANG_GF03['merge_topic']}</button>
+														</li>
+	{!endif}
+{!endif}
+{!if mod_lock}
+														<li>
+															<button name="modfunction" value="locktopic"><i class="uk-icon uk-icon-lock"></i>&nbsp;{$LANG_GF03['lock_topic']}</button>
+														</li>
+{!endif}
+{!if mod_unlock}
+														<li>
+															<button name="modfunction" value="unlocktopic"><i class="uk-icon uk-icon-unlock"></i>&nbsp;{$LANG_GF03['unlock_topic']}</button>
+														</li>
+{!endif}
+													</ul>
+												</div>
+											</div>
+										</form>
+									</div>
 {!endif}
 								</div> {# end of bottom meta #}
 							</div> {# end of bottom line 1/1 #}
 						</div> {# end of uk-grid #2 #}
-
-						<div class="uk-grid uk-margin-small uk-visible-small">
-							<div class="uk-width-1-1 uk-visible-small">
-								<div class="uk-align-right uk-text-right uk-margin-remove uk-visible-small">
-									{mod_functions}
-								</div>
-							</div>
-						</div>
 
 					</div> {# end of uk-margin 1 - 1 #}
 				</div> {# end of uk-grid main #}
@@ -331,7 +477,7 @@
 	var clipboard = new Clipboard('.btn');
 	clipboard.on('success', function(e) {
 		e.clearSelection();
-		UIkit.notify('{$LANG_GF02[post_ctc]}',{timeout: 300});
+		UIkit.notify('{$LANG_GF02['post_ctc']}',{timeout: 300});
 	});
 </script>
 {!endif} {# else frame #}

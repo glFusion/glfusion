@@ -46,8 +46,8 @@ $_FF_CONF = array();
 
 $_FF_CONF['pi_name']            = 'forum';
 $_FF_CONF['pi_display_name']    = 'Forum';
-$_FF_CONF['pi_version']         = '3.3.5';
-$_FF_CONF['gl_version']         = '1.7.0';
+$_FF_CONF['pi_version']         = '3.4.0';
+$_FF_CONF['gl_version']         = '1.7.2';
 $_FF_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 $_TABLES['ff_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
@@ -62,4 +62,8 @@ $_TABLES['ff_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
 $_TABLES['ff_attachments']  = $_DB_table_prefix . 'forum_attachments';
 $_TABLES['ff_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 $_TABLES['ff_rating_assoc']	= $_DB_table_prefix . 'forum_rating_assoc';
+$_TABLES['ff_badges']       = $_DB_table_prefix . 'forum_badges';
+$_TABLES['ff_ranks']        = $_DB_table_prefix . 'forum_ranks';
+$_TABLES['ff_likes_assoc']  = $_DB_table_prefix . 'forum_likes_assoc';
+
 ?>

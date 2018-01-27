@@ -59,7 +59,7 @@ class EditIP extends BaseAdmin {
             if (!empty($entry)) {
                 $entry = str_replace(' ', '', $entry);
                 $entry = DB_escapeString($entry);
-                $result = DB_query("INSERT INTO {$_TABLES['spamx']} VALUES ('IP', '$entry')");
+                $result = DB_query("INSERT INTO {$_TABLES['spamx']} (name,value) VALUES ('IP', '$entry')");
             }
         }
 

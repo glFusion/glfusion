@@ -107,87 +107,7 @@ if (!defined('CSRF_TOKEN')) {
 */
 function SEC_getUserGroups($uid='')
 {
-    global $_TABLES, $_USER, $_SEC_VERBOSE;
-    static $runonce = array();
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("****************in getusergroups(uid=$uid,usergroups=$usergroups,cur_grp_id=$cur_grp_id)***************",1);
-    }
-    $cache = false;
-    $groups = array();
-
-    if (empty($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    } else {
-        $uid = (int) $uid;
-    }
-    if ($uid > 0 ) $cache = true;
-
-    if (array_key_exists($uid, $runonce)) {
-        return $runonce[$uid];
-    }
-//    if ( $cache && SESS_isSet('glfusion.user_groups.'.$uid) ) {
-//        return unserialize(SESS_getVar('glfusion.user_groups.'.$uid));
-//    }
-
-    $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES['group_assignments']},{$_TABLES['groups']}"
-            . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".(int) $uid,1);
-
-    if ($result == FALSE) {
-        $runonce[$uid] = $groups;
-        return $groups;
-    }
-
-    $nrows = DB_numRows($result);
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("got $nrows rows",1);
-    }
-
-    while ($nrows > 0) {
-        $cgroups = array();
-
-        for ($i = 1; $i <= $nrows; $i++) {
-            $A = DB_fetchArray($result);
-
-            if ($_SEC_VERBOSE) {
-                COM_errorLog('user is in group ' . $A['grp_name'],1);
-            }
-            if (!in_array($A['ug_main_grp_id'], $groups)) {
-                array_push($cgroups, $A['ug_main_grp_id']);
-                $groups[ucfirst($A['grp_name'])] = $A['ug_main_grp_id'];
-            }
-        }
-
-        if (sizeof ($cgroups) > 0) {
-            $glist = join(',', $cgroups);
-            $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES["group_assignments"]},{$_TABLES["groups"]}"
-                    . " WHERE grp_id = ug_main_grp_id AND ug_grp_id IN ($glist)",1);
-            $nrows = DB_numRows($result);
-        } else {
-            $nrows = 0;
-        }
-
-    }
-    if ( count($groups) == 0 ) {
-        $groups = array('All Users' => 2);
-    }
-
-    ksort($groups);
-
-    if ($_SEC_VERBOSE) {
-        COM_errorLog("****************leaving getusergroups(uid=$uid)***************",1);
-    }
-
-    $runonce[$uid] = $groups;
-//    if ( $cache ) {
-//        SESS_setVar('glfusion.user_groups.'.$uid,serialize($groups) );
-//    }
-    return $groups;
+    return \Group::getAll($uid);
 }
 
 /**
@@ -243,44 +163,7 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 */
 function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
 {
-    global $_TABLES, $_USER, $_SEC_VERBOSE, $_GROUPS;
-
-    if (empty ($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    }
-
-    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
-        if (empty ($_GROUPS)) {
-            $_GROUPS = SEC_getUserGroups ($uid);
-        }
-        $groups = $_GROUPS;
-    } else {
-        $groups = SEC_getUserGroups ($uid);
-    }
-    if (is_numeric($grp_to_verify)) {
-        if (in_array($grp_to_verify, $groups)) {
-           return true;
-        } else {
-           return false;
-        }
-    } else {
-        // perform case-insensitive comparison
-        $lgroups = array();
-        foreach ($groups as $key => $value) {
-            $lkey = strtolower($key);
-            $lgroups[$lkey] = $value;
-        }
-        $grp_to_verify = strtolower($grp_to_verify);
-        if (!empty($lgroups[$grp_to_verify])) {
-            return true;
-        } else {
-            return false;
-        }
-   }
+    return \Group::inGroup($grp_to_verify, $uid);
 }
 
 /**
@@ -611,11 +494,15 @@ function SEC_getUserPermissions($grp_id='',$uid='')
         $groups = SEC_getUserGroups ($uid);
     }
 
-    $glist = join(',', $groups);
-    $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
-                     . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
+    if ( count($groups) > 0 ) {
+        $glist = join(',', $groups);
+        $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
+                         . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
 
-    $nrows = DB_numrows($result);
+        $nrows = DB_numrows($result);
+    } else  {
+        $nrows = 0;
+    }
     for ($j = 1; $j <= $nrows; $j++) {
         $A = DB_fetchArray($result);
         if ($_SEC_VERBOSE) {
@@ -746,40 +633,8 @@ function SEC_getPermissionValue($perm_x)
 */
 function SEC_getFeatureGroup ($feature, $uid = '')
 {
-    global $_GROUPS, $_TABLES, $_USER;
-
-    $ugroups = array ();
-
-    if (empty ($uid)) {
-        if (COM_isAnonUser()) {
-            $uid = 1;
-        } else {
-            $uid = $_USER['uid'];
-        }
-    }
-
-    if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
-        if (empty ($_GROUPS)) {
-            $_GROUPS = SEC_getUserGroups ($uid);
-        }
-        $ugroups = $_GROUPS;
-    } else {
-        $ugroups = SEC_getUserGroups ($uid);
-    }
-
-    $group = 0;
-
-    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '".DB_escapeString($feature)."'");
-    if (($ft_id > 0) && (sizeof ($ugroups) > 0)) {
-        $grouplist = implode (',', $ugroups);
-        $result = DB_query ("SELECT acc_grp_id FROM {$_TABLES['access']} WHERE (acc_ft_id = $ft_id) AND (acc_grp_id IN ($grouplist)) ORDER BY acc_grp_id LIMIT 1");
-        $A = DB_fetchArray ($result);
-        if (isset ($A['acc_grp_id'])) {
-            $group = $A['acc_grp_id'];
-        }
-    }
-
-    return $group;
+    $grpFeature = \Group::withFeature($feature, $uid);
+    return $grpFeature[0];
 }
 
 
@@ -905,7 +760,7 @@ function SEC_authenticate($username, $password, &$uid)
         }
     } else {
         $tmp = $LANG01[32] . ": '" . $username;
-        COM_errorLog($tmp, 1);
+//        COM_errorLog($tmp, 1);
         return -1;
     }
 }
@@ -1265,7 +1120,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
 
     static $_tokenKey;
 
-    if ( $ttl == -1 ) {
+    if ( $ttl == -1 || COM_isAnonUser() ) {
         $tokenKey = '';
         return;
     }
@@ -1321,11 +1176,17 @@ function SEC_createToken($ttl = TOKEN_TTL)
 */
 function SEC_checkToken()
 {
-    global $_CONF, $LANG20, $LANG_ADMIN;
+    global $_CONF, $_USER, $LANG20, $LANG_ADMIN;
 
     if (_sec_checkToken()) {
         SEC_createToken(-1);
         return true;
+    }
+
+    if ( COM_isAnonUser() ) return false;
+
+    if ( !SEC_isLocalUser($_USER['uid']) ) {
+        return false;
     }
 
     // determine the destination of this request
@@ -1390,6 +1251,8 @@ function _sec_checkToken($ajax=0)
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
+
+    if ( COM_isAnonUser() ) return true;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REMOTE_ADDR'];
@@ -2195,4 +2058,198 @@ function SEC_collectRemoteOAuthModules()
     }
     return $modules;
 }
+
+function SEC_validate2FACode($code)
+{
+    global $_USER;
+    $tfa = \TwoFactor::getInstance($_USER['uid']);
+    return $tfa->validateCode($code);
+}
+
+/**
+* Displays the Two Factor Auth token entry form
+*
+* @return   no return
+*
+*/
+function SEC_2FAForm($uid)
+{
+    global $_CONF, $_USER, $LANG_TFA;
+
+    $retval = '';
+
+    $T = new Template($_CONF['path_layout'] . 'users');
+    $T->set_file('tfa', 'tfa-entry-form.thtml');
+
+    $T->set_var(array(
+        'uid'           => $uid,
+        'token_name'    => CSRF_TOKEN,
+        'token_value'   => SEC_createToken(),
+        'lang_two_factor'   => $LANG_TFA['two_factor'],
+        'lang_auth_code'    => $LANG_TFA['auth_code'],
+        'lang_verify'       => $LANG_TFA['verify'],
+    ));
+
+    $T->parse('output', 'tfa');
+
+    $retval .= $T->finish($T->get_var('output'));
+
+    $display = COM_siteHeader();
+    $display .= $retval;
+    $display .= COM_siteFooter();
+    echo $display;
+    exit;
+}
+
+/**
+* Checks password complexity to ensure it meets the configured rules
+*
+* @return   array of errors or empty array if no errors
+*
+*/
+function SEC_checkPwdComplexity($pwd)
+{
+    global $_CONF, $LANG_PWD;
+
+    $errors = array();
+
+    if ((!isset($_CONF['pwd_min_length'])  || $_CONF['pwd_min_length'] == 0) &&
+        (!isset($_CONF['pwd_max_length'])  || $_CONF['pwd_max_length'] == 0 ) &&
+        (!isset($_CONF['pwd_req_num'])     || $_CONF['pwd_req_num']    == 0 ) &&
+        (!isset($_CONF['pwd_req_letter'])  || $_CONF['pwd_req_letter'] == 0 ) &&
+        (!isset($_CONF['pwd_req_cap'])     || $_CONF['pwd_req_cap']    == 0 ) &&
+        (!isset($_CONF['pwd_req_lower'])   || $_CONF['pwd_req_lower']  == 0 ) &&
+        (!isset($_CONF['pwd_req_symbol'])  || $_CONF['pwd_req_symbol'] == 0 )
+        ) {
+        return array();
+    }
+
+    if ( isset($_CONF['pwd_min_length']) && $_CONF['pwd_min_length'] > 0 ) {
+        if ( strlen($pwd) < $_CONF['pwd_min_length'] ) {
+           $errors[] = $LANG_PWD['error_too_short'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_max_length']) && $_CONF['pwd_max_length'] > 0 ) {
+        if ( strlen($pwd) > $_CONF['pwd_max_length'] ) {
+            $errors[] = $LANG_PWD['error_too_long'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_num']) && $_CONF['pwd_req_num'] == 1 ) {
+        if ( !preg_match("#[0-9]+#", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_number'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_letter']) && $_CONF['pwd_req_letter'] == 1) {
+        if ( !preg_match("/[A-za-z]+/", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_letter'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_cap']) && $_CONF['pwd_req_cap'] == 1) {
+        if ( !preg_match('/[A-Z]/', $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_cap'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_lower']) && $_CONF['pwd_req_lower'] == 1) {
+        if ( !preg_match('/[a-z]/', $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_lower'];
+        }
+    }
+
+    if ( isset($_CONF['pwd_req_symbol']) && $_CONF['pwd_req_symbol'] == 1 ) {
+        if ( !preg_match("#\W+#", $pwd) ) {
+            $errors[] = $LANG_PWD['error_no_symbol'];
+        }
+    }
+
+    return $errors;
+}
+
+/**
+* Builds the password requirements help widget
+*
+* @return   HTML
+*
+*/
+function SEC_showPasswordHelp()
+{
+    global $_CONF, $LANG_PWD;
+
+    $retval = '';
+
+    if ((!isset($_CONF['pwd_min_length'])  || $_CONF['pwd_min_length'] == 0) &&
+        (!isset($_CONF['pwd_max_length'])  || $_CONF['pwd_max_length'] == 0 ) &&
+        (!isset($_CONF['pwd_req_num'])     || $_CONF['pwd_req_num']    == 0 ) &&
+        (!isset($_CONF['pwd_req_letter'])  || $_CONF['pwd_req_letter'] == 0 ) &&
+        (!isset($_CONF['pwd_req_cap'])     || $_CONF['pwd_req_cap']    == 0 ) &&
+        (!isset($_CONF['pwd_req_lower'])   || $_CONF['pwd_req_lower']  == 0 ) &&
+        (!isset($_CONF['pwd_req_symbol'])  || $_CONF['pwd_req_symbol'] == 0 )
+        ) {
+        return '';
+    }
+
+    $retval .= '<strong>'.$LANG_PWD['title'].'</strong>';
+    $retval .= '<br>';
+
+    if ( $_CONF['pwd_min_length'] > 0 ) {
+        $retval .= sprintf('<li>'.$LANG_PWD['min_length'].'</li>',$_CONF['pwd_min_length']);
+    }
+    if ( $_CONF['pwd_max_length'] > 0 ) {
+        $retval .= sprintf('<li>'.$LANG_PWD['max_length'].'</li>',$_CONF['pwd_max_length']);
+    }
+    if ( $_CONF['pwd_req_num'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_num'].'</li>';
+    }
+    if ( $_CONF['pwd_req_letter'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_letter'].'</li>';
+    }
+    if ( $_CONF['pwd_req_cap'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_cap'].'</li>';
+    }
+    if ( $_CONF['pwd_req_lower'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_lower'].'</li>';
+    }
+    if ( $_CONF['pwd_req_symbol'] > 0 ) {
+        $retval .= '<li>'.$LANG_PWD['req_symbol'].'</li>';
+    }
+    $retval .'</ul>';
+    return $retval;
+}
+
+/**
+* Generate random password
+*
+* @return   string
+*
+*/
+function SEC_generateStrongPassword($length = 9, $available_sets = 'luds')
+{
+	$sets = array();
+	if(strpos($available_sets, 'l') !== false)
+		$sets[] = 'abcdefghjkmnpqrstuvwxyz';
+	if(strpos($available_sets, 'u') !== false)
+		$sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+	if(strpos($available_sets, 'd') !== false)
+		$sets[] = '23456789';
+	if(strpos($available_sets, 's') !== false)
+		$sets[] = '!@#$%&*?';
+	$all = '';
+	$password = '';
+	foreach($sets as $set)
+	{
+		$password .= $set[array_rand(str_split($set))];
+		$all .= $set;
+	}
+	$all = str_split($all);
+	for($i = 0; $i < $length - count($sets); $i++)
+		$password .= $all[array_rand($all)];
+	$password = str_shuffle($password);
+
+    return $password;
+}
+
 ?>

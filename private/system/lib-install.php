@@ -993,4 +993,101 @@ function _pi_Header()
     return $retval;
 }
 
+function _update_config($plugin, $configData)
+{
+    global $_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='".DB_escapeString($plugin)."'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$configData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='".DB_escapeString($plugin)."'");
+        } else {
+            $configData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($configData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config($plugin);
+    // sync up sequence, etc.
+    foreach ( $configData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
+
+if ( !function_exists('_searchForId')) {
+function _searchForId($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $array[$key];
+       }
+   }
+   return null;
+}
+}
+if ( !function_exists('_searchForIdKey')) {
+function _searchForIdKey($id, $array) {
+   foreach ($array as $key => $val) {
+       if ($val['name'] === $id) {
+           return $key;
+       }
+   }
+   return null;
+}
+}
+if ( !function_exists('_addConfigItem')) {
+function _addConfigItem($data = array() )
+{
+    global $_TABLES;
+
+    $Qargs = array(
+                   $data['name'],
+                   $data['set'] ? serialize($data['default_value']) : 'unset',
+                   $data['type'],
+                   $data['subgroup'],
+                   $data['group'],
+                   $data['fieldset'],
+                   ($data['selection_array'] === null) ?
+                    -1 : $data['selection_array'],
+                   $data['sort'],
+                   $data['set'],
+                   serialize($data['default_value']));
+    $Qargs = array_map('DB_escapeString', $Qargs);
+
+    $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+        "subgroup, group_name, selectionArray, sort_order,".
+        " fieldset, default_value) VALUES ("
+        ."'{$Qargs[0]}',"   // name
+        ."'{$Qargs[1]}',"   // value
+        ."'{$Qargs[2]}',"   // type
+        ."{$Qargs[3]},"     // subgroup
+        ."'{$Qargs[4]}',"   // groupname
+        ."{$Qargs[6]},"     // selection array
+        ."{$Qargs[7]},"     // sort order
+        ."{$Qargs[5]},"     // fieldset
+        ."'{$Qargs[9]}')";  // default value
+
+    DB_query($sql);
+}
+}
 ?>

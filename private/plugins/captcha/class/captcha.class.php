@@ -63,7 +63,7 @@ class captcha {
     var $convertpath;
     var $gfxformat;
     var $debug;
-    var $session_id;
+    var $session_id = '';
     var $publickey;
 
     public function __construct($csid, $length = 6)
@@ -205,7 +205,7 @@ class captcha {
     function makeCaptcha () {
         global $cString, $_CONF, $_TABLES, $LANG_CP00;
 
-        if ( $this->session_id != 0 ) {
+        if ( $this->session_id != "" ) {
             $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . DB_escapeString($this->session_id) . "'";
             DB_query($sql);
         } else {

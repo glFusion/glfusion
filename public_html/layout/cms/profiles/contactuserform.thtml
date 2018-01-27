@@ -52,6 +52,7 @@
 		</div>
 	</div>
 
+	{spamx}
 
 	<div style="uk-alert-warning">{lang_nohtml}</div>
 	<div>{captcha}</div>

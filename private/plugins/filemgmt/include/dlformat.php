@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Enhancements to display formatting                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -43,10 +43,9 @@ if (!defined ('GVERSION')) {
 
 $dt = new Date('now',$_USER['tzid']);
 
-
 $path = $mytree->getPathFromId($cid, "title");
 $path = substr($path, 1);
-$path = str_replace("/"," <img src='" .$_CONF['site_url'] ."/filemgmt/images/arrow.gif' alt=''" . XHTML . "> ",$path);
+$path = str_replace("/"," <img src='" .$_CONF['site_url'] ."/filemgmt/images/arrow.gif' alt=''> ",$path);
 
 $p->set_var('LANG_CATEGORY',_MD_CATEGORYC);
 $p->set_var('category_path',$path);

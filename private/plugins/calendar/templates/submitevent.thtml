@@ -183,6 +183,7 @@
 		</div>
 	</div>
 
+	{spamx}
 
 	<hr>
 {!if captcha}

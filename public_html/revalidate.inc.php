@@ -60,6 +60,7 @@ if ( SESS_isSet('glfusion.auth.dest') ) {
 $display = '';
 switch ($mode) {
     case 'user' :
+        $oldUserID = $_USER['uid'];
         $status = -2;
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
         if (COM_checkSpeedlimit('tokenexpired', $_CONF['login_attempts']) > 0) {
@@ -84,7 +85,12 @@ switch ($mode) {
         }
         if ( $status == USER_ACCOUNT_ACTIVE ) {
             $uid = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($loginname).'"');
-            SESS_completeLogin($uid);
+            if ( $uid != $oldUserID) {
+                $authenticated = 0;
+            } else {
+                $authenticated = 1;
+            }
+            SESS_completeLogin($uid,$authenticated);
             _rebuild_data();
             unset($_POST['loginname']);
             COM_clearSpeedlimit(0, 'tokenexpired');

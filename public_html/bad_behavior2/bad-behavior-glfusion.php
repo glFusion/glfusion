@@ -62,6 +62,10 @@ $bb2_settings_defaults = array(
 
 // Return current time in the format preferred by your database.
 function bb2_db_date() {
+    global $_CONF;
+    $dt = new \Date('now',$_CONF['timezone']);
+    $timestamp = $dt->format("Y-m-d H:i:s",true);
+    return $timestamp;
 
     return date("Y-m-d H:i:s");
 }
@@ -310,34 +314,45 @@ function bb2_ban_remove($ip)
 
 function bb2_ban($ip,$type = 1,$reason = '') {
     global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR;
+
     if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
     }
-    switch ( $type ) {
-        case 0 :
-            COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
-            break;
-        case 2 :
-            COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
-            $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
-            break;
-        case 3 :
-            COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
-            $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
-            break;
-        default :
-            COM_errorLog("Banning " . $ip . " for type " . $type );
-            break;
+
+    if ( $ip == '' ) return;
+
+    if ( isset($_CONF['bb2_ban_log']) && $_CONF['bb2_ban_log'] == 1 ) {
+        switch ( $type ) {
+            case 0 :
+                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
+                break;
+            case 2 :
+                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
+                break;
+            case 3 :
+                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
+                break;
+            case 4 :
+                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
+                $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
+                break;
+            default :
+                COM_errorLog("Banning " . $ip . " for type " . $type );
+                break;
+        }
     }
     $settings = bb2_read_settings();
     $timestamp = time();
+
     $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']}
            (item,type,autoban,reason,timestamp) VALUE ('".DB_escapeString($ip)."','spambot_ip',".(int) $type.",'".DB_escapeString($reason)."', ".$timestamp.")";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
         CACHE_remove_instance('bb2_bl_data');
     }
-    if ( $type != 0 ) echo COM_refresh($_CONF['site_url']);
+    if ( $type != 0 && $type != 4 ) echo COM_refresh($_CONF['site_url']);
     return true;
 }
 

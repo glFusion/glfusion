@@ -41,7 +41,7 @@ class MailAdmin extends BaseCommand {
         $num = 8;
     }
 
-    function execute($comment)
+    function execute($comment,$data)
     {
         global $result, $_CONF, $_USER, $LANG_SX00, $_SPX_CONF;
 

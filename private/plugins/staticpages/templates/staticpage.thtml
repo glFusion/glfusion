@@ -8,7 +8,7 @@
 	{hits}&nbsp;
 {!endif}
 {!if print_icon}
-	<a href="{link_print}"><i class="uk-icon-print"></i></a>&nbsp;
+	<a href="{link_print}" rel="nofollow" target="_blank"><i class="uk-icon-print"></i></a>&nbsp;
 {!endif}
 {!if edit_icon}
 	<a href="{link_edit}"><i class="uk-icon-edit"></i></a>

@@ -183,13 +183,14 @@ function bb2_blacklist($settings,$package) {
 	if ( isset($_CONF['bb2_spambots_url'] ) && is_array($_CONF['bb2_spambots_url'] ) ) {
 	    $bb2_spambots_url = array_merge($bb2_spambots_url,$_CONF['bb2_spambots_url']);
 	}
-	if ( isset($_CONF['bb2_spambot_refer'] ) && is_array($_CONF['bb2_spambot_refer'] ) ) {
-	    $bb2_spambot_refer = array_merge($bb2_spambot_refer,$_CONF['bb2_spambot_refer']);
+	if ( isset($_CONF['bb2_spambot_referer'] ) && is_array($_CONF['bb2_spambot_referer'] ) ) {
+	    $bb2_spambot_refer = array_merge($bb2_spambot_refer,$_CONF['bb2_spambot_referer']);
 	}
 
+    $refer = '';
 	@$ua = $package['headers_mixed']['User-Agent'];
 	@$uri = $package['request_uri'];
-	@$refer = $package['Referer'];
+	if ( isset($package['headers_mixed']['Referer'])) $refer = $package['headers_mixed']['Referer'];
 
 	if (!empty($bb2_blacklist_cidrs)) {
 		foreach ($bb2_blacklist_cidrs as $range) {
@@ -204,11 +205,13 @@ function bb2_blacklist($settings,$package) {
 		}
 	}
 
-	foreach ($bb2_spambot_refer AS $spambot ) {
-	    if ( strpos($refer,$spambot) != FALSE) {
-	        return "174e8c9";
-	    }
-	}
+	if ( $refer != '' ) {
+    	foreach ($bb2_spambot_refer AS $spambot ) {
+    	    if ( stripos($refer,$spambot) !== false) {
+    	        return "17f4e8c9";
+    	    }
+    	}
+    }
 
 	foreach ($bb2_spambots as $spambot) {
 		if (strpos($ua, $spambot) !== FALSE) {

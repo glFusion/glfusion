@@ -1,0 +1,25 @@
+{# begin {templatelocation} #}
+<div title="{txt}" class="rankicons">
+{!if loopfilled}
+{!!set count {loopfilled} !!}
+{!while loopfilled}
+{!if isAdmin}
+    <i class="uk-icon uk-icon-circle uk-text-danger"></i>
+{!elseif isMod}
+    <i class="uk-icon uk-icon-circle uk-text-success"></i>
+{!else}
+    <i class="uk-icon uk-icon-circle uk-text-primary"></i>
+{!endif}
+   {!dec loopfilled}
+{!endwhile}
+{!endif}
+{!if loopopen}
+{!!set count {loopopen} !!}
+{!while loopopen}
+    <i class="uk-icon uk-icon-circle-o"></i>
+   {!dec loopopen}
+{!endwhile}
+{!endif}
+</div>
+{txt}
+{# end {templatelocation} #}

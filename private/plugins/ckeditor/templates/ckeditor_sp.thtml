@@ -5,7 +5,6 @@
 
 	function loadEditor(id) {
 		var instance = CKEDITOR.replace( id, {
-			allowedContent: true,
 			contentsCss: '{css_url}',
 			bodyClass: 'tm-container',
 			extraPlugins: 'mediagallery,youtube2',
@@ -15,11 +14,18 @@
 			filebrowserBrowseUrl :  '',
 			filebrowserImageBrowseUrl : '',
 {!endif}
-			language: '{iso_lang}'
+			language: '{iso_lang}',
+			allowedContent: {
+			    $1: {
+			        elements: CKEDITOR.dtd,
+			        attributes: true,
+			        styles: true,
+			        classes: true
+			    }
+			},
+			disallowedContent: 'table[cellspacing,cellpadding,border]'
 		} );
-
 		instance.config.protectedSource.push(/<i[^>]*><\/i>/g);
-
 		return instance;
 	}
 

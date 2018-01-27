@@ -29,7 +29,7 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-global $staticimageset, $cString;
+global $staticimageset, $cString, $cCount;
 $staticimageset = array();
 $staticimageset['name'] = 'Simple';
 $cCount = 199;

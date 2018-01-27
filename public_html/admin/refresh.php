@@ -43,6 +43,7 @@ switch ( $_POST['keepalive'] ) {
         }
         break;
     case 'forumeditor' :
+    case 'commenteditor' :
         $sql = "SELECT * FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $result = DB_query($sql);
         if ( DB_numRows($result) != 1 ) die();

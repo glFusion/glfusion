@@ -323,7 +323,8 @@ CREATE TABLE {$_TABLES['sessions']} (
   md5_sess_id varchar(128) NOT NULL default '',
   PRIMARY KEY  (md5_sess_id),
   KEY start_time (start_time),
-  KEY remote_ip (remote_ip)
+  KEY remote_ip (remote_ip),
+  KEY uid (uid)
 ) ENGINE=MyISAM
 ";
 
@@ -497,6 +498,16 @@ CREATE TABLE {$_TABLES['syndication']} (
 ";
 
 $_SQL[] = "
+CREATE TABLE {$_TABLES['tfa_backup_codes']} (
+  uid MEDIUMINT(8) NULL DEFAULT NULL,
+  code VARCHAR(128) NULL DEFAULT NULL,
+  used TINYINT(4) NULL DEFAULT '0',
+  INDEX `uid` (`uid`),
+  INDEX `code` (`code`)
+) ENGINE=MyISAM
+";
+
+$_SQL[] = "
 CREATE TABLE {$_TABLES['tokens']} (
   token varchar(32) NOT NULL,
   created datetime NOT NULL,
@@ -631,6 +642,8 @@ CREATE TABLE {$_TABLES['users']} (
   pwrequestid varchar(16) default NULL,
   act_token varchar(32) NOT NULL default '',
   act_time datetime NOT NULL default '1000-01-01 00:00:00.000000',
+  tfa_enabled tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+  tfa_secret varchar(128) NULL DEFAULT NULL,
   status smallint(5) unsigned NOT NULL default '1',
   account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
@@ -915,7 +928,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0'
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.7.1') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','1.7.2') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";

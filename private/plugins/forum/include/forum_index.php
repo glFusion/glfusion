@@ -167,8 +167,8 @@ function forum_index()
             $returnPostfix = '?cat='.$dCat;
         }
 
-        $html_query = trim(strip_tags($_REQUEST['query']));
-        $query = DB_escapeString($_REQUEST['query']);
+        $html_query = isset($_REQUEST['query']) ? trim(strip_tags($_REQUEST['query'])) : '';
+        $query = isset($_REQUEST['query']) ? DB_escapeString($_REQUEST['query']) : '';
         $report->set_var (array(
                 'form_action'   => $_CONF['site_url'] . '/forum/index.php?op=search',
                 'LANG_TITLE'    => $LANG_GF02['msg119'].' '. @htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),

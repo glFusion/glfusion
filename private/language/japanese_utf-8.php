@@ -485,6 +485,7 @@ $LANG04 = array(
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'プレビュー',
     'pe_namepass' => 'ユーザ名とパスワード',
+    'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => '個人情報',
     'pe_layout' => 'レイアウトと言語',
     'pe_content' => 'コンテンツ',
@@ -1673,7 +1674,7 @@ $LANG_ACCESS = array(
 # admin/database.php
 
 $LANG_DB_ADMIN = array(
-    'database_admin' => 'Database Administration',
+    'database_admin' => 'DB Admin',
     'last_ten_backups' => 'Database Backups',
     'create_backup' => 'Backup Database',
     'do_backup' => 'Do Backup',
@@ -1743,6 +1744,58 @@ $LANG_DB_ADMIN = array(
     'overall_progress' => 'Overall Progress',
     'no_backups_found' => 'No Backup Files Found',
     'error_msg' => 'The following errors were encountered'
+);
+
+###############################################################################
+# Two Factor Authentication
+
+$LANG_TFA = array(
+    'error_invalid_code' => 'Two Factor Authenication Code was incorrect, please enter a valid code from your authenticator app or use a backup code.',
+    'two_factor' => 'Two Factor Authentication',
+    'two_factor_enabled' => 'Two Factor Authentication Enabled',
+    'disable_tfa' => 'Disable Two Factor Authentication',
+    'enroll_tfa' => 'Enroll into Two Factor Authentication',
+    'auth_code' => 'Authentication Code',
+    'verify' => 'Verify',
+    'disable_warning' => 'Disabling two-factor authentication will make your account less secure. Are you sure you want to continue?',
+    'ajax_error' => 'Error completing the requested operation. Please try again later.',
+    'download_backup' => 'Download Backup Codes',
+    'enrolled' => '<p>This site supports two-factor authentication to enhance the security of your account.</p><p>Your account is currently <strong>enrolled</strong> in two-factor authentication.</p>',
+    'regenerate_backup' => '<p>If you misplaced your backup codes, or have already used them to login, you can reset them here.</p><p><strong>Regenerating Backup Codes will invalidate previously generated codes.</strong></p>',
+    'regenerate_button' => 'Regenerate Backup Codes',
+    'disable_tfa_help' => 'If needed, you can disable two-factor authentication.',
+    'disable_tfa_button' => 'Disabled two-factor authentication',
+    'not_enrolled' => '<p>This site supports two-factor authentication to enhance the security of your account.</p><p>Your account is not currently enrolled in two-factor authentication.</p>',
+    'enroll_button' => 'Enroll into two-factor authentication',
+    'error_verify_failed' => 'The code was not correct - Please enter the code provided by your authenticator app',
+    'enroll_success' => '<p>Congradulations, you have enabled Two Factor Authentication for your account.</p><p>Below are backup codes that can be used to log into the site if you do not have access to your authenticator application. Please store these in a secure location.</p>',
+    'scan_qrcode' => 'Scan the image with your authentication application',
+    'enter_secret' => 'Or enter the secret:',
+    'enroll_enter_code' => 'And enter the code the application gives you:',
+    'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.',
+    'copy_success' => 'Two Factor Token copied to clipboard',
+    'copy_to_clipboard' => 'Copy to Clipboard'
+);
+
+###############################################################################
+# Password Rules
+
+$LANG_PWD = array(
+    'title' => 'Passwords must meet the follow rules',
+    'min_length' => 'Must be longer than %s characters',
+    'max_length' => 'Must not be longer than %s characters',
+    'req_num' => 'Must contain at least 1 number',
+    'req_letter' => 'Must contain at least 1 letter',
+    'req_cap' => 'Must contain at least 1 upper case letter',
+    'req_lower' => 'Must contain at least 1 lower case letter',
+    'req_symbol' => 'Must contain at least 1 special character such as ! $ % * & ^',
+    'error_too_short' => 'Password is too short',
+    'error_too_long' => 'Password is too long',
+    'error_no_number' => 'Password must contain at least one number',
+    'error_no_letter' => 'Password must contain at least one letter',
+    'error_no_cap' => 'Password must contain at least one upper case letter',
+    'error_no_lower' => 'Password must contain at least one lower case letter',
+    'error_no_symbol' => 'Password must contain at least one special character'
 );
 
 ###############################################################################
@@ -2783,6 +2836,7 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'パーミッション',
     'article_comment_close_days' => 'Days to close comments (default)',
     'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'comment_indent' => 'Number of pixels to indent each child comment',
     'use_safe_html' => 'Use Safe HTML Mode?',
     'jhead_enabled' => 'Enable JHEAD?',
     'jpegtrans_enabled' => 'Enable jpegtrans?',
@@ -2839,6 +2893,7 @@ $LANG_confignames['Core'] = array(
     'min_username_length' => 'Minimum Username Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
+    'bb2_ban_log' => 'Log Automatic Ban Actions',
     'bb2_display_stats' => 'Display Stats',
     'bb2_strict' => 'Strict Checking',
     'bb2_verbose' => 'Verbose Logging',
@@ -2861,7 +2916,15 @@ $LANG_confignames['Core'] = array(
     'debug_oauth' => 'Oauth Debug Logging',
     'debug_html_filter' => 'HTML Filter Debug Logging',
     'standard_auth_first' => 'Display Standard Auth First in Dropdown',
-    'commentssubmission' => 'Enable Comment Submission Queue'
+    'commentssubmission' => 'Enable Comment Submission Queue',
+    'enable_twofactor' => 'Enable Two Factor Authentication',
+    'pwd_min_length' => 'Minimum password length (0 to disable)',
+    'pwd_max_length' => 'Maximum password length (0 to disable)',
+    'pwd_req_num' => 'Require number in password',
+    'pwd_req_letter' => 'Require letter in password',
+    'pwd_req_cap' => 'Required upper case letter in password',
+    'pwd_req_lower' => 'Require lower case letter in password',
+    'pwd_req_symbol' => 'Require special character in password'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2920,7 +2983,9 @@ $LANG_fs['Core'] = array(
     'fs_logo' => 'Logo Options',
     'fs_update' => 'Update Checker',
     'fs_rating' => 'Rating Options',
-    'fs_spam_config' => 'Configuration'
+    'fs_spam_config' => 'Configuration',
+    'fs_authentication' => 'Authentication',
+    'fs_pwd_complexity' => 'Password Rules'
 );
 
 $LANG_configselects['Core'] = array(

@@ -513,6 +513,7 @@ function newpasswordform ($uid, $requestid)
             'user_id'       => $uid,
             'user_name'     => DB_getItem ($_TABLES['users'], 'username',"uid = ".(int)$uid),
             'request_id'    => $requestid,
+            'password_help' => SEC_showPasswordHelp(),
             'lang_explain'  => $LANG04[90],
             'lang_username' => $LANG04[2],
             'lang_newpassword'  => $LANG04[4],
@@ -714,20 +715,29 @@ function createuser ( )
                     return $retval;
                 }
             }
-
-            // Let plugins have a chance to decide what to do before creating the user, return errors.
-
             $spamCheckData = array(
                 'username'  => $username,
                 'email'     => $email,
-                'ip'        => $REMOTE_ADDR);
+                'ip'        => $REMOTE_ADDR,
+                'type'      => 'registration');
 
+            $result = PLG_checkforSpam($username, $_CONF['spamx'],$spamCheckData);
+            if ($result > 0) {
+                COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
+            }
+            // Let plugins have a chance to decide what to do before creating the user, return errors.
             $msg = PLG_itemPreSave ('registration', $spamCheckData);
             if (!empty ($msg)) {
                 $retval .= newuserform ($msg);
                 return $retval;
             }
             if ( $_CONF['registration_type'] == 1 && !empty($passwd) ) {
+                $err = SEC_checkPwdComplexity($passwd);
+                if (count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    $retval .= newuserform ($msg);
+                    return $retval;
+                }
                 $encryptedPasswd = SEC_encryptPassword($passwd);
             } else {
                 $encryptedPasswd = '';
@@ -891,6 +901,7 @@ function newuserform ($msg = '')
     }
     $user_templates->set_var ('email_conf', $email_conf);
 
+    $user_templates->set_var ('password_help', SEC_showPasswordHelp());
 
     $user_templates->parse('output', 'regform');
     $retval .= $user_templates->finish($user_templates->get_var('output'));
@@ -920,6 +931,9 @@ function getpasswordform()
         'lang_emailpassword'            => $LANG04[28],
         'end_block'                     => COM_endBlock()
     ));
+
+    PLG_templateSetVars('forgotpassword',$user_templates);
+
     $user_templates->parse('output', 'form');
 
     $retval .= $user_templates->finish($user_templates->get_var('output'));
@@ -1083,26 +1097,30 @@ function _userSetnewpwd()
     global $_CONF, $_TABLES, $_USER, $LANG04;
 
     $retval = '';
-    if ( (empty ($_POST['passwd']))
-            || ($_POST['passwd'] != $_POST['passwd_conf']) ) {
+    if ( (empty ($_POST['passwd'])) || ($_POST['passwd'] != $_POST['passwd_conf']) ) {
         echo COM_refresh ($_CONF['site_url']
                  . '/users.php?mode=newpwd&amp;uid=' . COM_applyFilter($_POST['uid'],true)
                  . '&amp;rid=' . COM_applyFilter($_POST['rid']));
     } else {
         $uid = COM_applyFilter ($_POST['uid'], true);
         $reqid = COM_sanitizeID(COM_applyFilter ($_POST['rid']));
-        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
-                !empty ($reqid) && (strlen ($reqid) == 16)) {
+        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
             $uid = (int) $uid;
             $safereqid = DB_escapeString($reqid);
-            $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
-                               array ($uid, $safereqid));
+            $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),array ($uid, $safereqid));
             if ($valid == 1) {
-                $passwd = SEC_encryptPassword($_POST['passwd']);
-                DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
-                DB_delete ($_TABLES['sessions'], 'uid', $uid);
-                DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
-                echo COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
+                $err = SEC_checkPwdComplexity($_POST['passwd']);
+                if ( count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    $retval .= COM_showMessageText($msg,'',true,'error');
+                    $retval .= newpasswordform($uid,$reqid);
+                } else {
+                    $passwd = SEC_encryptPassword($_POST['passwd']);
+                    DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
+                    DB_delete ($_TABLES['sessions'], 'uid', $uid);
+                    DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
+                    echo COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
+                }
             } else { // request invalid or expired
                 $retval .= COM_showMessage (54,'','',1,'error');
                 $retval .= getpasswordform ();
@@ -1112,6 +1130,7 @@ function _userSetnewpwd()
             echo COM_refresh ($_CONF['site_url']);
         }
     }
+    return $retval;
 }
 
 function _userEmailpassword()
@@ -1129,6 +1148,12 @@ function _userEmailpassword()
         $retval .= COM_showMessageText(sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']),$LANG12[26],true,'error');
         $retval .= getpasswordform();
     } else {
+        // Validate captcha
+        $msg = PLG_itemPreSave ('forgotpassword', '');
+        if (!empty ($msg)) {
+            COM_setMsg($msg,'error');
+            echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
+        }
         $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
@@ -1138,7 +1163,6 @@ function _userEmailpassword()
         if (!empty ($username)) {
             $retval .= requestpassword ($username, 55);
         } else {
-
             echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
         }
     }
@@ -1239,6 +1263,33 @@ function _userGetnewtoken()
     return $retval;
 }
 
+function validateTFA()
+{
+    global $_CONF, $LANG12, $LANG04;
+
+    if (!isset($_CONF['enable_twofactor']) || !$_CONF['enable_twofactor']) {
+        return true;
+    }
+    $_USER['uid'] = (int) COM_applyFilter($_POST['uid'],true);
+    if ( _sec_checkToken() ) {
+        // Check login speed limit
+        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
+        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+            displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+        } else {
+            COM_updateSpeedlimit('login');
+            $tfaCode = COM_applyFilter($_POST['tfacode']);
+            $tfa = \TwoFactor::getInstance($_USER['uid']);
+            if ($tfa->validateCode($tfaCode)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 
 // MAIN
 if ( isset($_POST['mode']) ) {
@@ -1291,11 +1342,12 @@ switch ($mode) {
     case 'mergeacct' :
         $pageBody .= USER_mergeAccounts();
         break;
+
     default:
         $status = -2;
         $local_login = false;
         $newTwitter  = false;
-
+        $authenticated = 0;
         // prevent dictionary attacks on passwords
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
         if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -1322,10 +1374,18 @@ switch ($mode) {
         $uid = '';
         if (!empty($loginname) && !empty($passwd) && empty($service)) {
             if (empty($service) && $_CONF['user_login_method']['standard']) {
-                COM_updateSpeedlimit('login');
-                $status = SEC_authenticate($loginname, $passwd, $uid);
-                if ($status == USER_ACCOUNT_ACTIVE) {
-                    $local_login = true;
+
+                // check captcha here
+                $msg = PLG_itemPreSave ('loginform', $loginname);
+                if (!empty ($msg)) {
+                    COM_setMsg($msg,'error');
+                    $status = -2;
+                } else {
+                    COM_updateSpeedlimit('login');
+                    $status = SEC_authenticate($loginname, $passwd, $uid);
+                    if ($status == USER_ACCOUNT_ACTIVE) {
+                        $local_login = true;
+                    }
                 }
             } else {
                 COM_errorLog("ERROR: Username and Password were posted, but local authenticatio is disabled - check configuration settings");
@@ -1379,12 +1439,29 @@ switch ($mode) {
 
         //  end OAuth authentication method(s)
 
+        } elseif ($mode == 'tfa' ) {
+            if ( !validateTFA() ) {
+                $authenticated = 0;
+                COM_setMsg($LANG_TFA['error_invalid_code'],'error',true);
+            } else {
+                $authenticated = 1;
+            }
+            $uid = (int) $_POST['uid'];
+            $sql = "SELECT status,account_type FROM {$_TABLES['users']} WHERE uid=".(int) $uid;
+            $result = DB_query($sql);
+            if ( DB_numRows($result) == 1 ) {
+                $row = DB_fetchArray($result);
+                $status = $row['status'];
+                $local_login = $row['account_type'] & LOCAL_USER;
+            } else {
+                $status = -2;
+            }
         } else {
             $status = -2;
         }
 
         if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
-            SESS_completeLogin($uid);
+            SESS_completeLogin($uid,$authenticated);
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
             if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
@@ -1409,6 +1486,9 @@ switch ($mode) {
                     }
                 }
             }
+            SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],false);
             COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....

@@ -1,0 +1,29 @@
+{# begin {templatelocation} #}
+<div class="uk-panel-title">{lang_two_factor}</div>
+{lang_enrolled}
+
+{lang_regenerate_backup}
+
+<p>
+	<button id="tfa-regenerate" class="uk-button uk-button-primary">{lang_regenerate_button}</button>
+</p>
+
+<div id="backup-codes" style="display:none;">
+	<ul id="bc-list" class="uk-list" style="font-family: monospace;">
+	</ul>
+	<a href="{site_url}/twofactor.php?action=download_tfa_codes&amp;{sectoken_name}={sectoken_value}" rel="nofollow">
+		{lang_download_backup}
+	</a>
+</div>
+
+<p>
+	{lang_disable_tfa_help}
+</p>
+
+<p>
+	<button id="tfa-disable" class="uk-button uk-button-danger">
+		{lang_disable_tfa_button}
+	</button>
+	<input type="hidden" id="_sectoken" name="_sectoken" value="{sectoken_value}">
+</p>
+{# end {templatelocation} #}

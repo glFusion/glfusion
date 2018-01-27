@@ -6,6 +6,9 @@
 // |                                                                          |
 // | Installation SQL.                                                        |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2016-2017 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
@@ -34,10 +37,26 @@ if (!defined ('GVERSION')) {
 
 $_SQL['spamx'] = "
 CREATE TABLE {$_TABLES['spamx']} (
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   name varchar(20) NOT NULL default '',
   value varchar(255) NOT NULL default '',
+  PRIMARY KEY (id),
   INDEX spamx_name(name)
 ) ENGINE=MyISAM
 ";
 
+$_SQL['spamx_stats'] = "
+CREATE TABLE {$_TABLES['spamx_stats']} (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `module` VARCHAR(128) NOT NULL DEFAULT '',
+  `type` VARCHAR(50) NOT NULL DEFAULT '',
+  `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip` VARCHAR(50) NOT NULL DEFAULT '',
+  `email` VARCHAR(50) NOT NULL DEFAULT '',
+  `username` VARCHAR(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  INDEX `type` (`type`),
+  INDEX `blockdate` (`blockdate`)
+) ENGINE=MyISAM
+";
 ?>

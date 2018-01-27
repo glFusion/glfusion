@@ -126,8 +126,10 @@ function captcha_upgrade()
             $c->set('recaptcha_theme','light','captcha');
         case '3.5.3' :
             // no changes
+        case '3.5.4' :
 
         default :
+            captcha_update_config();
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");
             break;
     }
@@ -136,5 +138,16 @@ function captcha_upgrade()
     } else {
         return false;
     }
+}
+
+function captcha_update_config()
+{
+    global $_CONF, $_CP_CONF, $_TABLES;
+
+    USES_lib_install();
+
+    require_once $_CONF['path'].'plugins/captcha/sql/captcha_config_data.php';
+    _update_config('captcha', $captchaConfigData);
+
 }
 ?>

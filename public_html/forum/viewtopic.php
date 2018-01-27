@@ -287,6 +287,11 @@ if ( !$iframe ) {
         'num_pages'     => $numpages
     ));
 }
+
+if ($_FF_CONF['enable_likes']) {
+    \Forum\Like::TopicLikes($showtopic);
+}
+
 $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic." OR pid=".(int) $showtopic." ORDER BY date $order LIMIT $offset, $show";
 $result  = DB_query($sql);
 

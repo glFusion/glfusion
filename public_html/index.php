@@ -147,9 +147,15 @@ $story_sort = 'date';
 $story_sort_dir = 'DESC';
 
 if ( !empty($topic) ) {
-    $result = DB_query("SELECT limitnews,sort_by,sort_dir FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
+    $result = DB_query("SELECT limitnews,sort_by,sort_dir,description FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
     if ( $result ) {
-        list($topiclimit, $story_sort, $story_sort_dir) = DB_fetchArray($result);
+        list($topiclimit, $story_sort, $story_sort_dir, $topic_desc) = DB_fetchArray($result);
+        if (!empty($topic_desc)) {
+            $outputHandle = \outputHandler::getInstance();
+            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
+            $T->set_var('topic_desc',$topic_desc);
+        }
     }
 }
 
@@ -189,12 +195,14 @@ if ( $_VARS['totalhits'] % 50 === 0 ) {
                 DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
                 CACHE_remove_instance('story_'.$sid);
                 CACHE_remove_instance('whatsnew');
+                CACHE_remove_instance('menu');
             }
         } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
             COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
             STORY_removeStory($sid);
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
+            CACHE_remove_instance('menu');
         }
     }
 }

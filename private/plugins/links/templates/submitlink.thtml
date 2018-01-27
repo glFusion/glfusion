@@ -30,6 +30,8 @@
         </div>
     </div>
 
+		{spamx}
+
     {captcha}
 
     <div class="uk-form-row">

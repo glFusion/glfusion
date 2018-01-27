@@ -162,6 +162,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Abonnements',
     'TOP' => 'Nach oben',
     'PRINTABLE' => 'Druckfähige Version',
+    'PRINT' => 'Print',
     'ForumProfile' => 'Forum-Optionen',
     'USERPREFS' => 'Forum-Einstellungen',
     'SPEEDLIMIT' => '"Dein letzter Kommentar ist %s Sekunden her.<br />Zwischen den Forenbeiträgen müssen aber mindestens %s Sekunden liegen."',
@@ -243,7 +244,38 @@ $LANG_GF01 = array(
     'features' => 'Funktionen:',
     'rss_link' => 'RSS-Feed dieses Forum\'s abonieren.',
     'all_read_success' => 'Alle Themen wurden als gelesen markiert',
-    'formatted_code' => 'Formatierter Code'
+    'formatted_code' => 'Formatierter Code',
+    'reset' => 'Reset',
+    'q_del_item' => 'Are you sure you want to delete this badge?',
+    'badge_updated' => 'Badge Updated',
+    'badge_save_error' => 'Error saving badge',
+    'add_badge' => 'Add Badge',
+    'badge_grp' => 'Badge Group',
+    'site_grp' => 'Site Group Name',
+    'badge_img' => 'Badge Image',
+    'create_new' => 'Create New',
+    'badges' => 'Badges',
+    'badge_css' => 'CSS Class',
+    'badge_type' => 'Badge Type',
+    'add_rank' => 'Add Rank',
+    'err_rank_zero' => 'Post count must be greater than zero.',
+    'err_rank_key_exists' => 'A rank for this post count already exists.',
+    'ranks' => 'Forum Ranks',
+    'rank_updated' => 'Rank Updated',
+    'like' => 'Like',
+    'unlike' => 'Unlike',
+    'like_tooltip' => 'Like this post',
+    'unlike_tooltip' => 'Unlike this post',
+    'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
+    'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
+    'unk_username' => 'unknown',
+    'likes_received' => 'Likes Received',
+    'likes_given' => 'Likes Given',
+    'no_likes_received' => 'No Likes Received',
+    'no_likes_given' => 'No Likes Given',
+    'liked' => 'Liked',
+    'liked_thread' => 'post in thread',
+    'likes' => 'Likes'
 );
 
 $LANG_GF02 = array(
@@ -530,7 +562,9 @@ $LANG_GF06 = array(
     7 => 'IP-Verwaltung',
     8 => 'Bewertungs-System',
     9 => 'Importieren',
-    10 => 'Forum Administration'
+    10 => 'Forum Administration',
+    11 => 'Badges',
+    12 => 'Ranks'
 );
 
 $LANG_GF07 = array(
@@ -950,6 +984,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'FileMgmt für Anhänge',
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Benutzer Bewertungs-System',
+    'enable_likes' => 'Enable Likes System',
     'bbcode_signature' => 'Eigene BBcode-Signatur',
     'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor',
     'bbcode_disabled' => 'Standart für BBCode',

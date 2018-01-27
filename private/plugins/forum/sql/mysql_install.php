@@ -6,7 +6,7 @@
 // |                                                                          |
 // | SQL Commands for new install of the Forum plugin.                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -234,10 +234,53 @@ $_SQL['ff_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_rating_asso
   KEY `voter_id` (`voter_id`)
 ) ENGINE=MyISAM ; ";
 
+#
+# Table structures for table 'forum_badges'
+#
+$_SQL['ff_badges'] = "CREATE TABLE {$_TABLES['ff_badges']} (
+  `fb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `fb_grp` varchar(20) NOT NULL DEFAULT '',
+  `fb_order` int(3) NOT NULL DEFAULT '99',
+  `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `fb_gl_grp` MEDIUMINT(8) NOT NULL,
+  `fb_type` varchar(10) DEFAULT 'img',
+  `fb_data` varchar(255) DEFAULT NULL,
+  `fb_dscp` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`fb_id`),
+  KEY `grp` (`fb_grp`,`fb_order`)
+) ENGINE=MyISAM;";
+
+#
+# Table structures for table 'forum_ranks'
+#
+$_SQL['ff_ranks'] = "CREATE TABLE {$_TABLES['ff_ranks']} (
+  `posts` int(11) unsigned NOT NULL DEFAULT '0',
+  `dscp` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`posts`)
+) ENGINE=MyISAM;";
+
+#
+# Table structures for table 'forum_likes_assoc'
+#
+$_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
+  `poster_id` mediumint(9) NOT NULL,
+  `voter_id` mediumint(9) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  `username` varchar(40),
+  `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`),
+  KEY `voter_id` (`voter_id`),
+  KEY `poster_id` (`poster_id`)
+) ENGINE=MyISAM;";
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
 $_SQL['d2'] = "INSERT INTO {$_TABLES['ff_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
 $_SQL['d3'] = "INSERT INTO {$_TABLES['ff_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
 $_SQL['d4'] = "INSERT INTO {$_TABLES['ff_topic']} (`id`, `forum`, `pid`, `uid`, `name`, `date`, `lastupdated`, `last_reply_rec`, `email`, `website`, `subject`, `comment`, `postmode`, `replies`, `views`, `attachments`,`ip`, `mood`, `sticky`, `moved`, `locked`) VALUES (1,1,0,2,'Admin','1211775931','1211775931',0,NULL,'','Welcome to glFusion','Welcome to glFusion!  We hope you enjoy using your new glFusion site.\r\n\r\nglFusion is designed to provide you with features, functionality, and style, all in an easy to use package.\r\n\r\nYou can visit the [url=http://www.glfusion.org/wiki/]glFusion Wiki[/url] for the latest information on features and how to use them.\r\n\r\nThanks and enjoy!\r\nThe glFusion Team\r\n','text',0,1,0,'127.0.0.1','',0,0,0);";
+$_SQL['d5'] = "INSERT INTO {$_TABLES['ff_badges']} VALUES
+    (0,'1_site',20,1,'13','img','forum_user.png','Forum User'),
+    (0,'1_site',10,1,'1','img','siteadmin_badge.png','Site Admin');";
+$_SQL['d6'] = "INSERT INTO {$_TABLES['ff_ranks']} VALUES
+    (1, 'Newbie'), (15, 'Junior'), (35, 'Chatty'), (70, 'Regular Member'), (120, 'Active Member');";
 
 ?>

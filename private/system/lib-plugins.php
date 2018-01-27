@@ -2550,18 +2550,16 @@ function PLG_getWhatsNewComment()
 * @return   int                 > 0: spam detected, == 0: no spam detected
 *
 */
-function PLG_checkforSpam($content, $action = -1)
+function PLG_checkforSpam($content, $action = -1, $data = array() )
 {
     global $_PLUGINS;
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_checkforSpam_' . $pi_name;
         if (function_exists($function)) {
-            $result = $function($content, $action);
+            $result = $function($content, $action, $data);
             if ($result > 0) { // Plugin found a match for spam
-
-                $result = PLG_spamAction($content, $action);
-
+                $result = PLG_spamAction($content, $action,$data);
                 return $result;
             }
         }
@@ -2569,11 +2567,9 @@ function PLG_checkforSpam($content, $action = -1)
 
     $function = 'CUSTOM_checkforSpam';
     if (function_exists($function)) {
-        $result = $function($content, $action);
+        $result = $function($content, $action,$data);
         if ($result > 0) { // Plugin found a match for spam
-
-            $result = PLG_spamAction($content, $action);
-
+            $result = PLG_spamAction($content, $action,$data);
             return $result;
         }
     }
@@ -2595,7 +2591,7 @@ function PLG_checkforSpam($content, $action = -1)
 * @see      PLG_checkforSpam
 *
 */
-function PLG_spamAction($content, $action = -1)
+function PLG_spamAction($content, $action = -1,$data = array())
 {
     global $_PLUGINS;
 
@@ -2604,14 +2600,14 @@ function PLG_spamAction($content, $action = -1)
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_spamaction_' . $pi_name;
         if (function_exists($function)) {
-            $res = $function($content, $action);
+            $res = $function($content, $action,$data);
             $result = max($result, $res);
         }
     }
 
     $function = 'CUSTOM_spamaction';
     if (function_exists($function)) {
-        $res = $function($content, $action);
+        $res = $function($content, $action,$data);
         $result = max($result, $res);
     }
 
@@ -2793,11 +2789,12 @@ function PLG_itemSaved($id, $type, $old_id = '')
 *
 * @param    string  $id     ID of the item
 * @param    string  $type   type of the item, e.g. 'article'
+* @param    string  $children  comma separated list of children ids to delete
 * @return   void
 * @since    glFusion v1.1.6
 *
 */
-function PLG_itemDeleted($id, $type)
+function PLG_itemDeleted($id, $type, $children = null)
 {
     global $_PLUGINS;
 
@@ -2809,13 +2806,13 @@ function PLG_itemDeleted($id, $type)
         if ($_PLUGINS[$del] != $plg_type) {
             $function = 'plugin_itemdeleted_' . $_PLUGINS[$del];
             if (function_exists($function)) {
-                $function($id, $type);
+                $function($id, $type, $children);
             }
         }
     }
 
     if (function_exists('CUSTOM_itemdeleted')) {
-        CUSTOM_itemdeleted($id, $type);
+        CUSTOM_itemdeleted($id, $type, $children);
     }
 }
 

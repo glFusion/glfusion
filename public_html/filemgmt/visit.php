@@ -51,8 +51,11 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $uid = $_USER['uid'];
     } else {
         $uid = 1;
+        $_USER['username'] = 'anon';
     }
     $tempFile = 0;
+    $lid = 0;
+    $status = '';
     if ( isset($_GET['lid']) ) {
         $lid = COM_applyFilter($_GET['lid'],true);
         $status = 'status>0';
