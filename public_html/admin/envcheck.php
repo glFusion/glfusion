@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Environment Check                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -42,7 +42,6 @@ if (!SEC_inGroup ('Root')) {
     echo $display;
     exit;
 }
-
 
 function _checkEnvironment()
 {
@@ -126,33 +125,6 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
-    if (version_compare(PHP_VERSION,'5.4.0','<')) {
-        $rg = ini_get('register_globals');
-        $T->set_var('item','register_globals');
-        $T->set_var('status',$rg == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
-        $T->set_var('class',$rg == 1 ? 'tm-fail' : 'tm-pass');
-        $T->set_var('recommended',$LANG_ENVCHK['off']);
-        $T->set_var('notes',$LANG_ENVCHK['register_globals']);
-        $T->set_var('rowclass',($classCounter % 2)+1);
-        $T->parse('env','envs',true);
-        $classCounter++;
-    } else {
-        $rg = 0;
-    }
-
-    if (version_compare(PHP_VERSION,'5.4.0','<')) {
-        $sm = ini_get('safe_mode');
-        $T->set_var('item','safe_mode');
-        $T->set_var('status',$sm == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
-        $T->set_var('class',$sm == 1 ? 'tm-fmail' : 'tm-pass');
-        $T->set_var('recommended',$LANG_ENVCHK['off']);
-        $T->set_var('notes',$LANG_ENVCHK['safe_mode']);
-        $T->set_var('rowclass',($classCounter % 2)+1);
-        $T->parse('env','envs',true);
-        $classCounter++;
-    } else {
-        $sm = 0;
-    }
     if (version_compare(PHP_VERSION,'7.0.0','<')) {
         $ob = ini_get('open_basedir');
         if ( $ob == '' ) {
@@ -243,22 +215,22 @@ function _checkEnvironment()
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('env','envs',true);
         $classCounter++;
-// Cache Driver
-        $T->set_var('item', 'Cache Driver');
-        $T->set_var('status', $_CONF['cache_driver']);
-        $T->set_var('class', 'tm-pass');
-        $T->set_var('recommended', '');
-        $T->set_var('notes','Will fall back to using Files if primary driver unavailable');
-        $T->set_var('rowclass',($classCounter % 2)+1);
-        $T->parse('env','envs',true);
-        $classCounter++;
-
     }
 
     $mysql_version = DB_getVersion();
     $T->set_var('mysql', $LANG_ENVCHK['database_version']);
     $T->set_var('mysql_version',$mysql_version);
     $T->set_var('rowclass',($classCounter % 2)+1);
+    $classCounter++;
+
+// Cache Driver
+    $T->set_var('item', 'Cache Driver');
+    $T->set_var('status', $_CONF['cache_driver']);
+    $T->set_var('class', 'tm-pass');
+    $T->set_var('recommended', '');
+    $T->set_var('notes','Will fall back to using Files if primary driver unavailable');
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('env','envs',true);
     $classCounter++;
 
     $T->set_block('page','libs','lib');
@@ -287,169 +259,159 @@ function _checkEnvironment()
         $T->parse('lib','libs',true);
     }
 
-    if ( $sm != 1 && $open_basedir_restriction != 1 ) {
-        switch ( $_CONF['image_lib'] ) {
-            case 'graphicsmagick' :    // GraphicsMagick
-                if (PHP_OS == "WINNT") {
-                    $binary = "/gm.exe";
-                } else {
-                    $binary = "/gm";
-                }
-                clearstatcache();
-                if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
+    switch ( $_CONF['image_lib'] ) {
+        case 'graphicsmagick' :    // GraphicsMagick
+            if (PHP_OS == "WINNT") {
+                $binary = "/gm.exe";
+            } else {
+                $binary = "/gm";
+            }
+            clearstatcache();
+            if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
+                $T->set_var(array(
+                    'item'   =>  $LANG_ENVCHK['graphicsmagick'],
+                    'status' =>  $LANG_ENVCHK['not_found'],
+                    'class' =>  'tm-fail',
+                    'notes'  => $LANG_ENVCHK['gm_not_found'],
+                ));
+            } else {
+                $T->set_var(array(
+                    'item'   => $LANG_ENVCHK['graphicsmagick'],
+                    'status' => $LANG_ENVCHK['ok'],
+                    'class' => 'tm-pass',
+                    'notes'  => $LANG_ENVCHK['gm_ok'],
+                ));
+            }
+            break;
+        case 'imagemagick' :    // ImageMagick
+            if (PHP_OS == "WINNT") {
+                $binary = "/convert.exe";
+            } else {
+                $binary = "/convert";
+            }
+            clearstatcache();
+            if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
+                $T->set_var(array(
+                    'item'   =>  $LANG_ENVCHK['imagemagick'],
+                    'status' =>  $LANG_ENVCHK['not_found'],
+                    'class' =>  'tm-fail',
+                    'notes'  => $LANG_ENVCHK['im_not_found'],
+                ));
+            } else {
+                $T->set_var(array(
+                    'item'   => $LANG_ENVCHK['imagemagick'],
+                    'status' => $LANG_ENVCHK['ok'],
+                    'class' => 'tm-pass',
+                    'notes'  => $LANG_ENVCHK['im_ok'],
+                ));
+            }
+            break;
+        case 'gdlib' :        // GD Libs
+            if ($gdv = gdVersion()) {
+                if ($gdv >=2) {
                     $T->set_var(array(
-                        'item'   =>  $LANG_ENVCHK['graphicsmagick'],
-                        'status' =>  $LANG_ENVCHK['not_found'],
-                        'class' =>  'tm-fail',
-                        'notes'  => $LANG_ENVCHK['gm_not_found'],
-                    ));
-                } else {
-                    $T->set_var(array(
-                        'item'   => $LANG_ENVCHK['graphicsmagick'],
+                        'item'   => $LANG_ENVCHK['gd_lib'],
                         'status' => $LANG_ENVCHK['ok'],
                         'class' => 'tm-pass',
-                        'notes'  => $LANG_ENVCHK['gm_ok'],
+                        'notes'  => $LANG_ENVCHK['gd_ok'],
                     ));
-                }
-                break;
-            case 'imagemagick' :    // ImageMagick
-                if (PHP_OS == "WINNT") {
-                    $binary = "/convert.exe";
-                } else {
-                    $binary = "/convert";
-                }
-                clearstatcache();
-                if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
-                    $T->set_var(array(
-                        'item'   =>  $LANG_ENVCHK['imagemagick'],
-                        'status' =>  $LANG_ENVCHK['not_found'],
-                        'class' =>  'tm-fail',
-                        'notes'  => $LANG_ENVCHK['im_not_found'],
-                    ));
-                } else {
-                    $T->set_var(array(
-                        'item'   => $LANG_ENVCHK['imagemagick'],
-                        'status' => $LANG_ENVCHK['ok'],
-                        'class' => 'tm-pass',
-                        'notes'  => $LANG_ENVCHK['im_ok'],
-                    ));
-                }
-                break;
-            case 'gdlib' :        // GD Libs
-                if ($gdv = gdVersion()) {
-                    if ($gdv >=2) {
-                        $T->set_var(array(
-                            'item'   => $LANG_ENVCHK['gd_lib'],
-                            'status' => $LANG_ENVCHK['ok'],
-                            'class' => 'tm-pass',
-                            'notes'  => $LANG_ENVCHK['gd_ok'],
-                        ));
 
-                    } else {
-                        $T->set_var(array(
-                            'item'   => $LANG_ENVCHK['gd_lib'],
-                            'status' => $LANG_ENVCHK['ok'],
-                            'class' => 'tm-pass',
-                            'notes'  => $LANG_ENVCHK['gd_v1'],
-                        ));
-                    }
                 } else {
                     $T->set_var(array(
-                        'item'   =>  $LANG_ENVCHK['gd_lib'],
-                        'status' =>  $LANG_ENVCHK['not_found'],
-                        'class'  =>  'tm-fail',
-                        'notes' =>   $LANG_ENVCHK['gd_not_found'],
+                        'item'   => $LANG_ENVCHK['gd_lib'],
+                        'status' => $LANG_ENVCHK['ok'],
+                        'class' => 'tm-pass',
+                        'notes'  => $LANG_ENVCHK['gd_v1'],
                     ));
                 }
-                break;
-            case 'netpbm' :    // NetPBM
-                if (PHP_OS == "WINNT") {
-                    $binary = "/jpegtopnm.exe";
-                } else {
-                    $binary = "/jpegtopnm";
-                }
-                clearstatcache();
-                if (! @file_exists( $_CONF['path_to_netpbm'] . $binary ) ) {
-                    $T->set_var(array(
-                        'item'   => $LANG_ENVCHK['netpbm'],
-                        'status' => $LANG_ENVCHK['not_found'],
-                        'class' => 'tm-fail',
-                        'notes'  => $LANG_ENVCHK['np_not_found'],
-                    ));
-                } else {
-                    $T->set_var(array(
-                        'item'   =>  $LANG_ENVCHK['netpbm'],
-                        'status' =>  $LANG_ENVCHK['ok'],
-                        'class' =>  'tm-pass',
-                        'notes'  => $LANG_ENVCHK['np_ok'],
-                    ));
-                }
-                break;
+            } else {
+                $T->set_var(array(
+                    'item'   =>  $LANG_ENVCHK['gd_lib'],
+                    'status' =>  $LANG_ENVCHK['not_found'],
+                    'class'  =>  'tm-fail',
+                    'notes' =>   $LANG_ENVCHK['gd_not_found'],
+                ));
+            }
+            break;
+        case 'netpbm' :    // NetPBM
+            if (PHP_OS == "WINNT") {
+                $binary = "/jpegtopnm.exe";
+            } else {
+                $binary = "/jpegtopnm";
+            }
+            clearstatcache();
+            if (! @file_exists( $_CONF['path_to_netpbm'] . $binary ) ) {
+                $T->set_var(array(
+                    'item'   => $LANG_ENVCHK['netpbm'],
+                    'status' => $LANG_ENVCHK['not_found'],
+                    'class' => 'tm-fail',
+                    'notes'  => $LANG_ENVCHK['np_not_found'],
+                ));
+            } else {
+                $T->set_var(array(
+                    'item'   =>  $LANG_ENVCHK['netpbm'],
+                    'status' =>  $LANG_ENVCHK['ok'],
+                    'class' =>  'tm-pass',
+                    'notes'  => $LANG_ENVCHK['np_ok'],
+                ));
+            }
+            break;
+    }
+    $T->set_var('rowclass',($classCounter % 2)+1);
+    $T->parse('lib','libs',true);
+    $classCounter++;
+    if ( $_CONF['jhead_enabled'] ) {
+        if (PHP_OS == "WINNT") {
+            $binary = "/jhead.exe";
+        } else {
+            $binary = "/jhead";
+        }
+        clearstatcache();
+        if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
+            $T->set_var(array(
+                'item'      => $LANG_ENVCHK['jhead'],
+                'status'    => $LANG_ENVCHK['not_found'],
+                'class'    => 'tm-fail',
+                'notes'     => $LANG_ENVCHK['jhead_not_found'],
+            ));
+        } else {
+            $T->set_var(array(
+                'item'      => $LANG_ENVCHK['jhead'],
+                'status'    => $LANG_ENVCHK['ok'],
+                'class'    => 'tm-pass',
+                'notes'     => $LANG_ENVCHK['jhead_ok'],
+            ));
         }
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('lib','libs',true);
         $classCounter++;
-        if ( $_CONF['jhead_enabled'] ) {
-            if (PHP_OS == "WINNT") {
-                $binary = "/jhead.exe";
-            } else {
-                $binary = "/jhead";
-            }
-            clearstatcache();
-            if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
-                $T->set_var(array(
-                    'item'      => $LANG_ENVCHK['jhead'],
-                    'status'    => $LANG_ENVCHK['not_found'],
-                    'class'    => 'tm-fail',
-                    'notes'     => $LANG_ENVCHK['jhead_not_found'],
-                ));
-            } else {
-                $T->set_var(array(
-                    'item'      => $LANG_ENVCHK['jhead'],
-                    'status'    => $LANG_ENVCHK['ok'],
-                    'class'    => 'tm-pass',
-                    'notes'     => $LANG_ENVCHK['jhead_ok'],
-                ));
-            }
-            $T->set_var('rowclass',($classCounter % 2)+1);
-            $T->parse('lib','libs',true);
-            $classCounter++;
-        }
+    }
 
-        if ( $_CONF['jpegtrans_enabled'] ) {
-            if (PHP_OS == "WINNT") {
-                $binary = "/jpegtran.exe";
-            } else {
-                $binary = "/jpegtran";
-            }
-            clearstatcache();
-            if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
-                $T->set_var(array(
-                    'item'   => $LANG_ENVCHK['jpegtran'],
-                    'status' => $LANG_ENVCHK['not_found'],
-                    'class' => 'tm-fail',
-                    'notes'  => $LANG_ENVCHK['jpegtran_not_found'],
-                ));
-            } else {
-                $T->set_var(array(
-                    'item'   => $LANG_ENVCHK['jpegtran'],
-                    'status' => $LANG_ENVCHK['ok'],
-                    'class' => 'tm-pass',
-                    'notes'  => $LANG_ENVCHK['jpegtran_ok'],
-                ));
-            }
-            $T->set_var('rowclass',($classCounter % 2)+1);
-            $T->parse('lib','libs',true);
-            $classCounter++;
+    if ( $_CONF['jpegtrans_enabled'] ) {
+        if (PHP_OS == "WINNT") {
+            $binary = "/jpegtran.exe";
+        } else {
+            $binary = "/jpegtran";
         }
-
-    } else {
-        $T->set_var(array(
-            'item'   => $LANG_ENVCHK['graphics'],
-            'status' => $LANG_ENVCHK['not_checked'],
-            'class' => 'tm-pass',
-            'notes'  => $LANG_ENVCHK['bypass_note'],
-        ));
+        clearstatcache();
+        if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
+            $T->set_var(array(
+                'item'   => $LANG_ENVCHK['jpegtran'],
+                'status' => $LANG_ENVCHK['not_found'],
+                'class' => 'tm-fail',
+                'notes'  => $LANG_ENVCHK['jpegtran_not_found'],
+            ));
+        } else {
+            $T->set_var(array(
+                'item'   => $LANG_ENVCHK['jpegtran'],
+                'status' => $LANG_ENVCHK['ok'],
+                'class' => 'tm-pass',
+                'notes'  => $LANG_ENVCHK['jpegtran_ok'],
+            ));
+        }
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('lib','libs',true);
+        $classCounter++;
     }
 
     if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
@@ -501,6 +463,8 @@ function _checkEnvironment()
                         $_CONF['path_log'].'access.log',
                         $_CONF['path_log'].'captcha.log',
                         $_CONF['path_log'].'spamx.log',
+                        $_CONF['path_log'].'404.log',
+                        $_CONF['path_data'].'cache/',
                         $_CONF['path_data'].'layout_cache/',
                         $_CONF['path_data'].'temp/',
                         $_CONF['path_data'].'htmlpurifier/',
