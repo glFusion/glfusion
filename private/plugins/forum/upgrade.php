@@ -210,7 +210,11 @@ function forum_upgrade() {
               `poster_id` mediumint(9) NOT NULL,
               `voter_id` mediumint(9) NOT NULL,
               `topic_id` int(11) NOT NULL,
-              PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`)
+              `username` varchar(40),
+              `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (`poster_id`,`voter_id`,`topic_id`),
+              KEY `voter_id` (`voter_id`),
+              KEY `poster_id` (`poster_id`)
             ) ENGINE=MyISAM;";
 
             // Copy existing badge images from the original directory to the
