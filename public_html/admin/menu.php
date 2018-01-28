@@ -63,7 +63,8 @@ function MB_displayMenuList( ) {
     }
 
     $result = DB_query("SELECT * FROM {$_TABLES['menu']}",1);
-    while ( $menu = DB_fetchArray($result) ) {
+    $menuSet = DB_fetchAll($result);
+    foreach ($menuSet AS $menu) {
         $menuID = $menu['id'];
         $menuArray[$menu['id']]['menu_name']   = $menu['menu_name'];
         $menuArray[$menu['id']]['menu_id']     = $menu['id'];
@@ -216,7 +217,8 @@ function MB_saveCloneMenu( ) {
 
         $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int)$menu;
         $result = DB_query($sql);
-        while ($M = DB_fetchArray($result)) {
+        $menuSet = DB_fetchAll($result);
+        foreach ($menuSet AS $M) {
             $M['menu_id']       = $menu_id;
             $element            = new menuElement();
             $element->constructor( $M, $meadmin, $root, $groups );
@@ -232,7 +234,7 @@ function MB_saveCloneMenu( ) {
     }
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');    
+    $c->deleteItemsByTag('css');
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
 }
@@ -466,7 +468,8 @@ function MB_getMenuList( $selected = '' )
     $menu_select = '';
 
     $result = DB_query("SELECT id, menu_name FROM {$_TABLES['menu']} ORDER BY menu_name ASC",1);
-    while ( ( $M = DB_fetchArray($result) ) ) {
+    $menuSet = DB_fetchAll($result);
+    foreach($menuSet AS $M) {
         $menu_select .= '<option value="' . $M['id'].'"' . ($M['id'] == $selected ? ' selected="selected"' : '') . '>' . $M['menu_name'] .'</option>' . LB;
     }
     return $menu_select;
@@ -611,7 +614,8 @@ function MB_createElement ( $menu_id ) {
         $parent_select = '<select name="pid" id="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
         $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . (int) $menu_id . "' AND element_type=1");
-        while ($row = DB_fetchArray($result)) {
+        $menuSet = DB_fetchAll($result);
+        foreach($menuSet AS $row) {
             $parent_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;
         }
         $parent_select .= '</select>' . LB;
@@ -621,7 +625,8 @@ function MB_createElement ( $menu_id ) {
     $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
 
     $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=0 ORDER BY element_order ASC");
-    while ($row = DB_fetchArray($result)) {
+    $menuSet = DB_fetchAll($result);
+    foreach($menuSet AS $row) {
         $label = strip_tags($row['element_label']);
         if ( trim($label) == "") {
             $label = htmlspecialchars($row['element_label']);
@@ -892,7 +897,8 @@ function MB_editElement( $menu_id, $mid ) {
         $parent_select = '<select id="pid" name="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
         $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND element_type=1");
-        while ($row = DB_fetchArray($result)) {
+        $menuSet = DB_fetchAll($result);
+        foreach($menuSet AS $row) {
             if ($row['id'] != $mid ) {
                 $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
             }
@@ -934,8 +940,8 @@ function MB_editElement( $menu_id, $mid ) {
     $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
     $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".(int) $menu->menu_elements[$mid]->pid." ORDER BY element_order ASC");
     $order = 10;
-
-    while ($row = DB_fetchArray($result)) {
+    $menuSet = DB_fetchAll($result);
+    foreach($menuSet AS $row) {
         if ( $menu->menu_elements[$mid]->order != $order ) {
             $label = strip_tags($row['element_label']);
             if ( trim($label) == "") {
@@ -1085,7 +1091,7 @@ function MB_deleteMenu($menu_id) {
     DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');    
+    $c->deleteItemsByTag('css');
 }
 
 

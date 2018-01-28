@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion security library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -658,9 +658,8 @@ function SEC_getGroupList ($basegroup)
         $thisgroup = array_pop ($to_check);
         if ($thisgroup > 0) {
             $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
-            $numGroups = DB_numRows ($result);
-            for ($i = 0; $i < $numGroups; $i++) {
-                $A = DB_fetchArray ($result);
+            $grpSet = DB_fetchAll($result);
+            foreach($grpSet AS $A) {
                 if (!in_array ($A['ug_grp_id'], $checked)) {
                     if (!in_array ($A['ug_grp_id'], $to_check)) {
                         array_push ($to_check, $A['ug_grp_id']);
