@@ -313,13 +313,12 @@ final class Cache
     {
         global $_GROUPS, $_RIGHTS, $_USER;
 
-        static $hash = NULL;
+        $hash = '';
 
-        if (empty($hash)) {
-            $groups = implode(',',$_GROUPS);
-            $rights = implode(',',$_RIGHTS);
-            $hash = strtolower(md5($groups).md5($rights));
-        }
+        $groups = implode(',',$_GROUPS);
+        $rights = implode(',',$_RIGHTS);
+        $hash = strtolower(md5($groups).md5($rights));
+
         if ($byTheme) {
             $hash .= '_'.$_USER['theme'];
         }
