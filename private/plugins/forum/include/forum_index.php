@@ -301,9 +301,9 @@ function forum_index()
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
-        $cacheTest = $c->get($key);
-        if ( $cacheTest !== null ) {
-            $pageBody = $cacheTest;
+        $cacheTest = $c->has($key);
+        if ( COM_isAnonUser() && $cacheTest == true ) {
+            $pageBody = $c->get($key);
         } else {
             $categoryQuery = DB_query($sql);
 
@@ -515,7 +515,9 @@ function forum_index()
             }
             $forumlisting->parse ('output', 'forumlisting');
             $pageBody .= $forumlisting->finish ($forumlisting->get_var('output'));
-            $c->set($key,$pageBody,'forum');
+            if ( COM_isAnonUser())  {
+                $c->set($key,$pageBody,'forum');
+            }
         }
         $DisplayTime = $mytimer->stopTimer();
     }
