@@ -1179,7 +1179,7 @@ function GROUP_delete($grp_id)
     DB_delete ($_TABLES['groups'], 'grp_id', $grp_id);
 
     PLG_groupChanged ($grp_id, 'delete');
-    \glFusion\Cache::getInstance()->deleteItemsByTag('groups');
+    \glFusion\Cache::getInstance()->deleteItemsByTags(array('groups', 'group_' . $grp_id));
 
     COM_setMessage(50);
     $url = $_CONF['site_admin_url'] . '/group.php';
