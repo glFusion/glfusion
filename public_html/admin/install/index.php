@@ -895,6 +895,7 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['log_path'].'captcha.log',
                         $_PATH['log_path'].'spamx.log',
                         $_PATH['log_path'].'404.log',
+                        $_PATH['data_path'].'cache/',
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
                         $_PATH['data_path'].'htmlpurifier/',

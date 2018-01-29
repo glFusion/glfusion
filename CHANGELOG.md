@@ -1,3 +1,8 @@
+## v1.8.0 (Unreleased)
+  - Bumped PHP min version to v5.6.0
+  - Converted all caching calls to use new caching engine
+  - Implemented phpFastCache as glFusion's caching engine
+
 ## v1.7.2 (January 27, 2018)
   - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
   - Forum: Fixed issue where signature preview would not work consistently

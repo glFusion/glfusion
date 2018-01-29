@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main program to view forum                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -301,14 +301,13 @@ function forum_index()
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
-        $cacheTest = $c->get($key);
-        if ( $cacheTest !== null ) {
-            $pageBody = $cacheTest;
+        $cacheTest = $c->has($key);
+        if ( COM_isAnonUser() && $cacheTest == true ) {
+            $pageBody = $c->get($key);
         } else {
             $categoryQuery = DB_query($sql);
-
             $numCategories = DB_numRows($categoryQuery);
-
+            $resultSet = DB_fetchAll($categoryQuery,false);
             $forumlisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
             $forumlisting->set_file ('forumlisting','homepage.thtml');
 
@@ -318,9 +317,9 @@ function forum_index()
                     'layout_url'    => $_CONF['layout_url'],
                     'forum_home'    => 'Forum Index'
             ));
-            for ($i = 1; $i <= $numCategories; $i++) {
-                $A = DB_fetchArray($categoryQuery,false);
-
+            $i = 0;
+            foreach ($resultSet AS $A) {
+                $i++;
                 $forumlisting->set_block('forumlisting', 'catrows', 'crow');
                 $forumlisting->clear_var('frow');
                 if ( $birdSeedStart == '' ) {
@@ -371,12 +370,13 @@ function forum_index()
 
                 $forumQuery = DB_query($sql);
                 $numForums = DB_numRows($forumQuery);
+                $forumResults = DB_fetchAll($forumQuery,false);
 
                 $numForumsDisplayed = 0;
 
                 $forumlisting->set_block('forumlisting', 'forumrows', 'frow');
 
-                while ($B = DB_FetchArray($forumQuery)) {
+                foreach ($forumResults AS $B ) {
         			if ( _ff_canUserViewRating($B['forum_id'] ) ) {
                     	$lastforum_noaccess = false;
                 	    $topicCount = $B['topic_count'];
@@ -385,7 +385,8 @@ function forum_index()
                         	$modsql = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $B['forum_id']);
                        	 	$moderatorcnt = 1;
                         	if (DB_numRows($modsql) > 0) {
-                            	while($showmods = DB_fetchArray($modsql,false)) {
+                        	    $modResults = DB_fetchAll($modsql,false);
+                                foreach($modResults AS $showmods) {
                                 	if ($showmods['mod_uid'] == '0') {
                                     	if ($showmods['mod_groupid'] > 0) {
                                             $showmods['mod_username'] = _ff_getGroup($showmods['mod_groupid']);
@@ -515,7 +516,9 @@ function forum_index()
             }
             $forumlisting->parse ('output', 'forumlisting');
             $pageBody .= $forumlisting->finish ($forumlisting->get_var('output'));
-            $c->set($key,$pageBody,'forum');
+            if ( COM_isAnonUser())  {
+                $c->set($key,$pageBody,'forum');
+            }
         }
         $DisplayTime = $mytimer->stopTimer();
     }
@@ -769,7 +772,9 @@ function forum_index()
             $FF_userprefs['postsperpage'] = 20;
         }
         $topiccounter = 2;
-        while (($record = DB_fetchArray($topicResults,false)) != NULL ) {
+
+        $topicResultsSet = DB_fetchAll($topicResults,false);
+        foreach ($topicResultsSet AS $record) {
             if ( ( $record['replies']+1 ) <= $FF_userprefs['postsperpage'] ) {
                 $displaypageslink = "";
                 $gotomsg = "";
