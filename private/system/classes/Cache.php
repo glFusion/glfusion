@@ -284,6 +284,28 @@ final class Cache
     }
 
     /**
+     * delete cache items tagged by at least one of several tags
+     * @param array $tags
+     * @return none
+     */
+    public function deleteItemsByTags($tags)
+    {
+        if (!is_array($tags)) $tags = array($tags);
+        $this->internalCacheInstance->deleteItemsByTags($tags);
+    }
+
+    /**
+     * delete cache items tagged with all tags
+     * @param array $tags
+     * @return none
+     */
+    public function deleteItemsByTagsAll($tags)
+    {
+        if (!is_array($tags)) $tags = array($tags);
+        $this->internalCacheInstance->deleteItemsByTagsAll($tags);
+    }
+
+    /**
      * @param string $tag
      * @return mixed items
      */
