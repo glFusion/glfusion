@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Enhancement Library                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2018 by the following authors:                        |
+// | Copyright (C) 2015-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -50,17 +50,17 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
 
     $sql = "SELECT * FROM {$_TABLES['social_share']} WHERE enabled=1";
     $result = DB_query($sql);
-    if ( DB_numRows($result) <= 0 ) return $retval;
+    $numRows = DB_numRows($result);
+
+    if ( $numRows <= 0 ) return $retval;
 
     $T->set_block('social_icons','social_buttons','sb');
 
     $output = outputHandler::getInstance();
     $output->addLinkScript($_CONF['site_url'].'/javascript/socialshare.js');
 
-    $ssSet = DB_fetchAll($result);
-    foreach($ssSet AS $row) {
-//    for ( $x = 0; $x < $numRows; $x++ ) {
-//        $row = DB_fetchArray($result);
+    for ( $x = 0; $x < $numRows; $x++ ) {
+        $row = DB_fetchArray($result);
 
         $id = $row['id'];
         $name = $row['name'];
@@ -133,33 +133,38 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
             WHERE su.uid = " . (int) $uid . " AND ss.enabled = 1 ORDER BY service_name";
 
     $result = DB_query($sql);
-    $T->set_block('links','social_buttons','sb');
-    $sfsSet = DB_fetchAll($result);
-    foreach($sfsSet AS $row) {
-        $social_url = str_replace("%%u", $row['ss_username'],$row['url']);
+    $numRows = DB_numRows($result);
+    if ( $numRows > 0 ) {
 
-        $T->set_var(array(
-            'service_icon'  => $row['icon'],
-            'service_display_name' => $row['display_name'],
-            'social_url'   => $social_url,
-        ));
-        $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
-        $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
-        $T->parse('sb','social_buttons',true);
-    }
-    $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
-    $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
+        $T->set_block('links','social_buttons','sb');
 
-    if ( $uid == -1 ) {
-        $cfg =& config::get_instance();
-        $_SOCIAL = $cfg->get_config('social_internal');
+        for ( $x = 0; $x < $numRows; $x++ ) {
+            $row = DB_fetchArray($result);
 
-        if ( isset($_SOCIAL['social_site_extra'])) {
-            $T->set_var('extra',$_SOCIAL['social_site_extra']);
+            $social_url = str_replace("%%u", $row['ss_username'],$row['url']);
+
+            $T->set_var(array(
+                'service_icon'  => $row['icon'],
+                'service_display_name' => $row['display_name'],
+                'social_url'   => $social_url,
+            ));
+            $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
+            $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
+            $T->parse('sb','social_buttons',true);
         }
-    }
-    $retval = $T->finish ($T->parse('output','links'));
+        $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
+        $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
 
+        if ( $uid == -1 ) {
+            $cfg =& config::get_instance();
+            $_SOCIAL = $cfg->get_config('social_internal');
+
+            if ( isset($_SOCIAL['social_site_extra'])) {
+                $T->set_var('extra',$_SOCIAL['social_site_extra']);
+            }
+        }
+        $retval = $T->finish ($T->parse('output','links'));
+    }
     if ( $uid == -1 ) {
         $c->set($key,$retval,array('social','social_site'));
     }
@@ -181,15 +186,13 @@ function SOC_followMeProfile( $uid )
 
     $sql = "SELECT * FROM {$_TABLES['social_follow_services']} WHERE enabled=1 ORDER BY service_name ASC";
     $result = DB_query($sql);
-    $sfsSet = DB_fetchAll($result);
-    foreach($sfsSet AS $row) {
+    while ( ($row = DB_fetchArray($result)) != NULL ) {
         $id = $row['ssid'];
         $socialServicesArray[$id] = $row;
     }
     $sql = "SELECT * FROM {$_TABLES['social_follow_user']} WHERE uid=". (int) $uid;
     $result = DB_query($sql);
-    $sfsSet = DB_fetchAll($result);
-    foreach($sfsSet AS $row) {
+    while ( ($row = DB_fetchArray($result)) != NULL ) {
         $id = $row['ssid'];
         $userServicesArray[$id] = $row;
     }

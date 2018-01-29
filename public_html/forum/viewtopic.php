@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display a topic list                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -143,7 +143,7 @@ if ( !$iframe )  {
     ));
 }
 
-if (isset($_GET['lastpost']) && $_GET['lastpost'] == 'true') {
+if (isset($_GET['lastpost']) && $_GET['lastpost']) {
     if ( $page == 0 ) {
         $page = $numpages;
     }
@@ -164,11 +164,10 @@ if (isset($_GET['lastpost']) && $_GET['lastpost'] == 'true') {
         $order = $FF_userprefs['topic_order'];
         $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $showtopic." ORDER BY date " . $order;
         $idResult = DB_query($sql);
-
-        $idResultSet = DB_fetchAll($idResult);
-
         $ids = array();
-        foreach($idResultSet AS $idItem) $ids[] = $idResult['id'];
+        while ( $I = DB_fetchArray($idResult)) {
+            $ids[] = $I['id'];
+        }
         $key = array_search($topic,$ids);
         $key = $key + 1;
         $page = intval($key / $show) + 1;
@@ -302,8 +301,7 @@ $cantView = 0;
 
 $topicTemplate->set_block('topictemplate', 'topicrow', 'trow');
 
-$topicResults = DB_fetchAll($result,false);
-foreach ($topicResults AS $topicRec) {
+while ($topicRec = DB_fetchArray($result) ) {
     if ($FF_userprefs['viewanonposts'] == 0 AND $topicRec['uid'] == 1) {
        $display .= '<div class="uk-alert uk-alert-danger" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
        break;
@@ -323,7 +321,6 @@ foreach ($topicResults AS $topicRec) {
 
 if (!$iframe) {
     DB_query("UPDATE {$_TABLES['ff_topic']} SET views=views+1 WHERE id=".(int) $showtopic);
-
 //@TODO look at optimizing this better
     if ( !COM_isAnonUser() ) {
         $showtopicpid = $showtopic;

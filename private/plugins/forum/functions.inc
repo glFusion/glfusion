@@ -1079,10 +1079,12 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumcb__'.$c->securityHash(true,true);
-        $retval = $c->has($key);
-        if ( $retval == true ) {
-            return $c->get($key);
+        $retval = $c->get($key);
+
+        if ( $retval !== null ) {
+            return $retval;
         }
+
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file ('block','centerblock.thtml');
         $block->set_var (array(
@@ -1117,8 +1119,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $cssid = 0;
         $block->set_block('block', 'blockrow', 'brow');
-        $resultSet = DB_fetchAll($result);
-        foreach ( $resultSet AS $A) {
+        while ( ($A = DB_fetchArray ($result)) != NULL ) {
             $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,COM_getEncodingt());
             if ($_FF_CONF['use_censor']) {
                 $A['subject'] = COM_checkWords($A['subject']);

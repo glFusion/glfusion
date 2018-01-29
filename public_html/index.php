@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion homepage.                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -198,7 +198,6 @@ if ( $_VARS['totalhits'] % 50 === 0 ) {
                 $c->deleteItemsByTag('whatsnew');
                 $c->deleteItemsByTag('menu');
             }
-//            PLG_itemSaved()
         } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
             COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
             STORY_removeStory($sid);
@@ -295,36 +294,40 @@ $msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . $sql . "ORDER BY featured DESC," . $orderBy . " LIMIT $offset, $limit";
 
 $result = DB_query ($msql);
+
 $nrows = DB_numRows ($result);
 
 $data = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} AS s WHERE" . $sql);
 $D = DB_fetchArray ($data);
 $num_pages = ceil ($D['count'] / $limit);
 $articleCounter = 0;
+if ( $A = DB_fetchArray( $result ) ) {
 
-if ( $nrows > 0 ) {
-    $resultSet = DB_fetchAll($result);
-    foreach ($resultSet AS $A) {
+    $story = new Story();
+    $story->loadFromArray($A);
+    if ( $_CONF['showfirstasfeatured'] == 1 ) {
+        $story->_featured = 1;
+    }
+
+    // display first article
+    if ($story->DisplayElements('featured') == 1) {
+        $pageBody .= STORY_renderArticle ($story, 'y');
+        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+    } else {
+        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        $pageBody .= STORY_renderArticle ($story, 'y');
+    }
+    $articleCounter++;
+
+    // get remaining stories
+    while ($A = DB_fetchArray ($result)) {
+//        $pageBody .= PLG_displayAdBlock('story',$articleCounter);
         $story = new Story();
         $story->loadFromArray($A);
-
-        if ( $articleCounter == 0 && $_CONF['showfirstasfeatured'] == 1 ) {
-            $story->_featured = 1;
-        }
-        // display first article
-        if ( $articleCounter == 0 ) {
-            if ($story->DisplayElements('featured') == 1) {
-                $pageBody .= STORY_renderArticle ($story, 'y');
-                if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-            } else {
-                if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-                $pageBody .= STORY_renderArticle ($story, 'y');
-            }
-        } else {
-            $pageBody .= STORY_renderArticle ($story, 'y');
-        }
+        $pageBody .= STORY_renderArticle ($story, 'y');
         $articleCounter++;
     }
+
     // get plugin center blocks that follow articles
     if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
 

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Admin-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -730,10 +730,13 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $sql .= "$filtersql $groupbysql $orderbysql $limitsql;";
 
     $result = DB_query($sql);
+
+    // number of rows/records to display
+    $nrows = DB_numRows($result);
+
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
-    $resultSet = DB_fetchAll($result,false);
-    foreach($resultSet AS $A) {
-        $r++;
+    for ($i = 0; $i < $nrows; $i++) { # now go through actual data
+        $A = DB_fetchArray($result);
         $row_output = false; # as long as no fields are returned, dont print row
         if ($chkselect) {
             $admin_templates->set_var('class', 'admin-list-field');
@@ -794,14 +797,14 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->clear_var('item_field'); # clear field
     }
 
-    if ($r==1) { # there is no data. return notification message.
+    if ($nrows==0) { # there is no data. return notification message.
         $message = (isset($no_data)) ? $no_data : $LANG_ADMIN['no_results'];
         $admin_templates->set_var('message', $message);
     }
 
     // if we displayed data, and chkselect option is available, display the
     // actions row for all selected items. provide a delete action as a minimum
-    if ($r > 1 AND $chkselect ) {
+    if ($nrows > 0 AND $chkselect ) {
         $actions = '<td style="text-align:center;">'
             . '<img src="' . $_CONF['layout_url'] . '/images/admin/action.' . $_IMAGE_TYPE . '" alt="" /></td>';
         $actions .= '<td colspan="' . $ncols . '">' . $LANG_ADMIN['action'] . '&nbsp;&nbsp;&nbsp;';

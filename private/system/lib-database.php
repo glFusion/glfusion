@@ -483,7 +483,7 @@ function DB_fetchArray($recordset, $both = true)
 * @return       Array      Returns data for a record in an array
 *
 */
-function DB_fetchAll($recordset, $both = false)
+function DB_fetchAll($recordset, $both = true)
 {
     global $_DB;
 

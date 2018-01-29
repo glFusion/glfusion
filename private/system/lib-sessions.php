@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion session library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
+// | Copyright (C) 2009-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -189,8 +189,7 @@ function SESS_sessionCheck()
     if ( $gc_check == 0 ) {
         $expirytime = (string) (time() - $_CONF['session_cookie_timeout']);
         $result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE start_time < $expirytime AND uid > 1",1);
-        $sessSet = DB_fetchAll($result);
-        foreach ($sessSet AS $D) {
+        while ( $D = DB_fetchArray($result) != FALSE ) {
             CTL_clearCache('mbmenu_'.$D['uid']);
         }
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
