@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User-related functions needed in more than one place.                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
+// | Copyright (C) 2009-2016 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -416,9 +416,9 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 
     // any default groups?
     $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_default = 1");
-    $grpSet = DB_fetchAll($result);
-    foreach ($grpSet AS $row) {
-        $def_grp = $row['grp_id'];
+    $num_groups = DB_numRows($result);
+    for ($i = 0; $i < $num_groups; $i++) {
+        list($def_grp) = DB_fetchArray($result);
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($def_grp, $uid)");
     }
     DB_query ("INSERT INTO {$_TABLES['userprefs']} (uid,tzid) VALUES ($uid,'{$_CONF['timezone']}')");
@@ -857,8 +857,9 @@ function USER_getChildGroups($groupid)
         $thisgroup = array_pop($to_check);
         if ($thisgroup > 0) {
             $result = DB_query("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$thisgroup'");
-            $grpSet = DB_fetchAll($result);
-            foreach($grpSet AS $A) {
+            $numGroups = DB_numRows($result);
+            for ($i = 0; $i < $numGroups; $i++) {
+                $A = DB_fetchArray($result);
                 if (!in_array($A['ug_grp_id'], $groups)) {
                     if (!in_array($A['ug_grp_id'], $to_check)) {
                         array_push($to_check, $A['ug_grp_id']);

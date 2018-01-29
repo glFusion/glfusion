@@ -169,11 +169,9 @@ if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
 }
 
 $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
-$resultSet = DB_fetchAll($result);
-foreach($resultSet AS $row) {
+while ($row = DB_fetchArray($result) ) {
     $_VARS[$row['name']] = $row['value'];
 }
-
 if ( isset($_VARS['guid'])) $_CONF['mail_smtp_password'] = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
 // set default UI styles
 $uiStyles = array(
@@ -205,8 +203,7 @@ if ( !isset($_SYSTEM['admin_session']) ) {
 $_LOGO = array();
 $result = DB_query("SELECT * FROM {$_TABLES['logo']}",1);
 if ( $result ) {
-    $resultSet = DB_fetchAll($result,false);
-    foreach ($resultSet AS $row) {
+    while ($row = DB_fetchArray($result)) {
         $_LOGO[$row['config_name']] = $row['config_value'];
     }
 }
@@ -266,21 +263,12 @@ require_once $_CONF['path_system'].'lib-database.php';
 *
 */
 
-$c = glFusion\Cache::getInstance();
-if ( $c->has('plugins')) {
-    $_PLUGINS = unserialize($c->get('plugins'));
-    $_PLUGIN_INFO = unserialize($c->get('plugin_info'));
-} else {
-    $result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
-    $_PLUGINS = array();
-    $_PLUGIN_INFO = array();
-    $pluginData = DB_fetchAll($result,false);
-    foreach($pluginData AS $A) {
-        if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
-        $_PLUGIN_INFO[$A['pi_name']] = $A;
-    }
-    $c->set('plugins',serialize($_PLUGINS));
-    $c->set('plugin_info',serialize($_PLUGIN_INFO));
+$result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
+$_PLUGINS = array();
+$_PLUGIN_INFO = array();
+while ($A = DB_fetchArray($result)) {
+    if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
+    $_PLUGIN_INFO[$A['pi_name']] = $A;
 }
 
 /**

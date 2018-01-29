@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Story-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -1213,11 +1213,8 @@ function STORY_renderImages($sid, $text)
         $stdImageLoc = false;
     }
 
-    $i = 0;
-    $imageSet = DB_fetchAll($result);
-
-    foreach($imageSet AS $A) {
-        $i++;
+    for ($i = 1; $i <= $nrows; $i++) {
+        $A = DB_fetchArray($result);
 
         $sizeattributes = COM_getImgSizeAttributes($_CONF['path_images'] . 'articles/' . $A['ai_filename']);
 
@@ -1894,8 +1891,9 @@ function service_get_story($args, &$output, &$svc_msg)
         $result = DB_query($sql);
 
         $count = 0;
-        $storySet = DB_fetchAll($result);
-        foreach ($storySet AS $story_array) {
+
+        while (($story_array = DB_fetchArray($result, false)) !== false) {
+
             $count += 1;
             if ($count == $max_items) {
                 $svc_msg['offset'] = $offset + $_CONF['atom_max_stories'];

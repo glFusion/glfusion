@@ -146,13 +146,16 @@ function assembleMenu($name, $skipCache=false) {
 
     if ( $skipCache == false ) {
         $c = glFusion\Cache::getInstance();
-        $key = 'menu_'.$menuName . '_' . $c->securityHash();
+        $key = 'menu_'.$menuName.'_'.$c->securityHash();
         $menuDataSerialized = $c->get($key);
         if ( $menuDataSerialized !== null ) {
             $menuData = unserialize($menuDataSerialized);
             return $menuData;
         }
     }
+//if ( $menuName != 'header' && $menuName != 'footer') {
+//COM_errorLog("CACHE: Rebuilding cache for menu ". $menuName);
+//}
 
     $menuObject = initMenu($menuName, $skipCache);
     if ( $menuObject != NULL ) {

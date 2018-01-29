@@ -152,22 +152,21 @@ class config
 
         $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
         $result = DB_query($sql);
-        $rows = DB_fetchAll($result,false);
-        foreach ($rows AS $row ) {
-            if ($row['value'] !== 'unset') {
-                if (!array_key_exists($row['group_name'], $this->config_array) ||
-                    !array_key_exists($row['name'], $this->config_array[$row['group_name']])) {
-                    $row['value'] = preg_replace_callback ( '!s:(\d+):"(.*?)";!',
+        while ($row = DB_fetchArray($result)) {
+            if ($row[1] !== 'unset') {
+                if (!array_key_exists($row[2], $this->config_array) ||
+                    !array_key_exists($row[0], $this->config_array[$row[2]])) {
+                    $row[1] = preg_replace_callback ( '!s:(\d+):"(.*?)";!',
                         function($match) {
                             return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
-                        },$row['value'] );
-                    $value = @unserialize($row['value']);
-                    if (($value === false) && ($row['value'] != $false_str)) {
+                        },$row[1] );
+                    $value = @unserialize($row[1]);
+                    if (($value === false) && ($row[1] != $false_str)) {
                         if (function_exists('COM_errorLog')) {
-                            COM_errorLog("Unable to unserialize {$row['value']} for {$row['group_name']}:{$row['name']}");
+                            COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
                         }
                     } else {
-                        $this->config_array[$row['group_name']][$row['name']] = $value;
+                        $this->config_array[$row[2]][$row[0]] = $value;
                     }
                 }
             }
