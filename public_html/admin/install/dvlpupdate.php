@@ -1945,6 +1945,9 @@ function glfusion_180()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
+    // forum badge update
+    DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
+
     _updateConfig();
 
     // update version number
