@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Story Abstraction.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1783,15 +1783,16 @@ class Story
     {
         global $_CONF, $_USER, $_TABLES;
 
+		static $allowedElements = null;
+
         $filter = sanitizer::getInstance();;
         $filter->setPostmode($this->_postmode);
-        $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
+		if ( $allowedElements === null )
+			$allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
         $filter->setAllowedElements($allowedElements);
         $filter->setCensorData(true);
         $filter->setReplaceTags(true);
         $filter->setNamespace('glfusion','story');
-
-        $dtObject = new Date($this->_date,$_USER['tzid']);
 
         if (isset($this->_expire) && $this->_expire != 0) {
             $dtExpire = new Date($this->_expire,$_USER['tzid']);
@@ -1819,24 +1820,28 @@ class Story
                 break;
 
             case 'shortdate':
+				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->format($_CONF['shortdate'],true);
-
                 break;
 
             case 'dateonly':
+				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->format($_CONF['dateonly'],true);
 
                 break;
 
             case 'date':
+				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->format($dtObject->getUserFormat(),true);
                 break;
 
             case 'iso8601_date' :
+				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->toISO8601();
                 break;
 
             case 'unixdate':
+				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->toUnix();
                 break;
 
