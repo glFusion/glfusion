@@ -44,7 +44,8 @@ class Badge
             } else {
                 // Set reasonable defaults
                 $this->fb_id = 0;
-                $this->fb_enabled = 1;  // enable new badges
+                $this->fb_enabled = 1;  // enable this badge
+                $this->fb_inherited = 1;  // include inherited groups
                 $this->fb_order = 999;  // set to last in list
                 $this->fb_grp = '';
                 $this->fb_gl_grp = '';
@@ -92,6 +93,7 @@ class Badge
             $this->properties[$key] = (int)$value;
             break;
         case 'fb_enabled':
+        case 'fb_inherited':
             $this->properties[$key] = $value == 1 ? 1 : 0;
             break;
         case 'fb_gl_grp':
@@ -142,6 +144,10 @@ class Badge
             if (!isset($A['fb_enabled'])) {
                 // checkboxes are unset, force a value
                 $this->fb_enabled = 0;
+            }
+            if (!isset($A['fb_inherited'])) {
+                // checkboxes are unset, force a value
+                $this->fb_inherited = 0;
             }
             switch ($this->fb_type) {
             case 'img':
@@ -214,9 +220,11 @@ class Badge
 
         $badge_groups = self::getAll();
         $retval[$uid] = array();
-        $grps = \Group::getAll($uid);
+        $all_grps = \Group::getAll($uid);
+        $assigned_grps = \Group::getAssigned($uid);
         foreach ($badge_groups as $badge_group) {
             foreach ($badge_group as $badge) {
+                $grps = $badge->fb_inherited ? $all_grps : $assigned_grps;
                 if (in_array($badge->fb_gl_grp, $grps)) {
                     $badge->getBadgeHTML();
                     if ($badge->html != '') {
@@ -390,6 +398,7 @@ class Badge
                         "fb_grp <> ''"
                 ),
             'ena_chk'   => $this->fb_enabled ? 'checked="checked"' : '',
+            'inherit_chk' => $this->fb_inherited ? 'checked="checked"' : '',
             'chk_' . $this->fb_type => 'checked="checked"',
             'sel_' . $this->fb_data => 'selected="selected"',
             'fb_dscp'   => $this->fb_dscp,
@@ -465,6 +474,7 @@ class Badge
         $sql2 = "fb_grp = '" . DB_escapeString($this->fb_grp) . "',
                 fb_order = '{$this->fb_order}',
                 fb_enabled = {$this->fb_enabled},
+                fb_inherited = {$this->fb_inherited},
                 fb_gl_grp = '" . DB_escapeString($this->fb_gl_grp) . "',
                 fb_data = '" . DB_escapeString($this->fb_data) . "',
                 fb_type = '" . DB_escapeString($this->fb_type) . "',
