@@ -192,7 +192,6 @@ function forum_upgrade() {
               `fb_grp` varchar(20) NOT NULL DEFAULT '',
               `fb_order` int(3) NOT NULL DEFAULT '99',
               `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
-              `fb_inherited` tinyint(1) unsigned NOT NULL DEFAULT '1',
               `fb_gl_grp` MEDIUMINT(8) NOT NULL,
               `fb_type` varchar(10) DEFAULT 'img',
               `fb_data` varchar(255) DEFAULT NULL,
@@ -275,6 +274,9 @@ function forum_upgrade() {
                 $c->del($lvl . 'name', 'forum');
             }
             $c->del('ff_rank_settings', 'forum');
+
+        case '3.4.1' :
+            DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
 
         default :
             forum_update_config();
