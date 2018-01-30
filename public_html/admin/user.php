@@ -1943,6 +1943,7 @@ function USER_save($uid)
         echo $retval;
         exit;
     }
+    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
 
     if ($_USER_VERBOSE) COM_errorLog("***************leaving USER_save()*****************",1);
 
@@ -2452,7 +2453,7 @@ function USER_delete($uid)
     if (!USER_deleteAccount ($uid)) {
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
     COM_setMessage(22);
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
 }
