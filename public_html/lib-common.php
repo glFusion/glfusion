@@ -1409,6 +1409,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             $theme->set_var('precontent',true);
         }
     }
+    if (defined ('DVLP_DEBUG')) {
+        if ( function_exists('xdebug_peak_memory_usage') ) {
+            $debugger = '<div class="uk-alert uk-alert-danger uk-margin-remove uk-align-center uk-text-center">';
+            $debugger .= '<span class="uk-text-bold">Peak Memory: ' . (xdebug_peak_memory_usage() / 1024) / 1024 . ' mb :: Execution Time : '. xdebug_time_index() . ' sec</span>';
+            $debugger .= '</div>';
+            $theme->set_var('debugger',$debugger);
+        }
+    }
 
     // Actually parse the template and make variable substitutions
     $theme->parse( 'index_footer', 'footer' );
