@@ -102,10 +102,18 @@ class Group
         $uid = (int)$uid;
         if ($uid < 1 ) return array();  // Invalid non-integer $uid
 
+        // Check the static var in case this is called more than once
+        // for a page load
         if (array_key_exists($uid, $runonce)) {
             return $runonce[$uid];
         }
+        // Then check the glFusion cache to save DB queries
+        $cache_key = 'user_group_assigned_' . $uid;
+        if (\glFusion\Cache::getInstance()->has($cache_key)) {
+            return \glFusion\Cache::getInstance()->get($cache_key);
+        }
 
+        // Not found in cache? Perform the DB lookup
         $groups = array();
         $sql = "SELECT ga.ug_main_grp_id, g.grp_name
                 FROM {$_TABLES['group_assignments']} ga
@@ -120,6 +128,7 @@ class Group
         }
         ksort($groups);
         $runonce[$uid] = $groups;
+        \glFusion\Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
         return $runonce[$uid];
     }
 
@@ -150,11 +159,19 @@ class Group
         $uid = (int)$uid;
         if ($uid < 0 ) return array();  // Invalid user ID type
 
+        // Check the static var in case this is called more than once
+        // for a page load
         if (array_key_exists($uid, $runonce)) {
             return $runonce[$uid];
         }
+        // Then check the glFusion cache to save DB queries
+        $cache_key = 'user_group_all_' . $uid;
+        if (\glFusion\Cache::getInstance()->has($cache_key)) {
+            return \glFusion\Cache::getInstance()->get($cache_key);
+        }
 
-        // Get directly-assigned group memberships
+        // Not in cache? First get directly-assigned memberships, then
+        // all inherited ones.
         $groups = self::getAssigned($uid);
         $nrows = count($groups);
         if ($_SEC_VERBOSE) {
@@ -200,6 +217,7 @@ class Group
         }
         ksort($groups);
         $runonce[$uid] = $groups;
+        \glFusion\Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
         return $runonce[$uid];
     }
 
