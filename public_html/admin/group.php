@@ -662,6 +662,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         } else {
             PLG_groupChanged ($grp_id, 'edit');
         }
+        glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
         $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
@@ -1178,6 +1179,7 @@ function GROUP_delete($grp_id)
     DB_delete ($_TABLES['groups'], 'grp_id', $grp_id);
 
     PLG_groupChanged ($grp_id, 'delete');
+    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
 
     COM_setMessage(50);
     $url = $_CONF['site_admin_url'] . '/group.php';
