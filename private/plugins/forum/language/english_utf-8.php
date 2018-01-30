@@ -259,6 +259,7 @@ $LANG_GF01 = array(
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
     'badge_type' => 'Badge Type',
+    'incl_inherited' => 'Include Inherited Membership?',
     'add_rank' => 'Add Rank',
     'err_rank_zero' => 'Post count must be greater than zero.',
     'err_rank_key_exists' => 'A rank for this post count already exists.',
