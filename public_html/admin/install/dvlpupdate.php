@@ -1947,6 +1947,29 @@ function glfusion_180()
 
     // forum badge update
     DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
+    // Change badge css designators to actual color strings
+    $b_groups =\Forum\Badge::getAll();
+    foreach ($b_groups as $grp) {
+        foreach ($grp as $badge) {
+            if ($badge->fb_type == 'css') {
+                switch ($badge->fb_data) {
+                case 'uk-badge-success':
+                    $badge->fb_bgcolor = '#82bb42';
+                    break;
+                case 'uk-badge-danger':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                case 'uk-badge-warning':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                default:
+                    $badge->fb_bgcolor = '#009dd8';
+                    break;
+                }
+                $badge->Save();
+            }
+        }
+    }
 
     _updateConfig();
 
