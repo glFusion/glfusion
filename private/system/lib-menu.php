@@ -69,11 +69,7 @@ function initMenu($menuname, $skipCache=false) {
     $key = 'menu_'.$menuname . '_' . $c->securityHash();
 
     if ( $skipCache == false ) {
-        $retval = $c->get($key);
-        if ($retval !== null) {
-            $menu = unserialize($retval);
-            return $menu ;
-        }
+        if ( $c->has($key) ) return unserialize($c->get($key));
     }
 
     $mbadmin = SEC_hasRights('menu.admin');
@@ -147,16 +143,8 @@ function assembleMenu($name, $skipCache=false) {
     if ( $skipCache == false ) {
         $c = glFusion\Cache::getInstance();
         $key = 'menu_'.$menuName.'_'.$c->securityHash();
-        $menuDataSerialized = $c->get($key);
-        if ( $menuDataSerialized !== null ) {
-            $menuData = unserialize($menuDataSerialized);
-            return $menuData;
-        }
+        if ($c->has($key)) return unserialize($c->get($key));
     }
-//if ( $menuName != 'header' && $menuName != 'footer') {
-//COM_errorLog("CACHE: Rebuilding cache for menu ". $menuName);
-//}
-
     $menuObject = initMenu($menuName, $skipCache);
     if ( $menuObject != NULL ) {
         $menuData = $menuObject->_parseMenu();

@@ -1079,11 +1079,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumcb__'.$c->securityHash(true,true);
-        $retval = $c->get($key);
-
-        if ( $retval !== null ) {
-            return $retval;
-        }
+        if ( $c->has($key)) return $c->get($key);
 
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file ('block','centerblock.thtml');

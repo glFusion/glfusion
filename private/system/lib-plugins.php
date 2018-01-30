@@ -192,7 +192,11 @@ function PLG_callFunctionForOnePlugin($function, $args='')
 */
 function PLG_install($type)
 {
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('atperm');
+    $c->deleteItemsByTag('plugins');
+    $c->deleteItemsByTag('plugin_info');
+
     return PLG_callFunctionForOnePlugin('plugin_install_' . $type);
 }
 
@@ -205,7 +209,11 @@ function PLG_install($type)
 */
 function PLG_upgrade($type)
 {
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('atperm');
+    $c->deleteItemsByTag('plugins');
+    $c->deleteItemsByTag('plugin_info');
+
     return PLG_callFunctionForOnePlugin('plugin_upgrade_' . $type);
 }
 
@@ -236,7 +244,10 @@ function PLG_uninstall ($type)
     if (empty ($type)) {
         return false;
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('atperm');
+    $c->deleteItemsByTag('plugins');
+    $c->deleteItemsByTag('plugin_info');
 
     if (function_exists('plugin_autouninstall_' . $type)) {
         COM_errorLog ("Auto-uninstalling plugin $type:", 1);
