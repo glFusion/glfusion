@@ -192,6 +192,7 @@ function forum_upgrade() {
               `fb_grp` varchar(20) NOT NULL DEFAULT '',
               `fb_order` int(3) NOT NULL DEFAULT '99',
               `fb_enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
+              `fb_inherited` tinyint(1) unsigned NOT NULL DEFAULT '1',
               `fb_gl_grp` MEDIUMINT(8) NOT NULL,
               `fb_type` varchar(10) DEFAULT 'img',
               `fb_data` varchar(255) DEFAULT NULL,
