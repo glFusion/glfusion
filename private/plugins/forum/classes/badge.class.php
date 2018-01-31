@@ -20,9 +20,11 @@ class Badge
     private $properties = array();
 
     /**
-    *   Cache of badge objects
-    *   @var array() */
-    //private static $cache = array();
+    *   Default foreground and background colors for CSS-type badges
+    *   Matches the default uk-badge colors
+    */
+    private static $def_bg = '#009dd8';
+    private static $def_fg = '#ffffff';
 
 
     /**
@@ -51,6 +53,8 @@ class Badge
                 $this->fb_gl_grp = '';
                 $this->fb_data = '';
                 $this->fb_type = 'img';
+                $this->fb_bgcolor = self::$def_bg;
+                $this->fb_fgcolor = self::$def_fg;
             }
         }
     }
@@ -103,6 +107,8 @@ class Badge
         case 'fb_type':
         case 'fb_data':
         case 'fb_dscp':
+        case 'fb_fgcolor':
+        case 'fb_bgcolor':
             $this->properties[$key] = trim($value);
             break;
         case 'grp_name':
@@ -154,9 +160,18 @@ class Badge
                 $this->fb_data = $A['fb_image'];
                 break;
             case 'css':
-                $this->fb_data = $A['css'];
+                $this->fb_fgcolor = isset($A['fb_fgcolor']) ? $A['fb_fgcolor'] : self::$def_fg;
+                $this->fb_bgcolor = isset($A['fb_bgcolor']) ? $A['fb_bgcolor'] : self::$def_bg;
                 break;
             }
+        } else {
+            if ($this->fb_type == 'css') {
+                $data = @unserialize($this->fb_data);
+            } else {
+                $data = array();
+            }
+            $this->fb_fgcolor = isset($data['fgcolor']) ? $data['fgcolor'] : self::$def_fg;
+            $this->fb_bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : self::$def_bg;
         }
         return true;
     }
@@ -273,6 +288,8 @@ class Badge
             'dscp'  => $dscp,
             'badge_url' => $this->url,
             'badge_css' => $this->fb_data,
+            'fgcolor'   => $this->fb_fgcolor,
+            'bgcolor'   => $this->fb_bgcolor,
         ) );
         $T->parse('output','badge');
         $this->html = $T->finish($T->get_var('output'));
@@ -403,6 +420,8 @@ class Badge
             'sel_' . $this->fb_data => 'selected="selected"',
             'fb_dscp'   => $this->fb_dscp,
             'fb_type'   => $this->fb_type,
+            'fgcolor'   => $this->fb_fgcolor,
+            'bgcolor'   => $this->fb_bgcolor,
          ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -471,6 +490,13 @@ class Badge
             $sql3 = '';
         }
 
+        if ($this->fb_type == 'css') {
+            $this->fb_data = @serialize(array(
+                    'fgcolor' => $this->fb_fgcolor,
+                    'bgcolor' => $this->fb_bgcolor,
+                ) );
+        }
+
         $sql2 = "fb_grp = '" . DB_escapeString($this->fb_grp) . "',
                 fb_order = '{$this->fb_order}',
                 fb_enabled = {$this->fb_enabled},
@@ -533,6 +559,36 @@ class Badge
     {
         global $_TABLES;
         DB_delete($_TABLES['ff_badges'], 'fb_id', (int)$fb_id);
+    }
+
+
+    public static function Toggle($id, $field, $oldvalue)
+    {
+        global $_TABLES;
+
+        $id = (int)$id;
+        if ($id < 1) return $oldvalue;
+        $oldvalue = $oldvalue == 0 ? 0 : 1;
+        $newvalue = $oldvalue == 1 ? 0 : 1;
+        switch ($field) {
+        case 'enabled':
+        case 'inherited':
+            $field = 'fb_' . $field;
+            $sql = "UPDATE {$_TABLES['ff_badges']}
+                    SET $field=$newvalue
+                    WHERE fb_id='$id'";
+            COM_errorLog($sql);
+            DB_query($sql, 1);
+            if (DB_error()) {
+                COM_errorLog("Badge::Toggle SQL Error: $sql");
+                $newvalue = $oldvalue;
+            }
+            break;
+        default:
+            $newvalue = $oldvalue;
+            break;
+        }
+        return $newvalue;
     }
 
 }

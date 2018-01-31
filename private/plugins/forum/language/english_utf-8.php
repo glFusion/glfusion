@@ -293,6 +293,15 @@ $LANG_GF01 = array(
 	'liked' => 'Liked',
 	'liked_thread' => 'post in thread',
 	'likes' => 'Likes',
+    'msg_item_updated' => 'Item has been updated',
+    'msg_item_nochange' => 'Item was not changed',
+    'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
+    'fg_color' => 'Foreground Color',
+    'bg_color' => 'Background Color',
+    'more' => 'More',
+    'less' => 'Less',
+    'choose' => 'Choose',
 );
 
 $LANG_GF02 = array(

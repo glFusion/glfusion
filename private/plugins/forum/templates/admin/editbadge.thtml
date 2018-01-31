@@ -1,22 +1,24 @@
 {# begin {templatelocation} #}
+<script src="{site_url}/forum/javascript/spectrum.js"></script>
+<link rel="stylesheet" href="{site_url}/forum/javascript/spectrum.css" />
 <script type="text/javascript">
 function showhideTypeDiv(sel)
 {
-    if (sel == "img") {
-        document.getElementById("type_img").style.display="";
-        document.getElementById("type_css").style.display="none";
-    } else {
-        document.getElementById("type_img").style.display="none";
-        document.getElementById("type_css").style.display="";
-    }
+	if (sel == "img") {
+		document.getElementById("type_img").style.display="";
+		document.getElementById("type_css").style.display="none";
+	} else {
+		document.getElementById("type_img").style.display="none";
+		document.getElementById("type_css").style.display="";
+	}
 }
 $(document).ready(function() {
-    showhideTypeDiv("{fb_type}");
+	showhideTypeDiv("{fb_type}");
 });
 </script>
 
 <form action="{site_admin_url}/plugins/forum/badges.php" method="post"
-    enctype="multipart/form-data"
+	enctype="multipart/form-data"
 	class="uk-form uk-form-horizontal">
 	<input type="hidden" name="fb_id" value="{fb_id}" />
 
@@ -57,8 +59,8 @@ $(document).ready(function() {
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="fb_image">{$LANG_GF01['badge_type']}</label>
 		<div class="uk-form-controls">
-            <input name="fb_type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_GF01['badge_img']}
-            &nbsp;&nbsp;&nbsp;<input name="fb_type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
+			<input name="fb_type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_GF01['badge_img']}
+			&nbsp;&nbsp;&nbsp;<input name="fb_type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
 		</div>
 	</div>
 
@@ -66,23 +68,36 @@ $(document).ready(function() {
 		<label class="uk-form-label" for="fb_image">{$LANG_GF01['badge_img']}</label>
 		<div class="uk-form-controls">
 {!if fb_image_sel}
-            <select name="fb_image">
+			<select name="fb_image">
 			{fb_image_sel}
-            </select>
+			</select>
 {!endif}
-            <input id="fb_imgfile" name="fb_imgfile"type="file" accept="image/*" />
+			<input id="fb_imgfile" name="fb_imgfile"type="file" accept="image/*" />
 		</div>
 	</div>
 
-	<div id="type_css" class="uk-form-row">
-		<label class="uk-form-label" for="css">{$LANG_GF01['badge_css']}</label>
-		<div class="uk-form-controls">
-          <select name="css">
-            <option value="" {sel_}>{$LANG_GF01['DEFAULT']}</option>
-            <option value="uk-badge-success" {sel_uk-badge-success}>{$LANG_GF01['GREEN']}</option>
-            <option value="uk-badge-warning" {sel_uk-badge-warning}>{$LANG_GF01['YELLOW']}</option>
-            <option value="uk-badge-danger" {sel_uk-badge-danger}>{$LANG_GF01['RED']}</option>
-          </select>
+	<div id="type_css">
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_GF01['sample_color']}</label>
+			<div class="uk-form-controls">
+				<span id="sample" class="uk-badge ff-badge" style="background-color:{bgcolor};color:{fgcolor};">
+					{$LANG_GF01['sample_color']}
+				</span>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for=bgcolor>{$LANG_GF01['bg_color']}</label>
+			<div class="uk-form-controls">
+				<input type="text" id="bgcolor" name="fb_bgcolor" value="{bgcolor}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for=fgcolor>{$LANG_GF01['fg_color']}</label>
+			<div class="uk-form-controls">
+				<input type="text" id="fgcolor" name="fb_fgcolor" value="{fgcolor}">
+			</div>
 		</div>
 	</div>
 
@@ -111,4 +126,55 @@ $(document).ready(function() {
 	</div>
 
 </form>
+<script>
+	$("#fgcolor").spectrum({
+		color: "{fgcolor}",
+		preferredFormat: "hex",
+		change: function(color) {
+			$('#sample').css('color',color.toHexString())
+		},
+	showPaletteOnly: true,
+	togglePaletteOnly: true,
+	togglePaletteMoreText: '{$LANG_GF01['more']}',
+	togglePaletteLessText: '{$LANG_GF01['less']}',
+	cancelText: '{$LANG_ADMIN['cancel']}',
+	chooseText: '{$LANG_GF01['choose']}',
+	showInput: true,
+	palette: [
+		["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+		["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+		["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+		["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+		["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+		["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+		["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+		["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+	]
+	});
+	$("#bgcolor").spectrum({
+		color: "{bgcolor}",
+		preferredFormat: "hex",
+		preferredFormat: "hex",
+		change: function(color) {
+			$('#sample').css('background',color.toHexString())
+		},
+	showPaletteOnly: true,
+	togglePaletteOnly: true,
+	togglePaletteMoreText: '{$LANG_GF01['more']}',
+	togglePaletteLessText: '{$LANG_GF01['less']}',
+	cancelText: '{$LANG_ADMIN['cancel']}',
+	chooseText: '{$LANG_GF01['choose']}',
+	showInput: true,
+	palette: [
+		["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+		["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+		["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+		["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+		["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+		["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+		["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+		["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+	]
+	});
+</script>
 {# end {templatelocation} #}

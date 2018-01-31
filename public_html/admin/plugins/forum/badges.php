@@ -121,6 +121,8 @@ function FF_badge_AdminList()
 
     $uid = (int)$_USER['uid'];
     $retval = '';
+    $retval .= '<script type="text/javascript" src="' .
+            $_CONF['site_url'].'/forum/javascript/ajax_toggle.js"></script>';
     $form_arr = array();
 
     $header_arr = array(
@@ -211,19 +213,14 @@ function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
 
 
     case 'fb_enabled':
-        /*if ($fieldvalue == 1) {
+        if ($fieldvalue == 1) {
             $switch = 'checked="checked"';
         } else {
             $switch = '';
         }
         $retval .= "<input type=\"checkbox\" $switch value=\"1\" name=\"badge_ena_check\"
-                id=\"togena{$A['bid']}\"
-                onclick='FF_toggleEnabled(this, \"{$A['fb_id']}\",\"badge\");' />\n";*/
-        if ($fieldvalue) {
-            $retval .= '<i class="uk-icon uk-icon-check-square-o" style="color:green;"></i>';
-        } else {
-            $retval .= '<i class="uk-icon uk-icon-square-o" style=color:grey;"></i>';
-        }
+                id=\"togena{$A['fb_id']}\"
+                onclick='forum_ajaxtoggle(this, \"{$A['fb_id']}\",\"enabled\",\"badge\");' />\n";
         break;
 
     case 'delete':

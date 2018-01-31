@@ -19,6 +19,9 @@ if (is_ajax()) {
         $action = $_POST["action"];
 
         switch ( $action ) {
+            case 'admin_toggle':
+                admin_toggle();
+                break;
             case 'like':
                 user_like();
                 break;
@@ -412,6 +415,38 @@ function user_like()
 
     header("Cache-Control: no-store, no-cache, must-revalidate");
     echo $retval;
+    exit;
+}
+
+
+function admin_toggle()
+{
+    global $LANG_GF01;
+
+    if (!SEC_hasRights('forum.edit')) {
+        die;
+    }
+
+    $component = $_POST['component'];
+    $field = $_POST['field'];
+    $oldval = $_POST['oldval'];
+    $newval = $oldval;
+    switch($component) {
+    case 'badge':
+        $newval = \Forum\Badge::Toggle($_POST['id'], $field, $oldval);
+        break;
+    }
+
+    $response = array(
+        'newval' => $newval,
+        'id'    => $_POST['id'],
+        'field'  => $_POST['field'],
+        'component' => $_POST['component'],
+        'statusMessage' => $newval != $oldval ?
+                    $LANG_GF01['msg_item_updated'] :
+                    $LANG_GF01['msg_item_nochange'],
+    );
+    echo json_encode($response);
     exit;
 }
 
