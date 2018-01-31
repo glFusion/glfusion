@@ -421,7 +421,7 @@ function forum_index()
                         	}
         	                if (!COM_isAnonUser()) {
             	                // Determine if there are new topics since last visit for this user.
-                                $tcount = (int) DB_result(DB_query("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0"),0,0);
+                                $tcount = (int) DB_getItem($_TABLES['ff_log'],'COUNT(uid)',"uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0");
                                 if ($topicCount > $tcount ) {
                                     $busyforum = 1;
                                     $quietforum = 0;
