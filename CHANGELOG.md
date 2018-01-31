@@ -1,3 +1,6 @@
+## v1.7.3 (Unreleased)
+  - Forum: Badges can now be any color
+
 ## v1.7.2 (January 27, 2018)
   - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
   - Forum: Fixed issue where signature preview would not work consistently
