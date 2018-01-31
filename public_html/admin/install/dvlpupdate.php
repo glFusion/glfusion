@@ -1963,7 +1963,8 @@ function glfusion_180()
                     $badge->fb_bgcolor = '#d32c46;';
                     break;
                 default:
-                    if ( $badge->fb_data[0] != '#' ) {
+                    $fc = substr($badge->fb_data,0,1);
+                    if ( $fc != '#' ) {
                         $badge->fb_bgcolor = '#009dd8';
                     }
                     break;
