@@ -1963,7 +1963,9 @@ function glfusion_180()
                     $badge->fb_bgcolor = '#d32c46;';
                     break;
                 default:
-                    $badge->fb_bgcolor = '#009dd8';
+                    if ( $badge->fb_data[0] != '#' ) {
+                        $badge->fb_bgcolor = '#009dd8';
+                    }
                     break;
                 }
                 $badge->Save();
@@ -1976,7 +1978,6 @@ function glfusion_180()
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
-
 }
 
 function _spamx_update_config()
