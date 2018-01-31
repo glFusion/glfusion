@@ -721,7 +721,16 @@ class database
     {
         $result_type = $both ? MYSQLI_BOTH : MYSQLI_ASSOC;
 
-        $result = $recordset->fetch_all($result_type);
+        $result = array();
+
+        if (!method_exists ($recordset, 'fetch_all')) {
+            while ( ($row = DB_fetchArray($recordset, $result_type)) != null ) {
+                $result[] = $row;
+            }
+        } else {
+            $result = $recordset->fetch_all($result_type);
+        }
+
         return ($result === null) ? array() : $result;
     }
 
