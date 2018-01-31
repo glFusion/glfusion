@@ -1953,6 +1953,7 @@ function glfusion_180()
         foreach ($grp as $badge) {
             if ($badge->fb_type == 'css') {
                 switch ($badge->fb_data) {
+
                 case 'uk-badge-success':
                     $badge->fb_bgcolor = '#82bb42';
                     break;
@@ -1964,7 +1965,7 @@ function glfusion_180()
                     break;
                 default:
                     $fc = substr($badge->fb_data,0,1);
-                    if ( $fc != '#' ) {
+                    if ( $fc != 'a' ) {
                         $badge->fb_bgcolor = '#009dd8';
                     }
                     break;
