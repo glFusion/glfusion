@@ -1874,7 +1874,7 @@ function glfusion_172()
         ADD `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         ADD KEY `voter_id` (`voter_id`),
         ADD KEY `poster_id` (`poster_id`)";
-    
+
     $_SQL[] = "ALTER TABLE {$_TABLES['ff_likes_assoc']}
         ADD `username` varchar(40) AFTER topic_id";
 
@@ -1932,6 +1932,47 @@ function glfusion_172()
 
     _updateConfig();
 
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_173()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // forum badge update
+    DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
+    // Change badge css designators to actual color strings
+    $b_groups =\Forum\Badge::getAll();
+    foreach ($b_groups as $grp) {
+        foreach ($grp as $badge) {
+            if ($badge->fb_type == 'css') {
+                switch ($badge->fb_data) {
+                case 'uk-badge-success':
+                    $badge->fb_bgcolor = '#82bb42';
+                    break;
+                case 'uk-badge-danger':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                case 'uk-badge-warning':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                default:
+                    if ( $badge->fb_data[0] != '#' ) {
+                        $badge->fb_bgcolor = '#009dd8';
+                    }
+                    break;
+                }
+                $badge->Save();
+            }
+        }
+    }
+    _updateConfig();
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
