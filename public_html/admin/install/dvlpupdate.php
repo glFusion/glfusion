@@ -1977,8 +1977,8 @@ function glfusion_180()
     _updateConfig();
 
     // update version number
-    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
-    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.8.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.8.0' WHERE name='glfusion'",1);
 }
 
 function _spamx_update_config()
