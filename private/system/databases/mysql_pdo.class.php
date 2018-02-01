@@ -515,6 +515,41 @@ class database
 
 
     /**
+    * Returns the contents of one cell from a MySQL result set
+    *
+    * @param    mysqli_result $recordSet The recordset to operate on
+    * @param    int         $row         row to get data from
+    * @param    mixed       $field       field to return
+    * @return   mixed (depends on field content)
+    */
+    public function dbResult($recordset, $row, $field = 0)
+    {
+        if ($this->_verbose) {
+            $this->_errorlog("DEBUG: mysqli - Inside database->dbResult");
+            if (empty($recordset)) {
+                $this->_errorlog("DEBUG: mysqli - Passed recordset is not valid");
+            } else {
+                $this->_errorlog("DEBUG: mysqli - Everything looks good");
+            }
+            $this->_errorlog("DEBUG: mysqli - Leaving database->dbResult");
+        }
+
+        $retval = '';
+
+        if (is_numeric($field)) {
+            $field = intval($field, 10);
+            $targetRow = $recordset->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_ABS, $row);
+        } else {
+            $targetRow = $recordset->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $row);
+        }
+        if (($targetRow !== false) && isset($targetRow[$field])) {
+            $retval = $targetRow[$field];
+        }
+
+        return $retval;
+    }
+
+    /**
     * Retrieves the number of fields in a recordset
     *
     * This returns the number of fields in a recordset
