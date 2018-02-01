@@ -721,7 +721,7 @@ function editpreferences()
     $preferences->parse ('subscriptions_block','subscriptions',true);
 
     // excluded items block
-
+    $permissions = '';
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         $permissions = COM_getPermSQL ('');
         $preferences->set_var ('exclude_topic_checklist',
