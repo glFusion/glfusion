@@ -843,54 +843,6 @@ class Template
 
 
     /******************************************************************************
-    * DEPRECATED: This function doesn't really work any more. Processing in val_echo
-    * could be done to gather unknowns. But coding that seems like a waste of time
-    * and would only cause 99.99% of the normal use of this class to be slower.
-    *
-    * This function returns a hash of unresolved variable names in $varname, keyed
-    * by their names (that is, the hash has the form $a[$name] = $name).
-    *
-    * Returns: a hash of varname/varname pairs or false on error.
-    *
-    * usage: get_undefined(string $varname)
-    *
-    * @param     $varname     a string containing the name the name of the variable to scan for unresolved variables
-    * @return    array
-    */
-    public function get_undefined($varname)
-    {
-        if ($this->debug & 4) {
-            echo "<p><b>get_undefined (DEPRECATED):</b> varname = $varname</p>\n";
-        }
-        if (!$this->loadfile($varname)) {
-            $this->halt("get_undefined: unable to load $varname.");
-            return false;
-        }
-
-        preg_match_all("/{([^ \t\r\n}]+)}/", $this->get_var($varname), $m);
-        $m = $m[1];
-        if (!is_array($m)) {
-            return false;
-        }
-
-        foreach ( $m AS $k => $v ) {
-            if (!isset($this->varvals[$v])) {
-                if ($this->debug & 4) {
-                    echo "<p><b>get_undefined:</b> undefined: $v</p>\n";
-                }
-                $result[$v] = $v;
-            }
-        }
-
-        if (count($result)) {
-            return $result;
-        } else {
-            return false;
-        }
-    }
-
-
-    /******************************************************************************
     * Returns: Unknown processing use to take place here. Now it happens directly
     * in the cache file. This function is still necessary for being able to hook
     * the final output from the library.
@@ -1015,65 +967,6 @@ class Template
     private function varname($varname)
     {
         return preg_quote("{".$varname."}");
-    }
-
-
-    /******************************************************************************
-    * If a variable's value is undefined and the variable has a filename stored in
-    * $this->file[$varname] then the backing file will be loaded and the file's
-    * contents will be assigned as the variable's value.
-    *
-    * Note that the behaviour of this function changed slightly after the 7.2d
-    * release. Where previously a variable was reloaded from file if the value
-    * was empty, now this is not done. This allows a variable to be loaded then
-    * set to "", and also prevents attempts to load empty variables. Files are
-    * now only loaded if $this->varvals[$varname] is unset.
-    *
-    * Returns: true on success, false on error.
-    *
-    * usage: loadfile(string $varname)
-    *
-    * @param     $varname    a string containing the name of a variable to load
-    * @return    boolean
-    * @see       set_file
-    */
-    private function loadfile($varname)
-    {
-        if ($this->debug & 4) {
-            echo "<p><b>loadfile:</b> varname = $varname</p>\n";
-        }
-
-        if (!isset($this->file[$varname])) {
-            // $varname does not reference a file so return
-            if ($this->debug & 4) {
-                echo "<p><b>loadfile:</b> varname $varname does not reference a file</p>\n";
-            }
-            return true;
-        }
-
-        if (isset($this->varvals[$varname])) {
-            // will only be unset if varname was created with set_file and has never been loaded
-            // $varname has already been loaded so return
-            if ($this->debug & 4) {
-                echo "<p><b>loadfile:</b> varname $varname is already loaded</p>\n";
-            }
-            return true;
-        }
-        $filename = $this->file[$varname];
-
-        /* use @file here to avoid leaking filesystem information if there is an error */
-        $str = @file_get_contents($filename);
-        if (empty($str) && !is_numeric($str) ) {
-            $this->halt("loadfile: While loading $varname, $filename does not exist or is empty.");
-            return false;
-        }
-
-        if ($this->debug & 4) {
-            printf("<b>loadfile:</b> loaded $filename into $varname<br>\n");
-        }
-        $this->set_var($varname, $str);
-
-        return true;
     }
 
 
@@ -1515,6 +1408,7 @@ class Template
         if ( $tmplt !== null ) {
             return $tmplt;
         }
+
         $str = @file_get_contents($filename);
 
         $tmplt = $this->compile_template_code($str,false);
@@ -1741,6 +1635,8 @@ class Template
             return null;
         }
 
+        static $internalCache = array();
+
         $phpfile = $this->cache_create_filename($filename);
 
         $template_fstat = @filemtime($filename);
@@ -1753,14 +1649,20 @@ class Template
         if ($this->debug & 8) {
             printf("<check_cache> Look for %s<br>", $filename);
         }
-
+        $key = md5($phpfile);
         if ($template_fstat > $cache_fstat ) {
             $str = @file_get_contents($filename);
             // cache_write will compile the template prior to creating the cache file
             $tmplt= $this->cache_write($phpfile, $str);
+            // save compiled template to internal cache
+            $internalCache[$key] = $tmplt;
         } else {
-            // read the pre-compiled template into memory
-            $tmplt = @file_get_contents($phpfile);
+            if (isset($internalCache[$key])) {
+                $tmplt = $internalCache[$key];
+            } else {
+                $tmplt = @file_get_contents($phpfile);
+                $internalCache[$key] = $tmplt;
+            }
         }
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
         $matches = array();
