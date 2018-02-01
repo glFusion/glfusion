@@ -120,17 +120,17 @@ if ( !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
     die("No MySQL driver found in PHP environment.");
 }
 
-if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
+if (extension_loaded('pdo_mysql')) {
+    require_once $_CONF['path_system'] . 'databases/mysql_pdo.class.php';
+} else if (($_DB_dbms === 'mysql' || $_DB_dbms === 'mysqli') && class_exists('MySQLi')) {
     require_once $_CONF['path_system'] . 'databases/mysqli.class.php';
 } else if ( ($_DB_dbms === 'mysqli') && !class_exists('MySQLi') ) {
     require_once $_CONF['path_system'] . 'databases/mysql.class.php';
-} else if ( ($_DB_dbms === 'pdo') && extension_loaded('pdo_mysql')) {
-    require_once $_CONF['path_system'] . 'databases/mysql_pdo.class.php';
 } else {
     require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
 }
 
-if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo' ) {
+if ( $_DB_dbms == 'mysqli') {
     $_DB_dbms = 'mysql';
 }
 // Instantiate the database object
@@ -656,4 +656,15 @@ function DB_getServerVersion()
 
     return $_DB->dbGetServerVersion();
 }
+
+/**
+* @return     string     the database driver name
+*/
+function DB_getDriverName()
+{
+    global $_DB;
+
+    return $_DB->dbGetDriverName();
+}
+
 ?>

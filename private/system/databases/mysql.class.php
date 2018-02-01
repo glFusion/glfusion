@@ -40,7 +40,13 @@
 */
 class database {
 
+
     // PRIVATE PROPERTIES
+
+    /**
+    * @var string
+    */
+    var $driverName = 'mysql';
 
     /**
     * @access private
@@ -842,6 +848,16 @@ class database {
     public function dbGetServerVersion()
     {
         return $this->_mysql_version;
+    }
+
+    /**
+     * Return driver name
+     *
+     * @return  string
+     */
+    public function dbGetDriverName()
+    {
+        return $this->driverName;
     }
 }
 

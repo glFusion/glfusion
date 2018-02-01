@@ -6,7 +6,7 @@
 // |                                                                          |
 // | mysqli database class                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,6 +38,11 @@ if (!defined('GVERSION')) {
 
 class database
 {
+    /**
+    * @var string
+    */
+    private $driverName = 'mysqli';
+
     /**
     * @var string
     */
@@ -222,7 +227,7 @@ class database
     *
     * @param        string      $dbhost     Database host
     * @param        string      $dbname     Name of database
-     * @param       string      $dbuser     User to make connection as
+    * @param        string      $dbuser     User to make connection as
     * @param        string      $dbpass     Password for dbuser
     * @param        string      $errorlogfn Name of the errorlog function
     * @param        string      $charset    character set of site
@@ -724,9 +729,7 @@ class database
         $result = array();
 
         if (!method_exists ($recordset, 'fetch_all')) {
-            while ( ($row = DB_fetchArray($recordset, $result_type)) != null ) {
-                $result[] = $row;
-            }
+            for ($result = array(); $tmp = @mysqli_fetch_array($recordset, $result_type);) $result[] = $tmp;
         } else {
             $result = $recordset->fetch_all($result_type);
         }
@@ -859,6 +862,17 @@ class database
         $value = $this->_db->real_escape_string($value);
         return $value;
     }
+
+    /**
+     * Return driver name
+     *
+     * @return  string
+     */
+    public function dbGetDriverName()
+    {
+        return $this->driverName;
+    }
+
 
     /**
      * @return     string     the version of the database application

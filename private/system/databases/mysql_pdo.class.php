@@ -19,6 +19,11 @@
 
 class database
 {
+    /**
+    * @var string
+    */
+    private $driverName = 'pdo_mysql';
+
      /**
     * @var string
     */
@@ -734,6 +739,16 @@ class database
     public function dbGetVersion()
     {
         return $this->_db->getAttribute(PDO::ATTR_SERVER_VERSION);
+    }
+
+    /**
+     * Return driver name
+     *
+     * @return  string
+     */
+    public function dbGetDriverName()
+    {
+        return $this->driverName;
     }
 
     public function dbStartTransaction()
