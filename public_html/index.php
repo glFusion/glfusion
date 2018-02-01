@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion homepage.                                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -175,38 +175,6 @@ if ($maxstories == 0) {
 $limit = $maxstories;
 if ($limit < 1) {
     $limit = 1;
-}
-
-if ( $_VARS['totalhits'] % 50 === 0 ) {
-    COM_rdfUpToDateCheck();
-    // Scan for any stories that have expired and should be archived or deleted
-    $asql = "SELECT sid,tid,title,expire,statuscode FROM {$_TABLES['stories']} ";
-    $asql .= 'WHERE (expire <= NOW()) AND (statuscode = ' . STORY_DELETE_ON_EXPIRE;
-    if (empty ($archivetid)) {
-        $asql .= ')';
-    } else {
-        $asql .= ' OR statuscode = ' . STORY_ARCHIVE_ON_EXPIRE . ") AND tid != '".DB_escapeString($archivetid)."'";
-    }
-    $expiresql = DB_query ($asql);
-    while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray ($expiresql)) {
-        if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
-            if (!empty ($archivetid) ) {
-                COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-                DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
-                $c = glFusion\Cache::getInstance();
-                $c->deleteItemsByTag('story_'.$sid);
-                $c->deleteItemsByTag('whatsnew');
-                $c->deleteItemsByTag('menu');
-            }
-        } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
-            COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
-            STORY_removeStory($sid);
-            $c = glFusion\Cache::getInstance();
-            $c->deleteItemsByTag('story_'.$sid);
-            $c->deleteItemsByTag('whatsnew');
-            $c->deleteItemsByTag('menu');
-        }
-    }
 }
 
 $sql = " (date <= NOW()) AND (draft_flag = 0)";
@@ -382,6 +350,9 @@ if ( $A = DB_fetchArray( $result ) ) {
     $pageBody .= $cbDisplay;
 }
 
+$cronCheck = _cronSchedule();
+if ( $cronCheck != '' ) $T->set_var('cron',$cronCheck);
+
 if (isset($_CONF['infinite_scroll']) && $_CONF['infinite_scroll'] == true ) {
     $T->set_var('enable_infinite_scroll',true);
     if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] == 'facebook') {
@@ -407,4 +378,16 @@ $display .= COM_siteFooter (true); // The true value enables right hand blocks.
 // Output page
 echo $display;
 
+function _cronSchedule() {
+    global $_CONF, $_VARS;
+
+    if ( !isset($_VARS['last_maint_run'] ) || $_VARS['last_maint_run'] == '') {
+        $_VARS['last_maint_run'] = 0;
+    }
+    if (  (( $_VARS['last_maint_run'] + 3600 ) <= time()) ) {
+        return '<img src="'.$_CONF['site_url'].'/cron.php?id='.time().'" height="1" width="2" />';
+    } else {
+        return '';
+    }
+}
 ?>

@@ -169,7 +169,8 @@ if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
 }
 
 $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
-while ($row = DB_fetchArray($result) ) {
+$resultSet = DB_fetchAll($result);
+foreach($resultSet AS $row) {
     $_VARS[$row['name']] = $row['value'];
 }
 if ( isset($_VARS['guid'])) $_CONF['mail_smtp_password'] = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
@@ -202,10 +203,9 @@ if ( !isset($_SYSTEM['admin_session']) ) {
 
 $_LOGO = array();
 $result = DB_query("SELECT * FROM {$_TABLES['logo']}",1);
-if ( $result ) {
-    while ($row = DB_fetchArray($result)) {
-        $_LOGO[$row['config_name']] = $row['config_value'];
-    }
+$resultSet = DB_fetchAll($result);
+foreach($resultSet AS $row) {
+    $_LOGO[$row['config_name']] = $row['config_value'];
 }
 
 // Before we do anything else, check to ensure site is enabled
@@ -264,9 +264,10 @@ require_once $_CONF['path_system'].'lib-database.php';
 */
 
 $result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
+$resultSet = DB_fetchAll($result);
 $_PLUGINS = array();
 $_PLUGIN_INFO = array();
-while ($A = DB_fetchArray($result)) {
+foreach($resultSet AS $A) {
     if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
     $_PLUGIN_INFO[$A['pi_name']] = $A;
 }
@@ -7540,19 +7541,6 @@ if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SE
         }
     }
     exit;
-}
-
-// Check and see if any plugins (or custom functions)
-// have scheduled tasks to perform
-if ( !isset($_VARS['last_scheduled_run'] ) || $_VARS['last_scheduled_run'] == '') {
-    $_VARS['last_scheduled_run'] = 0;
-}
-if ( $_CONF['cron_schedule_interval'] > 0 && COM_onFrontpage() ) {
-    if (( $_VARS['last_scheduled_run']
-            + $_CONF['cron_schedule_interval'] ) <= time()) {
-        DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'" );
-        PLG_runScheduledTask();
-    }
 }
 
 if ( function_exists('CUSTOM_splashpage') ) {

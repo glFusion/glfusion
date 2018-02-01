@@ -1580,6 +1580,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.7.2';
 
         case '1.7.2' :
+        case '1.7.3' :
+
+            if (!isset($_VARS['last_maint_run'])) {
+                DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
+            }
 
             $current_fusion_version = '1.8.0';
 

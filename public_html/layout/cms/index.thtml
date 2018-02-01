@@ -26,6 +26,7 @@
 <div id="pagination" class="uk-text-center">
 	{pagination}
 </div>
+{cron}
 
 {!if enable_infinite_scroll}
 <script>

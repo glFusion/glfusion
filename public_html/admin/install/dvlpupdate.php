@@ -1975,6 +1975,11 @@ function glfusion_180()
         }
     }
 
+    // core items
+    if (!isset($_VARS['last_maint_run'])) {
+        DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
+    }
+
     _updateConfig();
 
     // update version number
@@ -2293,7 +2298,6 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_172();
 glfusion_180();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
