@@ -202,6 +202,13 @@ function displayMenu( $menuName, $skipCache=false ) {
 
     $retval = '';
 
+    if ( $skipCache == false ) {
+        $c = glFusion\Cache::getInstance();
+        $key = 'menufile_'.$menuName.'__'.$c->securityHash(true,true);
+        if ($c->has($key)) {
+            return $c->get($key);
+        }
+    }
     $structure = assembleMenu($menuName, $skipCache);
     if ( $structure == NULL ) {
         return $retval;
@@ -248,13 +255,15 @@ function displayMenu( $menuName, $skipCache=false ) {
         $T->parse('element', 'Elements',true);
         $T->unset_var('haschildren');
         $T->unset_var('children');
-
-
     }
     $T->set_var('wrapper',true);
 
     $T->parse('output','page');
     $retval = $T->finish($T->get_var('output'));
+
+    if ( $skipCache == false )
+        $c->set($key,$retval,'menu');
+
     return $retval;
 }
 

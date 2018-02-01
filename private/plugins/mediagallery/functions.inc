@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -103,7 +103,8 @@ $_MG_CONF['jpegtran_path'] = '';
 
 // Read config data
 $result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);
-while ($row = DB_fetchArray($result)) {
+$resultSet = DB_fetchAll($result);
+foreach($resultSet AS $row) {
     $_MG_CONF[$row['config_name']] = $row['config_value'];
 }
 $_MG_CONF['tmp_path'] = $_CONF['path'] . 'plugins/mediagallery/tmp/';
@@ -646,7 +647,8 @@ function plugin_getwhatsnew_mediagallery()
 
     $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE last_update >= '" . $newAge . "' ORDER BY last_update DESC";
     $result = DB_query($sql,1);
-    while ($row = DB_fetchArray($result)) {
+    $resultSet = DB_fetchAll($result);
+    foreach($resultSet AS $row) {
         $aid = $row['album_id'];
 
         if ( isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 && $MG_albums[$aid]->hidden != 1 && $MG_albums[$aid]->getOffset() != -1) {
@@ -668,11 +670,12 @@ function plugin_getwhatsnew_mediagallery()
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
         $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' AND c.queued = 0 GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
         $result = DB_query( $sql,1);
-        $nrows2 = DB_numRows( $result );
-        if( $nrows2 == 0 ) {
+        $resultSetComments = DB_fetchAll($result);
+        if ( count($resultSetComments) == 0 ) {
             $retval .= '' . '<br />' . LB;
         } else {
-            while ($A = DB_fetchArray($result)) {
+            foreach($resultSetComments AS $A) {
+
                 $access = SEC_hasAccess ($A['owner_id'],
                                          $A['group_id'],
                                          $A['perm_owner'],

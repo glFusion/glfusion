@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Admin-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -730,13 +730,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $sql .= "$filtersql $groupbysql $orderbysql $limitsql;";
 
     $result = DB_query($sql);
-
-    // number of rows/records to display
-    $nrows = DB_numRows($result);
+    $resultSet = DB_fetchAll($result);
+    $nrows = 0;
 
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
-    for ($i = 0; $i < $nrows; $i++) { # now go through actual data
-        $A = DB_fetchArray($result);
+    foreach($resultSet AS $A) {
+        $nrows++;
         $row_output = false; # as long as no fields are returned, dont print row
         if ($chkselect) {
             $admin_templates->set_var('class', 'admin-list-field');
