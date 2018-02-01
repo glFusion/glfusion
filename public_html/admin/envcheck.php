@@ -47,7 +47,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms,$_DB;
 
     $retval = '';
     $permError = 0;
@@ -414,11 +414,7 @@ function _checkEnvironment()
         $classCounter++;
     }
 
-    if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
-        $dbInfo['db_driver'] = 'mysqli';
-    } else {
-        $dbInfo['db_driver'] = 'mysql';
-    }
+    $dbInfo['db_driver'] = DB_getDriverName();
     $dbInfo['db_version'] = DB_getVersion();
     $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
     if ( $result ) {
