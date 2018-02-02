@@ -35,6 +35,12 @@ final class Cache
     protected $internalCacheInstance;
 
     /**
+     * @var $namespace
+     */
+
+    private $namespace = '';
+
+    /**
      * @return Class instance
      */
     public static function getInstance()
@@ -82,6 +88,12 @@ final class Cache
             'itemDetailedDate' => true
         );
 
+        if ($_CONF['cache_driver'] == 'files') {
+            $this->namespace = '';
+        } else {
+            $this->namespace = base_convert(md5($_CONF['site_name']), 10, 36);
+        }
+
         $this->internalCacheInstance = CacheManager::getInstance($_CONF['cache_driver'], $config);
     }
 
@@ -94,6 +106,9 @@ final class Cache
      */
     public function get($key, $default = null)
     {
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
+
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
             if (!$cacheItem->isExpired() && $cacheItem->get() !== null) {
@@ -117,6 +132,9 @@ final class Cache
     {
         global $_CONF;
 
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
+
         try {
             $cacheItem = $this->internalCacheInstance
               ->getItem($key)
@@ -129,8 +147,16 @@ final class Cache
                 $cacheItem->expiresAfter(86400);
             }
             if ( is_array($tag) ) {
-                $cacheItem->addTags($tag);
+
+                $nsTags = array_map(
+                    function($tag) {
+                        if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
+                        return $tag;
+                    },$tag);
+
+                $cacheItem->addTags($nsTags);
             } elseif ($tag != '' ) {
+                if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
                 $cacheItem->addTag($tag);
             }
             return $this->internalCacheInstance->save($cacheItem);
@@ -147,6 +173,12 @@ final class Cache
      */
     public function addTag($key, $tag)
     {
+        if ($this->namespace != '') {
+            $key = $this->namespace.'_'.$key;
+            $tag = $this->namespace.'_'.$tag;
+            $key = $this->validateKeyName($key);
+            $tag = $this->validateKeyName($tag);
+        }
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
             $cacheItem->addTag($tag);
@@ -162,6 +194,9 @@ final class Cache
      */
     public function delete($key)
     {
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
+
         try {
             return $this->internalCacheInstance->deleteItem($key);
         } catch (phpFastCacheInvalidArgumentException $e) {
@@ -190,10 +225,17 @@ final class Cache
      */
     public function getMultiple($keys, $default = null)
     {
+        $nsKeys = array_map(
+            function($key) {
+                if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+                $key = $this->validateKeyName($key);
+                return $key;
+            },$keys);
+
         try {
             return array_map(function (ExtendedCacheItemInterface $item) {
                 return $item->get();
-            }, $this->internalCacheInstance->getItems($keys));
+            }, $this->internalCacheInstance->getItems($nsKeys));
         } catch (phpFastCacheInvalidArgumentException $e) {
             throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
         }
@@ -209,6 +251,10 @@ final class Cache
     {
         try {
             foreach ($values as $key => $value) {
+                if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+
+                $key = $this->validateKeyName($key);
+
                 $cacheItem = $this->internalCacheInstance->getItem($key)->set($value);
 
                 if (is_int($ttl) && $ttl <= 0) {
@@ -232,8 +278,15 @@ final class Cache
      */
     public function deleteMultiple($keys)
     {
+        $nsKeys = array_map(
+            function($key) {
+                if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+                $key = $this->validateKeyName($key);
+                return $key;
+            },$keys);
+
         try {
-            return $this->internalCacheInstance->deleteItems($keys);
+            return $this->internalCacheInstance->deleteItems($nsKeys);
         } catch (phpFastCacheInvalidArgumentException $e) {
             throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
         }
@@ -246,6 +299,8 @@ final class Cache
      */
     public function has($key)
     {
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
             return $cacheItem->isHit() && !$cacheItem->isExpired();
@@ -260,6 +315,8 @@ final class Cache
      */
     public function getModificationDate($key)
     {
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
         $cacheItem = $this->internalCacheInstance->getItem($key);
         $modDate = $cacheItem->getModificationDate();
         if ( is_object($modDate) && isset($modDate->date)) {
@@ -275,6 +332,8 @@ final class Cache
      */
     public function deleteItemsByTag($tag)
     {
+        if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
+        $tag = $this->validateKeyName($tag);
         $tagArray = $this->getItemsByTag($tag);
         if (is_array($tagArray)) {
             foreach ($tagArray AS $item) {
@@ -291,7 +350,15 @@ final class Cache
     public function deleteItemsByTags($tags)
     {
         if (!is_array($tags)) $tags = array($tags);
-        $this->internalCacheInstance->deleteItemsByTags($tags);
+
+        $nsTags = array_map(
+            function($tag) {
+                if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
+                $tag = $this->validateKeyName($tag);
+                return $tag;
+            },$tags);
+
+        $this->internalCacheInstance->deleteItemsByTags($nsTags);
     }
 
     /**
@@ -302,7 +369,15 @@ final class Cache
     public function deleteItemsByTagsAll($tags)
     {
         if (!is_array($tags)) $tags = array($tags);
-        $this->internalCacheInstance->deleteItemsByTagsAll($tags);
+
+        $nsTags = array_map(
+            function($tag) {
+                if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
+                $tag = $this->validateKeyName($tag);
+                return $tag;
+            },$tags);
+
+        $this->internalCacheInstance->deleteItemsByTagsAll($nsTags);
     }
 
     /**
@@ -311,6 +386,8 @@ final class Cache
      */
     public function getItemsByTag($tag)
     {
+        if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
+        $tag = $this->validateKeyName($tag);
         return $this->internalCacheInstance->getItemsByTag($tag);
     }
 
@@ -322,7 +399,9 @@ final class Cache
     {
         global $_USER;
 
-        $key = $tag.'__' . $this->securityHash(true);
+        $tag = $this->validateKeyName($tag);
+
+        $key = $tag.'__' . $this->securityHash(true,true);
         return $key;
     }
 
@@ -348,6 +427,16 @@ final class Cache
             $hash .= '_'.$_USER['language'];
         }
         return $hash;
+    }
+
+    /**
+     * @param string $str
+     * @return string
+     */
+    private function validateKeyName($str)
+    {
+        $invalid = array('{','}','(',')','/','\\','@',':');
+        return str_replace($invalid,'_',$str);
     }
 }
 
