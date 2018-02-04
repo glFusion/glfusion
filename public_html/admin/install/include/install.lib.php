@@ -159,63 +159,6 @@ function INST_phpIsGreater($version)
     return false;
 }
 
-/**
- * Returns the MySQL version
- *
- * @return  mixed   array[0..2] of the parts of the version number or false
- *
- */
-function mysql_v($_DB_host, $_DB_user, $_DB_pass)
-{
-    global $php55;
-
-    if ( $php55 ) {
-        if (($res = @mysqli_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
-            return false;
-        }
-        $mysqlv = @mysqli_get_server_info($res);
-    } else {
-        if (($res = @mysql_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
-            return false;
-        }
-        $mysqlv = @mysql_get_server_info();
-    }
-    if (!empty($mysqlv)) {
-        preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlv, $match);
-        $mysqlmajorv = $match[1];
-        $mysqlminorv = $match[2];
-        $mysqlrev = $match[3];
-    } else {
-        $mysqlmajorv = 0;
-        $mysqlminorv = 0;
-        $mysqlrev = 0;
-    }
-    @mysql_close($res);
-
-    return array($mysqlmajorv, $mysqlminorv, $mysqlrev);
-}
-
-/**
- * Check if the user's MySQL version is supported by glFusion
- *
- * @param   array   $db     Database information
- * @return  bool    True if supported, falsed if not supported
- *
- */
-function INST_mysqlOutOfDate($db)
-{
-    $minv = explode('.', SUPPORTED_MYSQL_VER);
-
-    if ($db['type'] == 'mysql' || $db['type'] == 'mysql-innodb') {
-        $myv = mysql_v($db['host'], $db['user'], $db['pass']);
-        if (($myv[0] <  $minv[0]) || (($myv[0] == $minv[0]) && ($myv[1] <  $minv[1])) ||
-          (($myv[0] == $minv[0]) && ($myv[1] == $minv[1]) && ($myv[2] < $minv[2]))) {
-            return true;
-        }
-    }
-    return false;
-}
-
 
 /**
  * Make a nice display name from the language filename
@@ -274,66 +217,6 @@ function INST_checkTableExists($table)
 {
     return DB_checkTableExists($table);
 }
-
-/**
- * Can the install script connect to the database?
- *
- * @param   array   $db Database information
- * @return  mixed       Returns the DB handle if true, false if not
- *
- */
-function INST_dbConnect($db)
-{
-    global $php55;
-
-    if (empty($db['pass'])) {
-        return false;
-    }
-
-    $db_handle = false;
-    switch ($db['type']) {
-    case 'mysql-innodb':
-        // deliberate fallthrough - no "break"
-    case 'mysql':
-        if ($db_handle = @mysql_connect($db['host'], $db['user'], $db['pass'])) {
-            return $db_handle;
-        }
-        break;
-    case 'mysqli' :
-        if ($db_handle = @mysqli_connect($db['host'], $db['user'], $db['pass'])) {
-            return $db_handle;
-        }
-        break;
-    }
-    return $db_handle;
-}
-
-/**
- * Check if a glFusion database exists
- *
- * @param   array   $db Array containing connection info
- * @return  bool        True if a database exists, false if not
- *
- */
-function INST_dbExists($db)
-{
-    $db_handle = INST_dbConnect($db);
-    $db_exists = false;
-    switch ($db['type']) {
-    case 'mysql':
-        if (@mysql_select_db($db['name'], $db_handle)) {
-            return true;
-        }
-        break;
-    case 'mysqli':
-        if (@mysqli_select_db($db_handle, $db['name'], $db_handle)) {
-            return true;
-        }
-        break;
-    }
-    return false;
-}
-
 
 
 /**
