@@ -116,7 +116,7 @@ $_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
 * Include appropriate DBMS object
 *
 */
-if ( !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
+if ( !extension_loaded('pdo_mysql') && !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
     die("No MySQL driver found in PHP environment.");
 }
 
