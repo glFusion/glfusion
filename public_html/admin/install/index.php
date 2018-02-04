@@ -765,24 +765,6 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
     $T->parse('env','envs',true);
 
-    if (version_compare(PHP_VERSION,'5.4.0','<')) {
-        $rg = ini_get('register_globals');
-        $T->set_var('item','register_globals');
-        $T->set_var('status',$rg == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-        $T->set_var('recommended',$LANG_INSTALL['off']);
-        $T->set_var('notes',$LANG_INSTALL['register_globals']);
-        $T->parse('env','envs',true);
-    }
-
-    if (version_compare(PHP_VERSION,'5.4.0','<')) {
-        $sm = ini_get('safe_mode');
-        $T->set_var('item','safe_mode');
-        $T->set_var('status',$sm == 1 ? '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['on'].'</span>' : '<span class="uk-text-success">'.$LANG_INSTALL['off'].'</span>');
-        $T->set_var('recommended',$LANG_INSTALL['off']);
-        $T->set_var('notes',$LANG_INSTALL['safe_mode']);
-        $T->parse('env','envs',true);
-    }
-
     if (version_compare(PHP_VERSION,'7.0.0','<')) {
         $ob = ini_get('open_basedir');
         if ( $ob == '' ) {
