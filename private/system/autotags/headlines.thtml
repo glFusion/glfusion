@@ -58,7 +58,7 @@
 {!endif}
 				</header>
 				<div class="uk-clearfix"></div>
-				<span itemprop="description">{text}</span>
+				<div itemprop="description">{text}</p></div>
 {!if readmore_url}
 				<br><a class="uk-text" href="{readmore_url}">{lang_readmore} <i class="uk-icon-angle-double-right"></i></a>
 {!endif}
