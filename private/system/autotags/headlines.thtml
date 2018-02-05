@@ -39,13 +39,13 @@
 						<a href="{url}" itemprop="url">
 {!endif}
 							<span itemprop="headline">{title}</span>
-{!if subtitle}
-							<h3>{subtitle}</h3>
-{!endif}
 {!if titlelink}
 						</a>
 {!endif}
 					</h4>
+{!if subtitle}
+					<h4 class="uk-margin-remove">{subtitle}</h4>
+{!endif}
 {!if meta}
 					<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-top-remove uk-margin-bottom">
 						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{author}</span></span></li>
@@ -58,7 +58,7 @@
 {!endif}
 				</header>
 				<div class="uk-clearfix"></div>
-				<span itemprop="description">{text}</span>
+				<div itemprop="description">{text}</div>
 {!if readmore_url}
 				<br><a class="uk-text" href="{readmore_url}">{lang_readmore} <i class="uk-icon-angle-double-right"></i></a>
 {!endif}
