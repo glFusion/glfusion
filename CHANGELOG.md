@@ -1,7 +1,15 @@
 ## v1.8.0 (Unreleased)
+  - MySQL PDO driver support
   - Bumped PHP min version to v5.6.0
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine
+
+## v1.7.3 (Unreleased)
+  - Headlines auto tag - updated headlines.thtml to clean up the HTML
+  - Forum: Badges can now be any color
+  - Forum: Badge group can now be configured to inherit or not inherit other group memberships
+  - Indonesian Translation update by fahmipulo
+  - Minor code optimizations
 
 ## v1.7.2 (January 27, 2018)
   - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
