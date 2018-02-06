@@ -47,7 +47,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms,$_DB;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms,$_DB, $_CP_CONF;
 
     $retval = '';
     $permError = 0;
@@ -305,33 +305,7 @@ function _checkEnvironment()
                 ));
             }
             break;
-        case 'gdlib' :        // GD Libs
-            if ($gdv = gdVersion()) {
-                if ($gdv >=2) {
-                    $T->set_var(array(
-                        'item'   => $LANG_ENVCHK['gd_lib'],
-                        'status' => $LANG_ENVCHK['ok'],
-                        'class' => 'tm-pass',
-                        'notes'  => $LANG_ENVCHK['gd_ok'],
-                    ));
 
-                } else {
-                    $T->set_var(array(
-                        'item'   => $LANG_ENVCHK['gd_lib'],
-                        'status' => $LANG_ENVCHK['ok'],
-                        'class' => 'tm-pass',
-                        'notes'  => $LANG_ENVCHK['gd_v1'],
-                    ));
-                }
-            } else {
-                $T->set_var(array(
-                    'item'   =>  $LANG_ENVCHK['gd_lib'],
-                    'status' =>  $LANG_ENVCHK['not_found'],
-                    'class'  =>  'tm-fail',
-                    'notes' =>   $LANG_ENVCHK['gd_not_found'],
-                ));
-            }
-            break;
         case 'netpbm' :    // NetPBM
             if (PHP_OS == "WINNT") {
                 $binary = "/jpegtopnm.exe";
@@ -359,6 +333,39 @@ function _checkEnvironment()
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('lib','libs',true);
     $classCounter++;
+
+    if ( $_CONF['image_lib'] == 'gdlib' || (isset($_CP_CONF['gfxDriver']) && ($_CP_CONF['gfxDriver'] == CAPTCHA_GDLIB || $_CP_CONF['gfxDriver'] == CAPTCHA_MATH ))) {
+        if ($gdv = gdVersion()) {
+            if ($gdv >=2) {
+                $T->set_var(array(
+                    'item'   => $LANG_ENVCHK['gd_lib'],
+                    'status' => $LANG_ENVCHK['ok'],
+                    'class' => 'tm-pass',
+                    'notes'  => $LANG_ENVCHK['gd_ok'],
+                ));
+
+            } else {
+                $T->set_var(array(
+                    'item'   => $LANG_ENVCHK['gd_lib'],
+                    'status' => $LANG_ENVCHK['ok'],
+                    'class' => 'tm-pass',
+                    'notes'  => $LANG_ENVCHK['gd_v1'],
+                ));
+            }
+        } else {
+            $T->set_var(array(
+                'item'   =>  $LANG_ENVCHK['gd_lib'],
+                'status' =>  $LANG_ENVCHK['not_found'],
+                'class'  =>  'tm-fail',
+                'notes' =>   $LANG_ENVCHK['gd_not_found'],
+            ));
+        }
+
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('lib','libs',true);
+        $classCounter++;
+    }
+
     if ( $_CONF['jhead_enabled'] ) {
         if (PHP_OS == "WINNT") {
             $binary = "/jhead.exe";
