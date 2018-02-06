@@ -470,10 +470,11 @@ function FEED_edit($fid = 0, $type = '')
 
     if ($A['type'] == 'article') {
         $options = FEED_getArticleFeeds();
+    } elseif ( $A['type'] == 'comment' ) {
+        $options = PLG_getFeedNames('comment');
     } else {
         $result = DB_query("SELECT pi_enabled FROM {$_TABLES['plugins']} WHERE pi_name='{$A['type']}'");
-        if($result)
-        {
+        if ($result) {
             $P = DB_fetchArray($result);
             if($P['pi_enabled'] == 0) {
                 COM_setMessage(80);
@@ -481,7 +482,7 @@ function FEED_edit($fid = 0, $type = '')
                 exit;
             }
         }
-        $options = PLG_getFeedNames ($A['type']);
+        $options = PLG_getFeedNames($A['type']);
     }
     $selection = '<select name="topic">' . LB;
     foreach ($options as $o) {

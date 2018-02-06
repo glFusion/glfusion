@@ -34,6 +34,7 @@ if (!defined ('GVERSION')) {
 $obsoletePrivateDir = array(
 // 1.8.0
     'plugins/captcha/images/static/',
+    'plugins/commentfeeds/',
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',

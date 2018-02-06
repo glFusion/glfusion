@@ -1980,6 +1980,10 @@ function glfusion_180()
         DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
     }
 
+    // change comment feeds
+    DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
+    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
+
     _updateConfig();
 
     // update version number

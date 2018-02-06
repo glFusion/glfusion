@@ -1,6 +1,7 @@
 ## v1.8.0 (Unreleased)
   - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
+  - Improved cron / maintenance task interface
   - Bumped PHP min version to v5.6.0
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine

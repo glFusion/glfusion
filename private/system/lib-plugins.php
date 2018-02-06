@@ -2197,7 +2197,12 @@ function PLG_supportingFeeds()
 
     $plugins = array();
 
-    foreach ($_PLUGINS as $pi_name) {
+    USES_lib_story();
+    USES_lib_comment();
+
+    $pluginTypes = array_merge(array('article', 'comment'), $_PLUGINS);
+
+    foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_getfeednames_' . $pi_name;
         if (function_exists($function)) {
             $feeds = $function();
@@ -2233,22 +2238,21 @@ function PLG_getFeedNames($plugin)
 
     $feeds = array ();
 
-    if ($plugin == 'custom')
-    {
+    if ($plugin == 'custom') {
         $function = 'CUSTOM_getfeednames';
         if (function_exists($function)) {
             $feeds = $function();
         }
     } else {
-        if (in_array($plugin, $_PLUGINS)) {
+        $pluginTypes = array_merge(array('comment'), $_PLUGINS);
+        USES_lib_comment();
+        if (in_array($plugin, $pluginTypes)) {
             $function = 'plugin_getfeednames_' . $plugin;
             if (function_exists($function)) {
                 $feeds = $function();
             }
         }
     }
-
-
 
     return $feeds;
 }
@@ -2281,7 +2285,9 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
             $content = $function($feed, $link, $update_data, $feedType, $feedVersion);
         }
     } else {
-        if (in_array ($plugin, $_PLUGINS)) {
+        $pluginTypes = array_merge(array('comment'), $_PLUGINS);
+        USES_lib_comment();
+        if (in_array ($plugin, $pluginTypes)) {
             $function = 'plugin_getfeedcontent_' . $plugin;
             if (function_exists ($function)) {
                 $content = $function ($feed, $link, $update_data, $feedType, $feedVersion);
@@ -2432,7 +2438,9 @@ function PLG_feedUpdateCheck($plugin, $feed, $topic, $update_data, $limit, $upda
                             $updated_type, $updated_topic, $updated_id);
         }
     } else {
-        if (in_array($plugin, $_PLUGINS)) {
+        $pluginTypes = array_merge(array('comment'), $_PLUGINS);
+        USES_lib_comment();
+        if (in_array($plugin, $pluginTypes)) {
             $function = 'plugin_feedupdatecheck_' . $plugin;
             if (function_exists($function)) {
                 $is_current = $function($feed, $topic, $update_data, $limit,
@@ -2776,10 +2784,15 @@ function PLG_itemSaved($id, $type, $old_id = '')
     $t = explode('.', $type);
     $plg_type = $t[0];
 
-    $plugins = count($_PLUGINS);
-    for ($save = 0; $save < $plugins; $save++) {
-        if ($_PLUGINS[$save] != $plg_type) {
-            $function = 'plugin_itemsaved_' . $_PLUGINS[$save];
+    $pluginTypes = array('comment');
+
+    USES_lib_comment();
+
+    $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
+
+    foreach ($pluginTypes as $pi_name) {
+        if ($pi_name != $plg_type) {
+            $function = 'plugin_itemsaved_' . $pi_name;
             if (function_exists($function)) {
                 $function($id, $type, $old_id);
             }
