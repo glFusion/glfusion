@@ -1,4 +1,5 @@
 ## v1.8.0 (Unreleased)
+  - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
   - Bumped PHP min version to v5.6.0
   - Converted all caching calls to use new caching engine

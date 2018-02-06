@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -123,7 +123,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
+    2 => array('GD Libs' => 0, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Default' => 'default','Simple' => 'simple'),
     5 => array('JPG' => 'jpg','PNG' => 'png'),
     6 => array('light' => 'light','dark' => 'dark'),

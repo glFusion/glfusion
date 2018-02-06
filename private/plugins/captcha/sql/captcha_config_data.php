@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2017 by the following authors:
+*  Copyright (C) 2002-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -52,7 +52,7 @@ $captchaConfigData = array(
         'set' => TRUE,
         'group' => 'captcha'
     ),
-
+/*
     array(
         'name' => 'imageset',
         'default_value' => 'default',
@@ -88,7 +88,7 @@ $captchaConfigData = array(
         'set' => TRUE,
         'group' => 'captcha'
     ),
-
+*/
     array(
         'name' => 'publickey',
         'default_value' => '',
@@ -96,7 +96,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 50,
+        'sort' => 20,
         'set' => TRUE,
         'group' => 'captcha'
     ),
@@ -108,7 +108,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 60,
+        'sort' => 30,
         'set' => TRUE,
         'group' => 'captcha'
     ),
@@ -120,7 +120,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 6,
-        'sort' => 70,
+        'sort' => 40,
         'set' => TRUE,
         'group' => 'captcha'
     ),
@@ -132,7 +132,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 80,
+        'sort' => 50,
         'set' => TRUE,
         'group' => 'captcha'
     ),
@@ -144,7 +144,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 90,
+        'sort' => 60,
         'set' => TRUE,
         'group' => 'captcha'
     ),
@@ -156,7 +156,7 @@ $captchaConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 100,
+        'sort' => 70,
         'set' => TRUE,
         'group' => 'captcha'
     ),

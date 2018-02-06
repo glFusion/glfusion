@@ -32,6 +32,12 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+define('CAPTCHA_GDLIB', 0);
+define('CAPTCHA_IMGMAGICK', 1); // retired
+define('CAPTCHA_STATICIMG', 2); // retired
+define('CAPTCHA_RECAPTCHA', 3);
+define('CAPTCHA_MATH', 6);
+
 // load the language file(s), including custom strings if any
 
 $langfile = $_CONF['path'].'plugins/captcha/language/' . $_CONF['language'] . '.php';
@@ -63,11 +69,7 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
-if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 6 ) {
-    if (!extension_loaded('gd') || !function_exists('gd_info')) {
-        $_CP_CONF['gfxDriver'] = 2;
-    }
-}
+if ( !isset($_CP_CONF['gfxDriver'])) $_CP_CONF['gfxDriver'] = CAPTCHA_MATH;
 
 if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 3 ) {
     if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
@@ -83,6 +85,33 @@ if ( isset($_CP_CONF['gfxDriver']) && $_CP_CONF['gfxDriver'] == 5 ) {
 
 if ( !isset($_CP_CONF['enable_loginform'])) $_CP_CONF['enable_loginform'] = 0;
 if ( !isset($_CP_CONF['enable_forgotpassword'])) $_CP_CONF['enable_forgotpassword'] = 0;
+
+switch ($_CP_CONF['gfxDriver']) {
+    case CAPTCHA_STATICIMG :
+        $_CP_CONF['gfxDriver'] = CAPTCHA_GDLIB;
+        // fall through on purpose
+    case CAPTCHA_GDLIB :
+    case CAPTCHA_MATH :
+        if (!extension_loaded('gd') || !function_exists('gd_info')) {
+            // no gd lib support
+            $_CP_CONF['enable_loginform'] = 0;
+            $_CP_CONF['remoteusers'] = 0;
+            $_CP_CONF['enable_comment'] = 0;
+            $_CP_CONF['enable_story'] = 0;
+            $_CP_CONF['enable_registration'] = 0;
+            $_CP_CONF['enable_forgotpassword'] = 0;
+            $_CP_CONF['enable_contact'] = 0;
+            $_CP_CONF['enable_emailstory'] = 0;
+            $_CP_CONF['enable_forum'] = 0;
+            $_CP_CONF['enable_mediagallery'] = 0;
+            $_CP_CONF['enable_links'] = 0;
+            $_CP_CONF['enable_calendar'] = 0;
+            $_CP_CONF['disabled_error'] = 1;
+        }
+        break;
+}
+
+$_CP_CONF['gfxFormat'] = 'png';
 
 /* Auto loader */
 
@@ -233,6 +262,10 @@ function plugin_templatesetvars_captcha($ctype, &$template)
         default :
             return;
             break;
+    }
+
+    if (function_exists('imagettftext') == FALSE && ( $_CP_CONF['gfxDriver'] == 0 || $_CP_CONF['gfxDriver'] == 6) ) {
+        return;
     }
 
     if ( COM_isAnonUser() ) {

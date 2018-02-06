@@ -6,7 +6,7 @@
 // |                                                                          |
 // | main CAPTCHA processing, generates CAPTCHA image / tokens                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,13 +39,6 @@ if (!defined ('GVERSION')) {
 
 global $_CONF, $_CP_CONF;
 
-$imgSet = $_CONF['path'] . 'plugins/captcha/images/static/' . $_CP_CONF['imageset'] . '/imageset.inc';
-
-if (file_exists ($imgSet)) {
-    include_once $imgSet;
-} else {
-    include_once $_CONF['path'] . 'plugins/captcha/images/static/default/imageset.inc';
-}
 
 class captcha {
     var $Length;
@@ -59,8 +52,6 @@ class captcha {
     var $backgrounds;
 
     var $driver;
-    var $imageset;
-    var $convertpath;
     var $gfxformat;
     var $debug;
     var $session_id = '';
@@ -71,8 +62,6 @@ class captcha {
         global $_CONF, $_CP_CONF;
 
         $this->driver       = $_CP_CONF['gfxDriver'];
-        $this->imageset     = $_CP_CONF['imageset'];
-        $this->convertpath  = $_CP_CONF['gfxPath'];
         $this->gfxformat    = $_CP_CONF['gfxFormat'];
         $this->debug        = $_CP_CONF['debug'];
         $this->sizemin      = "34";
@@ -88,33 +77,30 @@ class captcha {
         $this->session_id   = $csid;
         $this->publickey    = $_CP_CONF['publickey'];
 
-        if ($this->driver == 2 ) { // static images
-            $this->stringGen();
-            $this->makeCaptcha();
-        } else {
-            $this->Length   = $length;
+        $this->Length   = $length;
 
-            $this->fontpath = $_CONF['path'] . 'plugins/captcha/images/fonts/';
-            $this->bgpath   = $_CONF['path'] . 'plugins/captcha/images/backgrounds/';
+        $this->fontpath = $_CONF['path'] . 'plugins/captcha/images/fonts/';
+        $this->bgpath   = $_CONF['path'] . 'plugins/captcha/images/backgrounds/';
 
-            $this->fonts       = $this->getFonts();
-            $this->backgrounds = $this->getBackGrounds();
+        $this->fonts       = $this->getFonts();
+        $this->backgrounds = $this->getBackGrounds();
 
-            $errormgr       = new cperror;
+        $errormgr       = new cperror;
 
-            if ($this->fonts == FALSE) {
-                $errormgr->addError('No fonts available!');
-                $errormgr->displayError();
-                die();
-            }
-
-            if (function_exists('imagettftext') == FALSE && ( $this->driver == 0 || $this->driver == 6) ) {
-                $this->driver = 2;
-            }
-
-            $this->stringGen();
-            $this->makeCaptcha();
+        if ($this->fonts == FALSE) {
+            $errormgr->addError('No fonts available!');
+            $errormgr->displayError();
+            die();
         }
+
+        if (function_exists('imagettftext') == FALSE && ( $this->driver == 0 || $this->driver == 6) ) {
+            $errormgr->addError('GD Library imagetftext function not available');
+            $errormgr->displayError();
+            die();
+        }
+
+        $this->stringGen();
+        $this->makeCaptcha();
     }
 
     function getFonts () {
@@ -174,10 +160,7 @@ class captcha {
     function stringGen () {
         global $cCount;
 
-        if ( $this->driver == 2 ) { // static
-            $i = mt_rand(0,$cCount);
-            $this->CaptchaString = $i;
-        } else if ($this->driver == 0 || $this->driver == 1 ) {
+        if ($this->driver == 0 ) {
             $CharPool = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
             $PoolLength = strlen($CharPool) - 1;
 
@@ -215,7 +198,6 @@ class captcha {
 
         switch ($this->driver) {
             case 0 :
-            case 1 :
                 if ( $this->gfxformat != 'png' && $this->gfxformat != 'jpg') {
                     header('Content-type: image/gif');
                     COM_errorLog("CAPTCHA: No valid gfxFormat specified");
@@ -228,88 +210,34 @@ class captcha {
                 $header = 'Content-type: image/' . $this->gfxformat;
                 header($header);
 
-                if ( $this->driver == 0 ) {
-                    $imagelength = $this->Length * 25 + 16;
-                    $imageheight = 75;
-                    $image       = imagecreate($imagelength, $imageheight);
-                    $bgcolor     = imagecolorallocate($image, 255, 255, 255);
-                    $stringcolor = imagecolorallocate($image, 0, 0, 0);
-                    $filter      = new filters;
-                    $filter->signs($image, $this->getRandFont());
-                    for ($i = 0; $i < strlen($this->CaptchaString); $i++) {
-                        imagettftext($image, 25, mt_rand(-15, 15), $i * 25 + 10,
-                                mt_rand(30, 70),
-                                $stringcolor,
-                                $this->getRandFont(),
-                                $this->CaptchaString{$i});
-                    }
-
-                    switch ($this->gfxformat ) {
-                        case 'png' :
-                            imagepng($image);
-                            break;
-                        case 'jpg' :
-                            imagejpeg($image);
-                            break;
-                    }
-                    imagedestroy($image);
-                } else {
-                    // ImageMagick code originally written by
-                    // Thom Skrtich  (email : bisohpthom@supertwist.net)
-                    // used in SecureImage a CAPTCHA plugin for WordPress.
-                    $gravity = 'Center';
-                    # modify the image according to the generated settings
-                    $size =  rand($this->sizemin,  $this->sizemax);
-                    $blur =  rand($this->blurmin,  $this->blurmax);
-                    $angle = rand($this->anglemin, $this->anglemax);
-                    $swirl = rand($this->swirlmin, $this->swirlmax);
-                    $wave =  rand($this->wavemin,  $this->wavemax);
-
-                    $cString = $this->CaptchaString;
-                    $i = strlen($cString);
-                    $newString = '';
-                    for ($x=0; $x<$i;$x++) {
-                        $newString .= $cString[$x];
-                        $newString .= ' ';
-                    }
-
-                    # prepare our image magick command
-                    $cmd    = '"' . $this->convertpath . '"';
-                    $cmd .= ' -font "'.$this->getRandFont().'"';
-                    $cmd .= ' -pointsize '.$size;
-                    $cmd .= ' -gravity "'.$gravity.'"';
-                    $cmd .= ' -annotate 0 "' . $newString . '"';
-                    $cmd .= ' -blur '.$blur;
-                    $cmd .= ' -rotate '.$angle;
-                    $cmd .= ' -swirl '.$swirl;
-                    $cmd .= ' -wave '.$wave.'x80';
-                    $cmd .= ' ' . $this->getRandBackground() . ' - ';
-
-                    if (PHP_OS == "WINNT") {
-                        $pcmd = 'cmd /c " ' . $cmd . '"';
-                    } else {
-                        $pcmd = $cmd;
-                    }
-                    if ($this->debug) {
-                        COM_errorLog("CAPTCHA cmd: " . $pcmd);
-                    }
-                    passthru($pcmd);
+                $imagelength = $this->Length * 25 + 16;
+                $imageheight = 75;
+                $image       = imagecreate($imagelength, $imageheight);
+                $bgcolor     = imagecolorallocate($image, 255, 255, 255);
+                $stringcolor = imagecolorallocate($image, 0, 0, 0);
+                $filter      = new filters;
+                $filter->signs($image, $this->getRandFont());
+                for ($i = 0; $i < strlen($this->CaptchaString); $i++) {
+                    imagettftext($image, 25, mt_rand(-15, 15), $i * 25 + 10,
+                            mt_rand(30, 70),
+                            $stringcolor,
+                            $this->getRandFont(),
+                            $this->CaptchaString{$i});
                 }
+
+                switch ($this->gfxformat ) {
+                    case 'png' :
+                        imagepng($image);
+                        break;
+                    case 'jpg' :
+                        imagejpeg($image);
+                        break;
+                }
+                imagedestroy($image);
                 break;
+
+            case 1 :
             case 2 :
-                $filename = $cString[$this->CaptchaString] . '.jpg';
-                $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
-                if ( $fp != NULL ) {
-                    header('Content-type: image/jpeg');
-                    while (!feof($fp)) {
-                        $buf = fgets($fp, 8192);
-                        echo $buf;
-                    }
-                    fclose($fp);
-                } else {
-                    COM_errorLog("CAPTCHA: Unable to open static image file");
-                }
-                break;
             case 3 :
             case 4 :
             case 5 :
@@ -365,9 +293,6 @@ class captcha {
     function getCaptchaString () {
         global $cString;
 
-        if ( $this->driver == 2 ) { // static images
-            return $cString[$this->CaptchaString];
-        }
         return $this->CaptchaString;
     } //GetCaptchaString
 } //class: captcha

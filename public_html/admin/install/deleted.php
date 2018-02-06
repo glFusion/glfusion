@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Installation                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,6 +32,8 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
+// 1.8.0
+    'plugins/captcha/images/static/',
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',

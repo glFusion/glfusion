@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2017 by the following authors:                        |
+// | Copyright (C) 2005-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -127,6 +127,14 @@ function captcha_upgrade()
         case '3.5.3' :
             // no changes
         case '3.5.4' :
+
+        case '3.6.0' :
+            $currentDriverSer = DB_getitem($_TABLES['conf_values'],'value','name="gfxDriver"');
+            $currentDriver = @unserialize($currentDriverSer);
+            if ( $currentDriver == 1 || $currentDriver == 2 ) {
+                $c = config::get_instance();
+                $c->set('gfxDriver',6,'captcha');
+            }
 
         default :
             captcha_update_config();

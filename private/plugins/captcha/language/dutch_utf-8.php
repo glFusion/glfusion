@@ -128,7 +128,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => true, 'Nee' => false),
-    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Statische Afbeeldingen' => 2, 'reCAPTCHA' => 3, 'Math Equation' => 6),
+    2 => array('GD Libs' => 0, 'reCAPTCHA' => 3, 'Math Equation' => 6),
     4 => array('Standaard' => 'default', 'Simpel' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('light' => 'light', 'dark' => 'dark')
