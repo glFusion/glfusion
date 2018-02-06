@@ -1469,6 +1469,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
             }
 
+            DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
+            DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
+
             $current_fusion_version = '1.8.0';
 
         default:
