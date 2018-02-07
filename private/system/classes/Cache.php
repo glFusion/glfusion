@@ -106,6 +106,9 @@ final class Cache
      */
     public function get($key, $default = null)
     {
+        global $_CONF;
+        if ( $_CONF['cache_driver'] == 'Devnull') return null;
+
         if ($this->namespace != '') $key = $this->namespace.'_'.$key;
         $key = $this->validateKeyName($key);
 
@@ -299,6 +302,8 @@ final class Cache
      */
     public function has($key)
     {
+        global $_CONF;
+        if ( $_CONF['cache_driver'] == 'Devnull') return false;
         if ($this->namespace != '') $key = $this->namespace.'_'.$key;
         $key = $this->validateKeyName($key);
         try {
