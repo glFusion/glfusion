@@ -494,7 +494,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
         $groups = SEC_getUserGroups ($uid);
     }
 
-    if ( count($groups) > 0 ) {
+    if ( is_array($groups) && count($groups) > 0 ) {
         $glist = join(',', $groups);
         $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
                          . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
