@@ -244,14 +244,6 @@ class database
             $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
         }
 
-/*
-        try {
-            $result = @$this->_db->query($sql);
-        } catch(PDOException  $e ){
-//@@TODO - better error handling...
-            die("error on sql " . $sql);
-        }
-*/
         $this->_errno = $this->_db->errorCode();
 
         if ( $result === false ) {
