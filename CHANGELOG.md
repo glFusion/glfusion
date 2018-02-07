@@ -1,4 +1,5 @@
 ## v1.8.0 (Unreleased)
+  - Removed comment feeds plugin - functionality integrated into core
   - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
   - Improved cron / maintenance task interface
