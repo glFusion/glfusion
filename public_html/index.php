@@ -384,7 +384,7 @@ function _cronSchedule() {
     if ( !isset($_VARS['last_maint_run'] ) || $_VARS['last_maint_run'] == '') {
         $_VARS['last_maint_run'] = 0;
     }
-    if (  (( $_VARS['last_maint_run'] + 3600 ) <= time()) ) {
+    if (  (( $_VARS['last_maint_run'] + 600 ) <= time()) ) {
         return '<img src="'.$_CONF['site_url'].'/cron.php?id='.time().'" height="1" width="2" />';
     } else {
         return '';

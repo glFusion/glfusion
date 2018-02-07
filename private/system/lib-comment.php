@@ -2799,7 +2799,6 @@ function plugin_feedupdatecheck_comment ($feed, $topic, $update_data, $limit, $u
         $updated_topic = '';
         $updated_id = '';
     }
-
     if ( (int) $_VARS['cmt_update'] > (int) $update_data ) {
         return false;
     }

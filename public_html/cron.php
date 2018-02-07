@@ -27,7 +27,6 @@ if(!$defer){
 
 // Catch any possible output (e.g. errors)
 ob_start();
-
 COM_rdfUpToDateCheck();
 
 // Scan for any stories that have expired and should be archived or deleted
@@ -59,7 +58,6 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
 
 if ( $_CONF['cron_schedule_interval'] > 0  ) {
     if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
-        COM_errorLog("RUNNING CRON INTERVAL");
         DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'" );
         PLG_runScheduledTask();
     }
