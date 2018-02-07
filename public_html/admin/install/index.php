@@ -62,6 +62,7 @@ define('NO_DB_DRIVER',             21);
 define('FILE_CLEANUP_ERROR',       22);
 define('DB_NO_UTF8',               23);
 define('DB_NO_CHECK_UTF8',         24);
+define('DB_TOO_OLD',               25);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -313,6 +314,9 @@ function _displayError($error,$step,$errorText='')
             break;
         case DB_NO_CHECK_UTF8 :
             $T->set_var('text',$LANG_INSTALL['no_check_utf8']);
+            break;
+        case DB_TOO_OLD :
+            $T->set_var('text',$LANG_INSTALL['db_too_old']);
             break;
         case NO_MIGRATE_GLFUSION :
             $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
@@ -1355,6 +1359,29 @@ function INST_gotSiteInformation()
             } catch (PDOException $e) {
                 return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
             }
+            $mysqlVersion = $db_handle->getAttribute(PDO::ATTR_SERVER_VERSION);
+            // check MySQL version here
+
+            if (!empty($mysqlVersion)) {
+                preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlVersion, $match);
+                $mysqlmajorv = $match[1];
+                $mysqlminorv = $match[2];
+                $mysqlrev = $match[3];
+            } else {
+                $mysqlmajorv = 0;
+                $mysqlminorv = 0;
+                $mysqlrev = 0;
+            }
+            $mySqlVersionOK = true;
+            $minv = explode('.', SUPPORTED_MYSQL_VER);
+            if (($mysqlmajorv <  $minv[0]) || (($mysqlmajorv == $minv[0]) && ($mysqlminorv <  $minv[1])) ||
+              (($mysqlmajorv == $minv[0]) && ($mysqlminorv == $minv[1]) && ($mysqlrev < $minv[2]))) {
+                $mySqlVersionOK = false;
+            }
+            if ( $mySqlVersionOK === false ) {
+                return _displayError(DB_TOO_OLD,'getsiteinformation');
+            }
+
             if ( $innodb ) {
                 INST_errorLog($log_path,'INSTALL: Checking MySQL Storage Engines');
                 $foundInnoDB = false;
@@ -1403,6 +1430,31 @@ function INST_gotSiteInformation()
             if (!$db_handle) {
                 return _displayError(DB_NO_CONNECT,'getsiteinformation');
             }
+
+            if ($db_handle) {
+                $mysqlVersion = mysqli_get_server_info($db_handle);
+            }
+
+            if (!empty($mysqlVersion)) {
+                preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlVersion, $match);
+                $mysqlmajorv = $match[1];
+                $mysqlminorv = $match[2];
+                $mysqlrev = $match[3];
+            } else {
+                $mysqlmajorv = 0;
+                $mysqlminorv = 0;
+                $mysqlrev = 0;
+            }
+            $mySqlVersionOK = true;
+            $minv = explode('.', SUPPORTED_MYSQL_VER);
+            if (($mysqlmajorv <  $minv[0]) || (($mysqlmajorv == $minv[0]) && ($mysqlminorv <  $minv[1])) ||
+              (($mysqlmajorv == $minv[0]) && ($mysqlminorv == $minv[1]) && ($mysqlrev < $minv[2]))) {
+                $mySqlVersionOK = false;
+            }
+            if ( $mySqlVersionOK === false ) {
+                return _displayError(DB_TOO_OLD,'getsiteinformation');
+            }
+
             if ($db_handle) {
                 $connected = @mysqli_select_db($db_handle, $db_name);
             }
@@ -1498,10 +1550,6 @@ function INST_gotSiteInformation()
             break;
 
     }
-
-
-// old db stuff
-
 
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_MISSING,'getsiteinformation',$errText);

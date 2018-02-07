@@ -6,7 +6,7 @@
 // |                                                                          |
 // | English language file for the glFusion installation script               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -66,6 +66,7 @@ $LANG_INSTALL = array(
     'db_type_error'             => 'Database Type must be selected',
     'db_user'                   => 'Database Username',
     'db_user_error'             => 'Database Username cannot be blank.',
+    'db_too_old'                => 'MySQL Version is too old - You must have MySQL v5.0.15 or later',
     'dbconfig_not_found'        => 'Unable to locate the db-config.php or db-config.php.dist file. Please make sure you have entered the correct path to your private directory.',
     'dbconfig_not_writable'     => 'The db-config.php file is not writable. Please ensure the web server has permission to write to this file.',
     'directory_permissions'     => 'Directory Permissions',
@@ -113,7 +114,7 @@ $LANG_INSTALL = array(
     'path_prompt'               => 'Path to private/ directory',
     'path_settings'             => 'Path Settings',
     'perform_upgrade'			=> 'Perform Upgrade',
-    'php_req_version'			=> 'glFusion requires PHP version 5.3.3 or newer.',
+    'php_req_version'			=> 'glFusion requires PHP version 5.6.0 or newer.',
     'php_settings'				=> 'PHP Settings',
     'php_version'				=> 'PHP Version',
     'php_warning'				=> 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -236,7 +237,7 @@ $LANG_INSTALL = array(
     'json_extension'            => 'Json Extension',
     'mbstring_extension'        => 'Multibyte (mbstring) Extension',
     'mysqli_extension'          => 'MySQLi Extension',
-    'mysql_extension'           => 'MySQL Driver',
+    'mysql_extension'           => 'MySQL Driver (either pdo_mysql or mysqli)',
     'openssl_extension'         => 'OpenSSL Extension',
     'session_extension'         => 'Session Extension',
     'xml_extension'             => 'XML Extension',
