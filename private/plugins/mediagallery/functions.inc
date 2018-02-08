@@ -1680,6 +1680,12 @@ function plugin_itemsaved_mediagallery($id, $type, $old_id = '')
     $c->deleteItemsByTag('mediagallery');
 }
 
+function plugin_itemdeleted_mediagallery($id, $type, $children = null)
+{
+    if ( $type != 'mediagallery' ) return;
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('mediagallery');
+}
 
 function MG_clean_directories($path, $needle = '')
 {
