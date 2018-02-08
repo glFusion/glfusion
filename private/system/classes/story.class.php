@@ -1786,8 +1786,11 @@ class Story
         global $_CONF, $_USER, $_TABLES;
 
 		static $allowedElements = null;
+		static $filter = null;
 
-        $filter = sanitizer::getInstance();;
+        if ($filter == null ) {
+            $filter = sanitizer::getInstance();
+        }
         $filter->setPostmode($this->_postmode);
 		if ( $allowedElements === null )
 			$allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
@@ -1795,12 +1798,6 @@ class Story
         $filter->setCensorData(true);
         $filter->setReplaceTags(true);
         $filter->setNamespace('glfusion','story');
-
-        if (isset($this->_expire) && $this->_expire != 0) {
-            $dtExpire = new Date($this->_expire,$_USER['tzid']);
-        } else {
-            $dtExpire = new Date($this->_date + (7*86400),$_USER['tzid']);
-        }
 
         $return = '';
 
@@ -1829,7 +1826,6 @@ class Story
             case 'dateonly':
 				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->format($_CONF['dateonly'],true);
-
                 break;
 
             case 'date':
@@ -1901,6 +1897,11 @@ class Story
                 break;
 
             case 'expire':
+                if (isset($this->_expire) && $this->_expire != 0) {
+                    $dtExpire = new Date($this->_expire,$_USER['tzid']);
+                } else {
+                    $dtExpire = new Date($this->_date + (7*86400),$_USER['tzid']);
+                }
                 $return = $dtExpire->toUnix();
                 break;
 

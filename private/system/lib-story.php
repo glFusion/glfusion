@@ -61,7 +61,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
  * submit.php and admin/story.php (Preview mode for the last two).
  *
  * @param   object  $story      The story to display, an instance of the Story class.
- * @param   string  $index      n = 'Compact display' for list of stories. p = 'Preview' mode. Else full display of article.
+ * @param   string  $index      y= 'Compact display' n = 'Compact display' for list of stories. p = 'Preview' mode. Else full display of article.
  * @param   string  $storytpl   The template to use to render the story.
  * @param   string  $query      A search query, if one was specified.
  *
@@ -110,7 +110,11 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
 
     $introtext = $story->displayElements('introtext');
-    $bodytext  = $story->displayElements('bodytext');
+    if ($index != 'y') {
+        $bodytext  = $story->displayElements('bodytext');
+    } else {
+        $bodytext = '';
+    }
 
     if ( !empty( $query )) {
         $introtext = COM_highlightQuery( $introtext, $query );
