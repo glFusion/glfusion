@@ -39,17 +39,6 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
     $pi_name = 'mediagallery';     // Plugin name
     $retval = '';
 
-	if ( $_MG_CONF['gallery_only'] == 1 && $topic == '') {
-		MG_galleryOnly();
-	}
-    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
-        return $retval;
-    }
-
-    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
-        return '';
-    }
-
     if ( $topic == '' ) {
         $sTopic = "none";
     } else {

@@ -260,7 +260,19 @@ function plugin_getuseroption_mediagallery()
 
 function plugin_centerblock_mediagallery( $where=1, $page=1, $topic ='' )
 {
-    global $_CONF;
+    global $_CONF, $_MG_CONF,$mg_installed_version;
+
+	if ( $_MG_CONF['gallery_only'] == 1 && $topic == '') {
+		MG_galleryOnly();
+	}
+
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
+        return '';
+    }
+
+    if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
+        return '';
+    }
 
     require_once $_CONF['path'].'plugins/mediagallery/include/centerblock.inc.php';
 
@@ -1661,6 +1673,13 @@ function plugin_supportadblock_mediagallery()
     return array('mediagallery_album_list','mediagallery_media_list');
 }
 
+function plugin_itemsaved_mediagallery($id, $type, $old_id = '')
+{
+    if ( $type != 'mediagallery' ) return;
+    $c = glFusion\Cache::getInstance();
+    $c->deleteItemsByTag('mediagallery');
+}
+
 
 function MG_clean_directories($path, $needle = '')
 {
@@ -1920,11 +1939,20 @@ function MG_initAlbums($force=0) {
         return;
     }
 
-    $_MG_CONF['dateformat'] = array();
-    // let's load all the dataformats in memory so we do not have to keep processing it over and over...
-    $result = DB_query("SELECT * FROM {$_TABLES['dateformats']}",1);
-    while ($row = DB_fetchArray($result)) {
-        $_MG_CONF['dateformat'][$row['dfid']] = $row['format'];
+    $c = glFusion\Cache::getInstance();
+
+    $dtKey = 'mediagallery_df';
+    if ( $c->has($dtKey)) {
+        $_MG_CONF['dateformat'] = unserialize($c->get($dtKey));
+    } else {
+        $_MG_CONF['dateformat'] = array();
+        // let's load all the dataformats in memory so we do not have to keep processing it over and over...
+        $result = DB_query("SELECT * FROM {$_TABLES['dateformats']}",1);
+        $resultSet = DB_fetchAll($result);
+        foreach($resultSet AS $row) {
+            $_MG_CONF['dateformat'][$row['dfid']] = $row['format'];
+        }
+        $c->set($dtKey,serialize($_MG_CONF['dateformat']),array('mediagallery'));
     }
 
     // read user prefs, if any...
@@ -1956,40 +1984,47 @@ function MG_initAlbums($force=0) {
         $uid = $_USER['uid'];
     }
 
-    $groups    = $_GROUPS;
-    $sql       = "SELECT * FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
-    $result    = DB_query( $sql, 1);
-    $MG_albums = array();
-    $album = new mgAlbum();
-    $album->id = 0;
-    $album->title = 'root album';
-    $album->owner_id = $mgadmin;
-    $album->group_id = $root;
-    $album->skin     = isset($_MG_CONF['indextheme']) ? $_MG_CONF['indextheme'] : 'default';
-    if ( $mgadmin ) {
-        $album->access = 3;
-    }
-    $MG_albums[$album->id] = $album;
-
-    while ($A = DB_fetchArray($result) ) {
-        $album  = new mgAlbum();
-        $album->constructor($A,$mgadmin,$root,$groups);
-
-        /*
-         * We include hidden albums in the array since they
-         * can be used in auto tags which a user will have
-         * access to.
-         */
-
-        if ( $album->access > 0 ) {
-            $MG_albums[$album->id] = $album;
+    $key = 'mediagallery_data__'.$c->securityHash(false,false);
+    if ($c->has($key)) {
+        $MG_albums = unserialize($c->get($key));
+    } else {
+        $groups    = $_GROUPS;
+        $sql       = "SELECT * FROM " . $_TABLES['mg_albums'] . " ORDER BY album_order DESC";
+        $result    = DB_query( $sql, 1);
+        $MG_albums = array();
+        $album = new mgAlbum();
+        $album->id = 0;
+        $album->title = 'root album';
+        $album->owner_id = $mgadmin;
+        $album->group_id = $root;
+        $album->skin     = isset($_MG_CONF['indextheme']) ? $_MG_CONF['indextheme'] : 'default';
+        if ( $mgadmin ) {
+            $album->access = 3;
         }
-    }
+        $MG_albums[$album->id] = $album;
 
-    foreach( $MG_albums as $id => $album) {
-        if ($id != 0 && isset($MG_albums[$album->parent]->id) ) {
-            $MG_albums[$album->parent]->setChild($id);
+        while ($A = DB_fetchArray($result) ) {
+            $album  = new mgAlbum();
+            $album->constructor($A,$mgadmin,$root,$groups);
+
+            /*
+             * We include hidden albums in the array since they
+             * can be used in auto tags which a user will have
+             * access to.
+             */
+
+            if ( $album->access > 0 ) {
+                $MG_albums[$album->id] = $album;
+            }
         }
+
+        foreach( $MG_albums as $id => $album) {
+            if ($id != 0 && isset($MG_albums[$album->parent]->id) ) {
+                $MG_albums[$album->parent]->setChild($id);
+            }
+        }
+
+        $c->set($key,serialize($MG_albums),array('mediagallery'));
     }
 }
 
