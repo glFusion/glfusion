@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Social Integration management console                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2017 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -477,8 +477,6 @@ function SI_save_site()
         $extra = $_POST['extra'];
         $cfg->set('social_site_extra', $extra, 'social_internal');
     }
-
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('social_site');
 
     return $retval;
 }

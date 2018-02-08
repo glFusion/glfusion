@@ -108,6 +108,8 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG_SOCIAL;
 
+    static $fmCache = array();
+
     $retval = '';
 
     if ( $uid == 0 ) {
@@ -115,12 +117,8 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
         $uid = $_USER['uid'];
     }
 
-    if ( $uid == -1 ) { // site social followme
-        $c = glFusion\Cache::getInstance();
-        $key = 'site_follow__'.md5($templateFile).'_'.$c->securityHash(true,true);
-        if ( $c->has($key) ) {
-            return $c->get($key);
-        }
+    if ( isset($fmCache[$uid])) {
+        return $fmCache[$uid];
     }
 
     $T = new Template( $_CONF['path_layout'].'social' );
@@ -165,9 +163,9 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
         }
         $retval = $T->finish ($T->parse('output','links'));
     }
-    if ( $uid == -1 ) {
-        $c->set($key,$retval,array('social','social_site'));
-    }
+
+    $fmCache[$uid] = $retval;
+
     return $retval;
 }
 
