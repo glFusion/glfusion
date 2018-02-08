@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This file implements plugin support in glFusion.                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -2781,9 +2781,6 @@ function PLG_itemSaved($id, $type, $old_id = '')
 {
     global $_PLUGINS;
 
-    $t = explode('.', $type);
-    $plg_type = $t[0];
-
     $pluginTypes = array('comment');
 
     USES_lib_comment();
@@ -2822,16 +2819,15 @@ function PLG_itemDeleted($id, $type, $children = null)
 {
     global $_PLUGINS;
 
-    $t = explode('.', $type);
-    $plg_type = $t[0];
+    $pluginTypes = array('comment');
 
-    $plugins = count($_PLUGINS);
-    for ($del = 0; $del < $plugins; $del++) {
-        if ($_PLUGINS[$del] != $plg_type) {
-            $function = 'plugin_itemdeleted_' . $_PLUGINS[$del];
-            if (function_exists($function)) {
-                $function($id, $type, $children);
-            }
+    USES_lib_comment();
+
+    $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
+    foreach ($pluginTypes as $pi_name) {
+        $function = 'plugin_itemdeleted_' . $pi_name;
+        if (function_exists($function)) {
+            $function($id, $type, $children);
         }
     }
 
