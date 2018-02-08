@@ -2790,11 +2790,9 @@ function PLG_itemSaved($id, $type, $old_id = '')
 
     $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
     foreach ($pluginTypes as $pi_name) {
-        if ($pi_name != $plg_type || $plg_type == 'comment') {
-            $function = 'plugin_itemsaved_' . $pi_name;
-            if (function_exists($function)) {
-                $function($id, $type, $old_id);
-            }
+        $function = 'plugin_itemsaved_' . $pi_name;
+        if (function_exists($function)) {
+            $function($id, $type, $old_id);
         }
     }
 
