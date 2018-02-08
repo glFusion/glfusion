@@ -1046,15 +1046,15 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         forum_index();
     }
 
+    if ( $_FF_CONF['centerblock_where'] != $where && $where != CENTERBLOCK_FORCE) {
+        return;
+    }
+
     if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
     }
 
     if ( COM_isAnonUser() && $_FF_CONF['registration_required'] == 1 )  {
-        return;
-    }
-
-    if ( $_FF_CONF['centerblock_where'] != $where && $where != CENTERBLOCK_FORCE) {
         return;
     }
 
@@ -1109,13 +1109,12 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
         $sql .= "ORDER BY lastupdated DESC LIMIT {$_FF_CONF['centerblock_numposts']}";
         $result = DB_query ($sql);
+        $resultSet = DB_fetchAll($result);
+        if (count($resultSet) == 0 ) return '';
 
-        if (DB_numRows($result) == 0) {
-            return;
-        }
         $cssid = 0;
         $block->set_block('block', 'blockrow', 'brow');
-        while ( ($A = DB_fetchArray ($result)) != NULL ) {
+        foreach($resultSet AS $A) {
             $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,COM_getEncodingt());
             if ($_FF_CONF['use_censor']) {
                 $A['subject'] = COM_checkWords($A['subject']);
