@@ -281,9 +281,11 @@ function forum_upgrade() {
             $bg_success = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#82bb42";}';
             $bg_danger  = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#d32c46";}';
             $bg_warning = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#faa732";}';
+            $bg_default = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#009dd8";}';
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_success)."' WHERE fb_data='uk-badge-success'",1);
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_danger)."' WHERE fb_data='uk-badge-danger'",1);
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_warning)."' WHERE fb_data='uk-badge-warning'",1);
+            DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_default)."' WHERE fb_data=''",1);
 
         default :
             forum_update_config();
