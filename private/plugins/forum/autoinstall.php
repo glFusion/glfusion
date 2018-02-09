@@ -70,6 +70,13 @@ $INSTALL_plugin['forum'] = array(
   array('type' => 'table', 'table' => $_TABLES['ff_ranks'], 'sql' => $_SQL['ff_ranks']),
   array('type' => 'table', 'table' => $_TABLES['ff_likes_assoc'], 'sql' => $_SQL['ff_likes_assoc']),
 
+//  array('type' => 'sql', 'sql' => $_SQL['d1'] ),
+//  array('type' => 'sql', 'sql' => $_SQL['d2'] ),
+//  array('type' => 'sql', 'sql' => $_SQL['d3'] ),
+//  array('type' => 'sql', 'sql' => $_SQL['d4'] ),
+  array('type' => 'sql', 'sql' => $_SQL['d5'] ),
+  array('type' => 'sql', 'sql' => $_SQL['d6'] ),
+
   array('type' => 'group', 'group' => 'forum Admin', 'desc' => 'Users in this group can administer the Forum plugin',
         'variable' => 'admin_group_id', 'addroot' => true, 'admin' => true),
 
