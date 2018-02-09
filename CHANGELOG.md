@@ -1,5 +1,10 @@
 ## v1.7.3 (Unreleased)
+  - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
+  - Headlines auto tag - updated headlines.thtml to clean up the HTML
   - Forum: Badges can now be any color
+  - Forum: Badge group can now be configured to inherit or not inherit other group memberships
+  - Indonesian Translation update by fahmipulo
+  - Minor code optimizations
 
 ## v1.7.2 (January 27, 2018)
   - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
