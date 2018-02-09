@@ -199,7 +199,7 @@ class Rank
         }
         $sql2 = "posts = {$this->posts},
                 dscp = '" . DB_escapeString($this->dscp) . "'";
-        DB_query($sql1 . $sql2 . $sql3);
+        DB_query($sql1 . $sql2 . $sql3,1);
         if (DB_error())  {
             return $LANG_GF01['badge_save_error'];
         } else {

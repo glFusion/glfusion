@@ -278,28 +278,14 @@ function forum_upgrade() {
         case '3.4.0' :
             DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
             // Change badge css designators to actual color strings
-            $b_groups =\Forum\Badge::getAll();
-            foreach ($b_groups as $grp) {
-                foreach ($grp as $badge) {
-                    if ($badge->fb_type == 'css') {
-                        switch ($badge->fb_data) {
-                        case 'uk-badge-success':
-                            $badge->fb_bgcolor = '#82bb42';
-                            break;
-                        case 'uk-badge-danger':
-                            $badge->fb_bgcolor = '#d32c46;';
-                            break;
-                        case 'uk-badge-warning':
-                            $badge->fb_bgcolor = '#d32c46;';
-                            break;
-                        default:
-                            $badge->fb_bgcolor = '#009dd8';
-                            break;
-                        }
-                        $badge->Save();
-                    }
-                }
-            }
+            $bg_success = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#82bb42";}';
+            $bg_danger  = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#d32c46";}';
+            $bg_warning = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#faa732";}';
+            $bg_default = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#009dd8";}';
+            DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_success)."' WHERE fb_data='uk-badge-success'",1);
+            DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_danger)."' WHERE fb_data='uk-badge-danger'",1);
+            DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_warning)."' WHERE fb_data='uk-badge-warning'",1);
+            DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_default)."' WHERE fb_data=''",1);
 
         default :
             forum_update_config();
