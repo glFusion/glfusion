@@ -757,7 +757,7 @@ class Topic
 
         // TID has changed and is confirmed OK (not duplicate).
         // Now update all other content items that have the old TID.
-        if ($this->tid != $this->old_tid) {
+        if ($this->old_tid != '' && $this->tid != $this->old_tid) {
             DB_query("UPDATE {$_TABLES['stories']}
                     SET tid = '".DB_escapeString($this->tid)."'
                     WHERE tid = '".DB_escapeString($this->old_tid)."'");
