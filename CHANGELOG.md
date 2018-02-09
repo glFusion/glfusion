@@ -7,7 +7,9 @@
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine
 
-## v1.7.3 (Unreleased)
+## v1.7.3 (February 9, 2018)
+  - Fixed Forum ranks save error on duplicate number of posts
+  - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
   - Headlines auto tag - updated headlines.thtml to clean up the HTML
   - Forum: Badges can now be any color
   - Forum: Badge group can now be configured to inherit or not inherit other group memberships
