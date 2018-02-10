@@ -2,7 +2,7 @@
 /**
 * @package    glFusion CMS
 *
-* @copyright   Copyright (C) 2014-2016 by the following authors
+* @copyright   Copyright (C) 2014-2018 by the following authors
 *              Mark R. Evans          mark AT glfusion DOT org
 *
 * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -69,7 +69,7 @@ class autotag_mgslider extends BaseAutotag {
         }
         if ( !isset($MG_albums[$p1]->id) || $MG_albums[$p1]->access == 0 ) {
             $link = '';
-            $content = str_replace ($autotag['tagstr'], $link, $content);
+            $content = $fulltag;
             return $content;
         }
 
