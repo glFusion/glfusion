@@ -56,6 +56,14 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
         $dt_lu = new Date($showtopic['lastedited'],$_USER['tzid']);
     }
 
+    $mod_perms = array(
+        'mod_edit'      => 0,
+        'mod_delete'    => 0,
+        'mod_move'      => 0,
+        'mod_ban'       => 0,
+        'mod_lock'      => 0
+    );
+
     static $cacheUserArray = array();
     static $_user_already_voted = array();
 
