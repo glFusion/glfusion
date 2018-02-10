@@ -337,14 +337,9 @@ final class Cache
      */
     public function deleteItemsByTag($tag)
     {
-        if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
-        $tag = $this->validateKeyName($tag);
-        $tagArray = $this->getItemsByTag($tag);
-        if (is_array($tagArray)) {
-            foreach ($tagArray AS $item) {
-                $this->internalCacheInstance->deleteItem($item->getKey());
-            }
-        }
+        $tagArray = explode(',',$tag);
+        $this->deleteItemsByTags($tagArray);
+        return;
     }
 
     /**
