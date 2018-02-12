@@ -63,13 +63,6 @@ function FF_newPosts($forum = 0)
         return array($pageTitle,$retval);
     }
 
-    $c = glFusion\Cache::getInstance();
-    $key = 'forum'.$forum.'__'.$c->securityHash(true);
-    $retval = $c->get($key);
-    if ( $retval !== null ) {
-        return array($pageTitle,$retval);
-    }
-
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file('list', 'lists.thtml');
 
@@ -200,8 +193,6 @@ function FF_newPosts($forum = 0)
 
     $T->parse ('output', 'list');
     $retval = $T->finish($T->get_var('output'));
-
-    $c->set($key,$retval,'forum',3600); // 1 hours
 
     return array($pageTitle,$retval);
 }
