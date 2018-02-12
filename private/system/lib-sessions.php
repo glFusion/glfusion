@@ -188,10 +188,6 @@ function SESS_sessionCheck()
 
     if ( $gc_check == 0 ) {
         $expirytime = (string) (time() - $_CONF['session_cookie_timeout']);
-        $result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE start_time < $expirytime AND uid > 1",1);
-        while ( $D = DB_fetchArray($result) != FALSE ) {
-            CTL_clearCache('mbmenu_'.$D['uid']);
-        }
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
         $delresult = DB_query($deleteSQL,1);
     }
