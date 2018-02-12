@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion CMS Menu Administration                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -231,8 +231,9 @@ function MB_saveCloneMenu( ) {
         }
     }
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');    
+    $c->deleteItemsByTags(array('menu'));
+    CACHE_clearCSS();
+
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
 }
@@ -344,8 +345,8 @@ function MB_saveNewMenu( ) {
     $menu_id = DB_insertId();
 
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');
+    $c->deleteItemsByTags(array('menu'));
+    CACHE_clearCSS();
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     return '';
@@ -385,8 +386,8 @@ function MB_saveEditMenu( ) {
     DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
 
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');
+    $c->deleteItemsByTags(array('menu'));
+    CACHE_clearCSS();
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     return '';
@@ -1084,8 +1085,8 @@ function MB_deleteMenu($menu_id) {
     DB_query("DELETE FROM {$_TABLES['menu']} WHERE id=".(int) $menu_id);
     DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');    
+    $c->deleteItemsByTags(array('menu'));
+    CACHE_clearCSS();
 }
 
 
@@ -1323,8 +1324,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'saveedit' :
             MB_saveEditMenuElement();
-    $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
+            glFusion\Cache::getInstance()->deleteItemsByTag('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
@@ -1332,8 +1332,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             // save the new or edited element
             $menu_id = COM_applyFilter($_POST['menu'],true);
             MB_saveNewMenuElement();
-    $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
+            glFusion\Cache::getInstance()->deleteItemsByTag('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
