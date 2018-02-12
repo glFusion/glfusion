@@ -28,6 +28,7 @@ if(!$defer){
 // Catch any possible output (e.g. errors)
 ob_start();
 COM_rdfUpToDateCheck();
+CMT_updateCommentcodes();
 
 // Scan for any stories that have expired and should be archived or deleted
 $asql = "SELECT sid,tid,title,expire,statuscode FROM {$_TABLES['stories']} ";

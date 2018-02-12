@@ -67,8 +67,6 @@ define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
-//define('DVLP_DEBUG',true);
-
 if (!defined ('OPENSSL_RAW_DATA')) {
     define('OPENSSL_RAW_DATA', 1);
 }
@@ -104,6 +102,18 @@ if (!isset($REMOTE_ADDR)) {
 }
 
 /**
+  * Load the site configuration.  This is done in three steps:
+  *
+  * 1) siteconfig.php - instantiates _CONF & _SYSTEM arrays, sets
+  * 2) config->load_baseconfig() - loads db-config.php, initializes database & config
+  * 3) config->get_config('Core') - loads config pairs for group 'core'
+  *
+  */
+require_once 'siteconfig.php' ;
+
+if ( defined('DVLP_DEBUG')) error_reporting( E_ALL );
+
+/**
   * Here, we shall establish an error handler. This will mean that whenever a
   * php level error is encountered, our own code handles it. This will hopefuly
   * go someway towards preventing nasties like path exposures from ever being
@@ -117,16 +127,6 @@ if ( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
-/**
-  * Load the site configuration.  This is done in three steps:
-  *
-  * 1) siteconfig.php - instantiates _CONF & _SYSTEM arrays, sets
-  * 2) config->load_baseconfig() - loads db-config.php, initializes database & config
-  * 3) config->get_config('Core') - loads config pairs for group 'core'
-  *
-  */
-require_once 'siteconfig.php' ;
-
 require_once $_CONF['path_system'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
 
@@ -137,6 +137,26 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
+
+// Before we do anything else, check to ensure site is enabled
+
+if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
+    if (empty($_CONF['site_disabled_msg'])) {
+        header("HTTP/1.1 503 Service Unavailable");
+        header("Status: 503 Service Unavailable");
+        echo $_CONF['site_name'] . ' is temporarily down.  Please check back soon.';
+    } else {
+        // if the msg starts with http: assume it's a URL we should redirect to
+        if (preg_match("/^(https?):/", $_CONF['site_disabled_msg']) === 1) {
+            echo COM_refresh($_CONF['site_disabled_msg']);
+        } else {
+            header("HTTP/1.1 503 Service Unavailable");
+            header("Status: 503 Service Unavailable");
+            echo $_CONF['site_disabled_msg'];
+        }
+    }
+    exit;
+}
 
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
@@ -206,27 +226,6 @@ $result = DB_query("SELECT * FROM {$_TABLES['logo']}",1);
 $resultSet = DB_fetchAll($result);
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
-}
-
-// Before we do anything else, check to ensure site is enabled
-
-if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
-
-    if (empty($_CONF['site_disabled_msg'])) {
-        header("HTTP/1.1 503 Service Unavailable");
-        header("Status: 503 Service Unavailable");
-        echo $_CONF['site_name'] . ' is temporarily down.  Please check back soon.';
-    } else {
-        // if the msg starts with http: assume it's a URL we should redirect to
-        if (preg_match("/^(https?):/", $_CONF['site_disabled_msg']) === 1) {
-            echo COM_refresh($_CONF['site_disabled_msg']);
-        } else {
-            header("HTTP/1.1 503 Service Unavailable");
-            header("Status: 503 Service Unavailable");
-            echo $_CONF['site_disabled_msg'];
-        }
-    }
-    exit;
 }
 
 list($usec, $sec) = explode(' ', microtime());
@@ -388,8 +387,8 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
     }
 } else if ($_CONF['theme'] == 'chameleon' ) {
     if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
-        $_USER['theme'] = 'default';
-        $_CONF['theme'] = 'default';
+        $_USER['theme'] = 'cms';
+        $_CONF['theme'] = 'cms';
         $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
         $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
     }
@@ -966,9 +965,12 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( !COM_onFrontpage() ) {
         $relLinks['home'] = '<link rel="home" href="' . $_CONF['site_url']
                           . '/" title="' . $LANG01[90] . '"/>';
-    } else {
+    }
+/*
+     else {
         CMT_updateCommentcodes();
     }
+*/
     $loggedInUser = !COM_isAnonUser();
     if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['searchloginrequired'] == 0 ))) {
@@ -6683,64 +6685,6 @@ function _commentsort($a, $b)
         return 0;
     }
     return ($b['lastdate'] < $a['lastdate']) ? -1 : 1;
-}
-
-
-function CTL_clearCacheDirectories($path, $needle = '')
-{
-    if ( $path[strlen($path)-1] != '/' ) {
-        $path .= '/';
-    }
-    if ($dir = @opendir($path)) {
-        while ($entry = readdir($dir)) {
-            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == '.git' || $entry == 'index.html') {
-                continue;
-            } elseif (is_dir($path . $entry)) {
-                CTL_clearCacheDirectories($path . $entry, $needle);
-                @rmdir($path . $entry);
-            } elseif (empty($needle) || strpos($entry, $needle) !== false) {
-                @unlink($path . $entry);
-            }
-        }
-        @closedir($dir);
-    }
-}
-
-
-function CTL_clearCache($plugin='')
-{
-    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
-
-    if (!empty($plugin)) {
-        $plugin = '__' . $plugin . '__';
-    }
-
-    if ( !isset($_CONF['css_cache_filename']) ) {
-        $_CONF['css_cache_filename'] = 'style.cache';
-    }
-    if ( !isset($_CONF['js_cache_filename']) ) {
-        $_CONF['js_cache_filename'] = 'js.cache';
-    }
-
-    CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
-
-    if ( $plugin == '' || empty($plugin) ) {
-        if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-            foreach (glob($_CONF['path_layout'].$_CONF['css_cache_filename']."*.*") as $filename) {
-                @unlink($filename);
-            }
-            foreach (glob($_CONF['path_layout'].$_CONF['js_cache_filename']."*.*") as $filename) {
-                @unlink($filename);
-            }
-        }
-    }
-    $c = glFusion\Cache::getInstance();
-    $c->clear();
-
-    if ( defined('DVLP_DEBUG') ) {
-        COM_errorLog("DEBUG: Cache has been cleared");
-    }
-
 }
 
 function _css_out()
