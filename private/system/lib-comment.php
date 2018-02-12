@@ -1734,9 +1734,7 @@ function CMT_deleteComment ($cid, $sid, $type)
     DB_unlockTable ($_TABLES['comments']);
     PLG_itemDeleted((int) $cid, 'comment');
 
-    $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('whatsnew');
-    $c->deleteItemsByTag('story');
+    glFusion\Cache::getInstance()->deleteItemsByTags(array('whatsnew','story_'.$sid));
 
     return $ret;
 }
@@ -2499,8 +2497,7 @@ function plugin_moderationapprove_comment($id)
     // now we need to alert everyone a comment has been saved.
     PLG_commentApproved($cid,$type,$sid);   // let plugins know they should update their counts if necessary
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('whatsnew');
-    $c->deleteItemsByTag('menu');
+    $c->deleteItemsByTags(array('whatsnew','menu'));
     if ( $type == 'article' ) {
         $c->deleteItemsByTag('story_'.$sid);
     }
