@@ -737,9 +737,9 @@ function MB_changeActiveStatusElement ($element_arr)
         }
     }
     $c = glFusion\Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-    $c->deleteItemsByTag('css');
-    $c->deleteItemsByTag('js');
+    $c->deleteItemsByTags(array('menu'));
+    CACHE_clearCSS();
+    CACHE_clearJS();
 
     return;
 }
