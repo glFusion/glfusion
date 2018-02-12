@@ -236,7 +236,7 @@ function SP_toggleStatus($enabledstaticpages, $sp_idarray)
             }
         }
         PLG_itemSaved($sp_id,'staticpages');
-        CTL_clearCache();
+        glFusion\Cache::getInstance()->deleteItemsByTag('staticpage');
         $retval['statusMessage'] = 'StaticPage state has been toggled.';
         $retval['errorCode'] = 0;
 
