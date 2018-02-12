@@ -1,3 +1,6 @@
+## v1.7.4 (Unreleased)
+  - Fixed error in Menu Builder where error text was blank
+
 ## v1.7.3 (February 9, 2018)
   - Fixed Forum ranks save error on duplicate number of posts
   - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic

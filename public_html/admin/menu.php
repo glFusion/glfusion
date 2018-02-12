@@ -304,7 +304,7 @@ function MB_createMenu( ) {
  */
 
 function MB_saveNewMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB;
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01;
 
     $errors = 0;
     $errMsg = '';
@@ -313,17 +313,17 @@ function MB_saveNewMenu( ) {
 
     if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
         $errors++;
-        $errMsg .= $LANG_MB['menu_name_error'];
+        $errMsg .= $LANG_MB01['menu_name_error'];
     } else {
         $menuname = COM_applyFilter($_POST['menuname']);
         if ( strstr($menuname,' ' ) !== FALSE ) {
             $errors++;
-            $errMsg .= $LANG_MB['menu_name_space'].'<br/>';
+            $errMsg .= $LANG_MB01['menu_name_space'].'<br/>';
         }
         $existing_id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuname).'"');
         if ( $existing_id > 0 ) {
             $errors++;
-            $errMsg .= $LANG_MB['menu_name_exits'];
+            $errMsg .= $LANG_MB01['menu_name_exits'];
         }
     }
 
@@ -350,7 +350,7 @@ function MB_saveNewMenu( ) {
 }
 
 function MB_saveEditMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB;
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01;
 
     $errors = 0;
     $errMsg = '';
@@ -359,12 +359,12 @@ function MB_saveEditMenu( ) {
 
     if ( !isset($_POST['menuname']) || $_POST['menuname'] == '' ) {
         $errors++;
-        $errMsg .= $LANG_MB['menu_name_error'];
+        $errMsg .= $LANG_MB01['menu_name_error'];
     } else {
         $menuname = COM_applyFilter($_POST['menuname']);
         if ( strstr($menuname,' ' ) !== FALSE ) {
             $errors++;
-            $errMsg .= $LANG_MB['menu_name_space'];;
+            $errMsg .= $LANG_MB01['menu_name_space'];;
         }
     }
 
