@@ -867,7 +867,6 @@ class Story
 
         DB_query($sql);
         $c->deleteItemsByTag('story_'.$this->_sid);
-
         /* Clean up the old story */
         if ($oldArticleExists && !empty($checksid)) {
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";
@@ -882,8 +881,7 @@ class Story
             }
         }
 
-        $c->deleteItemsByTag('whatsnew');
-        $c->deleteItemsByTag('menu');
+        $c->deleteItemsByTags(array('whatsnew','menu'));
         return STORY_SAVED;
     }
 
