@@ -1754,8 +1754,8 @@ function service_delete_story($args, &$output, &$svc_msg)
     PLG_itemDeleted($sid, 'article');
 
     // update RSS feed and Older Stories block
-    CTL_clearCache();
-    COM_rdfUpToDateCheck ();
+    glFusion\Cache::getInstance()->deleteItemsByTag('story_'.$sid);
+    COM_rdfUpToDateCheck();
     COM_olderStuff ();
     COM_setMessage(10);
     $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php');
