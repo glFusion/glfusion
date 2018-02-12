@@ -425,7 +425,7 @@ function STORY_global_save()
 
     $_POST['tid'] = '';
 
-    CTL_clearCache();
+    glFusion\Cache::getInstance()->deleteItemsByTag('story');
 
     return STORY_list();
 }
