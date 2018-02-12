@@ -2310,7 +2310,7 @@ foreach ($stdPlugins AS $pi_name) {
 }
 
 // need to clear the template cache so do it here
-CTL_clearCache();
+CACHE_clear();
 
 header('Location: '.$_CONF['site_admin_url'].'/plugins.php?msg=600');
 exit;

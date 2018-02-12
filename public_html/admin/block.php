@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion block administration.                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2017 by the following authors:                        |
+// | Copyright (C) 2010-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -809,7 +809,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
         if (($type == 'gldefault') && ($name == 'older_stories')) {
             COM_olderStuff ();
         }
-        CTL_clearCache();
+        CACHE_clear();
         COM_setMessage(11);
         return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
     } else {
@@ -965,7 +965,7 @@ function BLOCK_delete($bid)
     }
 
     DB_delete ($_TABLES['blocks'], 'bid', $bid);
-    CTL_clearCache();
+    CACHE_clear();
     return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=12');
 }
 

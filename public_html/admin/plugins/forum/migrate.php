@@ -77,7 +77,7 @@ if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] A
        }
     }
     gf_resyncforum($forum);
-    CTL_clearCache();
+    CACHE_clear();
     echo COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/migrate.php?num_stories=". $num_stories. "&num_posts=".$num_posts);
     exit;
 }

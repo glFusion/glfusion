@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Loads the administration UI and sends input to config.class              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -54,7 +54,7 @@ if (array_key_exists('form_submit', $_POST) && SEC_checkToken()) {
     $result = null;
     if (! array_key_exists('form_reset', $_POST)) {
         $result = $config->updateConfig($_POST, $conf_group);
-        CTL_clearCache();
+        CACHE_clear();
     }
     $sub_group = array_key_exists('sub_group', $_POST) ? COM_applyFilter($_POST['sub_group']) : null;
     $activeTab = array_key_exists('activetab',$_POST) ? COM_applyFilter($_POST['activetab']) : '';

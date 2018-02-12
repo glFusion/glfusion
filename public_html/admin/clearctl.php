@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Removed all cached templates                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -53,11 +53,7 @@ $sLength = strlen($_CONF['site_url']);
 if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
     $referer = $_CONF['site_url'];
 }
-
-$c = glFusion\Cache::getInstance();
-$c->clear();
-
-CTL_clearCache();
+CACHE_clear();
 COM_setMessage(500);
 echo COM_refresh($referer);
 ?>

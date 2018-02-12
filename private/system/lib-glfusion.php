@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Enhancement Library                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -601,7 +601,7 @@ function _doSiteConfigUpgrade() {
     } else {
         COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
     }
-    CTL_clearCache();
+    CACHE_clear();
     return $retval;
 }
 ?>

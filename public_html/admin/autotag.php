@@ -734,7 +734,7 @@ function ATP_save($autotag_id, $perms)
         $sql = "INSERT INTO {$_TABLES['autotag_usage']} (autotag_id,autotag_allowed,usage_namespace,usage_operation) VALUES ('".DB_escapeString($key['autotag_name'])."',".(int) $key['usage_allowed'].",'".DB_escapeString($key['usage_namespace'])."','".DB_escapeString($key['usage_operation'])."')";
         DB_query($sql);
     }
-    CTL_clearCache();
+    CACHE_clear();
     $url = $_CONF['site_admin_url'] . '/autotag.php?msg=36';
     echo COM_refresh($url);
     exit;

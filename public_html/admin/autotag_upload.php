@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Automated autotag installer                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -273,7 +273,7 @@ function post_uploadProcess() {
 
     _pi_deleteDir($tmp);
 
-    CTL_clearCache();
+    CACHE_clear();
     // show status (success or fail)
     return $retval;
 }

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Administration page.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -771,7 +771,7 @@ function PAGE_toggleStatus($enabledstaticpages, $sp_idarray)
         }
     }
     PLG_itemSaved($sp_id,'staticpages');
-    CTL_clearCache();
+    glFusion\Cache::getInstance()->deleteItemsByTag('staticpage');
 }
 
 // MAIN ========================================================================

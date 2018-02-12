@@ -486,7 +486,7 @@ function INSTALLER_install($A)
     }
 
     COM_errorLog("AutoInstall: **** END Installation ****");
-    CTL_clearCache();
+    CACHE_clear();
     return 0;
 }
 

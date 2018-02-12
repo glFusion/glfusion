@@ -6,7 +6,7 @@
 // |                                                                          |
 // | AJAX handler to reset item rating.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -37,7 +37,7 @@ $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
 if ( SEC_inGroup('Root') ) {
     RATING_resetRating( $type, $id );
-    CTL_clearCache();
+    CACHE_clear();
 
     COM_errorLog("RATING: User: " . $_USER['username']. " has reset the rating on item: " . $id . " of type " . $type);
 

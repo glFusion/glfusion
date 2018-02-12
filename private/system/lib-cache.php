@@ -288,6 +288,34 @@ function CACHE_instance_filename($iid,$bypass_lang = false)
     return $filename;
 }
 
+function CACHE_clearCSS()
+{
+    global $_CONF, $_SYSTEM;
+
+    if ( !isset($_CONF['css_cache_filename']) ) {
+        $_CONF['css_cache_filename'] = 'style.cache';
+    }
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
+        foreach (glob($_CONF['path_layout'].$_CONF['css_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+    }
+}
+
+function CACHE_clearJS()
+{
+    global $_CONF, $_SYSTEM;
+
+    if ( !isset($_CONF['js_cache_filename']) ) {
+        $_CONF['js_cache_filename'] = 'js.cache';
+    }
+    if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
+        foreach (glob($_CONF['path_layout'].$_CONF['js_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+    }
+}
+
 /******************************************************************************
 * Generates a hash based on the current user's secutiry profile.
 *
@@ -329,6 +357,55 @@ function CACHE_sanitizeFilename($filename, $allow_dots = true)
     }
 
     return trim($filename);
+}
+
+function CACHE_clear($plugin='')
+{
+    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+
+    if (!empty($plugin)) {
+        $plugin = '__' . $plugin . '__';
+    }
+
+    CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    CACHE_clearCSS();
+    CACHE_clearJS();
+    $c = glFusion\Cache::getInstance();
+    $c->clear();
+
+    if ( defined('DVLP_DEBUG') ) {
+        COM_errorLog("DEBUG: All Caches has been cleared");
+    }
+
+}
+
+
+function CTL_clearCacheDirectories($path, $needle = '')
+{
+    if ( $path[strlen($path)-1] != '/' ) {
+        $path .= '/';
+    }
+    if ($dir = @opendir($path)) {
+        while ($entry = readdir($dir)) {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == '.git' || $entry == 'index.html') {
+                continue;
+            } elseif (is_dir($path . $entry)) {
+                CTL_clearCacheDirectories($path . $entry, $needle);
+                @rmdir($path . $entry);
+            } elseif (empty($needle) || strpos($entry, $needle) !== false) {
+                @unlink($path . $entry);
+            }
+        }
+        @closedir($dir);
+    }
+}
+
+
+// legacy call - backward compatibility
+function CTL_clearCache($plugin='')
+{
+    CACHE_clear($plugin);
 }
 
 function configmanager_select_cache_driver_helper($index = '')

@@ -386,7 +386,7 @@ function PLUGINS_update($pi_name)
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
     }
-    CTL_clearCache();
+    CACHE_clear();
     return $retval;
 }
 
@@ -427,7 +427,7 @@ function PLUGINS_unInstall($pi_name)
         $msg = 95;
         $retval .= COM_showMessage (95);
     }
-    CTL_clearCache();
+    CACHE_clear();
 
     if ( $msg != '' ) {
         COM_setMsg($MESSAGE[$msg],'error');
@@ -476,7 +476,7 @@ function PLUGINS_remove($pi_name)
         $msg = 91;
         $retval .= COM_showMessage(91);
     }
-    CTL_clearCache();
+    CACHE_clear();
 
     if ( $msg != '' ) {
         COM_setMsg($MESSAGE[$msg],'error');
@@ -741,7 +741,7 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
             PLG_enableStateChange ($plugin, true);
         }
     }
-    CTL_clearCache();
+    CACHE_clear();
     return;
 }
 
@@ -1283,7 +1283,7 @@ function PLUGINS_post_uploadProcess() {
             $ret = INSTALLER_install($INSTALL_plugin[$pi_name]);
 
             if ( $ret == 0 ) {
-                CTL_clearCache();
+                CACHE_clear();
                 COM_setMessage(44);
                 echo COM_refresh ($_CONF['site_admin_url']. '/plugins.php');
                 exit;
@@ -1299,7 +1299,7 @@ function PLUGINS_post_uploadProcess() {
         exit;
     }
 
-    CTL_clearCache();
+    CACHE_clear();
     // show status (success or fail)
     return $retval;
 }
