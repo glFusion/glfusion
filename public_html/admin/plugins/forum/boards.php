@@ -623,9 +623,10 @@ function board_add_forum_save()
         $query = DB_query("SELECT max(forum_id) FROM {$_TABLES['ff_forums']} ");
         list ($forumid) = DB_fetchArray($query);
         $modquery = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_uid='{$_USER['uid']}' AND mod_forum='$forumid'");
-        if (DB_numrows($modquery) < 1){
+        if (DB_numrows($modquery) < 1) {
             $fields = 'mod_uid,mod_username,mod_forum,mod_delete,mod_ban,mod_edit,mod_move,mod_stick';
-            DB_query("INSERT INTO {$_TABLES['ff_moderators']} ($fields) VALUES ('{$_USER['uid']}','{$_USER['username']}', '$forumid','1','1','1','1','1')");
+            $username = DB_escapeString($_USER['username']);
+            DB_query("INSERT INTO {$_TABLES['ff_moderators']} ($fields) VALUES ('{$_USER['uid']}','{$username}', '$forumid','1','1','1','1','1')");
         }
         reorderForums($category);
         $retval = true;
