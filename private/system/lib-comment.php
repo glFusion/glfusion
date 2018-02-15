@@ -372,7 +372,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $resultSet = array();
 
     if ($preview) {
-        $comments['comment'] = $comments['comment_text'];
+        if ( isset($comments['comment_text'])) {
+            $comments['comment'] = $comments['comment_text'];
+        }
 
         $A = $comments;
         if( empty( $A['nice_date'] )) {

@@ -285,38 +285,6 @@ function handleEdit($mod = false, $admin = false) {
 
     }
 
-// at this point $A has what was retrieved from the DB
-// we need to handle it appropriately
-
-// we are using the title from the database
-// older legacy comments encoded this - at least some did and some didn't
-// we may want to call undo special chars here
-
-    $title = htmlspecialchars_decode($A['title']);
-
-
-// this tries to undo al the special chars we created
-//@@TODO we probably need to move this
-//  since newer comments are now raw data in the DB - we only want to do
-//  this one older legacy comments - so this goes in the detection part below
-//  we also have a htmlspecialchars_decode() call we just added somewhere we
-//  need to find and fix - I think it was in the display part
-//  need to use htmlspecialchars_decode instead...
-    $commenttext = COM_undoSpecialChars ($A['comment']);
-
-// pulls the signatuer from the comment
-//@@TODO - there are other - older signature types we need to fix too
-//         see the display code.
-    //remove signature
-    $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
-    if ( $pos > 0) {
-        $commenttext = substr($commenttext, 0, $pos);
-    }
-
-// here we deal with legacy comments that did not have a postmode
-// we try to figure it out
-// if we detect HTML (< or >) set to html otherwise default to plaintext
-
     if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
         //get format mode
         if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
@@ -325,21 +293,28 @@ function handleEdit($mod = false, $admin = false) {
             $postmode = 'plaintext';
         }
     } else {
-// use what was in the database
         $postmode = $A['postmode'];
     }
 
-// we are ready to call the comment form
-// at this point - we have not filtered anything
-// except the comment text - everything is from the DB as is....
+    $title = htmlspecialchars_decode($A['title']);
+
+    if ( $postmode == 'plaintext' ) {
+        $commenttext = COM_undoSpecialChars ($A['comment']);
+    } else {
+        $commenttext = $A['comment'];
+    }
+
+    $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
+    if ( $pos > 0) {
+        $commenttext = substr($commenttext, 0, $pos);
+    }
+
 
     if ( $mod ) {
         $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
         $edit_type = 'edit';
         if ( $admin == true ) $edit_type = 'adminedit';
-//        $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-
         $retval =  CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
     }
     return $retval;
