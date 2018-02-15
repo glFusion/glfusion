@@ -338,6 +338,9 @@ function handleEditSubmit()
     $sid        = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
+    $comment    = $_POST['comment_text'];
+    $title      = $_POST['title'];
+
     if ( isset($_POST['modedit'])) $modedit    = COM_applyFilter ($_POST['modedit']);
     if ( isset($_POST['adminedit'])) $adminedit  = COM_applyFilter ($_POST['adminedit']);
 
@@ -357,65 +360,62 @@ function handleEditSubmit()
         $uid = $_USER['uid'];
     }
 
-    $comment = $_POST['comment_text'];
-
-    //check for bad input
-    if (empty ($sid) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
-        COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to edit a comment with one or more missing values.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
+    if ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
         //check permissions
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment without proper permission.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-// planning to retire CMT_prepareText
-    $comment    = CMT_prepareText($comment, $postmode,true,$cid);
-    $title      = COM_checkWords (strip_tags ($_POST['title']));
-
-    if (!empty ($title) && !empty ($comment)) {
-        COM_updateSpeedlimit ('comment');
-        $title   = DB_escapeString ($title);
-        $comment = DB_escapeString ($comment);
-
-        // check if commentuid > 1
-        if ( $commentuid == 1 ) {
-            $filter = sanitizer::getInstance();
-            // anonymous user - so the name could have been edited.
-            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
-
-            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', name='".DB_escapeString($name)."',postmode='".DB_escapeString($postmode)."'"
-                    . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
-        } else {
-        // save the comment into the comment table
-            $sql = "UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title', postmode='".DB_escapeString($postmode)."'"
-                    . " WHERE cid=".(int)$cid." AND sid='".DB_escapeString($sid)."'";
-        }
-        DB_query($sql);
-
-        if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
-            COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-            . 'to edit to a non-existent comment or the cid/sid did not match');
-            return COM_refresh($_CONF['site_url'] . '/index.php');
-        }
-
-        $silentEdit = false;
-        if ( isset($_POST['silent_edit']) && SEC_hasRights('comment.moderate') ) {
-            $silentEdit = true;
-        }
-
-        if ( !$moderatorEdit && $silentEdit == false ) {
-            PLG_itemSaved((int) $cid,'comment');
-            $safecid = (int) $cid;
-            $safeuid = (int) $uid;
-            DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
-        }
-    } else {
-        COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to submit a comment with invalid $title and/or $comment.');
+    //check for bad input
+    if (empty ($sid) || empty($title) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
+        COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    COM_updateSpeedlimit ('comment');
+
+    $dbTitle   = DB_escapeString ($title);
+    $dbComment = DB_escapeString ($comment);
+    if (isset($_POST['username'])) {
+        $username = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
+        $dbUsername = DB_escapeString($username);
+    } else {
+        $username = '';
+        $dbUsername = DB_escapeString($username);
+    }
+    $dbCid = (int) $cid;
+    $dbSid = DB_escapeString($sid);
+    $dbPostmode = DB_escapeString($postmode);
+
+    if ( $commentuid == 1 ) {
+        $filter = sanitizer::getInstance();
+        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$dbComment', title = '$dbTitle', name='".$dbUsername."',postmode='".$dbPostmode."'"
+                . " WHERE cid=".$dbCid." AND sid='".$dbSid."'";
+    } else {
+    // save the comment into the comment table
+        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$dbComment', title = '$dbTitle', postmode='".$dbPostmode."'"
+                . " WHERE cid=".$dbCid." AND sid='".$dbSid."'";
+    }
+    DB_query($sql);
+
+    if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
+        COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        . 'to edit to a non-existent comment or the cid/sid did not match');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    $silentEdit = false;
+    if ( isset($_POST['silent_edit']) && SEC_hasRights('comment.moderate') ) {
+        $silentEdit = true;
+    }
+
+    if ( !$moderatorEdit && $silentEdit == false ) {
+        PLG_itemSaved((int) $cid,'comment');
+        $safecid = (int) $cid;
+        $safeuid = (int) $uid;
+        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
     }
 
     if ( !$moderatorEdit) PLG_commentEditSave($type,$cid,$sid);
