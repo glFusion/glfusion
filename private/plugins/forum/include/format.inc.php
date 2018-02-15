@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -41,81 +41,16 @@ if (!defined ('GVERSION')) {
 }
 
 // Magic url types
+/*
 define('MAGIC_URL_EMAIL', 1);
 define('MAGIC_URL_FULL', 2);
 define('MAGIC_URL_LOCAL', 3);
 define('MAGIC_URL_WWW', 4);
-
+*/
 define('DISABLE_BBCODE',1);
 define('DISABLE_SMILIES',2);
 define('DISABLE_URLPARSE',4);
 
-function convertlinebreaks ($text) {
-    return preg_replace ("/\015\012|\015|\012/", "\n", $text);
-}
-
-function bbcode_stripcontents ($text) {
-    return preg_replace ("/[^\n]/", '', $text);
-}
-
-function bbcode_htmlspecialchars($text) {
-    global $_FF_CONF;
-
-    return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt()));
-}
-
-function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
-    global $_FF_CONF, $_CONF;
-
-    if ($action == 'validate') {
-        return true;
-    }
-
-	$retval = '';
-    $url = '';
-    $linktext = '';
-    $target = '';
-
-    if (!isset ($attributes['default'])) {
-        if ( stristr($content,'http') ) {
-            $url = strip_tags($content);
-            $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt());
-        } else {
-            $url = 'http://'.strip_tags($content);
-            $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt());
-        }
-    } else if ( stristr($attributes['default'],'http') ) {
-        $url = strip_tags($attributes['default']);
-//        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
-        $linktext = strip_tags($content);
-    } else {
-        $url = 'http://'.strip_tags($attributes['default']);
-        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
-    }
-
-    if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
-        $target = ' target="_blank" rel="noopener noreferrer" ';
-    }
-	$url = COM_sanitizeUrl( $url );
-    $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
-	return $retval;
-}
-
-function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {
-    if ($action == 'validate') {
-        return true;
-    }
-    if (!isset ($attributes['default'])) {
-        return '<ul>'.$content.'</ul>';
-    } else {
-        if ( is_numeric($attributes['default']) ) {
-            return '<ol>'.$content.'</ol>';
-        } else {
-            return '<ul>'.$content.'</ul>';
-        }
-    }
-    return '<ul>'.$content.'</ul>';
-}
 
 function do_bbcode_file ($action, $attributes, $content, $params, $node_object) {
     global $_CONF,$_TABLES,$_FF_CONF,$topicRec,$forumfiles;
@@ -200,220 +135,45 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
 
 }
 
-function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {
-    global $_FF_CONF;
 
-    if ($action == 'validate') {
-        if (isset($attributes['caption'])) {
-            $node_object->setFlag('paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
-            if ($node_object->_parent->type() == STRINGPARSER_NODE_ROOT OR
-                in_array($node_object->_parent->_codeInfo['content_type'], array('block', 'list', 'listitem'))) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
-    }
 
-    if ($_FF_CONF['allow_img_bbcode']) {
-        if ( isset($attributes['h']) AND isset ($attributes['w']) ) {
-            $dim = 'width=' . (int) $attributes['w'] . ' height=' . (int) $attributes['h'];
-        } else {
-            $dim = '';
-        }
-        if ( isset($attributes['align'] ) ) {
-            if ( !in_array(strtolower($attributes['align']),array('left','right','center') ) ) {
-                $attributes['align'] = 'left';
-            }
-            $align = ' align=' . $attributes['align'] . ' ';
-        } else {
-            $align = '';
-        }
-        $content = bbcode_cleanHTML($content);
-        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()).'" ' . $dim . $align . ' alt=""/>';
-    } else {
-        return '[img]' . bbcode_cleanHTML($content) . '[/img]';
-    }
-}
-
-function do_bbcode_size  ($action, $attributes, $content, $params, $node_object) {
-    if ( $action == 'validate') {
-        return true;
-    }
-    return '<span style="font-size: '.(int) $attributes['default'].'px;">'.$content.'</span>';
-}
-
-function do_bbcode_color  ($action, $attributes, $content, $params, $node_object) {
-    if ( $action == 'validate') {
-        return true;
-    }
-    return '<span style="color: '. strip_tags($attributes['default']).';">'.$content.'</span>';
-}
-
-function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
-    global $_FF_CONF, $_ff_pm;
-
-    if ( $action == 'validate') {
-        return true;
-    }
-    if ($_FF_CONF['use_geshi']) {
-        /* Support for formatting various code types : [code=java] for example */
-        if (!isset ($attributes['default'])) {
-            $codeblock = '</p>' . _ff_geshi_formatted($content) . '<p>';
-        } else {
-            $codeblock = '</p>' . _ff_geshi_formatted($content,strtoupper(strip_tags($attributes['default']))) . '<p>';
-        }
-    } else {
-        $codeblock = '<pre class="codeblock">'  . $content . '</pre>';
-    }
-
-    $codeblock = str_replace('{','&#123;',$codeblock);
-    $codeblock = str_replace('}','&#125;',$codeblock);
-
-    if ( ($_FF_CONF['use_wysiwyg_editor'] == 1 && $_ff_pm != 'text') || $_ff_pm == 'html' ) {
-        $codeblock = str_replace('&lt;','<',$codeblock);
-        $codeblock = str_replace('&gt;','>',$codeblock);
-        $codeblock = str_replace('&amp;','&',$codeblock);
-        $codeblock = str_replace("<br /><br />","<br />",$codeblock);
-        $codeblock = str_replace("<p>","",$codeblock);
-        $codeblock = str_replace("</p>","",$codeblock);
-    }
-
-    return $codeblock;
-}
-
-/**
-* Cleans (filters) HTML - only allows safe HTML tags
-*
-* @param        string      $str    string to filter
-* @return       string      filtered HTML code
-*/
-function bbcode_cleanHTML($str) {
-    global $_FF_CONF, $_CONF;
-
-    $filter = sanitizer::getInstance();
-    $AllowedElements = $filter->makeAllowedElements($_FF_CONF['allowed_html']);
-    $filter->setAllowedelements($AllowedElements);
-    $filter->setNamespace('forum','post');
-    $filter->setPostmode('html');
-
-    return $filter->filterHTML($str);
-}
-
-/* for display */
-function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query = '') {
+function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
+{
     global $_CONF, $_FF_CONF, $_ff_pm;
 
-    $bbcode = new StringParser_BBCode ();
-    $bbcode->setGlobalCaseSensitive (false);
-    $filter = sanitizer::getInstance();
+    $format = new glFusion\Formatter();
+    $format->setNamespace('forum');
+    $format->setAction('post');
+    $format->setAllowedHTML($_FF_CONF['allowed_html']);
+    $format->setType($postmode);
 
-    $status = (int) $status;
-
-    if ($postmode == 'text' ) {
-        $_ff_pm = 'text';
-    } else {
-        $_ff_pm = 'html';
-    }
-    $filter->setPostmode($postmode);
-
-    if ( $postmode == 'text') {
-        // filter all code prior to replacements
-        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, 'bbcode_htmlspecialchars');
-    }
-    $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_fixmarkup');
-    if ( $_FF_CONF['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
-        $str = str_replace('<pre>','[code]',$str);
-        $str = str_replace('</pre>','[/code]',$str);
-    }
-    if ( $postmode != 'html' && $postmode != 'HTML') {
-        $bbcode->addParser(array('block','inline','link','listitem'), '_ff_nl2br');
-    }
-
-    if ( $query != '' ) {
-        $filter->query = $query;
-        $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
-    }
-
-    if ( ! ($status & DISABLE_SMILIES ) ) {
-//        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_replacesmilie');      // calls replacesmilie on all text blocks
-        $bbcode->addParser (array ('block', 'inline', 'listitem'), '_ff_replacesmilie');
+    if ( ! ( $status & DISABLE_BBCODE ) ) {
+        $format->setProcessBBCode(true);
     }
 
     if ( ! ($status & DISABLE_URLPARSE ) ) {
-        $bbcode->addParser (array('block','inline','listitem'), array (&$filter, 'linkify'));
+        $format->setParseURLs(true);
     }
 
-    if ( ! ( $status & DISABLE_BBCODE ) ) {
-        $bbcode->addParser ('list', 'bbcode_stripcontents');
-        $bbcode->addCode ('code', 'usecontent?', 'do_bbcode_code', array ('usecontent_param' => 'default'),
-                          'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
-
-        $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '<i>', 'end_tag' => '</i>'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('u', 'simple_replace', null, array ('start_tag' => '<span style="text-decoration: underline;">', 'end_tag' => '</span>'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '<p>', 'end_tag' => '</p>'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '<del>', 'end_tag' => '</del>'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('size', 'callback_replace', 'do_bbcode_size', array('usecontent_param' => 'default'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('color', 'callback_replace', 'do_bbcode_color', array ('usercontent_param' => 'default'),
-                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('list', 'callback_replace', 'do_bbcode_list', array ('usecontent_param' => 'default'),
-                          'list', array ('inline','block', 'listitem'), array ());
-        $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
-                          'listitem', array ('list'), array ());
-        if ($mode != 'noquote' ) {
-            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><blockquote>', 'end_tag' => '</blockquote><p>'),
-                              'inline', array('listitem','block','inline','link'), array());
-        }
-        $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
-                          'link', array ('listitem', 'block', 'inline'), array ('link'));
-        $bbcode->addCode ('img', 'usecontent', 'do_bbcode_img', array (),
-                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
-                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
-        $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
-        $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
-        $bbcode->setCodeFlag ('*', 'paragraphs', true);
-        $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
-        $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
+    if ( ! ($status & DISABLE_SMILIES ) ) {
+        $format->setProcessSmilies(true);
     }
-    if ($mode != 'noquote' ) {
-        $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
-    }
-    $bbcode->setRootParagraphHandling (true);
-
     if ($_FF_CONF['use_censor']) { // and $mode == 'preview') {
-        $str = COM_checkWords($str);
+        $format->setCensor(true);
     }
-    $str = $bbcode->parse ($str);
 
-    return $str;
+    if ($mode != 'noquote' ) {
+        $format->setParseAutoTags(true);
+    }
+
+    $format->setGeshi(true);
+
+    $format->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
+                      'image', array ('listitem', 'block', 'inline', 'link'), array ());
+
+    return $format->parse($str);
+
 }
-
-function _ff_nl2br($str) {
-    $str = str_replace(array("\r\n", "\r", "\n"), "<br>", $str);
-    return $str;
-}
-
-function _ff_fixmarkup($str) {
-    $str = str_replace(array("[/list]\r\n", "[/list]\r", "[/list]\n","[/list] \r\n", "[/list] \r", "[/list] \n"), "[/list]", $str);
-    $str = str_replace(array("[/code]\r\n", "[/code]\r", "[/code]\n","[/code] \r\n", "[/code] \r", "[/code] \n"), "[/code]", $str);
-    $str = str_replace(array("[quote]\r\n", "[quote]\r", "[quote]\n","[quote] \r\n", "[quote] \r", "[quote] \n"), "[quote]", $str);
-    $str = str_replace(array("[/quote]\r\n", "[/quote]\r", "[/quote]\n","[/quote] \r\n", "[/quote] \r", "[/quote] \n"), "[/quote]", $str);
-    $str = str_replace(array("[QUOTE]\r\n", "[QUOTE]\r", "[QUOTE]\n","[QUOTE] \r\n", "[QUOTE] \r", "[QUOTE] \n"), "[QUOTE]", $str);
-    $str = str_replace(array("[/QUOTE]\r\n", "[/QUOTE]\r", "[/QUOTE]\n","[/QUOTE] \r\n", "[/QUOTE] \r", "[/QUOTE] \n"), "[/QUOTE]", $str);
-
-    return $str;
-}
-
 
 function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
 {
@@ -445,48 +205,6 @@ function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
     return $retval;
 }
 
-function _ff_geshi_formatted($str,$type='php') {
-    global $_CONF, $_FF_CONF, $LANG_GF01;
-
-    $str = @htmlspecialchars_decode($str,ENT_QUOTES);
-    $str = preg_replace('/^\s*?\n|\s*?\n$/','',$str);
-    $geshi = new GeSHi($str,$type);
-    $geshi->set_encoding(COM_getEncodingt());
-    $geshi->set_header_type(GESHI_HEADER_DIV);
-    if ( $_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true ) {
-        $geshi->set_link_target(true);
-    }
-    if ( isset($_FF_CONF['geshi_line_numbers']) && $_FF_CONF['geshi_line_numbers']) {
-        $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    } else {
-        $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
-    }
-    $geshi->enable_keyword_links(false);
-    if ( isset($_FF_CONF['geshi_overall_style']) ) {
-        $geshi->set_overall_style($_FF_CONF['geshi_overall_style'],true);
-    } else {
-        $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
-    }
-    if ( isset($_FF_CONF['geshi_line_style'] ) ) {
-        $geshi->set_line_style($_FF_CONF['geshi_line_style'],true);
-    } else {
-        $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
-    }
-    if ( isset($_FF_CONF['geshi_code_style'] ) ) {
-        $geshi->set_code_style($_FF_CONF['geshi_code_style'],true);
-    } else {
-        $geshi->set_code_style('color: #000020;', 'color: #000020;');
-    }
-    $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
-    $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
-    $geshi->set_header_content(strtoupper($type) . " " . $LANG_GF01['formatted_code']);
-    if ( isset($_FF_CONF['geshi_header_style'] ) ) {
-        $geshi->set_header_content_style($_FF_CONF['geshi_header_style'],true);
-    } else {
-        $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: bold; background-color: #325482; border-bottom: 1px solid #d0d0d0; padding: 2px;');
-    }
-    return $geshi->parse_code();
-}
 
 function _ff_FormatForEmail( $str, $postmode='html' ) {
     global $_CONF, $_FF_CONF;
@@ -655,19 +373,6 @@ function _ff_preparefordb($message,$postmode) {
     return $message;
 }
 
-function _ff_replacesmilie($str) {
-    global $_CONF,$_TABLES,$_FF_CONF;
-
-    if($_FF_CONF['allow_smilies']) {
-        if (function_exists('msg_showsmilies') AND $_FF_CONF['use_smilies_plugin']) {
-            $str = msg_replaceEmoticons($str);
-        } else {
-            $str = forum_xchsmilies($str);
-        }
-    }
-
-    return $str;
-}
 
 function _ff_showattachments($topic,$mode='') {
     global $_TABLES,$_CONF,$_FF_CONF;

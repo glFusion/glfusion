@@ -90,6 +90,8 @@ class Story
     //*************************************************************************/
     // Variables:
 
+    var $format = null;
+
     // Public
     /**
      * Mode, either 'admin' for in the admin screens, or submission, for
@@ -418,7 +420,22 @@ class Story
      */
     function __construct($mode = 'admin')
     {
+        global $_CONF;
         $this->mode = $mode;
+
+        $this->format = new glFusion\Formatter();
+        $this->format->setNamespace('glfusion');
+        $this->format->setAction('story');
+        $this->format->setAllowedHTML($_CONF['htmlfilter_story']);
+        $this->format->setParseAutoTags(true);
+        $this->format->setProcessBBCode(false);
+        $this->format->setCensor(true);
+        $this->format->setGeshi(false);
+        $this->format->setProcessSmilies(true);
+        $this->format->addFilter(FILTER_PRE,array($this,'replaceImages'));
+        $this->format->addFilter(FILTER_POST,array($this,'renderImages'));
+
+
     }
 
     /**
@@ -1799,17 +1816,24 @@ class Story
 
         $return = '';
 
+
+    $this->format->setType($this->_postmode);
+
+
+
         switch (strtolower($item)) {
             case 'introtext':
-                $out = $this->replaceImages($this->_introtext);
-                $clean = $filter->displayText($out);
-                $return = $this->renderImages($clean);
+                $return = $this->format->parse($this->_introtext);
+//                $out = $this->replaceImages($this->_introtext);
+//                $clean = $filter->displayText($out);
+//                $return = $this->renderImages($clean);
                 break;
 
             case 'bodytext':
-                $out = $this->replaceImages($this->_bodytext);
-                $clean = $filter->displayText($out);
-                $return = $this->renderImages($clean);
+                $return = $this->format->parse($this->_bodytext);
+//                $out = $this->replaceImages($this->_bodytext);
+//                $clean = $filter->displayText($out);
+//                $return = $this->renderImages($clean);
                 break;
 
             case 'title':

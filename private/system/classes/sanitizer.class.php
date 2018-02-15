@@ -235,21 +235,13 @@ class sanitizer
     {
         global $_CONF;
 
-        $sp = new StringParser_BBCode ();
-        $sp->setGlobalCaseSensitive (false);
-
         if ( $this->_postmode == 'html' ) {
             if ( $this->filterMethod == 'htmlawed' ) {
-                $sp->addParser(array('block'), array($this,'_cleanHTMLawed'));
+                return $this->_cleanHTMLawed($str);
             } else {
-                $sp->addParser(array('block'), array($this,'_cleanHTML'));
+                return $this->_cleanHTML($str);
             }
         }
-        $sp->addCode ('code', 'usecontent?', array($this,'_codeblockFilter'), array ('usecontent_param' => 'default'),
-                      'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
-
-        $str = $sp->parse ($str);
-
         return $str;
     }
 

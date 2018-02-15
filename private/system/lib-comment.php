@@ -82,6 +82,20 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $A['title']   = COM_checkWords($A['title']);
         $A['title']   = @htmlspecialchars($A['title'],ENT_QUOTES, COM_getEncodingt());
 
+        $format = new glFusion\Formatter();
+        $format->setNamespace('glfusion');
+        $format->setAction('comment');
+        $format->setAllowedHTML($_CONF['htmlfilter_comment']);
+        $format->setParseAutoTags(true);
+        $format->setProcessBBCode(false);
+        $format->setCensor(true);
+        $format->setGeshi(false);
+        $format->setProcessSmilies(true);
+        $format->setType($A['postmode']);
+        $A['comment'] = $format->parse($A['comment']);
+
+/*
+
         //and finally: format the actual text of the comment, but check only the text, not sig or edit
         $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
         $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
@@ -92,7 +106,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
             $A['comment'] = nl2br( $A['comment'] );
         }
         $A['comment'] = $filter->_replaceTags($A['comment']);
-
+*/
         $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>');
 
         $dt->setTimestamp(strtotime($A['date']));
@@ -338,10 +352,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
 
-    $filter = sanitizer::getInstance();
-    $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
-    $filter->setAllowedelements($AllowedElements);
-    $filter->setNamespace('glfusion','comment');
+    static $userInfo = array();
 
     if ( $mode == 'threaded' ) $mode = 'nested';
 
@@ -355,8 +366,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $template->set_var( 'lang_permlink', $LANG01[120] );
     $template->set_var( 'order', $order );
 
-    if( $ccode == 0 &&
-     ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
+    if( $ccode == 0 && ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
         $template->set_var( 'lang_replytothis', $LANG01[43] );
         $template->set_var( 'lang_reply', $LANG01[25] );
     } else {
@@ -369,7 +379,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $_CONF['comment_indent'] = 25;
     }
 
-    if( $preview ) {
+    // Build the comment data record
+
+    if ($preview) {
         $A = $comments;
         if( empty( $A['nice_date'] )) {
             $A['nice_date'] = time();
@@ -402,6 +414,23 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     if( empty( $A ) ) {
         return '';
     }
+
+    // initialize our format class
+
+    $filter = sanitizer::getInstance();
+    $filter->setNamespace('glfusion','comment');
+    $filter->setPostmode('text');
+
+    $format = new glFusion\Formatter();
+    $format->setNamespace('glfusion');
+    $format->setAction('comment');
+    $format->setAllowedHTML($_CONF['htmlfilter_comment']);
+    $format->setParseAutoTags(true);
+    $format->setProcessBBCode(false);
+    $format->setCensor(true);
+    $format->setGeshi(false);
+    $format->setProcessSmilies(true);
+
     $token = '';
     if ($delete_option && !$preview) {
         $token = SEC_createToken();
@@ -409,6 +438,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     $row = 1;
 
+    // loop through all comments
     do {
         if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
             //get format mode
@@ -420,7 +450,48 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         } else {
             $postmode = $A['postmode'];
         }
-        if ( $A['postmode'] == 'plaintext' ) $A['comment'] = nl2br($A['comment']);
+
+        //remove any old signatures signature
+        $pos = strpos( $A['comment'],'<!-- COMMENTSIG --><div class="comment-sig">');
+        if ( $pos > 0) {
+            $A['comment'] = substr($A['comment'], 0, $pos);
+        } else {
+            $pos = strpos( $A['comment'],'<p>---<br />');
+            if ( $pos > 0 ) {
+                $A['comment'] = substr($A['comment'], 0, $pos);
+            }
+        }
+
+        // get user information for this comment author
+
+        if ( !isset($A['uid']) || $A['uid'] == '' ) {
+            $A['uid'] = 1;
+        }
+
+//@TODO - Move this to function
+        if ( $A['uid'] > 1 ) {
+            if (!isset($userInfo[$A['uid']])) {
+                $result = DB_query("SELECT username,remoteusername,remoteservice,fullname,sig,photo FROM {$_TABLES['users']} WHERE uid=".(int) $A['uid']);
+                $resultSet = DB_fetchAll($result);
+                if (count($resultSet) > 0 ) {
+                    $userInfo[$A['uid']] = $resultSet[0];
+                } else {
+                    $userInfo[$A['uid']] = array('username' => '','remoteusername' => '','remoteservice'=>'','fullname'=>'','sig'=>'','photo'=>'');
+                }
+            }
+            $A['username'] = $userInfo[$A['uid']]['username'];
+            $A['remoteusername'] = $userInfo[$A['uid']]['remoteusername'];
+            $A['remoteservice'] = $userInfo[$A['uid']]['remoteservice'];
+            $A['fullname'] = $userInfo[$A['uid']]['fullname'];
+            $A['sig'] = $userInfo[$A['uid']]['sig'];
+            $A['photo'] = $userInfo[$A['uid']]['photo'];
+        }
+
+        $format->setType($postmode);
+
+        $commentFooter = '';
+        // fixes previous encodings...
+        if ( $postmode == 'plaintext') $A['comment'] = htmlspecialchars_decode($A['comment']);
 
         $template->unset_var('delete_link');
         $template->unset_var('ipaddress');
@@ -438,9 +509,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             }
             //add edit info to text
             $dtObject = new Date($B['time'],$_USER['tzid']);
-            $A['comment'] .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
-                              . $dtObject->format($_CONF['date'],true) . ' ' . $LANG03[31] . ' '
-                              . $editname . '</div><!-- /COMMENTEDIT -->';
+
+            $commentFooter .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
+                                          . $dtObject->format($_CONF['date'],true) . ' ' . $LANG03[31] . ' '
+                                          . $editname . '</div><!-- /COMMENTEDIT -->';
         }
 
         // determines indentation for current comment
@@ -450,16 +522,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // comment variables
 
-        if ( !isset($A['uid']) || $A['uid'] == '' ) {
-            $A['uid'] = 1;
-        }
-
-        $filter->setReplaceTags(true);
-        $filter->setCensorData(true);
-
-        $filter->setPostmode('html');
-
         $template->set_var( 'indent', $indent );
+
         $template->set_var( 'author_name', $filter->sanitizeUsername($A['username'] ));
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
@@ -483,6 +547,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 if (isset ($A['photo']) && empty ($A['photo'])) {
                     $A['photo'] = '';
                 }
+
                 $photo = USER_getPhoto( $A['uid'], $A['photo'], $A['email'] );
                 $photo_raw = USER_getPhoto( $A['uid'], $A['photo'],$A['email'],64,0);
                 if( !empty( $photo ) ) {
@@ -518,8 +583,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 )
             );
             $template->set_var( 'author_url', $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']);
-
-
         } else {
             $username = $filter->sanitizeUsername($A['name']);
             if ( $username == '' ) {
@@ -644,20 +707,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
 
         //and finally: format the actual text of the comment, but check only the text, not sig or edit
+
         $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
         $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
         $text = str_replace('<div class="comment-edit">', '', $text);
-        $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
+        $A['comment'] = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
 
         // highlight search terms if specified
         if( !empty( $_REQUEST['query'] )) {
             $A['comment'] = COM_highlightQuery( $A['comment'], strip_tags($_REQUEST['query']) );
         }
-
-        if (function_exists('msg_replaceEmoticons'))  {
-            $A['comment'] = msg_replaceEmoticons($A['comment']);
-        }
-        $A['comment'] = $filter->displayText($A['comment']);
 
         // create a reply to link
         $reply_link = '';
@@ -681,7 +740,17 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $A['title'] = @htmlspecialchars( $A['title'],ENT_COMPAT,COM_getEncodingt() );
 
         $template->set_var( 'title', $A['title'] );
-        $template->set_var( 'comments', $A['comment'] );
+
+        // add signature if available
+        $sig = isset($A['sig']) ? $A['sig'] : '';
+        $finalsig = '';
+        if ($A['uid'] > 1 && !empty($sig)) {
+            $finalsig .= '<div class="comment-sig">';
+            $finalsig .= nl2br('---' . LB . $sig);
+            $finalsig .= '</div>';
+        }
+
+        $template->set_var( 'comments',  $format->parse($A['comment']).$finalsig.$commentFooter);
 
         // parse the templates
         if( ($mode == 'threaded') && $indent > 0 ) {
@@ -1143,6 +1212,8 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $filter->setPostmode($postmode);
             $filter->setCensorData(true);
             $filter->setAllowedElements($AllowedElements);
+
+
             $comment         = $filter->filterHTML($comment);
             $display_comment = $filter->displayText($comment);
             $edit_comment    = $filter->editableText($comment);
@@ -1153,7 +1224,8 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $filter->setPostmode($postmode);
 
             $_POST['title']     = $title;
-            $_POST['comment']   = $display_comment;
+            $_POST['comment']   = $comment; // $display_comment;
+
             // Preview mode:
             if (($mode == $LANG03[14] || $mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
@@ -1195,7 +1267,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 }
 
                 $author_id = PLG_getItemInfo($type, $sid, 'author');
-
                 $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$author_id);
 
                 $start->set_var( 'comments', $thecomments );
@@ -1395,7 +1466,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     global $_CONF, $_TABLES, $_USER, $LANG03, $REMOTE_ADDR;
 
     $ret = 0;
-
+COM_errorLog("comment postmode is " . $postmode);
     // Get a valid uid
     if (empty ($_USER['uid'])) {
         $uid = 1;
@@ -1557,7 +1628,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         }
         // Send notification of comment if no errors and notications enabled for comments
         if (($ret == 0) && isset ($_CONF['notification']) && in_array ('comment', $_CONF['notification'])) {
-            CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],$type, $cid,$queued);
+            CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],$type, $cid,$queued,$postmode);
         }
         if ( $ret == 0 && $queued == 0) {
             PLG_sendSubscriptionNotification('comment',$type,$sid,$cid,$uid);
@@ -1582,7 +1653,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 * @param    $cid        int         comment id
 *
 */
-function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, $queued = 0)
+function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, $queued = 0,$postmode='text')
 {
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09;
 
@@ -1618,7 +1689,20 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
             $comment = MBYTE_substr ($comment, 0, $_CONF['emailstorieslength'])
                      . '...';
         }
-        $mailbody .= html_entity_decode($comment) . "\n\n";
+        $format = new glFusion\Formatter();
+        $format->setNamespace('glfusion');
+        $format->setAction('comment');
+        $format->setAllowedHTML($_CONF['htmlfilter_comment']);
+        $format->setParseAutoTags(true);
+        $format->setProcessBBCode(false);
+        $format->setCensor(true);
+        $format->setGeshi(false);
+        $format->setProcessSmilies(false);
+
+        $format->setType($postmode);
+        $mailbody .= $format->parse($comment). "\n\n";
+
+//        $mailbody .= html_entity_decode($comment) . "\n\n";
     }
 
     if ( $queued == 0 ) {
@@ -1634,11 +1718,27 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid, 
         $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
         COM_mail ($to, $mailsubject, $mailbody);
     } else {
+
+    $format = new glFusion\Formatter();
+    $format->setNamespace('glfusion');
+    $format->setAction('comment');
+    $format->setAllowedHTML($_CONF['htmlfilter_comment']);
+    $format->setParseAutoTags(true);
+    $format->setProcessBBCode(false);
+    $format->setCensor(true);
+    $format->setGeshi(false);
+    $format->setProcessSmilies(false);
+
+    $format->setType($postmode);
+    $comment = $format->parse($comment);
+
+
         $html2txt  = new Html2Text\Html2Text($title,false);
         $mailbody = $LANG03[53].'<br><br>';
         $mailbody .= $LANG03[16].': '. $html2txt->get_text().'<br>';
         $mailbody .= $LANG03[5].': '.$author.'<br><br>';
-        $mailbody .= nl2br($comment) . '<br><br>';
+$mailbody .= htmlspecialchars($comment) . '<br><br>';
+//        $mailbody .= nl2br($comment) . '<br><br>';
         $mailbody .= sprintf($LANG03[54].'<br>',$_CONF['site_admin_url'].'/moderation.php');
 
         $html2txt  = new Html2Text\Html2Text($mailbody,false);
@@ -1901,8 +2001,17 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     $filter->setNamespace('glfusion','comment');
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedElements($AllowedElements);
-    $comment = $filter->filterData($comment);  // does not censor...
-    $comment = $filter->censor($comment);
+
+// filtering calls htmlspecialchars() on the data if text
+// we don't want this.
+// i don't think we need to do either of these
+
+    if ( $postmode != 'text' ) {
+        $comment = $filter->filterHTML($comment);
+    }
+
+//    $comment = $filter->filterData($comment);  // does not censor...
+//    $comment = $filter->censor($comment);
 
     if (COM_isAnonUser()) {
         $uid = 1;
@@ -1913,6 +2022,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         $uid = $_USER['uid'];
     }
 
+/* -- no longer append the signature
     $sig = '';
     if ($uid > 1) {
         $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".(int) $uid);
@@ -1926,6 +2036,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         $comment .= '</div><!-- /COMMENTSIG -->';
         }
     }
+----- */
 
     return $comment;
 }
@@ -1947,6 +2058,9 @@ function CMT_preview( $data )
             $A[$key] = (int) COM_applyFilter ($data[$key], true);
         } else if (($key == 'title') || ($key == 'comment')) {
             // these have already been filtered above
+
+// now we want the raw data
+
             $A[$key] = $data[$key];
         } else if ($key == 'username') {
             $A[$key] = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($data[$key])))),ENT_QUOTES,COM_getEncodingt());
