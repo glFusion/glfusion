@@ -284,14 +284,39 @@ function handleEdit($mod = false, $admin = false) {
         }
 
     }
-    $title = $A['title'];
+
+// at this point $A has what was retrieved from the DB
+// we need to handle it appropriately
+
+// we are using the title from the database
+// older legacy comments encoded this - at least some did and some didn't
+// we may want to call undo special chars here
+
+    $title = htmlspecialchars_decode($A['title']);
+
+
+// this tries to undo al the special chars we created
+//@@TODO we probably need to move this
+//  since newer comments are now raw data in the DB - we only want to do
+//  this one older legacy comments - so this goes in the detection part below
+//  we also have a htmlspecialchars_decode() call we just added somewhere we
+//  need to find and fix - I think it was in the display part
+//  need to use htmlspecialchars_decode instead...
     $commenttext = COM_undoSpecialChars ($A['comment']);
 
+// pulls the signatuer from the comment
+//@@TODO - there are other - older signature types we need to fix too
+//         see the display code.
     //remove signature
     $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
     if ( $pos > 0) {
         $commenttext = substr($commenttext, 0, $pos);
     }
+
+// here we deal with legacy comments that did not have a postmode
+// we try to figure it out
+// if we detect HTML (< or >) set to html otherwise default to plaintext
+
     if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
         //get format mode
         if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
@@ -300,14 +325,21 @@ function handleEdit($mod = false, $admin = false) {
             $postmode = 'plaintext';
         }
     } else {
+// use what was in the database
         $postmode = $A['postmode'];
     }
+
+// we are ready to call the comment form
+// at this point - we have not filtered anything
+// except the comment text - everything is from the DB as is....
+
     if ( $mod ) {
         $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
         $edit_type = 'edit';
         if ( $admin == true ) $edit_type = 'adminedit';
 //        $retval =  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
+
         $retval =  CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
     }
     return $retval;
@@ -364,6 +396,7 @@ function handleEditSubmit()
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
+// planning to retire CMT_prepareText
     $comment    = CMT_prepareText($comment, $postmode,true,$cid);
     $title      = COM_checkWords (strip_tags ($_POST['title']));
 
@@ -724,26 +757,47 @@ if ( isset($_POST['cancel'] ) ) {
             $last = 0;
             $last = COM_checkSpeedlimit ('comment');
 
+// $_REQUEST vars set on new comment:
+//  - sid  // story or item unique id
+//  - pid  // parent comment if replying
+//  - type  // article, or plugin
+//  - title  // the items title - not encoded or anything
+//  - reply // not sure - this has 'Post a comment' as the contents
+//  - mode // appears to be blank - this would be our preview, save, etc.
+//         modedit
+//         preview_edit_mod
+//         adminedit
+//         preview_edit_admin
+//         blank
+
             if ($last > 0) {
                 $goBack = '<br/><br/>'.$LANG03[48];
                 $pageBody .= COM_showMessageText($LANG03[7].$last.$LANG03[8].$goBack,$LANG12[26],true,'error');
             } else {
+// pull data passed
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
                 $title = isset($_REQUEST['title']) ? strip_tags($_REQUEST['title']) : '';
+
+// set postmode (options are text or html)
+
                 if ( $_CONF['comment_postmode'] == 'plaintext') {
                     $postmode = 'text';
                 } else {
                     $postmode = $_CONF['comment_postmode'];
                 }
+
                 $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
 
+// make sure the plugin or type is enabled and available
                 if ( $type != 'article' ) {
                     if (!in_array($type,$_PLUGINS) ) {
                         $type = '';
                     }
                 }
 
+// if title is empty - grab it from the database
+// only seems to pull it if an article
                 if (!empty ($sid) && !empty ($type)) {
                     if (empty ($title)) {
                         if ($type == 'article') {
@@ -753,25 +807,40 @@ if ( isset($_POST['cancel'] ) ) {
                                                 . COM_getTopicSQL('AND'));
                         }
                         // CMT_commentForm expects non-htmlspecial chars for title...
+// fixes and escaped html chars
                         $title = str_replace ( '&amp;', '&', $title );
                         $title = str_replace ( '&quot;', '"', $title );
                         $title = str_replace ( '&lt;', '<', $title );
                         $title = str_replace ( '&gt;', '>', $title );
                     }
+
                     if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] != 'internal') {
                         $pageBody = PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0);
                     } else {
+
+// get current comments - including the actual post (article or item from plugin)
                         $currentComments = PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0);
                         if ( $currentComments != false ) {
                             $outputHandle = outputHandler::getInstance();
                             $outputHandle->addMeta('name','robots','noindex');
+// now we show the comment form
+//* @param    string  $title      Title of comment
+//* @param    string  $comment    Text of comment
+//* @param    string  $sid        ID of object comment belongs to
+//* @param    int     $pid        ID of parent comment
+//* @param    string  $type       Type of object comment is posted to
+//* @param    string  $mode       Mode, e.g. 'preview'
+//* @param    string  $postmode   Indicates if comment is plain text or HTML
+
                             $pageBody .= $currentComments
                                       .  CMT_commentForm ($title, '', $sid,$pid, $type, $mode,$postmode);
                         } else {
+// or if no items found - do a 404 error
                             COM_404();
                         }
                     }
                 } else {
+// if sid and type were empty - go back to the index page.
                     echo COM_refresh($_CONF['site_url'].'/index.php');
                     exit;
                 }
