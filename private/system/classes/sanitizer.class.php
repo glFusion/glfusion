@@ -326,7 +326,7 @@ class sanitizer
 
     public function htmlspecialchars($text)
     {
-        return (@htmlspecialchars ($text,ENT_NOQUOTES, $this->encoding),true);
+        return (@htmlspecialchars ($text,ENT_NOQUOTES, $this->encoding,true));
     }
 
     /*
