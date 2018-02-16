@@ -89,6 +89,12 @@ class Formatter {
     var $censor = true;
 
     /*
+     * var $convertPre
+     * boolean - true to conver <pre> to [code]
+     */
+     var $convertPre = false;
+
+    /*
      * var $allowedHTML
      * string - comma delimited list of allowed HTML tags
      */
@@ -110,7 +116,7 @@ class Formatter {
      * var $action
      * string - current action (i.e.; comment, story, etc.)
      */
-    var $actions   = '';
+    var $action   = '';
 
     /*
      * var $bbcodeBlackList
@@ -130,12 +136,32 @@ class Formatter {
      */
     var $_filters = array();
 
+    /*
+     * var $cacheTime
+     * int - default time to cache format entries
+     */
+    var $cacheTime = 432000;
+
+    /*
+     * var $cacheEntry
+     * bool - whether to cache or not
+     */
+    var $cacheEntry = true;
+
+    /*
+     * var $query
+     * string - query string to highlight
+     */
+     var $query = '';
+
     /**
      * constructor
      */
     public function __construct()
     {
-
+        // pick a random time between 5 and 7 days
+        // prevents all caches from expiring at the same time
+        $this->cacheTime = rand(432000,604800);
     }
 
     /**
@@ -155,7 +181,7 @@ class Formatter {
             $this->censor               .
             $this->allowedHTML          .
             $this->namespace            .
-            $this->actions
+            $this->action
         );
     }
 
@@ -193,7 +219,7 @@ class Formatter {
      */
     public function setGeshi($mode = false)
     {
-        $this->useGeshi = $mode;
+        $this->useGeshi = (bool) $mode;
     }
 
     /**
@@ -203,7 +229,7 @@ class Formatter {
      */
     public function setProcessSmilies($allow = false)
     {
-        $this->processSmilies = $allow;
+        $this->processSmilies = (bool) $allow;
     }
 
     /**
@@ -213,7 +239,7 @@ class Formatter {
      */
     public function setProcessBBCode($allow = false)
     {
-        $this->processBBCode = $allow;
+        $this->processBBCode = (bool) $allow;
     }
 
     /**
@@ -223,7 +249,7 @@ class Formatter {
      */
     public function setParseURLs($allow = false)
     {
-        $this->parseUrls = $allow;
+        $this->parseUrls = (bool) $allow;
     }
 
     /**
@@ -233,7 +259,7 @@ class Formatter {
      */
     public function setParseAutoTags($allow = false)
     {
-        $this->parseAutoTags = $allow;
+        $this->parseAutoTags = (bool) $allow;
     }
 
     /**
@@ -243,7 +269,7 @@ class Formatter {
      */
     public function setCensor($allow = false)
     {
-        $this->censor = $allow;
+        $this->censor = (bool) $allow;
     }
 
     /**
@@ -275,6 +301,36 @@ class Formatter {
     {
         $this->action = $action;
     }
+
+    /**
+     * Enable / disable caching
+     * @param $cache - bool - true / false
+     * @return none
+     */
+    public function enableCache($cache = true)
+    {
+        $this->cacheEntry = (bool) $cache;
+    }
+
+    /**
+     * Sets query string
+     * @param $query - string to highlight
+     * @return none
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * Enable / disable auto conversion of <pre></pre> to [code][/code]
+     * @param $convert - bool true / false
+     * @return none
+     */
+     public function setConvertPre($convert = false)
+     {
+        $this->convertPre = (bool) $convert;
+     }
 
 	/**
 	 * Add a code
@@ -316,7 +372,6 @@ class Formatter {
 	    $this->_filters[] = array('type' => $type, 'callback' => $callback);
 	}
 
-
     /**
      * Processes content and performs all filtering / sanitzation actions
      * @param $str - string to parse
@@ -326,9 +381,13 @@ class Formatter {
     {
         global $_CONF;
 
-        $key = 'formatter_'.md5($str) .'_'. $this->getOptionsKey();
-        $c = \glFusion\Cache::getInstance();
-        if ( $c->has($key)) return $c->get($key);
+        if ($this->cacheEntry) {
+            $key = 'f_'.md5($str) .'_'. $this->getOptionsKey();
+            $c = \glFusion\Cache::getInstance();
+            if ($c->has($key)) {
+                return $c->get($key);
+            }
+        }
 
         $bbcode = new \StringParser_BBCode();
         $bbcode->setGlobalCaseSensitive (false);
@@ -346,19 +405,19 @@ class Formatter {
            	$bbcode->addFilter ($filter['type'], $filter['callback']);
         }
 
-        if ($this->useGeshi == false && ($this->formatType == 'html')) {
+        if ($this->convertPre && $this->useGeshi == false && ($this->formatType == 'html')) {
             $str = str_replace('<pre>','[code]',$str);
             $str = str_replace('</pre>','[/code]',$str);
         }
         if ( $this->formatType != 'html' ) {
             $bbcode->addParser(array('block','inline','link','listitem'), array($this,'_nl2br'));
         }
-/*
-        if ( $query != '' ) {
-            $filter->query = $query;
+
+        if ( $this->query != '' ) {
+            $filter->query = $$this->query;
             $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
         }
-*/
+
         if ($this->processSmilies) {
             $bbcode->addParser (array ('block', 'inline', 'listitem'), array($this,'_replacesmilie'));
         }
@@ -423,7 +482,6 @@ class Formatter {
             }
 
             foreach($this->_codes AS $code) {
-
                 $bbcode->addCode($code['name'],
                                  $code['callback_type'],
                                  $code['callback_func'],
@@ -455,7 +513,7 @@ class Formatter {
         }
         $str = $bbcode->parse ($str);
 
-        $c->set($key,$str,'',600);
+        if ($this->cacheEntry) $c->set($key,$str,array($this->namespace),$this->cacheTime); // 1 week expire
 
         unset($bbcode);
 
@@ -783,4 +841,3 @@ class Formatter {
         return $str;
     }
 }
-?>
