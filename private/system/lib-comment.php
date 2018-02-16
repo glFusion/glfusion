@@ -769,7 +769,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
         $row++;
     }
-
+    unset($format);
     return $retval;
 }
 
