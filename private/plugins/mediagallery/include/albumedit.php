@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Album editing administration                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -817,7 +817,7 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
     $album->order           = $album->getNextSortOrder();
     $album->saveAlbum();
     $aid = $album->id;
-
+    glFusion\Cache::getInstance()->deleteItemsByTag('mediagallery');
     MG_initAlbums(1);
 
     if ( !function_exists('MG_buildFullRSS') ) {
@@ -1221,6 +1221,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     }
     $album->saveAlbum();
     $album->updateChildPermissions($forceChildPermUpdate);
+    glFusion\Cache::getInstance()->deleteItemsByTag('mediagallery');
 
     // now handle the attached cover...
 
