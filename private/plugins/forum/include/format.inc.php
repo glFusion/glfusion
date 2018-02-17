@@ -135,8 +135,6 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
 
 }
 
-
-
 function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
 {
     global $_CONF, $_FF_CONF, $_ff_pm;
@@ -146,6 +144,10 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     $format->setAction('post');
     $format->setAllowedHTML($_FF_CONF['allowed_html']);
     $format->setType($postmode);
+
+    if ($mode == 'preview') {
+        $format->enableCache(false);
+    }
 
     if ( ! ( $status & DISABLE_BBCODE ) ) {
         $format->setProcessBBCode(true);
@@ -166,7 +168,13 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
         $format->setParseAutoTags(true);
     }
 
-    $format->setGeshi(true);
+    if ($_FF_CONF['use_wysiwyg_editor'] == 1 && ($postmode == 'html' || $postmode == 'HTML' )) {
+        $format->setWysiwyg(true);
+    }
+
+    if ($_FF_CONF['use_geshi']) {
+        $format->setGeshi(true);
+    }
 
     $format->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
@@ -174,37 +182,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     return $format->parse($str);
 
 }
-
-function FF_getSignature( $tagline, $signature, $postmode = 'html'  )
-{
-    global $_CONF, $_FF_CONF, $_TABLES;
-
-    USES_lib_bbcode();
-
-    $retval = '';
-    $sig    = '';
-
-    if ( $_FF_CONF['bbcode_signature'] && $signature != '') {
-        if ( $_FF_CONF['allow_img_bbcode'] != true ) {
-            $exclude = array('img');
-        } else {
-            $exclude = array();
-        }
-        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text',array(),array(), $exclude).'</div><div style="clear:both;"></div>';
-    } else {
-        if (!empty ($tagline)) {
-            if ( $postmode == 'html' ) {
-                $retval = nl2br($tagline);
-            } else {
-                $retval = nl2br($tagline);
-            }
-            $retval = '<strong>'.$retval.'</strong>';
-        }
-    }
-
-    return $retval;
-}
-
 
 function _ff_FormatForEmail( $str, $postmode='html' ) {
     global $_CONF, $_FF_CONF;

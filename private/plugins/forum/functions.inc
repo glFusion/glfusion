@@ -7,7 +7,7 @@
 // | This file implements the necessary glFusion Plugin API functions and     |
 // | includes some common Forum functions                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1907,8 +1907,6 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
 
     $retval = '';
 
-    USES_lib_bbcode();
-
     $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $T->set_file ('signature','signature_profile.thtml');
 
@@ -1921,9 +1919,17 @@ function FF_sigEditorProfile( $signature = '', $errors = array() )
         $T->set_var('img_tag_allowed',true);
     }
 
+    $format = new glFusion\Formatter();
+    $format->setNamespace('forum');
+    $format->setAction('signature');
+    $format->setType('text');
+    $format->setProcessBBCode(true);
+    if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+        $format->setBbcodeBlackList(array('img'));
+    }
     $T->set_var(array(
         'signature'   => $signature,
-        'preview_signature' => BBC_formatTextBlock($signature,'text',array(),array(), $exclude),
+        'preview_signature' => $format->parse($signature),
     ));
 
     $error_message = '';

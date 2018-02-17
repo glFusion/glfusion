@@ -214,15 +214,16 @@ class User
         //$this->getRank();
 
         // Set the forum signature (tagline)
-        USES_lib_bbcode();
-        $this->tagline = '';
         if ($_FF_CONF['bbcode_signature'] && $this->signature != '') {
-            if ($_FF_CONF['allow_img_bbcode'] != true) {
-                $exclude = array('img');
-            } else {
-                $exclude = array();
+            $format = new \glFusion\Formatter();
+            $format->setNamespace('forum');
+            $format->setAction('signature');
+            $format->setType('text');
+            $format->setProcessBBCode(true);
+            if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+                $format->setBbcodeBlackList(array('img'));
             }
-            $this->tagline = BBC_formatTextBlock($this->signature, 'text', array(), array(), $exclude);
+            $this->tagline = $format->parse($this->signature);
         } elseif ($this->sig != '') {
             $this->tagline = nl2br($this->sig);
         }

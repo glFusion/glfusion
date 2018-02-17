@@ -42,7 +42,6 @@ if ( COM_isAnonUser() || $_FF_CONF['bbcode_signature'] == 0 ) {
 
 USES_forum_functions();
 USES_forum_format();
-USES_lib_bbcode();
 
 $retval = array();
 
@@ -51,13 +50,16 @@ if ( isset($_POST['signature']) ) {
 } else {
     $signature = '';
 }
-if ( $_FF_CONF['allow_img_bbcode'] != true ) {
-    $exclude = array('img');
-} else {
-    $exclude = array();
-}
 
-$preview_sig = BBC_formatTextBlock($signature,'text',array(),array(),$exclude);
+$format = new glFusion\Formatter();
+$format->setNamespace('forum');
+$format->setAction('signature');
+$format->setType('text');
+$format->setProcessBBCode(true);
+if ( $_FF_CONF['allow_img_bbcode'] != true ) {
+    $format->setBbcodeBlackList(array('img'));
+}
+$preview_sig = $format->parse($signature);
 
 $retval['errorCode'] = 0;
 $retval['signature'] = $preview_sig;
