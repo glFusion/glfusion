@@ -154,6 +154,13 @@ class Formatter {
      */
      var $query = '';
 
+    /*
+     * var $wysiwygEditor
+     * bool - if WYSIWYG editor is being used
+     */
+     var $wysiwygEditor = false;
+
+
     /**
      * constructor
      */
@@ -220,6 +227,16 @@ class Formatter {
     public function setGeshi($mode = false)
     {
         $this->useGeshi = (bool) $mode;
+    }
+
+    /**
+     * Signals if wysiwyg editor is being used
+     * @param $mode - true or false
+     * @return none
+     */
+    public function setWysiwyg($mode = false)
+    {
+        $this->wysiwygEditor = (bool) $mode;
     }
 
     /**
@@ -335,12 +352,12 @@ class Formatter {
 	/**
 	 * Add a code
 	 * @param string $name The name of the code
-	 * @param string $callback_type See documentation
+	 * @param string $callback_type
 	 * @param string $callback_func The callback function to call
 	 * @param array $callback_params The callback parameters
-	 * @param string $content_type See documentation
-	 * @param array $allowed_within See documentation
-	 * @param array $not_allowed_within See documentation
+	 * @param string $content_type
+	 * @param array $allowed_within
+	 * @param array $not_allowed_within
 	 * @return bool
 	 */
 	public function addCode ($name, $callback_type, $callback_func, $callback_params, $content_type, $allowed_within, $not_allowed_within)
@@ -409,6 +426,7 @@ class Formatter {
             $str = str_replace('<pre>','[code]',$str);
             $str = str_replace('</pre>','[/code]',$str);
         }
+
         if ( $this->formatType != 'html' ) {
             $bbcode->addParser(array('block','inline','link','listitem'), array($this,'_nl2br'));
         }
@@ -513,7 +531,7 @@ class Formatter {
         }
         $str = $bbcode->parse ($str);
 
-        if ($this->cacheEntry) $c->set($key,$str,array($this->namespace),$this->cacheTime); // 1 week expire
+        if ($this->cacheEntry) $c->set($key,$str,array($this->namespace),$this->cacheTime);
 
         unset($bbcode);
 
@@ -703,7 +721,7 @@ class Formatter {
         $codeblock = str_replace('{','&#123;',$codeblock);
         $codeblock = str_replace('}','&#125;',$codeblock);
 
-        if ( $this->formatType == 'text') {
+        if ( $this->wysiwygEditor ) {
             $codeblock = str_replace('&lt;','<',$codeblock);
             $codeblock = str_replace('&gt;','>',$codeblock);
             $codeblock = str_replace('&amp;','&',$codeblock);
@@ -711,6 +729,7 @@ class Formatter {
             $codeblock = str_replace("<p>","",$codeblock);
             $codeblock = str_replace("</p>","",$codeblock);
         }
+
         $insideCode = 0;
         return $codeblock;
     }
@@ -765,25 +784,30 @@ class Formatter {
         $geshi = new \GeSHi($str,$type);
         $geshi->set_encoding(COM_getEncodingt());
         $geshi->set_header_type(GESHI_HEADER_DIV);
+
         if ( $_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true ) {
             $geshi->set_link_target(true);
         }
+
         if ( isset($_FF_CONF['geshi_line_numbers']) && $_FF_CONF['geshi_line_numbers']) {
             $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
         } else {
             $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
         }
         $geshi->enable_keyword_links(false);
+
         if ( isset($_FF_CONF['geshi_overall_style']) ) {
             $geshi->set_overall_style($_FF_CONF['geshi_overall_style'],true);
         } else {
             $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
         }
+
         if ( isset($_FF_CONF['geshi_line_style'] ) ) {
             $geshi->set_line_style($_FF_CONF['geshi_line_style'],true);
         } else {
             $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
         }
+
         if ( isset($_FF_CONF['geshi_code_style'] ) ) {
             $geshi->set_code_style($_FF_CONF['geshi_code_style'],true);
         } else {
@@ -792,11 +816,13 @@ class Formatter {
         $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
         $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
         $geshi->set_header_content(strtoupper($type) . " " . $LANG_GF01['formatted_code']);
+
         if ( isset($_FF_CONF['geshi_header_style'] ) ) {
             $geshi->set_header_content_style($_FF_CONF['geshi_header_style'],true);
         } else {
             $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: bold; background-color: #325482; border-bottom: 1px solid #d0d0d0; padding: 2px;');
         }
+
         return $geshi->parse_code();
     }
 
