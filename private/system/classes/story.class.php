@@ -434,8 +434,6 @@ class Story
         $this->format->setProcessSmilies(true);
         $this->format->addFilter(FILTER_PRE,array($this,'replaceImages'));
         $this->format->addFilter(FILTER_POST,array($this,'renderImages'));
-
-
     }
 
     /**
@@ -1816,10 +1814,7 @@ class Story
 
         $return = '';
 
-
-    $this->format->setType($this->_postmode);
-
-
+        $this->format->setType($this->_postmode);
 
         switch (strtolower($item)) {
             case 'introtext':
