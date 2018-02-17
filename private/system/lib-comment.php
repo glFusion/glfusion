@@ -746,7 +746,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'title', $A['title'] );
 
         // add signature if available
-        $sig = isset($A['sig']) ? $A['sig'] : '';
+        $sig = isset($A['sig']) ? $filter->censor($A['sig']) : '';
         $finalsig = '';
         if ($A['uid'] > 1 && !empty($sig)) {
             $finalsig .= '<div class="comment-sig">';
