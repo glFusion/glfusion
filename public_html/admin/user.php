@@ -1869,12 +1869,10 @@ function USER_save($uid)
             if (!in_array ($logUsers, $groups)) {
                 $groups[] = $logUsers;
             }
-
             foreach ($groups as $userGroup) {
                 if (in_array ($userGroup, $UserAdminGroups)) {
                     if ($_USER_VERBOSE) {
-                        COM_errorLog ("adding group_assignment " . $userGroup
-                                      . " for $username", 1);
+                        COM_errorLog ("adding group_assignment ".$userGroup." for $username", 1);
                     }
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($userGroup, $uid)";
                     DB_query ($sql);

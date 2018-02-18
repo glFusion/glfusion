@@ -49,6 +49,6 @@ $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 $_SP_CONF['pi_name']            = 'staticpages';
 $_SP_CONF['pi_display_name']    = 'Pages';
 $_SP_CONF['pi_version']         = '1.6.4';
-$_SP_CONF['gl_version']         = '1.7.3';
+$_SP_CONF['gl_version']         = '1.7.4';
 $_SP_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>
