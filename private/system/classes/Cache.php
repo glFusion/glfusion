@@ -107,7 +107,7 @@ final class Cache
     public function get($key, $default = null)
     {
         global $_CONF;
-        if ( $_CONF['cache_driver'] == 'Devnull') return null;
+        if ($_CONF['cache_driver'] == 'Devnull') return null;
 
         if ($this->namespace != '') $key = $this->namespace.'_'.$key;
         $key = $this->validateKeyName($key);
@@ -149,7 +149,7 @@ final class Cache
             } else if (strtolower($_CONF['cache_driver']) != 'files') {
                 $cacheItem->expiresAfter(86400);
             }
-            if ( is_array($tag) ) {
+            if (is_array($tag)) {
 
                 $nsTags = array_map(
                     function($tag) {
@@ -303,7 +303,9 @@ final class Cache
     public function has($key)
     {
         global $_CONF;
-        if ( $_CONF['cache_driver'] == 'Devnull') return false;
+        if ($_CONF['cache_driver'] == 'Devnull') {
+            return false;
+        }
         if ($this->namespace != '') $key = $this->namespace.'_'.$key;
         $key = $this->validateKeyName($key);
         try {
@@ -324,7 +326,7 @@ final class Cache
         $key = $this->validateKeyName($key);
         $cacheItem = $this->internalCacheInstance->getItem($key);
         $modDate = $cacheItem->getModificationDate();
-        if ( is_object($modDate) && isset($modDate->date)) {
+        if (is_object($modDate) && isset($modDate->date)) {
             return strtotime($modDate->date);
         }
         return 0;
