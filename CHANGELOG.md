@@ -1,7 +1,7 @@
 ## v1.8.0 (Unreleased)
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
-  - Consolodation of caching code into lib-cache
+  - Consolidation of caching code into lib-cache
   - Removed comment feeds plugin - functionality integrated into core
   - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
@@ -21,15 +21,15 @@
   - Minor code optimizations
 
 ## v1.7.2 (January 27, 2018)
-  - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
+  - Added support for "Open External Links in new Window" configuration setting in the RSS ticker widget
   - Forum: Fixed issue where signature preview would not work consistently
   - Forum: Admin message management did not page properly - lost selections on pagination
   - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
   - Polls: Comment link did not correctly display when showing poll results in Polls block
   - Open print window in new window when printing static pages
-  - Fixed incorrect variable reference in referer ban list
+  - Fixed incorrect variable reference in referrer ban list
   - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
-  - Forum: Moderator functions now in dropdown button
+  - Forum: Moderator functions now in drop down button
   - Forum: New Likes Feature by Lee Garner
   - Configuration option to enable / disable BB2 auto ban logging
   - Standardized the date/time format across all log files
