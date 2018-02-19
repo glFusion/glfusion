@@ -531,7 +531,9 @@ class Formatter {
         }
         $str = $bbcode->parse ($str);
 
-        if ($this->cacheEntry) $c->set($key,$str,array($this->namespace),$this->cacheTime);
+        if ($this->cacheEntry) {
+            $c->set($key,$str,array($this->namespace),$this->cacheTime);
+        }
 
         unset($bbcode);
 
