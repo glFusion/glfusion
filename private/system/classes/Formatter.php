@@ -14,7 +14,7 @@
 *
 *   Text will be formatted based on $formatMode
 *   Auto tags are processed if enabled
-*   BBCodes are procssed if enabled
+*   BBCodes are processed if enabled
 *   Smilies are processed if enabled and the Smiley Plugin is available
 *   Links (Urls, email, twitter) will be automatically parsed if enabled
 *   Code blocks are always processed
@@ -90,7 +90,7 @@ class Formatter {
 
     /*
      * var $convertPre
-     * boolean - true to conver <pre> to [code]
+     * boolean - true to convert <pre> to [code]
      */
      var $convertPre = false;
 
@@ -230,7 +230,7 @@ class Formatter {
     }
 
     /**
-     * Signals if wysiwyg editor is being used
+     * Signals if WYSIWYG editor is being used
      * @param $mode - true or false
      * @return none
      */
@@ -240,7 +240,7 @@ class Formatter {
     }
 
     /**
-     * Enables Smilie processing (if Smiley Plugin is available)
+     * Enables Smilies processing (if Smiley Plugin is available)
      * @param $allow - true or false
      * @return none
      */
@@ -390,7 +390,7 @@ class Formatter {
 	}
 
     /**
-     * Processes content and performs all filtering / sanitzation actions
+     * Processes content and performs all filtering / sanitize actions
      * @param $str - string to parse
      * @return string - display ready string
      */
@@ -412,7 +412,7 @@ class Formatter {
 
         $this->filter->setPostmode($this->formatType);
 
-        if ( $this->formatType == 'text') {
+        if ($this->formatType == 'text') {
             // filter all code prior to replacements
             $bbcode->addFilter(FILTER_PRE, array($this,'bbcode_htmlspecialchars'));
         }
@@ -427,11 +427,11 @@ class Formatter {
             $str = str_replace('</pre>','[/code]',$str);
         }
 
-        if ( $this->formatType != 'html' ) {
+        if ($this->formatType != 'html') {
             $bbcode->addParser(array('block','inline','link','listitem'), array($this,'_nl2br'));
         }
 
-        if ( $this->query != '' ) {
+        if ($this->query != '') {
             $filter->query = $$this->query;
             $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
         }
@@ -517,7 +517,7 @@ class Formatter {
             $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
         }
 
-        if ( $this->formatType == 'html' ) {
+        if ($this->formatType == 'html') {
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
         }
 
@@ -585,14 +585,14 @@ class Formatter {
         $target = '';
 
         if (!isset ($attributes['default'])) {
-            if ( stristr($content,'http') ) {
+            if (stristr($content,'http')) {
                 $url = strip_tags($content);
                 $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt(),true);
             } else {
                 $url = 'http://'.strip_tags($content);
                 $linktext = @htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt(),true);
             }
-        } else if ( stristr($attributes['default'],'http') ) {
+        } else if (stristr($attributes['default'],'http')) {
             $url = strip_tags($attributes['default']);
     //        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
             $linktext = strip_tags($content);
@@ -601,10 +601,10 @@ class Formatter {
             $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt(),true);
         }
 
-        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
+        if (isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false) {
             $target = ' target="_blank" rel="noopener noreferrer" ';
         }
-    	$url = COM_sanitizeUrl( $url );
+    	$url = COM_sanitizeUrl($url);
         $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
     	return $retval;
     }
@@ -620,7 +620,7 @@ class Formatter {
         if (!isset ($attributes['default'])) {
             return '<ul>'.$content.'</ul>';
         } else {
-            if ( is_numeric($attributes['default']) ) {
+            if (is_numeric($attributes['default'])) {
                 return '<ol>'.$content.'</ol>';
             } else {
                 return '<ul>'.$content.'</ul>';
@@ -648,13 +648,13 @@ class Formatter {
             }
         }
         if (!in_array('img',$this->bbcodeBlackList)) {
-            if ( isset($attributes['h']) AND isset ($attributes['w']) ) {
+            if (isset($attributes['h']) AND isset ($attributes['w'])) {
                 $dim = 'width=' . (int) $attributes['w'] . ' height=' . (int) $attributes['h'];
             } else {
                 $dim = '';
             }
-            if ( isset($attributes['align'] ) ) {
-                if ( !in_array(strtolower($attributes['align']),array('left','right','center') ) ) {
+            if (isset($attributes['align'] )) {
+                if (!in_array(strtolower($attributes['align']),array('left','right','center'))) {
                     $attributes['align'] = 'left';
                 }
                 $align = ' align=' . $attributes['align'] . ' ';
@@ -673,7 +673,7 @@ class Formatter {
      */
     public function do_bbcode_size  ($action, $attributes, $content, $params, $node_object)
     {
-        if ( $action == 'validate') {
+        if ($action == 'validate') {
             return true;
         }
         return '<span style="font-size: '.(int) $attributes['default'].'px;">'.$content.'</span>';
@@ -684,7 +684,7 @@ class Formatter {
      */
     public function do_bbcode_color  ($action, $attributes, $content, $params, $node_object)
     {
-        if ( $action == 'validate') {
+        if ($action == 'validate') {
             return true;
         }
         return '<span style="color: '. strip_tags($attributes['default']).';">'.$content.'</span>';
@@ -697,7 +697,7 @@ class Formatter {
     {
         global $_FF_CONF;
 
-        if ( $action == 'validate') {
+        if ($action == 'validate') {
             return true;
         }
 
@@ -715,13 +715,16 @@ class Formatter {
                 $codeblock = '</p>' . $this->_geshi_formatted($content,strtoupper(strip_tags($attributes['default']))) . '<p>';
             }
         } else {
+            $content = @htmlspecialchars_decode($content,ENT_QUOTES);
+            $content = preg_replace('/^\s*?\n|\s*?\n$/','',$content);
             $codeblock = '<div style="width:100%;" class="php"><pre class="codeblock">'  . @htmlspecialchars ($content,ENT_NOQUOTES, COM_getEncodingt(),true) . '</pre></div>';
+//            $codeblock = '<div style="width:100%;" class="php"><pre class="codeblock">'  . $content . '</pre></div>';
         }
 
         $codeblock = str_replace('{','&#123;',$codeblock);
         $codeblock = str_replace('}','&#125;',$codeblock);
 
-        if ( $this->wysiwygEditor ) {
+        if ($this->wysiwygEditor) {
             $codeblock = str_replace('&lt;','<',$codeblock);
             $codeblock = str_replace('&gt;','>',$codeblock);
             $codeblock = str_replace('&amp;','&',$codeblock);
@@ -777,51 +780,27 @@ class Formatter {
      */
     public function _geshi_formatted($str,$type='php')
     {
-        global $_CONF, $_FF_CONF, $LANG_GF01;
+        global $_CONF, $LANG_BBCODE;
 
         $str = @htmlspecialchars_decode($str,ENT_QUOTES);
         $str = preg_replace('/^\s*?\n|\s*?\n$/','',$str);
         $geshi = new \GeSHi($str,$type);
         $geshi->set_encoding(COM_getEncodingt());
         $geshi->set_header_type(GESHI_HEADER_DIV);
-
-        if ( $_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true ) {
+        if ($_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true) {
             $geshi->set_link_target(true);
         }
-
-        if ( isset($_FF_CONF['geshi_line_numbers']) && $_FF_CONF['geshi_line_numbers']) {
-            $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-        } else {
-            $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
-        }
+        $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
         $geshi->enable_keyword_links(false);
-
-        if ( isset($_FF_CONF['geshi_overall_style']) ) {
-            $geshi->set_overall_style($_FF_CONF['geshi_overall_style'],true);
-        } else {
-            $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #FAFAFA;', true);
-        }
-
-        if ( isset($_FF_CONF['geshi_line_style'] ) ) {
-            $geshi->set_line_style($_FF_CONF['geshi_line_style'],true);
-        } else {
-            $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;', 'font-weight: bold; color: #006060;', true);
-        }
-
-        if ( isset($_FF_CONF['geshi_code_style'] ) ) {
-            $geshi->set_code_style($_FF_CONF['geshi_code_style'],true);
-        } else {
-            $geshi->set_code_style('color: #000020;', 'color: #000020;');
-        }
+        $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #fafafa;margin-top:5px;margin-bottom:5px;', true);
+        $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;font-weight: 700; color: #006060; background: #fcfcfc;', true);
+        $geshi->set_code_style('color: #000020;', 'color: #000020;');
+        $geshi->set_header_type(GESHI_HEADER_DIV);
+        $geshi->set_line_style('background: red;', true);
         $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
         $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
-        $geshi->set_header_content(strtoupper($type) . " " . $LANG_GF01['formatted_code']);
-
-        if ( isset($_FF_CONF['geshi_header_style'] ) ) {
-            $geshi->set_header_content_style($_FF_CONF['geshi_header_style'],true);
-        } else {
-            $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: bold; background-color: #325482; border-bottom: 1px solid #d0d0d0; padding: 2px;');
-        }
+        $geshi->set_header_content("$type ".$LANG_BBCODE['formatted_code']);
+        $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #808080; font-size: 90%; font-weight: bold; background-color: #f0f0ff; border-bottom: 1px solid #d0d0d0; padding: 2px;');
 
         return $geshi->parse_code();
     }
