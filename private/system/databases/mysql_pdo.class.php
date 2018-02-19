@@ -114,7 +114,7 @@ class database
     private function _connect()
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - inside database->_connect");
+            $this->_errorlog("DEBUG: mysql_pdo - inside database->_connect");
         }
 
         $dsn = 'mysql:dbname='.$this->_name.';host='.$this->_host.';charset='.$this->_character_set_database;
@@ -129,7 +129,7 @@ class database
         $this->_mysql_version = $db->getAttribute(PDO::ATTR_CLIENT_VERSION);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - leaving database->_connect");
+            $this->_errorlog("DEBUG: mysql_pdo - leaving database->_connect");
         }
     }
 
@@ -229,13 +229,13 @@ class database
     * @param    string      $sql            SQL to be executed
     * @param    int         $ignore_errors  If 1 this function supresses any
     *                                       error messages
-    * @return   mysqli_result|false         Returns results of query
+    * @return   mysql_pdo_result|false      Returns results of query
     */
     public function dbQuery($sql, $ignore_errors=0)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - inside database->dbQuery");
-            $this->_errorlog("DEBUG: mysqli - SQL query is " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - inside database->dbQuery");
+            $this->_errorlog("DEBUG: mysql_pdo - SQL query is " . $sql);
         }
 
         if ($ignore_errors) {
@@ -266,7 +266,7 @@ class database
     public function dbSave($table, $fields, $values)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbSave");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbSave");
         }
 
         $sql = "REPLACE INTO $table ($fields) VALUES ($values)";
@@ -274,7 +274,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbSave");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbSave");
         }
     }
 
@@ -335,7 +335,7 @@ class database
     public function dbDelete($table, $id, $value)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbDelete");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbDelete");
         }
 
         $sql = "DELETE FROM $table";
@@ -350,7 +350,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbDelete");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbDelete");
         }
 
         return TRUE;
@@ -374,7 +374,7 @@ class database
                                 $suppress_quotes = false)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside dbChange");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside dbChange");
         }
 
         if ($suppress_quotes) {
@@ -392,13 +392,13 @@ class database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - dbChange sql = " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - dbChange sql = " . $sql);
         }
 
         $retval = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbChange");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbChange");
         }
         return $retval;
     }
@@ -418,7 +418,7 @@ class database
     public function dbCount($table, $id = '', $value = '')
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbCount");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCount");
         }
 
         $sql = "SELECT COUNT(*) FROM $table";
@@ -431,13 +431,13 @@ class database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - sql = " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - sql = " . $sql);
         }
 
         $result = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbCount");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCount");
         }
         return ($result->fetchColumn());
     }
@@ -459,7 +459,7 @@ class database
     public function dbCopy($table, $fields, $values, $tablefrom, $id, $value)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbCopy");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCopy");
         }
 
         $sql = "REPLACE INTO $table ($fields) SELECT $values FROM $tablefrom";
@@ -475,7 +475,7 @@ class database
         $retval = $retval && $this->dbDelete($tablefrom, $id, $value);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbCopy");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCopy");
         }
         return $retval;
     }
@@ -485,13 +485,13 @@ class database
     *
     * This returns the number of rows in a recordset
     *
-    * @param    mysqli_result $recordSet The record set to operate one
+    * @param    PDO  $recordSet The record set to operate one
     * @return   int            Returns number of rows otherwise FALSE (0)
     */
     public function dbNumRows($recordSet)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbNumRows");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbNumRows");
         }
 
         /*
@@ -509,7 +509,7 @@ class database
     /**
     * Returns the contents of one cell from a MySQL result set
     *
-    * @param    mysqli_result $recordSet The recordset to operate on
+    * @param    PDO $recordSet The recordset to operate on
     * @param    int         $row         row to get data from
     * @param    mixed       $field       field to return
     * @return   mixed (depends on field content)
@@ -517,13 +517,13 @@ class database
     public function dbResult($recordset, $row, $field = 0)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbResult");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbResult");
             if (empty($recordset)) {
-                $this->_errorlog("DEBUG: mysqli - Passed recordset is not valid");
+                $this->_errorlog("DEBUG: mysql_pdo - Passed recordset is not valid");
             } else {
-                $this->_errorlog("DEBUG: mysqli - Everything looks good");
+                $this->_errorlog("DEBUG: mysql_pdo - Everything looks good");
             }
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbResult");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbResult");
         }
 
         $retval = '';
@@ -546,7 +546,7 @@ class database
     *
     * This returns the number of fields in a recordset
     *
-    * @param   mysqli_result $recordSet The recordset to operate on
+    * @param   PDO $recordSet The recordset to operate on
     * @return  int     Returns number of rows from query
     */
     public function dbNumFields($recordset)
@@ -560,7 +560,7 @@ class database
     *
     * Returns the field name for a given field number
     *
-    * @param    mysqli_result $recordSet   The recordset to operate on
+    * @param    PDO $recordSet   The recordset to operate on
     * @param    int           $fieldNumber field number to return the name of
     * @return   string      Returns name of specified field
     *
@@ -579,7 +579,7 @@ class database
     *
     * Retrieves returns the number of effected rows for last query
     *
-    * @param    mysqli_result $recordSet The record set to operate on
+    * @param    PDO  $recordSet The record set to operate on
     * @return   int     Number of rows affected by last query
     */
     public function dbAffectedRows($recordset)
@@ -593,7 +593,7 @@ class database
     *
     * Gets the next record in a recordset and returns in array
     *
-    * @param    mysqli_result $recordSet The record set to operate on
+    * @param    PDO $recordSet The record set to operate on
     * @param    bool          $both      get both assoc and numeric indices
     * @return   array       Returns data array of current row from recordset
     */
@@ -663,7 +663,7 @@ class database
                     if (isset($btr[$i])) {
                         $b = $btr[$i];
                         if ($b['function'] == 'DB_query') {
-                            if (!empty($b['file']) && !empty($b['line'])) {
+                        if (!empty($b['file']) && !empty($b['line'])) {
                                 $fn = $b['file'] . ':' . $b['line'];
                             }
                             break;
@@ -711,7 +711,7 @@ class database
     public function dbLockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbLockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbLockTable");
         }
 
         $sql = "LOCK TABLES $table WRITE";
@@ -719,7 +719,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbLockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbLockTable");
         }
     }
 
@@ -735,7 +735,7 @@ class database
     public function dbUnlockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbUnlockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbUnlockTable");
         }
 
         $sql = 'UNLOCK TABLES';
@@ -743,7 +743,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbUnlockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbUnlockTable");
         }
     }
 
