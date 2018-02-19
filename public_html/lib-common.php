@@ -46,19 +46,6 @@ if (version_compare(PHP_VERSION,'5.6.0','<')) {
     die('glFusion requires PHP version 5.6.0 or greater.');
 }
 
-/**
-* This is the common library for glFusion.  Through our code, you will see
-* functions with the COM_ prefix (e.g. COM_siteHeader()).  Any such functions
-* can be found in this file.
-*
-* --- You don't need to modify anything in this file! ---
-*
-* WARNING: put any custom hacks in lib-custom.php and not in here.  This file is
-* modified frequently by the glFusion development team.  If you put your hacks in
-* lib-custom.php you will find upgrading much easier.
-*
-*/
-
 if (!defined ('GVERSION')) {
     define('GVERSION', '1.8.0');
 }
@@ -222,7 +209,7 @@ if ( !isset($_SYSTEM['admin_session']) ) {
 }
 
 $_LOGO = array();
-$result = DB_query("SELECT * FROM {$_TABLES['logo']}",1);
+$result = DB_query("SELECT * FROM {$_TABLES['logo']}");
 $resultSet = DB_fetchAll($result);
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
@@ -4079,102 +4066,6 @@ function COM_showMessageFromParameter()
     return $retval;
 }
 
-
-/**
-* Prints Google(tm)-like paging navigation
-*
-* @param        string      $base_url       base url to use for all generated links
-* @param        int         $curpage        current page we are on
-* @param        int         $num_pages      Total number of pages
-* @param        string      $page_str       page-variable name AND '='
-* @param        boolean     $do_rewrite     if true, url-rewriting is respected
-* @param        string      $msg            to be displayed with the navigation
-* @param        string      $open_ended     replace next/last links with this
-* @return       string   HTML formatted widget
-*/
-function COM_printPageNavigationOLD( $base_url, $curpage, $num_pages,
-                                  $page_str='page=', $do_rewrite=false, $msg='',
-                                  $open_ended = '',$suffix='')
-{
-    global $_CONF, $LANG05;
-
-    $retval = '';
-
-    $output = outputHandler::getInstance();
-
-    if ( $num_pages < 2 ) {
-        return $retval;
-    }
-
-    $T = new Template($_CONF['path_layout']);
-    $T->set_file('pagination','pagination.thtml');
-
-    if ( !$do_rewrite ) {
-        $hasargs = strstr( $base_url, '?' );
-        if ( $hasargs ) {
-            $sep = '&amp;';
-        } else {
-            $sep = '?';
-        }
-    } else {
-        $sep = '/';
-        $page_str = '';
-    }
-
-    if ( $curpage > 1 ) {
-        $T->set_var('first',true);
-        $T->set_var('first_link',$base_url . $sep . $page_str . '1' . $suffix);
-        $pg = $sep . $page_str . ( $curpage - 1 );
-        $T->set_var('prev',true);
-        $T->set_var('prev_link',$base_url . $pg . $suffix);
-        $output->addLink('prev', urldecode($base_url . $pg . $suffix));
-    } else {
-        $T->unset_var('first');
-        $T->unset_var('first_link');
-        $T->unset_var('prev');
-        $T->unset_var('prev_link');
-    }
-    $T->set_block('pagination', 'datarow', 'datavar');
-
-    for( $pgcount = ( $curpage - 10 ); ( $pgcount <= ( $curpage + 9 )) AND ( $pgcount <= $num_pages ); $pgcount++ ) {
-        if ( $pgcount <= 0 ) {
-            $pgcount = 1;
-        }
-
-        if ( $pgcount == $curpage ) {
-            $T->set_var('active',true);
-            $T->set_var('page_str',$curpage);
-        } else {
-            $T->unset_var('active');
-            $T->set_var('page_str',$pgcount);
-            $pg = $sep . $page_str . $pgcount;
-            $T->set_var('page_link',$base_url . $pg . $suffix);
-        }
-        $T->parse('datavar', 'datarow',true);
-    }
-    if ( !empty( $open_ended )) {
-        $T->set_var('open_ended',true);
-    } else if ( $curpage == $num_pages ) {
-        $T->unset_var('open_ended');
-        $T->unset_var('next');
-        $T->unset_var('last');
-        $T->unset_var('next_link');
-        $T->unset_var('last_link');
-    } else {
-        $T->set_var('next',true);
-        $T->set_var('next_link',$base_url . $sep.$page_str . ($curpage + 1) . $suffix);
-        $T->set_var('last',true);
-        $T->set_var('last_link',$base_url . $sep.$page_str . $num_pages . $suffix);
-        $output->addLink('next', urldecode($base_url . $sep. $page_str . ($curpage + 1) . $suffix));
-    }
-    if (!empty($msg) ) {
-        $T->set_var('msg',$msg);
-    }
-
-    $retval = $T->finish ($T->parse('output','pagination'));
-    return $retval;
-}
-
 function COM_printPageNavigation( $base_url, $curpage, $num_pages,
                                   $page_str='page=', $do_rewrite=false, $msg='',
                                   $open_ended = '',$suffix='')
@@ -6071,57 +5962,47 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 
             if (!function_exists('SEC_inGroup') || !SEC_inGroup('Root')) {
                 if ('force' != ''.$_SYSTEM['rootdebug']) {
-                    $errcontext = COM_rootDebugClean($errcontext);
+                $errcontext = COM_rootDebugClean($errcontext);
                 } else {
                     echo('<h2 style="color: red">Root Debug is set to "force", this
                     means that passwords and session cookies are exposed in this
                     message!!!</h2>');
                 }
             }
-
-            if (@ini_get('xdebug.default_enable') == 1) {
-                ob_start();
-                var_dump($errcontext);
-                $errcontext = ob_get_contents();
-                ob_end_clean();
-                echo "$errcontext</body></html>";
-            } else {
-                $btr = debug_backtrace();
-                if (count($btr) > 0) {
-                    if ($btr[0]['function'] == 'COM_handleError') {
-                        array_shift($btr);
-                    }
+            $btr = debug_backtrace();
+            if (count($btr) > 0) {
+                if ($btr[0]['function'] == 'COM_handleError') {
+                    array_shift($btr);
                 }
-                if (count($btr) > 0) {
-                    echo "<font size='1'><table class='xdebug-error' dir='ltr' border='1' cellspacing='0' cellpadding='1'>\n";
-                    echo "<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>\n";
-                    echo "<tr><th align='right' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>File</th><th align='right' bgcolor='#eeeeec'>Line</th></tr>\n";
-                    $i = 1;
-                    foreach ($btr as $b) {
-                        $f = '';
-                        if (! empty($b['file'])) {
-                            $f = $b['file'];
-                        }
-                        $l = '';
-                        if (! empty($b['line'])) {
-                            $l = $b['line'];
-                        }
-                        echo "<tr><td bgcolor='#eeeeec' align='right'>$i</td><td bgcolor='#eeeeec'>{$b['function']}</td><td bgcolor='#eeeeec'>{$f}</td><td bgcolor='#eeeeec' align='right'>{$l}</td></tr>\n";
-                        $i++;
-                        if ($i > 100) {
-                            echo "<tr><td bgcolor='#eeeeec' align='left' colspan='4'>Possible recursion - aborting.</td></tr>\n";
-                            break;
-                        }
-                    }
-                    echo "</table></font>\n";
-                }
-                echo '<pre>';
-                ob_start();
-                var_dump($errcontext);
-                $errcontext = htmlspecialchars(ob_get_contents());
-                ob_end_clean();
-                echo "$errcontext</pre></body></html>";
             }
+            if (count($btr) > 0) {
+                echo "<font size='1'><table class='xdebug-error' dir='ltr' border='1' cellspacing='0' cellpadding='1'>\n";
+                echo "<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>\n";
+                echo "<tr><th align='right' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>File</th><th align='right' bgcolor='#eeeeec'>Line</th></tr>\n";
+                $i = 1;
+                foreach ($btr as $b) {
+                    $f = '';
+                    if (! empty($b['file'])) {
+                        $f = $b['file'];
+                    }
+                    $l = '';
+                    if (! empty($b['line'])) {
+                        $l = $b['line'];
+                    }
+                    echo "<tr><td bgcolor='#eeeeec' align='right'>$i</td><td bgcolor='#eeeeec'>{$b['function']}</td><td bgcolor='#eeeeec'>{$f}</td><td bgcolor='#eeeeec' align='right'>{$l}</td></tr>\n";
+                    $i++;
+                    if ($i > 100) {
+                        echo "<tr><td bgcolor='#eeeeec' align='left' colspan='4'>Possible recursion - aborting.</td></tr>\n";
+                        break;
+                    }
+                }
+                echo "</table></font>\n";
+            }
+            echo '<pre>';
+            ob_start();
+            $errcontext = htmlspecialchars(ob_get_contents());
+            ob_end_clean();
+            echo $errcontext."</pre></body></html>";
             exit;
         }
     }
@@ -6186,6 +6067,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
   */
 function COM_rootDebugClean($array, $blank=false)
 {
+    static $counter = 0;
+
     $blankField = false;
     foreach ($array AS $key => $value ) {
         $lkey = strtolower($key);
@@ -6194,7 +6077,8 @@ function COM_rootDebugClean($array, $blank=false)
         } else {
             $blankField = $blank;
         }
-        if (is_array($value)) {
+        if (is_array($value) && $counter < 250) {
+            $counter++;
             $array[$key] = COM_rootDebugClean($value, $blankField);
         } elseif ($blankField) {
             $array[$key] = '[VALUE REMOVED]';
