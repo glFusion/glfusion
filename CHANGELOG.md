@@ -1,5 +1,5 @@
 ## v1.7.4 (Unreleased)
-
+  - Removed dependency on Media Gallery plugin from the core image processing library
 
 ## v1.7.3 (February 9, 2018)
   - Fixed error in Menu Builder where error text was blank

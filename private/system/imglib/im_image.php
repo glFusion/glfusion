@@ -6,7 +6,7 @@
 // |                                                                          |
 // | ImageMagick Graphic Library interface                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -81,7 +81,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
 
 function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType)
 {
-    global $_CONF, $_MG_CONF;
+    global $_CONF;
 
     $noLayers = 1;
 
@@ -96,7 +96,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
         }
     }
 
-    $JpegQuality = $_MG_CONF['jpg_quality'];
+    $JpegQuality = $_CONF['jpg_orig_quality'];
 
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("_img_resizeImage: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
@@ -224,7 +224,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
 
 function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth, $dSize, $mimeType)
 {
-    global $_CONF, $_MG_CONF;
+    global $_CONF;
 
     $version = _img_getIMversion();
 
@@ -239,7 +239,7 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
 
     $opt = '-quality ' . 91;
 
-    if ($_MG_CONF['verbose']) {
+    if ($_CONF['debug_image_upload']) {
         $opt .= ' -verbose';
         COM_errorLog("_img_squareThumbnail: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
     }
@@ -274,8 +274,8 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
         COM_errorLog("_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
         return array(false, 'Error - Unable to resize image (square thumbnail) - ImageMagick convert failed.');
     }
-    if (($mimeType != 'image/gif') && ($_MG_CONF['jhead_enabled'] == 1)) {
-        UTL_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
+    if (($mimeType != 'image/gif') && ($_CONF['jhead_enabled'] == 1)) {
+        UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
     }
     return array(true, '');
 }

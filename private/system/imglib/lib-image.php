@@ -323,7 +323,7 @@ function IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) 
     $mType = IMG_getMediaMetaData($origImage);
     $mimeType = $mType['mime_type'];
 
-    if ( !in_array($mimeType,$_MG_CONF['watermark_types']) ) {
+    if ( isset($_MG_CONF['watermark_types']) && !in_array($mimeType,$_MG_CONF['watermark_types']) ) {
         COM_errorLog("IMG_watermarkImage: Media type is not in allowed watermark types (config.php)");
         return false;
     }
