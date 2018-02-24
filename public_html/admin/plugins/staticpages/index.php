@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Administration page.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -66,6 +66,8 @@ function PAGE_form($A, $error = false, $editFlag = 0)
            $LANG_postmodes, $MESSAGE;
 
     USES_lib_admin();
+
+    $filter = new \sanitizer();
 
     if ( $editFlag ) {
         $lang_create_or_edit = $LANG_ADMIN['edit'];
@@ -307,7 +309,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
         $sp_template->set_var('lang_title', $LANG_STATIC['title']);
         $title = '';
         if (isset ($A['sp_title'])) {
-            $title = htmlspecialchars ($A['sp_title']);
+            $title = $filter->editableText($A['sp_title']);
         }
         $sp_template->set_var('sp_title', $title);
         $sp_template->set_var('lang_addtomenu', $LANG_STATIC['addtomenu']);
@@ -318,7 +320,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
         }
         $sp_template->set_var('lang_label', $LANG_STATIC['label']);
         if (isset ($A['sp_label'])) {
-            $sp_template->set_var('sp_label', $A['sp_label']);
+            $sp_template->set_var('sp_label', $filter->editableText($A['sp_label']));
         } else {
             $sp_template->set_var('sp_label', '');
         }
@@ -360,7 +362,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
         $sp_template->set_var('lang_content', $LANG_STATIC['content']);
         $content = '';
         if (isset ($A['sp_content'])) {
-            $content = htmlspecialchars ($A['sp_content']);
+            $content = $filter->editableText($A['sp_content']);
         }
         $sp_template->set_var('sp_content', $content);
         if ($_SP_CONF['filter_html'] == 1) {
