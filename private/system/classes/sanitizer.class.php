@@ -284,7 +284,7 @@ class sanitizer
             // html filter escapes several items...
 //            $str = htmlspecialchars_decode($str,ENT_NOQUOTES);
         }
-        return $this->htmlspecialchars($str,ENT_NOQUOTES,$this->encoding);
+        return $this->htmlspecialchars($str,ENT_QUOTES);
     }
 
     /*
@@ -324,9 +324,9 @@ class sanitizer
         return PLG_replaceTags($text,$this->namespace,$this->operation);
     }
 
-    public function htmlspecialchars($text)
+    public function htmlspecialchars($text, $flag = ENT_NOQUOTES)
     {
-        return (@htmlspecialchars ($text,ENT_NOQUOTES, $this->encoding,true));
+        return (@htmlspecialchars ($text,$flag, $this->encoding,true));
     }
 
     /*
