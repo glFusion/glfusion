@@ -348,7 +348,7 @@ function userprofile()
         }
     }
 
-    // Call custom registration function if enabled and exists
+    // Call custom registration if enabled and exists
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDisplay') ) {
         $user_templates->set_var ('customfields', CUSTOM_userDisplay ($user));
     }
