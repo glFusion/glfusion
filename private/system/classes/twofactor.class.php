@@ -1,32 +1,14 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | TwoFactorAuthentication.php                                              |
-// |                                                                          |
-// | glFusion 2FA                                                             |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2017 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+*   glFusion Two Factor Wrapper
+*
+*   @author     Mark R. Evans <mark@lglfusion.org>
+*   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
+*   @package    glFusion
+*   @version    1.0.0
+*   @license    http://opensource.org/licenses/gpl-2.0.php
+*               GNU Public License v2 or later
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -119,7 +101,7 @@ class TwoFactor
 
 
     /**
-     * Return the secret code associated with the current user
+     * Return the users secret code
      *
      * @return string
      */
@@ -150,11 +132,11 @@ class TwoFactor
             COM_errorLog(__METHOD__ . ': ' . $ex->getMessage());
             $secret = null;
         }
-        if ( $secret != null ) {
+        if ($secret != null) {
             $encryptedKey = COM_encrypt($secret);
             $sql = "UPDATE {$_TABLES['users']} SET tfa_secret = '".DB_escapeString($encryptedKey)."' WHERE (uid = ".(int) $this->uid.")";
             DB_query($sql,1);
-            if ( DB_error() ) {
+            if (DB_error()) {
                 $secret = null;
             }
         }
@@ -192,10 +174,9 @@ class TwoFactor
         $retval = array();
         $sql = "SELECT code FROM {$_TABLES['tfa_backup_codes']} WHERE (uid = ".(int)$this->uid.") AND (used = 0) ORDER BY code";
         $result = DB_query($sql);
-        if (!DB_error()) {
-            while (($A = DB_fetchArray($result, false)) !== false) {
-                $retval[] = $A['code'];
-            }
+        $resultSet = DB_fetchAll($result);
+        foreach($resultSet AS $A) {
+            $retval[] = $A['code'];
         }
         return $retval;
     }
@@ -269,7 +250,9 @@ class TwoFactor
                 break;
         }
 
-        if ( $retval == true ) $this->isAuthenticated = true;
+        if ( $retval == true ) {
+            $this->isAuthenticated = true;
+        }
 
         return $retval;
     }
