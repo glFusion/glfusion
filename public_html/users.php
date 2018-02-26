@@ -1388,7 +1388,7 @@ switch ($mode) {
                     }
                 }
             } else {
-                COM_errorLog("ERROR: Username and Password were posted, but local authenticatio is disabled - check configuration settings");
+                COM_errorLog("ERROR: Username and Password were posted, but local authentication is disabled - check configuration settings");
                 $status = -2;
             }
 
@@ -1405,6 +1405,11 @@ switch ($mode) {
         // begin OAuth authentication method(s)
 
         } elseif ($_CONF['user_login_method']['oauth'] && isset($_GET['oauth_login'])) {
+            if ( !SESS_isSet('oauth_redirect') && isset($_SERVER['HTTP_REFERER']) ) {
+                if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
+                    SESS_setVar('oauth_redirect',$_SERVER['HTTP_REFERER']);
+                }
+            }
             $modules = SEC_collectRemoteOAuthModules();
             $active_service = (count($modules) == 0) ? false : in_array(COM_applyFilter($_GET['oauth_login']), $modules);
             if (!$active_service) {
@@ -1434,6 +1439,8 @@ switch ($mode) {
                         COM_errorLog("Oauth: Error creating new user in OAuth authentication");
                         COM_setMsg($MESSAGE[111],'error');
                     }
+                    $_SERVER['HTTP_REFERER'] = SESS_getVar('oauth_redirect');
+                    SESS_unSet('oauth_redirect');
                 }
             }
 
