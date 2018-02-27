@@ -248,7 +248,7 @@
 												&nbsp;
 {!endif}
 {!if websitelink}
-												<a href="{websitelink}" rel="nofollow">
+												<a href="{websitelink}" {websitetarget} rel="nofollow">
 													<i class="uk-icon-home" title="{LANG_website}"></i>
 												</a>
 {!endif}

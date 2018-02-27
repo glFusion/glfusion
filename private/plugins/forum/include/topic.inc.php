@@ -214,6 +214,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$
             }
             $homepageimg = '<img src="'._ff_getImage('website_button').'" style="vertical-align:middle;" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"/>';
             $topictemplate->set_var(array(
+                    'websitetarget' => $_CONF['open_ext_url_new_window'] == true ? ' target="_blank" ' : '',
                     'websitelink'   => $homepage,
                     'websitelinkimg'=> $homepageimg,
                     'LANG_website'  => $LANG_GF01['WebsiteLink']));
