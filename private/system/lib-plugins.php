@@ -1995,9 +1995,9 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                 if (($end_pos > $start_pos) AND
                         (($next_tag === false) OR ($end_pos < $next_tag))) {
                     $taglength = $end_pos - $start_pos + 1;
-                    $tag = utf8_substr ($content, $start_pos, $taglength);
-                    $parms = explode (' ', str_replace("\xc2\xa0", ' ', $tag));
-
+                    $orig_tag = utf8_substr ($content, $start_pos, $taglength);
+                    $tag = str_replace(array("\xc2\xa0",'&nbsp;'), ' ', $orig_tag);
+                    $parms = explode(' ', $tag);
                     // Extra test to see if autotag was entered with a space
                     // after the module name
                     if (utf8_substr ($parms[0], -1) == ':') {
@@ -2020,7 +2020,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                     $newtag = array (
                         'module'    => $module,
                         'tag'       => $moduletag,
-                        'tagstr'    => $tag,
+                        'tagstr'    => $orig_tag,
                         'startpos'  => $start_pos,
                         'length'    => $taglength,
                         'parm1'     => str_replace (']', '', $tagid),
