@@ -1,4 +1,6 @@
 ## v1.7.4 (Unreleased)
+  - Honor open links in new window setting for user profile homepage links
+  - Fixed redirect after login
   - Fixed issue editing SP titles / labels with quotes
   - Removed dependency on Media Gallery plugin from the core image processing library
 
