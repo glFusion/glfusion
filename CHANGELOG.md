@@ -11,6 +11,12 @@
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine
 
+## v1.7.4 (Unreleased)
+  - Honor open links in new window setting for user profile homepage links
+  - Fixed redirect after login
+  - Fixed issue editing SP titles / labels with quotes
+  - Removed dependency on Media Gallery plugin from the core image processing library
+
 ## v1.7.3 (February 9, 2018)
   - Fixed Forum ranks save error on duplicate number of posts
   - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
