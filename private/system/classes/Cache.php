@@ -152,7 +152,7 @@ final class Cache
             if (is_array($tag)) {
                 $nsTags = array_map(
                     function($tag) {
-                        if (!is_string($tag)) $tag = (string)$tag;
+                        $tag = (string) $tag;
                         if ($this->namespace != '') $tag = $this->namespace.'_'.$tag;
                         return $tag;
                     },$tag);
