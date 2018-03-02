@@ -160,7 +160,6 @@ class Formatter {
      */
      var $wysiwygEditor = false;
 
-
     /**
      * constructor
      */
@@ -402,7 +401,11 @@ class Formatter {
             $key = 'f_'.md5($str) .'_'. $this->getOptionsKey();
             $c = \glFusion\Cache::getInstance();
             if ($c->has($key)) {
-                return $c->get($key);
+                $str = $c->get($key);
+                if ($this->parseAutoTags) {
+                    $str = $this->_replaceTags($str);
+                }
+                return $str;
             }
         }
 
@@ -521,9 +524,6 @@ class Formatter {
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
         }
 
-        if ($this->parseAutoTags) {
-            $bbcode->addParser(array('block','inline','listitem'), array($this,'_replacetags'));
-        }
         $bbcode->setRootParagraphHandling (true);
 
         if ($this->censor) {
@@ -537,6 +537,9 @@ class Formatter {
 
         unset($bbcode);
 
+        if ($this->parseAutoTags) {
+            $str = $this->_replaceTags($str);
+        }
         return $str;
     }
 
@@ -734,6 +737,9 @@ class Formatter {
             $codeblock = str_replace("<p>","",$codeblock);
             $codeblock = str_replace("</p>","",$codeblock);
         }
+
+        $codeblock = str_replace('[','&#91;',$codeblock);
+        $codeblock = str_replace(']','&#93;',$codeblock);
 
         $insideCode = 0;
         return $codeblock;
