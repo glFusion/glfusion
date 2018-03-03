@@ -246,10 +246,15 @@ class database
 
         $this->_errno = $this->_db->errorCode();
 
-        if ( $result === false ) {
-
+        if ($result === false) {
+            if ($ignore_errors) {
+                return false;
+            }
+            if ($this->_verbose) {
+                $this->_errorlog("DEBUG: mysql_pdo - SQL caused an error");
+                $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbQuery");
+            }
         }
-
         return $result;
     }
 
