@@ -1,4 +1,5 @@
 ## v1.7.4 (Unreleased)
+  - Fixed issue where Remember Me setting could not be changed without changing the password too
   - Honor open links in new window setting for user profile homepage links
   - Fixed redirect after login
   - Fixed issue editing SP titles / labels with quotes
