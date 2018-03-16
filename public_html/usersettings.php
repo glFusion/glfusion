@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user settings page.                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -1034,7 +1034,7 @@ function saveuser($A)
                     COM_setMsg( $MESSAGE[$ret], 'error',true );
                     return COM_refresh("{$_CONF['site_url']}/usersettings.php");
                 }
-            } else {
+            } elseif ($A['newp'] != '') {
                 $err = SEC_checkPwdComplexity($A['newp']);
                 if ( count($err) > 0 ) {
                     $msg = implode('<br>',$err);
