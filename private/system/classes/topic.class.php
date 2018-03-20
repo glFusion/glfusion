@@ -245,6 +245,8 @@ class Topic
     */
     public function __construct($tid = '')
     {
+        global $_CONF;
+
         // Set default for new topic objects. Will be overridden by setVars()
         $this->imageurl = self::$def_imageurl;
         $this->limitnews = self::$def_limitnews;
@@ -274,10 +276,10 @@ class Topic
         } else {
             $this->group_id = SEC_getFeatureGroup('topic.edit');
             $this->owner_id = 2;    // Default to Admina
-            $this->perm_owner = 3;
-            $this->perm_group = 3;
-            $this->perm_members = 2;
-            $this->perm_anon = 2;
+            $this->perm_owner = $_CONF['default_permissions_topic'][0];
+            $this->perm_group = $_CONF['default_permissions_topic'][1];
+            $this->perm_members = $_CONF['default_permissions_topic'][2];
+            $this->perm_anon = $_CONF['default_permissions_topic'][3];
         }
         // Else, this is an empty object to populate from a form.
     }
