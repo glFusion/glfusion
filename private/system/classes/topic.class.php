@@ -52,11 +52,6 @@ class Topic
     private static $def_imageurl = '/images/topics/';
 
     /**
-    *   Default value for limitnews
-    *   @var integer */
-    private static $def_limitnews = 10;
-
-    /**
     *   Default value for sort_by
     *   @var string */
     private static $def_sort_by = 'date';
@@ -245,17 +240,15 @@ class Topic
     */
     public function __construct($tid = '')
     {
-        // Set default for new topic objects. Will be overridden by setVars()
-        $this->imageurl = self::$def_imageurl;
-        $this->limitnews = self::$def_limitnews;
-        $this->sort_by = self::$def_sort_by;
-        $this->sort_dir = self::$def_sort_dir;
+        global $_CONF, $_USER, $_GROUPS;
+
         $this->isNew = true;
 
         if (!empty($tid)) {
             if (is_array($tid)) {
                 // A DB record passed in as an array
                 $this->setVars($tid, true);
+                $this->isNew = false;
             } else {
                 // A single topic ID passed in as a string
                 // Gets the info from self::Read() to ensure properties array
@@ -271,8 +264,31 @@ class Topic
                     self::$cache[$tid] = $this;
                 }
             }
+        } else {
+            $props = array(
+                'tid'           => '',
+                'topic'         => '',
+                'description'   => '',
+                'sortnum'       => 0,
+                'limitnews'     => $_CONF['limitnews'],
+                'is_default'    => 0,
+                'archive_flag'  => 0,
+                'sort_by'       => self::$def_sort_by,
+                'sort_dir'      => self::$def_sort_dir,
+                'imageurl'      => self::$def_imageurl,
+                'owner_id'      => $_USER['uid'],
+            );
+            if (isset ($_GROUPS['Topic Admin'])) {
+                // Use the default topic admin group, if it exists
+                $props['group_id'] = $_GROUPS['Topic Admin'];
+            } else {
+                // default group was deleted or renamed, get the first one
+                // with the topic.edit privilege
+                $props['group_id'] = SEC_getFeatureGroup ('topic.edit');
+            }
+            SEC_setDefaultPermissions ($props, $_CONF['default_permissions_topic']);
+            $this->setVars($props, true);
         }
-        // Else, this is an empty object to populate from a form.
     }
 
 
@@ -400,6 +416,8 @@ class Topic
     */
     public static function Get($tid, $key = NULL, $default = NULL)
     {
+        global $_CONF;
+
         $obj = NULL;
         $tid = COM_sanitizeID($tid, false);
         if (empty($tid)) return NULL;
@@ -417,7 +435,7 @@ class Topic
                     // No default supplied, use some standard ones
                     switch ($key) {
                     case 'limitnews':
-                        $default = self::$def_limitnews;
+                        $default = (int)$_CONF['limitnews'];
                         break;
                     case 'sort_by':
                         $default = self::$def_sort_by;
@@ -573,6 +591,11 @@ class Topic
         }
 
         $T->set_block('editor', 'sort_selection', 'sortsel');
+
+        // For new topics, set the sort number to follow the last topic.
+        if ($this->sortnum == 0) {
+            $this->sortnum = (count(self::All()) + 1) * 10;
+        }
         foreach (self::All() as $tid=>$obj) {
             if ($obj->tid == $this->tid) continue;
             $sel = ($this->sortnum - 10) == $obj->sortnum ? 'selected="selected"' : '';
