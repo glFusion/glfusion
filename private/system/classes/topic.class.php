@@ -271,6 +271,13 @@ class Topic
                     self::$cache[$tid] = $this;
                 }
             }
+        } else {
+            $this->group_id = SEC_getFeatureGroup('topic.edit');
+            $this->owner_id = 2;    // Default to Admina
+            $this->perm_owner = 3;
+            $this->perm_group = 3;
+            $this->perm_members = 2;
+            $this->perm_anon = 2;
         }
         // Else, this is an empty object to populate from a form.
     }
