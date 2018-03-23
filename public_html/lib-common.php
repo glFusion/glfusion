@@ -6380,7 +6380,7 @@ function COM_404()
     if ( $content == '' || $content == '[staticpage_content:_404]') {
         $content = COM_startBlock ($LANG_404[1]);
         $content .= '<p><b>' . $url . '</b></p>';
-        $content .= sprintf ($LANG_404[2]);
+        $content .= $LANG_404[2];
         $content .= $LANG_404[3];
         $content .= COM_endBlock ();
     }
