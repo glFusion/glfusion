@@ -3499,7 +3499,28 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
         $args[2] = $track_id;
         $args[3] = $post_id;
         $args[4] = $post_uid;
-        list($htmlmsg,$textmsg,$imageData) = PLG_callFunctionForOnePlugin($function,$args);
+
+        // modify plugin_subscription_email_format to return array
+
+        $htmlmsg = '';
+        $textmsg = '';
+        $imageData = array();
+
+        $msgData = PLG_callFunctionForOnePlugin($function,$args);
+        if (isset($msgData['msgtext'])) {
+            $textmsg = $msgData['msgtext'];
+        }
+        if (isset($msgData['msghtml'])) {
+            $htmlmsg = $msgData['msghtml'];
+        }
+        if ( isset($msgData['imagedata'])) {
+            $imageData = $msgData['imagedata'];
+        }
+        if ( isset($msgData['subject'])) {
+            $subject = $msgData['subject'];
+        } else {
+            $subject = $LANG04[184];
+        }
     } else {
         COM_errorLog("PLG_sendSubscriptionNotification() - No plugin_subscription_email_format_ defined");
         return false;
@@ -3522,7 +3543,7 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
     $nrows  = DB_numRows($result);
 
     $messageData = array();
-    $messageData['subject'] = $LANG04[184];
+    $messageData['subject'] = $subject;
     $messageData['from']    = $_CONF['noreply_mail'];
     $messageData['htmlmessage'] = $htmlmsg;
     $messageData['textmessage'] = $textmsg;

@@ -124,7 +124,15 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $html2txt = new Html2Text\Html2Text($msgText,false);
 
         $messageText = $html2txt->get_text();
-        return array($message,$messageText,array());
+
+        $msgData = array();
+        $msgData['msgtext'] = $messageText;
+        $msgData['msghtml'] = $message;
+        $msgData['imagedata'] = array();
+
+        return $msgData;
+
+//        return array($message,$messageText,array());
     }
     return false;
 }

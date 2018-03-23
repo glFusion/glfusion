@@ -6266,7 +6266,7 @@ function COM_404()
     if ( $content == '' || $content == '[staticpage_content:_404]') {
         $content = COM_startBlock ($LANG_404[1]);
         $content .= '<p><b>' . $url . '</b></p>';
-        $content .= sprintf ($LANG_404[2]);
+        $content .= $LANG_404[2];
         $content .= $LANG_404[3];
         $content .= COM_endBlock ();
     }
@@ -6859,6 +6859,7 @@ function _js_out()
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
+//        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-3.3.1.min.js';
         $files[] = $_CONF['path_layout'].'/js/header.js';
         $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 

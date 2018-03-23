@@ -1471,7 +1471,15 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
         $html2txt = new Html2Text\Html2Text($msgText,false);
 
         $messageText = $html2txt->get_text();
-        return array($message,$messageText,$imageData);
+
+        $msgData = array();
+        $msgData['msgtext'] = $messageText;
+        $msgData['msghtml'] = $message;
+        $msgData['imagedata'] = $imageData;
+
+        return $msgData;
+
+//        return array($message,$messageText,$imageData);
     }
     return false;
 }
