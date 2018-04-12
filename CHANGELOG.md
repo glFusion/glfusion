@@ -1,4 +1,5 @@
 ## v1.7.4 (Unreleased)
+  - Updated CKEditor v4.9.1
   - Updated Subscription API to allow plugins to send subject
   - Fixed issue where default topic settings (permission, owner) were not used for new topics
   - Fixed issue where Remember Me setting could not be changed without changing the password too
