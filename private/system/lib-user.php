@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User-related functions needed in more than one place.                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -178,6 +178,11 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
     }
 
+    $remoteservice = DB_getItem($_TABLES['users'],'remoteservice','uid='.$uid);
+    if ( $remoteservice != '' && $remoteservice != null ) {
+        $remoteuser = 1;
+    }
+
     if (file_exists ($_CONF['path_data'] . 'welcome_email.txt')) {
         $template = new Template ($_CONF['path_data']);
         $template->set_file (array ('mail' => 'welcome_email.txt'));
@@ -210,6 +215,16 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
                 'site_link_url'         => $_CONF['site_url'],
                 'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
                 'lang_button_text'      => $LANG04[203],
+                'localuser'             => true,
+            ));
+        } elseif ($remoteuser == 1) {
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/usersettings.php',
+                'lang_site_or_password' => $LANG04[171],
+                'site_link_url'         => $_CONF['site_url'],
+                'lang_activation'       => $LANG04[206],
+                'lang_button_text'      => '',
+                'passwd'                => '',
             ));
         } else {
             $T->set_var(array(
@@ -219,6 +234,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
                 'lang_activation'       => $LANG04[14],
                 'lang_button_text'      => 'Change Password',
                 'passwd'                => $passwd,
+                'localuser'             => true,
             ));
         }
         $T->set_var(array(

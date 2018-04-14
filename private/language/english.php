@@ -472,6 +472,8 @@ $LANG04 = array(
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
     205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.',
+    206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
+    207 => 'Go To Site',
 );
 
 ###############################################################################
