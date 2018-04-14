@@ -13,10 +13,16 @@
 {lang_activation}
 
 
-{lang_button_text} - {url}
+{!if lang_button_text}
+  {lang_button_text} - {url}
+{!else}
+  {$LANG04[207]} - {site_url}
+{!endif}
 
 
+{!if localuser}}
 {$LANG04[173]}
+{!endif}
 
 {$LANG04[174]}
 

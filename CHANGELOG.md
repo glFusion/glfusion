@@ -12,9 +12,15 @@
   - Implemented phpFastCache as glFusion's caching engine
 
 ## v1.7.4 (Unreleased)
+  - Fixed email notification to OAuth users when queued and approved.
+  - Updated CKEditor v4.9.1
+  - Updated Subscription API to allow plugins to send subject
+  - Fixed issue where default topic settings (permission, owner) were not used for new topics
+  - Fixed issue where Remember Me setting could not be changed without changing the password too
+  - Fixed issue where SpamX plugin would not install (new installations) on older MySQL versions
   - Honor open links in new window setting for user profile homepage links
   - Fixed redirect after login
-  - Fixed issue editing SP titles / labels with quotes
+  - Fixed issue editing Static Page titles / labels with quotes
   - Removed dependency on Media Gallery plugin from the core image processing library
 
 ## v1.7.3 (February 9, 2018)
