@@ -14,5 +14,15 @@
         "phpxmlrpc/phpxmlrpc": "^4.2",
         "robthree/twofactorauth": "^1.6",
         "phpFastCache/phpFastCache": "^6.0"
-    }
+    },
+	"repositories":
+		[
+			{
+				"type": "composer",
+				"url": "https:\/\/www.phpclasses.org\/"
+			},
+			{
+				"packagist": false
+			}
+	]
 }

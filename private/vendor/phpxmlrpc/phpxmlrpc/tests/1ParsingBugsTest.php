@@ -615,25 +615,28 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v1 = new xmlrpcval(array(new xmlrpcval('one'), new xmlrpcval('two')), 'array');
         $this->assertequals(1, count($v1));
         $out = array('me' => array(), 'mytype' => 2, '_php_class' => null);
+
         foreach($v1 as $key => $val)
         {
-            $expected = each($out);
-            $this->assertequals($expected['key'], $key);
-            if (gettype($expected['value']) == 'array') {
+            $this->assertArrayHasKey($key, $out);
+            $expected = $out[$key];
+            if (gettype($expected) == 'array') {
                 $this->assertequals('array', gettype($val));
             } else {
-                $this->assertequals($expected['value'], $val);
+                $this->assertequals($expected, $val);
             }
         }
 
         $v2 = new \PhpXmlRpc\Value(array(new \PhpXmlRpc\Value('one'), new \PhpXmlRpc\Value('two')), 'array');
         $this->assertequals(2, count($v2));
-        $out = array(0 => 'object', 1 => 'object');
+        $out = array(array('key' => 0, 'value'  => 'object'), array('key' => 1, 'value'  => 'object'));
+        $i = 0;
         foreach($v2 as $key => $val)
         {
-            $expected = each($out);
+            $expected = $out[$i];
             $this->assertequals($expected['key'], $key);
             $this->assertequals($expected['value'], gettype($val));
+            $i++;
         }
     }
 }

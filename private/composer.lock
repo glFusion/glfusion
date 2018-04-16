@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f3509f1cdcfcb484537383f9264052a0",
-    "content-hash": "ac195d8cbc3309d546dd8e7a80eefac0",
+    "content-hash": "c950f9b0299ab3cf8e7e5f25fa162124",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -43,20 +42,20 @@
             ],
             "description": "Fork of AddedBytes' PHP EmailAddressValidator script, now with Composer support!",
             "homepage": "https://github.com/aziraphale/email-address-validator",
-            "time": "2015-01-03 12:17:43"
+            "time": "2015-01-03T12:17:43+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.3",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +89,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03 02:28:16"
+            "time": "2018-02-23T01:58:20+00:00"
         },
         {
             "name": "geshi/geshi",
@@ -130,7 +129,7 @@
             ],
             "description": "Generic Syntax Highlighter",
             "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05 05:51:25"
+            "time": "2017-05-05T05:51:25+00:00"
         },
         {
             "name": "html2text/html2text",
@@ -167,20 +166,20 @@
                 "GPLv2"
             ],
             "description": "Converts HTML to formatted plain text",
-            "time": "2017-05-15 01:50:59"
+            "time": "2017-05-15T01:50:59+00:00"
         },
         {
             "name": "james-heinrich/getid3",
-            "version": "v1.9.14",
+            "version": "v1.9.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JamesHeinrich/getID3.git",
-                "reference": "30bd11473b0eef6f1b47866ef7ab0a557917fc21"
+                "reference": "df9b441e547da1018b1be0e239bee095c9962c96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/30bd11473b0eef6f1b47866ef7ab0a557917fc21",
-                "reference": "30bd11473b0eef6f1b47866ef7ab0a557917fc21",
+                "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/df9b441e547da1018b1be0e239bee095c9962c96",
+                "reference": "df9b441e547da1018b1be0e239bee095c9962c96",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +202,7 @@
                 "php",
                 "tags"
             ],
-            "time": "2017-03-27 21:12:55"
+            "time": "2017-10-26T18:34:37+00:00"
         },
         {
             "name": "misd/linkify",
@@ -248,7 +247,7 @@
                 "link",
                 "url"
             ],
-            "time": "2017-08-17 08:33:35"
+            "time": "2017-08-17T08:33:35+00:00"
         },
         {
             "name": "openpsa/universalfeedcreator",
@@ -296,7 +295,7 @@
                 "pie",
                 "rss"
             ],
-            "time": "2017-05-18 08:28:48"
+            "time": "2017-05-18T08:28:48+00:00"
         },
         {
             "name": "phpclasses/httpclient",
@@ -320,7 +319,7 @@
         },
         {
             "name": "phpclasses/oauth-api",
-            "version": "1.0.100",
+            "version": "1.0.103",
             "dist": {
                 "type": "zip",
                 "url": "https://www.phpclasses.org/install/package/oauth-api.zip",
@@ -366,16 +365,16 @@
         },
         {
             "name": "phpfastcache/phpfastcache",
-            "version": "6.0.8",
+            "version": "6.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-                "reference": "606c29476bd21d907dcd535716d66b31aa999538"
+                "reference": "0a8acb7d6e80b84a6bfdd7f8fb011097b0ce2a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/606c29476bd21d907dcd535716d66b31aa999538",
-                "reference": "606c29476bd21d907dcd535716d66b31aa999538",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/0a8acb7d6e80b84a6bfdd7f8fb011097b0ce2a15",
+                "reference": "0a8acb7d6e80b84a6bfdd7f8fb011097b0ce2a15",
                 "shasum": ""
             },
             "require": {
@@ -458,20 +457,20 @@
                 "zend memory cache",
                 "zend server"
             ],
-            "time": "2017-12-15 22:11:25"
+            "time": "2018-03-23T20:31:49+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.25",
+            "version": "v5.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "2baf20b01690fba8cf720c1ebcf9b988eda50915"
+                "reference": "70362997bda4376378be7d92d81e2200550923f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/2baf20b01690fba8cf720c1ebcf9b988eda50915",
-                "reference": "2baf20b01690fba8cf720c1ebcf9b988eda50915",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/70362997bda4376378be7d92d81e2200550923f7",
+                "reference": "70362997bda4376378be7d92d81e2200550923f7",
                 "shasum": ""
             },
             "require": {
@@ -535,20 +534,20 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-08-28 11:12:07"
+            "time": "2017-11-04T09:26:05+00:00"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
-            "version": "4.2.1",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gggeek/phpxmlrpc.git",
-                "reference": "42c180bece13d99ca97ebe842d059d7352d8e914"
+                "reference": "95f8828db62a6cb0e7a725136e75f12536892082"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/42c180bece13d99ca97ebe842d059d7352d8e914",
-                "reference": "42c180bece13d99ca97ebe842d059d7352d8e914",
+                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/95f8828db62a6cb0e7a725136e75f12536892082",
+                "reference": "95f8828db62a6cb0e7a725136e75f12536892082",
                 "shasum": ""
             },
             "require": {
@@ -586,7 +585,7 @@
                 "webservices",
                 "xmlrpc"
             ],
-            "time": "2017-09-03 19:15:39"
+            "time": "2018-01-20T15:17:09+00:00"
         },
         {
             "name": "psr/cache",
@@ -632,20 +631,20 @@
                 "psr",
                 "psr-6"
             ],
-            "time": "2016-08-06 20:24:11"
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/simple-cache",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/simple-cache.git",
-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
             "require": {
@@ -680,7 +679,7 @@
                 "psr-16",
                 "simple-cache"
             ],
-            "time": "2017-01-02 13:31:39"
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "robthree/twofactorauth",
@@ -731,20 +730,20 @@
                 "php",
                 "tfa"
             ],
-            "time": "2017-11-06 17:55:56"
+            "time": "2017-11-06T17:55:56+00:00"
         },
         {
             "name": "simplepie/simplepie",
-            "version": "1.5",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplepie/simplepie.git",
-                "reference": "5de5551953f95feef12cf355a7a26a70f94aa3ab"
+                "reference": "db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplepie/simplepie/zipball/5de5551953f95feef12cf355a7a26a70f94aa3ab",
-                "reference": "5de5551953f95feef12cf355a7a26a70f94aa3ab",
+                "url": "https://api.github.com/repos/simplepie/simplepie/zipball/db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e",
+                "reference": "db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e",
                 "shasum": ""
             },
             "require": {
@@ -791,7 +790,7 @@
                 "feeds",
                 "rss"
             ],
-            "time": "2017-04-17 07:29:31"
+            "time": "2017-11-12T02:03:34+00:00"
         },
         {
             "name": "splitbrain/php-archive",
@@ -842,7 +841,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2017-06-11 06:11:38"
+            "time": "2017-06-11T06:11:38+00:00"
         }
     ],
     "packages-dev": [],
