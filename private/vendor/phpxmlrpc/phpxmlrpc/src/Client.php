@@ -9,6 +9,10 @@ use PhpXmlRpc\Helper\Logger;
  */
 class Client
 {
+    const USE_CURL_NEVER = 0;
+    const USE_CURL_ALWAYS = 1;
+    const USE_CURL_AUTO = 2;
+
     /// @todo: do these need to be public?
     public $method = 'http';
     public $server;
@@ -41,6 +45,7 @@ class Client
 
     public $cookies = array();
     public $extracurlopts = array();
+    public $use_curl = self::USE_CURL_AUTO;
 
     /**
      * @var bool
@@ -69,6 +74,7 @@ class Client
      */
 
     public $request_compression = '';
+
     /**
      * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
      * http://curl.haxx.se/docs/faq.html#7.3).
@@ -125,7 +131,7 @@ class Client
     public function __construct($path, $server = '', $port = '', $method = '')
     {
         // allow user to specify all params in $path
-        if ($server == '' and $port == '' and $method == '') {
+        if ($server == '' && $port == '' && $method == '') {
             $parts = parse_url($path);
             $server = $parts['host'];
             $path = isset($parts['path']) ? $parts['path'] : '';
@@ -177,7 +183,7 @@ class Client
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // Add all charsets which mbstring can handle, but remove junk not found in IANA registry at
-        // in http://www.iana.org/assignments/character-sets/character-sets.xhtml
+        // http://www.iana.org/assignments/character-sets/character-sets.xhtml
         // NB: this is disabled to avoid making all the requests sent huge... mbstring supports more than 80 charsets!
         /*if (function_exists('mb_list_encodings')) {
 
@@ -201,7 +207,7 @@ class Client
      * This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
      * the server returns.
      *
-     * @param integer $in values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+     * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
      */
     public function setDebug($level)
     {
@@ -414,6 +420,15 @@ class Client
     }
 
     /**
+     * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
+     */
+    public function setUseCurl($useCurlMode)
+    {
+        $this->use_curl = $useCurlMode;
+    }
+
+
+    /**
      * Set user-agent string that will be used by this client instance in http headers sent to the server.
      *
      * The default user agent string includes the name of this library and the version number.
@@ -448,7 +463,6 @@ class Client
      * @param string $method valid values are 'http', 'http11' and 'https'. If left unspecified, the http protocol
      *                       chosen during creation of the object will be used.
      *
-     *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      */
     public function send($req, $timeout = 0, $method = '')
@@ -473,8 +487,13 @@ class Client
         // where req is a Request
         $req->setDebug($this->debug);
 
-        if ($method == 'https') {
-            $r = $this->sendPayloadHTTPS(
+        /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
+        ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
+        $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
+            ($method == 'https' || $method == 'http11'));
+
+        if ($useCurl) {
+            $r = $this->sendPayloadCURL(
                 $req,
                 $this->server,
                 $this->port,
@@ -491,34 +510,16 @@ class Client
                 $this->proxy_user,
                 $this->proxy_pass,
                 $this->proxy_authtype,
+                // bc
+                $method == 'http11' ? 'http' : $method,
                 $this->keepalive,
                 $this->key,
                 $this->keypass,
                 $this->sslversion
             );
-        } elseif ($method == 'http11') {
-            $r = $this->sendPayloadCURL(
-                $req,
-                $this->server,
-                $this->port,
-                $timeout,
-                $this->username,
-                $this->password,
-                $this->authtype,
-                null,
-                null,
-                null,
-                null,
-                $this->proxy,
-                $this->proxyport,
-                $this->proxy_user,
-                $this->proxy_pass,
-                $this->proxy_authtype,
-                'http',
-                $this->keepalive
-            );
         } else {
-            $r = $this->sendPayloadHTTP10(
+            // plain 'http 1.0': default to using socket
+            $r = $this->sendPayloadSocket(
                 $req,
                 $this->server,
                 $this->port,
@@ -526,12 +527,19 @@ class Client
                 $this->username,
                 $this->password,
                 $this->authtype,
+                $this->cert,
+                $this->certpass,
+                $this->cacert,
+                $this->cacertdir,
                 $this->proxy,
                 $this->proxyport,
                 $this->proxy_user,
                 $this->proxy_pass,
                 $this->proxy_authtype,
-                $method
+                $method,
+                $this->key,
+                $this->keypass,
+                $this->sslversion
             );
         }
 
@@ -539,6 +547,7 @@ class Client
     }
 
     /**
+     * @deprecated
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -558,158 +567,12 @@ class Client
         $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
         $method='http')
     {
-        if ($port == 0) {
-            $port = ( $method === "https" ) ? 443 : 80;
-        }
-
-        // Only create the payload if it was not created previously
-        if (empty($req->payload)) {
-            $req->createPayload($this->request_charset_encoding);
-        }
-
-        $payload = $req->payload;
-        // Deflate request body and set appropriate request headers
-        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
-            if ($this->request_compression == 'gzip') {
-                $a = @gzencode($payload);
-                if ($a) {
-                    $payload = $a;
-                    $encodingHdr = "Content-Encoding: gzip\r\n";
-                }
-            } else {
-                $a = @gzcompress($payload);
-                if ($a) {
-                    $payload = $a;
-                    $encodingHdr = "Content-Encoding: deflate\r\n";
-                }
-            }
-        } else {
-            $encodingHdr = '';
-        }
-
-        // thanks to Grant Rauscher <grant7@firstworld.net> for this
-        $credentials = '';
-        if ($username != '') {
-            $credentials = 'Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
-            if ($authType != 1) {
-                error_log('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
-            }
-        }
-
-        $acceptedEncoding = '';
-        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
-            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->accepted_compression) . "\r\n";
-        }
-
-        $proxyCredentials = '';
-        if ($proxyHost) {
-            if ($proxyPort == 0) {
-                $proxyPort = 8080;
-            }
-            $connectServer = $proxyHost;
-            $connectPort = $proxyPort;
-            $transport = "tcp";
-            $uri = 'http://' . $server . ':' . $port . $this->path;
-            if ($proxyUsername != '') {
-                if ($proxyAuthType != 1) {
-                    error_log('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
-                }
-                $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyUsername . ':' . $proxyPassword) . "\r\n";
-            }
-        } else {
-            $connectServer = $server;
-            $connectPort = $port;
-            /// @todo if supporting https, we should support all its current options as well: peer name verification etc...
-            $transport = ( $method === "https" ) ? "tls" : "tcp";
-            $uri = $this->path;
-        }
-
-        // Cookie generation, as per rfc2965 (version 1 cookies) or
-        // netscape's rules (version 0 cookies)
-        $cookieHeader = '';
-        if (count($this->cookies)) {
-            $version = '';
-            foreach ($this->cookies as $name => $cookie) {
-                if ($cookie['version']) {
-                    $version = ' $Version="' . $cookie['version'] . '";';
-                    $cookieHeader .= ' ' . $name . '="' . $cookie['value'] . '";';
-                    if ($cookie['path']) {
-                        $cookieHeader .= ' $Path="' . $cookie['path'] . '";';
-                    }
-                    if ($cookie['domain']) {
-                        $cookieHeader .= ' $Domain="' . $cookie['domain'] . '";';
-                    }
-                    if ($cookie['port']) {
-                        $cookieHeader .= ' $Port="' . $cookie['port'] . '";';
-                    }
-                } else {
-                    $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
-                }
-            }
-            $cookieHeader = 'Cookie:' . $version . substr($cookieHeader, 0, -1) . "\r\n";
-        }
-
-        // omit port if 80
-        $port = ($port == 80) ? '' : (':' . $port);
-
-        $op = 'POST ' . $uri . " HTTP/1.0\r\n" .
-            'User-Agent: ' . $this->user_agent . "\r\n" .
-            'Host: ' . $server . $port . "\r\n" .
-            $credentials .
-            $proxyCredentials .
-            $acceptedEncoding .
-            $encodingHdr .
-            'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings) . "\r\n" .
-            $cookieHeader .
-            'Content-Type: ' . $req->content_type . "\r\nContent-Length: " .
-            strlen($payload) . "\r\n\r\n" .
-            $payload;
-
-        if ($this->debug > 1) {
-            Logger::instance()->debugMessage("---SENDING---\n$op\n---END---");
-        }
-
-        if ($timeout > 0) {
-            $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $timeout);
-        } else {
-            $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr);
-        }
-        if ($fp) {
-            if ($timeout > 0) {
-                stream_set_timeout($fp, $timeout);
-            }
-        } else {
-            $this->errstr = 'Connect error: ' . $this->errstr;
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
-
-            return $r;
-        }
-
-        if (!fputs($fp, $op, strlen($op))) {
-            fclose($fp);
-            $this->errstr = 'Write error';
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
-
-            return $r;
-        } else {
-            // reset errno and errstr on successful socket connection
-            $this->errstr = '';
-        }
-        // G. Giunta 2005/10/24: close socket before parsing.
-        // should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
-        $ipd = '';
-        do {
-            // shall we check for $data === FALSE?
-            // as per the manual, it signals an error
-            $ipd .= fread($fp, 32768);
-        } while (!feof($fp));
-        fclose($fp);
-        $r = $req->parseResponse($ipd, false, $this->return_type);
-
-        return $r;
+        return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
+            null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
     }
 
     /**
+     * @deprecated
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -743,6 +606,218 @@ class Client
     }
 
     /**
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType only value supported is 1
+     * @param string $cert
+     * @param string $certPass
+     * @param string $caCert
+     * @param string $caCertDir
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param int $proxyAuthType only value supported is 1
+     * @param string $method 'http' (synonym for 'http10'), 'http10' or 'https'
+     * @param string $key
+     * @param string $keyPass @todo not implemented yet.
+     * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
+     * @return Response
+     */
+    protected function sendPayloadSocket($req, $server, $port, $timeout = 0, $username = '', $password = '',
+        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method='http', $key = '', $keyPass = '',
+        $sslVersion = 0)
+    {
+        if ($port == 0) {
+            $port = ( $method === 'https' ) ? 443 : 80;
+        }
+
+        // Only create the payload if it was not created previously
+        if (empty($req->payload)) {
+            $req->createPayload($this->request_charset_encoding);
+        }
+
+        $payload = $req->payload;
+        // Deflate request body and set appropriate request headers
+        $encodingHdr = '';
+        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
+            if ($this->request_compression == 'gzip') {
+                $a = @gzencode($payload);
+                if ($a) {
+                    $payload = $a;
+                    $encodingHdr = "Content-Encoding: gzip\r\n";
+                }
+            } else {
+                $a = @gzcompress($payload);
+                if ($a) {
+                    $payload = $a;
+                    $encodingHdr = "Content-Encoding: deflate\r\n";
+                }
+            }
+        }
+
+        // thanks to Grant Rauscher <grant7@firstworld.net> for this
+        $credentials = '';
+        if ($username != '') {
+            $credentials = 'Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
+            if ($authType != 1) {
+                error_log('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
+            }
+        }
+
+        $acceptedEncoding = '';
+        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
+            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->accepted_compression) . "\r\n";
+        }
+
+        $proxyCredentials = '';
+        if ($proxyHost) {
+            if ($proxyPort == 0) {
+                $proxyPort = 8080;
+            }
+            $connectServer = $proxyHost;
+            $connectPort = $proxyPort;
+            $transport = 'tcp';
+            $uri = 'http://' . $server . ':' . $port . $this->path;
+            if ($proxyUsername != '') {
+                if ($proxyAuthType != 1) {
+                    error_log('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
+                }
+                $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyUsername . ':' . $proxyPassword) . "\r\n";
+            }
+        } else {
+            $connectServer = $server;
+            $connectPort = $port;
+            $transport = ( $method === 'https' ) ? 'tls' : 'tcp';
+            $uri = $this->path;
+        }
+
+        // Cookie generation, as per rfc2965 (version 1 cookies) or
+        // netscape's rules (version 0 cookies)
+        $cookieHeader = '';
+        if (count($this->cookies)) {
+            $version = '';
+            foreach ($this->cookies as $name => $cookie) {
+                if ($cookie['version']) {
+                    $version = ' $Version="' . $cookie['version'] . '";';
+                    $cookieHeader .= ' ' . $name . '="' . $cookie['value'] . '";';
+                    if ($cookie['path']) {
+                        $cookieHeader .= ' $Path="' . $cookie['path'] . '";';
+                    }
+                    if ($cookie['domain']) {
+                        $cookieHeader .= ' $Domain="' . $cookie['domain'] . '";';
+                    }
+                    if ($cookie['port']) {
+                        $cookieHeader .= ' $Port="' . $cookie['port'] . '";';
+                    }
+                } else {
+                    $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
+                }
+            }
+            $cookieHeader = 'Cookie:' . $version . substr($cookieHeader, 0, -1) . "\r\n";
+        }
+
+        // omit port if default
+        if (($port == 80 && in_array($method, array('http', 'http10'))) || ($port == 443 && $method == 'https')) {
+            $port =  '';
+        } else {
+            $port = ':' . $port;
+        }
+
+        $op = 'POST ' . $uri . " HTTP/1.0\r\n" .
+            'User-Agent: ' . $this->user_agent . "\r\n" .
+            'Host: ' . $server . $port . "\r\n" .
+            $credentials .
+            $proxyCredentials .
+            $acceptedEncoding .
+            $encodingHdr .
+            'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings) . "\r\n" .
+            $cookieHeader .
+            'Content-Type: ' . $req->content_type . "\r\nContent-Length: " .
+            strlen($payload) . "\r\n\r\n" .
+            $payload;
+
+        if ($this->debug > 1) {
+            Logger::instance()->debugMessage("---SENDING---\n$op\n---END---");
+        }
+
+        $contextOptions = array();
+        if ($method == 'https') {
+            if ($cert != '') {
+                $contextOptions['ssl']['local_cert'] = $cert;
+                if ($certPass != '') {
+                    $contextOptions['ssl']['passphrase'] = $certPass;
+                }
+            }
+            if ($caCert != '') {
+                $contextOptions['ssl']['cafile'] = $caCert;
+            }
+            if ($caCertDir != '') {
+                $contextOptions['ssl']['capath'] = $caCertDir;
+            }
+            if ($key != '') {
+                $contextOptions['ssl']['local_pk'] = $key;
+            }
+            $contextOptions['ssl']['verify_peer'] = $this->verifypeer;
+            $contextOptions['ssl']['verify_peer_name'] = $this->verifypeer;
+        }
+        $context = stream_context_create($contextOptions);
+
+        if ($timeout <= 0) {
+            $connectTimeout = ini_get('default_socket_timeout');
+        } else {
+            $connectTimeout = $timeout;
+        }
+
+        $this->errno = 0;
+        $this->errstr = '';
+
+        $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
+            STREAM_CLIENT_CONNECT, $context);
+        if ($fp) {
+            if ($timeout > 0) {
+                stream_set_timeout($fp, $timeout);
+            }
+        } else {
+            if ($this->errstr == '') {
+                $err = error_get_last();
+                $this->errstr = $err['message'];
+            }
+            $this->errstr = 'Connect error: ' . $this->errstr;
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
+
+            return $r;
+        }
+
+        if (!fputs($fp, $op, strlen($op))) {
+            fclose($fp);
+            $this->errstr = 'Write error';
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
+
+            return $r;
+        }
+
+        // G. Giunta 2005/10/24: close socket before parsing.
+        // should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
+        $ipd = '';
+        do {
+            // shall we check for $data === FALSE?
+            // as per the manual, it signals an error
+            $ipd .= fread($fp, 32768);
+        } while (!feof($fp));
+        fclose($fp);
+
+        $r = $req->parseResponse($ipd, false, $this->return_type);
+
+        return $r;
+    }
+
+    /**
      * Contributed by Justin Miller <justin@voxel.net>
      * Requires curl to be built into PHP
      * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
@@ -763,7 +838,7 @@ class Client
      * @param string $proxyUsername
      * @param string $proxyPassword
      * @param int $proxyAuthType
-     * @param string $method
+     * @param string $method 'http' (let curl decide), 'http10', 'http11' or 'https'
      * @param bool $keepAlive
      * @param string $key
      * @param string $keyPass
@@ -789,7 +864,7 @@ class Client
         }
 
         if ($port == 0) {
-            if ($method == 'http') {
+            if (in_array($method, array('http', 'http10', 'http11'))) {
                 $port = 80;
             } else {
                 $port = 443;
@@ -826,7 +901,12 @@ class Client
         }
 
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
-            $curl = curl_init($method . '://' . $server . ':' . $port . $this->path);
+            if ($method == 'http11' || $method == 'http10') {
+                $protocol = 'http';
+            } else {
+                $protocol = $method;
+            }
+            $curl = curl_init($protocol . '://' . $server . ':' . $port . $this->path);
             if ($keepAlive) {
                 $this->xmlrpc_curl_handle = $curl;
             }
@@ -873,10 +953,20 @@ class Client
             $headers[] = $encodingHdr;
         }
 
+        // Fix the HTTP/1.1 417 Expectation Failed Bug (curl by default adds a 'Expect: 100-continue' header when POST
+        // size exceeds 1025 bytes, apparently)
+        $headers[] = 'Expect:';
+
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         // timeout is borked
         if ($timeout) {
             curl_setopt($curl, CURLOPT_TIMEOUT, $timeout == 1 ? 1 : $timeout - 1);
+        }
+
+        if ($method == 'http10') {
+            curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        } elseif ($method == 'http11') {
+            curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         }
 
         if ($username && $password) {
@@ -961,7 +1051,7 @@ class Client
                 }
                 $message .= $name . ': ' . $val . "\n";
             }
-            $message .= "---END---";
+            $message .= '---END---';
             Logger::instance()->debugMessage($message);
         }
 
@@ -1168,10 +1258,12 @@ class Client
                         break;
                     case 'struct':
                         $code = $val['faultCode'];
+                        /** @var Value $code */
                         if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
                             return false;
                         }
                         $str = $val['faultString'];
+                        /** @var Value $str */
                         if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
                             return false;
                         }

@@ -116,7 +116,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
      * @param PhpXmlRpc\Request|array $msg
      * @param int|array $errorCode
      * @param bool $returnResponse
-     * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|void
+     * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|null
      */
     protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
@@ -141,8 +141,20 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
                 return $r->value();
             }
         } else {
-            return;
+            return null;
         }
+    }
+
+    /**
+     * Adds (and replaces) query params to the url currently used by the client
+     * @param array $data
+     */
+    protected function addQueryParams($data)
+    {
+        $query = parse_url($this->client->path, PHP_URL_QUERY);
+        parse_str($query, $vars);
+        $query = http_build_query(array_merge($vars, $data));
+        $this->client->path = parse_url($this->client->path, PHP_URL_PATH) . '?' . $query;
     }
 
     public function testString()
@@ -235,7 +247,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
         // no encoding declaration either in the http header or xml prolog, let mb_detect_encoding
         // (used on the server side) sort it out
-        $this->client->path = $this->args['URI'].'?DETECT_ENCODINGS[]=EUC-JP&DETECT_ENCODINGS[]=UTF-8';
+        $this->addQueryParams(array('DETECT_ENCODINGS' => array('EUC-JP', 'UTF-8')));
         $v = $this->send(mb_convert_encoding($str, 'EUC-JP', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
@@ -261,7 +273,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
         // no encoding declaration either in the http header or xml prolog, let mb_detect_encoding
         // (used on the server side) sort it out
-        $this->client->path = $this->args['URI'].'?DETECT_ENCODINGS[]=ISO-8859-1&DETECT_ENCODINGS[]=UTF-8';
+        $this->addQueryParams(array('DETECT_ENCODINGS' => array('ISO-8859-1', 'UTF-8')));
         $v = $this->send($str);
         $this->assertEquals($sendString, $v->scalarval());
     }
@@ -488,6 +500,7 @@ And turned it into nylon';
     {
         // NB: This test will NOT pass if server does not support system.multicall.
 
+        $noMultiCall = $this->client->no_multicall;
         $this->client->no_multicall = false;
 
         $good1 = new xmlrpcmsg('system.methodHelp',
@@ -525,12 +538,15 @@ And turned it into nylon';
         $this->assertTrue($this->client->no_multicall == false,
             "server does not support system.multicall"
         );
+
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testClientMulticall2()
     {
         // NB: This test will NOT pass if server does not support system.multicall.
 
+        $noMultiCall = $this->client->no_multicall;
         $this->client->no_multicall = true;
 
         $good1 = new xmlrpcmsg('system.methodHelp',
@@ -562,11 +578,16 @@ And turned it into nylon';
             $val = $r[3]->value();
             $this->assertTrue($val->kindOf() == 'array', "good2 did not return array");
         }
+
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testClientMulticall3()
     {
         // NB: This test will NOT pass if server does not support system.multicall.
+
+        $noMultiCall = $this->client->no_multicall;
+        $returnType = $this->client->return_type;
 
         $this->client->return_type = 'phpvals';
         $this->client->no_multicall = false;
@@ -598,7 +619,9 @@ And turned it into nylon';
             $val = $r[3]->value();
             $this->assertTrue(is_array($val), "good2 did not return array");
         }
-        $this->client->return_type = 'xmlrpcvals';
+
+        $this->client->return_type = $returnType;
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testCatchWarnings()
@@ -618,9 +641,9 @@ And turned it into nylon';
             new xmlrpcval('whatever', 'string'),
         ));
         $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
-        $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=1';
+        $this->addQueryParams(array('EXCEPTION_HANDLING' => 1));
         $v = $this->send($m, 1); // the error code of the expected exception
-        $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=2';
+        $this->addQueryParams(array('EXCEPTION_HANDLING' => 2));
         // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
         // as php will generate an http status code of either 200 or 500...
         $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
@@ -834,19 +857,23 @@ And turned it into nylon';
             $this->fail('Registration of remote server failed');
         } else {
             $obj = new $class();
-            $v = $obj->examples_getStateName(23);
-            // work around bug in current (or old?) version of phpunit when reporting the error
-            /*if (is_object($v)) {
-                $v = var_export($v, true);
-            }*/
-            $this->assertEquals('Michigan', $v);
+            if (!is_callable(array($obj, 'examples_getStateName'))) {
+                $this->fail('Registration of remote server failed to import method "examples_getStateName"');
+            } else {
+                $v = $obj->examples_getStateName(23);
+                // work around bug in current (or old?) version of phpunit when reporting the error
+                /*if (is_object($v)) {
+                    $v = var_export($v, true);
+                }*/
+                $this->assertEquals('Michigan', $v);
+            }
         }
     }
 
     public function testTransferOfObjectViaWrapping()
     {
         // make a 'deep client copy' as the original one might have many properties set
-        $func = wrap_xmlrpc_method($this->client, 'tests.returnPhpObject', array('simple_client_copy' => true,
+        $func = wrap_xmlrpc_method($this->client, 'tests.returnPhpObject', array('simple_client_copy' => 0,
             'decode_php_objs' => true));
         if ($func == false) {
             $this->fail('Registration of tests.returnPhpObject failed');

@@ -1,5 +1,5 @@
 {
-	"version": "$Id: oauth_configuration.json,v 1.38 2017/03/18 07:27:06 mlemos Exp $",
+	"version": "$Id: oauth_configuration.json,v 1.40 2017/08/20 20:12:20 mlemos Exp $",
 	"comments": [
 		"The servers entry should be an object with a list of object",
 		"entries, one for each server type. The server object entry name is",
@@ -324,6 +324,13 @@
 			"token_request_method": "POST"
 		},
 
+		"Odnoklassniki":
+		{
+			"oauth_version": "2.0",
+			"dialog_url": "https://connect.ok.ru/oauth/authorize?client_id={CLIENT_ID}&scope={SCOPE}&response_type=code&redirect_uri={REDIRECT_URI}&layout=w&state={STATE}",
+			"access_token_url": "https://api.ok.ru/oauth/token.do"
+		},
+
 		"Paypal":
 		{
 			"oauth_version": "2.0",
@@ -460,7 +467,8 @@
 		{
 			"oauth_version": "2.0",
 			"dialog_url": "https://oauth.vk.com/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}",
-			"access_token_url": "https://oauth.vk.com/access_token"
+			"access_token_url": "https://oauth.vk.com/access_token",
+			"store_access_token_response": true
 		},
 
 		"Withings":

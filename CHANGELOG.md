@@ -1,4 +1,5 @@
 ## v1.7.4 (Unreleased)
+  - Updated external libaries - oauth, getid3, htmlpurifier, phpmailer, simplepie, phpxmlrpc
   - Fixed approval email for Oauth users who were queued and approved.
   - Updated CKEditor v4.9.1
   - Updated Subscription API to allow plugins to send subject

@@ -2,7 +2,7 @@
 /*
  * oauth_client.php
  *
- * @(#) $Id: oauth_client.php,v 1.163 2017/03/18 07:38:13 mlemos Exp $
+ * @(#) $Id: oauth_client.php,v 1.165 2017/08/20 09:30:30 mlemos Exp $
  *
  */
 
@@ -28,7 +28,7 @@ class oauth_session_value_class
 
 	<package>net.manuellemos.oauth</package>
 
-	<version>@(#) $Id: oauth_client.php,v 1.163 2017/03/18 07:38:13 mlemos Exp $</version>
+	<version>@(#) $Id: oauth_client.php,v 1.165 2017/08/20 09:30:30 mlemos Exp $</version>
 	<copyright>Copyright © (C) Manuel Lemos 2012</copyright>
 	<title>OAuth client</title>
 	<author>Manuel Lemos</author>
@@ -299,6 +299,7 @@ class oauth_client_class
 				<stringvalue>Microsoft</stringvalue>,
 				<stringvalue>Misfit</stringvalue>,
 				<stringvalue>oDesk</stringvalue>,
+				<stringvalue>Odnoklassniki</stringvalue>,
 				<stringvalue>Paypal</stringvalue>,
 				<stringvalue>PaypalApplication</stringvalue>,
 				<stringvalue>Pinterest</stringvalue>,
@@ -1181,7 +1182,7 @@ class oauth_client_class
 {/metadocument}
 */
 	var $http_arguments = array();
-	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.163 $)';
+	var $oauth_user_agent = 'PHP-OAuth-API (http://www.phpclasses.org/oauth-api $Revision: 1.165 $)';
 
 	var $response_time = 0;
 	var $session = '';
@@ -2528,6 +2529,7 @@ class oauth_client_class
 		$this->reauthenticate_dialog_url = 
 		$this->pin_dialog_url = 
 		$this->access_token_url = 
+		$this->revoke_token_url = 
 		$this->request_token_url =
 		$this->append_state_to_redirect_uri = '';
 		$this->authorization_header = true;
@@ -2545,8 +2547,8 @@ class oauth_client_class
 		{
 			case 'Facebook':
 				$this->oauth_version = '2.0';
-				$this->dialog_url = 'https://www.facebook.com/v2.3/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}';
-				$this->reauthenticate_dialog_url = 'https://www.facebook.com/v2.3/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}&auth_type=reauthenticate';
+				$this->dialog_url = 'https://www.facebook.com/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}';
+				$this->reauthenticate_dialog_url = 'https://www.facebook.com/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}&auth_type=reauthenticate';
 				$this->access_token_url = 'https://graph.facebook.com/oauth/access_token';
 				break;
 
@@ -2633,7 +2635,8 @@ class oauth_client_class
 					'store_access_token_response'=>'boolean',
 					'refresh_token_authentication'=>'string',
 					'grant_type'=>'string',
-					'access_token_content_type'=>'string'
+					'access_token_content_type'=>'string',
+					'revoke_token_url'=>'string'
 				);
 				$required = array(
 					'oauth_version'=>array(),
