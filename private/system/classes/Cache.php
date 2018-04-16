@@ -88,6 +88,10 @@ final class Cache
             'itemDetailedDate' => true
         );
 
+		if ($_CONF['cache_driver'] != 'files') {
+			$config['path'] = '';
+		}
+
         if ($_CONF['cache_driver'] == 'files') {
             $this->namespace = '';
         } else {
