@@ -403,7 +403,7 @@ class upload
             $this->_addDebugMsg('Max allowed height = ' . $this->_maxImageHeight . ', Image height = ' . $imageInfo['height']);
         }
 
-        if ( $this->_maxImageWidth == 0 && $this->maxImageHeight == 0 ) {
+        if ( $this->_maxImageWidth == 0 && $this->_maxImageHeight == 0 ) {
             return $sizeOK;
         }
 
