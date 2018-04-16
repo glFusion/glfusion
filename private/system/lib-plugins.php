@@ -332,8 +332,7 @@ function PLG_uninstall ($type)
 
         // uninstall php-blocks
         for ($i=0; $i <  count($remvars['php_blocks']); $i++) {
-            DB_delete ($_TABLES['blocks'], array ('type',     'phpblockfn'),
-                                           array ('phpblock', $remvars['php_blocks'][$i]));
+			DB_query("DELETE FROM {$_TABLES['blocks']} WHERE type='phpblock' AND phpblockfn LIKE '".$remvars['php_blocks'][$i]."%'");
         }
 
         // remove autotag permissions
