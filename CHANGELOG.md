@@ -1,7 +1,9 @@
 ## v1.7.4 (Unreleased)
+  - Fixed bug where a plugin's block may not always be removed when the plugin is deleted
+  - Fixed type in upload class where maxImageHeight was not used properly
   - Updated external libaries - oauth, getid3, htmlpurifier, phpmailer, simplepie, phpxmlrpc
   - Fixed approval email for Oauth users who were queued and approved.
-  - Updated CKEditor v4.9.1
+  - Updated CKEditor v4.9.2
   - Updated Subscription API to allow plugins to send subject
   - Fixed issue where default topic settings (permission, owner) were not used for new topics
   - Fixed issue where Remember Me setting could not be changed without changing the password too
