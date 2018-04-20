@@ -1,4 +1,10 @@
 ## v1.7.4 (Unreleased)
+  - Fixed issue where Forum story migration did not properly check if destination forum was selected
+  - Fixed error in linkify code on older versions of PHP
+  - Do not display the UTF8MB4 upgrade option if DB does not support UTF8MB4 collation
+  - Fixed MySQL error in Forum plugin for older MySQL versions
+  - MySQL driver updates - new support for PDO driver (backported from glFusion v1.8 development)
+  - Fixed issue where CSS compression did not work with non UTF8 encoding
   - Fixed bug where a plugin's block may not always be removed when the plugin is deleted
   - Fixed type in upload class where maxImageHeight was not used properly
   - Updated external libaries - oauth, getid3, htmlpurifier, phpmailer, simplepie, phpxmlrpc
