@@ -432,21 +432,8 @@ function _checkEnvironment()
             $T->parse('lib','libs',true);
             $classCounter++;
         }
-
-    } else {
-        $T->set_var(array(
-            'item'   => $LANG_ENVCHK['graphics'],
-            'status' => $LANG_ENVCHK['not_checked'],
-            'class' => 'tm-pass',
-            'notes'  => $LANG_ENVCHK['bypass_note'],
-        ));
     }
-
-    if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
-        $dbInfo['db_driver'] = 'mysqli';
-    } else {
-        $dbInfo['db_driver'] = 'mysql';
-    }
+    $dbInfo['db_driver'] = DB_getDriverName();
     $dbInfo['db_version'] = DB_getVersion();
     $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
     if ( $result ) {

@@ -1,49 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | mysqli.class.php                                                         |
-// |                                                                          |
-// | mysqli database class                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2011 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
-// |          Kenji Ito, geeklog AT mystral-kk DOT net                        |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
-if (!defined('GVERSION')) {
-    die('This file can not be used on its own.');
-}
+/**
+* glFusion CMS
+*
+* MySQL PDO database class
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2017-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Copyright (C) 2000-2011 by the following authors:
+*
+*  Authors: Tony Bibbs, tony AT tonybibbs DOT com
+*           Kenji Ito, geeklog AT mystral-kk DOT net
+*
+*/
 
 class database
 {
     /**
     * @var string
     */
-    private $driverName = 'mysqli';
+    private $driverName = 'pdo_mysql';
 
-    /**
+     /**
     * @var string
     */
     private $_host = '';
@@ -64,19 +45,19 @@ class database
     private $_pass = '';
 
     /**
-    * @var mysqli|false
+    * @var PDO object|null
     */
-    private $_db = false;
+    private $_db = null;
 
     /**
     * @var bool
     */
-    private $_verbose = false;
+    private $_verbose = true;
 
     /**
     * @var bool
     */
-    private $_display_error = false;
+    private $_display_error = true;
 
     /**
     * @var string|callable
@@ -119,7 +100,6 @@ class database
     private function _errorlog($msg)
     {
         $function = $this->_errorlog_fn;
-
         if (function_exists($function)) {
             $function($msg);
         }
@@ -129,94 +109,27 @@ class database
      * Connects to the MySQL database server
      * This function connects to the MySQL server and returns the connection object
      *
-     * @return   bool Returns connection object
+     * @return   object Returns PDO object
      */
     private function _connect()
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - inside database->_connect");
+            $this->_errorlog("DEBUG: mysql_pdo - inside database->_connect");
         }
 
-        // Connect to MySQL server
-        $this->_db = @new mysqli($this->_host, $this->_user, $this->_pass);
+        $dsn = 'mysql:dbname='.$this->_name.';host='.$this->_host.';charset='.$this->_character_set_database;
 
-        if ($this->_db->connect_errno) {
-            die('Connect Error: ' . $this->_db->connect_errno);
+        try {
+            $db = new PDO($dsn, $this->_user, $this->_pass);
+        } catch (PDOException $e) {
+            die ('Connection failed: ' . $e->getMessage());
         }
+        $this->_db = $db;
 
-        $this->_mysql_version = $this->_db->server_version;
-
-        // Set the database
-        $this->_db->select_db($this->_name) OR die('error selecting database');
-
-        if (!($this->_db)) {
-            if ($this->_verbose) {
-                $this->_errorlog("DEUBG: mysqli - error in database->_connect");
-            }
-            $this->dbError();
-        }
-
-        if ($this->_charset === 'utf-8') {
-            $result = false;
-
-            if ( $this->_character_set_database == '' ) {
-                $result = $this->_db->query("SELECT @@character_set_database");
-                $collation = $this->dbFetchArray($result);
-                $this->_character_set_database = $collation["@@character_set_database"];
-            }
-            if ( $this->_mysql_version >= 50503 ) {
-                if ( $this->_character_set_database == "utf8mb4" ) {
-                    if (method_exists($this->_db, 'set_charset')) {
-                        $result = $this->_db->set_charset('utf8mb4');
-                    }
-                    if (!$result) {
-                        @$this->_db->query("SET NAMES 'utf8mb4'");
-                    }
-                    $this->_filter = 0;
-                } else {
-                    if (method_exists($this->_db, 'set_charset')) {
-                        $result = $this->_db->set_charset('utf8');
-                    }
-
-                    if (!$result) {
-                        @$this->_db->query("SET NAMES 'utf8'");
-                    }
-                }
-            } else {
-                if (method_exists($this->_db, 'set_charset')) {
-                    $result = $this->_db->set_charset('utf8');
-                }
-                if (!$result) {
-                    @$this->_db->query("SET NAMES 'utf8'");
-                }
-            }
-        }
-
-        if ($this->_mysql_version >= 50700) {
-            $result = $this->_db->query("SELECT @@sql_mode");
-            $modeData = $this->dbFetchArray($result);
-            $updatedMode = '';
-            $first = 0;
-            $found = 0;
-            if ( isset($modeData["@@sql_mode"])) {
-                $modeArray = explode(",",$modeData["@@sql_mode"]);
-                foreach ($modeArray as $setting ) {
-                    if ( $setting == 'ONLY_FULL_GROUP_BY') {
-                        $found = 1;
-                        continue;
-                    }
-                    if ( $first != 0 ) $updatedMode .= ',';
-                    $updatedMode .= $setting;
-                    $first++;
-                }
-                if ( $found == 1 ) {
-                    @$this->_db->query("SET sql_mode = '".$updatedMode."'");
-                }
-            }
-        }
+        $this->_mysql_version = $db->getAttribute(PDO::ATTR_CLIENT_VERSION);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - leaving database->_connect");
+            $this->_errorlog("DEBUG: mysql_pdo - leaving database->_connect");
         }
     }
 
@@ -242,7 +155,7 @@ class database
         $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
-        $this->_character_set_database = strtolower($db_charset);
+        $this->_character_set_database = strtoupper(str_replace("-","",$db_charset));
         $this->_mysql_version = 0;
 
         $this->_connect();
@@ -250,7 +163,6 @@ class database
 
     public function __destruct()
     {
-        @$this->_db->close();
         $this->_db = null;
     }
 
@@ -289,7 +201,7 @@ class database
     {
         if ($this->_verbose
         && (empty($this->_errorlog_fn) || !function_exists($this->_errorlog_fn))) {
-            echo "\n<br/><b>Cannot run mysqli.class.php in verbose mode because the errorlog "
+            echo "\n<br/><b>Cannot run mysql_pdo.class.php in verbose mode because the errorlog "
             . "function was not set or does not exist.</b><br/>\n";
             return false;
         }
@@ -317,44 +229,33 @@ class database
     * @param    string      $sql            SQL to be executed
     * @param    int         $ignore_errors  If 1 this function supresses any
     *                                       error messages
-    * @return   mysqli_result|false         Returns results of query
+    * @return   mysql_pdo_result|false      Returns results of query
     */
     public function dbQuery($sql, $ignore_errors=0)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - inside database->dbQuery");
-            $this->_errorlog("DEBUG: mysqli - SQL query is " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - inside database->dbQuery");
+            $this->_errorlog("DEBUG: mysql_pdo - SQL query is " . $sql);
         }
 
-        // Run query
         if ($ignore_errors) {
             $result = @$this->_db->query($sql);
         } else {
             $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
         }
 
-        $this->_errno = $this->_db->errno;
+        $this->_errno = $this->_db->errorCode();
 
-        // If OK, return otherwise echo error
-        if ($this->_db->errno == 0 && ($result !== false)) {
-            if ($this->_verbose) {
-                $this->_errorlog("DEBUG: mysqli - SQL query ran without error");
-                $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
-            }
-
-            return $result;
-        } else {
-            // callee may want to suppress printing of errors
+        if ($result === false) {
             if ($ignore_errors) {
                 return false;
             }
-
             if ($this->_verbose) {
-                $this->_errorlog("DEBUG: mysqli - SQL caused an error");
-                $this->_errorlog("DEBUG: mysqli - Leaving database->dbQuery");
+                $this->_errorlog("DEBUG: mysql_pdo - SQL caused an error");
+                $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbQuery");
             }
-            return false;
         }
+        return $result;
     }
 
     /**
@@ -370,7 +271,7 @@ class database
     public function dbSave($table, $fields, $values)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbSave");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbSave");
         }
 
         $sql = "REPLACE INTO $table ($fields) VALUES ($values)";
@@ -378,7 +279,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbSave");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbSave");
         }
     }
 
@@ -439,7 +340,7 @@ class database
     public function dbDelete($table, $id, $value)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbDelete");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbDelete");
         }
 
         $sql = "DELETE FROM $table";
@@ -454,7 +355,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbDelete");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbDelete");
         }
 
         return TRUE;
@@ -475,10 +376,10 @@ class database
     * @return   bool                            Returns TRUE on success otherwise FALSE
     */
     public function dbChange($table, $item_to_set, $value_to_set, $id, $value,
-    $suppress_quotes = false)
+                                $suppress_quotes = false)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside dbChange");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside dbChange");
         }
 
         if ($suppress_quotes) {
@@ -496,13 +397,13 @@ class database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - dbChange sql = " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - dbChange sql = " . $sql);
         }
 
         $retval = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbChange");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbChange");
         }
         return $retval;
     }
@@ -522,7 +423,7 @@ class database
     public function dbCount($table, $id = '', $value = '')
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbCount");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCount");
         }
 
         $sql = "SELECT COUNT(*) FROM $table";
@@ -535,16 +436,15 @@ class database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - sql = " . $sql);
+            $this->_errorlog("DEBUG: mysql_pdo - sql = " . $sql);
         }
 
         $result = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbCount");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCount");
         }
-
-        return ($this->dbResult($result,0));
+        return ($result->fetchColumn());
     }
 
     /**
@@ -564,7 +464,7 @@ class database
     public function dbCopy($table, $fields, $values, $tablefrom, $id, $value)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbCopy");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCopy");
         }
 
         $sql = "REPLACE INTO $table ($fields) SELECT $values FROM $tablefrom";
@@ -580,7 +480,7 @@ class database
         $retval = $retval && $this->dbDelete($tablefrom, $id, $value);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbCopy");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCopy");
         }
         return $retval;
     }
@@ -590,36 +490,31 @@ class database
     *
     * This returns the number of rows in a recordset
     *
-    * @param    mysqli_result $recordSet The record set to operate one
+    * @param    PDO  $recordSet The record set to operate one
     * @return   int            Returns number of rows otherwise FALSE (0)
     */
     public function dbNumRows($recordSet)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbNumRows");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbNumRows");
         }
 
-        // return only if recordset exists, otherwise 0
-        if ($recordSet instanceof mysqli_result) {
-            if ($this->_verbose) {
-                $this->_errorlog('DEBUG: mysqli - got ' . $recordSet->num_rows . ' rows');
-                $this->_errorlog("DEBUG: mysqli - Leaving database->dbNumRows");
-            }
+        /*
+         * NOTE: not all databases return accurate results
+         * for rowCount() on selects.
+         * for now it appears MySQL does
+         * Need to move away from rowcounts
+         */
 
-            return $recordSet->num_rows;
-        } else {
-            if ($this->_verbose) {
-                $this->_errorlog("DEBUG: mysqli - Returned no rows");
-                $this->_errorlog("DEBUG: mysqli - Leaving database->dbNumRows");
-            }
-            return 0;
-        }
+        if ($recordSet === false) return 0;
+        return $recordSet->rowCount();
     }
+
 
     /**
     * Returns the contents of one cell from a MySQL result set
     *
-    * @param    mysqli_result $recordSet The recordset to operate on
+    * @param    PDO $recordSet The recordset to operate on
     * @param    int         $row         row to get data from
     * @param    mixed       $field       field to return
     * @return   mixed (depends on field content)
@@ -627,27 +522,25 @@ class database
     public function dbResult($recordset, $row, $field = 0)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbResult");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbResult");
             if (empty($recordset)) {
-                $this->_errorlog("DEBUG: mysqli - Passed recordset is not valid");
+                $this->_errorlog("DEBUG: mysql_pdo - Passed recordset is not valid");
             } else {
-                $this->_errorlog("DEBUG: mysqli - Everything looks good");
+                $this->_errorlog("DEBUG: mysql_pdo - Everything looks good");
             }
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbResult");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbResult");
         }
 
         $retval = '';
 
-        if ($recordset->data_seek($row)) {
-            if (is_numeric($field)) {
-                $field = intval($field, 10);
-                $row = $recordset->fetch_row();
-            } else {
-                $row = $recordset->fetch_assoc();
-            }
-            if (($row !== null) && isset($row[$field])) {
-                $retval = $row[$field];
-            }
+        if (is_numeric($field)) {
+            $field = intval($field, 10);
+            $targetRow = $recordset->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_ABS, $row);
+        } else {
+            $targetRow = $recordset->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $row);
+        }
+        if (($targetRow !== false) && isset($targetRow[$field])) {
+            $retval = $targetRow[$field];
         }
 
         return $retval;
@@ -658,12 +551,13 @@ class database
     *
     * This returns the number of fields in a recordset
     *
-    * @param   mysqli_result $recordSet The recordset to operate on
+    * @param   PDO $recordSet The recordset to operate on
     * @return  int     Returns number of rows from query
     */
     public function dbNumFields($recordset)
     {
-        return $recordset->field_count;
+        if ( $recordset === false) return 0;
+        return $recordset->columnCount();
     }
 
     /**
@@ -671,16 +565,18 @@ class database
     *
     * Returns the field name for a given field number
     *
-    * @param    mysqli_result $recordSet   The recordset to operate on
+    * @param    PDO $recordSet   The recordset to operate on
     * @param    int           $fieldNumber field number to return the name of
     * @return   string      Returns name of specified field
     *
     */
     public function dbFieldName($recordSet, $fieldNumber)
     {
-        $result = $recordSet->fetch_field_direct($fieldNumber);
+        if ( $recordSet === false) return '';
 
-        return ($result === false) ? '' : $result->name;
+        $meta = $recordSet->getColumnMeta($fieldNumber);
+        if (isset($meta['name'])) return $meta['name'];
+        return '';
     }
 
     /**
@@ -688,12 +584,13 @@ class database
     *
     * Retrieves returns the number of effected rows for last query
     *
-    * @param    mysqli_result $recordSet The record set to operate on
+    * @param    PDO  $recordSet The record set to operate on
     * @return   int     Number of rows affected by last query
     */
     public function dbAffectedRows($recordset)
     {
-        return $this->_db->affected_rows;
+        if ($recordset === false ) return 0;
+        return $recordset->rowCount();
     }
 
     /**
@@ -701,16 +598,19 @@ class database
     *
     * Gets the next record in a recordset and returns in array
     *
-    * @param    mysqli_result $recordSet The record set to operate on
+    * @param    PDO $recordSet The record set to operate on
     * @param    bool          $both      get both assoc and numeric indices
     * @return   array       Returns data array of current row from recordset
     */
-    public function dbFetchArray($recordSet, $both = false)
+    public function dbFetchArray($recordSet, $both = true)
     {
-        $result_type = $both ? MYSQLI_BOTH : MYSQLI_ASSOC;
-        $result = $recordSet->fetch_array($result_type);
 
-        return ($result === null) ? false : $result;
+        if ( $recordSet === false ) return false;
+
+        $result_type = $both ? PDO::FETCH_BOTH : PDO::FETCH_ASSOC;
+        $result = $recordSet->fetch($result_type);
+
+        return ($result === false) ? false : $result;
     }
 
     /**
@@ -724,17 +624,16 @@ class database
     */
     public function dbFetchAll($recordset, $both = false)
     {
-        $result_type = $both ? MYSQLI_BOTH : MYSQLI_ASSOC;
+        $result_type = $both ? PDO::FETCH_BOTH : PDO::FETCH_ASSOC;
 
-        $result = array();
+        if ( $recordset === false ) return array();
 
-        if (!method_exists ($recordset, 'fetch_all')) {
-            for ($result = array(); $tmp = @mysqli_fetch_array($recordset, $result_type);) $result[] = $tmp;
-        } else {
-            $result = $recordset->fetch_all($result_type);
+        try {
+            $result = $recordset->fetchAll($result_type);
+        } catch (Exception $e) {
+            trigger_error($this->dbError($e->getMessage()), E_USER_ERROR);
         }
-
-        return ($result === null) ? array() : $result;
+        return ($result === false) ? array() : $result;
     }
 
     /**
@@ -748,7 +647,7 @@ class database
     */
     public function dbInsertId($link_identifier = null, $sequence = '')
     {
-        return $this->_db->insert_id;
+        return $this->_db->lastInsertId();
     }
 
     /**
@@ -761,7 +660,7 @@ class database
     */
     public function dbError($sql = '')
     {
-        if ($this->_db->errno) {
+        if ((int)$this->_db->errorCode() > 0) {
             $fn = '';
             $btr = debug_backtrace();
             if (! empty($btr)) {
@@ -769,7 +668,7 @@ class database
                     if (isset($btr[$i])) {
                         $b = $btr[$i];
                         if ($b['function'] == 'DB_query') {
-                            if (!empty($b['file']) && !empty($b['line'])) {
+                        if (!empty($b['file']) && !empty($b['line'])) {
                                 $fn = $b['file'] . ':' . $b['line'];
                             }
                             break;
@@ -779,14 +678,16 @@ class database
                     }
                 }
             }
+            $info = $this->_db->errorInfo();
+
             if (empty($fn)) {
-                $errorMessage = $this->_db->errno . ': '.$this->_db->error;
+                $errorMessage = $this->_db->errorCode() . ': '.$info[2];
                 if ( $sql != '' ) {
                     $errorMessage .= " SQL in question: " . $sql;
                 }
                 $this->_errorlog($errorMessage);
             } else {
-                $errorMessage = $this->_db->errno . ': ' . $this->_db->error . " in " . $fn;
+                $errorMessage = $this->_db->errorCode() . ': ' . $info[2] . " in " . $fn;
                 if ( $sql != '' ) {
                     $errorMessage .= " SQL in question: ".$sql;
                 }
@@ -794,7 +695,7 @@ class database
             }
 
             if ($this->_display_error) {
-                return  $this->_db->errno . ': ' . $this->_db->error;
+                return  $this->_db->errorCode() . ': ' . $info[2];
             } else {
                 return 'An SQL error has occurred. Please see error.log for details.';
             }
@@ -815,7 +716,7 @@ class database
     public function dbLockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbLockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbLockTable");
         }
 
         $sql = "LOCK TABLES $table WRITE";
@@ -823,7 +724,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbLockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbLockTable");
         }
     }
 
@@ -839,7 +740,7 @@ class database
     public function dbUnlockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Inside database->dbUnlockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbUnlockTable");
         }
 
         $sql = 'UNLOCK TABLES';
@@ -847,7 +748,7 @@ class database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysqli - Leaving database->dbUnlockTable");
+            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbUnlockTable");
         }
     }
 
@@ -859,8 +760,17 @@ class database
      */
     public function dbEscapeString($value, $is_numeric = false)
     {
-        $value = $this->_db->real_escape_string($value);
+        $value = $this->_db->quote($value);
+        $value = substr($value, 1, -1);
         return $value;
+    }
+
+    /**
+     * @return     string     the version of the database application
+     */
+    public function dbGetVersion()
+    {
+        return $this->_db->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -873,18 +783,9 @@ class database
         return $this->driverName;
     }
 
-
-    /**
-     * @return     string     the version of the database application
-     */
-    public function dbGetVersion()
-    {
-        return $this->_db->server_info;
-    }
-
     public function dbStartTransaction()
     {
-        return $this->_db->autocommit(false);
+        return $this->_db->beginTransaction();
     }
 
     public function dbCommit()
@@ -894,7 +795,7 @@ class database
 
     public function dbRollback()
     {
-        return $this->_db->rollback();
+        return $this->_db->rollBack();
     }
 
     public function getFilter()
@@ -909,13 +810,89 @@ class database
 
     public function dbGetClientVersion()
     {
-        return $this->_db->client_version;
+        return $this->_db->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     public function dbGetServerVersion()
     {
-        return $this->_mysql_version;
+        return $this->_db->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
+
+    // PDO routines
+
+    /*
+     *
+     * @param $sql  valid SQL statement template for the target database server.
+     * @param $options  This array holds one or more key=>value pairs to
+     *                  set attribute values for the PDOStatement object that
+     *                  this method returns. You would most commonly use this
+     *                  to set the PDO::ATTR_CURSOR value to PDO::CURSOR_SCROLL
+     *                  to request a scrollable cursor. Some drivers have
+     *                  driver specific options that may be set at prepare-time.
+     * @return returns a PDOStatement object.
+     */
+    public function dbPrepare($sql, $options = array())
+    {
+        return $this->_db->prepare($sql, $options);
+    }
+
+    /*
+    * @param stmtResource  statement resource
+    * @param string     Parameter identifier. For a prepared statement using named placeholders,
+    *                   this will be a parameter name of the form :name. For a prepared statement
+    *                   using question mark placeholders, this will be the 1-indexed position of the parameter.
+    * @param value      The value to bind to the parameter
+    * @param dataType   Explicit data type for parameter using the PDO::PARAM_* constants
+    *
+    * return bool true / false
+    */
+    public function dbBindValue($sth, $parameter, $value, $dataType = 0)
+    {
+        return $sth->bindValue($parameter,$value,$dataType);
+    }
+
+    /*
+    *  Executes a prepared statement
+    *
+    * @param $sth           Statement resource
+    * @param $inputParms    An array of values with as many elements as there are
+    *                       bound parameters
+    *
+    * @return bool  TRUE on success or FALSE on failure.
+    */
+    /**
+     * Executes an SQL INSERT/UPDATE/DELETE query with the given parameters
+     * and returns the number of affected rows.
+     *
+     * This method supports PDO binding types
+     *
+     * @param string $query  The SQL query.
+     * @param array  $params The query parameters.
+     * @param array  $types  The parameter types.
+     *
+     * @return integer The number of affected rows.
+     *
+     * @throws some type of exception...
+     */
+    public function dbExecute($sth, $inputParms)
+    {
+        return $stmt->execute($inputParams);
+    }
+
 }
+
+/* to add
+
+execute
+executeQuery
+executeUpdate
+fetchColumn
+fetchAssoc
+delete
+insert
+update
+quote
+quoteIdentifier
+*/
 
 ?>

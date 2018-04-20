@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2106 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -116,17 +116,21 @@ $_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
 * Include appropriate DBMS object
 *
 */
-if ( !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
+if ( !extension_loaded('pdo_mysql') && !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
     die("No MySQL driver found in PHP environment.");
 }
-if (($_DB_dbms === 'mysql') && class_exists('MySQLi')) {
+
+if (extension_loaded('pdo_mysql')) {
+    require_once $_CONF['path_system'] . 'databases/mysql_pdo.class.php';
+} else if (($_DB_dbms === 'mysql' || $_DB_dbms === 'mysqli') && class_exists('MySQLi')) {
     require_once $_CONF['path_system'] . 'databases/mysqli.class.php';
 } else if ( ($_DB_dbms === 'mysqli') && !class_exists('MySQLi') ) {
     require_once $_CONF['path_system'] . 'databases/mysql.class.php';
 } else {
     require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
 }
-if ( $_DB_dbms == 'mysqli' ) {
+
+if ( $_DB_dbms == 'mysqli') {
     $_DB_dbms = 'mysql';
 }
 // Instantiate the database object
@@ -292,12 +296,12 @@ function DB_getItem($table,$what,$selection='')
         $sql = "SELECT $what FROM $table";
         $result = DB_query($sql);
     }
-	if ($result === NULL || DB_error($sql) ) {
+	if ($result === false || DB_error($sql) ) {
 		return NULL;
 	} else if (DB_numRows($result) == 0) {
 		return NULL;
 	} else {
-		$ITEM = DB_fetcharray($result);
+		$ITEM = DB_fetchArray($result);
 		return $ITEM[0];
 	}
 }
@@ -652,4 +656,15 @@ function DB_getServerVersion()
 
     return $_DB->dbGetServerVersion();
 }
+
+/**
+* @return     string     the database driver name
+*/
+function DB_getDriverName()
+{
+    global $_DB;
+
+    return $_DB->dbGetDriverName();
+}
+
 ?>
