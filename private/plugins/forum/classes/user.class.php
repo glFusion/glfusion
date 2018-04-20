@@ -98,8 +98,8 @@ class User
                     ON sessions.uid = users.uid
                 LEFT JOIN {$_TABLES['ff_rating_assoc']} rating
                     ON (rating.user_id = users.uid AND rating.voter_id = {$_USER['uid']})
-                WHERE users.uid = $uid";
-        //echo $sql;die;
+                WHERE users.uid = ".$uid." GROUP BY sessions.sess_id";
+//        echo $sql;die;
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
             $A = DB_fetchArray($res, false);
