@@ -6915,7 +6915,9 @@ function _css_compress($css){
     $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','_css_comment_cb',$css);
 
     //strip (incorrect but common) one line comments
-    $css = preg_replace_callback('/^.*\/\/.*$/m','_css_onelinecomment_cb',$css);
+    $charset = COM_getCharset();
+    if ( $charset == 'utf-8' ) $css = preg_replace_callback('/^.*\/\/.*$/m','_css_onelinecomment_cb',$css);
+
 
     // strip whitespaces
     $css = preg_replace('![\r\n\t ]+!',' ',$css);
