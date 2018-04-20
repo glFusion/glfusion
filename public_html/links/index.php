@@ -353,7 +353,20 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_name', $A['title']);
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
 
-    $linkDesc = PLG_replaceTags(nl2br($A['description']),'links','description');
+    $format = new glFusion\Formatter();
+    $format->setNamespace('links');
+    $format->setAction('description');
+    $format->setType('text');
+    $format->enableCache(false);
+    $format->setProcessBBCode(false);
+    $format->setParseURLs(false);
+    $format->setProcessSmilies(false);
+    $format->setCensor(true);
+    $format->setParseAutoTags(true);
+
+    $linkDesc = $format->parse(htmlspecialchars_decode($A['description']));
+
+//    $linkDesc = PLG_replaceTags(nl2br($A['description']),'links','description');
 
     $template->set_var ('link_description',$linkDesc);
 
