@@ -53,7 +53,11 @@ USES_forum_admin();
 if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
     $num_stories = 0;
     $num_posts = 0;
-    $forum = COM_applyFilter($_POST['selforum']);
+    $forum = COM_applyFilter($_POST['selforum'],true);
+    if ($forum == 0 ) {
+        COM_setMsg( $LANG_GF01['SELECTFORUM'], 'error',true );
+        echo COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/migrate.php");
+    }
     foreach($_POST['cb_chkentry'] as $sid ) {
         if($_POST['seltopic'] == 'submissions') {
             $topic = DB_getItem($_TABLES['storysubmission'],"tid","sid='".DB_escapeString($sid)."'");
@@ -76,6 +80,8 @@ if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] A
             }
        }
     }
+    $msg = sprintf($LANG_GF02['msg192'],$num_stories,$num_posts);
+    COM_setMsg( $msg, 'error',true );
     gf_resyncforum($forum);
     CACHE_clear();
     echo COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/migrate.php?num_stories=". $num_stories. "&num_posts=".$num_posts);
