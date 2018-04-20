@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion database backup administration page.                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2017 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -1254,6 +1254,7 @@ function getAdminHeaderMenu( $activeItem = '' )
 
     $allInnoDB = DBADMIN_innodbStatus();
     $allMyIsam = DBADMIN_myisamStatus();
+    $dbVersion = DB_getServerVersion();
 
     $menu_items = array(
         'database_admin' => array(
@@ -1303,6 +1304,14 @@ function getAdminHeaderMenu( $activeItem = '' )
             }
         } else if ( $item == 'convert_myisam_menu' ) {
             if ( !$allMyIsam && DBADMIN_supported_engine( 'MyISAM' ) ) {
+                $menu_arr[] = array(
+                                'url' => $info['url'],
+                                'text'=> $info['text'],
+                                'active' => $active
+                            );
+            }
+        } else if ( $item == 'utf8_title' ) {
+            if ($dbVersion >= 50503) {
                 $menu_arr[] = array(
                                 'url' => $info['url'],
                                 'text'=> $info['text'],
