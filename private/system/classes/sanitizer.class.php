@@ -483,7 +483,7 @@ class sanitizer
                     $target = '';
                 }
                 $returnLink = '';
-                $url = $this->sanitizeUrl( $url );
+                $url = sanitizer::sanitizeUrl( $url );
                 if ( $isEmail ) {
                     $returnLink = '<a href="mailto:'.$caption.'">'.$caption.'</a>';
                 } else {
