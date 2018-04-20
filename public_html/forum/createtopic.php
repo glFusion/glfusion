@@ -1129,7 +1129,9 @@ function FF_saveTopic( $forumData, $postData, $action )
             DB_query($sql);
 
             // Find the id of the last inserted topic
-            list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['ff_topic']} "));
+            $res = DB_query("SELECT max(id) AS lastid FROM {$_TABLES['ff_topic']}");
+            $resRow = DB_fetchArray($res);
+            $lastid = $resRow['lastid'];
             $savedPostID = $lastid;
             $topicPID    = $lastid;
             /* Check for any uploaded files - during add of new topic */
@@ -1144,7 +1146,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             DB_query($sql);
             // Update forums record
             DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count=post_count+1, topic_count=topic_count+1, last_post_rec=".(int) $lastid." WHERE forum_id=".(int) $forum);
-            if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
+            if ( DB_count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $lastid);
             }
             DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
@@ -1166,15 +1168,14 @@ function FF_saveTopic( $forumData, $postData, $action )
                     (int) $forum."," .
                     (int) $status.")";
             DB_query($sql);
-
             // Find the id of the last inserted topic
-            list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['ff_topic']} "));
+            $res = DB_query("SELECT max(id) AS lastid FROM {$_TABLES['ff_topic']}");
+            $resRow = DB_fetchArray($res);
+            $lastid = $resRow['lastid'];
             $savedPostID = $lastid;
             $topicPID    = $id;
-
             /* Check for any uploaded files  - during adding reply post */
             $uploadErrors = _ff_check4files($lastid);
-
             // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
             // This is needed in case user had used the file bbcode tag and then removed it
             $imagerecs = '';
@@ -1184,7 +1185,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             DB_query($sql);
             DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies+1, lastupdated='".DB_escapeString($date)."',last_reply_rec=".(int)$lastid." WHERE id=".(int)$id);
             DB_query("UPDATE {$_TABLES['ff_forums']} SET post_count=post_count+1, last_post_rec=".(int) $lastid." WHERE forum_id=".(int)$forum);
-            if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
+            if ( DB_count($_TABLES['ff_attachments'],'topic_id',(int) $lastid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $id);
             }
             DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
@@ -1222,7 +1223,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                 //Remove any lastviewed records in the log so that the new updated topic indicator will appear
 //                DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
             }
-            if ( DB_Count($_TABLES['ff_attachments'],'topic_id',(int) $editid) ) {
+            if ( DB_count($_TABLES['ff_attachments'],'topic_id',(int) $editid) ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $topicPID);
             }
             $topicparent = $topicPID;
@@ -1231,7 +1232,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         PLG_itemSaved($savedPostID,'forum');
 
         $c = glFusion\Cache::getInstance();
-        $c->deleteItemsByTag('forum');
+        $c->deleteItemsByTag('forumcb');
 
         if ( !COM_isAnonUser() ) {
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
