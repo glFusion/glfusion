@@ -132,7 +132,6 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     }
 
     return $retval;
-
 }
 
 function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
@@ -145,9 +144,10 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     $format->setAllowedHTML($_FF_CONF['allowed_html']);
     $format->setType($postmode);
 
-    if ($mode == 'preview') {
+// do not cache each individual post
+//    if ($mode == 'preview') {
         $format->enableCache(false);
-    }
+//    }
 
     if ( ! ( $status & DISABLE_BBCODE ) ) {
         $format->setProcessBBCode(true);
