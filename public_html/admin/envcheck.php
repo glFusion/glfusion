@@ -48,7 +48,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms;
+           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms,$_DB, $_CP_CONF;
 
     $retval = '';
     $permError = 0;
@@ -60,7 +60,6 @@ function _checkEnvironment()
         array('extension' => 'filter',  'fail' => 1),
         array('extension' => 'gettext', 'fail' => 0),
         array('extension' => 'json',    'fail' => 1),
-        array('extension' => 'mysqli',  'fail' => 1),
         array('extension' => 'mbstring','fail' => 0),
         array('extension' => 'openssl', 'fail' => 0),
         array('extension' => 'session', 'fail' => 1),
@@ -478,6 +477,7 @@ function _checkEnvironment()
                         $_CONF['path_log'].'access.log',
                         $_CONF['path_log'].'captcha.log',
                         $_CONF['path_log'].'spamx.log',
+                        $_CONF['path_log'].'404.log',
                         $_CONF['path_data'].'layout_cache/',
                         $_CONF['path_data'].'temp/',
                         $_CONF['path_data'].'htmlpurifier/',
