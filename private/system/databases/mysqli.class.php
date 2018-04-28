@@ -143,8 +143,7 @@ class database
         if ($this->_db->connect_errno) {
             die('Connect Error: ' . $this->_db->connect_errno);
         }
-
-        $this->_mysql_version = $this->_db->server_version;
+        $this->_mysql_version = $this->_db->server_info;
 
         // Set the database
         $this->_db->select_db($this->_name) OR die('error selecting database');
@@ -164,7 +163,7 @@ class database
                 $collation = $this->dbFetchArray($result);
                 $this->_character_set_database = $collation["@@character_set_database"];
             }
-            if ( $this->_mysql_version >= 50503 ) {
+            if ( $this->_db->server_version >= 50503 ) {
                 if ( $this->_character_set_database == "utf8mb4" ) {
                     if (method_exists($this->_db, 'set_charset')) {
                         $result = $this->_db->set_charset('utf8mb4');
@@ -192,7 +191,7 @@ class database
             }
         }
 
-        if ($this->_mysql_version >= 50700) {
+        if ($this->_db->server_version >= 50700) {
             $result = $this->_db->query("SELECT @@sql_mode");
             $modeData = $this->dbFetchArray($result);
             $updatedMode = '';
@@ -909,7 +908,9 @@ class database
 
     public function dbGetClientVersion()
     {
-        return $this->_db->client_version;
+        $v = $this->_db->client_info;
+        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', $v, $version);
+        return $version[0];
     }
 
     public function dbGetServerVersion()

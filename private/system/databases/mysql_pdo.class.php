@@ -120,7 +120,7 @@ class database
         $dsn = 'mysql:dbname='.$this->_name.';host='.$this->_host.';charset='.$this->_character_set_database;
 
         try {
-            $db = new PDO($dsn, $this->_user, $this->_pass);
+            $db = @new PDO($dsn, $this->_user, $this->_pass,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         } catch (PDOException $e) {
             die ('Connection failed: ' . $e->getMessage());
         }
@@ -238,10 +238,14 @@ class database
             $this->_errorlog("DEBUG: mysql_pdo - SQL query is " . $sql);
         }
 
-        if ($ignore_errors) {
-            $result = @$this->_db->query($sql);
-        } else {
-            $result = @$this->_db->query($sql) OR trigger_error($this->dbError($sql), E_USER_ERROR);
+        try {
+            $result = $this->_db->query($sql);
+        } catch (PDOException $e) {
+            if ($ignore_errors) {
+                $result = false;
+            } else {
+                die ('Connection failed: ' . $e->getMessage());
+            }
         }
 
         $this->_errno = $this->_db->errorCode();
@@ -506,8 +510,14 @@ class database
          * Need to move away from rowcounts
          */
 
-        if ($recordSet === false) return 0;
-        return $recordSet->rowCount();
+        if ($recordSet === false || $recordSet === null) return 0;
+
+        try {
+            $rowcount = $recordSet->rowCount();
+        } catch (PDOException $e) {
+            return 0;
+        }
+        return $rowcount;
     }
 
 
@@ -523,7 +533,7 @@ class database
     {
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbResult");
-            if (empty($recordset)) {
+            if (empty($recordset) || $recordset === null) {
                 $this->_errorlog("DEBUG: mysql_pdo - Passed recordset is not valid");
             } else {
                 $this->_errorlog("DEBUG: mysql_pdo - Everything looks good");
@@ -556,7 +566,7 @@ class database
     */
     public function dbNumFields($recordset)
     {
-        if ( $recordset === false) return 0;
+        if ($recordset === false || $recordset === null) return 0;
         return $recordset->columnCount();
     }
 
@@ -572,7 +582,7 @@ class database
     */
     public function dbFieldName($recordSet, $fieldNumber)
     {
-        if ( $recordSet === false) return '';
+        if ($recordSet === false || $recordSet === null) return '';
 
         $meta = $recordSet->getColumnMeta($fieldNumber);
         if (isset($meta['name'])) return $meta['name'];
@@ -589,7 +599,7 @@ class database
     */
     public function dbAffectedRows($recordset)
     {
-        if ($recordset === false ) return 0;
+        if ($recordset === false || $recordset === null) return 0;
         return $recordset->rowCount();
     }
 
@@ -605,10 +615,15 @@ class database
     public function dbFetchArray($recordSet, $both = true)
     {
 
-        if ( $recordSet === false ) return false;
+        if ($recordSet === false || $recordSet == null) return false;
 
         $result_type = $both ? PDO::FETCH_BOTH : PDO::FETCH_ASSOC;
-        $result = $recordSet->fetch($result_type);
+
+        try {
+            $result = $recordSet->fetch($result_type);
+        } catch (PDOException $e) {
+            $result = false;
+        }
 
         return ($result === false) ? false : $result;
     }
@@ -626,12 +641,13 @@ class database
     {
         $result_type = $both ? PDO::FETCH_BOTH : PDO::FETCH_ASSOC;
 
-        if ( $recordset === false ) return array();
+        if ($recordset === false || $recordset === null) return array();
 
         try {
             $result = $recordset->fetchAll($result_type);
         } catch (Exception $e) {
-            trigger_error($this->dbError($e->getMessage()), E_USER_ERROR);
+            $result = false;
+//            trigger_error($this->dbError($e->getMessage()), E_USER_ERROR);
         }
         return ($result === false) ? array() : $result;
     }
@@ -810,7 +826,9 @@ class database
 
     public function dbGetClientVersion()
     {
-        return $this->_db->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        $v = $this->_db->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', $v, $version);
+        return $version[0];
     }
 
     public function dbGetServerVersion()

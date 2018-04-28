@@ -647,6 +647,7 @@ function DB_getClientVersion()
     return $_DB->dbGetClientVersion();
 }
 
+
 /**
 * @return     int     the version of the database application as integer
 */
