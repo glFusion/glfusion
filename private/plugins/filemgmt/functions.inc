@@ -806,9 +806,10 @@ function plugin_getwhatsnew_filemgmt() {
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
             $sql .= " AND c.date >=  DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' AND c.queued = 0 ";
-            $sql .= "GROUP BY c.sid ORDER  BY c.date DESC LIMIT 15 ";
+            $sql .= "ORDER  BY c.date DESC LIMIT 15 ";
 
             $result = DB_query($sql);
+
             $nrows2 = DB_numRows( $result );
             if( $nrows2 == 0 ) {
                 $retval .= $LANG_FILEMGMT['no_comments'] . '<br' . XHTML . '>' . LB;
