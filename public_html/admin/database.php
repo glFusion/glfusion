@@ -1231,17 +1231,19 @@ function DBADMIN_supportUtf8mb()
         return false;
     }
     $serverVersion = DB_getServerVersion();
-    if ( $serverVersion < 50503 ) {
+
+    if (version_compare($serverVersion,'5.5.3','<')) {
         return false;
     }
     $clientVersion = DB_getClientVersion();
+
     if (function_exists('mysqli_get_client_stats')) {
         // mysqlnd
-        if ( $clientVersion < 50009 ) {
+        if (version_compare($clientVersion,'5.0.9','<')) {
             return false;
         }
     } else {
-        if ( $clientVersion < 50503) {
+        if (version_compare($clientVersion,'5.5.3','<')) {
             return false;
         }
     }
@@ -1311,7 +1313,7 @@ function getAdminHeaderMenu( $activeItem = '' )
                             );
             }
         } else if ( $item == 'utf8_title' ) {
-            if ($dbVersion >= 50503) {
+            if (version_compare($dbVersion,'5.3.3','>=')) {
                 $menu_arr[] = array(
                                 'url' => $info['url'],
                                 'text'=> $info['text'],
@@ -1466,6 +1468,7 @@ switch ($action) {
             $page .= DBADMIN_utf8mb4();
         } else {
             $page .= COM_showMessageText('Server does not support utf8mb4 - see error.log for details.','',true,'error');
+            COM_errorLog("UTF8MB4 Not Supported - MySQL PHP client is older than v5.0.9");
             $page .= DBADMIN_list();
         }
         break;
