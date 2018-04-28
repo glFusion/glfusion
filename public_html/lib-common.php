@@ -1049,6 +1049,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( defined( 'DVLP_DEBUG' ) && !headers_sent() ) {
         header('X-XSS-Protection: 0');
     }
+    header('X-Frame-Options: SAMEORIGIN');
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
