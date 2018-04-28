@@ -80,7 +80,8 @@ function CALENDAR_addUserEvent($eid)
 
         if (!empty ($A['url']) && ($A['url'] != 'http://')) {
             $cal_template->set_var ('event_url', COM_sanitizeURL($A['url']));
-            $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
+            $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']), $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
+//            $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
         } else {
             $cal_template->set_var ('event_url', '');
         }
@@ -571,7 +572,8 @@ default:
                 $cal_templates->set_var('layout_url', $_CONF['layout_url']);
                 $event_title = $A['title'];
                 if (!empty($A['url'])) {
-                    $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
+//                    $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']));
+                    $event_title = COM_createLink($event_title, COM_sanitizeURL($A['url']), $attr = array('target' => '_blank', 'rel' => 'noopener noreferrer'));
                 }
                 $cal_templates->set_var('event_title', $event_title);
                 if (($_CA_CONF['personalcalendars'] == 1)
