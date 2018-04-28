@@ -1,4 +1,6 @@
 ## v1.7.4 (Unreleased)
+  - Added Cross-Frame Scripting Protection
+  - MySQL v8.0 support
   - Fixed issue where Forum story migration did not properly check if destination forum was selected
   - Fixed error in linkify code on older versions of PHP
   - Do not display the UTF8MB4 upgrade option if DB does not support UTF8MB4 collation
