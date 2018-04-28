@@ -6,7 +6,7 @@
 // |                                                                          |
 // | mysql database class                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -129,11 +129,6 @@ class database {
 
         if ($this->_mysql_version == 0) {
             $v = mysql_get_server_info ();
-/* ---
-            preg_match ('/^([0-9]+).([0-9]+).([0-9]+)/', $v, $match);
-            $v = (intval ($match[1]) * 10000) + (intval ($match[2]) * 100)
-               + intval ($match[3]);
---- */
             $this->_mysql_version = $v;
         }
 
@@ -150,14 +145,13 @@ class database {
         }
 
         if ($this->_charset == 'utf-8') {
-            if (($this->_mysql_version >= 50007) && function_exists('mysql_set_charset') ) {
+            if (version_compare($this->_mysql_version,'5.0.7','>=') && function_exists('mysql_set_charset') ) {
                 @mysql_set_charset('utf8',$this->_db);
             } else {
                 @mysql_query ("SET NAMES 'utf8'", $this->_db);
             }
         }
-
-        if ($this->_mysql_version >= 50700) {
+        if (version_compare($this->_mysql_version,'5.7.0','>=')) {
             $result = @mysql_query("SELECT @@sql_mode", $this->_db);
             $modeData = @mysql_fetch_array($result);
             $updatedMode = '';
