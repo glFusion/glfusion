@@ -113,7 +113,7 @@ function plugin_postinstall_spamx()
 {
     global $_CONF, $_TABLES;
 
-    DB_query("INSERT INTO {$_TABLES['vars']} VALUES ('spamx.counter', '0')",1);
+//    DB_query("INSERT INTO {$_TABLES['vars']} VALUES ('spamx.counter', '0')",1);
 }
 
 
