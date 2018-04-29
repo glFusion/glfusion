@@ -1,4 +1,5 @@
 ## v1.7.4 (Unreleased)
+  - DB backup now writes several values per insert, improves efficiency of restores / imports
   - Fixed issue where watermark admin would not redirect properly after deleting watermark
   - Fixed issue where watermarking did not work with GraphicsMagick
   - Added Cross-Frame Scripting Protection
