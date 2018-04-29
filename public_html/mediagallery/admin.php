@@ -453,7 +453,8 @@ if ( $mode == 'cancel' ) {
             case 'watermark' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
-                $retval .= MG_watermarkDelete();
+                $actionURL = $_MG_CONF['site_url'] . '/admin.php?mode=wmmanage&album_id=0';
+                $retval .= MG_watermarkDelete($actionURL);
                 break;
         }
     } else {

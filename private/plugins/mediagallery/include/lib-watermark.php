@@ -198,7 +198,7 @@ function MG_watermarkSave( $actionURL = '' ) {
 }
 
 function MG_watermarkDelete( $actionURL = '') {
-    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03;
 
     // check permissions...
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
