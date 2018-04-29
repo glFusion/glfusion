@@ -12,6 +12,7 @@
   - Implemented phpFastCache as glFusion's caching engine
 
 ## v1.7.4 (Unreleased)
+  - Fixed issue where watermarking did not work with GraphicsMagick
   - Added Cross-Frame Scripting Protection
   - MySQL v8.0 support
   - Fixed issue where Forum story migration did not properly check if destination forum was selected

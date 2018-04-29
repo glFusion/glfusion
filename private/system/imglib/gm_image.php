@@ -196,7 +196,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
             return array(false,'Unknown watermark location');
             break;
     }
-    $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert $watermarkImage -fill grey50 -colorize 40  miff:- | " . '"' . $_CONF['path_to_mogrify'] . "/composite" . '"' . " -dissolve " . $opacity . " -gravity " . $location . " - $origImage $origImage");
+    $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/gm\" convert \"$watermarkImage\"  miff:- | " . '"' . $_CONF['path_to_mogrify'] . "gm" . '"'." composite -dissolve " . $opacity . " -gravity " . $location . " - $origImage $origImage");
     COM_errorLog("_img_watermarkImage: Watermark successfully applied (GraphicsMagick)");
     return array($rc,'');
 }
