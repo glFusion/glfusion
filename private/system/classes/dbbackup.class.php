@@ -481,7 +481,9 @@ class dbBackup
             $checkTimer = time();
             $elapsedTime = $checkTimer - $timerStart;
             if ( $elapsedTime > $timeout || $sessionCounter > $_SYSTEM['db_backup_rows'] ) {
-                $this->stow(" \n" . $insert . $valuesData . ';');
+                if ( $valuesData != '') {
+                    $this->stow(" \n" . $insert . $valuesData . ';');
+                }
                 $this->close();
                 return array(1,$sessionCounter, $recordCounter);
             }
