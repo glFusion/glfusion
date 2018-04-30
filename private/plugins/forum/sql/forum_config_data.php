@@ -403,7 +403,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'uploadpath',
-        'default_value' => 'forum/media',
+        'default_value' => $_CONF['path_html'].'forum/media',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,
@@ -415,7 +415,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'downloadURL',
-        'default_value' => '/forum/media',
+        'default_value' => $_CONF['site_url'].'/forum/media',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,
@@ -643,7 +643,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'allowed_html',
-        'default_value' => 'p,b,i,strong,em,br,pre,img,ol,ul,li,u',
+        'default_value' => 'p,b,i,strong,em,br,pre,img[src],ol,ul,li,u',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 2,
