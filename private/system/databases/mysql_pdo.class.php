@@ -260,14 +260,15 @@ class database
             $this->_errorlog("DEBUG: mysql_pdo - inside database->dbQuery");
             $this->_errorlog("DEBUG: mysql_pdo - SQL query is " . $sql);
         }
-
         try {
             $result = $this->_db->query($sql);
         } catch (PDOException $e) {
             if ($ignore_errors) {
                 $result = false;
+                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
             } else {
-                die ('Connection failed: ' . $e->getMessage());
+                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                die ('SQL Error: ' . $e->getMessage() . PHP_EOL. $sql);
             }
         }
 
