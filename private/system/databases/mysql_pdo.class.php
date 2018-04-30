@@ -126,7 +126,30 @@ class database
         }
         $this->_db = $db;
 
-        $this->_mysql_version = $db->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        $this->_mysql_version = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
+
+        if (version_compare($this->_mysql_version,'5.7.0','>=')) {
+            $result = $this->_db->query("SELECT @@sql_mode");
+            $modeData = $this->dbFetchArray($result);
+            $updatedMode = '';
+            $first = 0;
+            $found = 0;
+            if ( isset($modeData["@@sql_mode"])) {
+                $modeArray = explode(",",$modeData["@@sql_mode"]);
+                foreach ($modeArray as $setting ) {
+                    if ( $setting == 'ONLY_FULL_GROUP_BY') {
+                        $found = 1;
+                        continue;
+                    }
+                    if ( $first != 0 ) $updatedMode .= ',';
+                    $updatedMode .= $setting;
+                    $first++;
+                }
+                if ( $found == 1 ) {
+                    @$this->_db->query("SET sql_mode = '".$updatedMode."'");
+                }
+            }
+        }
 
         if ($this->_verbose) {
             $this->_errorlog("DEBUG: mysql_pdo - leaving database->_connect");
@@ -237,7 +260,6 @@ class database
             $this->_errorlog("DEBUG: mysql_pdo - inside database->dbQuery");
             $this->_errorlog("DEBUG: mysql_pdo - SQL query is " . $sql);
         }
-
         try {
             $result = $this->_db->query($sql);
         } catch (PDOException $e) {
