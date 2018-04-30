@@ -265,8 +265,10 @@ class database
         } catch (PDOException $e) {
             if ($ignore_errors) {
                 $result = false;
+                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
             } else {
-                die ('Connection failed: ' . $e->getMessage());
+                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                die ('SQL Error: ' . $e->getMessage() . PHP_EOL. $sql);
             }
         }
 
