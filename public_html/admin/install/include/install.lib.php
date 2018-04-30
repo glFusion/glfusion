@@ -43,7 +43,7 @@ if (!defined('SUPPORTED_PHP_VER')) {
     define('SUPPORTED_PHP_VER', '5.6.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
-    define('SUPPORTED_MYSQL_VER', '5.0.15');
+    define('SUPPORTED_MYSQL_VER', '5.1.30');
 }
 
 if (empty($LANG_DIRECTION)) {
@@ -384,14 +384,14 @@ function INST_getSiteUrl()
 {
     $url = str_replace('//', '/', $_SERVER['PHP_SELF']);
     $parts = explode('/', $url);
-    $num_parts = count($parts);
-    if (($num_parts < 3) || (substr($parts[$num_parts - 1], -4) != '.php')) {
+    $numParts = count($parts);
+    if (($numParts < 3) || (substr($parts[$numParts - 1], -4) !== '.php')) {
         die('Fatal error - can not figure out my own URL');
     }
-
-    $url = implode('/', array_slice($parts, 0, $num_parts - 3));
-
-    return 'http://' . $_SERVER['HTTP_HOST'] . $url;
+    $url = implode('/', array_slice($parts, 0, $numParts - 3));
+    $protocol = INST_isHttps() ? 'https://' : 'http://';
+    $url = $protocol . $_SERVER['HTTP_HOST'] . $url;
+    return $url;
 }
 
 /**
@@ -402,16 +402,37 @@ function INST_getSiteAdminUrl()
 {
     $url = str_replace('//', '/', $_SERVER['PHP_SELF']);
     $parts = explode('/', $url);
-    $num_parts = count($parts);
-    if (($num_parts < 3) || (substr($parts[$num_parts - 1], -4) != '.php')) {
+    $numParts = count($parts);
+    if (($numParts < 3) || (substr($parts[$numParts - 1], -4) !== '.php')) {
         die('Fatal error - can not figure out my own URL');
     }
-
-    $url = implode('/', array_slice($parts, 0, $num_parts - 2));
-
-    return 'http://' . $_SERVER['HTTP_HOST'] . $url;
+    $url = implode('/', array_slice($parts, 0, $numParts - 2));
+    $protocol = INST_isHttps() ? 'https://' : 'http://';
+    $url = $protocol . $_SERVER['HTTP_HOST'] . $url;
+    return $url;
 }
 
+
+/**
+ * Return if the current HTTP protocol is HTTPS
+ *
+ * @return bool
+ */
+function INST_isHttps()
+{
+    if (isset($_SERVER['HTTPS']) === true) {
+        return ($_SERVER['HTTPS'] === 'on') || ($_SERVER['HTTPS'] === '1');
+    } elseif (isset($_SERVER['SSL']) === true) {
+        return ($_SERVER['SSL'] === 'on');
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) === true) {
+        return (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT']) === true) {
+        return ($_SERVER['HTTP_X_FORWARDED_PORT'] === '443');
+    } elseif (isset($_SERVER['SERVER_PORT']) === true) {
+        return ($_SERVER['SERVER_PORT'] === '443');
+    }
+    return false;
+}
 
 /**
  * Check InnoDB Upgrade
