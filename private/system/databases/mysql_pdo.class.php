@@ -267,8 +267,7 @@ class database
                 $result = false;
                 $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
             } else {
-                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
-                die ('SQL Error: ' . $e->getMessage() . PHP_EOL. $sql);
+                trigger_error($this->dbError($sql), E_USER_ERROR);
             }
         }
 
