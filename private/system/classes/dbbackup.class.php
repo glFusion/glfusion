@@ -373,7 +373,7 @@ class dbBackup
             $create_table = DB_fetchArray($res);
 
             $create_table = str_replace('0000-00-00 00:00:00','1000-01-01 00:00:00.000000',$create_table);
-
+            $create_table = str_replace('0000-00-00','1999-01-01',$create_table);
             $this->stow($create_table[1] . ' ;');
 
             // If only backing up the structure, return now
@@ -438,7 +438,8 @@ class dbBackup
 
         $res = DB_query($sql);
         $table_data = array();
-        $insert = "INSERT INTO {$db_tablename} VALUES (";
+        $insert = "INSERT INTO {$db_tablename} VALUES ";
+        $valuesData = '';
 
         while ($A = DB_fetchArray($res, false)) {
             //    \x08\\x09, not required
@@ -457,22 +458,42 @@ class dbBackup
                             $value = $defs[strtolower($key)];
                             $values[] = ( '' === $value ) ? "''" : $value;
                         } else {
+                            if (strcmp($value,'0000-00-00 00:00:00')==0) $value = '1999-01-01 00:00:00';
+                            if (strcmp($value,'0000-00-00')==0) $value = '1999-01-01';
                             $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
                         }
                     } else {
+                        if (strcmp($value,'0000-00-00 00:00:00')==0) $value = '1999-01-01 00:00:00';
+                        if (strcmp($value,'0000-00-00')==0) $value = '1999-01-01';
                         $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
                     }
                 }
             }
-            $this->stow(" \n" . $insert . implode(', ', $values) . ');');
+            if ( $valuesData != '' ) $valuesData .= ',';
+            $valuesData .= '('.implode(', ', $values) .')';
+
+            if ( strlen($valuesData) > 45000 ) {
+                $this->stow(" \n" . $insert . $valuesData . ';');
+                $insert = "INSERT INTO {$db_tablename} VALUES ";
+                $valuesData = '';
+            }
             $recordCounter++;
             $checkTimer = time();
             $elapsedTime = $checkTimer - $timerStart;
             if ( $elapsedTime > $timeout || $sessionCounter > $_SYSTEM['db_backup_rows'] ) {
+                if ( $valuesData != '') {
+                    $this->stow(" \n" . $insert . $valuesData . ';');
+                }
                 $this->close();
                 return array(1,$sessionCounter, $recordCounter);
             }
             $sessionCounter++;
+
+        } // end of while fetach records
+
+        if ( $valuesData != '' ) {
+            $this->stow(" \n" . $insert . $valuesData . ';');
+            $valuesData = '';
         }
 
         // Create footer/closing comment in SQL-file
