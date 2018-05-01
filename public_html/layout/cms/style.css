@@ -349,6 +349,9 @@ p.tm-article-meta {
 	font-size:.8em;
 }
 
+.comment-sig {
+    font-style: italic;
+}
 
 /*
 * tm-table is the class for all tables

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion comment library.                                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -87,6 +87,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
         $text = str_replace('<div class="comment-edit">', '', $text);
         $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
+
         $A['comment'] = $text;
         if( preg_match( '/<.*>/', $text ) == 0 ) {
             $A['comment'] = nl2br( $A['comment'] );
@@ -346,6 +347,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
 
+    static $userInfo = array();
+
     $filter = sanitizer::getInstance();
     $AllowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_comment']);
     $filter->setAllowedelements($AllowedElements);
@@ -430,6 +433,18 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
         if ( $A['postmode'] == 'plaintext' ) $A['comment'] = nl2br($A['comment']);
 
+        //remove any old signatures signature
+        $pos = strpos( $A['comment'],'<!-- COMMENTSIG --><div class="comment-sig">');
+        if ( $pos > 0) {
+            $A['comment'] = substr($A['comment'], 0, $pos);
+        } else {
+            $pos = strpos( $A['comment'],'<p>---<br />');
+            if ( $pos > 0 ) {
+                $A['comment'] = substr($A['comment'], 0, $pos);
+            }
+        }
+        $commentFooter = '';
+
         $template->unset_var('delete_link');
         $template->unset_var('ipaddress');
         $template->unset_var('reply_link');
@@ -446,7 +461,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             }
             //add edit info to text
             $dtObject = new Date($B['time'],$_USER['tzid']);
-            $A['comment'] .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
+
+            $commentFooter .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
                               . $dtObject->format($_CONF['date'],true) . ' ' . $LANG03[31] . ' '
                               . $editname . '</div><!-- /COMMENTEDIT -->';
         }
@@ -460,6 +476,25 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         if ( !isset($A['uid']) || $A['uid'] == '' ) {
             $A['uid'] = 1;
+        }
+
+        //@TODO - Move this to function
+        if ( $A['uid'] > 1 ) {
+            if (!isset($userInfo[$A['uid']])) {
+                $result = DB_query("SELECT username,remoteusername,remoteservice,fullname,sig,photo FROM {$_TABLES['users']} WHERE uid=".(int) $A['uid']);
+                $resultSet = DB_fetchAll($result);
+                if (count($resultSet) > 0 ) {
+                    $userInfo[$A['uid']] = $resultSet[0];
+                } else {
+                    $userInfo[$A['uid']] = array('username' => '','remoteusername' => '','remoteservice'=>'','fullname'=>'','sig'=>'','photo'=>'');
+                }
+            }
+            $A['username'] = $userInfo[$A['uid']]['username'];
+            $A['remoteusername'] = $userInfo[$A['uid']]['remoteusername'];
+            $A['remoteservice'] = $userInfo[$A['uid']]['remoteservice'];
+            $A['fullname'] = $userInfo[$A['uid']]['fullname'];
+            $A['sig'] = $userInfo[$A['uid']]['sig'];
+            $A['photo'] = $userInfo[$A['uid']]['photo'];
         }
 
         $filter->setReplaceTags(true);
@@ -651,7 +686,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'delete_option', '' );
         }
 
-        //and finally: format the actual text of the comment, but check only the text, not sig or edit
+        //and finally: format the actual text of the comment
         $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
         $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
         $text = str_replace('<div class="comment-edit">', '', $text);
@@ -688,8 +723,17 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         // format title for display, must happen after reply_link is created
         $A['title'] = @htmlspecialchars( $A['title'],ENT_COMPAT,COM_getEncodingt() );
 
+        // add signature if available
+        $sig = isset($A['sig']) ? $filter->censor($A['sig']) : '';
+        $finalsig = '';
+        if ($A['uid'] > 1 && !empty($sig)) {
+            $finalsig .= '<div class="comment-sig tm-comment-sig">';
+            $finalsig .= nl2br('---' . LB . $sig);
+            $finalsig .= '</div>';
+        }
+
         $template->set_var( 'title', $A['title'] );
-        $template->set_var( 'comments', $A['comment'] );
+        $template->set_var( 'comments',  $A['comment'].$finalsig.$commentFooter);
 
         // parse the templates
         if( ($mode == 'threaded') && $indent > 0 ) {
@@ -1919,20 +1963,6 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         $uid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".(int) $cid);
     } else {
         $uid = $_USER['uid'];
-    }
-
-    $sig = '';
-    if ($uid > 1) {
-        $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".(int) $uid);
-        if (!empty ($sig)) {
-            $comment .= '<!-- COMMENTSIG --><div class="comment-sig">';
-            if ( $postmode == 'html') {
-                $comment .= nl2br(LB . '---' . LB . $sig);
-            } else {
-                $comment .=  LB . '---' . LB . $sig;
-            }
-        $comment .= '</div><!-- /COMMENTSIG -->';
-        }
     }
 
     return $comment;
