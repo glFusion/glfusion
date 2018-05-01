@@ -467,6 +467,10 @@ function plugin_user_delete_polls($uid)
 {
     global $_TABLES, $_PO_CONF;
 
+    // Anonymize pollvoters by uid / ipaddress
+
+    DB_query("UPDATE {$_TABLES['pollvoters']} SET uid=1, ipaddress='' WHERE uid=".(int) $uid);
+
     if (DB_count ($_TABLES['polltopics'], 'owner_id', intval($uid)) == 0) {
         // there are no polls owned by this user
         return;

@@ -363,6 +363,22 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     return $display;
 }
 
+function plugin_user_delete_filemgmt( $uid )
+{
+    global $_CONF, $_USER, $_TABLES;
+
+    // purge all rows from history
+    DB_delete ($_TABLES['filemgmt_history'], 'uid', $uid);
+
+    // Anonymize all data for ratinguser in filemgmt_vote / Blank out ratinghostname
+    DB_query("UPDATE {$_TABLES['filemgmt_votedata']} SET ratinghostname='', ratinguser=1 WHERE ratinguser = ".(int) $uid,1);
+
+    // Purge all broken links table entries for sender = uid
+    DB_delete ($_TABLES['filemgmt_brokenlinks'], 'sender', $uid);
+
+    // Anonymize submitter for filemgmt_filedetails
+    DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET submitter=1 WHERE submitter = ".(int) $uid,1);
+}
 
 function plugin_statssummary_filemgmt ()
 {
@@ -781,7 +797,9 @@ function plugin_getwhatsnew_filemgmt() {
         $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
         $sql .= filemgmt_buildAccessSql();
         $sql .= "AND STATUS=1 ORDER  BY date DESC LIMIT 15 ";
+
         $result = DB_query( $sql );
+
         $nrows1 = DB_numRows( $result );
         if( $nrows1 == 0 ) {
             $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;

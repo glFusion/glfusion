@@ -979,8 +979,7 @@ function plugin_user_delete_staticpages($uid)
         DB_query ("DELETE FROM {$_TABLES['staticpage']} WHERE (sp_uid = ".intval($uid).") OR (owner_id = ".intval($uid).")");
     } else {
         // assign ownership to a user from the Root group
-        $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
-                                 "grp_name = 'Root'");
+        $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name = 'Root'");
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
         $A = DB_fetchArray ($result);
         $rootuser = $A['ug_uid'];

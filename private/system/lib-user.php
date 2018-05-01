@@ -108,10 +108,19 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['social_follow_user'], 'uid', $uid);
     DB_delete ($_TABLES['tfa_backup_codes'], 'uid', $uid);
 
-    // avoid having orphand stories/comments by making them anonymous posts
+    // anonymize comments
+    DB_query ("UPDATE {$_TABLES['comments']} SET name = 'Anonymous' WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['comments']} SET ipaddress = '' WHERE uid = $uid");
     DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['commentedits']} SET uid = 1 WHERE uid = $uid");
+
+    // avoid having orphand stories/comments by making them anonymous posts
     DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $uid");
     DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $uid");
+
+    // ratings
+    DB_query ("UPDATE {$_TABLES['rating_votes']} SET ip_address = '' WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['rating_votes']} SET uid = 1 WHERE uid = $uid");
 
     // delete story submissions
     DB_delete ($_TABLES['storysubmission'], 'uid', $uid);

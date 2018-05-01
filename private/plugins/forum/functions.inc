@@ -240,10 +240,18 @@ function plugin_user_delete_forum ($uid)
     global $_TABLES;
 
     $username = DB_getItem($_TABLES['users'], "username", "uid=".(int) $uid);
+
     DB_query("DELETE FROM {$_TABLES['ff_moderators']} WHERE mod_username='".DB_escapeString($username)."'");
     DB_query("DELETE FROM {$_TABLES['ff_userinfo']} WHERE uid =".(int) $uid);
     DB_query("DELETE FROM {$_TABLES['ff_userprefs']} WHERE uid =".(int) $uid);
     DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid =".(int) $uid);
+    DB_query("DELETE FROM {$_TABLES['ff_bookmarks']} WHERE uid=".(int) $uid);
+    DB_query("DELETE FROM {$_TABLES['ff_rating_assoc']} WHERE user_id = ".(int) $uid);
+    DB_query("DELETE FROM {$_TABLES['ff_likes_assoc']} WHERE poster_id = " . (int) $uid);
+
+    DB_query("UPDATE {$_TABLES['ff_likes_assoc']} SET voter_id = 1 WHERE voter_id = ".(int) $uid);
+    DB_query("UPDATE {$_TABLES['ff_rating_assoc']} SET voter_id = 1 WHERE voter_id = ".(int) $uid);
+    DB_query("UPDATE {$_TABLES['ff_topic']} SET name = 'Anonymous', ip = '', email = '' WHERE uid = ".(int) $uid);
     DB_query("UPDATE {$_TABLES['ff_topic']} SET uid = 1 WHERE uid = ".(int) $uid);
 }
 
