@@ -94,6 +94,12 @@ function _mg_user_delete( $uid ) {
             DB_query($sql);
         }
     }
+    DB_query("UPDATE {$_TABLES['mg_media']} SET media_user_id = 1, media_user_ip = '' WHERE media_user_id = ".(int)$uid);
+    DB_query("UPDATE {$_TABLES['mg_mediaqueue']} SET media_user_id = 1, media_user_ip = '' WHERE media_user_id = ".(int)$uid);
+    DB_delete($_TABLES['mg_usage_tracking'],'user_id',$uid);
+    DB_query("UPDATE {$_TABLES['mg_watermarks']} SET owner_id = 1 WHERE owner_id = ".(int)$uid);
+    DB_delete($_TABLES['mg_postcard'],'uid',$uid);
+    DB_query("UPDATE {$_TABLES['mg_rating']} SET uid=1, ip_address='' WHERE uid=".(int) $uid);
 }
 
 function _mg_profileicondisplay( $uid ) {

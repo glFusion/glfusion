@@ -440,26 +440,26 @@ function plugin_user_delete_links ($uid)
 {
     global $_TABLES, $_LI_CONF;
 
-    if (DB_count ($_TABLES['links'], 'owner_id', $uid) == 0) {
-        return;
+
+    // Get a root user from the Root group
+    $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name = 'Root'");
+    $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
+    if ( DB_numRows($result) > 0 ) {
+        $A = DB_fetchArray ($result);
+        $rootuser = $A['ug_uid'];
+    } else {
+        $rootuser = 2;
     }
 
     if ($_LI_CONF['delete_links'] == 1) {
         // delete the links
         DB_delete($_TABLES['links'], 'owner_id', $uid);
     } else {
-        // assign ownership to a user from the Root group
-        $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
-                                 "grp_name = 'Root'");
-        $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
-        if ( DB_numRows($result) > 0 ) {
-            $A = DB_fetchArray ($result);
-            $rootuser = $A['ug_uid'];
-        } else {
-            $rootuser = 2;
-        }
         DB_query ("UPDATE {$_TABLES['links']} SET owner_id = $rootuser WHERE owner_id = $uid");
     }
+
+    DB_query("UPDATE {$_TABLES['linkcategories']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_delete($_TABLES['linksubmission'],'owner_id',$uid);
 }
 
 /**
