@@ -1076,6 +1076,10 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     }
 
     $userselect = '<select name="owner_name"> ';
+    $userselect .= '<option value="1"';
+    if ($row['media_user_id'] == 1) $userselect .= ' selected="selected"';
+    $userselect .= '>Anonymous</option>';
+
     $sql = "SELECT * FROM {$_TABLES['users']} WHERE status=3 AND uid > 1 ORDER BY username ASC";
     $result = DB_query($sql);
     while ($userRow = DB_fetchArray($result) ) {
