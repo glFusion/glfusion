@@ -153,7 +153,11 @@ function bb2_read_settings() {
         $bb2_bl_tmp['spambots_regex'] = array();
         $bb2_bl_tmp['spambots_url'] = array();
         $bb2_bl_tmp['spambot_referer'] = array();
-        $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['bl_table']}",1);
+        if ( isset($bb2_settings_defaults['bl_table'])) {
+            $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['bl_table']}",1);
+        } else {
+            $result = false;
+        }
         if ( $result !== false ) {
             while ( ($row = DB_fetchArray($result)) != NULL  ) {
                 $bb2_bl_tmp[$row['type']][] = $row['item'];
@@ -194,7 +198,11 @@ function bb2_read_settings() {
         $bb2_wl_tmp['ip'] = array();
         $bb2_wl_tmp['ua'] = array();
         $bb2_wl_tmp['url'] = array();
-        $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['wl_table']}",1);
+        if ( isset($bb2_settings_defaults['wl_table']) ) {
+            $result = DB_query("SELECT item,type FROM {$bb2_settings_defaults['wl_table']}",1);
+        } else {
+            $result = false;
+        }
         if ( $result !== false ) {
             while ( ($row = DB_fetchArray($result)) != NULL  ) {
                 $bb2_wl_tmp[$row['type']][] = $row['item'];
