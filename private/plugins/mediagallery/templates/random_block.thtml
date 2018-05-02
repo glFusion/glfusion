@@ -6,7 +6,7 @@
 {!if url_media}
 </a>
 {!endif}
-<div class="uk-text-small uk-text-center">
+<div class="uk-text-small uk-text-center uk-text-truncate">
 	{media_title}
 </div>
 <div class="uk-text-muted uk-text-center">
