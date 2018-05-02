@@ -94,6 +94,7 @@ function spamx_upgrade()
               INDEX `blockdate` (`blockdate`)
             ) ENGINE=MyISAM
             ";
+            $_SQL[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
 
             if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
                 $use_innodb = true;
