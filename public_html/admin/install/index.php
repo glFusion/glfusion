@@ -1754,7 +1754,7 @@ function INST_installAndContentPlugins()
 
     require $_CONF['path_system'].'lib-database.php';
     require $_CONF['path_system'].'lib-security.php';
-    if ( $_DB_dbms == 'mysqli' ) $_DB_dbms = 'mysql';
+    if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
     INST_errorLog($log_path,'INSTALL: Installing Database Tables and Default Data');
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
@@ -1868,7 +1868,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_html'].'lib-common.php';
-    if ( $_DB_dbms == 'mysqli') $_DB_dbms = 'mysql';
+    if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
     INST_errorLog($log_path,'INSTALL: Performing default plugin installations');
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');

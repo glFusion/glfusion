@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Auto Installer module                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -80,10 +80,6 @@ $INSTALL_plugin['links'] = array(
         'log' => 'Adding feature to the admin group'),
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'submit_feature_id',
         'log' => 'Adding feature to the admin group'),
-/*  array('type' => 'block', 'name' => 'blogroll_block', 'title' => 'Blog Roll',
-        'phpblockfn' => 'phpblock_blogroll', 'block_type' => 'phpblock',
-        'group_id' => 'admin_group_id'), */
-  array('type' => 'sql', 'sql' => $_SQL['links_data'], 'log' => 'Adding default links data'),
 );
 
 

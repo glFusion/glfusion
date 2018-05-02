@@ -10,10 +10,11 @@
 *  Copyright (C) 2017-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
+*  Based on original work in mysqli.class.php
 *  Copyright (C) 2000-2011 by the following authors:
 *
-*  Authors: Tony Bibbs, tony AT tonybibbs DOT com
-*           Kenji Ito, geeklog AT mystral-kk DOT net
+*  Original Authors: Tony Bibbs, tony AT tonybibbs DOT com
+*                    Kenji Ito, geeklog AT mystral-kk DOT net
 *
 */
 
@@ -265,7 +266,9 @@ class database
         } catch (PDOException $e) {
             if ($ignore_errors) {
                 $result = false;
-                $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                if (defined ('DVLP_DEBUG') || $this->_verbose) {
+                    $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                }
             } else {
                 trigger_error($this->dbError($sql), E_USER_ERROR);
             }

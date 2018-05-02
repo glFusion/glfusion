@@ -146,7 +146,7 @@ function bad_behavior2_upgrade ()
                             VALUE ('".DB_escapeString($item)."','".DB_escapeString($type)."','".DB_escapeString($reason)."',".(int) $autoban.",".$timestamp.")",1);
                 }
                 // drop the old ban table
-                DB_query("DROP {$_TABLES['bad_behavior2_ban']}",1);
+                DB_query("DROP TABLE {$_TABLES['bad_behavior2_ban']}",1);
             }
 
             $bb2_blacklist_cidrs = array();

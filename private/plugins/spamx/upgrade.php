@@ -85,7 +85,7 @@ function spamx_upgrade()
               `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `module` VARCHAR(128) NOT NULL DEFAULT '',
               `type` VARCHAR(50) NOT NULL DEFAULT '',
-              `blockdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `blockdate` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00.000000',
               `ip` VARCHAR(50) NOT NULL DEFAULT '',
               `email` VARCHAR(50) NOT NULL DEFAULT '',
               `username` VARCHAR(50) NOT NULL DEFAULT '',
@@ -94,6 +94,7 @@ function spamx_upgrade()
               INDEX `blockdate` (`blockdate`)
             ) ENGINE=MyISAM
             ";
+            $_SQL[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
 
             if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
                 $use_innodb = true;

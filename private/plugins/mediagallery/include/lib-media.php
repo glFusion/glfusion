@@ -2255,7 +2255,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $owner_name = 'unknown';
         }
     }
-    if ( $owner_name != 'unknown' ) {
+    if ( $owner_name != 'unknown' && $media[$mediaObject]['media_user_id'] != 1) {
         $owner_link = '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $media[$mediaObject]['media_user_id'] . '">' . $owner_name . '</a>';
     } else {
         $owner_link = $owner_name;
