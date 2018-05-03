@@ -442,6 +442,9 @@ class dbBackup
         $valuesData = '';
 
         while ($A = DB_fetchArray($res, false)) {
+
+            $recordCounter++;
+
             //    \x08\\x09, not required
             $search = array("\x00", "\x0a", "\x0d", "\x1a");
             $replace = array('\0', '\n', '\r', '\Z');
@@ -469,6 +472,7 @@ class dbBackup
                     }
                 }
             }
+
             if ( $valuesData != '' ) $valuesData .= ',';
             $valuesData .= '('.implode(', ', $values) .')';
 
@@ -477,7 +481,7 @@ class dbBackup
                 $insert = "INSERT INTO {$db_tablename} VALUES ";
                 $valuesData = '';
             }
-            $recordCounter++;
+
             $checkTimer = time();
             $elapsedTime = $checkTimer - $timerStart;
             if ( $elapsedTime > $timeout || $sessionCounter > $_SYSTEM['db_backup_rows'] ) {
