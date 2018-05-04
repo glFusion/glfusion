@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Installation                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -179,6 +179,8 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// 1.7.4
+    'layout/cms/images/icons/autotag.png',
 
 // 1.6.6
     'mediagallery/players/FMP3.swf',
