@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Autotag management console                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -120,7 +120,7 @@ function AT_adminForm($A, $error = false, $editOrNew = 0)
                 'lang_enabled'      => $LANG_AM['enabled'],
                 'lang_replacement'  => $LANG_AM['replacement'],
                 'lang_replace_explain'  => $LANG_AM['replace_explain'],
-                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
+                'admin_menu' => ADMIN_createMenu($menu_arr, $LANG_AM['instructions_edit'],$_CONF['layout_url'] . '/images/icons/at.png'),
         ));
 
         if (isset($A['is_enabled']) && $A['is_enabled'] == 1) {
@@ -305,7 +305,7 @@ function AT_adminList()
     );
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png');
+                $_CONF['layout_url'] . '/images/icons/at.png');
 
     $retval .= AT_showUploadForm();
 
@@ -372,7 +372,7 @@ function AT_list()
     $retval .= COM_startBlock($LANG_AM['public_title'], '', COM_getBlockTemplate('_admin_block', 'header'));
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_AM['public_instructions'],
-                $_CONF['layout_url'] . '/images/icons/autotag.png');
+                $_CONF['layout_url'] . '/images/icons/at.png');
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
@@ -606,7 +606,7 @@ function ATP_edit($autotag_id = '')
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_AM['autotagpermmsg'],
-        $_CONF['layout_url'] . '/images/icons/autotag.png'
+        $_CONF['layout_url'] . '/images/icons/at.png'
     );
 
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
@@ -799,7 +799,7 @@ function ATP_permEdit()
         'selectbox'         => $selectBox,
         'start_block_editor'=> COM_startBlock($LANG_AM['perm_header'], '', COM_getBlockTemplate('_admin_block', 'header')),
         'end_block'         => COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')),
-        'admin_menu'        => ADMIN_createMenu($menu_arr, $LANG_AM['perm_instructions'],$_CONF['layout_url'] . '/images/icons/autotag.png'),
+        'admin_menu'        => ADMIN_createMenu($menu_arr, $LANG_AM['perm_instructions'],$_CONF['layout_url'] . '/images/icons/at.png'),
         'sec_token_name'    => CSRF_TOKEN,
         'sec_token'         => SEC_createToken(),
     ));

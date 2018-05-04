@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the admin index page that does nothing more that login you in.   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Joe Mucchiello         joe AT throwingdice DOT com                       |
@@ -162,7 +162,7 @@ function commandcontrol()
                         'lang' => $LANG_LOGO['logo_admin'], 'image' => '/images/icons/logo.'),
                   array('condition' => SEC_hasRights('autotag.admin'),
                         'url' => $_CONF['site_admin_url'] . '/autotag.php',
-                        'lang' => $LANG_AM['title'], 'image' => '/images/icons/autotag.'),
+                        'lang' => $LANG_AM['title'], 'image' => '/images/icons/at.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/sfs.php',
                         'lang' => 'SFS User Check', 'image' => '/images/icons/sfs.'),
