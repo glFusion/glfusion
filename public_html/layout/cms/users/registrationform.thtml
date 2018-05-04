@@ -29,26 +29,42 @@
 		</div>
 
 {!if lang_passwd}
-		<div class="uk-form-row">
-			<label class="uk-form-label" for="passwd">{lang_passwd}</label>
-			<div class="uk-form-controls">
-				<input class="required" type="password" id="passwd" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');">
+
+	<div class="uk-grid uk-margin">
+		<div class="uk-small-width-1-2">
+
+			<div class="uk-form-row">
+				<label class="uk-form-label" for="passwd">{lang_passwd}</label>
+				<div class="uk-form-controls">
+					<input class="required" type="password" id="passwd" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');">
+				</div>
 			</div>
-		</div>
-		<div class="uk-form-row">
-			<label class="uk-form-label" for="passwd_conf">{lang_passwd_conf}</label>
-			<div class="uk-form-controls">
-				<input class="required" type="password" id="passwd_conf" name="passwd_conf" value="">
+			<div class="uk-form-row">
+				<label class="uk-form-label" for="passwd_conf">{lang_passwd_conf}</label>
+				<div class="uk-form-controls">
+					<input class="required" type="password" id="passwd_conf" name="passwd_conf" value="">
+				</div>
 			</div>
-		</div>
-		<div class="uk-form-row">
-			<label class="uk-form-label"></label>
-			<div class="uk-form-controls">
-				<span id="mypassword_text"></span>
-				<span id="mypassword_bar" style="display:none;"></span>
+			<div class="uk-form-row">
+				<label class="uk-form-label"></label>
+				<div class="uk-form-controls">
+					<span id="mypassword_text"></span>
+					<span id="mypassword_bar" style="display:none;"></span>
+				</div>
 			</div>
+
 		</div>
+		<div class="uk-small-width-1-2">
+{!if password_help}
+			<div class="uk-alert uk-alert-success uk-alert-large">
+				{password_help}
+			</div>
 {!endif}
+	</div>
+</div>
+
+{!endif}
+
 {!if show_fullname}
 		<div class="uk-form-row">
 			<label class="uk-form-label" for="fullname">{lang_fullname}</label>
@@ -57,18 +73,12 @@
 			</div>
 		</div>
 {!endif}
+
 		{plugin_fields}
 		{spamx}
+
 {!if captcha}
 		{captcha}
-{!endif}
-
-{!if lang_passwd}
-{!if password_help}
-		<div class="uk-alert uk-alert-success uk-alert-large">
-			{password_help}
-		</div>
-{!endif}
 {!endif}
 
 		<div class="uk-alert uk-alert-large">{lang_warning}</div>
