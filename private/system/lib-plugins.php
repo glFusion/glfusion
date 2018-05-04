@@ -3794,4 +3794,29 @@ function PLG_outputFilter($output, $type='')
     return $output;
 }
 
+
+/**
+* Privacy Hooks
+*
+* @param    int      $uid       User id
+* @param    char     $email     email address
+* @param    char     $username  username
+* @param    char     $ip        ip address
+* @return   char     XML formatted ata
+*
+*/
+function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
+{
+    global $_PLUGINS;
+
+    $output = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_privacy_export_' . $pi_name;
+        if (function_exists($function)) {
+            $output .= $function ($uid,$email,$username,$ip);
+        }
+    }
+    return $output;
+}
 ?>
