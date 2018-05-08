@@ -1,4 +1,7 @@
 ## v1.7.4 (Unreleased)
+  - Oauth new user creation to now follow same workflow as local user creation
+  - Increase homepage table var (users table) to 255 bytes in size
+  - Spam check when creating oauth user
   - Comment signatures are now dynamic (backported for glFusion NG code base)
   - DB backup now writes several values per insert, improves efficiency of restores / imports
   - Fixed issue where watermark admin would not redirect properly after deleting watermark
