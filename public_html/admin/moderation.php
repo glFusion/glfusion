@@ -321,10 +321,14 @@ function MODERATE_item($action='', $type='', $id='')
                     $nrows = DB_numRows($result);
                     if ($nrows == 1) {
                         $A = DB_fetchArray($result);
-                        if ( $_CONF['registration_type'] == 1 ) {
-                            $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_VERIFICATION." WHERE $key = '{$A['uid']}'";
+                        if ( !empty($A['remoteservice']) && !empty($A['remoteusername']) ) {
+                            $sql = "UPDATE $table SET status=".USER_ACCOUNT_ACTIVE." WHERE $key = '{$A['uid']}'";
                         } else {
-                            $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE $key = '{$A['uid']}'";
+                            if ( $_CONF['registration_type'] == 1 ) {
+                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_VERIFICATION." WHERE $key = '{$A['uid']}'";
+                            } else {
+                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE $key = '{$A['uid']}'";
+                            }
                         }
                         DB_query($sql);
                         USER_createAndSendPassword($A['username'], $A['email'], $A['uid']);
