@@ -172,6 +172,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     }
 
     $activation_link = '';
+    $remoteuser = 0;
 
     $uid = (int) $uid;
 
