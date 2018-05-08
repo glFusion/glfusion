@@ -481,7 +481,19 @@ $LANG04 = array(
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
-    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.'
+    205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.',
+    206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
+    207 => 'Go To Site',
+    208 => 'You are almost done!',
+    209 => 'Please provide and confirm the information below to finalize your account.',
+    210 => 'You are about to create a new account on <em>%s</em> using a login from <strong>%s</strong>',
+    211 => 'Create your personal account',
+    'facebook' => 'Facebook',
+    'github' => 'GitHub',
+    'google' => 'Google',
+    'linkedin' => 'LinkedIn',
+    'microsoft' => 'Microsoft',
+    'twitter' => 'Twitter'
 );
 
 ###############################################################################
@@ -1587,6 +1599,7 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account',
+    523 => 'Security Token has expired - please try again.',
     600 => 'The Development Update has completed - Please validate if any plugins needs to be updated'
 );
 
@@ -2930,7 +2943,13 @@ $LANG_confignames['Core'] = array(
     'pwd_req_letter' => 'Require letter in password',
     'pwd_req_cap' => 'Required upper case letter in password',
     'pwd_req_lower' => 'Require lower case letter in password',
-    'pwd_req_symbol' => 'Require special character in password'
+    'pwd_req_symbol' => 'Require special character in password',
+    'cache_driver' => 'Cache Driver',
+    'cache_host' => 'Cache Server',
+    'cache_port' => 'Cache Server Port',
+    'cache_password' => 'Password (needed for Redis driver)',
+    'cache_database' => 'Database (needed for Redis driver)',
+    'cache_timeout' => 'Connection Timeout'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2942,7 +2961,8 @@ $LANG_configsubgroups['Core'] = array(
     'sg_images' => 'Images',
     'sg_locale' => 'Languages and Locale',
     'sg_misc' => 'Miscellaneous',
-    'sg_spam' => 'Spam / Bot Protection'
+    'sg_spam' => 'Spam / Bot Protection',
+    'sg_cache' => 'Caching'
 );
 
 $LANG_fs['Core'] = array(
@@ -2991,7 +3011,9 @@ $LANG_fs['Core'] = array(
     'fs_rating' => 'Rating Options',
     'fs_spam_config' => 'Configuration',
     'fs_authentication' => 'Authentication',
-    'fs_pwd_complexity' => 'Password Rules'
+    'fs_pwd_complexity' => 'Password Rules',
+    'fs_cache_template' => 'Templates',
+    'fs_cache_backend' => 'Cache Options'
 );
 
 $LANG_configselects['Core'] = array(
