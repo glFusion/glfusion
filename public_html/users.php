@@ -1013,7 +1013,6 @@ function USER_registrationForm($info = array(), $messages = array())
         'lang_oauth_heading' => $LANG04[208],
         'lang_local_heading' => $LANG04[211],
         'lang_info_oauth'   => $LANG04[209],
-        'lang_action'       => sprintf($LANG04[210],$_CONF['site_name'],$LANG04[$info['oauth_service']]),
         'lang_password_help'=> SEC_showPasswordHelp(),  // dynamic based on password rules
         'site_name'         => $_CONF['site_name'],
         'sec_token'         => SEC_createToken(),
@@ -1021,6 +1020,7 @@ function USER_registrationForm($info = array(), $messages = array())
     ));
 
     if ( isset($info['oauth_provider']) && !empty($info['oauth_provider']) ) {
+        $T->set_var('lang_action',sprintf($LANG04[210],$_CONF['site_name'],$LANG04[$info['oauth_service']]));
         $T->set_var('oauth_login',true);
     }
 
