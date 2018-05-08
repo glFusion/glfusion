@@ -172,6 +172,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     }
 
     $activation_link = '';
+    $remoteuser = 0;
 
     $uid = (int) $uid;
 
@@ -215,7 +216,16 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
             'html_msg'   => 'newuser_template_html.thtml',
             'text_msg'   => 'newuser_template_text.thtml'
         ));
-        if ( $userStatus == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+        if ($remoteuser == 1) {
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/usersettings.php',
+                'lang_site_or_password' => $LANG04[171],
+                'site_link_url'         => $_CONF['site_url'],
+                'lang_activation'       => $LANG04[206],
+                'lang_button_text'      => '',
+                'passwd'                => '',
+            ));
+        } else if ( $userStatus == USER_ACCOUNT_AWAITING_VERIFICATION ) {
             $verification_id = USER_createActivationToken($uid,$username);
 
             $T->set_var(array(
@@ -225,15 +235,6 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
                 'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
                 'lang_button_text'      => $LANG04[203],
                 'localuser'             => true,
-            ));
-        } elseif ($remoteuser == 1) {
-            $T->set_var(array(
-                'url'                   => $_CONF['site_url'].'/usersettings.php',
-                'lang_site_or_password' => $LANG04[171],
-                'site_link_url'         => $_CONF['site_url'],
-                'lang_activation'       => $LANG04[206],
-                'lang_button_text'      => '',
-                'passwd'                => '',
             ));
         } else {
             $T->set_var(array(
