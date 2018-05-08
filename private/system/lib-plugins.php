@@ -3370,6 +3370,108 @@ function plugin_user_move_story($origUID, $destUID)
     DB_query($sql,1);
 }
 
+function plugin_privacy_export_story($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES;
+
+    $retval = '';
+
+    $exportFields = array('sid','date','title','tid');
+
+    $sql = "SELECT * FROM {$_TABLES['stories']} WHERE uid = ". (int) $uid . " OR owner_id = ".(int) $uid . " ORDER BY date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<stories>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<story>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</story>\n";
+    }
+    $retval .= "</stories>\n";
+
+    return $retval;
+
+}
+
+function plugin_privacy_export_rating($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('type','item_id','rating','uid','ip_address','ratingdate');
+
+    $sql = "SELECT * FROM {$_TABLES['rating_votes']} WHERE uid = ". (int) $uid;
+    if ( $ip != '' ) {
+        $sql .= " OR ip_address = '" . DB_escapeString($ip)."'";
+    }
+    $sql .= " ORDER BY ratingdate ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<ratings>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<rating>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                if ( $item == 'ratingdate' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</rating>\n";
+    }
+    $retval .= "</ratings>\n";
+
+    return $retval;
+
+}
+
+function plugin_privacy_export_social($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('social_service','ss_username','rating','uid','ip_address','ratingdate');
+
+    $sql = "SELECT *, ss.display_name AS social_service FROM {$_TABLES['social_follow_user']} AS su LEFT JOIN {$_TABLES['social_follow_services']} AS ss ON su.ssid=ss.ssid WHERE uid = ". (int) $uid;
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<socialservices>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<service>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</service>\n";
+    }
+    $retval .= "</socialservices>\n";
+
+    return $retval;
+
+}
+
+
 /**
 * Subscribe user to notification feed for an item
 *
@@ -3809,9 +3911,15 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
 {
     global $_PLUGINS;
 
+    USES_lib_comment();
+
     $output = '';
 
-    foreach ($_PLUGINS as $pi_name) {
+    $internalContent = array('comment','story','rating','social');
+
+    $contentTypes = array_merge($internalContent, $_PLUGINS);
+
+    foreach ($contentTypes as $pi_name) {
         $function = 'plugin_privacy_export_' . $pi_name;
         if (function_exists($function)) {
             $output .= $function ($uid,$email,$username,$ip);
