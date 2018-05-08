@@ -925,7 +925,7 @@ function USER_contentPanel($U, $newuser = 0)
     $userform->set_var('lang_boxes_title', $LANG04[144]);
     $userform->set_var('lang_boxes_help_title', $LANG04[143]);
     $userform->set_var('lang_boxes', $LANG04[55]);
-
+    $permissions = '';
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         $permissions = COM_getPermSQL ('',$uid);
         $userform->set_var('exclude_topic_checklist',
