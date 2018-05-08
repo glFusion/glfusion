@@ -407,7 +407,7 @@ class OAuthConsumer {
                     'homepage'       => $info->{'publicProfileUrl'},
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.linkedin',
-                    'remotephoto'    => $info->{'pictureUrl'},
+                    'remotephoto'    => (isset($info->{'pictureUrl'}) ? $info->{'pictureUrl'} : ''),
                     'socialservice'  => 'linkedin',
                     'socialuser'     => $info->id,
 
