@@ -298,7 +298,7 @@ $LANG04 = array(
     24 => 'Your password will be sent to the email address you enter.',
     25 => 'Did You Forget Your Password?',
     26 => 'Enter <em>either</em> your username <em>or</em> the email address you used to register and click email Password. Instructions on how to set a new password will be mailed to the email address on record.',
-    27 => 'Sign Up!',
+    27 => 'Create my Account',
     28 => 'Email Password',
     29 => 'logged out from',
     30 => 'logged in from',
@@ -474,6 +474,16 @@ $LANG04 = array(
     205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.',
     206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
     207 => 'Go To Site',
+    208 => 'You are almost done!',
+    209 => 'Please provide and confirm the information below to finalize your account.',
+    210 => 'You are about to create a new account on <em>%s</em> using a login from <strong>%s</strong>',
+    211 => 'Create your personal account',
+    'facebook'  => 'Facebook',
+    'github'    => 'GitHub',
+    'google'    => 'Google',
+    'linkedin'  => 'LinkedIn',
+    'microsoft' => 'Microsoft',
+    'twitter'   => 'Twitter',
 );
 
 ###############################################################################
@@ -1580,6 +1590,7 @@ $MESSAGE = array(
     520 => 'You have been subscribed to this notification feed.',
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account',
+    523 => 'Security Token has expired - please try again.',
     600 => 'The Development Update has completed - Please validate if any plugins needs to be updated',
 );
 
