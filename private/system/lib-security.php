@@ -1120,7 +1120,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
 
     static $_tokenKey;
 
-    if ( $ttl == -1 || COM_isAnonUser() ) {
+    if ($ttl == -1 ) {
         $tokenKey = '';
         return;
     }
@@ -1148,9 +1148,10 @@ function SEC_createToken($ttl = TOKEN_TTL)
     DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$uid} AND urlfor='".DB_escapeString($pageURL)."'";
-    DB_query($sql);
-
+    if ( !COM_isAnonUser()) {
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$uid} AND urlfor='".DB_escapeString($pageURL)."'";
+        DB_query($sql);
+    }
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
@@ -1183,7 +1184,7 @@ function SEC_checkToken()
         return true;
     }
 
-    if ( COM_isAnonUser() ) return false;
+//    if ( COM_isAnonUser() ) return false;
 
     if ( !SEC_isLocalUser($_USER['uid']) ) {
         return false;
@@ -1252,7 +1253,7 @@ function _sec_checkToken($ajax=0)
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
 
-    if ( COM_isAnonUser() ) return true;
+//    if ( COM_isAnonUser() ) return true;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REMOTE_ADDR'];
