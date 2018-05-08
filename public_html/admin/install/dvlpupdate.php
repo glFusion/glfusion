@@ -1984,6 +1984,15 @@ function glfusion_174()
 {
     global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
 
+    $_SQL = array();
+
+    // increase homepage field to 255 bytes
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE `homepage` `homepage` VARCHAR(255) NULL DEFAULT NULL;";
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 

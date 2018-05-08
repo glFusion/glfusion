@@ -1605,6 +1605,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.7.3';
 
         case '1.7.3' :
+            $_SQL = array();
+            // increase homepage field to 255 bytes
+            $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE `homepage` `homepage` VARCHAR(255) NULL DEFAULT NULL;";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
 
             $current_fusion_version = '1.7.4';
 
