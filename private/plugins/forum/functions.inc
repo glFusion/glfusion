@@ -2213,4 +2213,46 @@ function plugin_profileblocksdisplay_forum( $uid )
 
 }
 
+function plugin_privacy_export_forum($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('id','forum_name','uid','name','date','email','subject','ip','permalink');
+
+    $sql = "SELECT t.id,f.forum_name,t.uid,t.name,t.date,t.email,t.subject,t.ip FROM {$_TABLES['ff_topic']} AS t LEFT JOIN {$_TABLES['ff_forums']} AS f ON t.forum=f.forum_id WHERE t.uid = ". (int) $uid;
+    if ( $ip != '' ) {
+        $sql .= " OR ip = '" . DB_escapeString($ip)."'";
+    }
+    $sql .= " ORDER BY date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<forum>\n";
+
+    foreach($rows AS $row) {
+        $row['permalink'] = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['id'];
+        $retval .= "<post>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+                if ( $item == 'date' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</post>\n";
+    }
+    $retval .= "</forum>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
+    return $retval;
+}
+
 ?>

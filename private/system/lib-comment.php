@@ -2708,4 +2708,39 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     return $retval;
 }
 
+
+function plugin_privacy_export_comment($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES;
+
+    $retval = '';
+
+    $exportFields = array('type','sid','date','title','name','uid','ipaddress');
+
+    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = ". (int) $uid;
+    if ( $ip != '' ) {
+        $sql .= " OR ipaddress = '" . DB_escapeString($ip)."'";
+    }
+    $sql .= " ORDER BY date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<comments>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<comment>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</comment>\n";
+    }
+    $retval .= "</comments>\n";
+
+    return $retval;
+
+}
+
 ?>
