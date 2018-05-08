@@ -348,7 +348,7 @@ function userprofile()
         }
     }
 
-    // Call custom registration if enabled and exists
+    // Call custom registration function if enabled and exists
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDisplay') ) {
         $user_templates->set_var ('customfields', CUSTOM_userDisplay ($user));
     }
@@ -641,140 +641,257 @@ function newtokenform ($uid)
 * @return   string      HTML for the form again if error occurs, otherwise nothing.
 *
 */
-// function createuser ($username, $email, $email_conf, $passwd='', $passwd_conf='')
-function createuser ( )
+function USER_createuser($info = array())
 {
     global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE, $REMOTE_ADDR;
 
     $retval = '';
-
-    $retval = '';
-    $passwd = '';
-    $passwd_conf = '';
-
-    if ($_CONF['disable_new_user_registration']) {
-        COM_setMsg($LANG04[122],'error');
-        echo COM_refresh($_CONF['site_url']);
-    }
-
-    $email       = isset($_POST['email']) ? COM_applyFilter ($_POST['email']) : '';
-    $email_conf  = isset($_POST['email_conf']) ? COM_applyFilter ($_POST['email_conf']) : '';
-    $username = isset($_POST['username']) ? $_POST['username'] : '';
-
-    if ( isset($_POST['passwd']) ) {
-        $passwd = trim($_POST['passwd']);
-    }
-    if ( isset($_POST['passwd_conf']) ) {
-        $passwd_conf = trim($_POST['passwd_conf']);
-    }
-
-    $username   = COM_truncate(trim ($username),48);
-
-    if ( !USER_validateUsername($username)) {
-        $retval .= newuserform ($LANG04[162]);
-        return $retval;
-    }
-
-    $email      = COM_truncate(trim ($email),96);
-    $email_conf = trim ($email_conf);
-
-    if ( $_CONF['registration_type'] == 1 ) {
-        if ( empty($passwd) || ($passwd != $passwd_conf) ) {
-            $retval .= newuserform($MESSAGE[67]);
-            return $retval;
-        }
-    }
-
-    $fullname = '';
-    if (!empty ($_POST['fullname'])) {
-        $fullname   = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
-    }
+    $validationErrors = 0;
+    $errorMessages = array();
 
     if (!isset ($_CONF['disallow_domains'])) {
         $_CONF['disallow_domains'] = '';
     }
 
-    if (COM_isEmail ($email) && !empty ($username) && ($email === $email_conf)
-            && !USER_emailMatches ($email, $_CONF['disallow_domains'])
-            && (strlen ($username) <= 48)) {
+    // if new user registration is disabled - abort
+    if ($_CONF['disable_new_user_registration']) {
+        COM_setMsg($LANG04[122],'error');
+        echo COM_refresh($_CONF['site_url']);
+    }
+    // do not want re-auth option
 
-        $ucount = DB_count ($_TABLES['users'], 'username',
-                            DB_escapeString ($username));
-        $ecount = DB_count ($_TABLES['users'], 'email', DB_escapeString ($email));
-
-        if ($ucount == 0 AND $ecount == 0) {
-
-            // For glFusion, it would be okay to create this user now. But check
-            // with a custom userform first, if one exists.
-            if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
-                $msg = CUSTOM_userCheck ($username, $email);
-                if (!empty ($msg)) {
-                    // no, it's not okay with the custom userform
-                    $retval = CUSTOM_userForm ($msg);
-
-                    return $retval;
-                }
-            }
-            $spamCheckData = array(
-                'username'  => $username,
-                'email'     => $email,
-                'ip'        => $REMOTE_ADDR,
-                'type'      => 'registration');
-
-            $result = PLG_checkforSpam($username, $_CONF['spamx'],$spamCheckData);
-            if ($result > 0) {
-                COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
-            }
-            // Let plugins have a chance to decide what to do before creating the user, return errors.
-            $msg = PLG_itemPreSave ('registration', $spamCheckData);
-            if (!empty ($msg)) {
-                $retval .= newuserform ($msg);
-                return $retval;
-            }
-            if ( $_CONF['registration_type'] == 1 && !empty($passwd) ) {
-                $err = SEC_checkPwdComplexity($passwd);
-                if (count($err) > 0 ) {
-                    $msg = implode('<br>',$err);
-                    $retval .= newuserform ($msg);
-                    return $retval;
-                }
-                $encryptedPasswd = SEC_encryptPassword($passwd);
-            } else {
-                $encryptedPasswd = '';
-            }
-
-            $uid = USER_createAccount ($username, $email, $encryptedPasswd, $fullname);
-
-            if ($_CONF['usersubmission'] == 1) {
-                if (DB_getItem ($_TABLES['users'], 'status', "uid = ".(int) $uid)
-                        == USER_ACCOUNT_AWAITING_APPROVAL) {
-                   echo COM_refresh ($_CONF['site_url']
-                                           . '/index.php?msg=48');
-                } else {
-                    $retval = emailpassword ($username, $passwd, 1);
-                }
-            } else {
-                $retval = emailpassword ($username,$passwd);
-            }
-
-            return $retval;
-        } else {
-            $retval .= newuserform ($LANG04[19]);
-        }
-    } else if ($email !== $email_conf) {
-        $msg = $LANG04[125];
-        $retval .= newuserform ($msg);
-    } else { // invalid username or email address
-
-        if ((empty ($username)) || (strlen($username) > 48)) {
-            $msg = $LANG01[32]; // invalid username
-        } else {
-            $msg = $LANG04[18]; // invalid email address
-        }
-        $retval .= newuserform ($msg);
+    if ( !_sec_checkToken()) {
+        echo COM_refresh($_CONF['site_url'].'/users.php?msg=523');
     }
 
-    return $retval;
+    // defaults
+
+    $data['regtype']        = 'local';  // registration type - local or oauth
+    $data['username']       = '';       // contains the username for the glFusion site
+    $data['email']          = '';       // user's email address
+    $data['email_conf']     = '';       // always defaults to blank
+    $data['passwd']         = '';       // user's password
+    $data['passwd_conf']    = '';       // always defaults to blank
+    $data['fullname']       = '';       // user's fullname
+    $data['oauth_provider'] = '';       // oauth provider (i.e.; oauth.twitter, oauth.facebook, etc.)
+    $data['oauth_username'] = '';       // oauth username
+    $data['oauth_email']    = '';
+    $data['oauth_service']  = '';
+
+    // submitted data
+
+    $data['regtype']    = isset($info['regtype']) ? $info['regtype'] : 'local';
+
+    $data['username']   = isset($info['username']) ? $info['username'] : '';
+
+    $data['email']      = isset($info['email']) ? COM_applyFilter ($info['email']) : '';
+    $data['email_conf'] = isset($info['email_conf']) ? COM_applyFilter ($info['email_conf']) : '';
+
+    $data['passwd']      = isset($info['passwd']) ? COM_applyFilter ($info['passwd']) : '';
+    $data['passwd_conf'] = isset($info['passwd_conf']) ? COM_applyFilter ($info['passwd_conf']) : '';
+
+    $data['fullname']    = isset($info['fullname']) ? $info['fullname'] : '';
+
+    $data['oauth_provider'] = isset($info['oauth_provider']) ? $info['oauth_provider'] : '';
+    $data['oauth_service']  = isset($info['oauth_service']) ? $info['oauth_service'] : '';
+    $data['oauth_username'] = isset($info['oauth_username']) ? $info['oauth_username'] : '';
+    $data['oauth_email']    = isset($info['oauth_email']) ? COM_applyFilter($info['oauth_email']) : '';
+
+    // data cleanup and validations
+
+    // username
+    $data['username'] = COM_truncate(trim($data['username']),48);
+
+    if (empty($data['username'])) {
+        $validationErrors++;
+        $errorMessages[] = $LANG01[32];
+    } else if ( !USER_validateUsername($data['username'])) {
+        $validationErrors++;
+        $errorMessages[] = $LANG04[162];
+    }
+
+    // email
+    $data['email'] = COM_truncate(trim($data['email']),96);
+    $data['email_conf'] = COM_truncate(trim($data['email_conf']),96);
+
+    if ( empty($data['oauth_email']) ) {
+        if ($data['email'] !== $data['email_conf']) {
+            $validationErrors++;
+            $errorMessages[] = $LANG04[125];
+        } else if (!COM_isEmail($data['email'])) {
+            $validationErrors++;
+            $errorMessages[] = $LANG04[18];
+        } else if ( USER_emailMatches($data['email'],$_CONF['disallow_domains'])) {
+            $validationErrors++;
+            $errorMessages[] = $LANG04[18];
+        }
+    } else {
+        $data['email'] = $data['oauth_email'];
+    }
+
+    $ucount = $ecount = 0;
+
+    $ucount = DB_count($_TABLES['users'], 'username',DB_escapeString ($data['username']));
+    if ( $ucount != 0 ) {
+        $validationErrors++;
+        $errorMessages[] = $LANG04[19];
+    }
+
+    if ( $data['regtype'] == 'local' ) {
+        $ecount = DB_count($_TABLES['users'], 'email', DB_escapeString ($data['email']));
+        if ( $ecount != 0 ) {
+            $validationErrors++;
+            $errorMessages[] = $LANG04[19];
+        }
+    }
+
+    // passwd
+    $data['passwd'] = trim($data['passwd']);
+    $data['passwd_conf'] = trim($data['passwd_conf']);
+
+    if ($data['regtype'] == 'local' && $_CONF['registration_type'] == 1 ) {
+        if ( empty($data['passwd']) || $data['passwd'] != $data['passwd_conf'] ) {
+            $validationErrors++;
+            $errorMessages[] = $MESSAGE[67];
+        } else {
+            $err = SEC_checkPwdComplexity($data['passwd']);
+            if (count($err) > 0 ) {
+                $validationErrors++;
+                $errorMessages[] = implode('<br>',$err);
+            }
+        }
+    }
+
+    $data['fullname'] = COM_truncate(trim(USER_sanitizeName($data['fullname'])),80);
+
+    if ( $_CONF['user_reg_fullname'] == 2) {
+        if (empty($data['fullname'])) {
+            $validationErrors++;
+            $errorMessages[] = 'Please enter full name';
+        }
+    }
+
+    $spamCheckData = array(
+        'username'  => $data['username'],
+        'email'     => $data['email'],
+        'ip'        => $REMOTE_ADDR,
+        'type'      => 'registration');
+
+    $msg = PLG_itemPreSave ('registration', $spamCheckData);
+    if (!empty ($msg)) {
+        $validationErrors++;
+        $errorMessages[] = $msg;
+    }
+
+    // do our spam check
+    $result = PLG_checkforSpam($data['username'], $_CONF['spamx'],$spamCheckData);
+    if ($result > 0) {
+        COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
+    }
+
+    // is there a custom user check
+    if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
+        $msg = CUSTOM_userCheck ($username, $email);
+        if (!empty ($msg)) {
+            return CUSTOM_userForm ($msg);
+        }
+    }
+
+    if ( $validationErrors > 0 ) {
+        // we cannot proceed - we have issues to resolve
+        return USER_registrationForm($data,$errorMessages);
+    }
+
+    //
+    // All validations have passed - we need to now create the user
+    // based on if it is a local user or a oauth user
+    //
+
+    if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
+        if ( $_CONF['registration_type'] == 1 && !empty($data['passwd']) ) {
+            $encryptedPasswd = SEC_encryptPassword($data['passwd']);
+        } else {
+            $encryptedPasswd = '';
+        }
+        $uid = USER_createAccount ($data['username'], $data['email'], $encryptedPasswd, $data['fullname']);
+
+        if ($_CONF['usersubmission'] == 1) {
+            if (DB_getItem ($_TABLES['users'],'status',"uid=".(int) $uid) == USER_ACCOUNT_AWAITING_APPROVAL) {
+               echo COM_refresh ($_CONF['site_url'].'/index.php?msg=48');
+            } else {
+                $retval = emailpassword ($data['username'], $data['passwd'], 1);
+            }
+        } else {
+            $retval = emailpassword ($data['username'],$data['passwd']);
+        }
+    } else {
+        // oauth user
+        $users = SESS_getVar('users');
+        $userinfo = SESS_getVar('userinfo');
+
+if ( !isset($users['homepage']) ) $users['homepage'] = '';
+$users['homepage'] = COM_truncate($users['homepage'],80);
+
+//@TODO - fix the var names
+        $uid = USER_createAccount($data['username'], $data['email'], '', $data['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
+//@TODO should probably display an error
+        if ( $uid == NULL ) {
+            echo COM_refresh($_CONF['site_url']);
+        }
+
+        $oauth = new OAuthConsumer($info['oauth_service']);
+
+        if (is_array($users)) {
+            $oauth->_DBupdate_users($uid, $users);
+        }
+        if (is_array($userinfo)) {
+            $oauth->_DBupdate_userinfo($uid, $userinfo);
+        }
+
+        $status = DB_getItem($_TABLES['users'],'status','uid='.(int)$uid);
+        $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
+
+        if ( isset($users['socialuser']) ) {
+            $social_result = DB_query("SELECT * FROM {$_TABLES['social_follow_services']} WHERE service_name='".DB_escapeString($users['socialservice'])."' AND enabled=1");
+            if (DB_numRows($social_result) > 0 ) {
+                $social_row = DB_fetchArray($social_result);
+                $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+                $sql .= " VALUES (" . (int) $social_row['ssid'] . ",".$uid.",'".$users['socialuser']."');";
+                DB_query($sql,1);
+            }
+        }
+        $mergeAccount = 0;
+        $remoteUID = '';
+        $localUID = '';
+
+        // check and see if we need to merge the account
+        if ( isset($data['email']) && $data['email'] != '' ) {
+            $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".LOCAL_USER." AND email='".DB_escapeString($data['email'])."' AND uid > 1";
+            $result = DB_query($sql);
+            $numRows = DB_numRows($result);
+            if ( $numRows == 1 ) {
+                $row = DB_fetchArray($result);
+                $remoteUID = $uid;
+                $localUID  = $row['uid'];
+                $mergeAccount = 1;
+            }
+        }
+    }
+
+    if ($_CONF['usersubmission'] == 1) {
+        if (DB_getItem ($_TABLES['users'], 'status', "uid = ".(int) $uid) == USER_ACCOUNT_AWAITING_APPROVAL) {
+            echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
+        }
+    }
+
+    if ( $uid != null ) SESS_completeLogin($uid,0);
+
+    if ( $mergeAccount ) {
+        USER_mergeAccountScreen($remoteUID, $localUID);
+    }
+
+    echo COM_refresh($_CONF['site_url']);
 }
 
 /**
@@ -829,82 +946,122 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 * @param    string  $referrer   page to send user to after registration
 * @return   string  HTML for user registration page
 */
-function newuserform ($msg = '')
+function USER_registrationForm($info = array(), $messages = array())
 {
     global $_CONF, $_USER, $LANG01, $LANG04;
 
     $retval = '';
 
+    // if user is already logged in - take them to their profile page
+    if ( !COM_isAnonUser() ) echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
+
+    // if new user registration is disabled - abort
     if ($_CONF['disable_new_user_registration']) {
         COM_setMsg($LANG04[122],'error');
         echo COM_refresh($_CONF['site_url']);
+        exit;
     }
 
-    if ( !COM_isAnonUser() ) echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
-
+    // Hook into Custom Registration
     if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
-        return CUSTOM_userForm($msg);
+        return CUSTOM_userForm();
     }
 
-    if (!empty ($msg)) {
-        $retval .= COM_showMessageText($msg,$LANG04[21],false,'error');
+    // defaults
+    $options = array(
+        'oauth_login'       => false,
+        'show_password_entry' => true,    // dependent on registration type
+        'show_email_confirmation' => true,
+        'show_fullname'     => false,
+        'plugin_vars'       => true,
+        'registration_type' => 1,
+        'form_action'       => $_CONF['site_url'].'/users.php',
+    );
+
+    // registration type can be
+    //  0 - email user their password
+    //  1 - user enters password and receives verification link
+    if ( (isset($info['oauth_provider']) && !empty($info['oauth_provider']) ) || $_CONF['registration_type'] == 0 ) {
+        $options['show_password_entry'] = false;
     }
-    $user_templates = new Template($_CONF['path_layout'] . 'users');
-    $user_templates->set_file('regform', 'registrationform.thtml');
-    $user_templates->set_var('start_block', COM_startBlock($LANG04[22]));
-    $user_templates->set_var('lang_instructions', $LANG04[23]);
-    $user_templates->set_var('lang_username', $LANG04[2]);
-    $user_templates->set_var('lang_fullname', $LANG04[3]);
-    $user_templates->set_var('lang_email', $LANG04[5]);
-    $user_templates->set_var('lang_email_conf', $LANG04[124]);
+
+    if ( (isset($info['oauth_provider']) && !empty($info['oauth_provider'])) && (isset($info['oauth_email']) && !empty($info['oauth_email'])) ) {
+        $options['show_email_confirmation'] = false;
+    }
+
+    if ( !isset($info['oauth_service'])) $info['oauth_service'] = '';
+
+    // full name
+    // 0 = no
+    // 1 = optional
+    // 2 = required
+    if ( $_CONF['user_reg_fullname'] == 1 || $_CONF['user_reg_fullname'] == 2 ) {
+        $options['show_fullname'] = true;
+    }
+
+    $T = new Template($_CONF['path_layout'].'users');
+    $T->set_file('regform', 'registrationform.thtml');
+
+    $T->set_var('form_action',$options['form_action']);
+
+    $T->set_var(array(
+        'lang_instructions' => $LANG04[23],
+        'lang_username'     => $LANG04[2],
+        'lang_fullname'     => $LANG04[3],
+        'lang_email'        => $LANG04[5],
+        'lang_email_conf'   => $LANG04[124],
+        'lang_register'     => $LANG04[27],
+        'lang_passwd'       => $LANG01[57],
+        'lang_passwd_conf'  => $LANG04[176],
+        'lang_oauth_heading' => $LANG04[208],
+        'lang_local_heading' => $LANG04[211],
+        'lang_info_oauth'   => $LANG04[209],
+        'lang_action'       => sprintf($LANG04[210],$_CONF['site_name'],$LANG04[$info['oauth_service']]),
+        'lang_password_help'=> SEC_showPasswordHelp(),  // dynamic based on password rules
+        'site_name'         => $_CONF['site_name'],
+        'sec_token'         => SEC_createToken(),
+        'sec_token_name'    => CSRF_TOKEN,
+    ));
+
+    if ( isset($info['oauth_provider']) && !empty($info['oauth_provider']) ) {
+        $T->set_var('oauth_login',true);
+    }
+
     if ( $_CONF['registration_type'] == 1 ) { // verification link
-        $user_templates->set_var('lang_passwd',$LANG01[57]);
-        $user_templates->set_var('lang_passwd_conf',$LANG04[176]);
-        $user_templates->set_var('lang_warning',$LANG04[167]);
+        $T->set_var('lang_warning', $LANG04[167]);
     } else {
-        $user_templates->set_var('lang_warning', $LANG04[24]);
+        $T->set_var('lang_warning', $LANG04[24]);
     }
 
-    $user_templates->set_var('lang_register', $LANG04[27]);
-    PLG_templateSetVars ('registration', $user_templates);
-    $user_templates->set_var('end_block', COM_endBlock());
-
-    $username = '';
-    if (!empty ($_POST['username'])) {
-        $username = trim ( $_POST['username'] );
+    if ($options['show_fullname']) {
+        $T->set_var('show_fullname',true);
     }
-    $user_templates->set_var ('username', @htmlentities($username,ENT_COMPAT,COM_getEncodingt()));
-
-    $fullname = '';
-    if (!empty ($_POST['fullname'])) {
-        $fullname = $_POST['fullname'];
-    }
-    $fullname = USER_sanitizeName($fullname);
-
-    $user_templates->set_var ('fullname', @htmlentities($fullname,ENT_COMPAT,COM_getEncodingt()));
-    switch ($_CONF['user_reg_fullname']) {
-    case 2:
-        $user_templates->set_var('require_fullname', 'true');
-    case 1:
-        $user_templates->set_var('show_fullname', 'true');
+    if ($options['show_email_confirmation']) {
+        $T->set_var('show_email_confirmation',true);
     }
 
-    $email = '';
-    if (!empty ($_POST['email'])) {
-        $email = COM_applyFilter ($_POST['email']);
+    // registration type can be
+    //  0 - email user their password
+    //  1 - user enters password and receives verification link
+
+    if ($options['show_password_entry']) {
+        $T->set_var('show_password_entry',true);
     }
-    $user_templates->set_var ('email', $email);
 
-    $email_conf = '';
-    if (!empty ($_POST['email_conf'])) {
-        $email_conf = COM_applyFilter ($_POST['email_conf']);
+    foreach($info AS $item => $value) {
+        $T->set_var($item,$value);
     }
-    $user_templates->set_var ('email_conf', $email_conf);
 
-    $user_templates->set_var ('password_help', SEC_showPasswordHelp());
+    // Plugin Hook
+    if ( $options['plugin_vars'] ) {
+        PLG_templateSetVars('registration', $T);
+    }
 
-    $user_templates->parse('output', 'regform');
-    $retval .= $user_templates->finish($user_templates->get_var('output'));
+    // display any error messages
+    $T->set_var('feedback',implode('<br>',$messages));
+
+    $T->parse('output', 'regform');
+    $retval .= $T->finish($T->get_var('output'));
 
     return $retval;
 }
@@ -961,7 +1118,7 @@ function defaultform ($msg)
     $retval .= loginform (true);
 
     if ( $_CONF['disable_new_user_registration'] == FALSE ) {
-        $retval .= newuserform ();
+        $retval .= USER_registrationForm ();
     }
 
     $retval .= getpasswordform ();
@@ -1316,7 +1473,7 @@ switch ($mode) {
         $pageBody .= userprofile();
         break;
     case 'create':
-        $pageBody .= createuser();
+        $pageBody .= USER_createuser($_POST);
         break;
     case 'getpassword':
         $pageBody .= _userGetpassword();
@@ -1331,7 +1488,7 @@ switch ($mode) {
         $pageBody .= _userEmailpassword();
         break;
     case 'new':
-        $pageBody .= newuserform();
+        $pageBody .= USER_registrationForm();
         break;
     case 'verify':
         $pageBody .= _userVerify();
@@ -1536,7 +1693,7 @@ switch ($mode) {
                 case 'create':
                     // Got bad account info from registration process, show error
                     // message and display form again
-                    $pageBody .= newuserform ();
+                    $pageBody .= USER_registrationForm ();
                     break;
                 default:
                     if (!empty($_SERVER['HTTP_REFERER'])

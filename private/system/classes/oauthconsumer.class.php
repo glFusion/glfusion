@@ -6,7 +6,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2016 by the following authors:                        |
+// | Copyright (C) 2011-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -37,6 +37,7 @@ if (!defined ('GVERSION')) {
 }
 
 class OAuthConsumer {
+    public $service;
     protected $consumer = NULL;
     protected $client = NULL;
     protected $debug_oauth = false;
@@ -56,6 +57,7 @@ class OAuthConsumer {
             $service = str_replace("oauth.", "", $service);
         }
 
+        $this->service = $service;
     	$this->client = new oauth_client_class;
     	$this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';
     	$this->client->server     = $this->serviceMap[$service];
@@ -167,7 +169,7 @@ class OAuthConsumer {
     }
 
     public function doFinalLogin($info) {
-        global $_TABLES, $LANG04, $status, $uid, $_CONF, $checkMerge;
+        global $_TABLES, $LANG04, $status, $uid, $_CONF, $checkMerge, $REMOTE_ADDR;
 
         $users      = $this->_getCreateUserInfo($info);
         $userinfo   = $this->_getUpdateUserInfo($info);
@@ -209,15 +211,9 @@ class OAuthConsumer {
                 $this->_DBupdate_users($uid, $info);
             }
         } else {
-            if ( $_CONF['disable_new_user_registration'] && (DB_count($_TABLES['users'],array('email','status'),array(DB_escapeString($users['email']),3)) != 1 ) ) {
-                echo COM_siteHeader();
-                echo $LANG04[122];
-                echo COM_siteFooter();
-                exit;
-            }
-            // initial login - create account
-            $loginname = $users['loginname'];
+            // new user
 
+            $loginname = $users['loginname'];
             $checkName = DB_getItem($_TABLES['users'], 'username', "username='".DB_escapeString($loginname)."'");
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
@@ -228,42 +224,28 @@ class OAuthConsumer {
                 }
             }
             $users['loginname'] = $loginname;
-            $uid = USER_createAccount($users['loginname'], $users['email'], '', $users['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
-            if ( $uid == NULL ) {
-                return NULL;
-            }
-            if (is_array($users)) {
-                $this->_DBupdate_users($uid, $users);
-            }
-            if (is_array($userinfo)) {
-                $this->_DBupdate_userinfo($uid, $userinfo);
-            }
 
-            $status = DB_getItem($_TABLES['users'],'status','uid='.(int)$uid);
-            $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
+            SESS_setVar('users',$users);
+            SESS_setVar('userinfo',$userinfo);
 
-            if ( isset($users['socialuser']) ) {
-                $social_result = DB_query("SELECT * FROM {$_TABLES['social_follow_services']} WHERE service_name='".DB_escapeString($users['socialservice'])."' AND enabled=1");
-                if (DB_numRows($social_result) > 0 ) {
-                    $social_row = DB_fetchArray($social_result);
-                    $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
-                    $sql .= " VALUES (" . (int) $social_row['ssid'] . ",".$uid.",'".$users['socialuser']."');";
-                    DB_query($sql,1);
-                }
-            }
-
-            if ( isset($users['email']) && $users['email'] != '' ) {
-                $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".LOCAL_USER." AND email='".DB_escapeString($users['email'])."' AND uid > 1";
-                $result = DB_query($sql);
-                $numRows = DB_numRows($result);
-                if ( $numRows == 1 ) {
-                    $row = DB_fetchArray($result);
-                    $remoteUID = $uid;
-                    $localUID  = $row['uid'];
-                    USER_mergeAccountScreen($remoteUID, $localUID);
-                }
-            }
+            $userData = array(
+                'regtype'           => 'oauth',
+                'username'          => $loginname,
+                'email'             => $users['email'],
+                'fullname'          => $users['fullname'],
+                'oauth_provider'    => $users['remoteservice'],
+                'oauth_username'    => $users['remoteusername'],
+                'oauth_email'       => $users['email'],
+                'oauth_photo'       => $users['remotephoto'],
+                'oauth_homepage'    => $users['homepage'],
+                'oauth_service'     => $this->service,
+            );
+            $page = USER_registrationForm($userData);
+            $display = COM_siteHeader('menu');
+            $display .= $page;
+            $display .= COM_siteFooter();
+            echo $display;
+            exit;
         }
         return true;
     }
@@ -452,7 +434,7 @@ class OAuthConsumer {
         return $users;
     }
 
-    protected function _DBupdate_userinfo($uid, $userinfo) {
+    public function _DBupdate_userinfo($uid, $userinfo) {
         global $_TABLES;
         if (!empty($userinfo['about']) || !empty($userinfo['location']) ) {
             $commaCount = 0;
@@ -472,7 +454,7 @@ class OAuthConsumer {
         }
     }
 
-    protected function _DBupdate_users($uid, $users) {
+    public function _DBupdate_users($uid, $users) {
         global $_TABLES, $_CONF;
 
         $sql = "UPDATE {$_TABLES['users']} SET remoteusername = '".DB_escapeString($users['remoteusername'])."', remoteservice = '".DB_escapeString($users['remoteservice'])."' ";
