@@ -632,7 +632,7 @@ CREATE TABLE {$_TABLES['users']} (
   fullname varchar(80) default NULL,
   passwd varchar(40) NOT NULL default '',
   email varchar(96) default NULL,
-  homepage varchar(96) default NULL,
+  homepage varchar(255) default NULL,
   sig varchar(160) NOT NULL default '',
   regdate datetime NOT NULL default '1000-01-01 00:00:00.000000',
   photo varchar(128) DEFAULT NULL,

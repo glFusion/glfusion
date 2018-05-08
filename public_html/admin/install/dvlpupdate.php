@@ -1938,6 +1938,72 @@ function glfusion_172()
 
 }
 
+function glfusion_173()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // forum badge update
+    DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
+    // Change badge css designators to actual color strings
+    $b_groups =\Forum\Badge::getAll();
+    foreach ($b_groups as $grp) {
+        foreach ($grp as $badge) {
+            if ($badge->fb_type == 'css') {
+                switch ($badge->fb_data) {
+                case 'uk-badge-success':
+                    $badge->fb_bgcolor = '#82bb42';
+                    break;
+                case 'uk-badge-danger':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                case 'uk-badge-warning':
+                    $badge->fb_bgcolor = '#d32c46;';
+                    break;
+                default:
+                    $fc = substr($badge->fb_data,0,1);
+                    if ( $fc != 'a' ) {
+                        $badge->fb_bgcolor = '#009dd8';
+                    }
+                    break;
+                }
+                $badge->Save();
+            }
+        }
+    }
+    _updateConfig();
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.3',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.3' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_174()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    $_SQL = array();
+
+    // increase homepage field to 255 bytes
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE `homepage` `homepage` VARCHAR(255) NULL DEFAULT NULL;";
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    _updateConfig();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.4',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.4' WHERE name='glfusion'",1);
+
+}
+
 function glfusion_180()
 {
     global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
@@ -2302,6 +2368,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
+glfusion_174();
 glfusion_180();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');

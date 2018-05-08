@@ -1484,14 +1484,19 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.7.2';
 
         case '1.7.2' :
-        case '1.7.3' :
+            $current_fusion_version = '1.7.3';
 
-            if (!isset($_VARS['last_maint_run'])) {
-                DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
+        case '1.7.3' :
+            $_SQL = array();
+            // increase homepage field to 255 bytes
+            $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE `homepage` `homepage` VARCHAR(255) NULL DEFAULT NULL;";
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
             }
 
-            DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
-            DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
+            $current_fusion_version = '1.7.4';
+
+        case '1.7.4' :
 
             $current_fusion_version = '1.8.0';
 
