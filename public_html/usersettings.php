@@ -327,6 +327,10 @@ function edituser()
         } else {
             $preferences->set_var ('lang_deleteoption', $LANG04[156]);
         }
+        if (SEC_isLocalUser($_USER['uid'])) {
+            $preferences->set_var('local-acct',true);
+        }
+
         $preferences->parse ('delete_account_option', 'deleteaccount', false);
     } else {
         $preferences->set_var ('delete_account_option', '');
@@ -381,14 +385,15 @@ function confirmAccountDelete ($form_reqid)
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
-    // to change the password, email address, or cookie timeout,
-    // we need the user's current password
-    $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
-    if (empty($_POST['current_password']) || !SEC_check_hash(trim($_POST['current_password']),$current_password)) {
-         COM_setMsg( $MESSAGE[84], 'error',true );
-         return COM_refresh($_CONF['site_url'].'/usersettings.php?mode=delete');
+    if ( SEC_isLocalUser($_USER['uid']) ) {
+        // to change the password, email address, or cookie timeout,
+        // we need the user's current password
+        $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
+        if (empty($_POST['current_password']) || !SEC_check_hash(trim($_POST['current_password']),$current_password)) {
+             COM_setMsg( $MESSAGE[84], 'error',true );
+             return COM_refresh($_CONF['site_url'].'/usersettings.php?mode=delete');
+        }
     }
-
     $token = SEC_createToken();
 
     $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
