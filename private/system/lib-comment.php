@@ -2739,6 +2739,10 @@ function plugin_privacy_export_comment($uid,$email='',$username='',$ip='')
     }
     $retval .= "</comments>\n";
 
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
     return $retval;
 
 }

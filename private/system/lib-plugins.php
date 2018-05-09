@@ -3376,6 +3376,10 @@ function plugin_privacy_export_story($uid,$email='',$username='',$ip='')
     }
     $retval .= "</stories>\n";
 
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
     return $retval;
 
 }
@@ -3416,6 +3420,10 @@ function plugin_privacy_export_rating($uid,$email='',$username='',$ip='')
     }
     $retval .= "</ratings>\n";
 
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
     return $retval;
 
 }
@@ -3447,8 +3455,11 @@ function plugin_privacy_export_social($uid,$email='',$username='',$ip='')
     }
     $retval .= "</socialservices>\n";
 
-    return $retval;
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
 
+    return $retval;
 }
 
 
