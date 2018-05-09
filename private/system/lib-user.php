@@ -972,6 +972,8 @@ function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
             'localuid'       => $row['uid'],
             'local_username' => $row['username'],
             'remoteuid'      => $remoteUID,
+            'sec_token'      => CSRF_TOKEN,
+            'token'          => SEC_createToken(),
         ));
         $T->parse( 'page', 'merge' );
         if ( $msg != '' ) {
@@ -1039,7 +1041,8 @@ function USER_mergeAccounts()
 
     if ( SEC_check_hash($localpwd, $localRow['passwd']) ) {
         // password is valid
-        $sql = "SELECT * FROM {$_TABLES['users']} WHERE remoteusername <> '' and email='".DB_escapeString($localRow['email'])."'";
+//        $sql = "SELECT * FROM {$_TABLES['users']} WHERE remoteusername <> '' and email='".DB_escapeString($localRow['email'])."'";
+        $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".REMOTE_USER." AND email='".DB_escapeString($localRow['email'])."' AND uid = ".(int) $remoteUID;
         $result = DB_query($sql);
         $numRows = DB_numRows($result);
         if ( $numRows == 1 ) {
@@ -1048,9 +1051,11 @@ function USER_mergeAccounts()
                 $remoteUID = (int) $remoteRow['uid'];
                 $remoteService = substr($remoteRow['remoteservice'],6);
             } else {
+                COM_errorLog("ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
                 echo COM_refresh($_CONF['site_url'].'/index.php');
             }
         } else {
+            COM_errorLog("ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to more or less that 1 row returned");
             echo COM_refresh($_CONF['site_url'].'/index.php');
         }
         $sql = "UPDATE {$_TABLES['users']} SET remoteusername='".

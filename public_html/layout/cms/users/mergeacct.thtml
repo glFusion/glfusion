@@ -1,5 +1,6 @@
 <form class="uk-form uk-form-horizontal uk-align-center" id="acctmerge" action="{site_url}/users.php" method="post" autocomplete="off">
   <input type="hidden" name="mode" value="mergeacct">
+  <input type="hidden" name="{sec_token}" value="{token}">
   <input type="hidden" name="localuid" value="{localuid}">
   <input type="hidden" name="remoteuid" value="{remoteuid}">
 

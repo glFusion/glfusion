@@ -833,6 +833,7 @@ function USER_createuser($info = array())
         $users['homepage'] = COM_truncate($users['homepage'],255);
         $uid = USER_createAccount($data['username'], $data['email'], '', $data['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
         if ( $uid == NULL ) {
+            COM_errorLog("USER_createAccount() failed to return valid UID");
             echo COM_refresh($_CONF['site_url']);
         }
 
@@ -1494,7 +1495,11 @@ switch ($mode) {
         $pageBody .= _userGetnewtoken();
         break;
     case 'mergeacct' :
-        $pageBody .= USER_mergeAccounts();
+        if ( SEC_checkToken() ) {
+            $pageBody .= USER_mergeAccounts();
+        } else {
+            echo COM_refresh($_CONF['site_url']);
+        }
         break;
 
     default:
@@ -1620,20 +1625,11 @@ switch ($mode) {
         } else {
             $status = -2;
         }
-// here is where the login stuff actually
-// happens - we need to move this to a function
-// which I think we already have somewhere/
-// so we can auto-login the user
-// after creating the account
 
         if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
-
-//
             SESS_completeLogin($uid,$authenticated);
-// build our groups
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
-// set initial admin cookie
             if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
                 if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
                          || (count(PLG_getAdminOptions()) > 0)) {
@@ -1641,7 +1637,6 @@ switch ($mode) {
                     SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
                 }
             }
-// set the theme
             if ( !isset($_USER['theme']) ) {
                 $_USER['theme'] = $_CONF['theme'];
                 $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
