@@ -169,7 +169,7 @@ class OAuthConsumer {
     }
 
     public function doFinalLogin($info) {
-        global $_TABLES, $LANG04, $status, $uid, $_CONF, $checkMerge, $REMOTE_ADDR;
+        global $_TABLES, $LANG04, $status, $uid, $_CONF, $REMOTE_ADDR;
 
         $users      = $this->_getCreateUserInfo($info);
         $userinfo   = $this->_getUpdateUserInfo($info);
@@ -182,7 +182,6 @@ class OAuthConsumer {
 
         if (empty($tmp) && $nrows == 1) { // existing user...
             list($uid, $status) = DB_fetchArray($result);
-            $checkMerge = false;
 
             // Update users
             if (is_array($info)) {
@@ -408,7 +407,7 @@ class OAuthConsumer {
                     'homepage'       => $info->{'publicProfileUrl'},
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.linkedin',
-                    'remotephoto'    => $info->{'pictureUrl'},
+                    'remotephoto'    => (isset($info->{'pictureUrl'}) ? $info->{'pictureUrl'} : ''),
                     'socialservice'  => 'linkedin',
                     'socialuser'     => $info->id,
 
