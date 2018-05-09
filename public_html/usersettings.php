@@ -1095,7 +1095,7 @@ function saveuser($A)
             }
         }
     }
-
+/* ----
     // a quick spam check with the unfiltered field contents
     $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1><p>';
     if (empty($service)) {
@@ -1115,7 +1115,7 @@ function saveuser($A)
     if ($result > 0) {
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
-
+---- */
     $A['email'] = COM_applyFilter ($A['email']);
     $A['email_conf'] = COM_applyFilter ($A['email_conf']);
     $A['homepage'] = COM_applyFilter ($A['homepage']);
