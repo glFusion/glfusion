@@ -503,7 +503,7 @@ function USER_accountPanel($U,$newuser = 0)
     $statusselect .= '</select><input type="hidden" name="oldstatus" value="'.$U['status'] . '"/>';
     $userform->set_var('user_status', $statusselect);
 
-    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && $U['tfa_enabled']) {
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($U['tfa_enabled']) && $U['tfa_enabled']) {
         $userform->set_var('twofactor',true);
         $userform->set_var(array(
             'lang_two_factor' => $LANG_TFA['two_factor'],
