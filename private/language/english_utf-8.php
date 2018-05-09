@@ -1792,7 +1792,7 @@ $LANG_TFA = array(
 
 $LANG_PWD = array(
     'title'            => 'Passwords must meet the follow rules',
-    'min_length'       => 'Must be longer than %s characters',
+    'min_length'       => 'Must atleast %s characters in length',
     'max_length'       => 'Must not be longer than %s characters',
     'req_num'          => 'Must contain at least 1 number',
     'req_letter'       => 'Must contain at least 1 letter',
