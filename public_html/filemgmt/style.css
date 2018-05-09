@@ -3,10 +3,12 @@
 .fm-rating .ratingbar {
 	text-align:left;
 }
-#fm-brokenpage-pagewidth{ 
- width:80%; 
- text-align:left; 
- margin:0 auto; 
+.fm-rating .small-rating-unit {
+	margin: 0;
+}
+#fm-brokenpage-pagewidth {
+ width:80%;
+ text-align:left;
+ margin:0 auto;
  padding:1px;
-} 
- 
+}
