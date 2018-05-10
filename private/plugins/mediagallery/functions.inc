@@ -1676,6 +1676,54 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
     return $retval;
 }
 
+function plugin_privacy_export_mediagallery($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('media_user_id','media_original_filename','media_user_ip','media_upload_time','media_title','media_id','permalink');
+
+    $sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_user_id = ". (int) $uid;
+    if ( $ip != '' ) {
+        $sql .= " OR media_user_ip = '" . DB_escapeString($ip)."'";
+    }
+    $sql .= " ORDER BY media_upload_time ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<media>\n";
+
+    foreach($rows AS $row) {
+        $row['permalink'] = $_MG_CONF['site_url'].'/media.php?s='.$row['media_id'];
+        $retval .= "<item>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                if ( $item == 'media_upload_time' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+
+                if ( $item == 'media_original_filename' ) {
+                    $item = 'filename';
+                }
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</item>\n";
+    }
+    $retval .= "</media>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
+    return $retval;
+}
+
 function plugin_supportadblock_mediagallery()
 {
     return array('mediagallery_album_list','mediagallery_media_list');

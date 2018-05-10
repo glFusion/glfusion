@@ -1211,4 +1211,114 @@ function plugin_getconfigelementhelp_filemgmt($type, $option, $doclang = 'englis
 
     return array($retval,0);
 }
+
+function plugin_privacy_export_filemgmt($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_FM_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+// files
+
+    $exportFields = array('lid','title','url','homepage','version','submitter','date','permalink');
+
+    $sql = "SELECT * FROM {$_TABLES['filemgmt_filedetail']} WHERE submitter = ". (int) $uid;
+/*
+    if ( $ip != '' ) {
+        $sql .= " OR media_user_ip = '" . DB_escapeString($ip)."'";
+    }
+*/
+    $sql .= " ORDER BY date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<files>\n";
+
+    foreach($rows AS $row) {
+        $row['permalink'] = $_CONF['site_url'].'/filemgmt/index.php?id='.$row['lid'];
+        $retval .= "<file>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+/*
+                if ( $item == 'media_upload_time' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+*/
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</file>\n";
+    }
+    $retval .= "</files>\n";
+
+// download history
+
+    $exportFields = array('uid','title','remote_ip','date');
+
+    $sql = "SELECT * FROM {$_TABLES['filemgmt_history']} AS fh LEFT JOIN {$_TABLES['filemgmt_filedetail']} AS fd ON fh.lid=fd.lid WHERE uid = ". (int) $uid;
+
+    if ( $ip != '' ) {
+        $sql .= " OR remote_ip = '" . DB_escapeString($ip)."'";
+    }
+
+    $sql .= " ORDER BY fh.date ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<download_history>\n";
+
+    foreach($rows AS $row) {
+        $row['permalink'] = $_CONF['site_url'].'/filemgmt/index.php?id='.$row['lid'];
+        $retval .= "<download>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                if ( $item == 'date' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</download>\n";
+    }
+    $retval .= "</download_history>\n";
+
+// broken links
+
+    $exportFields = array('title','sender','ip');
+
+    $sql = "SELECT * FROM {$_TABLES['filemgmt_brokenlinks']} AS bl LEFT JOIN {$_TABLES['filemgmt_filedetail']} AS fd ON bl.lid=fd.lid WHERE sender = ". (int) $uid;
+
+    if ( $ip != '' ) {
+        $sql .= " OR ip = '" . DB_escapeString($ip)."'";
+    }
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<broken_link_report>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<report>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</report>\n";
+    }
+    $retval .= "</broken_link_report>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+    }
+
+    return $retval;
+}
+
 ?>
