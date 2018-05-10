@@ -21,8 +21,8 @@ $_DATA['calendar'][] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, d
 
 // FileMgmt Default Data
 $_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,1);";
-$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'Yahoo User Interface Grids CSS framework cheat sheet in .pdf format.');";
-$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'YUI Grids CSS Cheat Sheet','css.pdf','http://developer.yahoo.com/yui/grids/','v2.6',131072 ,'','',2,1,UNIX_TIMESTAMP(),0,0.0000,0,1);";
+$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'An overview of glFusion features in .pdf format.');";
+$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'glFusion Overview','glfusion_overview_and_features.pdf','https://www.glfusion.org','v1.7.4',131072 ,'','',2,1,UNIX_TIMESTAMP(),0,0.0000,0,1);";
 
 // Forum Default Data
 $_DATA['forum'][] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
