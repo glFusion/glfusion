@@ -181,6 +181,7 @@ $obsoletePrivateFiles = array(
 $obsoletePublicFiles = array(
 // 1.7.4
     'layout/cms/images/icons/autotag.png',
+    'filemgmt_data/files/css.pdf',
 
 // 1.6.6
     'mediagallery/players/FMP3.swf',
