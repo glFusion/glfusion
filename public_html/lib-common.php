@@ -34,8 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-//error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_PARSE | E_USER_ERROR );
-error_reporting( E_ALL );
+error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_PARSE | E_USER_ERROR );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -68,7 +67,7 @@ define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
-define('DVLP_DEBUG',true);
+//define('DVLP_DEBUG',true);
 
 if (!defined ('OPENSSL_RAW_DATA')) {
     define('OPENSSL_RAW_DATA', 1);
@@ -7454,7 +7453,7 @@ function COM_anonymizeIP($ip)
 
     if (strlen($packedAddress) == 4) {
         $last_dot = strrpos($ip, '.') + 1;
-        return substr($ip, 0, $last_dot).str_repeat('0', strlen($ip) - $last_dot);
+        return substr($ip, 0, $last_dot).'0';
     } elseif (strlen($packedAddress) == 16) {
         $last_colon = strrpos($ip, ':') + 1;
         return substr($ip, 0, $last_colon).str_repeat('0', strlen($ip) - $last_colon);
