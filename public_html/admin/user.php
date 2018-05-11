@@ -1560,7 +1560,7 @@ function USER_save($uid)
     if ( $username == '') {
         return USER_edit($uid,506);
     }
-    if ( !USER_validateUsername($username)) {
+    if ( !USER_validateUsername($username,1)) {
         return USER_edit($uid,512);
     }
     if ( $email == '' ) {
