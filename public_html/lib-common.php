@@ -7282,7 +7282,7 @@ function COM_anonymizeIP($ip)
 
     if (strlen($packedAddress) == 4) {
         $last_dot = strrpos($ip, '.') + 1;
-        return substr($ip, 0, $last_dot).str_repeat('0', strlen($ip) - $last_dot);
+        return substr($ip, 0, $last_dot).'0';
     } elseif (strlen($packedAddress) == 16) {
         $last_colon = strrpos($ip, ':') + 1;
         return substr($ip, 0, $last_colon).str_repeat('0', strlen($ip) - $last_colon);
