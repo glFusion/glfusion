@@ -3904,7 +3904,7 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
 
     $output = '';
 
-    $internalContent = array('comment','story','rating','social');
+    $internalContent = array('social');
 
     $contentTypes = array_merge($internalContent, $_PLUGINS);
 

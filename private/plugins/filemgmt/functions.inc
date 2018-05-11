@@ -1213,7 +1213,7 @@ function plugin_getconfigelementhelp_filemgmt($type, $option, $doclang = 'englis
     return array($retval,0);
 }
 
-function plugin_privacy_export_filemgmt($uid,$email='',$username='',$ip='')
+function plugin_privacy_export_filemgmt_DISABLED($uid,$email='',$username='',$ip='')
 {
     global $_CONF, $_FM_CONF, $_TABLES, $_USER;
 
