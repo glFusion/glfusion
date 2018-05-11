@@ -1316,7 +1316,7 @@ function plugin_privacy_export_filemgmt_DISABLED($uid,$email='',$username='',$ip
     $retval .= "</broken_link_report>\n";
 
     if ( function_exists('tidy_repair_string')) {
-        $retval = tidy_repair_string($retval, ['input-xml' => 1]);
+        $retval = tidy_repair_string($retval, array('input-xml' => 1));
     }
 
     return $retval;
