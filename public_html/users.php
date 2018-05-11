@@ -643,7 +643,7 @@ function newtokenform ($uid)
 */
 function USER_createuser($info = array())
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE, $REMOTE_ADDR;
+    global $_CONF, $_TABLES, $LANG01, $LANG04, $MESSAGE;
 
     $retval = '';
     $validationErrors = 0;
@@ -774,7 +774,7 @@ function USER_createuser($info = array())
     $spamCheckData = array(
         'username'  => $data['username'],
         'email'     => $data['email'],
-        'ip'        => $REMOTE_ADDR,
+        'ip'        => $_SERVER['REAL_ADDR'],
         'type'      => 'registration');
 
     $msg = PLG_itemPreSave ('registration', $spamCheckData);

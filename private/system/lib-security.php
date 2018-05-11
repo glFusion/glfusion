@@ -1132,7 +1132,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
     $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
-        $pageURL  = $_SERVER['REMOTE_ADDR'];
+        $pageURL  = $_SERVER['REAL_ADDR'];
     } else {
         $pageURL = COM_getCurrentURL();
     }
@@ -1256,7 +1256,7 @@ function _sec_checkToken($ajax=0)
 //    if ( COM_isAnonUser() ) return true;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
-        $referCheck  = $_SERVER['REMOTE_ADDR'];
+        $referCheck  = $_SERVER['REAL_ADDR'];
     } else {
         $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     }
@@ -1294,7 +1294,7 @@ function _sec_checkToken($ajax=0)
                 COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
-                    bb2_ban($_SERVER['REMOTE_ADDR'],3);
+                    bb2_ban($_SERVER['REAL_ADDR'],3);
                 }
 
                 $return = false;
@@ -1400,7 +1400,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
                 COM_errorLog("Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
 
                 if ( function_exists('bb2_ban') ) {
-                    bb2_ban($_SERVER['REMOTE_ADDR'],3);
+                    bb2_ban($_SERVER['REAL_ADDR'],3);
                 }
                 $return = false;
             } else {
