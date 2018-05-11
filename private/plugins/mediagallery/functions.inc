@@ -1676,7 +1676,7 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
     return $retval;
 }
 
-function plugin_privacy_export_mediagallery($uid,$email='',$username='',$ip='')
+function plugin_privacy_export_mediagallery_DISABLED($uid,$email='',$username='',$ip='')
 {
     global $_CONF, $_MG_CONF, $_TABLES, $_USER;
 

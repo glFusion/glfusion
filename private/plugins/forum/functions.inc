@@ -2196,7 +2196,7 @@ function plugin_profileblocksdisplay_forum( $uid )
 
 }
 
-function plugin_privacy_export_forum($uid,$email='',$username='',$ip='')
+function plugin_privacy_export_forum_DISABLED($uid,$email='',$username='',$ip='')
 {
     global $_CONF, $_TABLES, $_USER;
 
