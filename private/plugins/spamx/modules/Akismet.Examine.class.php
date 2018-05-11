@@ -36,7 +36,7 @@ class Akismet extends BaseCommand
      */
     public function execute($comment, $data)
     {
-        global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00, $REMOTE_ADDR;
+        global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00;
 
         $retval = false;
 
@@ -58,7 +58,7 @@ class Akismet extends BaseCommand
             if ( isset($data['ip'])) {
                 $akismet->setUserIP($data['ip']);
             } else {
-                $akismet->setUserIP($REMOTE_ADDR);
+                $akismet->setUserIP($_SERVER['REAL_ADDR']);
             }
             if ( isset($data['type']) ) {
                 $akismet->setCommentType($data['type']);
@@ -74,9 +74,9 @@ class Akismet extends BaseCommand
                 SPAMX_log ("Akismet: spam detected on " . $spamType);
                 SPAMX_log ($LANG_SX00['foundspam'] . 'Akismet'.
                            $LANG_SX00['foundspam2'] . $_USER['uid'] .
-                           $LANG_SX00['foundspam3'] . $REMOTE_ADDR);
+                           $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                 if ( function_exists('bb2_ban') ) {
-                    bb2_ban($REMOTE_ADDR,4);
+                    bb2_ban($_SERVER['REAL_ADDR'],4);
                 }
 
              }

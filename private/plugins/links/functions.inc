@@ -900,7 +900,7 @@ function plugin_save_submit_links($A)
     $spamData = array(
         'username' => $uname,
         'email'    => $email,
-        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'ip'       => $_SERVER['REAL_ADDR'],
         'type'     => 'link',
     );
 

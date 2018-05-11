@@ -118,8 +118,8 @@ class AkismetBase {
 		 * Otherwise the user_ip appears as the IP address of the PHP4 server passing the requests to the
 		 * PHP5 one...
 		 */
-		if(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] != getenv('SERVER_ADDR')) {
-			$this->comment['user_ip'] = $_SERVER['REMOTE_ADDR'];
+		if(isset($_SERVER['REAL_ADDR']) && $_SERVER['REAL_ADDR'] != getenv('SERVER_ADDR')) {
+			$this->comment['user_ip'] = $_SERVER['REAL_ADDR'];
 		} else {
 			$this->comment['user_ip'] = getenv('HTTP_X_FORWARDED_FOR');
 		}

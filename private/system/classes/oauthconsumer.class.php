@@ -56,7 +56,6 @@ class OAuthConsumer {
         if (strpos($service, 'oauth.') === 0) {
             $service = str_replace("oauth.", "", $service);
         }
-
         $this->service = $service;
     	$this->client = new oauth_client_class;
     	$this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';
@@ -169,7 +168,7 @@ class OAuthConsumer {
     }
 
     public function doFinalLogin($info) {
-        global $_TABLES, $LANG04, $status, $uid, $_CONF, $REMOTE_ADDR;
+        global $_TABLES, $LANG04, $status, $uid, $_CONF;
 
         $users      = $this->_getCreateUserInfo($info);
         $userinfo   = $this->_getUpdateUserInfo($info);

@@ -97,7 +97,7 @@ function SESS_sessionCheck()
 
     $userid = 0;
     $mintime = time() - $_CONF['session_cookie_timeout'];
-    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+    $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
 
     if (isset ($_COOKIE[$_CONF['cookie_session']]) && strlen($_COOKIE[$_CONF['cookie_session']]) < 33 ) {
         $sessid = COM_applyFilter ($_COOKIE[$_CONF['cookie_session']]);
@@ -210,7 +210,7 @@ function SESS_checkRememberMe()
 
     $userid = 0;
 
-    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+    $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
 
     if (isset ($_COOKIE[$_CONF['cookie_name']])) {
         $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
@@ -220,7 +220,7 @@ function SESS_checkRememberMe()
             $userid = (int) COM_applyFilter ($userid, true);
             $cookie_token = '';
             if ($userid > 1) {
-                $remote_ip       = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+                $remote_ip       = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
                 $result          = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=".(int) $userid,1);
                 $rip             = DB_fetchArray($result);
                 $server_ip       = $rip['remote_ip'];
@@ -520,7 +520,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER;
 
-    $request_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
+    $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
 
     // build the $_USER array
     $userdata = SESS_getUserDataFromId($uid);

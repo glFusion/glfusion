@@ -83,10 +83,6 @@ $_GET    = all_stripslashes($_GET);
 $_COOKIE = all_stripslashes($_COOKIE);
 // Override the $_REQUEST setting...
 $_REQUEST = array_merge($_GET, $_POST);
-// set $REMOTE_ADDR
-if (!isset($REMOTE_ADDR)) {
-    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
-}
 
 /**
   * Load the site configuration.  This is done in three steps:
@@ -171,9 +167,20 @@ if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
 
 require_once $_CONF['path_system'].'/lib-cache.php';
 
+/////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
     require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }
+/////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+if (!isset($_SERVER['REAL_ADDR'])) {
+    $_SERVER['REAL_ADDR'] = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
+}
+$_SERVER['REMOTE_ADDR'] = COM_anonymizeIP($_SERVER['REAL_ADDR']);
+$REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
+
+/////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 $result = DB_query("SELECT * FROM {$_TABLES['vars']}");
 $resultSet = DB_fetchAll($result);
@@ -1837,7 +1844,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 
 function COM_errorLog( $logentry, $actionid = 1 )
 {
-    global $_CONF, $LANG01, $REMOTE_ADDR;
+    global $_CONF, $LANG01;
 
     $retval = '';
 
@@ -1846,7 +1853,7 @@ function COM_errorLog( $logentry, $actionid = 1 )
 
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
-        $ipaddress = $REMOTE_ADDR;
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
         if (!isset($_CONF['path_layout']) &&
                 (($actionid == 2) || empty($actionid))) {
             $actionid = 1;
@@ -4583,7 +4590,7 @@ function COM_checkSpeedlimit($type = 'submit', $max = 1, $property = '')
     $last = 0;
 
     if (empty($property)) {
-        $property = $_SERVER['REMOTE_ADDR'];
+        $property = $_SERVER['REAL_ADDR'];
     }
     $property = DB_escapeString($property);
 
@@ -4620,7 +4627,7 @@ function COM_updateSpeedlimit($type = 'submit', $property = '')
     global $_TABLES;
 
     if (empty($property)) {
-        $property = $_SERVER['REMOTE_ADDR'];
+        $property = $_SERVER['REAL_ADDR'];
     }
     $property = DB_escapeString($property);
     $type     = DB_escapeString($type);
@@ -4660,7 +4667,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     global $_TABLES;
 
     if (empty($property)) {
-        $property = $_SERVER['REMOTE_ADDR'];
+        $property = $_SERVER['REAL_ADDR'];
     }
     $property = DB_escapeString($property);
     $type     = DB_escapeString($type);
@@ -7267,6 +7274,21 @@ function COM_randomKey($length = 40 )
     $random .= sha1(microtime(true).mt_rand(10000,90000));
     }
     return substr($random, 0, $length);
+}
+
+function COM_anonymizeIP($ip)
+{
+    $packedAddress = inet_pton($ip);
+
+    if (strlen($packedAddress) == 4) {
+        $last_dot = strrpos($ip, '.') + 1;
+        return substr($ip, 0, $last_dot).str_repeat('0', strlen($ip) - $last_dot);
+    } elseif (strlen($packedAddress) == 16) {
+        $last_colon = strrpos($ip, ':') + 1;
+        return substr($ip, 0, $last_colon).str_repeat('0', strlen($ip) - $last_colon);
+    } else {
+        return "";
+    }
 }
 
 /**

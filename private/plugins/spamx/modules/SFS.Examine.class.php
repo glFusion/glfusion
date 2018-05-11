@@ -60,10 +60,10 @@ class SFS extends BaseCommand {
             $ans = 1;
             SPAMX_log ($LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
                        $LANG_SX00['foundspam2'] . $uid .
-                       $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                       $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
             SESS_setVar('spamx_msg','Failed Stop Forum Spam IP / username check');
             if ( function_exists('bb2_ban') ) {
-                bb2_ban($REMOTE_ADDR,4);
+                bb2_ban($_SERVER['REAL_ADDR'],4);
             }
         }
         return $ans;

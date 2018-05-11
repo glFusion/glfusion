@@ -538,7 +538,7 @@ function CAPTCHA_sid() {
  * @return  string   session id
  */
 function CAPTCHA_getSession($ctype = '') {
-    global $_CP_CONF, $_TABLES, $REMOTE_ADDR;
+    global $_CP_CONF, $_TABLES;
 
     $counter = 0;
 
@@ -565,7 +565,7 @@ function CAPTCHA_getSession($ctype = '') {
 
     // this will be filled in by the CAPTCHA
     $validation = '';
-    $ip = $REMOTE_ADDR;
+    $ip = $_SERVER['REAL_ADDR'];
 
     // update the session table
     if ( $_CP_CONF['gfxDriver'] != 3 ) {
@@ -705,8 +705,8 @@ function CAPTCHA_checkRetries( $csid )
 
     if ( $counter > $_SYSTEM['max_captcha_atttempts'] ) {
         if ( function_exists('bb2_ban') ) {
-            CAPTCHA_errorLog("CAPTCHA: Banning for too many retries - IP Address: " . $_SERVER['REMOTE_ADDR'] );
-            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+            CAPTCHA_errorLog("CAPTCHA: Banning for too many retries - IP Address: " . $_SERVER['REAL_ADDR'] );
+            bb2_ban($_SERVER['REAL_ADDR'],2);
         }
     } else {
         $counter++;
@@ -735,7 +735,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         CAPTCHA_errorLog("CAPTCHA: Honey Pot Field was populated in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         // immediate ban!
         if ( function_exists('bb2_ban') ) {
-            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+            bb2_ban($_SERVER['REAL_ADDR'],2);
         }
         return array(0,$LANG_CP00['entry_error']);
     }
@@ -751,7 +751,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     if ( !isset($_POST[$csid_name]) ) {
         // immediate ban!
         if ( function_exists('bb2_ban') ) {
-            bb2_ban($_SERVER['REMOTE_ADDR'],2);
+            bb2_ban($_SERVER['REAL_ADDR'],2);
         }
         CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         $msg = $LANG_CP00['bypass_error_blank'];
@@ -839,7 +839,7 @@ function recaptcha_check_answer()
     $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\SocketPost());
     // Was there a reCAPTCHA response?
     if (isset($_POST["g-recaptcha-response"]) && $_POST["g-recaptcha-response"]) {
-        $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REMOTE_ADDR"]);
+        $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REAL_ADDR"]);
     }
     return $resp;
 }

@@ -44,7 +44,7 @@ class IP extends BaseCommand {
      */
     function execute($comment,$data)
     {
-        return $this->_process($_SERVER['REMOTE_ADDR']);
+        return $this->_process($_SERVER['REAL_ADDR']);
     }
 
     /**

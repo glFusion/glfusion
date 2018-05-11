@@ -64,7 +64,7 @@ class SLC extends BaseCommand {
         if ( $linkCount > $_SPX_CONF['slc_max_links']) {
             SPAMX_log ($LANG_SX00['foundspam'] . 'Spam Link Counter (SLC)'.
                        $LANG_SX00['foundspam2'] . $uid .
-                       $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                       $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
             $tooManyLinks = 1;
             SESS_setVar('spamx_msg','Too many links in post');
         }
