@@ -107,7 +107,7 @@ function submissionform($type='story', $mode = '', $topic = '')
 */
 function submitstory($topic = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24,$REMOTE_ADDR;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24;
 
     $retval = '';
 
@@ -209,7 +209,7 @@ function submitstory($topic = '')
     $retval .= COM_endBlock();
     $urlfor = 'advancededitor';
     if ( COM_isAnonUser() ) {
-        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+        $urlfor = 'advancededitor'.md5($_SERVER['REAL_ADDR']);
     }
     $rc = @setcookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral($urlfor),
                time() + 1200, $_CONF['cookie_path'],
@@ -289,7 +289,7 @@ function savestory($A)
 
     // pseudo-formatted story text for the spam check
     $spamData = array(
-        'ip'    => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'ip'    => $_SERVER['REAL_ADDR'],
         'type'  => 'blog-post'
     );
 
@@ -410,7 +410,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     }
     $urlfor = 'advancededitor';
     if ( COM_isAnonUser() ) {
-        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+        $urlfor = 'advancededitor'.md5($_SERVER['REAL_ADDR']);
     }
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='".$urlfor."'";
     DB_Query($sql,1);

@@ -141,7 +141,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         echo $display;
         exit;
     }
-    COM_resetSpeedlimit('login', $_SERVER['REMOTE_ADDR']);
+    COM_resetSpeedlimit('login', $_SERVER['REAL_ADDR']);
     if ( $_SYSTEM['admin_session'] != 0 ) {
         $token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
         SEC_setCookie('token',$token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);

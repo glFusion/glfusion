@@ -111,7 +111,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             $spamData = array(
                 'username' => $author,
                 'email'     => $authoremail,
-                'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+                'ip'        => $_SERVER['REAL_ADDR'],
                 'type'      => 'message'
             );
 
@@ -380,7 +380,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $spamData = array(
         'username'  => $from,
         'email'     => $fromemail,
-        'ip'        => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'ip'        => $_SERVER['REAL_ADDR'],
         'type'      => 'message'
     );
 

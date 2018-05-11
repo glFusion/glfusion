@@ -182,7 +182,7 @@ function plugin_deletecomment_polls($cid, $id)
                                  . "/polls/index.php?pid=$id");
     } else {
         COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
-                    . "tried to illegally delete comment $cid from poll $id");
+                    . "did not have permissions to delete comment $cid from poll $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     CACHE_remove_instance('whatsnew_');
@@ -1367,7 +1367,7 @@ function POLLS_saveVote($pid, $aid)
         $userid = $_USER['uid'];
     }
     // This always does an insert so no need to provide key_field and key_value args
-    $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
+    $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REAL_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
     $result = DB_query($sql);
 
     $eMsg = $LANG_POLLS['savedvotemsg'] . ' "'
@@ -1692,7 +1692,7 @@ function POLLS_ipAlreadyVoted($pid, $ip = '' )
     $retval = false;
 
     if(empty($ip )) {
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REAL_ADDR'];
     }
 
     if ( !COM_isAnonUser() ) {

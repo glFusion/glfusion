@@ -86,7 +86,7 @@ function TRB_logRejected($reason, $url = '')
 
     if ($_TRB_LOG_REJECTS) {
 
-        $logmsg = 'Trackback from IP ' . $_SERVER['REMOTE_ADDR']
+        $logmsg = 'Trackback from IP ' . $_SERVER['REAL_ADDR']
             . ' rejected for ' . $reason . ', URL: ' . $url;
 
         if (function_exists('SPAMX_log')) {
@@ -234,7 +234,7 @@ function TRB_checkForSpam($url, $title = '', $blog = '', $excerpt = '')
     $spamData = array(
         'username' => '',
         'email'    => '',
-        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'ip'       => $_SERVER['REAL_ADDR'],
         'type'     => 'trackback'
     );
 
@@ -300,7 +300,7 @@ function TRB_saveTrackbackComment($sid, $type, $url, $title = '', $blog = '', $e
     } // else: multiple trackbacks allowed
 
     DB_save ($_TABLES['trackback'], 'sid,url,title,blog,excerpt,date,type,ipaddress',
-             "'".DB_escapeString($sid)."','$url','$title','$blog','$excerpt',NOW(),'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REMOTE_ADDR'])."'");
+             "'".DB_escapeString($sid)."','$url','$title','$blog','$excerpt',NOW(),'".DB_escapeString($type)."','".DB_escapeString($_SERVER['REAL_ADDR'])."'");
 
     $comment_id = DB_insertId();
 
@@ -604,7 +604,7 @@ function TRB_handleTrackbackPing($sid, $type = 'article')
                 return false;
             } else {
                 $ip = gethostbyname($parts['host']);
-                if ($ip != $_SERVER['REMOTE_ADDR']) {
+                if ($ip != $_SERVER['REAL_ADDR']) {
                     TRB_sendTrackbackResponse(1, $TRB_ERROR['spam'],
                         403, 'Forbidden');
                     TRB_logRejected('IP address mismatch', $_POST['url']);

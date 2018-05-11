@@ -692,8 +692,6 @@ function forum_chkUsercanPost() {
 
     $display = '';
 
-    $remote_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
-
     //Check is anonymous users can post
     if ($_FF_CONF['registered_to_post'] && COM_isAnonUser() ){
         $display  = COM_siteHeader();
@@ -703,25 +701,8 @@ function forum_chkUsercanPost() {
         exit;
     }
 
-    /* ---
-    if ($_FF_CONF['use_sfs'] == 1 ) {
-        // Stop Forum Spam check
-        if ( @file_exists($_CONF['path'].'/plugins/spamx/SFS.Misc.class.php') ) {
-            require_once $_CONF['path'].'/plugins/spamx/SFS.Misc.class.php';
-            $EX = new SFSreg;
-            $res = $EX->execute('');
-            if ($res > 0) {
-                // sleep - slows down the spammer / bot
-                sleep(30);
-                die('IP listed in Stop Forum Spam database');
-                exit();
-            }
-        }
-    }
-    --- */
-
     // Check if IP of user has been banned
-    $isBanned = DB_count($_TABLES['ff_banned_ip'],'host_ip',DB_escapeString($remote_ip));
+    $isBanned = DB_count($_TABLES['ff_banned_ip'],'host_ip',DB_escapeString($_SERVER['REAL_ADDR']));
     if ( $isBanned > 0 ) {
         $display .= FF_siteHeader();
         $display .= COM_startBlock($LANG_GF00['access_denied']);

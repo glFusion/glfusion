@@ -217,7 +217,7 @@ function plugin_upgrade_spamx()
  */
 function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
 {
-    global $_CONF, $_TABLES, $_USER, $_SPX_CONF, $REMOTE_ADDR;
+    global $_CONF, $_TABLES, $_USER, $_SPX_CONF;
 
     // skip spam check for members of the 'spamx Admin' group, if enabled
     if (isset ($_SPX_CONF['admin_override']) && $_SPX_CONF['admin_override']) {
@@ -257,7 +257,7 @@ function plugin_checkforSpam_spamx ($comment, $action = -1, $data = array())
             $module = $Examine;
             $dt = new Date('now',$_USER['tzid']);
             $datetime = $dt->toMySQL(true);
-            $ip = (isset($data['ip']) ? $data['ip'] : $REMOTE_ADDR);
+            $ip = (isset($data['ip']) ? $data['ip'] : $_SERVER['REAL_ADDR']);
             $email = (isset($data['email']) ? $data['email'] : '' );
             $type  = (isset($data['type']) ? $data['type'] : 'other');
             $username = (isset($data['username']) ? $data['username'] : '');

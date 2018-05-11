@@ -168,7 +168,7 @@ class OAuthConsumer {
     }
 
     public function doFinalLogin($info) {
-        global $_TABLES, $LANG04, $status, $uid, $_CONF, $REMOTE_ADDR;
+        global $_TABLES, $LANG04, $status, $uid, $_CONF;
 
         $users      = $this->_getCreateUserInfo($info);
         $userinfo   = $this->_getUpdateUserInfo($info);

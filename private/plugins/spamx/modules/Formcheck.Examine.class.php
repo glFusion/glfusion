@@ -35,7 +35,7 @@ class Formcheck extends BaseCommand
      */
     public function execute($comment, $data)
     {
-        global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00, $REMOTE_ADDR;
+        global $_CONF, $_USER, $_SPX_CONF, $LANG_SX00;
 
         if ( !isset($_SPX_CONF['fc_enable']) || $_SPX_CONF['fc_enable'] == 0 ) {
             return false;
@@ -46,9 +46,9 @@ class Formcheck extends BaseCommand
             $rand = COM_applyFilter($_POST['fcfield']);
             $fieldName = 'fc_email_'.$rand;
             if ( isset($_POST[$fieldName] ) && $_POST[$fieldName] != '' ) {
-                SPAMX_log('FormCheck: spam identified in ' . $data['type'] . ' - ' . $REMOTE_ADDR);
+                SPAMX_log('FormCheck: spam identified in ' . $data['type'] . ' - ' . $_SERVER['REAL_ADDR']);
                 if ( function_exists('bb2_ban') ) {
-                    bb2_ban($REMOTE_ADDR,4);
+                    bb2_ban($_SERVER['REAL_ADDR'],4);
                 }
                 $retval = true;
             }

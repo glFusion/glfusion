@@ -164,7 +164,7 @@ if ( COM_isAnonUser() ) {
 // purge any tokens we created for the advanced editor
 $urlfor = 'advancededitor';
 if ( $uid == 1 ) {
-    $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+    $urlfor = 'advancededitor'.md5($_SERVER['REAL_ADDR']);
 }
 DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $uid." AND urlfor='".$urlfor."'",1);
 
@@ -355,7 +355,7 @@ function _ff_accessError()
 function FF_postEditor( $postData, $forumData, $action, $viewMode )
 {
     global $_CONF, $_TABLES, $_FF_CONF, $FF_userprefs, $_USER,
-           $LANG_GF01, $LANG_GF02, $LANG_GF10,$REMOTE_ADDR, $LANG_ADMIN;
+           $LANG_GF01, $LANG_GF02, $LANG_GF10, $LANG_ADMIN;
 
     $retval         = '';
     $editmoderator  = false;
@@ -904,7 +904,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
     $retval .= $peTemplate->finish($peTemplate->get_var('output'));
     $urlfor = 'advancededitor';
     if ( $uid == 1 ) {
-        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+        $urlfor = 'advancededitor'.md5($_SERVER['REAL_ADDR']);
     }
     SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral($urlfor),
                    time() + 1200, $_CONF['cookie_path'],
@@ -937,8 +937,6 @@ function FF_saveTopic( $forumData, $postData, $action )
     $okToSave = true;
     $dt = new Date('now',$_USER['tzid']);
     $date = $dt->toUnix();
-
-    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
     if (COM_isAnonUser() ) {
         $uid = 1;
@@ -1054,7 +1052,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         $spamCheckData = array(
             'username'  => $postData['name'],
             'email'     => $email,
-            'ip'        => $REMOTE_ADDR,
+            'ip'        => $_SERVER['REAL_ADDR'],
             'type'      => 'forum-post'
         );
         $result = PLG_checkforSpam($spamcheck, $_CONF['spamx'],$spamCheckData);
@@ -1118,7 +1116,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                     "'".$subject."'," .
                     "'".$comment."'," .
                     "'".DB_escapeString($postmode)."'," .
-                    "'".DB_escapeString($REMOTE_ADDR)."'," .
+                    "'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," .
                     "'".DB_escapeString($mood)."'," .
                     (int) $uid."," .
                     "0," .
@@ -1159,7 +1157,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                     "'$subject'," .
                     "'$comment'," .
                     "'".DB_escapeString($postmode)."'," .
-                    "'".DB_escapeString($REMOTE_ADDR)."'," .
+                    "'".DB_escapeString($_SERVER['REMOTE_ADDR'])."'," .
                     "'".DB_escapeString($mood)."'," .
                     (int) $uid."," .
                     (int) $id."," .

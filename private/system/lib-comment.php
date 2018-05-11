@@ -1444,7 +1444,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
  */
 function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $REMOTE_ADDR;
+    global $_CONF, $_TABLES, $_USER, $LANG03;
 
     $ret = 0;
 
@@ -1500,7 +1500,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     $spamData = array(
         'username' => $uname,
         'email'    => $email,
-        'ip'       => $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']),
+        'ip'       => $_SERVER['REAL_ADDR'],
         'type'     => 'comment'
     );
     $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx'],$spamData);

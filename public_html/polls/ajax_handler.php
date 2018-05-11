@@ -113,7 +113,7 @@ function POLLS_saveVote_AJAX($pid, $aid)
         } else {
             $userid = $_USER['uid'];
         }
-        $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REMOTE_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
+        $sql = "INSERT INTO {$_TABLES['pollvoters']} (ipaddress,uid,date,pid) VALUES ('".DB_escapeString($_SERVER['REAL_ADDR'])."',".(int)$userid.",".time().",'".DB_escapeString($pid)."')";
         $result = DB_query($sql);
     }
 

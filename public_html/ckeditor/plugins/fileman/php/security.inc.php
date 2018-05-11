@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -25,7 +25,7 @@ require_once '../../../../lib-common.php';
 
 function checkAccess($action){
 
-    global $_CONF, $_CK_CONF, $_USER, $REMOTE_ADDR;
+    global $_CONF, $_CK_CONF, $_USER;
 
     if ( COM_isAnonUser() ) {
         $uid = 1;
@@ -35,7 +35,7 @@ function checkAccess($action){
 
     $urlfor = 'advancededitor';
     if (COM_isAnonUser() ) {
-        $urlfor = 'advancededitor'.md5($REMOTE_ADDR);
+        $urlfor = 'advancededitor'.md5($_SERVER['REAL_ADDR']);
     }
     $cookiename = $_CONF['cookie_name'].'adveditor';
     if ( isset($_COOKIE[$cookiename]) ) {

@@ -105,7 +105,7 @@ class SFSreg extends BaseCommand {
                 if ( $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for IP '  . $ip . ' with confidence level of ' . $result['ip']['confidence'] .
-                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                        $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                     return 1;
                 } else if (isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
                     SPAMX_log("SFS: found match on IP, but confidence level was only " . $result['ip']['confidence']);
@@ -115,7 +115,7 @@ class SFSreg extends BaseCommand {
                 if ( $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for email '  . $email . ' with confidence level of ' . $result['email']['confidence'] .
-                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                        $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                     return 1;
                 } else if (isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
                     SPAMX_log("SFS: found match on email, but confidence level was only " . $result['email']['confidence'] . " which is below the configured confidence level of " . $_SPX_CONF['sfs_email_confidence']));
@@ -125,7 +125,7 @@ class SFSreg extends BaseCommand {
                 if ( $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for username '  . $username . ' with confidence level of ' . $result['username']['confidence'] .
-                        $LANG_SX00['foundspam3'] . $_SERVER['REMOTE_ADDR']);
+                        $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                     return 1;
                 } else if (isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
                     SPAMX_log("SFS: found match on username, but confidence level was only " . $result['username']['confidence']." which is below the configured confidence level of " . $_SPX_CONF['sfs_username_confidence']));
