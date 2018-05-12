@@ -1,4 +1,13 @@
 ## v1.7.4 (Unreleased)
+  - Delete account now removes or anonymizes all of the users info from the glFusion database tables
+  - Truncate the media item title to prevent overflow in the Media Gallery random image block
+  - Modified the CSS for FileMgmt download rating to left justify the rating stars
+  - Fixed issue where remote login users could not delete their account
+  - Fixed password rule text to better describe the length requirement
+  - Fixed issue on installation / upgrade screen where the enter key would select the Back button
+  - Updated the default download on a new install to a glFusion Overview PDF
+  - Fixed issue where site admin could not save a user record if the name did not meet length requirement
+  - Anonymize IP addresses prior to storing in database
   - Oauth new user creation to now follow same workflow as local user creation
   - Increase homepage table var (users table) to 255 bytes in size
   - Spam check when creating oauth user
