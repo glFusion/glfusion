@@ -499,7 +499,7 @@ function DBADMIN_innodb()
 
     $retval = '';
 
-    if ( defined('DEMO_MODE') ) return DB_list();
+    if ( defined('DEMO_MODE') ) return DBADMIN_list();
 
     $allInnoDB = DBADMIN_innodbStatus();
     $allMyIsam = DBADMIN_myisamStatus();
@@ -556,7 +556,7 @@ function DBADMIN_myisam()
 
     $retval = '';
 
-    if ( defined('DEMO_MODE') ) return DB_list();
+    if ( defined('DEMO_MODE') ) return DBADMIN_list();
 
     $allInnoDB = DBADMIN_innodbStatus();
 
@@ -622,7 +622,7 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
     $retval = '';
     $start = time();
 
-    if ( defined('DEMO_MODE') ) return DB_list();
+    if ( defined('DEMO_MODE') ) return DBADMIN_list();
 
     DB_displayError(true);
 
@@ -709,7 +709,7 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
     $retval = '';
     $start = time();
 
-    if ( defined('DEMO_MODE') ) return DB_list();
+    if ( defined('DEMO_MODE') ) return DBADMIN_list();
 
     DB_displayError(true);
 
