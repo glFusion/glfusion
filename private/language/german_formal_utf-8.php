@@ -473,7 +473,19 @@ $LANG04 = array(
     202 => 'Folge mir',
     203 => 'Konto aktivieren',
     204 => 'Remote-Konto entfernen',
-    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigst dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.'
+    205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigst dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.',
+    206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
+    207 => 'Go To Site',
+    208 => 'You are almost done!',
+    209 => 'Please provide and confirm the information below to finalize your account.',
+    210 => 'You are about to create a new account on <em>%s</em> using a login from <strong>%s</strong>',
+    211 => 'Create your personal account',
+    'facebook' => 'Facebook',
+    'github' => 'GitHub',
+    'google' => 'Google',
+    'linkedin' => 'LinkedIn',
+    'microsoft' => 'Microsoft',
+    'twitter' => 'Twitter'
 );
 
 ###############################################################################
@@ -1579,6 +1591,7 @@ $MESSAGE = array(
     520 => 'Sie haben diese Benachrichtigung abonniert.',
     521 => 'Sie wurden für diese Benachrichtigung erfolgreich abgemeldet.',
     522 => 'Remote-Konto wurde erfolgreich mit dem vorhandenen lokalen Konto zusammengeführt',
+    523 => 'Security Token has expired - please try again.',
     600 => 'Das Entwicklungs-Update wurde abgeschlossen - Bitte überprüfen Sie, ob Plugins aktualisiert werden müssen'
 );
 
