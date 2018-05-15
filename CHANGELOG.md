@@ -1,4 +1,4 @@
-## v1.7.4 (Unreleased)
+## v1.7.4 (May 15, 2018)
   - Delete account now removes or anonymizes all of the users info from the glFusion database tables
   - Truncate the media item title to prevent overflow in the Media Gallery random image block
   - Modified the CSS for FileMgmt download rating to left justify the rating stars
