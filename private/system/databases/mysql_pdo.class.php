@@ -179,7 +179,7 @@ class database
         $this->_verbose = false;
         $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
-        $this->_character_set_database = strtoupper(str_replace("-","",$db_charset));
+        $this->_character_set_database = strtolower(str_replace("-","",$db_charset));
         $this->_mysql_version = 0;
 
         $this->_connect();
