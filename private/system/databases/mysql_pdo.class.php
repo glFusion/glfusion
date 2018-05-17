@@ -137,7 +137,7 @@ class database
                 $collation = $this->dbFetchArray($result);
                 $this->_character_set_database = $collation["@@character_set_database"];
             }
-            if ( $this->_db->server_version >= 50503 ) {
+            if (version_compare($this->_mysql_version,'5.5.3','>=')) {
                 if ( $this->_character_set_database == "utf8mb4" ) {
                     if (method_exists($this->_db, 'set_charset')) {
                         $result = $this->_db->set_charset('utf8mb4');
