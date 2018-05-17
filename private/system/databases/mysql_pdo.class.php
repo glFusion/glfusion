@@ -129,6 +129,42 @@ class database
 
         $this->_mysql_version = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
 
+        if ($this->_charset === 'utf-8') {
+            $result = false;
+
+            if ( $this->_character_set_database == '' ) {
+                $result = $this->_db->query("SELECT @@character_set_database");
+                $collation = $this->dbFetchArray($result);
+                $this->_character_set_database = $collation["@@character_set_database"];
+            }
+            if ( $this->_db->server_version >= 50503 ) {
+                if ( $this->_character_set_database == "utf8mb4" ) {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8mb4');
+                    }
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8mb4'");
+                    }
+                    $this->_filter = 0;
+                } else {
+                    if (method_exists($this->_db, 'set_charset')) {
+                        $result = $this->_db->set_charset('utf8');
+                    }
+
+                    if (!$result) {
+                        @$this->_db->query("SET NAMES 'utf8'");
+                    }
+                }
+            } else {
+                if (method_exists($this->_db, 'set_charset')) {
+                    $result = $this->_db->set_charset('utf8');
+                }
+                if (!$result) {
+                    @$this->_db->query("SET NAMES 'utf8'");
+                }
+            }
+        }
+
         if (version_compare($this->_mysql_version,'5.7.0','>=')) {
             $result = $this->_db->query("SELECT @@sql_mode");
             $modeData = $this->dbFetchArray($result);
