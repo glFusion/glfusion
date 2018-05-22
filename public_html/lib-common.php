@@ -1847,7 +1847,7 @@ function COM_errorLog( $logentry, $actionid = 1 )
     global $_CONF, $LANG01;
 
     $retval = '';
-
+    if ( !isset($_CONF['timezone'])) $_CONF['timezone'] = 'America/Chicago';
     $dt = new \Date('now',$_CONF['timezone']);
     $timestamp = $dt->format("d M Y H:i:s T",true);
 
