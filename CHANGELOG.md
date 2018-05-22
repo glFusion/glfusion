@@ -1,3 +1,8 @@
+## v1.7.4.pl1 (Unreleased)
+  - Fixed error in email duplicate check on new registrations
+  - MySQL PDO Driver updates / fixes
+  - Updated PHP Archive class
+
 ## v1.7.4 (May 15, 2018)
   - Delete account now removes or anonymizes all of the users info from the glFusion database tables
   - Truncate the media item title to prevent overflow in the Media Gallery random image block
