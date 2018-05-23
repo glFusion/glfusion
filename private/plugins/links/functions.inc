@@ -451,14 +451,16 @@ function plugin_user_delete_links ($uid)
         $rootuser = 2;
     }
 
+    if ( $rootuser == '' || empty($rootuser) ) $rootuser = 2;
+
     if ($_LI_CONF['delete_links'] == 1) {
         // delete the links
         DB_delete($_TABLES['links'], 'owner_id', $uid);
     } else {
-        DB_query ("UPDATE {$_TABLES['links']} SET owner_id = $rootuser WHERE owner_id = $uid");
+        DB_query ("UPDATE {$_TABLES['links']} SET owner_id = ".$rootuser." WHERE owner_id = ".$uid);
     }
 
-    DB_query("UPDATE {$_TABLES['linkcategories']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_query("UPDATE {$_TABLES['linkcategories']} SET owner_id = ".$rootuser." WHERE owner_id = ".$uid);
     DB_delete($_TABLES['linksubmission'],'owner_id',$uid);
 }
 
