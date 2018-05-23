@@ -680,7 +680,7 @@ function USER_createuser($info = array())
 
     // submitted data
 
-    $data['regtype']    = isset($info['regtype']) ? $info['regtype'] : 'local';
+    $data['regtype']    = isset($info['regtype']) && $info['regtype'] != '' ? $info['regtype'] : 'local';
 
     $data['username']   = isset($info['username']) ? $info['username'] : '';
 
@@ -737,7 +737,7 @@ function USER_createuser($info = array())
         $errorMessages[] = $LANG04[19];
     }
 
-    if ( $data['regtype'] == 'local' ) {
+    if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
         $ecount = DB_count($_TABLES['users'], 'email', DB_escapeString ($data['email']));
         if ( $ecount != 0 ) {
             $validationErrors++;
