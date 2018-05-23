@@ -468,8 +468,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     if ( $ignore == 0 ) PLG_createUser($uid);
 
     // Notify the admin?
-    if (isset ($_CONF['notification']) &&
-        in_array ('user', $_CONF['notification'])) {
+    if (($ignore == 0) && (isset ($_CONF['notification']) && in_array ('user', $_CONF['notification']))) {
         if ($queueUser) {
             $mode = 'inactive';
         } else {

@@ -1,5 +1,7 @@
 ## v1.7.4.pl1 (Unreleased)
+  - Do not send notification email for new user when created by admin
   - Fixed error in email duplicate check on new registrations
+  - Fixed error in Links plugin when deleting a user
   - MySQL PDO Driver updates / fixes
   - Updated PHP Archive class
 
