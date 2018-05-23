@@ -468,8 +468,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     if ( $ignore == 0 ) PLG_createUser($uid);
 
     // Notify the admin?
-    if (isset ($_CONF['notification']) &&
-        in_array ('user', $_CONF['notification'])) {
+    if (($ignore == 0) && (isset ($_CONF['notification']) && in_array ('user', $_CONF['notification']))) {
         if ($queueUser) {
             $mode = 'inactive';
         } else {
@@ -1030,14 +1029,6 @@ function USER_unmergeAccounts()
 function USER_mergeAccounts()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG04, $LANG12, $LANG20;
-
-// we assume $_USER['uid'] has the remoteUID - we can only merge accounts
-// from the one we are logged in as.
-//
-// pull the record - validate the emails match - do the merge
-//
-// maybe
-// $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".REMOTE_USER." AND email='".DB_escapeString($localRow['email'])."' AND uid = ".(int) $remoteUID;
 
     $retval = '';
 
