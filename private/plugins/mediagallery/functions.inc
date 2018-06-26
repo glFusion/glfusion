@@ -1913,7 +1913,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
         if ( !isset($_MG_CONF['random_width']) || $_MG_CONF['random_width'] == 0 ) {
             $_MG_CONF['random_width'] = 120;
         }
-        if ( $MG_albums[$row['album_id']]->tn_size == 4 ) {
+        if ( isset($MG_albums[$row['album_id']])  && $MG_albums[$row['album_id']]->tn_size == 4 ) {
             $width = $_MG_CONF['random_width'];
             $height = $width;
         } else {
