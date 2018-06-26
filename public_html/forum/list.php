@@ -475,7 +475,7 @@ function FF_lastx()
     $T->parse ('output', 'list');
     $retval = $T->finish($T->get_var('output'));
 
-    $c->set($key,$retval,'forum',3600);
+    $c->set($key,$retval,'forumcb',3600);
 
     return array($pageTitle,$retval);
 }
