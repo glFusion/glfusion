@@ -822,7 +822,7 @@ class Formatter {
     * @param        string      $message        The topic post to filter
     * @return       string      filtered HTML code
     */
-    public static function _cleanHTML($message)
+    public function _cleanHTML($message)
     {
         $AllowedElements = $this->filter->makeAllowedElements($this->allowedHTML);
         $this->filter->setAllowedelements($AllowedElements);
