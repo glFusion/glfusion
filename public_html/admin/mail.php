@@ -215,6 +215,7 @@ function MAIL_sendMessages($vars)
     }
 
     if ( !isset($vars['to_uid'])) $vars['to_uid'] = 0;
+    if ( !isset($vars['to_group'])) $vars['to_group'] = 0;
 
     $usermode = ((int) $vars['to_uid'] > 0 && (int) $vars['to_group'] == 0) ? true : false;
 
