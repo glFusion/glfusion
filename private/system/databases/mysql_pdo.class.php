@@ -218,6 +218,10 @@ class database
         $this->_character_set_database = strtolower(str_replace("-","",$db_charset));
         $this->_mysql_version = 0;
 
+        if ($this->_character_set_database == '' || $this->_character_set_database == null) {
+            $this->_character_set_database = 'utf8';
+        }
+
         $this->_connect();
     }
 
