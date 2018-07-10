@@ -179,6 +179,9 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// 1.7.5
+    'admin/refresh.php',
+
 // 1.7.4
     'layout/cms/images/icons/autotag.png',
     'filemgmt_data/files/css.pdf',

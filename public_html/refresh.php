@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Refresh session                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2016 by the following authors:                        |
+// | Copyright (C) 2015-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -27,8 +27,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../lib-common.php';
+require_once 'lib-common.php';
 
+if ( !COM_isAjax() ) die();
 if ( !isset($_POST['keepalive']) || !isset($_POST['token']) )  die();
 $token = COM_applyFilter($_POST['token']);
 switch ( $_POST['keepalive'] ) {
