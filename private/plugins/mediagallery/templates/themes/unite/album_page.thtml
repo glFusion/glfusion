@@ -100,7 +100,7 @@ video {
 
 {!if album_noimages}
 {!else}
-	<script type="text/javascript">
+	<script>
 		jQuery(document).ready(function(){
 			jQuery("#gallery").unitegallery({
 					gallery_theme: "tiles",

@@ -10,7 +10,7 @@
     </tr>
   </table>
 
-<script type="text/javascript">
+<script>
 	var flashvars = {};
     var params = {
     wmode: "transparent"

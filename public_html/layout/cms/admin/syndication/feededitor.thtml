@@ -123,7 +123,7 @@
 		<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel" id="cancel">{lang_cancel}</button>
 	</div>
 </form>
-<script type="text/javascript">
+<script>
 	$(function(){
 		$("#feed_title").characterCounter({
 			limit: '40',

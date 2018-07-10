@@ -117,7 +117,7 @@ function MB_displayMenuList( ) {
     <input type="hidden" name="mode" value="menuactivate" />
     ';
 /*
-    <script type="text/javascript">
+    <script>
         document.getElementById(\'menubuilder\').style.display=\'\'
     </script>
 */
@@ -442,7 +442,7 @@ function MB_displayTree( $menu_id ) {
     $form_arr['bottom'] = '<input type="hidden" id="menu" name="menu" value="'.$menu_id.'"/>' . LB
                         . '<input type="hidden" name="mode" value="activate"/>'. LB;
 /*
-                        . '<script type="text/javascript">' . LB
+                        . '<script>' . LB
                         . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
                         . '</script>';
 */

@@ -317,8 +317,8 @@ function rescue_header( $authenticated ) {
         		<meta name="viewport" content="width=device-width, initial-scale=1">
         		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
         		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
-        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/js/uikit.min.js"></script>
+        		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/js/uikit.min.js"></script>
         		<meta name="robots" content="noindex,nofollow" />
         		<title>glFusion Rescue</title>
                 <style>

@@ -5,6 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{page_title}</title>
 <link rel="stylesheet" type="text/css" href="{style_cache_url}">
-<script type="text/javascript" src="{js_url}"></script>
+<script src="{js_url}"></script>
 </head>
 <body dir="{direction}" onload="dodisabled()">

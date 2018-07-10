@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	document.getElementById('menubuilder').style.display='';
 </script>
 <form id="newmenu" class="uk-form uk-form-horizontal" action="{form_action}" method="post">

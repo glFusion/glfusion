@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	function popitup(url)
 	{
 		newwindow=window.open(url,'name','height=500,width=550,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');

@@ -260,7 +260,7 @@ function MG_getThemeJS( $aid ) {
         return '';
     }
     if ( file_exists ($_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin . '/javascript.js') ) {
-        $js = '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/mgjs.php?theme=' . $MG_albums[$aid]->skin . '"></script>' . LB;
+        $js = '<script src="' . $_MG_CONF['site_url'] . '/mgjs.php?theme=' . $MG_albums[$aid]->skin . '"></script>' . LB;
     }
     return ($js);
 }

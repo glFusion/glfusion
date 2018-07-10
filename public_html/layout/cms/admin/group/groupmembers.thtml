@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/JavaScript" src="{site_url}/javascript/moveusers.js"></script>
+<script src="{site_url}/javascript/moveusers.js"></script>
 <div class="uk-panel uk-panel-box uk-container-center">
 	<form class="uk-form uk-form-horizontal" action="{phpself}" method="post">
 		<input type="hidden" name="savegroup" value="x">

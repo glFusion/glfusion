@@ -14,15 +14,15 @@
 		<body class="sitebody">
 {!endif}
 {!if full}
-	<script type="text/javascript">
+	<script>
 		var site_url = '{site_url}';
 	</script>
 	<script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
-	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
-	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
-	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_vote.js"></script>
+	<script src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
+	<script src="{site_url}/forum/javascript/ajax_rate.js"></script>
+	<script src="{site_url}/forum/javascript/ajax_vote.js"></script>
 {!if likes_enabled}
-	<script type="text/javascript" src="{site_url}/forum/javascript/ajax_like.js"></script>
+	<script src="{site_url}/forum/javascript/ajax_like.js"></script>
 {!endif}
 {!endif}
 	<script>
@@ -342,6 +342,8 @@
 									{likes_text}
 								</span>
 {!endif}
+
+{shareit}
 
 {!if last_edited}
 								<div class="uk-text-muted" style="font-size:.9em;">{$LANG_GF02['last_edited']} {last_edited}</div>

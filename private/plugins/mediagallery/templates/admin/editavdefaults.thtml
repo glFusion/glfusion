@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_url}/js/avdefaults_editor.js"></script>
+<script src="{site_url}/js/avdefaults_editor.js"></script>
 <form class="uk-form uk-form-horizontal" enctype="multipart/form-data" method="post" action="{s_form_action}">
 
     <ul class="uk-tab uk-margin" data-uk-tab="{connect:'#mg_avdefaults'}">

@@ -7,8 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="uikit/css/uikit.almost-flat.min.css">
 		<link rel="stylesheet" type="text/css" href="uikit/css/components/progress.almost-flat.min.css">
 		<link rel="stylesheet" type="text/css" href="layout/style.css">
-		<script type="text/javascript" src="../../javascript/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="uikit/js/uikit.min.js"></script>
+		<script src="../../javascript/jquery/jquery.min.js"></script>
+		<script src="uikit/js/uikit.min.js"></script>
 		<meta name="robots" content="noindex,nofollow" />
 		<title>{page_title}</title>
 		<link rel="shortcut icon" href="../../layout/cms/images/favicon.ico" type="image/x-icon">

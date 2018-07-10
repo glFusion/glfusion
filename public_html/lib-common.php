@@ -1346,7 +1346,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $outputHandle->addMeta('property','fb:app_id',$_CONF['fb_appid']);
     }
 
-    $jsFooter = '<script type="text/javascript" src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
+    $jsFooter = '<script src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
     if (isset($_CONF['comment_engine']) ) {
         switch ($_CONF['comment_engine']) {
             case 'disqus' :

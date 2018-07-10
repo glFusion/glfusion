@@ -53,7 +53,7 @@
 	<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{LANG_CANCEL}">{LANG_CANCEL}</button>
 
 </form>
-<script type="text/javascript">
+<script>
 $("#forumcatedit").validate();
 $(function(){
 	$("#name").characterCounter({

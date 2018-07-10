@@ -18,7 +18,7 @@
 
 <!-- BEGIN slideItems -->
 
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         var timer;
         var current_location = 1;
@@ -198,7 +198,7 @@
                 </div>
             </div>
             <div class="uk-panel uk-align-center uk-text-center">
-                <script type="text/javascript">
+                <script>
                     //<![CDATA[
                     document.write('<img class="uk-thumbnail" src="'+photo_urls[1]+'" name="slide">');
                     //]]>
@@ -206,14 +206,14 @@
             </div>
 
             <div class="uk-text-center" style="text-align:center">
-                <script type="text/javascript">
+                <script>
                     //<![CDATA[
                     document.write('<div id="caption">'+photo_captions[1]+'</div>');
                     //]]>
                 </script>
             </div>
 
-            <script type="text/javascript">
+            <script>
                 //<![CDATA[
                 /* Load the first picture */
                 setCaption(photo_captions[1]);

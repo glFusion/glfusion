@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
-<script type="text/javascript">
+<script>
 	var editor_type = 'forumeditor';
 	var lang_timer  = "{lang_timeout}";
 	var lastActivity = 0;
@@ -40,7 +40,7 @@
 
 {!if html_mode}
 {!else}
-			<script type="text/javascript">
+			<script>
 				/* Helpline messages */
 				b_help = "{LANG_bhelp}";
 				i_help = "{LANG_ihelp}";
@@ -60,8 +60,8 @@
 				t_help = "{LANG_thelp}";
 				e_help = "{LANG_ehelp}";
 			</script>
-			<script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
-			<script type="text/javascript">
+			<script src="{site_url}/forum/javascript/createtopic.js"></script>
+			<script>
 				var site_url = '{site_url}';
 				$(window).load(function() {
 					$( "#toggleV" ).click(function() {
@@ -71,7 +71,7 @@
 				});
 			</script>
 {!endif}
-			<script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
+			<script src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 
 {!if error_msg}
 			<div class="uk-alert uk-alert-danger" data-uk-alert>

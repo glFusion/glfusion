@@ -4,7 +4,7 @@
 <script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
 <script src="{site_url}/javascript/addons/datetime/datetimepicker.js" type="text/javascript"></script>
-<script type="text/javascript">
+<script>
 
 	var editor_type = 'storyeditor';
 	var lang_timer  = "{lang_timeout}";
@@ -577,7 +577,7 @@
 	</form>
 </div>
 
-<script type="text/javascript">
+<script>
 	var archiveTest = {showarchivedisabled};
 	var commentTest = {showcmtclosedisabled};
 	if (archiveTest) {

@@ -2091,7 +2091,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     if ( $MG_albums[$aid]->enable_slideshow == 2 ) {
         $lbSlideShow  = '<noscript><div class="pluginAlert">' . $LANG04[150] . '</div></noscript>' . LB;
-        $lbSlideShow .= '<script type="text/javascript">' . LB;
+        $lbSlideShow .= '<script>' . LB;
         $lbSlideShow .= 'function openGallery1() {' . LB;
         $lbSlideShow .= '    return loadXMLDoc("' . $_MG_CONF['site_url'] . '/lightbox.php?aid=' . $aid . '");';
         $lbSlideShow .= '}' . LB;

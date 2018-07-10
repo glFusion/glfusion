@@ -261,7 +261,7 @@
 		<input type="hidden" name="{gltoken_name}" value="{gltoken}">
 	</div>
 </form>
-<script type="text/javascript">
+<script>
 	$("#eventeditor").validate();
 	$(function(){
 		$("#event_title").characterCounter({

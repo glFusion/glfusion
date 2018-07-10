@@ -133,7 +133,7 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
 function aptoggle() {
   if (document.getElementById) {
     if (document.getElementById("remoteuser").checked == true) {

@@ -1,4 +1,4 @@
-<script type="text/javascript" src="js/pwd_strength.js"></script>
+<script src="js/pwd_strength.js"></script>
 <form class="uk-form" name="sitedata" id="sitedata" action="index.php" method="post">
 	{hiddenfields}
 	<div class="uk-grid">

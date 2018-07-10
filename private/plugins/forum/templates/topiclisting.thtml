@@ -1,8 +1,8 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	var site_url = '{site_url}';
 </script>
-<script type="text/javascript">
+<script>
 	$(document).ready(function(){
 		$("#subscribe-link").click(function(e){
 			e.preventDefault();

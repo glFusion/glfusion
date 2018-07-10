@@ -40,7 +40,7 @@ function phpblock_mg_fsplash($aid, $width, $height, $delay, $transition, $enable
         $nolink = 'false';
     }
 
-    $swfobject  = '<script type="text/javascript">' . LB;
+    $swfobject  = '<script>' . LB;
     $swfobject .= '	var flashvars = {};' . LB;
     $swfobject .= '	var params = {};' . LB;
     $swfobject .= '	var attributes = {};' . LB;

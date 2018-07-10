@@ -11,7 +11,7 @@
 {feed_url}
 {rel_links}
 {# Load JavaScript #}
-<script type="text/javascript" src="{js_cache_url}"></script>
+<script src="{js_cache_url}"></script>
 {# Load plugin Header Code #}
 {plg_headercode}
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

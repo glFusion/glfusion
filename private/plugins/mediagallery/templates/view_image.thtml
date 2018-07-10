@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <script src="../../javascript/addons/clipboard/clipboard.min.js"></script>
-<script type="text/javascript">
+<script>
 	//<![CDATA[
 	function popitup(url)	{
 		newwindow=window.open(url,'name','height=600,width=450,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
@@ -181,7 +181,7 @@
 	</div>
 </div>
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/javascript">
+<script>
 	//<![CDATA[
 	var el;
 	el=document.getElementsByTagName('span');

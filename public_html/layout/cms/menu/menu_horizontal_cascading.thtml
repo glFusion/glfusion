@@ -20,7 +20,7 @@
 <!-- END Elements -->
 {!if wrapper}
 </ul>
-	<script type="text/javascript">
+	<script>
 		$(function() {
 			$('#sm-{menuname}').smartmenus({
 				showTimeout: 300,

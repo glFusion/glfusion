@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 	var instance=window.opener.CKEDITOR.instances['{instance}'];
 	function dodisabled(){var autotag='';
 		if(document.mediabrowser.autotag!=undefined){

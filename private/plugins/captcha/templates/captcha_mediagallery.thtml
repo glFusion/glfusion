@@ -3,7 +3,7 @@
 	<table width="100%">
 		<tr>
 			<td align="center">
-				<script type="text/javascript">
+				<script>
 					//<![CDATA[
 					var RecaptchaOptions = {
 						theme : '{recaptcha_theme}'
@@ -16,7 +16,7 @@
 		</tr>
 	</table>
 {!else}
-	<script type="text/javascript">
+	<script>
 		//<![CDATA[
 		var counter = 0;
 		function new_captcha_{counter}()

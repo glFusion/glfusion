@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	var editor_type = 'commenteditor';
 	var lang_timer  = "{lang_timeout}";
 	var lastActivity = 0;

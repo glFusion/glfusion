@@ -121,7 +121,7 @@ function FF_badge_AdminList()
 
     $uid = (int)$_USER['uid'];
     $retval = '';
-    $retval .= '<script type="text/javascript" src="' .
+    $retval .= '<script src="' .
             $_CONF['site_url'].'/forum/javascript/ajax_toggle.js"></script>';
     $form_arr = array();
 

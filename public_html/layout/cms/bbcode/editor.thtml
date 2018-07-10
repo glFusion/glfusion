@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 // <![CDATA[
 	var form_name = '{form_name}';
 	var text_name = '{text_name}';
@@ -21,7 +21,7 @@
 
 // ]]>
 </script>
-<script type="text/javascript" src="{site_url}/javascript/bbcode.js"></script>
+<script src="{site_url}/javascript/bbcode.js"></script>
 <div class="bbceditor">
   <div class="bbc-buttons" style="width:95%;">
   <span style="line-height:2em;">

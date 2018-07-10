@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<script type="text/JavaScript" src="{layout_url}/js/profile_editor.js"></script>
-<script type="text/javascript" src="{site_url}/javascript/pwd_strength.js"></script>
+<script src="{layout_url}/js/profile_editor.js"></script>
+<script src="{site_url}/javascript/pwd_strength.js"></script>
 
 <div id="pe_navbar" class="uk-margin" style="display:none">
 	{navbar}
@@ -170,7 +170,7 @@
 <!-- end needs fixing -->
 
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/JavaScript">
+<script>
 	/* Initially the navbar is hidden - in case JS is disabled. Enable it now */
 	document.getElementById('pe_navbar').style.display='';
 

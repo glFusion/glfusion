@@ -28,7 +28,7 @@
 	</div>
 
 </form>
-<script type="text/javascript">
+<script>
 $("#rankedit").validate({
     rules: {
         posts: {

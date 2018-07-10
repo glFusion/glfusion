@@ -1,9 +1,9 @@
 {# begin {templatelocation} #}
 {# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
-<script type="text/javascript">
+<script>
     document.getElementById('menubuilder').style.display='';
 </script>
-<script type="text/javascript">
+<script>
 $(window).load(function() {
     $("#menutype").change(toggleFields);
     $("#pid").change(function() {
