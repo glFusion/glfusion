@@ -1,9 +1,8 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
-<script src="{site_url}/javascript/addons/datetime/datetimepicker.js" type="text/javascript"></script>
-<script language="javascript" type="text/javascript">
-	<!--
+<script src="{site_url}/javascript/addons/datetime/datetimepicker.js"></script>
+<script>
 	function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
 	function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
 	function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
@@ -26,7 +25,6 @@
 			break;
 		}
 	}
-	-->
 </script>
 {!if explanation}
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">

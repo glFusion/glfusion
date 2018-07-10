@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js"></script>
 <script>
 	var editor_type = 'speditor';
 	var lang_timer  = "{lang_timeout}";
@@ -297,5 +297,5 @@
 		});
 	});
 </script>
-<script src="{site_url}/javascript/activitytimer.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/activitytimer.js"></script>
 {# end {templatelocation} #}

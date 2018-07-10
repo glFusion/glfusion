@@ -131,7 +131,7 @@ function initMenu($menuname, $skipCache=false) {
  */
 function assembleMenu($name, $skipCache=false) {
 
-    $menuData = NULL;
+    $menuData = array();
 
     $lang = COM_getLanguageId();
     if (!empty($lang)) {
@@ -215,6 +215,7 @@ function displayMenu( $menuName, $skipCache=false ) {
     }
 
     $menuType = $structure['type'];
+//    $menuType = $structure->type;
     unset($structure['type']);
 
     $T = new Template( $_CONF['path_layout'].'/menu/');

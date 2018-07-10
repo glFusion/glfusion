@@ -1,6 +1,5 @@
 {# begin {templatelocation} #}
-<script language="javascript" type="text/javascript">
-<!--
+<script>
 function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
 function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
 function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
@@ -25,7 +24,6 @@ function toggleTOD() {
   }
 
 }
--->
 </script>
 <form class="uk-form uk-form-horizontal" action="{site_url}/calendar/event.php" id="editpersonalevent" method="post">
     <input type="hidden" name="calendar_type" value="personal">

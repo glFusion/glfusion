@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js"></script>
 {!if msg}
 <div class="uk-alert uk-alert-warning">{msg}</div>
 {!endif}
@@ -45,7 +45,7 @@
 		<button class="uk-button" type="submit" name="cancel" id="cancel" value="{lang_cancel}">{lang_cancel}</button>
 	</div>
 </form>
-<script  type="text/javascript">
+<script>
 $('#wl_type').change(function() {
 	var wltype = $('#wl_type').val();
 	switch ( wltype ) {
