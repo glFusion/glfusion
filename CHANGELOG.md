@@ -1,4 +1,5 @@
 ## v1.8.0 (Unreleased)
+  - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
   - Consolidation of caching code into lib-cache
@@ -6,12 +7,37 @@
   - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
   - Improved cron / maintenance task interface
-  - Bumped PHP min version to v5.6.0
   - Template class code significantly streamlined
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine
+  - Minimum PHP version is now 5.6.0
 
-## v1.7.4 (Unreleased)
+## v1.7.5 (unreleased)
+  - New comment notifications (subscriptions) used htmlentities for quotes
+  - Minor rearrangement of activitytimer files - removed from admin area
+  - HTML5 Validation updates on <script> tag
+  - Optimized template to improve performance
+  - Clean up the Facebook remote login to only require public data
+  - Fixed error when updating from older versions of glFusion
+  - Fixed display issue when admin poll edit fails validation checks.
+
+## v1.7.4.pl1 (May 23, 2018)
+  - Do not send notification email for new user when created by admin
+  - Fixed error in email duplicate check on new registrations
+  - Fixed error in Links plugin when deleting a user
+  - MySQL PDO Driver updates / fixes
+  - Updated PHP Archive class
+
+## v1.7.4 (May 15, 2018)
+  - Delete account now removes or anonymizes all of the users info from the glFusion database tables
+  - Truncate the media item title to prevent overflow in the Media Gallery random image block
+  - Modified the CSS for FileMgmt download rating to left justify the rating stars
+  - Fixed issue where remote login users could not delete their account
+  - Fixed password rule text to better describe the length requirement
+  - Fixed issue on installation / upgrade screen where the enter key would select the Back button
+  - Updated the default download on a new install to a glFusion Overview PDF
+  - Fixed issue where site admin could not save a user record if the name did not meet length requirement
+  - Anonymize IP addresses prior to storing in database
   - Oauth new user creation to now follow same workflow as local user creation
   - Increase homepage table var (users table) to 255 bytes in size
   - Spam check when creating oauth user
