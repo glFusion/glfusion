@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion template library.                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2017 by the following authors:                        |
+// | Copyright (C) 2007-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
@@ -40,167 +40,162 @@ if (!defined('GVERSION')) {
 }
 
 /**
- * The template class allows you to keep your HTML code in some external files
- * which are completely free of PHP code, but contain replacement fields.
- * The class provides you with functions which can fill in the replacement fields
- * with arbitrary strings. These strings can become very large, e.g. entire tables.
- *
- * Note: If you think that this is like FastTemplates, read carefully. It isn't.
- *
- */
+* The template class allows you to keep your HTML code in some external files
+* which are completely free of PHP code, but contain replacement fields.
+* The class provides you with functions which can fill in the replacement fields
+* with arbitrary strings. These strings can become very large, e.g. entire tables.
+*
+*/
 
 class Template
 {
- /**
-  * Serialization helper, the name of this class.
-  *
-  * @var       string
-  * @access    public
-  */
-  var $classname = "Template";
+    /**
+    * Serialization helper, the name of this class.
+    *
+    * @var       string
+    */
+    public $classname = "Template";
 
- /**
-  * Determines how much debugging output Template will produce.
-  * This is a bitwise mask of available debug levels:
-  * 0 = no debugging
-  * 1 = debug variable assignments
-  * 2 = debug calls to get variable
-  * 4 = debug internals (outputs all function calls with parameters).
-  * 8 = debug caching (incomplete)
-  *
-  * Note: setting $this->debug = true will enable debugging of variable
-  * assignments only which is the same behaviour as versions up to release 7.2d.
-  *
-  * @var       int
-  * @access    public
-  */
-  var $debug    = 0;
+    /**
+    * Determines how much debugging output Template will produce.
+    * This is a bitwise mask of available debug levels:
+    * 0 = no debugging
+    * 1 = debug variable assignments
+    * 2 = debug calls to get variable
+    * 4 = debug internals (outputs all function calls with parameters).
+    * 8 = debug caching (incomplete)
+    *
+    * Note: setting $this->debug = true will enable debugging of variable
+    * assignments only which is the same behaviour as versions up to release 7.2d.
+    *
+    * @var       int
+    */
+    public $debug    = 0;
 
- /**
-  * The base directory array from which template files are loaded. When
-  * attempting to open a file, the paths in this array are searched one at
-  * a time. As soon as a file exists, the array search stops.
-  *
-  * @var       string
-  * @access    private
-  * @see       set_root
-  */
-  var $root     = array();
+    /**
+    * The base directory array from which template files are loaded. When
+    * attempting to open a file, the paths in this array are searched one at
+    * a time. As soon as a file exists, the array search stops.
+    *
+    * @var       string
+    * @see       set_root
+    */
+    private $root     = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into names of files containing the variable content.
-  * $file[varname] = "filename";
-  *
-  * @var       array
-  * @access    private
-  * @see       set_file
-  */
-  var $file     = array();
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into names of files containing the variable content.
+    * $file[varname] = "filename";
+    *
+    * @var       array
+    * @see       set_file
+    */
+    private $file     = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into names of files containing the variable content.
-  * $location[varname] = "full path to template";
-  *
-  * @var       array
-  * @access    private
-  * @see       set_file
-  */
-  var $location     = array();
+    /**
+    * A hash of strings to denote if an instance or
+    * standard template. Contains the unique id for cache
+    * identifier
+    *
+    * @var       array
+    * @see       set_file
+    */
 
- /**
-  * The in memory template
-  *
-  * @var       array
-  * @access    private
-  * @see       set_file
-  */
-  var $templateCode = array();
+    private $instance = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into names of files containing the variable content.
-  * $file[varname] = "filename";
-  *
-  * @var       array
-  * @access    private
-  * @see       cache_blocks,set_block
-  */
-  var $blocks   = array();
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into names of files containing the variable content.
+    * $location[varname] = "full path to template";
+    *
+    * @var       array
+    * @see       set_file
+    */
+    private $location     = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into the parent name of the variable.
-  *
-  * @var       array
-  * @access    private
-  * @see       cache_blocks,set_block, block_echo
-  */
-  var $block_replace = array();
+    /**
+    * The in memory template
+    *
+    * @var       array
+    * @see       set_file
+    */
+    private $templateCode = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into regular expressions for themselves.
-  * $varkeys[varname] = "/varname/"
-  *
-  * @var       array
-  * @access    private
-  * @see       set_var
-  */
-  var $varkeys  = array();
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into names of files containing the variable content.
+    * $file[varname] = "filename";
+    *
+    * @var       array
+    * @see       cache_blocks,set_block
+    */
+    private $blocks   = array();
 
- /**
-  * A hash of strings forming a translation table which translates variable names
-  * into values for their respective varkeys.
-  * $varvals[varname] = "value"
-  *
-  * @var       array
-  * @access    private
-  * @see       set_var
-  */
-  var $varvals  = array();
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into the parent name of the variable.
+    *
+    * @var       array
+    * @see       cache_blocks,set_block, block_echo
+    */
+    private $block_replace = array();
 
- /**
-  * A hash of vars that are not to be translated when create_instance() is called.
-  * $nocache[varname] = true
-  *
-  * @var       array
-  * @access    private
-  * @see       create_instance, val_echo, mod_echo
-  */
-  var $nocache  = array();
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into regular expressions for themselves.
+    * $varkeys[varname] = "/varname/"
+    *
+    * @var       array
+    * @see       set_var
+    */
+    private $varkeys  = array();
 
- /**
-  * Determines how to output variable tags with no assigned value in templates.
-  *
-  * @var       string
-  * @access    private
-  * @see       set_unknowns
-  */
-  var $unknowns = "remove";
+    /**
+    * A hash of strings forming a translation table which translates variable names
+    * into values for their respective varkeys.
+    * $varvals[varname] = "value"
+    *
+    * @var       array
+    * @see       set_var
+    */
+    private $varvals  = array();
 
- /**
-  * Determines how Template handles error conditions.
-  * "yes"      = the error is reported, then execution is halted
-  * "report"   = the error is reported, then execution continues by returning "false"
-  * "no"       = errors are silently ignored, and execution resumes reporting "false"
-  * "log"      = writes errors to glFusion Error log and returns false.
-  *
-  * @var       string
-  * @access    public
-  * @see       halt
-  */
-  var $halt_on_error  = "yes";
+    /**
+    * A hash of vars that are not to be translated when create_instance() is called.
+    * $nocache[varname] = true
+    *
+    * @var       array
+    * @see       create_instance, val_echo, mod_echo
+    */
+    private $nocache  = array();
 
- /**
-  * The last error message is retained in this variable.
-  *
-  * @var       string
-  * @access    public
-  * @see       halt
-  */
-  var $last_error     = "";
+    /**
+    * Determines how to output variable tags with no assigned value in templates.
+    *
+    * @var       string
+    * @see       set_unknowns
+    */
+    private $unknowns = "remove";
+
+    /**
+    * Determines how Template handles error conditions.
+    * "yes"      = the error is reported, then execution is halted
+    * "report"   = the error is reported, then execution continues by returning "false"
+    * "no"       = errors are silently ignored, and execution resumes reporting "false"
+    * "log"      = writes errors to glFusion Error log and returns false.
+    *
+    * @var       string
+    * @see       halt
+    */
+    public $halt_on_error  = "yes";
+
+    /**
+    * The last error message is retained in this variable.
+    *
+    * @var       string
+    * @see       halt
+    */
+    public $last_error     = "";
 
     /******************************************************************************
     * Class constructor. May be called with two optional parameters.
@@ -213,10 +208,9 @@ class Template
     * @param     $string      what to do with undefined variables
     * @see       set_root
     * @see       set_unknowns
-    * @access    public
     * @return    void
     */
-    function __construct($root = array(), $unknowns = "remove")
+    public function __construct($root = array(), $unknowns = "remove")
     {
         global $_CONF, $TEMPLATE_OPTIONS;
 
@@ -233,7 +227,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * Checks that $root is a valid directory and if so sets this directory as the
     * base directory from which templates are loaded by storing the value in
     * $this->root. Relative filenames are prepended with the path in $this->root.
@@ -244,10 +238,9 @@ class Template
     *
     * @param     $root         string containing new template directory
     * @see       root
-    * @access    public
     * @return    boolean
     */
-    function set_root($root)
+    public function set_root($root)
     {
         global $TEMPLATE_OPTIONS;
 
@@ -295,7 +288,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * Sets the policy for dealing with unresolved variable names.
     *
     * unknowns defines what to do with undefined template variables
@@ -310,10 +303,9 @@ class Template
     *
     * @param     $unknowns         new value for unknowns
     * @see       unknowns
-    * @access    public
     * @return    void
     */
-    function set_unknowns($unknowns = "")
+    public function set_unknowns($unknowns = "")
     {
         global $TEMPLATE_OPTIONS;
 
@@ -334,7 +326,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * Defines a filename for the initial value of a variable.
     *
     * It may be passed either a varname and a file name as two strings or
@@ -352,10 +344,9 @@ class Template
     *
     * @param     $varname      either a string containing a varname or a hash of varname/file name pairs.
     * @param     $filename     if varname is a string this is the filename otherwise filename is not required
-    * @access    public
     * @return    boolean
     */
-    function set_file($varname, $filename = "")
+    public function set_file($varname, $filename = "")
     {
         global $_CONF;
 
@@ -368,13 +359,8 @@ class Template
                 return false;
             }
             $tFilename = $this->filename($filename);
-            if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-                $filename = $this->check_cache($varname, $tFilename);
-                $this->file[$varname] = $filename;
-            } else {
-                $templateCode = $this->compile_template($varname,$tFilename);
-                $this->templateCode[$varname] = $templateCode;
-            }
+            $templateCode = $this->compile_template($varname, $tFilename);
+            $this->templateCode[$varname] = $templateCode;
             $this->location[$varname] = $tFilename;
         } else {
             foreach($varname AS $v => $f ) {
@@ -386,13 +372,8 @@ class Template
                     return false;
                 }
                 $tFilename = $this->filename($f);
-                if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-                     $f = $this->check_cache($v, $tFilename);
-                    $this->file[$v] = $f;
-                } else {
-                    $f = $this->compile_template($v,$tFilename);
-                    $this->templateCode[$v] = $f;
-                }
+                $f = $this->compile_template($varname, $tFilename);
+                $this->templateCode[$v] = $f;
                 $this->location[$v] = $tFilename;
             }
         }
@@ -400,7 +381,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * A variable $parent may contain a variable block defined by:
     * &lt;!-- BEGIN $varname --&gt; content &lt;!-- END $varname --&gt;. This function removes
     * that block from $parent and replaces it with a variable reference named $name.
@@ -417,26 +398,19 @@ class Template
     * @param     $parent       a string containing the name of the parent variable
     * @param     $varname      a string containing the name of the block to be extracted
     * @param     $name         the name of the variable in which to store the block
-    * @access    public
     * @return    boolean
     */
-    function set_block($parent, $varname, $name = "")
+    public function set_block($parent, $varname, $name = "")
     {
         global $_CONF;
 
         $this->block_replace[$varname] = (!empty($name) || is_numeric($name)) ? $name : $parent;
 
-        if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-            $filename = $this->file[$parent];
-            $p = pathinfo($filename);
-            $this->blocks[$varname] = $p['dirname'].'/'.substr($p['basename'],0,-(strlen($p['extension'])+1)).'__'.$varname.'.'.$p['extension'];
-            $this->file[$varname] = $p['dirname'].'/'.substr($p['basename'],0,-(strlen($p['extension'])+1)).'.'.$p['extension'];
-        }
         return true;
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This functions sets the value of a variable.
     *
     * It may be called with either a varname and a value as two strings or an
@@ -460,10 +434,9 @@ class Template
     * @param     $value        if $varname is a string this contains the new value for the variable otherwise this parameter is ignored
     * @param     $append       if true, the value is appended to the variable's existing value
     * @param     $nocache      if true, the variable is added to the list of variable that are not instance cached.
-    * @access    public
     * @return    void
     */
-    function set_var($varname, $value = "", $append = false, $nocache = false)
+    public function set_var($varname, $value = "", $append = false, $nocache = false)
     {
         if (!is_array($varname)) {
             if (!empty($varname) || is_numeric($varname) ) {
@@ -500,7 +473,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This functions clears the value of a variable.
     *
     * It may be called with either a varname as a string or an array with the
@@ -516,10 +489,9 @@ class Template
     * usage: clear_var(array $varname = (string $varname))
     *
     * @param     $varname      either a string containing a varname or an array of varnames.
-    * @access    public
     * @return    void
     */
-    function clear_var($varname)
+    public function clear_var($varname)
     {
         if (!is_array($varname)) {
             if (!empty($varname) || is_numeric($varname) ) {
@@ -541,7 +513,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This functions unsets a variable completely.
     *
     * It may be called with either a varname as a string or an array with the
@@ -557,10 +529,9 @@ class Template
     * usage: unset_var(array $varname = (string $varname))
     *
     * @param     $varname      either a string containing a varname or an array of varnames.
-    * @access    public
     * @return    void
     */
-    function unset_var($varname)
+    public function unset_var($varname)
     {
         if (!is_array($varname)) {
             if (!empty($varname) || is_numeric($varname) ) {
@@ -596,66 +567,38 @@ class Template
     * usage: subst(string $varname)
     *
     * @param     $varname      the name of the variable within which variables are to be substituted
-    * @access    public
     * @return    string
     */
-    function subst($varname)
+    public function subst($varname)
     {
         global $_CONF;
 
-        if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-            if (isset($this->blocks[$varname])) {
-                $filename = $this->blocks[$varname];
-            } else if (isset($this->file[$varname])) {
-                $filename = $this->file[$varname];
-            } else if (isset($this->varvals[$varname]) OR (empty($varname) && !is_numeric($varname))  ) {
-                return $this->slow_subst($varname);
-            } else {
-                // $varname does not reference a file so return
-                if ($this->debug & 4) {
-                    echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
-                }
-                return "";
-            }
+        $instance = false;
 
-            $p = pathinfo($filename);
-            if ($p['extension'] == 'php') {
-                ob_start();
-                $rc = @include $filename;
-                if ( $rc != true) {
-                    ob_end_clean();
-                    return "";
-                }
-                $str = ob_get_contents();
-                ob_end_clean();
-            } else {
-                $str = $this->slow_subst($varname);
-            }
-            return $str;
+        if (isset($this->blocks[$varname])) {
+            $templateCode = $this->blocks[$varname];
+        } else if (isset($this->instance[$varname])) {
+            $templateCode = $this->instance[$varname];
+        } else if (isset($this->templateCode[$varname])) {
+            $templateCode = $this->templateCode[$varname];
+        } else if (isset($this->varvals[$varname]) OR (empty($varname) && !is_numeric($varname) ) ) {
+            return $this->slow_subst($varname);
         } else {
-            if (isset($this->blocks[$varname])) {
-                $templateCode = $this->blocks[$varname];
-            } else if (isset($this->templateCode[$varname])) {
-                $templateCode = $this->templateCode[$varname];
-            } else if (isset($this->varvals[$varname]) OR (empty($varname) && !is_numeric($varname) ) ) {
-                return $this->slow_subst($varname);
-            } else {
-                // $varname does not reference a file so return
-                if ($this->debug & 4) {
-                    echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
-                }
-                return "";
+            // $varname does not reference a file so return
+            if ($this->debug & 4) {
+                echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
             }
-
-            ob_start();
-            eval('?>'.$templateCode.'<?php ');
-            $str = ob_get_contents();
-            ob_end_clean();
-            return $str;
+            return "";
         }
+        ob_start();
+        eval('?>'.$templateCode.'<?php ');
+        $str = ob_get_contents();
+        ob_end_clean();
+        return $str;
+
     }
 
-   /******************************************************************************
+    /******************************************************************************
     * This function fills in all the variables contained within the variable named
     * $varname. The resulting value is returned as the function result and the
     * original value of the variable varname is not changed. The resulting string
@@ -669,10 +612,9 @@ class Template
     * usage: subst(string $varname)
     *
     * @param     $varname      the name of the variable within which variables are to be substituted
-    * @access    public
     * @return    string
     */
-    function slow_subst($varname)
+    public function slow_subst($varname)
     {
         $varvals_quoted = array();
         if ($this->debug & 4) {
@@ -696,7 +638,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This is shorthand for print $this->subst($varname). See subst for further
     * details.
     *
@@ -705,11 +647,10 @@ class Template
     * usage: psubst(string $varname)
     *
     * @param     $varname      the name of the variable within which variables are to be substituted
-    * @access    public
     * @return    false
     * @see       subst
     */
-    function psubst($varname)
+    public function psubst($varname)
     {
         if ($this->debug & 4) {
             echo "<p><b>psubst:</b> varname = $varname</p>\n";
@@ -720,7 +661,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * The function substitutes the values of all defined variables in the variable
     * named $varname and stores or appends the result in the variable named $target.
     *
@@ -756,11 +697,10 @@ class Template
     * @param     $target      a string containing the name of the variable into which substituted $varnames are to be stored
     * @param     $varname     if a string, the name the name of the variable to substitute or if an array a list of variables to be substituted
     * @param     $append      if true, the substituted variables are appended to $target otherwise the existing value of $target is replaced
-    * @access    public
     * @return    string
     * @see       subst
     */
-    function parse($target, $varname, $append = false)
+    public function parse($target, $varname, $append = false)
     {
         if (!is_array($varname)) {
             if ($this->debug & 4) {
@@ -797,7 +737,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This is shorthand for print $this->parse(...) and is functionally identical.
     * See parse for further details.
     *
@@ -810,11 +750,10 @@ class Template
     * @param     $target      a string containing the name of the variable into which substituted $varnames are to be stored
     * @param     $varname     if a string, the name the name of the variable to substitute or if an array a list of variables to be substituted
     * @param     $append      if true, the substituted variables are appended to $target otherwise the existing value of $target is replaced
-    * @access    public
     * @return    false
     * @see       parse
     */
-    function pparse($target, $varname, $append = false)
+    public function pparse($target, $varname, $append = false)
     {
         if ($this->debug & 4) {
             echo "<p><b>pparse:</b> passing parameters to parse...</p>\n";
@@ -824,7 +763,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This function returns an associative array of all defined variables with the
     * name as the key and the value of the variable as the value.
     *
@@ -835,11 +774,10 @@ class Template
     *
     * usage: get_vars()
     *
-    * @access    public
     * @return    array
     * @see       $debug
     */
-    function get_vars()
+    public function get_vars()
     {
         if ($this->debug & 4) {
             echo "<p><b>get_vars:</b> constructing array of vars...</p>\n";
@@ -850,7 +788,7 @@ class Template
         return $result;
     }
 
-    function dump_vars()
+    public function dump_vars()
     {
         $tvars = $this->get_vars();
         foreach ($tvars AS $name => $value) {
@@ -858,7 +796,7 @@ class Template
         }
     }
 
-   /******************************************************************************
+    /******************************************************************************
     * This function returns the value of the variable named by $varname.
     * If $varname references a file and that file has not been loaded yet, the
     * variable will be reported as empty.
@@ -873,10 +811,9 @@ class Template
     * usage: get_var(array $varname)
     *
     * @param     $varname     if a string, the name the name of the variable to get the value of, or if an array a list of variables to return the value of
-    * @access    public
     * @return    string or array
     */
-    function get_var($varname)
+    public function get_var($varname)
     {
         if (!is_array($varname)) {
             if (isset($this->varvals[$varname])) {
@@ -905,56 +842,7 @@ class Template
     }
 
 
-   /******************************************************************************
-    * DEPRECATED: This function doesn't really work any more. Processing in val_echo
-    * could be done to gather unknowns. But coding that seems like a waste of time
-    * and would only cause 99.99% of the normal use of this class to be slower.
-    *
-    * This function returns a hash of unresolved variable names in $varname, keyed
-    * by their names (that is, the hash has the form $a[$name] = $name).
-    *
-    * Returns: a hash of varname/varname pairs or false on error.
-    *
-    * usage: get_undefined(string $varname)
-    *
-    * @param     $varname     a string containing the name the name of the variable to scan for unresolved variables
-    * @access    public
-    * @return    array
-    */
-    function get_undefined($varname)
-    {
-        if ($this->debug & 4) {
-            echo "<p><b>get_undefined (DEPRECATED):</b> varname = $varname</p>\n";
-        }
-        if (!$this->loadfile($varname)) {
-            $this->halt("get_undefined: unable to load $varname.");
-            return false;
-        }
-
-        preg_match_all("/{([^ \t\r\n}]+)}/", $this->get_var($varname), $m);
-        $m = $m[1];
-        if (!is_array($m)) {
-            return false;
-        }
-
-        foreach ( $m AS $k => $v ) {
-            if (!isset($this->varvals[$v])) {
-                if ($this->debug & 4) {
-                    echo "<p><b>get_undefined:</b> undefined: $v</p>\n";
-                }
-                $result[$v] = $v;
-            }
-        }
-
-        if (count($result)) {
-            return $result;
-        } else {
-            return false;
-        }
-    }
-
-
-   /******************************************************************************
+    /******************************************************************************
     * Returns: Unknown processing use to take place here. Now it happens directly
     * in the cache file. This function is still necessary for being able to hook
     * the final output from the library.
@@ -962,10 +850,9 @@ class Template
     * usage: finish(string $str)
     *
     * @param     $str         a string to return
-    * @access    public
     * @return    string
     */
-    function finish($str)
+    public function finish($str)
     {
         global $TEMPLATE_OPTIONS;
 
@@ -979,7 +866,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This function prints the finished version of the value of the variable named
     * by $varname. That is, the policy regarding unresolved variable names will be
     * applied to the variable $varname then it will be printed.
@@ -987,18 +874,17 @@ class Template
     * usage: p(string $varname)
     *
     * @param     $varname     a string containing the name of the variable to finish and print
-    * @access    public
     * @return    void
     * @see       set_unknowns
     * @see       finish
     */
-    function p($varname)
+    public function p($varname)
     {
         print $this->finish($this->get_var($varname));
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This function returns the finished version of the value of the variable named
     * by $varname. That is, the policy regarding unresolved variable names will be
     * applied to the variable $varname and the result returned.
@@ -1008,18 +894,17 @@ class Template
     * usage: get(string $varname)
     *
     * @param     $varname     a string containing the name of the variable to finish
-    * @access    public
     * @return    void
     * @see       set_unknowns
     * @see       finish
     */
-    function get($varname)
+    public function get($varname)
     {
         return $this->finish($this->get_var($varname));
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * When called with a relative pathname, this function will return the pathname
     * with $this->root prepended. Absolute pathnames are returned unchanged.
     *
@@ -1028,11 +913,10 @@ class Template
     * usage: filename(string $filename)
     *
     * @param     $filename    a string containing a filename
-    * @access    private
     * @return    string
     * @see       set_root
     */
-    function filename($filename)
+    private function filename($filename)
     {
         if ($this->debug & 4) {
             echo "<p><b>filename:</b> filename = $filename</p>\n";
@@ -1045,9 +929,9 @@ class Template
 
         // if path reaches root, just use it.
         if (substr($filename, 0, 1) == '/' ||   // handle unix root /
-            substr($filename, 1, 1) == ':' ||   // handle windows d:\path
-            substr($filename, 0, 2) == '\\\\'   // handle windows network path \\server\path
-           ) {
+        substr($filename, 1, 1) == ':' ||   // handle windows d:\path
+        substr($filename, 0, 2) == '\\\\'   // handle windows network path \\server\path
+        ) {
             if (!file_exists($filename)) {
                 $this->halt("filename: file $filename does not exist.(1)");
             }
@@ -1069,7 +953,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This function will construct a regexp for a given variable name with any
     * special chars quoted.
     *
@@ -1078,76 +962,15 @@ class Template
     * usage: varname(string $varname)
     *
     * @param     $varname    a string containing a variable name
-    * @access    private
     * @return    string
     */
-    function varname($varname)
+    private function varname($varname)
     {
         return preg_quote("{".$varname."}");
     }
 
 
-   /******************************************************************************
-    * If a variable's value is undefined and the variable has a filename stored in
-    * $this->file[$varname] then the backing file will be loaded and the file's
-    * contents will be assigned as the variable's value.
-    *
-    * Note that the behaviour of this function changed slightly after the 7.2d
-    * release. Where previously a variable was reloaded from file if the value
-    * was empty, now this is not done. This allows a variable to be loaded then
-    * set to "", and also prevents attempts to load empty variables. Files are
-    * now only loaded if $this->varvals[$varname] is unset.
-    *
-    * Returns: true on success, false on error.
-    *
-    * usage: loadfile(string $varname)
-    *
-    * @param     $varname    a string containing the name of a variable to load
-    * @access    private
-    * @return    boolean
-    * @see       set_file
-    */
-    function loadfile($varname)
-    {
-        if ($this->debug & 4) {
-            echo "<p><b>loadfile:</b> varname = $varname</p>\n";
-        }
-
-        if (!isset($this->file[$varname])) {
-            // $varname does not reference a file so return
-            if ($this->debug & 4) {
-                echo "<p><b>loadfile:</b> varname $varname does not reference a file</p>\n";
-            }
-            return true;
-        }
-
-        if (isset($this->varvals[$varname])) {
-            // will only be unset if varname was created with set_file and has never been loaded
-            // $varname has already been loaded so return
-            if ($this->debug & 4) {
-                echo "<p><b>loadfile:</b> varname $varname is already loaded</p>\n";
-            }
-            return true;
-        }
-        $filename = $this->file[$varname];
-
-        /* use @file here to avoid leaking filesystem information if there is an error */
-        $str = @file_get_contents($filename);
-        if (empty($str) && !is_numeric($str) ) {
-            $this->halt("loadfile: While loading $varname, $filename does not exist or is empty.");
-            return false;
-        }
-
-        if ($this->debug & 4) {
-            printf("<b>loadfile:</b> loaded $filename into $varname<br>\n");
-        }
-        $this->set_var($varname, $str);
-
-        return true;
-    }
-
-
-   /******************************************************************************
+    /******************************************************************************
     * This function is called whenever an error occurs and will handle the error
     * according to the policy defined in $this->halt_on_error. Additionally the
     * error message will be saved in $this->last_error.
@@ -1157,11 +980,10 @@ class Template
     * usage: halt(string $msg)
     *
     * @param     $msg         a string containing an error message
-    * @access    private
     * @return    void
     * @see       $halt_on_error
     */
-    function halt($msg)
+    private function halt($msg)
     {
         $this->last_error = $msg;
 
@@ -1177,7 +999,7 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * This function prints an error message.
     * It can be overridden by your subclass of Template. It will be called with an
     * error message to display.
@@ -1185,11 +1007,10 @@ class Template
     * usage: haltmsg(string $msg)
     *
     * @param     $msg         a string containing the error message to display
-    * @access    public
     * @return    void
     * @see       halt
     */
-    function haltmsg($msg)
+    private function haltmsg($msg)
     {
         if ($this->halt_on_error == 'yes') {
             trigger_error(sprintf("Template Error: %s", $msg));
@@ -1198,38 +1019,40 @@ class Template
         }
     }
 
-   /******************************************************************************
+    /******************************************************************************
     * These functions are called from the cached php file to fetch data into the template.
     * You should NEVER have to call them directly.
     *
     * @param  $val             string containing name of template variable
     * @param  $modifier        Optional parameter to apply modifiers to template variables
-    * @access private
     * @return string
     * @see    cache_blocks,check_cache
     *
     */
-    function val_echo($val)
+    private function val_echo($val)
     {
-      if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
-          return '<?php echo $this->val_echo(\''.$val.'\'); ?>';
-      }
+        if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
+            return '<?php echo $this->val_echo(\''.$val.'\'); ?>';
+        }
 
-      if (array_key_exists($val, $this->varvals)) {
-          return $this->varvals[$val];
-      }
-      if ($this->unknowns == 'comment') {
-          return "<!-- Template variable $val undefined -->";
-      } else if ($this->unknowns == 'keep') {
-          return '{'.$val.'}';
-      }
-      return '';
+        if (array_key_exists($val, $this->varvals)) {
+            return $this->varvals[$val];
+        }
+        if ($this->unknowns == 'comment') {
+            return "<!-- Template variable $val undefined -->";
+        } else if ($this->unknowns == 'keep') {
+            return '{'.$val.'}';
+        }
+        return '';
     }
 
-   /***
-    * Used in {!if var}. Avoid duplicating a large string when all we care about is if the string is non-zero length
-    */
-    function var_notempty($val)
+    /***
+     * Used in {!if var}. Avoid duplicating a large string when all we care about is if the string is non-zero length
+     *
+     * @param  string $val
+     * @return bool
+     */
+    private function var_notempty($val)
     {
         if (array_key_exists($val, $this->varvals)) {
             return !(empty($this->varvals[$val]) ) ;
@@ -1237,7 +1060,7 @@ class Template
         return false;
     }
 
-    function var_empty($val)
+    private function var_empty($val)
     {
         if ( !array_key_exists($val, $this->varvals)) return true;
         if (array_key_exists($val, $this->varvals)) {
@@ -1247,7 +1070,7 @@ class Template
     }
 
 
-    function mod_echo($val, $modifier = '')
+    private function mod_echo($val, $modifier = '')
     {
         if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
             if (empty($modifier) && !is_numeric($modifer) ) {
@@ -1263,14 +1086,14 @@ class Template
             foreach ($mods as $mod) {
                 switch ($mod[0]) {
                     case 'u':
-                        $ret = urlencode($ret);
-                        break;
+                    $ret = urlencode($ret);
+                    break;
                     case 's':
-                        $ret = htmlspecialchars($ret);
-                        break;
+                    $ret = htmlspecialchars($ret);
+                    break;
                     case 't':
-                        $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
-                        break;
+                    $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
+                    break;
                 }
             }
             return $ret;
@@ -1283,7 +1106,7 @@ class Template
         return '';
     }
 
-    function lang_echo($val)
+    private function lang_echo($val)
     {
         // only allow variables with LANG in them to somewhat protect this from harm.
         if (stristr($val, 'LANG') === false) {
@@ -1312,7 +1135,7 @@ class Template
         return '';
     }
 
-    function block_echo($block)
+    private function block_echo($block)
     {
         if (array_key_exists($block, $this->block_replace)) {
             return $this->get_var($this->block_replace[$block]);
@@ -1320,7 +1143,7 @@ class Template
         return '';
     }
 
-    function loop($var)
+    private function loop($var)
     {
         $loopvar = $var . '__loopvar';
         $limit = $this->get_var($var);
@@ -1335,26 +1158,26 @@ class Template
         if (!$ret) $this->unset_var($loopvar);
         return $ret;
     }
-    function inc($var)
+    private function inc($var)
     {
         $val = $this->get_var($var);
         if ($val == 0) $val = 0;
         $this->set_var($var, ++$val);
     }
-    function inc_echo($var)
+    private function inc_echo($var)
     {
         $val = $this->get_var($var);
         if ($val == 0) $val = 0;
         $this->set_var($var, ++$val);
         return $val;
     }
-    function dec($var)
+    private function dec($var)
     {
         $val = $this->get_var($var);
         if ($val == 0) $val = 0;
         $this->set_var($var, --$val);
     }
-    function dec_echo($var)
+    private function dec_echo($var)
     {
         $val = $this->get_var($var);
         if ($val == 0) $val = 0;
@@ -1363,135 +1186,134 @@ class Template
     }
 
 
-   /******************************************************************************
+    /******************************************************************************
     * These functions build the cached php file.
     * You should NEVER have to call them directly.
     *
     * @param  $tmplt           string being cached
     * @param  $in_php          boolean used to determing if php escape chars need to be printed
-    * @access private
     * @return string
     * @see    cache_write
     *
     */
-    function replace_vars($tmplt, $in_php = false)
+    private function replace_vars($tmplt, $in_php = false)
     {
         // do all the common substitutions
         if ($in_php) {
             $tmplt = preg_replace(
-                      array(
-                            '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
-                            '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
-                           ),
-                      array(
-                            '$this->get_var(\'\1\')',
-                            '$this->mod_echo(\'\1\',\'\2\')',
-                           ),
-                      $tmplt);
+            array(
+            '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
+            '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
+            ),
+            array(
+            '$this->get_var(\'\1\')',
+            '$this->mod_echo(\'\1\',\'\2\')',
+            ),
+            $tmplt);
         } else {
             $tmplt = preg_replace(
-                      array(
-                            '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
-                            '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
-                           ),
-                      array(
-                            '<?php echo $this->val_echo(\'\1\'); ?>',
-                            '<?php echo $this->mod_echo(\'\1\',\'\2\'); ?>',
-                           ),
-                      $tmplt);
+            array(
+            '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
+            '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
+            ),
+            array(
+            '<?php echo $this->val_echo(\'\1\'); ?>',
+            '<?php echo $this->mod_echo(\'\1\',\'\2\'); ?>',
+            ),
+            $tmplt);
         }
 
         return $tmplt;
     }
 
-    function replace_lang($tmplt, $in_php = false)
+    private function replace_lang($tmplt, $in_php = false)
     {
         global $TEMPLATE_OPTIONS;
 
         if ($TEMPLATE_OPTIONS['cache_by_language']) {
             if ($in_php) {
                 $tmplt = preg_replace_callback(
-                            '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
-                            array($this, 'parse_quoted_lang_callback'),
-                            $tmplt);
+                '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
+                array($this, 'parse_quoted_lang_callback'),
+                $tmplt);
             } else {
                 $tmplt = preg_replace_callback(
-                            '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
-                            array($this, 'parse_lang_callback'),
-                            $tmplt);
+                '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
+                array($this, 'parse_lang_callback'),
+                $tmplt);
             }
         } else {
             if ($in_php) {
                 $tmplt = preg_replace(
-                            '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
-                            '$this->lang_echo(\'\1[\3]\')',
-                            $tmplt);
+                '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
+                '$this->lang_echo(\'\1[\3]\')',
+                $tmplt);
             } else {
                 $tmplt = preg_replace(
-                            '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
-                            '<?php echo $this->lang_echo(\'\1[\3]\'); ?>',
-                            $tmplt);
+                '/\{\$(LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\]\}/',
+                '<?php echo $this->lang_echo(\'\1[\3]\'); ?>',
+                $tmplt);
             }
         }
         return $tmplt;
     }
 
     // Callbacks for replace_lang
-    function parse_lang_callback($matches)
+    private function parse_lang_callback($matches)
     {
         return $this->lang_echo($matches[1].'['.$matches[3].']');
     }
 
-    function parse_quoted_lang_callback($matches)
+    private function parse_quoted_lang_callback($matches)
     {
         return '\'' . addslashes($this->lang_echo($matches[1].'['.$matches[3].']')) . '\'';
     }
 
-    function replace_extended($tmplt)
+    private function replace_extended($tmplt)
     {
         if (strpos($tmplt, '!}') !== false || strpos($tmplt, '$}') !== false) {
             $tmplt = preg_replace_callback(
-                      array('/\{\!\!(if|elseif|while|echo|global|autotag) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
-                            '/\{\!\!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) \!\!\}/',       // sets a variable
-                            '/\{(\$LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
-                           ),
-                      array($this, 'parse_extended_callback'),
-                      $tmplt);
+            array('/\{\!\!(if|elseif|while|echo|global|autotag) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
+            '/\{\!\!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) \!\!\}/',       // sets a variable
+            '/\{(\$LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
+            ),
+            array($this, 'parse_extended_callback'),
+            $tmplt);
         }
 
         if (strpos($tmplt, '{!') !== false) {
             $tmplt = preg_replace(
-                array(
-                      '/\{!(if|elseif|while) ([-\w\d_\[\]]+)\}/',
-                      '/\{!(if|elseif|while) !([-\w\d_\[\]]+)\}/',
-                      '/\{!else(|!| !)\}/',
-                      '/\{!end(if|while|for)(|!| !)\}/',                    // for is not yet supported but here for future use
-                      '/\{!loop ([-\w\d_\[\]]+)(|!| !)\}/',
-                      '/\{!endloop(|!| !)\}/',
-                      '/\{!(inc|dec) ([-\w\d_\[\]]+)(|!| !)\}/',
-                      '/\{!(inc|dec)(\+(echo))? ([-\w\d_\[\]]+)(|!| !)\}/',
-                      '/\{!(break|continue)( \d+)?(|!| !)\}/',
-                      '/\{!unset ([-\w\d_\[\]]+)(|!| !)\}/',                // unsets a variable
-                     ),
-                array(
-                      '<?php \1 ($this->var_notempty(\'\2\')): ?>',         // if exists and is non-zero
-                      '<?php \1 ($this->var_empty(\'\2\')): ?>',            // if exists and is non-zero
-                      '<?php else: ?>',
-                      '<?php end\1; ?>',
-                      '<?php while ($this->loop(\'\1\')): ?>',              // !loop
-                      '<?php endwhile; ?>',                                 // !endloop
-                      '<?php $this->\1(\'\2\'); ?>',                        // !inc and !dec and +echo
-                      '<?php \3 $this->\1_echo(\'\4\'); ?>',                // !inc and !dec and +echo
-                      '<?php \1\2; ?>',                                     // !break and !continue
-                      '<?php $this->unset_var(\'\1\'); ?>',
-                     ),
-                $tmplt);
+            array(
+            '/\{!(if|elseif|while) ([-\w\d_\[\]]+)\}/',
+            '/\{!(if|elseif|while) !([-\w\d_\[\]]+)\}/',
+            '/\{!else(|!| !)\}/',
+            '/\{!end(if|while|for)(|!| !)\}/',                    // for is not yet supported but here for future use
+            '/\{!loop ([-\w\d_\[\]]+)(|!| !)\}/',
+            '/\{!endloop(|!| !)\}/',
+            '/\{!(inc|dec) ([-\w\d_\[\]]+)(|!| !)\}/',
+            '/\{!(inc|dec)(\+(echo))? ([-\w\d_\[\]]+)(|!| !)\}/',
+            '/\{!(break|continue)( \d+)?(|!| !)\}/',
+            '/\{!unset ([-\w\d_\[\]]+)(|!| !)\}/',                // unsets a variable
+            ),
+            array(
+            '<?php \1 ($this->var_notempty(\'\2\')): ?>',         // if exists and is non-zero
+            '<?php \1 ($this->var_empty(\'\2\')): ?>',            // if exists and is non-zero
+            '<?php else: ?>',
+            '<?php end\1; ?>',
+            '<?php while ($this->loop(\'\1\')): ?>',              // !loop
+            '<?php endwhile; ?>',                                 // !endloop
+            '<?php $this->\1(\'\2\'); ?>',                        // !inc and !dec and +echo
+            '<?php \3 $this->\1_echo(\'\4\'); ?>',                // !inc and !dec and +echo
+            '<?php \1\2; ?>',                                     // !break and !continue
+            '<?php $this->unset_var(\'\1\'); ?>',
+            ),
+            $tmplt);
         }
         return $tmplt;
     }
 
     // Callbacks for replace_extended
-    function parse_extended_callback($matches)
+    private function parse_extended_callback($matches)
     {
         global $TEMPLATE_OPTIONS;
 
@@ -1527,23 +1349,92 @@ class Template
         return '<?php ' . $prefix . $cond . $postfix . ' ?>';
     }
 
-   /******************************************************************************
-    * This function does the final replace of {variable} with the appropriate PHP
-    * and writes the text to the cache directory.
+
+    /******************************************************************************
+    * This function is only used with template files that contain BEGIN/END BLOCK
+    * sections. See set_block for more details.
     *
     * As an internal function, you should never call it directly
-    * usage: cache_write(string $filename, string $tmplt, string $replace)
+    * usage: compile_blocks(string $filestub, array $parent, string $replace)
     *
-    * @param  $filename       string containing complete path to the cache file
-    * @param  $tmplt          contents of the template file before replacement
-    * @access private
+    * @param  $filestub       format string for sprintf to create cache filename
+    * @param  $parent         array containing name and content of the block
     * @return void
-    * @see    cache_blocks,check_cache
+    * @see    cache_write,compile_template,set_block
     *
     */
-    function cache_write($filename, $tmplt)
+    private function compile_blocks($parent)
+    {
+        global $_CONF;
+
+        $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
+        $matches = array();
+        $str = $parent[2];
+        $matches = array();
+        if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $m) {
+                $replace = '<?php echo $this->block_echo(\''.$m[1].'\'); ?>';
+                $str = str_replace($m[0], $replace, $str);
+                $this->compile_blocks($m);
+            }
+        }
+
+        $tmplt = $this->compile_template_code($str,true);
+
+        $this->blocks[$parent[1]] = $tmplt;
+    }
+
+    /******************************************************************************
+    * Called by filename(), compile_template verifies that the cache file is not out of
+    * date. If it is, it recreates it from the existing template file.
+    *
+    * As an internal function, you should never call it directly
+    * usage: compile_template(string $filename, string $tmplt, string $replace)
+    *
+    * @param  $varname        unused, name of the variable associated with the file
+    * @param  $filename       path to the template file
+    * @return void
+    * @see    cache_block,cache_write,filename
+    *
+    */
+    private function compile_template($varname, $filename)
     {
         global $TEMPLATE_OPTIONS, $_CONF;
+
+        if ($this->debug & 8) {
+            printf("<compile_template> Var %s for file %s<br>", $varname, $filename);
+        }
+        $tmplt = $this->check_cache($varname, $filename);
+        if ( $tmplt !== null ) {
+            return $tmplt;
+        }
+
+        $str = @file_get_contents($filename);
+
+        $tmplt = $this->compile_template_code($str,false);
+
+        return $tmplt;
+
+    }
+
+    // this compiles the template code to use the PHP replacements
+    // option to skip block processing for things like cached templates
+    // or instance caches
+    private function compile_template_code($tmplt,$skipblocks = false)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF;
+
+        if ($skipblocks == false) {
+            // check for begin/end block stuff
+            $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
+            $matches = array();
+            if (preg_match_all($reg, $tmplt, $matches, PREG_SET_ORDER)) {
+                foreach ($matches as $m) {
+                    $tmplt = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $tmplt);
+                    $this->compile_blocks($m);
+                }
+            }
+        }
 
         // order of operations could matter a lot so get rid of
         // template comments first: emits nothing to the output file
@@ -1564,77 +1455,142 @@ class Template
 
         // clean up concatenation.
         $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                            "\n", $tmplt);
+        "\n", $tmplt);
 
-        if ($this->debug & 4) {
-            printf("<b>cache_write:</b> opening $filename<br>\n");
-        }
-        $f = @fopen($filename,'w');
-        if ($f !== false ) {
-            if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
-                fwrite($f,
-"<?php if (!defined('GVERSION')) {
-    die ('This file can not be used on its own.');
-} ?>\n");
-            }
-            fwrite($f, $tmplt);
-            fclose($f);
-        }
+        return $tmplt;
     }
 
-   /******************************************************************************
-    * This function is only used with template files that contain BEGIN/END BLOCK
-    * sections. See set_block for more details.
+    /******************************************************************************
+    * Prevents certain variables from being cached in the instance cache.
     *
-    * As an internal function, you should never call it directly
-    * usage: cache_blocks(string $filestub, array $parent, string $replace)
-    *
-    * @param  $filestub       format string for sprintf to create cache filename
-    * @param  $parent         array containing name and content of the block
-    * @access private
-    * @return void
-    * @see    cache_write,check_cache,set_block
-    *
+    * @param  $vars           A string varname or array of varnames
+    * @return none
+    * @see    create_instance, set_var
     */
-    function cache_blocks($filestub, $parent)
+    public function uncached_var($vars)
     {
-        $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
-        $matches = array();
-        $str = $parent[2];
-        $matches = array();
-        if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $m) {
-                $replace = '<?php echo $this->block_echo(\''.$m[1].'\'); ?>';
-                $str = str_replace($m[0], $replace, $str);
-                $this->cache_blocks($filestub, $m);
-            }
+        if (empty($vars) && !is_numeric($vars) ) {
+            return;
+        } elseif (!is_array($vars)) {
+            $vars = array($vars);
         }
-        $filename = sprintf($filestub, $parent[1]);
-        $this->blocks[$parent[1]] = $filename;
-        $this->cache_write($filename, $str);
+        foreach ($vars as $varname) {
+            $this->nocache[$varname] = true;
+        }
     }
 
-   /******************************************************************************
-    * Called by filename(), check_cache verifies that the cache file is not out of
-    * date. If it is, it recreates it from the existing template file.
+    /******************************************************************************
+    * Creates an instance of the current template. Variables in the nocache array
+    * are untranslated by returning the original PHP back. Conceptually, this
+    * function is equivalent to the parse function.
     *
-    * As an internal function, you should never call it directly
-    * usage: check_cache(string $filename, string $tmplt, string $replace)
+    * The $iid parameter must be globally unique. The recommended format is
+    *   $plugin_$primarykey  or $plugin_$page_$uid
     *
-    * @param  $varname        unused, name of the variable associated with the file
-    * @param  $filename       path to the template file
-    * @access private
+    * The $filevar parameter is supposed to match one of the varnames passed to
+    * set_file.
+    *
+    * usage: create_instance(string $iid, string $filevar)
+    *
+    * @param  $iid            A globally unique instance identifier.
+    * @param  $filevar        This is the varname passed to $T->set_file.
     * @return void
-    * @see    cache_block,cache_write,filename
+    * @see    check_instance
     *
     */
-    function check_cache($varname, $filename)
+    public function create_instance($iid, $filevar)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+
+        if ( (isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true) || (isset($_CONF['cache_driver']) && $_CONF['cache_driver'] == 'Devnull') ) {
+            return;
+        }
+
+        $old_unknowns = $this->unknowns;
+        $this->unknowns = 'PHP';
+        $tmplt = $this->parse($iid, $filevar);
+        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+        $iid = str_replace('-','_',$iid);
+        $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
+                 . $tmplt
+                 . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
+
+        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+        if ($TEMPLATE_OPTIONS['cache_by_language']) {
+            $path_cache .= $_CONF['language'] . '/';
+        }
+        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+        $iid = str_replace('-','_',$iid);
+        $filename = $path_cache.'instance__'.$iid.'.php';
+
+        $this->cache_write($filename, $tmplt);
+
+        $this->instance[$filevar] = $tmplt;
+
+        $this->unknowns = $old_unknowns;
+        return;
+    }
+
+
+    /******************************************************************************
+    * Checks for an instance of the current template. This check is based soley on
+    * the $iid. The $filevar is replaces with the cached file if it exists.
+    *
+    * The $iid parameter must be globally unique. The recommended format is
+    *   $plugin_$primarykey  or $plugin_$page_$uid
+    *
+    * The $filevar parameter is supposed to match one of the varnames passed set_file.
+    *
+    * usage:
+    *          $T->set_file('main', 'main.thtml');
+    *          $iid = 'mainfile_'.$primarykey;
+    *          if (!$T->check_instance($iid, 'main')) {
+    *              $T->set_var(...); //...
+    *              $T->create_instance($iid, 'main');
+    *          }
+    *          $T->set_var('hits', $hit_count, false, true);
+    *          $T->parse('output', 'main');
+    *
+    * @param  $iid            A globally unique instance identifier.
+    * @param  $filevar        This is the varname passed to $T->set_file.
+    * @return boolean         true if the instance file exists
+    * @see    create_instance
+    *
+    */
+    public function check_instance($iid, $filevar)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+
+        if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
+            return;
+        }
+        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+        if ($TEMPLATE_OPTIONS['cache_by_language']) {
+            $path_cache .= $_CONF['language'] . '/';
+        }
+        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+        $iid = str_replace('-','_',$iid);
+        $filename = $path_cache.'instance__'.$iid.'.php';
+
+        if (@file_exists($filename) ) {
+            $this->instance[$filevar] = @file_get_contents($filename);
+            return true;
+        }
+        return false;
+    }
+
+    /******************************************************************************
+    * Creates the full path and filename for cache files
+    *
+    * @param  $filename       The template filename
+    * @return string          full path/filename of cache file
+    * @see    create_instance
+    *
+    */
+    private function cache_create_filename($filename)
     {
         global $TEMPLATE_OPTIONS, $_CONF;
 
-        if ($this->debug & 8) {
-            printf("<check_cache> Var %s for file %s<br>", $varname, $filename);
-        }
         $p = pathinfo($filename);
         if ($p['extension'] == 'php') {
             return $filename;
@@ -1664,6 +1620,34 @@ class Template
             }
         }
         $phpfile = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '.php';
+        return $phpfile;
+    }
+
+    /******************************************************************************
+    * Called by compile_template(), check_cache verifies that the cache file is not out of
+    * date. If it is, it recreates it from the existing template file.
+    *
+    * As an internal function, you should never call it directly
+    * usage: check_cache(string $filename, string $tmplt, string $replace)
+    *
+    * @param  $varname        unused, name of the variable associated with the file
+    * @param  $filename       path to the template file
+    * @return $tmplt          Mixed - the template code from cache or null
+    *                         if caching disabled
+    * @see    compile_template, cache_write,filename
+    *
+    */
+    private function check_cache($varname, $filename)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF;
+
+        if ( $_CONF['cache_templates'] == false ) {
+            return null;
+        }
+
+        static $internalCache = array();
+
+        $phpfile = $this->cache_create_filename($filename);
 
         $template_fstat = @filemtime($filename);
         if (file_exists($phpfile)) {
@@ -1675,249 +1659,69 @@ class Template
         if ($this->debug & 8) {
             printf("<check_cache> Look for %s<br>", $filename);
         }
-
+        $key = md5($phpfile);
         if ($template_fstat > $cache_fstat ) {
-
             $str = @file_get_contents($filename);
-
-            // check for begin/end block stuff
-            $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
-            $matches = array();
-            if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-                $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
-                foreach ($matches as $m) {
-                    $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
-                    $this->cache_blocks($phpstub, $m);
-                }
+            // cache_write will compile the template prior to creating the cache file
+            $tmplt= $this->cache_write($phpfile, $str);
+            // save compiled template to internal cache
+            $internalCache[$key] = $tmplt;
+        } else {
+            if (isset($internalCache[$key])) {
+                $tmplt = $internalCache[$key];
+            } else {
+                $tmplt = @file_get_contents($phpfile);
+                $internalCache[$key] = $tmplt;
             }
-            $this->cache_write($phpfile, $str);
         }
-        return $phpfile;
-    }
-
-   /******************************************************************************
-    * This function is only used with template files that contain BEGIN/END BLOCK
-    * sections. See set_block for more details.
-    *
-    * As an internal function, you should never call it directly
-    * usage: compile_blocks(string $filestub, array $parent, string $replace)
-    *
-    * @param  $filestub       format string for sprintf to create cache filename
-    * @param  $parent         array containing name and content of the block
-    * @access private
-    * @return void
-    * @see    cache_write,compile_template,set_block
-    *
-    */
-    function compile_blocks($parent)
-    {
-        global $_CONF;
-
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
         $matches = array();
-        $str = $parent[2];
-        $matches = array();
-        if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all($reg, $tmplt, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $m) {
-                $replace = '<?php echo $this->block_echo(\''.$m[1].'\'); ?>';
-                $str = str_replace($m[0], $replace, $str);
+                $tmplt = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $tmplt);
                 $this->compile_blocks($m);
             }
         }
 
-        // order of operations could matter a lot so get rid of
-        // template comments first: emits nothing to the output file
-        // since the regex is multiline, make sure there is a comment before calling it
-        if (strpos($str, '{#') !== false) {
-            if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
-                $str = str_replace('{#','<!-- ',$str);
-                $str = str_replace('#}',' -->',$str);
-            } else {
-                $str = preg_replace('!\{#.*?#\}(\n)?!sm', '', $str);
-            }
-        }
-
-        $tmplt = $this->replace_extended($str);
-        $tmplt = $this->replace_lang($tmplt);
-        $tmplt = $this->replace_vars($tmplt);
-
-        // clean up concatenation.
-        $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                              "\n", $tmplt);
-
-        $this->blocks[$parent[1]] = $tmplt;
+        return $tmplt;
     }
 
-   /******************************************************************************
-    * Called by filename(), compile_template verifies that the cache file is not out of
-    * date. If it is, it recreates it from the existing template file.
+
+    /******************************************************************************
+    * This function does the final replace of {variable} with the appropriate PHP
+    * and writes the text to the cache directory.
     *
     * As an internal function, you should never call it directly
-    * usage: compile_template(string $filename, string $tmplt, string $replace)
+    * usage: cache_write(string $filename, string $tmplt, string $replace)
     *
-    * @param  $varname        unused, name of the variable associated with the file
-    * @param  $filename       path to the template file
-    * @access private
+    * @param  $filename       string containing complete path to the cache file
+    * @param  $tmplt          contents of the template file before replacement
     * @return void
-    * @see    cache_block,cache_write,filename
+    * @see    check_cache
     *
     */
-    function compile_template($varname, $filename)
+    private function cache_write($filename, $tmplt)
     {
         global $TEMPLATE_OPTIONS, $_CONF;
 
-        if ($this->debug & 8) {
-            printf("<compile_template> Var %s for file %s<br>", $varname, $filename);
+        $tmplt = $this->compile_template_code($tmplt,true);
+
+        if ($this->debug & 4) {
+            printf("<b>cache_write:</b> opening $filename<br>\n");
         }
-
-        $str = @file_get_contents($filename);
-
-        // check for begin/end block stuff
-        $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
-        $matches = array();
-        if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $m) {
-                $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
-                $this->compile_blocks($m);
+        $f = @fopen($filename,'w');
+        if ($f !== false ) {
+            if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
+                fwrite($f,
+                "<?php if (!defined('GVERSION')) {
+                die ('This file can not be used on its own.');
+                } ?>\n");
             }
+            fwrite($f, $tmplt);
         }
-
-        // order of operations could matter a lot so get rid of
-        // template comments first: emits nothing to the output file
-        // since the regex is multiline, make sure there is a comment before calling it
-        if (strpos($str, '{#') !== false) {
-            if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
-                $str = str_replace('{#','<!-- ',$str);
-                $str = str_replace('#}',' -->',$str);
-            } else {
-                $str = preg_replace('!\{#.*?#\}(\n)?!sm', '', $str);
-            }
-        }
-
-        $tmplt = $this->replace_extended($str);
-        $tmplt = $this->replace_lang($tmplt);
-        $tmplt = $this->replace_vars($tmplt);
-
-        // clean up concatenation.
-        $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                             "\n", $tmplt);
-
+        fclose($f);
         return $tmplt;
-
     }
 
-   /******************************************************************************
-    * Prevents certain variables from being cached in the instance cache.
-    *
-    * @param  $vars           A string varname or array of varnames
-    * @access public
-    * @return none
-    * @see    create_instance, set_var
-    */
-    function uncached_var($vars)
-    {
-        if (empty($vars) && !is_numeric($vars) ) {
-            return;
-        } elseif (!is_array($vars)) {
-            $vars = array($vars);
-        }
-        foreach ($vars as $varname) {
-            $this->nocache[$varname] = true;
-        }
-    }
-
-   /******************************************************************************
-    * Creates an instance of the current template. Variables in the nocache array
-    * are untranslated by returning the original PHP back. Conceptually, this
-    * function is equivalent to the parse function.
-    *
-    * The $iid parameter must be globally unique. The recommended format is
-    *   $plugin_$primarykey  or $plugin_$page_$uid
-    *
-    * The $filevar parameter is supposed to match one of the varnames passed to
-    * set_file.
-    *
-    * usage: create_instance(string $iid, string $filevar)
-    *
-    * @param  $iid            A globally unique instance identifier.
-    * @param  $filevar        This is the varname passed to $T->set_file.
-    * @access public
-    * @return string          The fullpath of the cached file.
-    * @see    check_instance
-    *
-    */
-    function create_instance($iid, $filevar)
-    {
-        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
-
-        if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
-            return;
-        }
-
-        $old_unknowns = $this->unknowns;
-        $this->unknowns = 'PHP';
-        $tmplt = $this->parse($iid, $filevar);
-        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-        if ($TEMPLATE_OPTIONS['cache_by_language']) {
-            $path_cache .= $_CONF['language'] . '/';
-        }
-        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-        $iid = str_replace('-','_',$iid);
-        $filename = $path_cache.'instance__'.$iid.'.php';
-        $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
-               . $tmplt
-               . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
-        $this->cache_write($filename, $tmplt);
-        $this->unknowns = $old_unknowns;
-        return $filename;
-    }
-
-   /******************************************************************************
-    * Checks for an instance of the current template. This check is based soley on
-    * the $iid. The $filevar is replaces with the cached file if it exists.
-    *
-    * The $iid parameter must be globally unique. The recommended format is
-    *   $plugin_$primarykey  or $plugin_$page_$uid
-    *
-    * The $filevar parameter is supposed to match one of the varnames passed set_file.
-    *
-    * usage:
-    *          $T->set_file('main', 'main.thtml');
-    *          $iid = 'mainfile_'.$primarykey;
-    *          if (!$T->check_instance($iid, 'main')) {
-    *              $T->set_var(...); //...
-    *              $T->create_instance($iid, 'main');
-    *          }
-    *          $T->set_var('hits', $hit_count, false, true);
-    *          $T->parse('output', 'main');
-    *
-    * @param  $iid            A globally unique instance identifier.
-    * @param  $filevar        This is the varname passed to $T->set_file.
-    * @access public
-    * @return boolean         true if the instance file exists
-    * @see    create_instance
-    *
-    */
-    function check_instance($iid, $filevar)
-    {
-        global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
-
-        if ( isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true ) {
-            return;
-        }
-
-        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-        if ($TEMPLATE_OPTIONS['cache_by_language']) {
-            $path_cache .= $_CONF['language'] . '/';
-        }
-        $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-        $iid = str_replace('-','_',$iid);
-        $filename = $path_cache.'instance__'.$iid.'.php';
-        if (file_exists($filename) && array_key_exists($filevar, $this->file)) {
-            $this->file[$filevar] = $filename;
-            return true;
-        }
-        return false;
-    }
 } // end class
 ?>
