@@ -1,3 +1,12 @@
+## v1.7.5 (unreleased)
+  - New comment notifications (subscriptions) used htmlentities for quotes
+  - Minor rearrangement of activitytimer files - removed from admin area
+  - HTML5 Validaiton updates on <script> tag
+  - Optimized template to improve performance
+  - Clean up the Facebook remote login to only require public data
+  - Fixed error when updating from older versions of glFusion
+  - Fixed display issue when admin poll edit fails validation checks.
+
 ## v1.7.4.pl1 (May 23, 2018)
   - Do not send notification email for new user when created by admin
   - Fixed error in email duplicate check on new registrations

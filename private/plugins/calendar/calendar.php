@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -45,7 +45,7 @@ global $_DB_table_prefix, $_TABLES;
 $_CA_CONF['pi_name']            = 'calendar';
 $_CA_CONF['pi_display_name']    = 'Calendar';
 $_CA_CONF['pi_version']         = '1.1.2';
-$_CA_CONF['gl_version']         = '1.7.4';
+$_CA_CONF['gl_version']         = '1.7.5';
 $_CA_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 // Define database tables

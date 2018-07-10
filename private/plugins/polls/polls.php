@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -52,6 +52,6 @@ $_TABLES['pollvoters']          = $_DB_table_prefix . 'pollvoters';
 $_PO_CONF['pi_name']            = 'polls';
 $_PO_CONF['pi_display_name']    = 'Polls';
 $_PO_CONF['pi_version']         = '2.2.3';
-$_PO_CONF['gl_version']         = '1.7.4';
+$_PO_CONF['gl_version']         = '1.7.5';
 $_PO_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>

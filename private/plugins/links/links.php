@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -55,6 +55,6 @@ $_TABLES['linksubmission']      = $_DB_table_prefix . 'linksubmission';
 $_LI_CONF['pi_name']            = 'links';
 $_LI_CONF['pi_display_name']    = 'Links';
 $_LI_CONF['pi_version']         = '2.1.5';
-$_LI_CONF['gl_version']         = '1.7.4';
+$_LI_CONF['gl_version']         = '1.7.5';
 $_LI_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>
