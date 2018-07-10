@@ -80,7 +80,8 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $name = @htmlspecialchars($name,ENT_QUOTES, COM_getEncodingt());
 
         $A['title']   = COM_checkWords($A['title']);
-        $A['title']   = @htmlspecialchars($A['title'],ENT_QUOTES, COM_getEncodingt());
+        $html2txt = new Html2Text\Html2Text(strip_tags($A['title']),false);
+        $A['title'] = $html2txt->get_text();
 
         //and finally: format the actual text of the comment, but check only the text, not sig or edit
         $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
