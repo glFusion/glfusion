@@ -1360,6 +1360,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
          }
     }
 
+    $thisUrl = COM_getCurrentURL();
+    if (@strpos($thisUrl, $_CONF['site_admin_url']) !== false) {
+        $code = "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
+        $outputHandle->addScript($code);
+    }
+
     $jsFooter .= $outputHandle->renderFooter('script');
     $theme->set_var('js-footer',$jsFooter);
 
@@ -6981,7 +6987,6 @@ function _js_out()
     $js .= "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
     $js .= "var glfusionFileRoot = '".$fileroot ."';". LB;
     $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
-    $js .= "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {
