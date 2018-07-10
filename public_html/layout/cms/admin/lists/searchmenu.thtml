@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 {!if lang_search}
-<script type="text/javascript">
+<script>
 	function clearsearch() {
 		document.getElementById('admin-list-search').value = '';
 		this.form.submit();

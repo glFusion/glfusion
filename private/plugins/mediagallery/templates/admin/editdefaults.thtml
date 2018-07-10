@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_url}/js/defaults_editor.js"></script>
-<script type="text/javascript">
+<script src="{site_url}/js/defaults_editor.js"></script>
+<script>
     //<![CDATA[
     function change(what) {
         value = '{path_mg}/watermarks/' + what.options[what.selectedIndex].value;

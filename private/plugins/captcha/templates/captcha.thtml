@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 {!if recaptcha}
-	<script type="text/javascript">
+	<script>
 		//<![CDATA[
 		var RecaptchaOptions = {
 			theme : '{recaptcha_theme}'
@@ -16,7 +16,7 @@
 		</div>
 	</div>
 {!else}
-	<script type="text/javascript">
+	<script>
 		//<![CDATA[
 		var counter = 0;
 		function new_captcha_{counter}()

@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 //<![CDATA[
 function popitup(url) {
     newwindow=window.open(url,'name','height=600,width=450,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
@@ -76,7 +76,7 @@ function popitup(url) {
 </div>
 {!endif}
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/javascript">
+<script>
 //<![CDATA[
 var el;
 el=document.getElementsByTagName('span');

@@ -193,7 +193,7 @@
 		</div>
 	</form>
 </div>
-<script type="text/javascript">
+<script>
 	$("#topiceditor").validate();
 </script>
 {# end {templatelocation} #}

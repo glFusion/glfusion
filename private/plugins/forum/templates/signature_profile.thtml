@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <div style="clear"></div>
 
-<script type="text/javascript">
+<script>
 b_help = "{$LANG_GF01[b_help]}";
 i_help = "{$LANG_GF01[i_help]}";
 u_help = "{$LANG_GF01[u_help]}";
@@ -20,7 +20,7 @@ e_help = "{$LANG_GF01[e_help]}";
 site_url = "{site_url}";
 </script>
 
-<script type="text/javascript" src="{site_url}/forum/javascript/bbcode-signature.js"></script>
+<script src="{site_url}/forum/javascript/bbcode-signature.js"></script>
 <fieldset>
     <legend>{$LANG_GF01[signature]}</legend>
     <div class="input-field">

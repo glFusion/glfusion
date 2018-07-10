@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_url}/js/admin_editor.js"></script>
+<script src="{site_url}/js/admin_editor.js"></script>
 {configuration_check}
 {!if feedback}
 <span class="info">{feedback}</span>

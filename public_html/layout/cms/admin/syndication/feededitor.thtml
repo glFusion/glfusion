@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js" type="text/javascript"></script>
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js"></script>
 {start_feed_editor}
 {admin_menu}
 <form class="uk-form uk-form-horizontal" action="{site_admin_url}/syndication.php" method="post">
@@ -123,7 +123,7 @@
 		<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel" id="cancel">{lang_cancel}</button>
 	</div>
 </form>
-<script type="text/javascript">
+<script>
 	$(function(){
 		$("#feed_title").characterCounter({
 			limit: '40',

@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 {lbslideshow}
-<script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
+<script src="{site_url}/players/audio-player.js"></script>
 <ul class="uk-breadcrumb">
   {birdseed_ul}
 </ul>
@@ -127,7 +127,7 @@
 	</div>
 </div>
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/javascript">
+<script>
 //<![CDATA[
 var el;
 el=document.getElementsByTagName('div');

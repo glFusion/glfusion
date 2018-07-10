@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	function toggleModeratorMode(mode) {
 		if (mode == 'user') {
 			document.getElementById('lblusers').style.display="";

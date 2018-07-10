@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
+<script src="{site_url}/players/audio-player.js"></script>
 {# begin {templatelocation} #}
 <nav class="uk-navbar uk-margin-bottom">
     <div class="uk-navbar-content">
@@ -113,7 +113,7 @@
 </div>
 
 {# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
-<script type="text/javascript">
+<script>
     //<![CDATA[
     var el;
     el=document.getElementsByTagName('div');

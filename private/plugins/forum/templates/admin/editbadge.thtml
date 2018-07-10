@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/forum/javascript/spectrum.js"></script>
 <link rel="stylesheet" href="{site_url}/forum/javascript/spectrum.css" />
-<script type="text/javascript">
+<script>
 function showhideTypeDiv(sel)
 {
 	if (sel == "img") {

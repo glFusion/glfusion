@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 	function formControl(){
 		var myForm = document.forms.remoteupload;
 		var myType = myForm.elements['type[0]'];
@@ -110,7 +110,7 @@
 
 </form>
 
-<script type="text/javascript">
+<script>
 	formControl();
 </script>
 {# end {templatelocation} #}

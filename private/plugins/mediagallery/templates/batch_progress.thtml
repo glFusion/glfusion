@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 {META}
-<script type="text/javascript">
+<script>
 	//<![CDATA[
 	var refresh;
 
@@ -92,7 +92,7 @@
 	<div class="uk-text-center uk-margin">
 		<button class="uk-button uk-button-primary" type="submit" name="submit_button" id="submit_button" value="{L_NEXT}" onclick="javascript:ticker=0">{L_NEXT}</button>
 		<button class="uk-button" type="submit" name="cancel_button" value="{L_CANCEL}">{L_CANCEL}</button>
-		<script type="text/javascript"><!--
+		<script><!--
 			updateButton();
 			//-->
 		</script>

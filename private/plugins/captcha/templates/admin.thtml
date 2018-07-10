@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<script type="text/javascript">
+<script>
 //<![CDATA[
 function dodisabled(){
 var gfxdriver = document.getElementById('gfxdriver');
@@ -127,7 +127,7 @@ var gfxformat = document.getElementById('gfxformat');
 </td>
 </tr>
 </table>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 dodisabled();
 //]]>

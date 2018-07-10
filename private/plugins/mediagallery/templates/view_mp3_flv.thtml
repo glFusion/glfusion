@@ -2,7 +2,7 @@
 {!!if {align} == "center" !!}
   <style>#{id2} { margin: 0 auto !important; } </style>
 {!endif}
-<script type="text/javascript">
+<script>
 //<![CDATA[
 	$(document).ready(function(){
 		new jPlayerPlaylist({

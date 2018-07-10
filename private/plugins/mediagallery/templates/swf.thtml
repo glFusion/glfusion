@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}">
-<script type="text/javascript" src="{site_url}/js/swfobject.js"></script>
+<script src="{site_url}/js/swfobject.js"></script>
 {themeCSS}
 <title>{title}</title>
 </head>
 <body>
 <div style="text-align:center;">
-<script type="text/javascript">
+<script>
 	var flashvars = {};
     var params = {
     wmode: "transparent"

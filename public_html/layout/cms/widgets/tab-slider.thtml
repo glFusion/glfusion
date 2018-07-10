@@ -19,7 +19,7 @@
 
 <div style="clear:both;"></div>
 
-<script type="text/javascript">
+<script>
 	$(document).ready(function(){
 		$("div#slidertabs_{rand}").sliderTabs(
 		{

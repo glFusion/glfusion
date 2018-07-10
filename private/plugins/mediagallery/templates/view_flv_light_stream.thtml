@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <span id="{id}" style="align:left;width:{width}px;height:{height}px">{lang_noflash}</span>
-<script type="text/javascript">
+<script>
     // <![CDATA[
     var fo = new SWFObject("{site_url}/players/FlowPlayer.swf", "{id2}", "{width}", "{height}", "7", "#ffffff", true);
     fo.useExpressInstall('{site_url}/players/expressinstall.swf');

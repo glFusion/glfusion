@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}">
 <link rel="stylesheet" type="text/css" href="{css_url}">
-<script type="text/javascript" src="{js_url}"></script>
+<script src="{js_url}"></script>
 {themeCSS}
 <title>{title}</title>
 </head>

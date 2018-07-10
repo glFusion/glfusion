@@ -182,7 +182,7 @@ class outputHandler {
     public function addScript($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
     {
         if ($code != '') {
-            $this->_header['script'][$priority][] = '<script type="' . $mime . "\">".LB."<!--" . LB . $code . LB ."// --></script>" . LB;
+            $this->_header['script'][$priority][] = '<script>'.LB."<!--" . LB . $code . LB ."// --></script>" . LB;
         }
     }
 
@@ -264,7 +264,7 @@ class outputHandler {
 	 */
     public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript',$async = false)
     {
-        $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
+        $link = '<script src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
         if ( $async ) $link .= ' async';
         $link .= "></script>" . LB;
 
@@ -355,7 +355,7 @@ class outputHandler {
 	 */
     public function addLinkScriptFooter($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript',$async = false)
     {
-        $link = '<script type="' . $mime . '" src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
+        $link = '<script src="' . @htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
         if ( $async ) $link .= ' async';
         $link .= "></script>" . LB;
 
@@ -377,7 +377,7 @@ class outputHandler {
     public function addScriptFooter($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
     {
         if ($code != '') {
-            $this->_footer['script'][$priority][] = '<script type="' . $mime . "\">".LB."" . LB . $code . LB ."</script>" . LB;
+            $this->_footer['script'][$priority][] = '<script>'.LB."" . LB . $code . LB ."</script>" . LB;
         }
     }
 

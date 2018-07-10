@@ -82,8 +82,8 @@ class OAuthConsumer {
 
         switch ( $this->client->server ) {
             case 'Facebook' :
-                $api_url = 'https://graph.facebook.com/me?fields=name,email,link,id,first_name,last_name,about';
-                $scope   = 'email,public_profile,user_friends';
+                $api_url = 'https://graph.facebook.com/me?fields=name,email,id,first_name,last_name';
+                $scope   = 'email,public_profile';
                 $q_api   = array();
                 break;
             case 'Google' :
@@ -293,9 +293,6 @@ class OAuthConsumer {
         $userinfo = array();
         switch ( $this->client->server ) {
             case 'Facebook' :
-                if ( isset($info->about) ) {
-                    $userinfo['about'] = $info->about;
-                }
                 if ( isset($info->location->name) ) {
                     $userinfo['location'] = $info->location->name;
                 }
@@ -332,12 +329,11 @@ class OAuthConsumer {
                     'passwd'         => '',
                     'passwd2'        => '',
                     'fullname'       => $info->name,
-                    'homepage'       => $info->link,
+                    'homepage'       => '',
                     'remoteusername' => DB_escapeString($info->id),
                     'remoteservice'  => 'oauth.facebook',
                     'remotephoto'    => 'http://graph.facebook.com/'.$info->id.'/picture',
                     'socialservice'  => 'facebook',
-                    'socialuser'     => 'app_scoped_user_id/'.$info->id,
                 );
                 break;
             case 'Google' :

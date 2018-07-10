@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
-<script type="text/javascript" src="{site_url}/javascript/addons/autocomplete/jquery.autocomplete.min.js"></script>
+<script src="{site_url}/javascript/configmanager.js"></script>
+<script src="{site_url}/javascript/addons/autocomplete/jquery.autocomplete.min.js"></script>
 <div id="configuration">
 	<form id="config" class="uk-form" method="post" action="configuration.php" name="group">
 		<input type="hidden" value="{open_group}" name="conf_group">

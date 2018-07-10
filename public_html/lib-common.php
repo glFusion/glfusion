@@ -1357,7 +1357,13 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $outputHandle->addMeta('property','fb:app_id',$_CONF['fb_appid']);
     }
 
-    $jsFooter = '<script type="text/javascript" src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
+    $thisUrl = COM_getCurrentURL();
+    if (@strpos($thisUrl, $_CONF['site_admin_url']) !== false) {
+        $code = "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
+        $outputHandle->addScript($code);
+    }
+
+    $jsFooter = '<script src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
     if (isset($_CONF['comment_engine']) ) {
         switch ($_CONF['comment_engine']) {
             case 'disqus' :
@@ -7152,7 +7158,7 @@ function _js_out()
     $js .= "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
     $js .= "var glfusionFileRoot = '".$fileroot ."';". LB;
     $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
-    $js .= "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
+//    $js .= "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
     } else {

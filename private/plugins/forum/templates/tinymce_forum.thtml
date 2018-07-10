@@ -1,5 +1,5 @@
-<script type="text/javascript" src="{site_url}/tinymce/tinymce.min.js" ></script >
-<script type="text/javascript" >
+<script src="{site_url}/tinymce/tinymce.min.js" ></script >
+<script >
 function won (id) {
     tinymce.execCommand('mceAddEditor', false, id);
 }
