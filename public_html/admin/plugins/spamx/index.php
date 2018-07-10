@@ -72,8 +72,7 @@ if ( $_VARS['spamxstats'] + 2592000 < time() ) {
 $menu_arr = array (
     array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['plugin_name'],'active'=>true),
     array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/filters.php','text' => $LANG_SX00['filters']),
-//    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_comments']),
-//    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_trackbacks']),
+    array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/tester.php','text' => $LANG_SX00['interactive_tester']),
     array('url' => $_CONF['site_admin_url'] . '/index.php','text' => $LANG_ADMIN['admin_home']),
 );
 

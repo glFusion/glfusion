@@ -31,6 +31,8 @@ class SLCbase {
 
     var $_verbose = false;
 
+    var $response = array();
+
     /**
     * Constructor
     */
@@ -55,6 +57,9 @@ class SLCbase {
         $links = 0;
 
         preg_match_all("/<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\"/", $post, $matches);
+
+        $this->response['urls'] = count($matches[0]);
+
         for ($i = 0; $i < count ($matches[0]); $i++) {
             $url = $matches[1][$i];
             if ($url === "" || strpos($url, $_CONF['site_url']) !== false) {
@@ -64,8 +69,13 @@ class SLCbase {
                 $links++;
             }
         }
-
+        $this->response['external_urls'] = $links;
         return $links;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
 

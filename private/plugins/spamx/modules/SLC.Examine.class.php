@@ -68,6 +68,7 @@ class SLC extends BaseCommand {
             $tooManyLinks = 1;
             SESS_setVar('spamx_msg','Too many links in post');
         }
+        $this->response = $slc->getResponse();
 
         // tell the Action module that we've already been triggered
         $GLOBALS['slc_triggered'] = true;

@@ -69,6 +69,8 @@ class Akismet extends BaseCommand
 
             $retval = $akismet->isCommentSpam();
 
+            $this->response = $akismet->getResponse();
+
             if ($retval == true) {
                 $spamType = isset($data['type']) ? $data['type'] : ' unknown ';
                 SPAMX_log ("Akismet: spam detected on " . $spamType);

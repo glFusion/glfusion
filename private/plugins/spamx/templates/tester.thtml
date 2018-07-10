@@ -1,0 +1,80 @@
+{# begin {templatelocation} #}
+
+{admin_menu}
+
+<div class="uk-panel uk-panel-box">
+
+	<form class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
+		<input type="hidden" name="mode" id="mode" value="{mode}">
+		<input type="hidden" name="id" id="id" value="{spamx_id}">
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['username']}</label>
+			<div class="uk-form-controls">
+				<input type="text" name="username" id="username" value="{username}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['email']}</label>
+			<div class="uk-form-controls">
+				<input type="text" name="email" id="email" value="{email}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['ip_address']}</label>
+			<div class="uk-form-controls">
+				<input type="text" name="ipaddress" id="ipaddress" value="{ip}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['user_agent']}</label>
+			<div class="uk-form-controls">
+				<input type="text" class="uk-form-width-large" name="useragent" id="useragent" value="{useragent}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['referrer']}</label>
+			<div class="uk-form-controls">
+				<input type="text" class="uk-form-width-large" name="referer" id="referer" value="{referer}">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['content_type']}</label>
+			<div class="uk-form-controls">
+				<select id="content_type" name="content_type">
+					<option value="comment">{$LANG_SX00['comment']}</option>
+					<option value="forum">{$LANG_SX00['forum_post']}</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['content']}</label>
+			<div class="uk-form-controls">
+				<textarea rows=5 class="uk-width-1-1" name="content" id="content">{content}</textarea>
+			</div>
+		</div>
+
+		<div class="uk-margin">
+			<button class="uk-button uk-button-primary" type="submit" name="submit" id="submit" value="submit">{$LANG_SX00['submit']}</button>
+			<button class="uk-button" type="submit" name="cancel" id="cancel" value="cancel">{$LANG_SX00['cancel']}</button>
+		</div>
+
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{$LANG_SX00['response']}</label>
+			<div class="uk-form-controls">
+				<pre>{response}</pre>
+			</div>
+		</div>
+
+	</form>
+
+</div>
+
+{# end {templatelocation} #}

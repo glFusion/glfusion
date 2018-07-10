@@ -66,8 +66,14 @@ class SFS extends BaseCommand {
                 bb2_ban($_SERVER['REAL_ADDR'],4);
             }
         }
+        $this->response = $sfs->getResponse();
         return $ans;
     }
+
+	public function getResponse()
+	{
+	    return $this->response;
+	}
 }
 
 ?>

@@ -71,6 +71,8 @@ class AkismetBase {
 	private $akismetVersion;
 	private $requestFactory;
 
+	private $response;
+
 	// This prevents some potentially sensitive information from being sent accross the wire.
 	private $ignore = array('HTTP_COOKIE',
 							'HTTP_X_FORWARDED_FOR',
@@ -192,11 +194,18 @@ class AkismetBase {
 	 */
 	public function isCommentSpam() {
 		$response = $this->sendRequest($this->getQueryString(), $this->wordPressAPIKey . '.rest.akismet.com', '/' . $this->akismetVersion . '/comment-check');
+        $this->response = $response;
+
 		if($response[1] == 'invalid' && !$this->isKeyValid()) {
 			return false;
 		}
 
 		return ($response[1] == 'true');
+	}
+
+	public function getResponse()
+	{
+	    return $this->response;
 	}
 
 	/**

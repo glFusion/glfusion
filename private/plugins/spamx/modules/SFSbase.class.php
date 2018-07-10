@@ -31,6 +31,8 @@ class SFSbase {
 
     var $_verbose = false;
 
+    var $response = '';
+
     /**
     * Constructor
     */
@@ -116,6 +118,7 @@ class SFSbase {
             if ( $error == "" || strlen($body) > 0 ) {
                 $response = $response . $body;
                 $result = @unserialize($response);
+                $this->response = $result;
                 if (!$result) {
                     return $retval;     // invalid data, assume ok
                 }
@@ -149,6 +152,10 @@ class SFSbase {
             }
         }
         return $retval;
+    }
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
 

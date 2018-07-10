@@ -19,6 +19,9 @@ class BaseCommand {
 
     var $result = null; //Result of execute command
     var $num = 0; // Action Number
+
+    var $response = '';
+
     /**
      * Constructor
      *
@@ -44,6 +47,11 @@ class BaseCommand {
         global $num;
 
         return $num;
+    }
+
+    function getResponse()
+    {
+        return $this->response;
     }
 }
 

@@ -97,7 +97,7 @@ class SFSreg extends BaseCommand {
             $error=$http->ReadReplyBody($body,1024);
             if ( $error != "" || strlen($body) == 0 )
                 return 0;
-            $response = $response . $body;
+            $response = $response . $body;z
             $result = @unserialize($response);
             if (!$result) return 0;     // invalid data, assume ok
 

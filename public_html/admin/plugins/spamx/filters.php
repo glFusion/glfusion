@@ -51,6 +51,7 @@ function spamx_filter_list($filterid = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['plugin_name']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/filters.php','text' => $LANG_SX00['filters'], 'active' => true),
+        array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/tester.php','text' => $LANG_SX00['interactive_tester']),
 //        array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_comments']),
 //        array('url' => $_CONF['site_admin_url'] . '/plugins/spamx/index.php','text' => $LANG_SX00['scan_trackbacks']),
         array('url' => $_CONF['site_admin_url'] . '/index.php','text' => $LANG_ADMIN['admin_home']),
