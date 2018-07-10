@@ -1498,6 +1498,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.7.4' :
 
+            $current_fusion_version = '1.7.5';
+
+        case '1.7.5' :
+
             $current_fusion_version = '1.8.0';
 
         default:

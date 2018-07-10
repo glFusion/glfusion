@@ -52,7 +52,6 @@ $obsoletePrivateDir = array(
     'lib/utf8/docs/examples/',
     'lib/utf8/docs/',
 
-
     'lib/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/',
     'system/classes/openid/',
     'system/pear/Auth/',
@@ -182,6 +181,12 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+// 1.7.5
+    'admin/refresh.php',
+
+// 1.7.4
+    'layout/cms/images/icons/autotag.png',
+    'filemgmt_data/files/css.pdf',
 
 // 1.6.6
     'mediagallery/players/FMP3.swf',
