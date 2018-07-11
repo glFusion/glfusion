@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>{title}</title>
-		<style type="text/css">
+		<style>
 			img{max-width:100%}body{-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;width:100%!important;height:100%;line-height:1.6em;background-color:#f6f6f6}@media only screen and (max-width:640px){.container,.content,body{padding:0!important}.container,.invoice{width:100%!important}h1,h2,h3,h4{font-weight:800!important;margin:20px 0 5px!important}h1{font-size:22px!important}h2{font-size:18px!important}h3{font-size:16px!important}.content-wrap{padding:10px!important}}blockquote{padding-left:15px;border-left:5px solid #ddd;font-size:14px;font-style:italic}
 		</style>
 	</head>

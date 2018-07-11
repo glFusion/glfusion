@@ -136,7 +136,7 @@
 			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
 		</a>
 {!endif}
-			<span itemprop="description">
+			<div itemprop="description">
 				{story_introtext_only}
 {!if adblock_content}
 				<div class="uk-panel uk-text-center">
@@ -144,7 +144,7 @@
 				</div>
 {!endif}
 				{story_bodytext_only}
-			</span>
+			</divn>
 
 {!if plugin_body_vars}
 		{plugin_body_vars}

@@ -60,7 +60,7 @@
 		<input type="hidden" name="type" value="{comment_type}">
 		{order_selector}
 		{mode_selector}
-		<button class="uk-button uk-button-primary uk-button-small" type="submit" value="{lang_refresh}" class="submit">{lang_refresh}</button>
+		<button class="uk-button uk-button-primary uk-button-small submit" type="submit" value="{lang_refresh}">{lang_refresh}</button>
 	</form>
 
 	<div class="uk-margin uk-text-center">

@@ -88,7 +88,7 @@
 
 			<div class="uk-width-medium-1-3">
 				<div class="uk-text-right">
-					<a class="uk-button uk-button-small" href="{printlink}" rel="nofollow" target="_blank" rel="noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;&nbsp;{$LANG_GF01[PRINT]}</a>
+					<a class="uk-button uk-button-small" href="{printlink}" target="_blank" rel="nofollow noopener noreferrer"><i class="uk-icon-print"></i>&nbsp;&nbsp;{$LANG_GF01[PRINT]}</a>
   {!if notifylink}
 					<a class="uk-button uk-button-small" id="subscribe-link" href="{notifylink}" rel="nofollow">
 						<input type="hidden" id="forum_id" value="{forum}">
@@ -269,7 +269,7 @@
 								</div>
 {!endif}
 {!endif}
-								<span itemprop="author">
+								<div itemprop="author">
 									<h4 class="uk-margin-bottom-remove uk-margin-small-top">
 {!if profilelink}
 										<a href="{profilelink}" class="authorname">
@@ -282,7 +282,7 @@
 										<i class="uk-icon {online_icon}" title="{onlinestatus}" {tooltip}></i>
 {!endif}
 									</h4>
-								</span>
+								</div>
 								<div>{member_badge}</div>
 								<div class="uk-text-muted uk-text-small">
 {!if moodimage}
@@ -295,13 +295,13 @@
 										{$LANG_GF01['grade']}: <span class="user_rep_{topic_uid}">{user_rep}</span>
 										<span class="downvote_{topic_uid}" style="visibility:{downvote_vis};" {tooltip} title="{vote_lang}">
 											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},-1);return false;">
-												<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" alt="{vote_lang}""></i>
+												<i class="uk-icon uk-icon-{negative_rating} uk-icon-small uk-text-danger" title="{vote_lang}""></i>
 											</a>
 										</span>
 
 										<span class="upvote_{topic_uid}" style="visibility:{upvote_vis};" {tooltip} title="{vote_lang}">
 											<a href="#" onclick="forum_ajaxvote({current_uid},{topic_uid},{topic_id},1);return false;">
-												<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" alt="plus"></i>
+												<i class="uk-icon uk-icon-{positive_rating} uk-icon-small uk-text-success" title="plus"></i>
 											</a>
 										</span>
 {!else}
@@ -313,7 +313,7 @@
 {!endif}
 
 {!if likes_enabled}
-										<div class="like_lang_{topic_uid}" style="display:{like_lang_vis};">{liked_times}</div>
+										<div class="like_lang_{topic_uid}" {!if like_lang_vis}style="display:{like_lang_vis};"{!endif}>{liked_times}</div>
 {!endif}
 
 {!if regdate}
@@ -350,14 +350,14 @@
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-right" style="padding-right:10px;">
 								<div class="bottom_meta" style="width:100%;">
 {!if can_like}
-									<span style="display:{unlike_vis}" id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
+									<span {!if unlike_vis}style="display:{unlike_vis}"{!endif} id="unlike_{topic_id}_{topic_uid}" {tooltip} title="{unlike_tooltip}">
 										<a class="uk-button uk-button-danger uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},0);return false;">
-											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" alt="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
+											<i class="uk-icon uk-icon-{unlike_icon} uk-icon-small" title="{$LANG_GF01['unlike']}"></i>&nbsp;{$LANG_GF01['unlike']}
 										</a>
 									</span>
-									<span style="display:{like_vis}" id="like_{topic_id}_{topic_uid}" {tooltip} title="{like_tooltip}">
+									<span {!if like_vis}style="display:{like_vis}"{!endif} id="like_{topic_id}_{topic_uid}" {tooltip} title="{like_tooltip}">
 										<a class="uk-button uk-button-success uk-button-mini" href="#" onclick="forum_ajaxlike({current_uid},{topic_uid},{topic_id},1);return false;">
-											<i class="uk-icon uk-icon-{like_icon} uk-icon-small" alt="plus"></i>&nbsp;{$LANG_GF01['like']}
+											<i class="uk-icon uk-icon-{like_icon} uk-icon-small" title="plus"></i>&nbsp;{$LANG_GF01['like']}
 										</a>
 									</span>
 {!endif}

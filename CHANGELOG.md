@@ -1,7 +1,7 @@
 ## v1.7.5 (unreleased)
   - New comment notifications (subscriptions) used htmlentities for quotes
   - Minor rearrangement of activitytimer files - removed from admin area
-  - HTML5 Validaiton updates on <script> tag
+  - Several HTML5 validation updates
   - Optimized template to improve performance
   - Clean up the Facebook remote login to only require public data
   - Fixed error when updating from older versions of glFusion

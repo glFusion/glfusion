@@ -29,8 +29,8 @@
 					</div>
 {!if moderator}
 					<div class="uk-text-left uk-text-medium">
-        		{moderator}
-		      </div>
+						{moderator}
+					</div>
 {!endif}
 				</dt>
 				<dd class="topics uk-hidden-small">{topics}</dd>

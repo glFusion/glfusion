@@ -94,11 +94,11 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
 
     if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
-        $target = ' target="_blank" rel="noopener noreferrer" ';
+        $target = ' target="_blank" ';
     }
-	$url = COM_sanitizeUrl( $url );
-    $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
-	return $retval;
+		$url = COM_sanitizeUrl( $url );
+    $retval = '<a href="'. $url .'" rel="nofollow noopener noreferrer"'.$target.'>'.$linktext.'</a>';
+		return $retval;
 }
 
 function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {
@@ -190,7 +190,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
             } else {
                 $titletext = $LANG_GF10['click2view'];
             }
-            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$titletext.'" alt="'.$titletext.'"/></a>';
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_blank"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$titletext.'" alt="'.$titletext.'"/></a>';
             break;
          }
         $i++;
@@ -698,14 +698,14 @@ function _ff_showattachments($topic,$mode='') {
             list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         }
         if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
-            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>Insufficent Access";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" style=\"border:0;\" alt=\"\"/>Insufficent Access";
         } elseif (!empty($field_value)) {
-            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"/>";
-            $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_new\">";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" style=\"border:0;\" alt=\"\"/>";
+            $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_blank\">";
             $retval .= "{$filename[1]}</a>&nbsp;";
             if ($mode == 'edit') {
                 $retval .= "<a href=\"#\" onclick='ajaxDeleteFile($topic,$id);'>";
-                $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/delete.gif\" border=\"0\" alt=\"\"/></a>";
+                $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/delete.gif\" style=\"border:0;\" alt=\"\"/></a>";
             }
         } else {
             $retval .= 'N/A&nbsp;';
