@@ -45,7 +45,7 @@ $status = 0;
 
 $vote_sent  = preg_replace("/[^0-9]/","",$_GET['j']);
 $id_sent    = COM_applyFilter($_GET['q']);
-$ip_num     = preg_replace("/[^0-9\.]/","",$_GET['t']);
+$ip_num     = preg_replace("/[^0-9\.\:]/","",$_GET['t']);
 $units      = preg_replace("/[^0-9]/","",$_GET['c']);
 $size       = preg_replace("/[^0-9a-zA-Z]/","",$_GET['s']);
 $plugin     = isset($_GET['p']) ? COM_applyFilter($_GET['p']) : '';
