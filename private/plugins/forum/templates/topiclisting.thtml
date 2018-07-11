@@ -141,6 +141,7 @@
 				<dd class="lastpost">
 					<a href="{site_url}/forum/index.php?forum={forum_id}&amp;order={new_sort_order}&amp;sort=5" rel="nofollow">
 						{LANG_LASTPOST}
+					</a>
 {!if sort_lastupdated}
 {!if sort_asc}
   <i class="uk-icon-caret-up"></i>

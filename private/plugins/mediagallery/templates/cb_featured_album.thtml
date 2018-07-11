@@ -4,7 +4,7 @@
 	<div class="uk-grid uk-text-left">
 		<div class="uk-width-medium-1-5 uk-text-left">
 			<a href="{u_viewalbum}">
-			<img class="uk-thumbnail" src="{album_last_image}" {media_size}></a>
+			<img class="uk-thumbnail" src="{album_last_image}" {media_size} alt=""></a>
 		</div>
 {!if lang_subalbums}
 		<div class="uk-width-medium-2-5">

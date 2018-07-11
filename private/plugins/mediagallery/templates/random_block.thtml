@@ -2,7 +2,7 @@
 {!if url_media}
 <a class="" href="{url_media}">
 {!endif}
-	<img src="{media_thumbnail_img}" class="uk-thumbnail uk-align-center">
+	<img src="{media_thumbnail_img}" class="uk-thumbnail uk-align-center" alt="">
 {!if url_media}
 </a>
 {!endif}

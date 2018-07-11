@@ -15,7 +15,7 @@ function bb2_screener_javascript($settings, $package, $cookie_name, $cookie_valu
 	global $bb2_javascript;
 
 	// FIXME: do something
-	$bb2_javascript = "<script type=\"text/javascript\">
+	$bb2_javascript = "<script>
 <!--
 function bb2_addLoadEvent(e){var t=window.onload;if(typeof window.onload!=\"function\"){window.onload=e}else{window.onload=function(){t();e()}}}bb2_addLoadEvent(function(){for(i=0;i<document.forms.length;i++){if(document.forms[i].method==\"post\"){var e=document.createElement(\"input\");e.setAttribute(\"type\",\"hidden\");e.name=\"$cookie_name\";e.value=\"$cookie_value\";document.forms[i].appendChild(e)}}})
 // --></script>";

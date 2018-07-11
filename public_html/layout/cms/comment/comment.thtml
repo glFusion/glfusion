@@ -2,7 +2,7 @@
 {!if preview_mode}
 <div class="uk-panel uk-panel-box uk-margin-bottom">
 {!else}
-<a name="cid_{cid}"></a>
+<a id="cid_{cid}"></a>
 <article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
 	<div class="uk-panel uk-panel-box uk-margin-small-bottom" style="margin-left:{indent}px;">
 {!endif}

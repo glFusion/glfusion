@@ -524,13 +524,13 @@ class Formatter {
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
         }
 
-        $bbcode->setRootParagraphHandling (true);
+//        $bbcode->setRootParagraphHandling (true);
 
         if ($this->censor) {
             $str = $this->filter->censor($str);
         }
-        $str = $bbcode->parse ($str);
 
+        $str = $bbcode->parse ($str);
         if ($this->cacheEntry) {
             $c->set($key,$str,array($this->namespace),$this->cacheTime);
         }
@@ -607,11 +607,11 @@ class Formatter {
         }
 
         if (isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false) {
-            $target = ' target="_blank" rel="noopener noreferrer" ';
+            $target = ' target="_blank" ';
         }
-    	$url = COM_sanitizeUrl($url);
-        $retval = '<a href="'. $url .'" rel="nofollow"'.$target.'>'.$linktext.'</a>';
-    	return $retval;
+        $url = COM_sanitizeUrl($url);
+        $retval = '<a href="'. $url .'" rel="nofollow noopener noreferrer"'.$target.'>'.$linktext.'</a>';
+        return $retval;
     }
 
     /**
