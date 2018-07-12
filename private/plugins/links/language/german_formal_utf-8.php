@@ -59,7 +59,8 @@ $LANG_LINKS = array(
     'root' => 'Root',
     'error_header' => 'Link-Einsendung Fehler',
     'verification_failed' => 'Die angegebene URL scheint keine gültige URL zu sein',
-    'category_not_found' => 'Die angegebene Kategorie scheint fehlerhaft zu sein'
+    'category_not_found' => 'Die angegebene Kategorie scheint fehlerhaft zu sein',
+    'no_links' => 'No links have been entered.'
 );
 
 ###############################################################################
@@ -257,7 +258,8 @@ $LANG_confignames['links'] = array(
     'root' => 'ID der Oberkategorie',
     'default_permissions' => 'Standardberechtigungen - Links',
     'target_blank' => 'Links in neuen Fenster öffnen',
-    'displayblocks' => 'Anzeige glFusion Blöcke'
+    'displayblocks' => 'Anzeige glFusion Blöcke',
+    'submission' => 'Link Submission'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -276,7 +278,8 @@ $LANG_configselects['links'] = array(
     1 => array('Ja' => true, 'Nein' => false),
     9 => array('Weiter zur Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Link-Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3)
+    13 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3),
+    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
 );
 
 ?>

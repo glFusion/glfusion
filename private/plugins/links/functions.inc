@@ -451,14 +451,16 @@ function plugin_user_delete_links ($uid)
         $rootuser = 2;
     }
 
+    if ( $rootuser == '' || empty($rootuser) ) $rootuser = 2;
+
     if ($_LI_CONF['delete_links'] == 1) {
         // delete the links
         DB_delete($_TABLES['links'], 'owner_id', $uid);
     } else {
-        DB_query ("UPDATE {$_TABLES['links']} SET owner_id = $rootuser WHERE owner_id = $uid");
+        DB_query ("UPDATE {$_TABLES['links']} SET owner_id = ".$rootuser." WHERE owner_id = ".$uid);
     }
 
-    DB_query("UPDATE {$_TABLES['linkcategories']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_query("UPDATE {$_TABLES['linkcategories']} SET owner_id = ".$rootuser." WHERE owner_id = ".$uid);
     DB_delete($_TABLES['linksubmission'],'owner_id',$uid);
 }
 
@@ -876,6 +878,11 @@ function plugin_save_submit_links($A)
     global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12, $LANG_LINKS;
 
     $retval = '';
+
+    if ( !LINKS_canSubmit() ) {
+        echo COM_refresh($_CONF['site_url'].'/links/index.php');
+    }
+
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
@@ -1871,6 +1878,34 @@ function LINKS_siteFooter() {
             break;
     }
     return $retval;
+}
+
+function LINKS_canSubmit()
+{
+    global $_CONF, $_LI_CONF;
+
+    $retval = false;
+
+    if ( !isset($_LI_CONF['submission'])) {
+        return true;
+    }
+
+    if (SEC_inGroup('Root') ) {
+        return true;
+    }
+    if (SEC_hasRights('links.edit')) {
+        return true;
+    }
+    if ( COM_isAnonUser() ) {
+        if (isset($_LI_CONF['submission']) && $_LI_CONF['submission'] == 2) {
+            return true;
+        }
+    } else {
+        if (isset($_LI_CONF['submission']) && $_LI_CONF['submission'] > 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 ?>

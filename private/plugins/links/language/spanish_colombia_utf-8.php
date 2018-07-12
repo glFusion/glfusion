@@ -58,7 +58,8 @@ $LANG_LINKS = array(
     'root' => 'Enlaces/Vínculos',
     'error_header' => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
-    'category_not_found' => 'The Category does not appear to be valid'
+    'category_not_found' => 'The Category does not appear to be valid',
+    'no_links' => 'No links have been entered.'
 );
 
 ###############################################################################
@@ -256,7 +257,8 @@ $LANG_confignames['links'] = array(
     'root' => 'ID de la Categoría Raíz',
     'default_permissions' => 'Permisos Predeterminados',
     'target_blank' => 'Abrir Enlaces en una Ventana Nueva',
-    'displayblocks' => 'Mostrar Bloques'
+    'displayblocks' => 'Mostrar Bloques',
+    'submission' => 'Link Submission'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -275,7 +277,8 @@ $LANG_configselects['links'] = array(
     1 => array('Sí' => true, 'No' => false),
     9 => array('Ir al sitio del Enlace' => 'item', 'Ir a la Lista' => 'list', 'Ir a la Lista Publica' => 'plugin', 'Ir al Inicio' => 'home', 'Ir a la Administración' => 'admin'),
     12 => array('Sin Acceso' => 0, 'Solo Lectura' => 2, 'Lectura-Escritura' => 3),
-    13 => array('Izquierda' => 0, 'Derecha' => 1, 'Izquierda & Derecha' => 2, 'Ninguno' => 3)
+    13 => array('Izquierda' => 0, 'Derecha' => 1, 'Izquierda & Derecha' => 2, 'Ninguno' => 3),
+    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
 );
 
 ?>
