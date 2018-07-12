@@ -75,6 +75,8 @@ function links_list($message)
 
     $cid = $_LI_CONF['root'];
     $display = '';
+    $linkCounter = 0;
+
     if (isset($_GET['category'])) {
         $cid = strip_tags($_GET['category']);
     } elseif (isset($_POST['category'])) {
@@ -233,7 +235,10 @@ function links_list($message)
     $linklist->set_var('cid', $cid);
     $linklist->set_var('cid_plain', $cid);
     $linklist->set_var('cid_encoded', urlencode($cid));
-    $linklist->set_var('lang_addalink', $LANG_LINKS[116]);
+
+    if ( LINKS_canSubmit() ) {
+        $linklist->set_var('lang_addalink', $LANG_LINKS[116]);
+    }
 
     // Build SQL for links
     $sql = 'SELECT lid,cid,url,description,title,hits,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon';
@@ -275,6 +280,7 @@ function links_list($message)
                     $linklist->parse ('link_details', 'link', true);
                 }
                 $linklist->parse ('category_links', 'catlinks', true);
+                $linkCounter++;
             }
         }
         $linklist->set_var ('page_navigation', '');
@@ -301,6 +307,7 @@ function links_list($message)
 
         $result = DB_query ('SELECT COUNT(*) AS count ' . $from_where);
         list($numlinks) = DB_fetchArray ($result);
+        $linkCounter += $numlinks;
         $pages = 0;
         if ($_LI_CONF['linksperpage'] > 0) {
             $pages = (int) ($numlinks / $_LI_CONF['linksperpage']);
@@ -325,6 +332,10 @@ function links_list($message)
     if ( $_LI_CONF['linksperpage'] == 'x' ) {
         $social_icons = SOC_getShareIcons();
         $linklist->set_var('social_share',$social_icons);
+    }
+
+    if ($linkCounter == 0) {
+        $linklist->set_var('nolinks',true);
     }
 
     $linklist->set_var ('blockfooter',COM_endBlock());
@@ -441,6 +452,10 @@ if ( $mode == 'submit' ) {
     if (SEC_hasRights ("links.edit") || SEC_hasRights ("links.admin"))  {
         echo COM_refresh ($_CONF['site_admin_url']."/plugins/links/index.php?edit=x");
         exit;
+    }
+
+    if ( !LINKS_canSubmit() ) {
+        echo COM_refresh($_CONF['site_url'].'/links/index.php');
     }
 
     $slerror = '';

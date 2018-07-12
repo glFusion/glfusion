@@ -58,7 +58,8 @@ $LANG_LINKS = array(
     'root' => 'Root',
     'error_header' => 'Lien Soumission Erreur',
     'verification_failed' => 'L`URL spécifiée ne semble pas être une URL valide',
-    'category_not_found' => 'La Catégorie ne semble pas être valide'
+    'category_not_found' => 'La Catégorie ne semble pas être valide',
+    'no_links' => 'No links have been entered.'
 );
 
 ###############################################################################
@@ -256,7 +257,8 @@ $LANG_confignames['links'] = array(
     'root' => 'ID de catégorie Root',
     'default_permissions' => 'Permission Lien par Défaut',
     'target_blank' => 'Les liens s`ouvrent dans une nouvelle fenêtre',
-    'displayblocks' => 'Afficher glFusion Blocs'
+    'displayblocks' => 'Afficher glFusion Blocs',
+    'submission' => 'Link Submission'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -275,7 +277,8 @@ $LANG_configselects['links'] = array(
     1 => array('True' => true, 'False' => false),
     9 => array('Transmettre au site lié' => 'item', 'Affichage de la Liste Admin' => 'list', 'Afficher la Liste Publique' => 'plugin', 'Affichage d`Accueil' => 'home', 'Affichage d`Administration' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Gauche Blocs' => 0, 'Blocs Droite' => 1, 'Gauche et Blocs Droite' => 2, 'None' => 3)
+    13 => array('Gauche Blocs' => 0, 'Blocs Droite' => 1, 'Gauche et Blocs Droite' => 2, 'None' => 3),
+    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
 );
 
 ?>

@@ -58,7 +58,8 @@ $LANG_LINKS = array(
     'root' => 'Juuri',
     'error_header' => 'Linkin L&auml;hetys Virhe',
     'verification_failed' => 'M&auml;&auml;ritelty URL ei vaikuta olevan toimiva',
-    'category_not_found' => 'Kategoria ei vaikuta olevan toimiva'
+    'category_not_found' => 'Kategoria ei vaikuta olevan toimiva',
+    'no_links' => 'No links have been entered.'
 );
 
 ###############################################################################
@@ -256,7 +257,8 @@ $LANG_confignames['links'] = array(
     'root' => 'Juuri Kategorian ID',
     'default_permissions' => 'Linkin Oletus Oikeudet',
     'target_blank' => 'Avaa Linkit Uuteen Ikkunaan',
-    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot'
+    'displayblocks' => 'N&auml;yt&auml; glFusion Lohkot',
+    'submission' => 'Link Submission'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -275,7 +277,8 @@ $LANG_configselects['links'] = array(
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
+    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
 );
 
 ?>

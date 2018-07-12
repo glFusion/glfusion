@@ -878,6 +878,11 @@ function plugin_save_submit_links($A)
     global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12, $LANG_LINKS;
 
     $retval = '';
+
+    if ( !LINKS_canSubmit() ) {
+        echo COM_refresh($_CONF['site_url'].'/links/index.php');
+    }
+
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
@@ -1873,6 +1878,34 @@ function LINKS_siteFooter() {
             break;
     }
     return $retval;
+}
+
+function LINKS_canSubmit()
+{
+    global $_CONF, $_LI_CONF;
+
+    $retval = false;
+
+    if ( !isset($_LI_CONF['submission'])) {
+        return true;
+    }
+
+    if (SEC_inGroup('Root') ) {
+        return true;
+    }
+    if (SEC_hasRights('links.edit')) {
+        return true;
+    }
+    if ( COM_isAnonUser() ) {
+        if (isset($_LI_CONF['submission']) && $_LI_CONF['submission'] == 2) {
+            return true;
+        }
+    } else {
+        if (isset($_LI_CONF['submission']) && $_LI_CONF['submission'] > 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 ?>

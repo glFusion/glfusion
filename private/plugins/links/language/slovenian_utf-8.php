@@ -59,7 +59,8 @@ $LANG_LINKS = array(
     'root' => 'Root',
     'error_header' => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
-    'category_not_found' => 'The Category does not appear to be valid'
+    'category_not_found' => 'The Category does not appear to be valid',
+    'no_links' => 'No links have been entered.'
 );
 
 ###############################################################################
@@ -257,7 +258,8 @@ $LANG_confignames['links'] = array(
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks'
+    'displayblocks' => 'Display glFusion Blocks',
+    'submission' => 'Link Submission'
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -276,7 +278,8 @@ $LANG_configselects['links'] = array(
     1 => array('True' => true, 'False' => false),
     9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
+    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
 );
 
 ?>

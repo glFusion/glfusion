@@ -4,16 +4,24 @@
 {category_dropdown}
 {category_navigation}
 
-<div class="uk-text-center">
-    [ <a href="{site_url}/links/index.php?mode=submit&amp;cid={cid_encoded}">{lang_addalink}</a> ]
-</div>
+{!if lang_addalink}
+	<div class="uk-text-center">
+	    [ <a href="{site_url}/links/index.php?mode=submit&amp;cid={cid_encoded}">{lang_addalink}</a> ]
+	</div>
+{!endif}
 
 {category_links}
 
+{!if nolinks}
+   <div class="uk-alert uk-alert-warning">
+   		{$LANG_LINKS['no_links']}
+   </div>
+{!endif}
+
 {!if social_share}
-<div class="uk-container uk-container-center">
-	{social_share}
-</div>
+	<div class="uk-container uk-container-center">
+		{social_share}
+	</div>
 {!endif}
 
 {page_navigation}

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upgrade routines                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,7 +70,10 @@ function links_upgrade()
             DB_query("ALTER TABLE {$_TABLES['links']} CHANGE `lid` `lid` VARCHAR(128) NOT NULL DEFAULT '';",1);
             DB_query("ALTER TABLE {$_TABLES['linksubmission']} CHANGE `lid` `lid` VARCHAR(128) NOT NULL DEFAULT '';",1);
 
+        case '2.1.5' :
+
         default :
+            links_update_config();
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_LI_CONF['pi_version']."',pi_gl_version='".$_LI_CONF['gl_version']."' WHERE pi_name='links' LIMIT 1");
             break;
     }
@@ -79,5 +82,16 @@ function links_upgrade()
     } else {
         return false;
     }
+}
+
+function links_update_config()
+{
+    global $_CONF, $_LI_CONF, $_TABLES;
+
+    USES_lib_install();
+
+    require_once $_CONF['path'].'plugins/links/sql/links_config_data.php';
+    _update_config('links', $linksConfigData);
+
 }
 ?>

@@ -1,8 +1,9 @@
 ## v1.7.5 (unreleased)
-  - New comment notifications (subscriptions) used htmlentities for quotes
+  - Links Plugin can now configure if link submissions are allowed (None, Logged-In Only or Anyone)
+  - Fixed new comment notifications (subscriptions) used htmlentities for quotes
   - Minor rearrangement of activitytimer files - removed from admin area
   - Several HTML5 validation updates
-  - Optimized template to improve performance
+  - Optimized template processing to improve performance
   - Clean up the Facebook remote login to only require public data
   - Fixed error when updating from older versions of glFusion
   - Fixed display issue when admin poll edit fails validation checks.
