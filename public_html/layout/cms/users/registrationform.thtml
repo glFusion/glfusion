@@ -123,7 +123,7 @@
 {!endif}
 
 {!if !oauth_login}
-	<div class="uk-alert uk-alert-large">{lang_warning}</div>
+	<div class="uk-alert uk-alert-large uk-margin">{lang_warning}</div>
 {!endif}
 
 {plugin_bottom}
