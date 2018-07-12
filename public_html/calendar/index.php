@@ -248,7 +248,7 @@ function getSmallCalendar ($m, $y, $mode = '')
                 }
                 $tr_sent = true;
             }
-            $retval .= '<td style="alignright"';
+            $retval .= '<td style="text-align:right;"';
             if (!empty ($curday)) {
                 if ($j % 2 == 0) {
                     $retval .= ' class="smallcal-day-even">' . LB;
