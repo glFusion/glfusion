@@ -396,7 +396,7 @@ function plugin_getheadercode_spamx()
     $retval = '';
 
     if ( isset($_SPX_CONF['fc_enable']) && $_SPX_CONF['fc_enable'] == 1) {
-        $retval = '<style type="text/css">div.form-check {display: none;}</style>';
+        $retval = '<style>div.form-check {display: none;}</style>';
     }
     return $retval;
 }

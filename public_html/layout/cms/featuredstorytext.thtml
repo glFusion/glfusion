@@ -133,7 +133,7 @@
 
 {!if story_topic_image_url}
 		<a href="{topic_url}">
-			<img class="uk-float-right" src="{story_topic_image_url}" height="48" width="48">
+			<img class="uk-float-right" src="{story_topic_image_url}" alt="{story_topic_name}" height="48" width="48">
 		</a>
 {!endif}
 			<div itemprop="description" class="uk-margin-remove">

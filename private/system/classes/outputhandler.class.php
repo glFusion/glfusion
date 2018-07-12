@@ -163,7 +163,7 @@ class outputHandler {
     public function addStyle($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/css')
     {
         if ( $code != '' ) {
-            $this->_header['style'][$priority][] = '<style type="' . $mime . "\">" . LB . $code . LB . "</style>" . LB;
+            $this->_header['style'][$priority][] = '<style>' . LB . $code . LB . "</style>" . LB;
         }
     }
 

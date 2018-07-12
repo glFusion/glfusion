@@ -7208,7 +7208,7 @@ function phpblock_whosonline()
                 } else {
                     $usrimg = '<img src="' . $_CONF['layout_url']
                             . '/images/smallcamera.' . $_IMAGE_TYPE
-                            . '" border="0" alt=""/>';
+                            . '" style="border:0;" alt=""/>';
                 }
                 $retval .= '&nbsp;' . COM_createLink($usrimg, $url);
             }
