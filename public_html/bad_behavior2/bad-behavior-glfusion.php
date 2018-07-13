@@ -51,7 +51,6 @@ $bb2_settings_defaults = array(
     'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
     'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
     'offsite_forms' => $_CONF['bb2_offsite_forms'],
-    'eu_cookie'     => $_CONF['bb2_eu_cookie'],
     'secure_cookie' => $_CONF['cookiesecure'],
     'reverse_proxy' => isset($_CONF['bb2_reverse_proxy']) ? $_CONF['bb2_reverse_proxy'] : 0,
     'reverse_proxy_header' => isset($_CONF['bb2_reverse_proxy_header']) ? $_CONF['bb2_reverse_proxy_header'] : 'X-Forwarded-For',
@@ -235,7 +234,6 @@ function bb2_read_settings() {
                  'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
                  'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
                  'offsite_forms' => $_CONF['bb2_offsite_forms'],
-                 'eu_cookie'     => $_CONF['bb2_eu_cookie'],
                  'secure_cookie' => $_CONF['cookiesecure'],
                  'is_installed'  => true
                  );
