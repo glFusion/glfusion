@@ -1,4 +1,7 @@
 ## v1.7.5 (unreleased)
+  - fusionrescue can now disable two-factor authentication
+  - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
+  - New $_SYSTEM option to disable IP anonymization
   - Links Plugin can now configure if link submissions are allowed (None, Logged-In Only or Anyone)
   - Fixed new comment notifications (subscriptions) used htmlentities for quotes
   - Minor rearrangement of activitytimer files - removed from admin area
