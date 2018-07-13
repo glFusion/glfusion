@@ -183,6 +183,7 @@ $obsoletePrivateFiles = array(
 $obsoletePublicFiles = array(
 // 1.7.5
     'admin/refresh.php',
+    'bad_behavior2/bad-behavior/screener.inc.php',
 
 // 1.7.4
     'layout/cms/images/icons/autotag.png',
