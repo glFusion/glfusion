@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Safely edit glFusion configuration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.7.0');
+define('GVERSION','1.7.5');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
@@ -45,7 +45,7 @@ require_once $_CONF['path_system'].'lib-database.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','enable_twofactor');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -231,6 +231,16 @@ function validateInput( &$input_val ) {
     return $r;
 }
 
+function getConfigSetting($name)
+{
+    global $_CONF, $_TABLES, $_DB_name;
+
+    $setting = DB_getItem($_TABLES['conf_values'], 'value', "name = '".DB_escapeString($name)."' AND group_name='Core'");
+
+    return @unserialize($setting);
+
+}
+
 
 function rescue_innodbStatus()
 {
@@ -317,8 +327,8 @@ function rescue_header( $authenticated ) {
         		<meta name="viewport" content="width=device-width, initial-scale=1">
         		<link rel="apple-touch-icon-precomposed" href="../../layout/cms/images/apple-touch-icon.png">
         		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/css/uikit.almost-flat.min.css">
-        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/js/uikit.min.js"></script>
+        		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.3/js/uikit.min.js"></script>
         		<meta name="robots" content="noindex,nofollow" />
         		<title>glFusion Rescue</title>
                 <style>
@@ -356,6 +366,11 @@ function rescue_header( $authenticated ) {
                         <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
                         <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
                         <li><a href="fusionrescue.php?mode=resetpassword">Reset Password</a></li>
+        ';
+        if ( getConfigSetting('enable_twofactor') == true ) {
+            $retval .= '                <li><a href="fusionrescue.php?mode=resetmfa">Disable 2FA</a></li>';
+        }
+        $retval .= '
                         <li><a  href="fusionrescue.php?mode=cancel">Logout</a></li>
                         </ul>
                     </ul>
@@ -363,7 +378,7 @@ function rescue_header( $authenticated ) {
             </div>
             <ul class="uk-navbar-nav tm-navbar-nav uk-hidden-small">
             <li class="uk-parent" data-uk-dropdown="{remaintime:\'300\',delay:\'300\'}"">
-            <a href="">Configuration <i class="uk-icon-caret-down"></i></a>
+            <a>Configuration <i class="uk-icon-caret-down"></i></a>
             <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom tm-dropdown">
                 <ul class="uk-nav uk-nav-navbar tm-nav-navbar">
                     <li><a href="fusionrescue.php?mode=submit&groupmode=Core">glFusion Core</a></li>
@@ -386,6 +401,11 @@ function rescue_header( $authenticated ) {
             ';
         }
         $retval .= '<li><a href="fusionrescue.php?mode=resetpassword">Reset Password</a></li>';
+
+        if ( getConfigSetting('enable_twofactor') == true ) {
+            $retval .= '<li><a href="fusionrescue.php?mode=resetmfa">Disable 2FA</a></li>';
+        }
+
         $retval .= '
             </ul>
             <div class="uk-navbar-flip uk-hidden-small">
@@ -859,6 +879,73 @@ function resetPassword()
 }
 
 
+// returns a form to request a new password
+function requestDisableMFA($errorMsg = '')
+{
+    global $rescueFields, $_DB_table_prefix;
+
+    $form = '
+        <ul class="uk-breadcrumb">
+            <li>Disable Two Factor Authentication</li>
+        </ul>';
+
+    if ( $errorMsg != '' ) {
+        $form .= '
+            <div class="uk-alert uk-alert-danger">
+            <p>' . $errorMsg . '</p></div>';
+    }
+    $form .= '
+        <form class="uk-form uk-form-horizontal" method="post" action="fusionrescue.php">
+          <div class="uk-panel uk-panel-box uk-margin-bottom">
+            <div class="uk-form-row">
+                <label class="uk-form-label">Username</label>
+                <div class="uk-form-controls">
+                    <input type="text" id="username" name="username">
+                </div>
+            </div>
+          </div>
+          <div class="uk-text-center">
+            <button class="uk-button uk-button-success" type="submit" name="mode" value="disablemfa" />Disable 2FA</button>
+            <button class="uk-button uk-button-danger" type="submit" name="mode" value="cancel" />Logout</button>
+          </div>
+        </form>
+    ';
+
+    return $form;
+}
+
+function resetMFA()
+{
+    global $rescueFields, $_DB_table_prefix;
+
+    $username = '';
+
+    if ( !isset($_POST['username']) ) {
+        return requestDisableMFA('Please provide a username to disable two-factor authentication.');
+    }
+
+    $username = $_POST['username'];
+
+    $result = DB_query ("SELECT uid,email,passwd,status FROM ".$_DB_table_prefix . "users" . "
+                WHERE username = '".DB_escapeString($username)."'");
+
+    $nrows = DB_numRows ($result);
+    if ($nrows == 1) {
+        $U = DB_fetchArray ($result);
+        DB_change ($_DB_table_prefix . "users" , 'tfa_enabled', "0",'uid', (int) $U['uid']);
+    } else {
+        return requestDisableMFA('Username was not found');
+    }
+
+    $retval = '<div class="uk-alert uk-alert-success" data-uk-alert>';
+    $retval .= '<a href="" class="uk-alert-close uk-close"></a>';
+    $retval .= 'Two Factor Authentication has been disabled for the user.';
+    $retval .= '</div>';
+    $retval .= requestDisableMFA();
+
+    return $retval;
+}
+
 /**
 *
 * Borrowed from the phpBB3 project
@@ -1133,6 +1220,13 @@ if ( $authenticated == 0 && isset($_POST['fusionpwd']) ) {
             break;
         case 'reset' :
             $page = resetPassword();
+            break;
+
+        case 'resetmfa' :
+            $page = requestDisableMFA();
+            break;
+        case 'disablemfa' :
+            $page = resetMFA();
             break;
 
         case 'cancel' :

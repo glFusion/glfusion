@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2014 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -70,7 +70,7 @@ function plugin_cclabel_bad_behavior2 ()
 {
     global $_CONF, $LANG_BAD_BEHAVIOR;
 
-    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head') ) {
+    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_stats') ) {
         return array ($LANG_BAD_BEHAVIOR['plugin_display_name'],
                 $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php',
                 plugin_geticon_bad_behavior2 ());
@@ -83,7 +83,7 @@ function plugin_getadminoption_bad_behavior2 ()
 {
     global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR;
 
-    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head') ) {
+    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_stats') ) {
         return array ($LANG_BAD_BEHAVIOR['plugin_display_name'],
                       $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list', DB_count ($_TABLES['bad_behavior2']));
     }
@@ -103,14 +103,6 @@ function plugin_upgrade_bad_behavior2 ()
     require_once $_CONF['path'].'plugins/bad_behavior2/upgrade.php';
 
     return bad_behavior2_upgrade();
-}
-
-function plugin_getheadercode_bad_behavior2() {
-
-    if ( function_exists('bb2_insert_head') ) {
-        return  bb2_insert_head();
-    }
-    return '';
 }
 
 
@@ -173,7 +165,7 @@ function plugin_showstats_bad_behavior2 ($showsitestats)
 
     $retval = '';
 
-    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head')) {
+    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_stats')) {
         $result = DB_query ("SELECT `key`,COUNT(`key`) AS count FROM " . $_TABLES['bad_behavior2'] . " GROUP BY `key` ORDER BY 2 DESC,`key` LIMIT 10");
         $nrows  = DB_numRows ($result);
         if ($nrows > 0) {
@@ -226,7 +218,7 @@ function plugin_statssummary_bad_behavior2 ()
 {
     global $LANG_BAD_BEHAVIOR;
 
-    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_head')) {
+    if (SEC_inGroup ('Bad Behavior2 Admin') && function_exists('bb2_insert_stats')) {
         $blocked_ips = BB_countBlockedIPs ();
 
         return array ($LANG_BAD_BEHAVIOR['blocked_ips'],

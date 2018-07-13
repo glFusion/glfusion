@@ -179,6 +179,10 @@ function bad_behavior2_upgrade ()
                 DB_query($sql,1);
             }
 
+        case '2.0.54' :
+            $c = config::get_instance();
+            $c->del('bb2_eu_cookie','Core');
+
         default:
             break;
     }

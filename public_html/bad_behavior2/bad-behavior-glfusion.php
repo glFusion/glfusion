@@ -51,7 +51,6 @@ $bb2_settings_defaults = array(
     'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
     'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
     'offsite_forms' => $_CONF['bb2_offsite_forms'],
-    'eu_cookie'     => $_CONF['bb2_eu_cookie'],
     'secure_cookie' => $_CONF['cookiesecure'],
     'reverse_proxy' => isset($_CONF['bb2_reverse_proxy']) ? $_CONF['bb2_reverse_proxy'] : 0,
     'reverse_proxy_header' => isset($_CONF['bb2_reverse_proxy_header']) ? $_CONF['bb2_reverse_proxy_header'] : 'X-Forwarded-For',
@@ -229,7 +228,6 @@ function bb2_read_settings() {
                  'httpbl_threat' => $_CONF['bb2_httpbl_threat'],
                  'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
                  'offsite_forms' => $_CONF['bb2_offsite_forms'],
-                 'eu_cookie'     => $_CONF['bb2_eu_cookie'],
                  'secure_cookie' => $_CONF['cookiesecure'],
                  'is_installed'  => true
                  );
@@ -252,20 +250,6 @@ function bb2_install() {
         $settings['is_installed'] = true;
         bb2_write_settings( $settings );
     }
-}
-
-// Screener
-// Insert this into the <head> section of your HTML through a template call
-// or whatever is appropriate. This is optional we'll fall back to cookies
-// if you don't use it.
-function bb2_insert_head() {
-    global $bb2_timer_total;
-    global $bb2_javascript;
-    $retval = '';
-
-    $retval =  "\n<!-- Bad Behavior " . BAD_BEHAVIOR_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->\n";
-    $retval .= $bb2_javascript;
-    return $retval;
 }
 
 // Display stats? This is optional.
