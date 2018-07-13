@@ -260,20 +260,6 @@ function bb2_install() {
     }
 }
 
-// Screener
-// Insert this into the <head> section of your HTML through a template call
-// or whatever is appropriate. This is optional we'll fall back to cookies
-// if you don't use it.
-function bb2_insert_head() {
-    global $bb2_timer_total;
-    global $bb2_javascript;
-    $retval = '';
-
-    $retval =  "\n<!-- Bad Behavior " . BAD_BEHAVIOR_VERSION . " run time: " . number_format(1000 * $bb2_timer_total, 3) . " ms -->\n";
-    $retval .= $bb2_javascript;
-    return $retval;
-}
-
 // Display stats? This is optional.
 function bb2_insert_stats($force = false) {
 

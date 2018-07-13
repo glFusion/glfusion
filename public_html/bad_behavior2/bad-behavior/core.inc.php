@@ -5,7 +5,6 @@
 // Go read the bad-behavior-generic.php file.
 
 define('BB2_CORE', dirname(__FILE__));
-define('BB2_COOKIE', 'bb2_screener_');
 
 require_once(BB2_CORE . "/functions.inc.php");
 
@@ -19,7 +18,7 @@ function bb2_table_structure($name)
     $sql = "CREATE TABLE IF NOT EXISTS `$name_escaped` (
 		`id` INT(11) NOT NULL auto_increment,
 		`ip` TEXT NOT NULL,
-		`date` DATETIME NOT NULL default '0000-00-00 00:00:00',
+		`date` DATETIME NOT NULL default '1000-00-00 00:00:00',
 		`request_method` TEXT NOT NULL,
 		`request_uri` TEXT NOT NULL,
 		`server_protocol` TEXT NOT NULL,
@@ -29,7 +28,7 @@ function bb2_table_structure($name)
 		`key` TEXT NOT NULL,
 		INDEX (`ip`(15)),
 		INDEX (`user_agent`(10)),
-		PRIMARY KEY (`id`) ) ENGINE=MyISAM;";	// TODO: INDEX might need tuning
+		PRIMARY KEY (`id`) ) ENGINE=MyISAM;";
 
     $sql .= "CREATE TABLE IF NOT EXISTS `gl_bad_behavior2_ban` (
         `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -267,10 +266,6 @@ function bb2_start($settings)
 			bb2_test($settings, $package, bb2_post($settings, $package));
 		}
 	}
-
-	// Last chance screening.
-	require_once(BB2_CORE . "/screener.inc.php");
-	bb2_screener($settings, $package);
 
 	// And that's about it.
 	bb2_approved($settings, $package);
