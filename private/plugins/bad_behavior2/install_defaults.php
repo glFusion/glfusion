@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Configuration Defaults                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -49,16 +49,15 @@ function plugin_initconfig_bad_behavior2()
     $c->add('fs_spam_config', NULL, 'fieldset', 8, 1, NULL, 0, TRUE);
     $c->add('bb2_enabled',1,'select',8,1,0,10,TRUE);
     $c->add('bb2_ban_enabled',0,'select',8,1,0,20,TRUE);
-    $c->add('bb2_ban_timeout',24,'text',8,1,0,30,TRUE);
-    $c->add('bb2_strict',0,'select',8,1,0,40,TRUE);
-    $c->add('bb2_verbose',0,'select',8,1,0,50,TRUE);
-    $c->add('bb2_logging',1,'select',8,1,0,60,TRUE);
-    $c->add('bb2_httpbl_key','','text',8,1,NULL,70,TRUE);
-    $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,80,TRUE);
-    $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,90,TRUE);
-    $c->add('bb2_offsite_forms',0,'select',8,1,0,100,TRUE);
-//    $c->add('bb2_eu_cookie',0,'select',8,1,0,110,TRUE);
-
+    $c->add('bb2_ban_log',1,'select',8,1,0,30,TRUE);
+    $c->add('bb2_ban_timeout',24,'text',8,1,0,40,TRUE);
+    $c->add('bb2_strict',0,'select',8,1,0,50,TRUE);
+    $c->add('bb2_verbose',0,'select',8,1,0,60,TRUE);
+    $c->add('bb2_logging',1,'select',8,1,0,70,TRUE);
+    $c->add('bb2_httpbl_key','','text',8,1,NULL,80,TRUE);
+    $c->add('bb2_httpbl_threat',25,'text',8,1,NULL,90,TRUE);
+    $c->add('bb2_httpbl_maxage',30,'text',8,1,NULL,100,TRUE);
+    $c->add('bb2_offsite_forms',0,'select',8,1,0,110,TRUE);
     $c->add('bb2_reverse_proxy',0,'select',8,1,0,120,TRUE);
     $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE);
     $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE);
