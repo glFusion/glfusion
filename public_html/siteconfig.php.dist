@@ -229,6 +229,21 @@ $_SYSTEM['sp_pages_in_plugin_menu'] = false;
 
 $_SYSTEM['skip_upgrade_check'] = false;
 
+// ** Privacy Options **
+
+// +--------------------------------------------------------------------------+
+// | Disable IP anonymization                                                 |
+// |                                                                          |
+// | By default, the IP address of the user is anonymized, masking the final  |
+// | octet of the IP address to 0 - this still allows the site administrator  |
+// | to see the general IP range but not the specific IP used by the user.    |
+// |                                                                          |
+// | Setting this value to true will DISABLE the IP anonymization and store   |
+// | the full IP address.                                                     |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['disable_anonimize_ip'] = false;
+
 // +--------------------------------------------------------------------------+
 // | glFusion cache filenames - You generally do not need to adjust these.    |
 // |                                                                          |

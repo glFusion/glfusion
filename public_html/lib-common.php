@@ -7283,6 +7283,12 @@ function COM_randomKey($length = 40 )
 
 function COM_anonymizeIP($ip)
 {
+    global $_CONF, $_SYSTEM;
+
+    if ( isset($_SYSTEM['disable_anonimize_ip']) && $_SYSTEM['disable_anonimize_ip'] == true ) {
+        return $ip;
+    }
+
     $packedAddress = inet_pton($ip);
 
     if (strlen($packedAddress) == 4) {

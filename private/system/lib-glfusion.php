@@ -512,6 +512,7 @@ function _doSiteConfigUpgrade() {
         'style_type'                  => 'undefined',
         'sp_pages_in_plugin_menu'     => false,
         'skip_upgrade_check'          => false,
+        'disable_anonimize_ip'        => false,
     );
 
     if (is_array($_SYSTEM) && (count($_SYSTEM) > 1)) {
@@ -575,6 +576,7 @@ function _doSiteConfigUpgrade() {
         'db_backup_rows'              => $_NEWSYSTEM['db_backup_rows'],
         'sp_pages_in_plugin_menu'     => $_NEWSYSTEM['sp_pages_in_plugin_menu']  ? 'true' : 'false',
         'skip_upgrade_check'          => $_NEWSYSTEM['skip_upgrade_check'] ? 'true' : 'false',
+        'disable_anonimize_ip'        => $_NEWSYSTEM['disable_anonimize_ip'] ? 'true' : 'false',
         'beginphp'                    => '<?php',
         'endphp'                      => '?>',
     ));
