@@ -183,6 +183,7 @@ $LANG_INSTALL = array(
     'support_resources'         => 'Support Resources',
     'plugins'                   => 'glFusion Plugins',
     'support_forums'            => 'glFusion Support Forums',
+    'community_chat'            => 'Community chat @ Discord',
     'instruction_step'          => 'Instructions',
     'install_stepheading'       => 'New Install Tasks',
     'install_doc_alert'         => 'To ensure a smooth installation, please read the <a href="https://www.glfusion.org/wiki/glfusion:installation" target="_blank">Insallation Documentation</a> before proceeding.',

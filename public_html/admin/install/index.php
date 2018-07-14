@@ -170,6 +170,7 @@ function _buildProgressBar($currentStep, &$T)
     $T->set_var('lang_support_resources',$LANG_INSTALL['support_resources']);
     $T->set_var('lang_glfusion_plugins',$LANG_INSTALL['plugins']);
     $T->set_var('lang_support_forums',$LANG_INSTALL['support_forums']);
+    $T->set_var('lang_community_chat',$LANG_INSTALL['community_chat']);
 
     $T->set_block('header','steps','st');
 

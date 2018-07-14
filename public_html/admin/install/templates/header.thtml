@@ -24,7 +24,7 @@
 				<!--
 				<ul class="uk-navbar-nav tm-navbar-nav">
 				<li><a class="uk-parent" href="https://github.com/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github"></i></a></li>
-				<li><a class="uk-parent" href="https://gitter.im/glFusion/glfusion" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github-alt"></i></a></li>
+				<li><a class="uk-parent" href="https://discord.gg/CmMyyKJ" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-github-alt"></i></a></li>
 				<li><a class="uk-parent" href="https://www.glfusion.org/forum/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-comments"></i></a></li>
 				<li><a class="uk-parent" href="https://www.glfusion.org/filemgmt/index.php" style="text-shadow:none;color:#fff;"><i class="uk-icon-large uk-icon-plug"></i></a></li>
 				</ul>
@@ -79,13 +79,13 @@
 									</a>
 								</li>
 								<li>
-									<a href="https://gitter.im/glFusion/glfusion" target="_blank">
+									<a href="https://discord.gg/CmMyyKJ" target="_blank">
 										<div class="uk-grid">
 											<div class="uk-width-large-1-6">
 												<i class="uk-icon uk-icon-github-alt uk-icon-medium"></i>
 											</div>
 											<div class="uk-width-large-5-6">
-												Community chat @ Gitter
+												{lang_community_chat}
 											</div>
 										</div>
 									</a>
