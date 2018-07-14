@@ -3663,7 +3663,7 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'bb2_eu_cookie',
+    	'name' => 'bb2_reverse_proxy',
     	'default_value' => 0,
     	'type' => 'select',
     	'subgroup' => 8,
@@ -3674,24 +3674,13 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'bb2_reverse_proxy',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 8,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 130,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'bb2_reverse_proxy_header',
     	'default_value' => 'X-Forwarded-For',
     	'type' => 'text',
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 140,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3702,42 +3691,7 @@ $coreConfigData = array(
     	'subgroup' => 8,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 150,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-
-    array(
-    	'name' => 'sg_cache',
-    	'default_value' => NULL,
-    	'type' => 'subgroup',
-    	'subgroup' => 9,
-    	'fieldset' => 0,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'fs_cache_template',
-    	'default_value' => NULL,
-    	'type' => 'fieldset',
-    	'subgroup' => 9,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-
-    array(
-    	'name' => 'cache_templates',
-    	'default_value' => '1',
-    	'type' => 'select',
-    	'subgroup' => 9,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 10,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
