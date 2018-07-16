@@ -13,6 +13,7 @@
   - Minimum PHP version is now 5.6.0
 
 ## v1.7.5 (unreleased)
+  - Update CKEditor to v4.10.0
   - fusionrescue can now disable two-factor authentication
   - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
   - New $_SYSTEM option to disable IP anonymization
@@ -72,6 +73,7 @@
   - Removed dependency on Media Gallery plugin from the core image processing library
 
 ## v1.7.3 (February 9, 2018)
+  - Fixed error in Menu Builder where error text was blank
   - Fixed Forum ranks save error on duplicate number of posts
   - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
   - Headlines auto tag - updated headlines.thtml to clean up the HTML
@@ -81,13 +83,13 @@
   - Minor code optimizations
 
 ## v1.7.2 (January 27, 2018)
-  - Added support for "Open External Links in new Window" configuration setting in the RSS ticker widget
+  - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
   - Forum: Fixed issue where signature preview would not work consistently
   - Forum: Admin message management did not page properly - lost selections on pagination
   - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
   - Polls: Comment link did not correctly display when showing poll results in Polls block
   - Open print window in new window when printing static pages
-  - Fixed incorrect variable reference in referrer ban list
+  - Fixed incorrect variable reference in referer ban list
   - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
   - Forum: Moderator functions now in drop down button
   - Forum: New Likes Feature by Lee Garner

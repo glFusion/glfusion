@@ -66,6 +66,10 @@ $obsoletePrivateDir = array(
 );
 
 $obsoletePublicDir = array(
+// 1.7.5
+    'ckeditor/plugins/codemirror/js/addmon/',
+    'ckeditor/plugins/codemirror/js/mode/',
+
 // 1.7.2
     'forum/images/badges/',
 
@@ -184,6 +188,11 @@ $obsoletePublicFiles = array(
 // 1.7.5
     'admin/refresh.php',
     'bad_behavior2/bad-behavior/screener.inc.php',
+    'ckeditor/plugins/codemirror/js/beautify.js',
+    'ckeditor/plugins/codemirror/js/beautify-html.js',
+    'ckeditor/plugins/codemirror/js/codemirror.js',
+    'ckeditor/plugins/codemirror/css/codemirror.ckeditor.css',
+    'ckeditor/plugins/codemirror/css/codemirror.css',
 
 // 1.7.4
     'layout/cms/images/icons/autotag.png',
