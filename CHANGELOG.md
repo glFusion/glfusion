@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Add Conf value for story sort on index page #256
   - Update CKEditor to v4.10.0
   - fusionrescue can now disable two-factor authentication
   - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.

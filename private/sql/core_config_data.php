@@ -654,16 +654,14 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-
-// NEW 1.7.5
     array(
     	'name' => 'story_sort_by',
     	'default_value' => 'date',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
-    	'selection_array' => 30,
-    	'sort' => 21,
+    	'selection_array' => 33,
+    	'sort' => 30,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -673,14 +671,11 @@ $coreConfigData = array(
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
-    	'selection_array' => 40,
-    	'sort' => 22,
+    	'selection_array' => 32,
+    	'sort' => 40,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-// end of new
-
-
     array(
     	'name' => 'infinite_scroll',
     	'default_value' => 1,
