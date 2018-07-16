@@ -660,6 +660,7 @@ function plugin_getfeednames_filemgmt ()
 
 function filemgmt_buildSql ($topic, $limits)
 {
+    global $_CONF;
 
     $groups = array ();
     $usergroups = SEC_getUserGroups(1);
@@ -681,7 +682,7 @@ function filemgmt_buildSql ($topic, $limits)
             if (!empty ($where)) {
                 $where .= ' AND ';
             }
-            $where .= "filedetail.date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+            $where .= "filedetail.date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
         } else {
             $limitsql = ' ORDER BY filedetail.date DESC LIMIT ' . $limits;
         }
@@ -794,7 +795,7 @@ function plugin_getwhatsnew_filemgmt() {
     if ((SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) AND $mydownloads_whatsnew == 1) {
         $sql  = "SELECT a.lid, a.title FROM {$_TABLES['filemgmt_filedetail']} a ";
         $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-        $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
+        $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
         $sql .= filemgmt_buildAccessSql();
         $sql .= "AND STATUS=1 ORDER  BY date DESC LIMIT 15 ";
 
@@ -823,7 +824,7 @@ function plugin_getwhatsnew_filemgmt() {
             $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
-            $sql .= " AND c.date >=  DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' AND c.queued = 0 ";
+            $sql .= " AND c.date >=  DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL $filemgmtWhatsNewPeriodDays DAY ) AND c.type='filemgmt' AND c.queued = 0 ";
             $sql .= "ORDER  BY c.date DESC LIMIT 15 ";
 
             $result = DB_query($sql);

@@ -379,7 +379,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         DB_save ($_TABLES['staticpage'], 'sp_id,sp_status,sp_uid,sp_title,sp_content,sp_date,sp_hits,sp_format,sp_onmenu,sp_label,commentcode,owner_id,group_id,'
                 .'perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_nf,sp_centerblock,sp_help,sp_tid,sp_where,sp_inblock,postmode,sp_search',
-                "'$sp_id',$sp_status, $sp_uid,'$sp_title','$sp_content',NOW(),$sp_hits,'$sp_format',$sp_onmenu,'$sp_label','$commentcode',$owner_id,$group_id,"
+                "'$sp_id',$sp_status, $sp_uid,'$sp_title','$sp_content','".$_CONF['_now']->toMySQL(true)."',$sp_hits,'$sp_format',$sp_onmenu,'$sp_label','$commentcode',$owner_id,$group_id,"
                         ."$perm_owner,$perm_group,$perm_members,$perm_anon,'$sp_php','$sp_nf',$sp_centerblock,'$sp_help','$sp_tid',$sp_where,"
                         ."'$sp_inblock','$postmode',$sp_search");
 

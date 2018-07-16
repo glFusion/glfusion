@@ -145,7 +145,7 @@ class autotag_headlines extends BaseAutotag {
 
         $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
 
-        $sql = " (date <= NOW()) AND (draft_flag = 0)";
+        $sql = " (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)";
         if (empty ($topic)) {
             $sql .= COM_getLangSQL ('tid', 'AND', 's');
         }
@@ -161,7 +161,7 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ( $frontpage == 1 ) {
-            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) ";
+            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."' ) ) ";
         }
 
         if ( $storyimage != 2 ) {

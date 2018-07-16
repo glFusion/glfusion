@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Shows articles in various formats.                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -322,7 +322,7 @@ if ($A['count'] > 0) {
                 $pageBody .= COM_showMessage($msg, $plugin,'',0,'info');
             }
         }
-        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
+        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".DB_escapeString($story->getSid())."') AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)");
 
         // Display whats related
 

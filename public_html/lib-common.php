@@ -145,6 +145,8 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
+$_CONF['_now'] = new Date('now',$_CONF['timezone']);
+
 require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
@@ -2029,7 +2031,7 @@ function COM_showTopics( $topic='' )
 
     if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
-             . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
+             . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'") '
              . COM_getPermSQL( 'AND' )
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );
@@ -2809,7 +2811,7 @@ function COM_olderStuff()
 {
     global $_TABLES, $_CONF;
 
-    $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW()))) AND (date <= NOW()) AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
+    $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."'))) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
@@ -3446,7 +3448,7 @@ function COM_emailUserTopics()
     for( $x = 0; $x < $nrows; $x++ ) {
         $U = DB_fetchArray( $users );
         $storysql  = "SELECT sid,uid,date AS day,title,introtext,bodytext";
-        $commonsql = " FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND date >= '{$lastrun}'";
+        $commonsql = " FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' AND date >= '{$lastrun}'";
         $topicsql  = "SELECT tid FROM {$_TABLES['topics']}"
                         . COM_getPermSQL( 'WHERE', $U['uuid'] );
         $tresult   = DB_query( $topicsql );
@@ -3589,7 +3591,7 @@ function COM_emailUserTopics()
         COM_mail ($to, $subject, $mailtext, $from,1,0,'',$mailtext_text);
 
     }
-    DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );
+    DB_query( "UPDATE {$_TABLES['vars']} SET value = '".$_CONF['_now']->toMySQL(true)."' WHERE name = 'lastemailedstories'" );
 }
 
 
@@ -3643,7 +3645,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
 
         // Find the newest stories
-        $sql = "SELECT * FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' ) . ' ORDER BY date DESC';
+        $sql = "SELECT * FROM {$_TABLES['stories']} WHERE (date >= (date_sub('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' ) . ' ORDER BY date DESC';
 
         $result = DB_query( $sql );
         $nrows  = DB_numRows( $result );
@@ -3699,7 +3701,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $stwhere .= "({$_TABLES['stories']}.perm_anon IS NOT NULL)";
         }
 
-        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
+        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
 
         $result = DB_query( $sql );
         $nrows = DB_numRows( $result );
@@ -3761,7 +3763,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
     if ( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
 
-        $sql = "SELECT DISTINCT COUNT(*) AS count,{$_TABLES['stories']}.title,t.sid,max(t.date) AS lastdate FROM {$_TABLES['trackback']} AS t,{$_TABLES['stories']} WHERE (t.type = 'article') AND (t.sid = {$_TABLES['stories']}.sid) AND (t.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newtrackbackinterval']} SECOND)))" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.trackbackcode = 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . " GROUP BY t.sid, {$_TABLES['stories']}.title ORDER BY lastdate DESC LIMIT 15";
+        $sql = "SELECT DISTINCT COUNT(*) AS count,{$_TABLES['stories']}.title,t.sid,max(t.date) AS lastdate FROM {$_TABLES['trackback']} AS t,{$_TABLES['stories']} WHERE (t.type = 'article') AND (t.sid = {$_TABLES['stories']}.sid) AND (t.date >= (DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newtrackbackinterval']} SECOND)))" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.trackbackcode = 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . " GROUP BY t.sid, {$_TABLES['stories']}.title ORDER BY lastdate DESC LIMIT 15";
         $result = DB_query( $sql );
 
         $nrows = DB_numRows( $result );

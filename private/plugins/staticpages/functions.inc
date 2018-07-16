@@ -253,7 +253,7 @@ function plugin_getwhatsnewcomment_staticpages()
             . COM_getPermSQL( 'AND', 0, 2, $_TABLES['staticpage'] ) .
             " AND ({$_TABLES['staticpage']}.commentcode >= 0)" .
             COM_getLangSQL( 'sp_id', 'AND', $_TABLES['staticpage'] ) . ")
-            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
             AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['staticpage']}.sp_title,
             {$_TABLES['staticpage']}.sp_title, {$_TABLES['staticpage']}.sp_id
             ORDER BY 4 DESC LIMIT 15";

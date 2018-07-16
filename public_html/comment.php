@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Let user comment on a story or plugin.                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -415,7 +415,7 @@ function handleEditSubmit()
         PLG_itemSaved((int) $cid,'comment');
         $safecid = (int) $cid;
         $safeuid = (int) $uid;
-        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
+        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,'".$_CONF['_now']->toMySQL(true)."'");
     }
 
     if ( !$moderatorEdit) PLG_commentEditSave($type,$cid,$sid);

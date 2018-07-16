@@ -2076,7 +2076,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
                             $U['tids'] = '';
                         }
 
-                        $sql = " (date <= NOW()) AND (draft_flag = 0)";
+                        $sql = " (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)";
 
                         if (empty ($topic)) {
                             $sql .= COM_getLangSQL ('tid', 'AND', 's');

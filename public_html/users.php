@@ -6,7 +6,7 @@
 // |                                                                          |
 // | User authentication module.                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -254,7 +254,7 @@ function userprofile()
 
     // list of last 10 stories by this user
     if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".(int) $user."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".(int) $user."') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $sql .= " ORDER BY unixdate DESC LIMIT 10";
         $result = DB_query ($sql);
         $nrows = DB_numRows ($result);
@@ -316,7 +316,7 @@ function userprofile()
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int) $user.") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int) $user.") AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));

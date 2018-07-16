@@ -62,7 +62,7 @@ $data_arr[] = array('title' => $LANG10[2], 'stats' => COM_NumberFormat ($totalhi
 if ($_CONF['lastlogin']) {
     // if we keep track of the last login date, count the number of users
     // that have logged in during the last 4 weeks
-    $result = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['users']} AS u,{$_TABLES['userinfo']} AS i WHERE (u.uid > 1) AND (u.uid = i.uid) AND (lastlogin <> '') AND (lastlogin >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 28 DAY)))");
+    $result = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['users']} AS u,{$_TABLES['userinfo']} AS i WHERE (u.uid > 1) AND (u.uid = i.uid) AND (lastlogin <> '') AND (lastlogin >= UNIX_TIMESTAMP(DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL 28 DAY)))");
     list($active_users) = DB_fetchArray ($result);
 } else {
     // otherwise, just count all users with status 'active'
@@ -75,8 +75,8 @@ $data_arr[] = array('title' => $LANG10[27], 'stats' => COM_NumberFormat ($active
 $topicsql = COM_getTopicSql ('AND');
 
 $id = array ('draft_flag', 'date');
-$values = array ('0', 'NOW()');
-$result = DB_query ("SELECT COUNT(*) AS count,SUM(comments) AS ccount FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND') . $topicsql);
+$values = array ('0', '"'.$_CONF['_now']->toMySQL(true).'"');
+$result = DB_query ("SELECT COUNT(*) AS count,SUM(comments) AS ccount FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getPermSQL ('AND') . $topicsql);
 $A = DB_fetchArray ($result);
 if (empty ($A['ccount'])) {
     $A['ccount'] = 0;
@@ -103,7 +103,7 @@ $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 // Detailed story statistics
 
-$result = DB_query("SELECT sid,title,hits FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW()) AND (Hits > 0)" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY hits DESC LIMIT 10");
+$result = DB_query("SELECT sid,title,hits FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (Hits > 0)" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY hits DESC LIMIT 10");
 $nrows  = DB_numRows($result);
 
 if ($nrows > 0) {
@@ -134,7 +134,7 @@ if ($nrows > 0) {
 
 // Top Ten Commented Stories
 
-$result = DB_query("SELECT sid,title,comments FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW()) AND (comments > 0)" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY comments DESC LIMIT 10");
+$result = DB_query("SELECT sid,title,comments FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (comments > 0)" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY comments DESC LIMIT 10");
 $nrows  = DB_numRows($result);
 if ($nrows > 0) {
     $header_arr = array(
@@ -164,7 +164,7 @@ if ($nrows > 0) {
 // Top Ten Trackback Comments
 
 if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
-    $result = DB_query ("SELECT {$_TABLES['stories']}.sid,{$_TABLES['stories']}.title,COUNT(*) AS count FROM {$_TABLES['stories']},{$_TABLES['trackback']} AS t WHERE (draft_flag = 0) AND ({$_TABLES['stories']}.date <= NOW()) AND ({$_TABLES['stories']}.sid = t.sid) AND (t.type = 'article')" . COM_getPermSql ('AND') . $topicsql . " GROUP BY t.sid,{$_TABLES['stories']}.sid,{$_TABLES['stories']}.title ORDER BY count DESC LIMIT 10");
+    $result = DB_query ("SELECT {$_TABLES['stories']}.sid,{$_TABLES['stories']}.title,COUNT(*) AS count FROM {$_TABLES['stories']},{$_TABLES['trackback']} AS t WHERE (draft_flag = 0) AND ({$_TABLES['stories']}.date <= '".$_CONF['_now']->toMySQL(true)."') AND ({$_TABLES['stories']}.sid = t.sid) AND (t.type = 'article')" . COM_getPermSql ('AND') . $topicsql . " GROUP BY t.sid,{$_TABLES['stories']}.sid,{$_TABLES['stories']}.title ORDER BY count DESC LIMIT 10");
     $nrows = DB_numRows ($result);
     if ($nrows > 0) {
         $header_arr = array(
@@ -194,7 +194,7 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
 
 // Top Ten Emailed Stories
 
-$result = DB_query("SELECT sid,title,numemails FROM {$_TABLES['stories']} WHERE (numemails > 0) AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY numemails DESC LIMIT 10");
+$result = DB_query("SELECT sid,title,numemails FROM {$_TABLES['stories']} WHERE (numemails > 0) AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY numemails DESC LIMIT 10");
 $nrows = DB_numRows($result);
 
 if ($nrows > 0) {

@@ -1597,7 +1597,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
                    . "WHERE sid = '".$dbSid."' AND type = '$type' AND rht >= $rht");
             DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
-                    "'".$dbSid."',$uid,'".$dbComment."',now(),'".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht,$rht+1,$indent+1,'".$dbType."','".$dbIP."'");
+                    "'".$dbSid."',$uid,'".$dbComment."','".$_CONF['_now']->toMySQL(true)."','".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht,$rht+1,$indent+1,'".$dbType."','".$dbIP."'");
         } else { //replying to non-existent comment or comment in wrong article
             COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                        . 'to reply to a non-existent comment or the pid/sid did not match');
@@ -1609,7 +1609,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $rht = 0;
         }
         DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
-                "'".$dbSid."',".$dbUid.",'".$dbComment."',now(),'".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht+1,$rht+2,0,'".$dbType."','".$dbIP."'");
+                "'".$dbSid."',".$dbUid.",'".$dbComment."','".$_CONF['_now']->toMySQL(true)."','".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht+1,$rht+2,0,'".$dbType."','".$dbIP."'");
     }
     $cid = DB_insertId();
 
@@ -2079,7 +2079,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
     $retval = '';
 
     $commentcode = DB_getItem($_TABLES['stories'], 'commentcode',
-                "(sid = '".DB_escapeString($id)."') AND (draft_flag = 0) AND (date <= NOW())"
+                "(sid = '".DB_escapeString($id)."') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')"
                 . COM_getPermSQL('AND'));
     if (!isset($commentcode) || ($commentcode != 0)) {
         return COM_refresh($_CONF['site_url'] . '/index.php');
@@ -2173,7 +2173,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
              . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
              . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
              . "WHERE (sid = '".DB_escapeString($id)."') "
-             . 'AND (draft_flag = 0) AND (date <= NOW())' . COM_getPermSQL('AND',0,2, 's')
+             . 'AND (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'")' . COM_getPermSQL('AND',0,2, 's')
              . COM_getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
 
 
@@ -2190,7 +2190,7 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
     $sql = 'SELECT COUNT(*) AS count, commentcode, uid, owner_id, group_id, perm_owner, perm_group, '
          . "perm_members, perm_anon FROM {$_TABLES['stories']} "
          . "WHERE (sid = '".DB_escapeString($id)."') "
-         . 'AND (draft_flag = 0) AND (date <= NOW())' . COM_getPermSQL('AND')
+         . 'AND (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'")' . COM_getPermSQL('AND')
          . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
 
     $result = DB_query ($sql);

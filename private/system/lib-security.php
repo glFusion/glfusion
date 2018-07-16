@@ -1142,7 +1142,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
     $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."')"
            . " AND (ttl > 0)";
 
     DB_query($sql);
@@ -1155,7 +1155,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$uid}, '".$pageURL."', '".(int) $ttl."')";
+           . "VALUES ('$token', '".$_CONF['_now']->toMySQL(true)."', {$uid}, '".$pageURL."', '".(int) $ttl."')";
     DB_query($sql);
 
     $tokenKey = $token;
@@ -1183,8 +1183,6 @@ function SEC_checkToken()
         SEC_createToken(-1);
         return true;
     }
-
-//    if ( COM_isAnonUser() ) return false;
 
     if ( !SEC_isLocalUser($_USER['uid']) ) {
         return false;
@@ -1253,8 +1251,6 @@ function _sec_checkToken($ajax=0)
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
 
-//    if ( COM_isAnonUser() ) return true;
-
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REAL_ADDR'];
     } else {
@@ -1268,7 +1264,7 @@ function _sec_checkToken($ajax=0)
     }
 
     if (trim($token) != '') {
-        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
+        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."') AND ttl > 0) as expired, owner_id, urlfor FROM "
            . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $tokens = DB_query($sql);
         $numberOfTokens = DB_numRows($tokens);
@@ -1329,7 +1325,7 @@ function _sec_checkToken($ajax=0)
   */
 function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_USER, $_TABLES, $_DB_dbms;
 
     if ( !isset($_USER['uid'] ) || $_USER['uid'] == '' ) {
         $_USER['uid'] = 1;
@@ -1339,7 +1335,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
     $token = md5($_USER['uid'].$_USER['uid'].uniqid (mt_rand (), 1));
 
     /* Destroy exired tokens: */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."')"
        . " AND (ttl > 0)";
 
     DB_query($sql);
@@ -1351,7 +1347,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
     }
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";
+           . "VALUES ('$token', '".$_CONF['_now']->toMySQL(true)."', {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";
     DB_query($sql);
 
     /* And return the token to the user */
@@ -1362,7 +1358,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
 
 function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_USER, $_TABLES, $_DB_dbms;
 
     $return = false; // Default to fail.
 
@@ -1372,7 +1368,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 
     if(trim($token) != '') {
         $token = COM_applyFilter($token);
-        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
+        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."') AND ttl > 0) as expired, owner_id, urlfor FROM "
            . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
 
         $tokens = DB_Query($sql);

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Story-related functions needed in more than one place.                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
@@ -941,7 +941,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     } else {
         $where = " WHERE (sid = '" . DB_escapeString($sid) . "') AND";
     }
-    $where .= ' (date <= NOW())';
+    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(true).'")';
     if ($uid > 0) {
         $permSql = COM_getPermSql('AND', $uid)
                  . COM_getTopicSql('AND', $uid);
@@ -1162,16 +1162,16 @@ function STORY_removeStory($sid)
 
 function STORY_featuredCheck()
 {
-    global $_TABLES;
+    global $_CONF, $_TABLES;
 
     // allow only 1 featured for frontpage
-    $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND (frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW() ) ) AND date <= NOW() ORDER BY date DESC LIMIT 2";
+    $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND (frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."' ) ) AND date <= '".$_CONF['_now']->toMySQL(true)."' ORDER BY date DESC LIMIT 2";
     $result = DB_query($sql);
     $numrows = DB_numRows($result);
     if ($numrows > 1) {
         $F = DB_fetchArray($result);
         // un-feature all other featured frontpage story
-        $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW())) AND date <= NOW() AND sid <> '{$F['sid']}'";
+        $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."')) AND date <= '".$_CONF['_now']->toMySQL(true)."' AND sid <> '{$F['sid']}'";
         DB_query($sql);
     }
     // check all topics
@@ -1180,13 +1180,13 @@ function STORY_featuredCheck()
     $topicRows = DB_numRows($topicResult);
     for($i = 0; $i < $topicRows; $i++) {
         $T = DB_fetchArray($topicResult);
-        $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= NOW() ORDER BY date DESC LIMIT 2";
+        $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= '".$_CONF['_now']->toMySQL(true)."' ORDER BY date DESC LIMIT 2";
         $storyResult = DB_query($sql);
         $storyRows   = DB_numRows($storyResult);
         if ($storyRows > 1) {
             // OK, we have two or more featured stories in a topic, fix that
             $S = DB_fetchArray($storyResult);
-            $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= NOW() AND sid <> '{$S['sid']}'";
+            $sql = "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND tid = '{$T['tid']}' AND date <= '".$_CONF['_now']->toMySQL(true)."' AND sid <> '{$S['sid']}'";
             DB_query($sql);
         }
     }

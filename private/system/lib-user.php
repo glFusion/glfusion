@@ -283,7 +283,7 @@ function USER_createActivationToken($uid,$username)
 
     $token = md5($uid.$username.uniqid (mt_rand (), 1));
 
-    DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time=NOW() WHERE uid=".$uid);
+    DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time='".$_CONF['_now']->toMySQL(true)."' WHERE uid=".$uid);
 
     return $token;
 }
