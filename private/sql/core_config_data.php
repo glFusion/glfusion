@@ -654,30 +654,35 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+// NEW 1.7.5
     array(
-    	'name' => 'infinite_scroll',
-    	'default_value' => 1,
+    	'name' => 'story_sort_by',
+    	'default_value' => 'date',
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 30,
+    	'selection_array' => 30,
+    	'sort' => 21,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'minnews',
-    	'default_value' => 1,
-    	'type' => 'text',
+    	'name' => 'story_sort_dir',
+    	'default_value' => 'DESC',
+    	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 40,
+    	'selection_array' => 40,
+    	'sort' => 22,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+// end of new
+
+
     array(
-    	'name' => 'contributedbyline',
+    	'name' => 'infinite_scroll',
     	'default_value' => 1,
     	'type' => 'select',
     	'subgroup' => 1,
@@ -688,19 +693,19 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'hidestorydate',
-    	'default_value' => 0,
-    	'type' => 'select',
+    	'name' => 'minnews',
+    	'default_value' => 1,
+    	'type' => 'text',
     	'subgroup' => 1,
     	'fieldset' => 1,
-    	'selection_array' => 0,
+    	'selection_array' => NULL,
     	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'hideviewscount',
-    	'default_value' => 0,
+    	'name' => 'contributedbyline',
+    	'default_value' => 1,
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
@@ -710,7 +715,7 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'hideemailicon',
+    	'name' => 'hidestorydate',
     	'default_value' => 0,
     	'type' => 'select',
     	'subgroup' => 1,
@@ -721,13 +726,35 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'hideprintericon',
+    	'name' => 'hideviewscount',
     	'default_value' => 0,
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
     	'sort' => 90,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'hideemailicon',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 100,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'hideprintericon',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -739,7 +766,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 24,
-    	'sort' => 100,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -750,7 +777,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 110,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -761,7 +788,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 7,
-    	'sort' => 120,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -772,7 +799,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 8,
-    	'sort' => 130,
+    	'sort' => 150,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -783,7 +810,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 140,
+    	'sort' => 160,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -794,7 +821,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 150,
+    	'sort' => 170,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -805,7 +832,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 160,
+    	'sort' => 180,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -816,7 +843,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 170,
+    	'sort' => 190,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -827,7 +854,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 180,
+    	'sort' => 200,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -838,7 +865,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 190,
+    	'sort' => 210,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -849,7 +876,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 9,
-    	'sort' => 200,
+    	'sort' => 220,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

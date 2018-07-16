@@ -142,8 +142,15 @@ if (!COM_isAnonUser()) {
 }
 
 $topiclimit = 0;
+
 $story_sort = 'date';
 $story_sort_dir = 'DESC';
+if (isset($_CONF['story_sort_by'])) {
+    $story_sort = $_CONF['story_sort_by'];
+}
+if (isset($_CONF['story_sort_dir'])) {
+    $story_sort_dir = $_CONF['story_sort_dir'];
+}
 
 if ( !empty($topic) ) {
     $result = DB_query("SELECT limitnews,sort_by,sort_dir,description FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
@@ -249,7 +256,8 @@ if ( !empty($topic) ) {
             break;
     }
 } else {
-    $orderBy = ' date DESC';
+//    $orderBy = ' date DESC';
+    $orderBy = $story_sort . ' ' . $story_sort_dir;
 }
 
 $msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "

@@ -2936,6 +2936,8 @@ $LANG_confignames['Core'] = array(
     'pwd_req_cap' => 'Großbuchstaben erforderlch',
     'pwd_req_lower' => 'Kleinbuchstaben erforderlich',
     'pwd_req_symbol' => 'Sonderzeichen erforderlich',
+    'story_sort_by' => 'Story List Sort Field',
+    'story_sort_dir' => 'Story List Sort Direction',
     'cache_driver' => 'Cache Driver',
     'cache_host' => 'Cache Server',
     'cache_port' => 'Cache Server Port',
@@ -3040,7 +3042,9 @@ $LANG_configselects['Core'] = array(
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Täglich' => 86400, 'Wöchentlich' => 604800, 'Stündlich' => 3600, 'Immer' => 0),
     30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
-    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
+    32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
+    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid')
 );
 
 ?>
