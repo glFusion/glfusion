@@ -541,7 +541,7 @@ function forum_buildFeedsSql ($forumID, $limits)
             if (!empty ($where)) {
                 $where .= ' AND ';
             }
-            $where .= "date >= DATE_SUB(NOW(),INTERVAL $hours HOUR) ORDER BY date DESC";
+            $where .= "date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR) ORDER BY date DESC";
         } else {
             $limitsql = ' ORDER BY date DESC LIMIT ' . $limits;
         }

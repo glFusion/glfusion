@@ -209,7 +209,7 @@ function plugin_getwhatsnewcomment_polls()
             . COM_getPermSQL( 'AND', 0, 2, $_TABLES['polltopics'] ) .
             " AND ({$_TABLES['polltopics']}.commentcode >= 0)" .
             /* COM_getLangSQL( 'pid', 'AND', $_TABLES['polltopics'] ) .*/ ")
-            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
             AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['polltopics']}.topic,
             {$_TABLES['polltopics']}.topic, {$_TABLES['polltopics']}.pid
             ORDER BY 4 DESC LIMIT 15";
@@ -264,7 +264,7 @@ function plugin_searchtypes_polls()
   */
 function plugin_dopluginsearch_polls($query, $dateStart, $dateEnd, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_TABLES, $_DB_dbms, $LANG09, $LANG_POLLS, $_USER;
+    global $_CONF, $_TABLES, $_DB_dbms, $LANG09, $LANG_POLLS, $_USER;
 
     // Make sure the query is SQL safe
     $query = trim(DB_escapeString($query));
@@ -274,7 +274,7 @@ function plugin_dopluginsearch_polls($query, $dateStart, $dateEnd, $topic, $type
     $sql = "SELECT p.pid AS id, p.topic AS title, p.description AS description, UNIX_TIMESTAMP(p.date) AS date, "
         . " p.owner_id AS uid, p.voters AS hits, CONCAT('/polls/index.php?pid=',p.pid) AS url "
         . " FROM {$_TABLES['polltopics']} AS p "
-        . " WHERE (p.date <= NOW()) "
+        . " WHERE (p.date <= '".$_CONF['_now']->toMySQL(true)."') "
         . COM_getPermSQL('AND', 0, 2, 'p');
 
     if (!SEC_inGroup('Root', $uid)) {

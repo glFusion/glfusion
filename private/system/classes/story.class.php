@@ -763,10 +763,10 @@ class Story
             if ($this->_draft_flag == 0 AND $this->_date <= time()) {
                 if ( $this->_frontpage == 1 || $this->_frontpage == 2 ) {
                     // un-feature any featured frontpage story
-                    DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND (frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) AND date <= NOW()");
+                    DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND (frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."' ) ) AND date <= '".$_CONF['_now']->toMySQL(true)."'");
                 }
                 // un-feature any featured story in the same topic
-                DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND tid = '{$this->_tid}' AND date <= NOW()");
+                DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured > 0 AND draft_flag = 0 AND tid = '{$this->_tid}' AND date <= '".$_CONF['_now']->toMySQL(true)."'");
             }
         }
 
@@ -1183,7 +1183,7 @@ class Story
             $this->_postmode = DB_escapeString($this->_postmode);
             DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
                         "'{$this->_sid}','{$this->_tid}','".intval($this->_uid)."','{$this->_title}'," .
-                        "'{$this->_introtext}','{$this->_bodytext}',NOW(),'{$this->_postmode}'");
+                        "'{$this->_introtext}','{$this->_bodytext}','".$_CONF['_now']->toMySQL(true)."','{$this->_postmode}'");
 
             return STORY_SAVED_SUBMISSION;
         } else {

@@ -63,7 +63,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
         {
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
         }
         else
         {
@@ -91,9 +91,9 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
         $where .= " AND (tid IN ($tlist) OR alternate_tid IN ($tlist))";
     }
     if ($frontpage_only) {
-        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW() ) ) ';
+        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(true).'" ) ) ';
     }
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
+    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
     $nrows = DB_numRows( $result );
 
     $sids = array ();
@@ -142,7 +142,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
         {
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
         }
         else
         {
@@ -154,7 +154,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
         $limitsql = ' LIMIT 10';
     }
 
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '$tid' OR alternate_tid = '$tid') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' AND (tid = '$tid' OR alternate_tid = '$tid') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
     $nrows = DB_numRows( $result );
 
     $sids = array ();
@@ -236,7 +236,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
             if( substr( $limit, -1 ) == 'h' ) { // last xx hours
                 $limitsql = '';
                 $hours = substr( $limit, 0, -1 );
-                $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+                $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
             } else {
                 $limitsql = ' LIMIT ' . $limit;
             }
@@ -246,7 +246,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
         $topic = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".DB_escapeString($tid)."'" );
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 
@@ -339,7 +339,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
         if( substr( $limit, -1 ) == 'h' ) { // last xx hours
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
+            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
         } else {
             $limitsql = ' LIMIT ' . $limit;
         }
@@ -365,9 +365,9 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
         $where .= " AND (tid IN ($tlist))";
     }
     if ($frontpage_only) {
-        $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= NOW() ) ) ';
+        $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(true).'" ) ) ';
     }
-    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
+    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
 
     $content = array();
     $sids = array();
@@ -538,7 +538,7 @@ function SYND_updateFeed( $fid )
             COM_errorLog ("update_info for feed $fid is $data", 1);
         }
 
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
     }
 }
 

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion admin authentication module                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2017 by the following authors:                        |
+// | Copyright (C) 2011-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -355,7 +355,7 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
     } else {
         // re-init the token...
         if ( $token != '' ) {
-            DB_query("UPDATE {$_TABLES['tokens']} SET created=NOW() WHERE token='".DB_escapeString($token)."'");
+            DB_query("UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($token)."'");
         }
     }
 }

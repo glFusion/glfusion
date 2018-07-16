@@ -48,7 +48,7 @@ switch ( $_POST['keepalive'] ) {
         $sql = "SELECT * FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
         $result = DB_query($sql);
         if ( DB_numRows($result) != 1 ) die();
-        $sql = "UPDATE {$_TABLES['tokens']} SET created=NOW() WHERE token='".DB_escapeString($token)."'";
+        $sql = "UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($token)."'";
         DB_query($sql);
         exit;
     default :
@@ -75,17 +75,17 @@ if ( DB_numRows($result) != 1 ) die();
 
 // refresh tokens
 
-$sql = "UPDATE {$_TABLES['tokens']} SET created=NOW() WHERE token='".DB_escapeString($token)."'";
+$sql = "UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($token)."'";
 DB_query($sql);
 
-$sql = "UPDATE {$_TABLES['tokens']} SET created=NOW() WHERE token='".DB_escapeString($advtoken)."'";
+$sql = "UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($advtoken)."'";
 DB_query($sql);
 
 SEC_setCookie ($_CONF['cookie_name'].'adveditor', $advtoken,
                time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
 
-$sql = "UPDATE {$_TABLES['tokens']} SET created=NOW() WHERE token='".DB_escapeString($admtoken)."'";
+$sql = "UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($admtoken)."'";
 DB_query($sql);
 exit;
 ?>

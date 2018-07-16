@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Directory of all the stories on a glFusion site.                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -213,7 +213,7 @@ function DIR_displayMonth(&$template, $dir_topic, $year, $month)
     $lastday = DIR_lastDayOfMonth ($month, $year);
     $end   = sprintf ('%04d-%02d-%02d 23:59:59', $year, $month, $lastday);
 
-    $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
+    $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')";
     if ($dir_topic != 'all') {
         $sql .= " AND ((tid = '".DB_escapeString($dir_topic)."') || alternate_tid= '".DB_escapeString($dir_topic)."')";
     }
@@ -284,7 +284,7 @@ function DIR_displayYear(&$template,$topic, $year, $main = false)
     $end   = sprintf ('%04d-12-31 23:59:59', $year);
 
     $monthsql = array();
-    $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
+    $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')";
 
     if ($topic != 'all') {
         $monthsql['mysql'] .= " AND ((tid = '".DB_escapeString($topic)."') || alternate_tid = '".DB_escapeString($topic). "' )";
@@ -347,12 +347,12 @@ function DIR_displayYear(&$template,$topic, $year, $main = false)
 */
 function DIR_displayAll(&$template, $dir_topic)
 {
-    global $_TABLES, $LANG_DIR;
+    global $_CONF, $_TABLES, $LANG_DIR;
 
     $retval = '';
 
     $yearsql = array();
-    $yearsql['mysql'] = "SELECT DISTINCT YEAR(date) AS year,date FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW())" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
+    $yearsql['mysql'] = "SELECT DISTINCT YEAR(date) AS year,date FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
     $ysql = array();
     $ysql['mysql'] = $yearsql['mysql'] . " GROUP BY YEAR(date) ORDER BY date DESC";
 

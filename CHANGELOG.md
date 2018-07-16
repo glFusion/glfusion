@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
   - Add Conf value for story sort on index page #256
   - Update CKEditor to v4.10.0
   - fusionrescue can now disable two-factor authentication

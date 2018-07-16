@@ -354,7 +354,7 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
         DB_delete ($_TABLES['linksubmission'], 'lid', $old_lid);
         DB_delete ($_TABLES['links'], 'lid', $old_lid);
 
-        DB_save ($_TABLES['links'], 'lid,cid,url,description,title,date,hits,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon', "'$lid','$cid','$url','$description','$title',NOW(),'$hits',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
+        DB_save ($_TABLES['links'], 'lid,cid,url,description,title,date,hits,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon', "'$lid','$cid','$url','$description','$title','".$_CONF['_now']->toMySQL(true)."','$hits',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
 
         if (empty($old_lid) || ($old_lid == $lid)) {
             PLG_itemSaved($lid, 'links');

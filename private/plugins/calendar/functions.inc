@@ -125,13 +125,13 @@ function phpblock_calendar( $help='', $title='' )
 
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
         . "FROM {$_TABLES['events']} ";
-        $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) AND (status = 1)";
+        $eventSql .= "WHERE dateend >= ('".$dt->toMySQL(true)."' - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS('".$dt->toMySQL(true)."') < $range ) AND (status = 1)";
         $eventSql .= 'ORDER BY datestart,timestart';
 
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !COM_isAnonUser() ) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon,UNIX_TIMESTAMP(datestart) AS datestart_unix, UNIX_TIMESTAMP(dateend) AS dateend_unix '
             . "FROM {$_TABLES['personal_events']} ";
-            $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
+            $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= ('".$dt->toMySQL(true)."' - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS('".$dt->toMySQL(true)."') < $range) ";
             $personaleventsql .= 'ORDER BY datestart, dateend';
         }
 
@@ -1190,7 +1190,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
             if( substr( $limit, -1 ) == 'h' ) {// next xx hours
                 $limitsql = '';
                 $hours = substr( $limit, 0, -1 );
-                $where = " AND (datestart <= DATE_ADD(NOW(), INTERVAL $hours HOUR))";
+                $where = " AND (datestart <= DATE_ADD('".$_CONF['_now']->toMySQL(true)."', INTERVAL $hours HOUR))";
             }
             else {
                 $limitsql = ' LIMIT ' . $limit;
@@ -1201,7 +1201,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
         }
 
         $sql = "SELECT eid,owner_id,title,description FROM {$_TABLES['events']} "
-              ."WHERE status = 1 AND perm_anon > 0 AND dateend >= NOW() $where "
+              ."WHERE status = 1 AND perm_anon > 0 AND dateend >= '".$_CONF['_now']->toMySQL(true)."' $where "
               ."ORDER BY datestart,timestart $limitsql";
         $result = DB_query($sql);
 
@@ -1269,7 +1269,7 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
         if( substr( $limit, -1 ) == 'h' ) { // next xx hours
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
-            $where = " AND (datestart <= DATE_ADD(NOW(), INTERVAL $hours HOUR))";
+            $where = " AND (datestart <= DATE_ADD('".$_CONF['_now']->toMySQL(true)."', INTERVAL $hours HOUR))";
         } else {
             $limitsql = ' LIMIT ' . intval($limit);
         }
@@ -1277,7 +1277,7 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
         $limitsql = ' LIMIT 10';
     }
 
-    $result = DB_query( "SELECT eid FROM {$_TABLES['events']} WHERE status = 1 AND perm_anon > 0 AND dateend >= NOW()$where ORDER BY datestart,timestart $limitsql" );
+    $result = DB_query( "SELECT eid FROM {$_TABLES['events']} WHERE status = 1 AND perm_anon > 0 AND dateend >= '".$_CONF['_now']->toMySQL(true)."'$where ORDER BY datestart,timestart $limitsql" );
     $nrows = DB_numRows( $result );
 
     $eids = array();

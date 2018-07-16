@@ -401,7 +401,7 @@ function LINK_CAT_save($cid, $old_cid, $pid, $category, $description, $tid, $own
                         pid='{$pid}',
                         tid='{$tid}',category='{$category}',
                         description='{$description}',
-                        modified=NOW(),
+                        modified='".$_CONF['_now']->toMySQL(true)."',
                         owner_id='{$owner_id}',group_id='{$group_id}',
                         perm_owner='{$perm_owner}',perm_group='{$perm_group}',
                         perm_members='{$perm_members}',perm_anon='{$perm_anon}'
@@ -421,7 +421,7 @@ function LINK_CAT_save($cid, $old_cid, $pid, $category, $description, $tid, $own
                     SET pid='{$pid}',
                         tid='{$tid}',category='{$category}',
                         description='{$description}',
-                        modified=NOW(),
+                        modified='".$_CONF['_now']->toMySQL(true)."',
                         owner_id='{$owner_id}',group_id='{$group_id}',
                         perm_owner='{$perm_owner}',perm_group='{$perm_group}',
                         perm_members='{$perm_members}',perm_anon='{$perm_anon}'
@@ -440,7 +440,7 @@ function LINK_CAT_save($cid, $old_cid, $pid, $category, $description, $tid, $own
                     VALUES
                     ('{$cid}','{$pid}','{$category}',
                     '{$description}','{$tid}',
-                    NOW(),NOW(),
+                    '".$_CONF['_now']->toMySQL(true)."','".$_CONF['_now']->toMySQL(true)."',
                     '{$owner_id}','{$group_id}','{$perm_owner}',
                     '{$perm_group}','{$perm_members}','{$perm_anon}')";
             $result = DB_query($sql);

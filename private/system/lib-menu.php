@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion menu library.                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -628,7 +628,7 @@ function getTopicMenu()
 
     if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
-             . 'WHERE (draft_flag = 0) AND (date <= NOW()) '
+             . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'") '
              . COM_getPermSQL( 'AND' )
              . ' GROUP BY tid';
         $rcount = DB_query( $sql );

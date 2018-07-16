@@ -315,7 +315,7 @@ class Search {
                 }
             }
             if ( isset($_TABLES['stories'])) {
-                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['stories']} WHERE (date <= NOW()) AND (draft_flag = 0)");
+                $result = DB_query("SELECT DISTINCT uid FROM {$_TABLES['stories']} WHERE (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)");
                 while ($A = DB_fetchArray($result)) {
                     $searchusers[$A['uid']] = $A['uid'];
                 }
@@ -414,14 +414,14 @@ class Search {
      */
     function _searchStories()
     {
-        global $_TABLES, $_DB_dbms, $LANG09;
+        global $_CONF, $_TABLES, $_DB_dbms, $LANG09;
 
         // Make sure the query is SQL safe
         $query = trim(DB_escapeString(htmlspecialchars($this->_query)));
 
         $sql = "SELECT s.sid AS id, s.title AS title, s.introtext AS description, UNIX_TIMESTAMP(s.date) AS date, s.uid AS uid, s.hits AS hits, CONCAT('/article.php?story=',s.sid) AS url ";
         $sql .= "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u ";
-        $sql .= "WHERE (draft_flag = 0) AND (date <= NOW()) AND (u.uid = s.uid) ";
+        $sql .= "WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (u.uid = s.uid) ";
         $sql .= COM_getPermSQL('AND') . COM_getTopicSQL('AND') . COM_getLangSQL('sid', 'AND') . ' ';
 
         if (!empty($this->_topic)) {
@@ -470,7 +470,7 @@ class Search {
         $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
         $sql .= "LEFT JOIN {$_TABLES['stories']} AS s ON ((s.sid = c.sid) ";
         $sql .= COM_getPermSQL('AND',0,2,'s') . COM_getTopicSQL('AND',0,'s') . COM_getLangSQL('sid','AND','s') . ") ";
-        $sql .= "WHERE (u.uid = c.uid) AND (s.draft_flag = 0) AND (s.commentcode >= 0) AND (s.date <= NOW()) ";
+        $sql .= "WHERE (u.uid = c.uid) AND (s.draft_flag = 0) AND (s.commentcode >= 0) AND (s.date <= '".$_CONF['_now']->toMySQL(true)."') ";
 
         if (!empty($this->_topic))
             $sql .= "AND (s.tid = '".DB_escapeString($this->_topic)."') ";

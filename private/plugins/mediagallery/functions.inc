@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | functions.inc                                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -675,7 +675,7 @@ function plugin_getwhatsnew_mediagallery()
     }
 
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
-        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' AND c.queued = 0 GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
+        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' AND c.queued = 0 GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
         $result = DB_query( $sql,1);
         $nrows2 = DB_numRows( $result );
         if( $nrows2 == 0 ) {
