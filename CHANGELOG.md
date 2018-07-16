@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Update CKEditor to v4.10.0
   - fusionrescue can now disable two-factor authentication
   - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
   - New $_SYSTEM option to disable IP anonymization
