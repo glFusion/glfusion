@@ -2937,7 +2937,9 @@ $LANG_confignames['Core'] = array(
     'pwd_req_letter' => 'Require letter in password',
     'pwd_req_cap' => 'Required upper case letter in password',
     'pwd_req_lower' => 'Require lower case letter in password',
-    'pwd_req_symbol' => 'Require special character in password'
+    'pwd_req_symbol' => 'Require special character in password',
+    'story_sort_by' => 'Story List Sort Field',
+    'story_sort_dir' => 'Story List Sort Direction'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -3033,7 +3035,9 @@ $LANG_configselects['Core'] = array(
     28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
     29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
     30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
-    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2)
+    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
+    32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
+    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid')
 );
 
 ?>
