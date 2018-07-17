@@ -796,7 +796,7 @@ function plugin_getwhatsnew_filemgmt() {
     if ((SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) AND $mydownloads_whatsnew == 1) {
         $sql  = "SELECT a.lid, a.title FROM {$_TABLES['filemgmt_filedetail']} a ";
         $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-        $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
+        $sql .= "WHERE date >= UNIX_TIMESTAMP( DATE_SUB(NOW(), INTERVAL $filemgmtWhatsNewPeriodDays DAY )) ";
         $sql .= filemgmt_buildAccessSql();
         $sql .= "AND STATUS=1 ORDER  BY date DESC LIMIT 15 ";
 
