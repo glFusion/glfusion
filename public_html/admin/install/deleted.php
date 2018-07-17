@@ -65,7 +65,7 @@ $obsoletePrivateDir = array(
 
 $obsoletePublicDir = array(
 // 1.7.5
-    'ckeditor/plugins/codemirror/js/addmon/',
+    'ckeditor/plugins/codemirror/js/addon/',
     'ckeditor/plugins/codemirror/js/mode/',
 
 // 1.7.2
@@ -87,6 +87,10 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 1.7.5
+    'data/bb2_ip_ban.php.sample',
+    'data/bb2_ip_ban.php',
+
 // 1.7.0
     'system/classes/filter.class.php',
     'system/classes/output.class.php',
