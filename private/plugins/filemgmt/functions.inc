@@ -380,6 +380,7 @@ function plugin_user_delete_filemgmt( $uid )
     DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET submitter=1 WHERE submitter = ".(int) $uid,1);
 }
 
+
 function plugin_statssummary_filemgmt ()
 {
     global $_USER, $mydownloads_publicpriv, $_TABLES, $LANG_FILEMGMT;
@@ -1183,6 +1184,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         $tRet = array_values($retval);
         $retval = $tRet[0];
     }
+    if ( $retval === '' || (is_array($retval) && count($retval) == 0 ) ) return NULL;
 
     return $retval;
 }
