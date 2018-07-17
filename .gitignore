@@ -7,35 +7,45 @@
 # git update-index --assume-unchanged public_html/backend/glfusion.rss
 # git ls-files -v | grep '^[[:lower:]]'
 #
+
+# ignore thumbnails created by Windows
+**/Thumbs.db
+
+# ignore thumbnails created by OSX
+.DS_Store
+
+# ignore sync directories
+.sync/
+
+# Configuration, Log and cache files
 db-config.php
 siteconfig.php
 lib-custom.php
 custom.css
 404.log
-
 public_html/.htaccess
 public_html/web.config
 aspnet_client/
+public_html/jscache_*.js
+public_html/stylecache_*.css
+style.cache.css
+js.cache.js
+sitemap.xml
+mobile.xml
 
+# Data directories
 private/data/
 private/backups/
 private/logs/
 private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/**
 
+#Images
 public_html/images/
 public_html/images/articles/
 public_html/images/userphotos/
 public_html/images/topics/
 public_html/images/forum/
 public_html/backend/
-
-public_html/jscache_*.js
-public_html/stylecache_*.css
-style.cache.css
-js.cache.js
-
-sitemap.xml
-mobile.xml
 
 # Media Gallery
 private/plugins/mediagallery/config.php
@@ -49,11 +59,105 @@ public_html/forum/media/
 
 # FileMgmt
 public_html/filemgmt_data/files/
+public_html/filemgmt_data/category_snaps/
 
-# ignore thumbnails created by Windows
-**/Thumbs.db
+# Non-bundled plugins
 
-# ignore thumbnails created by OSX
-.DS_Store
+# Agenda Plugin
+private/plugins/agenda/
+public_html/agenda/
+public_html/admin/plugins/agenda/
 
-# local items
+# DokuWiki Integration
+private/plugins/dokuwiki/
+public_html/dokuwiki/
+public_html/admin/plugins/dokuwiki/
+
+# elFinder Plugin
+private/plugins/elfinder/
+public_html/admin/plugins/elfinder/
+public_html/.tmb/
+
+# GUS Plugin
+private/plugins/gus/
+public_html/gus/
+public_html/admin/plugins/gus/
+
+# Metatags Plugin
+private/plugins/metatags/
+public_html/metatags/
+public_html/admin/plugins/metatags/
+
+# Private Message Plugin
+private/plugins/pm/
+public_html/pm/
+public_html/admin/plugins/pm/
+
+# Privacy Plugin
+private/plugins/privacy/
+public_html/privacy/
+public_html/admin/plugins/privacy/
+
+# Searcher Plugin
+private/plugins/searcher/
+public_html/searcher/
+public_html/admin/plugins/searcher/
+
+# Sitemap Plugin
+private/plugins/sitemap/
+public_html/sitemap/
+public_html/admin/plugins/sitemap/
+
+# Smiley Plugin
+private/plugins/smiley/
+public_html/smiley/
+public_html/admin/plugins/smiley/
+
+# SocialShare Plugin
+private/plugins/socialshare/
+public_html/socialshare/
+public_html/admin/plugins/socialshare/
+
+# Stats Plugin
+private/plugins/stats/
+public_html/stats/
+public_html/admin/plugins/stats/
+
+# Tag Plugin
+private/plugins/tag/
+public_html/tag/
+public_html/admin/plugins/tag/
+
+# Testimonials Plugin
+private/plugins/testimonials/
+public_html/admin/plugins/testimonials/
+public_html/testimonials/
+
+# Versions Plugin
+private/plugins/versions/
+public_html/versions/
+public_html/admin/plugins/versions/
+
+# vThemes Plugin
+private/plugins/vthemes/
+public_html/vthemes/
+public_html/admin/plugins/vthemes/
+
+# Development Themes
+
+public_html/layout/demo/
+public_html/layout/uikit/
+public_html/layout/legacy/
+public_html/layout/equinox/
+
+#
+# Put additional local excludes here...
+#
+
+# Analytics Plugin
+private/plugins/analytics/
+public_html/analytics/
+public_html/admin/plugins/analytics/
+
+public_html/layout/uikit3/
+public_html/layout/nouveau/
