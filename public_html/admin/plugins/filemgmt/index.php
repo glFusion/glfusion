@@ -898,6 +898,8 @@ function delDownload() {
     DB_query("DELETE FROM {$_TABLES['filemgmt_votedata']}    WHERE lid=$lid");
     DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid=$lid");
 
+    DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = 'fileid_".DB_escapeString($lid)."' AND type = 'filemgmt'");
+
     PLG_itemDeleted($lid,'filemgmt');
 
     // Check for duplicate files of the same filename (actual filename in repository)
