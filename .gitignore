@@ -4,6 +4,7 @@
 # git update-index --assume-unchanged private/logs/captcha.log
 # git update-index --assume-unchanged private/logs/access.log
 # git update-index --assume-unchanged private/logs/spamx.log
+# git update-index --assume-unchanged private/logs/404.log
 # git update-index --assume-unchanged public_html/backend/glfusion.rss
 # git ls-files -v | grep '^[[:lower:]]'
 #
@@ -32,6 +33,7 @@ style.cache.css
 js.cache.js
 sitemap.xml
 mobile.xml
+custom_config.js
 
 # Data directories
 private/data/
