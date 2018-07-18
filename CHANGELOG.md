@@ -1,5 +1,5 @@
 ## v1.8.0 (Unreleased)
-  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0) and phpfastcache (6.1.3)
+  - Updated external libs: phpfastcache (6.1.3)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
@@ -14,6 +14,11 @@
   - Minimum PHP version is now 5.6.0
 
 ## v1.7.5 (unreleased)
+  - Updated external libs: twofactorauth (1.6.5) and php-archive (1.1.0)
+  - Display Poll List / error when poll id is invalid
+  - Fixed error where FileMgmt did not always remove associated comments when download was deleted
+  - Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
+  - Add Conf value for story sort on index page #256
   - Update CKEditor to v4.10.0
   - fusionrescue can now disable two-factor authentication
   - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
