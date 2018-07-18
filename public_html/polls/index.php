@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Display poll results and past polls.                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
+// | Copyright (C) 2009-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -145,13 +145,18 @@ if (isset($_REQUEST['msg'])) {
     $msg = COM_applyFilter($_REQUEST['msg'], true);
 }
 
-if (isset($pid)) {
+if ($pid != '') {
     $questions_sql = "SELECT question,qid FROM {$_TABLES['pollquestions']} "
     . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
     $questions = DB_query($questions_sql);
     $nquestions = DB_numRows($questions);
+
+    if ( $nquestions == 0 ) {
+        COM_setMsg($LANG_POLLS['deny_msg'],'error',true);
+        $page .= POLLS_pollList ();
+    }
 }
-if (empty($pid)) {
+if (empty($pid) || $pid == '') {
     $title = $LANG_POLLS['pollstitle'];
     if ($msg > 0) {
         $page .= COM_showMessage($msg, 'polls');

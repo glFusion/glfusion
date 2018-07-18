@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Display Poll List / error when poll id is invalid
   - Fixed error where FileMgmt did not always remove associated comments when download was deleted
   - Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
   - Add Conf value for story sort on index page #256
