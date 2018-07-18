@@ -1,4 +1,5 @@
 ## v1.8.0 (Unreleased)
+  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0) and phpfastcache (6.1.3)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
