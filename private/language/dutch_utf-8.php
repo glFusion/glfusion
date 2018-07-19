@@ -1427,7 +1427,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Logbestanden',
     'view' => 'Bekijk Logbestand',
     'clear' => 'Maak Logbestand leeg',
-    'log_file' => 'Logbestand'
+    'log_file' => 'Logbestand',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################

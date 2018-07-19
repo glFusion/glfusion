@@ -14,6 +14,9 @@
 {!if log_data}
 <p>
 	<strong>{lang_logfile} : {log}</strong>
+	{!if lang_too_big}
+	  <span class="uk-text-warning uk-text-bold">{lang_too_big}</span>
+  {!endif}
 </p>
 <pre class="uk-scrollable-text" style="height:600px !important;">
 <code>{log_data}</code>

@@ -1425,7 +1425,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Protokolle',
     'view' => 'Protokoll anzeigen',
     'clear' => 'Protokoll löschen',
-    'log_file' => 'Protokolldatei'
+    'log_file' => 'Protokolldatei',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################

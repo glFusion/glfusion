@@ -1421,7 +1421,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Sucesos',
     'view' => 'Ver Archivo de Sucesos',
     'clear' => 'Limpiar Archivo de Sucesos',
-    'log_file' => 'Archivo de Sucesos'
+    'log_file' => 'Archivo de Sucesos',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################
