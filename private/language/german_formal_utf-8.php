@@ -2512,6 +2512,7 @@ $LANG_ENVCHK = array(
     'gd_v1' => 'GDlib-Erweiterung-v1 ist installiert - Diese Version unterstützt die JPG-Bildbearbeitung nicht vollständig, daher könnten hiermit Qualitätsprobleme auftreten.',
     'gettext_extension' => 'Gettext-Erweiterung',
     'graphics' => 'Grafik-Bibliothek',
+    'hash_extension' => 'Message Digest (hash) Extension',
     'hide_phpinfo' => 'PHP-Info ausblenden',
     'hosting_env' => 'Hosting-Umgebung prüfen',
     'im_not_found' => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
@@ -2638,7 +2639,8 @@ $LANG_CONFIG = array(
     'title' => 'Konfiguration',
     'disable' => 'Deaktivieren',
     'enable' => 'Aktivieren',
-    'search' => 'Konfiguration durchsuchen'
+    'search' => 'Konfiguration durchsuchen',
+    'hash_ext_missing' => 'Missing Message Digest (Hash) Extension - Two Factor Authentication cannot be enabled.'
 );
 
 $LANG_configsections['Core'] = array(

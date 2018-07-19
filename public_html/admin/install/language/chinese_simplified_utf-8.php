@@ -239,6 +239,7 @@ $LANG_INSTALL = array(
     'filter_extension' => 'Filter Extension',
     'gd_extension' => 'GD Graphics Extension',
     'gettext_extension' => 'Gettext Extension',
+    'hash_extension' => 'Message Digest (hash) Extension',
     'json_extension' => 'Json Extension',
     'mbstring_extension' => 'Multibyte (mbstring) Extension',
     'mysqli_extension' => 'MySQLi Extension',

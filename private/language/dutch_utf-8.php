@@ -2514,6 +2514,7 @@ $LANG_ENVCHK = array(
     'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
     'gettext_extension' => 'Gettext Extension',
     'graphics' => 'Graphics Library',
+    'hash_extension' => 'Message Digest (hash) Extension',
     'hide_phpinfo' => 'Hide Full PHP Info',
     'hosting_env' => 'Hosting Environment Check',
     'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
@@ -2640,7 +2641,8 @@ $LANG_CONFIG = array(
     'title' => 'Instellingen',
     'disable' => 'Klik om deze optie uit te schakelen',
     'enable' => 'Inschakelen',
-    'search' => 'Search Configuration'
+    'search' => 'Search Configuration',
+    'hash_ext_missing' => 'Missing Message Digest (Hash) Extension - Two Factor Authentication cannot be enabled.'
 );
 
 $LANG_configsections['Core'] = array(

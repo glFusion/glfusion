@@ -59,6 +59,7 @@ function _checkEnvironment()
         array('extension' => 'date',    'fail' => 1),
         array('extension' => 'filter',  'fail' => 1),
         array('extension' => 'gettext', 'fail' => 0),
+        array('extension' => 'hash',    'fail' => 0),
         array('extension' => 'json',    'fail' => 1),
         array('extension' => 'mbstring','fail' => 0),
         array('extension' => 'openssl', 'fail' => 0),
@@ -249,9 +250,7 @@ function _checkEnvironment()
     $T->set_var('mysql_version',$mysql_version);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $classCounter++;
-
     $T->set_block('page','libs','lib');
-
     foreach ( $required_extensions AS $extension ) {
         if ( $extension['fail'] ) {
             $note = $LANG_ENVCHK[$extension['extension'].'_extension'] .' '.$LANG_ENVCHK['is_required'];

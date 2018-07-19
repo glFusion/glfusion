@@ -71,7 +71,7 @@ function edituser()
         foreach ($LANG_MYACCOUNT as $id => $label) {
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
                 continue;
-            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) ) {
+            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) || !function_exists('hash_hmac') ) {
                 continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
@@ -260,8 +260,7 @@ function edituser()
     $preferences->set_var('plugin_namepass_pwdemail',PLG_profileEdit($_USER['uid'],'namepass','pwdemail'));
     $preferences->set_var('plugin_namepass',PLG_profileEdit($_USER['uid'],'namepass'));
 
-
-    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] == 1 ) {
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] == 1 && function_exists('hash_hmac')) {
         $outputHandler = outputHandler::getInstance();
         $outputHandler->addLinkScript($_CONF['site_url'].'/javascript/twofactor.js');
         $tfaMaster = new \Template ($_CONF['path_layout'] . 'preferences');
@@ -295,6 +294,7 @@ function edituser()
         }
         $tfaMaster->set_var(array(
             'lang_disable_warning'  => $LANG_TFA['disable_warning'],
+            'lang_ajax_error'       => $LANG_TFA['ajax_error'],
         ));
         $tfaMaster->set_var('content',$tfaPanelContent);
         $tfaPanel = $tfaMaster->finish($tfaMaster->parse('output','tfa_panel'));
