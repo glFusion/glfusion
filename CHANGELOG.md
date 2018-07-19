@@ -1,5 +1,5 @@
 ## v1.8.0 (Unreleased)
-  - Updated external libs: phpfastcache (6.1.3)
+  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (6.1.3)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
@@ -14,7 +14,7 @@
   - Minimum PHP version is now 5.6.0
 
 ## v1.7.5 (unreleased)
-  - Updated external libs: twofactorauth (1.6.5) and php-archive (1.1.0)
+  - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid
   - Fixed error where FileMgmt did not always remove associated comments when download was deleted
   - Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
