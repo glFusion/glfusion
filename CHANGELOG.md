@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Improved environment validation for required extensions
   - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid
   - Fixed error where FileMgmt did not always remove associated comments when download was deleted
