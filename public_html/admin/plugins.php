@@ -773,6 +773,7 @@ function PLUGINS_processUpload()
         $upload->setAllowedMimeTypes (array (
                 'application/x-gzip'=> '.gz,.gzip,tgz',
                 'application/zip'   => '.zip',
+                'application/octet-stream' => '.gz,.gzip,.tgz,.zip,.tar,.tar.gz',
                 'application/x-tar' => '.tar,.tar.gz,.gz',
                 'application/x-gzip-compressed' => '.tar.gz,.tgz,.gz',
                 ));
