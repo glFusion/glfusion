@@ -525,7 +525,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
     // build the $_USER array
     $userdata = SESS_getUserDataFromId($uid);
 
-    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($userdata['tfa_enabled']) && $userdata['tfa_enabled'] && $authenticated == 0 ) {
+    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($userdata['tfa_enabled']) && $userdata['tfa_enabled'] && $authenticated == 0 && function_exists('hash_hmac')) {
         if ( !SESS_isSet('login_referer')) {
             if ( isset($_SERVER['HTTP_REFERER'])) {
                 SESS_setVar('login_referer',$_SERVER['HTTP_REFERER']);

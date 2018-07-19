@@ -146,6 +146,9 @@ if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
 $_CONF['_now'] = new Date('now',$_CONF['timezone']);
+if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] ) {
+    if (!function_exists('hash_hmac')) $_CONF['enable_twofactor'] = false;
+}
 
 require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs

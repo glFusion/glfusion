@@ -58,6 +58,7 @@ function _checkEnvironment()
         array('extension' => 'date',    'fail' => 1),
         array('extension' => 'filter',  'fail' => 1),
         array('extension' => 'gettext', 'fail' => 0),
+        array('extension' => 'hash',    'fail' => 0),
         array('extension' => 'json',    'fail' => 1),
         array('extension' => 'mbstring','fail' => 0),
         array('extension' => 'openssl', 'fail' => 0),

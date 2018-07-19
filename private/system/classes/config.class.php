@@ -1651,6 +1651,24 @@ function configmanager_path_to_jhead_validate($value)
 * @return   string      validated ata
 *
 */
+function configmanager_enable_twofactor_validate($value)
+{
+    global $LANG_CONFIG;
+    if ($value == 1) {
+        if (!function_exists('hash_hmac')) {
+            COM_setMsg($LANG_CONFIG['hash_ext_missing'],'error',true);
+            $value = 0;
+        }
+    }
+    return $value;
+}
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
 function configmanager_path_to_jpegtrans_validate($value)
 {
     $value = trim($value);
