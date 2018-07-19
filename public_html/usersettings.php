@@ -71,7 +71,7 @@ function edituser()
         foreach ($LANG_MYACCOUNT as $id => $label) {
             if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
                 continue;
-            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) || !function_exists('hash_hmac') ) {
+            } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 || !function_exists('hash_hmac')) ) {
                 continue;
             } else {
                 $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
