@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion log viewer.                                                     |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -34,6 +34,8 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+define('MAX_LOG_SIZE',262144); // 256kb
 
 USES_lib_admin();
 
@@ -93,7 +95,29 @@ if ( isset($_POST['clearlog']) ) {
     fclose($fd);
     $_POST['viewlog'] = 1;
 }
-$T->set_var('log_data', @htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt()));
+
+$fs = filesize ( $_CONF['path_log'] . $log );
+
+if ( $fs > MAX_LOG_SIZE ) {
+    if ( $fs > 1048576) {
+        $measure = 'mb';
+        $divider = 1024;
+    } else {
+        $measure = 'kb';
+        $divider = 1;
+    }
+    $T->set_var('lang_too_big',sprintf($LANG_LOGVIEW['too_large'], (($fs / 1024) / $divider),$measure));
+    $buffer = '';
+    $seekPosition = $fs - MAX_LOG_SIZE;
+    $fp = fopen($_CONF['path_log'] . $log, 'r');
+    fseek($fp, $seekPosition);
+    while(!feof($fp)) {
+        $buffer .= fread($fp, MAX_LOG_SIZE);
+    }
+} else {
+    $buffer = file_get_contents($_CONF['path_log'] . $log);
+}
+$T->set_var('log_data', @htmlentities($buffer,ENT_NOQUOTES,COM_getEncodingt()));
 
 $T->set_var(array(
     'log_options'   => $logOption,

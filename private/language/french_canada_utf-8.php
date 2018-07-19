@@ -1424,7 +1424,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Journaux',
     'view' => 'Voir Fichier Journal',
     'clear' => 'Fichier Effacer Journal',
-    'log_file' => 'Fichier Journal'
+    'log_file' => 'Fichier Journal',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################

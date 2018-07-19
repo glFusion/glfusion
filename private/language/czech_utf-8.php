@@ -1420,7 +1420,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Logy',
     'view' => 'Prohlédnout Log soubor',
     'clear' => 'Vyčistit log',
-    'log_file' => 'Log soubor'
+    'log_file' => 'Log soubor',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################

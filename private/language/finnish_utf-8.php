@@ -1423,7 +1423,8 @@ $LANG_LOGVIEW = array(
     'logs' => 'Logit',
     'view' => 'Katso Logi Tiedosto',
     'clear' => 'Tyhjenn&auml; Logi Tiedosto',
-    'log_file' => 'Logi Tiedosto'
+    'log_file' => 'Logi Tiedosto',
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
 );
 
 ###############################################################################
