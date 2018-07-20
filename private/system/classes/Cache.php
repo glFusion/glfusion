@@ -99,7 +99,7 @@ final class Cache
                 break;
 
             case 'memcached' :
-                $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcached\Config([
+                $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
                     'host' =>$_CONF['cache_host'],
                     'port' => (int) $_CONF['cache_port'],
                     'servers' => [
