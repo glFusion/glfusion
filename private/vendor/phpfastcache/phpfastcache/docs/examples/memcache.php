@@ -7,24 +7,23 @@
  *
  * For full copyright and license information, please see the docs/CREDITS.txt file.
  *
- * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> http://www.phpfastcache.com
+ * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> https://www.phpfastcache.com
  * @author Georges.L (Geolim4)  <contact@geolim4.com>
  *
  */
 
-use phpFastCache\CacheManager;
+use Phpfastcache\CacheManager;
+use Phpfastcache\Drivers\Memcache\Config;
 
 // Include composer autoloader
 require __DIR__ . '/../../src/autoload.php';
 
-$InstanceCache = CacheManager::getInstance('memcache', ['servers' => [
-  [
+$InstanceCache = CacheManager::getInstance('memcache',new Config([
     'host' =>'127.0.0.1',
     'port' => 11211,
-      // 'sasl_user' => false, // optional
-      // 'sasl_password' => false // optional
-  ],
-]]);
+    // 'sasl_user' => false, // optional
+    // 'sasl_password' => false // optional
+]));
 
 /**
  * In case you need to enable compress_data option:

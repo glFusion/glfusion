@@ -7,28 +7,24 @@
  *
  * For full copyright and license information, please see the docs/CREDITS.txt file.
  *
- * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> http://www.phpfastcache.com
+ * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> https://www.phpfastcache.com
  * @author Georges.L (Geolim4)  <contact@geolim4.com>
  *
  */
 
-use phpFastCache\CacheManager;
+use Phpfastcache\CacheManager;
+use Phpfastcache\Drivers\Couchbase\Config;
 
 // Include composer autoloader
 require __DIR__ . '/../../vendor/autoload.php';
 
-$InstanceCache = CacheManager::getInstance('couchbase', [
+$InstanceCache = CacheManager::getInstance('couchbase', new Config([
   'host' => 'your-couchbase-host',
-  'port' => 8091,
+  'port' => '8091',
   'username' => 'your-couchbase-username',
   'password' => 'your-couchbase-password',
-  'buckets' => [
-    [
-      'bucket' => 'default', // The bucket name, generally "default" by default
-      'password' => '' // The bucket password if there is
-    ],
-  ]
-]);
+  'bucketName' => 'default' // The bucket name, generally "default" by default
+]));
 
 /**
  * Try to get $products from Caching First
