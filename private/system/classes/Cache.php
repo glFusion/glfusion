@@ -64,13 +64,15 @@ final class Cache
     {
         global $_CONF;
 
+        $success = true;
+
         // validations
         if (!isset($_CONF['cache_driver'])) $_CONF['cache_driver'] = 'files';
         if (!isset($_CONF['cache_host'])) $_CONF['cache_host'] = '127.0.0.1';
         if (!isset($_CONF['cache_port'])) $_CONF['cache_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
-        if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = 'password';
-        if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = 'glfusion';
-        if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 60;
+        if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = '';
+        if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = '0';
+        if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 10;
 
         $validArray = configmanager_select_cache_driver_helper();
         if (!in_array($_CONF['cache_driver'],$validArray)) {
@@ -84,32 +86,43 @@ final class Cache
         }
 
         switch ($_CONF['cache_driver']) {
+
             case 'memcache' :
-                $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
-                    'host' =>$_CONF['cache_host'],
-                    'port' => (int) $_CONF['cache_port'],
-                    'servers' => [
-                        [
-                        'host' => $_CONF['cache_host'],
-                        'port' => (int) $_CONF['cache_port']
+                try {
+                    $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
+                        'host' =>$_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port'],
+                        'servers' => [
+                            [
+                            'host' => $_CONF['cache_host'],
+                            'port' => (int) $_CONF['cache_port'],
+                            ],
                         ],
-                    ],
-                    'itemDetailedDate' => true
-                ]));
+                        'itemDetailedDate' => true
+                    ]));
+                } catch (\Phpfastcache\Exceptions\PhpfastcacheDriverException $e) {
+                    $success = false;
+//                    COM_handleError(1, 'Memcache Server is not reachable', __FILE__, __LINE__, 'Unable to connect');
+                }
                 break;
 
             case 'memcached' :
-                $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
-                    'host' =>$_CONF['cache_host'],
-                    'port' => (int) $_CONF['cache_port'],
-                    'servers' => [
-                        [
-                        'host' => $_CONF['cache_host'],
-                        'port' => (int) $_CONF['cache_port']
+                try {
+                    $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
+                        'host' =>$_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port'],
+                        'servers' => [
+                            [
+                            'host' => $_CONF['cache_host'],
+                            'port' => (int) $_CONF['cache_port']
+                            ],
                         ],
-                    ],
-                    'itemDetailedDate' => true
-                ]));
+                        'itemDetailedDate' => true
+                    ]));
+                } catch (\Phpfastcache\Exceptions\PhpfastcacheDriverException $e) {
+                    $success = false;
+//                    COM_handleError(1, 'Memcached Server is not reachable', __FILE__, __LINE__, 'Unable to connect');
+                }
                 break;
 
             case 'redis' :
@@ -118,15 +131,18 @@ final class Cache
                     $redis = new \Redis();
                     $redis->connect($_CONF['cache_host'], $_CONF['cache_port']);
                 } catch(\RedisException $e) {
-                    COM_handleError(1, 'Redis Server is not reachable', __FILE__, __LINE__, 'Unable to connect');
+                    $success = false;
+//                    COM_handleError(1, 'Redis Server is not reachable', __FILE__, __LINE__, 'Unable to connect');
                 }
-                $this->internalCacheInstance = CacheManager::getInstance('redis', new \Phpfastcache\Drivers\Redis\Config([
-                    'host' =>$_CONF['cache_host'],
-                    'port' => (int) $_CONF['cache_port'],
-                    'database' => (int) $_CONF['cache_database'],
-                    'password' => $_CONF['cache_password'],
-                    'itemDetailedDate' => true
-                ]));
+                if ($success == true) {
+                    $this->internalCacheInstance = CacheManager::getInstance('redis', new \Phpfastcache\Drivers\Redis\Config([
+                        'host' =>$_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port'],
+                        'database' => (int) $_CONF['cache_database'],
+                        'password' => $_CONF['cache_password'],
+                        'itemDetailedDate' => true
+                    ]));
+                }
                 break;
 
             case 'apcu' :
@@ -152,9 +168,16 @@ final class Cache
                 break;
         }
 
-        $_CONF['cache_drive'] = $this->getDriverName();
 
-
+        if ($success == false) {
+            // fallback to files
+            CacheManager::setDefaultConfig(new Config([
+              "path" => $_CONF['path'].'data/cache/',
+              "itemDetailedDate" => true
+            ]));
+            $this->internalCacheInstance = CacheManager::getInstance('files');
+//            $_CONF['cache_driver'] = 'files';
+        }
     }
 
 
