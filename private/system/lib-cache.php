@@ -421,7 +421,7 @@ function configmanager_select_cache_driver_helper($index = '')
     if (extension_loaded('apcu')) {
         $retval['APCU'] = 'apcu';
     }
-    if (extension_loaded('memcache')) {
+    if (extension_loaded('memcache') && PHP_OS == 'WINNT') {
         $retval['Memcache'] = 'memcache';
     }
     if (extension_loaded('memcached')) {
