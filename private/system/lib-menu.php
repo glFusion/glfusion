@@ -110,11 +110,9 @@ function initMenu($menuname, $skipCache=false) {
             }
         }
         $menu->getElements();
-
-        $cacheMenu = serialize($menu);
-
-        $c->set($key,$cacheMenu,'menu');
     }
+    $cacheMenu = serialize($menu);
+    $c->set($key,$cacheMenu,'menu');
 
     return $menu;
 }
@@ -149,12 +147,11 @@ function assembleMenu($name, $skipCache=false) {
     if ( $menuObject != NULL ) {
         $menuData = $menuObject->_parseMenu();
         $menuData['type'] = $menuObject->type;
-        $cacheMenu = serialize($menuData);
-        if ( $skipCache == false ) {
-            $c->set($key,$cacheMenu,'menu');
-        }
     }
-
+    $cacheMenu = serialize($menuData);
+    if ( $skipCache == false ) {
+        $c->set($key,$cacheMenu,'menu');
+    }
     return $menuData;
 }
 
@@ -205,17 +202,21 @@ function displayMenu( $menuName, $skipCache=false ) {
     if ( $skipCache == false ) {
         $c = glFusion\Cache::getInstance();
         $key = 'menufile_'.$menuName.'__'.$c->securityHash(true,true);
+
         if ($c->has($key)) {
             return $c->get($key);
         }
     }
     $structure = assembleMenu($menuName, $skipCache);
     if ( $structure == NULL ) {
+        if ( $skipCache == false ) {
+            $c->set($key,$retval,'menu');
+        }
         return $retval;
     }
 
     $menuType = $structure['type'];
-//    $menuType = $structure->type;
+
     unset($structure['type']);
 
     $T = new Template( $_CONF['path_layout'].'/menu/');
@@ -262,8 +263,9 @@ function displayMenu( $menuName, $skipCache=false ) {
     $T->parse('output','page');
     $retval = $T->finish($T->get_var('output'));
 
-    if ( $skipCache == false )
+    if ( $skipCache == false ) {
         $c->set($key,$retval,'menu');
+    }
 
     return $retval;
 }
