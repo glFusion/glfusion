@@ -3795,9 +3795,9 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-     array(
-    	'name' => 'cache_password',
-    	'default_value' => '',
+    array(
+    	'name' => 'cache_timeout',
+    	'default_value' => '5',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
@@ -3806,10 +3806,11 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+// redis info
     array(
-    	'name' => 'cache_database',
-    	'default_value' => '0',
-    	'type' => 'text',
+    	'name' => 'cache_redis_info',
+    	'default_value' => '',
+    	'type' => 'fset',
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
@@ -3818,13 +3819,71 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'cache_timeout',
-    	'default_value' => '5',
+    	'name' => 'cache_redis_socket',
+    	'default_value' => '',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 60,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_redis_password',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 70,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_redis_database',
+    	'default_value' => '0',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 80,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+// memcache info
+    array(
+    	'name' => 'cache_memcached_info',
+    	'default_value' => '',
+    	'type' => 'fset',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 90,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_memcached_username',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 100,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'cache_memcached_password',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

@@ -229,19 +229,19 @@ function _checkEnvironment()
     $cDriver = strtolower($c->getDriverName());
 
     if ($cDriver != $_CONF['cache_driver']) {
-        $T->set_var('item', 'Cache Driver');
+        $T->set_var('item', $LANG_ENVCHK['cache_driver']);
         $T->set_var('status', $cDriver);
         $T->set_var('class', 'tm-fail');
         $T->set_var('recommended', '');
-        $T->set_var('notes','Using files drivers as fallback due to error with configured driver: ' .$_CONF['cache_driver']);
+        $T->set_var('notes',$LANG_ENVCHK['cache_driver_error'].$_CONF['cache_driver']);
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('env','envs',true);
     } else {
-        $T->set_var('item', 'Cache Driver');
+        $T->set_var('item', $LANG_ENVCHK['cache_driver']);
         $T->set_var('status', $cDriver);
         $T->set_var('class', 'tm-pass');
         $T->set_var('recommended', '');
-        $T->set_var('notes','');
+        $T->set_var('notes',$LANG_ENVCHK['cache_driver_ok']);
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('env','envs',true);
     }

@@ -2485,6 +2485,9 @@ $LANG_AM = array (
 # admin/envcheck.php - environment check
 $LANG_ENVCHK = array(
     'bypass_note'               => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
+    'cache_driver'              => 'Cache Driver',
+    'cache_driver_error'        => 'Using files drivers as fallback due to error with configured driver: ',
+    'cache_driver_ok'           => 'Caching Backend is up and operational',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
     'ctype_extension'           => 'Ctype Extension',
     'curl_extension'            => 'Curl Extension',
@@ -2940,9 +2943,17 @@ $LANG_confignames['Core'] = array(
     'cache_driver' => 'Cache Driver',
     'cache_host' => 'Cache Server',
     'cache_port' => 'Cache Server Port',
-    'cache_password' => 'Password (needed for Redis driver)',
-    'cache_database' => 'Database (needed for Redis driver)',
     'cache_timeout' => 'Connection Timeout',
+
+    'cache_redis_socket' => 'Path / Filename to Redis Socket',
+    'cache_redis_password' => 'Redis Password if required',
+    'cache_redis_database' => 'Redis Database #',
+
+    'cache_memcached_username' => 'SASL Username for Memcached',
+    'cache_memcached_password' => 'SASL Password for Memcached',
+
+    'cache_redis_info' => 'Redis Driver Attributes',
+    'cache_memcached_info' => 'Memcached Driver Attributes',
 );
 
 $LANG_configsubgroups['Core'] = array(
