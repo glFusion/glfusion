@@ -415,7 +415,6 @@ function configmanager_select_cache_driver_helper($index = '')
     $retval = array();
 
     $retval = array(
-        'Disabled'  => 'Devnull',
         'Files'     => 'files'
     );
     if (extension_loaded('apcu')) {
@@ -430,6 +429,9 @@ function configmanager_select_cache_driver_helper($index = '')
     if (extension_loaded('redis')) {
         $retval['Redis'] = 'redis';
     }
+
+    $retval['Disabled'] = 'Devnull';
+
     return $retval;
 }
 
