@@ -2944,14 +2944,11 @@ $LANG_confignames['Core'] = array(
     'cache_host' => 'Cache Server',
     'cache_port' => 'Cache Server Port',
     'cache_timeout' => 'Connection Timeout',
-
     'cache_redis_socket' => 'Path / Filename to Redis Socket',
-    'cache_redis_password' => 'Redis Password if required',
-    'cache_redis_database' => 'Redis Database #',
-
+    'cache_redis_password' => 'Redis Password',
+    'cache_redis_database' => 'Redis Database Index',
     'cache_memcached_username' => 'SASL Username for Memcached',
     'cache_memcached_password' => 'SASL Password for Memcached',
-
     'cache_redis_info' => 'Redis Driver Attributes',
     'cache_memcached_info' => 'Memcached Driver Attributes',
 );
