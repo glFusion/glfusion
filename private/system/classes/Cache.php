@@ -112,7 +112,7 @@ final class Cache
 
             case 'memcached' :
                 $servers = array();
-                if ($_CONF['cache_memcached_usernmae'] != '') {
+                if ($_CONF['cache_memcached_username'] != '') {
                     $servers['saslUsername'] = $_CONF['cache_memcached_username'];
                 }
                 if ($_CONF['cache_memcached_password'] != '') {
