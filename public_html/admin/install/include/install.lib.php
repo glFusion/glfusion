@@ -568,7 +568,7 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
  * @param   array $_SQL   Array of queries
  *
  */
-function INST_updateDB($_SQL,$use_innodb)
+function INST_updateDB($_SQL,$use_innodb=0)
 {
     global $_DB, $_DB_dbms;
 
