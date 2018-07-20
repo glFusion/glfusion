@@ -88,6 +88,26 @@ final class Cache
                 $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
                     'host' =>$_CONF['cache_host'],
                     'port' => (int) $_CONF['cache_port'],
+                    'servers' => [
+                        [
+                        'host' => $_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port']
+                        ],
+                    ],
+                    'itemDetailedDate' => true
+                ]));
+                break;
+
+            case 'memcached' :
+                $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcached\Config([
+                    'host' =>$_CONF['cache_host'],
+                    'port' => (int) $_CONF['cache_port'],
+                    'servers' => [
+                        [
+                        'host' => $_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port']
+                        ],
+                    ],
                     'itemDetailedDate' => true
                 ]));
                 break;
@@ -130,9 +150,11 @@ final class Cache
                 ]));
                 $this->internalCacheInstance = CacheManager::getInstance('Devnull');
                 break;
-
-
         }
+
+        $_CONF['cache_drive'] = $this->getDriverName();
+
+
     }
 
 
@@ -469,6 +491,11 @@ final class Cache
         return $hash;
     }
 
+    public function getDriverName()
+    {
+        return $this->internalCacheInstance->getDriverName();
+    }
+
     /**
      * @param string $str
      * @return string
@@ -478,6 +505,7 @@ final class Cache
         $invalid = array('{','}','(',')','/','\\','@',':');
         return str_replace($invalid,'_',$str);
     }
+
 }
 
 /* notes

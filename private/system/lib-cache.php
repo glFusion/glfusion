@@ -410,6 +410,8 @@ function CTL_clearCache($plugin='')
 
 function configmanager_select_cache_driver_helper($index = '')
 {
+    global $_CONF;
+
     $retval = array();
 
     $retval = array(
@@ -422,15 +424,12 @@ function configmanager_select_cache_driver_helper($index = '')
     if (extension_loaded('memcache')) {
         $retval['Memcache'] = 'memcache';
     }
-//    if (extension_loaded('memcached')) {
-//        $retval['Memcached'] = 'memcached';
-//    }
+    if (extension_loaded('memcached')) {
+        $retval['Memcached'] = 'memcached';
+    }
     if (extension_loaded('redis')) {
         $retval['Redis'] = 'redis';
     }
-//    if (extension_loaded('wincache')) {
-//        $retval['Wincache'] = 'wincache';
-//    }
     return $retval;
 }
 
