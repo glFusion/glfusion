@@ -821,7 +821,7 @@ class config
 
         $blocks = array('delete-button', 'text-element','passwd-element',
                         'placeholder-element','select-element', 'list-element',
-                        'unset-param','keyed-add-button', 'unkeyed-add-button','text-area');
+                        'unset-param','keyed-add-button', 'unkeyed-add-button','text-area','break');
 
         if ( is_array($blocks) ) {
             foreach ($blocks as $block) {
@@ -875,6 +875,8 @@ class config
         }
         if ($type == "unset") {
             return $t->finish($t->parse('output', 'unset-param'));
+        } elseif ($type == "fset") {
+            return $t->finish($t->parse('output', 'fset'));
         } elseif ($type == "text") {
             return $t->finish($t->parse('output', 'text-element'));
         } elseif ($type == "textarea") {
