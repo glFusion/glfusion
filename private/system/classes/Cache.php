@@ -87,7 +87,7 @@ final class Cache
             case 'memcache' :
                 $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
                     'host' =>$_CONF['cache_host'],
-                    'port' => $_CONF['cache_port'],
+                    'port' => (int) $_CONF['cache_port'],
                     'itemDetailedDate' => true
                 ]));
                 break;
@@ -102,8 +102,8 @@ final class Cache
                 }
                 $this->internalCacheInstance = CacheManager::getInstance('redis', new \Phpfastcache\Drivers\Redis\Config([
                     'host' =>$_CONF['cache_host'],
-                    'port' => $_CONF['cache_port'],
-                    'database' => $_CONF['cache_database'],
+                    'port' => (int) $_CONF['cache_port'],
+                    'database' => (int) $_CONF['cache_database'],
                     'password' => $_CONF['cache_password'],
                     'itemDetailedDate' => true
                 ]));
