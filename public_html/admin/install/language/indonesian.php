@@ -122,7 +122,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Path ke private/ directory',
     'path_settings' => 'Seting Path',
     'perform_upgrade' => 'Lakukan Upgrade',
-    'php_req_version' => 'glFusion membutuhkan PHP versi 5.3.3 atau lebih baru.',
+    'php_req_version' => 'glFusion membutuhkan PHP versi 7.1.0 atau lebih baru.',
     'php_settings' => 'Setting PHP',
     'php_version' => 'Versi PHP',
     'php_warning' => 'Jika ada item di bawah ini yang ditandai <span class="no">merah</span>, kemungkinan anda mengalami masalah dengan situs glFusion anda.  Berkonsultasilah dengan hosting provider anda untuk informasi pada perubahan Setting PHP ini.',

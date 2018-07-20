@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.6 or greater
-if (version_compare(PHP_VERSION,'5.6.0','<')) {
-    die('glFusion requires PHP version 5.6.0 or greater.');
+if (version_compare(PHP_VERSION,'7.1.0','<')) {
+    die('glFusion requires PHP version 7.1.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
