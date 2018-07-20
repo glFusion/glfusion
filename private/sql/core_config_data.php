@@ -3797,7 +3797,7 @@ $coreConfigData = array(
     ),
      array(
     	'name' => 'cache_password',
-    	'default_value' => 'password',
+    	'default_value' => '',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
@@ -3808,7 +3808,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'cache_database',
-    	'default_value' => 'glfusion',
+    	'default_value' => '0',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
@@ -3819,7 +3819,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'cache_timeout',
-    	'default_value' => '60',
+    	'default_value' => '5',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
