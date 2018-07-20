@@ -7,24 +7,23 @@
  *
  * For full copyright and license information, please see the docs/CREDITS.txt file.
  *
- * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> http://www.phpfastcache.com
+ * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> https://www.phpfastcache.com
  * @author Georges.L (Geolim4)  <contact@geolim4.com>
  *
  */
 
-use phpFastCache\CacheManager;
+use Phpfastcache\CacheManager;
+use Phpfastcache\Drivers\Memcached\Config;
 
 // Include composer autoloader
 require __DIR__ . '/../../vendor/autoload.php';
 
-$InstanceCache = CacheManager::getInstance('memcached', ['servers' => [
-  [
+$InstanceCache = CacheManager::getInstance('memcached', new Config([
     'host' =>'127.0.0.1',
     'port' => 11211,
       // 'sasl_user' => false, // optional
       // 'sasl_password' => false // optional
-  ],
-]]);
+]));
 
 /**
  * In case you need SASL authentication:

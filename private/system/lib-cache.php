@@ -410,16 +410,17 @@ function CTL_clearCache($plugin='')
 
 function configmanager_select_cache_driver_helper($index = '')
 {
+    global $_CONF;
+
     $retval = array();
 
     $retval = array(
-        'Disabled'  => 'Devnull',
         'Files'     => 'files'
     );
     if (extension_loaded('apcu')) {
         $retval['APCU'] = 'apcu';
     }
-    if (extension_loaded('memcache')) {
+    if (extension_loaded('memcache') && PHP_OS == 'WINNT') {
         $retval['Memcache'] = 'memcache';
     }
     if (extension_loaded('memcached')) {
@@ -428,9 +429,9 @@ function configmanager_select_cache_driver_helper($index = '')
     if (extension_loaded('redis')) {
         $retval['Redis'] = 'redis';
     }
-    if (extension_loaded('wincache')) {
-        $retval['Wincache'] = 'wincache';
-    }
+
+    $retval['Disabled'] = 'Devnull';
+
     return $retval;
 }
 

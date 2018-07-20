@@ -105,7 +105,7 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.0.0+');
+    $T->set_var('recommended','7.1.0+');
 
     $phpnotes = $LANG_ENVCHK['php_req_version'];
     if ( !_phpUpToDate() ) {
@@ -224,13 +224,27 @@ function _checkEnvironment()
     $classCounter++;
 
 // Cache Driver
-    $T->set_var('item', 'Cache Driver');
-    $T->set_var('status', $_CONF['cache_driver']);
-    $T->set_var('class', 'tm-pass');
-    $T->set_var('recommended', '');
-    $T->set_var('notes','Will fall back to using Files if primary driver unavailable');
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('env','envs',true);
+
+    $c = glFusion\Cache::getInstance();
+    $cDriver = strtolower($c->getDriverName());
+
+    if ($cDriver != $_CONF['cache_driver']) {
+        $T->set_var('item', $LANG_ENVCHK['cache_driver']);
+        $T->set_var('status', $cDriver);
+        $T->set_var('class', 'tm-fail');
+        $T->set_var('recommended', '');
+        $T->set_var('notes',$LANG_ENVCHK['cache_driver_error'].$_CONF['cache_driver']);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+    } else {
+        $T->set_var('item', $LANG_ENVCHK['cache_driver']);
+        $T->set_var('status', $cDriver);
+        $T->set_var('class', 'tm-pass');
+        $T->set_var('recommended', '');
+        $T->set_var('notes',$LANG_ENVCHK['cache_driver_ok']);
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('env','envs',true);
+    }
     $classCounter++;
 
     $T->set_block('page','libs','lib');

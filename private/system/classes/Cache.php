@@ -5,7 +5,7 @@
 *   @author     Mark R. Evans <mark@lglfusion.org>
 *   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
 *   @package    glFusion
-*   @version    0.0.1
+*   @version    0.0.2
 *   @license    http://opensource.org/licenses/gpl-2.0.php
 *               GNU Public License v2 or later
 *   @filesource
@@ -13,14 +13,17 @@
 
 namespace glFusion;
 
-use \phpFastCache\CacheManager;
-use \phpFastCache\Core\Item\ExtendedCacheItemInterface;
-use \phpFastCache\Core\Pool\ExtendedCacheItemPoolInterface;
-use \phpFastCache\Exceptions\phpFastCacheDriverCheckException;
-use \phpFastCache\Exceptions\phpFastCacheInvalidArgumentException;
-use \phpFastCache\Exceptions\phpFastCacheRootException;
-use \phpFastCache\Exceptions\phpFastCacheSimpleCacheException;
-use \Psr\SimpleCache\CacheInterface;
+use \Phpfastcache\CacheManager;
+use \Phpfastcache\Config\Config;
+use \Phpfastcache\Config\ConfigurationOption;
+
+
+use \Phpfastcache\Core\Item\ExtendedCacheItemInterface;
+use \Phpfastcache\Core\Pool\ExtendedCacheItemPoolInterface;
+use \Phpfastcache\Exceptions\{
+    PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException, PhpfastcacheRootException, PhpfastcacheSimpleCacheException
+};
+use \Phpfastcache\Helper\Psr\SimpleCache\CacheInterface;
 
 /**
  * Class Cache
@@ -57,40 +60,24 @@ final class Cache
     /**
      * constructor
      */
-    private  function __construct()
+    private function __construct()
     {
         global $_CONF;
+
+        $success = true;
 
         // validations
         if (!isset($_CONF['cache_driver'])) $_CONF['cache_driver'] = 'files';
         if (!isset($_CONF['cache_host'])) $_CONF['cache_host'] = '127.0.0.1';
         if (!isset($_CONF['cache_port'])) $_CONF['cache_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
-        if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = 'password';
-        if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = 'glfusion';
-        if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 60;
+        if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = '';
+        if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = '0';
+        if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 10;
 
         $validArray = configmanager_select_cache_driver_helper();
         if (!in_array($_CONF['cache_driver'],$validArray)) {
             $_CONF['cache_driver'] = 'files';
         }
-
-        $config = array(
-            'driver' => $_CONF['cache_driver'],
-            'host' => $_CONF['cache_host'],
-            'port' => $_CONF['cache_port'],
-            'password' => $_CONF['cache_password'],
-            'database' => $_CONF['cache_database'],
-            'servers' => array(
-                            0 => array('host' => $_CONF['cache_host'], 'port' => $_CONF['cache_port'])
-                         ),
-            'fallback' => 'files',
-            'path' => $_CONF['path'].'data/cache/',
-            'itemDetailedDate' => true
-        );
-
-		if ($_CONF['cache_driver'] != 'files') {
-			$config['path'] = '';
-		}
 
         if ($_CONF['cache_driver'] == 'files') {
             $this->namespace = '';
@@ -98,7 +85,122 @@ final class Cache
             $this->namespace = base_convert(md5($_CONF['site_name']), 10, 36);
         }
 
-        $this->internalCacheInstance = CacheManager::getInstance($_CONF['cache_driver'], $config);
+        switch ($_CONF['cache_driver']) {
+
+            case 'memcache' :
+
+                if ($_CONF['cache_memcached_username'] != '') {
+                    $servers['saslUsername'] = $_CONF['cache_memcached_username'];
+                }
+                if ($_CONF['cache_memcached_password'] != '') {
+                    $servers['saslPassword'] = $_CONF['cache_memcached_password'];
+                }
+                $servers['host'] = $_CONF['cache_host'];
+                $servers['port'] = $_CONF['cache_port'];
+
+                try {
+                    $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
+                        'host' =>$_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port'],
+                        'servers' => array($servers),
+                        'itemDetailedDate' => true
+                    ]));
+                } catch (\Phpfastcache\Exceptions\PhpfastcacheDriverException $e) {
+                    $success = false;
+                }
+                break;
+
+            case 'memcached' :
+                $servers = array();
+                if ($_CONF['cache_memcached_usernmae'] != '') {
+                    $servers['saslUsername'] = $_CONF['cache_memcached_username'];
+                }
+                if ($_CONF['cache_memcached_password'] != '') {
+                    $servers['saslPassword'] = $_CONF['cache_memcached_password'];
+                }
+                $servers['host'] = $_CONF['cache_host'];
+                $servers['port'] = (int) $_CONF['cache_port'];
+
+                try {
+                    $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
+                        'host' =>$_CONF['cache_host'],
+                        'port' => (int) $_CONF['cache_port'],
+                        'servers' => array($servers),
+                        'itemDetailedDate' => true
+                    ]));
+                } catch (\Phpfastcache\Exceptions\PhpfastcacheDriverException $e) {
+                    $success = false;
+                }
+                break;
+
+            case 'redis' :
+                if ($_CONF['cache_redis_socket'] != '') {
+                    $configInfo['path'] = $_CONF['cache_redis_socket'];
+                } else {
+                    $configInfo['host'] = $_CONF['cache_host'];
+                    $configInfo['port'] = (int) $_CONF['cache_port'];
+                    $configInfo['database'] = (int) $_CONF['cache_redis_database'];
+                }
+                if ($_CONF['cache_redis_password'] != '') {
+                    $configInfo['password'] = $_CONF['cache_redis_password'];
+                }
+                if ($_CONF['cache_timeout'] > 0) {
+                    $configInfo['timeout'] = (int) $_CONF['cache_timeout'];
+                }
+                $configInfo['itemDetailedDate'] = true;
+
+                try {
+                    $connected = true;
+                    $redis = new \Redis();
+                    if ($_CONF['cache_redis_socket'] != '') {
+                        $redis->connect($_CONF['cache_redis_socket']);
+                    } else {
+                        $redis->connect($_CONF['cache_host'], $_CONF['cache_port']);
+                    }
+                } catch(\RedisException $e) {
+                    $success = false;
+                }
+
+                if ($success == true) {
+                    $this->internalCacheInstance = CacheManager::getInstance('redis', new \Phpfastcache\Drivers\Redis\Config(
+                        $configInfo
+                    ));
+                }
+                break;
+
+            case 'apcu' :
+                $this->internalCacheInstance = CacheManager::getInstance('apcu',new \Phpfastcache\Drivers\Apcu\Config([
+                    'itemDetailedDate' => true
+                ]));
+                break;
+
+            case 'files' :
+                CacheManager::setDefaultConfig(new Config([
+                  "path" => $_CONF['path'].'data/cache/',
+                  "itemDetailedDate" => true
+                ]));
+                $this->internalCacheInstance = CacheManager::getInstance('files');
+                break;
+
+            case 'Devnull' :
+                CacheManager::setDefaultConfig(new Config([
+                  "path" => $_CONF['path'].'data/cache/',
+                  "itemDetailedDate" => true
+                ]));
+                $this->internalCacheInstance = CacheManager::getInstance('Devnull');
+                break;
+        }
+
+
+        if ($success == false) {
+            // fallback to files
+            CacheManager::setDefaultConfig(new Config([
+              "path" => $_CONF['path'].'data/cache/',
+              "itemDetailedDate" => true
+            ]));
+            $this->internalCacheInstance = CacheManager::getInstance('files');
+//            $_CONF['cache_driver'] = 'files';
+        }
     }
 
 
@@ -106,7 +208,7 @@ final class Cache
      * @param string $key
      * @param null $default
      * @return mixed|null
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function get($key, $default = null)
     {
@@ -123,8 +225,8 @@ final class Cache
             } else {
                 return $default;
             }
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
@@ -133,7 +235,7 @@ final class Cache
      * @param mixed $value
      * @param null $ttl
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function set($key, $value, $tag = '', $ttl = null)
     {
@@ -167,8 +269,8 @@ final class Cache
                 $cacheItem->addTag($tag);
             }
             return $this->internalCacheInstance->save($cacheItem);
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
@@ -176,7 +278,7 @@ final class Cache
      * @param string $key
      * @param string $tag
      * @return none
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function addTag($key, $tag)
     {
@@ -189,15 +291,15 @@ final class Cache
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
             $cacheItem->addTag($tag);
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
     /**
      * @param string $key
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function delete($key)
     {
@@ -206,21 +308,21 @@ final class Cache
 
         try {
             return $this->internalCacheInstance->deleteItem($key);
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
     /**
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function clear()
     {
         try {
             return $this->internalCacheInstance->clear();
         } catch (phpFastCacheRootException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
@@ -228,7 +330,7 @@ final class Cache
      * @param string[] $keys
      * @param null $default
      * @return \iterable
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function getMultiple($keys, $default = null)
     {
@@ -243,8 +345,8 @@ final class Cache
             return array_map(function (ExtendedCacheItemInterface $item) {
                 return $item->get();
             }, $this->internalCacheInstance->getItems($nsKeys));
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
@@ -252,7 +354,7 @@ final class Cache
      * @param string[] $values
      * @param null|int|\DateInterval $ttl
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function setMultiple($values, $ttl = null)
     {
@@ -273,15 +375,15 @@ final class Cache
                 unset($cacheItem);
             }
             return $this->internalCacheInstance->commit();
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
     /**
      * @param string[] $keys
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function deleteMultiple($keys)
     {
@@ -294,15 +396,15 @@ final class Cache
 
         try {
             return $this->internalCacheInstance->deleteItems($nsKeys);
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
     /**
      * @param string $key
      * @return bool
-     * @throws \phpFastCache\Exceptions\phpFastCacheSimpleCacheException
+     * @throws \phpFastCache\Exceptions\\Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException
      */
     public function has($key)
     {
@@ -315,8 +417,8 @@ final class Cache
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
             return $cacheItem->isHit() && !$cacheItem->isExpired();
-        } catch (phpFastCacheInvalidArgumentException $e) {
-            throw new phpFastCacheSimpleCacheException($e->getMessage(), null, $e);
+        } catch (PhpfastcacheInvalidArgumentException $e) {
+            throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
         }
     }
 
@@ -435,6 +537,11 @@ final class Cache
         return $hash;
     }
 
+    public function getDriverName()
+    {
+        return $this->internalCacheInstance->getDriverName();
+    }
+
     /**
      * @param string $str
      * @return string
@@ -444,6 +551,7 @@ final class Cache
         $invalid = array('{','}','(',')','/','\\','@',':');
         return str_replace($invalid,'_',$str);
     }
+
 }
 
 /* notes

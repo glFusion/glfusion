@@ -7,15 +7,15 @@
  *
  * For full copyright and license information, please see the docs/CREDITS.txt file.
  *
- * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> http://www.phpfastcache.com
+ * @author Khoa Bui (khoaofgod)  <khoaofgod@gmail.com> https://www.phpfastcache.com
  * @author Georges.L (Geolim4)  <contact@geolim4.com>
  *
  */
 
 namespace MyCustom\Project;
 
-use phpFastCache\Drivers\Files\Driver as FilesDriver;
-use phpFastCache\Proxy\phpFastCacheAbstractProxy;
+use Phpfastcache\Drivers\Files\Driver as FilesDriver;
+use Phpfastcache\Proxy\PhpfastcacheAbstractProxy;
 
 /**
  * Specific driver-based example
@@ -40,7 +40,7 @@ class extendedPhpFastCache extends FilesDriver
  * Class myCustomCacheClass
  * @package MyCustom\Project
  */
-class myCustomCacheClass extends phpFastCacheAbstractProxy
+class myCustomCacheClass extends PhpfastcacheAbstractProxy
 {
     public function __construct($driver = '', array $config = [])
     {

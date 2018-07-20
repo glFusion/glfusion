@@ -40,7 +40,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '5.6.0');
+    define('SUPPORTED_PHP_VER', '7.1.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.1.30');
@@ -568,7 +568,7 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
  * @param   array $_SQL   Array of queries
  *
  */
-function INST_updateDB($_SQL,$use_innodb)
+function INST_updateDB($_SQL,$use_innodb=0)
 {
     global $_DB, $_DB_dbms;
 

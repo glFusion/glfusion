@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.6 or greater
-if (version_compare(PHP_VERSION,'5.6.0','<')) {
-    die('glFusion requires PHP version 5.6.0 or greater.');
+if (version_compare(PHP_VERSION,'7.1.0','<')) {
+    die('glFusion requires PHP version 7.1.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
@@ -6087,6 +6087,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 function COM_rootDebugClean($array, $blank=false)
 {
     static $counter = 0;
+
+    if ( !is_array($array) ) return $array;
 
     $blankField = false;
     foreach ($array AS $key => $value ) {

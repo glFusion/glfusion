@@ -505,6 +505,70 @@
 					<dd>If this option is enabled (set to TRUE) all templates will be cached, which should improve performance of the web site. In some cases, caching could slow performance down. For example, if the disk access is slow on the web server or if the web server is accessing Windows shared drives, setting this option to FALSE may improve performance.</dd>
 				</dl>
 
+				<dl id="desc_cache_driver">
+					<dt>Cache Driver</dt>
+					<dd>
+					  Determines the caching backend to use. Options include Disabled: No caching. -- Files: Use local files to cache.  --  Memcache(d): Memcache Server  -- Redis: Redis Caching Server.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_host">
+					<dt>Cache Server</dt>
+					<dd>
+					  If your caching driver requires connecting to a server, enter the URL to the server. Typically Memcache(d) and Redis will require this field.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_port">
+					<dt>Cache Server Port</dt>
+					<dd>
+					  Enter the port the caching server listens on. Defaults for Memcache(d) is 11211 and for Redis is 6379.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_timeout">
+					<dt>Connection Timeout</dt>
+					<dd>
+					  If your caching backend supports a timeout period before returning an error - enter the lenght of the time out here. Default is 5 which generally does not need to be changed.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_redis_socket">
+					<dt>Path / Filename to Redis Socket</dt>
+					<dd>
+					  If you are using Redis as your caching backend and it allows Unix socket connections, enter the full path and filename of the Unix socket.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_redis_password">
+					<dt>Redis Password</dt>
+					<dd>
+					  If your Redis server requires a password to authenticate, enter it here. Generally this is left blank.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_redis_database">
+					<dt>Redis Database #</dt>
+					<dd>
+					  Redis generally supports up to 16 databases. Enter the database index number to use (0-15). Default is 0 and generally does not need to be changed.
+					</dd>
+				</dl>
+
+
+				<dl id="desc_cache_memcached_username">
+					<dt>SASL Username for Memcached</dt>
+					<dd>
+					  If you are using Memcached as your caching backend and it requires a username / password for authentication, enter the username here. Generally this is left blank.
+					</dd>
+				</dl>
+
+				<dl id="desc_cache_memcached_password">
+					<dt>SASL Password for Memcached</dt>
+					<dd>
+					  If you are using Memcached as your caching backend and it requires a username / password for authentication, enter the password here. Generally this is left blank.
+					</dd>
+				</dl>
+
 
 				<h2>Blocks</h2>
 				<h2>Admin Block</h2>
