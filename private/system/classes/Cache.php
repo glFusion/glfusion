@@ -5,7 +5,7 @@
 *   @author     Mark R. Evans <mark@lglfusion.org>
 *   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
 *   @package    glFusion
-*   @version    0.0.1
+*   @version    0.0.2
 *   @license    http://opensource.org/licenses/gpl-2.0.php
 *               GNU Public License v2 or later
 *   @filesource
@@ -103,6 +103,8 @@ final class Cache
                 $this->internalCacheInstance = CacheManager::getInstance('redis', new \Phpfastcache\Drivers\Redis\Config([
                     'host' =>$_CONF['cache_host'],
                     'port' => $_CONF['cache_port'],
+                    'database' => $_CONF['cache_database'],
+                    'password' => $_CONF['cache_password'],
                     'itemDetailedDate' => true
                 ]));
                 break;
@@ -120,6 +122,16 @@ final class Cache
                 ]));
                 $this->internalCacheInstance = CacheManager::getInstance('files');
                 break;
+
+            case 'Devnull' :
+                CacheManager::setDefaultConfig(new Config([
+                  "path" => $_CONF['path'].'data/cache/',
+                  "itemDetailedDate" => true
+                ]));
+                $this->internalCacheInstance = CacheManager::getInstance('Devnull');
+                break;
+
+
         }
     }
 
