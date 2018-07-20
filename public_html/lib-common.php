@@ -6088,6 +6088,8 @@ function COM_rootDebugClean($array, $blank=false)
 {
     static $counter = 0;
 
+    if ( !is_array($array) ) return $array;
+
     $blankField = false;
     foreach ($array AS $key => $value ) {
         $lkey = strtolower($key);
