@@ -62,6 +62,9 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
         case 'left' :
             $IM_rotate = "-90";
             break;
+        case 'flip' :
+            $IM_rotate = "180";
+            break;
         default :
             COM_errorLog("_img_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');
@@ -71,11 +74,17 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
     $tmpImage = $tmp['dirname'] .'/' . $tmp['filename'] . '_RT.' . $tmp['extension'];
 
     UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . '/gm" convert -quality 100 -rotate ' . $IM_rotate . " $srcImage $tmpImage");
+
     if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
         $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
     }
-    $rc = copy($tmpImage, $srcImage);
-    @unlink($tmpImage);
+
+    if (file_exists($tmpImage)) {
+        $rc = copy($tmpImage, $srcImage);
+        @unlink($tmpImage);
+    } else {
+        COM_errorLog("IMG: Failed to rotate image: " . $srcImage);
+    }
     return array(true,'');
 }
 

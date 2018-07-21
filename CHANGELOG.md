@@ -1,4 +1,6 @@
 ## v1.7.5 (unreleased)
+  - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
+  = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
   - Improved environment validation for required extensions
   - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid

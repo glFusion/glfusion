@@ -254,7 +254,7 @@ if ($MG_albums[$album_id]->albums_first == 1 ) {
 
 if ( $MG_albums[$album_id]->enable_slideshow == 2 ) {
     $lbSlideShow = '<noscript><div class="pluginAlert">' . $LANG04[150] . '</div></noscript>' . LB;
-    $lbSlideShow .= '<script type="text/javascript">' . LB;
+    $lbSlideShow .= '<script>' . LB;
     $lbSlideShow .= 'function openGallery1() {' . LB;
     $lbSlideShow .= '    return loadXMLDoc("' . $_MG_CONF['site_url'] . '/lightbox.php?aid=' . $album_id . '");';
     $lbSlideShow .= '}' . LB;

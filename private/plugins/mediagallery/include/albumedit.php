@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Album editing administration                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -142,6 +142,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['enable_slideshow']  = $_MG_CONF['ad_enable_slideshow'];
         $A['enable_random']     = $_MG_CONF['ad_enable_random'];
 //        $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
+        $A['auto_rotate']       = 1;
         $A['enable_views']      = $_MG_CONF['ad_enable_views'];
         $A['enable_keywords']   = $_MG_CONF['ad_enable_keywords'];
         $A['enable_html']       = 0;
@@ -268,6 +269,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $ss_select      .= '</select>';
 
 //    $sf_select      = '<input type="checkbox" name="enable_shutterfly" value="1" ' . ($A['enable_shutterfly'] ? ' checked="checked"' : '') . '/>';
+    $auto_rotate_select  = '<input type="checkbox" name="auto_rotate" value="1" ' . ($A['auto_rotate'] ? ' checked="checked"' : '') . '/>';
     $views_select   = '<input type="checkbox" name="enable_views" value="1" ' . ($A['enable_views'] ? ' checked="checked"' : '') . '/>';
     $keywords_select = '<input type="checkbox" name="enable_keywords" value="1" ' . ($A['enable_keywords'] ? ' checked="checked"' : '') . '/>';
     $html_select    = '<input type="checkbox" name="enable_html" value="1" ' . ($A['enable_html'] ? ' checked="checked"' : '') . '/>';
@@ -634,6 +636,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'full_select'           => $full_select,
         'ss_select'             => $ss_select,
 //        'sf_select'             => $sf_select,
+        'auto_rotate_select'    => $auto_rotate_select,
         'views_select'          => $views_select,
         'keywords_select'       => $keywords_select,
         'html_select'           => $html_select,
@@ -724,6 +727,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_unlimited'        => $LANG_MG01['zero_unlimited'],
         'lang_display_album_desc' => $LANG_MG01['display_album_desc'],
         'lang_filename_title'   => $LANG_MG01['filename_title'],
+        'lang_auto_rotate'      => $LANG_MG01['auto_rotate'],
         'lang_media_attributes' => $LANG_MG01['media_attributes'],
         'lang_theme_select'		=> $LANG_MG01['album_theme'],
     ));
@@ -928,6 +932,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     } else {
         $album->enable_random = 0;
     }
+    if (isset($_POST['auto_rotate'])) {
+        $album->auto_rotate = COM_applyFilter($_POST['auto_rotate'],true);
+    } else {
+        $album->auto_rotate = 0;
+    }
+
 //    if ( isset($_POST['enable_shutterfly'] ) ) {
 //        $album->enable_shutterfly   = COM_applyFilter($_POST['enable_shutterfly'],true);
 //    } else {

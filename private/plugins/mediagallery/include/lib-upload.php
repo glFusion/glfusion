@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Upload library                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -865,6 +865,26 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
                 if ( $_MG_CONF['verbose'] ) {
                     COM_errorLog("MG Upload: Calling MG_convertImage()");
+                }
+
+                // auto rotate
+                if (isset($MG_albums[$albums]->auto_rotate) && $MG_albums[$albums]->auto_rotate) {
+                    if (function_exists('exif_read_data')) {
+                        $exif = @exif_read_data($media_orig);
+                        if (!empty($exif['Orientation'])) {
+                            switch ($exif['Orientation']) {
+                                case 3:
+                                    IMG_rotateImage( $media_orig, 'flip' );
+                                    break;
+                                case 6:
+                                    IMG_rotateImage( $media_orig, 'right' );
+                                    break;
+                                case 8:
+                                    IMG_rotateImage( $media_orig, 'left' );
+                                    break;
+                            }
+                        }
+                    }
                 }
 
                 list($rc,$msg) = MG_convertImage( $media_orig, $media_tn, $media_disp, $mimeExt, $mimeType, $albums, $media_filename, $dnc );

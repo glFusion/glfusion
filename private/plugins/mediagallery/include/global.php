@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Global album edit/perm administration routines                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -251,6 +251,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $A['full_display']       = 0;
     $A['enable_album_views'] = 0;
     $A['allow_download']     = 0;
+    $A['auto_rotate']        = 0;
     $A['display_album_desc'] = 0;
     $A['filename_title']     = 0;
     $A['podcast']            = 0;
@@ -356,6 +357,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
     $postcard_select .= '</select>';
 
     $allow_download_select     = '<input type="checkbox" name="allow_download" value="1" />';
+    $auto_rotate_select     = '<input type="checkbox" name="auto_rotate" value="1" />';
 
     // build album list for starting point...
 
@@ -425,6 +427,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'playback_type'         => $playback_type,
         'admin_menu'            => $adminMenu,
         'allow_download_select' => $allow_download_select,
+        'auto_rotate_select'    => $auto_rotate_select,
         'filename_title_select' => $filename_title_select,
         'skin_select'           => $skin_select,
         'askin_select'          => $askin_select,
@@ -491,6 +494,7 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'lang_enable_rss'       => $LANG_MG01['enable_rss'],
         'lang_enable_postcard'  => $LANG_MG01['enable_postcard'],
         'lang_allow_download'   => $LANG_MG01['allow_download'],
+        'lang_auto_rotate'      => $LANG_MG01['auto_rotate'],
         'lang_display_album_desc' => $LANG_MG01['display_album_desc'],
         'lang_filename_title'   => $LANG_MG01['filename_title'],
         'lang_theme_select'		=> $LANG_MG01['album_theme'],
@@ -574,6 +578,7 @@ function MG_saveGlobalAlbumAttr() {
     $A['enable_rss']         = isset($_POST['enable_rss']) ? COM_applyFilter($_POST['enable_rss'],true) : 0;
     $A['enable_postcard']    = isset($_POST['enable_postcard']) ? COM_applyFilter($_POST['enable_postcard'],true) : 0;
     $A['allow_download']     = isset($_POST['allow_download']) ? COM_applyFilter($_POST['allow_download'],true) : 0;
+    $A['auto_rotate']        = isset($_POST['auto_rotate']) ? COM_applyFilter($_POST['auto_rotate'],true) : 0;
     $A['display_album_desc'] = isset($_POST['display_album_desc']) ? COM_applyFilter($_POST['display_album_desc'],true) : 0;
     $A['filename_title']     = isset($_POST['filename_title']) ? COM_applyFilter($_POST['filename_title'],true) : 0;
     $A['image_skin']         = COM_applyFilter($_POST['skin']);
@@ -631,6 +636,7 @@ function MG_saveGlobalAlbumAttr() {
     $enable_rss_active      = isset($_POST['enable_rss_active']) ? COM_applyFilter($_POST['enable_rss_active'],true) : 0;
     $enable_postcard_active = isset($_POST['enable_postcard_active'])? COM_applyFilter($_POST['enable_postcard_active'],true) : 0;
     $allow_download_active  = isset($_POST['allow_download_active']) ? COM_applyFilter($_POST['allow_download_active'],true) : 0;
+    $auto_rotate_active  = isset($_POST['auto_rotate_active']) ? COM_applyFilter($_POST['auto_rotate_active'],true) : 0;
     $display_album_desc_active = isset($_POST['display_album_desc_active']) ? COM_applyFilter($_POST['display_album_desc_active'],true) : 0;
     $formats_active         = isset($_POST['formats_active']) ? COM_applyFilter($_POST['formats_active'],true) : 0;
     $filename_title_active  = isset($_POST['filename_title_active']) ? COM_applyFIlter($_POST['filename_title_active'],true) : 0;
@@ -670,6 +676,7 @@ function MG_saveGlobalAlbumAttr() {
     $updateSQL .= ($columns_active ? ($updateSQL != '' ? ',' : '') . "display_columns={$A['display_columns']}" : '');
     $updateSQL .= ($full_display_active ? ($updateSQL != '' ? ',' : '') . "full_display={$A['full_display']}" : '');
     $updateSQL .= ($allow_download_active ? ($updateSQL != '' ? ',' : '') . "allow_download={$A['allow_download']}" : '');
+    $updateSQL .= ($auto_rotate_active ? ($updateSQL != '' ? ',' : '') . "auto_rotate={$A['auto_rotate']}" : '');
     $updateSQL .= ($display_album_desc_active ? ($updateSQL != '' ? ',' : '') . "display_album_desc={$A['display_album_desc']}" : '');
     $updateSQL .= ($formats_active ? ($updateSQL != '' ? ',' : '') . "valid_formats=$valid_formats" : '');
     $updateSQL .= ($filename_title_active ? ($updateSQL != '' ? ',' : '') . "filename_title={$A['filename_title']}" : '');

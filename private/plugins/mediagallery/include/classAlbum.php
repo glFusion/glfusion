@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Album class                                                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -114,6 +114,7 @@ class mgAlbum {
     var $useAlternate;
     var $skin;
     var $rssChildren;
+    var $auto_rotate;
 
     function __construct () {
         global $_MG_CONF;
@@ -176,6 +177,7 @@ class mgAlbum {
         $this->member_uploads       = $_MG_CONF['ad_member_uploads'];
         $this->moderate             = $_MG_CONF['ad_moderate'];
         $this->email_mod            = $_MG_CONF['ad_email_mod'];
+        $this->auto_rotate          = 1;
         $this->featured             = 0;
         $this->cbposition           = 0;
         $this->cbpage               = 'all';
@@ -225,6 +227,7 @@ class mgAlbum {
         $this->enable_sort      = $album['enable_sort'];
         $this->enable_rss       = $album['enable_rss'];
         $this->enable_postcard  = $album['enable_postcard'];
+        $this->auto_rotate      = (isset($album['auto_rotate']) ? $album['auto_rotate'] : 0);
         $this->albums_first     = $album['albums_first'];
         $this->allow_download   = $album['allow_download'];
         $this->full             = $album['full_display'];
@@ -279,8 +282,8 @@ class mgAlbum {
         $this->title            = DB_escapeString($this->title);
         $this->description      = DB_escapeString($this->description);
 
-        $sqlFieldList  = 'album_id,album_title,album_desc,album_parent,album_order,skin,hidden,album_cover,album_cover_filename,media_count,album_disk_usage,last_update,album_views,display_album_desc,enable_album_views,image_skin,album_skin,display_skin,enable_comments,exif_display,enable_rating,playback_type,tn_attached,enable_slideshow,enable_random,enable_shutterfly,enable_views,enable_keywords,enable_html,enable_sort,enable_rss,enable_postcard,albums_first,allow_download,full_display,tn_size,max_image_height,max_image_width,max_filesize,display_image_size,display_rows,display_columns,valid_formats,filename_title,shopping_cart,wm_auto,wm_id,opacity,wm_location,album_sort_order,member_uploads,moderate,email_mod,featured,cbposition,cbpage,owner_id,group_id,mod_group_id,perm_owner,perm_group,perm_members,perm_anon,podcast,mp3ribbon,tnheight,tnwidth,usealternate,rsschildren';
-        $sqlDataValues = "$this->id,'$this->title','$this->description',$this->parent,$this->order,'$this->skin',$this->hidden,'$this->cover','$this->cover_filename',$this->media_count,$this->album_disk_usage,$this->last_update,$this->views,$this->display_album_desc,$this->enable_album_views,'$this->image_skin','$this->album_skin','$this->display_skin',$this->enable_comments,$this->exif_display,$this->enable_rating,$this->playback_type,$this->tn_attached,$this->enable_slideshow,$this->enable_random,$this->enable_shutterfly,$this->enable_views,$this->enable_keywords,$this->enable_html,$this->enable_sort,$this->enable_rss,$this->enable_postcard,$this->albums_first,$this->allow_download,$this->full,$this->tn_size,$this->max_image_height,$this->max_image_width,$this->max_filesize,$this->display_image_size,$this->display_rows,$this->display_columns,$this->valid_formats,$this->filename_title,$this->shopping_cart,$this->wm_auto,$this->wm_id,$this->wm_opacity,$this->wm_location,$this->album_sort_order,$this->member_uploads,$this->moderate,$this->email_mod,$this->featured,$this->cbposition,'$this->cbpage',$this->owner_id,$this->group_id,$this->mod_group_id,$this->perm_owner,$this->perm_group,$this->perm_members,$this->perm_anon,$this->podcast,$this->mp3ribbon,$this->tnHeight,$this->tnWidth,$this->useAlternate,$this->rssChildren";
+        $sqlFieldList  = 'album_id,album_title,album_desc,album_parent,album_order,skin,hidden,album_cover,album_cover_filename,media_count,album_disk_usage,last_update,album_views,display_album_desc,enable_album_views,image_skin,album_skin,display_skin,enable_comments,exif_display,enable_rating,playback_type,tn_attached,enable_slideshow,enable_random,enable_shutterfly,enable_views,enable_keywords,enable_html,enable_sort,enable_rss,enable_postcard,albums_first,allow_download,full_display,tn_size,max_image_height,max_image_width,max_filesize,display_image_size,display_rows,display_columns,valid_formats,filename_title,shopping_cart,wm_auto,wm_id,opacity,wm_location,album_sort_order,member_uploads,moderate,email_mod,featured,cbposition,cbpage,owner_id,group_id,mod_group_id,perm_owner,perm_group,perm_members,perm_anon,podcast,mp3ribbon,tnheight,tnwidth,usealternate,rsschildren,auto_rotate';
+        $sqlDataValues = "$this->id,'$this->title','$this->description',$this->parent,$this->order,'$this->skin',$this->hidden,'$this->cover','$this->cover_filename',$this->media_count,$this->album_disk_usage,$this->last_update,$this->views,$this->display_album_desc,$this->enable_album_views,'$this->image_skin','$this->album_skin','$this->display_skin',$this->enable_comments,$this->exif_display,$this->enable_rating,$this->playback_type,$this->tn_attached,$this->enable_slideshow,$this->enable_random,$this->enable_shutterfly,$this->enable_views,$this->enable_keywords,$this->enable_html,$this->enable_sort,$this->enable_rss,$this->enable_postcard,$this->albums_first,$this->allow_download,$this->full,$this->tn_size,$this->max_image_height,$this->max_image_width,$this->max_filesize,$this->display_image_size,$this->display_rows,$this->display_columns,$this->valid_formats,$this->filename_title,$this->shopping_cart,$this->wm_auto,$this->wm_id,$this->wm_opacity,$this->wm_location,$this->album_sort_order,$this->member_uploads,$this->moderate,$this->email_mod,$this->featured,$this->cbposition,'$this->cbpage',$this->owner_id,$this->group_id,$this->mod_group_id,$this->perm_owner,$this->perm_group,$this->perm_members,$this->perm_anon,$this->podcast,$this->mp3ribbon,$this->tnHeight,$this->tnWidth,$this->useAlternate,$this->rssChildren,$this->auto_rotate";
         DB_save($_TABLES['mg_albums'], $sqlFieldList, $sqlDataValues);
         CACHE_remove_instance('whatsnew');
     }

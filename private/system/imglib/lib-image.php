@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion media handling library.                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -230,6 +230,10 @@ function IMG_rotateImage( $srcImage, $direction ) {
             case 'left' :
                 $JT_rotate = "270";
                 break;
+            case 'flip' :
+                $JT_rotate = "180";
+                break;
+
             default :
                 COM_errorLog("IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
                 return array(false,'Invalid direction passed to rotate, must be left or right');
