@@ -41,7 +41,6 @@ $A = DB_fetchArray($res);
 
 if ($A === FALSE) {
     echo "Error: Cannot Display Selected File";
-    COM_errorLog("Error: Cannot Display Selected File");
     exit;
 }
 
