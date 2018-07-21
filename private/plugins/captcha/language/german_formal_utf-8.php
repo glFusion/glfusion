@@ -130,13 +130,13 @@ $LANG_fs['captcha'] = array(
 $LANG_configselects['captcha'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('GD Libs' => 0,'reCAPTCHA' => 3, 'Rechnung' => 6),
+    2 => array('GD Libs' => 0, 'reCAPTCHA' => 3, 'Rechnung' => 6),
     4 => array('Standard' => 'default', 'Einfach' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
     6 => array('Hell' => 'light', 'Dunkel' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA-Plugin erfolgreich installiert';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 ?>

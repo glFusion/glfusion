@@ -166,7 +166,17 @@ $LANG_SX00 = array(
     'invalid_item_id' => 'Invalid ID',
     'edit_filter_entry' => 'Edit Filter',
     'spamx_filters' => 'Spam-X Filters',
-    'history' => 'Past 3 Months'
+    'history' => 'Past 3 Months',
+    'interactive_tester' => 'Interactive Tester',
+    'username' => 'Username',
+    'email' => 'Email',
+    'ip_address' => 'IP Address',
+    'user_agent' => 'User Agent',
+    'referrer' => 'Referrer',
+    'content_type' => 'Content Type',
+    'comment' => 'Comment',
+    'forum_post' => 'Forum Post',
+    'response' => 'Response'
 );
 
 // Define Messages that are shown when Spam-X module action is taken

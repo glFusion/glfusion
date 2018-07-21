@@ -2486,6 +2486,9 @@ $LANG_AM = array(
 
 $LANG_ENVCHK = array(
     'bypass_note' => 'Da entweder <b>safe_mode</b> oder <b>open_basedir</b> Einschränkungen erkannt wurden, wurde die Überprüfung auf Grafik-Bibliotheken übersprungen.',
+    'cache_driver' => 'Cache Driver',
+    'cache_driver_error' => 'Using files drivers as fallback due to error with configured driver: ',
+    'cache_driver_ok' => 'Caching Backend is up and operational',
     'correct_perms' => 'Bitte beheben Sie die unten angegebenen Probleme und überprüfen Sie danach Ihre Hosting-Umgebung erneut.',
     'ctype_extension' => 'Ctype-Erweiterung',
     'curl_extension' => 'Curl Extension',
@@ -2512,6 +2515,7 @@ $LANG_ENVCHK = array(
     'gd_v1' => 'GDlib-Erweiterung-v1 ist installiert - Diese Version unterstützt die JPG-Bildbearbeitung nicht vollständig, daher könnten hiermit Qualitätsprobleme auftreten.',
     'gettext_extension' => 'Gettext-Erweiterung',
     'graphics' => 'Grafik-Bibliothek',
+    'hash_extension' => 'Hash Message Digest Extension',
     'hide_phpinfo' => 'PHP-Info ausblenden',
     'hosting_env' => 'Hosting-Umgebung prüfen',
     'im_not_found' => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
@@ -2638,7 +2642,8 @@ $LANG_CONFIG = array(
     'title' => 'Konfiguration',
     'disable' => 'Deaktivieren',
     'enable' => 'Aktivieren',
-    'search' => 'Konfiguration durchsuchen'
+    'search' => 'Konfiguration durchsuchen',
+    'hash_ext_missing' => 'Missing Hash Message Digest Extension - Two Factor Authentication cannot be enabled.'
 );
 
 $LANG_configsections['Core'] = array(
@@ -2942,9 +2947,14 @@ $LANG_confignames['Core'] = array(
     'cache_driver' => 'Cache Driver',
     'cache_host' => 'Cache Server',
     'cache_port' => 'Cache Server Port',
-    'cache_password' => 'Password (needed for Redis driver)',
-    'cache_database' => 'Database (needed for Redis driver)',
-    'cache_timeout' => 'Connection Timeout'
+    'cache_timeout' => 'Connection Timeout',
+    'cache_redis_socket' => 'Path / Filename to Redis Socket',
+    'cache_redis_password' => 'Redis Password',
+    'cache_redis_database' => 'Redis Database Index',
+    'cache_memcached_username' => 'SASL Username for Memcached',
+    'cache_memcached_password' => 'SASL Password for Memcached',
+    'cache_redis_info' => 'Redis Driver Attributes',
+    'cache_memcached_info' => 'Memcached Driver Attributes'
 );
 
 $LANG_configsubgroups['Core'] = array(
