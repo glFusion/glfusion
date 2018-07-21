@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Media Upload routines                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -166,7 +166,7 @@ function MG_saveHTML5Upload( $album_id ) {
     $fn = (isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : false);
 
     if ($fn) {
-        $filename = $_MG_CONF['tmp_path'] . md5(time()) . '.tmp';
+        $filename = $_MG_CONF['tmp_path'] . uniqid(mt_rand(),true) . '.tmp';
         file_put_contents($filename,file_get_contents('php://input'));
         $file = array(
                     array('name' => $fn,
