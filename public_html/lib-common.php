@@ -47,7 +47,7 @@ if (version_compare(PHP_VERSION,'7.1.0','<')) {
 }
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.8.0');
+    define('GVERSION', '2.0.0');
 }
 
 define('PATCHLEVEL','.pl0');

@@ -3,8 +3,8 @@
     <name>FileMgmt</name>
     <description>Download Manager</description>
     <version>1.7.7</version>
-    <glfusionversion>1.8.0</glfusionversion>
-    <phpversion>5.6.0</phpversion>
+    <glfusionversion>2.0.0</glfusionversion>
+    <phpversion>7.1.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
     <renamedist>config.php.dist</renamedist>
