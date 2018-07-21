@@ -32,7 +32,7 @@ if (!defined ('GVERSION')) {
 }
 
 $obsoletePrivateDir = array(
-// 1.8.0
+// 2.0.0
     'vendor/phpfastcache/phpfastcache/src/',
     'plugins/captcha/images/static/',
     'plugins/commentfeeds/',
