@@ -62,6 +62,9 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
         case 'left' :
             $IM_rotate = "-90";
             break;
+        case 'flip' :
+            $IM_rotate = "180";
+            break;
         default :
             COM_errorLog("_img_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');

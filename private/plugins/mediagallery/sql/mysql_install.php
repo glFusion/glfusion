@@ -6,7 +6,7 @@
 // |                                                                          |
 // | MySQL SQL for Media Gallery installation.                                |
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2005-2016 by the following authors:                       |
+// | Copyright (C)  2005-2018 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -63,6 +63,7 @@ $_SQL['mg_albums'] = "CREATE TABLE {$_TABLES['mg_albums']} (
   `enable_slideshow` tinyint(4) NOT NULL default '0',
   `enable_random` tinyint(4) NOT NULL default '0',
   `enable_shutterfly` tinyint(4) NOT NULL default '0',
+  `auto_rotate` tinyint(4) NOT NULL default '0',
   `enable_views` tinyint(4) NOT NULL default '0',
   `enable_keywords` tinyint(4) NOT NULL default '0',
   `enable_html` tinyint(4) NOT NULL default '0',

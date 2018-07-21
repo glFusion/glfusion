@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade routines                                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -207,6 +207,9 @@ function mediagallery_upgrade()
             DB_query("ALTER TABLE {$_TABLES['mg_exif_tags']} CHANGE `name` `name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
             DB_query("ALTER TABLE {$_TABLES['mg_playback_options']} CHANGE `option_name` `option_name` VARCHAR( 128 ) NOT NULL DEFAULT ''");
         case '2.1.2' :
+
+        case '2.1.3' :
+            DB_query("ALTER TABLE {$_TABLES['mg_albums']} ADD COLUMN `auto_rotate` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' AFTER `enable_shutterfly`;");
 
         default :
 

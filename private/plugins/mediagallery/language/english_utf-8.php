@@ -5,8 +5,6 @@
 // | Copyright (C) 2002-2017 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Translator:                                                              |
-// |                                                                          |
 // +--------------------------------------------------------------------------|
 // | If you translate this file, please consider uploading a copy at          |
 // |    http://www.glfusion.org so others can benefit from your               |
@@ -703,7 +701,7 @@ $LANG_MG01 = array (
     'media_details'             => 'Media Details',
     'playback_options'          => 'Playback Options',
     'meta_data'                 => 'Meta Data',
-
+    'auto_rotate'               => 'Auto Rotate Uploads',
 );
 
 // error messages

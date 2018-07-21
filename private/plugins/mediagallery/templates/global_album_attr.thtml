@@ -161,6 +161,12 @@
             <td class="uk-text-center"><input type="checkbox" name="filename_title_active" value="1"></td>
         </tr>
         <tr>
+            <td class="uk-text-left">{lang_auto_rotate}</td>
+            <td class="uk-text-left">{auto_rotate_select}</td>
+            <td class="uk-text-center"><input type="checkbox" name="auto_rotate_active" value="1"></td>
+        </tr>
+
+        <tr>
             <td class="uk-text-left">{lang_allow_download}</td>
             <td class="uk-text-left">{allow_download_select}</td>
             <td class="uk-text-center"><input type="checkbox" name="allow_download_active" value="1"></td>

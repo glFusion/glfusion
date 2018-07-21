@@ -213,6 +213,9 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
         case 'left' :
             $GD_rotate = "90";
             break;
+        case 'flip' :
+            $GD_rotate = "180";
+            break;
         default :
             COM_errorLog("IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');
@@ -259,7 +262,7 @@ function _img_gdRotate( $src, $dest, $angle, $mimeType ) {
     }
 
     if ($angle == 180) {
-        $dst_img = imagerotate($curImg, $angle, 0);
+        $final_img = imagerotate($curImg, $angle, 0);
     } else {
         $final_img = imagerotate($curImg,$angle,0);
     }

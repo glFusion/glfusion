@@ -701,7 +701,7 @@ $LANG_MG01 = array (
     'media_details'             => 'Media Details',
     'playback_options'          => 'Playback Options',
     'meta_data'                 => 'Meta Data',
-
+    'auto_rotate'               => 'Auto Rotate Uploads',
 );
 
 // error messages

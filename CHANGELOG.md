@@ -1,5 +1,5 @@
 ## v1.8.0 (Unreleased)
-  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (6.1.3)
+  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.1)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
@@ -11,9 +11,12 @@
   - Template class code significantly streamlined
   - Converted all caching calls to use new caching engine
   - Implemented phpFastCache as glFusion's caching engine
-  - Minimum PHP version is now 5.6.0
+  - Minimum PHP version is now 7.1.0
 
 ## v1.7.5 (unreleased)
+  - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
+  = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
+  - Improved environment validation for required extensions
   - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid
   - Fixed error where FileMgmt did not always remove associated comments when download was deleted
