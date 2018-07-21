@@ -178,6 +178,13 @@ class Template
     private $unknowns = "remove";
 
     /**
+    * Determines if using memory based caching
+    *
+    * @var       string
+    */
+    private $memCache = false;
+
+    /**
     * Determines how Template handles error conditions.
     * "yes"      = the error is reported, then execution is halted
     * "report"   = the error is reported, then execution continues by returning "false"
@@ -221,8 +228,16 @@ class Template
                 $this->set_var($k, $v);
             }
         }
-        if ( $_CONF['cache_templates'] ) {
-            clearstatcache();
+
+        $c = glFusion\Cache::getInstance();
+        $cDriver = strtolower($c->getDriverName());
+
+        if ($cDriver != 'files' && $cDriver != 'devnull') {
+            $this->memCache = true;
+        } else {
+            if ( $_CONF['cache_templates'] ) {
+                clearstatcache();
+            }
         }
     }
 
@@ -1609,6 +1624,11 @@ class Template
                 @touch($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'] . '/index.html');
             }
         }
+
+        if ($this->memCache) {
+            return str_replace(".","",$extra_path . $basefile);
+        }
+
         $phpfile = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '.php';
         return $phpfile;
     }
@@ -1640,28 +1660,50 @@ class Template
         $phpfile = $this->cache_create_filename($filename);
 
         $template_fstat = @filemtime($filename);
-        if (file_exists($phpfile)) {
-            $cache_fstat = @filemtime($phpfile);
-        } else {
-            $cache_fstat = 0;
-        }
-
-        if ($this->debug & 8) {
-            printf("<check_cache> Look for %s<br>", $filename);
-        }
         $key = md5($phpfile);
-        if ($template_fstat > $cache_fstat ) {
-            $str = @file_get_contents($filename);
-            // cache_write will compile the template prior to creating the cache file
-            $tmplt= $this->cache_write($phpfile, $str);
-            // save compiled template to internal cache
-            $internalCache[$key] = $tmplt;
-        } else {
-            if (isset($internalCache[$key])) {
-                $tmplt = $internalCache[$key];
-            } else {
-                $tmplt = @file_get_contents($phpfile);
+
+        if ($this->memCache) {
+            $c = glFusion\Cache::getInstance();
+
+            $cache_fstat = $c->getModificationDate($phpfile);
+            if ($template_fstat > $cache_fstat) {
+                $str = @file_get_contents($filename);
+                // cache_write will compile the template prior to creating the cache file
+                $tmplt= $this->cache_write($phpfile, $str);
+                // save compiled template to internal cache
                 $internalCache[$key] = $tmplt;
+            } else {
+                if (isset($internalCache[$key])) {
+                    $tmplt = $internalCache[$key];
+                } else {
+                    $tmplt = $c->get($phpfile);
+                    $internalCache[$key] = $tmplt;
+                }
+            }
+        } else {
+            if (file_exists($phpfile)) {
+                $cache_fstat = @filemtime($phpfile);
+            } else {
+                $cache_fstat = 0;
+            }
+
+            if ($this->debug & 8) {
+                printf("<check_cache> Look for %s<br>", $filename);
+            }
+
+            if ($template_fstat > $cache_fstat ) {
+                $str = @file_get_contents($filename);
+                // cache_write will compile the template prior to creating the cache file
+                $tmplt= $this->cache_write($phpfile, $str);
+                // save compiled template to internal cache
+                $internalCache[$key] = $tmplt;
+            } else {
+                if (isset($internalCache[$key])) {
+                    $tmplt = $internalCache[$key];
+                } else {
+                    $tmplt = @file_get_contents($phpfile);
+                    $internalCache[$key] = $tmplt;
+                }
             }
         }
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
@@ -1699,16 +1741,23 @@ class Template
         if ($this->debug & 4) {
             printf("<b>cache_write:</b> opening $filename<br>\n");
         }
-        $f = @fopen($filename,'w');
-        if ($f !== false ) {
-            if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
-                fwrite($f,
-                "<?php if (!defined('GVERSION')) {
-                die ('This file can not be used on its own.');
-                } ?>\n");
+
+        if ($this->memCache) {
+            $c = glFusion\Cache::getInstance();
+            $c->set($filename,$tmplt,'template');
+        } else {
+
+            $f = @fopen($filename,'w');
+            if ($f !== false ) {
+                if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
+                    fwrite($f,
+                    "<?php if (!defined('GVERSION')) {
+                    die ('This file can not be used on its own.');
+                    } ?>\n");
+                }
+                fwrite($f, $tmplt);
+                fclose($f);
             }
-            fwrite($f, $tmplt);
-            fclose($f);
         }
         return $tmplt;
     }

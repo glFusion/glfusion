@@ -439,6 +439,22 @@ final class Cache
     }
 
     /**
+     * @param string $key
+     * @return int (time)
+     */
+    public function getCreationDate($key)
+    {
+        if ($this->namespace != '') $key = $this->namespace.'_'.$key;
+        $key = $this->validateKeyName($key);
+        $cacheItem = $this->internalCacheInstance->getItem($key);
+        $createDate = $cacheItem->getCreationDate();
+        if (is_object($createDate) && isset($createDate->date)) {
+            return strtotime($createDate->date);
+        }
+        return 0;
+    }
+
+    /**
      * delete cache items by tag
      * @param string $tag
      * @return none
