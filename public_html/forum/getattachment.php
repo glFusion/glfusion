@@ -6,7 +6,7 @@
 // |                                                                          |
 // | AJAX Server functions for file attachments                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2013 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,7 +41,6 @@ $A = DB_fetchArray($res);
 
 if ($A === FALSE) {
     echo "Error: Cannot Display Selected File";
-    COM_errorLog("Error: Cannot Display Selected File");
     exit;
 }
 
