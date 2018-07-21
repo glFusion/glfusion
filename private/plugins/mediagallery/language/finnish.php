@@ -687,7 +687,8 @@ $LANG_MG01 = array(
     'attributes' => 'Attributes',
     'media_details' => 'Media Details',
     'playback_options' => 'Playback Options',
-    'meta_data' => 'Meta Data'
+    'meta_data' => 'Meta Data',
+    'auto_rotate' => 'Auto Rotate Uploads'
 );
 
 ###############################################################################
