@@ -6381,17 +6381,18 @@ function COM_404()
 
         $dt = new \Date('now',$_CONF['timezone']);
         $timestamp = $dt->format("d M Y H:i:s T",true);
+        if (strpos($url,'custom_config.js') === false) {
+            $logEntry = "404 :: $byUser :: URL: $url";
+            if (!empty($refUrl)) {
+                $logEntry .= " :: Referer: $refUrl";
+            }
+            $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
 
-        $logEntry = "404 :: $byUser :: URL: $url";
-        if (!empty($refUrl)) {
-            $logEntry .= " :: Referer: $refUrl";
-        }
-        $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
-
-        $logfile = $_CONF['path_log'] . '404.log';
-        if ($file = fopen($logfile, 'a')) {
-            fputs($file, "$timestamp - $logEntry \n");
-            fclose($file);
+            $logfile = $_CONF['path_log'] . '404.log';
+            if ($file = fopen($logfile, 'a')) {
+                fputs($file, "$timestamp - $logEntry \n");
+                fclose($file);
+            }
         }
     }
 
