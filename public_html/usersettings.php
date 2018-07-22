@@ -929,8 +929,7 @@ function handlePhotoUpload ($delete_photo = '')
     if (!empty ($newphoto['name'])) {
         $pos = strrpos ($newphoto['name'], '.') + 1;
         $fextension = substr ($newphoto['name'], $pos);
-        $filename = $_USER['uid'] . '.' . $fextension;
-
+        $filename = $_USER['uid'] . '_'.mt_rand(1,1000000).'.'.$fextension;
         if (!empty ($curphoto) && ($filename != $curphoto)) {
             $delete_photo = true;
         } else {
