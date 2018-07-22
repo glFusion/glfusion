@@ -1780,6 +1780,17 @@ class Story
         return $return;
     }
 
+    /*
+     * returns true of story has body text
+     */
+    function hasBody()
+    {
+        if ($this->_bodytext == '' ) {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Provide access to story elements. For display.

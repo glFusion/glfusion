@@ -396,7 +396,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         }
 
         // full article or preview
-
         if (( $index == 'n' ) || ( $index == 'p' )) {
             if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ) &&
                     SEC_hasRights( 'story.ping' )) {
@@ -474,7 +473,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'feed_icon', '' );
             }
         } else { // index view
-            if ( !empty( $bodytext )) {
+            if ($story->hasBody() ) {
                 $article->set_var( 'lang_readmore', $LANG01[2] );
                 $article->set_var( 'lang_readmore_words', $LANG01[62] );
                 $numwords = COM_numberFormat (sizeof( explode( ' ', strip_tags( $bodytext ))));
