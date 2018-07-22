@@ -1,6 +1,7 @@
 ## v1.7.5 (unreleased)
   - Modified how profile images are stored to ensure a unique filename is used when new profile images are uploaded - resolves an issue with the old image being cached for services such as CloudFlare.
   - Do not log custom_config.js missing in 404 log
+  - Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
   - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
   = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
   - Improved environment validation for required extensions

@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | profile.inc.php                                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
+// | Copyright (C) 2002-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -187,7 +187,7 @@ function _mg_profileblocksdisplay( $uid ) {
                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
                     if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
                         $url_thumb = $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
+                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
                         break;
                     }
                 }
