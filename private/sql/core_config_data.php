@@ -444,6 +444,17 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+    array(
+    	'name' => 'path_themes',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 0,
+    	'fieldset' => 3,
+    	'selection_array' => NULL,
+    	'sort' => 70,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
 
     // search fieldset - site tab
 
@@ -632,10 +643,12 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+// reorg
     array(
-    	'name' => 'maximagesperarticle',
-    	'default_value' => 5,
-    	'type' => 'text',
+    	'name' => 'fset_story_display',
+    	'default_value' => NULL,
+    	'type' => 'fset',
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => NULL,
@@ -655,35 +668,13 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'story_sort_by',
-    	'default_value' => 'date',
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 33,
-    	'sort' => 30,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'story_sort_dir',
-    	'default_value' => 'DESC',
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 32,
-    	'sort' => 40,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'infinite_scroll',
     	'default_value' => 1,
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 50,
+    	'sort' => 30,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -694,18 +685,18 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => NULL,
-    	'sort' => 60,
+    	'sort' => 40,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
+     array(
     	'name' => 'contributedbyline',
     	'default_value' => 1,
     	'type' => 'select',
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 70,
+    	'sort' => 50,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -716,7 +707,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 80,
+    	'sort' => 60,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -727,7 +718,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 90,
+    	'sort' => 70,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -738,7 +729,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 100,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -749,41 +740,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 110,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-
-    array(
-    	'name' => 'rating_enabled',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 24,
-    	'sort' => 120,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'allow_page_breaks',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 130,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'page_break_comments',
-    	'default_value' => 'last',
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 7,
-    	'sort' => 140,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -794,7 +751,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 8,
-    	'sort' => 150,
+    	'sort' => 100,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -805,29 +762,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 160,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'draft_flag',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 170,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'frontpage',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 180,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -838,7 +773,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 190,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -849,10 +784,142 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
+    	'sort' => 130,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'story_geshi_enabled',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 140,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+
+// end of story display fset
+
+
+// story administration fset
+    array(
+    	'name' => 'fset_story_administration',
+    	'default_value' => NULL,
+    	'type' => 'fset',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 150,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'maximagesperarticle',
+    	'default_value' => 5,
+    	'type' => 'text',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 160,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'story_sort_by',
+    	'default_value' => 'date',
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 33,
+    	'sort' => 170,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'story_sort_dir',
+    	'default_value' => 'DESC',
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 32,
+    	'sort' => 180,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'default_story_editor',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 34,
+    	'sort' => 190,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'rating_enabled',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 24,
     	'sort' => 200,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+    array(
+    	'name' => 'allow_page_breaks',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 210,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'page_break_comments',
+    	'default_value' => 'last',
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 7,
+    	'sort' => 220,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    array(
+    	'name' => 'draft_flag',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 230,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'frontpage',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 1,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 240,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
     array(
     	'name' => 'onlyrootfeatures',
     	'default_value' => 0,
@@ -860,7 +927,7 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 0,
-    	'sort' => 210,
+    	'sort' => 250,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -871,10 +938,12 @@ $coreConfigData = array(
     	'subgroup' => 1,
     	'fieldset' => 1,
     	'selection_array' => 9,
-    	'sort' => 220,
+    	'sort' => 260,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+    // end of story_administration fset
 
     // trackback fieldset - story subgroup
 
@@ -1041,17 +1110,42 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'path_themes',
-    	'default_value' => '',
-    	'type' => 'text',
+
+     array(
+    	'name' => 'show_right_blocks',
+    	'default_value' => '1',
+    	'type' => 'select',
     	'subgroup' => 2,
     	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 20,
+    	'selection_array' => 1,
+    	'sort' => 30,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+    array(
+    	'name' => 'showfirstasfeatured',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 2,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'allow_user_themes',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 2,
+    	'fieldset' => 1,
+    	'selection_array' => 0,
+    	'sort' => 50,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
+    // advanced tab
     array(
     	'name' => 'fs_theme_advanced',
     	'default_value' => NULL,
@@ -1063,28 +1157,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'show_right_blocks',
-    	'default_value' => '1',
-    	'type' => 'select',
-    	'subgroup' => 2,
-    	'fieldset' => 2,
-    	'selection_array' => 1,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'showfirstasfeatured',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 2,
-    	'fieldset' => 2,
-    	'selection_array' => 0,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+
     array(
     	'name' => 'compress_css',
     	'default_value' => '1',
@@ -1427,17 +1500,7 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'allow_user_themes',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+
     array(
     	'name' => 'allow_user_language',
     	'default_value' => 0,

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2017 by the following authors:                        |
+// | Copyright (C) 2014-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -106,6 +106,11 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
                 return;
             }
             $templateFile = 'ckeditor_story.thtml';
+            if (!isset($_CONF['default_story_editor'])) {
+                $template->set_var('default_visual_editor',true);
+            } else if ($_CONF['default_story_editor'] == 1 ) {
+                $template->set_var('default_visual_editor',true);
+            }
             break;
         case 'story' :
             if ( $_CK_CONF['enable_submitstory'] != 1 ) {
@@ -222,6 +227,12 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
         COM_errorLog("WARNING: mbstring extension not installed - disabling FileMan plugin in CKEditor");
     } else {
         $T->unset_var('mbmissing');
+    }
+// put a check for story editor...
+    if (!isset($_CONF['default_story_editor'])) {
+        $T->set_var('default_visual_editor',true);
+    } else if ($_CONF['default_story_editor'] == 1 ) {
+        $T->set_var('default_visual_editor',true);
     }
 
     PLG_templateSetVars('ckeditor',$T);

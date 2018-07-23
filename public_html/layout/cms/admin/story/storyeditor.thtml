@@ -128,8 +128,8 @@
 						<span class="uk-text-large">{lang_introtext}</span>
 {!if wysiwyg}
 						<div class="uk-margin-small">
-							<button id="visual1" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');">{visual_editor}</button>
-							<button id="std1" type="button" class="uk-button" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success')">{html_editor}</button>
+							<button id="visual1" type="button" class="uk-button {!if default_visual_editor} uk-button-success {!endif}" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');">{visual_editor}</button>
+							<button id="std1" type="button" class="uk-button {!if !default_visual_editor} uk-button-success {!endif}" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success')">{html_editor}</button>
 						</div>
 {!endif}
 						<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{story_introtext}</textarea>
@@ -138,11 +138,11 @@
 					<span class="uk-text-large">{lang_bodytext}</span>
 {!if wysiwyg}
 					<div class="uk-margin-small">
-						<button id="visual2" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');">{visual_editor}</button>
-						<button id="std2" type="button" class="uk-button" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success')">{html_editor}</button>
+						<button id="visual2" type="button" class="uk-button {!if default_visual_editor} uk-button-success {!endif}" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');">{visual_editor}</button>
+						<button id="std2" type="button" class="uk-button {!if !default_visual_editor} uk-button-success {!endif}" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success')">{html_editor}</button>
 					</div>
 {!endif}
-					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="40" style="width:100%;">{story_bodytext}</textarea>
+					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="30" style="width:100%;">{story_bodytext}</textarea>
 				</div>
 				<div class="uk-form-row uk-margin-small">
 					<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">

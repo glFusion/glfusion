@@ -1,4 +1,6 @@
 ## v2.0.0 (Unreleased)
+  - Allow Geshi code formatting to be used in stories
+  - Allow configuration of default story edit mode (visual or html)
   - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.1)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
