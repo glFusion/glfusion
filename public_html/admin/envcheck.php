@@ -228,7 +228,7 @@ function _checkEnvironment()
     $c = glFusion\Cache::getInstance();
     $cDriver = strtolower($c->getDriverName());
 
-    if ($cDriver != $_CONF['cache_driver']) {
+    if ($cDriver != strtolower($_CONF['cache_driver'])) {
         $T->set_var('item', $LANG_ENVCHK['cache_driver']);
         $T->set_var('status', $cDriver);
         $T->set_var('class', 'tm-fail');
@@ -241,7 +241,7 @@ function _checkEnvironment()
         $T->set_var('status', $cDriver);
         $T->set_var('class', 'tm-pass');
         $T->set_var('recommended', '');
-        $T->set_var('notes',$LANG_ENVCHK['cache_driver_ok']);
+        $T->set_var('notes',($cDriver == 'devnull') ? $LANG_ENVCHK['cache_disabled'] : $LANG_ENVCHK['cache_driver_ok']);
         $T->set_var('rowclass',($classCounter % 2)+1);
         $T->parse('env','envs',true);
     }
