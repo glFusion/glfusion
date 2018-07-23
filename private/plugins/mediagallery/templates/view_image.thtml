@@ -11,12 +11,24 @@
 </script>
 {lbslideshow}
 
-<ul class="uk-breadcrumb">
-	{birdseed_ul}
-</ul>
+<div class="uk-grid uk-margin-bottom">
+	<div class="uk-width-medium-2-3">
+		<ul class="uk-breadcrumb">
+			{birdseed_ul}
+		</ul>
+	</div>
+	<div class="uk-width-medium-1-3 uk-text-right">
+{!if slide_show}
+		<div class="uk-vertical-align-middle">{slide_show}&nbsp;&nbsp;</div>
+{!endif}
+{!if postcard_link}
+		<div class="uk-vertical-align-middle">{postcard_link}</div>
+{!endif}
+	</div>
+</div>
 
 <nav class="uk-navbar uk-margin-bottom">
-	<div class="uk-navbar-content uk-width-small-3-4 uk-text-truncate">
+	<div class="uk-navbar-content uk-width-1-3 uk-text-truncate">
 {!if album_link}
 		{album_link}
 {!endif}
@@ -25,29 +37,25 @@
 		</a>
 {!endif}
 	</div>
-	<div class="uk-navbar-content uk-navbar-flip uk-width-small-1-4 uk-text-right uk-hidden-small">
+
+	<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
 		<form method="get" action="{site_url}/search.php" class="uk-form uk-search uk-margin-remove uk-display-inline-block" style="display: inline-block !important;">
 			<input type="search" class="uk-search uk-search-field" placeholder="{$LANG09[10]}" autocomplete="off" name="keywords">
 			<input type="hidden" name="mode" value="search">
 			<input type="hidden" name="swhere" value="0">
 		</form>
 	</div>
+
+	<div class="uk-navbar-content uk-navbar-center uk-hidden-small">
+		{pagination}
+	</div>
+	<div class="uk-navbar-content uk-navbar-flip uk-visible-small">
+		{pagination}
+	</div>
+
 </nav>
 
-<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-remove">
-{!if slide_show}
-	<div class="uk-vertical-align-middle">{slide_show}&nbsp;&nbsp;</div>
-{!endif}
-{!if postcard_link}
-	<div class="uk-vertical-align-middle">{postcard_link}</div>
-{!endif}
-	<div class="uk-align-right uk-vertical-align-middle uk-margin-right">{pagination}</div>
-</div>
-
 <div class="uk-panel uk-panel-box uk-text-center uk-margin-top">
-	<div class="uk-align-center">
-		{media_title}
-	</div>
 	<div class="uk-thumbnail">
 {!if media_link_start}
 		{media_link_start}
@@ -56,6 +64,9 @@
 {!if media_link_end}
 		{media_link_end}
 {!endif}
+	</div>
+	<div class="uk-thumbnail-caption uk-align-center uk-margin-small-top">
+		{media_title}
 	</div>
 	<div class="uk-thumbnail-caption uk-text-center">
 		{media_desc}
