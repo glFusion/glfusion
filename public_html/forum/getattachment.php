@@ -40,7 +40,7 @@ $res = DB_query($sql);
 $A = DB_fetchArray($res);
 
 if ($A === FALSE) {
-    echo "Error: Cannot Display Selected File";
+    die();
     exit;
 }
 
