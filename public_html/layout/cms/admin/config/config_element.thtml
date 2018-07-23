@@ -111,8 +111,8 @@
 	</fieldset>
 </div>
 <div style="overflow:hidden;">
-	<fieldset style="margin-top:10px;">
-		<legend class="title">{display_name}</legend>
+	<fieldset>
+		<legend class="title" style="padding-bottom:0;">{display_name}</legend>
 		<table class="uk-table">
 <!-- END fset -->
 

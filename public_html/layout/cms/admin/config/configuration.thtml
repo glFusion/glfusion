@@ -61,8 +61,8 @@
 	<!-- BEGIN fieldset -->
 						<li>
 						<div id="{index}" style="overflow:hidden;">
-							<fieldset style="margin-top:10px;">
-								<legend class="title">{fs_display}</legend>
+							<fieldset>
+								<legend class="title" style="padding-bottom:0">{fs_display}</legend>
 	<!-- BEGIN notes -->
 								<div class="notes">
 									<h4>{fs_display}</h4>
