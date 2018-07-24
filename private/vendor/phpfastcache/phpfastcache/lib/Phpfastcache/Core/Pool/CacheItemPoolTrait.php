@@ -240,11 +240,12 @@ trait CacheItemPoolTrait
         /**
          * @eventName CacheClearItem
          * @param $this ExtendedCacheItemPoolInterface
-         * @param $deferredList ExtendedCacheItemInterface[]
+         * @param $itemInstances ExtendedCacheItemInterface[]
          */
         $this->eventManager->dispatch('CacheClearItem', $this, $this->itemInstances);
 
         CacheManager::$WriteHits++;
+        // Faster than detachAllItems()
         $this->itemInstances = [];
 
         return $this->driverClear();
@@ -395,7 +396,7 @@ trait CacheItemPoolTrait
     }
 
     /**
-     * @return mixed|null
+     * @return bool
      * @throws PhpfastcacheInvalidArgumentException
      */
     public function commit()
@@ -416,6 +417,6 @@ trait CacheItemPoolTrait
             }
         }
 
-        return (bool)$return;
+        return (bool) $return;
     }
 }

@@ -44,7 +44,7 @@ class Driver implements ExtendedCacheItemPoolInterface
     public function driverCheck(): bool
     {
         if (extension_loaded('Redis')) {
-            \trigger_error('The native Redis extension is installed, you should use Redis instead of Predis to increase performances', E_USER_NOTICE);
+            \trigger_error('The native Redis extension is installed, you should use Redis instead of Predis to increase performances', \E_USER_NOTICE);
         }
 
         return \class_exists('Predis\Client');
@@ -73,13 +73,19 @@ class Driver implements ExtendedCacheItemPoolInterface
             return true;
         }
 
+        $options = [];
+
+        if($this->getConfig()->getOptPrefix()){
+            $options['prefix'] = $this->getConfig()->getOptPrefix();
+        }
+
         if (!empty($this->getConfig()->getPath())) {
             $this->instance = new PredisClient([
                 'scheme' => 'unix',
                 'path' => $this->getConfig()->getPath(),
-            ]);
+            ], $options);
         } else {
-            $this->instance = new PredisClient($this->getConfig()->getPredisConfigArray());
+            $this->instance = new PredisClient($this->getConfig()->getPredisConfigArray(), $options);
         }
 
         try {
@@ -194,6 +200,6 @@ HELP;
             ->setRawData($info)
             ->setSize((int)$size)
             ->setInfo(\sprintf("The Redis daemon v%s is up since %s.\n For more information see RawData. \n Driver size includes the memory allocation size.",
-                $version, $date->format(DATE_RFC2822)));
+                $version, $date->format(\DATE_RFC2822)));
     }
 }

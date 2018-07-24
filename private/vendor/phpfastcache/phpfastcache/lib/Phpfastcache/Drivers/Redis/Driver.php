@@ -81,6 +81,10 @@ class Driver implements ExtendedCacheItemPoolInterface
             return false;
         }
 
+        if($this->getConfig()->getOptPrefix()){
+            $this->instance->setOption(RedisClient::OPT_PREFIX, $this->getConfig()->getOptPrefix());
+        }
+
         if (!$this->getConfig()->getPath()) {
             if ($this->getConfig()->getPassword() && !$this->instance->auth($this->getConfig()->getPassword())) {
                 return false;
@@ -179,6 +183,6 @@ class Driver implements ExtendedCacheItemPoolInterface
             ->setRawData($info)
             ->setSize((int)$info['used_memory'])
             ->setInfo(\sprintf("The Redis daemon v%s is up since %s.\n For more information see RawData. \n Driver size includes the memory allocation size.",
-                $info['redis_version'], $date->format(DATE_RFC2822)));
+                $info['redis_version'], $date->format(\DATE_RFC2822)));
     }
 }

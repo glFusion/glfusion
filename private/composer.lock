@@ -365,16 +365,16 @@
         },
         {
             "name": "phpfastcache/phpfastcache",
-            "version": "7.0.1",
+            "version": "7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-                "reference": "4e7427fc8a073307dbbc5a8f2c6ab1dac9241e4b"
+                "reference": "949146e0a83d8d30871d18e16dd1021407c9b17c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/4e7427fc8a073307dbbc5a8f2c6ab1dac9241e4b",
-                "reference": "4e7427fc8a073307dbbc5a8f2c6ab1dac9241e4b",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/949146e0a83d8d30871d18e16dd1021407c9b17c",
+                "reference": "949146e0a83d8d30871d18e16dd1021407c9b17c",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,7 @@
                 "zend memory cache",
                 "zend server"
             ],
-            "time": "2018-06-22T19:29:20+00:00"
+            "time": "2018-07-23T19:06:45+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

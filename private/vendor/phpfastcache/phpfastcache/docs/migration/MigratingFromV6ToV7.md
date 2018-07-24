@@ -92,7 +92,7 @@ This object will contain fluent setters allowing you to make use of chained sett
 Despite the fact that this is a bad practice, this object which implements ArrayAccess interface 
 will allow you to treat the object as an array for primitive variable accesses:
 ```php
-use \phpFastCache\Config\Config;
+use Phpfastcache\Config\Config;
 
 $configArray = [];
 $config = new Config();
@@ -108,7 +108,7 @@ $cacheInstace = CacheManager::getInstance('Files', new Config([
 #### For non-global option you MUST use the specific Config object provided for each drivers 
 ```php
 // The recommanded way is to use an alias to not confuse yourself 
-use \phpFastCache\Drivers\Files\Config as FilesConfig;
+use Phpfastcache\Drivers\Files\Config as FilesConfig;
 
 $config = new FilesConfig();
 $config->setPath('/an/absolute/path');
@@ -158,9 +158,9 @@ The method still returns a valid string but its format has changed slightly.
 ### Couchbase PHP SDK
 The Couchbase driver has been updated to works with PHP SDK 2.4+ (Couchbase Server 5+).
 Therefore it way requires a Couchbase Server updated combined with an SDK update.
-
+ 
 ### Constants autoload-related
-As of the V7, all the constant starting by _PFC\_*_ were moved into the `Phpfastcache\Autoload` namespace\ 
+As of the V7, all the constant starting by _PFC\_*_ were moved in     to the `Phpfastcache\Autoload` namespace\ 
 to not pollute php's root namespace.
 
 ### Autoload mechanism

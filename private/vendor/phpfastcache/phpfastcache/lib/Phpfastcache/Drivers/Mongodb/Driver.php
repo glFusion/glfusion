@@ -61,7 +61,7 @@ class Driver implements ExtendedCacheItemPoolInterface
 
         if (!$mongoExtensionExists && class_exists(\MongoClient::class)) {
             \trigger_error('This driver is used to support the pecl MongoDb extension with mongo-php-library.
-            For MongoDb with Mongo PECL support use Mongo Driver.', E_USER_ERROR);
+            For MongoDb with Mongo PECL support use Mongo Driver.', \E_USER_ERROR);
         }
 
         return $mongoExtensionExists && class_exists(\MongoDB\Collection::class);
@@ -224,10 +224,21 @@ class Driver implements ExtendedCacheItemPoolInterface
      */
     protected function buildConnectionURI($databaseName = ''): string
     {
+        $servers = $this->getConfig()->getServers();
+        $options = $this->getConfig()->getOptions();
+
         $host = $this->getConfig()->getHost();
         $port = $this->getConfig()->getPort();
         $username = $this->getConfig()->getUsername();
         $password = $this->getConfig()->getPassword();
+
+        if( \count($servers) > 0 ){
+            $host = \array_reduce($servers, function($carry, $data){
+                $carry .= ($carry === '' ? '' : ',').$data['host'].':'.$data['port'];
+                return $carry;
+            }, '');
+            $port = false;
+        }
 
         return implode('', [
             'mongodb://',
@@ -235,8 +246,9 @@ class Driver implements ExtendedCacheItemPoolInterface
             ($password ? ":{$password}" : ''),
             ($username ? '@' : ''),
             $host,
-            ($port !== 27017 ? ":{$port}" : ''),
+            ($port !== 27017 && $port !== false ? ":{$port}" : ''),
             ($databaseName ? "/{$databaseName}" : ''),
+            (\count($options) > 0 ? '?'.\http_build_query($options) : ''),
         ]);
     }
 
