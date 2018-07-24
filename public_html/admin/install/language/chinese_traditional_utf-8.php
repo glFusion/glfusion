@@ -119,7 +119,7 @@ $LANG_INSTALL = array(
     'path_prompt' => '指向private/目錄的路徑',
     'path_settings' => '路徑設置',
     'perform_upgrade' => '執行升級',
-    'php_req_version' => 'glFusion要求PHP版本不低於7.1.0.',
+    'php_req_version' => 'glFusion要求PHP版本不低於7.0.0.',
     'php_settings' => 'PHP配置',
     'php_version' => 'PHP版本',
     'php_warning' => '如果下面有任何一處被標記為<span class="no">紅色</span>，您的glFusion網站就可能遇到問題。請聯繫您的伺服器提供商來改變這些PHP配置項。',

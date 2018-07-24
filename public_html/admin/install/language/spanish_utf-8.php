@@ -119,7 +119,7 @@ $LANG_INSTALL = array(
     'path_prompt' => 'Ruta al directorio private/ ',
     'path_settings' => 'Configuraciones de la ruta',
     'perform_upgrade' => 'Realizar actualización',
-    'php_req_version' => 'glFusion requiere PHP en su versión 7.1.0 o superior.',
+    'php_req_version' => 'glFusion requiere PHP en su versión 7.0.0 o superior.',
     'php_settings' => 'Configuraciones de PHP',
     'php_version' => 'Versión de PHP',
     'php_warning' => 'Si alguno de los objetos en listados a continuación, aparecen marcados en color <span class="no">rojo</span>, significa que encontrarás problemas con tu sitio glFusion. Verifique con su proveedor de Alojamiento acerca de cómo cambiar alguna de las configuraciones de PHP.',

@@ -2545,7 +2545,7 @@ $LANG_ENVCHK = array(
     'on' => 'On',
     'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'openssl_extension' => 'OpenSSL Extension',
-    'php_req_version' => 'glFusion requires PHP version 5.3.3 or newer.',
+    'php_req_version' => 'glFusion requires PHP version 7.0.0 or newer.',
     'php_settings' => 'PHP Settings',
     'php_version' => 'PHP Version',
     'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',

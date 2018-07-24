@@ -4,7 +4,7 @@
     <description>Online Media Management System (Photo Albums, etc.)</description>
     <version>2.1.4</version>
     <glfusionversion>2.0.0</glfusionversion>
-    <phpversion>7.1.0</phpversion>
+    <phpversion>7.0.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
     <renamedist>config.php.dist</renamedist>
