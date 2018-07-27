@@ -52,7 +52,7 @@ switch ( $_POST['keepalive'] ) {
         DB_query($sql);
         exit;
     default :
-        die();
+        break;
 }
 
 if ( !isset($_COOKIE[$_CONF['cookie_name'].'adveditor'])) die();
