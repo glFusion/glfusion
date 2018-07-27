@@ -1034,6 +1034,9 @@ function USER_registrationForm($info = array(), $messages = array())
     if ($options['show_fullname']) {
         $T->set_var('show_fullname',true);
     }
+    if ($_CONF['user_reg_fullname'] == 2) {
+        $T->set_var('require_fullname',true);
+    }
     if ($options['show_email_confirmation']) {
         $T->set_var('show_email_confirmation',true);
     }
