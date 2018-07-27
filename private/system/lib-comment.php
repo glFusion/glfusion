@@ -725,11 +725,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $text = str_replace('<div class="comment-edit">', '', $text);
         $A['comment'] = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
 
-        // highlight search terms if specified
-        if( !empty( $_REQUEST['query'] )) {
-            $A['comment'] = COM_highlightQuery( $A['comment'], strip_tags($_REQUEST['query']) );
-        }
-
         // create a reply to link
         $reply_link = '';
         if( $ccode == 0 &&
@@ -762,7 +757,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $finalsig .= '</div>';
         }
 
-        $template->set_var( 'comments',  $format->parse($A['comment']).$finalsig.$commentFooter);
+        // sanitize and format comment
+        $A['comment'] = $format->parse($A['comment']);
+
+        // highlight search terms if specified. After formatting to avoid introducing
+        // strange comment fields
+        if( !empty( $_REQUEST['query'] )) {
+            $A['comment'] = COM_highlightQuery( $A['comment'], strip_tags($_REQUEST['query']) );
+        }
+
+        $template->set_var( 'comments',  $A['comment'].$finalsig.$commentFooter);
 
         // parse the templates
         if( ($mode == 'threaded') && $indent > 0 ) {
