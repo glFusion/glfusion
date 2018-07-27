@@ -1,4 +1,6 @@
 ## v1.7.5 (unreleased)
+  - Improved UTF8 handling in context snippits
+  - Improved filtering of search results (HTML / censor, etc.)
   - Fullname in user registration did not show required attribute if required
   - Modified how profile images are stored to ensure a unique filename is used when new profile images are uploaded - resolves an issue with the old image being cached for services such as CloudFlare.
   - Do not log custom_config.js missing in 404 log
