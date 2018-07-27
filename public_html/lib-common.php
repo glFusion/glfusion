@@ -6553,9 +6553,6 @@ function COM_getTextContent($text)
     // replace entities with plain spaces
     $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
 
-    // collapse whitespace
-    $text = preg_replace('/\s\s+/', ' ', $text);
-
     return trim($text);
 }
 
