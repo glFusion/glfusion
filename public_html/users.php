@@ -999,6 +999,9 @@ function USER_registrationForm($info = array(), $messages = array())
     if ( $_CONF['user_reg_fullname'] == 1 || $_CONF['user_reg_fullname'] == 2 ) {
         $options['show_fullname'] = true;
     }
+    if ($_CONF['user_reg_fullname'] == 2) {
+        $options['require_fullname'] = true;
+    }
 
     $T = new Template($_CONF['path_layout'].'users');
     $T->set_file('regform', 'registrationform.thtml');
@@ -1036,6 +1039,9 @@ function USER_registrationForm($info = array(), $messages = array())
 
     if ($options['show_fullname']) {
         $T->set_var('show_fullname',true);
+    }
+    if ($_CONF['user_reg_fullname'] == 2) {
+        $T->set_var('require_fullname',true);
     }
     if ($options['show_email_confirmation']) {
         $T->set_var('show_email_confirmation',true);
