@@ -75,8 +75,12 @@ class Search {
         global $_CONF, $_TABLES;
 
         // Set search criteria
-        if ( isset($_GET['query']) ){
+        if ( isset($_GET['q']) ) {
+            $this->_query = strip_tags ($_GET['q']);
+        } elseif ( isset($_GET['query']) ){
             $this->_query = strip_tags ($_GET['query']);
+        } else if ( isset($_POST['q']) ) {
+            $this->_query = strip_tags ($_POST['q']);
         } else if ( isset($_POST['query']) ) {
             $this->_query = strip_tags ($_POST['query']);
         } else {
