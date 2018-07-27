@@ -1,7 +1,8 @@
 ## v2.0.0 (Unreleased)
+  - .tm-story-text CSS style to story text in featured and standard story templates
   - Allow Geshi code formatting to be used in stories
   - Allow configuration of default story edit mode (visual or html)
-  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.1)
+  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - Comment system code optimizations
@@ -12,10 +13,16 @@
   - Improved cron / maintenance task interface
   - Template class code significantly streamlined
   - Converted all caching calls to use new caching engine
-  - Implemented phpFastCache as glFusion's caching engine
-  - Minimum PHP version is now 7.1.0
+  - Implemented a new caching engine based on phpFastCache
+  - Minimum PHP version is now 7.0.0
 
 ## v1.7.5 (unreleased)
+  - Improved UTF8 handling in context snippits
+  - Improved filtering of search results (HTML / censor, etc.)
+  - Fullname in user registration did not show required attribute if required
+  - Modified how profile images are stored to ensure a unique filename is used when new profile images are uploaded - resolves an issue with the old image being cached for services such as CloudFlare.
+  - Do not log custom_config.js missing in 404 log
+  - Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
   - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
   = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
   - Improved environment validation for required extensions

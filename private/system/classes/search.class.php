@@ -763,6 +763,11 @@ class Search {
 
         $dt = new Date('now',$_USER['tzid']);
 
+        $filter = \sanitizer::getInstance();
+        $filter->setReplaceTags(false);
+        $filter->setCensorData(true);
+        $filter->setPostmode('html');
+
         if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];
 
@@ -801,7 +806,8 @@ class Search {
                 $row['title'] = $LANG21[61];
             }
 
-            $row['title'] = $row['title']; // $this->_shortenText($this->_query, $row['title'], 6);
+            $row['title'] = $filter->displayText($filter->filterHTML($row['title']));
+
             $row['title'] = str_replace('$', '&#36;', $row['title']);
             $row['title'] = COM_createLink($row['title'], $row['url']);
 
@@ -867,7 +873,7 @@ class Search {
         $rt = '';
         $pos = $this->_stripos($text, $keyword);
         if ($pos !== false) {
-            $pos_space = strpos($text, ' ', $pos);
+            $pos_space = utf8_strpos($text, ' ', $pos);
             if (empty($pos_space)) {
                 // Keyword at the end of text
                 $key = $word_count - 1;
@@ -875,7 +881,7 @@ class Search {
                 $end = 0;
                 $rt = '<b>...</b> ';
             } else {
-                $str = substr($text, $pos, $pos_space - $pos);
+                $str = utf8_substr($text, $pos, $pos_space - $pos);
                 $m = (int) (($num_words - 1) / 2);
                 $key = $this->_arraySearch($keyword, $words);
                 if ($key === false) {

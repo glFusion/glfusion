@@ -141,7 +141,7 @@
 					<img class="uk-float-right" src="{story_topic_image_url}" alt="{story_topic_name}" height="48" width="48">
 				</a>
 {!endif}
-				<div itemprop="description" class="uk-margin-remove">
+				<div itemprop="description" class="uk-margin-remove tm-story-text">
 					{story_introtext_only}
 {!if adblock_content}
 					<div class="uk-panel uk-text-center">
