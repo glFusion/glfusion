@@ -6441,9 +6441,6 @@ function COM_getTextContent($text)
     // replace entities with plain spaces
     $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
 
-    // collapse whitespace
-    $text = preg_replace('/\s\s+/', ' ', $text);
-
     return trim($text);
 }
 
@@ -6469,11 +6466,11 @@ function COM_getEffectivePermission($owner, $group_id, $perm_owner,$perm_group, 
         $perm = $perm_anon;
     } else {
         $perm = $perm_member;
-        if ( in_array($item['group_id'],$_GROUPS )) {
+        if ( in_array($group_id,$_GROUPS )) {
             if ( $perm_group > $perm)
                 $perm = $perm_group;
         }
-        if ( $item['owner_id'] == $_USER['uid'] ) {
+        if ( $owner == $_USER['uid'] ) {
             if ( $perm_owner > $perm ) {
                 $perm = $perm_owner;
             }
