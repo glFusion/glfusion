@@ -2627,3 +2627,7 @@ pre {
  white-space: -o-pre-wrap;    /* Opera 7 */
  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
+
+#whats_new_block .uk-list {
+	line-height:2 !important;
+}
