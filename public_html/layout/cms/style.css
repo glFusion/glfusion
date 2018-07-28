@@ -429,8 +429,9 @@ p.tm-article-meta {
 /* used for text based editors */
 .texteditor {
 	width:100%;
-	font-family:courier new !important;
-	font-size:1.2em !important;
+	font-family: Consolas, monospace !important;
+	font-size:1.1em !important;
+	line-height:1.5 !important;
 }
 
 /* scroll widget */
