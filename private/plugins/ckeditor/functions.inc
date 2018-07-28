@@ -154,16 +154,17 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
             break;
         default :
             foreach ( $_editorRegistration AS $_pi => $data ) {
-
                 if ( $data['function'] == $ctype ) {
-                    $template->unset_var('wysiwyg');
                     $templateFile = $data['template'];
                     $templatePath = $_CONF['path'].'plugins/'.$_pi.'/templates';
                     $setupEditor = 1;
                     break;
                 }
             }
-            if ( $setupEditor == 0 ) return '';
+            if ( $setupEditor == 0 ) {
+                $template->unset_var('wysiwyg');
+                return;
+            }
             break;
     }
 
