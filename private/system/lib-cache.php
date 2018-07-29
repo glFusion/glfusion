@@ -159,9 +159,10 @@ function CACHE_remove_instance($iid)
 
     $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
     $iid = str_replace('-','_',$iid);
+/*
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
     CACHE_clean_directories($path_cache, 'instance__'.$iid);
-
+*/
     $c = glFusion\Cache::getInstance();
     $c->delete($iid);
     $c->deleteItemsByTag($tag);
