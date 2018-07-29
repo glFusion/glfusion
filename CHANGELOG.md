@@ -1,4 +1,6 @@
 ## v1.7.5 (unreleased)
+  - Changed texteditor style to use Consolas font
+  - Implement caching stub for compatbility with glFusion v2 cache APIs
   - Improved UTF8 handling in context snippits
   - Improved filtering of search results (HTML / censor, etc.)
   - Fullname in user registration did not show required attribute if required
@@ -6,7 +8,7 @@
   - Do not log custom_config.js missing in 404 log
   - Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
   - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
-  = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
+  - Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
   - Improved environment validation for required extensions
   - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid
