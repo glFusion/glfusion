@@ -37,7 +37,8 @@ high volume community discussion sites, and almost everything in between.
 
 **Web Server supporting PHP**
 
-glFusion will run on any web server that supports PHP. Modern web servers such as Apache, Nginx, Caddy, LiteSpeed, IIS, Lighttpd,and Abyss are known to work.
+glFusion will run on any web server that supports PHP. Modern web servers such
+as Apache, Nginx, Caddy, LiteSpeed, IIS, Lighttpd,and Abyss are known to work.
 
 **PHP version 7.0.0 or later**
 
@@ -78,7 +79,7 @@ install, extend and use the glFusion CMS.
 ## Support
 
 The best support method for glFusion CMS is the glFusion Web Site located at
-<a href="https://www.glfusion.org" target="_blank">https://www.glfusion.org</a>.  There is an active community ready to help out.
+[https://www.glfusion.org](https://www.glfusion.org).  There is an active community ready to help out.
 
 Please do not email the developers directly - there is a good chance the email will be
 missed due to the high volume of email they receive.
@@ -88,12 +89,12 @@ The [glFusion Website](https://www.glfusion.org) and [glFusion Online Chat hoste
 The glFusion CMS documentation is located in the [glFusion Documentation Wiki](https://www.glfusion.org/wiki/doku.php).
 
 The mailing list for announcements is glfusion-announce@freelists.org. You can
-subscribe at <a href="http://www.freelists.org/list/glfusion-announce" target="_blank">http://www.freelists.org/list/glfusion-announce</a>. This list is an
+subscribe at [http://www.freelists.org/list/glfusion-announce](http://www.freelists.org/list/glfusion-announce). This list is an
 extremely low traffic mailing list.
 
 The mailing list for development discussions is
 glfusion-development@freelists.org. You can subscribe at
-<a href="http://www.freelists.org/list/glfusion-development" target="_blank">http://www.freelists.org/list/glfusion-development</a>.
+[http://www.freelists.org/list/glfusion-development](http://www.freelists.org/list/glfusion-development).
 
 ## Demo
 
