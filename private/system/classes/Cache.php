@@ -252,8 +252,6 @@ final class Cache
                 $cacheItem->expiresAt((new \DateTime('@0')));
             } elseif (is_int($ttl) || $ttl instanceof \DateInterval) {
                 $cacheItem->expiresAfter($ttl);
-            } else if (strtolower($_CONF['cache_driver']) != 'files') {
-                $cacheItem->expiresAfter(86400);
             }
             if (is_array($tag)) {
                 $nsTags = array_map(
