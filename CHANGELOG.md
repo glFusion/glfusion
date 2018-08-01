@@ -1,4 +1,5 @@
 ## v2.0.0 (Unreleased)
+  - Implemented JavaScript based code formatter / highlighter
   - .tm-story-text CSS style to story text in featured and standard story templates
   - Allow Geshi code formatting to be used in stories
   - Allow configuration of default story edit mode (visual or html)

@@ -1451,6 +1451,11 @@
 					<dd>Send an email notification to <b>site_email</b> when a new story, comment, trackback or pingback has been submitted or a new user has registered with the site. The array() can hold any combination of the strings 'story', 'comment', 'trackback', 'pingback', and 'user' (separated by commas), depending on which notification(s) you want.<br><br>In this web-based configuration tool, click the '+' button to add each item as an individual element. Do not include single or double quotes. </dd>
 				</dl>
 
+				<dl id="desc_syntax_highlight">
+					<dt>Enable Syntax Highlighting / Code Formatting</dt>
+					<dd>If set to True, all [code][/code] blocks will have their contents formatted using the Code syntax / format feature.</dd>
+				</dl>
+
 				<dl id="desc_cron_schedule_interval">
 					<dt>Cron Schedule Interval</dt>
 					<dd>glFusion can emulate a cronjob, i.e. trigger a certain action at a given time. The code to be executed can be provided by a plugin or through the CUSTOM_runScheduledTask function in your lib-custom.php. The value given is in seconds and specifies the interval in which the code should be executed.<br><br>Please note that to trigger this action, you will need to have someone visit your site at around the specified time. On a site with few visitors, the code may only be executed with considerable delay. Set to 0 to disable. </dd>

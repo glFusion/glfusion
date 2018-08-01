@@ -179,7 +179,6 @@ class Formatter {
     {
         return md5(
             $this->formatType           .
-            $this->useGeshi             .
             $this->processSmilies       .
             $this->processBBCode        .
             $this->parseUrls            .
@@ -219,13 +218,13 @@ class Formatter {
     }
 
     /**
-     * Enables Geshi formatting of code blocks
+     * Enables Geshi formatting of code blocks - keep for compatibility
      * @param $mode - true or false
      * @return none
      */
     public function setGeshi($mode = false)
     {
-        $this->useGeshi = (bool) $mode;
+        return;
     }
 
     /**
@@ -425,7 +424,7 @@ class Formatter {
            	$bbcode->addFilter ($filter['type'], $filter['callback']);
         }
 
-        if ($this->convertPre && $this->useGeshi == false && ($this->formatType == 'html')) {
+        if ($this->convertPre && $this->formatType == 'html') {
             $str = str_replace('<pre>','[code]',$str);
             $str = str_replace('</pre>','[/code]',$str);
         }
@@ -712,19 +711,16 @@ class Formatter {
 
         $insideCode = 1;
 
-        if ($this->useGeshi) {
-            /* Support for formatting various code types : [code=java] for example */
-            if (!isset ($attributes['default'])) {
-                $codeblock = '</p>' . $this->_geshi_formatted($content) . '<p>';
-            } else {
-                $codeblock = '</p>' . $this->_geshi_formatted($content,strtoupper(strip_tags($attributes['default']))) . '<p>';
-            }
+        $content = @htmlspecialchars_decode($content,ENT_QUOTES);
+        $content = preg_replace('/^\s*?\n|\s*?\n$/','',$content);
+
+        if (isset ($attributes['default'])) {
+            $style = strtolower(strip_tags($attributes['default']));
         } else {
-            $content = @htmlspecialchars_decode($content,ENT_QUOTES);
-            $content = preg_replace('/^\s*?\n|\s*?\n$/','',$content);
-            $codeblock = '<div style="width:100%;" class="php"><pre class="codeblock">'  . @htmlspecialchars ($content,ENT_NOQUOTES, COM_getEncodingt(),true) . '</pre></div>';
-//            $codeblock = '<div style="width:100%;" class="php"><pre class="codeblock">'  . $content . '</pre></div>';
+            $style = 'php';
         }
+
+        $codeblock = '<div style="width:100%;"><pre><code class="'.$style.'">'  . @htmlspecialchars ($content,ENT_NOQUOTES, COM_getEncodingt(),true) . '</code></pre></div>';
 
         $codeblock = str_replace('{','&#123;',$codeblock);
         $codeblock = str_replace('}','&#125;',$codeblock);
@@ -781,36 +777,6 @@ class Formatter {
         $str = str_replace(array("[/QUOTE]\r\n", "[/QUOTE]\r", "[/QUOTE]\n","[/QUOTE] \r\n", "[/QUOTE] \r", "[/QUOTE] \n"), "[/QUOTE]", $str);
 
         return $str;
-    }
-
-    /**
-     * Geshi Formatting
-     */
-    public function _geshi_formatted($str,$type='php')
-    {
-        global $_CONF, $LANG_BBCODE;
-
-        $str = @htmlspecialchars_decode($str,ENT_QUOTES);
-        $str = preg_replace('/^\s*?\n|\s*?\n$/','',$str);
-        $geshi = new \GeSHi($str,$type);
-        $geshi->set_encoding(COM_getEncodingt());
-        $geshi->set_header_type(GESHI_HEADER_DIV);
-        if ($_CONF['open_ext_url_new_window'] && $_CONF['open_ext_url_new_window'] == true) {
-            $geshi->set_link_target(true);
-        }
-        $geshi->enable_line_numbers(GESHI_NO_LINE_NUMBERS);
-        $geshi->enable_keyword_links(false);
-        $geshi->set_overall_style('font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #fafafa;margin-top:5px;margin-bottom:5px;', true);
-        $geshi->set_line_style('font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;font-weight: 700; color: #006060; background: #fcfcfc;', true);
-        $geshi->set_code_style('color: #000020;', 'color: #000020;');
-        $geshi->set_header_type(GESHI_HEADER_DIV);
-        $geshi->set_line_style('background: red;', true);
-        $geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
-        $geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
-        $geshi->set_header_content("$type ".$LANG_BBCODE['formatted_code']);
-        $geshi->set_header_content_style('font-family: Verdana, Arial, sans-serif; color: #808080; font-size: 90%; font-weight: bold; background-color: #f0f0ff; border-bottom: 1px solid #d0d0d0; padding: 2px;');
-
-        return $geshi->parse_code();
     }
 
 

@@ -3297,6 +3297,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'syntax_highlight',
+    	'default_value' => 0,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 2,
+    	'selection_array' => 0,
+    	'sort' => 50,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_debug',
     	'default_value' => NULL,
     	'type' => 'fieldset',

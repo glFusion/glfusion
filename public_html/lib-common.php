@@ -1364,6 +1364,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 break;
          }
     }
+    if ( isset($_CONF['syntax_highlight']) && $_CONF['syntax_highlight'] == true && (!isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false)) {
+        $jsFooter .= '<script>hljs.initHighlightingOnLoad();</script>';
+    }
 
     $thisUrl = COM_getCurrentURL();
     if (@strpos($thisUrl, $_CONF['site_admin_url']) !== false) {
@@ -6611,6 +6614,10 @@ function _css_out()
     $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/nivo-slider.css',HEADER_PRIO_NORMAL);
     $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css',HEADER_PRIO_NORMAL);
 
+    if (isset($_CONF['syntax_highlight']) && $_CONF['syntax_highlight'] == true) {
+        $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/highlight/styles/default.css',HEADER_PRIO_NORMAL);
+    }
+
     // Let's look in the custom directory first...
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
         $outputHandle->addCSSFile($_CONF['path_layout'] . 'custom/style.css',HEADER_PRIO_HIGH);
@@ -6878,7 +6885,6 @@ function _js_out()
     // standard JS used by glFusion
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
-//        $files[] = $_CONF['path_html'].'javascript/jquery/jquery-3.3.1.min.js';
         $files[] = $_CONF['path_layout'].'/js/header.js';
         $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
@@ -6901,6 +6907,11 @@ function _js_out()
             $files[] = $_CONF['path_html'].'javascript/addons/tcycle/jquery.tcycle.min.js';
         }
         $files[] = $_CONF['path_html'].'javascript/addons/nivo-slider/jquery.nivo.slider.pack.js';
+
+        if (isset($_CONF['syntax_highlight']) && $_CONF['syntax_highlight'] == true) {
+            $files[] = $_CONF['path_html'].'javascript/addons/highlight/highlight.pack.js';
+        }
+
     }
     $files[] = $_CONF['path_html'].'javascript/common.min.js';
 
