@@ -194,10 +194,30 @@ class mgAlbum {
     }
 
     function constructor( $album, $mgadmin, $root, $groups ) {
+
+        $filter = new \sanitizer();
+        $filter->setReplaceTags(false);
+        $filter->setCensorData(true);
+        $filter->setPostmode('text');
+
+        $this->title = '';
+        $this->description = '';
+
+        if ($album['enable_html'] ) {
+            $filter->setPostmode('html');
+        } else {
+            $filter->setPostmode('text');
+        }
+        if (isset($album['album_title'])) {
+            $this->title = $filter->filterData($album['album_title']);
+        }
+        if (isset($album['album_desc'])) {
+            $this->description = $filter->filterData($album['album_desc']);
+        }
         $this->id               = $album['album_id'];
-        $this->title            = (!empty($album['album_title']) && $album['album_title'] != ' ') ? $album['album_title'] : '';
+//        $this->title            = (!empty($album['album_title']) && $album['album_title'] != ' ') ? $album['album_title'] : '';
         $this->parent           = $album['album_parent'];
-        $this->description      = (!empty($album['album_desc']) && $album['album_desc'] != ' ') ? $album['album_desc'] : '';
+//        $this->description      = (!empty($album['album_desc']) && $album['album_desc'] != ' ') ? $album['album_desc'] : '';
         $this->order            = $album['album_order'];
         $this->hidden           = $album['hidden'];
         $this->podcast			= $album['podcast'];

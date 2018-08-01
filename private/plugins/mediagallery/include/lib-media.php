@@ -1778,6 +1778,21 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
  			break;
  	}
 
+    $filter = new \sanitizer();
+    $filter->setNamespace('mediagallery','media_title');
+    $filter->setReplaceTags(false);
+    $filter->setCensorData(true);
+    if ($MG_albums[$aid]->enable_html == 1) {
+        $filter->setPostmode('html');
+    } else {
+        $filter->setPostmode('text');
+    }
+    if (isset($media[$mediaObject]['media_title'])) {
+        $media[$mediaObject]['media_title'] = $filter->filterData($media[$mediaObject]['media_title']);
+    }
+    if (isset($media[$mediaObject]['media_desc'])) {
+        $media[$mediaObject]['media_desc'] = $filter->filterData($media[$mediaObject]['media_desc']);
+    }
     $ptitle = (isset($media[$mediaObject]['media_title']) && $media[$mediaObject]['media_title'] != ' ' ) ? PLG_replaceTags($media[$mediaObject]['media_title'],'mediagallery','media_title') : '';
 
     $permalink = $_MG_CONF['site_url'] . '/media.php?s='.$srcID;
@@ -2064,6 +2079,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     }
 
     $media_desc = PLG_replaceTags(nl2br($media[$mediaObject]['media_desc']),'mediagallery','media_description');
+
     if ( strlen($media_desc) > 0 ) {
         $metaDesc = $media_desc;
         $metaDesc = strip_tags($metaDesc);
