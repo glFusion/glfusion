@@ -2,7 +2,6 @@
     "require": {
         "splitbrain/php-archive": "^1.0",
         "openpsa/universalfeedcreator": "^1.8",
-        "geshi/geshi": "^1.0",
         "html2text/html2text": "^4.1",
         "james-heinrich/getid3": "^1.9",
         "ezyang/htmlpurifier": "^4.9",

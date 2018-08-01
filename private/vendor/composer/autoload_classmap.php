@@ -18,7 +18,6 @@ return array(
     'FeedImage' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedImage.php',
     'FeedItem' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedItem.php',
     'GPXCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/GPXCreator.php',
-    'GeSHi' => $vendorDir . '/geshi/geshi/src/geshi.php',
     'HTMLCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/HTMLCreator.php',
     'HtmlDescribable' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/HtmlDescribable.php',
     'Image_XMP' => $vendorDir . '/james-heinrich/getid3/getid3/module.tag.xmp.php',

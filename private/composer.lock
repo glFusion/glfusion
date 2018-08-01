@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11ecfe911584699b95521c4758c00be5",
+    "content-hash": "0c011f632f38de759c7a306a7e2bd6e0",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -90,46 +90,6 @@
                 "html"
             ],
             "time": "2018-02-23T01:58:20+00:00"
-        },
-        {
-            "name": "geshi/geshi",
-            "version": "v1.0.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/GeSHi/geshi-1.0.git",
-                "reference": "5a7b461338d322d941986a656d4d1651452e73dd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/5a7b461338d322d941986a656d4d1651452e73dd",
-                "reference": "5a7b461338d322d941986a656d4d1651452e73dd",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/geshi/",
-                    "src/geshi.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Benny Baumann",
-                    "email": "BenBE@geshi.org",
-                    "homepage": "http://blog.benny-baumann.de/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Generic Syntax Highlighter",
-            "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05T05:51:25+00:00"
         },
         {
             "name": "html2text/html2text",

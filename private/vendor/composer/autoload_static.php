@@ -109,7 +109,6 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'FeedImage' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedImage.php',
         'FeedItem' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedItem.php',
         'GPXCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/GPXCreator.php',
-        'GeSHi' => __DIR__ . '/..' . '/geshi/geshi/src/geshi.php',
         'HTMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/HTMLCreator.php',
         'HtmlDescribable' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/HtmlDescribable.php',
         'Image_XMP' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.tag.xmp.php',
