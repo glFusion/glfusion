@@ -55,6 +55,9 @@
   			lastActivity = new Date().getTime();
   	  	introtext.on( 'key', function(){
 	  	  	lastActivity = new Date().getTime();
+	        if (modifiedForm != null){
+	            modifiedForm = 1;
+	        }
     	});
   	}
   }
@@ -63,6 +66,9 @@
   			lastActivity = new Date().getTime();
   	  	bodytext.on( 'key', function(){
   	  		lastActivity = new Date().getTime();
+	        if (modifiedForm != null){
+	            modifiedForm = 1;
+	        }
     	});
   	}
   }

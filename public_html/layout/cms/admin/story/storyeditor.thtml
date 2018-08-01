@@ -5,10 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
 <script src="{site_url}/javascript/addons/datetime/datetimepicker.js"></script>
 <script>
-
 	var editor_type = 'storyeditor';
 	var lang_timer  = "{lang_timeout}";
-
+	var modifiedForm = 0;
+{!if !show_preview}
+	modifiedForm = 1;
+{!endif}
 	function enablearchive(obj) {
 		var f = obj.form;               // all elements have their parent form in "form"
 		var disable = obj.checked;      // Disable when checked
@@ -44,11 +46,28 @@
 				$('#frmstory').trigger('submit', [ { $action: true } ]);
 			}, function(){});
 		} else {
+			modifiedForm = 0;
 			$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked' />");
 			$('#frmstory').trigger('submit', [ { $action: true } ]);
 		}
 	}
+	$(document).ready(function() {
 
+		modifiedForm = $('#mod').val();
+		$(':input').change(function(){
+			modifiedForm = 1;
+			$('#mod').val(1);
+		});
+		window.onbeforeunload = confirmExit;
+		function confirmExit(){
+			if (modifiedForm == 1) {
+				return 'unsaved';
+			}
+		}
+		$('.button').click(function(){
+			modifiedForm = 0;
+		});
+	});
 </script>
 <div class="tm-admin">
 	{wysiwyg}
@@ -72,6 +91,7 @@
 		<input type="hidden" name="numemails" value="{story_emails}">
 		<input type="hidden" name="old_sid" value="{old_story_id}">
 		<input type="hidden" name="hour_mode" value="{hour_mode}">
+		<input type="hidden" name="mod" id="mod" value="{mod}">
 		<input type="hidden" id="sectoken" name="{security_token_name}" value="{security_token}">
 
 		<ul class="uk-tab" data-uk-tab="{connect:'#story-form'}">
@@ -554,10 +574,10 @@
 					<button onclick="actionClick('save');" class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
 				</li>
 				<li>
-					<button onclick="actionClick('previewstory');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					<button onclick="actionClick('previewstory');" class="uk-button cancel tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 				<li>
-					<button onclick="actionClick('cancel');return false;" class="cancel uk-button uk-button-primary tm-admin-save-button-width" type="submit" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');return false;" class="cancel button uk-button uk-button-primary tm-admin-save-button-width" type="submit" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
 			</ul>
 		</div>
@@ -567,7 +587,7 @@
 
 		<div id="se_bottom" class="uk-margin-large">
 			<button onclick="actionClick('save');" class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
-			<button onclick="actionClick('previewstory');" class="uk-button" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
+			<button onclick="actionClick('previewstory');" class="uk-button button cancel" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
 			<button onclick="actionClick('cancel');return false;" class="cancel uk-button uk-button-primary" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
 {!if delete_option}
 			<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>

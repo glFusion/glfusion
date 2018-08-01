@@ -745,6 +745,14 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $story_templates->set_var ('show_texteditor', 'none');
         $story_templates->set_var ('show_submitoptions', 'none');
         $navbar->set_selected($LANG24[79]);
+
+        if (isset($_POST['mod']) && $_POST['mod'] == '1') {
+            $story_templates->set_var('mod',1);
+        } else {
+            $story_templates->set_var('mod',0);
+        }
+
+
     } else {
         $navbar->set_selected($LANG24[80]);
         $story_templates->set_var ('show_preview', 'none');
@@ -1074,16 +1082,6 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('frontpage_date_minute_options', $minute_options);
 
     $story_templates->set_var('frontpage_date_second', $story->EditElements('frontpage_date_second'));
-
-
-
-
-
-
-
-
-
-// end of new stuf
 
 
     $story_templates->set_var('story_introtext', $story->EditElements('introtext'));
