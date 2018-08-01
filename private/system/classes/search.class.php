@@ -802,9 +802,11 @@ class Search {
                 $row['title'] = $LANG21[61];
             }
 
-            $row['title'] = $filter->displayText($filter->filterHTML($row['title']));
-
+            $filter->setPostmode('text');
+            $title = COM_getTextContent($row['title']);
+            $row['title'] = $filter->displayText($title);
             $row['title'] = str_replace('$', '&#36;', $row['title']);
+            if ($row['title'] == '') $row['title'] = 'No title available';
             $row['title'] = COM_createLink($row['title'], $row['url']);
 
             if ( $row['description'] == '' ) {

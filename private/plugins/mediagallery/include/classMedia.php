@@ -66,11 +66,29 @@ class Media {
     }
 
     function constructor( $M, $aid ) {
+        global $MG_albums;
         $this->id               = $M['media_id'];
         $this->type             = $M['media_type'];
         if ( $this->type != -1 ) {
-            $this->title            = (isset($M['media_title']) && $M['media_title'] != ' ') ? $M['media_title'] : '';
-            $this->description      = (isset($M['media_desc']) && $M['media_desc'] != ' ') ? $M['media_desc'] : '';
+            $filter = new \sanitizer();
+            $filter->setNamespace('mediagallery','');
+            $filter->setReplaceTags(false);
+            $filter->setCensorData(true);
+            $filter->setPostmode('text');
+
+            $this->title = '';
+            $this->description = '';
+            if ($MG_albums[$aid]->enable_html ) {
+                $filter->setPostmode('html');
+            } else {
+                $filter->setPostmode('text');
+            }
+            if (isset($M['media_title'])) {
+                $this->title = $filter->filterData($M['media_title']);
+            }
+            if (isset($M['media_desc'])) {
+                $this->description = $filter->filterData($M['media_desc']);
+            }
             $this->filename         = $M['media_filename'];
             $this->keywords         = (isset($M['media_keywords']) && $M['media_keywords'] != ' ') ? $M['media_keywords'] : '';
             $this->mime_ext         = $M['media_mime_ext'];

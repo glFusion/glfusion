@@ -343,6 +343,13 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
+    $filter = new \sanitizer();
+    $filter->setNamespace('mediagallery','');
+    $filter->setReplaceTags(false);
+    $filter->setCensorData(false);
+    $filter->setPostmode('text');
+
+
     $numItems = count($_POST['mid']);
 
     for ($i=0; $i < $numItems; $i++) {
@@ -363,8 +370,11 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
             $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media_title_safe))));
             $media_desc = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords($media[$i]['description']))));
         } else {
+            $filter->setPostmode('html');
+            $media_title_safe = $filter->filterData($media_title_safe);
+            $media_desc = $filter->filterData($media[$i]['description']);
             $media_title = DB_escapeString($media_title_safe);
-            $media_desc  = DB_escapeString($media[$i]['description']);
+            $media_desc  = DB_escapeString($media_desc);
         }
         if ( $media[$i]['include_ss'] == 1 ) {
             $ss = 1;
@@ -1250,9 +1260,15 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 
 	$remote_url = isset($_POST['remoteurl']) ? DB_escapeString($_POST['remoteurl']) : '';
 
+    $filter = new \sanitizer();
+    $filter->setReplaceTags(false);
+    $filter->setCensorData(true);
+    $filter->setPostmode('text');
+
     if ($MG_albums[$album_id]->enable_html ) {
-        $media_title    = COM_checkWords($_POST['media_title']);
-        $media_desc     = COM_checkWords($_POST['media_desc']);
+        $filter->setPostmode('html');
+        $media_title    = $filter->filterData($_POST['media_title']);
+        $media_desc     = $filter->filterData($_POST['media_desc']);
     } else {
         $media_title        = htmlspecialchars(strip_tags(COM_checkWords($_POST['media_title'])));
         $media_desc         = htmlspecialchars(strip_tags(COM_checkWords($_POST['media_desc'])));
