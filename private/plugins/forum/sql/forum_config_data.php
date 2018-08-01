@@ -688,55 +688,6 @@ $forumConfigData = array(
         'set' => TRUE,
         'group' => 'forum'
     ),
-
-    array(
-        'name' => 'geshi_line_style',
-        'default_value' => 'font: normal normal 95% \'Courier New\', Courier, monospace; color: #003030;font-weight: 700; color: #006060; background: #fcfcfc;',
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 2,
-        'selection_array' => 0,
-        'sort' => 130,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'geshi_overall_style',
-        'default_value' => 'font-size: 12px; color: #000066; border: 1px solid #d0d0d0; background-color: #fafafa;',
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 2,
-        'selection_array' => 0,
-        'sort' => 140,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'geshi_code_style',
-        'default_value' => 'color: #000020;',
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 2,
-        'selection_array' => 0,
-        'sort' => 150,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'geshi_header_style',
-        'default_value' => 'font-family: Verdana, Arial, sans-serif; color: #fff; font-size: 90%; font-weight: 700; background-color: #3299D6; border-bottom: 1px solid #d0d0d0; padding: 2px;',
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 2,
-        'selection_array' => 0,
-        'sort' => 160,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
     array(
         'name' => 'use_spamx_filter',
         'default_value' => '0',
@@ -744,7 +695,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 0,
-        'sort' => 170,
+        'sort' => 130,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -756,7 +707,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 0,
-        'sort' => 180,
+        'sort' => 140,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -768,7 +719,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 0,
-        'sort' => 190,
+        'sort' => 150,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -780,7 +731,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 0,
-        'sort' => 200,
+        'sort' => 160,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -792,7 +743,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 0,
-        'sort' => 210,
+        'sort' => 170,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -804,7 +755,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 6,
-        'sort' => 220,
+        'sort' => 180,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -816,7 +767,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 6,
-        'sort' => 230,
+        'sort' => 190,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -828,7 +779,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 2,
         'selection_array' => 6,
-        'sort' => 240,
+        'sort' => 200,
         'set' => TRUE,
         'group' => 'forum'
     ),
