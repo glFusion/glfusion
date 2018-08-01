@@ -404,7 +404,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
 
     $topic = DB_escapeString ($topic);
 
-    $filter = new sanitizer();
+    $filter = sanitizer::getInstance();
     $description = $filter->filterText($description);
     $description = DB_escapeString($description);
 
@@ -711,7 +711,7 @@ function POLLS_getListFieldVoters($fieldname, $fieldvalue, $A, $icon_arr, $token
                 break;
 
             case 'topic' :
-                $filter = new sanitizer();
+                $filter = sanitizer::getInstance();
                 $filter->setPostmode('text');
                 $retval = $filter->filterData($fieldvalue);
                 break;

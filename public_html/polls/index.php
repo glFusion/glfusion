@@ -102,7 +102,7 @@ $display = '';
 $page = '';
 $title = $LANG_POLLS['pollstitle'];
 
-$filter = new sanitizer();
+$filter = sanitizer::getInstance();
 $filter->setPostmode('text');
 
 $pid = isset($_POST['pid']) ? COM_applyFilter($_POST['pid'],true) : 0;

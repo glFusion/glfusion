@@ -804,10 +804,13 @@ function plugin_getwhatsnew_filemgmt() {
 
         $nrows1 = DB_numRows( $result );
         if( $nrows1 == 0 ) {
-            $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
+            $retval .= $LANG_FILEMGMT['no_new_files'] . '<br>' . LB;
         } else {
+            $filter = sanitizer::getInstance();
+            $filter->setPostmode('text');
             for( $i = 0; $i < $nrows1; $i++ ) {
                 list($lid, $ftitle) = DB_fetchArray( $result );
+                $ftitle = $filter->filterData($ftitle);
                 $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\" title=\"".htmlspecialchars($ftitle,ENT_COMPAT,COM_getEncodingt())."\" rel=\"nofollow\">";
 				if( strlen( $ftitle ) > $filemgmtWhatsNewTitleLength ) {
 					$titleTrimLength = $filemgmtWhatsNewTitleLength - 3;
@@ -832,10 +835,14 @@ function plugin_getwhatsnew_filemgmt() {
 
             $nrows2 = DB_numRows( $result );
             if( $nrows2 == 0 ) {
-                $retval .= $LANG_FILEMGMT['no_comments'] . '<br' . XHTML . '>' . LB;
+                $retval .= $LANG_FILEMGMT['no_comments'] . '<br>' . LB;
             } else {
+                $filter = sanitizer::getInstance();
+                $filter->setPostmode('text');
                 for( $i = 0; $i < $nrows2; $i++ ) {
                     list($lid, $ftitle, $ctitle) = DB_fetchArray( $result );
+                    $ftitle = $filter->filterData($ftitle);
+                    $ctitle = $filter->filterData($ctitle);
                     $commentTitle = $ctitle;
                     $titlePrefix = "<b>C:</b>&nbsp;";
                     $ctitle = $titlePrefix . $ctitle;
