@@ -162,8 +162,8 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
                 }
             }
             if ( $setupEditor == 0 ) {
-                $template->unset_var('wysiwyg');
-                return;
+//                $template->unset_var('wysiwyg');
+                return '';
             }
             break;
     }
