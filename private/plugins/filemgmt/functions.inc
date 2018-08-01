@@ -914,7 +914,7 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
                 return $content;
             }
             $F = DB_fetchArray($result);
-            $title = $F['title'];
+            $title = COM_filterHTML($F['title']);
 
     		// check for target window specification, and user-defined caption, if any
             $px = explode (' ', trim ($autotag['parm2']));

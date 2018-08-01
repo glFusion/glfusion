@@ -710,6 +710,11 @@ function POLLS_getListFieldVoters($fieldname, $fieldvalue, $A, $icon_arr, $token
                         . '?delvote=x&amp;id=' . $A['id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
                 break;
 
+            case 'topic' :
+                $filter = new sanitizer();
+                $filter->setPostmode('text');
+                $retval = $filter->filterData($fieldvalue);
+                break;
 
             default:
                 $retval = $fieldvalue;

@@ -217,12 +217,15 @@ function plugin_getwhatsnewcomment_polls()
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
     if ( $nrows > 0 ) {
+        $filter = new sanitizer();
+        $filter->setPostmode('text');
+
         for ($x = 0; $x < $nrows; $x++ ) {
             $A = DB_fetchArray($result);
             $cmtReturn['url'] = $_CONF['site_url'].'/polls/index.php?pid=' . $A['sid'] . '#comments';
             $cmtReturn['type'] = 'polls';
             $cmtReturn['dups'] = $A['dups'];
-            $cmtReturn['title'] = $A['title'];
+            $cmtReturn['title'] = $filter->filterData($A['title']);
             $cmtReturn['lastdate'] = $A['lastdate'];
             $commentrow[] = $cmtReturn;
         }
@@ -374,11 +377,15 @@ function plugin_showstats_polls($showsitestats)
         $text_arr = array('has_menu' => false,
                           'title'    => $LANG_POLLS['stats_top10'],
         );
+
+        $filter = new sanitizer();
+        $filter->setPostmode('text');
+
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
             $url = $_CONF['site_url'] . '/polls/index.php?pid=' . $A['pid']
                  . '&amp;aid=-1';
-            $pid = COM_createLink($A['topic'], $url);
+            $pid = COM_createLink($filter->filterData($A['topic']), $url);
             $voters = COM_NumberFormat ($A['voters']);
             $data_arr[] = array ('pid' => $pid, 'voters' => $voters);
         }
@@ -744,6 +751,9 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
 
         switch ($autotag['tag']) {
             case 'poll':
+                $filter = new sanitizer();
+                $filter->setPostmode('text');
+
                 if (!empty($autotag['parm2'])) {
                     $title = COM_applyFilter($autotag['parm2']);
                 } else {
@@ -753,7 +763,7 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
                 if ( $title == '' ) {
                     $retval = '';
                 } else {
-                    $retval = COM_createLink($title, $_CONF['site_url']
+                    $retval = COM_createLink($filter->filterData($title), $_CONF['site_url']
                                 . '/polls/index.php?pid=' . $pid);
                 }
                 break;
@@ -863,6 +873,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
 
+    $filter = new sanitizer();
+    $filter->setPostmode('text');
+
     $retval = array();
     for ($i = 0; $i < $numRows; $i++) {
         $A = DB_fetchArray($result);
@@ -878,7 +891,7 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     $props['id'] = $A['pid'];
                     break;
                 case 'description' :
-                    $props['description'] = $A['description'];
+                    $props['description'] = $filter->filterData($A['description']);
                     break;
                 case 'searchidx' :
                     if ( $A['description'] == '' ) {
@@ -888,7 +901,7 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                     }
                     break;
                 case 'title':
-                    $props['title'] = $A['topic'];
+                    $props['title'] = $filter->filterData($A['topic']);
                     break;
                 case 'url':
                     if (empty($A['pid'])) {
@@ -1034,6 +1047,9 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 
     USES_lib_comments();
 
+    $filterS = new sanitizer();
+    $filterS->setPostmode('text');
+
     $retval = '';
 
     $result = DB_query("SELECT topic,description,voters,commentcode,is_open,login_required,hideresults,owner_id "
@@ -1062,10 +1078,10 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                                         'comments' => 'pollcomments.thtml'));
                 $poll->set_var('poll_id', $pid );
             //    if ($nquestions > 1) {
-                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
+                    $poll->set_var('poll_topic', $LANG25['34'] . " " . $filterS->filterData($P['topic']));
                     $poll->set_var('lang_question', $LANG25[31].':');
             //    }
-                $poll->set_var('poll_description', htmlspecialchars($P['description']));
+                $poll->set_var('poll_description', $filterS->filterData($P['description']));
                 $poll->set_var('num_votes', COM_numberFormat($P['voters']));
                 $poll->set_var('poll_vote_url', $_CONF['site_url']
                                                 . '/polls/index.php');
@@ -1123,7 +1139,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 
                 for($j=0; $j<$nquestions; $j++) {
                     $Q = DB_fetchArray($questions);
-                    $poll->set_var('poll_question', " ".$Q['question']);
+                    $poll->set_var('poll_question', " ".$filterS->filterData($Q['question']));
                     $poll->set_var('question_id', $j);
                     $notification = "";
                     $filter = "";
@@ -1148,7 +1164,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                         }
 
                         $poll->set_var('answer_id', $A['aid']);
-                        $poll->set_var('answer_text', $A['answer']);
+                        $poll->set_var('answer_text', $filterS->filterData($A['answer']));
                         $poll->parse('poll_answers', 'panswer', true);
                         $poll->clear_var('selected');
                     }
@@ -1213,7 +1229,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     if ( !in_array($mode,$valid_cmt_modes) ) {
                         $mode = '';
                     }
-                    $retval .= CMT_userComments($pid, $P['topic'], 'polls',
+                    $retval .= CMT_userComments($pid, $filterS->filterData($P['topic']), 'polls',
                                                 $order, $mode, 0, $page, false,
                                                 $delete_option, $P['commentcode'],$P['owner_id']);
                 }
@@ -1246,6 +1262,7 @@ function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
 
     $retval = '';
     $is_open = 0;
+
     // housekeeping - delete old anonymous voting data
     if ( !isset($_PO_CONF['polladdresstime']) ) {
         $polladdresstime = 86400; // 24 hours
@@ -1399,6 +1416,9 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
     global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE,
            $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
 
+    $filter = new sanitizer();
+    $filter->setPostmode('text');
+
     $retval = '';
     $topic_sql = "SELECT topic,description,voters,is_open,hideresults,commentcode,owner_id,group_id,"
         . "perm_owner,perm_group,perm_members,perm_anon "
@@ -1454,8 +1474,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 'votes_bar' => 'pollvotes_bar.thtml',
                 'votes_num' => 'pollvotes_num.thtml' ));
             $poll->set_var('layout_url', $_CONF['layout_url']);
-            $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
-            $poll->set_var('poll_description',htmlspecialchars($P['description']));
+            $poll->set_var('poll_topic', $filter->filterData($P['topic']));
+            $poll->set_var('poll_description',$filter->filterData($P['description']));
 
             $poll->set_var('poll_id', $pid);
             $poll->set_var('num_votes', COM_numberFormat($P['voters']));
@@ -1486,7 +1506,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 if ($nquestions >= 1) {
                     $counter = ($j + 1) . "/$nquestions: " ;
                 }
-                $poll->set_var('poll_question', $counter . $Q['question']);
+                $poll->set_var('poll_question', $counter . $filter->filterData($Q['question']));
 
                 $answer_sql = "SELECT votes,answer,remark "
                     . "FROM {$_TABLES['pollanswers']} "
@@ -1515,8 +1535,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     }
                     $poll->set_var('cssida', 1);
                     $poll->set_var('cssidb', 2);
-                    $poll->set_var('answer_text', $A['answer']);
-                    $poll->set_var('remark_text', $A['remark']);
+                    $poll->set_var('answer_text', $filter->filterData($A['answer']));
+                    $poll->set_var('remark_text', $filter->filterData($A['remark']));
                     $poll->set_var('answer_counter', $i);
                     $poll->set_var('answer_odd', (($i - 1) % 2));
                     $poll->set_var('answer_num', COM_numberFormat($A['votes']));
@@ -1583,7 +1603,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 } else {
                     $mode = '';
                 }
-                $retval .= CMT_userComments($pid, $P['topic'], 'polls',
+                $retval .= CMT_userComments($pid, $filter->filterData($P['topic']), 'polls',
                                             $order, $mode, 0, $page, false,
                                             $delete_option, $P['commentcode'],$P['owner_id']);
             }
@@ -1621,6 +1641,11 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'topic':
+            case 'topic' :
+                $filter = new sanitizer();
+                $filter->setPostmode('text');
+                $fieldvalue = $filter->filterData($fieldvalue);
+
                 $retval = COM_createLink($fieldvalue,
                         "{$_CONF['site_url']}/polls/index.php?pid={$A['pid']}");
                 break;
