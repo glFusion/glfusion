@@ -23,7 +23,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: site_url + '/refresh.php',
+            url: glfusionSiteUrl + '/refresh.php',
             data: {"keepalive" : editor_type, "token" : sec_token },
             success: function(data) {
             }
