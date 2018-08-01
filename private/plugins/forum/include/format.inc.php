@@ -172,10 +172,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
         $format->setWysiwyg(true);
     }
 
-    if ($_FF_CONF['use_geshi']) {
-        $format->setGeshi(true);
-    }
-
     $format->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
 
@@ -186,7 +182,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
 function _ff_FormatForEmail( $str, $postmode='html' ) {
     global $_CONF, $_FF_CONF;
 
-    $_FF_CONF['use_geshi']     = true;
     $_FF_CONF['allow_smilies'] = false;
     $str = FF_formatTextBlock($str,$postmode,'text');
 

@@ -788,21 +788,8 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'story_geshi_enabled',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 1,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 140,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-
 
 // end of story display fset
-
 
 // story administration fset
     array(

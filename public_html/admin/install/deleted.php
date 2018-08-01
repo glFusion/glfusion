@@ -36,6 +36,7 @@ $obsoletePrivateDir = array(
     'vendor/phpfastcache/phpfastcache/src/',
     'plugins/captcha/images/static/',
     'plugins/commentfeeds/',
+    'vendor/geshi/',
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',

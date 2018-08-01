@@ -53,12 +53,6 @@ class Formatter {
     var $formatType = 'text';
 
     /*
-     * var useGeshi
-     * Boolean - true enable Geshi code blocks, false use <pre></pre>
-     */
-    var $useGeshi = false;
-
-    /*
      * var processSmilies
      * Boolean - true process smilies
      */

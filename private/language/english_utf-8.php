@@ -2953,7 +2953,6 @@ $LANG_confignames['Core'] = array(
     'cache_redis_info' => 'Redis Driver Attributes',
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
-    'story_geshi_enabled' => 'Geshi Code Formatting',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
 
 // embedded field sets

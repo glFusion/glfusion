@@ -430,11 +430,6 @@ class Story
         $this->format->setParseAutoTags(true);
         $this->format->setProcessBBCode(false);
         $this->format->setCensor(true);
-        if (isset($_CONF['story_geshi_enabled']) && $_CONF['story_geshi_enabled'] == 1) {
-            $this->format->setGeshi(true);
-        } else {
-            $this->format->setGeshi(false);
-        }
         $this->format->setProcessSmilies(true);
         $this->format->addFilter(FILTER_PRE,array($this,'replaceImages'));
         $this->format->addFilter(FILTER_POST,array($this,'renderImages'));

@@ -90,7 +90,6 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $format->setParseAutoTags(true);
         $format->setProcessBBCode(false);
         $format->setCensor(true);
-        $format->setGeshi(false);
         $format->setProcessSmilies(true);
         $format->setType($A['postmode']);
         $A['comment'] = $format->parse($A['comment']);
@@ -431,7 +430,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $format->setParseAutoTags(true);
     $format->setProcessBBCode(false);
     $format->setCensor(true);
-    $format->setGeshi(false);
     $format->setProcessSmilies(true);
 
     $token = '';
@@ -1704,7 +1702,6 @@ function CMT_sendNotification( $commentData = array())
     $format->setParseAutoTags(true);
     $format->setProcessBBCode(false);
     $format->setCensor(true);
-    $format->setGeshi(false);
     $format->setProcessSmilies(false);
     $format->setType($commentData['postmode']);
 
