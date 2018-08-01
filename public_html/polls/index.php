@@ -102,6 +102,9 @@ $display = '';
 $page = '';
 $title = $LANG_POLLS['pollstitle'];
 
+$filter = new sanitizer();
+$filter->setPostmode('text');
+
 $pid = isset($_POST['pid']) ? COM_applyFilter($_POST['pid'],true) : 0;
 $type = isset($_POST['type']) ? COM_applyFilter($_POST['type']) : '';
 
@@ -174,8 +177,11 @@ if (empty($pid) || $pid == '') {
         $page .= COM_showMessage($msg, 'polls');
     }
     if (isset($_POST['aid'])) {
+
+        $tp = DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'");
+
         $eMsg = $LANG_POLLS['answer_all'] . ' "'
-            . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'") . '"';
+            . $filter->filterData($tp) . '"';
         $page .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
     }
     if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".DB_escapeString($pid)."'") != 1) {
@@ -196,7 +202,7 @@ if (empty($pid) || $pid == '') {
         $title = $LANG_POLLS['pollstitle'];
         $page .= POLLS_pollList();
     } else {
-        $title = $Q['topic'];
+        $title = $filter->filterData($Q['topic']);
         $page .= POLLS_pollResults($pid, 400, $order, $mode);
     }
 }

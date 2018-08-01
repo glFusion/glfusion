@@ -339,11 +339,11 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
 
     // check if any question was entered
     if (empty($topic) || (count($Q) == 0) || (strlen($Q[0]) == 0) || (strlen($A[0][0]) == 0)) {
-        $retval .= COM_siteHeader ('menu', $LANG25[5]);
+//        $retval .= COM_siteHeader ('menu', $LANG25[5]);
         $retval .= COM_startBlock ($LANG21[32], '',COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $LANG25[2];
         $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-        $retval .= COM_siteFooter ();
+//        $retval .= COM_siteFooter ();
         return $retval;
     }
     // check for poll id change
@@ -710,6 +710,11 @@ function POLLS_getListFieldVoters($fieldname, $fieldvalue, $A, $icon_arr, $token
                         . '?delvote=x&amp;id=' . $A['id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
                 break;
 
+            case 'topic' :
+                $filter = new sanitizer();
+                $filter->setPostmode('text');
+                $retval = $filter->filterData($fieldvalue);
+                break;
 
             default:
                 $retval = $fieldvalue;
