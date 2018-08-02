@@ -44,7 +44,11 @@ class autotag_headlines extends BaseAutotag {
         // template - the template name
 
         $topic = $p1;
-        if ( $topic == 'all' ) $topic = '';
+
+        if ( $topic == 'all' ) {
+            $topic = '';
+        }
+
         $uniqueID = md5($p1.$p2);
 
         $display    = 10;       // display 10 articles
@@ -130,12 +134,20 @@ class autotag_headlines extends BaseAutotag {
         if ( $display < 0 ) $display = 3;
 
         $valid_sortby = array('date','views','rating','featured');
-        if ( !in_array($sortby,$valid_sortby)) $sortby = 'featured';
-        if( $sortby == 'views' ) $sortby = 'hits';
+        if ( !in_array($sortby,$valid_sortby)) {
+            $sortby = 'featured';
+        }
+        if( $sortby == 'views' ) {
+            $sortby = 'hits';
+        }
         $valid_order = array('desc','asc');
-        if ( !in_array($orderby,$valid_order)) $orderby = 'desc';
+        if ( !in_array($orderby,$valid_order)) {
+            $orderby = 'desc';
+        }
 
-        if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) $storyimage = 2;
+        if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) {
+            $storyimage = 2;
+        }
 
         $c = glFusion\Cache::getInstance();
         $key = 'headlines__'.$uniqueID.'_'.$c->securityHash(true,true);
@@ -208,8 +220,9 @@ class autotag_headlines extends BaseAutotag {
             $headlinesSQL .= " LIMIT ".$display;
         }
 
-        $result = DB_query ($headlinesSQL);
-        $numRows = DB_numRows($result);
+        $result  = DB_query ($headlinesSQL);
+        $storyRecords = DB_fetchAll($result);
+        $numRows = @count($storyRecords);
 
         if ( $numRows < $cols ) {
             $cols = $numRows;
@@ -219,16 +232,13 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ( $numRows > 0 ) {
-
             $T = new Template($_CONF['path'].'system/autotags/');
             $T->set_file('page',$template);
-
             $T->set_var('columns',$cols);
-
             $T->set_block('page','headlines','hl');
 
             $newstories = array();
-            while ( $A = DB_fetchArray($result) ) {
+            foreach ($storyRecords AS $A) {
                 $readMore = false;
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
@@ -239,24 +249,22 @@ class autotag_headlines extends BaseAutotag {
                     $author = $A['username'];
                 }
 
-                $title = COM_undoSpecialChars( $A['title'] );
-                $title = str_replace('&nbsp;',' ',$title);
-                $subtitle = COM_undoSpecialChars($A['subtitle']);
+                $story = new Story();
+                $story->loadFromArray($A);
+                $A['introtext'] = $story->displayElements('introtext');
+                $A['bodytext']  = $story->displayElements('bodytext');
+                $title = $story->displayElements('title');
+                $subtitle = $story->displayElements('subtitle');
+
                 if ( $A['story_image'] != '' ) {
                     $story_image = $_CONF['site_url'].$A['story_image'];
                 } else {
                     $story_image = '';
                 }
 
-                $A['introtext'] = STORY_renderImages($A['sid'], $A['introtext']);
-
                 if ( !empty($A['bodytext']) ) {
                     $readMore = true;
-                    $closingP = strrpos($A['introtext'], "</p>");
-                    if ( $closingP !== FALSE ) {
-                        $text = substr($A['introtext'],0,$closingP);
-                        $A['introtext'] = $text;
-                    }
+
                     // adds the read more link
                     $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
                     $T->set_var('lang_readmore',$LANG01['continue_reading']);
@@ -264,6 +272,7 @@ class autotag_headlines extends BaseAutotag {
 
                 if ( $truncate > 0 ) {
                     $truncatedArticle = COM_truncateHTML($A['introtext'], $truncate,'...');
+
                     if ( $readMore == false && utf8_strlen($A['introtext']) != utf8_strlen($truncatedArticle) ) {
                         // adds the read more link
                         $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
@@ -276,7 +285,7 @@ class autotag_headlines extends BaseAutotag {
                 $dt->setTimestamp($A['unixdate']);
 
                 if ( $A['commentcode'] >= 0 ) {
-                    $cmtLinkArray = CMT_getCommentLinkWithCount( 'article', $A['sid'], $_CONF['site_url'].'/article.php?story=' . $A['sid'],$A['comments'],1);
+                    $cmtLinkArray = CMT_getCommentLinkWithCount('article', $A['sid'], $_CONF['site_url'].'/article.php?story=' . $A['sid'],$A['comments'],1);
 
                     $T->set_var(array(
                         'lang_comments'     => '',
@@ -292,30 +301,30 @@ class autotag_headlines extends BaseAutotag {
                 }
 
                 $T->set_var(array(
-                    'titlelink'         => ($titleLink ? TRUE : ''),
-                    'meta'              => ($meta ? TRUE : ''),
+                    'attribution_name'  => $A['attribution_name'],
+                    'attribution_url'   => $A['attribution_url'],
+                    'author'            => $author,
+                    'author_id'         => $A['uid'],
+                    'date'              => $dt->format($dt->getUserFormat(),true),
+                    'date_only'         => $dt->format($_CONF['dateonly'],true),
                     'lang_by'           => $LANG01[1],
                     'lang_posted_in'    => $LANG01['posted_in'],
-                    'story_topic_url'   => $topicurl,
-                    'title'             => $title,
-                    'subtitle'          => $subtitle,
-                    'story_image'       => $story_image,
-                    'text'              => PLG_replaceTags($A['introtext']),
-                    'date'              => $A['date'],
-                    'time'              => $dt->format('Y-m-d',true).'T'.$dt->format('H:i:s',true),
-                    'topic'             => $A['topic'],
-                    'tid'               => $A['tid'],
-                    'author'            => $author, // $A['username'],
-                    'author_id'         => $A['uid'],
-                    'sid'               => $A['sid'],
+                    'meta'              => ($meta ? TRUE : ''),
                     'short_date'        => $dt->format($_CONF['shortdate'],true),
-                    'date_only'         => $dt->format($_CONF['dateonly'],true),
-                    'date'              => $dt->format($dt->getUserFormat(),true),
+                    'sid'               => $A['sid'],
+                    'story_image'       => $story_image,
+                    'story_topic_url'   => $topicurl,
+                    'subtitle'          => $subtitle,
+                    'text'              => $A['introtext'],
+                    'tid'               => $A['tid'],
+                    'time'              => $dt->format('Y-m-d',true).'T'.$dt->format('H:i:s',true),
+                    'title'             => $title,
+                    'titlelink'         => ($titleLink ? TRUE : ''),
+                    'topic'             => $A['topic'],
                     'url'               => COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$A['sid']),
-                    'attribution_url'   => $A['attribution_url'],
-                    'attribution_name'  => $A['attribution_name'],
                 ));
                 $T->parse('hl','headlines',true);
+                unset($story);
             }
             $retval = $T->finish($T->parse('output','page'));
             $c->set($key,$retval,array('whatsnew','story'));
