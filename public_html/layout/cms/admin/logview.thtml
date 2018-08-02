@@ -19,7 +19,7 @@
   {!endif}
 </p>
 <pre class="uk-scrollable-text" style="height:600px !important;">
-<code>{log_data}</code>
+<code class="nohighlight">{log_data}</code>
 </pre>
 {!endif}
 <script>
