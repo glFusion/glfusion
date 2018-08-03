@@ -68,7 +68,7 @@ class IPofUrl extends BaseCommand {
                     continue;
                 }
                 $parsedURL = parse_url($url);
-                $ip = gethostbyname ($parsedURL['host']);
+                $ip = @gethostbyname ($parsedURL['host']);
                 if ($val == $ip) {
                     $ans = 1; // quit on first positive match
                     SPAMX_log ($LANG_SX00['foundspam'] . $urls[2][$i] .
