@@ -97,12 +97,12 @@ class SFSreg extends BaseCommand {
             $error=$http->ReadReplyBody($body,1024);
             if ( $error != "" || strlen($body) == 0 )
                 return 0;
-            $response = $response . $body;z
+            $response = $response . $body;
             $result = @unserialize($response);
             if (!$result) return 0;     // invalid data, assume ok
 
             if ( isset($result['ip']) && $result['ip']['appears'] == 1 ) {
-                if ( $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
+                if ( (float) $result['ip']['confidence'] > (float) $_SPX_CONF['sfs_ip_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for IP '  . $ip . ' with confidence level of ' . $result['ip']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
@@ -112,7 +112,7 @@ class SFSreg extends BaseCommand {
                 }
             }
             if ( isset($result['email']) && $result['email']['appears'] == 1 ) {
-                if ( $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
+                if ( (float) $result['email']['confidence'] > (float) $_SPX_CONF['sfs_email_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for email '  . $email . ' with confidence level of ' . $result['email']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
@@ -122,7 +122,7 @@ class SFSreg extends BaseCommand {
                 }
             }
             if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
-                if ( $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
+                if ( (float) $result['username']['confidence'] > (float) $_SPX_CONF['sfs_username_confidence']) {
                     SPAMX_log ($type . ' - Found ' . $type . ' matching ' . 'Stop Forum Spam (SFS)'.
                         'for username '  . $username . ' with confidence level of ' . $result['username']['confidence'] .
                         $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
