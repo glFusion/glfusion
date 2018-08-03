@@ -2,7 +2,6 @@
   - Removed geshi code formatter
   - Implemented JavaScript based code formatter / highlighter
   - .tm-story-text CSS style to story text in featured and standard story templates
-  - Allow Geshi code formatting to be used in stories
   - Allow configuration of default story edit mode (visual or html)
   - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
   - SpamX Tester - allows admin to submit test content to see which service blocks
@@ -13,12 +12,15 @@
   - CAPTCHA - removed static images and ImageMagick support
   - MySQL PDO driver support
   - Improved cron / maintenance task interface
-  - Template class code significantly streamlined
+  - Template class code significantly streamlined - utilizes new caching engine
   - Converted all caching calls to use new caching engine
   - Implemented a new caching engine based on phpFastCache
   - Minimum PHP version is now 7.0.0
 
 ## v1.7.5 (unreleased)
+  - Fixed response comparison in SFS SpamX module
+  - Changed texteditor style to use Consolas font
+  - Implement caching stub for compatbility with glFusion v2 cache APIs
   - Improved UTF8 handling in context snippits
   - Improved filtering of search results (HTML / censor, etc.)
   - Fullname in user registration did not show required attribute if required
@@ -26,7 +28,7 @@
   - Do not log custom_config.js missing in 404 log
   - Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
   - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
-  = Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
+  - Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
   - Improved environment validation for required extensions
   - Logview will now only display the last 256kb of very large log files.
   - Display Poll List / error when poll id is invalid
