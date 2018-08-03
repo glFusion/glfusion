@@ -1,4 +1,5 @@
 ## v1.7.5 (unreleased)
+  - Fixed response comparison in SFS SpamX module
   - Changed texteditor style to use Consolas font
   - Implement caching stub for compatbility with glFusion v2 cache APIs
   - Improved UTF8 handling in context snippits
