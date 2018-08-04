@@ -2,6 +2,7 @@
 <script>
 	document.getElementById('menubuilder').style.display='';
 </script>
+<div class="uk-panel uk-panel-box">
 <form id="newmenu" class="uk-form uk-form-horizontal" action="{form_action}" method="post">
 	<input type="hidden" id="mode" name="mode" value="saveeditmenu">
 	<input type="hidden" id="menu_id" name="menu_id" value="{menu_id}">
@@ -29,9 +30,12 @@
 			{group_select}
 		</div>
 	</div>
-	<button class="uk-button uk-button-primary uk-margin" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
-	<button class="uk-button uk-button-danger uk-margin cancel" type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+	<div class="uk-form-row">
+		<button class="uk-button uk-button-success" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
+		<button class="uk-button cancel" type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+	</div>
 </form>
+</div>
 <script>
 	$("#newmenu").validate();
 </script>

@@ -49,6 +49,7 @@
 	  		<input type="hidden" id="activetab" value="" id="activetab" name="activetab">
 	  		<input type="hidden" id="fieldname" value="" name="fieldname">
 				<input type="hidden" name="{sec_token_name}" value="{sec_token}">
+				<input type="hidden" name="form_submit" value="true">
 				<div id="ce_{subgroup_name}">
 					<div id="tabs">
 						<ul class="uk-subnav uk-subnav-pill" data-uk-switcher="{connect:'#tabdata'}">
@@ -79,10 +80,12 @@
 	<!-- END fieldset -->
 					</div>
 				</div>
-				<input type="hidden" name="form_submit" value="true">
-				<div class="uk-margin">
-					<button class="uk-button uk-button-primary" type="submit" value="{lang_save_changes}">{lang_save_changes}</button>
-					<button class="uk-button uk-button-danger cancel" type="reset" name="form_reset" value="{lang_reset_form}">{lang_reset_form}</button>
+
+				<div class="uk-grid uk-margin">
+					<div class="uk-width-small-1-1">
+						<button class="uk-button uk-button-success" type="submit" value="{lang_save_changes}">{lang_save_changes}</button>
+						<button class="uk-button cancel" type="reset" name="form_reset" value="{lang_reset_form}">{lang_reset_form}</button>
+					</div>
 				</div>
 			</form>
 		</div>

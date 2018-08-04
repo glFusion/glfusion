@@ -9,7 +9,7 @@
 			refresh = 1;
 		} else {
 			$('#refresh-button').html('{lang_auto_refresh_off}');
-			$('#refresh-button').attr("class","uk-button uk-button-danger");
+			$('#refresh-button').attr("class","uk-button");
 			refresh = 0;
 		}
 	}
@@ -23,7 +23,7 @@
 		} else {
 			window.location.replace("#");
 			$('#refresh-button').html('{lang_auto_refresh_off}');
-			$('#refresh-button').attr("class","uk-button uk-button-danger");
+			$('#refresh-button').attr("class","uk-button");
 			clearTimeout(reloading);
 			refresh = 0;
 		}

@@ -9,6 +9,8 @@
 
 <div class="clearboth">
 	<form class="uk-form uk-form-horizontal" id="profileform" name="profileform" action="{site_admin_url}/user.php" method="post" {enctype}>
+		<input type="hidden" name="newuser" value="{newuser}">
+		<input type="hidden" name="{gltoken_name}" value="{gltoken}">
 		{account_panel}
 		{group_panel}
 		{userinfo_panel}
@@ -17,14 +19,19 @@
 		{privacy_panel}
 		{subscription_panel}
 		{plugin_panel}
-		<div class="uk-margin">
-			<button class="uk-button uk-button-primary" type="submit" id="save" name="save" value="{lang_save}">{lang_save}</button>
-			<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+
+		<div class="uk-form-row">
+			<div class="uk-grid uk-margin-top">
+				<div class="uk-width-small-3-4">
+					<button class="uk-button uk-button-success" type="submit" id="save" name="save" value="{lang_save}">{lang_save}</button>
+					<button class="uk-button cancel" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+				</div>
+				<div class="uk-width-1-4 uk-text-right">
 {!if delete_option}
-			<button class="uk-button uk-button-danger cancel" type="submit" value="{$LANG_ADMIN[delete]}" name="delete" onclick="return doubleconfirm('{$LANG28[104]}','{$LANG28[109]}');">{$LANG_ADMIN[delete]}</button>
+					<button class="uk-button uk-button-danger cancel" type="submit" value="{$LANG_ADMIN[delete]}" name="delete" onclick="return doubleconfirm('{$LANG28[104]}','{$LANG28[109]}');">{$LANG_ADMIN[delete]}</button>
 {!endif}
-			<input type="hidden" name="newuser" value="{newuser}">
-			<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+				</div>
+			</div>
 		</div>
 	</form>
 </div>

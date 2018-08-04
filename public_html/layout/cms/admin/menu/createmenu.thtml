@@ -32,9 +32,11 @@
 			</div>
 		</div>
 		<div class="uk-form-row">
-			<div class="uk-form-controls">
-				<button class="uk-button uk-button-primary" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
-				<button class="uk-button cancel" type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+			<div class="uk-grid uk-margin-top">
+				<div class="uk-width-small-1-1">
+					<button class="uk-button uk-button-success" type="submit" id="execute" name="execute" value="{$LANG32[23]}">{$LANG32[23]}</button>
+					<button class="uk-button cancel" type="submit" id="cancel" name="cancel" value="{$LANG_MB01[cancel]}">{$LANG_MB01[cancel]}</button>
+				</div>
 			</div>
 		</div>
 	</form>

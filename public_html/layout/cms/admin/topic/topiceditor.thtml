@@ -184,12 +184,18 @@
 			</div>
 		</fieldset>
 
-		<div class="uk-margin">
-			<button class="uk-button uk-button-primary" type="submit" name="save">{$LANG_ADMIN['save']}</button>
-			<button class="uk-button cancel" type="submit" name="cancel">{$LANG_ADMIN['cancel']}</button>
+		<div class="uk-form-row">
+			<div class="uk-grid">
+				<div class="uk-width-small-3-4">
+					<button class="uk-button uk-button-success" type="submit" name="save">{$LANG_ADMIN['save']}</button>
+					<button class="uk-button cancel" type="submit" name="cancel">{$LANG_ADMIN['cancel']}</button>
+				</div>
+				<div class="uk-width-small-1-4 uk-text-right">
 {!if delete_option}
-			<button class="uk-button uk-button-danger" type="submit" name="delete"  onclick="return doubleconfirm('{$LANG27[40]}','{$LANG27[6]}');">{$LANG_ADMIN[delete]}</button>
+					<button class="uk-button uk-button-danger" type="submit" name="delete"  onclick="return doubleconfirm('{$LANG27[40]}','{$LANG27[6]}');">{$LANG_ADMIN[delete]}</button>
 {!endif}
+				</div>
+			</div>
 		</div>
 	</form>
 </div>

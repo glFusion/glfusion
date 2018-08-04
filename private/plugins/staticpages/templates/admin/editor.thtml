@@ -253,24 +253,30 @@
 				</li>
 
 				<li>
-					<button onclick="actionClick('preview');" class="uk-button tm-admin-save-button-width" type="submit" value="{lang_preview}" name="preview" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					<button onclick="actionClick('preview');" class="uk-button uk-button-primary tm-admin-save-button-width" type="submit" value="{lang_preview}" name="preview" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
 				</li>
 
 				<li>
-					<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					<button onclick="actionClick('cancel');return false;" class="uk-button cancel tm-admin-save-button-width" type="submit" value="{lang_cancel}" id="cancel" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
 				</li>
 			</ul>
 		</div>
 		{# end save side bar #}
 
-		<ul class="uk-grid uk-grid-small">
-			<li><button onclick="actionClick('save');" type="submit" class="uk-button uk-button-primary uk-margin" id="save" name="save" value="{lang_save}">{lang_save}</button></li>
-			<li><button onclick="actionClick('preview');" class="uk-button" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button></li>
-			<li><button onclick="actionClick('cancel');return false;" type="submit" class="uk-button uk-margin cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button></li>
+
+		<div class="uk-grid">
+			<div class="uk-width-small-3-4">
+			<button onclick="actionClick('save');" type="submit" class="uk-button uk-button-success" id="save" name="save" value="{lang_save}">{lang_save}</button>
+			<button onclick="actionClick('preview');" class="uk-button uk-button-primary" type="submit" value="{lang_preview}" name="preview" title="{lang_preview}">{lang_preview}</button>
+			<button onclick="actionClick('cancel');return false;" type="submit" class="uk-button cancel" id="cancel" name="cancel" value="{lang_cancel}">{lang_cancel}</button>
+			</div>
+			<div class="uk-width-small-1-4 uk-text-right">
 {!if delete_button}
-			<li><button onclick="actionClick('delete');return false;" type="submit" class="uk-button uk-button-danger uk-margin" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
+			<button onclick="actionClick('delete');return false;" type="submit" class="uk-button uk-button-danger" id="delete" name="delete" value="{lang_delete}" onclick="return confirm('{lang_delete_confirm}');">{lang_delete}</button></li>
 {!endif}
-		</ul>
+			</div>
+		</div>
+
 	</form>
 </div>
 <script>
