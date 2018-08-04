@@ -47,7 +47,7 @@ if (!SEC_hasRights ('staticpages.edit')) {
     $display .= $LANG_STATIC['access_denied_msg'];
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the static pages administration screen.");
+    COM_accessLog ("User {$_USER['username']} tried to access the static pages administration screen.");
     echo $display;
     exit;
 }
@@ -606,6 +606,13 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             }
             break;
 
+        case 'sp_search' :
+            if ($fieldvalue == 0) {
+                $retval = '<i class="uk-icon uk-icon-minus uk-text-danger"></i>';
+            } else {
+                $retval = '<i class="uk-icon uk-icon-check uk-text-success"></i>';
+            }
+            break;
         case 'access':
             if ($access == 3) {
                 $privs = $LANG_ACCESS['edit'];
@@ -707,7 +714,7 @@ function PAGE_list()
         array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
         array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => true),
-        array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center'),
+        array('text' => $LANG_STATIC['searchable'], 'field' => 'sp_search', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
         array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
         array('text' => $LANG_ADMIN['enabled'], 'field' => 'sp_status', 'sort' => true, 'align' => 'center'),
@@ -1006,7 +1013,7 @@ switch ($action) {
                          );
             PLG_invokeService('staticpages', 'delete', $args, $display, $svc_msg);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete staticpage $sp_id and failed CSRF checks.");
+            COM_accessLog("User {$_USER['username']} tried to delete staticpage $sp_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
