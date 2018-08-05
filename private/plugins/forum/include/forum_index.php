@@ -301,8 +301,7 @@ function forum_index()
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
-        $cacheTest = $c->has($key);
-        if ( COM_isAnonUser() && $cacheTest == true ) {
+        if ( COM_isAnonUser() && $c->has($key) ) {
             $pageBody = $c->get($key);
         } else {
             $categoryQuery = DB_query($sql);
