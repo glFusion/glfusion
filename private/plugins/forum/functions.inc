@@ -1152,6 +1152,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
                 $testText = FF_formatTextBlock($B['comment'],'text','noquote',$A['status']);
+                $testText = str_replace (array("\r\n", "\n", "\r","<br>", "<br />"), ' ', $testText);
                 $testText = strip_tags($testText);
                 $html2txt = new Html2Text\Html2Text($testText,false);
                 $testText = trim($html2txt->get_text());
