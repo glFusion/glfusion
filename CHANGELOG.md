@@ -18,6 +18,7 @@
   - Minimum PHP version is now 7.0.0
 
 ## v1.7.5 (unreleased)
+  - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
   - Fixed response comparison in SFS SpamX module
   - Changed texteditor style to use Consolas font
   - Implement caching stub for compatbility with glFusion v2 cache APIs
