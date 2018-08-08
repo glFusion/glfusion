@@ -27,6 +27,7 @@ verifyAction('DOWNLOAD');
 checkAccess('DOWNLOAD');
 
 $path = trim($_GET['f']);
+$path = str_replace('..', '', $path);
 verifyPath($path);
 
 if(is_file(fixPath($path))){

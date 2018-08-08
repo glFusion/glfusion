@@ -63,14 +63,15 @@ function verifyAction($action){
     $thisUrl = dirname(__FILE__).'/'.basename($_SERVER['PHP_SELF']);
     $thisUrl = RoxyFile::FixPath($thisUrl);
     if($thisUrl != $confUrl){
-      echo "$confUrl $thisUrl";
+// do not allow the message to be echoed
+//      echo "$confUrl $thisUrl";
       exit;
     }
   }
 }
 function verifyPath($path){
   if(!checkPath($path)){
-    echo getErrorRes("Access to $path is denied").' '.$path;
+    echo getErrorRes("Access is denied").' '.$path;
     exit;
   }
 }
