@@ -46,6 +46,7 @@ class Formcheck extends BaseCommand
             $rand = COM_applyFilter($_POST['fcfield']);
             $fieldName = 'fc_email_'.$rand;
             if ( isset($_POST[$fieldName] ) && $_POST[$fieldName] != '' ) {
+                if (!isset($data['type'])) $data['type'] = 'default';
                 SPAMX_log('FormCheck: spam identified in ' . $data['type'] . ' - ' . $_SERVER['REAL_ADDR']);
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],4);
