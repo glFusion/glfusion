@@ -1,4 +1,4 @@
-## v1.7.5 (unreleased)
+## v1.7.5 (August 8, 2018)
   - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
   - Fixed response comparison in SFS SpamX module
   - Changed texteditor style to use Consolas font
