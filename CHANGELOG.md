@@ -1,4 +1,7 @@
 ## v2.0.0 (Unreleased)
+  - Integrate Whoops debug console for development
+  - Fixed issue where utf8mb4 support detection did not work properly when using PDO driver
+  - Fixed incorrect variable reference in SFS module for email check - fixes issue where SFS score was not properly displayed in spamx log
   - Removed geshi code formatter
   - Implemented JavaScript based code formatter / highlighter
   - .tm-story-text CSS style to story text in featured and standard story templates
@@ -17,7 +20,7 @@
   - Implemented a new caching engine based on phpFastCache
   - Minimum PHP version is now 7.0.0
 
-## v1.7.5 (unreleased)
+## v1.7.5 (August 8, 2018)
   - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
   - Fixed response comparison in SFS SpamX module
   - Changed texteditor style to use Consolas font
