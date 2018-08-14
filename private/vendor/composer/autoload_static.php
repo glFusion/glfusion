@@ -15,6 +15,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'splitbrain\\PHPArchive\\' => 22,
         ),
+        'W' => 
+        array (
+            'Whoops\\' => 7,
+        ),
         'R' => 
         array (
             'RobThree\\Auth\\' => 14,
@@ -22,6 +26,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
+            'Psr\\Log\\' => 8,
             'Psr\\Cache\\' => 10,
             'Phpfastcache\\' => 13,
             'PhpXmlRpc\\' => 10,
@@ -41,6 +46,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
         ),
+        'Whoops\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
+        ),
         'RobThree\\Auth\\' => 
         array (
             0 => __DIR__ . '/..' . '/robthree/twofactorauth/lib',
@@ -48,6 +57,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Psr\\Cache\\' => 
         array (

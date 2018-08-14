@@ -94,8 +94,6 @@ $_REQUEST = array_merge($_GET, $_POST);
   */
 require_once 'siteconfig.php' ;
 
-if ( defined('DVLP_DEBUG')) error_reporting( E_ALL );
-
 /**
   * Here, we shall establish an error handler. This will mean that whenever a
   * php level error is encountered, our own code handles it. This will hopefuly
@@ -112,6 +110,13 @@ if ( function_exists('set_error_handler') ) {
 
 require_once $_CONF['path_system'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
+
+if ( defined('DVLP_DEBUG')) {
+    error_reporting( E_ALL );
+    $whoops = new \Whoops\Run;
+    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->register();
+}
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -965,11 +970,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $relLinks['home'] = '<link rel="home" href="' . $_CONF['site_url']
                           . '/" title="' . $LANG01[90] . '"/>';
     }
-/*
-     else {
-        CMT_updateCommentcodes();
-    }
-*/
+
     $loggedInUser = !COM_isAnonUser();
     if ( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
                 ( $_CONF['searchloginrequired'] == 0 ))) {
