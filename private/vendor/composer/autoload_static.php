@@ -39,6 +39,11 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'Html2Text\\' => 10,
         ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\' => 16,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -83,6 +88,14 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
             0 => __DIR__ . '/..' . '/html2text/html2text/src',
             1 => __DIR__ . '/..' . '/html2text/html2text/test',
         ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -105,6 +118,13 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
             'EmailAddressValidator' => 
             array (
                 0 => __DIR__ . '/..' . '/aziraphale/email-address-validator',
+            ),
+        ),
+        'D' => 
+        array (
+            'Doctrine\\DBAL\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
             ),
         ),
     );

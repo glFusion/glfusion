@@ -16,4 +16,6 @@ return array(
     'PhpXmlRpc\\' => array($vendorDir . '/phpxmlrpc/phpxmlrpc/src'),
     'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Html2Text\\' => array($vendorDir . '/html2text/html2text/src', $vendorDir . '/html2text/html2text/test'),
+    'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
+    'Doctrine\\Common\\' => array($vendorDir . '/doctrine/event-manager/lib/Doctrine/Common'),
 );
