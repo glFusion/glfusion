@@ -268,8 +268,9 @@ if ( $limituser ) {
 }
 
 if ($newstories) {
-    $sql = "(date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
+    $sql = "(date >= (date_sub(NOW(), INTERVAL :interval SECOND))) ";
     $queryBuilder->andWhere($sql);
+    $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],\glFusion\Database::INTEGER);
 }
 
 $offset = intval(($page - 1) * $limit);
@@ -327,12 +328,11 @@ $D = $cStmt->fetch();
 // Build the final query to pull the story data
 // Set the limits
 
-
 $queryBuilder
     ->addSelect(explode(',',$userfields))
     ->setFirstResult($offset)
     ->setMaxResults($limit);
-
+//print $queryBuilder->getSQL();exit;
 $stmt = $queryBuilder->execute();
 
 $nrows = $stmt->rowCount();
@@ -341,7 +341,9 @@ $num_pages = ceil ($D['count'] / $limit);
 $articleCounter = 0;
 
 $storyRecs = $stmt->fetchAll();
-if (count($storyRecs > 0)) {
+
+if (count($storyRecs) > 0) {
+
     foreach($storyRecs AS $A) {
         $story = new Story();
         $story->loadFromArray($A);
@@ -368,7 +370,9 @@ if (count($storyRecs > 0)) {
     }
 
     // get plugin center blocks that follow articles
-    if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    if ($cb) {
+        $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    }
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
@@ -401,14 +405,17 @@ if (count($storyRecs > 0)) {
     }
 } else { // no stories to display
     $cbDisplay = '';
+
     if ($cb) {
         $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
         $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     }
-    if ( (!isset ($_CONF['hide_no_news_msg']) ||
-            ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
+
+    if ( (!isset ($_CONF['hide_no_news_msg']) || ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
         // If there's still nothing to display, show any default centerblocks.
-        if ( $cb ) $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
+        if ( $cb ) {
+            $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
+        }
         if ($cbDisplay == '') {
             // If there's *still* nothing to show, show the stock message
             $eMsg = $LANG05[2];
