@@ -108,6 +108,7 @@ if ( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
+require_once $_CONF['path'].'db-config.php';
 require_once $_CONF['path_system'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
 
@@ -117,6 +118,13 @@ if ( defined('DVLP_DEBUG')) {
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
+
+// we should be able to initialize the database here
+
+$_DB_dbms = 'mysql';
+if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
+$_DB = new glFusion\Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
+                     $_CONF['default_charset'], $_CONF['db_charset']);
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -259,7 +267,6 @@ $_URL = new url( $_CONF['url_rewrite'] );
 */
 
 require_once $_CONF['path_system'].'lib-database.php';
-
 
 /**
 * Buffer all enabled plugins
