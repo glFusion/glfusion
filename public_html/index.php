@@ -47,6 +47,9 @@ $displayall = false;
 $limituser  = false;
 $cb         = true;
 
+$display = '';
+$pageBody = '';
+
 if (isset ($_GET['display'])) {
     if (($_GET['display'] == 'new') && (empty ($topic))) {
         $newstories = true;
@@ -64,9 +67,6 @@ if ( isset($_GET['ncb'])) {
     $cb = false;
 }
 
-// Retrieve the archive topic - currently only one supported
-$archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
-
 $page = 1;
 if (isset ($_GET['page'])) {
     $page = (int) COM_applyFilter ($_GET['page'], true);
@@ -75,16 +75,34 @@ if (isset ($_GET['page'])) {
     }
 }
 
-$display = '';
-$pageBody = '';
+$conn = \glFusion\Database::getInstance();
+$archivetid = $conn->fetchColumn("SELECT tid FROM {$_TABLES['topics']} WHERE archive_flag=1");
 
 // get template
 $T = new Template($_CONF['path_layout']);
 $T->set_file('page','index.thtml');
 
 if ( !empty($topic) ) {
-    $T->set_var('breadcrumbs',true);
-    $T->set_var('topic',DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($topic)."'"));
+    $sql = "SELECT limitnews,sort_by,sort_dir,description,topic FROM {$_TABLES['topics']} WHERE tid = ?";
+    $topicResult = $conn->prepare($sql);
+    $topicResult->bindParam(1, $topic,\glFusion\Database::STRING);
+    $topicResult->execute();
+    $row = $topicResult->fetch();
+    if ($row !== false) {
+        $topiclimit = $row['limitnews'];
+        $story_sort = $row['sort_by'];
+        $story_sort_dir = $row['sort_dir'];
+        $topic_desc = $row['description'];
+        $topicname = $row['topic'];
+        if (!empty($topic_desc)) { // set meta data
+            $outputHandle = \outputHandler::getInstance();
+            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
+            $T->set_var('topic_desc',$topic_desc);
+        }
+        $T->set_var('breadcrumbs',true);
+        $T->set_var('topic',$topicname);
+    }
 }
 
 if (!$newstories && !$displayall) {
@@ -143,26 +161,15 @@ if (!COM_isAnonUser()) {
 
 $topiclimit = 0;
 
-$story_sort = 'date';
+$story_sort     = 'date';
 $story_sort_dir = 'DESC';
+
+// need to sanitize
 if (isset($_CONF['story_sort_by'])) {
     $story_sort = $_CONF['story_sort_by'];
 }
 if (isset($_CONF['story_sort_dir'])) {
     $story_sort_dir = $_CONF['story_sort_dir'];
-}
-
-if ( !empty($topic) ) {
-    $result = DB_query("SELECT limitnews,sort_by,sort_dir,description FROM {$_TABLES['topics']} WHERE tid='".DB_escapeString($topic)."'");
-    if ( $result ) {
-        list($topiclimit, $story_sort, $story_sort_dir, $topic_desc) = DB_fetchArray($result);
-        if (!empty($topic_desc)) {
-            $outputHandle = \outputHandler::getInstance();
-            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
-            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
-            $T->set_var('topic_desc',$topic_desc);
-        }
-    }
 }
 
 $maxstories = 0;
@@ -183,41 +190,86 @@ if ($limit < 1) {
     $limit = 1;
 }
 
-$sql = " (date <= NOW()) AND (draft_flag = 0)";
+// Build the monster query to retrieve articles based on
+// user permissions and preferences
+$queryBuilder = $conn->createQueryBuilder();
+$queryBuilder
+    ->select(   's.*',
+                'UNIX_TIMESTAMP(s.date) AS unixdate',
+                'UNIX_TIMESTAMP(s.expire) as expireunix',
+                'UNIX_TIMESTAMP(s.frontpage_date) as frontpage_date_unix',
+                't.topic',
+                't.imageurl'
+            )
+    ->from($_TABLES['stories'],'s')
+    ->leftJoin('s',$_TABLES['users'],'u','s.uid=u.uid')
+    ->leftJoin('s',$_TABLES['topics'],'t','s.tid=t.tid')
+    ->where('date <= NOW()')
+    ->andWhere('draft_flag = 0')
+    ->orderBy('featured', 'DESC');
 
 if (empty ($topic)) {
-    $sql .= COM_getLangSQL ('tid', 'AND', 's');
+    $sql = COM_getLangSQL ('tid', '', 's');
+    if (!empty($sql)) {
+        $queryBuilder->andWhere($sql);
+    }
 }
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND (s.tid = '".DB_escapeString($topic)."' OR s.alternate_tid = '".DB_escapeString($topic)."') ";
+    $queryBuilder->andWhere(
+        $queryBuilder->expr()->orX(
+            $queryBuilder->expr()->eq('s.tid', $queryBuilder->createNamedParameter($topic,\glFusion\Database::STRING)),
+            $queryBuilder->expr()->eq('s.alternate_tid', $queryBuilder->createNamedParameter($topic,\glFusion\Database::STRING))
+        )
+    );
 } elseif (!$newstories) {
-    $sql .= " AND (frontpage = 1 OR (frontpage = 2 AND frontpage_date >= NOW())) ";
+    $queryBuilder->andWhere(
+        $queryBuilder->expr()->orX(
+            $queryBuilder->expr()->eq('frontpage',1),
+            $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->eq('frontpage',2),
+                $queryBuilder->expr()->gte('frontpage_date','NOW()')
+            )
+        )
+    );
 }
 
 if ($topic != $archivetid) {
-    $sql .= " AND s.tid != '".DB_escapeString($archivetid)."' ";
+    $queryBuilder->andWhere('s.tid != ' . $queryBuilder->createNamedParameter($archivetid,\glFusion\Database::STRING));
 }
 
-$sql .= COM_getPermSQL ('AND', 0, 2, 's');
+$sql = COM_getPermSQL('',0,2,'s');
+
+if (!empty($sql)) {
+    $queryBuilder->andWhere($sql);
+}
 
 if (!empty($U['aids'])) {
-    $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
+    $queryBuilder->andWhere(
+        $queryBuilder->expr()->notIn('s.uid', "'".str_replace( ' ', ",", $U['aids'] )."'"  )
+    );
 }
 
 if (!empty($U['tids'])) {
-    $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
+    $queryBuilder->andWhere(
+        $queryBuilder->expr()->notIn('s.uid','"'. str_replace( ' ', "','", $U['tids'] ).'"' )
+    );
 }
 
-$sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
+//@TODO - do we need to handle  topic SQL??
+$sql = COM_getTopicSQL ('', 0, 's');
+if (!empty($sql)) {
+    $queryBuilder->andWhere($sql);
+}
 
 if ( $limituser ) {
-    $sql .= " AND s.uid=".$limituser_id." ";
+    $queryBuilder->andWhere('s.uid',$queryBuilder->createNamedParameter($limituser_id,\glFusion\Database::INTEGER));
 }
 
 if ($newstories) {
-    $sql .= "AND (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
+    $sql = "(date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
+    $queryBuilder->andWhere($sql);
 }
 
 $offset = intval(($page - 1) * $limit);
@@ -260,46 +312,58 @@ if ( !empty($topic) ) {
     $orderBy = $story_sort . ' ' . $story_sort_dir;
 }
 
-$msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-         . 'UNIX_TIMESTAMP(s.frontpage_date) as frontpage_date_unix, '
-         . $userfields . ", t.topic, t.imageurl "
-         . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
-         . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid WHERE "
-         . $sql . "ORDER BY featured DESC," . $orderBy . " LIMIT $offset, $limit";
+//@TODO vet / validate these 2 vars...
+$queryBuilder->addOrderBy($story_sort,$story_sort_dir);
 
-$result = DB_query ($msql);
+// clone the primary query so we can execute
+// a query to get total story count - we are overriding
+// the SELECT statement to use just the count
 
-$nrows = DB_numRows ($result);
+$countQueryBuilder = clone $queryBuilder;
+$countQueryBuilder->select("COUNT(*) AS count");
+$cStmt = $countQueryBuilder->execute();
+$D = $cStmt->fetch();
 
-$data = DB_query ("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} AS s WHERE" . $sql);
-$D = DB_fetchArray ($data);
+// Build the final query to pull the story data
+// Set the limits
+
+
+$queryBuilder
+    ->addSelect(explode(',',$userfields))
+    ->setFirstResult($offset)
+    ->setMaxResults($limit);
+
+$stmt = $queryBuilder->execute();
+
+$nrows = $stmt->rowCount();
+
 $num_pages = ceil ($D['count'] / $limit);
 $articleCounter = 0;
-if ( $A = DB_fetchArray( $result ) ) {
 
-    $story = new Story();
-    $story->loadFromArray($A);
-    if ( $_CONF['showfirstasfeatured'] == 1 ) {
-        $story->_featured = 1;
-    }
-
-    // display first article
-    if ($story->DisplayElements('featured') == 1) {
-        $pageBody .= STORY_renderArticle ($story, 'y');
-        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-    } else {
-        if ( $cb ) $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-        $pageBody .= STORY_renderArticle ($story, 'y');
-    }
-    $articleCounter++;
-
-    // get remaining stories
-    while ($A = DB_fetchArray ($result)) {
-//        $pageBody .= PLG_displayAdBlock('story',$articleCounter);
+$storyRecs = $stmt->fetchAll();
+if (count($storyRecs > 0)) {
+    foreach($storyRecs AS $A) {
         $story = new Story();
         $story->loadFromArray($A);
-        $pageBody .= STORY_renderArticle ($story, 'y');
+        if ($articleCounter == 0) {
+            if ( $_CONF['showfirstasfeatured'] == 1 ) {
+                $story->_featured = 1;
+            }
+            if ($story->DisplayElements('featured') == 1) {
+                if ($cb) {
+                    $pageBody .= STORY_renderArticle ($story, 'y');
+                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+                }
+            } else {
+                if ($cb) {
+                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+                }
+                $pageBody .= STORY_renderArticle ($story, 'y');
+            }
+        } else {
+            $pageBody .= STORY_renderArticle ($story, 'y');
+        }
+
         $articleCounter++;
     }
 
@@ -337,8 +401,10 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 } else { // no stories to display
     $cbDisplay = '';
-    if ( $cb ) $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-    if ( $cb ) $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    if ($cb) {
+        $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+        $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
+    }
     if ( (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
         // If there's still nothing to display, show any default centerblocks.
@@ -347,8 +413,6 @@ if ( $A = DB_fetchArray( $result ) ) {
             // If there's *still* nothing to show, show the stock message
             $eMsg = $LANG05[2];
             if (!empty ($topic)) {
-                $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                         "tid = '".DB_escapeString($topic)."'");
                 $eMsg .= sprintf ($LANG05[3], $topicname);
             }
             $cbDisplay .= COM_showMessageText($eMsg, $LANG05[1],true,'warning');
