@@ -107,7 +107,9 @@ if ( !empty($topic) ) {
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
-    if ( $cb ) $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
+    if ($cb) {
+        $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
+    }
     if (!empty ($newcontent)) {
         echo $newcontent;
         exit;
@@ -341,9 +343,8 @@ $num_pages = ceil ($D['count'] / $limit);
 $articleCounter = 0;
 
 $storyRecs = $stmt->fetchAll();
-
-if (count($storyRecs) > 0) {
-
+$stmt->closeCursor();
+if ($nrows > 0) {
     foreach($storyRecs AS $A) {
         $story = new Story();
         $story->loadFromArray($A);
