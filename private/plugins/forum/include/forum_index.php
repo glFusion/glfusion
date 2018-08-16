@@ -56,6 +56,8 @@ function forum_index()
     $forum_id   = isset($_REQUEST['forum_id']) ? COM_applyFilter($_REQUEST['forum_id'],true) : 0;
     $op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
+    $conn = \glFusion\Database::getInstance();
+
     /*
      * Initialize vars
      */
@@ -72,25 +74,54 @@ function forum_index()
         $now = time();
         $categories = array();
         if ($cat_id == 0 && $forum_id == 0) {
-            $csql = DB_query("SELECT id FROM {$_TABLES['ff_categories']} ORDER BY id");
-            while (list ($categoryID) = DB_fetchArray($csql)) {
-                $categories[] = $categoryID;
+            $sql = "SELECT id FROM {$_TABLES['ff_categories']} ORDER BY id";
+            $csql = $conn->prepare($sql);
+            $csql->execute();
+            $row = $topicResult->fetchAll();
+            foreach($row AS $catRec) {
+                $categories[] = $catRec['id'];
             }
         } else {
             $categories[] = $cat_id;
         }
 
         foreach ($categories as $category) {
-            $extraWhere = '';
-            if ( $forum_id != 0 ) {
-                $extraWhere = ' AND forum_id='.(int)$forum_id.' ';
+
+            $queryBuilder = $conn->createQueryBuilder();
+            $queryBuilder
+                ->select(   'forum_id',
+                            'grp_id'
+                        )
+                ->from($_TABLES['ff_forums'])
+                ->where('forum_cat = :forum_cat')
+                ->setParameter('forum_cat',$category,\glFusion\Database::INTEGER);
+            if ($forum_id !=0) {
+                $queryBuilder->andWhere('forum_id = :forum_id')
+                ->setParameter('forum_id',$forum_id,\glFusion\Database::INTEGER);
             }
-            $fsql = DB_query("SELECT forum_id,grp_id FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $category . $extraWhere);
-            while($frecord = DB_fetchArray($fsql)){
+            $stmt = $queryBuilder->execute();
+//            $catRecs = $stmt->fetchAll();
+
+            while($frecord = $stmt->fetch()) {
+//            foreach($catRecs AS $frecord) {
                 if (SEC_inGroup($frecord['grp_id'])) {
-                    DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND forum=".(int)$frecord['forum_id']."");
-                    $tsql = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum={$frecord['forum_id']} and pid=0");
-                    while($trecord = DB_fetchArray($tsql)){
+                    $qb = $conn->createQueryBuilder()
+                      ->delete($_TABLES['ff_log'])
+                      ->where('uid = :user_id')
+                      ->andwhere('forum = :forum_id')
+                      ->setParameter(':user_id', $_USER['uid'],\glFusion\Database::INTEGER)
+                      ->setParameter(':forum_id', $frecord['forum_id'],\glFusion\Database::INTEGER);
+                    $qb->execute();
+//                    DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND forum=".(int)$frecord['forum_id']."");
+
+                    $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE forum = :forum_id AND pid = 0";
+                    $tsql = $conn->prepare($sql);
+                    $tsql->bindParam('forum_id',$frecord['forum_id'],\glFusion\Database::INTEGER);
+                    $tsql->execute();
+
+//                    $tsql = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum={$frecord['forum_id']} and pid=0");
+                    while ($trecord = $tsql->fetch()) {
+//                    while($trecord = DB_fetchArray($tsql)){
                         $log_sql = DB_query("SELECT * FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND topic=".(int) $trecord['id']." AND forum=".(int) $frecord['forum_id']);
                         if (DB_numRows($log_sql) == 0) {
                             DB_query("INSERT INTO {$_TABLES['ff_log']} (uid,forum,topic,time) VALUES (".(int) $_USER['uid'].",".(int) $frecord['forum_id'].",".(int) $trecord['id'].",'$now')");
@@ -100,7 +131,7 @@ function forum_index()
             }
         }
         COM_setMsg($LANG_GF01['all_read_success'],'info');
-        if ( $extraWhere != '' ) {
+        if ( !empty($extraWhere) ) {
             echo COM_refresh($_CONF['site_url'].'/forum/index.php?forum='.(int) $forum_id);
         } else {
             echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
@@ -268,6 +299,8 @@ function forum_index()
         exit();
     }
 
+// ************** MAIN CODE - gets executed for category / forum list
+
     $mytimer = new timerobject();
     $mytimer->startTimer();
 
@@ -292,21 +325,24 @@ function forum_index()
         }
         $groupAccessList = implode(',',$groups);
 
-        if ( $dCat > 0 ) {
-            $sql = "SELECT * FROM {$_TABLES['ff_categories']} WHERE id=". (int) $dCat . " ORDER BY cat_order ASC";
+        $qb = $conn->createQueryBuilder()
+          ->select('*')
+          ->from($_TABLES['ff_categories'])
+          ->orderby('cat_order','ASC');
+        if ($dCat > 0) {
+            $qb->where('id = ?')
+               ->setParameter(1,$dCat,\glFusion\Database::INTEGER);
             $birdSeedStart = '<a href="'.$_CONF['site_url'].'/forum/index.php">Forum Index</a> :: ';
-        } else {
-            $sql = "SELECT * FROM {$_TABLES['ff_categories']} ORDER BY cat_order ASC";
         }
+        $sql = $qb->getSQL();
 
         $c = glFusion\Cache::getInstance();
         $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
         if ( COM_isAnonUser() && $c->has($key) ) {
             $pageBody = $c->get($key);
         } else {
-            $categoryQuery = DB_query($sql);
-
-            $numCategories = DB_numRows($categoryQuery);
+            $stmt = $qb->execute();
+            $numCategories = $stmt->rowCount();
 
             $forumlisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
             $forumlisting->set_file ('forumlisting','homepage.thtml');
@@ -317,9 +353,10 @@ function forum_index()
                     'layout_url'    => $_CONF['layout_url'],
                     'forum_home'    => 'Forum Index'
             ));
-            for ($i = 1; $i <= $numCategories; $i++) {
-                $A = DB_fetchArray($categoryQuery,false);
 
+            $i=0;
+            while ($A = $stmt->fetch()) {
+                $i++;
                 $forumlisting->set_block('forumlisting', 'catrows', 'crow');
                 $forumlisting->clear_var('frow');
                 if ( $birdSeedStart == '' ) {
@@ -362,24 +399,38 @@ function forum_index()
                                 'LANGGF01_LASTPOST' => $LANG_GF01['LASTPOST']
                 ));
 
+// no user supplied data for this query
+// may optimize to use straight SQL. QB gives
+// portability...
                 //Display all forums under each cat
-                $sql = "SELECT * FROM {$_TABLES['ff_forums']} AS f "
-                     . "LEFT JOIN {$_TABLES['ff_topic']} AS t ON f.last_post_rec=t.id "
-                     . "WHERE forum_cat=" . (int) $A['id']." "
-                     . "AND grp_id IN ($groupAccessList) AND is_hidden=0 ORDER BY forum_order ASC";
+                $qb = $conn->createQueryBuilder()
+                  ->select('*')
+                  ->from($_TABLES['ff_forums'],'f')
+                  ->leftJoin('f',$_TABLES['ff_topic'],'t','f.last_post_rec=t.id')
+                  ->where('forum_cat = ?')
+                  ->setParameter(1,$A['id'],\glFusion\Database::INTEGER)
+                  ->andWhere(
+                        $qb->expr()->in('grp_id', $groupAccessList )
+                            )
+                  ->andWhere('is_hidden=0')
+                  ->orderby('forum_order','ASC');
 
-                $forumQuery = DB_query($sql);
-                $numForums = DB_numRows($forumQuery);
-
+                $forumQuery = $qb->execute();
+                $numForums = $forumQuery->rowCount();
                 $numForumsDisplayed = 0;
 
                 $forumlisting->set_block('forumlisting', 'forumrows', 'frow');
 
-                while ($B = DB_FetchArray($forumQuery)) {
+                while ($B = $forumQuery->fetch()) {
         			if ( _ff_canUserViewRating($B['forum_id'] ) ) {
                     	$lastforum_noaccess = false;
                 	    $topicCount = $B['topic_count'];
                     	$postCount = $B['post_count'];
+/* - rewrite the whole block
+     we can pull all moderator records
+     in a single query and build an array
+     of arrays to hold the info
+
                     	if ( $_FF_CONF['show_moderators'] ) {
                         	$modsql = DB_query("SELECT * FROM {$_TABLES['ff_moderators']} WHERE mod_forum=".(int) $B['forum_id']);
                        	 	$moderatorcnt = 1;
@@ -410,6 +461,7 @@ function forum_index()
         	            } else {
             	            $forumlisting->set_var ('moderator', '');
                 	    }
+*/
                    		$numForumsDisplayed ++;
                    		$busyforum = 0;
                    		$quietforum = 1;
@@ -420,7 +472,8 @@ function forum_index()
                         	}
         	                if (!COM_isAnonUser()) {
             	                // Determine if there are new topics since last visit for this user.
-                                $tcount = (int) DB_getItem($_TABLES['ff_log'],'COUNT(uid)',"uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0");
+$tcount = $conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid=? AND forum = ? AND time > 0",array($uid,$B['forum_id']));
+//                                $tcount = (int) DB_getItem($_TABLES['ff_log'],'COUNT(uid)',"uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0");
                                 if ($topicCount > $tcount ) {
                                     $busyforum = 1;
                                     $quietforum = 0;
@@ -520,7 +573,7 @@ function forum_index()
         }
         $DisplayTime = $mytimer->stopTimer();
     }
-
+// ------ Display a specific forum
     // Display Forums
     if ($forum > 0) {
         $skipForum = false;
@@ -770,6 +823,7 @@ function forum_index()
             $FF_userprefs['postsperpage'] = 20;
         }
         $topiccounter = 2;
+//from query earlier
         while (($record = DB_fetchArray($topicResults,false)) != NULL ) {
             if ( ( $record['replies']+1 ) <= $FF_userprefs['postsperpage'] ) {
                 $displaypageslink = "";
