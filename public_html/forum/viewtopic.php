@@ -69,17 +69,29 @@ if ( $showtopic == 0 ) {
     exit;
 }
 
-$result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic);
-list($forum, $topic_pid, $subject) = DB_fetchArray($result);
+$conn = \glFusion\Database::getInstance();
 
-if ($topic_pid == '') {
+// pull the topic record to validate it exists and find the parent ID
+$sql = "SELECT forum, pid, subject FROM {$_TABLES['ff_topic']} WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(1, $showtopic, \glFusion\Database::INTEGER);
+$stmt->execute();
+$row = $stmt->fetch();
+
+if ($row === false) {
     COM_setMsg( $LANG_GF02['msg172'], 'error' );
     echo COM_refresh($_CONF['site_url'].'/forum/index.php');
     exit;
 }
+
+$forum      = $row['forum'];
+$topic_pid  = $row['pid'];
+$subject    = $row['subject'];
+
 if ($topic_pid != 0) {
     $showtopic = $topic_pid;
 }
+
 
 if (empty($show) AND $FF_userprefs['postsperpage'] > 0) {
     $show = $FF_userprefs['postsperpage'];
@@ -91,8 +103,19 @@ $sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_n
 $sql .= "FROM {$_TABLES['ff_topic']} a ";
 $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON b.forum_id=a.forum ";
 $sql .= "LEFT JOIN {$_TABLES['ff_categories']} c on c.id=b.forum_cat ";
-$sql .= "WHERE a.id=".(int) $showtopic;
-$viewtopic = DB_fetchArray(DB_query($sql),false);
+$sql .= "WHERE a.id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(1, $showtopic, \glFusion\Database::INTEGER);
+$stmt->execute();
+$viewtopic = $stmt->fetch();
+
+// if $viewtopic is false that means the parent topic did not exist...
+if ($viewtopic === false) {
+    COM_setMsg( $LANG_GF02['msg172'], 'error' );
+    echo COM_refresh($_CONF['site_url'].'/forum/index.php');
+    exit;
+}
 
 $canPost = _ff_canPost( $viewtopic );
 
@@ -161,11 +184,21 @@ if (isset($_GET['lastpost']) && $_GET['lastpost']) {
     $base_url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$showtopic.'&amp;mode='.$mode.'&amp;show='.$show;
 } else {
     if ( $topic != 0 ) {
+
+// when would this be executed?
+
         $order = $FF_userprefs['topic_order'];
-        $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $showtopic." ORDER BY date " . $order;
-        $idResult = DB_query($sql);
+//@TODO - need to fix order
+        $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid= :topicid ORDER BY date ASC"; // :order";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam("topicid", $showtopic, \glFusion\Database::INTEGER);
+        $stmt->execute();
+
+$ids = $stmt->fetchAll();
+//var_dump($ids);
+
         $ids = array();
-        while ( $I = DB_fetchArray($idResult)) {
+        while ($I = $stmt->fetch()) {
             $ids[] = $I['id'];
         }
         $key = array_search($topic,$ids);
@@ -177,9 +210,9 @@ if (isset($_GET['lastpost']) && $_GET['lastpost']) {
         $page = 1;
     }
     if ( $page > 1 ) {
-        $offset = ($page - 1) * $show;
+        $offset = (int) ($page - 1) * (int) $show;
     } else {
-        $offset = 0;
+        $offset = (int) 0;
     }
 
     $base_url = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$showtopic.'&amp;mode='.$mode.'&amp;show='.$show;
@@ -292,8 +325,16 @@ if ($_FF_CONF['enable_likes']) {
     \Forum\Like::TopicLikes($showtopic);
 }
 
-$sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE id=".(int) $showtopic." OR pid=".(int) $showtopic." ORDER BY date $order LIMIT $offset, $show";
-$result  = DB_query($sql);
+$queryBuilder = $conn->createQueryBuilder();
+$queryBuilder
+    ->select('*')
+    ->from($_TABLES['ff_topic'])
+    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,\glFusion\Database::INTEGER).' OR pid = :dcValue1')
+    ->orderBy('date', $order)
+    ->setFirstResult($offset)
+    ->setMaxResults($show);
+
+$stmt = $queryBuilder->execute();
 
 // Display each post in this topic
 $onetwo = 1;
@@ -301,7 +342,9 @@ $cantView = 0;
 
 $topicTemplate->set_block('topictemplate', 'topicrow', 'trow');
 
-while ($topicRec = DB_fetchArray($result) ) {
+$topicRecs = $stmt->fetchAll();
+
+foreach($topicRecs AS $topicRec) {
     if ($FF_userprefs['viewanonposts'] == 0 AND $topicRec['uid'] == 1) {
        $display .= '<div class="uk-alert uk-alert-danger" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
        break;
