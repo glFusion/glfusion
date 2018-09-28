@@ -2642,6 +2642,8 @@ switch($mode) {
             if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
             }
+            require_once $_CONF['path_system'] . 'classes/Autoload.php';
+            glFusion\Autoload::initialize();
             require_once $_CONF['path_system'].'lib-database.php';
             $version = INST_identifyglFusionVersion();
             if ($version == '' || $version == 'empty' ) {
