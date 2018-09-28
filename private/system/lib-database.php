@@ -49,12 +49,8 @@ if (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug']) {
     DB_displayError(true);
 }
 
-// +---------------------------------------------------------------------------+
-// | These are the library functions.  In all cases they turn around and make  |
-// | calls to the DBMS specific functions.  These ARE to be used directly in   |
-// | the code...do NOT use the $_DB methods directly
-// +---------------------------------------------------------------------------+
-
+// we should not need a global...
+$_DB = glFusion\Database::getInstance();
 
 /**
 * @return     string     the version of the database application as integer
@@ -127,8 +123,12 @@ function DB_query ($sql, $ignore_errors = 0)
             die ($result);
         }
     }
-
-    return $_DB->dbQuery ($sql, $ignore_errors);
+    try {
+        $result = $_DB->dbQuery ($sql, $ignore_errors);
+    } catch (Exception $e) {
+        $result = false;
+    }
+    return $result;
 }
 
 /**

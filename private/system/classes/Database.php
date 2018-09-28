@@ -2,7 +2,7 @@
 /**
 * glFusion CMS
 *
-* Doctrine DBAL Driver
+* Database Driver - utilizing Doctrine's DBAL
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
@@ -68,13 +68,6 @@ $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
 $_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
 
-// These tables aren't used by glFusion any more, but the table names are still
-// needed when upgrading from old versions
-$_TABLES['commentspeedlimit']   = $_DB_table_prefix . 'commentspeedlimit';
-$_TABLES['submitspeedlimit']    = $_DB_table_prefix . 'submitspeedlimit';
-$_TABLES['tzcodes']             = $_DB_table_prefix . 'tzcodes';
-$_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
-
 class Database
 {
     public const ASSOCIATIVE = \Doctrine\DBAL\FetchMode::ASSOCIATIVE;
@@ -124,7 +117,7 @@ class Database
     * @var DBAL object|null
     */
     private static $_db = null;
-
+    public $conn = null;
     /**
     * @var bool
     */
@@ -182,8 +175,8 @@ class Database
     }
 
     /**
-     * Connects to the MySQL database server
-     * This function connects to the MySQL server and returns the connection object
+     * Connects to the database server
+     * This function connects to the server and returns the connection object
      *
      * @return   object Returns DBAL object
      */
@@ -204,7 +197,12 @@ class Database
             'host'      => $this->_host,
             'driver'    => $this->internalDriverName,
             'charset'   => $this->_character_set_database,
+            'collate'   => 'utf8mb4_unicode_ci'
         );
+        if ($this->_charset === 'utf-8') {
+            $connectionParams['driverOptions'] = [1002 => "SET NAMES '".$this->_character_set_database."'"];
+        }
+
         $db = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
 
         $db->setFetchMode( \Doctrine\DBAL\FetchMode::MIXED );
@@ -212,22 +210,24 @@ class Database
         $this->_mysql_version = $db->getWrappedConnection()->getServerVersion();
 
         self::$_db = $db;
+        $this->conn = $db;
 
         if ($this->_charset === 'utf-8') {
             $result = false;
 
             if ( $this->_character_set_database == '' ) {
-                $result = self::$_db->query("SELECT @@character_set_database");
+                $result = $this->query("SELECT @@character_set_database");
                 $collation = $this->dbFetchArray($result);
                 $this->_character_set_database = $collation["@@character_set_database"];
             }
             if (version_compare($this->_mysql_version,'5.5.3','>=')) {
                 if ( $this->_character_set_database == "utf8mb4" ) {
-                    if (method_exists(self::$_db, 'set_charset')) {
-                        $result = self::$_db->set_charset('utf8mb4');
+                    if (method_exists($this->conn, 'set_charset')) {
+                        $result = $this->conn->set_charset('utf8mb4');
                     }
+
                     if (!$result) {
-                        @self::$_db->query("SET NAMES 'utf8mb4'");
+                        @$this->conn->query("SET NAMES 'utf8mb4'");
                     }
                     $this->_filter = 0;
                 } else {
@@ -311,7 +311,7 @@ class Database
         } else if (class_exists('MySQLi')) {
             $this->internalDriverName = 'mysqli';
         } else {
-            die("No MySQL driver found in PHP environment.");
+            die("No Suitable driver found in PHP environment.");
         }
 
         $this->_connect();
@@ -320,15 +320,26 @@ class Database
     /*
      * returns instance of DBAL object
      */
+
     public static function getInstance()
     {
-        return self::$_db;
-    }
+        global $_CONF;
 
+        static $instance;
+
+        if (!isset($instance) ) {
+            include $_CONF['path'].'db-config.php';
+            if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
+            $instance = new Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
+                     $_CONF['default_charset'], $_CONF['db_charset']);
+        }
+        return $instance;
+    }
 
     public function __destruct()
     {
         self::$_db = null;
+        $this->conn = null;
     }
 
     /**
@@ -366,7 +377,7 @@ class Database
     {
         if ($this->_verbose
         && (empty($this->_errorlog_fn) || !function_exists($this->_errorlog_fn))) {
-            echo "\n<br/><b>Cannot run mysql_pdo.class.php in verbose mode because the errorlog "
+            echo "\n<br/><b>Cannot run Database.php in verbose mode because the errorlog "
             . "function was not set or does not exist.</b><br/>\n";
             return false;
         }
@@ -403,7 +414,7 @@ class Database
             $this->_errorlog("DEBUG: Database - SQL query is " . $sql);
         }
         try {
-            $result = self::$_db->query($sql);
+            $result = $this->conn->query($sql);
         } catch (PDOException $e) {
             if ($ignore_errors) {
                 $result = false;
@@ -415,7 +426,7 @@ class Database
             }
         }
 
-        $this->_errno = self::$_db->errorCode();
+        $this->_errno = $this->conn->errorCode();
 
         if ($result === false) {
             if ($ignore_errors) {
@@ -514,7 +525,7 @@ class Database
             $this->_errorlog("DEBUG: Database - Inside database->dbDelete");
         }
 
-        $sql = "DELETE FROM $table";
+        $sql = "DELETE FROM `$table`";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
         if ($id_and_value === false) {
@@ -526,7 +537,7 @@ class Database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbDelete");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbDelete");
         }
 
         return TRUE;
@@ -550,13 +561,13 @@ class Database
                                 $suppress_quotes = false)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside dbChange");
+            $this->_errorlog("DEBUG: Database - Inside dbChange");
         }
 
         if ($suppress_quotes) {
-            $sql = "UPDATE $table SET $item_to_set = $value_to_set";
+            $sql = "UPDATE `$table` SET $item_to_set = $value_to_set";
         } else {
-            $sql = "UPDATE $table SET $item_to_set = '$value_to_set'";
+            $sql = "UPDATE `$table` SET $item_to_set = '$value_to_set'";
         }
 
         $id_and_value = $this->_buildIdValuePair($id, $value);
@@ -568,13 +579,13 @@ class Database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - dbChange sql = " . $sql);
+            $this->_errorlog("DEBUG: Database - dbChange sql = " . $sql);
         }
 
         $retval = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbChange");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbChange");
         }
         return $retval;
     }
@@ -594,10 +605,10 @@ class Database
     public function dbCount($table, $id = '', $value = '')
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCount");
+            $this->_errorlog("DEBUG: Database - Inside database->dbCount");
         }
 
-        $sql = "SELECT COUNT(*) FROM $table";
+        $sql = "SELECT COUNT(*) FROM `$table`";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
         if ($id_and_value === false) {
@@ -607,13 +618,13 @@ class Database
         }
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - sql = " . $sql);
+            $this->_errorlog("DEBUG: Database - sql = " . $sql);
         }
 
         $result = $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCount");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbCount");
         }
         return ($result->fetchColumn());
     }
@@ -635,10 +646,10 @@ class Database
     public function dbCopy($table, $fields, $values, $tablefrom, $id, $value)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbCopy");
+            $this->_errorlog("DEBUG: Database - Inside database->dbCopy");
         }
 
-        $sql = "REPLACE INTO $table ($fields) SELECT $values FROM $tablefrom";
+        $sql = "REPLACE INTO `$table` ($fields) SELECT $values FROM $tablefrom";
         $id_and_value = $this->_buildIdValuePair($id, $value);
 
         if ($id_and_value === false) {
@@ -651,7 +662,7 @@ class Database
         $retval = $retval && $this->dbDelete($tablefrom, $id, $value);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbCopy");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbCopy");
         }
         return $retval;
     }
@@ -667,7 +678,7 @@ class Database
     public function dbNumRows($recordSet)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbNumRows");
+            $this->_errorlog("DEBUG: Database - Inside database->dbNumRows");
         }
 
         /*
@@ -699,13 +710,13 @@ class Database
     public function dbResult($recordset, $row, $field = 0)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbResult");
+            $this->_errorlog("DEBUG: Database - Inside database->dbResult");
             if (empty($recordset) || $recordset === null) {
-                $this->_errorlog("DEBUG: mysql_pdo - Passed recordset is not valid");
+                $this->_errorlog("DEBUG: Database - Passed recordset is not valid");
             } else {
-                $this->_errorlog("DEBUG: mysql_pdo - Everything looks good");
+                $this->_errorlog("DEBUG: Database - Everything looks good");
             }
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbResult");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbResult");
         }
 
         $retval = '';
@@ -842,7 +853,7 @@ class Database
     */
     public function dbError($sql = '')
     {
-        if ((int)self::$_db->errorCode() > 0) {
+        if ((int)$this->conn->errorCode() > 0) {
             $fn = '';
             $btr = debug_backtrace();
             if (! empty($btr)) {
@@ -863,13 +874,13 @@ class Database
             $info = self::$_db->errorInfo();
 
             if (empty($fn)) {
-                $errorMessage = self::$_db->errorCode() . ': '.$info[2];
+                $errorMessage = $this->conn->errorCode() . ': '.$info[2];
                 if ( $sql != '' ) {
                     $errorMessage .= " SQL in question: " . $sql;
                 }
                 $this->_errorlog($errorMessage);
             } else {
-                $errorMessage = self::$_db->errorCode() . ': ' . $info[2] . " in " . $fn;
+                $errorMessage = $this->conn->errorCode() . ': ' . $info[2] . " in " . $fn;
                 if ( $sql != '' ) {
                     $errorMessage .= " SQL in question: ".$sql;
                 }
@@ -877,7 +888,7 @@ class Database
             }
 
             if ($this->_display_error) {
-                return  self::$_db->errorCode() . ': ' . $info[2];
+                return  $this->conn->errorCode() . ': ' . $info[2];
             } else {
                 return 'An SQL error has occurred. Please see error.log for details.';
             }
@@ -898,15 +909,15 @@ class Database
     public function dbLockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbLockTable");
+            $this->_errorlog("DEBUG: Database - Inside database->dbLockTable");
         }
 
-        $sql = "LOCK TABLES $table WRITE";
+        $sql = "LOCK TABLES `$table` WRITE";
 
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbLockTable");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbLockTable");
         }
     }
 
@@ -922,7 +933,7 @@ class Database
     public function dbUnlockTable($table)
     {
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Inside database->dbUnlockTable");
+            $this->_errorlog("DEBUG: Database - Inside database->dbUnlockTable");
         }
 
         $sql = 'UNLOCK TABLES';
@@ -930,7 +941,7 @@ class Database
         $this->dbQuery($sql);
 
         if ($this->_verbose) {
-            $this->_errorlog("DEBUG: mysql_pdo - Leaving database->dbUnlockTable");
+            $this->_errorlog("DEBUG: Database - Leaving database->dbUnlockTable");
         }
     }
 
@@ -942,7 +953,7 @@ class Database
      */
     public function dbEscapeString($value, $is_numeric = false)
     {
-        $value = self::$_db->quote($value);
+        $value = $this->conn->quote($value);
         $value = substr($value, 1, -1);
         return $value;
     }
@@ -953,7 +964,6 @@ class Database
     public function dbGetVersion()
     {
         return $this->_mysql_version;
-//        return self::$_db->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -1000,7 +1010,365 @@ class Database
 
     public function dbGetServerVersion()
     {
-        return self::$_db->getAttribute(\PDO::ATTR_SERVER_VERSION);
+        return $this->_mysql_version;
+    }
+
+// helper functions
+
+    /**
+    * Return SQL expression to check for permissions.
+    *
+    * Creates part of an SQL expression that can be used to request items with the
+    * standard set of glFusion permissions.
+    *
+    * @param        string      $type     part of the SQL expr. e.g. 'WHERE', 'AND'
+    * @param        int         $u_id     user id or 0 = current user
+    * @param        int         $access   access to check for (2=read, 3=r&write)
+    * @param        string      $table    table name if ambiguous (e.g. in JOINs)
+    * @return       string      SQL expression string (may be empty)
+    *
+    */
+    public function getPermSQL($type = 'WHERE', $u_id = 0, $access = 2, $table = '')
+    {
+        global $_USER, $_GROUPS;
+
+        if (!empty($table)) {
+            $table .= '.';
+        }
+
+        $uid = $u_id;
+        if ($uid <= 0) {
+            $uid = $_USER['uid'];
+            if (COM_isAnonUser()) {
+                $uid = 1;
+            }
+        }
+
+        $UserGroups = array();
+        if ((empty( $_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+            if (empty($_GROUPS)) {
+                $_GROUPS = SEC_getUserGroups($uid);
+            }
+            $UserGroups = $_GROUPS;
+        } else {
+            $UserGroups = SEC_getUserGroups($uid);
+        }
+
+        if (empty($UserGroups)) {
+            // this shouldn't really happen, but if it does, handle user
+            // like an anonymous user
+            $uid = 1;
+        }
+
+        if (SEC_inGroup('Root', $uid)) {
+            return '';
+        }
+
+        $sql = ' ' . $type . ' (';
+
+        if ($uid > 1) {
+            $sql .= "(({$table}owner_id = '{$uid}') AND ({$table}perm_owner >= $access)) OR ";
+
+            $sql .= "(({$table}group_id IN (" . implode( ',', $UserGroups )
+                 . ")) AND ({$table}perm_group >= $access)) OR ";
+            $sql .= "({$table}perm_members >= $access)";
+        } else {
+            $sql .= "(({$table}group_id IN (" . implode( ',', $UserGroups )
+                 . ")) AND ({$table}perm_group >= $access)) OR ";
+            $sql .= "({$table}perm_anon >= $access)";
+        }
+
+        $sql .= ')';
+
+        return $sql;
+    }
+
+    /**
+    * Adds appropriate WHERE expressesion to check for permissions.
+    *
+    * Creates part of an SQL expression that can be used to request items with the
+    * standard set of glFusion permissions.
+    *
+    * @param        string      $type     part of the SQL expr. e.g. 'WHERE', 'AND'
+    * @param        int         $u_id     user id or 0 = current user
+    * @param        int         $access   access to check for (2=read, 3=r&write)
+    * @param        string      $table    table name if ambiguous (e.g. in JOINs)
+    * @return       string      SQL expression string (may be empty)
+    *
+    */
+//WIP Concept
+    public function qbGetPermSQL($queryBuilder, $type = '', $u_id = 0, $access = 2, $table = '')
+    {
+        global $_USER, $_GROUPS;
+
+        // $type is either blank (implies WHERE, AND or OR)
+        switch (strtolower($type)) {
+            case 'where' :
+                $method = 'where';
+                break;
+            case 'and' :
+                $method = 'andWhere';
+                break;
+            case 'or' :
+                $method = 'orWhere';
+                break;
+            default :
+                $method = 'andWhere';
+                break;
+        }
+
+        $uid = $u_id;
+        if ($uid <= 0) {
+            $uid = $_USER['uid'];
+            if (COM_isAnonUser()) {
+                $uid = 1;
+            }
+        }
+
+        $userGroups = array();
+        if ((empty( $_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+            if (empty($_GROUPS)) {
+                $_GROUPS = SEC_getUserGroups($uid);
+            }
+            $userGroups = $_GROUPS;
+        } else {
+            $userGroups = SEC_getUserGroups($uid);
+        }
+
+        if (empty($userGroups)) {
+            // this shouldn't really happen, but if it does, handle user
+            // like an anonymous user
+            $uid = 1;
+        }
+
+        if (SEC_inGroup('Root', $uid)) {
+            return '';
+        }
+
+        if (!empty($table)) {
+            $table = $table.'.';
+        }
+
+        if ($uid > 1) {
+            $queryBuilder->$method(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->eq($table.'owner_id',
+                          $queryBuilder->createNamedParameter($uid,\glFusion\Database::INTEGER)
+                        ),
+                        $queryBuilder->expr()->gte($table.'perm_owner',
+                          $queryBuilder->createNamedParameter($access,\glFusion\Database::INTEGER)
+                        )
+                    ),
+                    $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->in($table.'group_id',
+                          $queryBuilder->createNamedParameter($userGroups,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                        ),
+                        $queryBuilder->expr()->gte($table.'perm_group',$access,\glFusion\Database::INTEGER)
+                    ),
+                    $queryBuilder->expr()->gte($table.'perm_members',$access,\glFusion\Database::INTEGER)
+                )
+            );
+        } else {
+            $queryBuilder->$method(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->in($table.'group_id',
+                          $queryBuilder->createNamedParameter($userGroups,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                        ),
+                        $queryBuilder->expr()->gte($table.'perm_group',$access,\glFusion\Database::INTEGER)
+                    ),
+                    $queryBuilder->expr()->gte($table.'perm_anon',$access,\glFusion\Database::INTEGER)
+                )
+            );
+        }
+        return;
+    }
+
+    /**
+    * Return SQL expression to request language-specific content
+    *
+    * Creates part of an SQL expression that can be used to request items in the
+    * current language only.
+    *
+    * @param    string  $field  name of the "id" field, e.g. 'sid' for stories
+    * @param    string  $type   part of the SQL expression, e.g. 'WHERE', 'AND'
+    * @param    string  $table  table name if ambiguous, e.g. in JOINs
+    * @return   string          SQL expression string (may be empty)
+    *
+    */
+
+    // we may make part of an overall query builder call
+    // so we can pass the object for the querybuilder
+    // and add the appropriate addwhere() calls
+    // if for some reason we need the actual SQL we could pass
+    // a null query builder object????
+
+
+    public function getLangSQL($field, $type = 'WHERE',$table = '')
+    {
+        global $_CONF, $_TABLES;
+
+        $sql = '';
+
+        // do some validations
+        // type should only be WHERE, AND, OR, blank
+
+        if (empty($_CONF['languages']) || empty($_CONF['language_files'])) {
+            // no multi-language support
+            return $sql;
+        }
+
+        if (!empty( $table)) {
+            $table .= '.';
+        }
+
+        $lang_id = COM_getLanguageId();
+
+        if (!empty($lang_id)) {
+            $sql = ' ' . $type . " ({$table}$field LIKE '%\\_$lang_id')";
+        }
+        return $sql;
+    }
+
+    /**
+    * Return SQL expression to check for allowed topics.
+    *
+    * Creates part of an SQL expression that can be used to only request stories
+    * from topics to which the user has access to.
+    *
+    * Note that this function does an SQL request, so you should cache
+    * the resulting SQL expression if you need it more than once.
+    *
+    * @param    string  $type   part of the SQL expr. e.g. 'WHERE', 'AND'
+    * @param    int     $u_id   user id or 0 = current user
+    * @param    string  $table  table name if ambiguous (e.g. in JOINs)
+    * @return   string          SQL expression string (may be empty)
+    *
+    */
+    public function getTopicSQL($type = 'WHERE', $u_id = 0, $table = '')
+    {
+        global $_TABLES, $_USER, $_GROUPS;
+
+        $UserGroups = array();
+        $tids = array();
+
+        if (($u_id <= 0) || (isset($_USER['uid']) && $u_id == $_USER['uid'])) {
+            if (!COM_isAnonUser()) {
+                $uid = $_USER['uid'];
+            } else {
+                $uid = 1;
+            }
+        }
+
+        // root users have access to all data
+        if (SEC_inGroup('Root', $uid)) {
+            return '';
+        }
+
+        $UserGroups = SEC_getUserGroups($uid);
+
+        $topicsql = ' ' . $type . ' ';
+
+        if (!empty( $table)) {
+            $table .= '.';
+        }
+
+        if (empty($UserGroups)) {
+            // this shouldn't really happen, but if it does, handle user
+            // like an anonymous user
+            $uid = 1;
+        }
+// need to build a query that returns all topics we have access
+
+        $sql = "SELECT tid FROM `{$_TABLES['topics']}` "
+               . $this->getPermSQL('WHERE',$uid);
+
+        $stmt = $this->conn->query($sql);
+        while ($T = $stmt->fetch()) {
+            $tids[] = $T['tid'];
+        }
+
+        if (sizeof($tids) > 0) {
+            $topicsql .= "({$table}tid IN ('" . implode( "','", $tids ) . "'))";
+        } else {
+            $topicsql .= '0';
+        }
+
+        return $topicsql;
+    }
+
+    /**
+    * Adds appropriate WHERE statements to QueryBuilder object
+    *
+    * Creates part of an SQL expression that can be used to only request stories
+    * from topics to which the user has access to.
+    *
+    * Note that this function does an SQL request, so you should cache
+    * the resulting SQL expression if you need it more than once.
+    *
+    * @param    object  $queryBuilder - queryBuilder handle
+    * @param    string  $type   part of the SQL expr. e.g. 'WHERE', 'AND'
+    * @param    int     $u_id   user id or 0 = current user
+    * @param    string  $table  table name if ambiguous (e.g. in JOINs)
+    * @return   none
+    *
+    */
+    public function qbGetTopicSQL($queryBuilder, $type = 'WHERE', $u_id = 0, $table = '')
+    {
+        global $_TABLES, $_USER;
+
+        // $type is either WHERE, blank (implies AND), AND or OR)
+        switch (strtolower($type)) {
+            case 'where' :
+                $method = 'where';
+                break;
+            case 'and' :
+                $method = 'andWhere';
+                break;
+            case 'or' :
+                $method = 'orWhere';
+                break;
+            default :
+                $method = 'andWhere';
+                break;
+        }
+
+        $tids = array();
+
+        if (($u_id <= 0) || (isset($_USER['uid']) && $u_id == $_USER['uid'])) {
+            if (!COM_isAnonUser()) {
+                $uid = $_USER['uid'];
+            } else {
+                $uid = 1;
+            }
+        }
+        // root users have access to all topics
+        if (SEC_inGroup('Root', $uid)) {
+            return;
+        }
+        if (!empty( $table)) {
+            $table .= '.';
+        }
+
+        // retrieve all topics the user has access to
+        $db = \glFusion\Database::getInstance();
+        $topicQB = $db->conn->createQueryBuilder();
+        $topicQB->select('tid')
+                ->from($_TABLES['topics']);
+        $this->qbGetPermSQL($topicQB,'WHERE',$uid);
+        $topicStmt = $topicQB->execute();
+        $tids = $topicStmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (count($tids) > 0) {
+            $queryBuilder->$method(
+                $queryBuilder->expr()->in($table.
+                  'tid',
+                   $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+                   )
+            );
+        }
+        return;
     }
 }
 ?>
