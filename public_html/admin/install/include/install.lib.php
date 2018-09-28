@@ -1618,6 +1618,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             // no changes
             $current_fusion_version = '1.7.5';
 
+        case '1.7.5' :
+            // no changes
+            $current_fusion_version = '1.7.6';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);

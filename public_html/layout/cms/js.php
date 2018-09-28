@@ -28,7 +28,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.7.5');
+    define('GVERSION', '1.7.6');
 }
 
 require_once '../../siteconfig.php';
