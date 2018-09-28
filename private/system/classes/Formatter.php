@@ -5,7 +5,7 @@
 *   @author     Mark R. Evans <mark@lglfusion.org>
 *   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
 *   @package    glFusion
-*   @version    0.0.1
+*   @version    0.0.2
 *   @license    http://opensource.org/licenses/gpl-2.0.php
 *               GNU Public License v2 or later
 *
@@ -131,18 +131,6 @@ class Formatter {
     var $_filters = array();
 
     /*
-     * var $cacheTime
-     * int - default time to cache format entries
-     */
-    var $cacheTime = 432000;
-
-    /*
-     * var $cacheEntry
-     * bool - whether to cache or not
-     */
-    var $cacheEntry = true;
-
-    /*
      * var $query
      * string - query string to highlight
      */
@@ -159,9 +147,7 @@ class Formatter {
      */
     public function __construct()
     {
-        // pick a random time between 5 and 7 days
-        // prevents all caches from expiring at the same time
-        $this->cacheTime = rand(432000,604800);
+
     }
 
     /**
@@ -312,16 +298,6 @@ class Formatter {
     }
 
     /**
-     * Enable / disable caching
-     * @param $cache - bool - true / false
-     * @return none
-     */
-    public function enableCache($cache = true)
-    {
-        $this->cacheEntry = (bool) $cache;
-    }
-
-    /**
      * Sets query string
      * @param $query - string to highlight
      * @return none
@@ -383,14 +359,16 @@ class Formatter {
 
     /**
      * Processes content and performs all filtering / sanitize actions
-     * @param $str - string to parse
+     * @param string  $str      - string to parse
+     * @param boolean $cache    - whether or not to cache the results
+     * @param integer $cacheTTL - Time to Live for cache object
      * @return string - display ready string
      */
-    public function parse($str)
+    public function parse($str, $cache = false, $cacheTTL = 3600)
     {
         global $_CONF;
 
-        if ($this->cacheEntry) {
+        if ($cache) {
             $key = 'f_'.md5($str) .'_'. $this->getOptionsKey();
             $c = \glFusion\Cache::getInstance();
             if ($c->has($key)) {
@@ -410,7 +388,7 @@ class Formatter {
 
         if ($this->formatType == 'text') {
             // filter all code prior to replacements
-            $bbcode->addFilter(FILTER_PRE, array($this,'bbcode_htmlspecialchars'));
+            $bbcode->addFilter(FILTER_PRE, array($this,'_htmlspecialchars'));
         }
         $bbcode->addFilter(FILTER_PRE, array($this,'_fixmarkup'));
 
@@ -441,7 +419,7 @@ class Formatter {
         }
 
         if (!in_array('code',$this->bbcodeBlackList)) {
-            $bbcode->addCode ('code', 'usecontent?', array($this,'do_bbcode_code'), array ('usecontent_param' => 'default'),
+            $bbcode->addCode ('code', 'usecontent?', array($this,'_do_code'), array ('usecontent_param' => 'default'),
                               'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
         }
         if ($this->processBBCode) {
@@ -524,8 +502,8 @@ class Formatter {
         }
 
         $str = $bbcode->parse ($str);
-        if ($this->cacheEntry) {
-            $c->set($key,$str,array($this->namespace),$this->cacheTime);
+        if ($cache) {
+            $c->set($key,$str,array($this->namespace,$this->namespace.'_'.$this->action),$cacheTTL);
         }
 
         unset($bbcode);
@@ -561,7 +539,7 @@ class Formatter {
      * @param $text
      * @return string
      */
-    public static function bbcode_htmlspecialchars($text)
+    public function _htmlspecialchars($text)
     {
         return (@htmlspecialchars ($text,ENT_NOQUOTES, COM_getEncodingt(),true));
     }
@@ -691,7 +669,7 @@ class Formatter {
     /**
      * [code] bbcode
      */
-    public function do_bbcode_code($action, $attributes, $content, $params, $node_object)
+    public function _do_code($action, $attributes, $content, $params, $node_object)
     {
         global $_FF_CONF;
 
@@ -732,6 +710,7 @@ class Formatter {
         $codeblock = str_replace(']','&#93;',$codeblock);
 
         $insideCode = 0;
+
         return $codeblock;
     }
 
@@ -753,7 +732,7 @@ class Formatter {
     /**
      * Converts newline to <br>
      */
-    public static function _nl2br($str)
+    public function _nl2br($str)
     {
         return str_replace(array("\r\n", "\r", "\n"), "<br>", $str);
     }
@@ -761,7 +740,7 @@ class Formatter {
     /**
      * Fixes older markup
      */
-    public static function _fixmarkup($str)
+    public function _fixmarkup($str)
     {
         $str = str_replace(array("[/list]\r\n", "[/list]\r", "[/list]\n","[/list] \r\n", "[/list] \r", "[/list] \n"), "[/list]", $str);
         $str = str_replace(array("[/code]\r\n", "[/code]\r", "[/code]\n","[/code] \r\n", "[/code] \r", "[/code] \n"), "[/code]", $str);

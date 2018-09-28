@@ -1091,14 +1091,38 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $grouplist = implode(',',$groups);
 
-        $sql  = "SELECT a.id, a.forum, a.name, a.date, a.lastupdated, a.last_reply_rec, a.subject, ";
-        $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, a.status, b.forum_name  ";
-        $sql .= "FROM {$_TABLES['ff_topic']} a ";
-        $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
-        $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
-        $sql .= "ORDER BY lastupdated DESC LIMIT {$_FF_CONF['centerblock_numposts']}";
-        $result = DB_query ($sql);
-        $resultSet = DB_fetchAll($result);
+        $db = \glFusion\Database::getInstance();
+        $queryBuilder = $db->conn->createQueryBuilder();
+        $queryBuilder
+            ->select(   'a.id',
+                        'a.forum',
+                        'a.name',
+                        'a.date',
+                        'a.lastupdated',
+                        'a.last_reply_rec',
+                        'a.subject',
+                        'a.comment',
+                        'a.uid',
+                        'a.name',
+                        'a.pid',
+                        'a.replies',
+                        'a.views',
+                        'a.status',
+                        'b.forum_name'
+                    )
+            ->from($_TABLES['ff_topic'],'a')
+            ->leftJoin('a',$_TABLES['ff_forums'],'b','a.forum=b.forum_id')
+            ->where('pid=0')
+            ->andWhere(
+                $queryBuilder->expr()->in('b.grp_id',$groups)
+                )
+            ->andWhere('b.no_newposts = 0')
+            ->orderBy('a.lastupdated', 'DESC')
+            ->setMaxResults($_FF_CONF['centerblock_numposts']);
+
+        $stmt = $queryBuilder->execute();
+        $resultSet = $stmt->fetchAll();
+
         if (count($resultSet) == 0 ) return '';
 
         $cssid = 0;
@@ -1142,8 +1166,27 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $lastpostinfo = @htmlspecialchars(preg_replace('#\r?\n#',' ',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
                 $lastpostinfo = stripBBCode($lastpostinfo);
             } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['ff_topic']} WHERE id={$A['last_reply_rec']}");
-                $B = DB_fetchArray($qlreply);
+
+                $queryBuilder = $db->conn->createQueryBuilder();
+                $queryBuilder
+                    ->select(   'id',
+                                'uid',
+                                'name',
+                                'comment'
+                            )
+                    ->from($_TABLES['ff_topic'],'a')
+                    ->where('id=?')
+                    ->setMaxResults(1)
+                    ->setParameter(1, $A['last_reply_rec'],\glFusion\Database::INTEGER);
+
+                $stmt = $queryBuilder->execute();
+                $B = $stmt->fetch();
+                // while this should never happen - we should always check for an error and act appropriately
+                if ($B === false) {
+                    // initialize to blank values
+                    $B = array('id' => 0, 'comment' => '', 'uid' => 1);
+                }
+
                 $lastid = $B['id'];
                 $lastcomment = $B['comment'];
                 if ($B['uid'] > 1) {

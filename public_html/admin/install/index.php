@@ -771,7 +771,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
     $T->parse('env','envs',true);
 
-    if (version_compare(PHP_VERSION,'7.0.0','<')) {
+    if (version_compare(PHP_VERSION,'7.1.0','<')) {
         $ob = ini_get('open_basedir');
         if ( $ob == '' ) {
             $open_basedir_restriction = 0;
@@ -1753,6 +1753,9 @@ function INST_installAndContentPlugins()
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_CONF['path_system'].'lib-database.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
+
+    require_once $_CONF['path_system'] . 'classes/Autoload.php';
+    glFusion\Autoload::initialize();
 
     require $_CONF['path_system'].'lib-database.php';
     require $_CONF['path_system'].'lib-security.php';

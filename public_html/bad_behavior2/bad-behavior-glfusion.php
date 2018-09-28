@@ -178,7 +178,7 @@ function bb2_read_settings() {
                 $_CONF['bb2_spambot_referer'] = $bb2_bl_tmp['spambot_referer'];
             $cache_bb2_bl_data = serialize($bb2_bl_tmp);
 
-            $c->set($key,$cache_bb2_bl_data);
+            $c->set($key,$cache_bb2_bl_data,$key);
         }
     }
 
@@ -219,7 +219,7 @@ function bb2_read_settings() {
                 $_CONF['bb2_whitelist_urls'] = $bb2_wl_tmp['url'];
             $cache_bb2_wl_data = serialize($bb2_wl_tmp);
 
-            $c->set($key,$cache_bb2_wl_data);
+            $c->set($key,$cache_bb2_wl_data,$key);
         }
     }
 

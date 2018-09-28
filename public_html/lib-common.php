@@ -42,8 +42,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v5.6 or greater
-if (version_compare(PHP_VERSION,'7.0.0','<')) {
-    die('glFusion requires PHP version 7.0.0 or greater.');
+if (version_compare(PHP_VERSION,'7.1.0','<')) {
+    die('glFusion requires PHP version 7.1.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
@@ -108,6 +108,12 @@ if ( function_exists('set_error_handler') ) {
     $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
+require_once $_CONF['path'].'db-config.php';
+unset($_DB_host);
+unset($_DB_name);
+unset($_DB_user);
+unset($_DB_pass);
+
 require_once $_CONF['path_system'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
 
@@ -117,6 +123,9 @@ if ( defined('DVLP_DEBUG')) {
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
+
+//force the initial database connection...
+//$_DB = glFusion\Database::getInstance();
 
 $config =& config::get_instance();
 $config->set_configfile($_CONF['path'].'db-config.php');
@@ -161,6 +170,7 @@ if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
+// calculate the admin path
 $adminurl = $_CONF['site_admin_url'];
 if (strrpos ($adminurl, '/') == strlen ($adminurl) - 1) {
     $adminurl = substr ($adminurl, 0, -1);
@@ -173,6 +183,8 @@ if ($pos === false) {
 }
 
 $charset = COM_getCharset();
+
+// if using a non UTF8 character set, force filter to htmlawed
 if ( $charset != 'utf-8' ) $_SYSTEM['html_filter'] = 'htmlawed';
 
 require_once $_CONF['path_system'].'/lib-cache.php';
@@ -192,8 +204,9 @@ $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-$result = DB_query("SELECT * FROM {$_TABLES['vars']}");
-$resultSet = DB_fetchAll($result);
+$db = glFusion\Database::getInstance();
+
+$resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['vars']}`")->fetchAll();
 foreach($resultSet AS $row) {
     $_VARS[$row['name']] = $row['value'];
 }
@@ -226,8 +239,7 @@ if ( !isset($_SYSTEM['admin_session']) ) {
 }
 
 $_LOGO = array();
-$result = DB_query("SELECT * FROM {$_TABLES['logo']}");
-$resultSet = DB_fetchAll($result);
+$resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['logo']}`")->fetchAll();
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
 }
@@ -260,14 +272,12 @@ $_URL = new url( $_CONF['url_rewrite'] );
 
 require_once $_CONF['path_system'].'lib-database.php';
 
-
 /**
 * Buffer all enabled plugins
 *
 */
 
-$result = DB_query("SELECT pi_name,pi_version,pi_enabled FROM {$_TABLES['plugins']}");
-$resultSet = DB_fetchAll($result);
+$resultSet = $db->conn->query("SELECT pi_name,pi_version,pi_enabled FROM `{$_TABLES['plugins']}`")->fetchAll();
 $_PLUGINS = array();
 $_PLUGIN_INFO = array();
 foreach($resultSet AS $A) {
@@ -370,7 +380,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
 
         }
     }
-
+/*
     if ( isset($_USER['theme']) && $_USER['theme'] == 'chameleon' ) {
         if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
             if ( $_CONF['theme'] != 'chameleon' ) {
@@ -380,7 +390,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
             }
         }
     }
-
+*/
     if ( !empty( $_USER['theme'] )) {
         if ( is_dir( $_CONF['path_themes'] . $_USER['theme'] )) {
             $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
@@ -389,7 +399,9 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
             $_USER['theme'] = $_CONF['theme'];
         }
     }
-} else if ($_CONF['theme'] == 'chameleon' ) {
+}
+/*
+ else if ($_CONF['theme'] == 'chameleon' ) {
     if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
         $_USER['theme'] = 'cms';
         $_CONF['theme'] = 'cms';
@@ -397,6 +409,7 @@ if ( $_CONF['allow_user_themes'] && !empty( $usetheme ) && is_dir( $_CONF['path_
         $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
     }
 }
+*/
 $TEMPLATE_OPTIONS['default_vars']['layout_url'] = $_CONF['layout_url'];
 
 // Set language
@@ -645,12 +658,12 @@ require_once $_CONF['path_system'].'lib-menu.php';
 
 // Set the current topic in both the global var and Topic class
 // during transition
-if ( isset( $_GET['topic'] )) {
-    $topic = COM_applyFilter( $_GET['topic'] );
-    Topic::setCurrent($_GET['topic']);
-} else if ( isset( $_POST['topic'] )) {
-    $topic = COM_applyFilter( $_POST['topic'] );
-    Topic::setCurrent($_POST['topic']);
+if (isset( $_GET['topic'])) {
+    $topic = (string) filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+    Topic::setCurrent($topic);
+} else if (isset( $_POST['topic'])) {
+    $topic = (string) filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_STRING);
+    Topic::setCurrent($topic);
 } else {
     $topic = '';
 }
@@ -915,22 +928,31 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
-            $sid = COM_applyFilter( $_GET['story'] );
+            $sid = (string) filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+//            $sid = COM_applyFilter( $_GET['story'] );
         } elseif ( isset( $_GET['sid'] )) {
-            $sid = COM_applyFilter( $_GET['sid'] );
+            $sid = (string) filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+//            $sid = COM_applyFilter( $_GET['sid'] );
         } elseif ( isset( $_POST['story'] )) {
-            $sid = COM_applyFilter( $_POST['story'] );
+//            $sid = COM_applyFilter( $_POST['story'] );
+            $sid = (string) filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
+//@FIXME - use COM_getCurrentURL() for consistency
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-            $sid = COM_applyFilter( COM_getArgument( 'story' ));
+            $sid = (string) filter_var(COM_getArgument('story'),FILTER_SANITIZE_STRING);
+//            $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
         if ( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
+            $db = \glFusion\Database::getInstance();
+            $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
+            $stmt->bindParam(1,$sid,\glFusion\Database::STRING);
+            $topic = $stmt->fetchColumn();
         }
     } else {
-        $topic = COM_applyFilter( $_GET['topic'] );
+//        $topic = COM_applyFilter( $_GET['topic'] );
+        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
     }
 
     $feed_url = array();
@@ -943,12 +965,14 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $sql = 'SELECT format, filename, title, language FROM '
                  . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
             if ( !empty( $topic )) {
-                $sql .= " OR (header_tid = '" . DB_escapeString( $topic ) . "')";
+                $sql .= " OR (header_tid = ?)";
             }
-            $result = DB_query( $sql );
-            $numRows = DB_numRows( $result );
-            for( $i = 0; $i < $numRows; $i++ ) {
-                $A = DB_fetchArray( $result );
+            $db = \glFusion\Database::getInstance();
+            $stmt = $db->conn->prepare($sql);
+            $stmt->bindParam(1,$topic,\glFusion\Database::STRING);
+            $stmt->execute();
+            $topicRows = $stmt->fetchAll();
+            foreach($topicRows AS $A) {
                 if ( !empty( $A['filename'] )) {
                     $format = explode( '-', $A['format'] );
                     $format_type = strtolower( $format[0] );
@@ -999,8 +1023,11 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         if ( empty( $topic )) {
             $pagetitle = $_CONF['site_slogan'];
         } else {
-            $pagetitle = DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '".DB_escapeString($topic)."'" );
+            $db = \glFusion\Database::getInstance();
+            $stmt = $db->conn->prepare("SELECT topic FROM `{$_TABLES['topics']}` WHERE tid=?");
+            $stmt->bindParam(1,$topic,\glFusion\Database::STRING);
+            $stmt->execute();
+            $pagetitle = $stmt->fetchColumn();
         }
     }
     if ( !empty( $pagetitle )) {
@@ -1119,21 +1146,30 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
-            $sid = COM_applyFilter( $_GET['story'] );
+            $sid = filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+//            $sid = COM_applyFilter( $_GET['story'] );
         } elseif ( isset( $_GET['sid'] )) {
-            $sid = COM_applyFilter( $_GET['sid'] );
+            $sid = filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+//            $sid = COM_applyFilter( $_GET['sid'] );
         } elseif ( isset( $_POST['story'] )) {
-            $sid = COM_applyFilter( $_POST['story'] );
+//            $sid = COM_applyFilter( $_POST['story'] );
+            $sid = filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-            $sid = COM_applyFilter( COM_getArgument( 'story' ));
+//            $sid = COM_applyFilter( COM_getArgument( 'story' ));
+            $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
         } if ( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".DB_escapeString($sid)."'" );
+            $db = \glFusion\Database::getInstance();
+            $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
+            $stmt->bindParam(1,$sid,\glFusion\Database::STRING);
+            $stmt->execute();
+            $topic = $stmt->fetchColumn();
         }
     } else {
-        $topic = COM_applyFilter( $_GET['topic'] );
+        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+//        $topic = COM_applyFilter( $_GET['topic'] );
     }
     if ( !isset($_GET['ncb'])) {
         $theme->set_var('cb',true);
@@ -1390,7 +1426,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if ( $msg > 0 ) {
         $plugin = '';
         if (isset ($_GET['plugin'])) {
-            $plugin = COM_applyFilter ($_GET['plugin']);
+            $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+//            $plugin = COM_applyFilter ($_GET['plugin']);
         }
         $msgTxt = COM_showMessage ($msg, $plugin,'',0,'info');
     }
@@ -1441,11 +1478,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
-
-
     _js_out();
     _css_out();
-
 
     return $retval;
 }
@@ -1544,6 +1578,8 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 
     $retval = '';
 
+    $sortcol = (int) $sortcol;
+
     $LangTableName = '';
     if ( substr( $table, 0, strlen( $_DB_table_prefix )) == $_DB_table_prefix ) {
         $LangTableName = 'LANG_' . substr( $table, strlen( $_DB_table_prefix ));
@@ -1567,11 +1603,11 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
         $sql .= " WHERE $where";
     }
     $sql .= " ORDER BY {$select_set[$sortcol]}";
-    $result = DB_query( $sql );
-    $nrows = DB_numRows( $result );
 
-    for( $i = 0; $i < $nrows; $i++ ) {
-        $A = DB_fetchArray( $result, true );
+    $db = \glFusion\Database::getInstance();
+    $stmt = $db->conn->query($sql);
+
+    while ($A = $stmt->fetch()) {
         $retval .= '<option value="' . $A[0] . '"';
 
         if ( is_array( $selected ) AND count( $selected ) > 0 ) {
@@ -1652,14 +1688,17 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 
     $retval = array();
 
+    $sortcol = (int) $sortcol;
+
     $tmp = str_replace('DISTINCT ', '', $selection);
     $select_set = explode(',', $tmp);
 
     $sql = "SELECT $selection FROM {$_TABLES['topics']}";
+
     if ($ignorelang) {
-        $sql .= COM_getPermSQL('WHERE',0,$access);
+        $sql .= COM_getPermSQL('WHERE',0,(int)$access);
     } else {
-        $permsql = COM_getPermSQL('WHERE',0,$access);
+        $permsql = COM_getPermSQL('WHERE',0,(int)$access);
         if (empty($permsql)) {
             $sql .= COM_getLangSQL('tid');
         } else {
@@ -1668,17 +1707,15 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
     }
     $sql .=  " ORDER BY $select_set[$sortcol]";
 
-    $result = DB_query($sql);
-    $nrows = DB_numRows($result);
+    $db = \glFusion\Database::getInstance();
+    $stmt = $db->conn->query($sql);
 
     if (count($select_set) > 1) {
-        for ($i = 0; $i < $nrows; $i++) {
-            $A = DB_fetchArray($result, true);
+        while ($A = $stmt->fetch()) {
             $retval[$A[0]] = $A[1];
         }
     } else {
-        for ($i = 0; $i < $nrows; $i++) {
-            $A = DB_fetchArray($result, true);
+        while ($A = $stmt->fetch()) {
             $retval[] = $A[0];
         }
     }
@@ -1710,8 +1747,10 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         $sql .= " WHERE $where";
     }
 
-    $result = DB_query( $sql );
-    $nrows = DB_numRows( $result );
+    $db = \glfusion\Database::getInstance();
+    $stmt = $db->conn->query($sql);
+
+COM_errorLog("in COM_checkList - " . $sql);
 
     if ( !empty( $selected )) {
         if ( $_COM_VERBOSE ) {
@@ -1727,9 +1766,8 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         $S = array();
     }
     $retval = '<ul class="checkboxes-list">' . LB;
-    for( $i = 0; $i < $nrows; $i++ ) {
+    while ($A = $stmt->fetch()) {
         $access = true;
-        $A = DB_fetchArray( $result, true );
 
         if ( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 ) {
             $access = false;
@@ -1820,11 +1858,11 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
         } else {
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE is_enabled = 1";
         }
-        $result = DB_query( $sql );
-        $num = DB_numRows( $result );
-        for( $i = 0; $i < $num; $i++) {
-            $A = DB_fetchArray( $result );
 
+        $db = \glFusion\Database::getInstance();
+        $stmt = $db->conn->query($sql);
+        $resultSet = $stmt->fetchAll();
+        foreach($resultSet AS $A) {
             $is_current = true;
             if ( $A['type'] == 'article' ) {
                 $is_current = SYND_feedUpdateCheck( $A['topic'],
@@ -1975,6 +2013,8 @@ function COM_accessLog( $logentry )
 function COM_showTopics( $topic='' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $_BLOCK_TEMPLATE, $page;
+
+// use query builder to build this query as it is somewhat complex...
 
     $langsql = COM_getLangSQL( 'tid' );
     if ( empty( $langsql )) {
@@ -2818,50 +2858,45 @@ function COM_olderStuff()
 {
     global $_TABLES, $_CONF;
 
-    $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."'))) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
-    $result = DB_query( $sql );
-    $nrows = DB_numRows( $result );
+    $db = \glFusion\Database::getInstance();
+    $stmt = $db->conn->query("SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."'))) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}");
 
-    if ( $nrows > 0 ) {
-        $dateonly = $_CONF['dateonly'];
-        if ( empty( $dateonly )) {
-            $dateonly = 'd-M'; // fallback: day - abbrev. month name
-        }
+    $dateonly = $_CONF['dateonly'];
+    if ( empty( $dateonly )) {
+        $dateonly = 'd-M'; // fallback: day - abbrev. month name
+    }
 
-        $day = 'noday';
-        $string = '';
-        $dt = new Date();
-        for( $i = 0; $i < $nrows; $i++ ) {
-            $A = DB_fetchArray( $result );
-            $dt->setTimestamp($A['day']);
-            $daycheck = $dt->format("z",true);
-            if ( $day != $daycheck ) {
-                if ( $day != 'noday' ) {
-                    $daylist = COM_makeList($oldnews, 'list-older-stories');
-                    $daylist = str_replace(array("\015", "\012"), '', $daylist);
-                    $string .= $daylist; // . '<br/>';
-                }
-                $day2 = $dt->format($_CONF['dateonly'], true);
-                $string .= '<h3>' . $dt->format('l',true) . ' <small>' . $day2
-                        . '</small></h3>' . LB;
-                $oldnews = array();
-                $day = $daycheck;
+    $day = 'noday';
+    $string = '';
+    $dt = new Date();
+
+    while ($A = $stmt->fetch()) {
+        $dt->setTimestamp($A['day']);
+        $daycheck = $dt->format("z",true);
+        if ( $day != $daycheck ) {
+            if ( $day != 'noday' ) {
+                $daylist = COM_makeList($oldnews, 'list-older-stories');
+                $daylist = str_replace(array("\015", "\012"), '', $daylist);
+                $string .= $daylist; // . '<br/>';
             }
-            $oldnews_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='. $A['sid'] );
-
-            $oldnews[] = COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
-                         $oldnews_url,array('title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())))
-                .' (' . COM_numberFormat( $A['comments'] ) . ')';
+            $day2 = $dt->format($_CONF['dateonly'], true);
+            $string .= '<h3>' . $dt->format('l',true) . ' <small>' . $day2
+                    . '</small></h3>' . LB;
+            $oldnews = array();
+            $day = $daycheck;
         }
+        $oldnews_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='. $A['sid'] );
 
-        if ( !empty( $oldnews )) {
-            $daylist = COM_makeList( $oldnews, 'list-older-stories' );
-            $daylist = str_replace(array("\015", "\012"), '', $daylist);
-            $string .= $daylist;
-            $string = DB_escapeString( $string );
+        $oldnews[] = COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
+                     $oldnews_url,array('title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())))
+            .' (' . COM_numberFormat( $A['comments'] ) . ')';
+    }
 
-            DB_query( "UPDATE {$_TABLES['blocks']} SET content = '$string' WHERE name = 'older_stories'" );
-        }
+    if ( !empty( $oldnews )) {
+        $daylist = COM_makeList( $oldnews, 'list-older-stories' );
+        $daylist = str_replace(array("\015", "\012"), '', $daylist);
+        $string .= $daylist;
+        $db->conn->executeUpdate("UPDATE {$_TABLES['blocks']} SET content = ? WHERE name = 'older_stories'",array($string),array(\glFusion\Database::STRING));
     }
 }
 
@@ -2943,7 +2978,9 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     $retval = '';
 
     // Get user preferences on blocks
+
     if ( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] )) {
+        // failsafe - generally this is always set when the $_USER record is populated
         if ( !COM_isAnonUser() ) {
             $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} "
                                ."WHERE uid = {$_USER['uid']}" );
@@ -3208,6 +3245,8 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         } else{
             $number_of_items = $feed->get_item_quantity($maxheadlines);
         }
+
+//@TODO - odd test - last_modified is also update so if one is empty both are...
         $etag = '';
         $update = date('Y-m-d H:i:s');
         $last_modified = $update;
@@ -3218,7 +3257,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         } else {
             DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".(int) $bid);
         }
-
+//
         for ( $i = 0; $i < $number_of_items; $i++ ) {
             $item = $feed->get_item($i);
             $title = $item->get_title();
@@ -3932,13 +3971,16 @@ function COM_getMessage()
 {
     $msg = 0;
     if ( isset($_POST['msg']) ) {
-        $msg = COM_applyFilter($_POST['msg'],true);
+        $msg = filter_input(INPUT_POST, 'msg', FILTER_SANITIZE_NUMBER_INT);
+//        $msg = COM_applyFilter($_POST['msg'],true);
         unset($_POST['msg']);
     } elseif ( isset($_GET['msg']) ) {
-        $msg = COM_applyFilter($_GET['msg'],true);
+        $msg = filter_input(INPUT_GET, 'msg', FILTER_SANITIZE_NUMBER_INT);
+//        $msg = COM_applyFilter($_GET['msg'],true);
         unset($_GET['msg']);
     } elseif ( SESS_isSet('glfusion.infomessage') ) {
-        $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
+        $msg = filter_var(SESS_getVar('glfusion.infomessage'),FILTER_SANITIZE_NUMBER_INT);
+//        $msg = COM_applyFilter(SESS_getVar('glfusion.infomessage'),true);
         SESS_unSet('glfusion.infomessage');
     }
     return $msg;

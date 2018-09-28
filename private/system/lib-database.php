@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | lib-database.php                                                         |
 // |                                                                          |
-// | glFusion database library.                                               |
+// | glFusion Legacy database library.                                        |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
@@ -41,105 +41,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-// +---------------------------------------------------------------------------+
-// | Table definitions, these are used by the install program to create the    |
-// | database schema.  If you don't like the tables names, change them PRIOR   |
-// | to running the install after running the install program DO NOT TOUCH     |
-// | these. You have been warned!  Also, these variables are used in the core  |
-// | glFusion code                                                             |
-// +---------------------------------------------------------------------------+
-
-$_TABLES['access']              = $_DB_table_prefix . 'access';
-$_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
-$_TABLES['autotag_perm']        = $_DB_table_prefix . 'autotag_perm';
-$_TABLES['autotag_usage']       = $_DB_table_prefix . 'autotag_usage';
-$_TABLES['autotags']            = $_DB_table_prefix . 'autotags';
-$_TABLES['blocks']              = $_DB_table_prefix . 'blocks';
-$_TABLES['commentcodes']        = $_DB_table_prefix . 'commentcodes';
-$_TABLES['commentedits']        = $_DB_table_prefix . 'commentedits';
-$_TABLES['commentmodes']        = $_DB_table_prefix . 'commentmodes';
-$_TABLES['comments']            = $_DB_table_prefix . 'comments';
-$_TABLES['conf_values']         = $_DB_table_prefix . 'conf_values';
-$_TABLES['cookiecodes']         = $_DB_table_prefix . 'cookiecodes';
-$_TABLES['dateformats']         = $_DB_table_prefix . 'dateformats';
-$_TABLES['featurecodes']        = $_DB_table_prefix . 'featurecodes';
-$_TABLES['features']            = $_DB_table_prefix . 'features';
-$_TABLES['frontpagecodes']      = $_DB_table_prefix . 'frontpagecodes';
-$_TABLES['group_assignments']   = $_DB_table_prefix . 'group_assignments';
-$_TABLES['groups']              = $_DB_table_prefix . 'groups';
-$_TABLES['logo']                = $_DB_table_prefix . 'logo';
-$_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
-$_TABLES['menu']                = $_DB_table_prefix . 'menu';
-$_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
-$_TABLES['menu_elements']       = $_DB_table_prefix . 'menu_elements';
-$_TABLES['pingservice']         = $_DB_table_prefix . 'pingservice';
-$_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
-$_TABLES['postmodes']           = $_DB_table_prefix . 'postmodes';
-$_TABLES['rating']              = $_DB_table_prefix . 'rating';
-$_TABLES['rating_votes']        = $_DB_table_prefix . 'rating_votes';
-$_TABLES['sessions']            = $_DB_table_prefix . 'sessions';
-$_TABLES['social_share']        = $_DB_table_prefix . 'social_share';
-$_TABLES['social_follow_services'] = $_DB_table_prefix . 'social_follow_services';
-$_TABLES['social_follow_user']  = $_DB_table_prefix . 'social_follow_user';
-$_TABLES['sortcodes']           = $_DB_table_prefix . 'sortcodes';
-$_TABLES['speedlimit']          = $_DB_table_prefix . 'speedlimit';
-$_TABLES['statuscodes']         = $_DB_table_prefix . 'statuscodes';
-$_TABLES['stories']             = $_DB_table_prefix . 'stories';
-$_TABLES['storysubmission']     = $_DB_table_prefix . 'storysubmission';
-$_TABLES['subscriptions']       = $_DB_table_prefix . 'subscriptions';
-$_TABLES['syndication']         = $_DB_table_prefix . 'syndication';
-$_TABLES['tokens']              = $_DB_table_prefix . 'tokens';
-$_TABLES['topics']              = $_DB_table_prefix . 'topics';
-$_TABLES['trackback']           = $_DB_table_prefix . 'trackback';
-$_TABLES['trackbackcodes']      = $_DB_table_prefix . 'trackbackcodes';
-$_TABLES['usercomment']         = $_DB_table_prefix . 'usercomment';
-$_TABLES['userindex']           = $_DB_table_prefix . 'userindex';
-$_TABLES['userinfo']            = $_DB_table_prefix . 'userinfo';
-$_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
-$_TABLES['users']               = $_DB_table_prefix . 'users';
-$_TABLES['vars']                = $_DB_table_prefix . 'vars';
-$_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
-
-// These tables aren't used by glFusion any more, but the table names are still
-// needed when upgrading from old versions
-$_TABLES['commentspeedlimit']   = $_DB_table_prefix . 'commentspeedlimit';
-$_TABLES['submitspeedlimit']    = $_DB_table_prefix . 'submitspeedlimit';
-$_TABLES['tzcodes']             = $_DB_table_prefix . 'tzcodes';
-$_TABLES['userevent']           = $_DB_table_prefix . 'userevent';
-
-
-// +---------------------------------------------------------------------------+
-// | DO NOT TOUCH ANYTHING BELOW HERE                                          |
-// +---------------------------------------------------------------------------+
-
-/**
-* Include appropriate DBMS object
-*
-*/
-if ( !extension_loaded('pdo_mysql') && !function_exists('mysqli_connect') && !function_exists('mysql_connect') ) {
-    die("No MySQL driver found in PHP environment.");
-}
-
-if (extension_loaded('pdo_mysql')) {
-    require_once $_CONF['path_system'] . 'databases/mysql_pdo.class.php';
-} else if (($_DB_dbms === 'mysql' || $_DB_dbms === 'mysqli') && class_exists('MySQLi')) {
-    require_once $_CONF['path_system'] . 'databases/mysqli.class.php';
-} else if ( ($_DB_dbms === 'mysqli') && !class_exists('MySQLi') ) {
-    require_once $_CONF['path_system'] . 'databases/mysql.class.php';
-} else {
-    require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
-}
-
-if ( $_DB_dbms == 'mysqli') {
-    $_DB_dbms = 'mysql';
-}
-// Instantiate the database object
-if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
-$_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
-                    $_CONF['default_charset'], $_CONF['db_charset']);
-unset($_DB_user);
-unset($_DB_pass);
-
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
     $_DB->_no_fail = 1;
 }
@@ -148,12 +49,8 @@ if (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug']) {
     DB_displayError(true);
 }
 
-// +---------------------------------------------------------------------------+
-// | These are the library functions.  In all cases they turn around and make  |
-// | calls to the DBMS specific functions.  These ARE to be used directly in   |
-// | the code...do NOT use the $_DB methods directly
-// +---------------------------------------------------------------------------+
-
+// we should not need a global...
+$_DB = glFusion\Database::getInstance();
 
 /**
 * @return     string     the version of the database application as integer
@@ -226,8 +123,12 @@ function DB_query ($sql, $ignore_errors = 0)
             die ($result);
         }
     }
-
-    return $_DB->dbQuery ($sql, $ignore_errors);
+    try {
+        $result = $_DB->dbQuery ($sql, $ignore_errors);
+    } catch (Exception $e) {
+        $result = false;
+    }
+    return $result;
 }
 
 /**
