@@ -1,3 +1,10 @@
+## v1.7.6 (unreleased)
+  - Update CKEditor to v4.10.1
+  - Updated Polish Translation
+  - Story instance caching did not account for custom templates per topic
+  - Fixed issue where utf8mb4 support detection did not work properly when using PDO driver
+  - Fixed incorrect variable reference in SFS module for email check - fixes issue where SFS score was not properly displayed in spamx log
+
 ## v1.7.5 (August 8, 2018)
   - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
   - Fixed response comparison in SFS SpamX module
