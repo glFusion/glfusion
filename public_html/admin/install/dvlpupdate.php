@@ -982,8 +982,6 @@ function glfusion_130()
     // alter the users table
     DB_query("ALTER TABLE {$_TABLES['users']} ADD account_type smallint(5) NOT NULL default '1' AFTER status",1);
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
@@ -1470,8 +1468,6 @@ function glfusion_161()
         DB_query($sql,1);
     }
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.1',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.1' WHERE name='glfusion'",1);
@@ -1525,9 +1521,6 @@ function glfusion_162()
     $atSQL = "REPLACE INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
     DB_query($atSQL,1);
 
-
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.2' WHERE name='glfusion'",1);
@@ -1559,8 +1552,6 @@ function glfusion_163()
     DB_query("ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;",1);
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'",1);
     DB_query("REPLACE INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL)",1);
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.3',name='glfusion'",1);
@@ -1603,8 +1594,6 @@ function glfusion_165()
         DB_query($sql,1);
     }
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.5',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.5' WHERE name='glfusion'",1);
@@ -1626,8 +1615,6 @@ function glfusion_166()
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.6',name='glfusion'",1);
@@ -1719,8 +1706,6 @@ function glfusion_170()
 
     DB_query("INSERT INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');",1);
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.0' WHERE name='glfusion'",1);
@@ -1744,8 +1729,6 @@ function glfusion_171()
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.1',name='glfusion'",1);
@@ -1930,8 +1913,6 @@ function glfusion_172()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
     // end of spam-x
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
@@ -1973,7 +1954,7 @@ function glfusion_173()
             }
         }
     }
-    _updateConfig();
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.3',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.3' WHERE name='glfusion'",1);
@@ -1996,8 +1977,6 @@ function glfusion_174()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.4',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.4' WHERE name='glfusion'",1);
@@ -2010,6 +1989,14 @@ function glfusion_200()
 
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
+
+    // fix invalid data
+    DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '1970-01-01 00:00:00' WHERE CAST(rdfupdated AS CHAR(20)) = '0000-00-00 00:00:00';");
+    DB_query("UPDATE {$_TABLES['stories']} SET comment_expire = '1970-01-01 00:00:00' WHERE CAST(comment_expire AS CHAR(20)) = '0000-00-00 00:00:00';");
+    DB_query("UPDATE {$_TABLES['stories']} SET expire = '1970-01-01 00:00:00' WHERE CAST(expire AS CHAR(20)) = '0000-00-00 00:00:00';");
+    DB_query("UPDATE {$_TABLES['syndication']} SET updated = '1970-01-01 00:00:00' WHERE CAST(updated AS CHAR(20)) = '0000-00-00 00:00:00';");
+    DB_query("UPDATE {$_TABLES['users']} SET regdate = '1970-01-01 00:00:00' WHERE CAST(regdate AS CHAR(20)) = '0000-00-00 00:00:00';");
+    DB_query("UPDATE {$_TABLES['users']} SET act_time = '1970-01-01 00:00:00' WHERE CAST(act_time AS CHAR(20)) = '0000-00-00 00:00:00';");
 
     // forum badge update
     DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
@@ -2049,8 +2036,6 @@ function glfusion_200()
     // change comment feeds
     DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.0.0',name='glfusion'",1);
@@ -2366,9 +2351,13 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
     $use_innodb = true;
 }
 
-$retval .= 'Performing database upgrades if necessary...<br />';
+$retval .= 'Performing database upgrades if necessary...<br>';
 
 glfusion_200();
+
+$retval .= 'Performing Configuration upgrades if necessary...<br>';
+
+_updateConfig();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

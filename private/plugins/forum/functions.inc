@@ -1091,8 +1091,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $grouplist = implode(',',$groups);
 
-        $conn = \glFusion\Database::getInstance();
-        $queryBuilder = $conn->createQueryBuilder();
+        $db = \glFusion\Database::getInstance();
+        $queryBuilder = $db->conn->createQueryBuilder();
         $queryBuilder
             ->select(   'a.id',
                         'a.forum',
@@ -1167,7 +1167,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $lastpostinfo = stripBBCode($lastpostinfo);
             } else {
 
-                $queryBuilder = $conn->createQueryBuilder();
+                $queryBuilder = $db->conn->createQueryBuilder();
                 $queryBuilder
                     ->select(   'id',
                                 'uid',

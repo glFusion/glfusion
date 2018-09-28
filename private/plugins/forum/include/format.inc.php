@@ -144,11 +144,6 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     $format->setAllowedHTML($_FF_CONF['allowed_html']);
     $format->setType($postmode);
 
-// do not cache each individual post
-//    if ($mode == 'preview') {
-        $format->enableCache(false);
-//    }
-
     if ( ! ( $status & DISABLE_BBCODE ) ) {
         $format->setProcessBBCode(true);
     }
@@ -175,7 +170,14 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     $format->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
 
-    return $format->parse($str);
+    $enableCache = false;
+    $cacheTTL = 0;
+    if ($mode != 'preview') {
+        $enableCache = true;
+        $cacheTTL = 3600;
+    }
+
+    return $format->parse($str, $enableCache,$cacheTTL);
 
 }
 

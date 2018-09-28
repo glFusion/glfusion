@@ -69,12 +69,12 @@ if ( $showtopic == 0 ) {
     exit;
 }
 
-$conn = \glFusion\Database::getInstance();
+$db = glFusion\Database::getInstance();
 
 // pull the topic record to validate it exists and find the parent ID
-$sql = "SELECT forum, pid, subject FROM {$_TABLES['ff_topic']} WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $showtopic, \glFusion\Database::INTEGER);
+$sql = "SELECT forum, pid, subject FROM `{$_TABLES['ff_topic']}` WHERE id = ?";
+$stmt = $db->conn->prepare($sql);
+$stmt->bindParam(1, $showtopic, glFusion\Database::INTEGER);
 $stmt->execute();
 $row = $stmt->fetch();
 
@@ -100,13 +100,13 @@ if (empty($show) AND $FF_userprefs['postsperpage'] > 0) {
 }
 
 $sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,b.grp_id,b.rating_post,c.cat_name,c.id ";
-$sql .= "FROM {$_TABLES['ff_topic']} a ";
-$sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON b.forum_id=a.forum ";
-$sql .= "LEFT JOIN {$_TABLES['ff_categories']} c on c.id=b.forum_cat ";
+$sql .= "FROM `{$_TABLES['ff_topic']}` a ";
+$sql .= "LEFT JOIN `{$_TABLES['ff_forums']}` b ON b.forum_id=a.forum ";
+$sql .= "LEFT JOIN `{$_TABLES['ff_categories']}` c on c.id=b.forum_cat ";
 $sql .= "WHERE a.id = ?";
 
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $showtopic, \glFusion\Database::INTEGER);
+$stmt = $db->conn->prepare($sql);
+$stmt->bindParam(1, $showtopic, glFusion\Database::INTEGER);
 $stmt->execute();
 $viewtopic = $stmt->fetch();
 
@@ -189,9 +189,9 @@ if (isset($_GET['lastpost']) && $_GET['lastpost']) {
 
         $order = $FF_userprefs['topic_order'];
 //@TODO - need to fix order
-        $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE pid= :topicid ORDER BY date ASC"; // :order";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam("topicid", $showtopic, \glFusion\Database::INTEGER);
+        $sql = "SELECT id FROM `{$_TABLES['ff_topic']}` WHERE pid= :topicid ORDER BY date ASC"; // :order";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindParam("topicid", $showtopic, glFusion\Database::INTEGER);
         $stmt->execute();
 
 $ids = $stmt->fetchAll();
@@ -325,11 +325,11 @@ if ($_FF_CONF['enable_likes']) {
     \Forum\Like::TopicLikes($showtopic);
 }
 
-$queryBuilder = $conn->createQueryBuilder();
+$queryBuilder = $db->conn->createQueryBuilder();
 $queryBuilder
     ->select('*')
     ->from($_TABLES['ff_topic'])
-    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,\glFusion\Database::INTEGER).' OR pid = :dcValue1')
+    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER).' OR pid = :dcValue1')
     ->orderBy('date', $order)
     ->setFirstResult($offset)
     ->setMaxResults($show);
@@ -363,7 +363,7 @@ foreach($topicRecs AS $topicRec) {
 }
 
 if (!$iframe) {
-    DB_query("UPDATE {$_TABLES['ff_topic']} SET views=views+1 WHERE id=".(int) $showtopic);
+    DB_query("UPDATE `{$_TABLES['ff_topic']}` SET views=views+1 WHERE id=".(int) $showtopic);
 //@TODO look at optimizing this better
     if ( !COM_isAnonUser() ) {
         $showtopicpid = $showtopic;

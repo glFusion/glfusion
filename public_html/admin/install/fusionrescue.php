@@ -41,6 +41,18 @@ if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-con
 
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
+
+require_once $_CONF['path_system'] . 'classes/Autoload.php';
+glFusion\Autoload::initialize();
+
+
+$_DB_dbms = 'mysql';
+if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
+$_DB = new glFusion\Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
+                     $_CONF['default_charset'], $_CONF['db_charset']);
+
+
+
 require_once $_CONF['path_system'].'lib-database.php';
 
 $self = basename(__FILE__);

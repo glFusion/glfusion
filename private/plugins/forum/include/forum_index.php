@@ -56,7 +56,7 @@ function forum_index()
     $forum_id   = isset($_REQUEST['forum_id']) ? COM_applyFilter($_REQUEST['forum_id'],true) : 0;
     $op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
-    $conn = \glFusion\Database::getInstance();
+    $db = \glFusion\Database::getInstance();
 
     /*
      * Initialize vars
@@ -75,7 +75,7 @@ function forum_index()
         $categories = array();
         if ($cat_id == 0 && $forum_id == 0) {
             $sql = "SELECT id FROM {$_TABLES['ff_categories']} ORDER BY id";
-            $csql = $conn->prepare($sql);
+            $csql = $db->conn->prepare($sql);
             $csql->execute();
             $row = $topicResult->fetchAll();
             foreach($row AS $catRec) {
@@ -87,7 +87,7 @@ function forum_index()
 
         foreach ($categories as $category) {
 
-            $queryBuilder = $conn->createQueryBuilder();
+            $queryBuilder = $db->conn->createQueryBuilder();
             $queryBuilder
                 ->select(   'forum_id',
                             'grp_id'
@@ -105,7 +105,7 @@ function forum_index()
             while($frecord = $stmt->fetch()) {
 //            foreach($catRecs AS $frecord) {
                 if (SEC_inGroup($frecord['grp_id'])) {
-                    $qb = $conn->createQueryBuilder()
+                    $qb = $db->conn->createQueryBuilder()
                       ->delete($_TABLES['ff_log'])
                       ->where('uid = :user_id')
                       ->andwhere('forum = :forum_id')
@@ -115,7 +115,7 @@ function forum_index()
 //                    DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND forum=".(int)$frecord['forum_id']."");
 
                     $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE forum = :forum_id AND pid = 0";
-                    $tsql = $conn->prepare($sql);
+                    $tsql = $db->conn->prepare($sql);
                     $tsql->bindParam('forum_id',$frecord['forum_id'],\glFusion\Database::INTEGER);
                     $tsql->execute();
 
@@ -325,7 +325,7 @@ function forum_index()
         }
         $groupAccessList = implode(',',$groups);
 
-        $qb = $conn->createQueryBuilder()
+        $qb = $db->conn->createQueryBuilder()
           ->select('*')
           ->from($_TABLES['ff_categories'])
           ->orderby('cat_order','ASC');
@@ -403,7 +403,7 @@ function forum_index()
 // may optimize to use straight SQL. QB gives
 // portability...
                 //Display all forums under each cat
-                $qb = $conn->createQueryBuilder()
+                $qb = $db->conn->createQueryBuilder()
                   ->select('*')
                   ->from($_TABLES['ff_forums'],'f')
                   ->leftJoin('f',$_TABLES['ff_topic'],'t','f.last_post_rec=t.id')
@@ -472,7 +472,7 @@ function forum_index()
                         	}
         	                if (!COM_isAnonUser()) {
             	                // Determine if there are new topics since last visit for this user.
-$tcount = $conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid=? AND forum = ? AND time > 0",array($uid,$B['forum_id']));
+$tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WHERE uid=? AND forum = ? AND time > 0",array($uid,$B['forum_id']));
 //                                $tcount = (int) DB_getItem($_TABLES['ff_log'],'COUNT(uid)',"uid = ".(int) $uid." AND forum = ".(int) $B['forum_id']." AND time > 0");
                                 if ($topicCount > $tcount ) {
                                     $busyforum = 1;
