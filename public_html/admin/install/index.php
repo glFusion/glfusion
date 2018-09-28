@@ -1754,6 +1754,9 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
 
+    require_once $_CONF['path_system'] . 'classes/Autoload.php';
+    glFusion\Autoload::initialize();
+
     require $_CONF['path_system'].'lib-database.php';
     require $_CONF['path_system'].'lib-security.php';
     if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
