@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | glFusion homepage.                                                       |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony@tonybibbs.com                          |
-// |          Mark Limburg      - mlimburg@users.sourceforge.net              |
-// |          Jason Whittenburg - jwhitten@securitygeeks.com                  |
-// |          Dirk Haun         - dirk@haun-online.de                         |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Main Index Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2018-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony@tonybibbs.com
+*  Mark Limburg      mlimburg@users.sourceforge.net
+*  Jason Whittenburg jwhitten@securitygeeks.com
+*  Dirk Haun         dirk@haun-online.de
+*
+*/
 
 if (!@file_exists('siteconfig.php') ) {
     header("Location:admin/install/index.php");
@@ -45,133 +29,119 @@ USES_lib_story();
 $newstories = false;
 $displayall = false;
 $limituser  = false;
-$cb         = true;
+$centerBlock = true;
+$display    = '';
+$pageBody   = '';
+$topiclimit = 0;
+$story_sort     = 'date';
+$story_sort_dir = 'DESC';
 
-$display = '';
-$pageBody = '';
+if (isset($_CONF['story_sort_by'])) {
+    $story_sort = $_CONF['story_sort_by'];
+}
+if (isset($_CONF['story_sort_dir'])) {
+    $story_sort_dir = $_CONF['story_sort_dir'];
+}
 
 if (isset ($_GET['display'])) {
-    if (($_GET['display'] == 'new') && (empty ($topic))) {
+    if (($_GET['display'] == 'new') && (empty($topic))) {
         $newstories = true;
     } else if (($_GET['display'] == 'all') && (empty ($topic))) {
         $displayall = true;
     }
 }
 
-if ( isset($_GET['u'])) {
-    $limituser = true;
-    $limituser_id = COM_applyFilter($_GET['u']);
+$pageBody .= glfusion_UpgradeCheck();
+$pageBody .= glfusion_SecurityCheck();
+
+$topic = Topic::currentID();
+
+$page = (int) filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT);
+if ($page == 0) {
+    $page = 1;
 }
 
-if ( isset($_GET['ncb'])) {
-    $cb = false;
-}
-
-$page = 1;
-if (isset ($_GET['page'])) {
-    $page = (int) COM_applyFilter ($_GET['page'], true);
-    if ($page == 0) {
-        $page = 1;
-    }
-}
-
-$conn = \glFusion\Database::getInstance();
-$archivetid = $conn->fetchColumn("SELECT tid FROM {$_TABLES['topics']} WHERE archive_flag=1");
-
-// get template
-$T = new Template($_CONF['path_layout']);
-$T->set_file('page','index.thtml');
-
-if ( !empty($topic) ) {
-    $sql = "SELECT limitnews,sort_by,sort_dir,description,topic FROM {$_TABLES['topics']} WHERE tid = ?";
-    $topicResult = $conn->prepare($sql);
-    $topicResult->bindParam(1, $topic,\glFusion\Database::STRING);
-    $topicResult->execute();
-    $row = $topicResult->fetch();
-    if ($row !== false) {
-        $topiclimit = $row['limitnews'];
-        $story_sort = $row['sort_by'];
-        $story_sort_dir = $row['sort_dir'];
-        $topic_desc = $row['description'];
-        $topicname = $row['topic'];
-        if (!empty($topic_desc)) { // set meta data
-            $outputHandle = \outputHandler::getInstance();
-            $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
-            $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
-            $T->set_var('topic_desc',$topic_desc);
-        }
-        $T->set_var('breadcrumbs',true);
-        $T->set_var('topic',$topicname);
-    }
-}
-
+// If the plugin is hijacking the index page - let it do it here
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
-    if ($cb) {
+    if ($centerBlock) {
         $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
     }
-    if (!empty ($newcontent)) {
-        echo $newcontent;
+    if (!empty($newcontent)) {
+        echo $pageBody . $newcontent;
         exit;
     }
 }
 
-$ratedIds = array();
-if ( $_CONF['rating_enabled'] != 0 ) {
-    $ratedIds = RATING_getRatedIds('article');
+if (isset($_GET['u'])) {
+    $limituser = true;
+    $limituser_id = (int) filter_input(INPUT_GET, 'u', FILTER_SANITIZE_NUMBER_INT);
 }
 
-$pageBody .= glfusion_UpgradeCheck();
+if ( isset($_GET['ncb'])) {
+    $centerBlock = false;
+}
 
-$pageBody .= glfusion_SecurityCheck();
+// get DB object
+$db = glFusion\Database::getInstance();
 
-$msg = COM_getMessage();
-if ( $msg > 0 ) {
-    $plugin = '';
-    if (isset ($_GET['plugin'])) {
-        $plugin = COM_applyFilter ($_GET['plugin']);
+// set archive topic
+$archivetid = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
+
+// create template
+$T = new Template($_CONF['path_layout']);
+$T->set_file('page','index.thtml');
+
+if (!empty($topic)) {
+    $topiclimit     = (int) Topic::Current()->limitnews;
+    $story_sort     = Topic::Current()->sort_by;
+    $story_sort_dir = Topic::Current()->sort_dir;
+    $topic_desc     = Topic::Current()->description;
+    $topicname      = Topic::Current()->topic;
+
+    switch ( $story_sort ) {
+        case 0 :    // date
+            $story_sort = 'date';
+            break;
+        case 1 :    // title
+            $story_sort = 'title';
+            break;
+        case 2 :    // ID
+            $story_sort = 'sid';
+            break;
+        default :
+            $story_sort = 'date';
+            break;
     }
-    $pageBody .= COM_showMessage ($msg, $plugin,'',0,'info');
-}
-
-// Show any Plugin formatted blocks
-// Requires a plugin to have a function called plugin_centerblock_<plugin_name>
-
-if ( $cb ) $displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
-if (!empty ($displayBlock)) {
-    $pageBody .= $displayBlock;
-    // Check if theme has added the template which allows the centerblock
-    // to span the top over the rightblocks
-    if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
-            $topspan = new Template($_CONF['path_layout']);
-            $topspan->set_file (array ('topspan'=>'topcenterblock-span.thtml'));
-            $topspan->parse ('output', 'topspan');
-            $pageBody .= $topspan->finish ($topspan->get_var('output'));
-            $GLOBALS['centerspan'] = true;
+    switch ( $story_sort_dir ) {
+        case 'DESC' :
+            $story_sort_dir = 'DESC';
+            break;
+        case 'ASC' :
+            $story_sort_dir = 'ASC';
+            break;
+        default :
+            $story_sort_dir = 'DESC';
+            break;
     }
+
+    if (!empty($topic_desc)) {
+        $outputHandle = \outputHandler::getInstance();
+        $outputHandle->addMeta('name', 'description', $topic_desc, HEADER_PRIO_NORMAL);
+        $outputHandle->addMeta('property', 'og:description', $topic_desc, HEADER_PRIO_NORMAL);
+        $T->set_var('topic_desc',$topic_desc);
+    }
+    $T->set_var('breadcrumbs',true);
+    $T->set_var('topic',$topicname);
 }
 
+$U['maxstories'] = 0;
+$U['aids'] = '';
+$U['tids'] = '';
 if (!COM_isAnonUser()) {
     $U['maxstories'] = $_USER['maxstories'];
     $U['aids'] = $_USER['aids'];
     $U['tids'] = $_USER['tids'];
-} else {
-    $U['maxstories'] = 0;
-    $U['aids'] = '';
-    $U['tids'] = '';
-}
-
-$topiclimit = 0;
-
-$story_sort     = 'date';
-$story_sort_dir = 'DESC';
-
-// need to sanitize
-if (isset($_CONF['story_sort_by'])) {
-    $story_sort = $_CONF['story_sort_by'];
-}
-if (isset($_CONF['story_sort_dir'])) {
-    $story_sort_dir = $_CONF['story_sort_dir'];
 }
 
 $maxstories = 0;
@@ -180,21 +150,50 @@ if ($U['maxstories'] >= $_CONF['minnews']) {
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
     if ($topiclimit >= $_CONF['minnews']) {
-        $maxstories = $topiclimit;
+        $maxstories = (int) $topiclimit;
     }
 }
 if ($maxstories == 0) {
-    $maxstories = $_CONF['limitnews'];
+    $maxstories = (int) $_CONF['limitnews'];
 }
 
-$limit = $maxstories;
+$limit = (int) $maxstories;
 if ($limit < 1) {
     $limit = 1;
 }
 
+$ratedIds = array();
+if ( $_CONF['rating_enabled'] != 0 ) {
+    $ratedIds = RATING_getRatedIds('article');
+}
+
+// Check session to determine if any pending messages need to be displayed
+$msg = COM_getMessage();
+if ( $msg > 0 ) {
+    $plugin = '';
+    if (isset ($_GET['plugin'])) {
+        $plugin = (string) filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+        if (!in_array($plugin,$_PLUGINS)) {
+            $plugin = '';
+        }
+    }
+    $pageBody .= COM_showMessage ($msg, $plugin,'',0,'info');
+}
+
+// Show any Plugin formatted blocks
+// Requires a plugin to have a function called plugin_centerblock_<plugin_name>
+
+if ($centerBlock) {
+    $displayBlock = PLG_showCenterblock (CENTERBLOCK_TOP, $page, $topic); // top blocks
+}
+
+if (!empty ($displayBlock)) {
+    $pageBody .= $displayBlock;
+}
+
 // Build the monster query to retrieve articles based on
 // user permissions and preferences
-$queryBuilder = $conn->createQueryBuilder();
+$queryBuilder = $db->conn->createQueryBuilder();
 $queryBuilder
     ->select(   's.*',
                 'UNIX_TIMESTAMP(s.date) AS unixdate',
@@ -210,8 +209,8 @@ $queryBuilder
     ->andWhere('draft_flag = 0')
     ->orderBy('featured', 'DESC');
 
-if (empty ($topic)) {
-    $sql = COM_getLangSQL ('tid', '', 's');
+if (empty($topic)) {
+    $sql = $db->getLangSQL ('tid', '', 's');
     if (!empty($sql)) {
         $queryBuilder->andWhere($sql);
     }
@@ -221,8 +220,12 @@ if (empty ($topic)) {
 if (!empty($topic)) {
     $queryBuilder->andWhere(
         $queryBuilder->expr()->orX(
-            $queryBuilder->expr()->eq('s.tid', $queryBuilder->createNamedParameter($topic,\glFusion\Database::STRING)),
-            $queryBuilder->expr()->eq('s.alternate_tid', $queryBuilder->createNamedParameter($topic,\glFusion\Database::STRING))
+            $queryBuilder->expr()->eq('s.tid',
+              $queryBuilder->createNamedParameter($topic,glFusion\Database::STRING)
+            ),
+            $queryBuilder->expr()->eq('s.alternate_tid',
+              $queryBuilder->createNamedParameter($topic,glFusion\Database::STRING)
+            )
         )
     );
 } elseif (!$newstories) {
@@ -238,42 +241,55 @@ if (!empty($topic)) {
 }
 
 if ($topic != $archivetid) {
-    $queryBuilder->andWhere('s.tid != ' . $queryBuilder->createNamedParameter($archivetid,\glFusion\Database::STRING));
+    $queryBuilder->andWhere('s.tid != ' .
+      $queryBuilder->createNamedParameter($archivetid,glFusion\Database::STRING)
+    );
 }
 
-$sql = COM_getPermSQL('',0,2,'s');
+$db->qbGetPermSQL($queryBuilder,'',0,SEC_ACCESS_RO,'s');
 
-if (!empty($sql)) {
-    $queryBuilder->andWhere($sql);
-}
+// test data
+//$U['aids'] = $U['aids'] . "5 10 escape'd bad";
 
 if (!empty($U['aids'])) {
+    $aids = explode(' ',$U['aids']);
+    $aids = array_map( 'intval', $aids);
+    $U['aids'] = implode(',',$aids);
     $queryBuilder->andWhere(
-        $queryBuilder->expr()->notIn('s.uid', "'".str_replace( ' ', ",", $U['aids'] )."'"  )
+        $queryBuilder->expr()->notIn('s.uid',
+         $queryBuilder->createNamedParameter($aids,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+        )
     );
 }
+
+// test data
+//$U['tids'] = "one two escape'd ";
 
 if (!empty($U['tids'])) {
+    $tids = explode(' ',$U['tids']);
+    $U['tids'] = implode(',',$tids);
     $queryBuilder->andWhere(
-        $queryBuilder->expr()->notIn('s.uid','"'. str_replace( ' ', "','", $U['tids'] ).'"' )
+        $queryBuilder->expr()->notIn('s.uid',
+          $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+        )
     );
 }
 
-//@TODO - do we need to handle  topic SQL??
-$sql = COM_getTopicSQL ('', 0, 's');
-if (!empty($sql)) {
-    $queryBuilder->andWhere($sql);
-}
+$db->qbGetTopicSQL($queryBuilder,'AND',0,'s');
 
 if ( $limituser ) {
-    $queryBuilder->andWhere('s.uid',$queryBuilder->createNamedParameter($limituser_id,\glFusion\Database::INTEGER));
+    $queryBuilder->andWhere('s.uid',
+      $queryBuilder->createNamedParameter($limituser_id,glFusion\Database::INTEGER)
+    );
 }
 
 if ($newstories) {
     $sql = "(date >= (date_sub(NOW(), INTERVAL :interval SECOND))) ";
     $queryBuilder->andWhere($sql);
-    $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],\glFusion\Database::INTEGER);
+    $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],glFusion\Database::INTEGER);
 }
+
+//print $_CONF['newstoriesinterval'].'<br>';
 
 $offset = intval(($page - 1) * $limit);
 $userfields = 'u.uid, u.username, u.fullname';
@@ -284,36 +300,7 @@ if ($_CONF['allow_user_photo'] == 1) {
     }
 }
 
-if ( !empty($topic) ) {
-    switch ( $story_sort ) {
-        case 0 :    // date
-            $orderBy = ' date ';
-            break;
-        case 1 :    // title
-            $orderBy = ' title ';
-            break;
-        case 2 :    // ID
-            $orderBy = ' sid ';
-            break;
-        default :
-            $orderBy = ' date ';
-            break;
-    }
-    switch ( $story_sort_dir ) {
-        case 'DESC' :
-            $orderBy = $orderBy . ' DESC ';
-            break;
-        case 'ASC' :
-            $orderBy = $orderBy . ' ASC ';
-            break;
-        default :
-            $orderBy = $orderBy . ' DESC ';
-            break;
-    }
-} else {
-//    $orderBy = ' date DESC';
-    $orderBy = $story_sort . ' ' . $story_sort_dir;
-}
+$orderBy = $story_sort . ' ' . $story_sort_dir;
 
 //@TODO vet / validate these 2 vars...
 $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
@@ -325,7 +312,8 @@ $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
 $countQueryBuilder = clone $queryBuilder;
 $countQueryBuilder->select("COUNT(*) AS count");
 $cStmt = $countQueryBuilder->execute();
-$D = $cStmt->fetch();
+$totalStoryCount = $cStmt->fetchColumn();
+$cStmt->closeCursor();
 
 // Build the final query to pull the story data
 // Set the limits
@@ -334,44 +322,47 @@ $queryBuilder
     ->addSelect(explode(',',$userfields))
     ->setFirstResult($offset)
     ->setMaxResults($limit);
+
 //print $queryBuilder->getSQL();exit;
+
 $stmt = $queryBuilder->execute();
 
-$nrows = $stmt->rowCount();
-
-$num_pages = ceil ($D['count'] / $limit);
+$num_pages = ceil ($totalStoryCount / $limit);
 $articleCounter = 0;
 
 $storyRecs = $stmt->fetchAll();
 $stmt->closeCursor();
-if ($nrows > 0) {
-    foreach($storyRecs AS $A) {
-        $story = new Story();
-        $story->loadFromArray($A);
-        if ($articleCounter == 0) {
-            if ( $_CONF['showfirstasfeatured'] == 1 ) {
-                $story->_featured = 1;
-            }
-            if ($story->DisplayElements('featured') == 1) {
-                if ($cb) {
-                    $pageBody .= STORY_renderArticle ($story, 'y');
-                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-                }
-            } else {
-                if ($cb) {
-                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-                }
+$nrows = 0;
+foreach($storyRecs AS $A) {
+    $nrows++;
+    $story = new Story();
+    $story->loadFromArray($A);
+    if ($articleCounter == 0) {
+        // processing the first story
+        if ( $_CONF['showfirstasfeatured'] == 1 ) {
+            $story->_featured = 1;
+        }
+        if ($story->DisplayElements('featured') == 1) {
+            if ($centerBlock) {
                 $pageBody .= STORY_renderArticle ($story, 'y');
+                $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
             }
         } else {
+            if ($centerBlock) {
+                $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+            }
             $pageBody .= STORY_renderArticle ($story, 'y');
         }
-
-        $articleCounter++;
+    } else {
+        $pageBody .= STORY_renderArticle ($story, 'y');
     }
 
+    $articleCounter++;
+}
+
+if ($nrows > 0) {
     // get plugin center blocks that follow articles
-    if ($cb) {
+    if ($centerBlock) {
         $pageBody .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     }
 
@@ -389,7 +380,7 @@ if ($nrows > 0) {
                 $base_url .= ($parm1set ? '&' : '?') . 'u=' . $limituser_id;
                 $parm1set = true;
             }
-            if ( $cb == false ) {
+            if ( $centerBlock == false ) {
                 $base_url .= ($parm1set ? '&' : '?') . 'ncb=x';
             }
         } else {
@@ -397,7 +388,7 @@ if ($nrows > 0) {
             if ( $limituser ) {
                 $base_url .= '&u='.$limituser_id;
             }
-            if ( $cb == false ) {
+            if ( $centerBlock == false ) {
                 $base_url .= '&ncb=x';
             }
         }
@@ -407,18 +398,18 @@ if ($nrows > 0) {
 } else { // no stories to display
     $cbDisplay = '';
 
-    if ($cb) {
+    if ($centerBlock) {
         $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
         $cbDisplay .= PLG_showCenterblock (CENTERBLOCK_BOTTOM, $page, $topic); // bottom blocks
     }
 
     if ( (!isset ($_CONF['hide_no_news_msg']) || ($_CONF['hide_no_news_msg'] == 0)) && $cbDisplay == '') {
         // If there's still nothing to display, show any default centerblocks.
-        if ( $cb ) {
+        if ( $centerBlock ) {
             $cbDisplay .= PLG_showCenterblock(CENTERBLOCK_NONEWS, $page, $topic);
         }
         if ($cbDisplay == '') {
-            // If there's *still* nothing to show, show the stock message
+            // If there is still nothing to show, show the stock message
             $eMsg = $LANG05[2];
             if (!empty ($topic)) {
                 $eMsg .= sprintf ($LANG05[3], $topicname);
