@@ -1003,9 +1003,9 @@ class Database
 
     public function dbGetClientVersion()
     {
-        $v = self::$_db->getAttribute(\PDO::ATTR_CLIENT_VERSION);
-        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', $v, $version);
-        return $version[0];
+        $version = $this->conn->query('select version()')->fetchColumn();
+        preg_match("/^[0-9\.]+/", $version, $match);
+        return $match[0];
     }
 
     public function dbGetServerVersion()
