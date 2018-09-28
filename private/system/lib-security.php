@@ -72,7 +72,6 @@ if (!defined ('TOKEN_TTL')) {
 
 // Turn this on to get various debug messages from the code in this library
 $_SEC_VERBOSE = false;
-
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
 define('USER_ACCOUNT_AWAITING_ACTIVATION', 1); // Account awaiting user to login.
@@ -80,10 +79,14 @@ define('USER_ACCOUNT_AWAITING_APPROVAL', 2); // Account awaiting moderator appro
 define('USER_ACCOUNT_ACTIVE', 3); // active account
 define('USER_ACCOUNT_AWAITING_VERIFICATION', 4); // Account waiting for user to complete verification
 
-
 /* Constants for account types */
 define('LOCAL_USER',1);
 define('REMOTE_USER',2);
+
+/* Constants for ACCESS */
+define('SEC_ACCESS_RW',3);
+define('SEC_ACCESS_RO',2);
+define('SEC_ACCESS_NONE',0);
 
 /* Constant for Security Token */
 if (!defined('CSRF_TOKEN')) {
