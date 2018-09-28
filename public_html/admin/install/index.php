@@ -771,7 +771,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
     $T->parse('env','envs',true);
 
-    if (version_compare(PHP_VERSION,'7.0.0','<')) {
+    if (version_compare(PHP_VERSION,'7.1.0','<')) {
         $ob = ini_get('open_basedir');
         if ( $ob == '' ) {
             $open_basedir_restriction = 0;

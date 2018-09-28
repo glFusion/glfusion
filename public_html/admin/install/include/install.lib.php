@@ -40,7 +40,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '7.0.0');
+    define('SUPPORTED_PHP_VER', '7.1.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.1.30');
@@ -1505,6 +1505,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.8.0';
 
         case '1.8.0' : // internal development release
+
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '1970-01-01 00:00:00' WHERE CAST(rdfupdated AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['stories']} SET comment_expire = '1970-01-01 00:00:00' WHERE CAST(comment_expire AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['stories']} SET expire = '1970-01-01 00:00:00' WHERE CAST(expire AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['syndication']} SET updated = '1970-01-01 00:00:00' WHERE CAST(updated AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['users']} SET regdate = '1970-01-01 00:00:00' WHERE CAST(regdate AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['users']} SET act_time = '1970-01-01 00:00:00' WHERE CAST(act_time AS CHAR(20)) = '0000-00-00 00:00:00';");
+
 
             $current_fusion_version = '2.0.0';
 
