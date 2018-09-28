@@ -37,6 +37,10 @@ function uc_all($string) {
 function match_cidr($addr, $cidr) {
 	$output = false;
 
+    if (filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        return $output;
+    }
+
 	if (is_array($cidr)) {
 		foreach ($cidr as $cidrlet) {
 			if (match_cidr($addr, $cidrlet)) {
