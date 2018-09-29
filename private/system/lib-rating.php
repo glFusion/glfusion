@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Rating Interface                                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2016 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -80,7 +80,7 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
     }
 
     //set some variables
-    $ip     = $_SERVER['REMOTE_ADDR'];
+    $ip     = $_SERVER['REAL_ADDR'];
     $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
     if (!$units) {
@@ -427,7 +427,7 @@ function RATING_getRatedIds($type)
 {
     global $_TABLES, $_USER;
 
-    $ip     = DB_escapeString($_SERVER['REMOTE_ADDR']);
+    $ip     = DB_escapeString($_SERVER['REAL_ADDR']);
     $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
     $ratedIds = array();
