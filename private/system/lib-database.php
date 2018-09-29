@@ -52,6 +52,10 @@ if (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug']) {
 // we should not need a global...
 $_DB = glFusion\Database::getInstance();
 
+if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo_mysql') {
+    $_DB_dbms = 'mysql';
+}
+
 /**
 * @return     string     the version of the database application as integer
 */
