@@ -7,7 +7,7 @@
 // | This page handles the 'AJAX' type response if the user has               |
 // | Javascript enabled.                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2016 by the following authors:                        |
+// | Copyright (C) 2006-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -45,11 +45,11 @@ $status = 0;
 
 $vote_sent  = preg_replace("/[^0-9]/","",$_GET['j']);
 $id_sent    = COM_applyFilter($_GET['q']);
-$ip_num     = preg_replace("/[^0-9\.]/","",$_GET['t']);
+$ip_num     = preg_replace("/[^0-9\.\:]/","",$_GET['t']);
 $units      = preg_replace("/[^0-9]/","",$_GET['c']);
 $size       = preg_replace("/[^0-9a-zA-Z]/","",$_GET['s']);
 $plugin     = isset($_GET['p']) ? COM_applyFilter($_GET['p']) : '';
-$ip         = $_SERVER['REMOTE_ADDR'];
+$ip         = $_SERVER['REAL_ADDR'];
 $ratingdate = time();
 $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
@@ -81,12 +81,12 @@ if ( $canRate ) {
     } else {
         $speedlimiterror = 0;
     }
-    if(!$voted && !$speedlimiterror) {     //if the user hasn't yet voted, then vote normally...
-       	if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
+    if (!$voted && !$speedlimiterror) {     //if the user hasn't yet voted, then vote normally...
+        if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
             list($new_rating,$added) = RATING_addVote( $plugin, $id_sent, $vote_sent, $uid, $ip );
             COM_updateSpeedlimit ('rate');
-$voted = 1;
-    	}
+            $voted = 1;
+        }
     } else {
         $added = $current_votes;
         $new_rating = $current_rating;

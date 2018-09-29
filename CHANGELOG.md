@@ -1,4 +1,5 @@
 ## v1.7.6 (unreleased)
+  - Fixed issue where previous rating checks did not use full IP address
   - Update CKEditor to v4.10.1
   - Updated Polish Translation
   - Story instance caching did not account for custom templates per topic
