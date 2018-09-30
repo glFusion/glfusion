@@ -51,7 +51,6 @@ function FUSION_formatTextBlock( $str, $postmode='html', $parser = array(), $cod
     $format->setNamespace('bbcode');
     $format->setAction('post');
     $format->setType($postmode);
-    $format->enableCache(false);
     if ($_CONF['censormode']) {
         $format->setCensor(true);
     }
@@ -121,8 +120,6 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
     if ( in_array('img',$exclude ) ) {
         $format->setBbcodeBlackList(array('img'));
     }
-
-    $format->enableCache(false);
 
     if ( is_array($parser) && count($parser) > 0 ) {
         foreach ($parser AS $extraparser) {

@@ -368,7 +368,6 @@ function prepare_link_item ($A, &$template)
     $format->setNamespace('links');
     $format->setAction('description');
     $format->setType('text');
-    $format->enableCache(false);
     $format->setProcessBBCode(false);
     $format->setParseURLs(false);
     $format->setProcessSmilies(false);
