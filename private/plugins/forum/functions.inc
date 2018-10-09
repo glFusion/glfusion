@@ -1413,14 +1413,17 @@ function plugin_profilesave_forum($uid = 0 )
 function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG_GF00;
-
     $buildingSearchIndex = false;
     $batchreindex = false;
-
+    $summary = false;
     $properties = explode(',', $what);
     $fields = array();
+
     foreach ($properties as $p) {
         switch ($p) {
+            case 'summary' :
+                $summary = true;
+                break;
             case 'search_index' :
                 $buildingSearchIndex = true;
                 break;
@@ -1430,7 +1433,11 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'date' :
             case 'date-modified':
             case 'date-created' :
-                $fields[] = 'a.date AS unixdate';
+                if ($summary) {
+                    $fields[] = 'a.lastupdated AS unixdate';
+                } else {
+                    $fields[] = 'a.date AS unixdate';
+                }
                 break;
             case 'description':
             case 'excerpt':
@@ -1461,50 +1468,71 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 break;
         }
     }
-
     $fields = array_unique($fields);
-
     if (count($fields) == 0) {
         $retval = array();
         return $retval;
     }
-
     USES_forum_format();
-
-    $where = ' WHERE ';
-    if ($id != '*') {
-        $where .= " id = '" . DB_escapeString($id) . "' AND ";
-        $limit = ' LIMIT 1';
+    if ($id == '*') {
+        if ( $summary ) {
+            $where = " WHERE a.pid=0 ";
+            $permOp = " AND ";
+        } else {
+            $where = '';
+            $permOp = ' WHERE ';
+        }
     } else {
-        $limit = '';
+        if ($summary == true) {
+            // check to see if we have the PID or a reply ID
+            // query the record for PID
+            // if it is 0 - we are good
+            // if it is not 0 - update ID to PID
+            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
+            if ( $pid != 0 && $pid != NULL) {
+                $id = $pid;
+            }
+            $fields[] = "GROUP_CONCAT(a.comment ORDER BY a.date DESC SEPARATOR ' ') AS summarycomment ";
+            $lastupdated = DB_getItem($_TABLES['ff_topic'],'lastupdated','id='.DB_escapeString($id));
+        }
+        if ($summary) {
+            $where = " WHERE (id = '" . DB_escapeString($id) . "' OR pid = '".DB_escapeString($id)."') ";
+            DB_query("SET group_concat_max_len = 18196");
+        } else {
+            $where = " WHERE id = '" . DB_escapeString($id) . "'";
+        }
+        $permOp = ' AND ';
     }
-
     $groups = array ();
     $usergroups = SEC_getUserGroups();
     foreach ($usergroups as $group) {
         $groups[] = $group;
     }
     $grouplist = implode(',',$groups);
-
     $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status, b.* ";
     $sql .= "FROM {$_TABLES['ff_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id ";
-    $sql .= "$where b.grp_id IN ($grouplist) $limit";
+    $sql .= $where . $permOp . " b.grp_id IN ($grouplist)";
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
 
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
-
     $retval = array();
     for ($i = 0; $i < $numRows; $i++) {
         $A = DB_fetchArray($result);
-
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
                 case 'date' :
                 case 'date-created' :
                 case 'date-modified':
-                    $props[$p] = $A['unixdate'];
+                    if ($summary) {
+                        $props[$p] = $lastupdated;
+                    } else {
+                        $props[$p] = $A['unixdate'];
+                    }
                     break;
                 case 'description':
                 case 'excerpt':
@@ -1512,7 +1540,11 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     break;
                 case 'searchidx' :
                 case 'raw-description' :
-                    $comment = _forum_strip_bbcode($A['comment']);
+                    if ($summary == true) {
+                        $comment = _forum_strip_bbcode($A['summarycomment']);
+                    } else {
+                        $comment = _forum_strip_bbcode($A['comment']);
+                    }
                     $props[$p] = $comment;
                     break;
                 case 'parent_id':
@@ -1560,13 +1592,11 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                         'perm_anon' => 1,       // fix
                     );
                     break;
-
                 default:
                     $props[$p] = '';
                     break;
             }
         }
-
         $mapped = array();
         if ( is_array($props) ) {
             foreach ($props as $key => $value) {
@@ -1579,7 +1609,6 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 }
             }
         }
-
         if ($id == '*') {
             $retval[] = $mapped;
         } else {
@@ -1587,13 +1616,11 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             break;
         }
     }
-
     if (($id != '*') && (count($retval) == 1)) {
         $tRet = array_values($retval);
         $retval = $tRet[0];
     }
     if ( $retval === '' || count($retval) == 0 ) return NULL;
-
     return $retval;
 }
 
