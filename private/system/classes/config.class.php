@@ -400,9 +400,14 @@ class config
                        serialize($default_value));                      // 8
         $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "UPDATE {$_TABLES['conf_values']} SET subgroup={$Qargs[3]},sort_order={$Qargs[6]},fieldset={$Qargs[7]},default_value='{$Qargs[8]}'".
-               " WHERE group_name='{$Qargs[4]}' AND name='{$Qargs[0]}'";
-
+        $sql = "UPDATE {$_TABLES['conf_values']} SET
+            subgroup={$Qargs[3]},
+            sort_order={$Qargs[6]},
+            fieldset={$Qargs[7]},
+            default_value='{$Qargs[8]}',
+            type='{$Qargs[2]}',
+            selectionArray={$Qargs[5]}
+            WHERE group_name='{$Qargs[4]}' AND name='{$Qargs[0]}'";
         $this->_DB_escapedQuery($sql,1);
     }
 
