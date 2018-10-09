@@ -130,7 +130,11 @@ function DB_query ($sql, $ignore_errors = 0)
     try {
         $result = $_DB->dbQuery ($sql, $ignore_errors);
     } catch (Exception $e) {
-        $result = false;
+        if ($ignore_errors) {
+            $result = false;
+        } else {
+            trigger_error(DB_error($sql), E_USER_ERROR);
+        }
     }
     return $result;
 }
