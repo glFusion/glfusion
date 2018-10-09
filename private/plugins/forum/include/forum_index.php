@@ -156,16 +156,16 @@ function forum_index()
     }
 
     if ($op == 'search') {
-        $prevorder  = isset($_REQUEST['prevorder']) ? COM_applyFilter($_REQUEST['prevorder']) : 0;
-        $direction  = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : 'DESC';
-        $sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
+//        $prevorder  = isset($_REQUEST['prevorder']) ? COM_applyFilter($_REQUEST['prevorder']) : 0;
+//        $direction  = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : 'DESC';
+//        $sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
         $dCat = isset($_GET['cat']) ? COM_applyFilter($_GET['cat'],true) : 0;
 
         $pageBody = '';
 
         $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $report->set_file('report', 'search_results.thtml');
-
+/*
         switch($order) {
             case 1:
                 $orderby = 'subject';
@@ -189,6 +189,7 @@ function forum_index()
         } else {
             $direction = ($direction == "ASC") ? "ASC" : "DESC";
         }
+*/
         $returnPostfix = '';
     // need to grab referer
         if ( $forum != 0 ) {
@@ -200,6 +201,7 @@ function forum_index()
 
         $html_query = isset($_REQUEST['query']) ? trim(strip_tags($_REQUEST['query'])) : '';
         $query = isset($_REQUEST['query']) ? DB_escapeString($_REQUEST['query']) : '';
+
         $report->set_var (array(
                 'form_action'   => $_CONF['site_url'] . '/forum/index.php?op=search',
                 'LANG_TITLE'    => $LANG_GF02['msg119'].' '. @htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
@@ -210,8 +212,8 @@ function forum_index()
                 'LANG_Heading3' => $LANG_GF01['VIEWS'],
                 'LANG_Heading4' => $LANG_GF01['DATE'],
                 'op'            => "&amp;op=search&amp;query=".@htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()),
-                'prevorder'     => $order,
-                'direction'     => $direction,
+//                'prevorder'     => $order,
+//                'direction'     => $direction,
                 'page'          => '1'
         ));
 
@@ -223,21 +225,66 @@ function forum_index()
 
         if ($forum != 0) {
             $inforum = "AND (forum = ".(int) $forum.")";
+            $inforum2 = " WHERE (forum = " . (int) $forum. ") ";
+            $report->set_var('forum_specific',$forum);
+            $forum_name = DB_getItem($_TABLES['ff_forums'],'forum_name','forum_id='.(int)$forum);
+            $report->set_var('forum_name',$forum_name);
         } else {
             $inforum = "";
+            $inforum2 = "";
+            $report->unset_var('forum_specific');
         }
 
-        $sql  = "SELECT * FROM {$_TABLES['ff_topic']} WHERE (subject LIKE '%$query%') $inforum OR ";
-        $sql .= "(comment LIKE '%$query%') $inforum GROUP BY $orderby ORDER BY $orderby $direction LIMIT 100";
+        $query      = trim(rtrim($query));
+        $query      = ff_limitChars($query);
+        $keywords   = ff_filterSearchKeys($query);
+        $escQuery   = DB_escapeString($query);
+
+        $titleSQL = array();
+        $postSQL = array();
+        if (count($keywords) > 1 && !empty($escQuery)) {
+            $titleSQL[] = "if (subject LIKE '%".$escQuery."%',3,0)";
+            $postSQL[] = "if (comment LIKE '%".$escQuery."%',4,0)";
+        }
+        foreach($keywords as $key) {
+            if ( !empty($key)) {
+                $subjectSQL[] = "if (subject LIKE '%".DB_escapeString($key)."%',1,0)";
+                $postSQL[] = "if (comment LIKE '%".DB_escapeString($key)."%',2,0)";
+            }
+        }
+        if (empty($subjectSQL)) {
+            $subjectSQL[] = 0;
+        }
+        if (empty($postSQL)) {
+            $postSQL[] = 0;
+        }
+        $where = forum_buildSearchAccessSql('');
+        if ($where == '' ) $where = ' 1=1 ';
+        $sql = "SELECT *,
+                    (
+                        (
+                        ".implode(" + ", $subjectSQL)."
+                        )+
+                        (
+                        ".implode(" + ", $postSQL)."
+                        )
+                    ) as relevance
+                    FROM {$_TABLES['ff_topic']} t LEFT JOIN {$_TABLES['ff_forums']} f ON t.forum=f.forum_id WHERE " . $where . $inforum . "
+                    HAVING relevance > 0
+                    ORDER BY relevance DESC, lastupdated DESC
+                    LIMIT 50";
+
         $result = DB_query($sql);
 
         $nrows = DB_numRows($result);
         $report->set_block('report', 'reportrow', 'rrow');
+
         if ($nrows > 0) {
             if ($_FF_CONF['enable_user_rating_system'] && !COM_isAnonUser() ) {
                 $user_rating = intval(DB_getItem($_TABLES['ff_userinfo'],'rating','uid='.(int)$_USER['uid']));
             }
             $csscode = 1;
+
             for ($i = 1; $i <= $nrows; $i++) {
                 $P = DB_fetchArray($result);
                 $fres = DB_query("SELECT grp_id,rating_view FROM {$_TABLES['ff_forums']} WHERE forum_id=".(int)$P['forum']);
@@ -265,7 +312,7 @@ function forum_index()
                     }
                     $report->set_var(array(
                             'post_start_ahref'  => $link,
-                            'post_subject'      => $P['subject'],
+                            'post_subject'      => $P['subject'], //  . ' ('. $P['relevance'].')',
                             'post_end_ahref'    => '</a>',
                             'post_date'         => $postdate[0],
                             'post_replies'      => $replies, // $P['replies'],
@@ -1017,4 +1064,32 @@ $tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WH
     echo $display;
     exit;
 }
+
+// Remove unnecessary words from the search term and return them as an array
+function ff_filterSearchKeys($query)
+{
+    $query = trim(preg_replace("/(\s+)+/", " ", $query));
+    $words = array();
+    // expand this list with your words.
+    $list = array("in","it","a","the","of","or","I","you","he","me","us","they","she","to","but","that","this","those","then", "and", "or");
+    $c = 0;
+    foreach (explode(" ", $query) as $key) {
+        if (in_array($key, $list)) {
+            continue;
+        }
+        $words[] = $key;
+        if ($c >= 15) {
+            break;
+        }
+        $c++;
+    }
+    return $words;
+}
+
+// limit words number of characters
+function ff_limitChars($query, $limit = 200)
+{
+    return substr($query, 0,$limit);
+}
+
 ?>
