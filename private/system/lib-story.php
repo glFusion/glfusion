@@ -984,11 +984,12 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
                     $props['date-created'] = $A['unixdate'];
                     break;
                 case 'description':
-                case 'searchidx' :
+//                case 'searchidx' :
                     $props[$p] = trim(PLG_replaceTags($A['introtext'] . ' ' . $A['bodytext'],'glfusion','story'));
                     break;
                 case 'raw-description':
-                    $props['raw-description'] = trim($A['introtext'] . ' ' . $A['bodytext']);
+                case 'searchidx' :
+                    $props[$p] = trim($A['introtext'] . ' ' . $A['bodytext']);
                     break;
                 case 'excerpt':
                     $excerpt = $A['introtext'];
