@@ -92,7 +92,6 @@ if ($topic_pid != 0) {
     $showtopic = $topic_pid;
 }
 
-
 if (empty($show) AND $FF_userprefs['postsperpage'] > 0) {
     $show = $FF_userprefs['postsperpage'];
 } elseif (empty($show)) {
@@ -116,9 +115,7 @@ if ($viewtopic === false) {
     echo COM_refresh($_CONF['site_url'].'/forum/index.php');
     exit;
 }
-
 $canPost = _ff_canPost( $viewtopic );
-
 $replies  = $viewtopic['replies'];
 $numpages = ceil(($replies+1) / $show);
 
@@ -185,18 +182,13 @@ if (isset($_GET['lastpost']) && $_GET['lastpost']) {
 } else {
     if ( $topic != 0 ) {
 
-// when would this be executed?
-
         $order = $FF_userprefs['topic_order'];
+
 //@TODO - need to fix order
-        $sql = "SELECT id FROM `{$_TABLES['ff_topic']}` WHERE pid= :topicid ORDER BY date ASC"; // :order";
+        $sql = "SELECT id FROM `{$_TABLES['ff_topic']}` WHERE pid= :topicid ORDER BY date " . $order;
         $stmt = $db->conn->prepare($sql);
         $stmt->bindParam("topicid", $showtopic, glFusion\Database::INTEGER);
         $stmt->execute();
-
-$ids = $stmt->fetchAll();
-//var_dump($ids);
-
         $ids = array();
         while ($I = $stmt->fetch()) {
             $ids[] = $I['id'];
@@ -329,7 +321,7 @@ $queryBuilder = $db->conn->createQueryBuilder();
 $queryBuilder
     ->select('*')
     ->from($_TABLES['ff_topic'])
-    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER).' OR pid = :dcValue1')
+    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER).' OR pid = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER))
     ->orderBy('date', $order)
     ->setFirstResult($offset)
     ->setMaxResults($show);
