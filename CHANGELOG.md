@@ -1,4 +1,5 @@
 ## v1.7.6 (unreleased)
+  - Forum search improvements
   - Fixed issue where previous rating checks did not use full IP address
   - Update CKEditor to v4.10.1
   - Updated Polish Translation
