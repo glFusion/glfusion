@@ -115,7 +115,7 @@ function FF_ForumHeader($forum,$showtopic) {
     $retval = '';
     $navbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $navbar->set_file (array ('topicheader'=>'navbar.thtml'));
-    $navbar->set_var ('search_forum', f_forumsearch());
+    $navbar->set_var ('search_forum', f_forumsearch($forum));
     $navbar->set_var ('select_forum', f_forumjump());
 
     if ($_FF_CONF['usermenu'] == 'navbar') {
@@ -368,7 +368,7 @@ function FF_BaseFooter($showbottom=true) {
                 $footer->set_var ('forum_rules', f_forumrules() );
             }
         }
-        $footer->set_var ('search_forum', f_forumsearch() );
+        $footer->set_var ('search_forum', f_forumsearch($forum) );
         $footer->set_var ('select_forum', f_forumjump() );
         $footer->parse ('output', 'footerblock');
         $retval .= $footer->finish($footer->get_var('output'));
@@ -376,8 +376,8 @@ function FF_BaseFooter($showbottom=true) {
     return $retval;
 }
 
-function f_forumsearch() {
-    global $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
+function f_forumsearch($forum) {
+    global $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02;
 
     $forum_search = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_search->set_file (array ('forum_search'=>'forum_search.thtml'));
