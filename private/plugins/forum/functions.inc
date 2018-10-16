@@ -1494,8 +1494,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             }
             $fields[] = "GROUP_CONCAT(a.comment ORDER BY a.date DESC SEPARATOR ' ') AS summarycomment ";
             $lastupdated = DB_getItem($_TABLES['ff_topic'],'lastupdated','id='.DB_escapeString($id));
-        }
-        if ($summary) {
+
             $where = " WHERE (id = '" . DB_escapeString($id) . "' OR pid = '".DB_escapeString($id)."') ";
             DB_query("SET group_concat_max_len = 18196");
         } else {
@@ -1583,13 +1582,14 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                     $props['hits'] = $A['views'];
                     break;
                 case 'perms' :
+                    $grpPerm = SEC_inGroup($A['grp_id'],1) ? 2 : 0;
                     $props['perms'] = array(
-                        'owner_id' => 2,
+                        'owner_id' => $A['uid'],
                         'group_id' => $A['grp_id'],
-                        'perm_owner' => 3,
-                        'perm_group' => 3,
-                        'perm_members' => 1,    // fix
-                        'perm_anon' => 1,       // fix
+                        'perm_owner' => $grpPerm,
+                        'perm_group' => $grpPerm,
+                        'perm_members' => $grpPerm,
+                        'perm_anon' => $grpPerm,
                     );
                     break;
                 default:
