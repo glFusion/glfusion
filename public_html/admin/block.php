@@ -88,7 +88,7 @@ function BLOCK_hasTopicAccess ($tid)
 */
 function BLOCK_editDefault($A, $access)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG21, $LANG_ACCESS, $LANG_ADMIN,$_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $_USER, $LANG21, $LANG_BLOCKS, $LANG_ACCESS, $LANG_ADMIN,$_IMAGE_TYPE;
 
     $retval = '';
 
@@ -139,8 +139,8 @@ function BLOCK_editDefault($A, $access)
                               COM_topicList ('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_all', $LANG21[7]);
     $block_templates->set_var('lang_side', $LANG21[39]);
-    $block_templates->set_var('lang_left', $LANG21[40]);
-    $block_templates->set_var('lang_right', $LANG21[41]);
+    $block_templates->set_var('lang_left', $LANG_BLOCKS['left_title']); // $LANG21[40]);
+    $block_templates->set_var('lang_right', $LANG_BLOCKS['right_title']); //$LANG21[41]);
 
     if ($A['onleft'] == 1) {
         $block_templates->set_var('left_selected', 'selected="selected"');
@@ -191,7 +191,7 @@ function BLOCK_editDefault($A, $access)
 */
 function BLOCK_edit($bid = '', $B = array())
 {
-    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG24,$LANG_ACCESS,
+    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG24,$LANG_BLOCKS, $LANG_ACCESS,
            $LANG_ADMIN, $LANG_postmodes,$MESSAGE,$_IMAGE_TYPE;
 
     USES_lib_admin();
@@ -322,8 +322,8 @@ function BLOCK_edit($bid = '', $B = array())
     $block_templates->set_var('topic_options',
                               COM_topicList('tid,topic,sortnum', $A['tid'], 2, true));
     $block_templates->set_var('lang_side', $LANG21[39]);
-    $block_templates->set_var('lang_left', $LANG21[40]);
-    $block_templates->set_var('lang_right', $LANG21[41]);
+    $block_templates->set_var('lang_left', $LANG_BLOCKS['left_title']); //$LANG21[40]);
+    $block_templates->set_var('lang_right', $LANG_BLOCKS['right_title']); //$LANG21[41]);
     if ($A['onleft'] == 1) {
         $block_templates->set_var('left_selected', 'selected="selected"');
     } else if ($A['onleft'] == 0) {
