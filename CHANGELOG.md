@@ -1,4 +1,6 @@
 ## v1.7.6 (unreleased)
+  - Forum - if a user does not have permission to a topic - display 404 page
+  - Enhanced Forum's getItemInfo() to allow for consolidated forum topic retrieval (by parent_id)
   - Forum search improvements
   - Fixed issue where previous rating checks did not use full IP address
   - Update CKEditor to v4.10.1
