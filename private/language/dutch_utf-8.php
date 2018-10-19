@@ -2488,6 +2488,7 @@ $LANG_AM = array(
 
 $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
+    'cache_disabled' => 'Caching is disabled',
     'cache_driver' => 'Cache Driver',
     'cache_driver_error' => 'Using files drivers as fallback due to error with configured driver: ',
     'cache_driver_ok' => 'Caching Backend is up and operational',
@@ -2956,7 +2957,11 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_username' => 'SASL Username for Memcached',
     'cache_memcached_password' => 'SASL Password for Memcached',
     'cache_redis_info' => 'Redis Driver Attributes',
-    'cache_memcached_info' => 'Memcached Driver Attributes'
+    'cache_memcached_info' => 'Memcached Driver Attributes',
+    'default_story_editor' => 'Default Story Editor',
+    'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
+    'fset_story_display' => 'Story Display',
+    'fset_story_administration' => 'Story Administration'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -3057,7 +3062,8 @@ $LANG_configselects['Core'] = array(
     30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
     31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
     32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid')
+    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
+    34 => array('HTML' => 0, 'Visual' => 1)
 );
 
 ?>
