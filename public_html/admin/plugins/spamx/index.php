@@ -165,7 +165,7 @@ foreach ($stats AS $module => $statistics) {
             foreach ($statistics AS $type => $num) {
                 $T->set_block('page', 'type', 'typeblock');
                 $T->set_var('type',$type);
-                $T->set_var('count',$num);
+                $T->set_var('count',COM_numberFormat($num));
                 $T->parse('typeblock', 'type',true);
             }
         } else {
