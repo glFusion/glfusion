@@ -1,4 +1,5 @@
 ## v1.7.6 (unreleased)
+  - ICS feed support for calendar events was broken and produced RSS formatted feeds.
   - Forum - if a user does not have permission to a topic - display 404 page
   - Enhanced Forum's getItemInfo() to allow for consolidated forum topic retrieval (by parent_id)
   - Forum search improvements
