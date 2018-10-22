@@ -568,11 +568,14 @@ function SYND_updateFeediCal( $A )
 
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
+                if (!isset($feedItem['guid'])) {
+                    $feedItem['guid'] = $feedItem['link'];
+                }
                 $vEvent = new \Eluceo\iCal\Component\Event();
                 foreach($feedItem as $var => $value) {
                     switch ($var) {
                         case 'date' :
-//                            $vEvent->setCreated(new \DateTime($value));
+                            $vEvent->setCreated(new \DateTime($value));
                             break;
 
                         case 'title' :
@@ -583,9 +586,12 @@ function SYND_updateFeediCal( $A )
                             $vEvent->setDescription($value);
                             break;
 
+                        case 'guid' :
+                            $vEvent->setUniqueId($value);
+                            break;
+
                         case 'link' :
                             $vEvent->setUrl($value);
-                            $vEvent->setUniqueId($value);
                             break;
 
                         case 'dtstart' :
@@ -601,6 +607,53 @@ function SYND_updateFeediCal( $A )
 
                         case 'allday' :
                             $vEvent->setNoTime($value);
+                            break;
+
+                        case 'rrule' :
+                            if ($value !== null && $value !== '') {
+                                $rrule = new \Eluceo\iCal\Property\Event\RecurrenceRule();
+                                $ruleArray = explode(';',$value);
+                                $rules = array();
+                                foreach ( $ruleArray AS $element ) {
+                                    $rule = explode('=',$element);
+                                    if ( $rule[0] != '' ) {
+                                        $rules[$rule[0]] = $rule[1];
+                                    }
+                                }
+                                foreach ($rules AS $type => $var) {
+                                    switch ($type) {
+                                        case 'FREQ' :
+                                            $rrule->setFreq($var);
+                                            break;
+                                        case 'INTERVAL' :
+                                            $rrule->setInterval($var);
+                                            break;
+                                        case 'BYSETPOS' :
+                                            $rrule->setBySetPos($var);
+                                            break;
+                                        case 'BYDAY' :
+                                            $rrule->setByDay($var);
+                                            break;
+                                        case 'BYMONTHDAY' :
+                                            $rrule->setByMonthDay((int)$var);
+                                            break;
+                                        case 'BYMONTH' :
+                                            $rrule->setByMonth( (int) $var);
+                                            break;
+                                        case 'DTSTART' :
+                                            $vEvent->setDtStart(new \DateTime($var));
+                                            break;
+                                        case 'COUNT' :
+                                            $rrule->setCount($var);
+                                            break;
+                                        default :
+                                            COM_errorLog("SYND: RRULE unknown: " . $type);
+                                            break;
+                                    }
+                                }
+                                $vEvent->setRecurrenceRule($rrule);
+
+                            }
                             break;
                     }
                 }
