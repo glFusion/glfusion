@@ -14,6 +14,7 @@
         "robthree/twofactorauth": "^1.6",
         "phpFastCache/phpFastCache": "^7.0",
         "filp/whoops": "^2.2",
-        "doctrine/dbal": "^2.8"
+        "doctrine/dbal": "^2.8",
+        "eluceo/ical": "^0.14.0"
     }
 }

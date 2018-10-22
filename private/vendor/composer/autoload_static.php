@@ -39,6 +39,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             'Html2Text\\' => 10,
         ),
+        'E' => 
+        array (
+            'Eluceo\\iCal\\' => 12,
+        ),
         'D' => 
         array (
             'Doctrine\\Common\\Cache\\' => 22,
@@ -87,6 +91,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             0 => __DIR__ . '/..' . '/html2text/html2text/src',
             1 => __DIR__ . '/..' . '/html2text/html2text/test',
+        ),
+        'Eluceo\\iCal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/eluceo/ical/src',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
