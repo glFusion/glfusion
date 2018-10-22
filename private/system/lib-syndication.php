@@ -455,6 +455,10 @@ function SYND_updateFeed( $fid )
     if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
+        if ($A['format'] == 'ICS-1.0') {
+            return SYND_updateFeediCal( $A );
+        }
+
         $rss = new UniversalFeedCreator();
         if ( $A['content_length'] > 1 ) {
             $rss->descriptionTruncSize = $A['content_length'];
@@ -541,6 +545,88 @@ function SYND_updateFeed( $fid )
         DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
     }
 }
+
+function SYND_updateFeediCal( $A )
+{
+    global $_CONF, $_TABLES, $_SYND_DEBUG;
+
+    $fid = $A['fid'];
+
+    if ( $A['is_enabled'] == 1 ) {
+        $format = explode( '-', $A['format'] );
+
+        $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+
+        if ( !empty( $A['filename'] )) {
+            $filename = $A['filename'];
+        } else {
+            $pos = strrpos( $_CONF['rdf_file'], '/' );
+            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+        }
+
+        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1]);
+
+        if ( is_array($content) ) {
+            foreach ( $content AS $feedItem ) {
+                $vEvent = new \Eluceo\iCal\Component\Event();
+                foreach($feedItem as $var => $value) {
+                    switch ($var) {
+                        case 'date' :
+//                            $vEvent->setCreated(new \DateTime($value));
+                            break;
+
+                        case 'title' :
+                            $vEvent->setSummary($value);
+                            break;
+
+                        case 'summary' :
+                            $vEvent->setDescription($value);
+                            break;
+
+                        case 'link' :
+                            $vEvent->setUrl($value);
+                            $vEvent->setUniqueId($value);
+                            break;
+
+                        case 'dtstart' :
+                            $vEvent->setDtStart(new \DateTime($value));
+                            break;
+                        case 'dtend' :
+                            $vEvent->setDtEnd(new \DateTime($value));
+                            break;
+
+                        case 'location' :
+                            $vEvent->setLocation($value);
+                            break;
+
+                        case 'allday' :
+                            $vEvent->setNoTime($value);
+                            break;
+                    }
+                }
+                $vCalendar->addComponent($vEvent);
+            }
+        }
+        if (empty($link)) {
+            $link = $_CONF['site_url'];
+        }
+        $feedData = $vCalendar->render();
+        $handle = fopen(SYND_getFeedPath( $filename ), "w");
+        if ($handle === false) {
+            COM_errorLog("Error: Unable to open " . SYND_getFeedPath( $filename ) . " for writing");
+            return;
+        }
+        fwrite($handle,$feedData);
+        fclose($handle);
+
+        if ($_SYND_DEBUG) {
+            COM_errorLog ("update_info for feed $fid is $data", 1);
+        }
+
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = '".DB_escapeString($data)."' WHERE fid = '".DB_escapeString($fid)."'");
+    }
+}
+
 
 /**
 * Truncate a feed item's text to a given max. length of characters
