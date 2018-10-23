@@ -6,6 +6,9 @@
 // |                                                                          |
 // | glFusion syndication library.                                            |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2017-2018 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2003-2010 by the following authors:                        |
 // |                                                                          |
@@ -575,7 +578,8 @@ function SYND_updateFeediCal( $A )
                 foreach($feedItem as $var => $value) {
                     switch ($var) {
                         case 'date' :
-                            $vEvent->setCreated(new \DateTime($value));
+                            $date = is_numeric($value) ? date('c', $value) : $value;
+                            $vEvent->setCreated(new \DateTime($date));
                             break;
 
                         case 'title' :
@@ -597,6 +601,7 @@ function SYND_updateFeediCal( $A )
                         case 'dtstart' :
                             $vEvent->setDtStart(new \DateTime($value));
                             break;
+
                         case 'dtend' :
                             $vEvent->setDtEnd(new \DateTime($value));
                             break;
@@ -652,7 +657,6 @@ function SYND_updateFeediCal( $A )
                                     }
                                 }
                                 $vEvent->setRecurrenceRule($rrule);
-
                             }
                             break;
                     }
