@@ -1,14 +1,24 @@
+# glFusion CMS Long Term Support ChangeLog
+
 ## v1.7.6 (unreleased)
-  - ICS feed support for calendar events was broken and produced RSS formatted feeds.
-  - Forum - if a user does not have permission to a topic - display 404 page
-  - Enhanced Forum's getItemInfo() to allow for consolidated forum topic retrieval (by parent_id)
-  - Forum search improvements
-  - Fixed issue where previous rating checks did not use full IP address
-  - Update CKEditor to v4.10.1
-  - Updated Polish Translation
-  - Story instance caching did not account for custom templates per topic
-  - Fixed issue where utf8mb4 support detection did not work properly when using PDO driver
-  - Fixed incorrect variable reference in SFS module for email check - fixes issue where SFS score was not properly displayed in spamx log
+
+### Added
+  - Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
+
+### Changed
+  - Upgraded CKEditor to v4.10.1
+  - Forum Plugin: Now returns 404 page if user does not have permissions to acces forum category or topic
+  - Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
+  - Polish Translation Update provided by Damian Kucaj (glFusion Polish Support)
+  - Content Syndication dropdown list is now sorted
+
+### Fixed
+  - ICS Feed support for calendar was broken and produced RSS feeds instead
+  - Rating IP validation to determine if user had already rated an item was broken
+  - Story instance caching did not properly cache custom templates by topic
+  - UTF8MB4 detection did not work properly with MySQL PDO driver
+  - StopForumSpam SpamX check referenced incorrect variable when checking email SFS score
+  - Block location language did not properly reflect block locations supported by themes
 
 ## v1.7.5 (August 8, 2018)
   - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
