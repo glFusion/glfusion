@@ -1,31 +1,56 @@
+# glFusion CMS ChangeLog
+
 ## v2.0.0 (Unreleased)
+
+### Added
   - Integrate Whoops debug console for development
-  - Fixed issue where utf8mb4 support detection did not work properly when using PDO driver
-  - Fixed incorrect variable reference in SFS module for email check - fixes issue where SFS score was not properly displayed in spamx log
-  - Removed geshi code formatter
   - Implemented JavaScript based code formatter / highlighter
   - .tm-story-text CSS style to story text in featured and standard story templates
   - Allow configuration of default story edit mode (visual or html)
-  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
-  - Comment system code optimizations
-  - Consolidation of caching code into lib-cache
-  - Removed comment feeds plugin - functionality integrated into core
-  - CAPTCHA - removed static images and ImageMagick support
-  - MySQL PDO driver support
-  - Improved cron / maintenance task interface
-  - Template class code significantly streamlined - utilizes new caching engine
-  - Converted all caching calls to use new caching engine
-  - Implemented a new caching engine based on phpFastCache
+  - New Caching system utilizing phpFastCache library
+
+### Changed
   - Minimum PHP version is now 7.1.0
+  - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
+  - Comment system code has been reworked and optimized
+  - Consolidation of caching code into lib-cache / Cache.php class
+  - Maintenance / Cron task execution has been optimized to reduce user impact / experience
+  - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
+  - Replaced all old style Cache calls to new Cache class interface
+
+### Depreciated
+
+### Removed
+  - Removed GeShi code formatter
+  - Removed comment feeds plugin - functionality integrated into core
+  - CAPTCHA Plugin: removed static images and ImageMagick support
+
+### Fixed
+
+### Security
+
 
 ## v1.7.6 (unreleased)
-  - Update CKEditor to v4.10.1
-  - Updated Polish Translation
-  - Story instance caching did not account for custom templates per topic
-  - Fixed issue where utf8mb4 support detection did not work properly when using PDO driver
-  - Fixed incorrect variable reference in SFS module for email check - fixes issue where SFS score was not properly displayed in spamx log
+
+### Added
+  - Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
+
+### Changed
+  - Upgraded CKEditor to v4.10.1
+  - Forum Plugin: Now returns 404 page if user does not have permissions to acces forum category or topic
+  - Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
+  - Polish Translation Update provided by Damian Kucaj (glFusion Polish Support)
+  - Content Syndication dropdown list is now sorted
+
+### Fixed
+  - ICS Feed support for calendar was broken and produced RSS feeds instead
+  - Rating IP validation to determine if user had already rated an item was broken
+  - Story instance caching did not properly cache custom templates by topic
+  - UTF8MB4 detection did not work properly with MySQL PDO driver
+  - StopForumSpam SpamX check referenced incorrect variable when checking email SFS score
+  - Block location language did not properly reflect block locations supported by themes
 
 ## v1.7.5 (August 8, 2018)
   - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay

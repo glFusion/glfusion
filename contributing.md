@@ -43,7 +43,7 @@ Please keep the change in a single PR **as small as possible**. If you want to c
 1. The change is as small as possible (see the above paragraph for details)
 1. Has been properly tested
 2. Documentation updates are provided if necessary
-1. Can merge without problems (if not please use: `git rebase master`)
+1. Can merge without problems (if not please use: `git rebase develop`)
 1. Does not break any existing functionality
 1. Fixes one specific issue or implements one specific feature (do not combine things, send separate pull requests if needed)
 1. Keeps the glFusion code base clean and well structured
