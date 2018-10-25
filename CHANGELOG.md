@@ -36,6 +36,7 @@
 
 ### Added
   - Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
+  - headlines auto tag now supports incl_alt: setting to allow searching for alternate topic ids that match the topic being displayed
 
 ### Changed
   - Upgraded CKEditor to v4.10.1
