@@ -5,14 +5,14 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2016 by the following authors:
+*  Copyright (C) 2014-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
 
 require_once '../../../lib-common.php';
 
-if ( SEC_inGroup('Root') ) {
+if ( SEC_inGroup('Root') && !defined ('DEMO_MODE')) {
     $createDir = "php/createdir.php";
     $deleteDir = "php/deletedir.php";
     $moveDir   = "php/movedir.php";
