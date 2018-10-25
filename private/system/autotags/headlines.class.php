@@ -33,6 +33,7 @@ class autotag_headlines extends BaseAutotag {
         $dt  = new Date('now',$_USER['tzid']);
 
         // topic = specific topic or 'all'
+        //
         // display = how many stories to display, if 0, then all
         // meta = show meta data (i.e.; who when etc)
         // titleLink - make title a hot link
@@ -65,6 +66,7 @@ class autotag_headlines extends BaseAutotag {
         $sortby     = 'featured';  // sort by: date, views, rating, featured
         $orderby    = 'desc';   // order by - desc or asc
         $template   = 'headlines.thtml';
+        $include_alt = 0;       // search both primary topic and alternate topics if true
 
         $px = explode (' ', trim ($p2));
         if (is_array ($px)) {
@@ -108,6 +110,10 @@ class autotag_headlines extends BaseAutotag {
                 } elseif (substr ($part,0, 5) == 'sort:') {
                     $a = explode(':', $part);
                     $sortby = strtolower($a[1]);
+                    $skip++;
+                } elseif (substr ($part,0, 9) == 'incl_alt:') {
+                    $a = explode(':', $part);
+                    $include_alt = (int) $a[1];
                     $skip++;
                 } elseif (substr ($part,0, 6) == 'order:') {
                     $a = explode(':', $part);
@@ -163,7 +169,12 @@ class autotag_headlines extends BaseAutotag {
         }
         // if a topic was provided only select those stories.
         if (!empty($topic)) {
-            $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
+            $sql .= " AND (s.tid = '".DB_escapeString($topic)."' ";
+            if ($include_alt) {
+                $sql .= " OR s.alternate_tid = '".DB_escapeString($topic)."') ";
+            } else {
+                $sql .= ') ';
+            }
         }
 
         if ( $featured == 1) {
