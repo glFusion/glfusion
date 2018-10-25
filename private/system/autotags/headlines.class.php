@@ -44,7 +44,11 @@ class autotag_headlines extends BaseAutotag {
         // template - the template name
 
         $topic = $p1;
-        if ( $topic == 'all' ) $topic = '';
+
+        if ( $topic == 'all' ) {
+            $topic = '';
+        }
+
         $uniqueID = md5($p1.$p2);
 
         $display    = 10;       // display 10 articles
@@ -61,6 +65,7 @@ class autotag_headlines extends BaseAutotag {
         $sortby     = 'featured';  // sort by: date, views, rating, featured
         $orderby    = 'desc';   // order by - desc or asc
         $template   = 'headlines.thtml';
+        $include_alt = 0;       // search both primary topic and alternate topics if true
 
         $px = explode (' ', trim ($p2));
         if (is_array ($px)) {
@@ -105,6 +110,10 @@ class autotag_headlines extends BaseAutotag {
                     $a = explode(':', $part);
                     $sortby = strtolower($a[1]);
                     $skip++;
+                } elseif (substr ($part,0, 9) == 'incl_alt:') {
+                    $a = explode(':', $part);
+                    $include_alt = (int) $a[1];
+                    $skip++;
                 } elseif (substr ($part,0, 6) == 'order:') {
                     $a = explode(':', $part);
                     $orderby = strtolower($a[1]);
@@ -130,13 +139,20 @@ class autotag_headlines extends BaseAutotag {
         if ( $display < 0 ) $display = 3;
 
         $valid_sortby = array('date','views','rating','featured');
-        if ( !in_array($sortby,$valid_sortby)) $sortby = 'featured';
-        if( $sortby == 'views' ) $sortby = 'hits';
+        if ( !in_array($sortby,$valid_sortby)) {
+            $sortby = 'featured';
+        }
+        if( $sortby == 'views' ) {
+            $sortby = 'hits';
+        }
         $valid_order = array('desc','asc');
-        if ( !in_array($orderby,$valid_order)) $orderby = 'desc';
+        if ( !in_array($orderby,$valid_order)) {
+            $orderby = 'desc';
+        }
 
-        if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) $storyimage = 2;
-
+        if ( $storyimage != 0 && $storyimage != 1 && $storyimage != 2 ) {
+            $storyimage = 2;
+        }
         $hash = CACHE_security_hash();
         $instance_id = 'whatsnew_headlines_'.$uniqueID.'_'.$hash.'_'.$_USER['theme'];
 
@@ -152,7 +168,12 @@ class autotag_headlines extends BaseAutotag {
         }
         // if a topic was provided only select those stories.
         if (!empty($topic)) {
-            $sql .= " AND s.tid = '".DB_escapeString($topic)."' ";
+            $sql .= " AND (s.tid = '".DB_escapeString($topic)."' ";
+            if ($include_alt) {
+                $sql .= " OR s.alternate_tid = '".DB_escapeString($topic)."') ";
+            } else {
+                $sql .= ') ';
+            }
         }
 
         if ( $featured == 1) {
@@ -209,8 +230,9 @@ class autotag_headlines extends BaseAutotag {
             $headlinesSQL .= " LIMIT ".$display;
         }
 
-        $result = DB_query ($headlinesSQL);
-        $numRows = DB_numRows($result);
+        $result  = DB_query ($headlinesSQL);
+        $storyRecords = DB_fetchAll($result);
+        $numRows = @count($storyRecords);
 
         if ( $numRows < $cols ) {
             $cols = $numRows;
@@ -229,7 +251,7 @@ class autotag_headlines extends BaseAutotag {
             $T->set_block('page','headlines','hl');
 
             $newstories = array();
-            while ( $A = DB_fetchArray($result) ) {
+            foreach ($storyRecords AS $A) {
                 $readMore = false;
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
@@ -317,6 +339,7 @@ class autotag_headlines extends BaseAutotag {
                     'attribution_name'  => $A['attribution_name'],
                 ));
                 $T->parse('hl','headlines',true);
+                unset($story);
             }
             $retval = $T->finish($T->parse('output','page'));
             CACHE_create_instance($instance_id, $retval, 0);
