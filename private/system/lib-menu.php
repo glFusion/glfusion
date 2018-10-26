@@ -137,13 +137,17 @@ function assembleMenu($name, $skipCache=false) {
     } else {
         $menuName = $name;
     }
-
     if ( $skipCache == false ) {
+        $md = array();
         $c = glFusion\Cache::getInstance();
         $key = 'menu_'.$menuName.'_'.$c->securityHash();
-        if ($c->has($key)) return unserialize($c->get($key));
+        if ($c->has($key)) {
+            $md = unserialize($c->get($key));
+            return $md;
+        }
     }
     $menuObject = initMenu($menuName, $skipCache);
+    $menuData = array();
     if ( $menuObject != NULL ) {
         $menuData = $menuObject->_parseMenu();
         $menuData['type'] = $menuObject->type;
@@ -216,7 +220,6 @@ function displayMenu( $menuName, $skipCache=false ) {
     }
 
     $menuType = $structure['type'];
-
     unset($structure['type']);
 
     $T = new Template( $_CONF['path_layout'].'/menu/');
