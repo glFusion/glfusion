@@ -39,6 +39,8 @@
   - headlines auto tag now supports incl_alt: setting to allow searching for alternate topic ids that match the topic being displayed
 
 ### Changed
+  - Story Admin topic filter will now include matches against the alternate topic id
+  - Media Gallery Image view now uses overlays for next / previous image navigation
   - Upgraded CKEditor to v4.10.1
   - Forum Plugin: Now returns 404 page if user does not have permissions to acces forum category or topic
   - Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
