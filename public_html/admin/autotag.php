@@ -754,6 +754,7 @@ function ATP_permEdit()
     USES_lib_admin();
 
     $tagUsage = PLG_collectAutotagUsage();
+    asort($tagUsage);
 
     $autoTags = PLG_collectTags();
     ksort($autoTags);
