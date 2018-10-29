@@ -3061,6 +3061,7 @@ $LANG_configselects['Core'] = array(
     32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
     33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
     34 => array('HTML' => 0, 'Visual' => 1),
+    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user'),
 );
 
 ?>

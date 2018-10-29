@@ -931,7 +931,7 @@ class config
                     $t->set_var('selected', ($val == $sVal ? 'selected="selected"' : ''));
                     $t->parse('myoptions', 'select-options', true);
                 }
-	        if ($index == 'placeholder') {
+    	        if ($index == 'placeholder') {
                     $t->set_var('hide_row', ' style="display:none;"');
                 }
             }
@@ -958,10 +958,12 @@ class config
             $result = "";
             if ( is_array($val) ) {
                 if ($type == '%select') {
+
                     $result .= config::_UI_get_conf_element($group,
                                     $name . '[placeholder]', 'placeholder',
                                     substr($type, 1), 'placeholder', $selectionArray,
                                     true);
+
                 }
                 foreach ($val as $valkey => $valval) {
                     $result .= config::_UI_get_conf_element($group,

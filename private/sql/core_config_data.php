@@ -3242,10 +3242,10 @@ $coreConfigData = array(
     array(
     	'name' => 'notification',
     	'default_value' => array(),
-    	'type' => '%text',
+    	'type' => '%select',
     	'subgroup' => 7,
     	'fieldset' => 2,
-    	'selection_array' => NULL,
+    	'selection_array' => 35,
     	'sort' => 10,
     	'set' => TRUE,
     	'group' => 'Core'
