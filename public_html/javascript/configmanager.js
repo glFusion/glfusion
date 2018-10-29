@@ -46,8 +46,12 @@ function add_select(tbl, arr_name, index, deletable) {
 
     if (deletable) {
         paramCell.appendChild(document.createTextNode("\n"));
-        deleteButton = document.createElement("input");
+        deleteButton = document.createElement("button");
         deleteButton.type = "button";
+        deleteButton.classList.add('uk-button');
+        deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-button-small');
+        deleteButton.innerHTML = 'x';
         deleteButton.value = "x";
         deleteButton.onclick =
             function () {
@@ -122,6 +126,10 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable) {
         deleteButton = document.createElement("input");
         deleteButton.type = "button";
         deleteButton.value = "x";
+        deleteButton.classList.add('uk-button');
+        deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-button-small');
+        deleteButton.innerHTML = 'x';
         deleteButton.onclick = function () {
             glfremove(this);
         };
