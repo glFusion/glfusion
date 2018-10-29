@@ -38,7 +38,7 @@ function add_select(tbl, arr_name, index, deletable) {
     var newRow = tbl.insertRow(tbl.rows.length - 1);
     titleCell = newRow.insertCell(0);
     paramCell = newRow.insertCell(1);
-    titleCell.className = "alignright";
+    titleCell.className = "uk-text-left";
     titleCell.appendChild(document.createTextNode(index));
     dropDown = tbl.getElementsByTagName('tr')[0].getElementsByTagName('td')[1].getElementsByTagName('select')[0].cloneNode(true);
     dropDown.name = arr_name + "[" + index + "]";
@@ -103,7 +103,7 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable) {
     arrayCell = newRow.insertCell(1);
 
     labelCell.appendChild(document.createTextNode(arr_index));
-    labelCell.className = "alignright";
+    labelCell.className = "uk-text-left";
 
     arrLink = document.createElement("input");
     arrLink.type = "button";
