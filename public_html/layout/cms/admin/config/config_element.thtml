@@ -65,6 +65,7 @@
 	    <option {selected}  value="{opt_value}">{opt_name}</option>
 	  <!-- END select-options -->
 		</select>
+                {delete}
 	</td>
 </tr>
 <!-- END select-element -->
