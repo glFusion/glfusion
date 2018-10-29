@@ -3038,7 +3038,9 @@ $LANG_configselects['Core'] = array(
     30 => array('Intern' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
     31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
     32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid')
+    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
+    34 => array('HTML' => 0, 'Visual' => 1),
+    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user')
 );
 
 ?>
