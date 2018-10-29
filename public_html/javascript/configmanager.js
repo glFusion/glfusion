@@ -71,20 +71,20 @@ function add_element(tbl, arr_name, index, disp_type, def_val, deletable) {
     inputBox.type = disp_type;
     inputBox.name = arr_name + "[" + index + "]";
     inputBox.value = def_val;
-    inputBox.classList.add('uk-form-width-medium');
-    inputBox.setAttribute("style", "width:80%;padding-right:5px;");
+    inputBox.classList.add('uk-margin-small-right');
+    inputBox.setAttribute("style", "width:80%;");
     paramCell.appendChild(inputBox);
 
     if (deletable) {
         //        deleteButton = document.createElement("input");
         deleteButton = document.createElement("button");
-        deleteButton.type = "button";
+        deleteButton.type = "submit";
         deleteButton.classList.add('uk-button');
         deleteButton.classList.add('uk-button-small');
         deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-margin-small');
         deleteButton.value = "x";
         deleteButton.innerHTML = 'x';
-        deleteButton.text = 'X';
         deleteButton.onclick =
             function () {
                 glfremove(this)
