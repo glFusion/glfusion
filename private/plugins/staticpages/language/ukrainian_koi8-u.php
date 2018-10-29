@@ -121,7 +121,8 @@ $LANG_STATIC = array(
     'attributes' => 'Attributes',
     'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
     'page_saved' => 'Page has been successfully saved.',
-    'page_deleted' => 'Page has been successfully deleted.'
+    'page_deleted' => 'Page has been successfully deleted.',
+    'searchable' => 'Search'
 );
 ###############################################################################
 # autotag descriptions

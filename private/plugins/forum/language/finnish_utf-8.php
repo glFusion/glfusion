@@ -729,8 +729,6 @@ $LANG_GF92 = array(
     'pmplugindscp' => 'Private Message Plugin is installed and should be enabled',
     'smiliesplugin' => 'Smilies Plugin',
     'smiliesplugindscp' => 'Smilies Plugin or external functions should be used for handling smilies',
-    'geshiformat' => 'Code Formatting',
-    'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Muokkamiseen Aikaa',
     'edit_timewindowdscp' => 'Sallittu aika (min) oman viestin muokkaamiseen'
 );

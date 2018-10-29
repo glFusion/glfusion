@@ -729,8 +729,6 @@ $LANG_GF92 = array(
     'pmplugindscp' => 'Plugin Message Privé est installé et doit être activée',
     'smiliesplugin' => 'Smilies Plugin',
     'smiliesplugindscp' => 'Smileys Plugin ou fonctions externes doivent être utilisés pour le traitement des smileys',
-    'geshiformat' => 'Le Code de mise en Forme',
-    'geshiformatdscp' => 'Utilisez la fonction Geshi forme du code',
     'edit_timewindow' => 'Modifier Calendrier',
     'edit_timewindowdscp' => 'Délai imparti (min) pour permettre aux membres d`éditer leurs messages'
 );

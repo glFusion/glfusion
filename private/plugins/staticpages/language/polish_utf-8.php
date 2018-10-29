@@ -1,8 +1,8 @@
 <?php
 ###############################################################################
-# polish.php
-# This is the Polish language page for the glFusion Static Page Plug-in!
-# Translation by Robert Stadnik robert_stadnik@wp.pl
+# File: polish_utf-8.php
+# This is the polish language file for the glFusion Static Page plugin
+# www.glfusion.pl - glFusion Support Poland
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com
 #
@@ -36,99 +36,100 @@ global $LANG32;
 ###############################################################################
 
 $LANG_STATIC = array(
-    'newpage' => 'Nowa Strona',
-    'adminhome' => 'Centrum Admina',
-    'staticpages' => 'Strony Statyczne',
-    'staticpageeditor' => 'Edytor Stron Statycznych',
+    'newpage' => 'Nowa strona',
+    'adminhome' => 'Admin Home',
+    'staticpages' => 'Strony',
+    'staticpageeditor' => 'Edytor stron',
     'writtenby' => 'Autor',
-    'date' => 'Ostatnia Aktualizacja',
+    'date' => 'Ostatnio zaktualizowano',
     'title' => 'Tytuł',
     'content' => 'Zawartość',
-    'hits' => 'Odsłon',
-    'staticpagelist' => 'Lista Stron Statycznych',
+    'hits' => 'Odwiedzin',
+    'staticpagelist' => 'Lista stron',
     'url' => 'URL',
-    'edit' => 'Edycja',
-    'lastupdated' => 'Ostatnia Aktualizacja',
-    'pageformat' => 'Format Strony',
-    'leftrightblocks' => 'Lewe & Prawe Bloki',
-    'blankpage' => 'Nowe Okno',
-    'noblocks' => 'Bez Bloków',
+    'edit' => 'Edytuj',
+    'lastupdated' => 'Ostatnio zaktualizowano',
+    'pageformat' => 'Format strony',
+    'leftrightblocks' => 'Lewe &amp; Prawe Bloki',
+    'blankpage' => 'Pusta strona',
+    'noblocks' => 'Brak bloków',
     'leftblocks' => 'Lewe Bloki',
-    'rightblocks' => 'Right Blocks',
-    'addtomenu' => 'Dodaj Do Menu',
+    'rightblocks' => 'Prawe Bloki',
+    'addtomenu' => 'Dodaj do menu',
     'label' => 'Etykieta',
-    'nopages' => 'Brak stron statycznych w systemie',
+    'nopages' => 'W systemie nie ma jeszcze stron',
     'save' => 'zapisz',
     'preview' => 'podgląd',
-    'delete' => 'kasuj',
+    'delete' => 'usuń',
     'cancel' => 'anuluj',
-    'access_denied' => 'Odmowa Dostępu',
-    'access_denied_msg' => 'Próbujesz nielegalnie  dostać się do panelu administrującego Stronami Statycznymi.  Proszę mieć na uwadze, że wszelkie nieautoryzowane próby wejścia są logowane',
-    'all_html_allowed' => 'Wszystkie Znaczniki HTML są dozwolone',
-    'results' => 'Wyniki Dla Stron Statycznych',
+    'access_denied' => 'Odmowa dostępu',
+    'access_denied_msg' => 'Nielegalnie próbujesz uzyskać dostęp do jednej ze stron administracyjnych. Pamiętaj, że wszystkie próby nielegalnego dostępu do tej strony są rejestrowane',
+    'all_html_allowed' => 'HTML dozwolony',
+    'results' => 'Strony wyniki',
     'author' => 'Autor',
-    'no_title_or_content' => 'Musisz wypełnić co najmniej pola <b>Tytuł</b> i <b>Zawartość</b>.',
-    'no_such_page_anon' => 'Prosze się zalogować..',
-    'no_page_access_msg' => "Może to być spowodowane tym, że nie jesteś zalogowana/-y lub zarejestrowanan/-y w Serwisie {$_CONF['site_name']}. Proszę <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> zarejestrować się</a> of {$_CONF['site_name']} aby otrzymać przywileje użytkowników zarejestrowanych",
+    'no_title_or_content' => 'Musisz przynajmniej wypełnić <b>Tytuł</b> i <b>Zawartość</b> pola.',
+    'no_such_page_anon' => 'Prosimy się zalogować..',
+    'no_page_access_msg' => "Może to być spowodowane tym, że nie jesteś zalogowany lub nie jesteś członkiem {$_CONF['site_name']}. Prosimy <a href=\"{$_CONF['site_url']}/users.php?mode=new\"> stwórz konto</a> z {$_CONF['site_name']} aby uzyskać pełny dostęp do strony",
     'php_msg' => 'PHP: ',
-    'php_warn' => 'Uwaga: jeśli aktywujesz tę opcję to kod PHP zawarty w Twojej stronie zostanie zweryfikowany. Używaj ostrożnie !!',
-    'exit_msg' => 'Rodzaj Wyjścia: ',
-    'exit_info' => 'Aktywuj na potrzeby komunikatu Wymagany Login.  Zostaw puste dla normalnego testu zabezpieczeń i komunikatu.',
-    'deny_msg' => 'Brak dostępu do tej strony. Albo strona została przeniesiona/usunięta albo nie masz wystarczających uprawnień.',
-    'stats_headline' => '10 Najpopularniejszych Stron Statycznych',
-    'stats_page_title' => 'Tytuł Strony',
-    'stats_hits' => 'Odsłon',
-    'stats_no_hits' => 'Wygląda na to, że nie ma żadnych stron statycznych albo nikt ich do tej pory nie oglądał.',
+    'php_warn' => 'Uwaga: kod PHP na twojej stronie zostanie oceniony, jeśli włączysz tę opcję. Używaj ostrożnie !!',
+    'exit_msg' => 'Typ wyjścia: ',
+    'exit_info' => 'Włącz dla wiadomości wymagane logowanie. Pozostaw niezaznaczone dla normalnego sprawdzenia bezpieczeństwa i wiadomości.',
+    'deny_msg' => 'Dostęp do tej strony jest zabroniony. Albo strona została przeniesiona / usunięta, albo nie masz wystarczających uprawnień.',
+    'stats_headline' => 'Dziesięć najlepszych stron',
+    'stats_page_title' => 'Tytuł strony',
+    'stats_hits' => 'Odwiedzin',
+    'stats_no_hits' => 'Wygląda na to, że na tej stronie nie ma stron lub nikt ich nigdy nie widział.',
     'id' => 'ID',
-    'duplicate_id' => 'Wybrane ID dla danej strony jest już w użyciu. Proszę wpisać inne ID.',
-    'instructions' => 'Aby zmodyfikować lub usunąć stronę statyczną, kliknij na numer strony poniżej. Aby podglądnąć stronę statyczną, kliknij na tytuł strony. Aby stworzyć nową stronę kliknij Nowa Strona powyżej. Kliknij [C] aby skopiować istniejącą stronę.',
-    'centerblock' => 'Blok Środkowy: ',
-    'centerblock_msg' => 'W przypadku zaznaczenia, dana Strona Statyczna będzie widoczna jako blok środkowy na stronie głównej.',
-    'topic' => 'Sekcja: ',
+    'duplicate_id' => 'Identyfikator wybrany dla tej strony jest już w użyciu. Proszę wybrać inny identyfikator.',
+    'instructions' => 'Aby zmodyfikować lub usunąć stronę, kliknij ikonę edycji tej strony poniżej. Aby wyświetlić stronę, kliknij tytuł strony, którą chcesz wyświetlić. Aby utworzyć nową stronę, kliknij powyżej "Nowa strona". Kliknij na ikonę kopii, aby utworzyć kopię istniejącej strony.',
+    'centerblock' => 'Blok centralny: ',
+    'centerblock_msg' => 'Po zaznaczeniu strona będzie wyświetlana jako blok centralny na stronie indeksu.',
+    'topic' => 'Temat: ',
     'position' => 'Pozycja: ',
     'all_topics' => 'Wszystkie',
-    'no_topic' => 'Tylko Strona Główna',
-    'position_top' => 'Góra Strony',
-    'position_feat' => 'Po Artykule Dnia',
-    'position_bottom' => 'Dół Strony',
-    'position_entire' => 'Cała Strona',
-    'position_nonews' => 'Only if No Other News',
-    'head_centerblock' => 'Blok Środkowy',
+    'no_topic' => 'Tylko na stronie głównej',
+    'position_top' => 'Na górze strony',
+    'position_feat' => 'Po wyróżnionym artykule',
+    'position_bottom' => 'Dół strony',
+    'position_entire' => 'Cała strona',
+    'position_nonews' => 'Tylko jeśli nie ma innych wiadomości',
+    'head_centerblock' => 'Blok centralny',
     'centerblock_no' => 'Nie',
-    'centerblock_top' => 'Góra',
-    'centerblock_feat' => 'Strona Dnia',
-    'centerblock_bottom' => 'Dół',
-    'centerblock_entire' => 'Cała Strona',
-    'centerblock_nonews' => 'If No News',
+    'centerblock_top' => 'Top',
+    'centerblock_feat' => 'Feat. Story',
+    'centerblock_bottom' => 'Dolny',
+    'centerblock_entire' => 'Cała strona',
+    'centerblock_nonews' => 'Brak wiadomości',
     'inblock_msg' => 'W bloku: ',
-    'inblock_info' => 'Zawijaj Stronę Statyczną w bloku.',
-    'title_edit' => 'Edycja strony',
-    'title_copy' => 'Utwórz kopię tej strony',
-    'title_display' => 'Pokaż stronę',
-    'select_php_none' => 'nie wykonuj kodu PHP',
-    'select_php_return' => 'wykonaj kod PHP (enter)',
-    'select_php_free' => 'wykonaj kod PHP',
-    'php_not_activated' => "Używanie PHP w stronie statycznej nie jest aktywne. Sprawdź szczegóły w <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">dokumentacji</a>.",
-    'printable_format' => 'Printable Format',
-    'copy' => 'Copy',
-    'limit_results' => 'Limit Results',
-    'search' => 'Search',
-    'submit' => 'Submit',
-    'delete_confirm' => 'Are you sure you want to delete this page?',
-    'allnhp_topics' => 'All Topics (No Homepage)',
-    'page_list' => 'Page List',
-    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
-    'attributes' => 'Attributes',
-    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
-    'page_saved' => 'Page has been successfully saved.',
-    'page_deleted' => 'Page has been successfully deleted.'
+    'inblock_info' => 'Zawijaj stronę w bloku.',
+    'title_edit' => 'Edytuj stronę',
+    'title_copy' => 'Kopiuj tytuł',
+    'title_display' => 'Wyświetl stronę',
+    'select_php_none' => 'nie wykonuj PHP',
+    'select_php_return' => 'wykonaj PHP (powrót)',
+    'select_php_free' => 'wykonaj PHP',
+    'php_not_activated' => 'Używanie PHP na stronach nie jest aktywowane. Zobacz <a href="https://www.glfusion.org/wiki/glfusion:staticpages#activating_php" target="_blank">dokumentacja</a> dla szczegółów.',
+    'printable_format' => 'Format do druku',
+    'copy' => 'Kopiuj',
+    'limit_results' => 'Limit wyników',
+    'search' => 'Wykonaj wyszukiwanie',
+    'submit' => 'Wyślij',
+    'delete_confirm' => 'Czy na pewno chcesz usunąć stronę?',
+    'allnhp_topics' => 'Wszystkie tematy (bez strony głównej)',
+    'page_list' => 'Lista stron',
+    'instructions_edit' => 'Ten ekran umożliwia tworzenie / edytowanie nowej strony statycznej. Strony mogą zawierać kod PHP i kod HTML.',
+    'attributes' => 'Atrybuty',
+    'preview_help' => 'Wybierz <b>Podgląd</b> aby odświeżyć ekran podglądu',
+    'page_saved' => 'Strona została pomyślnie zapisana.',
+    'page_deleted' => 'Strona została pomyślnie usunięta.',
+    'searchable' => 'Search'
 );
 ###############################################################################
 # autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage' => 'Link: do strony statycznej; link_text defaults do tytułu strony statystycznej. użyj: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content' => 'HTML: renderuje zawartość strony statycznej.  użyj: [staticpage_content:<i>page_id</i>]'
 );
 
 
@@ -136,52 +137,52 @@ $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
-$PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_staticpages_MESSAGE3001 = 'Aktualizacja wtyczki nie jest obsługiwana.';
 $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(
-    'label' => 'Static Pages',
-    'title' => 'Static Pages Configuration'
+    'label' => 'Strony',
+    'title' => 'Strony Konfiguracja'
 );
 
 $LANG_confignames['staticpages'] = array(
-    'allow_php' => 'Allow PHP?',
-    'sort_by' => 'Sort Centerblocks by',
-    'sort_menu_by' => 'Sort Menu Entries by',
-    'delete_pages' => 'Delete Pages with Owner?',
-    'in_block' => 'Wrap Pages in Block?',
-    'show_hits' => 'Show Hits?',
-    'show_date' => 'Show Date?',
-    'filter_html' => 'Filter HTML?',
-    'censor' => 'Censor Content?',
-    'default_permissions' => 'Page Default Permissions',
-    'aftersave' => 'After Saving Page',
-    'atom_max_items' => 'Max. Pages in Webservices Feed',
-    'comment_code' => 'Comment Default',
-    'include_search' => 'Site Search Default',
-    'status_flag' => 'Default Page Mode'
+    'allow_php' => 'Zezwalaj na PHP',
+    'sort_by' => 'Sortuj bloki środkowe według',
+    'sort_menu_by' => 'Sortuj wpisy w menu według',
+    'delete_pages' => 'Usuń strony z właścicielem',
+    'in_block' => 'Zawijaj strony w bloku',
+    'show_hits' => 'Pokaż odwiedziny',
+    'show_date' => 'Pokaz datę',
+    'filter_html' => 'Filtruj HTML',
+    'censor' => 'Treść cenzora',
+    'default_permissions' => 'Domyślne uprawnienia strony',
+    'aftersave' => 'Po zapisaniu strony',
+    'atom_max_items' => 'Max. Stron na kanale RSS',
+    'comment_code' => 'Domyślny komentarz',
+    'include_search' => 'Domyślne wyszukiwanie strony',
+    'status_flag' => 'Domyślny tryb strony'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Ustawienia główne'
 );
 
 $LANG_fs['staticpages'] = array(
-    'fs_main' => 'Static Pages Main Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Strony Główne Ustawienia',
+    'fs_permissions' => 'Domyślne Uprawnienia'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['staticpages'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
-    3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
-    9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Enabled' => 1, 'Disabled' => 0),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
+    0 => array('Tak' => 1, 'Nie' => 0),
+    1 => array('Tak' => true, 'Nie' => false),
+    2 => array('Data' => 'data', 'Strona ID' => 'id', 'Tytuł' => 'tytuł'),
+    3 => array('Data' => 'data', 'Strona ID' => 'id', 'Tytuł' => 'tytuł', 'Etykieta' => 'label'),
+    9 => array('Wróć do strony' => 'item', 'Wyświetl listę' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
+    12 => array('Odmowa dostępu' => 0, 'Tylko do odczytu' => 2, 'Odczyt i zapis' => 3),
+    13 => array('Włącz' => 1, 'Wyłącz' => 0),
+    17 => array('Komentarze włączone' => 0, 'Komentarze wyłączone' => -1)
 );
 
 ?>

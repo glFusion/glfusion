@@ -729,8 +729,6 @@ $LANG_GF92 = array(
     'pmplugindscp' => 'La extensión Mensajes Privados esta instalada y debería estar habilitada',
     'smiliesplugin' => 'Extensión Smilies',
     'smiliesplugindscp' => 'La extensión Smilies o funciones externas deberían usarse para manejar smilies',
-    'geshiformat' => 'Code Formatting',
-    'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
     'edit_timewindowdscp' => 'Tiempo permitido (<i>min</i>) para que los miembros modifiquen sus mesajes'
 );

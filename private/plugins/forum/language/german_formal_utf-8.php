@@ -733,8 +733,6 @@ $LANG_GF92 = array(
     'pmplugindscp' => 'Private-Nachrichten-Plugin ist installiert und sollte aktiviert werden',
     'smiliesplugin' => 'Smilies-Plugin',
     'smiliesplugindscp' => 'Smilies-Plugin oder externe Funktionen sollten für Smilies verwendet werden',
-    'geshiformat' => 'Code-Formatierung',
-    'geshiformatdscp' => 'Geshi-Code-Formatierung verwenden',
     'edit_timewindow' => 'Zeitlimit bearbeiten',
     'edit_timewindowdscp' => 'Erlaubte Zeit (Min.), um Mitgliedern das Bearbeiten ihrer Beiträge zu ermöglichen'
 );

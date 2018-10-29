@@ -731,8 +731,6 @@ $LANG_GF92 = array(
     'pmplugindscp' => 'el módulo de Mensajes Privados (PM) está instalado y debe activarse',
     'smiliesplugin' => 'Modulo de Smilies',
     'smiliesplugindscp' => 'El módulo de Smilies o funciones externas se debe utilizar para gestionar los smilies',
-    'geshiformat' => 'Code Formatting',
-    'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Tiempo válido de edición',
     'edit_timewindowdscp' => 'Tiempo (en minutos) durante el que se permite a los miembros editar sus Posts'
 );

@@ -128,7 +128,8 @@ $LANG_STATIC = array(
     'attributes' => 'Allgemeines',
     'preview_help' => 'Wählen Sie die Schaltfläche <b>Vorschau</b>, um die Vorschauanzeige zu aktualisieren',
     'page_saved' => 'Seite wurde erfolgreich gespeichert.',
-    'page_deleted' => 'Seite wurde erfolgreich gelöscht.'
+    'page_deleted' => 'Seite wurde erfolgreich gelöscht.',
+    'searchable' => 'Search'
 );
 ###############################################################################
 # autotag descriptions

@@ -121,7 +121,8 @@ $LANG_STATIC = array(
     'attributes' => 'Atributos',
     'preview_help' => 'Selecciona el botón <b>Visualizar</b> para refrescar la pantalla',
     'page_saved' => 'La Pagina ha sido correctametne guardada.',
-    'page_deleted' => 'Page has been successfully deleted.'
+    'page_deleted' => 'Page has been successfully deleted.',
+    'searchable' => 'Search'
 );
 ###############################################################################
 # autotag descriptions
