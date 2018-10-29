@@ -27,7 +27,10 @@ function handleAddWithName(self, array_type, array_name, name) {
     } else if (array_type == "placeholder") {
         add_element(self.parentNode.parentNode.parentNode, array_name, name, 'hidden', '1', '1');
     } else if (array_type == "select") {
-        add_select(self.parentNode.parentNode.parentNode, array_name, name - 1, '1');
+        if (typeof(name) == "number") {
+            name--;
+        }
+        add_select(self.parentNode.parentNode.parentNode, array_name, name, '1');
     }
 }
 
