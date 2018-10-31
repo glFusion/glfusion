@@ -27,7 +27,10 @@ function handleAddWithName(self, array_type, array_name, name) {
     } else if (array_type == "placeholder") {
         add_element(self.parentNode.parentNode.parentNode, array_name, name, 'hidden', '1', '1');
     } else if (array_type == "select") {
-        add_select(self.parentNode.parentNode.parentNode, array_name, name - 1, '1');
+        if (typeof(name) == "number") {
+            name--;
+        }
+        add_select(self.parentNode.parentNode.parentNode, array_name, name, '1');
     }
 }
 
@@ -35,7 +38,7 @@ function add_select(tbl, arr_name, index, deletable) {
     var newRow = tbl.insertRow(tbl.rows.length - 1);
     titleCell = newRow.insertCell(0);
     paramCell = newRow.insertCell(1);
-    titleCell.className = "alignright";
+    titleCell.className = "uk-text-left";
     titleCell.appendChild(document.createTextNode(index));
     dropDown = tbl.getElementsByTagName('tr')[0].getElementsByTagName('td')[1].getElementsByTagName('select')[0].cloneNode(true);
     dropDown.name = arr_name + "[" + index + "]";
@@ -43,8 +46,12 @@ function add_select(tbl, arr_name, index, deletable) {
 
     if (deletable) {
         paramCell.appendChild(document.createTextNode("\n"));
-        deleteButton = document.createElement("input");
+        deleteButton = document.createElement("button");
         deleteButton.type = "button";
+        deleteButton.classList.add('uk-button');
+        deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-button-small');
+        deleteButton.innerHTML = 'x';
         deleteButton.value = "x";
         deleteButton.onclick =
             function () {
@@ -64,20 +71,20 @@ function add_element(tbl, arr_name, index, disp_type, def_val, deletable) {
     inputBox.type = disp_type;
     inputBox.name = arr_name + "[" + index + "]";
     inputBox.value = def_val;
-    inputBox.classList.add('uk-form-width-medium');
-    inputBox.setAttribute("style", "width:80%;padding-right:5px;");
+    inputBox.classList.add('uk-margin-small-right');
+    inputBox.setAttribute("style", "width:80%;");
     paramCell.appendChild(inputBox);
 
     if (deletable) {
         //        deleteButton = document.createElement("input");
         deleteButton = document.createElement("button");
-        deleteButton.type = "button";
+        deleteButton.type = "submit";
         deleteButton.classList.add('uk-button');
         deleteButton.classList.add('uk-button-small');
         deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-margin-small');
         deleteButton.value = "x";
         deleteButton.innerHTML = 'x';
-        deleteButton.text = 'X';
         deleteButton.onclick =
             function () {
                 glfremove(this)
@@ -96,7 +103,7 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable) {
     arrayCell = newRow.insertCell(1);
 
     labelCell.appendChild(document.createTextNode(arr_index));
-    labelCell.className = "alignright";
+    labelCell.className = "uk-text-left";
 
     arrLink = document.createElement("input");
     arrLink.type = "button";
@@ -119,6 +126,10 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable) {
         deleteButton = document.createElement("input");
         deleteButton.type = "button";
         deleteButton.value = "x";
+        deleteButton.classList.add('uk-button');
+        deleteButton.classList.add('uk-button-danger');
+        deleteButton.classList.add('uk-button-small');
+        deleteButton.innerHTML = 'x';
         deleteButton.onclick = function () {
             glfremove(this);
         };

@@ -481,7 +481,7 @@ function STORY_list()
             $excludetopics .= ') ';
         }
     } else {
-        $excludetopics = " tid = '$current_topic' ";
+        $excludetopics = " tid = '$current_topic' OR alternate_tid = '$current_topic' ";
         $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
@@ -501,7 +501,6 @@ function STORY_list()
     $header_arr[] = array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true);
     $header_arr[] = array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true);
     $header_arr[] = array('text' => $LANG_ADMIN['alt_topic'], 'field' => 'alternate_tid', 'sort' => true);
-//    $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[34], 'field' => 'draft_flag', 'sort' => true, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[32], 'field' => 'featured', 'sort' => true, 'align' => 'center');
     $header_arr[] = array('text' => $LANG24[7], 'field' => 'username', 'sort' => true); //author

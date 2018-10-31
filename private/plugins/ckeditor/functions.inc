@@ -56,6 +56,10 @@ if (!isset($_CK_CONF['enable_story'])) {
 }
 require_once $_CONF['path'].'plugins/ckeditor/ckeditor.php';
 
+if (defined ('DEMO_MODE')) {
+    $_CK_CONF['filemanager_browse_only'] = true;
+}
+
 $_editorRegistration = array();
 
 /**

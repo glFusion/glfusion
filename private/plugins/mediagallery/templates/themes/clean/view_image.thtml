@@ -32,11 +32,11 @@
 		<img src="{raw_image}" width="{image_width}" height="{image_height}" class="uk-thumbnail" alt="Next Image" />
 
 {!if prev_link}
-		<a href="{prev_link}" class="uk-contrast uk-slidenav uk-slidenav-previous" title="{lang_prev}"></a>
+		<a href="{prev_link}" class="uk-slidenav-contrast uk-slidenav uk-slidenav-previous" title="{lang_prev}"></a>
 {!endif}
 
 {!if next_link}
-		<a href="{next_link}" class="uk-contrast uk-slidenav uk-slidenav-next" title="{lang_next}"></a>
+		<a href="{next_link}" class="uk-slidenav-contrast uk-slidenav uk-slidenav-next" title="{lang_next}"></a>
 {!endif}
 	</div>
 

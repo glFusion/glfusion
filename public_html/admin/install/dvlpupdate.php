@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -982,8 +982,6 @@ function glfusion_130()
     // alter the users table
     DB_query("ALTER TABLE {$_TABLES['users']} ADD account_type smallint(5) NOT NULL default '1' AFTER status",1);
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
@@ -1470,8 +1468,6 @@ function glfusion_161()
         DB_query($sql,1);
     }
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.1',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.1' WHERE name='glfusion'",1);
@@ -1526,8 +1522,6 @@ function glfusion_162()
     DB_query($atSQL,1);
 
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.2' WHERE name='glfusion'",1);
@@ -1559,8 +1553,6 @@ function glfusion_163()
     DB_query("ALTER TABLE {$_TABLES['logo']} CHANGE `config_name` `config_name` varchar(128) DEFAULT NULL;",1);
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled='0' WHERE pi_name='ban'",1);
     DB_query("REPLACE INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL)",1);
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.3',name='glfusion'",1);
@@ -1603,8 +1595,6 @@ function glfusion_165()
         DB_query($sql,1);
     }
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.5',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.6.5' WHERE name='glfusion'",1);
@@ -1626,8 +1616,6 @@ function glfusion_166()
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.6.6',name='glfusion'",1);
@@ -1719,8 +1707,6 @@ function glfusion_170()
 
     DB_query("INSERT INTO {$_TABLES['autotags']} (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');",1);
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.0' WHERE name='glfusion'",1);
@@ -1744,8 +1730,6 @@ function glfusion_171()
     foreach ($_SQL as $sql) {
         DB_query($sql,1);
     }
-
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.1',name='glfusion'",1);
@@ -1930,8 +1914,6 @@ function glfusion_172()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SPX_CONF['pi_version']."',pi_gl_version='".$_SPX_CONF['gl_version']."' WHERE pi_name='spamx' LIMIT 1");
     // end of spam-x
 
-    _updateConfig();
-
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.2',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.2' WHERE name='glfusion'",1);
@@ -1973,7 +1955,6 @@ function glfusion_173()
             }
         }
     }
-    _updateConfig();
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.3',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.3' WHERE name='glfusion'",1);
@@ -1996,11 +1977,29 @@ function glfusion_174()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
 
-    _updateConfig();
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.4',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.4' WHERE name='glfusion'",1);
+
+}
+
+function glfusion_176()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    $_SQL = array();
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.6',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.6' WHERE name='glfusion'",1);
 
 }
 
@@ -2315,7 +2314,10 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_174();
+glfusion_176();
+
+// update configuration
+_updateConfig();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {

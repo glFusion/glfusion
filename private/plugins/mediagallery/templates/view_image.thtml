@@ -46,17 +46,11 @@
 		</form>
 	</div>
 
-	<div class="uk-navbar-content uk-navbar-center uk-hidden-small">
-		{pagination}
-	</div>
-	<div class="uk-navbar-content uk-navbar-flip uk-visible-small">
-		{pagination}
-	</div>
-
 </nav>
 
 <div class="uk-panel uk-panel-box uk-text-center uk-margin-top">
-	<div class="uk-thumbnail">
+
+<div class="uk-thumbnail uk-slidenav-position">
 {!if media_link_start}
 		{media_link_start}
 {!endif}
@@ -64,7 +58,15 @@
 {!if media_link_end}
 		{media_link_end}
 {!endif}
-	</div>
+{!if prev_link}
+    <a href="{prev_link}" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous"></a>
+{!endif}
+{!if next_link}
+    <a href="{next_link}" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next"></a>
+{!endif}
+</div>
+
+
 	<div class="uk-thumbnail-caption uk-align-center uk-margin-small-top">
 		{media_title}
 	</div>

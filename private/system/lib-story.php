@@ -246,8 +246,23 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
     PLG_templateSetVars($article_filevar,$article);
 
+    switch($article_filevar) {
+        case 'article' :
+            $templateHash = substr($storytpl,0,strpos($storytpl,'.'));
+            break;
+        case 'archivearticle' :
+            $templateHash = substr($archivestorytpl,0,strpos($archivestorytpl,'.'));
+            break;
+        case 'featuredarticle' :
+            $templateHash = substr($featuredstorytpl,0,strpos($featuredstorytpl,'.'));
+            break;
+        default :
+            $templateHash = substr($storytpl,0,strpos($storytpl,'.'));
+            break;
+    }
+
     $hash = CACHE_security_hash();
-    $instance_id = 'story_'.$story->getSid().'_'.$index.'_'.$article_filevar.'_'.$hash.'_'.$_USER['theme'];
+    $instance_id = 'story_'.$story->getSid().'_'.$index.'_'.$article_filevar.'_'.$templateHash.'_'.$hash.'_'.$_USER['theme'];
 
     if ( $index == 'p' || !$article->check_instance($instance_id,$article_filevar)) {
         $article->set_var('article_filevar','');

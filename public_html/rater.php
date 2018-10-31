@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Non AJAX rating script                                                   |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2015 by the following authors:                        |
+// | Copyright (C) 2006-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -43,7 +43,7 @@ $ip_num     = preg_replace("/[^0-9\.]/","",$_REQUEST['t']);
 $units      = preg_replace("/[^0-9]/","",$_REQUEST['c']);
 $size       = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['s']);
 $plugin     = COM_applyFilter($_GET['p']);
-$ip         = $_SERVER['REMOTE_ADDR'];
+$ip         = $_SERVER['REAL_ADDR'];
 $ratingdate = time();
 $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
 $uid        = (int) $uid;

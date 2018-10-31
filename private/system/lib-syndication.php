@@ -6,6 +6,9 @@
 // |                                                                          |
 // | glFusion syndication library.                                            |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2017-2018 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Copyright (C) 2003-2010 by the following authors:                        |
 // |                                                                          |
@@ -455,6 +458,10 @@ function SYND_updateFeed( $fid )
     if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
+        if ($A['format'] == 'ICS-1.0') {
+            return SYND_updateFeediCal( $A );
+        }
+
         $rss = new UniversalFeedCreator();
         if ( $A['content_length'] > 1 ) {
             $rss->descriptionTruncSize = $A['content_length'];
@@ -541,6 +548,142 @@ function SYND_updateFeed( $fid )
         DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
     }
 }
+
+function SYND_updateFeediCal( $A )
+{
+    global $_CONF, $_TABLES, $_SYND_DEBUG;
+
+    $fid = $A['fid'];
+
+    if ( $A['is_enabled'] == 1 ) {
+        $format = explode( '-', $A['format'] );
+
+        $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+
+        if ( !empty( $A['filename'] )) {
+            $filename = $A['filename'];
+        } else {
+            $pos = strrpos( $_CONF['rdf_file'], '/' );
+            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+        }
+
+        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1]);
+
+        if ( is_array($content) ) {
+            foreach ( $content AS $feedItem ) {
+                if (!isset($feedItem['guid'])) {
+                    $feedItem['guid'] = $feedItem['link'];
+                }
+                $vEvent = new \Eluceo\iCal\Component\Event();
+                foreach($feedItem as $var => $value) {
+                    switch ($var) {
+                        case 'date' :
+                            $date = is_numeric($value) ? date('c', $value) : $value;
+                            $vEvent->setCreated(new \DateTime($date));
+                            break;
+
+                        case 'title' :
+                            $vEvent->setSummary($value);
+                            break;
+
+                        case 'summary' :
+                            $vEvent->setDescription($value);
+                            break;
+
+                        case 'guid' :
+                            $vEvent->setUniqueId($value);
+                            break;
+
+                        case 'link' :
+                            $vEvent->setUrl($value);
+                            break;
+
+                        case 'dtstart' :
+                            $vEvent->setDtStart(new \DateTime($value));
+                            break;
+
+                        case 'dtend' :
+                            $vEvent->setDtEnd(new \DateTime($value));
+                            break;
+
+                        case 'location' :
+                            $vEvent->setLocation($value);
+                            break;
+
+                        case 'allday' :
+                            $vEvent->setNoTime($value);
+                            break;
+
+                        case 'rrule' :
+                            if ($value !== null && $value !== '') {
+                                $rrule = new \Eluceo\iCal\Property\Event\RecurrenceRule();
+                                $ruleArray = explode(';',$value);
+                                $rules = array();
+                                foreach ( $ruleArray AS $element ) {
+                                    $rule = explode('=',$element);
+                                    if ( $rule[0] != '' ) {
+                                        $rules[$rule[0]] = $rule[1];
+                                    }
+                                }
+                                foreach ($rules AS $type => $var) {
+                                    switch ($type) {
+                                        case 'FREQ' :
+                                            $rrule->setFreq($var);
+                                            break;
+                                        case 'INTERVAL' :
+                                            $rrule->setInterval($var);
+                                            break;
+                                        case 'BYSETPOS' :
+                                            $rrule->setBySetPos($var);
+                                            break;
+                                        case 'BYDAY' :
+                                            $rrule->setByDay($var);
+                                            break;
+                                        case 'BYMONTHDAY' :
+                                            $rrule->setByMonthDay((int)$var);
+                                            break;
+                                        case 'BYMONTH' :
+                                            $rrule->setByMonth( (int) $var);
+                                            break;
+                                        case 'DTSTART' :
+                                            $vEvent->setDtStart(new \DateTime($var));
+                                            break;
+                                        case 'COUNT' :
+                                            $rrule->setCount($var);
+                                            break;
+                                        default :
+                                            COM_errorLog("SYND: RRULE unknown: " . $type);
+                                            break;
+                                    }
+                                }
+                                $vEvent->setRecurrenceRule($rrule);
+                            }
+                            break;
+                    }
+                }
+                $vCalendar->addComponent($vEvent);
+            }
+        }
+        if (empty($link)) {
+            $link = $_CONF['site_url'];
+        }
+        $feedData = $vCalendar->render();
+        $handle = fopen(SYND_getFeedPath( $filename ), "w");
+        if ($handle === false) {
+            COM_errorLog("Error: Unable to open " . SYND_getFeedPath( $filename ) . " for writing");
+            return;
+        }
+        fwrite($handle,$feedData);
+        fclose($handle);
+
+        if ($_SYND_DEBUG) {
+            COM_errorLog ("update_info for feed $fid is $data", 1);
+        }
+
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = '".DB_escapeString($data)."' WHERE fid = '".DB_escapeString($fid)."'");
+    }
+}
+
 
 /**
 * Truncate a feed item's text to a given max. length of characters

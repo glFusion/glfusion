@@ -1175,6 +1175,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
                                 'location'   => $row['location'],
                                 'categories' => $row['event_type'],
                                 'format'     => 'plaintext',
+                                'allday'     => $row['allday'],
                                 'extensions' => $extensionTags
                               );
         }

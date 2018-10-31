@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion content syndication administration                              |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2018 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -526,7 +526,13 @@ function FEED_newFeed()
 
     $retval = '';
 
-    $plugins = PLG_supportingFeeds ();
+    $availableFeeds = array();
+
+    $availableFeeds[] = 'article';
+    $plugins = PLG_supportingFeeds();
+    $availableFeeds = array_merge($availableFeeds, $plugins);
+    asort($availableFeeds);
+
     if (sizeof ($plugins) == 0) {
         // none of the installed plugins are supporting feeds
         // - go directly to the feed editor
@@ -535,9 +541,7 @@ function FEED_newFeed()
                 . COM_siteFooter ();
     } else {
         $selection = '<select name="type">' . LB;
-        $selection .= '<option value="article">' . $LANG33[55]
-                   . '</option>' . LB;
-        foreach ($plugins as $p) {
+        foreach ($availableFeeds as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
         }

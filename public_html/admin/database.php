@@ -1236,8 +1236,13 @@ function DBADMIN_supportUtf8mb()
         return false;
     }
     $clientVersion = DB_getClientVersion();
+    $dbDriver = DB_getDriverName();
 
-    if (function_exists('mysqli_get_client_stats')) {
+    if ($dbDriver == 'pdo_mysql') {
+        if (version_compare($clientVersion,'5.0.9','<')) {
+            return false;
+        }
+    } elseif (function_exists('mysqli_get_client_stats')) {
         // mysqlnd
         if (version_compare($clientVersion,'5.0.9','<')) {
             return false;
