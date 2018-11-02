@@ -204,7 +204,7 @@ function phpblock_calendar( $help='', $title='' )
                         $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
                     }
                     $dt->setTimestamp($theEvent['datestart_unix']);
-                    $abbrDate1 = $dt->format($dateonly,true);
+                    $abbrDate1 = $dt->format($dateonly,false);
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
@@ -213,7 +213,7 @@ function phpblock_calendar( $help='', $title='' )
                         $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
                     }
                     $dt->setTimestamp($theEvent['dateend_unix']);
-                    $abbrDate2 = $dt->format($dateonly,true);
+                    $abbrDate2 = $dt->format($dateonly,false);
                     if ( COM_getCharset() == 'utf-8' ) {
                         if ( !MBYTE_is_utf8($dayName1) ) {
                             $dayName1 = utf8_encode($dayName1);
