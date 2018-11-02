@@ -3,6 +3,7 @@
 ## v2.0.0 (Unreleased)
 
 ### Added
+  - Allow { and } to be escaped in templates by using {{ and }} so {{x}} will become {x}
   - Integrate Whoops debug console for development
   - Implemented JavaScript based code formatter / highlighter
   - .tm-story-text CSS style to story text in featured and standard story templates
@@ -22,6 +23,8 @@
 
 ### Depreciated
 
+  - n/a
+
 ### Removed
   - Removed GeShi code formatter
   - Removed comment feeds plugin - functionality integrated into core
@@ -29,10 +32,13 @@
 
 ### Fixed
 
+  - n/a
+
 ### Security
 
+  - n/a
 
-## v1.7.6 (unreleased)
+## v1.7.6 (October 31, 2018)
 
 ### Added
   - Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
@@ -46,6 +52,7 @@
   - Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
   - Polish Translation Update provided by Damian Kucaj (glFusion Polish Support)
   - Content Syndication dropdown list is now sorted
+  - Auto tag permission editor - content area drop down now sorted
 
 ### Fixed
   - ICS Feed support for calendar was broken and produced RSS feeds instead
