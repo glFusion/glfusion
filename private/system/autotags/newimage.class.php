@@ -74,7 +74,7 @@ class autotag_newimage extends BaseAutotag {
 
         $c = glFusion\Cache::getInstance();
         $key = 'newimages__'.$uniqueID.'_'.$c->securityHash(true,true);
-        if ( $c->hit($key)) {
+        if ( $c->has($key)) {
             return $c->get($key);
         }
         $imageArray = array();
@@ -90,7 +90,7 @@ class autotag_newimage extends BaseAutotag {
                 on ma.media_id=m.media_id
                 LEFT JOIN {$_TABLES['users']} as u ON m.media_user_id=u.uid
                 WHERE
-                m.media_type=0 AND a.enable_random=1 AND a.hidden=0 "
+                m.media_type=0 AND a.hidden=0 "
                 . COM_getPermSQL('and') . " ORDER BY m.media_upload_time DESC LIMIT ". (int) $itemsToDisplay;
 
         $result = DB_query( $sql,1 );
