@@ -1,5 +1,18 @@
 # glFusion CMS Long Term Support ChangeLog
 
+## v1.7.7 (Unreleased)
+
+### Added
+  - headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
+  - Forum plugin - admin can now change the forum category when editing a forum
+
+### Changed
+  - newimage: auto tag no longer requires the ablum to have the Include in Random Block attribute set.
+  - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
+
+### Fixed
+  - Calendar upcoming event block would use the previous date as header in some instances
+
 ## v1.7.6 (October 31, 2018)
 
 ### Added
