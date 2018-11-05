@@ -1198,6 +1198,8 @@ class Template
     */
     private function replace_vars($tmplt, $in_php = false)
     {
+        $tmplt = str_replace(array("{{","}}") ,array("?x?x?","x?x?x"),$tmplt);
+
         // do all the common substitutions
         if ($in_php) {
             $tmplt = preg_replace(
@@ -1222,6 +1224,8 @@ class Template
             ),
             $tmplt);
         }
+
+        $tmplt = str_replace(array("?x?x?","x?x?x"),array("{","}"),$tmplt);
 
         return $tmplt;
     }
