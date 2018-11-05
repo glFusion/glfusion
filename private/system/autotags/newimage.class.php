@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2016 by the following authors
+ * @copyright   Copyright (C) 2014-2018 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -92,7 +92,7 @@ class autotag_newimage extends BaseAutotag {
                 on ma.media_id=m.media_id
                 LEFT JOIN {$_TABLES['users']} as u ON m.media_user_id=u.uid
                 WHERE
-                m.media_type=0 AND a.enable_random=1 AND a.hidden=0 "
+                m.media_type=0 AND a.hidden=0 "
                 . COM_getPermSQL('and') . " ORDER BY m.media_upload_time DESC LIMIT ". (int) $itemsToDisplay;
 
         $result = DB_query( $sql,1 );
