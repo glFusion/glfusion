@@ -302,6 +302,7 @@ $LANG_GF01 = array(
     'more' => 'More',
     'less' => 'Less',
     'choose' => 'Choose',
+    'display_after' => 'Display After',
 );
 
 $LANG_GF02 = array(

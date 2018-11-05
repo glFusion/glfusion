@@ -259,6 +259,7 @@ $LANG_GF01 = array(
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
     'badge_type' => 'Badge Type',
+    'incl_inherited' => 'Include Inherited Membership?',
     'add_rank' => 'Add Rank',
     'err_rank_zero' => 'Post count must be greater than zero.',
     'err_rank_key_exists' => 'A rank for this post count already exists.',
@@ -292,6 +293,16 @@ $LANG_GF01 = array(
 	'liked' => 'Liked',
 	'liked_thread' => 'post in thread',
 	'likes' => 'Likes',
+    'msg_item_updated' => 'Item has been updated',
+    'msg_item_nochange' => 'Item was not changed',
+    'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
+    'fg_color' => 'Foreground Color',
+    'bg_color' => 'Background Color',
+    'more' => 'More',
+    'less' => 'Less',
+    'choose' => 'Choose',
+    'display_after' => 'Display After',
 );
 
 $LANG_GF02 = array(
@@ -1007,6 +1018,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
     'enable_likes' => 'Enable Likes System',
+    'enable_likes_profile' => 'Display User\'s likes received and given on User Profile',
     'bbcode_signature' => 'Enable BBcode Signature',
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
     'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',

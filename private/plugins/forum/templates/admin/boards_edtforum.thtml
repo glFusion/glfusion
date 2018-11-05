@@ -8,7 +8,6 @@
 <form id="forum" class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
 	<input type="hidden" name="id" value="{id}">
 	<input type="hidden" name="mode" value="{mode}">
-	<input type="hidden" name="category" value="{category_id}">
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="name">{LANG_NAME}</label>
 		<div class="uk-form-controls">
@@ -21,6 +20,14 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="category">{lang_category}</label>
+		<div class="uk-form-controls">
+			{cat_select}
+		</div>
+	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="dscp">{LANG_DESCRIPTION}</label>
 		<div class="uk-form-controls">
@@ -29,7 +36,7 @@
 	</div>
 
 	<div class="uk-form-row">
-		<label class="uk-form-label" for="order">Display After</label>
+		<label class="uk-form-label" for="order">{lang_display_after}</label>
 		<div class="uk-form-controls">
 			<select name="order" id="order">
 				{order_list}
@@ -43,12 +50,14 @@
 			<select name="privgroup" id="privgroup">{grouplist}</select>
 		</div>
 	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="attachmentgroup">{LANG_ATTACHACCESS}</label>
 		<div class="uk-form-controls">
 			<select name="attachmentgroup" id="attachmentgroup">{attachmentgrouplist}</select>
 		</div>
 	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="is_readonly">{LANG_readonly}</label>
 		<div class="uk-form-controls">
@@ -56,6 +65,7 @@
 			<span>{LANG_readonlydscp}</span>
 		</div>
 	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="is_hidden">{LANG_hidden}</label>
 		<div class="uk-form-controls">
@@ -63,6 +73,7 @@
 			<span>{LANG_hiddendscp}</span>
 		</div>
 	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="no_newposts">{LANG_hideposts}</label>
 		<div class="uk-form-controls">
@@ -70,6 +81,7 @@
 			<span>{LANG_hidepostsdscp}</span>
 		</div>
 	</div>
+
 	<div class="uk-form-row">
 		<div class="uk-form-controls">
 			<button class="uk-button uk-button-primary" type="submit" name="submit" value="{LANG_SAVE}">{LANG_SAVE}</button>

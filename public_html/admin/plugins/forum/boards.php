@@ -803,6 +803,7 @@ function board_edit_forum($id, $statusText='')
         'LANG_CANCEL'       => $LANG_GF01['CANCEL'],
         'block_end'         => COM_endBlock(COM_getBlockTemplate ('_admin_block', 'footer')),
         'status_text'       => $statusText,
+        'lang_display_after'=> $LANG_GF01['display_after'],
     ));
 
     $T->parse ('output', 'boards_edtforum');
