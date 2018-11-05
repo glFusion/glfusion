@@ -168,9 +168,13 @@ class autotag_headlines extends BaseAutotag {
         }
         // if a topic was provided only select those stories.
         if (!empty($topic)) {
-            $sql .= " AND (s.tid = '".DB_escapeString($topic)."' ";
-            if ($include_alt) {
+            if ($include_alt != 2) {
+                $sql .= " AND (s.tid = '".DB_escapeString($topic)."' ";
+            }
+            if ($include_alt == 1) {
                 $sql .= " OR s.alternate_tid = '".DB_escapeString($topic)."') ";
+            } else if ($include_alt == 2) {
+                $sql .= " AND (s.alternate_tid = '".DB_escapeString($topic)."') ";
             } else {
                 $sql .= ') ';
             }
