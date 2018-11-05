@@ -8,7 +8,6 @@
 <form id="forum" class="uk-form uk-form-horizontal" action="{s_form_action}" method="post">
 	<input type="hidden" name="id" value="{id}">
 	<input type="hidden" name="mode" value="{mode}">
-	<input type="hidden" name="category" value="{category_id}">
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="name">{LANG_NAME}</label>
 		<div class="uk-form-controls">
@@ -21,6 +20,14 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="category">{lang_category}</label>
+		<div class="uk-form-controls">
+			{cat_select}
+		</div>
+	</div>
+
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="dscp">{LANG_DESCRIPTION}</label>
 		<div class="uk-form-controls">
@@ -29,7 +36,7 @@
 	</div>
 
 	<div class="uk-form-row">
-		<label class="uk-form-label" for="order">Display After</label>
+		<label class="uk-form-label" for="order">{lang_display_after}</label>
 		<div class="uk-form-controls">
 			<select name="order" id="order">
 				{order_list}
