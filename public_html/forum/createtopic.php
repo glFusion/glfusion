@@ -1006,8 +1006,8 @@ function FF_saveTopic( $forumData, $postData, $action )
     }
 
     // speed limit check
+    COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
     if ( !SEC_hasRights('forum.edit') && $action != 'saveedit' ) {
-        COM_clearSpeedlimit ($_FF_CONF['post_speedlimit'], 'forum');
         $last = COM_checkSpeedlimit ('forum');
         if ($last > 0) {
             $errorMessages .= sprintf($LANG_GF01['SPEEDLIMIT'],$last,$_FF_CONF['post_speedlimit']) . '<br/>';
