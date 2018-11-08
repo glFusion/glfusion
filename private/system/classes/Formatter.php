@@ -692,19 +692,12 @@ class Formatter {
             $style = 'php';
         }
 
-        $codeblock = '<div style="width:100%;"><pre><code class="'.$style.'">'  . @htmlspecialchars ($content,ENT_NOQUOTES, COM_getEncodingt(),true) . '</code></pre></div>';
+        $codeblock = '<div style="width:100%;"><pre><code class="'.$style.'">'
+                    . @htmlspecialchars ($content,ENT_NOQUOTES, COM_getEncodingt(),true)
+                    . '</code></pre></div>';
 
         $codeblock = str_replace('{','&#123;',$codeblock);
         $codeblock = str_replace('}','&#125;',$codeblock);
-
-        if ($this->wysiwygEditor) {
-            $codeblock = str_replace('&lt;','<',$codeblock);
-            $codeblock = str_replace('&gt;','>',$codeblock);
-            $codeblock = str_replace('&amp;','&',$codeblock);
-            $codeblock = str_replace("<br /><br />","<br />",$codeblock);
-            $codeblock = str_replace("<p>","",$codeblock);
-            $codeblock = str_replace("</p>","",$codeblock);
-        }
 
         $codeblock = str_replace('[','&#91;',$codeblock);
         $codeblock = str_replace(']','&#93;',$codeblock);
