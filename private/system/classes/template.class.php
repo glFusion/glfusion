@@ -1,39 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | template.class.php                                                       |
-// |                                                                          |
-// | glFusion template library.                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans      - mark AT glfusion DOT org                            |
-// | Joe Mucchiello     - joe AT throwingdice DOT com                         |
-// |                                                                          |
-// | Based on phpLib Template Library                                         |
-// | (C) Copyright 1999-2000 NetUSE GmbH                                      |
-// |                 Kristian Koehntopp                                       |
-// | Bug fixes to version 7.2c compiled by                                    |
-// |          Richard Archer <rha@juggernaut.com.au>:                         |
-// | (credits given to first person to post a diff to phplib mailing list)    |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Template Engine
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 207-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Caching and logic processing developed by:
+*  (C) Copyright 2007-2009 Joe Mucchiello - joe AT throwingdice DOT com
+*
+*  Based on phpLib Template Library
+*  (C) Copyright 1999-2000 NetUSE GmbH
+*                  Kristian Koehntopp
+*   Bug fixes to version 7.2c compiled by
+*            Richard Archer <rha@juggernaut.com.au>:
+*   (credits given to first person to post a diff to phplib mailing list)
+*
+*/
+
+#namespace glFusion;
 
 if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
@@ -185,6 +174,13 @@ class Template
     private $memCache = false;
 
     /**
+    * Internal error handler stub
+    *
+    * @var string
+    */
+    private static $emptyErrorHandler;
+
+    /**
     * Determines how Template handles error conditions.
     * "yes"      = the error is reported, then execution is halted
     * "report"   = the error is reported, then execution continues by returning "false"
@@ -239,6 +235,7 @@ class Template
                 clearstatcache();
             }
         }
+        self::$emptyErrorHandler = function () {};
     }
 
 
@@ -1581,7 +1578,7 @@ class Template
 
         $c = glFusion\Cache::getInstance();
         $rc = $c->has($iid);
-        if ( $rc === true ) {
+        if ($rc === true) {
             $this->instance[$filevar] = $c->get($iid);
             return true;
         }
@@ -1685,17 +1682,11 @@ class Template
                 }
             }
         } else {
-            if (file_exists($phpfile)) {
-                $cache_fstat = @filemtime($phpfile);
-            } else {
-                $cache_fstat = 0;
-            }
+            set_error_handler(self::$emptyErrorHandler);
+            $data = include($phpfile);
+            restore_error_handler();
 
-            if ($this->debug & 8) {
-                printf("<check_cache> Look for %s<br>", $filename);
-            }
-
-            if ($template_fstat > $cache_fstat ) {
+            if (!isset($data['touch']) || $template_fstat > $data['touch']) {
                 $str = @file_get_contents($filename);
                 // cache_write will compile the template prior to creating the cache file
                 $tmplt= $this->cache_write($phpfile, $str);
@@ -1705,7 +1696,7 @@ class Template
                 if (isset($internalCache[$key])) {
                     $tmplt = $internalCache[$key];
                 } else {
-                    $tmplt = @file_get_contents($phpfile);
+                    $tmplt = $data['data'];
                     $internalCache[$key] = $tmplt;
                 }
             }
@@ -1750,21 +1741,19 @@ class Template
             $c = glFusion\Cache::getInstance();
             $c->set($filename,$tmplt,'template');
         } else {
-
+            $value = [
+                'touch' => time(),
+                'data'  => $tmplt
+            ];
+            $value  = var_export(serialize($value), true);
+            $code   = sprintf('<?php return unserialize(%s);', $value);
             $f = @fopen($filename,'w');
             if ($f !== false ) {
-                if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
-                    fwrite($f,
-                    "<?php if (!defined('GVERSION')) {
-                    die ('This file can not be used on its own.');
-                    } ?>\n");
-                }
-                fwrite($f, $tmplt);
+                fwrite($f, $code);
                 fclose($f);
             }
         }
         return $tmplt;
     }
-
 } // end class
 ?>
