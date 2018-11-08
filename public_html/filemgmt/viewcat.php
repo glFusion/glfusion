@@ -46,7 +46,7 @@ $_GROUPS = SEC_getUserGroups( $uid );       // List of groups user is a member o
 $numCategoriesPerRow  = 6;
 
 $myts = new MyTextSanitizer;
-$mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],'cid','pid');
+$mytree = new XoopsTree('',$_TABLES['filemgmt_cat'],'cid','pid');
 $mytree->setGroupAccessFilter($_GROUPS);
 
 $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;

@@ -58,7 +58,7 @@ $p->set_file (array (
     'category'         =>     'filelisting_category.thtml'));
 
 $myts = new MyTextSanitizer;
-$mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
+$mytree = new XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
 $mytree->setGroupAccessFilter($_GROUPS);
 
 COM_setArgNames( array('id') );
