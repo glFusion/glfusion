@@ -1,34 +1,18 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | config.class.php                                                         |
-// |                                                                          |
-// | Controls the UI and database for configuration settings                  |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2007-2008 by the following authors:                        |
-// | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Controls the UI and database for configuration settings
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2018-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2007-2008 by the following authors:
+*  Aaron Blankstein  - kantai AT gmail DOT com
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -40,12 +24,6 @@ if (!defined ('CONFIG_CACHE_FILE_NAME')) {
 
 class config
 {
-    /**
-     * Path to db-config.php file
-     *
-     * @var string
-     */
-    var $dbconfig_file;
 
     /**
      * Array of configurations
@@ -92,19 +70,6 @@ class config
         return $instance;
     }
 
-    /**
-     * This function sets the secure configuration file (database related
-     * settings) for the configuration class to read. This should only need to
-     * be called for the 'Core' group. It also must be called before
-     * load_baseconfig()
-     *
-     * @param string sf        The filename and path of the secure db settings
-     */
-
-    function set_configfile($sf)
-    {
-        $this->dbconfig_file = $sf;
-    }
 
     /**
      * This function reads the secure configuration file and loads
@@ -113,15 +78,12 @@ class config
      */
     function load_baseconfig()
     {
-        global $_DB, $_TABLES, $_CONF;
-
-        include $this->dbconfig_file;
-        $this->config_array['Core'] =& $_CONF;
-
-        include_once $_CONF['path_system'] . 'lib-database.php';
+        global $_CONF;
 
         // for backward compatibility
         $_CONF['ostype'] = PHP_OS;
+
+        $this->config_array['Core'] =& $_CONF;
     }
 
     /**
@@ -136,10 +98,12 @@ class config
     {
         global $_TABLES, $_CONF, $_SYSTEM;
 
+        $db = glFusion\Database::getInstance();
+
         // Reads from a cache file if there is one
         if ( isset($_SYSTEM['no_cache_config']) && !$_SYSTEM['no_cache_config'] ) {
             if ( function_exists('COM_isWritable') ) {
-                if ( COM_isWritable($_CONF['path'].'data/layout_cache/'.CONFIG_CACHE_FILE_NAME)) {
+                if ( COM_isWritable($_CONF['path'].'data/cache/'.CONFIG_CACHE_FILE_NAME)) {
                     if ($this->_readFromCache()) {
                         $this->_post_configuration();
                         return $this->config_array;
@@ -150,9 +114,17 @@ class config
 
         $false_str = serialize(false);
 
-        $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
-        $result = DB_query($sql);
-        while ($row = DB_fetchArray($result)) {
+        $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']}
+                WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
+
+        try {
+            $stmt = $db->conn->query($sql);
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+        }
+        while ($row = $stmt->fetch()) {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
@@ -173,7 +145,6 @@ class config
         }
         $this->_writeIntoCache();
         $this->_post_configuration();
-
         return $this->config_array;
     }
 
@@ -182,7 +153,6 @@ class config
         $retval = false;
 
         if (array_key_exists($group, $this->config_array)) {
-
             return $this->config_array[$group];
         }
 
@@ -206,6 +176,8 @@ class config
     {
         global $_TABLES, $_VARS;
 
+        $db = glFusion\Database::getInstance();
+
         if ($group == 'Core') {
             $fn = 'configmanager_' . $name . '_validate';
         } else {
@@ -215,7 +187,7 @@ class config
             $value = $fn($value);
         }
 
-        if ( $name == 'mail_smtp_password') {
+        if ($name == 'mail_smtp_password') {
             if ( function_exists('COM_encrypt')) {
                 $value = COM_encrypt($value,$_VARS['guid']);
             } elseif ( function_exists('INST_encrypt')) {
@@ -223,20 +195,25 @@ class config
             }
         }
 
-        if ( in_array($name,$this->consumer_keys) ) {
+        if (in_array($name,$this->consumer_keys)) {
             $svalue = strval($value);
-            $escaped_val = DB_escapeString(serialize($svalue));
+            $value = serialize($svalue);
         } else {
-            $escaped_val = DB_escapeString(serialize($value));
+            $value = serialize($value);
         }
+        $sql = "UPDATE `{$_TABLES['conf_values']}` " .
+               "SET value = ? WHERE " .
+               "name = ? AND group_name = ?";
+        try {
+            $db->conn->executeUpdate($sql,
+                        array($value,$name,$group),
+                        array(\glFusion\Database::STRING,\glFusion\Database::STRING,\glFusion\Database::STRING)
+                        );
 
-        $escaped_name = DB_escapeString($name);
-        $escaped_grp = DB_escapeString($group);
-        $sql = "UPDATE {$_TABLES['conf_values']} " .
-               "SET value = '{$escaped_val}' WHERE " .
-               "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql);
-        if ( $name != 'theme' )  {
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        }
+        if ($name != 'theme')  {
             $this->config_array[$group][$name] = $value;
             $this->_post_configuration();
             $this->_writeIntoCache();
@@ -259,13 +236,24 @@ class config
     {
         global $_TABLES;
 
-        $escaped_val = DB_escapeString(serialize($value));
-        $escaped_name = DB_escapeString($name);
-        $escaped_grp = DB_escapeString($group);
+        $db = glFusion\Database::getInstance();
+
+        $escaped_val = serialize($value);
+        $escaped_name = $name;
+        $escaped_grp = $group;
+
         $sql = "UPDATE {$_TABLES['conf_values']} " .
-               "SET default_value = '{$escaped_val}' WHERE " .
-               "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql);
+               "SET default_value = ? WHERE " .
+               "name = ? AND group_name = ?";
+
+        try {
+            $db->conn->executeUpdate($sql,
+                    array($escaped_val,$escaped_name,$escaped_grp),
+                    array(\glFusion\Database::STRING,\glFusion\Database::STRING,\glFusion\Database::STRING));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        }
+
         $this->_writeIntoCache();
         $this->_purgeCache();
     }
@@ -274,21 +262,55 @@ class config
     {
         global $_TABLES;
 
-        $escaped_name = DB_escapeString($name);
-        $escaped_grp = DB_escapeString($group);
+        $db = glFusion\Database::getInstance();
 
-        $result = DB_query("SELECT value, default_value FROM {$_TABLES['conf_values']} WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'");
-        list($value, $default_value) = DB_fetchArray($result);
+        $sql = "SELECT value, default_value
+                FROM `{$_TABLES['conf_values']}`
+                WHERE name = ? AND group_name = ?";
 
-        $sql = "UPDATE {$_TABLES['conf_values']} ";
-        if ($value == 'unset') {
-            $default_value = DB_escapeString($default_value);
-            $sql .= "SET value = '{$default_value}', default_value = 'unset:{$default_value}'";
-        } else {
-            $sql .= "SET value = default_value";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindValue(1,$name,\glFusion\Database::STRING);
+        $stmt->bindValue(2,$group,\glFusion\Database::STRING);
+
+        try {
+            $result = $stmt->execute();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return;
         }
-        $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql);
+        $info = $stmt->fetch(\glFusion\Database::ASSOCIATIVE);
+        if ($info === false) {
+            return;
+        }
+        $value = $info['value'];
+        $default_value = $info['default_value'];
+
+        $sql = "UPDATE `{$_TABLES['conf_values']}` ";
+        if ($value == 'unset') {
+            $sql .= " SET value = :defval, default_value = :u_defval";
+        } else {
+            $sql .= " SET value = :defval";
+        }
+        $sql .= " WHERE name = :name AND group_name = :group_name";
+
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindValue("defval", $default_value);
+        if ($value == 'unset') {
+            $stmt->bindValue("u_defval", 'unset:'.$default_value);
+        }
+        $stmt->bindValue("name", $name);
+        $stmt->bindValue("group_name", $group);
+        try {
+            $stmt->execute();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return;
+        }
+
         $this->_writeIntoCache();
         $this->_purgeCache();
     }
@@ -297,17 +319,32 @@ class config
     {
         global $_TABLES;
 
-        $escaped_name = DB_escapeString($name);
-        $escaped_grp = DB_escapeString($group);
-        $default_value = DB_getItem($_TABLES['conf_values'], 'default_value',
-                "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'");
-        $sql = "UPDATE {$_TABLES['conf_values']} SET value = 'unset'";
+        $db = glFusion\Database::getInstance();
+
+        $default_value = $db->conn->fetchColumn("SELECT default_value FROM `{$_TABLES['conf_values']}`
+                            WHERE name = ? AND group_name = ?", array($name,$group), 0);
+
+        $sql = "UPDATE `{$_TABLES['conf_values']}` SET value = 'unset'";
+
         if (substr($default_value, 0, 6) == 'unset:') {
-            $default_value = DB_escapeString(substr($default_value, 6));
-            $sql .= ", default_value = '{$default_value}'";
+            $default_value = substr($default_value, 6);
         }
-        $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql);
+        $sql .= ", default_value = ?";
+        $sql .= " WHERE name = ? AND group_name = ?";
+
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindValue(1,$default_value);
+        $stmt->bindValue(2,$name);
+        $stmt->bindValue(3,$group);
+
+        try {
+            $stmt->execute();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return;
+        }
         $this->_writeIntoCache();
         $this->_purgeCache();
     }
@@ -348,6 +385,8 @@ class config
     {
         global $_TABLES;
 
+        $db = glFusion\Database::getInstance();
+
         $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
                        $type,
@@ -358,25 +397,52 @@ class config
                        $sort,
                        $fieldset,
                        serialize($default_value));
-        $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}' AND subgroup={$Qargs[3]}";
-        $this->_DB_escapedQuery($sql);
+        $sql = "DELETE FROM `{$_TABLES['conf_values']}`
+                WHERE name = ?
+                AND group_name = ?";
+
+        try {
+            $db->conn->executeUpdate($sql,
+                array(
+                    $Qargs[0],
+                    $Qargs[4]
+                ),
+                array(
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::STRING
+                )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+        }
 
         $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
             "subgroup, group_name, selectionArray, sort_order,".
-            " fieldset, default_value) VALUES ("
-            ."'{$Qargs[0]}',"
-            ."'{$Qargs[1]}',"
-            ."'{$Qargs[2]}',"
-            ."{$Qargs[3]},"
-            ."'{$Qargs[4]}',"
-            ."{$Qargs[5]},"
-            ."{$Qargs[6]},"
-            ."{$Qargs[7]},"
-            ."'{$Qargs[8]}')";
-
-        $this->_DB_escapedQuery($sql);
+            " fieldset, default_value) VALUES (?,?,?,?,?,?,?,?,?)";
+        try {
+            $db->conn->executeUpdate($sql,
+                $Qargs,
+                array(
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::STRING,
+                )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        }
 
         $this->config_array[$group][$param_name] = $default_value;
         $this->_writeIntoCache();
@@ -388,6 +454,8 @@ class config
     {
         global $_TABLES;
 
+        $db = glFusion\Database::getInstance();
+
         $Qargs = array($param_name,                                     // 0
                        $set ? serialize($default_value) : 'unset',      // 1
                        $type,                                           // 2
@@ -398,17 +466,45 @@ class config
                        $sort,                                           // 6
                        $fieldset,                                       // 7
                        serialize($default_value));                      // 8
-        $Qargs = array_map('DB_escapeString', $Qargs);
 
-        $sql = "UPDATE {$_TABLES['conf_values']} SET
-            subgroup={$Qargs[3]},
-            sort_order={$Qargs[6]},
-            fieldset={$Qargs[7]},
-            default_value='{$Qargs[8]}',
-            type='{$Qargs[2]}',
-            selectionArray={$Qargs[5]}
-            WHERE group_name='{$Qargs[4]}' AND name='{$Qargs[0]}'";
-        $this->_DB_escapedQuery($sql,1);
+        $sql = "UPDATE `{$_TABLES['conf_values']}` SET
+                        subgroup=?,
+                        sort_order=?,
+                        fieldset=?,
+                        default_value=?,
+                        type=?,
+                        selectionArray=?
+                    WHERE group_name=? AND name=?";
+
+        try {
+            $db->conn->executeUpdate($sql,
+                array(
+                    $Qargs[3],
+                    $Qargs[6],
+                    $Qargs[7],
+                    $Qargs[8],
+                    $Qargs[2],
+                    $Qargs[5],
+                    $Qargs[4],
+                    $Qargs[0]
+                ),
+                array(
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::INTEGER,
+                    \glFusion\Database::STRING,
+                    \glFusion\Database::STRING
+                )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        }
     }
 
 
@@ -418,9 +514,18 @@ class config
      */
     function del($param_name, $group)
     {
-        DB_delete($GLOBALS['_TABLES']['conf_values'],
-                  array('name', 'group_name'),
-                  array(DB_escapeString($param_name), DB_escapeString($group)));
+        global $_TABLES;
+
+        $db = glFusion\Database::getInstance();
+        try {
+            $db->conn->delete($_TABLES['conf_values'],array('name' => $param_name,
+                              'group_name' => $group));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        }
         unset($this->config_array[$group][$param_name]);
         $this->_writeIntoCache();
         $this->_purgeCache();
@@ -434,17 +539,20 @@ class config
     {
         global $_CONF, $_TABLES;
 
-        if ( $group == 'Core' ) {
+        if ($group == 'Core') {
             return;
         }
-        $result = DB_query("SELECT * FROM {$GLOBALS['_TABLES']['conf_values']} WHERE group_name='".DB_escapeString($group)."'");
-        while ( $C = DB_fetchArray($result) ) {
-            $param_name = $C['name'];
-            DB_delete($GLOBALS['_TABLES']['conf_values'],
-                      array('name', 'group_name'),
-                      array(DB_escapeString($param_name), DB_escapeString($group)));
-            unset($this->config_array[$group][$param_name]);
+
+        $db = glFusion\Database::getInstance();
+        try {
+            $db->conn->delete($_TABLES['conf_values'],array('group_name' => $group));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->_errorlog("SQL Error: " . $e->getMessage());
         }
+        unset($this->config_array[$group]);
         $this->_purgeCache();
     }
 
@@ -458,20 +566,39 @@ class config
     {
         global $_TABLES, $LANG_confignames, $LANG_configselects;
 
+        $db = glFusion\Database::getInstance();
+
         $q_string = "SELECT name, type, selectionArray, "
-            . "fieldset, value, default_value FROM {$_TABLES['conf_values']}" .
-            " WHERE group_name='{$group}' AND subgroup='{$subgroup}' " .
+            . "fieldset, value, default_value FROM `{$_TABLES['conf_values']}`" .
+            " WHERE group_name=? AND subgroup=? " .
             " AND (type <> 'fieldset' AND type <> 'subgroup') " .
             " ORDER BY fieldset,sort_order ASC";
-        $Qresult = DB_query($q_string);
-        $res = array();
+
+        try {
+            $data = $db->conn->fetchAll($q_string,
+                        array(
+                            $group,
+                            $subgroup
+                        ),
+                        array(
+                            \glFusion\Database::INTEGER,
+                            \glFusion\Database::INTEGER
+                        )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->dbError($e->getMessage(),$sql);
+        }
+
         if (!array_key_exists($group, $LANG_configselects)) {
             $LANG_configselects[$group] = array();
         }
         if (!array_key_exists($group, $LANG_confignames)) {
             $LANG_confignames[$group] = array();
         }
-        while ($row = DB_fetchArray($Qresult)) {
+        foreach ($data AS $row) {
             $cur = $row;
             if (substr($cur[5], 0, 6) == 'unset:') {
                 $cur[5] = true;
@@ -541,6 +668,8 @@ class config
     {
         global $_TABLES, $_PLUGIN_INFO;
 
+        $db = glFusion\Database::getInstance();
+
         $groups = array_keys($this->config_array);
         $num_groups = count($groups);
         for ($i = 0; $i < $num_groups; $i++) {
@@ -553,7 +682,7 @@ class config
                         $enabled = 0;
                     }
                 } else {
-                    $enabled = (int) DB_getItem($_TABLES['plugins'], 'pi_enabled',"pi_name = '$g'");
+                    $enabled = (int) $db->conn->fetchColumn("SELECT pi_enabled FROM `{$_TABLES['plugins']}` WHERE pi_name = ?", array($g), 0);
                 }
                 if ( !isset($enabled) || $enabled != 1 ) {
                     unset($groups[$i]);
@@ -568,12 +697,23 @@ class config
     {
         global $_TABLES;
 
+        $db = glFusion\Database::getInstance();
+
         $q_string = "SELECT name,subgroup FROM {$_TABLES['conf_values']} WHERE "
-                  . "type = 'subgroup' AND group_name = '$group' "
+                  . "type = 'subgroup' AND group_name = ? "
                   . "ORDER BY subgroup";
+
+        try {
+            $data = $db->conn->fetchAll($q_string,array($group));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $db->dbError($e->getMessage(),$sql);
+        }
+
         $retval = array();
-        $res = DB_query($q_string);
-        while ($row = DB_fetchArray($res)) {
+        foreach($data AS $row) {
             $retval[$row['name']] = $row['subgroup'];
         }
 
@@ -769,12 +909,26 @@ class config
     {
         global $_TABLES, $LANG_fs;
 
+        $db = glFusion\Database::getInstance();
+
         if (!array_key_exists($group, $LANG_fs)) {
             $LANG_fs[$group] = array();
         }
         $t->set_var('fs_contents', $contents);
-        $fs_index = DB_getItem($_TABLES['conf_values'], 'name',
-                        "type = 'fieldset' AND fieldset = $fs_id AND group_name = '$group' AND subgroup=".$sg);
+
+        $fs_index = $db->conn->fetchColumn("SELECT name FROM `{$_TABLES['conf_values']}`
+                        WHERE type = 'fieldset'
+                        AND fieldset = ?
+                        AND group_name = ?
+                        AND subgroup = ?",
+                        array(
+                            $fs_id,
+                            $group,
+                            $sg
+                        ),
+                        0
+        );
+
         if (empty($fs_index) && isset($LANG_fs[$group][$fs_id])) {
             $t->set_var('fs_display', $LANG_fs[$group][$fs_id]);
             $t->set_var('tab',$LANG_fs[$group][$fs_id]);
@@ -991,22 +1145,25 @@ class config
             return null;
         }
 
+        $db = glFusion\Database::getInstance();
+
         if ($group == 'Core') {
             /**
              * $_CONF['language'] are overwritten with
              * the user's preferences in lib-common.php. Re-read values from
              * the database so that we're comparing the correct values below.
              */
-            $value = DB_getItem($_TABLES['conf_values'], 'value',
-                                "group_name='Core' AND name='language'");
+            $value = $db->conn->fetchColumn("SELECT value FROM `{$_TABLES['conf_values']}` WHERE
+                                group_name='Core' AND name='language'");
+
             $this->config_array['Core']['language'] = unserialize($value);
 
             /**
              * Same with $_CONF['cookiedomain'], which is overwritten in
              * in lib-sessions.php (if empty).
              */
-            $value = DB_getItem($_TABLES['conf_values'], 'value',
-                                "group_name='Core' AND name='cookiedomain'");
+            $value = $db->conn->fetchColumn("SELECT value FROM `{$_TABLES['conf_values']}` WHERE
+                                group_name='Core' AND name='cookiedomain'");
             $this->config_array['Core']['cookiedomain'] = @unserialize($value);
         }
 
@@ -1154,23 +1311,6 @@ class config
         return $retval;
     }
 
-    /**
-     * Helper function: Fix escaped SQL requests for MS SQL, if necessary
-     *
-     */
-    function _DB_escapedQuery($sql,$noerror=0)
-    {
-        global $_DB, $_DB_dbms;
-
-        if ($_DB_dbms == 'mssql') {
-            $sql = str_replace("\\'", "''", $sql);
-            $sql = str_replace('\\"', '"', $sql);
-            $_DB->dbQuery($sql, 0, 1);
-        } else {
-            DB_query($sql,$noerror);
-        }
-    }
-
     function _getConfigHelpDocument($group, $option)
     {
         global $_CONF;
@@ -1277,7 +1417,7 @@ class config
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/cache/' . CONFIG_CACHE_FILE_NAME;
         clearstatcache();
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
@@ -1302,7 +1442,7 @@ class config
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
         $fh = @fopen($cache_file, 'wb');
         if ($fh !== false) {
@@ -1327,7 +1467,7 @@ class config
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/cache/' . CONFIG_CACHE_FILE_NAME;
         if ( file_exists($cache_file)) {
             @unlink($cache_file);
         }
@@ -1346,6 +1486,8 @@ class config
         $listOfPlugins = 'Core,' . $listOfPlugins;
         $itemArray = explode(",",$listOfPlugins);
 
+        $db = glFusion\Database::getInstance();
+
         $confArray = array();
 
         foreach ($itemArray AS $item) {
@@ -1355,11 +1497,17 @@ class config
             $fieldset = '';
             $group = $item;
 
-            $sql = "SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='".$item."' ORDER BY subgroup, fieldset, sort_order ASC";
-            $result = DB_query($sql);
+            $sql = "SELECT * FROM {$_TABLES['conf_values']}
+                    WHERE group_name=?
+                    ORDER BY subgroup, fieldset, sort_order ASC";
 
-            while (($row = DB_fetchArray($result))) {
-
+            try {
+                $data = $db->conn->fetchAll($sql,array($item));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                $db->_errorlog("SQL Error: " . $e->getMessage());
+                continue;
+            }
+            foreach($data AS $row) {
                 $groupname = $LANG_configsections[$group]['label'];
 
                 if ( $row['type'] == 'subgroup' ) {
