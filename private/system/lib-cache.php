@@ -191,8 +191,22 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
     }
 
     $filename = CACHE_instance_filename($iid, $bypass_lang);
-    file_put_contents($filename, $data,LOCK_EX);
 
+    $value = array(
+        'touch' => time(),
+        'data'  => $data
+    );
+    $value  = var_export(serialize($value), true);
+    $code   = sprintf('<?php return unserialize(%s);', $value);
+    file_put_contents($filename, $code,LOCK_EX);
+/*
+    $f = @fopen($filename,'w');
+    if ($f !== false ) {
+        fwrite($f, $code);
+        fclose($f);
+    }
+*/
+    return;
 }
 
 /******************************************************************************
@@ -234,9 +248,12 @@ function CACHE_check_instance($iid, $bypass_lang = false)
     }
 
     $filename = CACHE_instance_filename($iid, $bypass_lang);
-    if (file_exists($filename)) {
-        $str = @file_get_contents($filename);
-        return $str === FALSE ? false : $str;
+
+    set_error_handler('emptyErrorHandler');
+    $data = include($filename);
+    restore_error_handler();
+    if (isset($data['touch'])) {
+        return $data['data'];
     }
     return false;
 }
@@ -335,4 +352,8 @@ function CACHE_sanitizeFilename($filename, $allow_dots = true)
 
     return trim($filename);
 }
+
+function emptyErrorHandler()
+{}
+
 ?>

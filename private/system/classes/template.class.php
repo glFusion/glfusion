@@ -178,6 +178,13 @@ class Template
     private $unknowns = "remove";
 
     /**
+    * Internal error handler stub
+    *
+    * @var string
+    */
+    private static $emptyErrorHandler;
+
+    /**
     * Determines how Template handles error conditions.
     * "yes"      = the error is reported, then execution is halted
     * "report"   = the error is reported, then execution continues by returning "false"
@@ -224,6 +231,7 @@ class Template
         if ( $_CONF['cache_templates'] ) {
             clearstatcache();
         }
+        self::$emptyErrorHandler = function () {};
     }
 
 
@@ -1576,8 +1584,12 @@ class Template
         $iid = str_replace('-','_',$iid);
         $filename = $path_cache.'instance__'.$iid.'.php';
 
-        if (@file_exists($filename) ) {
-            $this->instance[$filevar] = @file_get_contents($filename);
+        set_error_handler(self::$emptyErrorHandler);
+        $data = include($filename);
+        restore_error_handler();
+        if (isset($data['touch'])) {
+            $this->instance[$filevar] = $data['data'];
+            unset($data);
             return true;
         }
         return false;
@@ -1654,17 +1666,13 @@ class Template
         $phpfile = $this->cache_create_filename($filename);
 
         $template_fstat = @filemtime($filename);
-        if (file_exists($phpfile)) {
-            $cache_fstat = @filemtime($phpfile);
-        } else {
-            $cache_fstat = 0;
-        }
-
-        if ($this->debug & 8) {
-            printf("<check_cache> Look for %s<br>", $filename);
-        }
         $key = md5($phpfile);
-        if ($template_fstat > $cache_fstat ) {
+
+        set_error_handler(self::$emptyErrorHandler);
+        $data = include($phpfile);
+        restore_error_handler();
+
+        if (!isset($data['touch']) || $template_fstat > $data['touch']) {
             $str = @file_get_contents($filename);
             // cache_write will compile the template prior to creating the cache file
             $tmplt= $this->cache_write($phpfile, $str);
@@ -1674,7 +1682,7 @@ class Template
             if (isset($internalCache[$key])) {
                 $tmplt = $internalCache[$key];
             } else {
-                $tmplt = @file_get_contents($phpfile);
+                $tmplt = $data['data'];
                 $internalCache[$key] = $tmplt;
             }
         }
@@ -1713,6 +1721,28 @@ class Template
         if ($this->debug & 4) {
             printf("<b>cache_write:</b> opening $filename<br>\n");
         }
+
+        $value = array('touch' => time(),'data'  => $tmplt);
+        $value  = var_export(serialize($value), true);
+        $code   = sprintf('<?php return unserialize(%s);', $value);
+        $f = @fopen($filename,'w');
+        if ($f !== false ) {
+            fwrite($f, $code);
+            fclose($f);
+        }
+        return $tmplt;
+    }
+
+    private function cache_write_instance($filename, $tmplt)
+    {
+        global $TEMPLATE_OPTIONS, $_CONF;
+
+        $tmplt = $this->compile_template_code($tmplt,true);
+
+        if ($this->debug & 4) {
+            printf("<b>cache_write:</b> opening $filename<br>\n");
+        }
+
         $f = @fopen($filename,'w');
         if ($f !== false ) {
             if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
@@ -1724,6 +1754,7 @@ class Template
             fwrite($f, $tmplt);
         }
         fclose($f);
+
         return $tmplt;
     }
 
