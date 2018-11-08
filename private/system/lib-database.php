@@ -1,39 +1,18 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-database.php                                                         |
-// |                                                                          |
-// | glFusion Legacy database library.                                        |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
 /**
-* This is the high-level database layer for glFusion (for the low-level stuff,
-* see the system/databases directory).
+* glFusion CMS
+*
+* Legacy Database Driver - backward compatibility with glFusion v1.x
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on orignal work by the following authors:
+*  Copyright (C) 2000-2008 by
+*      Tony Bibbs, tony AT tonybibbs DOT com
 *
 */
 
@@ -41,19 +20,14 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+/*
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
     $_DB->_no_fail = 1;
 }
+*/
 
 if (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug']) {
     DB_displayError(true);
-}
-
-// we should not need a global...
-$_DB = glFusion\Database::getInstance();
-
-if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo_mysql') {
-    $_DB_dbms = 'mysql';
 }
 
 /**
@@ -61,9 +35,9 @@ if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo_mysql') {
 */
 function DB_getVersion()
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbGetVersion();
+    return $db->_mysql_version;
 }
 
 
@@ -83,9 +57,8 @@ function DB_getVersion()
 */
 function DB_setdebug($flag)
 {
-    global $_DB;
-
-    $_DB->setVerbose($flag);
+    $db = glFusion\Database::getInstance();
+    $db->setVerbose($flag);
 }
 
 /** Setting this on will return the SQL error message.
@@ -96,9 +69,8 @@ function DB_setdebug($flag)
 */
 function DB_displayError($flag)
 {
-    global $_DB;
-
-    $_DB->setDisplayError($flag);
+    $db = glFusion\Database::getInstance();
+    $db->setDisplayError($flat);
 }
 
 /**
@@ -113,7 +85,9 @@ function DB_displayError($flag)
 */
 function DB_query ($sql, $ignore_errors = 0)
 {
-    global $_DB, $_DB_dbms;
+    global $_SYSTEM;
+
+    $db = glFusion\Database::getInstance();
 
     if (is_array ($sql)) {
         if (isset ($sql[$_DB_dbms])) {
@@ -127,24 +101,38 @@ function DB_query ($sql, $ignore_errors = 0)
             die ($result);
         }
     }
+
+    if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
+        $ignore_errors = true;
+    }
+
     try {
-        $result = $_DB->dbQuery ($sql, $ignore_errors);
-    } catch (Exception $e) {
+        $result = $db->conn->query($sql);
+    } catch (PDOException $e) {
         if ($ignore_errors) {
             $result = false;
+            if (defined ('DVLP_DEBUG')) {
+                $db->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+            }
         } else {
-            trigger_error(DB_error($sql), E_USER_ERROR);
+            trigger_error($db->dbError($sql), E_USER_ERROR);
+        }
+    }
+
+    if ($result === false) {
+        if ($ignore_errors) {
+            return false;
         }
     }
     return $result;
+
 }
 
 /**
 * Saves information to the database
 *
 * This will use a REPLACE INTO to save a record into the
-* database. NOTE: this function is going to change in the near future
-* to remove dependency of REPLACE INTO. Please use DB_query if you can
+* database.
 *
 * @param        string      $table          The table to save to
 * @param        string      $fields         Comma demlimited list of fields to save
@@ -154,14 +142,13 @@ function DB_query ($sql, $ignore_errors = 0)
 */
 function DB_save($table,$fields,$values,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF;
+    $sql = "REPLACE INTO `$table` ($fields) VALUES ($values)";
 
-    $_DB->dbSave($table,$fields,$values);
+    DB_query($sql);
 
     if (!empty($return_page)) {
        echo COM_refresh("$return_page");
     }
-
 }
 
 /**
@@ -177,14 +164,20 @@ function DB_save($table,$fields,$values,$return_page='')
 */
 function DB_delete($table,$id,$value,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF;
+    $sql = "DELETE FROM `$table`";
+    $id_and_value = DB_buildIdValuePair($id, $value);
 
-    $_DB->dbDelete($table,$id,$value);
+    if ($id_and_value === false) {
+        return false;
+    } else {
+        $sql .= $id_and_value;
+    }
+
+    DB_query($sql);
 
     if (!empty($return_page)) {
         echo COM_refresh("$return_page");
     }
-
 }
 
 /**
@@ -199,10 +192,10 @@ function DB_delete($table,$id,$value,$return_page='')
 function DB_getItem($table,$what,$selection='')
 {
     if (!empty($selection)) {
-        $sql = "SELECT $what FROM $table WHERE $selection";
+        $sql = "SELECT $what FROM `$table` WHERE $selection";
         $result = DB_query($sql);
     } else {
-        $sql = "SELECT $what FROM $table";
+        $sql = "SELECT $what FROM `$table`";
         $result = DB_query($sql);
     }
 	if ($result === false || DB_error($sql) ) {
@@ -232,9 +225,23 @@ function DB_getItem($table,$what,$selection='')
 */
 function DB_change($table,$item_to_set,$value_to_set,$id='',$value='',$return_page='',$supress_quotes=false)
 {
-    global $_DB,$_TABLES,$_CONF;
+    global $_TABLES,$_CONF;
 
-    $_DB->dbChange($table,$item_to_set,$value_to_set,$id,$value,$supress_quotes);
+    if ($supress_quotes) {
+        $sql = "UPDATE `$table` SET `$item_to_set` = $value_to_set";
+    } else {
+        $sql = "UPDATE `$table` SET `$item_to_set` = '$value_to_set'";
+    }
+
+    $id_and_value = DB_buildIdValuePair($id, $value);
+
+    if ($id_and_value === false) {
+        return false;
+    } else {
+        $sql .= $id_and_value;
+    }
+
+    $retval = DB_query($sql);
 
     if (!empty($return_page)) {
         echo COM_refresh("$return_page");
@@ -255,9 +262,18 @@ function DB_change($table,$item_to_set,$value_to_set,$id='',$value='',$return_pa
 */
 function DB_count($table,$id='',$value='')
 {
-    global $_DB;
+    $sql = "SELECT COUNT(*) FROM `$table`";
+    $id_and_value = DB_buildIdValuePair($id, $value);
 
-    return $_DB->dbCount($table,$id,$value);
+    if ($id_and_value === false) {
+        return false;
+    } else {
+        $sql .= $id_and_value;
+    }
+
+    $result = DB_query($sql);
+
+    return ($result->fetchColumn());
 }
 
 /**
@@ -277,9 +293,17 @@ function DB_count($table,$id='',$value='')
 */
 function DB_copy($table,$fields,$values,$tablefrom,$id,$value,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF;
+    $sql = "REPLACE INTO `$table` ($fields) SELECT $values FROM $tablefrom";
+    $id_and_value = DB_buildIdValuePair($id, $value);
 
-    $_DB->dbCopy($table,$fields,$values,$tablefrom,$id,$value);
+    if ($id_and_value === false) {
+        return false;
+    } else {
+        $sql .= $id_and_value;
+    }
+
+    $retval = DB_query($sql);
+    $retval = $retval && DB_delete($tablefrom, $id, $value);
 
     if (!empty($return_page)) {
         echo COM_refresh("$return_page");
@@ -295,11 +319,25 @@ function DB_copy($table,$fields,$values,$tablefrom,$id,$value,$return_page='')
 * @return       int         Returns number of rows returned by a previously executed query
 *
 */
-function DB_numRows($recordset)
+function DB_numRows($recordSet)
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbNumRows($recordset);
+    /*
+     * NOTE: not all databases return accurate results
+     * for rowCount() on selects.
+     * for now it appears MySQL does
+     * Need to move away from rowcounts
+     */
+
+    if ($recordSet === false || $recordSet === null) return 0;
+
+    try {
+        $rowcount = $recordSet->rowCount();
+    } catch (PDOException $e) {
+        return 0;
+    }
+    return $rowcount;
 }
 
 /**
@@ -315,9 +353,21 @@ function DB_numRows($recordset)
 */
 function DB_result($recordset,$row,$field)
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbResult($recordset,$row,$field);
+    $retval = '';
+
+    if (is_numeric($field)) {
+        $field = intval($field, 10);
+        $targetRow = $recordset->fetch(\Doctrine\DBAL\FetchMode::NUMERIC, \PDO::FETCH_ORI_ABS, $row);
+    } else {
+        $targetRow = $recordset->fetch(\Doctrine\DBAL\FetchMode::ASSOCIATIVE, \PDO::FETCH_ORI_ABS, $row);
+    }
+    if (($targetRow !== false) && isset($targetRow[$field])) {
+        $retval = $targetRow[$field];
+    }
+
+    return $retval;
 }
 
 /**
@@ -331,9 +381,9 @@ function DB_result($recordset,$row,$field)
 */
 function DB_numFields($recordset)
 {
-    global $_DB;
-
-    return $_DB->dbNumFields($recordset);
+    $db = glFusion\Database::getInstance();
+    if ($recordset === false || $recordset === null) return 0;
+    return $recordset->columnCount();
 }
 
 /**
@@ -348,9 +398,11 @@ function DB_numFields($recordset)
 */
 function DB_fieldName($recordset,$fnumber)
 {
-    global $_DB;
+    if ($recordSet === false || $recordSet === null) return '';
 
-    return $_DB->dbFieldName($recordset,$fnumber);
+    $meta = $recordset->getColumnMeta($fieldNumber);
+    if (isset($meta['name'])) return $meta['name'];
+    return '';
 }
 
 /**
@@ -364,9 +416,8 @@ function DB_fieldName($recordset,$fnumber)
 */
 function DB_affectedRows($recordset)
 {
-    global $_DB;
-
-    return $_DB->dbAffectedRows($recordset);
+    if ($recordset === false || $recordset === null) return 0;
+    return $recordset->rowCount();
 }
 
 /**
@@ -381,9 +432,19 @@ function DB_affectedRows($recordset)
 */
 function DB_fetchArray($recordset, $both = true)
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbFetchArray($recordset, $both);
+    if ($recordset === false || $recordset == null) return false;
+
+    $result_type = $both ? \Doctrine\DBAL\FetchMode::MIXED  : \Doctrine\DBAL\FetchMode::ASSOCIATIVE;
+
+    try {
+        $result = $recordset->fetch($result_type);
+    } catch (PDOException $e) {
+        $result = false;
+    }
+
+    return ($result === false) ? false : $result;
 }
 
 /**
@@ -398,9 +459,16 @@ function DB_fetchArray($recordset, $both = true)
 */
 function DB_fetchAll($recordset, $both = true)
 {
-    global $_DB;
+    $result_type = $both ? \Doctrine\DBAL\FetchMode::MIXED : \Doctrine\DBAL\FetchMode::ASSOCIATIVE;
 
-    return $_DB->dbFetchAll($recordset, $both);
+    if ($recordset === false || $recordset === null) return array();
+
+    try {
+        $result = $recordset->fetchAll($result_type);
+    } catch (Exception $e) {
+        $result = false;
+    }
+    return ($result === false) ? array() : $result;
 }
 
 /**
@@ -414,9 +482,8 @@ function DB_fetchAll($recordset, $both = true)
 */
 function DB_insertId($link_identifier = '')
 {
-    global $_DB;
-
-    return $_DB->dbInsertId($link_identifier);
+    $db = glFusion\Database::getInstance();
+    return $db->conn->lastInsertId();
 }
 
 /**
@@ -429,38 +496,48 @@ function DB_insertId($link_identifier = '')
 */
 function DB_error($sql = '')
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
+    if ((int)$db->conn->errorCode() > 0) {
+        $fn = '';
+        $btr = debug_backtrace();
+        if (! empty($btr)) {
+            for ($i = 0; $i < 100; $i++) {
+                if (isset($btr[$i])) {
+                    $b = $btr[$i];
+                    if ($b['function'] == 'DB_query') {
+                    if (!empty($b['file']) && !empty($b['line'])) {
+                            $fn = $b['file'] . ':' . $b['line'];
+                        }
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
 
-    return $_DB->dbError($sql);
-}
+        $info = $db->errorInfo();
 
-/**
-* Creates database structures for fresh installation
-*
-* This may not be used by glFusion currently
-*
-* @return   boolean     returns true on success otherwise false
-*
-*/
-function DB_createDatabaseStructures()
-{
-    global $_DB;
+        if (empty($fn)) {
+            $errorMessage = $db->conn->errorCode() . ': '.$info[2];
+            if ( $sql != '' ) {
+                $errorMessage .= " SQL in question: " . $sql;
+            }
+            $db->_errorlog($errorMessage);
+        } else {
+            $errorMessage = $db->conn->errorCode() . ': ' . $info[2] . " in " . $fn;
+            if ( $sql != '' ) {
+                $errorMessage .= " SQL in question: ".$sql;
+            }
+            $db->_errorlog($errorMessage);
+        }
 
-    return $_DB->dbCreateStructures();
-}
-
-/**
-* Executes the sql upgrade script(s)
-*
-* @param        string      $current_gl_version     version of glFusion to upgrade from
-* @return       boolean     returns true on success otherwise false
-*
-*/
-function DB_doDatabaseUpgrade($current_gl_version)
-{
-    global $_DB;
-
-    return $_DB->dbDoDatabaseUpgrade($current_gl_version);
+        if ($db->_display_error) {
+            return  $this->conn->errorCode() . ': ' . $info[2];
+        } else {
+            return 'An SQL error has occurred. Please see error.log for details.';
+        }
+    }
 }
 
 /**
@@ -475,9 +552,9 @@ function DB_doDatabaseUpgrade($current_gl_version)
 */
 function DB_lockTable($table)
 {
-    global $_DB;
+    $sql = "LOCK TABLES `$table` WRITE";
 
-    $_DB->dbLockTable($table);
+    DB_query($sql);
 }
 
 /**
@@ -492,9 +569,8 @@ function DB_lockTable($table)
 */
 function DB_unlockTable($table)
 {
-    global $_DB;
-
-    $_DB->dbUnlockTable($table);
+    $sql = 'UNLOCK TABLES';
+    DB_query($sql);
 }
 
 /**
@@ -510,16 +586,9 @@ function DB_checkTableExists($table)
 
     $exists = false;
 
-    if ($_DB_dbms == 'mysql' || $_DB_dbms == 'mysqli' ) {
-        $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'");
-        if (DB_numRows ($result) > 0) {
-            $exists = true;
-        }
-    } elseif ($_DB_dbms == 'mssql') {
-        $result = DB_Query("SELECT 1 FROM sysobjects WHERE name='{$_TABLES[$table]}' AND xtype='U'");
-        if (DB_numRows ($result) > 0) {
-            $exists = true;
-        }
+    $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'");
+    if (DB_numRows ($result) > 0) {
+        $exists = true;
     }
 
     return $exists;
@@ -538,12 +607,15 @@ function DB_checkTableExists($table)
 */
 function DB_escapeString($str)
 {
-    global $_DB;
-    if ( $_DB->getFilter() != 0 ) {
+    $db = glFusion\Database::getInstance();
+
+    if ( $db->getFilter() != 0 ) {
         $str = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "?", $str);
         $str = preg_replace('/([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{200D}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F9FF}][\x{FE00}-\x{FEFF}]?/u', '?', $str);
     }
-    return $_DB->dbEscapeString($str);
+    $value = $db->conn->quote($str);
+    $value = substr($value, 1, -1);
+    return $value;
 }
 
 /**
@@ -551,9 +623,10 @@ function DB_escapeString($str)
 */
 function DB_getClientVersion()
 {
-    global $_DB;
-
-    return $_DB->dbGetClientVersion();
+    $db = glFusion\Database::getInstance();
+    $version = $db->conn->query('select version()')->fetchColumn();
+    preg_match("/^[0-9\.]+/", $version, $match);
+    return $match[0];
 }
 
 /**
@@ -561,9 +634,9 @@ function DB_getClientVersion()
 */
 function DB_getServerVersion()
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbGetServerVersion();
+    return $db->dbGetServerVersion();
 }
 
 /**
@@ -571,9 +644,65 @@ function DB_getServerVersion()
 */
 function DB_getDriverName()
 {
-    global $_DB;
+    $db = glFusion\Database::getInstance();
 
-    return $_DB->dbGetDriverName();
+    return $db->dbGetDriverName();
+}
+
+function DB_executeUpdate($sql,$params = array(),$types = array())
+{
+    $db = glFusion\Database::getInstance();
+
+    $ignore_errors = false;
+    if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
+        $ignore_errors = true;
+    }
+
+    try {
+        $result = $db->dbExecuteUpdate($sql,$params,$types);
+    } catch (Exception $e) {
+        if ($ignore_errors) {
+            $result = false;
+        } else {
+            trigger_error(DB_error($sql), E_USER_ERROR);
+        }
+    }
+    return $result;
+}
+
+function DB_buildIdValuePair($id, $value)
+{
+    $retval = '';
+
+    if (is_array($id) || is_array($value)) {
+        $num_ids = count($id);
+
+        if (is_array($id) && is_array($value) && ($num_ids === count($value))) {
+            // they are arrays, traverse them and build sql
+            $retval .= ' WHERE ';
+
+            for ($i = 1; $i <= $num_ids; $i ++) {
+                $retval .= current($id) . " = '"
+                .  DB_escapeString(current($value)) . "'";
+                if ($i !== $num_ids) {
+                    $retval .= " AND ";
+                }
+
+                next($id);
+                next($value);
+            }
+        } else {
+            // error, they both have to be arrays and of the same size
+            $retval = false;
+        }
+    } else {
+        // just regular string values, build sql
+        if (!empty($id) && (isset($value) || ($value != ''))) {
+            $retval .= " WHERE $id = '$value'";
+        }
+    }
+
+    return $retval;
 }
 
 ?>
