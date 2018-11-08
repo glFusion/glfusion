@@ -86,7 +86,14 @@ if ( isset($_GET['ncb'])) {
 $db = glFusion\Database::getInstance();
 
 // set archive topic
-$archivetid = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
+try {
+    $archivetid = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
+} catch(\Doctrine\DBAL\DBALException $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+    $archivetid = '';
+}
 
 // create template
 $T = new Template($_CONF['path_layout']);
@@ -311,9 +318,21 @@ $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
 
 $countQueryBuilder = clone $queryBuilder;
 $countQueryBuilder->select("COUNT(*) AS count");
-$cStmt = $countQueryBuilder->execute();
-$totalStoryCount = $cStmt->fetchColumn();
-$cStmt->closeCursor();
+
+try {
+    $cStmt = $countQueryBuilder->execute();
+} catch(\Doctrine\DBAL\DBALException $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+}
+
+if ($cStmt) {
+    $totalStoryCount = $cStmt->fetchColumn();
+    $cStmt->closeCursor();
+} else {
+    $totalStoryCount = 0;
+}
 
 // Build the final query to pull the story data
 // Set the limits
@@ -325,13 +344,23 @@ $queryBuilder
 
 //print $queryBuilder->getSQL();exit;
 
-$stmt = $queryBuilder->execute();
+try {
+    $stmt = $queryBuilder->execute();
+} catch(\Doctrine\DBAL\DBALException $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+    $stmt = false;
+}
 
 $num_pages = ceil ($totalStoryCount / $limit);
 $articleCounter = 0;
 
-$storyRecs = $stmt->fetchAll();
-$stmt->closeCursor();
+$storyRecs = array();
+if ($stmt) {
+    $storyRecs = $stmt->fetchAll();
+    $stmt->closeCursor();
+}
 $nrows = 0;
 foreach($storyRecs AS $A) {
     $nrows++;
