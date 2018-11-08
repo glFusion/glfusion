@@ -960,23 +960,8 @@ class database
      */
     public function dbExecute($sth, $inputParms)
     {
-        return $stmt->execute($inputParams);
+        return $sth->execute($inputParams);
     }
 
 }
-
-/* to add
-
-execute
-executeQuery
-executeUpdate
-fetchColumn
-fetchAssoc
-delete
-insert
-update
-quote
-quoteIdentifier
-*/
-
 ?>
