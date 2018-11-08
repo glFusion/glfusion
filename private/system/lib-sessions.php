@@ -1,39 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-sessions.php                                                         |
-// |                                                                          |
-// | glFusion session library.                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net    |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Sessions Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: Tony Bibbs       - tony AT tonybibbs DOT com
+*            Mark Limburg     - mlimburg AT users DOT sourceforge DOT net
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
 
 // ensure cookie domain is properly initialized
@@ -86,6 +69,8 @@ function SESS_sessionCheck()
 
     unset($_USER);
     $userdata = array();
+
+    $db = glFusion\Database::getInstance();
 
     // initialize the standard user record data
     $userdata['uid'] = 1;
@@ -147,15 +132,17 @@ function SESS_sessionCheck()
                 $userid == 0;
             }
         }
+
         if ( $userid == 0 ) {
-            $sql = "SELECT md5_sess_id, start_time FROM {$_TABLES['sessions']} WHERE "
-                . "(remote_ip = '".DB_escapeString($request_ip)."') AND (start_time > $mintime) AND (uid = 1)";
+            $row = $db->conn->fetchAssoc(
+                    "SELECT md5_sess_id, start_time FROM `{$_TABLES['sessions']}` WHERE "
+                    . "(remote_ip = ?) AND (start_time > ?) AND (uid = 1)",
+                    array($request_ip,$mintime),
+                    array(\glFusion\Database::STRING,\glFusion\Database::INTEGER)
+            );
 
-            $result = DB_query($sql);
-            if ( $result && DB_numRows($result) > 0 ) {
-                $row = DB_fetchArray($result);
+            if ($row) {
                 $sessid = $row['md5_sess_id'];
-
                 if ( $row['start_time'] + 60 < time() ) {
                     SESS_updateSessionTime($sessid);
                 }
@@ -187,9 +174,9 @@ function SESS_sessionCheck()
     }
 
     if ( $gc_check == 0 ) {
-        $expirytime = (string) (time() - $_CONF['session_cookie_timeout']);
-        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
-        $delresult = DB_query($deleteSQL,1);
+        $expirytime = (int) (time() - $_CONF['session_cookie_timeout']);
+        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < ?)";
+        $db->conn->executeUpdate($deleteSQL,array($expirytime),array(\glFusion\Database::INTEGER));
     }
 
     return $_USER;
@@ -210,27 +197,28 @@ function SESS_checkRememberMe()
 
     $userid = 0;
 
-    $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
+    $db = glFusion\Database::getInstance();
 
     if (isset ($_COOKIE[$_CONF['cookie_name']])) {
         $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
         if (empty ($userid) || ($userid == 'deleted')) {
             $userid = 0;
         } else {
-            $userid = (int) COM_applyFilter ($userid, true);
+            $userid = (int) $userid;
             $cookie_token = '';
             if ($userid > 1) {
-                $remote_ip       = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
-                $result          = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=".(int) $userid,1);
-                $rip             = DB_fetchArray($result);
-                $server_ip       = $rip['remote_ip'];
-                $cookie_token    = isset($_COOKIE[$_CONF['cookie_password']]) ? COM_applyFilter($_COOKIE[$_CONF['cookie_password']]) : '';
-                $remote_ip_array = explode('.',$remote_ip);
-                $server_ip_array = explode('.',$request_ip);
                 $ipmatch = false;
-                $ipmatch = _ipCheck( $server_ip, $remote_ip );
+                $remote_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
+                $rip = $db->conn->fetchColumn(
+                    "SELECT remote_ip FROM `{$_TABLES['users']}` WHERE uid=?",
+                    array($userid),0
+                );
+                if ($rip) {
+                    $cookie_token = isset($_COOKIE[$_CONF['cookie_password']]) ? COM_applyFilter($_COOKIE[$_CONF['cookie_password']]) : '';
+                    $ipmatch = _ipCheck( $rip, $remote_ip );
+                }
             }
-            if (empty ($cookie_token)  || ($ipmatch == false ) || (!SEC_checkTokenGeneral($cookie_token,'ltc',$userid))) {
+            if (empty ($cookie_token) || ($ipmatch == false ) || (!SEC_checkTokenGeneral($cookie_token,'ltc',$userid))) {
                 // Invalid remember settings - clear all the cookies
                 $userid = 0;
 
@@ -265,6 +253,8 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
     $sessid = 0;
     $md5_sessid = _createID();
 
+    $db = glFusion\Database::getInstance();
+
     $currtime   = (string) (time());
     $expirytime = (string) (time() - $lifespan);
 
@@ -274,43 +264,78 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
         // delete old sesson records for this user
         $oldsessionid = COM_applyFilter($_COOKIE[$_CONF['cookie_session']]);
         if ( !empty($oldsessionid) ) {
-            DB_query("DELETE FROM {$_TABLES['sessions']} WHERE md5_sess_id = '".DB_escapeString($oldsessionid)."'",1);
-            if ( DB_error() ) {
-                DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
-                COM_errorLog("***** REPAIR SESSIONS TABLE *****");
+            try {
+                $stmt = $db->conn->delete($_TABLES['sessions'],array('md5_sess_id' => $oldsessionid));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                throw($e);
+                try {
+                    $db->conn->query("REPAIR TABLE {$_TABLES['sessions']}");
+                    COM_errorLog("***** REPAIR SESSIONS TABLE #2 *****");
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    COM_errorLog("ERROR: Unable to write to sessions table");
+                }
             }
-
     		if (session_id()) {
     			session_unset();
     			session_destroy();
     		}
-
             SEC_setcookie ($_CONF['cookie_session'], '', time() - 3600,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure'],true);
-
         }
     }
 
     if ( $userid > 1 ) {
-        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
-        $delresult = DB_query($deleteSQL,1);
-        if ( DB_error() ) {
-            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
-            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
-            $delresult = DB_query($deleteSQL,1);
-        }
-        if (!$delresult) {
-            die("Delete failed in new_session()");
-        }
-    }
-    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, browser,md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '".DB_escapeString($browser)."', '".DB_escapeString($md5_sessid)."', ". (int) $userid .",'$currtime', '".DB_escapeString($remote_ip)."')";
 
-    $result = DB_query($sql);
+        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
+        $stmt = $db->conn->prepare($deleteSQL);
+        $stmt->bindValue(1,$expirytime,\glFusion\Database::INTEGER);
+        $stmt->execute();
+
+//        $db->conn->query($deleteSQL,array($expirytime),array(\glFusion\Database::INTEGER));
+//        $delresult = DB_query($deleteSQL,1);
+//        if ( DB_error() ) {
+//            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
+//            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
+//            $delresult = DB_query($deleteSQL,1);
+//        }
+//        if (!$delresult) {
+//            die("Delete failed in new_session()");
+//        }
+
+    }
+    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, browser,md5_sess_id, uid, start_time, remote_ip)
+            VALUES (?, ?, ?, ?,?, ?)";
+
+    $result = $db->conn->executeUpdate($sql,
+                        array($sessid,
+                            $browser,
+                            $md5_sessid,
+                            $userid,
+                            $currtime,
+                            $remote_ip),
+                        array(
+                            \glFusion\Database::STRING,
+                            \glFusion\Database::STRING,
+                            \glFusion\Database::STRING,
+                            \glFusion\Database::INTEGER,
+                            \glFusion\Database::STRING,
+                            \glFusion\Database::STRING
+                        )
+    );
+
+//            VALUES ('$sessid', '".DB_escapeString($browser)."', '".DB_escapeString($md5_sessid)."', ". (int) $userid .",'$currtime', '".DB_escapeString($remote_ip)."')";
+
+//    $result = DB_query($sql);
     if ($result) {
         if ($userid > 1 && $_CONF['lastlogin'] == true) {
+            $db->conn->executeUpdate(
+                "UPDATE `{$_TABLES['userinfo']}` SET lastlogin = UNIX_TIMESTAMP() WHERE uid = ?",
+                array($userid),
+                array(\glFusion\Database::INTEGER)
+            );
             // Update userinfo record to record the date and time as lastlogin
-            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='".(int) $userid."'");
+//            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='".(int) $userid."'");
         }
     } else {
         echo DB_error().": ".DB_error()."<br />";
@@ -346,7 +371,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
     $result = DB_query($sql,1);
     if ( DB_error() ) {
         DB_query("REPAIR TABLE {$_TABLES['sessions']}");
-        COM_errorLog("**** REPAIRING SESSION TABLE ******");
+        COM_errorLog("**** REPAIRING SESSION TABLE #1 ******");
         $result = DB_query($sql,1);
     }
     $row = DB_fetchArray($result);
@@ -487,21 +512,40 @@ function SESS_getUserDataFromId($userid)
 {
     global $_TABLES;
 
-    $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']},{$_TABLES['userindex']} "
+    $db = glFusion\Database::getInstance();
+
+    $sql = "SELECT *,format FROM `{$_TABLES['dateformats']}`,`{$_TABLES['users']}`,`{$_TABLES['userprefs']}`,`{$_TABLES['userinfo']}`,`{$_TABLES['userindex']}` "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = ".(int) $userid." AND {$_TABLES['users']}.uid = ".(int)$userid." AND {$_TABLES['userinfo']}.uid = ".(int) $userid." AND {$_TABLES['userindex']}.uid=".(int) $userid;
+     . "{$_TABLES['userprefs']}.uid = :userid
+        AND {$_TABLES['users']}.uid = :userid
+        AND {$_TABLES['userinfo']}.uid = :userid
+        AND {$_TABLES['userindex']}.uid= :userid";
 
-    if (!$result = DB_query($sql)) {
-        return false;
+    $cacheKey = (string) 'userdata_'.(int)$userid;
+
+    try {
+        $stmt = $db->conn->executeQuery($sql,
+            array('userid'=>$userid),
+            array(\glFusion\Database::INTEGER),
+            new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $cacheKey));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        $db->dbError($e->getMessage(),$sql);
     }
 
-    if (!$myrow = DB_fetchArray($result, false)) {
+    $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $stmt->closeCursor();
+    if (count($data) < 1) {
         return false;
     }
+    $myrow = $data[0];
 
     if (isset($myrow['passwd'])) {
         unset($myrow['passwd']);
     }
+
+
+//$db->cacheHandle->delete($cacheKey);
+//exit;
 
     return $myrow;
 }
