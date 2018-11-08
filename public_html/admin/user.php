@@ -1493,6 +1493,8 @@ function USER_save($uid)
     $sql = '';
     $userChanged = false;
 
+    $db = glFusion\Database::getInstance();
+
     if ($_USER_VERBOSE) COM_errorLog("**** entering USER_save()****",1);
     if ($_USER_VERBOSE) COM_errorLog("group size at beginning = " . sizeof($groups),1);
 
@@ -1944,7 +1946,7 @@ function USER_save($uid)
         echo $retval;
         exit;
     }
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
+    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'userdata','user_' . $uid));
 
     if ($_USER_VERBOSE) COM_errorLog("***************leaving USER_save()*****************",1);
 

@@ -1336,7 +1336,7 @@ function PLUGINS_upload_update ($pi_name)
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('menu','plugin'));
     return $retval;
 }
 
