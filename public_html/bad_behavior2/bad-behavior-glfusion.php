@@ -246,18 +246,6 @@ function bb2_write_settings($settings) {
    return true;
 }
 
-// installation
-function bb2_install() {
-    return;
-
-    $settings = bb2_read_settings();
-    if( $settings['is_installed'] == false ) {
-        bb2_db_query(bb2_table_structure($settings['log_table']));
-        $settings['is_installed'] = true;
-        bb2_write_settings( $settings );
-    }
-}
-
 // Display stats? This is optional.
 function bb2_insert_stats($force = false) {
 
@@ -366,14 +354,18 @@ function bb2_expireBans() {
     return;
 }
 
+global $_PLUGINS;
+
+if (empty($_PLUGINS) || !in_array('bad_behavior2', $_PLUGINS)) {
+    return;
+}
+
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 
 // Calls inward to Bad Behavor itself.
 require_once(BB2_CWD . "/bad-behavior/version.inc.php");
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
-
-bb2_install();
 
 bb2_start(bb2_read_settings());
 
