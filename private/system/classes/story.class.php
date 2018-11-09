@@ -1,57 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | story.class.php                                                          |
-// |                                                                          |
-// | glFusion Story Abstraction.                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2006-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Michael Jervis, mike AT fuckingbrit DOT com                     |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusin Installation
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2006-2009 by the following authors:
+*  Michael Jervis, mike AT fuckingbrit DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-/**
- * This file provides a class to represent a story, or article. It provides a
- * finite state machine for articles. Switching them between the various states:
- *  1) Post Data
- *  2) Display Mode
- *  3) Edit Mode
- *  4) Database Mode
- *
- * @package glFusion
- * @filesource
- * @version 0.1
- * @since GL 1.4.2
- * @copyright Copyright &copy; 2006-2009
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author Michael Jervis, mike AT fuckingbrit DOT com
- *
- */
 
 /**
  * Constants for stories:
@@ -431,6 +397,7 @@ class Story
         $this->format->setProcessBBCode(false);
         $this->format->setCensor(true);
         $this->format->setProcessSmilies(true);
+        $this->format->setConvertPre(true);
         $this->format->addFilter(FILTER_PRE,array($this,'replaceImages'));
         $this->format->addFilter(FILTER_POST,array($this,'renderImages'));
     }
@@ -2358,15 +2325,8 @@ class Story
         global $_CONF;
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-
-        $filter = sanitizer::getInstance();
-        $filter->setPostmode($this->_postmode);
-        $allowedElements = $filter->makeAllowedElements($_CONF['htmlfilter_story']);
-        $filter->setAllowedElements($allowedElements);
-        $filter->setCensorData(true);
-        $filter->setNamespace('glfusion','story');
-        $this->_introtext = $filter->filterHTML($intro);
-        $this->_bodytext = $filter->filterHTML($body);
+        $this->_introtext = $intro;
+        $this->_bodytext = $body;
     }
 
 
