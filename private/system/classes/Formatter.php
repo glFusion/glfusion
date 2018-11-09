@@ -684,6 +684,7 @@ class Formatter {
         $insideCode = 1;
 
         $content = @htmlspecialchars_decode($content,ENT_QUOTES);
+        $content = @html_entity_decode($content);
         $content = preg_replace('/^\s*?\n|\s*?\n$/','',$content);
 
         if (isset ($attributes['default'])) {
