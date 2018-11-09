@@ -6773,7 +6773,7 @@ function _css_out()
     $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/nivo-slider/themes/default/default.css',HEADER_PRIO_NORMAL);
 
     if (isset($_CONF['syntax_highlight']) && $_CONF['syntax_highlight'] == true) {
-        $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/highlight/styles/default.css',HEADER_PRIO_NORMAL);
+        $outputHandle->addCSSFile($_CONF['path_html'].'javascript/addons/highlight/styles/agate.css',HEADER_PRIO_NORMAL);
     }
 
     // Let's look in the custom directory first...
@@ -7575,7 +7575,7 @@ if ( @file_exists($_CONF['path_language'].'custom/'.$_CONF['language'].'.php') )
 }
 
 // Now include all plugin functions
-if ( is_array($_PLUGINS) ) {
+if ( isset($_PLUGINS) && is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
         if ( !@include_once $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' ) {
             unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
