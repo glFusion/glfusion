@@ -85,7 +85,7 @@ function DB_displayError($flag)
 */
 function DB_query ($sql, $ignore_errors = 0)
 {
-    global $_SYSTEM;
+    global $_SYSTEM, $_DB_dbms;
 
     $db = glFusion\Database::getInstance();
 
