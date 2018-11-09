@@ -659,7 +659,7 @@ function DB_executeUpdate($sql,$params = array(),$types = array())
     }
 
     try {
-        $result = $db->dbExecuteUpdate($sql,$params,$types);
+        $result = $db->conn->executeUpdate($sql,$params,$types);
     } catch (Exception $e) {
         if ($ignore_errors) {
             $result = false;
