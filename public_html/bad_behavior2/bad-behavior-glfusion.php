@@ -354,12 +354,6 @@ function bb2_expireBans() {
     return;
 }
 
-global $_PLUGINS;
-
-if (empty($_PLUGINS) || !in_array('bad_behavior2', $_PLUGINS)) {
-    return;
-}
-
 $bb2_mtime = explode(" ", microtime());
 $bb2_timer_start = $bb2_mtime[1] + $bb2_mtime[0];
 
