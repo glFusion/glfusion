@@ -270,7 +270,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     require_once $path . 'system/classes/config.class.php';
 
     $config = config::get_instance();
-    $config->set_configfile($path . 'db-config.php');
+//    $config->set_configfile($path . 'db-config.php');
     $config->load_baseconfig();
     $config->initConfig();
     $_CONF = $config->get_config('Core');
@@ -466,7 +466,7 @@ function INST_checkInnodbUpgrade($_SQL,$use_innodb)
  */
 function INST_createDatabaseStructures ($use_innodb = false)
 {
-    global $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass, $LANG_INSTALL;
+    global $_CONF, $_TABLES,  $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass, $LANG_INSTALL;
 
     $rc = true;
 
@@ -479,8 +479,6 @@ function INST_createDatabaseStructures ($use_innodb = false)
             $dbDriver = 'mysql';
             break;
     }
-
-    $_DB->setDisplayError (true);
 
     // Because the create table syntax can vary from dbms-to-dbms we are
     // leaving that up to each database driver (e.g. mysql.class.php,
@@ -570,9 +568,8 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
  */
 function INST_updateDB($_SQL,$use_innodb=0)
 {
-    global $_DB, $_DB_dbms;
+    global $_DB_dbms;
 
-    $_DB->setDisplayError (true);
     $errors = '';
     $rc = true;
 
@@ -598,14 +595,12 @@ function INST_updateDB($_SQL,$use_innodb=0)
  */
 function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 {
-    global $_TABLES, $_CONF, $_SYSTEM, $_VARS, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
+    global $_TABLES, $_CONF, $_SYSTEM, $_VARS, $_SP_CONF, $_DB_dbms, $_DB_table_prefix,
            $LANG_AM, $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
     global $_GLFUSION;
 
     $rc = true;
     $errors = '';
-
-    $_DB->setDisplayError (true);
 
     // Because the upgrade sql syntax can vary from dbms-to-dbms we are
     // leaving that up to each glFusion database driver
@@ -696,7 +691,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('user_html','Core');
             $c->del('admin_html','Core');
             $c->del('allowed_protocols','Core');
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.0';
             $_SQL = array();
@@ -711,7 +706,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
             $c->add('use_from_site_mail',0,'select',0,1,0,150,TRUE);
             $c->del('pdf_enabled','Core');
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.2',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.2',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.2';
         case '1.1.2' :
@@ -738,7 +733,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('cache_templates',1,'select',2,12,0,1375,TRUE);
             $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
 
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.3',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.3',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.3' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.3';
         case '1.1.3' :
@@ -752,7 +747,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             if ( $rc === false ) {
                 return array($rc,$errors);
             }
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.4',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.4',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.4' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.4';
@@ -762,7 +757,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
             DB_query("UPDATE {$_TABLES['conf_values']} SET type='text' WHERE name='mail_smtp_host'",1);
             DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='23' WHERE name='censormode'",1);
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
 
@@ -789,7 +784,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             $current_fusion_version = '1.1.5';
         case '1.1.5' :
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.6';
@@ -813,7 +808,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c = config::get_instance();
             $c->add('rating_enabled',1,'select',1,7,24,1237,TRUE);
 
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.7',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.7',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.7' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.7';
@@ -821,7 +816,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('user_reg_fullname',1,'select',4,19,25,980,TRUE);
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.8',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.8',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.8' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.8';
@@ -890,12 +885,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('comment_postmode','plaintext','select',4,21,5,1693,TRUE);
             $c->add('comment_editor',0,'select',4,21,28,1694,TRUE);
 
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.0',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.2.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.0' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.2.0';
         case '1.2.0' :
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.2.1',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.2.1',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.2.1' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.2.1';
@@ -1011,7 +1006,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_grp_id) VALUES (".$autotag_group_id.",1)");
             }
 
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.3.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.3.0' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.3.0';
@@ -1517,7 +1512,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '2.0.0';
 
         default:
-            DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             break;
@@ -1743,7 +1738,6 @@ function INST_pluginAutoInstall( $plugin )
     require_once $_CONF['path'] . '/system/lib-install.php';
 
     if ( file_exists($_CONF['path'].'/plugins/'.$plugin.'/autoinstall.php') ) {
-
         require_once $_CONF['path'].'/plugins/'.$plugin.'/autoinstall.php';
 
         $ret = INSTALLER_install($INSTALL_plugin[$plugin]);
@@ -1895,9 +1889,7 @@ function INST_clearCache($plugin='')
  */
 function INST_identifyglFusionVersion ()
 {
-    global $_GLFUSION, $_TABLES, $_DB, $_DB_dbms, $_CONF, $dbconfig_path, $siteconfig_path;
-
-    $_DB->setDisplayError(true);
+    global $_GLFUSION, $_TABLES, $_DB_dbms, $_CONF, $dbconfig_path, $siteconfig_path;
 
     // simple tests for the version of the database:
     // "DESCRIBE sometable somefield", ''
@@ -2033,7 +2025,7 @@ function INST_checkCacheDir($path,$template,$classCounter)
  */
 function INST_pluginExists($plugin)
 {
-    global $_DB, $_TABLES;
+    global $_TABLES;
     $result = DB_query("SELECT `pi_name` FROM {$_TABLES['plugins']} WHERE `pi_name` = '$plugin'");
     if (DB_numRows($result) > 0) {
         return true;

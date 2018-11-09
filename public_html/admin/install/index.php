@@ -1,36 +1,19 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | glFusion Installation                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric Warren            eric AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2007-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Aaron Blankstein  - kantai AT gmail DOT com                     |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusin Installation
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2007-2008 by the following authors:
+*  Aaron Blankstein  - kantai AT gmail DOT com
+*
+*/
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
@@ -835,13 +818,15 @@ function INST_checkEnvironment($dbconfig_path='')
         }
         require_once $_CONF['path_system'] . 'classes/Autoload.php';
         glFusion\Autoload::initialize();
-        require_once $_CONF['path_system'].'lib-database.php';
+
+        require_once $_CONF['path'].'system/db-init.php';
+
         if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
             return _displayError(FILE_INCLUDE_ERROR,'pathsetting', 'Error code: ' . __LINE__);
         }
         require_once $_CONF['path_system'].'classes/config.class.php';
         $config = config::get_instance();
-        $config->set_configfile($_CONF['path'] . 'db-config.php');
+
         $config->load_baseconfig();
         $config->initConfig();
         $_CONF = $config->get_config('Core');
@@ -1190,6 +1175,9 @@ function INST_gotSiteInformation()
     }
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
+    require_once $_GLFUSION['dbconfig_path'] . 'system/classes/Autoload.php';
+    glFusion\Autoload::initialize();
+
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
     $log_path = $dbconfig_path .'logs/';
     clearstatcache();
@@ -1197,7 +1185,6 @@ function INST_gotSiteInformation()
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
-    include $dbconfig_path.'vendor/aziraphale/email-address-validator/EmailAddressValidator.php';
     $validator = new EmailAddressValidator;
 
     $numErrors = 0;
@@ -1248,14 +1235,8 @@ function INST_gotSiteInformation()
             $innodb = true;
             $db_type = 'mysql';
         case 'mysql' :
-            $db_type = 'mysql';
-            break;
         case 'mysqli' :
-            if ( class_exists('MySQLi') ) {
-                $db_type = 'mysqli';
-            } else {
-                $db_type = 'mysql';
-            }
+            $db_type = 'mysql';
             break;
     }
 
@@ -1351,208 +1332,109 @@ function INST_gotSiteInformation()
     } else if (class_exists('MySQLi')) {
         $driver = 'mysqli';
     } else {
-        $driver = 'mysql';
+        die("No Suitable driver found in PHP environment.");
     }
 
-    switch ( $driver ) {
-        case 'pdo_mysql' :
-            INST_errorLog($log_path,'INSTALL: Connecting to the database using PDO::MySql');
-            $dsn = 'mysql:dbname='.$db_name.';host='.$db_host;
-            try {
-                $db_handle = new PDO($dsn, $db_user, $db_pass);
-            } catch (PDOException $e) {
-                return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
-            }
-            $mysqlVersion = $db_handle->getAttribute(PDO::ATTR_SERVER_VERSION);
-            // check MySQL version here
+    if ($_GLFUSION['utf8']) {
+        $charset = 'utf8';
+    } else {
+        $charset = 'latin1';
+    }
 
-            if (!empty($mysqlVersion)) {
-                preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlVersion, $match);
-                $mysqlmajorv = $match[1];
-                $mysqlminorv = $match[2];
-                $mysqlrev = $match[3];
-            } else {
-                $mysqlmajorv = 0;
-                $mysqlminorv = 0;
-                $mysqlrev = 0;
-            }
-            $mySqlVersionOK = true;
-            $minv = explode('.', SUPPORTED_MYSQL_VER);
-            if (($mysqlmajorv <  $minv[0]) || (($mysqlmajorv == $minv[0]) && ($mysqlminorv <  $minv[1])) ||
-              (($mysqlmajorv == $minv[0]) && ($mysqlminorv == $minv[1]) && ($mysqlrev < $minv[2]))) {
-                $mySqlVersionOK = false;
-            }
-            if ( $mySqlVersionOK === false ) {
-                return _displayError(DB_TOO_OLD,'getsiteinformation');
-            }
+    $config = new \Doctrine\DBAL\Configuration();
+    $dsn = 'mysql:dbname='.$db_name.';host='.$db_host;
+    $connectionParams = array(
+        'dbname'    => $db_name,
+        'user'      => $db_user,
+        'password'  => $db_pass,
+        'host'      => $db_host,
+        'driver'    => $driver,
+        'charset'   => $charset,
+    );
 
-            if ( $innodb ) {
-                INST_errorLog($log_path,'INSTALL: Checking MySQL Storage Engines');
-                $foundInnoDB = false;
-                $res = @$db_handle->query("SHOW STORAGE ENGINES");
+    if ($charset === 'utf8') {
+        $connectionParams['driverOptions'] = [1002 => "SET NAMES 'UTF8'"];
+    }
 
-                while ( ( $A = $res->fetch(PDO::FETCH_ASSOC) ) !== false ) {
-                    if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
-                        if ((strcasecmp($A['Support'], 'yes') == 0) ||
-                            (strcasecmp($A['Support'], 'default') == 0)) {
-                            $foundInnoDB = true;
-                        }
-                        break;
-                    }
-                }
-                if ( $foundInnoDB === false ) {
-                    return _displayError(DB_NO_INNODB,'getsiteinformation');
-                }
-            }
+    try {
+        $db = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+    } catch(\Doctrine\DBAL\DBALException | PDOException $e) {
+        return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
+    }
+    $db->setFetchMode( \Doctrine\DBAL\FetchMode::MIXED );
 
-            INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
-            $collationResult = @$db_handle->query("SELECT @@character_set_database, @@collation_database;");
-            $collation = @$collationResult->fetch(PDO::FETCH_ASSOC);
-            $collation_database = $collation["@@collation_database"];
-            $character_set = $collation["@@character_set_database"];
-            $_GLFUSION['db_charset'] = $character_set;
-            if ( $_GLFUSION['utf8'] ) {
-                if ( (substr($collation_database,0,4) != "utf8") || (substr($character_set,0,4) != "utf8")  ) {
-                    return _displayError(DB_NO_UTF8, 'getsiteinformation');
-                }
-            } else {
-                if ( (substr($collation_database,0,4) == "utf8") || (substr($character_set,0,4) == "utf8")  ) {
-                    return _displayError(DB_NO_CHECK_UTF8, 'getsiteinformation');
-                }
-            }
-            INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
-            $result = @$db_handle->query("SHOW TABLES LIKE '".$db_prefix."vars'");
-            if ( $result->rowCount() > 0 ) {
-                INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
-                return _displayError(DB_EXISTS,'');
-            }
-            break;
+    try {
+        $mysqlVersion = $db->getWrappedConnection()->getServerVersion();
+    } catch(\Doctrine\DBAL\DBALException | PDOException $e) {
+        return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
+    }
 
-        case 'mysqi' :
-            INST_errorLog($log_path,'INSTALL: Connecting to the database using MySQLi');
-            $db_handle = @mysqli_connect($db_host, $db_user, $db_pass);
-            if (!$db_handle) {
-                return _displayError(DB_NO_CONNECT,'getsiteinformation');
-            }
+    if (!empty($mysqlVersion)) {
+        preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlVersion, $match);
+        $mysqlmajorv = $match[1];
+        $mysqlminorv = $match[2];
+        $mysqlrev = $match[3];
+    } else {
+        $mysqlmajorv = 0;
+        $mysqlminorv = 0;
+        $mysqlrev = 0;
+    }
+    $mySqlVersionOK = true;
+    $minv = explode('.', SUPPORTED_MYSQL_VER);
+    if (($mysqlmajorv <  $minv[0]) || (($mysqlmajorv == $minv[0]) && ($mysqlminorv <  $minv[1])) ||
+      (($mysqlmajorv == $minv[0]) && ($mysqlminorv == $minv[1]) && ($mysqlrev < $minv[2]))) {
+        $mySqlVersionOK = false;
+    }
+    if ( $mySqlVersionOK === false ) {
+        return _displayError(DB_TOO_OLD,'getsiteinformation');
+    }
 
-            if ($db_handle) {
-                $mysqlVersion = mysqli_get_server_info($db_handle);
-            }
+    if ( $innodb ) {
+        INST_errorLog($log_path,'INSTALL: Checking MySQL Storage Engines');
+        $foundInnoDB = false;
+        try {
+            $res = @$db->query("SHOW STORAGE ENGINES");
+        } catch(\Doctrine\DBAL\DBALException | PDOException $e) {
 
-            if (!empty($mysqlVersion)) {
-                preg_match('/^([0-9]+).([0-9]+).([0-9]+)/', $mysqlVersion, $match);
-                $mysqlmajorv = $match[1];
-                $mysqlminorv = $match[2];
-                $mysqlrev = $match[3];
-            } else {
-                $mysqlmajorv = 0;
-                $mysqlminorv = 0;
-                $mysqlrev = 0;
-            }
-            $mySqlVersionOK = true;
-            $minv = explode('.', SUPPORTED_MYSQL_VER);
-            if (($mysqlmajorv <  $minv[0]) || (($mysqlmajorv == $minv[0]) && ($mysqlminorv <  $minv[1])) ||
-              (($mysqlmajorv == $minv[0]) && ($mysqlminorv == $minv[1]) && ($mysqlrev < $minv[2]))) {
-                $mySqlVersionOK = false;
-            }
-            if ( $mySqlVersionOK === false ) {
-                return _displayError(DB_TOO_OLD,'getsiteinformation');
-            }
+        }
 
-            if ($db_handle) {
-                $connected = @mysqli_select_db($db_handle, $db_name);
-            }
-            if ( !$connected) {
-                return _displayError(DB_NO_DATABASE,'getsiteinformation');
-            }
-            if ( $innodb ) {
-                INST_errorLog($log_path,'INSTALL: Checking MySQL Storage Engines');
-                $foundInnoDB = false;
-                $res = @mysqli_query($db_handle, "SHOW STORAGE ENGINES");
-                $numEngines = @mysqli_num_rows($res);
-                for ($i = 0; $i < $numEngines; $i++) {
-                    $A = @mysqli_fetch_array($res);
-                    if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
-                        if ((strcasecmp($A['Support'], 'yes') == 0) ||
-                            (strcasecmp($A['Support'], 'default') == 0)) {
-                            $foundInnoDB = true;
-                        }
-                        break;
-                    }
+        while ( ( $A = $res->fetch(\glFusion\Database::ASSOCIATIVE) ) !== false ) {
+            if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
+                if ((strcasecmp($A['Support'], 'yes') == 0) ||
+                    (strcasecmp($A['Support'], 'default') == 0)) {
+                    $foundInnoDB = true;
                 }
-                if ( $foundInnoDB === false ) {
-                    return _displayError(DB_NO_INNODB,'getsiteinformation');
-                }
+                break;
             }
-            INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
-            $collationResult = @mysqli_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
-            $collation = @mysqli_fetch_array($collationResult);
-            $collation_database = $collation["@@collation_database"];
-            $character_set = $collation["@@character_set_database"];
-            $_GLFUSION['db_charset'] = $character_set;
-            if ( $_GLFUSION['utf8'] ) {
-                if ( (substr($collation_database,0,4) != "utf8") || (substr($character_set,0,4) != "utf8")  ) {
-                    return _displayError(DB_NO_UTF8, 'getsiteinformation');
-                }
-            } else {
-                if ( (substr($collation_database,0,4) == "utf8") || (substr($character_set,0,4) == "utf8")  ) {
-                    return _displayError(DB_NO_CHECK_UTF8, 'getsiteinformation');
-                }
-            }
-            INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
-            $result = @mysqli_query($db_handle, "SHOW TABLES LIKE '".$db_prefix."vars'");
-            if (@mysqli_num_rows ($result) > 0) {
-                INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
-                return _displayError(DB_EXISTS,'');
-            }
-            break;
-        case 'mysql' :
-            INST_errorLog($log_path,'INSTALL: Connecting to the database using MySQL');
-            $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
-            if (!$db_handle) {
-                return _displayError(DB_NO_CONNECT,'getsiteinformation');
-            }
-            if ($db_handle) {
-                $connected = @mysql_select_db($db_name, $db_handle);
-            }
-            if ( !$connected) {
-                return _displayError(DB_NO_DATABASE,'getsiteinformation');
-            }
-            if ( $innodb ) {
-                INST_errorLog($log_path,'INSTALL: Checking available MySQL storage engines');
-                $foundInnoDB = false;
-                $res = @mysql_query($db_handle, "SHOW STORAGE ENGINES");
-                $numEngines = @mysql_num_rows($res);
-                for ($i = 0; $i < $numEngines; $i++) {
-                    $A = @mysql_fetch_array($res);
-                    if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
-                        if ((strcasecmp($A['Support'], 'yes') == 0) ||
-                            (strcasecmp($A['Support'], 'default') == 0)) {
-                            $foundInnoDB = true;
-                        }
-                        break;
-                    }
-                }
-                if ( $foundInnoDB === false ) {
-                    return _displayError(DB_NO_INNODB,'getsiteinformation');
-                }
-            }
-            INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
-            $collationResult = @mysql_query($db_handle, "SELECT @@character_set_database, @@collation_database;");
-            $collation = @mysql_fetch_array($collationResult);
-            $collation_database = substr($collation["@@collation_database"],0,4);
-            $character_set = substr($collation["@@character_set_database"],0,4);
-            if ( ($collation_database != "utf8") || ($character_set != "utf8")  ) {
-                return _displayError(DB_NO_UTF8, 'getsiteinformation');
-            }
-            INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
-            $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
-            if (@mysql_numrows ($result) > 0) {
-                INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
-                return _displayError(DB_EXISTS,'');
-            }
-            break;
-
+        }
+        if ( $foundInnoDB === false ) {
+            return _displayError(DB_NO_INNODB,'getsiteinformation');
+        }
+    }
+    INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
+    try {
+        $collationResult = $db->query("SELECT @@character_set_database, @@collation_database;");
+    } catch(\Doctrine\DBAL\DBALException | PDOException $e) {
+        // ignore error
+    }
+    $collation = @$collationResult->fetch(\glFusion\Database::ASSOCIATIVE);
+    $collation_database = $collation["@@collation_database"];
+    $character_set = $collation["@@character_set_database"];
+    $_GLFUSION['db_charset'] = $character_set;
+    if ( $_GLFUSION['utf8'] ) {
+        if ( (substr($collation_database,0,4) != "utf8") || (substr($character_set,0,4) != "utf8")  ) {
+            return _displayError(DB_NO_UTF8, 'getsiteinformation');
+        }
+    } else {
+        if ( (substr($collation_database,0,4) == "utf8") || (substr($character_set,0,4) == "utf8")  ) {
+            return _displayError(DB_NO_CHECK_UTF8, 'getsiteinformation');
+        }
+    }
+    INST_errorLog($log_path,'INSTALL: Checking for existing glFusion tables');
+    $result = @$db->query("SHOW TABLES LIKE '".$db_prefix."vars'");
+    if ( $result->rowCount() > 0 ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Found existing glFusion tables');
+        return _displayError(DB_EXISTS,'');
     }
 
     if ( $numErrors > 0 ) {
@@ -1759,7 +1641,7 @@ function INST_installAndContentPlugins()
     require_once $_CONF['path_system'] . 'classes/Autoload.php';
     glFusion\Autoload::initialize();
 
-    require $_CONF['path_system'].'lib-database.php';
+    require_once $_CONF['path'].'system/db-init.php';
     require $_CONF['path_system'].'lib-security.php';
     if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
     INST_errorLog($log_path,'INSTALL: Installing Database Tables and Default Data');
@@ -1856,7 +1738,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     include $siteconfig_path;
-    $config->set_configfile($_CONF['path'] . 'db-config.php');
+
     $config->load_baseconfig();
     $config->initConfig();
     $_CONF = $config->get_config('Core');
@@ -1875,7 +1757,9 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     require $_CONF['path_html'].'lib-common.php';
+
     if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
+
     INST_errorLog($log_path,'INSTALL: Performing default plugin installations');
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
@@ -2644,7 +2528,7 @@ switch($mode) {
             }
             require_once $_CONF['path_system'] . 'classes/Autoload.php';
             glFusion\Autoload::initialize();
-            require_once $_CONF['path_system'].'lib-database.php';
+            require_once $_CONF['path_system'].'db-init.php';
             $version = INST_identifyglFusionVersion();
             if ($version == '' || $version == 'empty' ) {
                 $pageBody = _displayError(CORE_UPGRADE_ERROR,'',$LANG_INSTALL['unable_to_find_ver']);
@@ -2671,7 +2555,8 @@ switch($mode) {
             }
             require_once $_CONF['path_system'] . 'classes/Autoload.php';
             glFusion\Autoload::initialize();
-            require $_CONF['path_system'] . 'lib-database.php';
+            require $_CONF['path_system'] . 'db-init.php';
+
             $pageBody = INST_doSiteUpgrade();
         }
         if ( $pageBody != '' ) {

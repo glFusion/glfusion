@@ -108,7 +108,7 @@ function DB_query ($sql, $ignore_errors = 0)
 
     try {
         $result = $db->conn->query($sql);
-    } catch (PDOException $e) {
+    } catch (\Doctrine\DBAL\DBALException | PDOException $e) {
         if ($ignore_errors) {
             $result = false;
             if (defined ('DVLP_DEBUG')) {
