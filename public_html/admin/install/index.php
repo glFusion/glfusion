@@ -1759,14 +1759,14 @@ function INST_installAndContentPlugins()
     require $_CONF['path_html'].'lib-common.php';
 
     if ( $_DB_dbms == 'mysqli' || $_DB_dbms == 'pdo') $_DB_dbms = 'mysql';
-
+/*
     INST_errorLog($log_path,'INSTALL: Performing default plugin installations');
     INST_pluginAutoInstall('bad_behavior2');
     INST_pluginAutoInstall('captcha');
     INST_pluginAutoInstall('ckeditor');
     INST_pluginAutoInstall('spamx');
     INST_pluginAutoInstall('staticpages');
-
+*/
     $config->_purgeCache();
     INST_clearCache();
 
@@ -1810,6 +1810,16 @@ function INST_doPluginInstall()
 
     $site_url = $_CONF['site_url'];
     $language = $_GLFUSION['language'];
+
+//    INST_errorLog($log_path,'INSTALL: Performing default plugin installations');
+    INST_pluginAutoInstall('bad_behavior2');
+    INST_pluginAutoInstall('captcha');
+    INST_pluginAutoInstall('ckeditor');
+    INST_pluginAutoInstall('spamx');
+    INST_pluginAutoInstall('staticpages');
+
+//    $config->_purgeCache();
+//    INST_clearCache();
 
     $pluginsToInstall = $_POST['plugin'];
     if ( is_array($pluginsToInstall) ) {
