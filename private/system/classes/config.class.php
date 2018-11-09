@@ -575,13 +575,13 @@ class config
             " ORDER BY fieldset,sort_order ASC";
 
         try {
-            $data = $db->conn->fetchAll($q_string,
+            $stmt = $db->conn->executeQuery($q_string,
                         array(
                             $group,
                             $subgroup
                         ),
                         array(
-                            \glFusion\Database::INTEGER,
+                            \glFusion\Database::STRING,
                             \glFusion\Database::INTEGER
                         )
             );
@@ -591,6 +591,8 @@ class config
             }
             $db->dbError($e->getMessage(),$sql);
         }
+
+        $data = $stmt->fetchAll();
 
         if (!array_key_exists($group, $LANG_configselects)) {
             $LANG_configselects[$group] = array();
@@ -704,14 +706,14 @@ class config
                   . "ORDER BY subgroup";
 
         try {
-            $data = $db->conn->fetchAll($q_string,array($group));
+            $stmt = $db->conn->executeQuery($q_string,array($group));
         } catch(\Doctrine\DBAL\DBALException $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
             $db->dbError($e->getMessage(),$sql);
         }
-
+        $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
         $retval = array();
         foreach($data AS $row) {
             $retval[$row['name']] = $row['subgroup'];
@@ -1502,11 +1504,12 @@ class config
                     ORDER BY subgroup, fieldset, sort_order ASC";
 
             try {
-                $data = $db->conn->fetchAll($sql,array($item));
+                $stmt = $db->conn->executeQuery($sql,array($item));
             } catch(\Doctrine\DBAL\DBALException $e) {
                 $db->_errorlog("SQL Error: " . $e->getMessage());
                 continue;
             }
+            $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
             foreach($data AS $row) {
                 $groupname = $LANG_configsections[$group]['label'];
 

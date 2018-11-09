@@ -367,11 +367,17 @@ function CACHE_clear($plugin='')
 {
     global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
+    if (!defined ('CONFIG_CACHE_FILE_NAME')) {
+        define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+    }
+
     if (!empty($plugin)) {
         $plugin = '__' . $plugin . '__';
     }
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    @unlink($_CONF['path_data'].'cache/'.CONFIG_CACHE_FILE_NAME);
 
     CACHE_clearCSS();
     CACHE_clearJS();
