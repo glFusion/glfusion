@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<style>.cke_contents { padding: 10px !important; }</style>
 <script src="{site_url}/ckeditor/ckeditor.js"></script>
 <script >
 	var site_url = "{site_url}";
@@ -10,7 +11,7 @@
 		var instance = CKEDITOR.replace( id, {
 			toolbar: 'standard',
 			extraPlugins: 'mediagallery,youtube2,vimeo',
-			contentsCss : [ '{css_url}' ],
+			contentsCss : '{css_url}',
 			bodyClass: 'tm-container uk-article tm-article',
 			height: height,
 			{styleset}
@@ -19,10 +20,18 @@
 			filebrowserBrowseUrl :  '',
 			filebrowserImageBrowseUrl : '',
 {!endif}
-			language: '{iso_lang}'
+			language: '{iso_lang}',
+// advanced stuff
+			basicEntities : true,
+			entities : false,
+			entities_greek : false,
+			entities_latin : false,
+			fillEmptyBlocks : false,
+			tabSpaces: 0,
+			allowedContent: true,
 		} );
 
-		instance.config.protectedSource.push(/<i[^>]*><\/i>/g);
+//		instance.config.protectedSource.push(/<i[^>]*><\/i>/g);
 
 		return instance;
 	}
