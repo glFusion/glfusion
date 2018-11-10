@@ -686,7 +686,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 array(),
                 new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_num'));
         } catch(\Doctrine\DBAL\DBALException $e) {
-            $db->dbError($e->getMessage(),$sql);
+            $db->dbError($e->getMessage(),$num_pagessql);
         }
         $num_rows = $stmt->rowCount();
         $stmt->closeCursor();

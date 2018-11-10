@@ -1,36 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-autotag.php                                                          |
-// |                                                                          |
-// | glFusion autotag library.                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark Howard            mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Auto tag library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark Howard     mark AT usable-web DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
 
 //@TODO Move this to online configuration
@@ -106,16 +90,28 @@ function AT_collectTags()
 }
 
 
-function AT_loadTags() {
+function AT_loadTags()
+{
     global $_TABLES, $_AM_CONF;
 
+    $db = glFusion\Database::getInstance();
+
     $A = array();
-    $sql = "SELECT * FROM {$_TABLES['autotags']} WHERE is_enabled = 1";
-    $result = DB_query($sql,1);
-    $rows = DB_numrows($result);
+    $sql = "SELECT * FROM `{$_TABLES['autotags']}` WHERE is_enabled = 1";
+
+    try {
+        $stmt = $db->conn->executeQuery($sql,
+            array(),
+            array(),
+            new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'autotag_list'));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        if (defined('DVLP_DEBUG')) {
+            throw($e);
+        }
+        // otherwise ignore
+    }
     $allow_php = ($_AM_CONF['allow_php'] == 1) ? true : false;
-    for ($i = 0; $i < $rows; ++$i) {
-        $R = DB_fetchArray($result);
+    while ($R = $stmt->fetch(\glFusion\Database::ASSOCIATIVE)) {
         $isfunction = ($R['is_function'] == 1) ? true : false;
         if (!$isfunction OR ($isfunction AND $allow_php)) {
             $A[$R['tag']] = $R;
