@@ -1,43 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-admin.php                                                            |
-// |                                                                          |
-// | Admin-related functions needed in more than one place.                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark Howard            mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
-// |          Mark Limburg       - mlimburg AT users DOT sourceforge DOT net  |
-// |          Jason Whittenburg  - jwhitten AT securitygeeks DOT com          |
-// |          Dirk Haun          - dirk AT haun-online DOT de                 |
-// |          Oliver Spiesshofer - oliver AT spiesshofer DOT com              |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Admin-related functions needed in more than one place.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark Howard     mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: Tony Bibbs       - tony AT tonybibbs DOT com
+*            Mark Limburg       - mlimburg AT users DOT sourceforge DOT net
+*            Jason Whittenburg  - jwhitten AT securitygeeks DOT com
+*            Dirk Haun          - dirk AT haun-online DOT de
+*            Oliver Spiesshofer - oliver AT spiesshofer DOT com
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
 
 /**
@@ -207,7 +190,6 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('header_column_style', 'style="text-align:center;width:25px;"'); // always center checkbox
         $admin_templates->parse('header_row', 'header', true);
     }
-
     // setup list sort options
     if (!isset($_GET['orderby'])) {
         $orderby = $defsort_arr['field']; // not set - use default (this could be null)
@@ -220,14 +202,12 @@ function ADMIN_listArray($component, $fieldfunction, $header_arr, $text_arr,
             $orderby = $defsort_arr['field']; // not set - use default (this could be null)
         }
     }
-
     // set sort direction.  defaults to ASC
     $direction = (isset($_GET['direction'])) ? COM_applyFilter($_GET['direction']) : $defsort_arr['direction'];
     $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
 
     // retrieve previous sort order field
     $prevorder = (isset($_GET['prevorder'])) ? COM_applyFilter ($_GET['prevorder']) : '';
-
     // reverse direction if previous order field was the same (this is a toggle)
     if ($orderby == $prevorder) { // reverse direction if prev. order was the same
         $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
@@ -433,6 +413,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01, $_IMAGE_TYPE, $MESSAGE;
 
+    $db = glFusion\Database::getInstance();
+
     // retrieve the query
     if (isset($_GET['q'])) {
         $query = strip_tags($_GET['q']);
@@ -593,6 +575,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     SESS_setVar($component.'_direction',$direction);
     SESS_setVar($component.'_orderby',$orderbyidx);
 
+//@SQL
     // ok now let's build the order sql
     $orderbysql = (!empty($orderby)) ? "ORDER BY $orderby $direction" : '';
 
@@ -683,22 +666,31 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         // set the default sql filter (if any)
         $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
         $groupbysql = (isset($query_arr['group_by']) && !empty($query_arr['group_by'])) ? " GROUP BY {$query_arr['group_by']} " : '';
+
         // now add the query fields
         if (!empty($query)) { # add query fields with search term
             $filtersql .= " AND (";
             for ($f = 0; $f < count($query_arr['query_fields']); $f++) {
                 $filtersql .= $query_arr['query_fields'][$f]
-                            . " LIKE '%" . DB_escapeString($query) . "%'";
+                            . " LIKE " . $db->conn->quote('%'.$query.'%') . "";
                 if ($f < (count($query_arr['query_fields']) - 1)) {
                     $filtersql .= " OR ";
                 }
             }
             $filtersql .= ")";
         }
-
         $num_pagessql = $sql . $filtersql . $groupbysql;
-        $num_pagesresult = DB_query($num_pagessql);
-        $num_rows = DB_numRows($num_pagesresult);
+        try {
+            $stmt = $db->conn->executeQuery($num_pagessql,
+                array(),
+                array(),
+                new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_num'));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->dbError($e->getMessage(),$sql);
+        }
+        $num_rows = $stmt->rowCount();
+        $stmt->closeCursor();
+
         $num_pages = ceil ($num_rows / $limit);
         $curpage = ($num_pages < $curpage) ? 1 : $curpage; // don't go beyond possible results
         $offset = (($curpage - 1) * $limit);
@@ -713,7 +705,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     } else {
         $admin_templates->set_var('search_menu','');
     }
-
     # form the sql query to retrieve the data
     if ( !isset($filtersql) ) {
         $filtersql = '';
@@ -729,8 +720,16 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
     $sql .= "$filtersql $groupbysql $orderbysql $limitsql;";
 
-    $result = DB_query($sql);
-    $resultSet = DB_fetchAll($result);
+    try {
+        $stmt = $db->conn->executeQuery($sql,
+            array(),
+            array(),
+            new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        $db->dbError($e->getMessage(),$sql);
+    }
+    $resultSet = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $stmt->closeCursor();
     $nrows = 0;
 
     $r = 1; # r is the counter for the actual displayed rows for correct coloring
