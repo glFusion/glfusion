@@ -2042,14 +2042,18 @@ function COM_showTopics( $topic='' )
 
     // retrieve all the topic data
     try {
-        $topicData = $db->conn->fetchAll($sql);
+        $stmt = $db->conn->executeQuery($sql);
     } catch(\Doctrine\DBAL\DBALException $e) {
-        $topicData = array();
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
             $db->dbError($e->getMessage(),$sql);
         }
+    }
+    if ($stmt) {
+        $topicData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    } else {
+        $topicData = array();
     }
 
     $retval = '';
