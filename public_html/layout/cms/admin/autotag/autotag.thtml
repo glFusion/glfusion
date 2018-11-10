@@ -11,13 +11,13 @@
 		switch (selected) {
 			case false:
   			$('#replacement').prop('disabled',false);
-  			$('#replacement-help').css('display','');
-  			$('#replacement').html('');
+//  			$('#replacement-help').css('display','');
+  			$('#replacement-help').html('{lang_replace_explain}');
   			break;
 			case true:
   			$('#replacement').prop('disabled', true);
-  			$('#replacement-help').css('display','none');
-  			$('#replacement').html('{phpfn_replace} {phpfn_must_exist}');
+//  			$('#replacement-help').css('display','none');
+  			$('#replacement-help').html('{phpfn_replace} {phpfn_must_exist}');
   			break;
 		}
 	}
