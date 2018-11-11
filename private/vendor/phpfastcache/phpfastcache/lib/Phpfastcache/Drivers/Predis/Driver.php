@@ -82,6 +82,7 @@ class Driver implements ExtendedCacheItemPoolInterface
         if (!empty($this->getConfig()->getPath())) {
             $this->instance = new PredisClient([
                 'scheme' => 'unix',
+                'timeout' =>  $this->getConfig()->getTimeout(),
                 'path' => $this->getConfig()->getPath(),
             ], $options);
         } else {
@@ -91,9 +92,11 @@ class Driver implements ExtendedCacheItemPoolInterface
         try {
             $this->instance->connect();
         } catch (PredisConnectionException $e) {
-            echo $e->getMessage();
-            throw new PhpfastcacheDriverException('Failed to connect to predis server. Check the Predis documentation: https://github.com/nrk/predis/tree/v1.1#how-to-install-and-use-predis',
-                0, $e);
+            throw new PhpfastcacheDriverException(
+                'Failed to connect to predis server. Check the Predis documentation: https://github.com/nrk/predis/tree/v1.1#how-to-install-and-use-predis',
+                0,
+                $e
+            );
         }
 
         return true;
