@@ -13,6 +13,7 @@
   - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
 
 ### Fixed
+  - Forum boards admin - apostrophe's were double escaped causing the backslash to be stored as part of the forum name
   - Custom Autotag editor would remove custom replacement text due to a JavaScript error
   - Calendar upcoming event block would use the previous date as header in some instances
 
