@@ -858,7 +858,7 @@ function board_edit_forum_save($id)
         $name = _ff_preparefordb($name,'text');
         $dscp = _ff_preparefordb($dscp,'text');
 
-        $sql = "UPDATE {$_TABLES['ff_forums']} SET forum_name='".DB_escapeString($name)."',forum_order=".(int) $order.",forum_dscp='".DB_escapeString($dscp)."', grp_id=".(int) $privgroup.", ";
+        $sql = "UPDATE {$_TABLES['ff_forums']} SET forum_name='".$name."',forum_order=".(int) $order.",forum_dscp='".$dscp."', grp_id=".(int) $privgroup.", ";
         $sql .= "is_hidden='".DB_escapeString($is_hidden)."', is_readonly='".DB_escapeString($is_readonly)."', no_newposts='".DB_escapeString($no_newposts)."',use_attachment_grpid=".(int) $attachmentgroup.",forum_cat=".(int) $category." ";
         $sql .= "WHERE forum_id=".(int) $id;
 
