@@ -7,6 +7,7 @@
   - Forum plugin - admin can now change the forum category when editing a forum
 
 ### Changed
+  - Updated Polish translations for the installer, by glFusion Poland
   - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hold in the editor)
   - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
   - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
