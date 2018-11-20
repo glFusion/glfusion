@@ -16,6 +16,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Formatter;
+
 /**
  * Parse text block and interpret BBcodes
  *
@@ -31,7 +33,7 @@ function FUSION_formatTextBlock( $str, $postmode='html', $parser = array(), $cod
 
     $postmode = strtolower($postmode);
 
-    $format = new glFusion\Formatter();
+    $format = new Formatter();
     $format->setNamespace('bbcode');
     $format->setAction('post');
     $format->setType($postmode);
@@ -90,7 +92,7 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
 
     $postmode = strtolower($postmode);
 
-    $format = new glFusion\Formatter();
+    $format = new Formatter();
     $format->setNamespace('bbcode');
     $format->setAction('post');
     $format->setType($postmode);
