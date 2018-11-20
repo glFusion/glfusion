@@ -23,6 +23,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database;
+
 /**
 * Stub function for generation of checkbox
 *
@@ -724,11 +726,11 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $stmt = $db->conn->executeQuery($sql,
             array(),
             array(),
-            new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component));
+            new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_admlist'));
     } catch(\Doctrine\DBAL\DBALException $e) {
         $db->dbError($e->getMessage(),$sql);
     }
-    $resultSet = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $resultSet = $stmt->fetchAll(Database::ASSOCIATIVE);
     $stmt->closeCursor();
     $nrows = 0;
 
