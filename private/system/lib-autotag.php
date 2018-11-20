@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database;
+
 //@TODO Move this to online configuration
 
 $_AM_CONF['allow_php'] = 1;
@@ -111,7 +113,7 @@ function AT_loadTags()
         // otherwise ignore
     }
     $allow_php = ($_AM_CONF['allow_php'] == 1) ? true : false;
-    while ($R = $stmt->fetch(\glFusion\Database::ASSOCIATIVE)) {
+    while ($R = $stmt->fetch(Database::ASSOCIATIVE)) {
         $isfunction = ($R['is_function'] == 1) ? true : false;
         if (!$isfunction OR ($isfunction AND $allow_php)) {
             $A[$R['tag']] = $R;
