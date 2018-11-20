@@ -23,6 +23,8 @@ if (!@file_exists('siteconfig.php') ) {
     exit;
 }
 
+use glFusion\Database;
+
 require_once 'lib-common.php';
 USES_lib_story();
 
@@ -83,7 +85,7 @@ if ( isset($_GET['ncb'])) {
 }
 
 // get DB object
-$db = glFusion\Database::getInstance();
+$db = Database::getInstance();
 
 // set archive topic
 try {
@@ -228,10 +230,10 @@ if (!empty($topic)) {
     $queryBuilder->andWhere(
         $queryBuilder->expr()->orX(
             $queryBuilder->expr()->eq('s.tid',
-              $queryBuilder->createNamedParameter($topic,glFusion\Database::STRING)
+              $queryBuilder->createNamedParameter($topic,Database::STRING)
             ),
             $queryBuilder->expr()->eq('s.alternate_tid',
-              $queryBuilder->createNamedParameter($topic,glFusion\Database::STRING)
+              $queryBuilder->createNamedParameter($topic,Database::STRING)
             )
         )
     );
@@ -249,7 +251,7 @@ if (!empty($topic)) {
 
 if ($topic != $archivetid) {
     $queryBuilder->andWhere('s.tid != ' .
-      $queryBuilder->createNamedParameter($archivetid,glFusion\Database::STRING)
+      $queryBuilder->createNamedParameter($archivetid,Database::STRING)
     );
 }
 
@@ -286,14 +288,14 @@ $db->qbGetTopicSQL($queryBuilder,'AND',0,'s');
 
 if ( $limituser ) {
     $queryBuilder->andWhere('s.uid',
-      $queryBuilder->createNamedParameter($limituser_id,glFusion\Database::INTEGER)
+      $queryBuilder->createNamedParameter($limituser_id,Database::INTEGER)
     );
 }
 
 if ($newstories) {
     $sql = "(date >= (date_sub(NOW(), INTERVAL :interval SECOND))) ";
     $queryBuilder->andWhere($sql);
-    $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],glFusion\Database::INTEGER);
+    $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],Database::INTEGER);
 }
 
 //print $_CONF['newstoriesinterval'].'<br>';
