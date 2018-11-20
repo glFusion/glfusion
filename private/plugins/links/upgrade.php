@@ -72,6 +72,16 @@ function links_upgrade()
 
         case '2.1.5' :
 
+        case '2.1.6' :
+            DB_query("UPDATE {$_TABLES['linkcategories']} SET `created` = '1970-01-01 00:00:00' WHERE CAST(`created` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['linkcategories']} SET `modified` = '1970-01-01 00:00:00' WHERE CAST(`modified` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['links']} SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE {$_TABLES['linksubmission']} SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("ALTER TABLE `{$_TABLES['linkcategories']}` CHANGE COLUMN `created` `created` DATETIME NULL DEFAULT NULL,
+                        CHANGE COLUMN `modified` `modified` DATETIME NULL DEFAULT NULL;",1);
+            DB_query("ALTER TABLE `{$_TABLES['links']}` CHANGE COLUMN `date` `date` DATETIME NULL DEFAULT NULL;",1);
+            DB_query("ALTER TABLE `{$_TABLES['linksubmission']}` CHANGE COLUMN `date` `date` DATETIME NULL DEFAULT NULL;",1);
+
         default :
             links_update_config();
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_LI_CONF['pi_version']."',pi_gl_version='".$_LI_CONF['gl_version']."' WHERE pi_name='links' LIMIT 1");

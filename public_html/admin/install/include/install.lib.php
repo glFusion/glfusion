@@ -1623,7 +1623,54 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.7.6';
 
         case '1.7.6' :
-            // need to update DB Fields
+            // fix invalid defaults
+            $sql = "ALTER TABLE `{$_TABLES['stories']}`
+                CHANGE COLUMN `comment_expire` `comment_expire` DATETIME NULL DEFAULT NULL,
+                CHANGE COLUMN `expire` `expire` DATETIME NULL DEFAULT NULL;";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE CAST(`comment_expire` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE CAST(`comment_expire` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE CAST(`expire` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE CAST(`expire` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql ="UPDATE `{$_TABLES['syndication']}` SET `updated` = '1970-01-01 00:00:00' WHERE CAST(`updated` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql ="UPDATE `{$_TABLES['syndication']}` SET `updated` = '1970-01-01 00:00:00' WHERE CAST(`updated` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "ALTER TABLE `{$_TABLES['syndication']}` CHANGE COLUMN `updated` `updated` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "ALTER TABLE `{$_TABLES['users']}`
+            	CHANGE COLUMN `regdate` `regdate` DATETIME NULL DEFAULT NULL AFTER `sig`,
+            	CHANGE COLUMN `act_time` `act_time` DATETIME NULL DEFAULT NULL AFTER `act_token`;";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['users']}` SET `act_time` = '1970-01-01 00:00:00' WHERE CAST(`act_time` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql = "UPDATE `{$_TABLES['users']}` SET `act_time` = '1970-01-01 00:00:00' WHERE CAST(`act_time` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['users']}` SET `regdate` = '1970-01-01 00:00:00' WHERE CAST(`regdate` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql = "UPDATE `{$_TABLES['users']}` SET `regdate` = '1970-01-01 00:00:00' WHERE CAST(`regdate` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '0000-00-00 00:00:00';";
+            DB_query($sql,1);
+            $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+
+            $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '1000-01-01 00:00:00';";
+            DB_query($sql,1);
+            $sql = "ALTER TABLE `{$_TABLES['blocks']}` CHANGE COLUMN `rdfupdated` `rdfupdated` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';";
+            DB_query($sql,1);
 
             $current_fusion_version = '1.7.7';
 

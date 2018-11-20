@@ -183,6 +183,11 @@ function bad_behavior2_upgrade ()
             $c = config::get_instance();
             $c->del('bb2_eu_cookie','Core');
 
+        case '2.0.55' :
+            DB_query("UPDATE `{$_TABLES['bad_behavior2']}` SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '0000-00-00 00:00:00';",1);
+            DB_query("UPDATE `{$_TABLES['bad_behavior2']}` SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '1000-01-01 00:00:00';",1);
+            DB_query("ALTER TABLE `{$_TABLES['bad_behavior2']}` CHANGE COLUMN `date` `date` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' AFTER `ip`;",1);
+
         default:
             break;
     }

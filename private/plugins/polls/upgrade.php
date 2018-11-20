@@ -79,6 +79,11 @@ function polls_upgrade()
         case '2.2.2' :
             // no changes
 
+        case '2.2.3' :
+            DB_query("UPDATE `{$_TABLES['polltopics']}` SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE `{$_TABLES['polltopics']}` SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '1000-01-01 00:00:00';");
+            DB_query("ALTER TABLE `{$_TABLES['polltopics']}` CHANGE COLUMN `date` `date` DATETIME NULL DEFAULT NULL;",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_PO_CONF['pi_version']."',pi_gl_version='".$_PO_CONF['gl_version']."' WHERE pi_name='polls' LIMIT 1");
             break;

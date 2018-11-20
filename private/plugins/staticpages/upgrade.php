@@ -72,6 +72,11 @@ function staticpages_upgrade()
         case '1.6.3' :
             DB_query("ALTER TABLE {$_TABLES['staticpage']} CHANGE `sp_content` `sp_content` MEDIUMTEXT NOT NULL;",1);
 
+        case '1.6.4' :
+            DB_query("UPDATE `{$_TABLES['staticpage']}` SET `sp_date` = '1970-01-01 00:00:00' WHERE CAST(`sp_date` AS CHAR(20)) = '0000-00-00 00:00:00';");
+            DB_query("UPDATE `{$_TABLES['staticpage']}` SET `sp_date` = '1970-01-01 00:00:00' WHERE CAST(`sp_date` AS CHAR(20)) = '1000-00-00 01:01:00';");
+            DB_query("ALTER TABLE `{$_TABLES['staticpage']}` CHANGE COLUMN `sp_date` `sp_date` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");
             break;
