@@ -34,7 +34,7 @@ if (!defined ('GVERSION')) {
 $_SQL['bad_behavior2'] = "CREATE TABLE {$_TABLES['bad_behavior2']} (
     `id` INT(10) unsigned NOT NULL auto_increment,
     `ip` TEXT NOT NULL,
-    `date` DATETIME NOT NULL default '1000-01-01 00:00:00.000000',
+    `date` DATETIME NOT NULL default '1970-01-01 00:00:00',
     `request_method` TEXT NOT NULL,
     `request_uri` TEXT NOT NULL,
     `server_protocol` TEXT NOT NULL,

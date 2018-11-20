@@ -127,7 +127,7 @@ $_SQL['filemgmt_history'] = "CREATE TABLE {$_TABLES['filemgmt_history']} (
   uid mediumint(8) NOT NULL default '0',
   lid int(11) NOT NULL default '0',
   remote_ip varchar(15) NOT NULL default '',
-  date datetime NOT NULL default '1000-01-01 00:00:00.000000',
+  date datetime NOT NULL default '1970-01-01 00:00:00',
   KEY lid (lid),
   KEY uid (uid)
 ) ENGINE=MyISAM";

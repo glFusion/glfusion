@@ -38,6 +38,24 @@
 
   - n/a
 
+## v1.7.7 (Unreleased)
+
+### Added
+  - headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
+  - Forum plugin - admin can now change the forum category when editing a forum
+
+### Changed
+  - Updated Polish translations for the installer, by glFusion Poland
+  - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hold in the editor)
+  - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
+  - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
+  - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
+
+### Fixed
+  - Forum boards admin - apostrophe's were double escaped causing the backslash to be stored as part of the forum name
+  - Custom Autotag editor would remove custom replacement text due to a JavaScript error
+  - Calendar upcoming event block would use the previous date as header in some instances
+
 ## v1.7.6 (October 31, 2018)
 
 ### Added
