@@ -134,7 +134,7 @@ $LANG_configselects['captcha'] = array(
     6 => array('light' => 'light', 'dark' => 'dark')
 );
 $PLG_captcha_MESSAGE1 = 'CAPTCHA aktualizacja wtyczki: aktualizacja zakończona powodzeniem.';
-$PLG_captcha_MESSAGE2 = 'CAPTCHA wtyczka pomyślnie zainstalowana';
+$PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
 
 ?>
