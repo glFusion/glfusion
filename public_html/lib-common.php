@@ -51,6 +51,9 @@ if (!defined ('OPENSSL_RAW_DATA')) {
 
 $_COM_VERBOSE = false;
 
+use \glFusion\Database;
+use \glFusion\Cache;
+
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
 {
@@ -199,7 +202,7 @@ $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-$db = glFusion\Database::getInstance();
+$db = Database::getInstance();
 
 try {
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['vars']}`",
@@ -209,7 +212,7 @@ try {
 } catch(\Doctrine\DBAL\DBALException $e) {
     $db->dbError($e->getMessage(),$sql);
 }
-$data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+$data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
 if (count($data) < 1) {
     $data = array();
@@ -293,7 +296,7 @@ try {
 } catch(\Doctrine\DBAL\DBALException $e) {
     $db->dbError($e->getMessage(),$sql);
 }
-$data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+$data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
 if (count($data) < 1) {
     $data = array();
@@ -926,12 +929,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
             $sid = (string) filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['story'] );
         } elseif ( isset( $_GET['sid'] )) {
             $sid = (string) filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['sid'] );
         } elseif ( isset( $_POST['story'] )) {
-//            $sid = COM_applyFilter( $_POST['story'] );
             $sid = (string) filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
@@ -939,16 +939,14 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = (string) filter_var(COM_getArgument('story'),FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
         if ( !empty( $sid )) {
-            $db = \glFusion\Database::getInstance();
+            $db = Database::getInstance();
             $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
-            $stmt->bindParam(1,$sid,\glFusion\Database::STRING);
+            $stmt->bindParam(1,$sid,Database::STRING);
             $topic = $stmt->fetchColumn();
         }
     } else {
-//        $topic = COM_applyFilter( $_GET['topic'] );
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
     }
 
@@ -959,14 +957,16 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         } else {
             $baseurl = SYND_getFeedUrl();
 
-            $sql = 'SELECT format, filename, title, language FROM '
-                 . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
+            $sql = "SELECT format, filename, title, language FROM `{$_TABLES['syndication']}`
+                     WHERE (header_tid = 'all')";
             if ( !empty( $topic )) {
                 $sql .= " OR (header_tid = ?)";
             }
-            $db = \glFusion\Database::getInstance();
+            $db = Database::getInstance();
             $stmt = $db->conn->prepare($sql);
-            $stmt->bindParam(1,$topic,\glFusion\Database::STRING);
+            if ( !empty( $topic )) {
+                $stmt->bindParam(1,$topic,Database::STRING);
+            }
             $stmt->execute();
             $topicRows = $stmt->fetchAll();
             foreach($topicRows AS $A) {
@@ -984,7 +984,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             SESS_setVar('feedurl',serialize($feed_url));
         }
     }
-    $header->set_var( 'feed_url', implode( LB, $feed_url ));
+    $header->set_var( 'feed_url', implode( PHP_EOL, $feed_url ));
 
     $relLinks = array();
     if ( !COM_onFrontpage() ) {
@@ -1011,7 +1011,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         }
     }
 
-    $header->set_var( 'rel_links', implode( LB, $relLinks ));
+    $header->set_var( 'rel_links', implode( PHP_EOL, $relLinks ));
 
     if ( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
         $pagetitle = $_CONF['pagetitle'];
@@ -1020,9 +1020,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         if ( empty( $topic )) {
             $pagetitle = $_CONF['site_slogan'];
         } else {
-            $db = \glFusion\Database::getInstance();
+            $db = Database::getInstance();
             $stmt = $db->conn->prepare("SELECT topic FROM `{$_TABLES['topics']}` WHERE tid=?");
-            $stmt->bindParam(1,$topic,\glFusion\Database::STRING);
+            $stmt->bindParam(1,$topic,Database::STRING);
             $stmt->execute();
             $pagetitle = $stmt->fetchColumn();
         }
@@ -1049,7 +1049,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $header->set_var('page_title_and_site_name', $title_and_name);
 
-    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . LB;
+    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
 
     list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
     list($cacheFile,$js_cache_url) = COM_getJSCacheLocation();
@@ -1158,9 +1158,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 //            $sid = COM_applyFilter( COM_getArgument( 'story' ));
             $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
         } if ( !empty( $sid )) {
-            $db = \glFusion\Database::getInstance();
+            $db = Database::getInstance();
             $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
-            $stmt->bindParam(1,$sid,\glFusion\Database::STRING);
+            $stmt->bindParam(1,$sid,Database::STRING);
             $stmt->execute();
             $topic = $stmt->fetchColumn();
         }
@@ -1284,7 +1284,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
 
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                          strlen( $_CONF['path_html'] ) - 1 ) . LB;
+                          strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
     $theme->set_var( 'rdf_file', $rdf );
     $theme->set_var( 'rss_url', $rdf );
 
@@ -1404,7 +1404,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $thisUrl = COM_getCurrentURL();
     if (@strpos($thisUrl, $_CONF['site_admin_url']) !== false) {
-        $code = "var site_admin_url = '".$_CONF['site_admin_url']."';" . LB;
+        $code = "var site_admin_url = '".$_CONF['site_admin_url']."';" . PHP_EOL;
         $outputHandle->addScript($code);
     }
 
@@ -1601,7 +1601,7 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     }
     $sql .= " ORDER BY {$select_set[$sortcol]}";
 
-    $db = \glFusion\Database::getInstance();
+    $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
     while ($A = $stmt->fetch()) {
@@ -1623,7 +1623,7 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
         } else {
             $retval .= $LangTable[$A[0]];
         }
-        $retval .= '</option>' . LB;
+        $retval .= '</option>' . PHP_EOL;
     }
 
     return $retval;
@@ -1661,7 +1661,7 @@ function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = 
             if ( isset($tid) ) {
                 $retval .= ' (' . $tid . ')';
             }
-            $retval .=  '</option>' . LB;
+            $retval .=  '</option>' . PHP_EOL;
         }
     }
 
@@ -1704,7 +1704,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
     }
     $sql .=  " ORDER BY $select_set[$sortcol]";
 
-    $db = \glFusion\Database::getInstance();
+    $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
     if (count($select_set) > 1) {
@@ -1744,7 +1744,7 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         $sql .= " WHERE $where";
     }
 
-    $db = \glfusion\Database::getInstance();
+    $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
     if ( !empty( $selected )) {
@@ -1760,7 +1760,7 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
         $S = array();
     }
-    $retval = '<ul class="checkboxes-list">' . LB;
+    $retval = '<ul class="checkboxes-list">' . PHP_EOL;
     while ($A = $stmt->fetch()) {
         $access = true;
 
@@ -1786,13 +1786,13 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
             }
 
             if (( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
-                $retval .= '/><span class="gldefault">' .  $A[1]  . '</span></li>' . LB;
+                $retval .= '/><span class="gldefault">' .  $A[1]  . '</span></li>' . PHP_EOL;
             } else {
-                $retval .= '/><span>' .  $A[1]  . '</span></li>' . LB;
+                $retval .= '/><span>' .  $A[1]  . '</span></li>' . PHP_EOL;
             }
         }
     }
-    $retval .= '</ul>' . LB;
+    $retval .= '</ul>' . PHP_EOL;
 
     return $retval;
 }
@@ -1812,13 +1812,13 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 function COM_debug( $A )
 {
     if ( !empty( $A )) {
-        $retval .= LB . '<pre><p>---- DEBUG ----</p>';
+        $retval .= PHP_EOL . '<pre><p>---- DEBUG ----</p>';
 
         for( reset( $A ); $k = key( $A ); next( $A )) {
             $retval .= sprintf( "<li>%13s [%s]</li>\n", $k, $A[$k] );
         }
 
-        $retval .= '<p>---------------</p></pre>' . LB;
+        $retval .= '<p>---------------</p></pre>' . PHP_EOL;
     }
 
     return $retval;
@@ -1854,7 +1854,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE is_enabled = 1";
         }
 
-        $db = \glFusion\Database::getInstance();
+        $db = Database::getInstance();
         $stmt = $db->conn->query($sql);
         $resultSet = $stmt->fetchAll();
         foreach($resultSet AS $A) {
@@ -1914,7 +1914,7 @@ function COM_errorLog( $logentry, $actionid = 1 )
                 $logfile = $_CONF['path_log'] . 'error.log';
 
                 if ( !$file = fopen( $logfile, 'a' )) {
-                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . LB;
+                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
                 } else {
                     fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
                 }
@@ -1932,7 +1932,7 @@ function COM_errorLog( $logentry, $actionid = 1 )
                 $logfile = $_CONF['path_log'] . 'error.log';
 
                 if ( !$file = fopen( $logfile, 'a' )) {
-                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . LB;
+                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
                 } else {
                     fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
                     if ( class_exists('Template') ) {
@@ -1979,7 +1979,7 @@ function COM_accessLog( $logentry )
         $logfile = $_CONF['path_log'] . 'access.log';
 
         if ( !$file = fopen( $logfile, 'a' )) {
-            return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br/>' . LB;
+            return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
         }
 
         if ( isset( $_USER['uid'] )) {
@@ -2009,7 +2009,7 @@ function COM_showTopics( $topic='' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $_BLOCK_TEMPLATE, $page;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $langsql = $db->getLangSQL( 'tid' );
     if ( empty( $langsql )) {
@@ -2023,7 +2023,7 @@ function COM_showTopics( $topic='' )
     if ( !COM_isAnonUser() ) {
         if ( !empty( $_USER['tids'] )) {
             $tidsArray = array_map(function($tid) {
-              $db = glFusion\Database::getInstance();
+              $db = Database::getInstance();
               return $db->conn->quote($tid);
             }, explode(' ',$_USER['tids']));
             $sql .= " $op (tid NOT IN (".implode(',',$tidsArray).")) ". $db->getPermSQL( 'AND' );
@@ -2051,7 +2051,7 @@ function COM_showTopics( $topic='' )
         }
     }
     if ($stmt) {
-        $topicData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $topicData = $stmt->fetchAll(Database::ASSOCIATIVE);
     } else {
         $topicData = array();
     }
@@ -2097,11 +2097,11 @@ function COM_showTopics( $topic='' )
 
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
-                new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, glFusion\Cache::getInstance()->createKey('menu_sc')));
+                new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_sc')));
         } catch(\Doctrine\DBAL\DBALException $e) {
             $db->dbError($e->getMessage(),$sql);
         }
-        $storyCountData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $storyCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
 
         foreach ($storyCountData AS $C) {
@@ -2114,11 +2114,11 @@ function COM_showTopics( $topic='' )
 
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
-                new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, glFusion\Cache::getInstance()->createKey('menu_submissioncount')));
+                new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_submissioncount')));
         } catch(\Doctrine\DBAL\DBALException $e) {
             $db->dbError($e->getMessage(),$sql);
         }
-        $submissionCountData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $submissionCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
         foreach($submissionCountData AS $C) {
             $submissioncount[$C['tid']] = $C['count'];
@@ -2194,7 +2194,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
     $retval = '';
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ( !COM_isAnonUser() ) {
         if ( empty( $title )) {
@@ -2333,7 +2333,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         return '';
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ( empty( $title )) {
         $title = $db->conn->fetchColumn("SELECT title FROM `{$_TABLES['blocks']}` WHERE name='admin_block'");
@@ -2888,7 +2888,7 @@ function COM_olderStuff()
 {
     global $_TABLES, $_CONF;
 
-    $db = \glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     try {
         $stmt = $db->conn->query("SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day
@@ -2942,7 +2942,7 @@ function COM_olderStuff()
         $daylist = str_replace(array("\015", "\012"), '', $daylist);
         $string .= $daylist;
         try {
-            $db->conn->executeUpdate("UPDATE {$_TABLES['blocks']} SET content = ? WHERE name = 'older_stories'",array($string),array(\glFusion\Database::STRING));
+            $db->conn->executeUpdate("UPDATE {$_TABLES['blocks']} SET content = ? WHERE name = 'older_stories'",array($string),array(Database::STRING));
         } catch(\Doctrine\DBAL\DBALException $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
@@ -3024,7 +3024,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     $retval = '';
     $prepareData = array();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     // Get user preferences on blocks
 
@@ -3055,7 +3055,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if ( !empty( $_USER['boxes'] )) {
         $boxesArray = array_map(function($bid) {
-          $db = glFusion\Database::getInstance();
+          $db = Database::getInstance();
           return intval($bid);
         }, explode(' ',$_USER['boxes']));
         $commonsql .= " AND (bid NOT IN (".implode(',',$boxesArray).") OR bid = '-1') ";
@@ -3066,7 +3066,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     $blocksql .= $commonsql;
 
     $stmt = $db->conn->executeQuery($blocksql,$prepareData);
-    $blocks = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $blocks = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     // Check and see if any plugins have blocks to show
     $pluginBlocks = PLG_getBlocks( $side, $topic, $name );
@@ -3115,7 +3115,7 @@ function COM_formatBlock( $A, $noboxes = false )
 
     $retval = '';
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $lang = COM_getLanguageId();
 
@@ -3123,7 +3123,7 @@ function COM_formatBlock( $A, $noboxes = false )
         $sql = "SELECT *,UNIX_TIMESTAMP(rdfupdated) AS date FROM `{$_TABLES['blocks']}`
                 WHERE name = ?";
         $searchItem = $A['name'].'_'.$lang;
-        $row = $db->conn->fetchAssoc($sql,array($searchItem),array(\glFusion\Database::STRING));
+        $row = $db->conn->fetchAssoc($sql,array($searchItem),array(Database::STRING));
         if ($row) {
             $A = $row;
         }
@@ -3202,7 +3202,7 @@ function COM_formatBlock( $A, $noboxes = false )
 
         $retval .= COM_startBlock( $A['title'], $A['help'],
                        COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] )
-                . $blockcontent . LB
+                . $blockcontent . PHP_EOL
                 . COM_endBlock( COM_getBlockTemplate( $A['name'], 'footer', $position ));
     }
 
@@ -3256,11 +3256,11 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
     $articles = array();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $last_modified = null;
     $etag = null;
-    $rdfData = $db->conn->fetchAssoc("SELECT rdf_last_modified,rdf_etag FROM `{$_TABLES['blocks']}` WHERE bid = ?",array($bid),array(\glFusion\Database::INTEGER));
+    $rdfData = $db->conn->fetchAssoc("SELECT rdf_last_modified,rdf_etag FROM `{$_TABLES['blocks']}` WHERE bid = ?",array($bid),array(Database::INTEGER));
     if ($rdfData) {
         $last_modified = $rdfData['rdf_last_modified'];
         $etag = $rdfData['rdf_etag'];
@@ -3298,8 +3298,8 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         if (empty($last_modified)) {
             $db->conn->executeUpdate("UPDATE `{$_TABLES['blocks']}` SET rdfupdated = ?, rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ?",
                 array(1=>$update,2=>$bid),
-                array(\glFusion\Database::STRING,
-                      \glFusion\Database::INTEGER
+                array(Database::STRING,
+                      Database::INTEGER
                 )
             );
         } else {
@@ -3310,10 +3310,10 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                     3=>$etag,
                     4=>$bid
                 ),
-                array(\glFusion\Database::STRING,
-                      \glFusion\Database::STRING,
-                      \glFusion\Database::STRING,
-                      \glFusion\Database::INTEGER
+                array(Database::STRING,
+                      Database::STRING,
+                      Database::STRING,
+                      Database::INTEGER
                 )
             );
         }
@@ -3350,8 +3350,8 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                 1=>$content,
                 2=>$bid
             ),
-            array(\glFusion\Database::STRING,
-                  \glFusion\Database::INTEGER
+            array(Database::STRING,
+                  Database::INTEGER
             )
         );
     } else {
@@ -3362,8 +3362,8 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                 1=>$err,
                 2=>$bid
             ),
-            array(\glFusion\Database::STRING,
-                  \glFusion\Database::INTEGER
+            array(Database::STRING,
+                  Database::INTEGER
             )
         );
     }
@@ -3433,7 +3433,7 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $passwd = $db->conn->fetchColumn("SELECT passwd FROM `{$_TABLES['users']}` WHERE username = ?",array($loginname),0);
 
@@ -3467,7 +3467,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
 
     static $cache = array();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ($uid == '') {
         if (COM_isAnonUser()) {
@@ -3489,7 +3489,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
                FROM `{$_TABLES['users']}`
                WHERE uid=?",
                array($uid),
-               array(\glFusion\Database::INTEGER)
+               array(Database::INTEGER)
         );
         if ($userData !== false) {
             $username = $userData['username'];
@@ -3534,7 +3534,7 @@ function COM_hit()
     global $_TABLES;
 
     try {
-        $db = glFusion\Database::getInstance()->conn->executeUpdate("UPDATE `{$_TABLES['vars']}` SET value = value + 1 WHERE name = 'totalhits'");
+        $db = Database::getInstance()->conn->executeUpdate("UPDATE `{$_TABLES['vars']}` SET value = value + 1 WHERE name = 'totalhits'");
     } catch(\Doctrine\DBAL\DBALException $e) {
         // ignore the error
     }
@@ -3558,7 +3558,7 @@ function COM_emailUserTopics()
         return;
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $storytext = '';
     $storytext_text = '';
@@ -3596,13 +3596,13 @@ function COM_emailUserTopics()
         $lastrun = '1970-01-01 00:00:00';
     }
 
-    while($U = $stmt->fetch(\glFusion\Database::ASSOCIATIVE)) {
+    while($U = $stmt->fetch(Database::ASSOCIATIVE)) {
 
         $topicSQL = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',$U['uuid']);
 
         // pull topic info
         $topicStmt = $db->conn->executeQuery($topicSQL);
-        $topicData = $topicStmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $topicData = $topicStmt->fetchAll(Database::ASSOCIATIVE);
         if (count($topicData) == 0) {
             continue;
         }
@@ -3624,7 +3624,7 @@ function COM_emailUserTopics()
 
 
         $tidsArray = array_map(function($tid) {
-          $db = glFusion\Database::getInstance();
+          $db = Database::getInstance();
           return $db->conn->quote($tid);
         }, $TIDS);
 
@@ -3638,7 +3638,7 @@ function COM_emailUserTopics()
         // run the story select
 
         $storyStmt = $db->conn->executeQuery($storySQL,array(),array());
-        $storyData = $storyStmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $storyData = $storyStmt->fetchAll(Database::ASSOCIATIVE);
 
         if ( count($storyData) == 0 ) {
             // If no new stories where pulled for this user, continue with next
@@ -3737,8 +3737,8 @@ function COM_emailUserTopics()
         $mailtext_text = $TT->finish($TT->get_var('digest'));
 
         $mailfrom = $_CONF['noreply_mail'];
-        $mailtext .= LB . LB . $LANG04[159];
-        $mailtext_text .= LB . LB . $LANG04[159];
+        $mailtext .= PHP_EOL . PHP_EOL . $LANG04[159];
+        $mailtext_text .= PHP_EOL . PHP_EOL . $LANG04[159];
 
         $to = array();
         $from = array();
@@ -3751,7 +3751,7 @@ function COM_emailUserTopics()
     $db->conn->executeUpdate(
         "UPDATE `{$_TABLES['vars']}` SET value = ? WHERE name = 'lastemailedstories'",
         array($_CONF['_now']->toMySQL(true)),
-        array(\glFusion\Database::STRING)
+        array(Database::STRING)
     );
 }
 
@@ -3776,14 +3776,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $_CONF['whatsnew_cache_time'] = 3600;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $key = 'whatsnew__'.$c->securityHash(true,true);
     $final = $c->get($key);
     if ( $final !== null ) {
         return $final;
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $T = new Template($_CONF['path_layout'].'blocks');
     $T->set_file('block', 'whatsnew.thtml');
@@ -3818,8 +3818,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $key = 'whatsnew_query_'.MD5($sql);
 
-        $stmt = $db->conn->executeQuery($sql,array($_CONF['newstoriesinterval']),array(\glFusion\Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $key));
-        $newStoryData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $stmt = $db->conn->executeQuery($sql,array($_CONF['newstoriesinterval']),array(Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $key));
+        $newStoryData = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
 
         if ( empty( $title )) {
@@ -3875,7 +3875,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.queued = 0 AND {$_TABLES['comments']}.date >= (DATE_SUB('".$_CONF['_now']->toMySQL(true)."', INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
         $stmt = $db->conn->executeQuery($sql);
-        $commentCountData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $commentCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
 
         if (count($commentCountData) > 0) {
             $T->set_var('section_title',$LANG01[83]);
@@ -3940,7 +3940,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 ORDER BY lastdate DESC LIMIT 15";
 
         $stmt = $db->conn->executeQuery($sql);
-        $trackbackData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $trackbackData = $stmt->fetchAll(Database::ASSOCIATIVE);
         if ( count($trackbackData) > 0 ) {
             $T->set_var('section_title',$LANG01[114]);
             $T->set_var('interval',COM_formatTimeString( $LANG_WHATSNEW['new_last'],$_CONF['newtrackbackinterval'] ));
@@ -4457,7 +4457,7 @@ function COM_getUserCookieTimeout()
         return;
     }
 
-    $timeoutvalue = glFusion\Database::getInstance()
+    $timeoutvalue = Database::getInstance()
                     ->conn->fetchColumn("SELECT cookietimeout FROM `{$_TABLES['users']}` WHERE uid=?",array($_USER['uid']),0);
 
     if ($timeoutvalue === false) {
@@ -4703,16 +4703,16 @@ function COM_getAmPmFormSelection( $name, $selected = '' )
             $selected = date( 'a' );
         }
 
-        $retval .= '<select name="' . $name . '">' . LB;
+        $retval .= '<select name="' . $name . '">' . PHP_EOL;
         $retval .= '<option value="am"';
         if ( $selected == 'am' ) {
             $retval .= ' selected="selected"';
         }
-        $retval .= '>am</option>' . LB . '<option value="pm"';
+        $retval .= '>am</option>' . PHP_EOL . '<option value="pm"';
         if ( $selected == 'pm' ) {
             $retval .= ' selected="selected"';
         }
-        $retval .= '>pm</option>' . LB . '</select>' . LB;
+        $retval .= '>pm</option>' . PHP_EOL . '</select>' . PHP_EOL;
     }
 
     return $retval;
@@ -4776,13 +4776,13 @@ function COM_checkSpeedlimit($type = 'submit', $max = 1, $property = '')
         $property = $_SERVER['REAL_ADDR'];
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $sql = "SELECT date FROM `{$_TABLES['speedlimit']}`
             WHERE (type = ?) AND (ipaddress = ?) ORDER BY date ASC";
 
     $stmt = $db->conn->executeQuery($sql,array($type,$property));
-    $slData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $slData = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     // If the number of allowed tries has not been reached,
     // return 0 (didn't hit limit)
@@ -4817,12 +4817,12 @@ function COM_updateSpeedlimit($type = 'submit', $property = '')
         $property = $_SERVER['REAL_ADDR'];
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $stmt = $db->conn->executeUpdate(
         "REPLACE INTO `{$_TABLES['speedlimit']}` (ipaddress,date,type) VALUES (?, UNIX_TIMESTAMP(), ?)",
         array($property,$type),
-        array(\glFusion\Database::STRING, \glFusion\Database::STRING)
+        array(Database::STRING, Database::STRING)
     );
 }
 
@@ -4837,7 +4837,7 @@ function COM_clearSpeedlimit($speedlimit = 60, $type = '')
 {
     global $_TABLES;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $sql = "DELETE FROM `{$_TABLES['speedlimit']}` WHERE ";
     if (!empty($type)) {
@@ -4859,7 +4859,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
 {
     global $_TABLES;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if (empty($property)) {
         $property = $_SERVER['REAL_ADDR'];
@@ -4868,7 +4868,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     $db->conn->executeUpdate(
         "DELETE FROM `{$_TABLES['speedlimit']}` WHERE type=? AND ipaddress=?",
         array($type, $property),
-        array(\glFusion\Database::STRING, \glFusion\Database::STRING)
+        array(Database::STRING, Database::STRING)
     );
 }
 
@@ -5066,7 +5066,7 @@ function COM_getTopicSQL( $type = 'WHERE', $u_id = 0, $table = '' )
 {
     global $_TABLES, $_USER, $_GROUPS;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     return $db->getTopicSQL($type, $u_id, $table);
 }
@@ -6543,11 +6543,11 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
 {
     global $_TABLES;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
     $owner_select = '<select name="'.$fieldName.'">';
-    while ($row = $stmt->fetch(\glFusion\Database::ASSOCIATIVE)) {
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
@@ -6697,13 +6697,13 @@ function CMT_updateCommentcodes()
     global $_CONF, $_TABLES;
 
     $cleared = 0;
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ($_CONF['comment_close_rec_stories'] > 0) {
         $stmt = $db->conn->executeQuery(
             "SELECT sid FROM `{$_TABLES['stories']}` ORDER BY date DESC LIMIT ".(int) $_CONF['comment_close_rec_stories']
         );
-        $aComments = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $aComments = $stmt->fetchAll(Database::ASSOCIATIVE);
         foreach ($aComments AS $row) {
             $allowedcomments[] = $row['sid'];
         }
@@ -6725,7 +6725,7 @@ function CMT_updateCommentcodes()
 
             if ( $stmt ) {
                 if ( $stmt->rowCount() > 0 ) {
-                    $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+                    $c = Cache::getInstance()->deleteItemsByTag('story');
                     $cleared = 1;
                 }
             }
@@ -6740,7 +6740,7 @@ function CMT_updateCommentcodes()
     if ( $cleared == 0 ) {
         if ( $stmt ) {
             if ( $stmt->rowCount() > 0 ) {
-                $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+                $c = Cache::getInstance()->deleteItemsByTag('story');
             }
         }
     }
@@ -6833,20 +6833,20 @@ function _css_out()
 
     $cacheID = 'css_' . md5(time());
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     try {
         $stmt = $db->conn->executeUpdate(
             "REPLACE INTO `{$_TABLES['vars']}` (name, value) VALUES ('cacheid',?)",
             array($cacheID),
-            array(\glFusion\Database::INTEGER)
+            array(Database::INTEGER)
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
     }
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('glfusion'));
+    Cache::getInstance()->deleteItemsByTags(array('glfusion'));
     $_VARS['cacheid'] = $cacheID;
 
     // load files
@@ -6858,7 +6858,7 @@ function _css_out()
             } else {
                 $css .= $file_content;
             }
-            $css .= LB;
+            $css .= PHP_EOL;
         }
     }
 
@@ -7174,13 +7174,13 @@ function _js_out()
         $fileroot = '';
     }
 
-    $js .= "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
-    $js .= "var glfusionFileRoot = '".$fileroot ."';". LB;
-    $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . LB;
+    $js .= "var glfusionSiteUrl = '".$_CONF['site_url']."';" . PHP_EOL;
+    $js .= "var glfusionFileRoot = '".$fileroot ."';". PHP_EOL;
+    $js .= "var glfusionLayoutUrl = '".$_CONF['layout_url']."';" . PHP_EOL;
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
-        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . LB;
+        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css?t='.$_USER['theme'] . "';" . PHP_EOL;
     } else {
-        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . LB;
+        $js .= "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_USER['theme'] . "';" . PHP_EOL;
     }
 
     // send any global plugin JS vars
@@ -7199,11 +7199,11 @@ function _js_out()
             } else {
                 $js .= $file_content;
             }
-            $js .= LB;
+            $js .= PHP_EOL;
         }
     }
 
-    $js .= LB; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
+    $js .= PHP_EOL; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
 
     $rc = writeFile_lck($cacheFile,'',$js,'glfusion_js.lck');
     if ( $rc === false ) writeFile_lck($cacheFile,'',$js,'glfusion_js.lck');
@@ -7267,7 +7267,7 @@ function phpblock_lastlogin()
 
     $retval = '';
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $stmt = $db->conn->executeQuery(
         "SELECT u.uid AS uid, u.username AS 'username', ui.lastlogin AS 'login'
@@ -7278,7 +7278,7 @@ function phpblock_lastlogin()
                     AND up.showonline != 0 ORDER BY ui.lastlogin
                 DESC LIMIT 5"
     );
-    $llData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $llData = $stmt->fetchAll(Database::ASSOCIATIVE);
     if (count($llData) > 0) {
         $retval = sprintf($LANG10[29],count($llData));
         $i = 0;
@@ -7332,9 +7332,9 @@ function phpblock_switch_language()
         $retval .= COM_createLink($newLang, $switchUrl);
     } else {
         $retval .= '<form name="change" action="'. $_CONF['site_url']
-                . '/switchlang.php" method="get">' . LB;
+                . '/switchlang.php" method="get">' . PHP_EOL;
         $retval .= '<input type="hidden" name="oldlang" value="' . $langId
-                . '"/>' . LB;
+                . '"/>' . PHP_EOL;
 
         $retval .= '<select onchange="change.submit()" name="lang">';
         foreach( $_CONF['languages'] as $key => $value ) {
@@ -7344,10 +7344,10 @@ function phpblock_switch_language()
                 $selected = '';
             }
             $retval .= '<option value="' . $key . '"' . $selected . '>'
-                    . $value . '</option>' . LB;
+                    . $value . '</option>' . PHP_EOL;
         }
-        $retval .= '</select>' . LB;
-        $retval .= '</form>' . LB;
+        $retval .= '</select>' . PHP_EOL;
+        $retval .= '</form>' . PHP_EOL;
     }
 
     return $retval;
@@ -7375,7 +7375,7 @@ function phpblock_whosonline()
         $byname .= ',remoteusername,remoteservice';
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $sql = "SELECT DISTINCT {$_TABLES['sessions']}.uid,{$byname},photo,showonline
                 FROM `{$_TABLES['sessions']}`,`{$_TABLES['users']}`,`{$_TABLES['userprefs']}`
@@ -7385,8 +7385,8 @@ function phpblock_whosonline()
                     AND {$_TABLES['sessions']}.uid <> 1
                 ORDER BY {$byname}";
 
-    $stmt = $db->conn->executeQuery($sql,array($expire_time),array(\glFusion\Database::INTEGER));
-    $woData = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $stmt = $db->conn->executeQuery($sql,array($expire_time),array(Database::INTEGER));
+    $woData = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     $num_anon = 0;
     $num_reg  = 0;
