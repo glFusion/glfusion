@@ -28,6 +28,8 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
+use \glFusion\Cache;
+
 /**
 * The template class allows you to keep your HTML code in some external files
 * which are completely free of PHP code, but contain replacement fields.
@@ -225,7 +227,7 @@ class Template
             }
         }
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $cDriver = strtolower($c->getDriverName());
 
         if ($cDriver != 'files' && $cDriver != 'devnull') {
@@ -1532,7 +1534,7 @@ class Template
         . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
 
         $tmplt = $this->compile_template_code($tmplt,true);
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $c->set($iid,$tmplt,array('story','story_'.$this->varvals['story_id']));
         $this->instance[$filevar] = $tmplt;
 
@@ -1576,7 +1578,7 @@ class Template
         $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
         $iid = str_replace('-','_',$iid);
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $rc = $c->has($iid);
         if ($rc === true) {
             $this->instance[$filevar] = $c->get($iid);
@@ -1664,7 +1666,7 @@ class Template
         $key = md5($phpfile);
 
         if ($this->memCache) {
-            $c = glFusion\Cache::getInstance();
+            $c = Cache::getInstance();
 
             $cache_fstat = $c->getModificationDate($phpfile);
             if ($template_fstat > $cache_fstat) {
@@ -1738,7 +1740,7 @@ class Template
         }
 
         if ($this->memCache) {
-            $c = glFusion\Cache::getInstance();
+            $c = Cache::getInstance();
             $c->set($filename,$tmplt,'template');
         } else {
             $value = [
