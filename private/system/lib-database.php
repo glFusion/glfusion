@@ -20,6 +20,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Database;
+
 /*
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
     $_DB->_no_fail = 1;
@@ -35,7 +37,7 @@ if (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug']) {
 */
 function DB_getVersion()
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     return $db->_mysql_version;
 }
@@ -57,7 +59,7 @@ function DB_getVersion()
 */
 function DB_setdebug($flag)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     $db->setVerbose($flag);
 }
 
@@ -69,7 +71,7 @@ function DB_setdebug($flag)
 */
 function DB_displayError($flag)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     $db->setDisplayError($flat);
 }
 
@@ -87,7 +89,7 @@ function DB_query ($sql, $ignore_errors = 0)
 {
     global $_SYSTEM, $_DB_dbms;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if (is_array ($sql)) {
         if (isset ($sql[$_DB_dbms])) {
@@ -321,7 +323,7 @@ function DB_copy($table,$fields,$values,$tablefrom,$id,$value,$return_page='')
 */
 function DB_numRows($recordSet)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     /*
      * NOTE: not all databases return accurate results
@@ -353,7 +355,7 @@ function DB_numRows($recordSet)
 */
 function DB_result($recordset,$row,$field)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $retval = '';
 
@@ -381,7 +383,7 @@ function DB_result($recordset,$row,$field)
 */
 function DB_numFields($recordset)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     if ($recordset === false || $recordset === null) return 0;
     return $recordset->columnCount();
 }
@@ -432,7 +434,7 @@ function DB_affectedRows($recordset)
 */
 function DB_fetchArray($recordset, $both = true)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ($recordset === false || $recordset == null) return false;
 
@@ -482,7 +484,7 @@ function DB_fetchAll($recordset, $both = true)
 */
 function DB_insertId($link_identifier = '')
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     return $db->conn->lastInsertId();
 }
 
@@ -496,7 +498,7 @@ function DB_insertId($link_identifier = '')
 */
 function DB_error($sql = '')
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     if ((int)$db->conn->errorCode() > 0) {
         $fn = '';
         $btr = debug_backtrace();
@@ -515,25 +517,8 @@ function DB_error($sql = '')
                 }
             }
         }
-
-        $info = $db->errorInfo();
-
-        if (empty($fn)) {
-            $errorMessage = $db->conn->errorCode() . ': '.$info[2];
-            if ( $sql != '' ) {
-                $errorMessage .= " SQL in question: " . $sql;
-            }
-            $db->_errorlog($errorMessage);
-        } else {
-            $errorMessage = $db->conn->errorCode() . ': ' . $info[2] . " in " . $fn;
-            if ( $sql != '' ) {
-                $errorMessage .= " SQL in question: ".$sql;
-            }
-            $db->_errorlog($errorMessage);
-        }
-
         if ($db->_display_error) {
-            return  $this->conn->errorCode() . ': ' . $info[2];
+            return  $db->getErrno() . ': ' . $sql;
         } else {
             return 'An SQL error has occurred. Please see error.log for details.';
         }
@@ -607,7 +592,7 @@ function DB_checkTableExists($table)
 */
 function DB_escapeString($str)
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ( $db->getFilter() != 0 ) {
         $str = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "?", $str);
@@ -623,7 +608,7 @@ function DB_escapeString($str)
 */
 function DB_getClientVersion()
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
     $version = $db->conn->query('select version()')->fetchColumn();
     preg_match("/^[0-9\.]+/", $version, $match);
     return $match[0];
@@ -634,7 +619,7 @@ function DB_getClientVersion()
 */
 function DB_getServerVersion()
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     return $db->dbGetServerVersion();
 }
@@ -644,14 +629,14 @@ function DB_getServerVersion()
 */
 function DB_getDriverName()
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     return $db->dbGetDriverName();
 }
 
 function DB_executeUpdate($sql,$params = array(),$types = array())
 {
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $ignore_errors = false;
     if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
