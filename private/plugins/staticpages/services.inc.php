@@ -388,14 +388,13 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             DB_change($_TABLES['comments'], 'sid', DB_escapeString($sp_id),
                       array('sid', 'type'),
                       array(DB_escapeString($sp_old_id), 'staticpages'));
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('sp_'.md5($sp_old_id));
+            $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_old_id),'staticpages'));
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('sp_'.md5($sp_id));
+        $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_id),'staticpages','menu'));
         PLG_itemSaved($sp_id,'staticpages');
         COM_setMsg( $LANG_STATIC['page_saved'], 'info' );
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
         $url = COM_buildURL($_CONF['site_url'] . '/page.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,
