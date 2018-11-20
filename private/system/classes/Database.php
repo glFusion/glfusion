@@ -34,6 +34,8 @@ class Database
     public const STRING = \Doctrine\DBAL\ParameterType::STRING;
     public const LARGE_OBJECT = \Doctrine\DBAL\ParameterType::LARGE_OBJECT;
     public const BOOLEAN = \Doctrine\DBAL\ParameterType::BOOLEAN;
+    public const PARAM_INT_ARRAY = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
+    public const PARAM_STR_ARRAY = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
     public const BINARY = 16;
 
     /**
@@ -84,7 +86,7 @@ class Database
     /**
     * @var bool
     */
-    private $_display_error = true;
+    public $_display_error = true;
 
     /**
     * @var string|callable
