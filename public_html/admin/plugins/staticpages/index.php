@@ -552,6 +552,9 @@ function PAGE_submit($sp_id, $sp_status, $sp_uid, $sp_title, $sp_content, $sp_hi
                  );
 
     PLG_invokeService('staticpages', 'submit', $args, $retval, $svc_msg);
+
+    glFusion\Cache::getInstance()->deleteItemsByTag('staticpages');
+
     return $retval;
 }
 
@@ -747,7 +750,7 @@ function PAGE_list()
         'bottom' => '<input type="hidden" name="staticpageenabler" value="true"/>'
     );
 
-    $retval .= ADMIN_list('static_pages', 'PAGE_getListField',
+    $retval .= ADMIN_list('staticpages', 'PAGE_getListField',
                           $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
