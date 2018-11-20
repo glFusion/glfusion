@@ -1,44 +1,31 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-comment.php                                                          |
-// |                                                                          |
-// | glFusion comment library.                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
-// |          Jared Wenerd      - wenerd87 AT gmail DOT com                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion comment library.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: Tony Bibbs       - tony AT tonybibbs DOT com
+*            Mark Limburg       - mlimburg AT users DOT sourceforge DOT net
+*            Jason Whittenburg  - jwhitten AT securitygeeks DOT com
+*            Dirk Haun          - dirk AT haun-online DOT de
+*            Vincent Furia      - vinny01 AT users DOT sourceforge DOT net
+*            Jared Wenerd       - wenerd87 AT gmail DOT com
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
+
+use \glFusion\Database;
+use \glFusion\Cache;
+use \glFusion\Formatter;
 
 USES_lib_user();
 
@@ -53,6 +40,8 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
 {
     global $_CONF, $_USER, $_TABLES, $LANG01, $LANG03, $LANG04;
 
+    $db = Database::getInstance();
+
     $dt = new Date('now',$_USER['tzid']);
     $permalink = 'Not defined';
 
@@ -61,29 +50,41 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
     $filter->setAllowedelements($AllowedElements);
     $filter->setNamespace('glfusion','comment');
 
-    $post_id = COM_applyFilter($post_id,true);
-    $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE queued = 0 AND cid={$post_id}");
-    if ( DB_numRows($result) > 0 ) {
-        $A = DB_fetchArray($result);
-        $itemInfo = PLG_getItemInfo($A['type'],$track_id,'url,title');
+    $post_id = filter_var($post_id, FILTER_VALIDATE_INT);
+    if ($post_id === false) {
+        return false;
+    }
+    $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE queued = 0 AND cid=?";
+
+    try {
+        $commentRecord = $db->conn->fetchAssoc($sql, array($post_id),array(Database::INTEGER));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        if (defined('DVLP_DEBUG')) {
+            throw($e);
+        }
+        return false;
+    }
+
+    if ($commentRecord !== false) {
+        $itemInfo = PLG_getItemInfo($commentRecord['type'],$track_id,'url,title');
         $permalink = $itemInfo['url'];
         if ( empty($permalink) ) {
             $permalink = $_CONF['site_url'];
         }
-        if ( $A['uid'] > 1 ) {
-            $name = COM_getDisplayName($A['uid']);
+        if ( $commentRecord['uid'] > 1 ) {
+            $name = COM_getDisplayName($commentRecord['uid']);
         } else {
-            $name = $filter->sanitizeUsername($A['name']);
+            $name = $filter->sanitizeUsername($commentRecord['name']);
             $name = $filter->censor($name);
         }
 
         $name = @htmlspecialchars($name,ENT_QUOTES, COM_getEncodingt(),true);
 
-        $A['title']   = COM_checkWords($A['title']);
-        $html2txt = new Html2Text\Html2Text(strip_tags($A['title']),false);
+        $A['title']   = COM_checkWords($commentRecord['title']);
+        $html2txt = new Html2Text\Html2Text(strip_tags($commentRecord['title']),false);
         $A['title'] = $html2txt->get_text();
 
-        $format = new glFusion\Formatter();
+        $format = new Formatter();
         $format->setNamespace('glfusion');
         $format->setAction('comment');
         $format->setAllowedHTML($_CONF['htmlfilter_comment']);
@@ -91,12 +92,12 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $format->setProcessBBCode(false);
         $format->setCensor(true);
         $format->setProcessSmilies(true);
-        $format->setType($A['postmode']);
-        $A['comment'] = $format->parse($A['comment']);
+        $format->setType($commentRecord['postmode']);
+        $commentRecord['comment'] = $format->parse($commentRecord['comment']);
 
-        $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$A['type'].'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>');
+        $notifymsg = sprintf($LANG03[46],'<a href="'.$_CONF['site_url'].'/comment.php?mode=unsubscribe&sid='.htmlentities($track_id).'&type='.$commentRecord['type'].'" rel="nofollow">'.$LANG01['unsubscribe'].'</a>');
 
-        $dt->setTimestamp(strtotime($A['date']));
+        $dt->setTimestamp(strtotime($commentRecord['date']));
         $date = $dt->format('F d Y @ h:i a');
         $T = new Template( $_CONF['path_layout'] . 'comment' );
         $T->set_file (array(
@@ -105,11 +106,11 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         ));
 
         $T->set_var(array(
-            'post_subject'  => $A['title'],
+            'post_subject'  => $commentRecord['title'],
             'post_date'     => $date,
             'iso8601_date'  => $dt->toISO8601(),
             'post_name'     => $name,
-            'post_comment'  => $A['comment'],
+            'post_comment'  => $commentRecord['comment'],
             'notify_msg'    => $notifymsg,
             'site_name'     => $_CONF['site_name'],
             'online_version' => sprintf($LANG01['view_online'],$permalink),
@@ -130,8 +131,6 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
         $msgData['imagedata'] = array();
 
         return $msgData;
-
-//        return array($message,$messageText,array());
     }
     return false;
 }
@@ -156,11 +155,17 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03;
 
+    $db = Database::getInstance();
+
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
     $page = array_pop( $parts );
 
-    $nrows = DB_count( $_TABLES['comments'], array( 'sid', 'type','queued' ),
-                       array( DB_escapeString($sid), DB_escapeString($type),0 ));
+    $sql = "SELECT COUNT(*) FROM `{$_TABLES['comments']}`
+            WHERE sid = ?
+                AND type = ?
+                AND queued = 0";
+
+    $nrows = $db->conn->fetchColumn($sql,array($sid,$type),0,array(Database::STRING,Database::STRING));
 
     $commentbar = new Template( $_CONF['path_layout'] . 'comment' );
     $commentbar->set_file( array( 'commentbar' => 'commentbar.thtml' ));
@@ -247,8 +252,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $username = $_USER['username'];
         $fullname = $_USER['fullname'];
     } else {
-        $result = DB_query( "SELECT username,fullname FROM {$_TABLES['users']} WHERE uid = 1" );
-        $N = DB_fetchArray( $result );
+        $N = $db->conn->fetchAssoc("SELECT username,fullname FROM `{$_TABLES['users']}` WHERE uid=1");
         $username = $N['username'];
         $fullname = $N['fullname'];
     }
@@ -349,6 +353,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     static $userInfo = array();
 
+    $db = Database::getInstance();
+
     if ( $mode == 'threaded' ) $mode = 'nested';
 
     $template = new Template( $_CONF['path_layout'] . 'comment' );
@@ -378,6 +384,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     $resultSet = array();
 
+//@TODO - appears if $preview is true- we pass the results instead of the result set
     if ($preview) {
         if ( isset($comments['comment_text'])) {
             $comments['comment'] = $comments['comment_text'];
@@ -409,7 +416,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var('preview_mode',true);
         $resultSet[] = $A;
     } else {
-        $resultSet = DB_fetchAll($comments);
+//@TODO - $comments is passed from another function -
+//          really isn't a good practice -
+        $resultSet = $comments->fetchAll(Database::ASSOCIATIVE);
         $template->unset_var('preview_mode');
     }
 
@@ -423,7 +432,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $filter->setNamespace('glfusion','comment');
     $filter->setPostmode('text');
 
-    $format = new glFusion\Formatter();
+    $format = new Formatter();
     $format->setNamespace('glfusion');
     $format->setAction('comment');
     $format->setAllowedHTML($_CONF['htmlfilter_comment']);
@@ -471,10 +480,11 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 //@TODO - Move this to function
         if ( $A['uid'] > 1 ) {
             if (!isset($userInfo[$A['uid']])) {
-                $result = DB_query("SELECT username,remoteusername,remoteservice,fullname,sig,photo FROM {$_TABLES['users']} WHERE uid=".(int) $A['uid']);
-                $resultSet = DB_fetchAll($result);
-                if (count($resultSet) > 0 ) {
-                    $userInfo[$A['uid']] = $resultSet[0];
+                $sql = "SELECT username,remoteusername,remoteservice,fullname,sig,photo
+                         FROM `{$_TABLES['users']}` WHERE uid=?";
+                $userData = $db->conn->fetchAssoc($sql,array($A['uid']),array(Database::INTEGER));
+                if ($userData) {
+                    $userInfo[$A['uid']] = $userData;
                 } else {
                     $userInfo[$A['uid']] = array('username' => '','remoteusername' => '','remoteservice'=>'','fullname'=>'','sig'=>'','photo'=>'');
                 }
@@ -503,14 +513,16 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->unset_var('edit_link');
 
         //check for comment edit
-        $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = ".(int) $A['cid']);
-        $B = DB_fetchArray($commentedit);
+        $sql = "SELECT cid,uid,UNIX_TIMESTAMP(time) as time
+                    FROM `{$_TABLES['commentedits']}` WHERE cid = ?";
+        $B = $db->conn->fetchAssoc($sql,array($A['cid']),array(Database::INTEGER));
         if ($B) { //comment edit present
             //get correct editor name
             if ($A['uid'] == $B['uid']) {
                 $editname = $A['username'];
             } else {
-                $editname = DB_getItem($_TABLES['users'], 'username', "uid=".(int) $B['uid']);
+                $editname = $db->conn->fetchColumn("SELECT username FROM `{$_TABLES['users']}`
+                        WHERE uid=?",array($B['uid']),0,array(Database::INTEGER));
             }
             //add edit info to text
             $dtObject = new Date($B['time'],$_USER['tzid']);
@@ -643,7 +655,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
                     && ($_CONF['comment_edittime'] == 0 || ((time() - $A['nice_date']) < $_CONF['comment_edittime'] )) &&
                     $ccode == 0 &&
-                    DB_getItem($_TABLES['comments'], 'COUNT(*)', "queued = 0 AND pid = ".(int) $A['cid']) == 0) {
+                    ($db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['comments']}`
+                        WHERE queued=0 AND pid=?",array($A['cid']),0,array(Database::INTEGER)) == 0)) {
                 $edit_option = true;
             } else if (SEC_hasRights('comment.moderate') ) {
                 $edit_option = true;
@@ -884,6 +897,10 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     if ( !isset($_CONF['comment_engine'])) $_CONF['comment_engine'] = 'internal';
 
+    $db = Database::getInstance();
+
+    $order = strtoupper($order);
+
     switch ( $_CONF['comment_engine'] ) {
         case 'disqus' :
             if( $type == 'article' ) {
@@ -944,8 +961,9 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
             if ($mode == 'threaded') $mode = 'nested';
 
             if (! COM_isAnonUser()) {
-                $result = DB_query( "SELECT commentorder,commentmode,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}" );
-                $U = DB_fetchArray( $result );
+                $sql = "SELECT commentorder,commentmode,commentlimit
+                    FROM `{$_TABLES['usercomment']}` WHERE uid = ?";
+                $U = $db->conn->fetchAssoc($sql,array($_USER['uid']),array(Database::INTEGER));
                 if( empty( $order ) ) {
                     $order = $U['commentorder'];
                 }
@@ -969,7 +987,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
             }
 
             if( empty( $limit )) {
-                $limit = $_CONF['comment_limit'];
+                $limit = (int) $_CONF['comment_limit'];
             } else {
                 $limit = (int) $limit;
             }
@@ -980,7 +998,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                 $page = (int) $page;
             }
 
-            $start = $limit * ( $page - 1 );
+            $start = (int) $limit * ( $page - 1 );
 
             $template = new Template( $_CONF['path_layout'] . 'comment' );
             $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
@@ -999,18 +1017,29 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                             $count = 1;
 
                             $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
-                               . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                               . "WHERE c.queued = 0 AND c.uid = u.uid AND c.cid = ".(int) $pid." AND type='".DB_escapeString($type)."'";
+                                . "UNIX_TIMESTAMP(c.date) AS nice_date "
+                                . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['users']}` AS u "
+                                . "WHERE c.queued = 0 AND c.uid = u.uid AND c.cid = ? AND type=?";
+                            // (int) $pid and (string) $type
+                            $stmt = $db->conn->prepare($q);
+                            $stmt->bindValue(1, $pid, Database::INTEGER);
+                            $stmt->bindValue(2, $type, Database::STRING);
+
                         } else {
-                            $count = DB_count( $_TABLES['comments'],
-                                        array( 'sid', 'type','queued' ), array( DB_escapeString($sid), DB_escapeString($type),0 ));
+                            $q2 = "SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid=? AND type=? AND queued=0";
+                            $count = $db->conn->fetchColumn($q2,array($sid,$type),
+                                        0,
+                                        array(Database::STRING,Database::STRING));
 
                             $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, "
                                . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                               . "WHERE c.queued = 0 AND c.uid = u.uid AND c.sid = '".DB_escapeString($sid)."' AND type='".DB_escapeString($type)."' "
-                               . "ORDER BY date $order LIMIT $start, $limit";
+                               . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['users']}` AS u "
+                               . "WHERE c.queued = 0 AND c.uid = u.uid AND c.sid = ? AND type=? "
+                               . "ORDER BY date ". $order ." LIMIT ".(int) $start.", ". (int) $limit;
+                            // $sid , $type, $order, $start, $limit
+                            $stmt = $db->conn->prepare($q);
+                            $stmt->bindValue(1, $sid, Database::STRING);
+                            $stmt->bindValue(2, $type, Database::STRING);
                         }
                         break;
 
@@ -1028,55 +1057,68 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
                         if( $cid ) {  // pid refers to commentid rather than parentid
                             // count the total number of applicable comments
                             $q2 = "SELECT COUNT(*) "
-                                . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
-                                . "WHERE c.queued = 0 AND c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                                . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
-                            $result = DB_query( $q2 );
-                            list( $count ) = DB_fetchArray( $result );
+                                . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['comments']}` AS c2 "
+                                . "WHERE c.queued = 0 AND c.sid = ? AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
+                                . "AND c2.cid = ? AND c.type=?";
+
+                            $count = $db->conn->fetchColumn($q2,array($sid,$pid,$type),0,array(Database::STRING,Database::INTEGER,Database::STRING));
 
                             $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent AS pindent, "
                                . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                               . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
+                               . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['comments']}` AS c2, "
                                . "{$_TABLES['users']} AS u "
-                               . "WHERE c.queued = 0 AND c.sid = '".DB_escapeString($sid)."' AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
-                               . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
-                               . "ORDER BY $cOrder LIMIT $start, $limit";
+                               . "WHERE c.queued = 0 AND c.sid = ? AND (c.lft >= c2.lft AND c.lft <= c2.rht) "
+                               . "AND c2.cid = ? AND c.uid = u.uid AND c.type=? "
+                               . "ORDER BY ".$cOrder." LIMIT ".(int)$start.", ".(int)$limit;
+
+                            $stmt = $db->conn->prepare($q);
+                            $stmt->bindValue(1, $sid, Database::STRING);
+                            $stmt->bindValue(2, $pid, Database::INTEGER);
+                            $stmt->bindValue(3, $type, Database::STRING);
+
                         } else {    // pid refers to parentid rather than commentid
                             if( $pid == 0 ) {  // the simple, fast case
                                 // count the total number of applicable comments
-                                $count = DB_count( $_TABLES['comments'],
-                                        array( 'sid', 'type','queued' ), array( DB_escapeString($sid), DB_escapeString($type),0 ));
+
+                                $q2 = "SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid=? AND type=? AND queued=0";
+                                $count = $db->conn->fetchColumn($q2,array($sid,$type),0,array(Database::STRING,Database::STRING));
 
                                 $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, 0 AS pindent, "
                                    . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                                   . "FROM {$_TABLES['comments']} AS c, {$_TABLES['users']} AS u "
-                                   . "WHERE queued = 0 AND c.sid = '".DB_escapeString($sid)."' AND c.uid = u.uid  AND type='".DB_escapeString($type)."' "
-                                   . "ORDER BY $cOrder LIMIT $start, $limit";
+                                   . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['users']}` AS u "
+                                   . "WHERE queued = 0 AND c.sid = ? AND c.uid = u.uid  AND type=? "
+                                   . "ORDER BY ".$cOrder." LIMIT ".(int)$start.", ".(int)$limit;
+                                $stmt = $db->conn->prepare($q);
+                                $stmt->bindValue(1, $sid, Database::STRING);
+                                $stmt->bindValue(2, $type, Database::STRING);
                             } else {
                                 // count the total number of applicable comments
                                 $q2 = "SELECT COUNT(*) "
-                                    . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2 "
-                                    . "WHERE c.queued = 0 AND c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                                    . "AND c2.cid = ".(int) $pid." AND c.type='".DB_escapeString($type)."'";
-                                $result = DB_query($q2);
-                                list($count) = DB_fetchArray($result);
+                                    . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['comments']}` AS c2 "
+                                    . "WHERE c.queued = 0 AND c.sid = ? AND (c.lft > c2.lft AND c.lft < c2.rht) "
+                                    . "AND c2.cid = ? AND c.type=?";
+                                $count = $db->conn->fetchColumn($q2,array($sid,$pid,$type),0,array(Database::STRING,Database::INTEGER,Database::STRING));
 
                                 $q = "SELECT c.*, u.username, u.fullname, u.photo, u.email, c2.indent + 1 AS pindent, "
                                    . "UNIX_TIMESTAMP(c.date) AS nice_date "
-                                   . "FROM {$_TABLES['comments']} AS c, {$_TABLES['comments']} AS c2, "
+                                   . "FROM `{$_TABLES['comments']}` AS c, `{$_TABLES['comments']}` AS c2, "
                                    . "{$_TABLES['users']} AS u "
-                                   . "WHERE c.queued = 0 AND c.sid = '".DB_escapeString($sid)."' AND (c.lft > c2.lft AND c.lft < c2.rht) "
-                                   . "AND c2.cid = ".(int) $pid." AND c.uid = u.uid AND c.type='".DB_escapeString($type)."' "
-                                   . "ORDER BY $cOrder LIMIT $start, $limit";
+                                   . "WHERE c.queued = 0 AND c.sid = ? AND (c.lft > c2.lft AND c.lft < c2.rht) "
+                                   . "AND c2.cid = ? AND c.uid = u.uid AND c.type=? "
+                                   . "ORDER BY ".$cOrder." LIMIT ".(int)$start.", ".(int)$limit;
+                                $stmt = $db->conn->prepare($q);
+                                $stmt->bindValue(1, $sid, Database::STRING);
+                                $stmt->bindValue(2, $pid, Database::INTEGER);
+                                $stmt->bindValue(3, $type, Database::STRING);
                             }
                         }
                         break;
                 }
 
                 $thecomments = '';
-                $result = DB_query( $q );
+                $stmt->execute();
 
-                $thecomments .= CMT_getComment( $result, $mode, $type, $order,
+                $thecomments .= CMT_getComment( $stmt, $mode, $type, $order,
                                                 $delete_option, false, $ccode, $sid_author_id );
 
                 if ( $thecomments == '' ) {
@@ -1125,8 +1167,17 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 function CMT_getCount($type, $sid, $queued = 0)
 {
     global $_TABLES;
+
+    $db = Database::getInstance();
+
     if ( $type == '' || $sid == '' ) return 0;
-    return DB_count ($_TABLES['comments'], array('sid','type','queued'), array(DB_escapeString($sid), DB_escapeString($type),(int) $queued ) );
+
+    return $db->conn->fetchColumn(
+            "SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid=? AND type=? AND queued=?",
+            array($sid, $type, $queued),
+            0,
+            array(Database::STRING, Database::STRING, Database::INTEGER)
+    );
 }
 
 /**
@@ -1157,6 +1208,8 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         $retval .= SEC_loginRequiredForm();
         return $retval;
     }
+
+    $db = Database::getInstance();
 
     switch ( $mode ) {
         case 'modedit' :
@@ -1210,8 +1263,14 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
     $commentuid = $uid;
     if ( ($mode == 'edit' || $mode == 'preview_edit') && isset($_REQUEST['cid']) ) {
-        $cid = COM_applyFilter ($_REQUEST['cid']);
-        $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "queued=0 AND cid = ".(int) $cid);
+        $cid = (int) COM_applyFilter($_REQUEST['cid'],true);
+
+        $commentuid = $db->conn->fetchColumn(
+                        "SELECT uid FROM `{$_TABLES['comments']}` WHERE queued=0 AND cid=?",
+                        array($cid),
+                        0,
+                        array(Database::INTEGER)
+                      );
     }
 
     COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
@@ -1251,13 +1310,24 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
         //correct time and username for edit preview
         if ($mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') {
-            $A['nice_date'] = DB_getItem ($_TABLES['comments'],'UNIX_TIMESTAMP(date)', "cid = ".(int) $cid);
+
+            $A['nice_date'] = $db->conn->fetchColumn(
+                                "SELECT UNIX_TIMESTAMP(date) FROM `{$_TABLES['comments']}` WHERE cid=?",
+                                array($cid),
+                                0,
+                                array(Database::INTEGER)
+                              );
 
             // not an anonymous user
             if ( $commentuid > 1 ) {
                 // get username from DB - we don't allow
                 // logged-in-users to set or change their name
-                $A['username'] = DB_getItem ($_TABLES['users'],'username', "uid = ".(int) $commentuid);
+                $A['username'] = $db->conn->fetchColumn(
+                                        "SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
+                                        array($commentuid),
+                                        0,
+                                        array(Database::INTEGER)
+                                  );
             } else {
                 // we have an anonymous user - so $_POST['username'] should be set
                 // already from above
@@ -1265,13 +1335,19 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
         }
         if (empty ($A['username'])) {
-            $A['username'] = DB_getItem ($_TABLES['users'], 'username',"uid = ".(int) $commentuid);
+            $A['username'] = $db->conn->fetchColumn(
+                                    "SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
+                                    array($commentuid),
+                                    0,
+                                    array(Database::INTEGER)
+                              );
         }
 
         $author_id = PLG_getItemInfo($type, $sid, 'author');
 
         $A['comment'] = $A['comment_text'];
 
+// In preview mode - the first parameter is an associative array
         $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false, true,0,$author_id);
 
         $start->set_var( 'comments', $thecomments );
@@ -1325,7 +1401,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             if  ( isset($A['username'])) {
                 $username = $A['username'];
             } else {
-                $username = DB_getItem($_TABLES['comments'],'name','cid='.(int) $cid);
+                $username = $db->conn->fetchColumn(
+                                        "SELECT name FROM `{$_TABLES['comments']}` WHERE cid=?",
+                                        array($cid),
+                                        0,
+                                        array(Database::INTEGER)
+                                  );
             }
             if ( empty($username)) {
                 $username = $LANG03[24]; //anonymous user
@@ -1471,6 +1552,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     $ret = 0;
 
+    $db = Database::getInstance();
+
     // Get a valid uid
     if (empty ($_USER['uid'])) {
         $uid = 1;
@@ -1571,68 +1654,137 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         }
     }
 
-    $dbComment  = DB_escapeString($comment);
-    $dbSid      = DB_escapeString($sid);
-    $dbUid      = (int) $uid;
-    $dbTitle    = DB_escapeString($title);
-    $dbPid      = (int) $pid;
-    $dbPostmode = DB_escapeString($postmode);
-    $dbType     = DB_escapeString($type);
-    $dbUsername = DB_escapeString($uname);
-
     $IP = $_SERVER['REMOTE_ADDR'];
-    $dbIP      = DB_escapeString($IP);
 
-    // story the data into the database
+    $cid = 0;
 
-    DB_lockTable ($_TABLES['comments']);
-
-    if ($pid > 0) {
-        $result = DB_query("SELECT rht, indent FROM {$_TABLES['comments']} WHERE cid = ".$dbPid
-                         . " AND sid = '".$dbSid."'");
-        list($rht, $indent) = DB_fetchArray($result);
-
-        if ( !DB_error() ) {
-
-            DB_query("UPDATE {$_TABLES['comments']} SET lft = lft + 2 "
-                   . "WHERE sid = '".$dbSid."' AND type = '$type' AND lft >= $rht");
-            DB_query("UPDATE {$_TABLES['comments']} SET rht = rht + 2 "
-                   . "WHERE sid = '".$dbSid."' AND type = '$type' AND rht >= $rht");
-            DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
-                    "'".$dbSid."',$uid,'".$dbComment."','".$_CONF['_now']->toMySQL(true)."','".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht,$rht+1,$indent+1,'".$dbType."','".$dbIP."'");
-        } else { //replying to non-existent comment or comment in wrong article
-            COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
+    if ($pid > 0) { // reply to an existing comment
+        $row = $db->conn->fetchAssoc(
+            "SELECT rht, indent FROM `{$_TABLES['comments']}` WHERE cid = ? AND sid = ?",
+            array($pid, $sid),
+            array(Database::INTEGER, Database::STRING)
+        );
+        if ($row === false) {
+            COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REAL_ADDR']} tried "
                        . 'to reply to a non-existent comment or the pid/sid did not match');
-            $ret = 4; // Cannot return here, tables locked!
+            return 4;
         }
-    } else {
-        $rht = DB_getItem($_TABLES['comments'], 'MAX(rht)', "sid = '".$dbSid."'");
-        if ( DB_error() ) {
+
+        $rht    = $row['rht'];
+        $indent = $row['indent'];
+
+        $db->conn->beginTransaction();
+        $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
+        try {
+            $db->conn->executeUpdate(
+                    "UPDATE `{$_TABLES['comments']}` SET lft = lft + 2 "
+                  . "WHERE sid = ? AND type = ? AND lft >= ?",
+                  array($sid,$type,$rht),
+                  array(Database::STRING, Database::STRING, Database::INTEGER)
+            );
+            $db->conn->executeUpdate(
+                    "UPDATE `{$_TABLES['comments']}` SET rht = rht + 2 "
+                  . "WHERE sid = ? AND type = ? AND rht >= ?",
+                  array($sid,$type,$rht),
+                  array(Database::STRING, Database::STRING, Database::INTEGER)
+            );
+            $db->conn->executeUpdate(
+                "INSERT INTO `{$_TABLES['comments']}` (sid,uid,name,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress) "
+              . " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                array($sid,$uid,$uname,$comment,$_CONF['_now']->toMySQL(true),$title,$pid,$queued,$postmode,$rht,$rht+1,$indent+1,$type,$IP),
+                array(
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::STRING, // date
+                    Database::STRING, // title
+                    Database::INTEGER, // pid
+                    Database::INTEGER, // queued
+                    Database::STRING, // postmode
+                    Database::INTEGER, //rht
+                    Database::INTEGER, // rht+1
+                    Database::INTEGER, // indent
+                    Database::STRING // IP
+                )
+            );
+            $cid = $db->conn->lastInsertId();
+            $db->conn->commit();
+            $db->conn->query("UNLOCK TABLES");
+        } catch (\Doctrine\DBAL\Exception\RetryableException $e) {
+            $db->conn->commit();
+            $db->conn->query("UNLOCK TABLES `{$_TABLES['comments']}` WRITE");
+            usleep(250000);
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->conn->rollBack();
+            $db->conn->query("UNLOCK TABLES");
+            throw($e);
+        }
+
+    } else {  // first - parent level comment
+
+        $db->conn->beginTransaction();
+        $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
+
+        try {
+            $rht = $db->conn->fetchColumn(
+                "SELECT MAX(rht) FROM `{$_TABLES['comments']}` WHERE sid=?",
+                array($sid),
+                0
+            );
+            if ($rht === null) {
+                $rht = 0;
+            }
+        } catch(\Doctrine\DBAL\DBALException $e) {
             $rht = 0;
         }
-        DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress',
-                "'".$dbSid."',".$dbUid.",'".$dbComment."','".$_CONF['_now']->toMySQL(true)."','".$dbTitle."',".$dbPid.",$queued,'".$dbPostmode."',$rht+1,$rht+2,0,'".$dbType."','".$dbIP."'");
+
+        $indent = 0;
+
+        try {
+            $db->conn->executeUpdate(
+                "INSERT INTO `{$_TABLES['comments']}` (sid,uid,name,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress) "
+              . " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                array($sid,$uid,$uname,$comment,$_CONF['_now']->toMySQL(true),$title,$pid,$queued,$postmode,$rht+1,$rht+2,0,$type,$IP),
+                array(
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::STRING, // date
+                    Database::STRING, // title
+                    Database::INTEGER, // pid
+                    Database::INTEGER, // queued
+                    Database::STRING, // postmode
+                    Database::INTEGER, //rht
+                    Database::INTEGER, // rht+1
+                    Database::INTEGER, // indent
+                    Database::STRING // IP
+                )
+            );
+
+            $cid = $db->conn->lastInsertId();
+            $db->conn->commit();
+            $db->conn->query("UNLOCK TABLES");
+        } catch (\Doctrine\DBAL\Exception\RetryableException $e) {
+            $db->conn->commit();
+            $db->conn->query("UNLOCK TABLES");
+            usleep(250000);
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->conn->rollBack();
+            $db->conn->query("UNLOCK TABLES");
+            throw($e);
+        }
     }
-    $cid = DB_insertId();
-
-    // set username if available
-    if ($uname != '' ) {
-        DB_change($_TABLES['comments'],'name',$dbUsername,'cid',(int) $cid);
-    }
-
-    DB_unlockTable ($_TABLES['comments']);
-
-    // Done with comment table update
-
     if ( $queued == 0 ) {
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $c->deleteItemsByTag('whatsnew');
         if ($type == 'article') {
             $c->deleteItemsByTag('story_'.$sid);
         }
         PLG_itemSaved($cid, 'comment');
     } else {
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+        $c = Cache::getInstance()->deleteItemsByTag('menu');
         SESS_setVar('glfusion.commentpostsave',$LANG03[52]);
     }
 
@@ -1688,6 +1840,8 @@ function CMT_sendNotification( $commentData = array())
 
     $filter = sanitizer::getInstance();
 
+    $db = Database::getInstance();
+
     $author = $filter->sanitizeUsername($commentData['username']) . ' ('.$commentData['ip'].')';
     $type   = $commentData['type'];
     $html2txt  = new Html2Text\Html2Text(strip_tags($commentData['title']),false);
@@ -1695,7 +1849,7 @@ function CMT_sendNotification( $commentData = array())
 
     // build out the view
 
-    $format = new glFusion\Formatter();
+    $format = new Formatter();
     $format->setNamespace('glfusion');
     $format->setAction('comment');
     $format->setAllowedHTML($_CONF['htmlfilter_comment']);
@@ -1749,19 +1903,21 @@ function CMT_sendNotification( $commentData = array())
         $to[] = array('email' => $_CONF['site_mail'], 'name' => '');
         $toCount++;
     } else {
-        $commentadmin_grp_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Comment Admin"');
-        if ( $commentadmin_grp_id === NULL ) {
+
+        $commentadmin_grp_id = $db->conn->fetchColumn("SELECT grp_id FROM `{$_TABLES['groups']}` WHERE grp_name='Comment Admin'",array(),0);
+        if ( $commentadmin_grp_id === null ) {
             return;
         }
         $groups = SEC_getGroupList($commentadmin_grp_id);
-        $groupList = implode(',',$groups);
+
 	    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email "
-	          ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
+	          ."FROM `{$_TABLES['group_assignments']}`,`{$_TABLES['users']}` "
 	          ."WHERE {$_TABLES['users']}.uid > 1 "
 	          ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
-	          ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN (".$groupList."))";
-        $result = DB_query($sql);
-        $resultSet = DB_fetchAll($result);
+	          ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN (?))";
+
+        $stmt = $db->conn->executeQuery($sql,array($groups),array(Database::PARAM_INT_ARRAY));
+        $resultSet = $stmt->fetchAll(Database::ASSOCIATIVE);
 
         foreach($resultSet AS $row) {
             if ( $row['email'] != '' ) {
@@ -1805,37 +1961,76 @@ function CMT_deleteComment ($cid, $sid, $type)
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
         COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to delete a comment with one or more missing/bad values.');
-        return $ret = 1;
+        return 1;
     }
+
+    $db = Database::getInstance();
 
     // Delete the comment from the DB and update the other comments to
     // maintain the tree structure
     // A lock is needed here to prevent other additions and/or deletions
     // from happening at the same time. A transaction would work better,
     // but aren't supported with MyISAM tables.
-    DB_lockTable ($_TABLES['comments']);
-    $result = DB_query("SELECT pid, lft, rht FROM {$_TABLES['comments']} "
-                     . "WHERE cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
-    if ( DB_numRows($result) == 1 ) {
-        list($pid,$lft,$rht) = DB_fetchArray($result);
-        DB_change ($_TABLES['comments'], 'pid', (int) $pid, 'pid', (int) $cid);
-        DB_delete ($_TABLES['comments'], 'cid', (int) $cid);
-        DB_query("UPDATE {$_TABLES['comments']} SET indent = indent - 1 "
-           . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."' AND lft BETWEEN $lft AND $rht");
-        DB_query("UPDATE {$_TABLES['comments']} SET lft = lft - 2 "
-           . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND lft >= $rht");
-        DB_query("UPDATE {$_TABLES['comments']} SET rht = rht - 2 "
-           . "WHERE sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'  AND rht >= $rht");
-    } else {
-        COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to delete a comment that doesn\'t exist as described.');
-        return $ret = 2;
+
+    $db->conn->beginTransaction();
+    $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
+
+    try {
+        $cmtData = $db->conn->fetchAssoc(
+            "SELECT pid, lft, rht FROM `{$_TABLES['comments']}` "
+          . "WHERE cid = ? AND sid = ? AND type = ?",
+          array($cid,$sid,$type),
+          array(Database::INTEGER, Database::STRING, Database::STRING)
+        );
+        if ($cmtData === false) {
+            COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                       . 'to delete a comment that doesn\'t exist as described.');
+            return $ret = 2;
+        }
+        $pid = $cmtData['pid'];
+        $rht = $cmtData['rht'];
+        $lft = $cmtData['lft'];
+
+        $db->conn->executeUpdate(
+                    "UPDATE `{$_TABLES['comments']}` SET pid=? WHERE pid=?",
+                    array($pid,$cid),
+                    array(Database::INTEGER, Database::INTEGER)
+        );
+        $db->conn->executeUpdate(
+                    "DELETE FROM `{$_TABLES['comments']}` WHERE cid=?",
+                    array($cid),
+                    array(Database::INTEGER)
+        );
+        $db->conn->executeUpdate(
+                    "UPDATE {$_TABLES['comments']} SET indent = indent - 1 WHERE sid = ? AND type = ? AND lft BETWEEN ? AND ?",
+                    array($sid,$type,$lft,$rht),
+                    array(Database::STRING, Database::STRING, Database::INTEGER, Database::INTEGER)
+        );
+        $db->conn->executeUpdate(
+                    "UPDATE `{$_TABLES['comments']}` SET lft = lft - 2 WHERE sid = ? AND type = ?  AND lft >= ?",
+                    array($sid,$type,$rht),
+                    array(Database::STRING, Database::STRING, Database::INTEGER)
+        );
+        $db->conn->executeUpdate(
+                    "UPDATE `{$_TABLES['comments']}` SET rht = rht - 2 WHERE sid = ? AND type = ?  AND rht >= ?",
+                    array($sid,$type,$rht),
+                    array(Database::STRING,Database::STRING,Database::INTEGER)
+        );
+        $db->conn->commit();
+        $db->conn->query("UNLOCK TABLES");
+    } catch (\Doctrine\DBAL\Exception\RetryableException $e) {
+        $db->conn->commit();
+        $db->conn->query("UNLOCK TABLES");
+        usleep(250000);
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        $db->conn->rollBack();
+        $db->conn->query("UNLOCK TABLES");
+        throw($e);
     }
 
-    DB_unlockTable ($_TABLES['comments']);
     PLG_itemDeleted((int) $cid, 'comment');
 
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('whatsnew','story_'.$sid));
+    Cache::getInstance()->deleteItemsByTags(array('whatsnew','story_'.$sid));
 
     return $ret;
 }
@@ -1867,6 +2062,8 @@ function CMT_reportAbusiveComment ($cid, $type)
         return $retval;
     }
 
+    $db = Database::getInstance();
+
     $start = new Template($_CONF['path_layout'] . 'comment');
     $start->set_file(array('report' => 'reportcomment.thtml'));
     $start->set_var('lang_report_this', $LANG03[25]);
@@ -1876,11 +2073,20 @@ function CMT_reportAbusiveComment ($cid, $type)
     $start->set_var('gltoken_name', CSRF_TOKEN);
     $start->set_var('gltoken', SEC_createToken());
 
-    $result = DB_query ("SELECT uid,sid,pid,title,comment,UNIX_TIMESTAMP(date) AS nice_date FROM {$_TABLES['comments']} WHERE cid = ".(int) $cid." AND type = '".DB_escapeString($type)."'");
-    $A = DB_fetchArray ($result);
+    $A = $db->conn->fetchAssoc("SELECT uid,sid,pid,title,comment,UNIX_TIMESTAMP(date) AS nice_date FROM `{$_TABLES['comments']}` WHERE cid = ? AND type = ?",
+            array($cid,$type),
+            array(Database::INTEGER,Database::STRING)
+         );
 
-    $result = DB_query ("SELECT username,fullname,photo,email FROM {$_TABLES['users']} WHERE uid = ".(int) $A['uid']);
-    $B = DB_fetchArray ($result);
+    if ($A === false) {
+        return $retval;
+    }
+
+    $B = $db->conn->fetchAssoc("SELECT username,fullname,photo,email FROM `{$_TABLES['users']}` WHERE uid = ?",
+            array($A['uid']),
+            array(Database::INTEGER)
+
+         );
 
     // prepare data for comment preview
     $A['cid'] = $cid;
@@ -1892,6 +2098,7 @@ function CMT_reportAbusiveComment ($cid, $type)
     $A['indent'] = 0;
     $A['pindent'] = 0;
 
+//@TODO - we are calling this in preview mode so the first parameter is an associative array
     $thecomment = CMT_getComment ($A, 'flat', $type, 'ASC', false, true);
     $start->set_var ('comment', $thecomment);
     $retval .= COM_startBlock ($LANG03[15])
@@ -1926,10 +2133,21 @@ function CMT_sendReport ($cid, $type)
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
-    $username = DB_getItem ($_TABLES['users'], 'username',
-                            "uid = {$_USER['uid']}");
-    $result = DB_query ("SELECT uid,title,comment,sid,ipaddress FROM {$_TABLES['comments']} WHERE cid = ".(int) $cid." AND type = '".DB_escapeString($type)."'");
-    $A = DB_fetchArray ($result);
+    $db = Database::getInstance();
+
+    $username = $db->conn->fetchColumn("SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
+                    array($USER['uid'],0,array(Database::INTEGER)));
+
+
+    $A = $db->conn->fetchAssoc("SELECT uid,title,comment,sid,ipaddress FROM `{$_TABLES['comments']}`
+                              WHERE cid = ? AND type = ?",
+                              array($cid,$type),
+                              array(Database::INTEGER,Database::STRING)
+                     );
+
+    if ($A == false) {
+        return;
+    }
 
     $title = $A['title'];
     $comment = $A['comment'];
@@ -2022,6 +2240,8 @@ function CMT_preview( $data )
     $start->set_file( array( 'comment' => 'startcomment.thtml' ));
     $start->set_var( 'hide_if_preview', 'style="display:none"' );
 
+    $db = Database::getInstance();
+
     // Clean up all the vars
     $A = array();
     foreach ($data as $key => $value) {
@@ -2035,7 +2255,6 @@ function CMT_preview( $data )
             $A[$key] = $data[$key];
         } else if ($key == 'username') {
             $A[$key] = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($data[$key])))),ENT_QUOTES,COM_getEncodingt());
-//            $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($data[$key])),ENT_QUOTES,COM_getEncodingt());
         } else {
             $A[$key] = COM_applyFilter($data[$key]);
         }
@@ -2043,14 +2262,23 @@ function CMT_preview( $data )
 
     //correct time and username for edit preview
     if ($mode == 'preview' || $mode == 'preview_new' || $mode == 'preview_edit') {
-        $A['nice_date'] = DB_getItem ($_TABLES['comments'],'UNIX_TIMESTAMP(date)', "cid = ".(int) $data['cid']);
+        $A['nice_date'] = $db->conn->fetchColumn("SELECT UNIX_TIMESTAMP(date) FROM `{$_TABLES['comments']}` WHERE cid = ?",
+                          array($data['cid']),
+                          0,
+                          array(Database::INTEGER)
+        );
     }
     if (empty ($A['username'])) {
-        $A['username'] = DB_getItem ($_TABLES['users'], 'username',"uid = ".(int) $data['uid']);
+        $A['username'] = $db->conn->fetchColumn("SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
+                          array($data['uid']),
+                          0,
+                          array(Database::INTEGER)
+        );
     }
 
     $author_id = PLG_getItemInfo($data['type'], $data['sid'], 'author');
 
+//@TODO - we are calling this in preview mode so the first parameter is an associative array
     $thecomments = CMT_getComment ($A, 'flat', $data['type'], 'ASC', false, true,0,$author_id);
 
     $start->set_var( 'comments', $thecomments );
@@ -2079,9 +2307,16 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
 
     $retval = '';
 
-    $commentcode = DB_getItem($_TABLES['stories'], 'commentcode',
-                "(sid = '".DB_escapeString($id)."') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')"
-                . COM_getPermSQL('AND'));
+    $db = Database::getInstance();
+
+    $sql = "SELECT commentcode FROM `{$_TABLES['stories']}` WHERE sid=? AND (draft_flag = 0) AND (date <= ?) " . $db->getPermSQL('AND');
+
+    $commentcode = $db->conn->fetchColumn($sql,
+                                          array($id,$_CONF['_now']->toMySQL(true)),
+                                          0,
+                                          array(Database::STRING,Database::STRING)
+    );
+
     if (!isset($commentcode) || ($commentcode != 0)) {
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
@@ -2100,8 +2335,16 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
         $retval .= $msg . CMT_commentForm ($title,$comment,$id,$pid,'article',$LANG03[14],$postmode);
 
     } else { // success
-        $comments = CMT_getCount('article',$id); // DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $id,0));
-        DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $id);
+        $comments = CMT_getCount('article',$id);
+
+        try {
+            $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET comments=? WHERE sid=?",
+                                     array($comments,$id),
+                                     array(Database::INTEGER, Database::STRING)
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->error($e->getMessage());
+        }
         COM_olderStuff(); // update comment count in Older Stories block
         $retval = COM_refresh(COM_buildUrl($_CONF['site_url']
                               . "/article.php?story=$id#comments"));
@@ -2124,18 +2367,37 @@ function plugin_deletecomment_article($cid, $id)
 
     $retval = '';
 
-    $has_editPermissions = SEC_hasRights ('story.edit');
-    $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
-                      . "FROM {$_TABLES['stories']} WHERE sid = '".DB_escapeString($id)."'");
-    $A = DB_fetchArray ($result);
+    $db = Database::getInstance();
 
-    if ($has_editPermissions && SEC_hasAccess ($A['owner_id'],
-            $A['group_id'], $A['perm_owner'], $A['perm_group'],
-            $A['perm_members'], $A['perm_anon']) == 3) {
+    $has_editPermissions = SEC_hasRights ('story.edit');
+
+    $sql = "SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon
+            FROM `{$_TABLES['stories']}` WHERE sid = ?";
+
+    $commentRow = $db->conn->fetchAssoc($sql,array($id),array(Database::STRING));
+
+    if ($commentRow === null || $commentRow === false) {
+        return $retval;
+    }
+
+    if ($has_editPermissions && SEC_hasAccess ($commentRow['owner_id'],
+            $commentRow['group_id'], $commentRow['perm_owner'], $commentRow['perm_group'],
+            $commentRow['perm_members'], $commentRow['perm_anon']) == 3) {
+
         CMT_deleteComment($cid, $id, 'article');
-        $comments = DB_count ($_TABLES['comments'], array('sid','queued'), array(DB_escapeString($id),0));
-        DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', DB_escapeString($id));
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
+
+        $commentCount = $db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid = ? AND queued = 0",
+                            array($id),
+                            0,
+                            array(Database::STRING)
+        );
+
+        $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET comments=? WHERE sid=?",
+                            array($commentCount,$id),
+                            array(Database::INTEGER, Database::STRING)
+        );
+
+        $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
         $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
                  . "/article.php?story=$id") . '#comments');
     } else {
@@ -2166,36 +2428,45 @@ function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page
 
     USES_lib_story();
 
+    $db = Database::getInstance();
+
     $retval = '';
     // display story
+
     $sql   = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
              . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
              . "u.uid, u.username, u.fullname, t.topic, t.imageurl "
-             . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u ON s.uid=u.uid "
+             . "FROM `{$_TABLES['stories']}` AS s LEFT JOIN `{$_TABLES['users']}` AS u ON s.uid=u.uid "
              . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
-             . "WHERE (sid = '".DB_escapeString($id)."') "
-             . 'AND (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'")' . COM_getPermSQL('AND',0,2, 's')
-             . COM_getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
+             . "WHERE (sid = ?) "
+             . 'AND (draft_flag = 0) AND (date <= ?)' . $db->getPermSQL('AND',0,2, 's')
+             . $db->getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
 
 
-    $result = DB_query ($sql);
+    $A = $db->conn->fetchAssoc($sql,
+                               array($id,$_CONF['_now']->toMySQL(true)),
+                               array(Database::STRING,Database::STRING)
+            );
 
-    $nrows = DB_numRows ($result);
-    if ( $A = DB_fetchArray( $result ) ) {
-
-        $story = new Story();
-        $story->loadFromArray($A);
-        $retval .= STORY_renderArticle ($story, 'n');
+    if ($A === null || $A === false) {
+        return $retval;
     }
-    // end
+
+    $story = new Story();
+    $story->loadFromArray($A);
+    $retval .= STORY_renderArticle ($story, 'n');
+
     $sql = 'SELECT COUNT(*) AS count, commentcode, uid, owner_id, group_id, perm_owner, perm_group, '
          . "perm_members, perm_anon FROM {$_TABLES['stories']} "
-         . "WHERE (sid = '".DB_escapeString($id)."') "
-         . 'AND (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'")' . COM_getPermSQL('AND')
-         . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
+         . "WHERE (sid = ?) "
+         . 'AND (draft_flag = 0) AND (date <= ?)' . $db->getPermSQL('AND')
+         . $db->getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
 
-    $result = DB_query ($sql);
-    $B = DB_fetchArray ($result);
+    $B = $db->conn->fetchAssoc($sql,
+                            array($id,$_CONF['_now']->toMySQL(true)),
+                            array(Database::STRING,Database::STRING)
+            );
+
     $allowed = $B['count'];
 
     if ( $allowed == 1 ) {
@@ -2235,6 +2506,10 @@ function plugin_getcommenturlid_article( )
 function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG03;
+
+    $db = Database::getInstance();
+    $sqlParams = array();
+    $sqlTypes  = array();
 
     $buildingSearchIndex = false;
 
@@ -2296,32 +2571,28 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
             $permOp = ' WHERE ';
         }
     } else {
-        $where = " WHERE cid = '" . DB_escapeString($id) . "'";
+        $where = " WHERE cid = ? ";
+        $sqlParams[] = $id;
+        $sqlTypes[] = Database::INTEGER;
         $permOp = ' AND ';
     }
 
-    $groups = array ();
-    $usergroups = SEC_getUserGroups();
-    foreach ($usergroups as $group) {
-        $groups[] = $group;
-    }
-    $grouplist = implode(',',$groups);
-
     $sql  = "SELECT " . implode(',', $fields) . " ";
-    $sql .= "FROM {$_TABLES['comments']} ";
+    $sql .= "FROM `{$_TABLES['comments']}` ";
     $sql .= $where;
 
     if ($id != '*') {
         $sql .= ' LIMIT 1';
     }
-
-    $result = DB_query($sql);
-    $numRows = DB_numRows($result);
+    try {
+        $stmt = $db->conn->executeQuery($sql,$sqlParams,$sqlTypes);
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        $throw($e);
+    }
 
     $retval = array();
-    for ($i = 0; $i < $numRows; $i++) {
-        $A = DB_fetchArray($result);
 
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $props = array();
         foreach ($properties as $p) {
             switch ($p) {
@@ -2337,10 +2608,11 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
                 case 'searchidx' :
                 case 'raw-description' :
                     if ( $buildingSearchIndex ) {
-                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment FROM {$_TABLES['comments']} WHERE pid=".$id." GROUP BY pid";
-                        $childres = DB_query($sql);
-                        if ( DB_numRows($childres) > 0 ) {
-                            $B = DB_fetchArray($childres);
+                        $sql = "SELECT GROUP_CONCAT(comment SEPARATOR ' ') as comment
+                                FROM `{$_TABLES['comments']}`
+                                WHERE pid=? GROUP BY pid";
+                        $cmtStmt = $db->conn->executeQuery($sql,array($id),array(Database::INTEGER));
+                        while ($B = $cmtStmt->fetch(Database::ASSOCIATIVE)) {
                             if ( isset($B['comment'])) {
                                 $A['comment'] = $A['comment'] . $B['comment'];
                             }
@@ -2481,22 +2753,26 @@ function plugin_itemlist_comment($token)
         $uid = $_USER['uid'];
     }
 
-    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day, name AS username FROM {$_TABLES['comments']} WHERE queued = 1 ORDER BY date DESC";
+    $db = Database::getInstance();
 
-    $result = DB_query($sql);
-    $nrows = DB_numRows($result);
+    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day, name AS username FROM `{$_TABLES['comments']}` WHERE queued = 1 ORDER BY date DESC";
+    $stmt = $db->conn->query($sql);
 
-    if ( $nrows == 0 ) return;
+    $commentData = $stmt->fetchAll(Database::ASSOCIATIVE);
+
+    if (count($commentData) == 0) {
+        return;
+    }
 
     $data_arr = array();
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray($result);
-        $A['edit'] = $_CONF['site_url'].'/comment.php?mode=modedit&amp;cid='.$A['cid'].'&amp;'.CSRF_TOKEN.'='.$token;
+
+    foreach($commentData AS $A) {
+        $A['edit']      = $_CONF['site_url'].'/comment.php?mode=modedit&amp;cid='.$A['cid'].'&amp;'.CSRF_TOKEN.'='.$token;
         $A['_type_']    = 'comment';
         $A['_key_']     = 'cid';        // name of key/id field
         $A['preview']   = CMT_preview($A); // format a comment for preview.
         $A['username']  = $A['name'];
-        $data_arr[$i]   = $A;           // push row data into array
+        $data_arr[]   = $A;           // push row data into array
     }
 
     $header_arr = array(      // display 'text' and use table field 'field'
@@ -2542,7 +2818,7 @@ function plugin_itemlist_comment($token)
     $form_arr['bottom'] = '<input type="hidden" name="type" value="comment"/>' . LB
             . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>' . LB
             . '<input type="hidden" name="moderation" value="x"/>' . LB
-            . '<input type="hidden" name="count" value="' . $nrows . '"/>';
+            . '<input type="hidden" name="count" value="' . count($commentData) . '"/>';
 
     $retval .= ADMIN_simpleList('CMT_getListField', $header_arr,
                               $text_arr, $data_arr, $options, $form_arr, $token);
@@ -2564,24 +2840,45 @@ function plugin_moderationapprove_comment($id)
 {
     global $_CONF, $_TABLES, $LANG03;
 
-    if ( (int) $id <= 0 ) return '';
+    if ( (int) $id <= 0 ) {
+        return '';
+    }
 
-    $sql = "UPDATE {$_TABLES['comments']} SET queued=0 WHERE cid=".(int) $id;
-    DB_query($sql);
+    $db = Database::getInstance();
 
-    // now we need to determine the type of comment and call all the stuff we need
-    $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $id);
-    if ( ( DB_numRows( $result) ) != 1 ) {
+    $sql = "UPDATE `{$_TABLES['comments']}` SET queued=0 WHERE cid=?";
+
+    try {
+        $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        if ($db->getIgnore()) {
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        } else {
+            $db->dbError($e->getMessage(),$sql);
+        }
+    }
+    $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE cid=?";
+    try {
+        $row = $db->conn->fetchAssoc($sql,array($id),array(Database::INTEGER));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        if ($db->getIgnore()) {
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+            return false;
+        } else {
+            $db->dbError($e->getMessage(),$sql);
+        }
+    }
+    if ($row === false) {
         COM_errorLog("Unable to retrieve approved comment");
         return false;
     }
-    $row = DB_fetchArray($result);
+
     $cid = $id;
     $type = $row['type'];
     $sid  = $row['sid'];
     // now we need to alert everyone a comment has been saved.
     PLG_commentApproved($cid,$type,$sid);   // let plugins know they should update their counts if necessary
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('whatsnew','menu'));
     if ( $type == 'article' ) {
         $c->deleteItemsByTag('story_'.$sid);
@@ -2607,11 +2904,21 @@ function plugin_moderationdelete_comment($id)
 {
     global $_CONF, $_TABLES;
 
-    if ( (int) $id <= 0 ) return '';
-
-    $sql = "DELETE FROM {$_TABLES['comments']} WHERE cid=".(int) $id . " AND queued=1";
-    DB_query($sql);
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    if ( (int) $id <= 0 ) {
+        return '';
+    }
+    $db = Database::getInstance();
+    $sql = "DELETE FROM `{$_TABLES['comments']}` WHERE cid=? AND queued=1";
+    try {
+        $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        if ($db->getIgnore()) {
+            $db->_errorlog("SQL Error: " . $e->getMessage());
+        } else {
+            $db->dbError($e->getMessage(),$sql);
+        }
+    }
+    $c = Cache::getInstance()->deleteItemsByTag('menu');
     return;
 }
 
@@ -2625,10 +2932,12 @@ function plugin_submissioncount_comment()
 {
     global $_TABLES;
 
-    $retval = 0;
+    $db = Database::getInstance();
 
-    $retval = DB_count ($_TABLES['comments'],'queued',1);
-
+    $retval = $db->conn->fetchColumn("SELECT COUNT(queued) FROM `{$_TABLES['comments']}` WHERE queued = 1",array(),0);
+    if ($retval === false) {
+        $retval = 0;
+    }
     return $retval;
 }
 
@@ -2676,8 +2985,16 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'tid':
-            $retval = DB_getItem($_TABLES['topics'], 'topic',
-                                 "tid = '".DB_escapeString($A['tid'])."'");
+            $db = Database::getInstance();
+            $retval = $db->conn->fetchColumn(
+                        "SELECT topic FROM `{$_TABLES['topics']}` WHERE tid=?",
+                        array($A['tid']),
+                        0,
+                        array(Database::STRING)
+                      );
+            if ($retval === false) {
+                $retval = '';
+            }
             break;
 
         case 'uid':
@@ -2692,8 +3009,13 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                             . '&nbsp;&nbsp;'
                             . '<span style="vertical-align:top">' . $A['name'] . '</span>';
             } else {
-                // lookup the username from the uid
-                $username = DB_getItem($_TABLES['users'], 'username',"uid = ". (int) $A['uid']);
+                $db = Database::getInstance();
+                $username = $db->conn->fetchColumn(
+                                "SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
+                                array($A['uid']),
+                                0,
+                                array(Database::INTEGER)
+                            );
 
                 $attr['title'] = $LANG28[108];
                 $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
@@ -2723,7 +3045,7 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $_CONF['site_admin_url'] . '/moderation.php'
                 . '?approve=x'
                 . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A[0]
+                . '&amp;id=' . $A['cid']
                 . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
@@ -2735,7 +3057,7 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $_CONF['site_admin_url'] . '/moderation.php'
                 . '?delete=x'
                 . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A[0]
+                . '&amp;id=' . $A['cid']
                 . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
             break;
 
@@ -2795,19 +3117,24 @@ function plugin_getfeedcontent_comment ($feed, &$link, &$update)
 {
     global $_CONF, $_TABLES;
 
-    $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($feed)."'" );
-    $S = DB_fetchArray( $result );
+    $db = Database::getInstance();
 
-    $sql = "SELECT * FROM {$_TABLES['comments']} where queued = 0 ";
+    $sql = "SELECT topic,limits,content_length
+            FROM `{$_TABLES['syndication']}`
+            WHERE fid = ?";
+
+    $S = $db->conn->fetchAssoc($sql,array($feed),array(Database::STRING));
+    $sql = "SELECT * FROM `{$_TABLES['comments']}` where queued = 0 ";
 
     if( $S['topic'] != 'all' ) {
-        $sql .= " AND type='{$S['topic']}' ";
+        $sql .= " AND type = " . $db->conn->quote($S['topic']) . " ";
     }
     $sql .= " ORDER BY date DESC ";
 
-    $result = DB_query($sql);
+    $stmt = $db->conn->query($sql);
     $counter = 0;
-    while ( ( $row = DB_fetchArray($result)) != NULL ) {
+
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $itemInfo = PLG_getItemInfo($row['type'],$row['sid'],'url,perms',1);
         if ( isset($itemInfo['perms'] ) ) {
             if ( $itemInfo['perms']['perm_anon'] > 0 && isset($itemInfo['url']) && $itemInfo['url'] != '' ) {
@@ -2892,17 +3219,23 @@ function plugin_itemsaved_comment( $id, $type )
 {
     global $_TABLES, $_VARS;
 
-    if ( $type != 'comment' ) return;
+    if ($type != 'comment') {
+        return;
+    }
+    $db = Database::getInstance();
+    $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE queued = 0 AND cid=?";
 
-    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE queued = 0 AND cid=".(int) $id;
-    $result = DB_query($sql);
-    if ( DB_numRows( $result ) != 0 ) {
-        $row = DB_fetchArray($result);
+    $stmt = $db->conn->executeQuery($sql,array($id),array(Database::INTEGER));
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $itemInfo = PLG_getItemInfo($row['type'],$row['sid'],'id,perms',1);
         if ( isset($itemInfo['perms'] ) ) {
             if ( isset($itemInfo['perms']['perm_anon']) && $itemInfo['perms']['perm_anon'] > 0 ) {
                 $now = time();
-                DB_query("REPLACE INTO {$_TABLES['vars']} (name,value) VALUES('cmt_update','".$now."')");
+                $db->conn->executeUpdate(
+                    "REPLACE INTO `{$_TABLES['vars']}` (name,value) VALUES('cmt_update',?)",
+                    array($now),
+                    array(Database::STRING)
+                );
                 $_VARS['cmt_update'] = $now;
             }
         }
@@ -2914,18 +3247,29 @@ function plugin_privacy_export_comment($uid,$email='',$username='',$ip='')
 {
     global $_CONF, $_TABLES;
 
+    $db = Database::getInstance();
+    $sqlParams = array();
+    $sqlTypes  = array();
+
     $retval = '';
 
     $exportFields = array('type','sid','date','title','name','uid','ipaddress');
 
-    $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = ". (int) $uid;
+    $sql = "SELECT * `FROM {$_TABLES['comments']}` WHERE uid = ? ";
+    $sqlParams[] = $uid;
+    $sqlTypes[]  = Database::INTEGER;
+
     if ( $ip != '' ) {
-        $sql .= " OR ipaddress = '" . DB_escapeString($ip)."'";
+        $sql .= " OR ipaddress = ?";
+        $sqlParams[] = $ip;
+        $sqlTypes[]  = Database::STRING;
+
     }
     $sql .= " ORDER BY date ASC";
 
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
+    $stmt = $db->conn->executeQuery($sql,$sqlParams,$sqlTypes);
+
+    $rows = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     $retval .= "<comments>\n";
 
