@@ -63,6 +63,8 @@ if ($page == 0) {
     $page = 1;
 }
 
+$cronCheck = _cronSchedule();
+
 // If the plugin is hijacking the index page - let it do it here
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
@@ -70,7 +72,7 @@ if (!$newstories && !$displayall) {
         $newcontent = PLG_showCenterblock (CENTERBLOCK_FULLPAGE, $page, $topic);
     }
     if (!empty($newcontent)) {
-        echo $pageBody . $newcontent;
+        echo $pageBody . $newcontent . $cronCheck;
         exit;
     }
 }
@@ -451,8 +453,9 @@ if ($nrows > 0) {
     $pageBody .= $cbDisplay;
 }
 
-$cronCheck = _cronSchedule();
-if ( $cronCheck != '' ) $T->set_var('cron',$cronCheck);
+if ( $cronCheck != '' ) {
+    $T->set_var('cron',$cronCheck);
+}
 
 if (isset($_CONF['infinite_scroll']) && $_CONF['infinite_scroll'] == true ) {
     $T->set_var('enable_infinite_scroll',true);
@@ -485,7 +488,7 @@ function _cronSchedule() {
     if ( !isset($_VARS['last_maint_run'] ) || $_VARS['last_maint_run'] == '') {
         $_VARS['last_maint_run'] = 0;
     }
-    if (  (( $_VARS['last_maint_run'] + 600 ) <= time()) ) {
+    if ((($_VARS['last_maint_run'] + 600 ) <= time())) {
         return '<img alt="" src="'.$_CONF['site_url'].'/cron.php?id='.time().'" height="1" width="2" />';
     } else {
         return '';
