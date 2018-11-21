@@ -4,7 +4,7 @@
 		<div class="uk-form-controls uk-text-center">
 			<div class="uk-form-icon">
 				<i class="uk-icon-user"></i>
-				<input class="uk-width-1-1" type="text" id="loginname" name="loginname" placeholder="{lang_username}" value="">
+				<input class="uk-width-1-1" type="text" name="loginname" placeholder="{lang_username}" value="">
 			</div>
 		</div>
 	</div>
@@ -12,7 +12,7 @@
 		<div class="uk-form-controls uk-text-center">
 			<div class="uk-form-icon">
 				<i class="uk-icon-lock"></i>
-				<input class="uk-width-1-1" type="password" placeholder="{lang_password}" name="passwd" id="passwd">
+				<input class="uk-width-1-1" type="password" placeholder="{lang_password}" name="passwd">
 			</div>
 		</div>
 	</div>
