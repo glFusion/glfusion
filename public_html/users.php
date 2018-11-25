@@ -444,7 +444,7 @@ function requestpassword ($username, $msg = 0)
         $T->set_block('html_msg', 'content', 'contentblock');
         $T->set_block('text_msg', 'contenttext', 'contenttextblock');
 
-        $T->set_var('content_text',sprintf ($LANG04[88], $username) );
+        $T->set_var('content_text',sprintf ($LANG04[88], $username,$_CONF['site_name'],$_CONF['site_url']) );
 
         $T->parse('contentblock', 'content',true);
         $T->parse('contenttextblock', 'contenttext',true);
@@ -707,7 +707,7 @@ function USER_createuser($info = array())
         $errorMessages[] = $LANG01[32];
     } else if ( !USER_validateUsername($data['username'])) {
         $validationErrors++;
-        $errorMessages[] = $LANG04[162];
+        $errorMessages[] = sprintf($LANG04[162],$_CONF['min_username_length']);
     }
 
     // email
@@ -930,10 +930,10 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
         $options['newreg_link']        = false;
         $options['verification_link']  = true;
     } elseif ($statusmode == -1) { // invalid credentials
-        $options['title']   = $LANG04[65]; // log in to {site_name}
+        $options['title']   = sprintf($LANG04[65],$_CONF['site_name']); // log in to {site_name}
         $options['message'] = $LANG04[113]; // login attempt failed
     } else {
-        $options['title']   = $LANG04[65]; // log in to {site_name}
+        $options['title']   = sprintf($LANG04[65],$_CONF['site_name']); // log in to {site_name}
         $options['message'] = ''; // $LANG04[66]; // please enter your user name and password below
     }
 
@@ -1009,7 +1009,7 @@ function USER_registrationForm($info = array(), $messages = array())
     $T->set_var('form_action',$options['form_action']);
 
     $T->set_var(array(
-        'lang_instructions' => $LANG04[23],
+        'lang_instructions' => sprintf($LANG04[23],$_CONF['site_name']),
         'lang_username'     => $LANG04[2],
         'lang_fullname'     => $LANG04[3],
         'lang_email'        => $LANG04[5],

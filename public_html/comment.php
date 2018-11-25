@@ -747,7 +747,7 @@ if ( isset($_POST['cancel'] ) ) {
 
             if ($last > 0) {
                 $goBack = '<br/><br/>'.$LANG03[48];
-                $pageBody .= COM_showMessageText($LANG03[7].$last.$LANG03[8].$goBack,$LANG12[26],true,'error');
+                $pageBody .= COM_showMessageText($LANG03[7].$last.sprintf($LANG03[8],$_CONF['commentspeedlimit']).$goBack,$LANG12[26],true,'error');
             } else {
 // pull data passed
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';

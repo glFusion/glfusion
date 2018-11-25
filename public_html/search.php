@@ -46,7 +46,7 @@ if (isset ($_GET['mode']) && ($_GET['mode'] == 'search')) {
     $display = COM_siteHeader('menu', $LANG09[11]);
     $display .= $searchObj->doSearch();
 } else {
-    $display = COM_siteHeader ('menu', $LANG09[1]);
+    $display = COM_siteHeader ('menu', sprintf($LANG09[1],$_CONF['site_name']));
     $display .= $searchObj->showForm();
 }
 

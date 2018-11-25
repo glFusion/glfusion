@@ -5,7 +5,7 @@
 		<table width="100%" cellspacing="0" cellpadding="0" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">
 			<tr>
 				<td colspan="2">
-					{$LANG08[29]} {week_date}
+					{title} {week_date}
 				</td>
 			</tr>
 			<tr>

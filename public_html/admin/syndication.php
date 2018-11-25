@@ -378,7 +378,7 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var ('lang_clen_explain', $LANG33[28]);
     $feed_template->set_var ('lang_description', $LANG33[29]);
     $feed_template->set_var ('lang_feedlogo', $LANG33[49]);
-    $feed_template->set_var ('lang_feedlogo_explain', $LANG33[50]);
+    $feed_template->set_var ('lang_feedlogo_explain', sprintf($LANG33[50],$_CONF['site_url']));
     $feed_template->set_var ('lang_filename', $LANG33[16]);
     $feed_template->set_var ('lang_updated', $LANG33[30]);
     $feed_template->set_var ('lang_type', $LANG33[15]);

@@ -245,7 +245,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         // not yet available to support.  this is likely to cause an error, and
         // therefore we should warn the user to create the function first.
 
-        $error = sprintf($LANG_AM['phpfn_missing'],$tag).' '.$LANG_AM['phpfn_must_exist'];
+        $error = sprintf($LANG_AM['phpfn_missing'],$tag,$_CONF['path_system']).' '.$LANG_AM['phpfn_must_exist'];
         COM_errorLog($error);
         $retval = COM_showMessageText($error,'',true,'error');
         $retval .= AT_edit('');

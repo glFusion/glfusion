@@ -658,11 +658,11 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
 
     if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) ) {
-        $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true,'error');
+        $display .= COM_showMessageText(sprintf($LANG24[42],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
         COM_accessLog("User {$_USER['username']} tried to access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
     } elseif( ($result == STORY_EDIT_DENIED) || ($result == STORY_EXISTING_NO_EDIT_PERMISSION) ) {
-        $display .= COM_showMessageText($LANG24[41],$LANG_ACCESS['accessdenied'],true,'error');
+        $display .= COM_showMessageText(sprintf($LANG24[41],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
         $display .= STORY_renderArticle ($story, 'p');
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
@@ -693,7 +693,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
         $allowedAltTopicList = '<option value="">'.$LANG33[44].'</option>'.COM_topicList ('tid,topic,sortnum', $story->EditElements('alternate_tid'), 2, true,3);
     }
     if ( $allowedTopicList == '' ) {
-        $display .= COM_showMessageText($LANG24[42],$LANG_ACCESS['accessdenied'],true,'error');
+        $display .= COM_showMessageText(sprintf($LANG24[42],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
         COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. No allowed topics.");
         return $display;
     }

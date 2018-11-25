@@ -54,7 +54,7 @@ function _checkUpgrades()
         // run version check
         list($upToDate,$pluginsUpToDate,$pluginData) = _checkVersion();
         if ( $upToDate == 0 || $pluginsUpToDate == 0 ) {
-            $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $LANG_UPGRADE['updates_available'] . '</span></p>';
+            $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . sprintf($LANG_UPGRADE['updates_available'],$_CONF['site_admin_url']) . '</span></p>';
         }
         DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('updatecheck',UNIX_TIMESTAMP())");
     }

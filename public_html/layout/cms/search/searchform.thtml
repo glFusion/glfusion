@@ -1,5 +1,5 @@
 {# begin {templatelocation} #}
-<h2>{$LANG09[1]}</h2>
+<h2>{search_heading}</h2>
 <form class="uk-form uk-form-stacked uk-margin-large uk-search uk-width-1-1" method="get" action="{site_url}/search.php">
 	<input type="hidden" name="mode" value="search">
 	<input class="uk-search" type="search" id="query" name="q" value="{query}" placeholder="{$LANG09[10]}">

@@ -298,8 +298,7 @@ function MAIL_sendMessages($vars)
 
     $failcount = count ($failures);
     $successcount = count ($successes);
-    $mailresult = str_replace ('<successcount>', $successcount, $LANG31[20]);
-    $retval .= str_replace ('<failcount>', $failcount, $mailresult);
+    $retval .= sprintf ($LANG31[20], $successcount,$failcount,$_CONF['site_admin_url'],$_CONF['site_admin_url']);
 
     $retval .= '<h2>' . $LANG31[21] . '</h2>';
     for ($i = 0; $i < count ($failures); $i++) {

@@ -254,7 +254,8 @@ class Search {
         $searchform = new Template($_CONF['path_layout'].'search');
         $searchform->set_file (array ('searchform' => 'searchform.thtml',
                                       'authors'    => 'searchauthors.thtml'));
-        $searchform->set_var('search_intro', $LANG09[19]);
+        $searchform->set_var('search_heading', sprintf($LANG09[1],$_CONF['site_name']));
+        $searchform->set_var('search_intro', sprintf($LANG09[19],$_CONF['site_name']));
         $searchform->set_var('site_url', $_CONF['site_url']);
         $searchform->set_var('site_admin_url', $_CONF['site_admin_url']);
         $searchform->set_var('layout_url', $_CONF['layout_url']);

@@ -3,6 +3,7 @@
 ## v2.0.0 (Unreleased)
 
 ### Added
+  - {site_name} is now a default template var
   - Allow { and } to be escaped in templates by using {{ and }} so {{x}} will become {x}
   - Integrate Whoops debug console for development
   - Implemented JavaScript based code formatter / highlighter
@@ -13,6 +14,7 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Removed all variable references from language files - now use sprintf() to build final string
   - Minimum PHP version is now 7.1.0
   - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
   - Comment system code has been reworked and optimized

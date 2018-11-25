@@ -462,7 +462,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         'lang_by'           => $LANG01[1],
         'site_name'         => $_CONF['site_name'],
         'from_name'         => $from,
-        'disclaimer'        => sprintf ($LANG08[23], $from, $fromemail),
+        'disclaimer'        => sprintf ($LANG08[23], $from, $fromemail,$_CONF['site_url']),
     ));
 
     $T->parse( 'message_body_html', 'html_msg' );

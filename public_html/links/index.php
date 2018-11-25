@@ -474,7 +474,7 @@ if ( $mode == 'submit' ) {
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
     $last = COM_checkSpeedlimit ('submit');
     if ($last > 0) {
-        $slerror .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],true,'error');
+        $slerror .= COM_showMessageText($LANG12[30].$last.sprintf($LANG12[31],$_CONF['speedlimit']),$LANG12[26],true,'error');
     }
 
     echo LINKS_siteHeader();

@@ -158,7 +158,7 @@ function DBADMIN_list()
     } else {
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
-        $retval .= $LANG_DB_ADMIN['no_access'];
+        $retval .= sprintf($LANG_DB_ADMIN['no_access'],$_CONF['backup_path']);
         COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
@@ -364,7 +364,7 @@ function DBADMIN_backupPrompt()
     } else {
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
-        $retval .= $LANG_DB_ADMIN['no_access'];
+        $retval .= sprintf($LANG_DB_ADMIN['no_access'],$_CONF['backup_path']);
         COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }

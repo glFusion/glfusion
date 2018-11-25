@@ -39,7 +39,7 @@ class autotag_uikitlogin extends BaseAutotag {
                 'form_action'        => $_CONF['site_url'].'/users.php',
                 'plugin_vars'        => true,
             );
-            $options['title']   = $LANG04[65]; // log in to {site_name}
+            $options['title']   = sprintf($LANG04[65],$_CONF['site_name']); // log in to {site_name}
             $options['message'] = ''; //$LANG04[66]; // please enter your user name and password below
 
             $retval .= '<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">';

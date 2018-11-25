@@ -210,7 +210,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $commentbar->unset_var( 'comment_option_text');
     } else {
         $commentbar->set_var( 'reply_hidden_or_submit', 'hidden' );
-        $commentbar->set_var( 'comment_option_text', $LANG03[50] );
+        $commentbar->set_var( 'comment_option_text', sprintf($LANG03[50],$_CONF['site_url']) );
     }
     $commentbar->set_var( 'num_comments', COM_numberFormat( $nrows ));
     $commentbar->set_var( 'comment_type', $type );
@@ -1281,7 +1281,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         $last = COM_checkSpeedlimit ('comment');
     }
     if ($last > 0) {
-        $retval .= COM_showMessageText($LANG03[7].$last.$LANG03[8],$LANG12[26],false,'error');
+        $retval .= COM_showMessageText($LANG03[7].$last.sprintf($LANG03[8],$_CONF['commentspeedlimit']),$LANG12[26],false,'error');
         return $retval;
     }
 
@@ -2058,7 +2058,7 @@ function CMT_reportAbusiveComment ($cid, $type)
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     $last = COM_checkSpeedlimit ('mail');
     if ($last > 0) {
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false,'error');
+        $retval .= COM_showMessageText($LANG12[30].$last.sprintf($LANG12[31],$_CONF['speedlimit']), $LANG12[26],false,'error');
         return $retval;
     }
 

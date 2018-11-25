@@ -201,7 +201,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         $template->set_var ('site_url', $_CONF['site_url']);
         $template->set_var ('site_name', $_CONF['site_name']);
         $template->set_var ('site_slogan', $_CONF['site_slogan']);
-        $template->set_var ('lang_text1', $LANG04[15]);
+        $template->set_var ('lang_text1', sprintf($LANG04[15],$_CONF['site_name']));
         $template->set_var ('lang_text2', $LANG04[14]);
         $template->set_var ('lang_username', $LANG04[2]);
         $template->set_var ('lang_password', $LANG04[4]);
@@ -221,7 +221,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
                 'url'                   => $_CONF['site_url'].'/usersettings.php',
                 'lang_site_or_password' => $LANG04[171],
                 'site_link_url'         => $_CONF['site_url'],
-                'lang_activation'       => $LANG04[206],
+                'lang_activation'       => sprintf($LANG04[206],$_CONF['site_name']),
                 'lang_button_text'      => '',
                 'passwd'                => '',
             ));
@@ -307,12 +307,12 @@ function USER_sendActivationEmail ($username, $useremail)
         $template->set_file (array ('mail' => 'activation_email.txt'));
         $template->set_var ('site_name', $_CONF['site_name']);
         $template->set_var ('site_slogan', $_CONF['site_slogan']);
-        $template->set_var ('lang_text1', $LANG04[15]);
+        $template->set_var ('lang_text1', sprintf($LANG04[15],$_CONF['site_name']));
         $template->set_var ('lang_text2', $LANG04[14]);
         $template->parse ('output', 'mail');
         $mailtext = $template->get_var ('output');
     } else {
-        $mailtext = str_replace("<username>", $username, $LANG04[118]) . "\n\n";
+        $mailtext = str_replace("<username>", $username, sprintf($LANG04[118],$_CONF['site_name'])) . "\n\n";
         $mailtext .= $_CONF['site_url'] ."\n\n";
         $mailtext .= $LANG04[119] . "\n\n";
         $mailtext .= $_CONF['site_url'] ."/users.php?mode=getpassword\n\n";

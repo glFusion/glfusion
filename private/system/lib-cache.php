@@ -33,6 +33,7 @@ $TEMPLATE_OPTIONS = array(
         'site_url' => $_CONF['site_url'],
         'site_admin_url' => $_CONF['site_admin_url'],
         'layout_url' => $_CONF['layout_url'],
+        'site_name' => $_CONF['site_name'],
     ),
     'hook' => array(),
 );

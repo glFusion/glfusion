@@ -142,7 +142,7 @@ function USER_edit($uid = '', $msg = '')
         if (SEC_inGroup('Root',$uid) AND !SEC_inGroup('Root')) {
             // the current admin user isn't Root but is trying to change
             // a root account.  Deny them and log it.
-            $retval .= COM_showMessageText($LANG_ACCESS['editrootmsg'], $LANG28[1], true,'error');
+            $retval .= COM_showMessageText(sprintf($LANG_ACCESS['editrootmsg'],$_CONF['site_admin_url']), $LANG28[1], true,'error');
             COM_accessLog("User {$_USER['username']} tried to edit a Root account with insufficient privileges.");
             return $retval;
         }
@@ -2249,11 +2249,11 @@ function USER_sendReminders()
                     $mailtext = $template->get_var ('output');
                 } else {
                     if ($lastlogin == 0) {
-                        $mailtext = $LANG28[83] . "\n\n";
+                        $mailtext = sprintf($LANG28[83],$_CONF['site_name']) . "\n\n";
                     } else {
-                        $mailtext = sprintf($LANG28[82], $lasttime[0]) . "\n\n";
+                        $mailtext = sprintf($LANG28[82], $_CONF['site_name'], $lasttime[0]) . "\n\n";
                     }
-                    $mailtext .= sprintf($LANG28[84], $username) . "\n";
+                    $mailtext .= sprintf($LANG28[84], $username,$_CONF['site_url']) . "\n";
                     $mailtext .= sprintf($LANG28[85], $_CONF['site_url']
                                          . '/users.php?mode=getpassword') . "\n\n";
 

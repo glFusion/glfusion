@@ -1888,7 +1888,7 @@ function SEC_loginForm($use_options = array())
         'prefill_user'      => false,   // prefill username of current user
 
         // default texts
-        'title'             => $LANG04[65], // Login to site
+        'title'             => sprintf($LANG04[65],$_CONF['site_name']), // Login to site
         'message'           => '', // $LANG04[66], // Please enter username
         'footer_message'    => '',
         'button_text'       => $LANG04[80], // Login
@@ -1910,7 +1910,7 @@ function SEC_loginForm($use_options = array())
     if ($options['newreg_link'] == false || $_CONF['disable_new_user_registration']) {
         $loginform->set_var('lang_newreglink', '');
     } else {
-        $loginform->set_var('lang_newreglink', $LANG04[123]);
+        $loginform->set_var('lang_newreglink', sprintf($LANG04[123],$_CONF['site_url']));
     }
 
     $loginform->set_var('lang_username', $LANG04[2]);

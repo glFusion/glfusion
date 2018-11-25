@@ -69,7 +69,7 @@ function submissionform($type='story', $mode = '', $topic = '')
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31], $LANG12[26],false,'error');
+        $retval .= COM_showMessageText($LANG12[30].$last.sprintf($LANG12[31],$_CONF['speedlimit']), $LANG12[26],false,'error');
     } else {
         if (COM_isAnonUser() &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
@@ -340,7 +340,7 @@ function savesubmission($type, $A)
 
     if ($last > 0) {
         $retval  = COM_siteHeader ();
-        $retval .= COM_showMessageText($LANG12[30].$last.$LANG12[31],$LANG12[26],false,'error');
+        $retval .= COM_showMessageText($LANG12[30].$last.sprintf($LANG12[31],$_CONF['speedlimit']),$LANG12[26],false,'error');
         $retval .= COM_siteFooter ();
 
         return $retval;

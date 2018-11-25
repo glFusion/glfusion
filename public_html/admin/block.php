@@ -206,7 +206,7 @@ function BLOCK_edit($bid = '', $B = array())
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
         if ($access == 2 || $access == 0 || BLOCK_hasTopicAccess($A['tid']) < 3) {
-            $retval .= COM_showMessageText($LANG21[45],$LANG_ACCESS['accessdenied'],true,'error');
+            $retval .= COM_showMessageText(sprintf($LANG21[45],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
             COM_accessLog("User {$_USER['username']} tried to illegally create or edit block ".$bid);
             return $retval;
         }
