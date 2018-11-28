@@ -1,32 +1,17 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | envcheck.php                                                             |
-// |                                                                          |
-// | glFusion Environment Check                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric Warren            eric AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Environment Check
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Eric Warren     eric AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
@@ -47,7 +32,7 @@ function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
            $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $LANG_FILECHECK,$_DB_dbms,$_DB, $_CP_CONF;
+           $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF;
 
     $retval = '';
     $permError = 0;
@@ -105,9 +90,9 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.1.0+');
+    $T->set_var('recommended','7.2.0+');
 
-    $phpnotes = $LANG_ENVCHK['php_req_version'];
+    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.1.0');
     if ( !_phpUpToDate() ) {
         $phpnotes .= '<br><span class="tm-fail">'.$LANG_ENVCHK['phpendoflife'].'</span>';
     }

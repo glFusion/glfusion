@@ -44,7 +44,7 @@ if (!SEC_inGroup ('Root')) {
 
 function _displayVersionData()
 {
-    global $_CONF, $_USER, $LANG01, $LANG_UPGRADE, $LANG_ENVCHK, $LANG01, $LANG_FILECHECK, $LANG_ADMIN, $_PLUGIN_INFO;
+    global $_CONF, $_USER, $LANG01, $LANG_UPGRADE, $LANG_ENVCHK, $LANG01, $LANG_ADMIN, $_PLUGIN_INFO;
 
     $retval = '';
     $upToDate = 0;
