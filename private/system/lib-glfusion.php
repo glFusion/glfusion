@@ -1,36 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-glfusion.php                                                         |
-// |                                                                          |
-// | glFusion Enhancement Library                                             |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Enhancement Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
+
+use \glFusion\Database;
 
 function glfusion_UpgradeCheck() {
     global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
@@ -110,11 +96,15 @@ function phpblock_storypicker() {
     $LANG_STORYPICKER = array('choose' => 'Choose a story');
     $max_stories = 5; //how many stories to display in the list
 
+    $db = Database::getInstance();
+    $dataArray = array();
+    $typeArray = array();
+
     $topicsql = '';
     $sid = '';
     if (isset($_GET['story'])) {
         $sid = COM_applyFilter($_GET['story']);
-        $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.DB_escapeString($sid).'\'');
+        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?",array($sid),array(Database::STRING));
         if (!empty($stopic)) {
             $topic = $stopic;
         } else {
@@ -132,14 +122,19 @@ function phpblock_storypicker() {
         }
     }
     if (!empty($topic)) {
-        $topicsql = " AND tid = '".DB_escapeString($topic)."'";
+        $dataArray[] = $topic;
+        $typeArray[] = Database::STRING;
+        $topicsql = " AND tid = ?";
     }
     if (empty($topicsql)) {
-        $topic = DB_getItem($_TABLES['topics'], 'tid', 'archive_flag = 1');
+        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
+
         if (empty($topic)) {
             $topicsql = '';
         } else {
-            $topicsql = " AND tid <> '".DB_escapeString($topic)."'";
+            $dataArray[] = $topic;
+            $typeArray[] = Database::STRING;
+            $topicsql = " AND tid <> ?";
         }
     }
     $sql = 'SELECT sid, title FROM ' .$_TABLES['stories']
@@ -147,15 +142,16 @@ function phpblock_storypicker() {
          . COM_getPermSQL(' AND')
          . COM_getTopicSQL(' AND')
          . $topicsql
-         . ' ORDER BY date DESC LIMIT ' . $max_stories;
+         . ' ORDER BY date DESC LIMIT ' . (int) $max_stories;
 
-    $res = DB_query($sql);
+    $stmt = $db->conn->executeQuery($sql,$dataArray,$typeArray);
+
     $list = '';
-    while ($A = DB_fetchArray($res)) {
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
         $list .= '<li><a href=' . $url .'>'
 		//uncomment the 2 lines below to limit of characters displayed in the title
-		. htmlspecialchars(COM_truncate($A['title'],41,'...')) . "</a></li>\n";
+		. COM_truncate($A['title'],41,'...') . "</a></li>\n";
     }
     return $list;
 }
@@ -303,6 +299,8 @@ function _checkVersion()
 
     $result = '';
 
+    $dbVersion = Database::getInstance()->dbGetVersion();
+
     $http=new http_class;
     $http->timeout=5;
     $http->data_timeout=5;
@@ -315,7 +313,7 @@ function _checkVersion()
     $arguments["PostValues"]=array(
         "v"=>GVERSION.PATCHLEVEL,
         "p"=>PHP_VERSION,
-        "d"=>urlencode(DB_getVersion())
+        "d"=>urlencode($dbVersion)
     );
     if ( $_CONF['send_site_data'] ) {
         $arguments["PostValues"]['s'] = $_CONF['site_url'];
@@ -491,6 +489,8 @@ function _doSiteConfigUpgrade() {
 
     $retval = false;
 
+    $db = Database::getInstance();
+
     $_SYSDEFAULT = array(
         'use_direct_style_js'         => true,
         'html_filter'                 => 'htmlpurifier',
@@ -528,10 +528,17 @@ function _doSiteConfigUpgrade() {
     $_CFDEFAULT['default_charset']               = 'iso-8859-1';
 
     if ( empty($_CONF['db_charset'])) {
-        $result = DB_query("SELECT @@character_set_database",1);
-        $collation = DB_fetchArray($result);
-
-        $_CFDEFAULT['db_charset'] = $collation["@@character_set_database"];
+        try {
+            $stmt = $db->conn->query("SELECT @@character_set_database");
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $stmt = false;
+        }
+        if ($stmt) {
+            $collation = $stmt->fetch(Database::ASSOCIATIVE);
+            $_CFDEFAULT['db_charset'] = $collation["@@character_set_database"];
+        } else {
+            $_CFDEFAULT['db_charset'] = '';
+        }
         if ( empty($_CFDEFAULT['db_charset'])) {
             $_CFDEFAULT['db_charset'] = '';
         } else {
