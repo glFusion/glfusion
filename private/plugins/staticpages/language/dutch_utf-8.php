@@ -1,32 +1,24 @@
 <?php
-###############################################################################
-# dutch.php
-# This is the Dutch language page for the glFusion Static Page Plug-in!
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony@tonybibbs.com
-#
-# Ported to level 1.3.10 by: Ko de Pree <ko@depree.nl>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Spam-X Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001 by the following authors:
+*  Tony Bibbs       tony AT tonybibbs DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
+
 
 global $LANG32;
 
@@ -88,7 +80,7 @@ $LANG_STATIC = array(
     'centerblock_msg' => 'Indien aangevinkt, wordt deze Statische Pagina weergegeven in het midden van de index pagina.',
     'topic' => 'Thema: ',
     'position' => 'Positie: ',
-    'all_topics' => 'All',
+    'all_topics' => 'Alle',
     'no_topic' => 'Alleen Startpagina',
     'position_top' => 'Bovenaan',
     'position_feat' => 'Na HoofdArtikel',
@@ -110,7 +102,7 @@ $LANG_STATIC = array(
     'select_php_none' => 'maak het uitvoeren van PHP onmogelijk',
     'select_php_return' => 'uitvoeren van PHP (return)',
     'select_php_free' => 'voer PHP uit',
-    'php_not_activated' => "Het gebruik van PHP in Statische Pagina\'s is niet geactiveerd. Bekijk de <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentatie</a> voor meer bijzonderheden.",
+    'php_not_activated' => "Het gebruik van PHP in Statische Pagina\\'s is niet geactiveerd. Bekijk de <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentatie</a> voor meer bijzonderheden.",
     'printable_format' => 'Afdruk versie',
     'copy' => 'Kopieer',
     'limit_results' => 'Beperk Resultaten',
@@ -118,22 +110,19 @@ $LANG_STATIC = array(
     'submit' => 'Opslaan',
     'delete_confirm' => 'Weet u zeker dat u deze pagina wilt verwijderen?',
     'allnhp_topics' => 'All Topics (No Homepage)',
-    'page_list' => 'Page List',
+    'page_list' => 'Overzicht Statische Pagina\'s',
     'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
-    'attributes' => 'Attributes',
+    'attributes' => 'Album Attributen',
     'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
     'page_saved' => 'Page has been successfully saved.',
     'page_deleted' => 'Page has been successfully deleted.',
-    'searchable' => 'Search'
+    'searchable' => 'Zoek',
 );
-###############################################################################
-# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage'           => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content'   => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
 );
-
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -153,17 +142,17 @@ $LANG_confignames['staticpages'] = array(
     'sort_by' => 'Sorteer Centerblokken op',
     'sort_menu_by' => 'Sorteer Menu Items op',
     'delete_pages' => 'Verwijder pagina\'s tegelijk met de Eigenaar?',
-    'in_block' => 'Wrap Pages in Block?',
+    'in_block' => 'Wrap Pages in Block',
     'show_hits' => 'Toon Treffers?',
     'show_date' => 'Toon Datum?',
-    'filter_html' => 'Filter HTML?',
+    'filter_html' => 'Filter HTML',
     'censor' => 'Gecensureerde Inhoud?',
     'default_permissions' => 'Standaard Pagina Rechten',
     'aftersave' => 'na het opslaan van de pagina',
     'atom_max_items' => 'Max. aantal pagina\'s in Webservice Feed',
-    'comment_code' => 'Comment Default',
+    'comment_code' => 'Reageer Standaard',
     'include_search' => 'Site Search Default',
-    'status_flag' => 'Default Page Mode'
+    'status_flag' => 'Default Page Mode',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -176,15 +165,15 @@ $LANG_fs['staticpages'] = array(
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['staticpages'] = array(
-    0 => array('Ja' => 1, 'Nee' => 0),
-    1 => array('Ja' => true, 'Nee' => false),
-    2 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title'),
-    3 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title', 'Label' => 'label'),
-    9 => array('Ga naar pagina' => 'item', 'Toon Overzicht' => 'list', 'Toon Startpagina' => 'home', 'Toon Beheer' => 'admin'),
-    12 => array('Geen toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3),
-    13 => array('Enabled' => 1, 'Disabled' => 0),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
+$LANG_configSelect['staticpages'] = array(
+    0 => array(1=>'Ja', 0=>'Nee'),
+    1 => array(true=>'Ja', false=>'Nee'),
+    2 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel'),
+    3 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel', 'label'=>'Label'),
+    9 => array('item'=>'Forward to Page', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Toon Startpagina', 'admin'=>'Toon Beheerpagina'),
+    12 => array(0=>'Geen Toegang', 2=>'Alleen lezen', 3=>'Lezen-Schrijven'),
+    13 => array(1=>'Geactiveerd / mogelijk gemaakt', 0=>'Uitgeschakeld'),
+    17 => array(0=>'Reacties toegestaan', 1=>'Reacties niet toegestaan'),
 );
 
 ?>

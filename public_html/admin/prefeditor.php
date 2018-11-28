@@ -49,7 +49,7 @@ if (!SEC_hasRights('user.edit')) {
 
 function editPreferences()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $LANG_confignames, $LANG_configselects, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $LANG_confignames, $LANG_configselects, $LANG_configSelect,$_IMAGE_TYPE;
 
     $retval = '';
 
@@ -152,7 +152,12 @@ function editPreferences()
                                  0) . '</select>';
     $T->set_var('dateformat_selector', $selection);
     $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
-    foreach ($LANG_configselects['Core'][18] AS $name => $type ) {
+    if (isset($LANG_configSelect['Core'])) {
+        $cfgSelect = $LANG_configSelect['Core'][18];
+    } else {
+        $cfgSelect = array_flip($LANG_configselects['Core'][18]);
+    }
+    foreach ($cfgSelect AS $type => $name ) {
         $search_result_select .= '<option value="'. $type . '"' . ('google' == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
     }
     $search_result_select .= '</select>';

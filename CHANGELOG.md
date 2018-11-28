@@ -14,6 +14,7 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Translation now handled on the glFusion CMS Crowdin site
   - Removed all variable references from language files - now use sprintf() to build final string
   - Minimum PHP version is now 7.1.0
   - Updated external libs: twofactorauth (1.6.5), php-archive (1.1.0), phpfastcache (7.0.2)
@@ -25,7 +26,7 @@
 
 ### Depreciated
 
-  - n/a
+  - Depreciated the $LANG_configselects() language array
 
 ### Removed
   - Removed GeShi code formatter
@@ -38,7 +39,7 @@
 
 ### Security
 
-  - n/a
+  - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
 
 ## v1.7.7 (Unreleased)
 

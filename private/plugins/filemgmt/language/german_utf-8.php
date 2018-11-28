@@ -1,40 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | german_utf-8.php                                                         |
-// |                                                                          |
-// | German language file, addressing the user as "Du"                       |
-// | Modifiziert: August 09 Tony Kluever									  |
-// | Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -51,9 +34,9 @@ $LANG_FM00 = array (
     'uninstall'         => 'Deinstallieren',
     'editor'            => 'Plugin-Editor',
     'warning'           => 'Warnung! Plugin ist noch akiviert',
-    'enabled'           => 'Deaktivieren Sie das Plugin, bevor Sie es deinstallieren.',
-    'WhatsNewLabel'		=> 'Dateien',
-    'WhatsNewPeriod'	=> ' der letzen %s Tage',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
+    'WhatsNewLabel'    => 'Dateien',
+    'WhatsNewPeriod'   => ' der letzen %s Tage',
     'new_upload'        => 'Neue Datei eingesendet am ',
     'new_upload_body'   => 'Ein neuer Datei-Upload wurde der Warteschlange hinzugefügt am ',
     'details'           => 'Datei-Details',
@@ -64,79 +47,79 @@ $LANG_FM00 = array (
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'instructions'		=> '<ul><li>Um eine Datei zu ändern oder zu löschen, klicke unten auf das Bearbeitungssymbol der entsprechenden Datei.</li><li>Um Dateien hochzuladen, wähle oben die Option "Datei hinzufügen".</li><li>Um Kategorien zu ändern oder neu zu erstellen, wähle oben die Option "Kategorien".</li></ul>',
-    'nav1'				=> 'Einstellungen',
-    'nav2'				=> 'Kategorien',
-    'nav3'				=> 'Datei hinzufügen',
-    'nav4'				=> 'Einsendungen (%s)',
-    'nav5'				=> 'Fehlerhafte Dateien (%s)',
-    'edit'				=> 'Bearbeiten',
-    'file'				=> 'Dateiname',
-    'category'			=> 'Kategorie',
-    'version'			=> 'Version',
-    'size'				=> 'Größe',
-    'date'				=> 'Datum',
+    'instructions' => '<ul><li>Um eine Datei zu ändern oder zu löschen, klicke unten auf das Bearbeitungssymbol der entsprechenden Datei.</li><li>Um Dateien hochzuladen, wähle oben die Option "Datei hinzufügen".</li><li>Um Kategorien zu ändern oder neu zu erstellen, wähle oben die Option "Kategorien".</li></ul>',
+    'nav1'  => 'Einstellungen',
+    'nav2'  => 'Kategorien',
+    'nav3'  => 'Datei hinzufügen',
+    'nav4'  => 'Einsendungen (%s)',
+    'nav5'  => 'Fehlerhafte Dateien (%s)',
+    'edit'  => 'Bearbeiten',
+    'file'  => 'Dateiname',
+    'category' => 'Kategorie',
+    'version' => 'Version',
+    'size'  => 'Größe',
+    'date' => 'Datum',
 );
 
 $LANG_FILEMGMT = array(
-    'newpage'				=> "Neue Seite",
-    'adminhome'				=> "Kommandozentrale",
-    'plugin_name'			=> "Datei Verwaltung",
-    'searchlabel'			=> "Datei-Suche",
-    'searchlabel_results'	=> "Ergebnis Datei-Suche",
-    'downloads'				=> "Meine Downloads",
-    'report'				=> "Top-Downloads",
-    'usermenu1'				=> "Downloads",
-    'usermenu2'				=> "&nbsp;&nbsp;Top-Bewertet",
-    'usermenu3'				=> "Datei hochladen",
-    'admin_menu'			=> "Filemgmt-Admin",
-    'writtenby'				=> "Geschrieben von",
-    'date'					=> "Zuletzt aktualisiert",
-    'title'					=> "Titel",
-    'content'				=> "Inhalt",
-    'hits'					=> "Aufrufe",
-    'Filelisting'			=> "Dateiauflistung",
-    'DownloadReport'		=> "Download-Verlauf für einzelne Datei",
-    'StatsMsg1'				=> "Top 10 der beliebtesten Downloads",
-    'StatsMsg2'				=> "Es wurde noch nichts heruntergeladen.",
-    'usealtheader'			=> "Alternativen Header verwenden",
-    'url'					=> "URL",
-    'edit'					=> "Bearbeiten",
-    'lastupdated'			=> "Zuletzt aktualisiert",
-    'pageformat'			=> "Seitenformat",
-    'leftrightblocks'		=> "Linke & rechte Blöcke",
-    'blankpage'				=> "Leere Seite",
-    'noblocks'				=> "Keine Blöcke",
-    'leftblocks'			=> "Linke Blöcke",
-    'addtomenu'				=> 'Im Menü eintragen',
-    'label'					=> 'Label',
-    'nofiles'				=> 'Dateien im Downloadbereich (Heruntergeladen)',
-    'save'					=> 'Speichern',
-    'preview'				=> 'Vorschau',
-    'delete'				=> 'Löschen',
-    'cancel'				=> 'Abbruch',
-    'access_denied'			=> 'Zugriff verweigert',
-    'invalid_install'		=> 'Jemand hat versucht, auf die FileMgmt-Administration zuzugreifen.  Benutzer-ID: ',
-    'start_install'			=> 'Es wird versucht das FileMgmt-Plugin zu installieren',
-    'start_dbcreate'		=> 'Es wird versucht Tabellen für das FileMgmt-Plugin zu erstellen',
-    'install_skip'			=> '... übersprungen entsprechend der "filemgmt.cfg"',
-    'access_denied_msg'		=> 'Leider hast Du keinen Zugriff auf die FileMgmt-Administrationsseite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
+    'newpage' => "Neue Seite",
+    'adminhome' => "Kommandozentrale",
+    'plugin_name' => "Datei Verwaltung",
+    'searchlabel' => "Datei-Suche",
+    'searchlabel_results' => "Ergebnis Datei-Suche",
+    'downloads' => "Meine Downloads",
+    'report' => "Top-Downloads",
+    'usermenu1' => "Meine Downloads",
+    'usermenu2' => "&nbsp;&nbsp;Top-Bewertet",
+    'usermenu3' => "Datei hochladen",
+    'admin_menu' => "Filemgmt-Admin",
+    'writtenby' => "Geschrieben von",
+    'date' => "Zuletzt aktualisiert",
+    'title' => "Titel",
+    'content' => "Inhalt",
+    'hits' => "Aufrufe",
+    'Filelisting' => "Dateiauflistung",
+    'DownloadReport' => "Download-Verlauf für einzelne Datei",
+    'StatsMsg1' => "Top 10 der beliebtesten Downloads",
+    'StatsMsg2' => "Es wurde noch nichts heruntergeladen.",
+    'usealtheader' => "Alternativen Header verwenden",
+    'url' => "URL",
+    'edit' => "Bearbeiten",
+    'lastupdated' => "Zuletzt aktualisiert",
+    'pageformat' => "Seitenformat",
+    'leftrightblocks' => "Linke & rechte Blöcke",
+    'blankpage' => "Leere Seite",
+    'noblocks' => "Keine Blöcke",
+    'leftblocks' => "Linke Blöcke",
+    'addtomenu' => 'Im Menü eintragen',
+    'label' => 'Beschriftung',
+    'nofiles' => 'Dateien im Downloadbereich (Heruntergeladen)',
+    'save' => 'Speichern',
+    'preview' => 'Vorschau',
+    'delete' => 'Löschen',
+    'cancel' => 'Abbruch',
+    'access_denied' => 'Zugriff verweigert',
+    'invalid_install' => 'Jemand hat versucht, auf die FileMgmt-Administration zuzugreifen.  Benutzer-ID: ',
+    'start_install' => 'Es wird versucht das FileMgmt-Plugin zu installieren',
+    'start_dbcreate' => 'Es wird versucht Tabellen für das FileMgmt-Plugin zu erstellen',
+    'install_skip' => '... übersprungen entsprechend der "filemgmt.cfg"',
+    'access_denied_msg' => 'Leider hast Du keinen Zugriff auf die FileMgmt-Administrationsseite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     'installation_complete' => 'Installation komplett',
     'installation_complete_msg' => 'Die Datenstrukturen für das FileMgmt-Plugin wurden erfolgreich in Deiner Datenbank erstellt!  Solltest Du das Plugin deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört.',
-    'installation_failed'	=> 'Installation fehlgeschlagen',
+    'installation_failed' => 'Installation fehlgeschlagen',
     'installation_failed_msg' => 'Installation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
-    'system_locked'			=> 'System gesperrt',
-    'system_locked_msg'		=> 'Das FileMgmt-Plugin wurde schon installiert und ist gesperrt.  Versuchst Du das Plugin zu deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört',
-    'uninstall_complete'	=> 'Deinstallation komplett',
+    'system_locked' => 'System gesperrt',
+    'system_locked_msg' => 'Das FileMgmt-Plugin wurde schon installiert und ist gesperrt.  Versuchst Du das Plugin zu deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört',
+    'uninstall_complete' => 'Deinstallation komplett',
     'uninstall_complete_msg' => 'Die Datenstrukturen für das FileMgmt-Plugin wurden erfolgreich von Deiner Datenbank entfernt.<br><br>Du mußt alle Dateien manuell aus Deiner Datei-Repository entfernen.',
-    'uninstall_failed'		=> 'Deinstallation fehlgeschlagen.',
-    'uninstall_failed_msg'	=> 'Deinstallation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
-    'install_noop'			=> 'Plugin-Installation',
-    'install_noop_msg'		=> 'Die FileMgmt-Plugin-Installation wurde ausgeführt, aber es gab nichts zu tun.<br><br>Überprüfe die Datei "install.cfg" des Plugins.',
-    'all_html_allowed'		=> 'HTML ist erlaubt',
-    'no_new_files'			=> 'Keine neuen Dateien',
-    'no_comments'			=> 'Keine neuen Kommentare',
-    'more'					=> '<em>mehr ...</em>'
+    'uninstall_failed' => 'Deinstallation fehlgeschlagen.',
+    'uninstall_failed_msg' => 'Deinstallation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
+    'install_noop' => 'Plugin-Installation',
+    'install_noop_msg' => 'Die FileMgmt-Plugin-Installation wurde ausgeführt, aber es gab nichts zu tun.<br><br>Überprüfe die Datei "install.cfg" des Plugins.',
+    'all_html_allowed' => 'HTML ist erlaubt',
+    'no_new_files'  => 'Keine neuen Dateien',
+    'no_comments'   => 'Keine neuen Kommentare',
+    'more'          => '<em>mehr ...</em>'
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -144,12 +127,12 @@ $LANG_FILEMGMT_AUTOTAG = array(
     'desc_file_download'        => 'Link: zu direktem Download. (Standart link_text: Datei-Titel). Anwendung: [file_download:<i>file_id</i> {link_text}]',
 );
 
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
     'label'                 => 'FileMgmt',
     'title'                 => 'FileMgmt-Konfiguration'
 );
-
 $LANG_confignames['filemgmt'] = array(
     'whatsnew'              => 'In "Was ist Neu" auflisten',
     'perpage'               => 'Downloads anzeigen pro Seite',
@@ -179,11 +162,9 @@ $LANG_confignames['filemgmt'] = array(
     'displayblocks'         => 'glFusion Blöcke anzeigen',
     'silent_edit_default'   => 'Standart für "Stilles Bearbeiten"',
 );
-
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'
 );
-
 $LANG_fs['filemgmt'] = array(
     'fs_public'             => 'Öffentliche-Einstellungen',
     'fs_admin'              => 'Admin-Einstellungen',
@@ -191,20 +172,18 @@ $LANG_fs['filemgmt'] = array(
     'fm_access'             => 'Zugangskontrolle',
     'fm_general'            => 'Allgemeine Einstellungen',
 );
-
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('Ja' => 1, 'Nein' => 0),
-    1 => array('Ja' => TRUE, 'Nein' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3)
+// Note: entries 0, 1 are the same as in $LANG_configselects['Core']
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'Ja', 0=>'Nein'),
+    1 => array(true=>'Ja', false=>'Nein'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Linke Blöcke', 1=>'Rechte Blöcke', 2=>'Linke & rechte Blöcke', 3=>'Aus')
 );
 
 $PLG_filemgmt_MESSAGE1 = 'FileMgmt-Installation abgebrochen<br>Datei: plugins/filemgmt/filemgmt.php ist nicht beschreibbar';
 $PLG_filemgmt_MESSAGE3 = 'Dieses Plugin benötigt glFusion Version 1.0 oder höher, Aktualisierung abgebrochen.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin-Version 1.5 Code nicht entdeckt - Aktualisierung abgebrochen.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt-Aktualisierung abgebrochen<br>Aktuelle Plugin-Version ist nicht 1.3';
-
 
 // Language variables used by the plugin - general users access code.
 
@@ -217,7 +196,7 @@ define("_MD_SEARCHFOR","Suche nach");
 define("_MD_MATCH","Übereinstimmung");
 define("_MD_ALL","ALLE");
 define("_MD_ANY","IRGENDEINE");
-define("_MD_NAME","Name");
+define("_MD_NAME","Kategorie-Name");
 define("_MD_DESCRIPTION","Beschreibung");
 define("_MD_SEARCH","Suche");
 
@@ -396,7 +375,7 @@ define("_MD_OWNER","Eigentümer: ");
 define("_MD_NOMODREQ","Keine Download-Info-ändern-Anforderungen.");
 define("_MD_DBUPDATED","Datenbank erfolgreich aktualisiert!");
 define("_MD_MODREQDELETED","Änderungsanforderung gelöscht.");
-define("_MD_IMGURLMAIN","Bild<font size='-2'> (Bild-Höhe wird auf 50px gesetzt)</font>");
+define("_MD_IMGURLMAIN",'Bild<font size=\'-2\'> (Bild-Höhe wird auf 50px gesetzt)</font>');
 define("_MD_PARENT","Oberkategorie:");
 define("_MD_SAVE","Änderungen speichern");
 define("_MD_CATDELETED","Kategorie gespeichert.");

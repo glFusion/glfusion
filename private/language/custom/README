@@ -8,5 +8,5 @@ if (!defined ('GVERSION')) {
 }
 
 $LANG28[45]='Active User';
-$LANG01[59]="Sign up as a <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">New User</a>";
+$LANG01[59]="Sign up as a <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">New User</a>";
 ?>

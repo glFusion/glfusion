@@ -1,38 +1,23 @@
-<?PHP
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// + ----------------------------------------------- -------------------------+
-// | French_canada_utf-8.php                                                  |
-// |                                                                          |
-// | File de langue anglaise                                                  |
-// + ----------------------------------------------- -------------------------+
-// | Copyright (C) 2008-2011 par les auteurs suivants:                        |
-// |                                                                          |
-// | Mark R. Evans marque AT glFusion DOT org                                 |
-// |                                                                          |
-// | Copyright (C) 2004 par Consult4Hire Inc.                                 |
-// | Auteur:                                                                  |
-// | Blaine Lang blaine@portalparts.com                                       |
-// + ----------------------------------------------- -------------------------+
-// |                                                                          |
-// | Ce programme est un logiciel libre; vous pouvez le redistribuer et / ou  |
-// | Modifier selon les termes de la Licence Publique Générale GNU            |
-// | Publié par la Free Software Foundation; soit la version 2                |
-// | De la Licence, ou (à votre choix) toute version ultérieure.              |
-// |                                                                          |
-// | Ce programme est distribué dans l`espoir qu`il sera utile,               |
-// | Mais SANS AUCUNE GARANTIE; sans même la garantie implicite de            |
-// | COMMERCIALISATION ou D`ADAPTATION À UN USAGE PARTICULIER. Voir l`        |
-// | Licence Publique Générale GNU pour plus de détails.                      |
-// |                                                                          |
-// | Vous devriez avoir reçu une copie de la Licence Publique Générale GNU    |
-// | Avec ce programme; si pas, écrivez à la Free Software Foundation,        |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.           |
-// |                                                                          |
-// + ----------------------------------------------- -------------------------+
+<?php
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -79,35 +64,35 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => 'Nouvelle Page',
-    'adminhome' => 'Accueil Admin',
-    'plugin_name' => 'Gestion des fichiers',
-    'searchlabel' => 'Une liste de fichiers',
-    'searchlabel_results' => 'Liste des fichiers Résultats',
-    'downloads' => 'Mes Téléchargements',
-    'report' => 'Haut Téléchargements',
-    'usermenu1' => 'Téléchargements',
-    'usermenu2' => '&nbsp;&nbsp;Les mieux notés',
-    'usermenu3' => 'Télécharger un fichier',
-    'admin_menu' => 'Filemgmt Admin',
-    'writtenby' => 'Écrit Par',
-    'date' => 'Dernière mise à jour',
-    'title' => 'Titre',
-    'content' => 'Teneur',
-    'hits' => 'Hits',
-    'Filelisting' => 'Une liste de fichiers',
-    'DownloadReport' => 'Télécharger Histoire de fichier unique',
-    'StatsMsg1' => 'Haut Dix des fichiers accédés en dépôt',
-    'StatsMsg2' => 'Il semble qu`il n`y a pas de fichiers définis pour le plugin filemgmt sur ​​ce site ou ne les a jamais consultée.',
-    'usealtheader' => 'Utilisez Alt. Rubrique',
-    'url' => 'URL',
-    'edit' => 'Modifier',
-    'lastupdated' => 'Dernière mise à jour',
-    'pageformat' => 'Format de page',
-    'leftrightblocks' => 'Gauche et blocs Droite',
-    'blankpage' => 'Page Vierge',
-    'noblocks' => 'Pas de Blocs',
-    'leftblocks' => 'Gauche Blocs',
+    'newpage' => "Nouvelle Page",
+    'adminhome' => "Accueil Admin",
+    'plugin_name' => "Gestion des fichiers",
+    'searchlabel' => "Une liste de fichiers",
+    'searchlabel_results' => "Liste des fichiers Résultats",
+    'downloads' => "Mes Téléchargements",
+    'report' => "Haut Téléchargements",
+    'usermenu1' => "Téléchargements",
+    'usermenu2' => "&nbsp;&nbsp;Les mieux notés",
+    'usermenu3' => "Télécharger un fichier",
+    'admin_menu' => "Filemgmt Admin",
+    'writtenby' => "Écrit Par",
+    'date' => "Dernière mise à jour",
+    'title' => "Titre",
+    'content' => "Teneur",
+    'hits' => "Hits",
+    'Filelisting' => "Une liste de fichiers",
+    'DownloadReport' => "Télécharger Histoire de fichier unique",
+    'StatsMsg1' => "Haut Dix des fichiers accédés en dépôt",
+    'StatsMsg2' => "Il semble qu`il n`y a pas de fichiers définis pour le plugin filemgmt sur ​​ce site ou ne les a jamais consultée.",
+    'usealtheader' => "Utilisez Alt. Rubrique",
+    'url' => "URL",
+    'edit' => "Modifier",
+    'lastupdated' => "Dernière mise à jour",
+    'pageformat' => "Format de page",
+    'leftrightblocks' => "Gauche et blocs Droite",
+    'blankpage' => "Page Vierge",
+    'noblocks' => "Pas de Blocs",
+    'leftblocks' => "Gauche Blocs",
     'addtomenu' => 'Ajouter au menu',
     'label' => 'étiquette',
     'nofiles' => 'Nombre de fichiers dans notre référentiel (Téléchargements)',
@@ -171,7 +156,7 @@ $LANG_confignames['filemgmt'] = array(
     'SnapCatURL'            => 'URL à la Catégorie Miniatures',
     'whatsnewperioddays'    => 'Quoi de neuf Jours',
     'whatsnewtitlelength'   => 'Quoi de neuf Titre Durée',
-    'showwhatsnewcomments'  => 'Afficher les commentaires dans l` Qu`est-ce \ Nouveau bloc',
+    'showwhatsnewcomments'  => 'Afficher les commentaires dans l` Qu`est-ce \\ Nouveau bloc',
     'numcategoriesperrow'   => 'Catégories Row',
     'numsubcategories2show' => 'Sous-Catégories Ligne',
     'outside_webroot'       => 'Stocker des fichiers en dehors racine Web',
@@ -190,20 +175,17 @@ $LANG_fs['filemgmt'] = array(
     'fm_general'            => 'Paramètres FileMgmt Générales',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Gauche Blocs', 1=>'Right Blocks', 2=>'Gauche et blocs Droite', 3=>'None')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Installer Aborted <br> fichier: plugins/filemgmt/filemgmt.php est pas accessible en écriture';
 $PLG_filemgmt_MESSAGE3 = 'Ce plugin nécessite glFusion version 1.0 ou supérieure, niveau avorté.';
 $PLG_filemgmt_MESSAGE4 = 'Version Plugin 1.5 du code non détecté - mise à niveau abandonnée.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Version actuelle du plugin de Aborted n`est pas 1.3';
-
 
 // Language variables used by the plugin - general users access code.
 
@@ -267,7 +249,7 @@ define("_MD_MODIFY","Modifier");
 define("_MD_REPORTBROKEN","Rapport de fichier brisé");
 define("_MD_TELLAFRIEND","Envoyer à un ami");
 define("_MD_VSCOMMENTS","Voir / Envoyer Commentaires");
-define("_MD_EDIT","Edit");
+define("_MD_EDIT","Modifier");
 
 define("_MD_THEREARE","Il ya des fichiers% dans notre base de données");
 define("_MD_LATESTLIST","Dernières listes");
@@ -295,8 +277,8 @@ define("_MD_BEOBJECTIVE","S`il vous plaît être objectif, si tous reçoivent un
 define("_MD_DONOTVOTE","Ne votez pas pour vos propres ressources.");
 define("_MD_RATEIT","Notez-le!");
 
-define("_MD_INTFILEAT","Intéressant Téléchargement de fichier à %s"); // %s est votre nom de site
-define("_MD_INTFILEFOUND","Voici un fichier de téléchargement intéressante que j`ai trouvé à %s"); // %s est votre nom de site
+define("_MD_INTFILEAT","Intéressant Téléchargement de fichier à %s"); // %s is your site name
+define("_MD_INTFILEFOUND","Voici un fichier de téléchargement intéressante que j`ai trouvé à %s"); // %s is your site name
 
 define("_MD_RECEIVED","Nous avons reçu vos informations de téléchargement. Merci!");
 define("_MD_WHENAPPROVED","Vous recevrez un e-mail quand il est approuvé.");
@@ -325,7 +307,7 @@ define("_MD_PREVIOUS","Précédent");
 define("_MD_NEXT","Suivant");
 define("_MD_NOMATCH","Aucune correspondance trouvée à votre requête");
 
-define("_MD_TOP10","%s Haut 10"); // %s est un nom de catégorie téléchargements
+define("_MD_TOP10","%s Haut 10"); // %s is a downloads category name
 define("_MD_CATEGORIES","Catégories");
 
 define("_MD_SUBMIT","Soumettre");
@@ -431,7 +413,7 @@ define("_MD_IMGWIDTH","Thumbnail Img Largeur: ");
 define("_MD_MUSTBEVALID","Thumbnail image doit être un fichier image valide en vertu de %s répertoire (ex. shot.gif). Laissez ce champ vide si aucun fichier d`image.");
 define("_MD_REGUSERVOTES","Votes des utilisateurs enregistrés (total des votes: %s)");
 define("_MD_ANONUSERVOTES","Anonymous votes des utilisateurs (votes au total: %s)");
-define("_MD_YOURFILEAT","Votre dossier soumis à %s"); // c'est un objet du courrier électronique approuvé. %s est votre nom de site
+define("_MD_YOURFILEAT","Votre dossier soumis à %s"); // this is an approved mail subject. %s is your site name
 define("_MD_VISITAT","Visitez notre section de téléchargements à %s");
 define("_MD_DLRATINGS","Télécharger Note (total des votes: %s)");
 define("_MD_CONFUPDATED","Configuration mise à jour avec succès!");

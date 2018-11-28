@@ -1,30 +1,20 @@
 <?php
-###############################################################################
-# german_utf-8.php
-#
-# This is the informal German language file 
-# for the glFusion Calendar Plugin, addressing the user as "Du"
-#
-# Authors: Dirk Haun <dirk AT haun-online DOT de>
-#          Markus Wollschläger
-# Modifiziert: Oct 2010
-# Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Calendar Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2005 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -93,7 +83,7 @@ $LANG_CAL_1 = array(
     50 => 'Termine',
     51 => 'Löschen',
     52 => 'Eingereicht von',
-    53 => 'Kalender-Ansicht'
+    53 => 'Kalender-Ansicht',
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -178,11 +168,11 @@ $LANG_CAL_ADMIN = array(
     38 => 'Bereinigen',
     39 => 'Termin-Verwaltung',
     40 => 'Termin-Liste',
-    41 => 'Hier kannst Du neue Termine erstellen oder vorhandene Einträge bearbeiten oder löschen.'
+    41 => 'Hier kannst Du neue Termine erstellen oder vorhandene Einträge bearbeiten oder löschen.',
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: zu einem Kalender-Eintrag; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Link: zu einem Kalender-Eintrag; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -226,7 +216,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'Nach speichern des Termins',
     'default_permissions' => 'Standard-Terminrechte',
     'only_admin_submit' => 'Nur Admins das Eintragen erlauben',
-    'displayblocks' => 'glFusion Blöcke anzeigen'
+    'displayblocks' => 'glFusion Blöcke anzeigen',
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -238,14 +228,13 @@ $LANG_fs['calendar'] = array(
     'fs_permissions' => 'Standard-Berechtigungen'
 );
 
-// Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['calendar'] = array(
-    0 => array('Ja' => 1, 'Nein' => 0),
-    1 => array('Ja' => true, 'Nein' => false),
-    6 => array('12' => 12, '24' => 24),
-    9 => array('Zum Termin weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Kalender anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3)
+$LANG_configSelect['calendar'] = array(
+    0 => array(1=> 'Ja', 0 => 'Nein'),
+    1 => array(true => 'Ja', false => 'Ja'),
+    6 => array(12 => '12', 24 => '24'),
+    9 => array('item'=>'Zum Termin weiterleiten', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Kalender anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Kommandozentrale'),
+    12 => array(0=>'Kein Zugang', 2=>'Nur lesen', 3=>'Lesen-Schreiben'),
+    13 => array(0=>'Linke Blöcke', 1=>'Rechte Blöcke', 2=>'Linke & Rechte Blöcke', 3=>'Keine')
 );
 
 ?>

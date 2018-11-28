@@ -1,29 +1,20 @@
 <?php
-###############################################################################
-# french_canada.php
-#
-# This is the Canadian French language file for the glFusion Calendar plugin
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony@tonybibbs.com
-# Copyright (C) 2005 Trinity Bays
-# trinity93@gmail.com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Calendar Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2005 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -66,7 +57,7 @@ $LANG_CAL_1 = array(
     24 => 'Les évènements du site',
     25 => 'Il n\'y a aucun évènement à venir',
     26 => 'Soumettre un évènement',
-    27 => "En soumettant un évènement à {$_CONF['site_name']}, vous acceptez que celui-ci soit vu par tous les usagers du site. Cette fonction est interdite aux envois de type personnels.<br><br>La soumission apparaîtra au calendrier général une fois approuvé par l\'administrateur du site.",
+    27 => "En soumettant un évènement à {$_CONF['site_name']}, vous acceptez que celui-ci soit vu par tous les usagers du site. Cette fonction est interdite aux envois de type personnels.<br><br>La soumission apparaîtra au calendrier général une fois approuvé par l\\'administrateur du site.",
     28 => 'Titre',
     29 => 'Heure du début',
     30 => 'Heure de la fin',
@@ -92,7 +83,7 @@ $LANG_CAL_1 = array(
     50 => 'Évènements',
     51 => 'Effacer',
     52 => 'Submitted By',
-    53 => 'Calendar View'
+    53 => 'Calendar View',
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -177,11 +168,11 @@ $LANG_CAL_ADMIN = array(
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
     40 => 'Event Liste',
-    41 => 'Cet écran vous permet de modifier / créer des événements. Modifiez les champs ci-dessous et enregistrez.'
+    41 => 'Cet écran vous permet de modifier / créer des événements. Modifiez les champs ci-dessous et enregistrez.',
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Lien: à un événement de calendrier sur ce site; LINK_TEXT par défaut titre de l`événement: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Lien: à un événement de calendrier sur ce site; LINK_TEXT par défaut titre de l`événement: [calendar:<i>event_id</i> {link_text}]',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -212,20 +203,20 @@ $LANG_configsections['calendar'] = array(
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Identifiez-vous nécessaire?',
-    'hidecalendarmenu' => 'Cachez Calendrier Menu entrée?',
-    'personalcalendars' => 'Activer Calendriers personnels?',
-    'eventsubmission' => 'Permettre la présentation de file d`attente?',
-    'showupcomingevents' => 'Afficher les événements à venir?',
+    'calendarloginrequired' => 'Identifiez-vous nécessaire',
+    'hidecalendarmenu' => 'Cachez Calendrier Menu entrée',
+    'personalcalendars' => 'Activer Calendriers personnels',
+    'eventsubmission' => 'Permettre la présentation de file d`attente',
+    'showupcomingevents' => 'Afficher les événements à venir',
     'upcomingeventsrange' => 'Événements à venir Gamme',
     'event_types' => 'Types d`événements',
     'hour_mode' => 'Mode Heure',
-    'notification' => 'Courriel de notification?',
-    'delete_event' => 'Supprimer événements avec le propriétaire?',
+    'notification' => 'Courriel de notification',
+    'delete_event' => 'Supprimer événements avec le propriétaire',
     'aftersave' => 'Après l`enregistrement de l`événement',
     'default_permissions' => 'Permission cas de défaut',
     'only_admin_submit' => 'Seulement Autoriser les administrateurs à Soumettre',
-    'displayblocks' => 'Afficher glFusion Blocs'
+    'displayblocks' => 'Afficher glFusion Blocs',
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -237,14 +228,13 @@ $LANG_fs['calendar'] = array(
     'fs_permissions' => 'Autorisations par Défaut'
 );
 
-// Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['calendar'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    6 => array('12' => 12, '24' => 24),
-    9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['calendar'] = array(
+    0 => array(1=> 'True', 0 => 'False'),
+    1 => array(true => 'True', false => 'False'),
+    6 => array(12 => '12', 24 => '24'),
+    9 => array('item'=>'Forward to Event', 'list'=>'Display Admin List', 'plugin'=>'Display Calendar', 'home'=>'Display Home', 'admin'=>'Display Admin'),
+    12 => array(0=>'No access', 2=>'Lecture-Seule', 3=>'Read-Write'),
+    13 => array(0=>'Gauche Blocs', 1=>'Right Blocks', 2=>'Gauche et blocs Droite', 3=>'None')
 );
 
 ?>

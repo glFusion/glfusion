@@ -1,39 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | czech_utf-8.php                                                          |
-// |                                                                          |
-// | Czech language file                                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Ivan Simunek  (2010)   ivsi AT post DOT cz                               |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -72,11 +56,11 @@ $LANG_FM02 = array(
     'nav4'  => 'Staženo (%s)',
     'nav5'  => 'Poškozené soubory (%s)',
     'edit'  => 'Edit',
-    'file'  => 'Filename',
+    'file'  => 'Jméno souboru',
     'category' => 'Category Name',
     'version' => 'Version',
     'size'  => 'Size',
-    'date' => 'Date',
+    'date' => 'Datum',
 );
 
 $LANG_FILEMGMT = array(
@@ -87,8 +71,8 @@ $LANG_FILEMGMT = array(
     'searchlabel_results' => "Výsledek výpisu souborů",
     'downloads' => "Má stahování",
     'report' => "Nejstahovanější",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Nejlépe hodnocené",
+    'usermenu1' => "Má stahování",
+    'usermenu2' => "  Nejlépe hodnocené",
     'usermenu3' => "Nahraj soubor",
     'admin_menu' => "Filemgmt Admin",
     'writtenby' => "Zapsáno",
@@ -103,7 +87,7 @@ $LANG_FILEMGMT = array(
     'usealtheader' => "Use Alt. Header",
     'url' => "URL",
     'edit' => "Edit",
-    'lastupdated' => "Last Updated",
+    'lastupdated' => "Naposledy aktualizováno",
     'pageformat' => "Page Format",
     'leftrightblocks' => "Left & Right Blocks",
     'blankpage' => "Blank Page",
@@ -112,11 +96,11 @@ $LANG_FILEMGMT = array(
     'addtomenu' => 'Add To Menu',
     'label' => 'Label',
     'nofiles' => 'Počet souborů v úložišti (celkem staženo)',
-    'save' => 'save',
+    'save' => 'uložit',
     'preview' => 'preview',
-    'delete' => 'delete',
+    'delete' => 'vymazat',
     'cancel' => 'cancel',
-    'access_denied' => 'Access Denied',
+    'access_denied' => 'Přístup odepřen',
     'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
     'start_install' => 'Attempting to install the Filemgmt Plugin',
     'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
@@ -144,6 +128,7 @@ $LANG_FILEMGMT_AUTOTAG = array(
     'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
     'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
 );
+
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
@@ -190,20 +175,17 @@ $LANG_fs['filemgmt'] = array(
     'fm_general'            => 'FileMgmt General Settings',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-     3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'None')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Install Aborted<br>File: plugins/filemgmt/filemgmt.php is not writeable';
 $PLG_filemgmt_MESSAGE3 = 'This plugin requires glFusion Version 1.0 or greater, upgrade aborted.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5 code not detected - upgrade aborted.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Upgrade Aborted<br>Current plugin version is not 1.3';
-
 
 // Language variables used by the plugin - general users access code.
 

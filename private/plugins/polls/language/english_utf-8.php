@@ -1,33 +1,23 @@
 <?php
-
-###############################################################################
-# english_utf-8.php
-#
-# This is the English language file for the glFusion Polls plugin
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony AT tonybibbs DOT com
-# Copyright (C) 2005 Trinity Bays
-# trinity93 AT gmail DOT com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Polls Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2005 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 global $LANG32;
@@ -160,14 +150,13 @@ $LANG_fs['polls'] = array(
     'fs_permissions' => 'Default Permissions'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['polls'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
-    9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['polls'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array('submitorder'=>'As Submitted', 'voteorder'=>'By Votes'),
+    9 => array('item'=>'Forward to Poll', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
+    12 => array(0=>'No access', 2=>'Read-Only', 3=>'Read-Write'),
+    13 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'None')
 );
 
 ?>

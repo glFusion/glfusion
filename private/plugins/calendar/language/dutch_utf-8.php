@@ -1,27 +1,20 @@
 <?php
-###############################################################################
-# dutch.php
-#
-# This is the Dutch language file for the glFusion Calendar Plugin
-#
-# Copyright (C) 2007 John van Gaal
-# www.vespaclub.nl
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Calendar Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2005 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -41,7 +34,7 @@ $LANG_CAL_1 = array(
     1 => 'Calendar of Events',
     2 => 'I\'m sorry, there are no events to display.',
     3 => 'When',
-    4 => 'Where',
+    4 => 'Root',
     5 => 'Description',
     6 => 'Add An Event',
     7 => 'Upcoming Events',
@@ -54,50 +47,50 @@ $LANG_CAL_1 = array(
     14 => 'Ends',
     15 => 'Back to Calendar',
     16 => 'Calendar',
-    17 => 'Start Date',
-    18 => 'End Date',
+    17 => 'Startdatum',
+    18 => 'Einddatum',
     19 => 'Calendar Submissions',
-    20 => 'Title',
-    21 => 'Start Date',
+    20 => 'Titel',
+    21 => 'Startdatum',
     22 => 'URL',
     23 => 'Your Events',
     24 => 'Site Events',
     25 => 'There are no upcoming events',
     26 => 'Submit an Event',
     27 => "Submitting an event to {$_CONF['site_name']} will put your event on the master calendar where users can optionally add your event to their personal calendar. This feature is <b>NOT</b> meant to store your personal events such as birthdays and anniversaries.<br><br>Once you submit your event it will be sent to our administrators and if approved, your event will appear on the master calendar.",
-    28 => 'Title',
+    28 => 'Titel',
     29 => 'End Time',
     30 => 'Start Time',
     31 => 'All Day Event',
-    32 => 'Address Line 1',
-    33 => 'Address Line 2',
-    34 => 'City/Town',
-    35 => 'State',
-    36 => 'Zip Code',
+    32 => 'Adresregel 1',
+    33 => 'Adresregel 2',
+    34 => 'Plaats',
+    35 => 'Provincie',
+    36 => 'Postcode',
     37 => 'Event Type',
     38 => 'Edit Event Types',
-    39 => 'Location',
+    39 => 'Lokatie',
     40 => 'Add Event to',
     41 => 'Master Calendar',
     42 => 'Personal Calendar',
     43 => 'Link',
-    44 => 'HTML tags are not allowed',
-    45 => 'Submit',
+    44 => 'HTML tags zijn niet toegestaan',
+    45 => 'Insturen',
     46 => 'Events in the system',
     47 => 'Top Ten Events',
-    48 => 'Hits',
+    48 => 'Treffers',
     49 => 'It appears that there are no events on this site or no one has ever clicked on one.',
     50 => 'Events',
-    51 => 'Delete',
+    51 => 'Verwijderen',
     52 => 'Submitted By',
-    53 => 'Calendar View'
+    53 => 'Calendar View',
 );
 
 $_LANG_CAL_SEARCH = array(
     'results' => 'Calendar Results',
-    'title' => 'Title',
+    'title' => 'Titel',
     'date_time' => 'Date & Time',
-    'location' => 'Location',
+    'location' => 'Lokatie',
     'description' => 'Description'
 );
 
@@ -111,17 +104,17 @@ $LANG_CAL_2 = array(
     11 => 'Master Calendar',
     12 => 'My Calendar',
     25 => 'Back to ',
-    26 => 'All Day',
+    26 => 'Gehele Dag',
     27 => 'Week',
     28 => 'Personal Calendar for',
     29 => 'Public Calendar',
     30 => 'delete event',
-    31 => 'Add',
+    31 => 'Toevoegen',
     32 => 'Event',
-    33 => 'Date',
-    34 => 'Time',
+    33 => 'Datum',
+    34 => 'Tijdstip',
     35 => 'Quick Add',
-    36 => 'Submit',
+    36 => 'Insturen',
     37 => 'Sorry, the personal calendar feature is not enabled on this site',
     38 => 'Personal Event Editor',
     39 => 'Day',
@@ -136,8 +129,8 @@ $LANG_CAL_2 = array(
 
 $LANG_CAL_ADMIN = array(
     1 => 'Event Editor',
-    2 => 'Error',
-    3 => 'Post Mode',
+    2 => 'Foutmelding',
+    3 => 'Opmaak',
     4 => 'Event URL',
     5 => 'Event Start Date',
     6 => 'Event End Date',
@@ -147,16 +140,16 @@ $LANG_CAL_ADMIN = array(
     10 => 'You must provide the dates/times, event title, and description',
     11 => 'Calendar Manager',
     12 => 'To modify or delete an event, click on that event\'s edit icon below.  To create a new event, click on "Create New" above. Click on the copy icon to create a copy of an existing event.',
-    13 => 'Owner',
-    14 => 'Start Date',
-    15 => 'End Date',
+    13 => 'Eigenaar',
+    14 => 'Startdatum',
+    15 => 'Einddatum',
     16 => '',
     17 => "You are trying to access an event that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">go back to the event administration screen</a>.",
     18 => '',
     19 => '',
-    20 => 'save',
-    21 => 'cancel',
-    22 => 'delete',
+    20 => 'Opslaan',
+    21 => 'Annuleren',
+    22 => 'Verwijderen',
     23 => 'Bad start date.',
     24 => 'Bad end date.',
     25 => 'End date is before start date.',
@@ -164,22 +157,22 @@ $LANG_CAL_ADMIN = array(
     27 => 'These are the events in your database that are older than ',
     28 => ' months. Update the time period as desired, and then click Update List.  Select one or more events from the results displayed, and then click on the Delete icon below to remove these older events from your database.  Only events displayed and selected on this page will be deleted.',
     29 => '',
-    30 => 'Update List',
+    30 => 'Update lijst',
     31 => 'Are You sure you want to permanently delete ALL selected users?',
-    32 => 'List all',
+    32 => 'Toon alles',
     33 => 'No events selected for deletion',
     34 => 'Event ID',
-    35 => 'could not be deleted',
+    35 => 'Kan niet worden verwijderd',
     36 => 'Sucessfully deleted',
     37 => 'Moderate Event',
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
     40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.'
+    41 => 'This screen allows you to edit / create events. Edit the fields below and save.',
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -217,13 +210,13 @@ $LANG_confignames['calendar'] = array(
     'showupcomingevents' => 'Show Upcoming Events',
     'upcomingeventsrange' => 'Upcoming Events Range',
     'event_types' => 'Event Types',
-    'hour_mode' => 'Hour Mode',
+    'hour_mode' => 'Uur Notatie',
     'notification' => 'Notification Email',
     'delete_event' => 'Delete Events with Owner',
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
     'only_admin_submit' => 'Only Allow Admins to Submit',
-    'displayblocks' => 'Display glFusion Blocks'
+    'displayblocks' => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -235,14 +228,13 @@ $LANG_fs['calendar'] = array(
     'fs_permissions' => 'Default Permissions'
 );
 
-// Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['calendar'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    6 => array('12' => 12, '24' => 24),
-    9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['calendar'] = array(
+    0 => array(1=> 'Ja', 0 => 'Nee'),
+    1 => array(true => 'Ja', false => 'Nee'),
+    6 => array(12 => '12', 24 => '24'),
+    9 => array('item'=>'Forward to Event', 'list'=>'Display Admin List', 'plugin'=>'Display Calendar', 'home'=>'Toon Startpagina', 'admin'=>'Toon Beheerpagina'),
+    12 => array(0=>'Geen Toegang', 2=>'Alleen lezen', 3=>'Lezen-Schrijven'),
+    13 => array(0=>'Linker Blokken', 1=>'Right Blocks', 2=>'Linker & Rechter Blokken', 3=>'Geen')
 );
 
 ?>

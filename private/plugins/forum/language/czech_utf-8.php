@@ -1,39 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | czech_utf-8.php                                                          |
-// |                                                                          |
-// | Czech language file                                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Ivan Simunek (2010)    ivsi AT post DOT cz                               |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for the Forum Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by:
+*     Authors: Blaine Lang       - blaine AT portalparts DOT com
+*                                  www.portalparts.com
+*     Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*     Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -52,7 +35,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Výsledek prohledávání fora %s',
     'access_denied' => 'Přístup nepovolen',
     'uploaderr' => 'File Upload Error',
-    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.',
 );
 
 $LANG_GF01 = array(
@@ -69,7 +52,7 @@ $LANG_GF01 = array(
     'SAVE' => 'Ulož',
     'CANCEL' => 'Storno',
     'ON' => 'došlo: ',
-    'ON2' => '&nbsp;&nbsp;<b>došlo: </b>',
+    'ON2' => '  <b>došlo: </b>',
     'BY' => 'Od: ',
     'RE' => 'Re: ',
     'DATE' => 'Datum',
@@ -92,7 +75,7 @@ $LANG_GF01 = array(
     'PAGES' => 'Stran',
     'TODAY' => 'Dnes ve ',
     'REGISTERED' => 'Registrován',
-    'ORDERBY' => 'Seřazeno podle:&nbsp;',
+    'ORDERBY' => 'Seřazeno podle: ',
     'ORDER' => 'Pořadí:',
     'USER' => 'Uživatel',
     'GROUP' => 'Skupina',
@@ -132,13 +115,13 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'HTML Mode:',
     'TopicPreview' => 'Náhled námětu',
     'moderator' => 'Moderator',
-    'admin' => 'Admin',
+    'admin' => 'Admin',                 /* stopped here */
     'DATEADDED' => 'Datum přidáno',
     'PREVTOPIC' => 'Předchozí námět',
     'NEXTTOPIC' => 'Další námět',
     'CONTENT' => 'Obsah',
-    'QUOTE_begin' => '[Citoval&nbsp;',
-    'QUOTE_by' => ':&nbsp;',
+    'QUOTE_begin' => '[Citoval ',
+    'QUOTE_by' => ': ',
     'RESYNC' => 'ReSync',
     'RESYNCCAT' => 'ReSync Category Forums',
     'PROFILE' => 'Profile',
@@ -172,7 +155,7 @@ $LANG_GF01 = array(
     'WARNING' => 'Warning',
     'MODERATED' => 'Moderators: %s',
     'NOTIFYNOT' => 'NOT!',
-    'LASTREPLYBY' => 'Poslední odpověď od:&nbsp;%s',
+    'LASTREPLYBY' => 'Poslední odpověď od: %s',
     'UID' => 'UID',
     'ANON_POST_BEGIN' => 'Anonymous messages',
     'ANON_POST_END' => 'viewable',
@@ -208,7 +191,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'White',
     'BLACK' => 'Black',
-    'ID' => 'ID',
+    'ID'    => 'ID',
     'b_help' => 'Bold text: [b]text[/b]',
     'i_help' => 'Italic text: [i]text[/i]',
     'u_help' => 'Underline text: [u]text[/u]',
@@ -225,20 +208,25 @@ $LANG_GF01 = array(
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
     'e_help' => 'List item: [*]text',
     'smiley' => 'Smajlíci',
-    'grade' => '<br /><b>Group Comfort<br />Level:</b>',
-    'grade_user' => '<br /><b>Evaluate User</b>',
+
+    /* --- Community moderation tags --- */
+    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
+    'grade_user'    => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
-    'rate_too_low' => 'Your rating level is too low for posting to this forum',
+    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
     'signature' => 'Forum Signature',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'OPRAVDU chceš zrušit tento příspěvek?',
+    /* --- topic features --- */
     'disable_bbcode' => 'Disable BBCode:',
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    /* --- rss feature --- */
     'rss_link' => 'Odebírat příspěvky z tohoto fora pomocí RSS.',
     'all_read_success' => 'All topics have been marked as read',
     'formatted_code' => 'Formatted Code',
@@ -246,9 +234,9 @@ $LANG_GF01 = array(
     'q_del_item' => 'Are you sure you want to delete this badge?',
     'badge_updated' => 'Badge Updated',
     'badge_save_error' => 'Error saving badge - A record with this Post count may exist already.',
-    'add_badge' => 'Add Badge',
+    'add_badge'         => 'Add Badge',
     'badge_grp' => 'Badge Group',
-    'site_grp' => 'Site Group Name',
+    'site_grp'  => 'Site Group Name',
     'badge_img' => 'Badge Image',
     'create_new' => 'Create New',
     'badges' => 'Badges',
@@ -260,12 +248,26 @@ $LANG_GF01 = array(
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
     'rank_updated' => 'Rank Updated',
+    /* --- Like system --- */
     'like' => 'Like',
     'unlike' => 'Unlike',
+    // In tooltips, add "%s" to include the user display name.
     'like_tooltip' => 'Like this post',
     'unlike_tooltip' => 'Unlike this post',
+    // "Liked X Times" in the user profile area.
+    // The span is required exactly as below.
+    // "%1$d" is replaced with the number of likes.
     'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
-    'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
+    // Formats for the text string in each post. The key indicates the minimum
+    // number of likes to use that string.
+    // %1$s is the comma-separated string containing <key> likers
+    // %2$d is the total number of likes
+    // %3$d is the number of liker names not shown, used with "X others...."
+    'likes_formats' => array(
+        0 => '%1$s likes this.',        // single like
+        1 => 'Liked by %1$s.',          // multiple likes, up to threshold
+        2 => '%1$s and %3$d others like this.', // threshold and beyond
+    ),
     'unk_username' => 'unknown',
     'likes_received' => 'Likes Received',
     'likes_given' => 'Likes Given',
@@ -277,12 +279,13 @@ $LANG_GF01 = array(
     'msg_item_updated' => 'Item has been updated',
     'msg_item_nochange' => 'Item was not changed',
     'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
     'fg_color' => 'Foreground Color',
     'bg_color' => 'Background Color',
     'more' => 'More',
     'less' => 'Less',
     'choose' => 'Choose',
-    'display_after' => 'Display After'
+    'display_after' => 'Display After',
 );
 
 $LANG_GF02 = array(
@@ -299,14 +302,14 @@ $LANG_GF02 = array(
     'msg11' => 'Zpět na index',
     'msg12' => 'Zpět na Hlavní stranu',
     'msg13' => 'Registration Required, you currently must register or login to use this feature.',
-    'msg14' => 'Sorry, You have been banned from making entries.<br>',
+    'msg14' => 'Sorry, You have been banned from making entries.<br/>',
     'msg15' => 'If you feel this is an error, contact <A HREF="mailto:%s?subject=Forum IP Ban">Site Admin</A>.',
     'msg16' => 'These are the most popular posts, you may order them by views or replies.',
     'msg17' => 'Message Edited, Your message has been edited sucessfully. Returning to your message.',
     'msg18' => 'Error! Not all required fields were completed or were too short in length.',
     'msg19' => 'Your message has been posted.',
     'msg20' => 'Reply Added, Your reply has been posted. Returning to Forum',
-    'msg21' => 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br><br>',
+    'msg21' => 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br/><br/>',
     'msg22' => '- Forum Post Notification',
     'msg23a' => "Odpověď do vlákna odeslána v '%s' (%s).\n\nPředmět začal %s ve foru %s. ",
     'msg23b' => "Nový námět '%s' poslal %s do fora %s na %s. Můžete si jej přečíst na:\n%s/forum/viewtopic.php?showtopic=%s\n",
@@ -326,16 +329,16 @@ $LANG_GF02 = array(
     'msg36' => 'Nálada:',
     'msg37' => 'Zpráva:',
     'msg38' => 'Uvědomit mě o odpovědích ',
-    'msg39' => '<br>There are no topic reviews for this new topic.',
-    'msg40' => '<br>Sorry, but you have already asked to be notified of replies to this topic.<br><br>',
-    'msg41' => '<br>Thank you! You will now be notified of replies to topic %s .<br><br>',
+    'msg39' => '<br/>There are no topic reviews for this new topic.',
+    'msg40' => '<br/>Sorry, but you have already asked to be notified of replies to this topic.<br/><br/>',
+    'msg41' => '<br/>Thank you! You will now be notified of replies to topic %s .<br/><br/>',
     'msg42' => 'Thank you! You have now deleted notifications on this topic.',
     'msg43' => 'Are you sure you want to delete this notification?.',
     'msg44' => '<p style="margin:0px; padding:5px;">You have no notifications currently.</p>',
     'msg45' => 'Prohledej forum',
     'msg46' => 'You can search the forum by entering keywords:',
     'msg47' => 'You can also specify an author to search under:',
-    'msg48' => '<br>The Chatterblock Plugin needs to be installed first.',
+    'msg48' => '<br/>The Chatterblock Plugin needs to be installed first.',
     'msg49' => '(čteno %sx) ',
     'msg50' => 'Signature n/a',
     'msg51' => "%s\n\n<br>[Editoval v %s - %s]",
@@ -352,26 +355,26 @@ $LANG_GF02 = array(
     'msg62' => 'Uvědom mě o odpovědích',
     'msg63' => 'Profil',
     'msg64' => 'Are you sure you want to delete topic %s titled: %s ?',
-    'msg65' => '<br>This is a parent topic, so all replies posted to it will also be deleted.',
+    'msg65' => '<br/>This is a parent topic, so all replies posted to it will also be deleted.',
     'msg66' => 'Confirm Delete Post',
     'msg67' => 'Edit Forum Post',
     'msg68' => 'Note: BE CAREFUL WHEN YOU BAN, only admins have the rights to unban someone.',
     'msg69' => 'Do you really want to ban the ip address: %s?',
     'msg70' => 'Confirm Ban',
-    'msg71' => 'No function selected, choose a post and then a moderator function.<br>Note: You must be a moderator to perform these functions.',
+    'msg71' => 'No function selected, choose a post and then a moderator function.<br/>Note: You must be a moderator to perform these functions.',
     'msg72' => 'Warning, you do not have rights to perform this moderation function.',
     'msg74' => 'Latest %s Forum Posts',
     'msg75' => 'Top %s Topics By Views',
     'msg76' => 'Top %s Topics By Posts',
-    'msg77' => '<br><p style="padding-left:10px;">You should not be here!<br>Restricted access to this forum only.<p />',
-    'msg78' => '<br>You should not be here!<br>Invalid Forum.',
+    'msg77' => '<br/><p style="padding-left:10px;">You should not be here!<br/>Restricted access to this forum only.<br />',
+    'msg78' => '<br/>You should not be here!<br/>Invalid Forum.',
     'msg81' => '- Topic Edit Notification',
     'msg82' => '<p>Your message "%s" has been edited by the moderator %s.<p>',
-    'msg83' => '<br><br>You need to be signed in to use this forum feature.<p />',
+    'msg83' => '<br/><br/>You need to be signed in to use this forum feature.<br />',
     'msg84' => 'Mark all topics read',
     'msg85' => 'Page:',
-    'msg86' => '&nbsp;Poslední příspěvky&nbsp;',
-    'msg87' => '<br>Warning: This topic has been locked by the moderator.<br>No additional posts are permitted',
+    'msg86' => ' Poslední příspěvky ',
+    'msg87' => '<br/>Warning: This topic has been locked by the moderator.<br/>No additional posts are permitted',
     'msg88' => 'Site Members',
     'msg88b' => 'Forum Activity Only',
     'msg89' => 'My Enabled Notifications',
@@ -437,10 +440,10 @@ $LANG_GF02 = array(
     'msg159' => 'Are you sure you want to DELETE these selected Moderator records?',
     'msg160' => 'View last page of topic',
     'msg161' => 'Return to members list',
-    'msg162' => 'To return to the forum index now click <a href="%s">here</a><br><p />Default is to  return automatically to view your post.<br>If you do not wish to wait, click <a href="%s">here</a> now.',
+    'msg162' => 'To return to the forum index now click <a href="%s">here</a><br/><br />Default is to  return automatically to view your post.<br/>If you do not wish to wait, click <a href="%s">here</a> now.',
     'msg163' => 'Post moved',
     'msg164' => 'Mark all Categories and Topics Read',
-    'msg165' => 'ERROR<p />Matching <b>QUOTE</b> tag missing. Unable to format message.<p />',
+    'msg165' => 'ERROR<br />Matching <b>QUOTE</b> tag missing. Unable to format message.<br />',
     'msg166' => 'ERROR: Invalid topic or Topic not found',
     'msg167' => 'Notification Option',
     'msg168' => 'Setting of No will disable email notifications',
@@ -477,7 +480,7 @@ $LANG_GF02 = array(
     'msg199' => 'View or remove forum notifications',
     'msg200' => 'Site Members',
     'msg201' => 'Popular Topics',
-    'msg202' => 'No new posts',
+    'msg202' => 'No Unread Posts Available',
     'msg203' => 'Click to add bookmark',
     'msg204' => 'Click to remove bookmark',
     'msg205' => 'You have not posts bookmarked',
@@ -494,12 +497,12 @@ $LANG_GF02 = array(
     'not_your_post' => 'You donot appear to be the author of this post.',
     'spam_detected' => 'Your post has been identified as a spam message',
     'invalid_email' => 'Email empty or not a valid email address',
-    'invalid_name' => 'No name or name blank',
-    'last_edited' => 'Last Edited',
+    'invalid_name'  => 'No name or name blank',
+    'last_edited'   => 'Last Edited',
     'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
-    'post_ctc' => 'Permalink Copied to Clipboard',
+    'post_ctc'      => 'Permalink Copied to Clipboard',
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
-    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
 );
 
 $LANG_GF03 = array(
@@ -513,29 +516,29 @@ $LANG_GF03 = array(
     'stick' => 'Make Sticky',
     'unstick' => 'Un-Stick',
     'movetopic' => 'Move Topic',
-    'movetopicmsg' => '<br>Topic to be moved: "<b>%s</b>"',
-    'splittopicmsg' => '<br>Create a new Topic with this post: "<b>%s</b>"<br><em>By:</em>&nbsp;%s&nbsp <em>On:</em>&nbsp;%s',
+    'movetopicmsg' => '<br/>Topic to be moved: "<b>%s</b>"',
+    'splittopicmsg' => '<br/>Create a new Topic with this post: "<b>%s</b>"<br/><em>By:</em>&nbsp;%s&nbsp <em>On:</em>&nbsp;%s',
     'selectforum' => 'Select new forum:',
     'lockedpost' => 'Add Reply Post',
     'splitheading' => 'Split thread option:',
     'splitopt1' => 'Move all posts from this point',
     'splitopt2' => 'Move only this one post',
-    'merge_post' => 'Merge Post',
+    'merge_post'  => 'Merge Post',
     'merge_topic' => 'Merge Topic',
     'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select' => 'Select',
+    'select'    => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
     'select_topic' => 'Select Topic',
     'lock_topic' => 'Lock Topic',
     'unlock_topic' => 'Unlock Topic',
-    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>',
 );
 
 $LANG_GF04 = array(
     'label_forum' => 'Forum Profile',
-    'label_location' => 'Location',
+    'label_location' => 'Umístění',
     'label_aim' => 'AIM Handle',
     'label_yim' => 'YIM Handle',
     'label_icq' => 'ICQ Identity',
@@ -559,9 +562,10 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistics',
-    2 => 'Settings',
+    2 => 'Nastavení',
     3 => 'Forums',
     4 => 'Moderator',
     5 => 'Convert',
@@ -571,9 +575,10 @@ $LANG_GF06 = array(
     9 => 'Import',
     10 => 'Forum Administration',
     11 => 'Badges',
-    12 => 'Ranks'
+    12 => 'Ranks',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Číst forum',
     2 => 'Preference',
@@ -582,12 +587,14 @@ $LANG_GF07 = array(
     5 => 'Členové'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Topic Notifications',
     2 => 'Track Forum Notifications',
     3 => 'Topic Exception Notifications'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Přílohy',
     'maxattachments' => 'Nejvýše %s je povoleno',
@@ -624,13 +631,14 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Average views per:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Topics Per Page',
     'showiframe' => 'Show Topic Review',
     'showiframedscp' => 'Show Topic Review (Iframe) at bottom when replying to a topic',
     'forum_prefs' => 'Forum Preferences',
     'forumprefs_help_title' => 'Forum Prefs Help',
-    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
     'topicspp_help' => 'Number of topics to display when viewing the forum index.',
     'postspp_help' => 'Number of posts to show per page.',
     'anonymous_help' => 'Hide posts from anonymous users.',
@@ -639,12 +647,13 @@ $LANG_GF92 = array(
     'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Pořadí témat',
     'editor_type' => 'Typ editoru',
-    'bbcode' => 'BBCode',
-    'wysiwyg' => 'WYSIWYG',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
     'ascending' => 'Vzestupně',
     'descending' => 'Sestupně',
-    'sb_latestposts' => 'Last Post',
+    'sb_latestposts' => 'Poslední Příspěvek',
     'setsavemsg' => 'Settings saved.',
+    /* not used */
     'gfsettings' => 'Discussion Forum Settings',
     'gensettings' => 'General Settings',
     'topicsettings' => 'Topic Posting Settings',
@@ -693,13 +702,13 @@ $LANG_GF92 = array(
     'lev5dscp' => 'Rank 5 - Desciption and post threshold',
     'setsave' => 'Settings Saved',
     'defaultmode' => 'Default Post Mode',
-    'defaultmodedscp' => 'Enable HTML Mode as default - set to Yes.<br>Enable Text mode as default (safest) - set to No',
+    'defaultmodedscp' => 'Enable HTML Mode as default - set to Yes.<br/>Enable Text mode as default (safest) - set to No',
     'cbsettings' => 'Centerblock Settings',
     'cbenable' => 'Enable Centerblock',
     'cbenabledscp' => '',
     'cbhomepage' => 'Homepage Only',
     'cbhomepagedscp' => 'Enabled will only show when on page 1',
-    'cbposition' => 'Location',
+    'cbposition' => 'Umístění',
     'cbpositiondscp' => 'Placement on the page',
     'position' => 'Position ',
     'all_topics' => 'All',
@@ -741,15 +750,16 @@ $LANG_GF92 = array(
     'smiliesplugin' => 'Smilies Plugin',
     'smiliesplugindscp' => 'Smilies Plugin or external functions should be used for handling smilies',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
 );
 
+// Board Admin
 $LANG_GF93 = array(
-    'gfboard' => 'Discussion Forum Board Admin',
+    'gfboard' => 'Forum Admin',
     'vieworder' => 'View Order',
     'addcat' => 'Add Forum Category',
     'addforum' => 'Add A Forum',
-    'order' => 'Order:',
+    'order' => 'Pořadí:',
     'catorder' => 'Category Order',
     'forumorder' => 'Forum Order',
     'catadded' => 'Category Added.',
@@ -759,8 +769,8 @@ $LANG_GF93 = array(
     'forumadded' => 'Forum Added.',
     'forumaddError' => 'Error Adding Forum.',
     'forumdeleted' => 'Forum Deleted',
-    'forumedited' => 'Forum Edited',
-    'forumordered' => 'Forum Order Edited',
+    'forumedited' => 'Forum Details Successfully Saved',
+    'forumordered' => 'Forum Order Saved',
     'transfer' => 'Transfering to board index..',
     'back' => 'Back',
     'addnote' => 'Note: You can edit these values.',
@@ -774,9 +784,9 @@ $LANG_GF93 = array(
     'deleteforumnote2' => 'All topics posted under it will also be deleted.',
     'groupaccess' => 'Group Access: ',
     'rebuild' => 'Rebuild LastPost Table',
-    'action' => 'Actions',
+    'action' => 'Akce',
     'forumdescription' => 'Forum Description',
-    'posts' => 'Posts',
+    'posts' => 'Příspěvek',
     'ordertitle' => 'Order',
     'ModDel' => 'Del',
     'ModEdit' => 'Edit',
@@ -785,7 +795,7 @@ $LANG_GF93 = array(
     'ModBan' => 'Ban',
     'addmoderator' => 'Add Record',
     'delmoderator' => " Delete\nSelected",
-    'moderatorwarning' => '<b>Warning: No Forums Defined</b><br><br>Setup Forum Categories and Add at least 1 forum<br>before attempting to add Modertators',
+    'moderatorwarning' => '<b>Warning: No Forums Defined</b><br/><br/>Setup Forum Categories and Add at least 1 forum<br/>before attempting to add Modertators',
     'private' => 'Private Forum',
     'filtertitle' => 'Select Moderator records to view',
     'addmessage' => 'Add new Moderator',
@@ -804,8 +814,8 @@ $LANG_GF93 = array(
     'desc_blank' => 'Description cannot be blank',
     'category_resynced' => 'All forums in the category have been resynced',
     'forum_resynced' => 'The Forum has been resynced',
-    'forum_options' => 'Forum Options...',
-    'category_options' => 'Category Options...'
+    'forum_options'  => 'Forum Options...',
+    'category_options' => 'Category Options...',
 );
 
 $LANG_GF94 = array(
@@ -867,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Your message has not been sent. Please go <a href="javascript:history.back()">back</a> and make sure you have all fields filled.',
     'msgdelok' => 'Delete Successful',
     'msgdelsuccess' => 'You have sucessfully deleted this message.',
-    'msgdelerr' => 'The message has not been deleted. Please go <a href=\"javascript:history.back()\">back</a> and choose one.',
+    'msgdelerr' => 'The message has not been deleted. Please go <a href=\\"javascript:history.back()\\">back</a> and choose one.',
     'msgpriv' => 'Private Messages',
     'msgprivnote1' => 'You have %s private message.',
     'msgprivnote2' => 'You have %s private messages.',
@@ -876,31 +886,32 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings' => 'User Ratings',
+    'user_ratings'  => 'User Ratings',
     'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
     'board_ratings' => 'Board Rating Settings',
     'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
-    'rating' => 'Rating',
-    'uid' => 'UID',
+    'rating'    => 'Hodnocení',
+    'uid'       => 'UID',
     'user_rating_title' => 'Community Moderation User Ratings',
     'no_subject_defined' => 'No subject defined',
     'admin_set_value' => 'Administrator set new user rating',
     'no_topic_defined' => 'No topic defined',
     'voter' => 'Voter',
     'grade' => 'Grade',
-    'topic' => 'Topic',
+    'topic' => 'Námět',
     'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
-    'save_changes' => 'Save Changes',
+    'save_changes'  => 'Ulož změny',
     'view_rating' => 'View Rating',
-    'post_rating' => 'Post Rating'
+    'post_rating' => 'Post Rating',
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]',
 );
 
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -1002,7 +1013,8 @@ $LANG_confignames['forum'] = array(
     'geshi_overall_style' => 'GeSHi Overall Code Block Style',
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
-    'geshi_header_style' => 'GeSHi Header Block Style'
+    'geshi_header_style' => 'GeSHi Header Block Style',
+
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1018,15 +1030,14 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Attachment Settings'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['forum'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Replace Home Page' => 0, 'Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
-    3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
-    4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
-    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    6 => array('Checked' => 1, 'Unchecked' => 0)
+$LANG_configSelect['forum'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(0=>'Replace Home Page', 1=>'Top of Page', 2=>'After Featured Story', 3=>'Bottom of Page'),
+    3 => array('noblocks'=>'No Blocks', 'leftblocks'=>'Left Blocks', 'rightblocks'=>'Right Blocks', 'allblocks'=>'Right / Left Blocks'),
+    4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'None'),
+    5 => array('DESC'=>'Sestupně', 'ASC'=>'Vzestupně'),
+    6 => array(1=>'Checked', 0=>'Unchecked')
 );
 
 ?>

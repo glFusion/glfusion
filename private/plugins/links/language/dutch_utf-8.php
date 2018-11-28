@@ -1,28 +1,21 @@
 <?php
-###############################################################################
-# dutch.php
-# This is the Dutch language file for the glFusion Links plugin
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony@tonybibbs.com
-# Copyright (C) 2005 Trinity Bays
-# trinity93@gmail.com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Links Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2007 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*   Tom Willett - twillett AT users DOT sourceforge DOT net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -32,11 +25,16 @@ global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
+# $LANGXX[YY]:    $LANG - variable name
+#                 XX - file id number
+#                 YY - phrase id number
 ###############################################################################
 
+/**
+* the link plugin's lang array
+*
+* @global array $LANG_LINKS
+*/
 $LANG_LINKS = array(
     10 => 'Ingezonden links',
     14 => 'Links',
@@ -54,38 +52,50 @@ $LANG_LINKS = array(
     124 => 'Ga',
     125 => 'Categorieen',
     126 => 'U bent hier:',
-    'root' => 'Start',
-    'error_header' => 'Link Submission Error',
+    'root' => 'Root',
+    'error_header'  => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
     'category_not_found' => 'The Category does not appear to be valid',
-    'no_links' => 'No links have been entered.'
+    'no_links'  => 'No links have been entered.',
 );
 
 ###############################################################################
 # for stats
-
+/**
+* the link plugin's lang stats array
+*
+* @global array $LANG_LINKS_STATS
+*/
 $LANG_LINKS_STATS = array(
     'links' => 'Links (Kliks) in het systeem',
     'stats_headline' => 'Top Tien Links',
     'stats_page_title' => 'Links',
     'stats_hits' => 'Treffers',
-    'stats_no_hits' => 'Er zijn nog geen links aanwezig of er is nog niet op geklikt.'
+    'stats_no_hits' => 'Er zijn nog geen links aanwezig of er is nog niet op geklikt.',
 );
 
 ###############################################################################
 # for the search
-
+/**
+* the link plugin's lang search array
+*
+* @global array $LANG_LINKS_SEARCH
+*/
 $LANG_LINKS_SEARCH = array(
-    'results' => 'Link resultaten',
-    'title' => 'Titel',
-    'date' => 'Toegevoegd op',
-    'author' => 'Ingezonden door',
-    'hits' => 'Treffers'
+ 'results' => 'Link resultaten',
+ 'title' => 'Titel',
+ 'date' => 'Toegevoegd op',
+ 'author' => 'Ingezonden door',
+ 'hits' => 'Treffers'
 );
 
 ###############################################################################
 # for the submission form
-
+/**
+* the link plugin's lang submit form array
+*
+* @global array $LANG_LINKS_SUBMIT
+*/
 $LANG_LINKS_SUBMIT = array(
     1 => 'Link voorstellen',
     2 => 'Link',
@@ -98,7 +108,14 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Categorie',
     11 => 'Ingezonden links',
-    12 => 'Submitted By'
+    12 => 'Submitted By',
+);
+
+###############################################################################
+# autotag description
+
+$LANG_LI_AUTOTAG = array(
+    'desc_link'                 => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -108,9 +125,10 @@ $PLG_links_MESSAGE1 = "Hartelijk dank voor het voorstellen van uw link op {$_CON
 $PLG_links_MESSAGE2 = 'De link is opgeslagen.';
 $PLG_links_MESSAGE3 = 'De link is verwijderd.';
 $PLG_links_MESSAGE4 = "Hartelijk dank voor het toevoegen van uw link op {$_CONF['site_name']}.  De link is opgenomen in de <a href={$_CONF['site_url']}/links/index.php>links</a> directory.";
-$PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this category.';
+$PLG_links_MESSAGE5 = "You do not have sufficient access rights to view this category.";
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
 $PLG_links_MESSAGE7 = 'Vul a.u.b. een Categorie Naam en Beschrijving in.';
+
 $PLG_links_MESSAGE10 = 'Uw categorie is met succes opgeslagen.';
 $PLG_links_MESSAGE11 = 'You are not allowed to set the id of a category to "site" or "user" - these are reserved for internal use.';
 $PLG_links_MESSAGE12 = 'You are trying to make a parent category the child of it\'s own subcategory. This would create an orphan category, so please first move the child category or categories up to a higher level.';
@@ -125,8 +143,12 @@ $PLG_links_MESSAGE3001 = 'Plugin upgrade niet ondersteund.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
-# admin/plugins/links/index.php
-
+# admin/link.php
+/**
+* the link plugin's lang admin array
+*
+* @global array $LANG_LINKS_ADMIN
+*/
 $LANG_LINKS_ADMIN = array(
     1 => 'Link Editor',
     2 => 'Link ID',
@@ -163,7 +185,7 @@ $LANG_LINKS_ADMIN = array(
     41 => 'Maak een subcategorie aan',
     42 => 'Verwijder deze categorie',
     43 => 'Website categorieen',
-    44 => 'Subcategorie&nbsp;toevoegen',
+    44 => 'Subcategorie toevoegen',
     46 => 'Gebruiker %s probeerde zonder toegangsrechten een categorie te verwijderen.',
     50 => 'Toon categorieen',
     51 => 'Nieuwe link',
@@ -174,65 +196,61 @@ $LANG_LINKS_ADMIN = array(
     56 => 'Categorie Editor',
     57 => 'Nog niet gevalideerd',
     58 => 'Valideer nu',
-    59 => '<p>To validate all links displayed, please click on the "Validate now" link below. Please note that this might take some time depending on the amount of links displayed.</p>',
+    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
     60 => 'Gebruiker %s probeerde ongeoorloofd de categorie %s te wijzigen.',
-    61 => 'Owner',
-    62 => 'Last Updated',
+    61 => 'Eigenaar',
+    62 => 'Laatste wijziging',
     63 => 'Are you sure you want to delete this link?',
     64 => 'Are you sure you want to delete this category?',
     65 => 'Moderate Link',
     66 => 'This screen allows you to create / edit links.',
-    67 => 'This screen allows you to create / edit a links category.'
+    67 => 'This screen allows you to create / edit a links category.',
 );
-
 
 $LANG_LINKS_STATUS = array(
-    100 => 'Doorgaan',
-    101 => 'Switching Protocols',
-    200 => 'OK',
-    201 => 'Aangemaakt',
-    202 => 'Geaccepteerd',
-    203 => 'Non-Authoritative Information',
-    204 => 'Geen Content',
-    205 => 'Reset Content',
-    206 => 'Gedeeltelijke Content',
-    300 => 'Meerdere Keuzes',
-    301 => 'Permanent Verplaatst',
-    302 => 'Gevonden',
-    303 => 'See Other',
-    304 => 'Niet Aangepast',
-    305 => 'Gebruik Proxy',
-    307 => 'Temporary Redirect',
-    400 => 'Bad Request',
-    401 => 'Unauthorized',
-    402 => 'Payment Required',
-    403 => 'Verboden',
-    404 => 'Niet Gevonden',
-    405 => 'Method Not Allowed',
-    406 => 'Not Acceptable',
-    407 => 'Proxy Authentication Required',
-    408 => 'Request Timeout',
-    409 => 'Conflict',
-    410 => 'Verdwenen',
-    411 => 'Length Required',
-    412 => 'Precondition Failed',
-    413 => 'Request Entity Too Large',
-    414 => 'Request-URI Too Long',
-    415 => 'Unsupported Media Type',
-    416 => 'Requested Range Not Satisfiable',
-    417 => 'Expectation Failed',
-    500 => 'Internal Server Error',
-    501 => 'Niet Geimplementeerd',
-    502 => 'Bad Gateway',
-    503 => 'Service Unavailable',
-    504 => 'Gateway Timeout',
-    505 => 'HTTP Version Not Supported',
-    999 => 'Connection Timed out'
+    100 => "Doorgaan",
+    101 => "Switching Protocols",
+    200 => "OK",
+    201 => "Aangemaakt",
+    202 => "Geaccepteerd",
+    203 => "Non-Authoritative Information",
+    204 => "Geen Content",
+    205 => "Reset Content",
+    206 => "Gedeeltelijke Content",
+    300 => "Meerdere Keuzes",
+    301 => "Permanent Verplaatst",
+    302 => "Gevonden",
+    303 => "See Other",
+    304 => "Niet Aangepast",
+    305 => "Gebruik Proxy",
+    307 => "Temporary Redirect",
+    400 => "Bad Request",
+    401 => "Unauthorized",
+    402 => "Payment Required",
+    403 => "Verboden",
+    404 => "Niet Gevonden",
+    405 => "Method Not Allowed",
+    406 => "Not Acceptable",
+    407 => "Proxy Authentication Required",
+    408 => "Request Timeout",
+    409 => "Conflict",
+    410 => "Verdwenen",
+    411 => "Length Required",
+    412 => "Precondition Failed",
+    413 => "Request Entity Too Large",
+    414 => "Request-URI Too Long",
+    415 => "Unsupported Media Type",
+    416 => "Requested Range Not Satisfiable",
+    417 => "Expectation Failed",
+    500 => "Internal Server Error",
+    501 => "Niet Geimplementeerd",
+    502 => "Bad Gateway",
+    503 => "Service Unavailable",
+    504 => "Gateway Timeout",
+    505 => "HTTP Version Not Supported",
+    999 => "Connection Timed out"
 );
 
-$LANG_LI_AUTOTAG = array(
-    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
-);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
@@ -257,7 +275,7 @@ $LANG_confignames['links'] = array(
     'default_permissions' => 'Link Default Permissions',
     'target_blank' => 'Open Links in Nieuw Window',
     'displayblocks' => 'Display glFusion Blocks',
-    'submission' => 'Link Submission'
+    'submission'    => 'Link Submission',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -270,14 +288,14 @@ $LANG_fs['links'] = array(
     'fs_permissions' => 'Standaard Rechten'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['links'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    9 => array('Forward to Linked Site' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3),
-    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
+$LANG_configSelect['links'] = array(
+    0 => array(1=>'Ja', 0=>'Nee'),
+    1 => array(true=>'Ja', false=>'Nee'),
+    9 => array('item'=>'Forward to Linked Site', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Toon Startpagina', 'admin'=>'Toon Beheerpagina'),
+    12 => array(0=>'Geen Toegang', 2=>'Alleen lezen', 3=>'Lezen-Schrijven'),
+    13 => array(0=>'Linker Blokken', 1=>'Right Blocks', 2=>'Linker & Rechter Blokken', 3=>'Geen'),
+    14 => array(0=>'Geen', 1=>'Logged-in Only', 2=>'Anyone', 3=>'Geen')
+
 );
 
 ?>

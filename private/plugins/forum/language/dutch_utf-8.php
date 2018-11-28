@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | dutch_utf-8.php                                                          |
-// |                                                                          |
-// | Dutch language file                                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for the Forum Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by:
+*     Authors: Blaine Lang       - blaine AT portalparts DOT com
+*                                  www.portalparts.com
+*     Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*     Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -51,7 +35,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Forum Zoek Resultaten %s',
     'access_denied' => 'Toegang Geweigerd',
     'uploaderr' => 'Bestand Upload Fout',
-    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.'
+    'instructions' => 'Select the option above to create / modify categories and forum. You can also setup forum moderators, import glFusion stories into the forum and administer the community moderation settings.',
 );
 
 $LANG_GF01 = array(
@@ -68,7 +52,7 @@ $LANG_GF01 = array(
     'SAVE' => 'Opslaan',
     'CANCEL' => 'Annuleren',
     'ON' => 'Op: ',
-    'ON2' => '&nbsp;&nbsp;<b>Op: </b>',
+    'ON2' => '  <b>Op: </b>',
     'BY' => 'Door: ',
     'RE' => 'Re: ',
     'DATE' => 'Datum',
@@ -91,7 +75,7 @@ $LANG_GF01 = array(
     'PAGES' => 'Pagina\'s',
     'TODAY' => 'Vandaag bij ',
     'REGISTERED' => 'Geregistreerd',
-    'ORDERBY' => 'Sorteer Op:&nbsp;',
+    'ORDERBY' => 'Sorteer Op: ',
     'ORDER' => 'Volgorde:',
     'USER' => 'Gebruiker',
     'GROUP' => 'Groep',
@@ -131,13 +115,13 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'HTML Mode:',
     'TopicPreview' => 'Bekijk bericht bij Onderwerp',
     'moderator' => 'Moderator',
-    'admin' => 'Beheerder',
+    'admin' => 'Beheerder',                 /* stopped here */
     'DATEADDED' => 'Datum Geplaatst',
     'PREVTOPIC' => 'Vorige Onderwerp',
     'NEXTTOPIC' => 'Volgende Onderwerp',
     'CONTENT' => 'Inhoud',
     'QUOTE_begin' => '[Quote&nbsp;',
-    'QUOTE_by' => 'door:&nbsp;',
+    'QUOTE_by' => 'door: ',
     'RESYNC' => 'ReSync',
     'RESYNCCAT' => 'ReSync Forum Categorieen',
     'PROFILE' => 'Profiel',
@@ -148,7 +132,7 @@ $LANG_GF01 = array(
     'ProfileLink' => 'Profiel',
     'WebsiteLink' => 'Website',
     'PMLink' => 'PM',
-    'EmailLink' => 'Email',
+    'EmailLink' => 'Emailadres',
     'FORUMSUBSCRIBE' => 'Volg deze discussie',
     'FORUMUNSUBSCRIBE' => 'Verwijder uit Favorieten',
     'NEWTOPIC' => 'Nieuw Onderwerp',
@@ -171,7 +155,7 @@ $LANG_GF01 = array(
     'WARNING' => 'Waarschuwing',
     'MODERATED' => 'Moderatoren: %s',
     'NOTIFYNOT' => 'NIET!',
-    'LASTREPLYBY' => 'Laatste reactie van:&nbsp;%s',
+    'LASTREPLYBY' => 'Laatste reactie van: %s',
     'UID' => 'UID',
     'ANON_POST_BEGIN' => 'Anonieme berichten',
     'ANON_POST_END' => 'zichtbaar',
@@ -207,7 +191,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'Wit',
     'BLACK' => 'Zwart',
-    'ID' => 'ID',
+    'ID'    => 'ID',
     'b_help' => 'Vetgedrukte tekst: [b]tekst[/b]',
     'i_help' => 'Schuingedrukte tekst: [i]tekst[/i]',
     'u_help' => 'Onderstreepte tekst: [u]tekst[/u]',
@@ -224,32 +208,37 @@ $LANG_GF01 = array(
     't_help' => 'Gebruik [file]#[/file] om een bijlage aan een bericht toe te voegen',
     'e_help' => 'List item: [*]tekst',
     'smiley' => 'Smileys',
-    'grade' => '<br /><b>Groep Comfort<br />Niveau:</b>',
-    'grade_user' => '<br /><b>Beoordeel Gebruiker</b>',
+
+    /* --- Community moderation tags --- */
+    'grade'         => '<br /><b>Groep Comfort<br />Niveau:</b>',
+    'grade_user'    => '<br /><b>Beoordeel Gebruiker</b>',
     'retract_grade' => '<br /><b>Verwijder Beoordeling</b>',
-    'rate_too_low' => 'Your rating level is too low for posting to this forum',
+    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
     'signature' => 'Forum Ondertekening',
     'edit_signature' => 'Wijzig BBcode Ondertekening',
     'signature_preview' => 'Bekijk Ondertekening',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
     'disable_bbcode' => 'Disable BBCode:',
     'disable_smilies' => 'Disable Smilies:',
     'disable_urlparse' => 'Do not parse URLs:',
     'features' => 'Features:',
+    /* --- rss feature --- */
     'rss_link' => 'Subscribe to this forum\'s RSS feed.',
     'all_read_success' => 'All topics have been marked as read',
     'formatted_code' => 'Formatted Code',
-    'reset' => 'Reset',
+    'reset' => 'Herstel',
     'q_del_item' => 'Are you sure you want to delete this badge?',
     'badge_updated' => 'Badge Updated',
     'badge_save_error' => 'Error saving badge - A record with this Post count may exist already.',
-    'add_badge' => 'Add Badge',
+    'add_badge'         => 'Add Badge',
     'badge_grp' => 'Badge Group',
-    'site_grp' => 'Site Group Name',
+    'site_grp'  => 'Site Group Name',
     'badge_img' => 'Badge Image',
-    'create_new' => 'Create New',
+    'create_new' => 'Maak nieuwe',
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
     'badge_type' => 'Badge Type',
@@ -259,12 +248,26 @@ $LANG_GF01 = array(
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
     'rank_updated' => 'Rank Updated',
+    /* --- Like system --- */
     'like' => 'Like',
     'unlike' => 'Unlike',
+    // In tooltips, add "%s" to include the user display name.
     'like_tooltip' => 'Like this post',
     'unlike_tooltip' => 'Unlike this post',
+    // "Liked X Times" in the user profile area.
+    // The span is required exactly as below.
+    // "%1$d" is replaced with the number of likes.
     'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
-    'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
+    // Formats for the text string in each post. The key indicates the minimum
+    // number of likes to use that string.
+    // %1$s is the comma-separated string containing <key> likers
+    // %2$d is the total number of likes
+    // %3$d is the number of liker names not shown, used with "X others...."
+    'likes_formats' => array(
+        0 => '%1$s likes this.',        // single like
+        1 => 'Liked by %1$s.',          // multiple likes, up to threshold
+        2 => '%1$s and %3$d others like this.', // threshold and beyond
+    ),
     'unk_username' => 'unknown',
     'likes_received' => 'Likes Received',
     'likes_given' => 'Likes Given',
@@ -276,12 +279,13 @@ $LANG_GF01 = array(
     'msg_item_updated' => 'Item has been updated',
     'msg_item_nochange' => 'Item was not changed',
     'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
     'fg_color' => 'Foreground Color',
     'bg_color' => 'Background Color',
     'more' => 'More',
     'less' => 'Less',
     'choose' => 'Choose',
-    'display_after' => 'Display After'
+    'display_after' => 'Display After',
 );
 
 $LANG_GF02 = array(
@@ -369,7 +373,7 @@ $LANG_GF02 = array(
     'msg83' => '<br><br>U dient aangemeld te zijn om dit forum feature te kunnen gebruiken.<p />',
     'msg84' => 'Markeer alle berichten als gelezen',
     'msg85' => 'Pagina:',
-    'msg86' => '&nbsp;Laatste inzendingen&nbsp;',
+    'msg86' => ' Laatste inzendingen ',
     'msg87' => '<br>Warning: This topic has been locked by the moderator.<br>No additional posts are permitted',
     'msg88' => 'Website Leden',
     'msg88b' => 'Alleen Forum Activiteiten',
@@ -474,7 +478,7 @@ $LANG_GF02 = array(
     'msg197' => 'Markeer alle onderwerpen als gelezen',
     'msg198' => 'Werk uw forum instellingen bij',
     'msg199' => 'Bekijk of verwijder Forum Waarschuwingen',
-    'msg200' => 'Site Members',
+    'msg200' => 'Website Leden',
     'msg201' => 'Populaire Onderwerpen',
     'msg202' => 'Geen nieuwe berichten',
     'msg203' => 'Toevoegen aan Mijn Markeringen',
@@ -493,17 +497,17 @@ $LANG_GF02 = array(
     'not_your_post' => 'You donot appear to be the author of this post.',
     'spam_detected' => 'Your post has been identified as a spam message',
     'invalid_email' => 'Email empty or not a valid email address',
-    'invalid_name' => 'No name or name blank',
-    'last_edited' => 'Last Edited',
+    'invalid_name'  => 'No name or name blank',
+    'last_edited'   => 'Last Edited',
     'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
-    'post_ctc' => 'Permalink Copied to Clipboard',
+    'post_ctc'      => 'Permalink Copied to Clipboard',
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
-    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
 );
 
 $LANG_GF03 = array(
     'welcomemsg' => 'Welkom Moderator',
-    'title' => 'Moderator Functie\'s:&nbsp;',
+    'title' => 'Moderator Functie\'s: ',
     'delete' => 'Verwijder Bericht',
     'edit' => 'Wijzig Bericht',
     'move' => 'Verplaats Onderwerp',
@@ -513,23 +517,23 @@ $LANG_GF03 = array(
     'unstick' => 'Un-Stick',
     'movetopic' => 'Verplaats Onderwerp',
     'movetopicmsg' => '<br>Onderwerp om te verplaatsen: "<b>%s</b>"',
-    'splittopicmsg' => '<br>Create a new Topic with this post: "<b>%s</b>"<br><em>By:</em>&nbsp;%s&nbsp <em>On:</em>&nbsp;%s',
+    'splittopicmsg' => '<br>Create a new Topic with this post: "<b>%s</b>"<br><em>By:</em> %s&nbsp <em>On:</em> %s',
     'selectforum' => 'Selecteer nieuw forum:',
     'lockedpost' => 'Add Reply Post',
     'splitheading' => 'Splits draad optie:',
     'splitopt1' => 'Move all posts from this point',
     'splitopt2' => 'Move only this one post',
-    'merge_post' => 'Merge Post',
+    'merge_post'  => 'Merge Post',
     'merge_topic' => 'Merge Topic',
     'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
     'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
-    'select' => 'Select',
+    'select'    => 'Select',
     'select_forum' => 'Select Forum Topic',
     'destination_topic' => 'Destination Topic ID:',
     'select_topic' => 'Select Topic',
     'lock_topic' => 'Lock Topic',
     'unlock_topic' => 'Unlock Topic',
-    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>',
 );
 
 $LANG_GF04 = array(
@@ -558,6 +562,7 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistieken',
     2 => 'Instellingen',
@@ -570,9 +575,10 @@ $LANG_GF06 = array(
     9 => 'Import',
     10 => 'Forum Administration',
     11 => 'Badges',
-    12 => 'Ranks'
+    12 => 'Ranks',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Bekijk de Forums',
     2 => 'Voorkeuren',
@@ -581,12 +587,14 @@ $LANG_GF07 = array(
     5 => 'Leden'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Topic Notifications',
     2 => 'Track Forum Notifications',
     3 => 'Topic Exception Notifications'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Bijlagen',
     'maxattachments' => 'Max %s toegestaan',
@@ -623,6 +631,7 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Average views per:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Onderwerpen Per Pagina',
     'showiframe' => 'Show Topic Review',
@@ -638,14 +647,15 @@ $LANG_GF92 = array(
     'iframe_help' => 'Show topic review (iframe) at bottom when replying.',
     'topic_order' => 'Topic Order',
     'editor_type' => 'Editor Type',
-    'bbcode' => 'BBCode',
-    'wysiwyg' => 'WYSIWYG',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
     'ascending' => 'Ascending',
     'descending' => 'Descending',
     'sb_latestposts' => 'Laatste Bericht',
     'setsavemsg' => 'Instellingen opgeslagen.',
+    /* not used */
     'gfsettings' => 'Discussion Forum Settings',
-    'gensettings' => 'General Settings',
+    'gensettings' => 'Algemene Instellingen',
     'topicsettings' => 'Topic Posting Settings',
     'blocksettings' => 'Latest Posts Block Settings',
     'ranksettings' => 'Rank Settings',
@@ -740,9 +750,10 @@ $LANG_GF92 = array(
     'smiliesplugin' => 'Smilies Plugin',
     'smiliesplugindscp' => 'Smilies Plugin or external functions should be used for handling smilies',
     'edit_timewindow' => 'Wijzig Tijdframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
 );
 
+// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Discussie Forum Administratie',
     'vieworder' => 'Kijk volgorde',
@@ -803,8 +814,8 @@ $LANG_GF93 = array(
     'desc_blank' => 'Description cannot be blank',
     'category_resynced' => 'All forums in the category have been resynced',
     'forum_resynced' => 'The Forum has been resynced',
-    'forum_options' => 'Forum Options...',
-    'category_options' => 'Category Options...'
+    'forum_options'  => 'Forum Options...',
+    'category_options' => 'Category Options...',
 );
 
 $LANG_GF94 = array(
@@ -866,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Your message has not been sent. Please go <a href="javascript:history.back()">back</a> and make sure you have all fields filled.',
     'msgdelok' => 'Met succes verwijderd',
     'msgdelsuccess' => 'You have sucessfully deleted this message.',
-    'msgdelerr' => 'The message has not been deleted. Please go <a href=\"javascript:history.back()\">back</a> and choose one.',
+    'msgdelerr' => 'The message has not been deleted. Please go <a href=\\"javascript:history.back()\\">back</a> and choose one.',
     'msgpriv' => 'Prive Berichten',
     'msgprivnote1' => 'U heeft %s prive bericht.',
     'msgprivnote2' => 'U heeft %s prive berichten.',
@@ -875,12 +886,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings' => 'Gebruiker Waarderingen',
+    'user_ratings'  => 'Gebruiker Waarderingen',
     'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
     'board_ratings' => 'Board Rating Settings',
     'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
-    'rating' => 'Waardering',
-    'uid' => 'UID',
+    'rating'    => 'Waardering',
+    'uid'       => 'UID',
     'user_rating_title' => 'Community Moderation User Ratings',
     'no_subject_defined' => 'Geen onderwerp opgegeven',
     'admin_set_value' => 'Administrator set new user rating',
@@ -891,15 +902,16 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
-    'save_changes' => 'Wijzigingen Opslaan',
+    'save_changes'  => 'Wijzigingen Opslaan',
     'view_rating' => 'View Rating',
-    'post_rating' => 'Post Rating'
+    'post_rating' => 'Post Rating',
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]',
 );
 
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -1001,7 +1013,8 @@ $LANG_confignames['forum'] = array(
     'geshi_overall_style' => 'GeSHi Overall Code Block Style',
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
-    'geshi_header_style' => 'GeSHi Header Block Style'
+    'geshi_header_style' => 'GeSHi Header Block Style',
+
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1017,15 +1030,14 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Bijlage Instellingen'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['forum'] = array(
-    0 => array('Ja' => 1, 'Nee' => 0),
-    1 => array('Ja' => true, 'Nee' => false),
-    2 => array('Replace Home Page' => 0, 'Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
-    3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks', 'Rechter / Linker Blokken' => 'allblocks'),
-    4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
-    5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),
-    6 => array('Checked' => 1, 'Unchecked' => 0)
+$LANG_configSelect['forum'] = array(
+    0 => array(1=>'Ja', 0=>'Nee'),
+    1 => array(true=>'Ja', false=>'Nee'),
+    2 => array(0=>'Replace Home Page', 1=>'Top of Page', 2=>'After Featured Story', 3=>'Bottom of Page'),
+    3 => array('noblocks'=>'Geen blokken', 'leftblocks'=>'Linker Blokken', 'rightblocks'=>'Right Blocks', 'allblocks'=>'Right / Left Blocks'),
+    4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'Geen'),
+    5 => array('DESC'=>'Descending', 'ASC'=>'Ascending'),
+    6 => array(1=>'Checked', 0=>'Unchecked')
 );
 
 ?>

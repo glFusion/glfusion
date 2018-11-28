@@ -1,369 +1,363 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | finnish_utf-8.php                                                        |
-// |                                                                          |
-// | finnish language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2010 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
-    'access_denied'     => 'P&auml;&auml;sy Ev&auml;tty',
-    'access_denied_msg' => 'vain Juuri K&auml;ytt&auml;jill&auml; On P&auml;&auml;sy T&auml;nne.',
-    'admin'             => 'Lis&auml;osa Admin',
-    'install_header'    => 'Asenna/poista asennus',
-    'installed'         => 'Lis&auml;osa ja Lohko on asennettu,<p><i>Enjoy,<br><a href="MAILTO:support@glfusion.org">glFusion Tiimi</a></i>',
-    'uninstalled'       => 'Lis&auml;osaa Ei Ole Asennettu',
-    'install_success'   => 'Asennus Onnistui<p><b>Seuraavaksi</b>:
-        <ol><li>K&auml;yt&auml; Filemgmt Yll&auml;pitoa (admin) lis&auml;osan asetusten m&auml;&auml;rittelyyn</ol>
-        <p>Katso <a href="%s">Asennus Muistutukset</a>.',
-    'install_failed'    => 'Asennus ep&auml;onnistui -- Katso error log.',
-    'uninstall_msg'     => 'Lis&auml;osan asennus poistettu',
+    'access_denied'     => 'P&auml;&auml;sy kielletty',
+    'access_denied_msg' => 'Only Root Users have Access to this Page.  Your user name and IP have been recorded.',
+    'admin'             => 'Plugin Admin',
+    'install_header'    => 'Install/Uninstall Plugin',
+    'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:support@glfusion.org">glFusion Team</a></i>',
+    'uninstalled'       => 'The Plugin is Not Installed',
+    'install_success'   => 'Installation Successful<p><b>Next Steps</b>:
+        <ol><li>Use the Filemgmt Admin to complete the plugin configuration</ol>
+        <p>Review the <a href="%s">Install Notes</a> for more information.',
+    'install_failed'    => 'Asennus epäonnistui -- Katso error logi.',
+    'uninstall_msg'     => 'Lisäosa asennus poistettu',
     'install'           => 'Asenna',
     'uninstall'         => 'Poista asennus',
-    'editor'            => 'Lis&auml;osa Editori',
-    'warning'           => 'Asennuksen Poisto Varoitus',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Lis&auml;osa On Asennettu Ja Otettu K&auml;ytt&ouml;&ouml;n.<br>Jos haluat poistaa asennuksen, ota ensin pois k&auml;yt&ouml;st&auml;.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Lis&auml;osa Editori</a></div',
-    'WhatsNewLabel'    => 'Tiedostot',
-    'WhatsNewPeriod'   => ' Viimeiset %s p&auml;iv&auml;&auml;',
-    'new_upload'        => 'Uusi tiedosto l&auml;hetetty ',
-    'new_upload_body'   => 'uusi tiedosto l&auml;hetetty lataus jonoon ',
-    'details'           => 'Tiedoston Tiedot',
-    'filename'          => 'Tiedostonimi',
-    'uploaded_by'       => 'L&auml;hetti',
+    'editor'            => 'Laajennusten muokkain',
+    'warning'           => 'De-Install Warning',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
+    'WhatsNewLabel'    => 'Files',
+    'WhatsNewPeriod'   => ' last %s days',
+    'new_upload'        => 'New File submitted at ',
+    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'details'           => 'File Details',
+    'filename'          => 'Tiedosto',
+    'uploaded_by'       => 'Uploaded By',
     'not_found'         => 'Download Not Found',
 );
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'nav1'  => 'Asetukset',
-    'nav2'  => 'Kategoriat',
-    'nav3'  => 'Lis&auml;&auml; tiedosto',
-    'nav4'  => 'Tiedostoja (%s)',
-    'nav5'  => 'Toimimattomia (%s)'
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
+    'nav1'  => 'Settings',
+    'nav2'  => 'Categories',
+    'nav3'  => 'Add File',
+    'nav4'  => 'Downloads (%s)',
+    'nav5'  => 'Broken Files (%s)',
+    'edit'  => 'Muokkaa',
+    'file'  => 'Tiedosto',
+    'category' => 'Category Name',
+    'version' => 'Koodi',
+    'size'  => 'Size',
+    'date' => 'Päivämäärä',
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Uusi sivu",
-    'adminhome' => "Admin Etusivu",
-    'plugin_name' => "Tiedostonhallinta",
-    'searchlabel' => "Tiedosto Lista",
-    'searchlabel_results' => "Tiedosto Listaus Tulos",
-    'downloads' => "Omat Lataukset",
-    'report' => "Eniten Ladatut",
-    'usermenu1' => "Tiedostot",
-    'usermenu2' => "&nbsp;&nbsp;Parhaiten arvioitu",
-    'usermenu3' => "Lataa Tiedosto",
+    'newpage' => "New Page",
+    'adminhome' => "Yll&auml;pidon sivu",
+    'plugin_name' => "File Management",
+    'searchlabel' => "File Listing",
+    'searchlabel_results' => "File Listing Results",
+    'downloads' => "Downloads",
+    'report' => "Top Downloads",
+    'usermenu1' => "Downloads",
+    'usermenu2' => "&nbsp;&nbsp;Top Rated",
+    'usermenu3' => "Upload a file",
     'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Kirjoitti",
-    'date' => "P&auml;ivitetty",
-    'title' => "Nimi",
+    'writtenby' => "Written By",
+    'date' => "viimeksi p&auml;ivitetty",
+    'title' => "Otsikko",
     'content' => "Sis&auml;lt&ouml;",
-    'hits' => "Latauksia",
-    'Filelisting' => "Tiedosto Lista",
-    'DownloadReport' => "Lataushistoria yhdelle tiedostolle",
-    'StatsMsg1' => "Top 10 Tiedostot S&auml;il&ouml;ss&auml;",
-    'StatsMsg2' => "Ei tiedostoja m&auml;&auml;ritelty filemgmt lis&auml;osalle t&auml;ll&auml; sivustolla.",
-    'usealtheader' => "K&auml;yt&auml; Alt. Header",
+    'hits' => "Lukukertoja",
+    'Filelisting' => "File Listing",
+    'DownloadReport' => "Download History for single file",
+    'StatsMsg1' => "Top Ten Accessed Files in Repository",
+    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'usealtheader' => "Use Alt. Header",
     'url' => "URL",
     'edit' => "Muokkaa",
-    'lastupdated' => "P&auml;ivitetty",
-    'pageformat' => "Sivu Formaatti",
-    'leftrightblocks' => "Vasen & Oikea Lohkot",
-    'blankpage' => "Tyhj&auml; Sivu",
-    'noblocks' => "Ei Lohkoja",
-    'leftblocks' => "Vasen Lohkot",
-    'addtomenu' => 'Lis&auml;&auml; Valikkoon',
+    'lastupdated' => "viimeksi p&auml;ivitetty",
+    'pageformat' => "Page Format",
+    'leftrightblocks' => "Left & Right Blocks",
+    'blankpage' => "Blank Page",
+    'noblocks' => "Ei laatikoita",
+    'leftblocks' => "Left Blocks",
+    'addtomenu' => 'Add To Menu',
     'label' => 'Label',
-    'nofiles' => 'Tiedostojen m&auml;&auml;r&auml; s&auml;ilytyksess&auml; (Ladattavat Tiedostot)',
+    'nofiles' => 'Number of files in our repository (Downloads)',
     'save' => 'tallenna',
     'preview' => 'esikatselu',
     'delete' => 'poista',
     'cancel' => 'peruuta',
-    'access_denied' => 'P&auml;&auml;sy Ev&auml;tty',
-    'invalid_install' => 'Joku yritti laittomasti p&auml;&auml;st&auml; Tiedoston hallinnan Asenna/Poista asennus sivulle.  K&auml;ytt&auml;j&auml; id: ',
-    'start_install' => 'Yritet&auml;&auml;n asentaa Filemgmt Lis&auml;osa',
-    'start_dbcreate' => 'Yritet&auml;&auml;n luoda taulukot Filemgmt lis&auml;osalle',
-    'install_skip' => '... ohitettu per filemgmt.cfg',
-    'access_denied_msg' => 'Yrit&auml;t p&auml;&auml;st&auml; ilman tarvittavia oikeuksia File Mgmt hallinta sivuille.  Huom! kaikki yritykset p&auml;&auml;st&auml; hallintasivuille ilman tarvittavia oikeuksia, kirjataan!',
-    'installation_complete' => 'Asennus Valmis',
+    'access_denied' => 'P&auml;&auml;sy kielletty',
+    'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
+    'start_install' => 'Attempting to install the Filemgmt Plugin',
+    'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
+    'install_skip' => '... skipped as per filemgmt.cfg',
+    'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
+    'installation_complete' => 'Installation Complete',
     'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
-    'installation_failed' => 'Asennus ep&auml;onnistui',
+    'installation_failed' => 'Installation Failed',
     'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'system_locked' => 'Systeemi Lukittu',
+    'system_locked' => 'System Locked',
     'system_locked_msg' => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
-    'uninstall_complete' => 'Asennuksen poisto valmis',
+    'uninstall_complete' => 'Uninstall Complete',
     'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your glFusion database<br><br>You will need to manually remove all files in your file repository.',
-    'uninstall_failed' => 'Asennuksen poisto ep&auml;onnistui.',
+    'uninstall_failed' => 'Uninstall Failed.',
     'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'install_noop' => 'Lis&auml;osan Asennus',
+    'install_noop' => 'Plugin Install',
     'install_noop_msg' => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
-    'all_html_allowed' => 'HTML on sallittu',
-    'no_new_files'  => 'Ei uusia tiedostoja',
-    'no_comments'   => 'Ei uusia kommentteja',
-    'more'          => '<em>lis&auml;&auml; ...</em>'
+    'all_html_allowed' => 'HTML sallittu',
+    'no_new_files'  => 'No new files',
+    'no_comments'   => 'No new comments',
+    'more'          => '<em>more ...</em>'
+);
+
+$LANG_FILEMGMT_AUTOTAG = array(
+    'desc_file'                 => 'Link: to a File download detail page.  link_text defaults to the file title. usage: [file:<i>file_id</i> {link_text}]',
+    'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
 );
 
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
     'label'                 => 'FileMgmt',
-    'title'                 => 'FileMgmt Asetukset'
+    'title'                 => 'FileMgmt Configuration'
 );
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Ota k&auml;ytt&ouml;&ouml;n Mit&auml; Uutta lista',
-    'perpage'               => 'N&auml;ytett&auml;v&auml;t tiedostot per sivu',
-    'popular_download'      => 'Osumia suosituksi tulemiseen',
-    'newdownloads'          => 'Tiedostojen m&auml;&auml;r&auml; Uutena Top Sivulla',
-    'trimdesc'              => 'Trimmaa Tiedoston kuvaus listaukseen',
-    'dlreport'              => 'Rajoitettu p&auml;&auml;sy Lataus Raporttiin',
-    'selectpriv'            => 'Rajoitettu p&auml;&auml;sy ryhm&auml;&auml;n \'Kirjautuneet K&auml;ytt&auml;j&auml;t\' Ainoastaan',
-    'uploadselect'          => 'Salli Kirjautuneiden Lataukset',
-    'uploadpublic'          => 'Salli Tuntemattomien Lataukset',
-    'useshots'              => 'N&auml;yt&auml; Kategoria Kuvat',
-    'shotwidth'             => 'Pienoiskuvan Leveys',
-    'Emailoption'           => 'S&auml;hk&ouml;posti l&auml;hett&auml;j&auml;lle jos tiedosto hyv&auml;ksyt&auml;&auml;n',
-    'FileStore'             => 'Tiedoston Tallennus Hakemisto',
-    'SnapStore'             => 'Tiedoston Pienoiskuvan Tallennus Hakemisto',
-    'SnapCat'               => 'Kategorian Pienoiskuvan Tallennus Hakemisto',
-    'FileStoreURL'          => 'URL Tiedostoihin',
-    'FileSnapURL'           => 'URL Tiedoston Pienoiskuviin',
-    'SnapCatURL'            => 'URL Kategorian Pienoiskuviin',
-    'whatsnewperioddays'    => 'Mit&auml; Uutta P&auml;ivi&auml;',
-    'whatsnewtitlelength'   => 'Mit&auml; Uutta Otsikon Pituus',
-    'showwhatsnewcomments'  => 'N&auml;yt&auml; Kommentit Mit&auml; Uutta Lohkossa',
-    'numcategoriesperrow'   => 'Kategorioita per Rivi',
-    'numsubcategories2show' => 'Ala Kategorioita per Rivi',
-    'outside_webroot'       => 'Tallenna Tiedostot Sivuston Juuren Ulkopuolelle',
-    'enable_rating'         => 'Ota k&auml;ytt&ouml;&ouml;n arvostelut',
-    'displayblocks'         => 'N&auml;ytett&auml;v&auml;t glFusion Lohkot',
-    'silent_edit_default'   => 'Piilomuokkaus Oletus',
+    'whatsnew'              => 'Enable WhatsNew Listing',
+    'perpage'               => 'Displayed Downloads per Page',
+    'popular_download'      => 'Hits to be Popular',
+    'newdownloads'          => 'Number of Downloads as New on Top Page',
+    'trimdesc'              => 'Trim File Descriptions in Listing',
+    'dlreport'              => 'Restrict Access to Download Report',
+    'selectpriv'            => 'Restrict Access to Group \'Logged-In Users\' Only',
+    'uploadselect'          => 'Allow Logged-In Uploads',
+    'uploadpublic'          => 'Allow Anonymous Uploads',
+    'useshots'              => 'Display Category Images',
+    'shotwidth'             => 'Thumbnail Img Width',
+    'Emailoption'           => 'Email Submitter if File Approved',
+    'FileStore'             => 'Directory to Store Files',
+    'SnapStore'             => 'Directory to Store File Thumbnails',
+    'SnapCat'               => 'Directory to Store Category Thumbnails',
+    'FileStoreURL'          => 'URL to Files',
+    'FileSnapURL'           => 'URL to File Thumbnails',
+    'SnapCatURL'            => 'URL to Category Thumbnails',
+    'whatsnewperioddays'    => 'What\'s New Days',
+    'whatsnewtitlelength'   => 'What\'s New Title Length',
+    'showwhatsnewcomments'  => 'Show Comments in What\'s New Block',
+    'numcategoriesperrow'   => 'Categories per Row',
+    'numsubcategories2show' => 'Sub Categories per Row',
+    'outside_webroot'       => 'Store Files Outside Web Root',
+    'enable_rating'         => 'Enable Ratings',
+    'displayblocks'         => 'Näytä glFusion Lohkot',
+    'silent_edit_default'   => 'Silent Edit Default',
 );
 $LANG_configsubgroups['filemgmt'] = array(
-    'sg_main'               => 'P&auml;&auml; Asetukset'
+    'sg_main'               => 'Pää Asetukset'
 );
 $LANG_fs['filemgmt'] = array(
-    'fs_public'             => 'Julkiset FileMgmt Asetukset',
-    'fs_admin'              => 'FileMgmt Admin Asetukset',
+    'fs_public'             => 'Public FileMgmt Settings',
+    'fs_admin'              => 'FileMgmt Admin Settings',
     'fs_permissions'        => 'Oletus Oikeudet',
-    'fm_access'             => 'FileMgmt P&auml;&auml;sy Kontrolli',
-    'fm_general'            => 'FileMgmt Ylesi Asetukset',
+    'fm_access'             => 'FileMgmt Access Control',
+    'fm_general'            => 'FileMgmt General Settings',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'Ei yht&auml;&auml;n')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Install Aborted<br>File: plugins/filemgmt/filemgmt.php is not writeable';
 $PLG_filemgmt_MESSAGE3 = 'This plugin requires glFusion Version 1.0 or greater, upgrade aborted.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5 code not detected - upgrade aborted.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Upgrade Aborted<br>Current plugin version is not 1.3';
 
-
 // Language variables used by the plugin - general users access code.
 
-define("_MD_THANKSFORINFO","Kiitos tiedosta. Tutkimme asian piakkoin.");
-define("_MD_BACKTOTOP","Takaisin top tiedostoihin");
-define("_MD_THANKSFORHELP","Kiitos ett&auml; autoit pit&auml;m&auml;&auml;n t&auml;m&auml;n hakemiston siistin&auml;.");
-define("_MD_FORSECURITY","Turvallisuus syist&auml; nimesi ja IP osoitteesi tallennetaan v&auml;liaikaisesti.");
+define("_MD_THANKSFORINFO","Thanks for the information. We'll look into your request shortly.");
+define("_MD_BACKTOTOP","Back to Downloads Top");
+define("_MD_THANKSFORHELP","Thank you for helping to maintain this directory's integrity.");
+define("_MD_FORSECURITY","For security reasons your user name and IP address will also be temporarily recorded.");
 
-define("_MD_SEARCHFOR","Hakuehto");
-define("_MD_MATCH","Osuma");
-define("_MD_ALL","KAKKI");
-define("_MD_ANY","MIK&auml; TAHANSA");
-define("_MD_NAME","Nimi");
+define("_MD_SEARCHFOR","Search for");
+define("_MD_MATCH","Match");
+define("_MD_ALL","ALL");
+define("_MD_ANY","ANY");
+define("_MD_NAME","Aihepiirin nimi");
 define("_MD_DESCRIPTION","Kuvaus");
 define("_MD_SEARCH","Etsi");
 
-define("_MD_MAIN","P&auml;&auml;");
-define("_MD_SUBMITFILE","L&auml;het&auml; tiedosto");
-define("_MD_POPULAR","Suosittu");
-define("_MD_NEW","Uusi");
-define("_MD_TOPRATED","Parhaiten arvioitu");
+define("_MD_MAIN","Main");
+define("_MD_SUBMITFILE","Submit File");
+define("_MD_POPULAR","Popular");
+define("_MD_NEW","New");
+define("_MD_TOPRATED","Top Rated");
 
-define("_MD_NEWTHISWEEK","Uusi T&auml;ll&auml; Viikolla");
-define("_MD_UPTHISWEEK","P&auml;ivitetty T&auml;ll&auml; Viikolla");
+define("_MD_NEWTHISWEEK","New this week");
+define("_MD_UPTHISWEEK","Updated this week");
 
-define("_MD_POPULARITYLTOM","Suosio (Latauksia V&auml;himm&auml;st&auml; Enimp&auml;&auml;n)");
-define("_MD_POPULARITYMTOL","Suosio (Latauksia Enimm&auml;st&auml; V&auml;himp&auml;&auml;n)");
-define("_MD_TITLEATOZ","Otsikko (A - Z)");
-define("_MD_TITLEZTOA","Otsikko (Z - A)");
-define("_MD_DATEOLD","P&auml;iv&auml; (Vanhat tiedostot ensin)");
-define("_MD_DATENEW","P&auml;iv&auml; (Uudet tiedostot ensin)");
-define("_MD_RATINGLTOH","Arviointi (V&auml;hiten &auml;&auml;ni&auml; - Eniten &auml;&auml;ni&auml;)");
-define("_MD_RATINGHTOL","Arviointi (Eniten &auml;&auml;ni&auml; - V&auml;hiten &auml;&auml;ni&auml;)");
+define("_MD_POPULARITYLTOM","Popularity (Least to Most Hits)");
+define("_MD_POPULARITYMTOL","Popularity (Most to Least Hits)");
+define("_MD_TITLEATOZ","Title (A to Z)");
+define("_MD_TITLEZTOA","Title (Z to A)");
+define("_MD_DATEOLD","Date (Old Files Listed First)");
+define("_MD_DATENEW","Date (New Files Listed First)");
+define("_MD_RATINGLTOH","Rating (Lowest Score to Highest Score)");
+define("_MD_RATINGHTOL","Rating (Highest Score to Lowest Score)");
 
-define("_MD_NOSHOTS","Ei pienoiskuvaa saatavilla");
-define("_MD_EDITTHISDL","Muokkaa T&auml;t&auml; Tiedostoa");
+define("_MD_NOSHOTS","No Thumbnails Available");
+define("_MD_EDITTHISDL","Edit This Download");
 
-define("_MD_LISTINGHEADING","<b>Tiedostolista: %s tiedostoa l&ouml;ytyi</b>");
-define("_MD_LATESTLISTING","<b>Uusin:</b>");
-define("_MD_DESCRIPTIONC","Kuvaus:");
-define("_MD_EMAILC","S&auml;hk&ouml;posti: ");
-define("_MD_CATEGORYC","Kategoria: ");
-define("_MD_LASTUPDATEC","P&auml;ivitetty: ");
-define("_MD_DLNOW","Lataa nyt!");
+define("_MD_LISTINGHEADING","<b>File Listing: There are %s files in our database</b>");
+define("_MD_LATESTLISTING","<b>Latest Listing:</b>");
+define("_MD_DESCRIPTIONC","Description:");
+define("_MD_EMAILC","Email: ");
+define("_MD_CATEGORYC","Category: ");
+define("_MD_LASTUPDATEC","Last Update: ");
+define("_MD_DLNOW","Download Now!");
 define("_MD_VERSION","Ver");
-define("_MD_SUBMITDATE","P&auml;iv&auml;ys");
-define("_MD_DLTIMES","Ladattu %s kertaa");
-define("_MD_FILESIZE","Tiedostokoko");
-define("_MD_SUPPORTEDPLAT","Tuetut Alustat");
-define("_MD_HOMEPAGE","Kotisivu");
-define("_MD_HITSC","Osumia: ");
-define("_MD_RATINGC","Arvio: ");
-define("_MD_ONEVOTE","1 &auml;&auml;ni");
+define("_MD_SUBMITDATE","Päivämäärä");
+define("_MD_DLTIMES","Downloaded %s times");
+define("_MD_FILESIZE","File Size");
+define("_MD_SUPPORTEDPLAT","Supported Platforms");
+define("_MD_HOMEPAGE","Home Page");
+define("_MD_HITSC","Hits: ");
+define("_MD_RATINGC","Rating: ");
+define("_MD_ONEVOTE","1 vote");
 define("_MD_NUMVOTES","(%s)");
 define("_MD_NOPOST","N/A");
-define("_MD_NUMPOSTS","%s &auml;&auml;nt&auml;");
-define("_MD_COMMENTSC","Kommentit: ");
-define ("_MD_ENTERCOMMENT", "Luo ensimm&auml;inen kommentti");
-define("_MD_RATETHISFILE","Arvioi t&auml;m&auml; tiedosto");
-define("_MD_MODIFY","Muokkaa");
-define("_MD_REPORTBROKEN","Ilmoita toimimaton tiedosto");
-define("_MD_TELLAFRIEND","Kerro kaverille");
-define("_MD_VSCOMMENTS","Katso/L&auml;het&auml; kommentteja");
+define("_MD_NUMPOSTS","%s votes");
+define("_MD_COMMENTSC","Comments: ");
+define ("_MD_ENTERCOMMENT", "Create first comment");
+define("_MD_RATETHISFILE","Rate this File");
+define("_MD_MODIFY","Modify");
+define("_MD_REPORTBROKEN","Report Broken File");
+define("_MD_TELLAFRIEND","Tell a Friend");
+define("_MD_VSCOMMENTS","View/Send Comments");
 define("_MD_EDIT","Muokkaa");
 
-define("_MD_THEREARE","%s tiedostoa tietokannassa");
-define("_MD_LATESTLIST","Uusin");
+define("_MD_THEREARE","There are %s files in our database");
+define("_MD_LATESTLIST","Latest Listings");
 
-define("_MD_REQUESTMOD","Tiedoston Muokkaus Pyynt&ouml;");
-define("_MD_FILE","Tiedosto");
-define("_MD_FILEID","Tiedosto ID: ");
-define("_MD_FILETITLE","Nimi: ");
-define("_MD_DLURL","Lataus URL: ");
-define("_MD_HOMEPAGEC","Kotisivu: ");
-define("_MD_VERSIONC","Versio: ");
-define("_MD_FILESIZEC","Tiedoston koko: ");
-define("_MD_NUMBYTES","%s tavua");
-define("_MD_PLATFORMC","Alusta: ");
-define("_MD_CONTACTEMAIL","Yhteys s&auml;hk&ouml;posti: ");
-define("_MD_SHOTIMAGE","Pienoiskuva: ");
-define("_MD_SENDREQUEST","L&auml;het&auml; pyynt&ouml;");
+define("_MD_REQUESTMOD","Request Download Modification");
+define("_MD_FILE","File");
+define("_MD_FILEID","File ID: ");
+define("_MD_FILETITLE","Title: ");
+define("_MD_DLURL","Download URL: ");
+define("_MD_HOMEPAGEC","Home Page: ");
+define("_MD_VERSIONC","Version: ");
+define("_MD_FILESIZEC","File Size: ");
+define("_MD_NUMBYTES","%s bytes");
+define("_MD_PLATFORMC","Platform: ");
+define("_MD_CONTACTEMAIL","Contact Email: ");
+define("_MD_SHOTIMAGE","Thumbnail Img: ");
+define("_MD_SENDREQUEST","Send Request");
 
-define("_MD_VOTEAPPRE","Kiitos &auml;&auml;nest&auml;.");
-define("_MD_THANKYOU","Kiitos ett&auml; uhrasit aikaasi &auml;&auml;nest&auml;m&auml;ll&auml; sivustollamme %s"); // %s is your site name
-define("_MD_VOTEFROMYOU","K&auml;ytt&auml;jien palaute auttaa muita vierailijoita p&auml;&auml;tt&auml;m&auml;&auml;n mik&auml; tiedosto kannattaa ladata.");
-define("_MD_VOTEONCE","&auml;l&auml; &auml;&auml;nest&auml; samaa enemmm&auml;n kuin yksi kertaa.");
-define("_MD_RATINGSCALE","Asteikko on 1 - 10, jossa 1 on huono ja 10 on mahtava.");
-define("_MD_BEOBJECTIVE","Ole objektiivinen, jos joku saa 1 tai 10, arvioinnilla ei ole pointtia.");
-define("_MD_DONOTVOTE","&auml;l&auml; &auml;&auml;nest&auml; omaasi.");
-define("_MD_RATEIT","Arvioi!");
+define("_MD_VOTEAPPRE","Your vote is appreciated.");
+define("_MD_THANKYOU","Thank you for taking the time to vote here at %s"); // %s is your site name
+define("_MD_VOTEFROMYOU","Input from users such as yourself will help other visitors better decide which file to download.");
+define("_MD_VOTEONCE","Please do not vote for the same resource more than once.");
+define("_MD_RATINGSCALE","The scale is 1 - 10, with 1 being poor and 10 being excellent.");
+define("_MD_BEOBJECTIVE","Please be objective, if everyone receives a 1 or a 10, the ratings aren't very useful.");
+define("_MD_DONOTVOTE","Do not vote for your own resource.");
+define("_MD_RATEIT","Rate It!");
 
-define("_MD_INTFILEAT","Mielenkiintoinen Ladattava Tiedosto Sivustolla %s"); // %s is your site name
-define("_MD_INTFILEFOUND","L&ouml;ysin mielenkiintoisen ladattavan tiedoston sivustolta %s"); // %s is your site name
+define("_MD_INTFILEAT","Interesting Download File at %s"); // %s is your site name
+define("_MD_INTFILEFOUND","Here is an interesting download file I have found at %s"); // %s is your site name
 
-define("_MD_RECEIVED","Olemme saaneet tiedoston tiedot. Kiitos!");
-define("_MD_WHENAPPROVED","Saat s&auml;hk&ouml;postia kun tiedosto on hyv&auml;ksytty.");
-define("_MD_SUBMITONCE","L&auml;het&auml; tiedosto/scripti vain kerran.");
-define("_MD_APPROVED", "Tiedostosi on hyv&auml;ksytty");
-define("_MD_ALLPENDING","Kaikki tiedosto/scripti tiedot l&auml;hetet&auml;&auml;n jonoon odottomaan tarkistusta.");
-define("_MD_DONTABUSE","K&auml;ytt&auml;j&auml;tunnus ja IP tallennetaan, joten &auml;l&auml; v&auml;&auml;rink&auml;yt&auml; toimintoa.");
-define("_MD_TAKEDAYS","Saattaa kest&auml;&auml; useita p&auml;ivi&auml;kin ennenkuin tiedostosi/scriptisi on lis&auml;tty tietokantaan.");
-define("_MD_FILEAPPROVED", "Tiedostosi on lis&auml;tty tiedostos&auml;il&ouml;&ouml;n");
+define("_MD_RECEIVED","We received your download information. Thanks!");
+define("_MD_WHENAPPROVED","You'll receive an E-mail when it's approved.");
+define("_MD_SUBMITONCE","Submit your file/script only once.");
+define("_MD_APPROVED", "Your file has been approved");
+define("_MD_ALLPENDING","All file/script information are posted pending verification.");
+define("_MD_DONTABUSE","Username and IP are recorded, so please don't abuse the system.");
+define("_MD_TAKEDAYS","It may take several days for your file/script to be added to our database.");
+define("_MD_FILEAPPROVED", "Your file has been added to the file repository");
 
 define("_MD_RANK","Rank");
-define("_MD_CATEGORY","Kategoria");
-define("_MD_HITS","Osumia");
+define("_MD_CATEGORY","Category");
+define("_MD_HITS","Lukukertoja");
 define("_MD_RATING","Arvio");
-define("_MD_VOTE","Arvioi");
+define("_MD_VOTE","Vote");
 
-define("_MD_SEARCHRESULT4","Hakutulokset haulle <b>%s</b>:");
-define("_MD_MATCHESFOUND","%s sopivaa l&ouml;ytyi.");
-define("_MD_SORTBY","J&auml;rjest&auml;:");
-define("_MD_TITLE","Nimi");
-define("_MD_DATE","P&auml;iv&auml;");
-define("_MD_POPULARITY","Suosio");
-define("_MD_CURSORTBY","Tiedostot j&auml;rjestetty: ");
-define("_MD_FOUNDIN","L&ouml;ytyi:");
+define("_MD_SEARCHRESULT4","Search results for <b>%s</b>:");
+define("_MD_MATCHESFOUND","%s matche(s) found.");
+define("_MD_SORTBY","Sort by:");
+define("_MD_TITLE","Otsikko");
+define("_MD_DATE","Päivämäärä");
+define("_MD_POPULARITY","Popularity");
+define("_MD_CURSORTBY","Files currently sorted by: ");
+define("_MD_FOUNDIN","Found in:");
 define("_MD_PREVIOUS","Edellinen");
 define("_MD_NEXT","Seuraava");
-define("_MD_NOMATCH","Ei l&ouml;ytynyt hakuehdoillasi");
+define("_MD_NOMATCH","No matches found to your query");
 
 define("_MD_TOP10","%s Top 10"); // %s is a downloads category name
-define("_MD_CATEGORIES","Kategoriat");
+define("_MD_CATEGORIES","Categories");
 
 define("_MD_SUBMIT","L&auml;het&auml;");
 define("_MD_CANCEL","Peruuta");
 
-define("_MD_BYTES","Tavua");
-define("_MD_ALREADYREPORTED","Olet jo l&auml;hett&auml;nyt raportin t&auml;st&auml;.");
-define("_MD_MUSTREGFIRST","Valitamme, mutta sinulla ei ole oikeuksia suorittaa t&auml;t&auml; toimenpidett&auml;.<br>Rekister&ouml;idy tai kirjaudu ensin!");
-define("_MD_NORATING","Arvioo ei valittu.");
-define("_MD_CANTVOTEOWN","Et voi &auml;&auml;nest&auml;&auml; kohdetta jonka l&auml;hetit.<br>Kaikki &auml;&auml;net arkistoidaan ja tarkistetaan.");
+define("_MD_BYTES","Bytes");
+define("_MD_ALREADYREPORTED","You have already submitted a broken report for this resource.");
+define("_MD_MUSTREGFIRST","Sorry, you don't have the permission to perform this action.<br>Please register or login first!");
+define("_MD_NORATING","No rating selected.");
+define("_MD_CANTVOTEOWN","You cannot vote on the resource you submitted.<br>All votes are logged and reviewed.");
 
 // Language variables used by the plugin - Admin code.
 
-define("_MD_RATEFILETITLE","Arkistoi Tiedosto Arvio");
-define("_MD_ADMINTITLE","Tiedoston Hallinta Yll&auml;pito");
-define("_MD_UPLOADTITLE","Tiedostonhallinta - Lis&auml;&auml; uusi tiedosto");
-define("_MD_CATEGORYTITLE","Tiedosto Lista - Kategoria N&auml;kym&auml;");
-define("_MD_DLCONF","Ladattavien Tiedostojen Asetukset");
-define("_MD_GENERALSET","Asetukset");
-define("_MD_ADDMODFILENAME","Lis&auml;&auml; uusi Tiedosto");
-define ("_MD_ADDCATEGORYSNAP", 'Valinnainen kuva:<div style="font-size:8pt;">Vain Top Level Kategoriat</div>');
-define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Kuvan korkeus muutetaan kokoon 50</span>');
-define("_MD_ADDMODCATEGORY","<b>Kategoriat:</b> Lis&auml;&auml;, Muokkaa, ja Poista Kategorioita");
-define("_MD_DLSWAITING","Tiedostot jotka odottaa vahvistusta");
-define("_MD_BROKENREPORTS","Tiedosto Raportit");
-define("_MD_MODREQUESTS","Tiedoston Tietojen Muokkaus Pyynt&ouml;");
+define("_MD_RATEFILETITLE","Record your file rating");
+define("_MD_ADMINTITLE","File Management Administration");
+define("_MD_UPLOADTITLE","File Management - Add new file");
+define("_MD_CATEGORYTITLE","File Listing - Category View");
+define("_MD_DLCONF","Downloads Configuration");
+define("_MD_GENERALSET","Configuration Settings");
+define("_MD_ADDMODFILENAME","Add new file");
+define ("_MD_ADDCATEGORYSNAP", 'Optional Image:<div style="font-size:8pt;">Top Level Categories only</div>');
+define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
+define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
+define("_MD_DLSWAITING","Downloads Waiting for Validation");
+define("_MD_BROKENREPORTS","Broken File Reports");
+define("_MD_MODREQUESTS","Download Info Modification Requests");
 define("_MD_EMAILOPTION","Email submitter if file approved: ");
-define("_MD_COMMENTOPTION","Salli kommentointi:");
-define("_MD_SUBMITTER","L&auml;hett&auml;j&auml;: ");
-define("_MD_DOWNLOAD","Lataa");
-define("_MD_FILELINK","Tiedostolinkki");
-define("_MD_SUBMITTEDBY","L&auml;hetti: ");
+define("_MD_COMMENTOPTION","Enable comments:");
+define("_MD_SUBMITTER","Submitter: ");
+define("_MD_DOWNLOAD","Download");
+define("_MD_FILELINK","File Link");
+define("_MD_SUBMITTEDBY","Submitted by: ");
 define("_MD_APPROVE","Hyv&auml;ksy");
 define("_MD_DELETE","Poista");
-define("_MD_NOSUBMITTED","Ei uusia l&auml;hetettyj&auml; tiedostoja.");
-define("_MD_ADDMAIN","Lis&auml;&auml; P&auml;&auml; Kategoria");
-define("_MD_TITLEC","Otsikko: ");
-define("_MD_CATSEC", "Katsomis Oikeus: ");
-define("_MD_UPLOADSEC", "Lataus Oikeus: ");
-define("_MD_IMGURL","<br>Kuvan Tiedostonimi <font size='-2'> (sijaitsee filemgmt_data/category_snaps hakemistossa - kuvan korkeus muutetaan kokoon 50)</font>");
+define("_MD_NOSUBMITTED","No New Submitted Downloads.");
+define("_MD_ADDMAIN","Add MAIN Category");
+define("_MD_TITLEC","Title: ");
+define("_MD_CATSEC", "View Access: ");
+define("_MD_UPLOADSEC", "Upload Access: ");
+define("_MD_IMGURL","<br>Image Filename <font size='-2'> (located in your filemgmt_data/category_snaps directory - Image height will be resized to 50)</font>");
 define("_MD_ADD","Lis&auml;&auml;");
-define("_MD_ADDSUB","Lis&auml;&auml; Ala Kategoria");
+define("_MD_ADDSUB","Add SUB-Category");
 define("_MD_IN","in");
-define("_MD_ADDNEWFILE","Lis&auml;&auml; uusi tiedosto");
-define("_MD_MODCAT","Muokkaa kategoriaa");
-define("_MD_MODDL","Muokkaa tiedoston tietoja");
+define("_MD_ADDNEWFILE","Add New File");
+define("_MD_MODCAT","Modify Category");
+define("_MD_MODDL","Modify Download Info");
 define("_MD_USER","K&auml;ytt&auml;j&auml;");
-define("_MD_IP","IP Osoite");
-define("_MD_USERAVG","K&auml;ytt&auml;j&auml; AVG Arvio");
-define("_MD_TOTALRATE","Kaikki Arviot");
+define("_MD_IP","IP Address");
+define("_MD_USERAVG","User AVG Rating");
+define("_MD_TOTALRATE","Total Ratings");
 define("_MD_NOREGVOTES","No Registered User Votes");
 define("_MD_NOUNREGVOTES","No Unregistered User Votes");
 define("_MD_VOTEDELETED","Vote data deleted.");
@@ -384,8 +378,8 @@ define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Updated Successfully!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Is&auml;nt&auml;kategoria:");
-define("_MD_SAVE","Tallenna muutokset");
+define("_MD_PARENT","Parent Category:");
+define("_MD_SAVE","Tallenna muutolset");
 define("_MD_CATDELETED","Category Deleted.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
 define("_MD_YES","Kyll&auml;");
@@ -424,9 +418,9 @@ define("_MD_VISITAT","Visit our downloads section at %s");
 define("_MD_DLRATINGS","Download Rating (total votes: %s)");
 define("_MD_CONFUPDATED","Configuration Updated Successfully!");
 define("_MD_NOFILES","No Files Found");
-define("_MD_APPROVEREQ","* T&auml;h&auml;n kategoriaan l&auml;hetetyt tiedostot vaatii hyv&auml;ksynn&auml;n");
-define("_MD_REQUIRED","* Vaaditaan");
-define("_MD_SILENTEDIT","Piilo Muokkaus: ");
+define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
+define("_MD_REQUIRED","* Required field");
+define("_MD_SILENTEDIT","Silent Edit: ");
 
 // Additional glFusion Defines
 define("_MD_NOVOTE","Not rated yet");
@@ -436,7 +430,7 @@ define("_GL_ERRORNOUPLOAD","ERROR: You do not have upload privilages");
 define("_GL_ERRORNOADMIN","ERROR: This function is restricted");
 define("_GL_NOUSERACCESS","does not have access to the Document Repository");
 define("_MD_ERRUPLOAD","Filemgmt: Unable to upload - check permissions for the file store directories");
-define("_MD_DLFILENAME","Tiedostonimi: ");
+define("_MD_DLFILENAME","Filename: ");
 define("_MD_REPLFILENAME","Replacement  File: ");
 define("_MD_SCREENSHOT","Screenshot");
 define("_MD_SCREENSHOT_NA",'&nbsp;');

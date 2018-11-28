@@ -1,38 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | spanish_colombia_utf-8.php                                               |
-// |                                                                          |
-// | Spanish (Colombia) language file                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2014 by NewRoute Inc.                                      |
-// | Author:                                                                  |
-// | John Toro            john.toro@newroute.net                              |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -64,7 +49,7 @@ $LANG_FM00 = array (
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'instructions' => 'Para modificar o borrar un archivo, haz clic sobre el icono: <img src="/layout/'.$_CONF['theme'].'/images/admin/edit.png" /> o <img src="/layout/'.$_CONF['theme'].'/images/admin/delete.png" /> correspondiente. Para ver o modificar categorías, selecciona la opción: <b>Categorías</b> arriba.',
+    'instructions' => 'To modify or delete a file, click on the files\'s edit icon below. To view or modify categories, select the Categories option above.',
     'nav1'  => 'Opciones',
     'nav2'  => 'Categorías',
     'nav3'  => 'Cargar Archivo',
@@ -80,7 +65,7 @@ $LANG_FM02 = array(
 
 $LANG_FILEMGMT = array(
     'newpage' => "Nueva página",
-    'adminhome' => "Admin Home",
+    'adminhome' => "Página de Inicio - Administrador",
     'plugin_name' => "Descargas",
     'searchlabel' => "Lista de archivos",
     'searchlabel_results' => "Resultados de la lista de archivos",
@@ -176,7 +161,7 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Sub Categories per row',
     'outside_webroot'       => 'Store Files Outside Web Root',
     'enable_rating'         => 'Habilitar Calificaciones',
-    'displayblocks'         => 'Display glFusion Blocks',
+    'displayblocks'         => 'Mostrar los Bloques glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
 );
 $LANG_configsubgroups['filemgmt'] = array(
@@ -190,20 +175,17 @@ $LANG_fs['filemgmt'] = array(
     'fm_general'            => 'General',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'Si', 0=>'No'),
+    1 => array(true=>'Si', false=>'No'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Bloque izquierdo', 1=>'Bloques a la Derecha', 2=>'Bloque derecho e izquierdo', 3=>'Ninguno')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Instalación de la extensión Filemgmt abortada<br>El archivo: plugins/filemgmt/filemgmt.php no se puede escribir';
 $PLG_filemgmt_MESSAGE3 = 'Esta extensión requiere la versión 1.0 de glFusion o una mas nueva, actualización abortada.';
 $PLG_filemgmt_MESSAGE4 = 'Código de la versión 1.5 de la Extensión no detectado - actualización abortada.';
 $PLG_filemgmt_MESSAGE5 = 'Actualización de la extensión Filemgmt abortada<br>la versión actual no es la 1.3';
-
 
 // Language variables used by the plugin - general users access code.
 
@@ -287,7 +269,7 @@ define("_MD_SHOTIMAGE","Vista miniatura: ");
 define("_MD_SENDREQUEST","Enviar Petición");
 
 define("_MD_VOTEAPPRE","Su voto es valorado por nosotros,  gracias por votar.");
-define("_MD_THANKYOU","Gracias por tomarse el tiempo de votar en  %s");// %s is your site name
+define("_MD_THANKYOU","Gracias por tomarse el tiempo de votar en  %s"); // %s is your site name
 define("_MD_VOTEFROMYOU","Las votaciones suministradas por usuarios como usted ayudarán a futuros usuarios a decidir la descarga apropiada.");
 define("_MD_VOTEONCE","Por favor no vote por la misma descarga más de una vez.");
 define("_MD_RATINGSCALE","La escala es de 1 - 10, siendo 1 mala y 10 excelente.");
@@ -295,8 +277,8 @@ define("_MD_BEOBJECTIVE","Por favor sea objetivo, si todos reciben 1 o 10, las c
 define("_MD_DONOTVOTE","No votes por tu propio recurso.");
 define("_MD_RATEIT","Votar");
 
-define("_MD_INTFILEAT","Descargas interesantes en  %s");// %s is your site name
-define("_MD_INTFILEFOUND","Aqui hay una descarga interesante que he encontrado en  %s");// %s is your site name
+define("_MD_INTFILEAT","Descargas interesantes en  %s"); // %s is your site name
+define("_MD_INTFILEFOUND","Aqui hay una descarga interesante que he encontrado en  %s"); // %s is your site name
 
 define("_MD_RECEIVED","Hemos recibido la información de tu descarga. gracias!");
 define("_MD_WHENAPPROVED","Usted recibirá un E-mail cuando sea aprobado.");
@@ -309,7 +291,7 @@ define("_MD_FILEAPPROVED", "Su archivo ha sido agregado a las descargas");
 
 define("_MD_RANK","Posición");
 define("_MD_CATEGORY","Categoría");
-define("_MD_HITS","Hits");
+define("_MD_HITS","Accesos");
 define("_MD_RATING","Calificación");
 define("_MD_VOTE","Voto");
 
@@ -325,7 +307,7 @@ define("_MD_PREVIOUS","Anterior");
 define("_MD_NEXT","Siguiente");
 define("_MD_NOMATCH","No hay coincidencias encontradas para");
 
-define("_MD_TOP10","Los 10 mas de %s ");// %s is a downloads category name
+define("_MD_TOP10","Los 10 mas de %s "); // %s is a downloads category name
 define("_MD_CATEGORIES","Categorías");
 
 define("_MD_SUBMIT","Enviar");
@@ -346,8 +328,8 @@ define("_MD_CATEGORYTITLE","Lista de Archivos - Ver categoría");
 define("_MD_DLCONF","Configuración de las descargas");
 define("_MD_GENERALSET","Opciones de Configuración");
 define("_MD_ADDMODFILENAME","Agregar nuevo archivo");
-define ("_MD_ADDCATEGORYSNAP", "Imagen opcional: <small>(<i>Sólo Categorías de alto nivel</i>)</small>");
-define ("_MD_ADDIMAGENOTE", "(<i>Alto de la imagen será modificada a 50 px)</i>");
+define ("_MD_ADDCATEGORYSNAP", 'Imagen opcional: <small>(<i>Sólo Categorías de alto nivel</i>)</small>');
+define ("_MD_ADDIMAGENOTE", '(<i>Alto de la imagen será modificada a 50 px)</i>');
 define("_MD_ADDMODCATEGORY","<b>Categorías:</b> agregar, Modificar, y borrar Categorías");
 define("_MD_DLSWAITING","Descargas esperando por validación");
 define("_MD_BROKENREPORTS","Reporte de  archivos dañados");
@@ -395,7 +377,7 @@ define("_MD_OWNER","Propietario: ");
 define("_MD_NOMODREQ","Sin petición de modificación de la descarga.");
 define("_MD_DBUPDATED","Actualización de la base de datos completada!");
 define("_MD_MODREQDELETED","Petición de modificación eliminada.");
-define("_MD_IMGURLMAIN","Imagen (Alto de la imagen será modificada a 50 px): ");
+define("_MD_IMGURLMAIN",'Imagen (Alto de la imagen será modificada a 50 px): ');
 define("_MD_PARENT","Categoría relacionada:");
 define("_MD_SAVE","Guardar cambios");
 define("_MD_CATDELETED","Categoría eliminada.");
@@ -431,7 +413,7 @@ define("_MD_IMGWIDTH","Ancho de la imagen de miniatura: ");
 define("_MD_MUSTBEVALID","Vista en miniatura de la imagen debe estar bajo el directorio %s (ej shot.gif). Dejalo en blanco si no hay archivo de imagen.");
 define("_MD_REGUSERVOTES","Votos de usuarios registrados (total: %s)");
 define("_MD_ANONUSERVOTES","Votos de usuarios anónimos (total: %s)");
-define("_MD_YOURFILEAT","Tu archivo enviado a %s");// this is an approved mail subject. %s is your site name
+define("_MD_YOURFILEAT","Tu archivo enviado a %s"); // this is an approved mail subject. %s is your site name
 define("_MD_VISITAT","Visita nuestra sección de descarga en  %s");
 define("_MD_DLRATINGS","Calificación de descargas (<i>total de votos: %s</i>)");
 define("_MD_CONFUPDATED","Configuración actualizada satisfactoriamente!");

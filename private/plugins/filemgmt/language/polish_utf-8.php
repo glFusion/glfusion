@@ -1,38 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | polish_utf-8.php                                                        |
-// |                                                                          |
-// | Polish language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -190,20 +175,17 @@ $LANG_fs['filemgmt'] = array(
     'fm_general'            => 'FileMgmt Ustawienia Ogólne',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('Tak' => 1, 'Nie' => 0),
-    1 => array('Tak' => TRUE, 'Nie' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Lewe bloki' => 0, 'Prawe bloki' => 1, 'Lewe & Prawe Bloki' => 2, 'Żaden' => 3)
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'Włącz', 0=>'False'),
+    1 => array(true=>'Włącz', false=>'False'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Lewe bloki', 1=>'Prawe Bloki', 2=>'Lewe i Prawe Bloki', 3=>'Brak')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Wtyczka Filemgmt instalacja przerwana<br>Plik: plugins/filemgmt/filemgmt.php nie można zapisać';
 $PLG_filemgmt_MESSAGE3 = 'Ta wtyczka wymaga programu glFusion w wersji 1.0 lub nowszej, aktualizacja została przerwana.';
 $PLG_filemgmt_MESSAGE4 = 'Nie wykryto kodu wtyczki w wersji 1.5 - aktualizacja przerwana.';
 $PLG_filemgmt_MESSAGE5 = 'Wtyczka Filemgmt aktualizacja przerwana<br>Obecna wersja wtyczki to nie 1.3';
-
 
 // Language variables used by the plugin - general users access code.
 

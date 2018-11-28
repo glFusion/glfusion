@@ -1,30 +1,21 @@
 <?php
-###############################################################################
-# german_utf-8.php
-#
-# This is the German language file for the glFusion Links Plugin
-# addressing the user as "Du" (informal German).
-#
-# Authors: Dirk Haun <dirk AT haun-online DOT de>
-#          Markus Wollschläger
-# Modifiziert: August 09 Tony Kluever
-# Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Links Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2007 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*   Tom Willett - twillett AT users DOT sourceforge DOT net
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -34,11 +25,16 @@ global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
+# $LANGXX[YY]:    $LANG - variable name
+#                 XX - file id number
+#                 YY - phrase id number
 ###############################################################################
 
+/**
+* the link plugin's lang array
+*
+* @global array $LANG_LINKS
+*/
 $LANG_LINKS = array(
     10 => 'Einsendungen',
     14 => 'Links',
@@ -57,37 +53,49 @@ $LANG_LINKS = array(
     125 => 'Kategorien',
     126 => 'Du bist hier:',
     'root' => 'Root',
-    'error_header' => 'Link-Einsendung Fehler',
+    'error_header'  => 'Link-Einsendung Fehler',
     'verification_failed' => 'Die angegebene URL scheint keine gültige URL zu sein',
     'category_not_found' => 'Die angegebene Kategorie scheint fehlerhaft zu sein',
-    'no_links' => 'No links have been entered.'
+    'no_links'  => 'No links have been entered.',
 );
 
 ###############################################################################
 # for stats
-
+/**
+* the link plugin's lang stats array
+*
+* @global array $LANG_LINKS_STATS
+*/
 $LANG_LINKS_STATS = array(
     'links' => 'Anzahl der Links (Klicks)',
     'stats_headline' => 'Top 10 der Links',
     'stats_page_title' => 'Links',
     'stats_hits' => 'Aufrufe',
-    'stats_no_hits' => 'Es wurden noch keine Links eingetragen.'
+    'stats_no_hits' => 'Es wurden noch keine Links eingetragen.',
 );
 
 ###############################################################################
 # for the search
-
+/**
+* the link plugin's lang search array
+*
+* @global array $LANG_LINKS_SEARCH
+*/
 $LANG_LINKS_SEARCH = array(
-    'results' => 'Ergebnisse: Links',
-    'title' => 'Titel',
-    'date' => 'Hinzugefügt',
-    'author' => 'Eingesendet von',
-    'hits' => 'Aufrufe'
+ 'results' => 'Ergebnisse: Links',
+ 'title' => 'Titel',
+ 'date' => 'Hinzugefügt',
+ 'author' => 'Eingesendet von',
+ 'hits' => 'Aufrufe'
 );
 
 ###############################################################################
 # for the submission form
-
+/**
+* the link plugin's lang submit form array
+*
+* @global array $LANG_LINKS_SUBMIT
+*/
 $LANG_LINKS_SUBMIT = array(
     1 => 'Einen Link einsenden',
     2 => 'Link',
@@ -100,7 +108,14 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Kategorie',
     11 => 'Link-Einsendungen',
-    12 => 'Eingereicht von'
+    12 => 'Eingereicht von',
+);
+
+###############################################################################
+# autotag description
+
+$LANG_LI_AUTOTAG = array(
+    'desc_link'                 => 'Link: zur Link-Detail-Seite. (Standart link_text: Link-Name). Anwendung: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -110,9 +125,10 @@ $PLG_links_MESSAGE1 = "Danke für Deinen Beitrag zu {$_CONF['site_name']}. Dein 
 $PLG_links_MESSAGE2 = 'Dein Link wurde erfolgreich gespeichert.';
 $PLG_links_MESSAGE3 = 'Der Link wurde erfolgreich gelöscht.';
 $PLG_links_MESSAGE4 = "Danke für Deinen Link. Du findest ihn nun unter den <a href=\"{$_CONF['site_url']}/links/index.php\">Links</a>.";
-$PLG_links_MESSAGE5 = 'Keine ausreichenden Rechte, diese Kategorie anzusehen.';
+$PLG_links_MESSAGE5 = "Keine ausreichenden Rechte, diese Kategorie anzusehen.";
 $PLG_links_MESSAGE6 = 'Keine ausreichenden Rechte, diese Kategorie zu bearbeiten.';
 $PLG_links_MESSAGE7 = 'Bitte gib den Namen der Kategorie und die Beschreibung ein.';
+
 $PLG_links_MESSAGE10 = 'Die Kategorie wurde erfolgreich gespeichert.';
 $PLG_links_MESSAGE11 = 'ID nicht "site" oder "user" nennen - dies sind reservierte Worte zum internen Gebrauch.';
 $PLG_links_MESSAGE12 = 'Du versuchst eine Oberkategorie zur Unterkategorie seiner eigenen Unterkategorie zu machen. Dies würde eine verwaiste Kategorie produzieren. Bitte erst die Unterkategorie einen Level höher verschieben.';
@@ -127,8 +143,12 @@ $PLG_links_MESSAGE3001 = 'Link-Plugin Aktualisierung: Diese Version kann nicht a
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
-# admin/plugins/links/index.php
-
+# admin/link.php
+/**
+* the link plugin's lang admin array
+*
+* @global array $LANG_LINKS_ADMIN
+*/
 $LANG_LINKS_ADMIN = array(
     1 => 'Link-Editor',
     2 => 'Link-ID',
@@ -184,57 +204,53 @@ $LANG_LINKS_ADMIN = array(
     64 => 'Soll diese Kategorie wirklich gelöscht werden?',
     65 => 'Link überprüfen und freigeben',
     66 => 'Hier kannst Du Deine Links erstellen oder bearbeiten.',
-    67 => 'Hier kannst Du Deine Link-Kategorien erstellen oder bearbeiten.'
+    67 => 'Hier kannst Du Deine Link-Kategorien erstellen oder bearbeiten.',
 );
-
 
 $LANG_LINKS_STATUS = array(
-    100 => 'Fortsetzen',
-    101 => 'Wechsel Protokolle',
-    200 => 'OK',
-    201 => 'Erstellt',
-    202 => 'Akzeptiert',
-    203 => 'Unmaßgebliche Information',
-    204 => 'Kein Inhalt',
-    205 => 'Inhalt zurücksetzten',
-    206 => 'Teilweiser Inhalt',
-    300 => 'Mehrfache Möglichkeiten',
-    301 => 'Permanent verschoben',
-    302 => 'Gefunden',
-    303 => 'Siehe andere',
-    304 => 'Nicht verändert',
-    305 => 'Proxy verwenden',
-    307 => 'Vorübergehend umleiten',
-    400 => 'Ungültige Anfrage',
-    401 => 'Nicht autorisiert',
-    402 => 'Zahlung erbeten',
-    403 => 'Kein Zugang',
-    404 => 'Nicht gefunden',
-    405 => 'Methode nicht erlaubt',
-    406 => 'Nicht akzeptabel',
-    407 => 'Proxy-Authentifizierung erforderlich',
-    408 => 'Anfragedauer überschritten',
-    409 => 'Konflikt',
-    410 => 'Verschwunden',
-    411 => 'Länge erforderlich',
-    412 => 'Voraussetzung nicht refüllt',
-    413 => 'Anfrage-Objekt zu groß',
-    414 => 'Anfrage-URI zu lang',
-    415 => 'Medientyp nicht unterstützt',
-    416 => 'Angeforderte Operation nicht ausführbar',
-    417 => 'Erwartung fehlgeschlagen',
-    500 => 'Interner Server Fehler',
-    501 => 'Nicht Implementiert',
-    502 => 'Ungültige Verbindung',
-    503 => 'Service nicht verfügbar',
-    504 => 'Verbindung Zeitüberschreitung',
-    505 => 'HTTP Version wird nicht unterstützt',
-    999 => 'Zeitüberschreitung der Verbindung'
+    100 => "Fortsetzen",
+    101 => "Wechsel Protokolle",
+    200 => "OK",
+    201 => "Erstellt",
+    202 => "Akzeptiert",
+    203 => "Unmaßgebliche Information",
+    204 => "Kein Inhalt",
+    205 => "Inhalt zurücksetzten",
+    206 => "Teilweiser Inhalt",
+    300 => "Mehrfache Möglichkeiten",
+    301 => "Permanent verschoben",
+    302 => "Gefunden",
+    303 => "Siehe andere",
+    304 => "Nicht verändert",
+    305 => "Proxy verwenden",
+    307 => "Vorübergehend umleiten",
+    400 => "Ungültige Anfrage",
+    401 => "Nicht autorisiert",
+    402 => "Zahlung erbeten",
+    403 => "Kein Zugang",
+    404 => "Nicht gefunden",
+    405 => "Methode nicht erlaubt",
+    406 => "Nicht akzeptabel",
+    407 => "Proxy-Authentifizierung erforderlich",
+    408 => "Anfragedauer überschritten",
+    409 => "Konflikt",
+    410 => "Verschwunden",
+    411 => "Länge erforderlich",
+    412 => "Voraussetzung nicht refüllt",
+    413 => "Anfrage-Objekt zu groß",
+    414 => "Anfrage-URI zu lang",
+    415 => "Medientyp nicht unterstützt",
+    416 => "Angeforderte Operation nicht ausführbar",
+    417 => "Erwartung fehlgeschlagen",
+    500 => "Interner Server Fehler",
+    501 => "Nicht Implementiert",
+    502 => "Ungültige Verbindung",
+    503 => "Service nicht verfügbar",
+    504 => "Verbindung Zeitüberschreitung",
+    505 => "HTTP Version wird nicht unterstützt",
+    999 => "Zeitüberschreitung der Verbindung"
 );
 
-$LANG_LI_AUTOTAG = array(
-    'desc_link' => 'Link: zur Link-Detail-Seite. (Standart link_text: Link-Name). Anwendung: [link:<i>link_id</i> {link_text}]'
-);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
@@ -259,7 +275,7 @@ $LANG_confignames['links'] = array(
     'default_permissions' => 'Standardberechtigungen - Links',
     'target_blank' => 'Links in neuen Fenster öffnen',
     'displayblocks' => 'Anzeige glFusion Blöcke',
-    'submission' => 'Link Submission'
+    'submission'    => 'Link Submission',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -272,14 +288,14 @@ $LANG_fs['links'] = array(
     'fs_permissions' => 'Standard-Berechtigungen'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['links'] = array(
-    0 => array('Ja' => 1, 'Nein' => 0),
-    1 => array('Ja' => true, 'Nein' => false),
-    9 => array('Weiter zur Seite' => 'item', 'Admin Liste anzeigen' => 'list', 'Link-Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Linke Blöcke' => 0, 'Rechte Blöcke' => 1, 'Linke & Rechte Blöcke' => 2, 'Keine' => 3),
-    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
+$LANG_configSelect['links'] = array(
+    0 => array(1=>'Ja', 0=>'Nein'),
+    1 => array(true=>'Ja', false=>'Nein'),
+    9 => array('item'=>'Weiter zur Seite', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Link-Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Kommandozentrale'),
+    12 => array(0=>'Kein Zugang', 2=>'Nur lesen', 3=>'Lesen-Schreiben'),
+    13 => array(0=>'Linke Blöcke', 1=>'Rechte Blöcke', 2=>'Linke & Rechte Blöcke', 3=>'Keine'),
+    14 => array(0=>'Aus', 1=>'Logged-in Only', 2=>'Anyone', 3=>'Aus')
+
 );
 
 ?>

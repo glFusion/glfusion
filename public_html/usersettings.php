@@ -449,7 +449,7 @@ function deleteUserAccount ($form_reqid)
 function editpreferences()
 {
     global $_TABLES, $_CONF, $_SYSTEM, $LANG04, $_USER, $_GROUPS,
-           $LANG_confignames, $LANG_configselects;
+           $LANG_confignames, $LANG_configselects, $LANG_configSelect;
 
     $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
 
@@ -667,8 +667,15 @@ function editpreferences()
     $preferences->set_var ('dateformat_selector', $selection);
     $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
 
+    if (isset($LANG_configSelect['Core'])) {
+        $cfgSelect = $LANG_configSelect['Core'][18];
+
+    } else {
+        $cfgSelect = array_flip($LANG_configselects['Core'][18]);
+    }
+
     $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
-    foreach ($LANG_configselects['Core'][18] AS $name => $type ) {
+    foreach ($cfgSelect AS $type => $name ) {
         $search_result_select .= '<option value="'. $type . '"' . ($A['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
     }
     $search_result_select .= '</select>';

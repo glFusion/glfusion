@@ -1,171 +1,152 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Bad Behavior Plugin - glFusion CMS                                       |
-// +--------------------------------------------------------------------------+
-// | finnish_utf-8.php                                                        |
-// |                                                                          |
-// | finnish language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2014 Michael Hampton                                  |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Bad Behavior2 Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Dirk Haun - dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
 }
 
-###############################################################################
-
-$LANG_BAD_BEHAVIOR = array(
-    'added' => 'Added',
-    'auto_refresh_off' => 'Auto Refresh Off',
-    'auto_refresh_on' => 'Auto Refresh On',
-    'automatic_captcha' => 'Automatically Added (CAPTCHA)',
-    'automatic_token' => 'Automatically Added (Token)',
-    'automatic_hp' => 'Automatically Added (Spam-X)',
-    'back_to_search' => 'Back to Search List',
-    'ban_ip' => 'Ban IPs',
-    'ban_list_info' => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans expire after 24 hours.',
-    'ban_results' => 'IPs listed below had errors that prevented them from being added to the ban list.',
-    'banned_ips' => 'Banned IPs',
-    'blacklist' => 'Blacklists',
-    'blacklist_info_text' => 'You can specify several types of bans; User Agent - Beginning of text, User Agent - anywhere in the text, User Agent Regex, URL text, Referer text or an IP address, or a range of IP addresses using CIDR format. See the <a href="https://www.glfusion.org/wiki/glfusion:bb2" target="_blank">glFusion\'s Bad Behavior2 Plugin Documentation</a> for full details on how to setup bans.',
-    'blacklist_items' => 'Blacklist Items',
-    'blacklist_new' => 'New Blacklist Entry',
-    'blacklist_success_delete' => 'Blacklist item(s) successfully deleted',
-    'blacklist_success_save' => 'Blacklist entry successfully saved',
-    'block_title_admin' => 'Bad Behavior2 Ylläpito',
-    'block_title_donate' => 'Lahjoita',
-    'block_title_entry' => 'Osuma Tiedot',
-    'block_title_list' => 'Bad Behavior2 Osuma Logo',
-    'blocked_ips' => 'Blocked unique IP addresses',
-    'cancel' => 'Cancel',
-    'captcha' => 'CAPTCHA',
-    'date' => 'Date',
-    'delete' => 'Delete',
-    'delete_bl_confirm_1' => 'Are you sure you want to remove the selected blacklist entries?',
-    'delete_confirm_1' => 'Are you sure you want to un-ban these IPs?',
-    'delete_confirm_2' => 'Are you REALLY sure?',
-    'delete_info' => 'Remove Banned IP',
-    'delete_wl_confirm_1' => 'Are you sure you want to remove the selected whitelist entries?',
-    'denied_reason' => 'Syy',
-    'description' => 'Bad Behavior complements other link spam solutions by acting as a gatekeeper, preventing spammers from ever delivering their junk, and in many cases, from ever reading your site in the first place. This keeps your site\'s load down, makes your site logs cleaner, and can help prevent denial of service conditions caused by spammers.',
-    'donate_msg' => 'If you find this plugin useful, please consider making a donation to Michael Hampton, the original author of Bad Behavior. <a href="http://www.bad-behavior.ioerror.us/">Visit the Bad Behavior homepage</a>.',
-    'duplicate_error' => 'IP %s already exists in the Ban list.',
-    'enter_ip' => 'Enter IP',
-    'enter_ip_info' => 'Enter IPs to ban from the site below. Each IP should be on a separate line.',
-    'error' => 'Virhe',
-    'filter' => 'Filter Selection',
-    'fsockopen_failed' => 'Failed to open socket. Could not perform self test.',
-    'fsockopen_not_available' => 'Sorry, the PHP function <code>fsockopen</code> is not available. Can not perform self test.',
-    'go' => 'Go',
-    'headers' => 'Headers',
-    'invalid_ip' => 'IP %s is not a valid IPv4 address.',
-    'ip_addr' => 'IP Addr',
-    'ip_address' => 'IP Address',
-    'ip_date' => 'IP / Date / Status',
-    'ip_error' => 'Invalid IP Address or CIDR format',
-    'ip_prompt' => 'Enter IP Address or Range',
-    'item' => 'IP / User Agent / URL',
-    'link_back' => 'Takaisin Logiin',
-    'list_entries' => 'Näytä Osuma Logi (%d)',
-    'list_ips' => 'List Banned IPs',
-    'list_no_entries' => 'No log entries.',
-    'log_entries' => 'Log Entries',
-    'manual' => 'Manual',
-    'manually_added' => 'Manually Added',
-    'new_entry' => 'New Entry',
-    'no_bl_data_error' => 'No blacklist data entered',
-    'no_data' => 'No data available',
-    'no_data_error' => 'No whitelist data entered',
-    'no_filter' => 'No Filter',
-    'note' => 'Notes',
-    'page_title' => 'Bad Behavior2',
-    'plugin_display_name' => 'Bad Behavior2',
-    'reason' => 'Reason',
-    'results' => 'Bad Behavior2 Results',
-    'row_date' => 'Päivä',
-    'row_ip' => 'IP Osoite',
-    'row_method' => 'Metodi',
-    'row_protocol' => 'Protokolli',
-    'row_reason' => 'Syy',
-    'row_referer' => 'Referrer',
-    'row_response' => 'Vastaus',
-    'row_user_agent' => 'User Agent',
-    'search' => 'Etsi',
-    'select_all' => 'All',
-    'select_iprange' => 'IP / IP Range (CIDR)',
-    'select_ua' => 'User Agent',
-    'select_url' => 'URLs',
-    'self_test' => 'Testaa Bad Behavior2',
-    'spambot_ip' => 'IP / Range (CIDR)',
-    'spambot_ip_prompt' => 'Enter IP Address or Range (CIDR) to block',
-    'spambot_referer' => 'Referer',
-    'spambot_referer_prompt' => 'Enter String to match anywhere in the referer URL',
-    'spambots' => 'UserAgent - Anywhere',
-    'spambots_0' => 'UA Beginning of String',
-    'spambots_0_prompt' => 'Enter String to match at the Beginning of the User Agent',
-    'spambots_prompt' => 'Enter string to match anywhere in the User Agent',
-    'spambots_regex' => 'User Agent Regex',
-    'spambots_regex_prompt' => 'Enter Regex (regular express) to match in the User Agent',
-    'spambots_url' => 'URL Strings',
-    'spambots_url_prompt' => 'Enter string to match in the URL parameters',
-    'stats_blocked' => 'Blokattu',
-    'stats_headline' => 'Bad Behavior2 Tilastot',
-    'stats_no_hits' => 'No entries.',
-    'stats_reason' => 'Syy',
-    'submit' => 'Submit',
-    'temp_ban' => 'Temporary Ban?',
-    'temporary_ban' => 'TEMPORARY BAN',
-    'title_lookup_ip' => 'Lookup IP address',
-    'title_show_headers' => 'Näytä HTTP headers',
-    'token' => 'Token',
-    'type' => 'Type',
-    'type_spambot_ip' => 'IP Addr',
-    'type_spambot_referer' => 'Referer',
-    'type_spambots' => 'UA Anywhere',
-    'type_spambots_0' => 'UA',
-    'type_spambots_regex' => 'UA Regex',
-    'type_spambots_url' => 'URL',
-    'ua_prompt' => 'Enter Full User Agent',
-    'unblock' => 'Unblock IP address',
-    'url' => 'URL',
-    'url_prompt' => 'Enter URL',
-    'useragent' => 'UserAgent',
-    'whitelist' => 'Whitelists',
-    'whitelist_info_text' => 'You can specify an IP address, or a range of IP addresses using CIDR format, specific User Agents or URLs on your site to whitelist. A whitelisted item will never be blocked by glFusion\'s spam protections provided by the Bad Behavior2 plugin.',
-    'whitelist_items' => 'Whitelist Items',
-    'whitelist_new' => 'New Whitelist Entry',
-    'whitelist_success_delete' => 'Whitelist item(s) successfully deleted',
-    'whitelist_success_save' => 'Whitelist entry successfully saved',
-    'invalid_item_id' => 'Invalid Item ID - No record found'
+$LANG_BAD_BEHAVIOR = array (
+    'added'                     => 'Added',
+    'auto_refresh_off'          => 'Auto Refresh Off',
+    'auto_refresh_on'           => 'Auto Refresh On',
+    'automatic_captcha'         => 'Automatically Added (CAPTCHA)',
+    'automatic_token'           => 'Automatically Added (Token)',
+    'automatic_hp'              => 'Automatically Added (Spam-X)',
+    'back_to_search'            => 'Back to Search List',
+    'ban_ip'                    => 'Ban IPs',
+    'ban_list_info'             => 'The IPs listed below are banned from the system. Manual bans are permanent. Automatic bans will expire after the timeout period.',
+    'ban_results'               => 'IPs listed below had errors that prevented them from being added to the ban list.',
+    'banned_ips'                => 'Banned IPs',
+    'blacklist'                 => 'Blacklists',
+    'blacklist_info_text'       => 'You can specify several types of bans; User Agent - Beginning of text, User Agent - anywhere in the text, User Agent Regex, URL text, Referer text or an IP address, or a range of IP addresses using CIDR format. See the <a href="https://www.glfusion.org/wiki/glfusion:bb2" target="_blank">glFusion\'s Bad Behavior2 Plugin Documentation</a> for full details on how to setup bans.',
+    'blacklist_items'           => 'Blacklist Items',
+    'blacklist_new'             => 'New Blacklist Entry',
+    'blacklist_success_delete'  => 'Blacklist item(s) successfully deleted',
+    'blacklist_success_save'    => 'Blacklist entry successfully saved',
+    'block_title_admin'         => 'Bad Behavior2 Yll',
+    'block_title_donate'        => 'Lahjoita',
+    'block_title_entry'         => 'Osuma Tiedot',
+    'block_title_list'          => 'Bad Behavior2 Osuma Logo',
+    'blocked_ips'               => 'Blocked unique IP addresses',
+    'cancel'                    => 'Peruuta',
+    'captcha'                   => 'CAPTCHA',
+    'date'                      => 'Expire Date',
+    'delete'                    => 'Poista',
+    'delete_bl_confirm_1'       => 'Are you sure you want to remove the selected blacklist entries?',
+    'delete_confirm_1'          => 'Are you sure you want to un-ban these IPs?',
+    'delete_confirm_2'          => 'Are you REALLY sure?',
+    'delete_info'               => 'Remove Selected Items',
+    'delete_wl_confirm_1'       => 'Are you sure you want to remove the selected whitelist entries?',
+    'denied_reason'             => 'Syy',
+    'description'               => 'Bad Behavior complements other link spam solutions by acting as a gatekeeper, preventing spammers from ever delivering their junk, and in many cases, from ever reading your site in the first place. This keeps your site\'s load down, makes your site logs cleaner, and can help prevent denial of service conditions caused by spammers.',
+    'donate_msg'                => 'If you find this plugin useful, please consider making a donation to Michael Hampton, the original author of Bad Behavior. <a href="http://www.bad-behavior.ioerror.us/">Visit the Bad Behavior homepage</a>.',
+    'duplicate_error'           => 'IP %s already exists in the Ban list.',
+    'enter_ip'                  => 'Enter IP',
+    'enter_ip_info'             => 'Enter an IP to ban.  Manually entered bans are permanent (until you manually delete them).',
+    'error'                     => 'Virhe',
+    'filter'                    => 'Filter Selection',
+    'filter'                    => 'Filter',
+    'fsockopen_failed'          => 'Failed to open socket. Could not perform self test.',
+    'fsockopen_not_available'   => 'Sorry, the PHP function <code>fsockopen</code> is not available. Can not perform self test.',
+    'go'                        => 'Go',
+    'headers'                   => 'Headers',
+    'invalid_ip'                => 'IP %s is not a valid IPv4 address.',
+    'ip_addr'                   => 'IP Addr',
+    'ip_address'                => 'IP Address',
+    'ip_date'                   => 'IP / Date / Status',
+    'ip_error'                  => 'Invalid IP Address or CIDR format',
+    'ip_prompt'                 => 'Enter IP Address or Range',
+    'item'                      => 'IP / User Agent / URL',
+    'link_back'                 => 'Takaisin Logiin',
+    'list_entries'              => 'Show log entries (%d)',
+    'list_ips'                  => 'List Banned IPs',
+    'list_no_entries'           => 'No log entries.',
+    'log_entries'               => 'Log Entries',
+    'manual'                    => 'Manual',
+    'manually_added'            => 'Manually Added',
+    'new_entry'                 => 'New Entry',
+    'no_bl_data_error'          => 'No blacklist data entered',
+    'no_data'                   => 'No data available',
+    'no_data_error'             => 'No whitelist data entered',
+    'no_filter'                 => 'No Filter',
+    'note'                      => 'Notes',
+    'page_title'                => 'Bad Behavior2',
+    'plugin_display_name'       => 'Bad Behavior2',
+    'reason'                    => 'Info',
+    'reason'                    => 'Syy',
+    'results'                   => 'Bad Behavior2 Results',
+    'row_date'                  => 'PÃ¤ivÃ¤mÃ¤Ã¤rÃ¤',
+    'row_ip'                    => 'IP Osoite',
+    'row_method'                => 'Metodi',
+    'row_protocol'              => 'Protokolli',
+    'row_reason'                => 'Syy',
+    'row_referer'               => 'Referrer',
+    'row_response'              => 'Vastaus',
+    'row_user_agent'            => 'User Agent',
+    'search'                    => 'Etsi',
+    'select_all'                => 'Kaikki',
+    'select_iprange'            => 'IP / IP Range (CIDR)',
+    'select_ua'                 => 'User Agent',
+    'select_url'                => 'URLs',
+    'self_test'                 => 'Testaa Bad Behavior2',
+    'spambot_ip'                => 'IP / Range (CIDR)',
+    'spambot_ip_prompt'         =>  'Enter IP Address or Range (CIDR) to block',
+    'spambot_referer'           => 'Referer',
+    'spambot_referer_prompt'    =>  'Enter String to match anywhere in the referer URL',
+    'spambots'                  => 'UserAgent - Anywhere',
+    'spambots_0'                => 'UA Beginning of String',
+    'spambots_0_prompt'         =>  'Enter String to match at the Beginning of the User Agent',
+    'spambots_prompt'           =>  'Enter string to match anywhere in the User Agent',
+    'spambots_regex'            => 'User Agent Regex',
+    'spambots_regex_prompt'     =>  'Enter Regex (regular express) to match in the User Agent',
+    'spambots_url'              => 'URL Strings',
+    'spambots_url_prompt'       =>  'Enter string to match in the URL parameters',
+    'stats_blocked'             => 'Blokattu',
+    'stats_headline'            => 'Bad Behavior2 Tilastot',
+    'stats_no_hits'             => 'No entries.',
+    'stats_reason'              => 'Syy',
+    'submit'                    => 'L&auml;het&auml;',
+    'temp_ban'                  =>  'Temporary Ban?',
+    'temporary_ban'             =>  'TEMPORARY BAN',
+    'title_lookup_ip'           => 'Lookup IP address',
+    'title_show_headers'        => 'N',
+    'token'                     => 'Token',
+    'type'                      => 'Type',
+    'type_spambot_ip'           => 'IP Addr',
+    'type_spambot_referer'      => 'Referer',
+    'type_spambots'             => 'UA Anywhere',
+    'type_spambots_0'           => 'UA',
+    'type_spambots_regex'       => 'UA Regex',
+    'type_spambots_url'         => 'URL',
+    'ua_prompt'                 => 'Enter Full User Agent',
+    'unblock'                   => 'Unblock IP address',
+    'url'                       => 'URL',
+    'url_prompt'                => 'Enter URL',
+    'useragent'                 => 'UserAgent',
+    'whitelist'                 => 'Whitelists',
+    'whitelist_info_text'       => 'You can specify an IP address, or a range of IP addresses using CIDR format, specific User Agents or URLs on your site to whitelist. A whitelisted item will never be blocked by glFusion\'s spam protections provided by the Bad Behavior2 plugin.',
+    'whitelist_items'           => 'Whitelist Items',
+    'whitelist_new'             => 'New Whitelist Entry',
+    'whitelist_success_delete'  => 'Whitelist item(s) successfully deleted',
+    'whitelist_success_save'    => 'Whitelist entry successfully saved',
+    'invalid_item_id'           => 'Invalid Item ID - No record found',
 );
 
-$LANG_BB2_RESPONSE = array(
+$LANG_BB2_RESPONSE = array (
     '00000000' => 'Request Passed - No User Agent Specified',
     '136673cd' => 'IP address found on external blacklist',
     '17566707' => 'Required header \'Accept\' missing',
@@ -179,7 +160,7 @@ $LANG_BB2_RESPONSE = array(
     '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
     '45b35e30' => 'Header \'Referer\' is corrupt',
     '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
-    '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
+    '582ec5e4' => 'Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
     '70e45496' => 'User agent claimed to be CloudFlare, claim appears false',
@@ -189,7 +170,7 @@ $LANG_BB2_RESPONSE = array(
     '7ad04a8a' => 'Prohibited header \'Range\' present',
     '7d12528e' => 'Prohibited header \'Range\' or \'Content-Range\' in POST request',
     '939a6fbb' => 'Banned proxy server in use',
-    '96c0bd29' => 'SQL Injection detected',
+    '96c0bd29' => 'URL pattern found on blacklist',
     '9c9e4979' => 'Prohibited header \'via\' present',
     'a0105122' => 'Header \'Expect\' prohibited; resend without Expect',
     'a1084bad' => 'User-Agent claimed to be MSIE, with invalid Windows version',
@@ -209,14 +190,14 @@ $LANG_BB2_RESPONSE = array(
     'f1182195' => 'User-Agent claimed to be Googlebot, claim appears to be false.',
     'f9f2b8b9' => 'A User-Agent is required but none was provided.',
     'f9f3b8b0' => 'Question mark at end of query.',
+    '96c0bd29' => 'SQL Injection detected',
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
     '96c0bd30' => 'Banned IP',
-    '96c0bd40' => 'Banned by Blacklist entry'
+    '96c0bd40' => 'Banned by Blacklist entry',
 );
 
-$PLG_bad_behavior_MESSAGE1 = 'If you see this message, then Bad Behavior2 is <b>not</b> installed correctly! Please read the installation instructions again carefully.';
+$PLG_bad_behavior_MESSAGE1  = 'If you see this message, then Bad Behavior2 is <b>not</b> installed correctly! Please read the installation instructions again carefully.';
 $PLG_bad_behavior_MESSAGE100 = 'IP address has been unblocked.';
 $PLG_bad_behavior_MESSAGE101 = 'There was a problem unblocking the IP address.';
-
 ?>

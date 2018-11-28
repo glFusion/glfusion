@@ -1,38 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | dutch_utf-8.php                                                          |
-// |                                                                          |
-// | Dutch language file                                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for FileMgt Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Consult4Hire Inc.
+*   Blaine Lang  - blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_FM00 = array (
@@ -51,7 +36,7 @@ $LANG_FM00 = array (
     'uninstall'         => 'Verwijderen',
     'editor'            => 'Plugin Editor',
     'warning'           => 'De-Install Waarschuwing',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is geinstalleerd en geactiveerd.<br>Deactiveer de plugin alvorens deze weer te verwijderen.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
     'WhatsNewLabel'    => 'Bestanden',
     'WhatsNewPeriod'   => ' laatste %s dag(en)',
     'new_upload'        => 'Nieuw Bestand ontvangen op ',
@@ -70,12 +55,12 @@ $LANG_FM02 = array(
     'nav3'  => 'Voeg een bestand toe',
     'nav4'  => 'Downloads (%s)',
     'nav5'  => 'Kapotte Bestanden (%s)',
-    'edit'  => 'Edit',
-    'file'  => 'Filename',
+    'edit'  => 'Wijzigen',
+    'file'  => 'Bestandsnaam',
     'category' => 'Category Name',
-    'version' => 'Version',
+    'version' => 'Code',
     'size'  => 'Size',
-    'date' => 'Date',
+    'date' => 'Datum',
 );
 
 $LANG_FILEMGMT = array(
@@ -86,12 +71,12 @@ $LANG_FILEMGMT = array(
     'searchlabel_results' => "Bestandenlijst Resultaten",
     'downloads' => "Mijn Downloads",
     'report' => "Top Downloads",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Best Gewaardeerd",
+    'usermenu1' => "Mijn Downloads",
+    'usermenu2' => "  Best Gewaardeerd",
     'usermenu3' => "Upload een bestand",
     'admin_menu' => "Bestandsbeheer Instellingen",
     'writtenby' => "Geschreven Door",
-    'date' => "Laatst Bijgewerkt",
+    'date' => "Laatste wijziging",
     'title' => "Titel",
     'content' => "Inhoud",
     'hits' => "Treffers",
@@ -106,13 +91,13 @@ $LANG_FILEMGMT = array(
     'pageformat' => "Pagina Formaat",
     'leftrightblocks' => "Linker & Rechter Blokken",
     'blankpage' => "Blanco Pagina",
-    'noblocks' => "Geen Blokken",
+    'noblocks' => "Geen blokken",
     'leftblocks' => "Linker Blokken",
     'addtomenu' => 'Voeg Toe aan Menu',
     'label' => 'Label',
     'nofiles' => 'Aantal bestanden in onze bibliotheek (Downloads)',
     'save' => 'Opslaan',
-    'preview' => 'Bekijken',
+    'preview' => 'Voorbeeld Bekijken',
     'delete' => 'Verwijder',
     'cancel' => 'Annuleren',
     'access_denied' => 'Toegang Geweigerd',
@@ -144,6 +129,7 @@ $LANG_FILEMGMT_AUTOTAG = array(
     'desc_file_download'        => 'Link: to a direct File download.  link_text defaults to the file title. usage: [file_download:<i>file_id</i> {link_text}]',
 );
 
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
     'label'                 => 'FileMgmt',
@@ -167,7 +153,7 @@ $LANG_confignames['filemgmt'] = array(
     'SnapCat'               => 'Folder om Categorie Thumbnails in op te slaan',
     'FileStoreURL'          => 'URL naar Bestanden',
     'FileSnapURL'           => 'URL naar Bestands Thumbnails',
-    'SnapCatURL'            => 'URL naar Category\ie Thumbnails',
+    'SnapCatURL'            => 'URL naar Category\\ie Thumbnails',
     'whatsnewperioddays'    => 'What\'s New Days',
     'whatsnewtitlelength'   => 'What\'s New Title Length',
     'showwhatsnewcomments'  => 'Toon Reacties in Blok; Wat is er Nieuw',
@@ -188,26 +174,23 @@ $LANG_fs['filemgmt'] = array(
     'fm_access'             => 'FileMgmt Toegangs Controle',
     'fm_general'            => 'FileMgmt Algemene Instellingen',
 );
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['filemgmt'] = array(
-    0 => array('Ja' => 1, 'Nee' => 0),
-    1 => array('Ja' => TRUE, 'Nee' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
-    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
+// Note: entries 0, 1 are the same as in $LANG_configselects['Core']
+$LANG_configSelect['filemgmt'] = array(
+    0 => array(1=>'Ja', 0=>'Nee'),
+    1 => array(true=>'Ja', false=>'Nee'),
+    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    3 => array(0=>'Linker Blokken', 1=>'Right Blocks', 2=>'Linker & Rechter Blokken', 3=>'Geen')
 );
-
-
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Install Aborted<br>File: plugins/filemgmt/filemgmt.php is not writeable';
 $PLG_filemgmt_MESSAGE3 = 'This plugin requires glFusion Version 1.0 or greater, upgrade aborted.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5 code not detected - upgrade aborted.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Upgrade Aborted<br>Current plugin version is not 1.3';
 
-
 // Language variables used by the plugin - general users access code.
 
 define("_MD_THANKSFORINFO","Thanks for the information. We'll look into your request shortly.");
-define("_MD_BACKTOTOP","Terug naar Downloads Top");
+define("_MD_BACKTOTOP","Back to Downloads Top");
 define("_MD_THANKSFORHELP","Thank you for helping to maintain this directory's integrity.");
 define("_MD_FORSECURITY","For security reasons your user name and IP address will also be temporarily recorded.");
 
@@ -215,7 +198,7 @@ define("_MD_SEARCHFOR","Zoek naar");
 define("_MD_MATCH","Match");
 define("_MD_ALL","ALLE");
 define("_MD_ANY","ANY");
-define("_MD_NAME","Naam");
+define("_MD_NAME","Rubriek Naam");
 define("_MD_DESCRIPTION","Beschrijving");
 define("_MD_SEARCH","Zoek");
 

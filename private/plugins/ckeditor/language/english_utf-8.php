@@ -1,34 +1,19 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | CKEditor Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for glFusion CKEditor Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2014-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CK00 = array (
@@ -113,19 +98,19 @@ $LANG_configsubgroups['ckeditor'] = array(
 $LANG_fs['ckeditor'] = array(
     'ck_public'                 => 'CKEditor Configuration',
     'ck_integration'            => 'CKEditor Integration',
-	'fs_filemanager_general'    => 'Filemanager General Settings',
-	'fs_filemanager_upload'     => 'Filemanager Upload Settings',
-	'fs_filemanager_images'     => 'Filemanager Image Settings',
-	'fs_filemanager_videos'     => 'Filemanager Video Settings',
-	'fs_filemanager_audios'     => 'Filemanager Audio Settings',
-	'fs_filemanager_editor'     => 'Filemanager Embedded Editor',
+    'fs_filemanager_general'    => 'Filemanager General Settings',
+    'fs_filemanager_upload'     => 'Filemanager Upload Settings',
+    'fs_filemanager_images'     => 'Filemanager Image Settings',
+    'fs_filemanager_videos'     => 'Filemanager Video Settings',
+    'fs_filemanager_audios'     => 'Filemanager Audio Settings',
+    'fs_filemanager_editor'     => 'Filemanager Embedded Editor',
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['ckeditor'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-	2 => array('grid' => 'grid', 'list' => 'list'),
-	3 => array('default' => 'default', 'Name (asc)' => 'NAME_ASC', 'Name (desc)' => 'NAME_DESC', 'Type (asc)' => 'TYPE_ASC', 'Type (desc)' => 'TYPE_DESC', 'Modified (asc)' => 'MODIFIED_ASC', 'Modified (desc)' => 'MODIFIED_DESC'),
+$LANG_configSelect['ckeditor'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array('grid'=>'grid', 'list' => 'list'),
+    3 => array('default' => 'default', 'NAME_ASC'=>'Name (asc)', 'NAME_DESC'=>'Name (desc)', 'TYPE_ASC'=>'Type (asc)', 'TYPE_DESC'=>'Type (desc)', 'MODIFIED_ASC'=>'Modified (asc)', 'MODIFIED_DESC'=>'Modified (desc)'),
 );
 
 $PLG_ckeditor_MESSAGE1 = 'CKEditor plugin upgrade: Update completed successfully.';

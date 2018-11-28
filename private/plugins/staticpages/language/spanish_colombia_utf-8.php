@@ -1,30 +1,24 @@
 <?php
-###############################################################################
-# spanish_colombia_utf-8.php
-# This is the spanish (Colombia) language file for the glFusion Static Page plugin
-#
-# Copyright (C) 2001 Tony Bibbs - tony@tonybibbs.com
-# Copyright (C) 2014 John Toro  - john.toro@newroute.net
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Spam-X Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001 by the following authors:
+*  Tony Bibbs       tony AT tonybibbs DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
+
 
 global $LANG32;
 
@@ -44,7 +38,7 @@ $LANG_STATIC = array(
     'date' => 'Modificada',
     'title' => 'Título',
     'content' => 'Contenido',
-    'hits' => 'Hits',
+    'hits' => 'Accesos',
     'staticpagelist' => 'Lista de Páginas',
     'url' => 'URL',
     'edit' => 'Editar',
@@ -110,7 +104,7 @@ $LANG_STATIC = array(
     'select_php_free' => 'ejecutar PHP',
     'php_not_activated' => "Es uso de PHP en páginas estáticas no está activado. Por favor, véase la <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentación</a> para más información.",
     'printable_format' => 'Listo para imprimir',
-    'copy' => 'Copy',
+    'copy' => 'Copiar',
     'limit_results' => 'Limitar Resultados',
     'search' => 'Incluir en Búsquedas',
     'submit' => 'Enviar',
@@ -122,16 +116,13 @@ $LANG_STATIC = array(
     'preview_help' => 'Selecciona el botón <b>Visualizar</b> para refrescar la pantalla',
     'page_saved' => 'La Pagina ha sido correctametne guardada.',
     'page_deleted' => 'Page has been successfully deleted.',
-    'searchable' => 'Search'
+    'searchable' => 'Buscar',
 );
-###############################################################################
-# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Enlace: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage'           => 'Enlace: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content'   => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
 );
-
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -161,7 +152,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comentarios',
     'include_search' => 'Incluir en Búsquedas',
-    'status_flag' => 'Modo predeterminado'
+    'status_flag' => 'Modo predeterminado',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -174,15 +165,15 @@ $LANG_fs['staticpages'] = array(
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['staticpages'] = array(
-    0 => array('Si' => 1, 'No' => 0),
-    1 => array('Si' => true, 'No' => false),
-    2 => array('Fecha' => 'date', 'ID' => 'id', 'Título' => 'title'),
-    3 => array('Fecha' => 'date', 'ID' => 'id', 'Título' => 'title', 'Etiqueta' => 'label'),
-    9 => array('Ir a la Página' => 'item', 'Lista de Páginas' => 'list', 'Página de Inicio' => 'home', 'Panel de Control' => 'admin'),
-    12 => array('Sin acceso' => 0, 'Solo-Lectura' => 2, 'Lectura-Escritura' => 3),
-    13 => array('Habilitada' => 1, 'Deshabilitada' => 0),
-    17 => array('Comentarios Habilitados' => 0, 'Comentarios Deshabilitados' => -1)
+$LANG_configSelect['staticpages'] = array(
+    0 => array(1=>'Si', 0=>'No'),
+    1 => array(true=>'Si', false=>'No'),
+    2 => array('date'=>'Fecha', 'id'=>'Page ID', 'title'=>'Título'),
+    3 => array('date'=>'Fecha', 'id'=>'Page ID', 'title'=>'Título', 'label'=>'Etiqueta'),
+    9 => array('item'=>'Forward to Page', 'list'=>'Ir a la lista', 'plugin'=>'Ir a la Lista Publica', 'home'=>'Ir al Inicio', 'admin'=>'Ir a Panel de C.'),
+    12 => array(0=>'Sin acceso', 2=>'Sólo-Lectura', 3=>'Lectura-Escritura'),
+    13 => array(1=>'Habilitado', 0=>'Deshabilitado'),
+    17 => array(0=>'Comentarios Habilitados', 1=>'Comentarios Deshabilitados'),
 );
 
 ?>

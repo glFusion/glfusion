@@ -1,31 +1,24 @@
 <?php
-
-###############################################################################
-# english_utf-8.php
-# This is the english language file for the glFusion Static Page plugin
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony@tonybibbs.com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Spam-X Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001 by the following authors:
+*  Tony Bibbs       tony AT tonybibbs DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
 
 global $LANG32;
 
@@ -172,15 +165,15 @@ $LANG_fs['staticpages'] = array(
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['staticpages'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
-    3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
-    9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Enabled' => 1, 'Disabled' => 0 ),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
+$LANG_configSelect['staticpages'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array('date'=>'Date', 'id'=>'Page ID', 'title'=>'Title'),
+    3 => array('date'=>'Date', 'id'=>'Page ID', 'title'=>'Title', 'label'=>'Label'),
+    9 => array('item'=>'Forward to Page', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
+    12 => array(0=>'No access', 2=>'Read-Only', 3=>'Read-Write'),
+    13 => array(1=>'Enabled', 0=>'Disabled'),
+    17 => array(0=>'Comments Enabled', 1=>'Comments Disabled'),
 );
 
 ?>

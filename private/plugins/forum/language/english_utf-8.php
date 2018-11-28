@@ -1,42 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for the Forum Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by:
+*     Authors: Blaine Lang       - blaine AT portalparts DOT com
+*                                  www.portalparts.com
+*     Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*     Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 ###############################################################################
@@ -290,9 +273,9 @@ $LANG_GF01 = array(
     'likes_given' => 'Likes Given',
     'no_likes_received' => 'No Likes Received',
     'no_likes_given' => 'No Likes Given',
-	'liked' => 'Liked',
-	'liked_thread' => 'post in thread',
-	'likes' => 'Likes',
+    'liked' => 'Liked',
+    'liked_thread' => 'post in thread',
+    'likes' => 'Likes',
     'msg_item_updated' => 'Item has been updated',
     'msg_item_nochange' => 'Item was not changed',
     'sample_color' => 'Sample',
@@ -1047,14 +1030,14 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Attachment Settings'
 );
 
-$LANG_configselects['forum'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Replace Home Page' => 0, 'Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
-    3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'Right / Left Blocks' => 'allblocks'),
-    4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
-    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    6 => array('Checked' => 1, 'Unchecked' => 0)
+$LANG_configSelect['forum'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(0=>'Replace Home Page', 1=>'Top of Page', 2=>'After Featured Story', 3=>'Bottom of Page'),
+    3 => array('noblocks'=>'No Blocks', 'leftblocks'=>'Left Blocks', 'rightblocks'=>'Right Blocks', 'allblocks'=>'Right / Left Blocks'),
+    4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'None'),
+    5 => array('DESC'=>'Descending', 'ASC'=>'Ascending'),
+    6 => array(1=>'Checked', 0=>'Unchecked')
 );
 
 ?>

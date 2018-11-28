@@ -1,37 +1,24 @@
 <?php
-###############################################################################
-# german_utf-8.php
-#
-# This is the German language file for the glFusion Static Pages plugin
-# addressing the user as "Du" (informal German).
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony AT tonybibbs DOT com
-#
-# German translation by Dirk Haun <dirk AT haun-online DOT de>
-# and Markus Wollschläger
-# Modifiziert: August 09 Tony Kluever
-# Siegfried Gutschi (November 2016) <sigi AT modellbaukalender DOT info>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Spam-X Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001 by the following authors:
+*  Tony Bibbs       tony AT tonybibbs DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
+
 
 global $LANG32;
 
@@ -63,7 +50,7 @@ $LANG_STATIC = array(
     'leftblocks' => 'Linke Blöcke',
     'rightblocks' => 'Rechte Blöcke',
     'addtomenu' => 'Ins Menü aufnehmen',
-    'label' => 'Label',
+    'label' => 'Beschriftung',
     'nopages' => 'Es sind keine statischen Seiten vorhanden.',
     'save' => 'Speichern',
     'preview' => 'Vorschau',
@@ -129,16 +116,13 @@ $LANG_STATIC = array(
     'preview_help' => 'Wählen Sie die Schaltfläche <b>Vorschau</b>, um die Vorschauanzeige zu aktualisieren',
     'page_saved' => 'Seite wurde erfolgreich gespeichert.',
     'page_deleted' => 'Seite wurde erfolgreich gelöscht.',
-    'searchable' => 'Search'
+    'searchable' => 'Suchen',
 );
-###############################################################################
-# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage' => 'Link: zu einer Statischen-Seite. (Standart link_text: Seiten-Titel). Anwendung: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: zeigt den Inhalt einer Statischen-Seite an. Anwendung: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage'           => 'Link: zu einer Statischen-Seite. (Standart link_text: Seiten-Titel). Anwendung: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content'   => 'HTML: zeigt den Inhalt einer Statischen-Seite an. Anwendung: [staticpage_content:<i>page_id</i>]',
 );
-
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -168,7 +152,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Seiten im News-Feed',
     'comment_code' => 'Kommentar-Standard',
     'include_search' => 'In Suche aufnehmen-Standart',
-    'status_flag' => 'Seite Sichtbar-Standart'
+    'status_flag' => 'Seite Sichtbar-Standart',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -181,15 +165,15 @@ $LANG_fs['staticpages'] = array(
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['staticpages'] = array(
-    0 => array('Ja' => 1, 'Nein' => 0),
-    1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Datum' => 'date', 'Seiten-ID' => 'id', 'Titel' => 'title'),
-    3 => array('Datum' => 'date', 'Seiten-ID' => 'id', 'Titel' => 'title', 'Menüpunkt' => 'label'),
-    9 => array('Zur Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite' => 'home', 'Kommandozentrale' => 'admin'),
-    12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3),
-    13 => array('Aktiviert' => 1, 'Deaktiviert' => 0),
-    17 => array('Kommentare erlaubt' => 0, 'Kommentare nicht erlaubt' => -1)
+$LANG_configSelect['staticpages'] = array(
+    0 => array(1=>'Ja', 0=>'Nein'),
+    1 => array(true=>'Ja', false=>'Nein'),
+    2 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel'),
+    3 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel', 'label'=>'Beschriftung'),
+    9 => array('item'=>'Forward to Page', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Link-Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Admin anzeigen'),
+    12 => array(0=>'Kein Zugang', 2=>'Nur Lesen', 3=>'Lesen & Schreiben'),
+    13 => array(1=>'Eingeschaltet', 0=>'Deaktiviert'),
+    17 => array(0=>'Kommentare erlaubt', 1=>'Kommentare deaktiviert'),
 );
 
 ?>

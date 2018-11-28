@@ -1,29 +1,20 @@
 <?php
-###############################################################################
-# polish_utf-8.php
-#
-# This is the Polish language file for the glFusion Calendar plugin
-#
-# Copyright (C) 2001 Tony Bibbs
-# tony AT tonybibbs DOT com
-# Copyright (C) 2005 Trinity Bays
-# trinity93 AT gmail DOT com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for Calendar Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2001-2005 by the following authors:
+*   Tony Bibbs - tony AT tonybibbs DOT com
+*   Trinity Bays - trinity93 AT gmail DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -74,7 +65,7 @@ $LANG_CAL_1 = array(
     32 => 'Adres 1',
     33 => 'Adres 2',
     34 => 'Miasto',
-    35 => 'State',
+    35 => 'Województwo',
     36 => 'Kod pocztowy',
     37 => 'Typ wydarzenia',
     38 => 'Edytuj typy wydarzeń',
@@ -92,7 +83,7 @@ $LANG_CAL_1 = array(
     50 => 'Wydarzenia',
     51 => 'Usuń',
     52 => 'Dodane przez',
-    53 => 'Widok kalendarza'
+    53 => 'Widok kalendarza',
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -177,11 +168,11 @@ $LANG_CAL_ADMIN = array(
     38 => 'Batch Event Admin',
     39 => 'Event Admin',
     40 => 'Lista wydarzeń',
-    41 => 'Ten ekran umożliwia edytowanie / tworzenie wydarzeń. Edytuj poniższe pola i zapisz.'
+    41 => 'Ten ekran umożliwia edytowanie / tworzenie wydarzeń. Edytuj poniższe pola i zapisz.',
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: do wydarzenia na tej stronie; link_text domyślnie jest to tytuł wydarzenia: [calendar:<i>event_id</i> {link_text}]'
+    'desc_calendar' => 'Link: do wydarzenia na tej stronie; link_text domyślnie jest to tytuł wydarzenia: [calendar:<i>event_id</i> {link_text}]',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -225,7 +216,7 @@ $LANG_confignames['calendar'] = array(
     'aftersave' => 'Po zapisaniu wydarzenia',
     'default_permissions' => 'Domyślne uprawnienia wydarzenia',
     'only_admin_submit' => 'Zezwalaj tylko administratorom na przesyłanie',
-    'displayblocks' => 'Wyświetl bloki glFusion'
+    'displayblocks' => 'Wyświetl bloki glFusion',
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -237,14 +228,13 @@ $LANG_fs['calendar'] = array(
     'fs_permissions' => 'Domyślne uprawnienia'
 );
 
-// Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['calendar'] = array(
-    0 => array('Tak' => 1, 'Nie' => 0),
-    1 => array('Tak' => true, 'Nie' => false),
-    6 => array('12' => 12, '24' => 24),
-    9 => array('Przejdź do wydarzenia' => 'pozycja', 'Wyświetl listę administracyjną' => 'list', 'Pokaz kalendarz' => 'plugin', 'Strona główna' => 'home', 'Administracja' => 'admin'),
-    12 => array('Brak dostępu' => 0, 'Tylko odczyt' => 2, 'Odczyt i zapis' => 3),
-    13 => array('Lewe bloki' => 0, 'Prawe bloki' => 1, 'Lewe & Prawe bloki' => 2, 'Żaden' => 3)
+$LANG_configSelect['calendar'] = array(
+    0 => array(1=> 'Tak', 0 => 'Nie'),
+    1 => array(true => 'Włącz', false => 'Tak'),
+    6 => array(12 => '12', 24 => '24'),
+    9 => array('item'=>'Forward to Event', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Pokaz kalendarz', 'home'=>'Strona główna', 'admin'=>'Administracja'),
+    12 => array(0=>'Brak dostępu', 2=>'Tylko odczyt', 3=>'Odczyt i zapis'),
+    13 => array(0=>'Lewe bloki', 1=>'Prawe bloki', 2=>'Lewe & Prawe bloki', 3=>'Żaden')
 );
 
 ?>

@@ -68,7 +68,7 @@ if (!SEC_hasRights('user.edit')) {
 function USER_edit($uid = '', $msg = '')
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG01, $LANG04, $LANG28, $LANG_ADMIN,
-           $LANG_configselects, $LANG_confignames,$LANG_ACCESS,$MESSAGE,$_IMAGE_TYPE;
+           $LANG_configselects, $LANG_configSelect,$LANG_confignames,$LANG_ACCESS,$MESSAGE,$_IMAGE_TYPE;
 
     $retval = '';
     $newuser = 0;
@@ -689,7 +689,7 @@ function USER_userinfoPanel($U, $newuser = 0)
 function USER_subscriptionPanel($U)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04,
-           $LANG_confignames,  $LANG_configselects;
+           $LANG_confignames,  $LANG_configselects, $LANG_configSelect;
 
     $uid = $U['uid'];
 
@@ -724,7 +724,7 @@ function USER_subscriptionPanel($U)
 function USER_layoutPanel($U, $newuser = 0)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04,
-           $LANG_confignames,  $LANG_configselects;
+           $LANG_confignames,  $LANG_configselects,$LANG_configSelect;
 
     $uid = $U['uid'];
 
@@ -856,7 +856,13 @@ function USER_layoutPanel($U, $newuser = 0)
                                  $U['dfid']) . '</select>';
     $userform->set_var('dateformat_selector', $selection);
     $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
-    foreach ($LANG_configselects['Core'][18] AS $name => $type ) {
+    if (isset($LANG_configSelect['Core'])) {
+        $cfgSelect = $LANG_configSelect['Core'][18];
+
+    } else {
+        $cfgSelect = array_flip($LANG_configselects['Core'][18]);
+    }
+    foreach ($cfgSelect AS $type => $name ) {
         $search_result_select .= '<option value="'. $type . '"' . ($U['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
     }
     $search_result_select .= '</select>';

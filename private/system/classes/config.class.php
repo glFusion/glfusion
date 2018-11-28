@@ -564,7 +564,7 @@ class config
      */
     function _get_extended($subgroup, $group)
     {
-        global $_TABLES, $LANG_confignames, $LANG_configselects;
+        global $_TABLES, $LANG_confignames, $LANG_configselects, $LANG_configSelect;
 
         $db = glFusion\Database::getInstance();
 
@@ -607,6 +607,19 @@ class config
             } else {
                 $cur[5] = false;
             }
+            if (isset($LANG_configSelect[$group])) {
+                $cfgSelect = $LANG_configSelect;
+            } else {
+                $cfgSelect[$group][$cur[2]] = array();
+                $cfgSelect = array();
+                if (isset($LANG_configselects[$group][$cur[2]])) {
+                    foreach($LANG_configselects[$group][$cur[2]] AS $name => $value) {
+                        $cfgSelect[$group][$cur[2]][$value] = $name;
+                    }
+                } else {
+                    $cfgSelect[$group][$cur[2]] = array();
+                }
+            }
             $res[$cur[3]][$cur[0]] =
                 array('display_name' =>
                       (array_key_exists($cur[0], $LANG_confignames[$group]) ?
@@ -618,7 +631,7 @@ class config
                       'selectionArray' =>
                       (($cur[2] != -1) ?
                        //isset($LANG_configselects[$group][$cur[2]]) : null),
-                       $LANG_configselects[$group][$cur[2]] : null),
+                       $cfgSelect[$group][$cur[2]] : null),
                       'value' =>
                       (($cur[4] == 'unset') ?
                        'unset' : @unserialize($cur[4])),
@@ -1067,6 +1080,7 @@ class config
                 } else {
                     $selectionArray = $fn($index);
                 }
+                $selectionArray = array_flip($selectionArray);
             } else if (is_array($selectionArray)) {
                 // leave sorting to the function otherwise
                 uksort($selectionArray, 'strcasecmp');
@@ -1077,7 +1091,9 @@ class config
 
             $t->set_block('select-element', 'select-options', 'myoptions');
             if ( is_array($selectionArray) ) {
-                foreach ($selectionArray as $sName => $sVal) {
+
+//                foreach ($selectionArray as $sName => $sVal) {
+                foreach ($selectionArray as $sVal => $sName) {
                     if (is_bool($sVal)) {
                         $t->set_var('opt_value', $sVal ? 'b:1' : 'b:0');
                     } else {

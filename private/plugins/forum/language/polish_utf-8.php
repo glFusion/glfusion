@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | polish_utf-8.php                                                        |
-// |                                                                          |
-// | Polish language file - www.glfusion.pl - Support glFusion Poland        |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for the Forum Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by:
+*     Authors: Blaine Lang       - blaine AT portalparts DOT com
+*                                  www.portalparts.com
+*     Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*     Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -51,7 +35,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Wyniki wyszukiwania %s',
     'access_denied' => 'Brak dostępu',
     'uploaderr' => 'Błąd przesyłanego pliku',
-    'instructions' => 'Wybierz powyższą opcję, aby utworzyć / zmodyfikować kategorie i forum. Możesz także ustawić moderatorów forum, zaimportować posty glFusion na forum i zarządzać ustawieniami moderacji społeczności.'
+    'instructions' => 'Wybierz powyższą opcję, aby utworzyć / zmodyfikować kategorie i forum. Możesz także ustawić moderatorów forum, zaimportować posty glFusion na forum i zarządzać ustawieniami moderacji społeczności.',
 );
 
 $LANG_GF01 = array(
@@ -79,7 +63,7 @@ $LANG_GF01 = array(
     'TOPIC' => 'Temat',
     'TOPICS' => 'Tematy',
     'TOPICSUBJECT' => 'Tematy',
-    'HOMEPAGE' => 'Home',
+    'HOMEPAGE' => 'Strona główna',
     'SUBJECT' => 'Temat',
     'MOVED' => 'Przenoszenie',
     'REMOVE' => 'Usunąć',
@@ -131,7 +115,7 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'Tryb HTML:',
     'TopicPreview' => 'Podgląd wątku tematu',
     'moderator' => 'Moderator',
-    'admin' => 'Admin',
+    'admin' => 'Admin',                 /* stopped here */
     'DATEADDED' => 'Data dodania',
     'PREVTOPIC' => 'Poprzedni temat',
     'NEXTTOPIC' => 'Następny temat',
@@ -207,7 +191,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Fioletowy',
     'WHITE' => 'Biały',
     'BLACK' => 'Czarny',
-    'ID' => 'ID',
+    'ID'    => 'Strony',
     'b_help' => 'Pogrubiony tekst: [b]text[/b]',
     'i_help' => 'Kursywa: [i]text[/i]',
     'u_help' => 'Podkreśl tekst: [u]text[/u]',
@@ -224,20 +208,25 @@ $LANG_GF01 = array(
     't_help' => 'Użyj [file]#[/file] do dołączenia załączonego obrazu w poście',
     'e_help' => 'Element lista: [*]text',
     'smiley' => 'Emotikony',
-    'grade' => 'Reputacja',
-    'grade_user' => 'Oceń użytkownika',
+
+    /* --- Community moderation tags --- */
+    'grade'         => 'Reputacja',
+    'grade_user'    => 'Oceń użytkownika',
     'retract_grade' => 'Wycofaj ocenę',
-    'rate_too_low' => 'Twój poziom oceny jest zbyt niski, aby móc publikować na tym forum',
+    'rate_too_low'  => 'Twój poziom oceny jest zbyt niski, aby móc publikować na tym forum',
     'rate_too_low_forum' => 'Twój poziom oceny nie jest wystarczająco wysoki, aby wyświetlić to forum',
     'rate_too_low_thread' => 'Twój poziom oceny nie jest wystarczająco wysoki, aby wyświetlić ten wątek',
+    /* --- bbcode signature --- */
     'signature' => 'Podpis na forum',
     'edit_signature' => 'Edytuj podpis BBcode',
     'signature_preview' => 'Podgląd podpisu',
     'cancel_confirm' => 'Czy na pewno chcesz anulować ten post??',
+    /* --- topic features --- */
     'disable_bbcode' => 'Wyłącz BBCode:',
     'disable_smilies' => 'Wyłącz emotikony:',
     'disable_urlparse' => 'Wyłącz analizowanie www:',
     'features' => 'Funkcje:',
+    /* --- rss feature --- */
     'rss_link' => 'Subskrybuj kanał RSS forum.',
     'all_read_success' => 'Wszystkie tematy zostały oznaczone jako przeczytane',
     'formatted_code' => 'Sformatowany kod',
@@ -245,9 +234,9 @@ $LANG_GF01 = array(
     'q_del_item' => 'Czy na pewno chcesz usunąć odznaczenie??',
     'badge_updated' => 'Uaktualniono odznaczenie',
     'badge_save_error' => 'Błąd podczas zapisywania odznaczenia	- rekord z tą liczbą postów może już istnieć.',
-    'add_badge' => 'Dodaj odznaczenie',
+    'add_badge'         => 'Dodaj odznaczenie',
     'badge_grp' => 'Grupa',
-    'site_grp' => 'Opis grupy',
+    'site_grp'  => 'Opis grupy',
     'badge_img' => 'Etykieta',
     'create_new' => 'Tworzyć nowe',
     'badges' => 'Odznaczenie',
@@ -259,12 +248,26 @@ $LANG_GF01 = array(
     'err_rank_key_exists' => 'Rangi liczby postów już istnieją.',
     'ranks' => 'Rangi forum',
     'rank_updated' => 'Zaktualizowano ranking',
+    /* --- Like system --- */
     'like' => 'Polub',
     'unlike' => 'Nie polubię',
+    // In tooltips, add "%s" to include the user display name.
     'like_tooltip' => 'Polub post',
     'unlike_tooltip' => 'Odznacz polubienie postu',
+    // "Liked X Times" in the user profile area.
+    // The span is required exactly as below.
+    // "%1$d" is replaced with the number of likes.
     'liked_times' => 'Polubienia: <span class="like_cnt_%2$d">%1$d</span>',
-    'likes_formats' => array('0' => '%1$s lubi to.', '1' => 'Polubione przez %1$s.', '2' => '%1$s i %3$d inni to lubią.'),
+    // Formats for the text string in each post. The key indicates the minimum
+    // number of likes to use that string.
+    // %1$s is the comma-separated string containing <key> likers
+    // %2$d is the total number of likes
+    // %3$d is the number of liker names not shown, used with "X others...."
+    'likes_formats' => array(
+        0 => '%1$s lubi to.',        // single like
+        1 => 'Polubione przez %1$s.',          // multiple likes, up to threshold
+        2 => '%1$s i %3$d inni to lubią.', // threshold and beyond
+    ),
     'unk_username' => 'nieznany',
     'likes_received' => 'Polubienia otrzymane',
     'likes_given' => 'Polub Given',
@@ -276,12 +279,13 @@ $LANG_GF01 = array(
     'msg_item_updated' => 'Item has been updated',
     'msg_item_nochange' => 'Item was not changed',
     'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
     'fg_color' => 'Foreground Color',
     'bg_color' => 'Background Color',
     'more' => 'More',
     'less' => 'Less',
     'choose' => 'Choose',
-    'display_after' => 'Display After'
+    'display_after' => 'Wyświetl po',
 );
 
 $LANG_GF02 = array(
@@ -349,7 +353,7 @@ $LANG_GF02 = array(
     'msg60' => 'Nowy wątek',
     'msg61' => 'Przyklejony temat',
     'msg62' => 'Powiadom mnie o odpowiedziach',
-    'msg63' => 'Profile',
+    'msg63' => 'Profil',
     'msg64' => 'Czy na pewno chcesz usunąć temat? %s pod tytułem: %s ?',
     'msg65' => '<br/>Jest to temat nadrzędny, więc wszystkie przesłane do niego odpowiedzi również zostaną usunięte.',
     'msg66' => 'Potwierdź usunięcie wątku',
@@ -493,12 +497,12 @@ $LANG_GF02 = array(
     'not_your_post' => 'Nie wydajesz się być autorem tego wpisu.',
     'spam_detected' => 'Twój post został zidentyfikowany jako spam',
     'invalid_email' => 'E-mail pusty lub niepoprawny adres e-mail',
-    'invalid_name' => 'Brak nazwy',
-    'last_edited' => 'Ostatnio edytowane',
+    'invalid_name'  => 'Brak nazwy',
+    'last_edited'   => 'Ostatnio edytowane',
     'copy_to_clipboard' => 'Skopiuj permalink do schowka',
-    'post_ctc' => 'Permalink skopiowany do schowka',
+    'post_ctc'      => 'Permalink skopiowany do schowka',
     'text_notify_message' => 'Nowy wątek "%s"" został wysłany przez %s w %s na forum %s dyskusyjnym. Możesz go zobaczyć tutaj: %s',
-    'html_notify_message' => 'Nowy wątek "%s"" został wysłany przez %s w %s na forum %s dyskusyjnym. Możesz go zobaczyć tutaj: <a href="%s">%s</a>'
+    'html_notify_message' => 'Nowy wątek "%s"" został wysłany przez %s w %s na forum %s dyskusyjnym. Możesz go zobaczyć tutaj: <a href="%s">%s</a>',
 );
 
 $LANG_GF03 = array(
@@ -519,17 +523,17 @@ $LANG_GF03 = array(
     'splitheading' => 'Opcja podzielonego wątku:',
     'splitopt1' => 'Przenieś wszystkie posty z tego punktu',
     'splitopt2' => 'Przenieś tylko ten jeden wątek',
-    'merge_post' => 'Połącz post',
+    'merge_post'  => 'Połącz post',
     'merge_topic' => 'Scal temat',
     'mergetopicmsg' => 'Możesz scalić wybrane posty w inny temat. Te posty nie zostaną zmienione i pojawią się tak, jakby użytkownicy umieścili je w nowym temacie. Podaj docelowy identyfikator tematu lub kliknij "Wybierz temat", aby go wyszukać.',
     'mergeparent' => 'Wybrałeś opcję scalenia <strong>wszystkich</strong> postów w tym temacie na inny temat.',
-    'select' => 'Wybierz',
+    'select'    => 'Wybierz',
     'select_forum' => 'Wybierz temat na forum',
     'destination_topic' => 'Temat docelowy ID:',
     'select_topic' => 'Wybierz temat',
     'lock_topic' => 'Zablokuj temat',
     'unlock_topic' => 'Odblokuj temat',
-    'locked_topic_msg' => 'Status wątku: <span style="font-weight:700;">Nie zostanie otwarty na dalsze odpowiedzi.</span>'
+    'locked_topic_msg' => 'Status wątku: <span style="font-weight:700;">Nie zostanie otwarty na dalsze odpowiedzi.</span>',
 );
 
 $LANG_GF04 = array(
@@ -558,6 +562,7 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statystyka',
     2 => 'Ustawienia',
@@ -570,9 +575,10 @@ $LANG_GF06 = array(
     9 => 'Import',
     10 => 'Administracja forum',
     11 => 'Odznaczenia',
-    12 => 'Rangi'
+    12 => 'Rangi',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Wyświetl fora',
     2 => 'Preferencje',
@@ -581,12 +587,14 @@ $LANG_GF07 = array(
     5 => 'Użytkownicy'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Powiadomienia tematyczne',
     2 => 'Śledź powiadomienia na forum',
     3 => 'Powiadomienia o wyjątkach tematów'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Załączniki',
     'maxattachments' => 'Max %s dozwolone',
@@ -623,6 +631,7 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Średnia liczba wyświetleń:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Tematy na stronę',
     'showiframe' => 'Pokaż recenzję tematu',
@@ -638,12 +647,13 @@ $LANG_GF92 = array(
     'iframe_help' => 'Pokaż odpowiedź na temat (iframe) na dole podczas odpowiadania.',
     'topic_order' => 'Temat ID',
     'editor_type' => 'Typ edytora',
-    'bbcode' => 'BBCode',
-    'wysiwyg' => 'WYSIWYG',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
     'ascending' => 'Rosnąco',
     'descending' => 'Malejąco',
     'sb_latestposts' => 'Ostatni post',
     'setsavemsg' => 'Ustawienia zapisane.',
+    /* not used */
     'gfsettings' => 'Ustawienia forum dyskusyjnego',
     'gensettings' => 'Ustawienia główne',
     'topicsettings' => 'Ustawienia publikowania wątków',
@@ -740,9 +750,10 @@ $LANG_GF92 = array(
     'smiliesplugin' => 'Wtyczka Smilies',
     'smiliesplugindscp' => 'Do obsługi emotikonów należy używać wtyczek Smilies lub zewnętrznych funkcji',
     'edit_timewindow' => 'Edytuj ramy czasowe',
-    'edit_timewindowdscp' => 'Dozwolony czas (min), aby umożliwić użytkownikom edycję swoich postów'
+    'edit_timewindowdscp' => 'Dozwolony czas (min), aby umożliwić użytkownikom edycję swoich postów',
 );
 
+// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Forum Admin',
     'vieworder' => 'Zobacz przeniesienie',
@@ -783,7 +794,7 @@ $LANG_GF93 = array(
     'ModStick' => 'Przyklejony',
     'ModBan' => 'Ban',
     'addmoderator' => 'Dodaj rekord',
-    'delmoderator' => ' Usuń wybrane',
+    'delmoderator' => " Usuń wybrane",
     'moderatorwarning' => '<b>Ostrzeżenie: brak zdefiniowanych forów</b><br/><br/>Ustaw kategorie forum i dodaj co najmniej 1 forum<br/>przed próbą dodania moderatorów',
     'private' => 'Prywatne forum',
     'filtertitle' => 'Wybierz rekordy moderatora, aby wyświetlić',
@@ -803,8 +814,8 @@ $LANG_GF93 = array(
     'desc_blank' => 'Opis nie może być pusty',
     'category_resynced' => 'Wszystkie fora w tej kategorii zostały zsynchronizowane',
     'forum_resynced' => 'Forum zostało zsynchronizowane',
-    'forum_options' => 'Opcje forum...',
-    'category_options' => 'Opcje kategorii...'
+    'forum_options'  => 'Opcje forum...',
+    'category_options' => 'Opcje kategorii...',
 );
 
 $LANG_GF94 = array(
@@ -866,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Twoja wiadomość nie została wysłana. Prosimy <a href="javascript:history.back()">wróć</a> i upewnij się, że wszystkie pola są wypełnione.',
     'msgdelok' => 'Usunięto pomyślnie',
     'msgdelsuccess' => 'Pomyślnie usunięto wiadomość.',
-    'msgdelerr' => 'Wiadomość nie została usunięta. Prosimy <a href=\"javascript:history.back()\">wróć</a> i wybierz jeden.',
+    'msgdelerr' => 'Wiadomość nie została usunięta. Prosimy <a href=\\"javascript:history.back()\\">wróć</a> i wybierz jeden.',
     'msgpriv' => 'Prywatne wiadomości',
     'msgprivnote1' => 'Masz %s prywatna wiadomość.',
     'msgprivnote2' => 'Masz %s prywatne wiadomości.',
@@ -875,12 +886,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings' => 'Oceny użytkowników',
+    'user_ratings'  => 'Oceny użytkowników',
     'forum_settings' => 'Ustawienia społeczności moderacji forum. Określ minimalną ocenę użytkownika, aby wyświetlać i publikować na forach.',
     'board_ratings' => 'Ustawienia oceny',
     'user_ratings_desc' => 'Oceny użytkowników moderacji społeczności. Możesz zmienić ustawienia użytkownika lub zobaczyć, kto ocenił lub zobaczyć ocenę użytkownika',
-    'rating' => 'Ocena',
-    'uid' => 'UID',
+    'rating'    => 'Ocena',
+    'uid'       => 'UID',
     'user_rating_title' => 'Oceny użytkowników moderacji społeczności',
     'no_subject_defined' => 'Nie określono tematu',
     'admin_set_value' => 'Administrator wyznaczył nową ocenę użytkownika',
@@ -891,15 +902,16 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'Ten ekran pokazuje, w jaki sposób użytkownik głosował (ocenił) innych użytkowników.',
     'user_rating_details' => 'Szczegóły oceny użytkownika: ',
     'user_voting_details' => 'Szczegóły dotyczące głosowania przez użytkownika: ',
-    'save_changes' => 'Zapisz zmiany',
+    'save_changes'  => 'Zapisz zmiany',
     'view_rating' => 'Zobacz ocenę',
-    'post_rating' => 'Ocena postu'
+    'post_rating' => 'Ocena postu',
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: do postu na forum.  link_text domyślny do tematu postu. stosowane: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: do postu na forum.  link_text domyślny do tematu postu. stosowane: [forum:<i>post_id</i> {link_text}]',
 );
 
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum aktualizacja wtyczki zakończone - brak błędów';
 $PLG_forum_MESSAGE2 = 'Forum aktualizacja wtyczki: Nie możemy automatycznie zaktualizować tej wersji. Zapoznaj się z dokumentacją wtyczki.';
 $PLG_forum_MESSAGE5 = 'Forum aktualizacja wtyczki nie powiodło się - sprawdź error.log';
@@ -1001,7 +1013,8 @@ $LANG_confignames['forum'] = array(
     'geshi_overall_style' => 'GeSHi ogólny styl bloku kodu',
     'geshi_line_style' => 'GeSHi styl numeru linii',
     'geshi_code_style' => 'GeSHi styl bloku kodu',
-    'geshi_header_style' => 'GeSHi styl bloku nagłówka'
+    'geshi_header_style' => 'GeSHi styl bloku nagłówka',
+
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1017,15 +1030,14 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Ustawienia załączników'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['forum'] = array(
-    0 => array('Tak' => 1, 'Nie' => 0),
-    1 => array('Tak' => true, 'Nie' => false),
-    2 => array('Zamień stronę główną' => 0, 'Na górze strony' => 1, 'Po wyróznionym artykule' => 2, 'Dół strony' => 3),
-    3 => array('Bez bloków' => 'noblocks', 'Lewy blok' => 'leftblocks', 'Prawy blok' => 'rightblocks', 'Prawy Lewy blok' => 'allblocks'),
-    4 => array('Blok Menu' => 'blockmenu', 'Pasek nawigacji' => 'navbar', 'Żaden' => 'none'),
-    5 => array('Malejąco' => 'DESC', 'Rosnąco' => 'ASC'),
-    6 => array('Sprawdzone' => 1, 'Nie sprawdzone' => 0)
+$LANG_configSelect['forum'] = array(
+    0 => array(1=>'Włącz', 0=>'False'),
+    1 => array(true=>'Włącz', false=>'False'),
+    2 => array(0=>'Replace Home Page', 1=>'Top of Page', 2=>'Po wyróżnionym artykule', 3=>'Bottom of Page'),
+    3 => array('noblocks'=>'Bez bloków', 'leftblocks'=>'Lewe bloki', 'rightblocks'=>'Prawe Bloki', 'allblocks'=>'Right / Left Blocks'),
+    4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'Brak'),
+    5 => array('DESC'=>'Malejąco', 'ASC'=>'Rosnąco'),
+    6 => array(1=>'Checked', 0=>'Unchecked')
 );
 
 ?>

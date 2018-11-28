@@ -1,29 +1,19 @@
 <?php
-
-###############################################################################
-# english_utf-8.php
-#
-# This is the English language file for glFusion
-# Special thanks to Mischa Polivanov for his work on this project
-#
-# Copyright (C) 2000 Jason Whittenburg
-# jwhitten AT securitygeeks DOT com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
+/**
+* glFusion CMS
+*
+* UTF-8 Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000 by the following authors:
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file cannot be used on its own.');
@@ -32,17 +22,6 @@ if (!defined ('GVERSION')) {
 $LANG_CHARSET = 'utf-8';
 
 $LANG_LOCALE  = 'en_US';
-
-###############################################################################
-# Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
-###############################################################################
-
-###############################################################################
-# USER PHRASES - These are file phrases used in end user scripts
-###############################################################################
 
 ###############################################################################
 # lib-common.php
@@ -307,7 +286,6 @@ $LANG03 = array(
     56 => 'Comment has been approved and is now visible.',
     57 => 'Silent Edit',
     58 => 'No Title Available',
-
 );
 
 ###############################################################################
@@ -336,7 +314,7 @@ $LANG04 = array(
     20 => 'The email address provided does not appear to be a valid email address',
     21 => 'Error',
 //not used
-    22 => "Register with {$_CONF['site_name']}!",
+    22 => "Register with %s!",
 //
     23 => "Register for %s membership.<br />Your email address will <b><i>never</i></b> be publicly displayed on this site.",
     24 => 'Your password will be sent to the email address you enter.',
@@ -388,8 +366,8 @@ $LANG04 = array(
     68 => 'Remember Me For',
     69 => 'How long should we remember you after logging in?',
 // not used
-    70 => "Customize the layout and content of {$_CONF['site_name']}",
-    71 => "One of the great features of {$_CONF['site_name']} is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">register</a> with {$_CONF['site_name']}.  Are you already a member?  Then use the login form to the left to log in!",
+    70 => "Customize the layout and content of %s",
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">register</a> with {$_CONF['site_name']}.  Are you already a member?  Then use the login form to the left to log in!",
 //
     72 => 'Theme',
     73 => 'Language',
@@ -437,8 +415,8 @@ $LANG04 = array(
     115 => 'Your account has been disabled, you may not login. Please contact an Administrator.',
     116 => 'Account Awaiting Activation',
     117 => 'Your account is currently awaiting activation by an administrator. You will not be able to login until your account has been approved.',
-    118 => "Your %s account has now been activated by an administrator. You may now login to the site at the url below using your username (<username>) and password as previously emailed to you.",
-    119 => 'If you have forgotten your password, you may request a new one at this url:',
+    118 => "Your %s account has now been activated by an administrator. You may now login to the site at the URL below using your username (<username>) and password as previously emailed to you.",
+    119 => 'If you have forgotten your password, you may request a new one at this URL:',
     120 => 'Account Activated',
     121 => 'Service',
     122 => 'Sorry, new user registration is disabled',
@@ -459,7 +437,7 @@ $LANG04 = array(
     137 => 'Filter Story Content',
     138 => 'Misc. Settings',
     139 => 'Layout and Language',
-    140 => '<li>No Topic Icons if checked will not display the story topic icons</li><li>No Blocks if checked will only show the Admin Menu, User Menu and Topics</li><li>Set the maximum number of stories to show per page</li><li>Set your timezone and preferred date format</li>',
+    140 => '<li>No Topic Icons if checked will not display the story topic icons</li><li>No Blocks if checked will only show the Admin Menu, User Menu and Topics</li><li>Set the maximum number of stories to show per page</li><li>Set your time zone and preferred date format</li>',
     141 => 'Privacy Settings',
     142 => 'The default setting is to allow users &amp; admins to email fellow site members and show your status as online. Un-check these options to protect your privacy.',
     143 => 'Filter Block Content',
@@ -469,7 +447,7 @@ $LANG04 = array(
     147 => 'Edit your account password (if displayed), autologin setting, and email. You will need to enter the same password or email address twice as a confirmation.',
     148 => 'User Information',
     149 => 'Modify your user information that will be shown to other users.<ul><li>The Tag Line will be added to any comments or forum posts you make.</li><li>The About block is a brief summary of yourself to share.</li><li>Share your PGP Key.</li><li>The Forum Signature will be added to any forum posts you make, overriding your Tag Line.</li></ul>',
-    150 => 'Warning: Javascript recommended for enhanced functionality',
+    150 => 'Warning: JavaScript recommended for enhanced functionality',
     156 => 'Delete Account',
     157 => 'Confirm Delete',
     158 => 'Time Zone',
@@ -520,7 +498,7 @@ $LANG04 = array(
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
     205 => 'Are you sure you want to unlink your remote account?<br>Remember to enter your current local password to complete the process.',
-    206 => "Your %s account has now been activated by an administrator. You may now login to the site at the url below.",
+    206 => "Your %s account has now been activated by an administrator. You may now login to the site at the URL below.",
     207 => 'Go To Site',
     208 => 'You are almost done!',
     209 => 'Please provide and confirm the information below to finalize your account.',
@@ -642,17 +620,10 @@ $LANG09 = array(
     27 => 'seconds',
     28 => 'No story or comment matches for your search',
     29 => 'Story and Comment Results',
-    30 => '',
     31 => 'This plugin returned no matches',
-    32 => '',
     33 => 'URL',
     34 => 'Location',
     35 => 'All Day',
-    36 => '',
-    37 => '',
-    38 => '',
-    39 => '',
-    40 => '',
     41 => 'Your query string should have at least 3 characters.',
     42 => 'Please use a date formatted as YYYY-MM-DD (year-month-day).',
     43 => 'exact phrase',
@@ -663,7 +634,6 @@ $LANG09 = array(
     48 => 'Author',
     49 => 'Date',
     50 => 'Hits',
-    51 => '',
     52 => 'Location',
     53 => 'Story Results',
     54 => 'Comment Results',
@@ -713,14 +683,6 @@ $LANG10 = array(
     11 => 'Top Ten Commented Stories',
     12 => 'Comments',
     13 => 'It appears that there are no stories on this site or no one has ever posted a comment on them.',
-    14 => '',
-    15 => '',
-    16 => '',
-    17 => '',
-    18 => '',
-    19 => '',
-    20 => '',
-    21 => '',
     22 => 'Top Ten emailed Stories',
     23 => 'Emails',
     24 => 'It appears that no one has emailed a story on this site',
@@ -730,7 +692,6 @@ $LANG10 = array(
     28 => 'No users have logged in.',
     29 => 'Last %d users logged on:',
     30 => 'Hits',
-    31 => '',
     32 => 'Total'
 );
 
@@ -752,24 +713,16 @@ $LANG12 = array(
     1 => 'To submit a %s you are required to be logged in as a user.',
     2 => 'Login',
     3 => 'New User',
-    4 => '',
-    5 => '',
     6 => 'Submit a Story',
     7 => 'Login is Required',
     8 => 'Submit',
     9 => 'When submitting information for use on this site we ask that you follow these suggestions...<ul class="bullet-grey"><li>Fill in all the fields, they\'re required</li><li>Provide complete and accurate information</li><li>Double check those URLs</li></ul>',
     10 => 'Title',
-    11 => '',
     12 => 'Start Date',
     13 => 'End Date',
     14 => 'Location',
     15 => 'Description',
-    16 => '',
-    17 => '',
-    18 => '',
     19 => 'Read First',
-    20 => '',
-    21 => '',
     22 => 'Error: Missing Fields',
     23 => 'Please fill in all the fields on the form.  All fields are required.',
     24 => 'Submission Saved',
@@ -785,20 +738,11 @@ $LANG12 = array(
     34 => 'Log Out',
     35 => 'HTML tags are not allowed',
     36 => 'Post Mode',
-    37 => '',
-    38 => '',
-    39 => '',
-    40 => '',
-    41 => '',
-    42 => '',
-    43 => '',
     44 => 'Address Line 1',
     45 => 'Address Line 2',
     46 => 'City/Town',
     47 => 'State',
     48 => 'Zip Code',
-    49 => '',
-    50 => '',
     51 => 'Location',
     52 => 'Delete',
     53 => 'Create Account',
@@ -850,12 +794,9 @@ $LANG21 = array(
     2 => 'You do not have the necessary rights to edit this block.',
     3 => 'Block Editor',
     4 => 'There was a problem reading this feed (see error.log for details).',
-    5 => '',
-    6 => '',
     7 => 'All',
     8 => 'Block Security Level',
     9 => 'Block Order',
-    10 => '',
     11 => 'Portal Block',
     12 => 'Normal Block',
     13 => 'Portal Block Options',
@@ -865,11 +806,8 @@ $LANG21 = array(
     17 => 'Block Content',
     18 => 'Please fill in the Block Title and Content fields',
     19 => 'Block Manager',
-    20 => '',
     21 => 'Block SecLev',
-    22 => '',
     23 => 'Block Order',
-    24 => '',
     25 => 'To edit or delete a block, click on the action icon below.  To create a new block, click on "Create New" above. To move a block, click on the arrows or [R] and [L] boxes.',
     26 => 'Layout Block',
     27 => 'PHP Block',
@@ -892,10 +830,8 @@ $LANG21 = array(
     44 => 'All Except Homepage',
     45 => "You are trying to access a block that you don't have rights to.  This attempt has been logged. Please <a href=\"%s/block.php\">go back to the block administration screen</a>.",
     46 => 'Move',
-    47 => '',
     48 => 'Block Name',
     49 => ' (no spaces and must be unique)',
-    50 => '',
     51 => 'include http://',
     52 => 'If you leave this blank the help icon for this block will not be displayed',
     53 => 'Enabled',
@@ -936,8 +872,6 @@ $LANG24 = array(
     10 => 'cancel',
     11 => 'delete',
     12 => 'ID',
-    13 => '',
-    14 => '',
     15 => 'Date',
     16 => 'Intro Text',
     17 => 'Body Text',
@@ -963,19 +897,14 @@ $LANG24 = array(
     37 => 'More by',
     38 => 'More from',
     39 => 'Emails',
-    40 => '',
     41 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  You may view the article in read-only below. Please <a href=\"%s/story.php\">go back to the story administration screen</a> when you are done.",
     42 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  Please <a href=\"%s/story.php\">go back to the story administration screen</a>.",
-    43 => '',
-    44 => '',
-    45 => '',
     46 => '<b>NOTE:</b> if you modify this date to be in the future, this article will not be published until that date.  That also means the story will not be included in your feed headline feed and it will be ignored by the search and statistics pages.',
     47 => 'Images',
     48 => 'image',
     49 => 'right',
     50 => 'left',
     51 => '<p>To add one of the images you are attaching to this article you need to insert specially formatted text.  The specially formatted text is [imageX], [imageX_right] or [imageX_left] where X is the number of the image you have attached.  NOTE: You must use the images you attach.  If you do not you will be unable to save your story.</p>',
-    52 => '',
     53 => 'was not used.  You must include this image in the intro or body before you can save your changes',
     54 => 'Attached Images Not Used',
     55 => 'The following errors occurred while trying to save your story.  Please correct these errors before saving',
@@ -983,12 +912,9 @@ $LANG24 = array(
     57 => 'View unscaled image',
     58 => 'Archive Options',
     59 => 'Option',
-    60 => '',
     61 => 'Auto Archive',
     62 => 'Auto Delete',
     63 => 'Auto Close Comments',
-    64 => '',
-    65 => '',
     66 => 'There are no topics available for you to submit your story.',
     67 => 'Expand the Content Edit Area size',
     68 => 'Reduce the Content Edit Area size',
@@ -1009,7 +935,6 @@ $LANG24 = array(
     83 => 'Archive Options',
     84 => 'Permissions',
     85 => 'Show All',
-    86 => '',
     87 => 'Story Stats',
     88 => 'Wiki-style format',
     89 => 'Are you sure you want to delete this Story?',
@@ -1068,9 +993,6 @@ $LANG27 = array(
     10 => 'Order',
     11 => 'Stories/Page',
     12 => 'Access Denied',
-// not used
-    13 => "You are trying to access a topic that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/topic.php\">go back to the topic administration screen</a>.",
-//
     14 => 'Sort Method',
     15 => 'alphabetical',
     16 => 'default is',
@@ -1139,17 +1061,12 @@ $LANG28 = array(
     14 => 'Registered',
     15 => 'New User',
     16 => 'Awaiting User Verification',
-    17 => '',
-    18 => '',
-    19 => '',
     20 => 'save',
     21 => 'The username you tried saving already exists.',
     22 => 'Error',
     23 => 'Batch Import',
     24 => 'Batch Import of Users',
     25 => 'You can import a batch of users into glFusion.  The import file must be a tab-delimited text file and must have the fields in the following order: full name, username, email address.  Each user you import will be emailed with a random password.  You must have one user entered per line.  Failure to follow these instructions will cause problems that may require manual work so double check your entries!',
-    26 => '',
-    27 => '',
     28 => 'Check here to delete this picture',
     29 => 'Path',
     30 => 'Import',
@@ -1442,12 +1359,10 @@ $LANG33 = array(
     34 => 'Entries',
     35 => 'Hours',
     36 => 'Select type of feed',
-    37 => '',
     38 => 'Error: Missing Fields',
     39 => 'Please fill in the Feed Title, Description, and Filename.',
     40 => 'Please enter a  number of entries or number of hours.',
     41 => 'Submit',
-    42 => '',
     43 => 'All',
     44 => 'None',
     45 => 'Header-link in topic',
@@ -1455,7 +1370,7 @@ $LANG33 = array(
     47 => 'Search',
     48 => 'Edit',
     49 => 'Feed Logo',
-    50 => "Relative to site url (%s)",
+    50 => "Relative to site URL (%s)",
     51 => 'The filename you have chosen is already used by another feed. Please choose a different one.',
     52 => 'Error: existing Filename',
     53 => 'All Frontpage Stories',
@@ -1513,7 +1428,6 @@ $MESSAGE = array(
     1 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message.",
     2 => "Thank-you for submitting your story.  It has been submitted to our staff for approval. If approved, your story will be available for others to read on our site.",
     3 => "A verification email has been sent to you and should arrive momentarily. Please follow the directions in the message.",
-    4 => '',
     5 => 'Your account information has been successfully saved.',
     6 => 'Your preferences have been successfully saved.',
     7 => 'Your comment preferences have been successfully saved.',
@@ -1526,25 +1440,16 @@ $MESSAGE = array(
     14 => 'The Topic and all its Stories and Blocks have been successfully deleted.',
     15 => 'Your Comment has been submitted for review and will be published when approved by a moderator.',
     16 => 'You have been un-subscribed. You will no longer be notified of new replies',
-    17 => '',
-    18 => '',
-    19 => '',
-    20 => '',
     21 => 'The user has been successfully saved.',
     22 => 'The user has been successfully deleted.',
-    23 => '',
-    24 => '',
-    25 => '',
     26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Message successfully sent.',
     28 => 'The plugin has been successfully saved',
-    29 => '',
     30 => 'Access Denied',
     31 => 'Sorry, you do not have access to the story administration page.  Please note that all attempts to access unauthorized features are logged',
     32 => 'Sorry, you do not have access to the topic administration page.  Please note that all attempts to access unauthorized features are logged',
     33 => 'Sorry, you do not have access to the block administration page.  Please note that all attempts to access unauthorized features are logged',
     34 => 'Sorry, you do not have access to this administration page.  Please note that all attempts to access unauthorized features are logged',
-    35 => '',
     36 => 'The Autotag permissions have been successfully saved.',
     37 => 'Sorry, you do not have access to the user administration page.  Please note that all attempts to access unauthorized features are logged',
     38 => 'Sorry, you do not have access to the plugin administration page.  Please note that all attempts to access unauthorized features are logged',
@@ -1595,15 +1500,10 @@ $MESSAGE = array(
     83 => 'To change your password, email address, or for how long to remember you, please enter your current password.',
     84 => 'To delete your account, please enter your current password.',
     85 => 'There was a problem sending the email.',
-    86 => '',
-    87 => '',
-    88 => '',
-    89 => '',
-    90 => '',
     91 => 'Error removing the plugin file structure - the web server may not have sufficient permissions. See error.log for details.',
     92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
-    94 => 'Backup Failed: Filesize less than 1kb',
+    94 => 'Backup Failed: File size less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
@@ -1798,7 +1698,7 @@ $LANG_DB_ADMIN = array(
     'configure'           => 'Configure',
     'config_instructions' => 'Select any tables you wish to exclude from the backup. You can also set how many backups to keep, older backups will be purged automatically.',
     'utf8_title'          => 'UTF8MB4 Upgrade',
-    'utf8_instructions'   => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
+    'utf8_instructions'   => 'Upgrade your existing utf-8 site to utf8mb4 - provides full support for all Unicode characters.<br><br>The current database collation is <strong>%s</strong> and the current database character set is <strong>%s</strong>.',
     'utf8_success'        => 'UTF8 Upgrade has completed successfully',
     'retrieve_tables'     => 'Retrieving Table List',
     'error_heading'       => 'Errors',
@@ -1817,7 +1717,7 @@ $LANG_DB_ADMIN = array(
 # Two Factor Authentication
 
 $LANG_TFA = array(
-    'error_invalid_code'    => 'Two Factor Authenication Code was incorrect, please enter a valid code from your authenticator app or use a backup code.',
+    'error_invalid_code'    => 'Two Factor Authentication Code was incorrect, please enter a valid code from your authenticator app or use a backup code.',
     'two_factor'            => 'Two Factor Authentication',
     'two_factor_enabled'    => 'Two Factor Authentication Enabled',
     'disable_tfa'           => 'Disable Two Factor Authentication',
@@ -1835,7 +1735,7 @@ $LANG_TFA = array(
     'not_enrolled'          => '<p>This site supports two-factor authentication to enhance the security of your account.</p><p>Your account is not currently enrolled in two-factor authentication.</p>',
     'enroll_button'         => 'Enroll into two-factor authentication',
     'error_verify_failed'   => 'The code was not correct - Please enter the code provided by your authenticator app',
-    'enroll_success'        => '<p>Congradulations, you have enabled Two Factor Authentication for your account.</p><p>Below are backup codes that can be used to log into the site if you do not have access to your authenticator application. Please store these in a secure location.</p>',
+    'enroll_success'        => '<p>Congratulations, you have enabled Two Factor Authentication for your account.</p><p>Below are backup codes that can be used to log into the site if you do not have access to your authenticator application. Please store these in a secure location.</p>',
     'scan_qrcode'           => 'Scan the image with your authentication application',
     'enter_secret'          => 'Or enter the secret:',
     'enroll_enter_code'     => 'And enter the code the application gives you:',
@@ -1849,7 +1749,7 @@ $LANG_TFA = array(
 
 $LANG_PWD = array(
     'title'            => 'Passwords must meet the follow rules',
-    'min_length'       => 'Must be atleast %s characters in length',
+    'min_length'       => 'Must be at least %s characters in length',
     'max_length'       => 'Must not be longer than %s characters',
     'req_num'          => 'Must contain at least 1 number',
     'req_letter'       => 'Must contain at least 1 letter',
@@ -1871,9 +1771,6 @@ $LANG_BUTTONS = array(
     1 => 'Home',
     2 => 'Contact',
     3 => 'Get Published',
-    4 => '',
-    5 => '',
-    6 => '',
     7 => 'Site Stats',
     8 => 'Personalize',
     9 => 'Search',
@@ -3010,7 +2907,6 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Story Administration',
@@ -3081,43 +2977,42 @@ $LANG_fs['Core'] = array(
     'fs_cache_backend' => 'Cache Options',
 );
 
-$LANG_configselects['Core'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Reject' => 0, 'Only Keep Latest' => 1, 'Allow Multiple Posts' => 2),
-    3 => array('Trackback Enabled' => 0, 'Trackback Disabled' => -1),
-    4 => array('Don\'t Check Anything' => 0, 'Check against Site URL' => 1, 'Check full URL' => 2, 'Check against Site URL and full URL' => 3, 'Check IP against Site IP' => 4, 'Check IP and Site URL' => 5, 'Check IP and Full URL' => 6, 'Check IP, Full URL, and Site URL' => 7),
-    5 => array('Text' => 'plaintext', 'HTML' => 'html'),
-    6 => array('12' => 12, '24' => 24),
-    7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
-    8 => array('Right' => 'right', 'Left' => 'left'),
-    9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib' ),
-    11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
-    14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
-    15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
-    16 => array('No Login required' => 0, 'Login Required' => 1),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
-    18 => array('Google' => 'google', 'Table' => 'table'),
-    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
-    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
-    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
-    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
-    24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
-    25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
-    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
-    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
-    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
-    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
-    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
-    32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
-    34 => array('HTML' => 0, 'Visual' => 1),
-    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user'),
+$LANG_configSelect['Core'] = array(
+    0 => array(1 => 'True', 0 => 'False'),
+    1 => array(true => 'True', false => 'False'),
+    2 => array(0 => 'Reject', 1 => 'Only Keep Latest', 2 => 'Allow Multiple Posts'),
+    3 => array(0 => 'Trackback Enabled', 1 => 'Trackback Disabled'),
+    4 => array(0 => 'Don\'t Check Anything', 1 => 'Check against Site URL', 2 => 'Check full URL', 3 => 'Check against Site URL and full URL', 4 => 'Check IP against Site IP', 5 => 'Check IP and Site URL', 6 => 'Check IP and Full URL', 7 => 'Check IP, Full URL, and Site URL'),
+    5 => array('plaintext' => 'Text', 'html' => 'HTML'),
+    6 => array(12 => '12', 24 => '24'),
+    7 => array('last' => 'Last Page', 'first' => 'First Page', 'all' => 'Every Page'),
+    8 => array('right'=>'Right', 'left'=>'Left'),
+    9 => array('item'=>'Forward to page', 'list'=>'Display List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
+    10 => array('netpbm'=>'Netpbm', 'graphicsmagick'=>'GraphicsMagick', 'imagemagick'=>'ImageMagick', 'gdlib'=>'gdLib'),
+    11 => array('flat'=>'Flat', 'nested'=>'Nested', 'nocomment'=>'No Comments'),
+    12 => array(0=>'No access', 2=>'Read-Only', 3=>'Read-Write'),
+    13 => array(0=>'Skip', 1=>'Allow, with speedlimit', 2=>'Allow, no speedlimit'),
+    14 => array('Sun'=>'Sunday', 'Mon'=>'Monday'),
+    15 => array('sortnum'=>'By Number', 'alpha'=>'Alphabetically'),
+    16 => array(0=>'No Login required', 1=>'Login Required'),
+    17 => array(0=>'Comments Enabled', -1 =>'Comments Disabled'),
+    18 => array('google'=>'Google', 'table'=>'Table'),
+    19 => array('phrase'=>'Exact Phrase', 'all'=> 'All of The Words', 'any'=>'Any of The Words'),
+    20 => array('mail'=>'Mail', 'sendmail'=>'Sendmail', 'smtp'=>'SMTP'),
+    21 => array('none' => 'none', 'tls'=>'TLS', 'ssl'=>'SSL'),
+    22 => array('date'=>'Date', 'title'=>'Title', 'uid'=>'Author', 'hits'=>'Hits'),
+    23 => array(0=>'Disabled', 1=>'Enabled (Exact Match)', 2=>'Enabled (Word Beginning)', 3=>'Enabled (Word Fragment)'),
+    24 => array(0=>'Disabled', 1=>'Logged-in Users', 2=>'Everyone'),
+    25 => array(0=>'No', 1=>'Optional', 2=>'Required'),
+    26 => array(0=>'None', 1=>'A.B', 2=>'A.B.C', 3=>'All'),
+    27 => array(0=>'Generate Password', 1=>'User Enters Password'),
+    28 => array(0=>'Text Box', 1=>'WYSIWYG Editor'),
+    29 => array(86400=>'Daily', 604800=>'Weekly', 3600=>'Hourly', 0=>'Always'),
+    30 => array('internal'=>'Internal', 'disqus'=>'Disqus', 'facebook'=>'Facebook'),
+    31 => array(0=>'Disabled', 1=>'Anonymous Users Only', 2=>'All Users'),
+    32 => array('DESC'=>'Descending', 'ASC'=>'Ascending'),
+    33 => array('date'=>'Date', 'title'=>'Title', 'uid'=>'Author', 'hits'=>'Hits', 'sid'=>'Story ID'),
+    34 => array(0=>'HTML', 1=>'Visual'),
+    35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'New Users'),
 );
-
 ?>

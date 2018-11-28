@@ -1,34 +1,19 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | CAPTCHA Plugin - glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* UTF-8 Language File for glFusion CAPTCHA Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CP00 = array (
@@ -88,7 +73,7 @@ $LANG_configsections['captcha'] = array(
 $LANG_confignames['captcha'] = array(
     'gfxDriver'             => 'Graphics Driver',
     'gfxFormat'             => 'Graphics Format',
-    'imageset'			    => 'Static Image Set',
+    'imageset'              => 'Static Image Set',
     'debug'                 => 'Debug',
     'gfxPath'               => 'Full Path to ImageMagick\'s Convert Utility',
     'remoteusers'           => 'Force CAPTCHA for All Remote Users',
@@ -119,13 +104,13 @@ $LANG_fs['captcha'] = array(
     'cp_public'                 => 'General Settings',
     'cp_integration'            => 'CAPTCHA Integration',
 );
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
-$LANG_configselects['captcha'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array('GD Libs' => 0, 'reCAPTCHA' => 3, 'Math Equation' => 6),
-    4 => array('Default' => 'default','Simple' => 'simple'),
-    5 => array('JPG' => 'jpg','PNG' => 'png'),
+
+$LANG_configSelect['captcha'] = array(
+    0 => array(1=>'True', 0=>'False'),
+    1 => array(true=>'True', false=>'False'),
+    2 => array(0=>'GD Libs', 3=>'reCAPTCHA', 6=>'Math Equation'),
+    4 => array('default'=>'Default','simple'=>'Simple'),
+    5 => array('jpg'=>'JPG','png'=>'PNG'),
     6 => array('light' => 'light','dark' => 'dark'),
 );
 
