@@ -1,6 +1,7 @@
 <script src="js/pwd_strength.js"></script>
 <form class="uk-form" name="sitedata" id="sitedata" action="index.php" method="post">
 	{hiddenfields}
+	<input type="hidden" name="use_utf8" value="1">
 	<div class="uk-grid">
 		<div class="uk-width-medium-4-4">
 			<div class="uk-float-right">
@@ -20,19 +21,12 @@
 
 			<div class="uk-form-row">
 				<label class="uk-form-label">{lang_database_type}</label>
+
 				<div class="uk-form-controls">
 					<select name="dbtype">
 						<option value="mysql" {noinnodb_selected}>MySQL</option>
 						<option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
-						<option value="mysqli" {mysqli_selected}>MySQLi</option>
 					</select>
-				</div>
-			</div>
-
-			<div class="uk-form-row">
-				<div class="uk-form-controls">
-					<input type="checkbox" name="use_utf8" checked="checked">
-					<label class="uk-form-label">{lang_utf8}</label>
 				</div>
 			</div>
 

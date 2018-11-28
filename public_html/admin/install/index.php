@@ -1061,8 +1061,11 @@ function INST_getSiteInformation()
     $site_mail      = (isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '');
     $noreply_mail   = (isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '');
     $securePassword = (isset($_GLFUSION['securepassword']) ? $_GLFUSION['securepassword'] : '');
-    $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
     $dbconfig_path  = $_GLFUSION['dbconfig_path'];
+
+
+//    $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    $utf8           = 1;
 
     if ( $securePassword == '' ) {
         $securePassword = INST_securePassword(15);
@@ -1314,7 +1317,9 @@ function INST_gotSiteInformation()
     $_GLFUSION['site_mail']       = $site_mail;
     $_GLFUSION['noreply_mail']    = $noreply_mail;
     $_GLFUSION['securepassword']  = $securePassword;
-    $_GLFUSION['utf8']            = isset($_POST['use_utf8']) ? 1 : 0;
+
+//    $_GLFUSION['utf8']            = isset($_POST['use_utf8']) ? 1 : 0;
+    $_GLFUSION['utf8']            = 1;
 
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_ERROR,'getsiteinformation',$errText);
@@ -1472,7 +1477,8 @@ function INST_installAndContentPlugins()
         $use_innodb = false;
     }
 
-    $utf8 = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+//    $utf8 = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    $utf8 = 1;
     if ( $utf8 ) {
         $charset = 'utf-8';
     } else {
