@@ -5787,7 +5787,11 @@ function COM_getLanguage()
     }
 
     // if all else fails, return the default language
-    return $_CONF['language'];
+    if (is_file($_CONF['path_language'].$_CONF['language'].'.php')) {
+        return $_CONF['language'];
+    }
+
+    return 'english_utf-8';
 }
 
 /**
