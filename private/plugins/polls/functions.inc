@@ -48,8 +48,8 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 } else {
-    $langfile = $_CONF['path'].'plugins/polls/language/english.php';
-    $custfile = $_CONF['path'].'plugins/polls/language/custom/english.php';
+    $langfile = $_CONF['path'].'plugins/polls/language/english_utf-8.php';
+    $custfile = $_CONF['path'].'plugins/polls/language/custom/english_utf-8.php';
     include_once $langfile;
     if (file_exists($custfile)) {
         include_once $custfile;

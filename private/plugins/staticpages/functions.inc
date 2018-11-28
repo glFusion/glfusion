@@ -44,7 +44,7 @@ if (file_exists($langfile)) {
     require_once $langfile;
 } else {
     $lang = 'english';
-    require_once $plugin_path . 'language/english.php';
+    require_once $plugin_path . 'language/english_utf-8.php';
 }
 
 // Include the custom language file, if any

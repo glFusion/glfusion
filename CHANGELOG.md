@@ -14,6 +14,7 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - glFusion now requires a UTF-8 configuration
   - Translation now handled on the glFusion CMS Crowdin site
   - Removed all variable references from language files - now use sprintf() to build final string
   - Minimum PHP version is now 7.1.0
@@ -27,6 +28,7 @@
 ### Depreciated
 
   - Depreciated the $LANG_configselects() language array
+  - Non-UTF-8 language support
 
 ### Removed
   - Removed GeShi code formatter

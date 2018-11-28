@@ -1,53 +1,36 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file for the glFusion installation script               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// |          Randy Kolenko     - randy AT nextide DOT ca                     |
-// |          Matt West         - matt AT mattdanger DOT net                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Installation UTF-8 Language File
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Tony Bibbs          tony AT tonybibbs DOT com
+*   Mark Limburg        mlimburg AT users DOT sourceforge DOT net
+*   Jason Whittenburg   jwhitten AT securitygeeks DOT com
+*   Dirk Haun           dirk AT haun-online DOT de
+*   Randy Kolenko       randy AT nextide DOT ca
+*   Matt West           matt AT mattdanger DOT net
+*
+*/
 
-// +---------------------------------------------------------------------------+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 $LANG_CHARSET = 'utf-8';
 
-// +---------------------------------------------------------------------------+
-// index.php
-
 $LANG_INSTALL = array(
-    'adminuser'                 => 'Admin Username',
+    'adminuser'                 => 'Admin User name',
     'back_to_top'               => 'Back to top',
     'calendar'                  => 'Load Calendar Plugin?',
-    'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
+    'calendar_desc'             => 'An on-line calendar / event system. Includes a site wide calendar and personal calendars for site users.',
     'connection_settings'       => 'Connection Settings',
     'content_plugins'           => 'Content & Plugins',
     'copyright'                 => '<a href="https://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>',
@@ -64,8 +47,8 @@ $LANG_INSTALL = array(
     'db_table_prefix'           => 'Database Table Prefix',
     'db_type'                   => 'Database Type',
     'db_type_error'             => 'Database Type must be selected',
-    'db_user'                   => 'Database Username',
-    'db_user_error'             => 'Database Username cannot be blank.',
+    'db_user'                   => 'Database User name',
+    'db_user_error'             => 'Database User name cannot be blank.',
     'db_too_old'                => 'MySQL Version is too old - You must have MySQL v5.0.15 or later',
     'dbconfig_not_found'        => 'Unable to locate the db-config.php or db-config.php.dist file. Please make sure you have entered the correct path to your private directory.',
     'dbconfig_not_writable'     => 'The db-config.php file is not writable. Please ensure the web server has permission to write to this file.',
@@ -79,7 +62,7 @@ $LANG_INSTALL = array(
     'filemgmt_desc'             => 'File Download Manager. An easy way to provide file downloads, organized by category.',
     'filesystem_check'          => 'File System Check',
     'forum'                     => 'Load Forum Plugin?',
-    'forum_desc'                => 'An online community forum system. Provides community collaboration and interactivity.',
+    'forum_desc'                => 'An on-line community forum system. Provides community collaboration and interactivity.',
     'hosting_env'               => 'Hosting Environment Check',
     'install'                   => 'Install',
     'install_heading'           => 'glFusion Installation',
@@ -108,7 +91,7 @@ $LANG_INSTALL = array(
     'ok'                        => 'OK',
     'on'                        => 'On',
     'online_help_text'          => 'Install Docs at glFusion.org',
-    'online_install_help'       => 'Online Install Help',
+    'online_install_help'       => 'On-line Install Help',
     'open_basedir'				=> 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'path_info'					=> 'Path Information',
     'path_prompt'               => 'Path to private/ directory',
@@ -153,7 +136,7 @@ $LANG_INSTALL = array(
     'siteconfig_exists'         => 'An existing siteconfig.php file was found. Please delete this file before performing a new installation.',
     'siteconfig_not_found'      => 'Unable to locate the siteconfig.php file, are you sure this is an upgrade?',
     'siteconfig_not_writable'   => 'The siteconfig.php file is not writable, or the directory where siteconfig.php is stored is not writable. Please correct this issue before proceeding.',
-    'sitedata_help'             => 'Select the type of database to use from the drop down list. This is generally <strong>MySQL</strong>. Also select whether to use the <strong>UTF-8</strong> character set (this should generally be checked for multi-lingual sites.)<br /><br />Enter the hostname of the database server. This may not be the same as your web server, so check with your hosting provider if you are not sure.<br /><br />Enter the name of your database. <strong>The database must already exist.</strong> If you do not know the name of your database, contact your hosting provider.<br /><br />Enter the username to connect to the database. If you do not know the database username, contact your hosting provider.<br /><br />Enter the password to connect to the database. If you do not know the database password, contact your hosting provider.<br /><br />Enter a table prefix to be used for the database tables. This is helpful to separate multiple sites or systems when using a single database.<br /><br />Enter the name of your site. It will be displayed in the site header. For example, glFusion or Mark\'s Marbles. Don\'t worry, it can always be changed later.<br /><br />Enter the slogan of your site. It will be displayed in the site header below the site name. For example, synergy - stability - style. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s main email address. This is the email address for the default Admin account. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s no reply email address. It will be used to automatically send new user, password reset, and other notification emails. Don\'t worry, it can always be changed later.<br /><br />Please confirm that this is the web address or URL used to access the homepage of your site.<br /><br />Please confirm that this is the web address or URL used to access the admin section of your site.',
+    'sitedata_help'             => 'Select the type of database to use from the drop down list. This is generally <strong>MySQL</strong>. Your database should be setup to use <strong>UTF-8</strong> collation.<br /><br />Enter the hostname of the database server. This may not be the same as your web server, so check with your hosting provider if you are not sure.<br /><br />Enter the name of your database. <strong>The database must already exist.</strong> If you do not know the name of your database, contact your hosting provider.<br /><br />Enter the user name to connect to the database. If you do not know the database user name, contact your hosting provider.<br /><br />Enter the password to connect to the database. If you do not know the database password, contact your hosting provider.<br /><br />Enter a table prefix to be used for the database tables. This is helpful to separate multiple sites or systems when using a single database.<br /><br />Enter the name of your site. It will be displayed in the site header. For example, glFusion or Mark\'s Marbles. Don\'t worry, it can always be changed later.<br /><br />Enter the slogan of your site. It will be displayed in the site header below the site name. For example, synergy - stability - style. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s main email address. This is the email address for the default Admin account. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s no reply email address. It will be used to automatically send new user, password reset, and other notification emails. Don\'t worry, it can always be changed later.<br /><br />Please confirm that this is the web address or URL used to access the homepage of your site.<br /><br />Please confirm that this is the web address or URL used to access the admin section of your site.',
     'sitedata_missing'          => 'The following problems were detected with the site data you entered:',
     'system_path'               => 'Path Settings',
     'unable_mkdir'              => 'Unable to create directory',
@@ -273,7 +256,7 @@ $LANG_SUCCESS = array(
     16 => 'Set permissions on',
     17 => 'and',
     18 => 'back to',
-    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The username for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
+    19 => '<strong>Note:</strong> Because the security model has been changed, we have created a new account with the rights you need to administer your new site.  The user name for this new account is <b>NewAdmin</b> and the password is <b>password</b>',
     20 => 'installed',
     21 => 'upgraded',
     22 => 'Remove Installation Directory',
