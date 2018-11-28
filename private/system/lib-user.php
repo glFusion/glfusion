@@ -312,7 +312,8 @@ function USER_sendActivationEmail ($username, $useremail)
         $template->parse ('output', 'mail');
         $mailtext = $template->get_var ('output');
     } else {
-        $mailtext = str_replace("<username>", $username, sprintf($LANG04[118],$_CONF['site_name'])) . "\n\n";
+//        $mailtext = str_replace("<username>", $username, sprintf($LANG04[118],$_CONF['site_name'])) . "\n\n";
+        $mailtext = sprintf($LANG04[118],$username, $_CONF['site_name']) . "\n\n";
         $mailtext .= $_CONF['site_url'] ."\n\n";
         $mailtext .= $LANG04[119] . "\n\n";
         $mailtext .= $_CONF['site_url'] ."/users.php?mode=getpassword\n\n";
