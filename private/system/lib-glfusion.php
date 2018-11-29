@@ -104,7 +104,7 @@ function phpblock_storypicker() {
     $sid = '';
     if (isset($_GET['story'])) {
         $sid = COM_applyFilter($_GET['story']);
-        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?",array($sid),array(Database::STRING));
+        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?",array($sid),0,array(Database::STRING));
         if (!empty($stopic)) {
             $topic = $stopic;
         } else {
@@ -127,7 +127,7 @@ function phpblock_storypicker() {
         $topicsql = " AND tid = ?";
     }
     if (empty($topicsql)) {
-        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
+        $topic = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1",array(),0);
 
         if (empty($topic)) {
             $topicsql = '';
@@ -150,8 +150,7 @@ function phpblock_storypicker() {
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
         $list .= '<li><a href=' . $url .'>'
-		//uncomment the 2 lines below to limit of characters displayed in the title
-		. COM_truncate($A['title'],41,'...') . "</a></li>\n";
+                . COM_truncate($A['title'],41,'...') . "</a></li>\n";
     }
     return $list;
 }
