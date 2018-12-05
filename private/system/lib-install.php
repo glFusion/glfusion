@@ -1,51 +1,75 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-install.php                                                          |
-// |                                                                          |
-// | Install/Uninstall library.                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2008 by the following authors:                             |
-// |                                                                          |
-// | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS
+*
+* glFusion Plugin Install / Uninstall Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2010-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2010 by the following authors:
+*   Authors: Joe Mucchiello  joe AT throwingdice DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database;
+
 if (!defined('INSTALLER_VERSION')) {
-define('INSTALLER_VERSION','1');
+    define('INSTALLER_VERSION','1');
+}
+
+function INSTALLER_install_feature($step, &$vars)
+{
+    global $_TABLES;
+
+    $db = Database::getInstance();
+
+    COM_errorLog("AutoInstall: Creating feature {$step['feature']}...");
+    $ft_name = $step['feature'];
+    $ft_desc = $step['desc'];
+
+    try {
+        $stmt = $db->conn->insert(
+                            $_TABLES['features'],
+                            array(
+                                'ft_name' => $step['feature'],
+                                'ft_descr' => $step['desc']
+                            )
+                );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        COM_errorLog("AutoInstall: Feature creation failed!");
+        return 1;
+    }
+
+    $ft_id = $db->conn->lastInsertId();
+
+    $vars[$step['variable']] = $ft_id;
+    $vars['__groups'][$step['variable']] = $ft_name;
+
+    return array( 'sql' => array(
+                        "DELETE FROM `{$_TABLES['features']}` WHERE ft_id=?",
+                        array($ft_id),
+                        array(Database::INTEGER)
+                    )
+            );
+}
 
 function INSTALLER_install_group($step, &$vars)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     COM_errorLog("AutoInstall: Creating group {$step['group']}...");
-    $grp_name = DB_escapeString($step['group']);
-    $grp_desc = DB_escapeString($step['desc']);
+    $grp_name = $step['group'];
+    $grp_desc = $step['desc'];
     if (isset($step['admin']) && $step['admin'] == true) {
         $admin = 2;
     } else {
@@ -56,80 +80,126 @@ function INSTALLER_install_group($step, &$vars)
     } else {
         $default = 0;
     }
-    DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr,grp_gl_core,grp_default) VALUES ('$grp_name', '$grp_desc',$admin,$default)", 1);
-    if (DB_error()) {
+
+    try {
+        $stmt = $db->conn->insert(
+                            $_TABLES['groups'],
+                            array(
+                                'grp_name' => $grp_name,
+                                'grp_descr' => $grp_desc,
+                                'grp_gl_core' => $admin,
+                                'grp_default' => $default
+                            ),
+                            array(
+                                Database::STRING,
+                                Database::STRING,
+                                Database::INTEGER,
+                                Database::INTEGER
+                            )
+                 );
+    } catch(\Doctrine\DBAL\DBALException $e) {
         COM_errorLog("AutoInstall: Group creation failed!");
         return 1;
     }
-    $grp_id = DB_insertId();
+
+    $grp_id = $db->conn->lastInsertId();
+
     $vars[$step['variable']] = $grp_id;
     $vars['__groups'][$step['variable']] = $grp_name;
 
     if (isset($step['addroot'])) {
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)", 1);
+        try {
+            $db->conn->insert(
+                $_TABLES['group_assignments'],
+                array(
+                    'ug_main_grp_id' => $grp_id,
+                    'ug_grp_id'      => 1
+                    ),
+                array(Database::INTEGER,Database::INTEGER)
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            COM_errorLog("AutoInstall: Error inserting Group Assignment for Root");
+        }
+
+        if ( isset($step['default']) && $step['default'] == true ) {
+            INSTALLER_applyGroupDefault($grp_id,true);
+        }
     }
 
-    if ( isset($step['default']) && $step['default'] == true ) {
-        INSTALLER_applyGroupDefault($grp_id,true);
-    }
-    return "DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id";
+    return array(
+                    'sql' =>
+                        array(
+                            "DELETE FROM `{$_TABLES['groups']}` WHERE grp_id=?",
+                            array($grp_id),
+                            array(Database::INTEGER)
+                        )
+                );
 }
 
 function INSTALLER_install_addgroup($step, &$vars)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     COM_errorLog("AutoInstall: Adding a group to another group...");
     if (array_key_exists('parent_var',$step)) {
         $parent_grp = $vars[$step['parent_var']];
     } elseif (array_key_exists('parent_grp',$step)) {
-        $parent_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . DB_escapeString($step['parent_grp']) . "'");
+
+        $parent_grp = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name'=>$step['parent_grp']));
     } else {
         $parent_grp = 0;
     }
     if (array_key_exists('child_var',$step)) {
         $child_grp = $vars[$step['child_var']];
     } elseif (array_key_exists('child_grp',$step)) {
-        $child_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '" . DB_escapeString($step['child_grp']) . "'");
+        $child_grp = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => $step['child_grp']));
     } else {
         $child_grp = 0;
     }
     $parent_grp = intval($parent_grp);
     $child_grp = intval($child_grp);
-    if ($parent_grp == 0 || $child_grp == 0) {
-        COM_errorLog("AutoInstall: Parent or child group missing!");
+
+    if ($parent_grp == 0) {
+        COM_errorLog("AutoInstall: ERROR: Parent group not found");
+        return 1;
+    }
+    if ($child_grp == 0) {
+        COM_errorLog("AutoInstall: ERROR: Child group not found");
         return 1;
     }
 
-    DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($parent_grp, $child_grp)", 1);
-    if (DB_error()) {
+    try {
+        $db->conn->insert(
+            $_TABLES['group_assignments'],
+            array(
+                'ug_main_grp_id' => $parent_grp,
+                'ug_grp_id' => $child_grp
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER
+            )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
         COM_errorLog("AutoInstall: Failed to assign group!");
         return 1;
     }
-    return "DELETE FROM {$_TABLES['group_assignments']} where ug_main_grp_id = $parent_grp and grp_id = $child_grp";
-}
 
-function INSTALLER_install_feature($step, &$vars)
-{
-    global $_TABLES;
-
-    COM_errorLog("AutoInstall: Creating feature {$step['feature']}...");
-    $ft_name = DB_escapeString($step['feature']);
-    $ft_desc = DB_escapeString($step['desc']);
-    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr) VALUES ('$ft_name', '$ft_desc')", 1);
-    if (DB_error()) {
-        COM_errorLog("AutoInstall: Feature creation failed!");
-        return 1;
-    }
-    $ft_id = DB_insertId();
-    $vars[$step['variable']] = $ft_id;
-    $vars['__groups'][$step['variable']] = $ft_name;
-    return "DELETE FROM {$_TABLES['features']} WHERE ft_id = $ft_id";
+    return array( 'sql' => array(
+                            "DELETE FROM `{$_TABLES['group_assignments']}` where ug_main_grp_id = ? and grp_id = ?",
+                            array($parent_grp,$child_grp),
+                            array(Database::INTEGER,Database::INTEGER)
+                            )
+           );
 }
 
 function INSTALLER_install_mapping($step, &$vars)
 {
     global $_TABLES;
+
+    $db = Database::getInstance();
 
     if (isset($step['log'])) {
         COM_errorLog("AutoInstall: ".$step['log']);
@@ -137,9 +207,10 @@ function INSTALLER_install_mapping($step, &$vars)
         COM_errorLog("AutoInstall: Mapping a feature to a group...");
     }
     if (array_key_exists('findgroup', $step)) {
-        $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . DB_escapeString($step['findgroup']) . "'"));
 
-        if ($grp_id == 0) {
+        $grp_id = $db->getItem($_TABLES['group'],'grp_id',array('grp_name' => $step['findgroup']));
+
+        if ($grp_id === false) {
             COM_errorLog("AutoInstall: Could not find existing '{$step['findgroup']}' group!");
             return 1;
         }
@@ -147,12 +218,30 @@ function INSTALLER_install_mapping($step, &$vars)
         $grp_id = $vars[$step['group']];
     }
     $ft_id = $vars[$step['feature']];
-    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
-    if (DB_error()) {
+
+    try {
+        $db->conn->insert(
+            $_TABLES['access'],
+            array(
+                'acc_ft_id' => $ft_id,
+                'acc_grp_id' => $grp_id
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER
+            )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
         COM_errorLog("AutoInstall: Mapping failed!");
         return 1;
     }
-    return "DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id AND acc_grp_id = $grp_id";
+
+    return array( 'sql' => array(
+                    "DELETE FROM `{$_TABLES['access']}` WHERE acc_ft_id = ? AND acc_grp_id = ?",
+                    array($ft_id,$grp_id),
+                    array(Database::INTEGER, Database::INTEGER)
+                    )
+            );
 }
 
 function INSTALLER_install_table($step, &$vars)
@@ -160,10 +249,16 @@ function INSTALLER_install_table($step, &$vars)
     global $_DB_dbms, $_TABLES;
 
     COM_errorLog("AutoInstall: Creating table {$step['table']}...");
+
+    $db = Database::getInstance();
+
     static $use_innodb = null;
+
     if ($use_innodb === null) {
-        if (($_DB_dbms == 'mysql') &&
-            (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+
+        $siteDBType = $db->getItem($_TABLES['vars'],'value',array('name' => 'database_engine'));
+
+        if (($_DB_dbms == 'mysql') AND $siteDBType == 'InnoDB') {
             $use_innodb = true;
         } else {
             $use_innodb = false;
@@ -178,12 +273,14 @@ function INSTALLER_install_table($step, &$vars)
         $sql = $sql55;
     }
 
-    DB_query($sql, 1);
-    if (DB_error()) {
-        COM_errorLog("AutoInstall: Failed to create table {$step['table']}!");
+    try {
+        $stmt = $db->conn->query($sql);
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        COM_errorLog("AutoInstall: Failed to create table {$step['table']}");
         return 1;
     }
-    return "DROP TABLE {$step['table']}";
+
+    return array('sql' => array("DROP TABLE `{$step['table']}`",array(),array()));
 }
 
 function INSTALLER_extract_params($str, $delim)
@@ -214,6 +311,8 @@ function INSTALLER_install_sql($step, &$vars)
         COM_errorLog("AutoInstall: ".$step['log']);
     }
 
+    $db = Database::getInstance();
+
     if (array_key_exists('sql', $step)) {
         $query = (is_array($step['sql'])) ? $step['sql'] : array($step['sql']);
         foreach ($query as $sql) {
@@ -223,12 +322,13 @@ function INSTALLER_install_sql($step, &$vars)
             foreach($params as $param) {
                 $sql = (array_key_exists($param, $vars)) ? str_replace('%%'.$param.'%%', $vars[$param], $sql) : $sql;
             }
-            DB_query($sql, 1);
-            if (DB_error()) {
+            try {
+                $stmt = $db->conn->query($sql);
+            } catch(\Doctrine\DBAL\DBALException $e) {
                 COM_errorLog("AutoInstall: SQL failed! ".htmlspecialchars($step['sql']));
                 return 1;
             }
-        }
+       }
     }
 
     return isset($step['rev']) ? $step['rev'] : '';
@@ -236,6 +336,8 @@ function INSTALLER_install_sql($step, &$vars)
 
 function INSTALLER_fail_sql($step, &$vars)
 {
+    $db = Database::getInstance();
+
     if (array_key_exists('rev', $step)) {
         $query = (is_array($step['rev'])) ? $step['rev'] : array($step['rev']);
         foreach ($query as $sql) {
@@ -245,7 +347,12 @@ function INSTALLER_fail_sql($step, &$vars)
             foreach($params as $param) {
                 $sql = (array_key_exists($param, $vars)) ? str_replace('%%'.$param.'%%', $vars[$param], $sql) : $sql;
             }
-            DB_query($sql, 1);
+            try {
+                $stmt = $db->conn->query($sql);
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+
         }
     }
 }
@@ -254,33 +361,82 @@ function INSTALLER_install_block($step, &$vars)
 {
     global $_TABLES, $_CONF, $_USER;
 
+    $db = Database::getInstance();
+
     COM_errorLog("AutoInstall: Creating block {$step['name']}...");
-    $is_enabled = isset($step['is_enabled']) ? intval($step['is_enabled']) : 1;
-    $rdflimit = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
-    $onleft = isset($step['onleft']) ? intval($step['onleft']) : 0;
+
+    $is_enabled     = isset($step['is_enabled']) ? intval($step['is_enabled']) : 1;
+    $rdflimit       = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
+    $onleft         = isset($step['onleft']) ? intval($step['onleft']) : 0;
     $allow_autotags = isset($step['allow_autotags']) ? intval($step['allow_autotags']) : 0;
-    $name = isset($step['name']) ? DB_escapeString($step['name']) : '';
-    $title = isset($step['title']) ? DB_escapeString($step['title']) : '';
-    $type = isset($step['block_type']) ? DB_escapeString($step['block_type']) : 'unknown';
-    $phpblockfn = isset($step['phpblockfn']) ? DB_escapeString($step['phpblockfn']) : '';
-    $help = isset($step['help']) ? DB_escapeString($step['help']) : '';
-    $content = isset($step['content']) ? DB_escapeString($step['content']) : '';
-    $blockorder = isset($step['blockorder']) ? intval($step['blockorder']) : 9999;
-    $owner_id = isset($_USER['uid']) ? $_USER['uid'] : 2;
-    $group_id = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
+    $name           = isset($step['name']) ? $step['name'] : '';
+    $title          = isset($step['title']) ? $step['title'] : '';
+    $type           = isset($step['block_type']) ? $step['block_type'] : 'unknown';
+    $phpblockfn     = isset($step['phpblockfn']) ? $step['phpblockfn'] : '';
+    $help           = isset($step['help']) ? $step['help'] : '';
+    $content        = isset($step['content']) ? $step['content'] : '';
+    $blockorder     = isset($step['blockorder']) ? intval($step['blockorder']) : 9999;
+    $owner_id       = isset($_USER['uid']) ? $_USER['uid'] : 2;
+    $group_id       = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = $_CONF['default_permissions_block'];
-    DB_query("INSERT INTO {$_TABLES['blocks']} "
-           . "(is_enabled,name,type,title,tid,blockorder,content,allow_autotags,rdflimit,onleft,phpblockfn,help,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon)"
-   . " VALUES ($is_enabled,'$name','$type','$title','all',$blockorder,'$content',$allow_autotags,$rdflimit,$onleft,'$phpblockfn','$help',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon)", 1);
-    if (DB_error()) {
+
+    try {
+        $db->conn->insert(
+            $_TABLES['blocks'],
+            array(
+                'is_enabled' => $is_enabled,
+                'name' => $name,
+                'type' => $type,
+                'title' => $title,
+                'tid' => 'all',
+                'blockorder' => $blockorder,
+                'content' => $content,
+                'allow_autotags' => $allow_autotags,
+                'rdflimit' => $rdflimit,
+                'onleft' => $onleft,
+                'phpblockfn' => $phpblockfn,
+                'help' => $help,
+                'owner_id' => $owner_id,
+                'group_id' => $group_id,
+                'perm_owner' => $perm_owner,
+                'perm_group' => $perm_group,
+                'perm_members' => $perm_members,
+                'perm_anon' => $perm_anon
+            ),
+            array(
+                Database::INTEGER,  // is_enabled
+                Database::STRING,   // name
+                Database::STRING,   // type
+                Database::STRING,   // title
+                Database::STRING,   // tid
+                Database::INTEGER,  // blockorder
+                Database::STRING,   // content
+                Database::INTEGER,  // allow_autotags
+                Database::INTEGER,  // rdflimit
+                Database::INTEGER,  // onleft
+                Database::STRING,   // phpblockfn
+                Database::STRING,   // help
+                Database::INTEGER,  // owner_id
+                Database::INTEGER,  // group_id
+                Database::INTEGER,  // perm_owner
+                Database::INTEGER,  // perm_group
+                Database::INTEGER,  // perm_members
+                Database::INTEGER   // perm_anonymous
+            )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
         COM_errorLog("AutoInstall: Block creation failed!");
         return 1;
     }
-    $bid = DB_insertId();
+    $bid = $db->conn->lastInsertId();
+
     if (isset($step['variable'])) {
         $vars[$step['variable']] = $bid;
     }
-    return "DELETE FROM {$_TABLES['blocks']} WHERE bid = $bid";
+
+    return array('sql'=>
+                    array("DELETE FROM `{$_TABLES['blocks']}` WHERE bid=?",array($bid),array(Database::INTEGER))
+           );
 }
 
 
@@ -288,21 +444,39 @@ function INSTALLER_install_createvar($step, &$vars)
 {
     global $_TABLES, $_CONF, $_USER;
 
+    $db = Database::getInstance();
+
     if (isset($step['group'])) {
         $table = $_TABLES['groups'];
         $col = 'grp_id';
-        $where = "grp_name = '{$step['group']}'";
+//        $where = "grp_name = ?";
+//        $data = $step['group'];
+//        $type = Database::STRING;
         $major = '__group';
+
+        $itemWhat = array('grp_name' => $step['group']);
+        $itemType = array(Database::STRING);
+
     } elseif (isset($step['feature'])) {
         $table = $_TABLES['features'];
         $col = 'ft_id';
-        $where = "ft_name = '{$step['feature']}'";
+//        $where = "ft_name = ?";
+//        $data = $step['feature'];
+//        $type = Database::STRING;
         $major = '__feature';
+
+        $itemWhat = array('ft_id' => $step['feature']);
+        $itemType = array(Database::INTEGER);
+
     } else {
         COM_errorLog("AutoInstall: Don't know what var to create");
         return 1;
     }
-    $vars[$step['variable']] = DB_getItem($table, $col, $where);
+//    $sql = "SELECT " . $col . " FROM `".$table."` WHERE " . $where;
+
+    $vars[$step['variable']] = $db->getItem($table,$col,$itemWhat, $itemType);
+
+//    $vars[$step['variable']] = $db->conn->fetchColumn($sql,array($data),0,array($type));
     $vars[$major][$step['variable']] = $vars[$step['variable']];
     return '';
 }
@@ -325,7 +499,7 @@ function INSTALLER_fail_rmdir($step)
     if (array_key_exists('dirs', $step)) {
         $dirs = (is_array($step['dirs'])) ? $step['dirs'] : array($step['dirs']);
         foreach ($dirs as $path) {
-            COM_errorlog("AutoInstall: FAIL: removing directory $path");
+            COM_errorlog("AutoInstall: UNDO removing directory $path");
             @rmdir($path);
         }
     }
@@ -333,21 +507,24 @@ function INSTALLER_fail_rmdir($step)
 
 function INSTALLER_fail($pluginName,$rev)
 {
+    $db = Database::getInstance();
+
     $A = array_reverse($rev);
-    foreach ($A as $sql) {
-        if (empty($sql)) {
-            // no step
-        } elseif (is_array($sql)) {
-            if (array_key_exists('type', $sql)) {
-                $function = 'INSTALLER_fail_'.$type;
-                if (function_exists($function)) {
-                    COM_errorlog("AutoInstall: FAIL: calling $function");
-                    $function($sql);
-                }
+
+    foreach ($A AS $action) {
+        if (!empty($action['sql'])) {
+            COM_errorLog("Autoinstall: UNDO: ". $action['sql'][0]);
+            try {
+                $db->conn->executeUpdate($action['sql'][0],$action['sql'][1],$action['sql'][2]);
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // no action - just ignore the error
             }
-        } else {
-            COM_errorLog("AutoInstall: FAIL: $sql");
-            DB_query($sql, 1);
+        } elseif (!empty($action['type'])) {
+            $function = 'INSTALLER_fail_'.$action['type'];
+            if (function_exists($function)) {
+                COM_errorlog("AutoInstall: UNDO calling $function");
+                $function($action);
+            }
         }
     }
     PLG_uninstall($pluginName);
@@ -357,13 +534,14 @@ function INSTALLER_install($A)
 {
     global $_TABLES, $_CONF, $_PLUGIN_INFO;
 
+    $db = Database::getInstance();
+
     COM_errorLog("AutoInstall: **** Start Installation ****");
 
-    if (!isset($A['installer']) OR $A['installer']['version'] != INSTALLER_VERSION) {
-        COM_errorLog('AutoInstall: Invalid or Unknown installer version');
-        COM_errorLog("AutoInstall: **** END Installation ****");
-        return 2;
+    if (!function_exists('INSTALLER_install_feature')) {
+        print "broken";exit;
     }
+
     if (!isset($A['plugin'])) {
         COM_errorLog("AutoInstall: Missing plugin description!");
         COM_errorLog("AutoInstall: **** END Installation ****");
@@ -433,7 +611,7 @@ function INSTALLER_install($A)
             }
         } else {
             $function = "INSTALLER_install_{$step['type']}";
-            if (function_exists($function)) {
+            if (function_exists("INSTALLER_install_{$step['type']}")) {
                 $result = $function($step, $vars);
                 if (is_numeric($result)) {
                     INSTALLER_fail($pluginName,$reverse);
@@ -443,8 +621,8 @@ function INSTALLER_install($A)
                     $reverse[] = $result;
                 }
             } else {
-                $dump = var_dump($step);
-                COM_errorLog('Can\'t process step: '.$dump);
+                $dump = print_r($step,true);
+                COM_errorLog('Can\'t process step: ' . $function .PHP_EOL.$dump);
                 INSTALLER_fail($pluginName,$reverse);
                 COM_errorLog("AutoInstall: **** END Installation ****");
                 return 1;
@@ -471,10 +649,18 @@ function INSTALLER_install($A)
     COM_errorLog ("AutoInstall: Registering {$plugin['display']} plugin with glFusion", 1);
 
     // silently delete an existing entry
-    DB_delete($_TABLES['plugins'], 'pi_name', $plugin['name']);
 
-    DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
-           . "VALUES ('{$plugin['name']}', '{$plugin['ver']}', '{$plugin['gl_ver']}', '{$plugin['url']}', 1)", 1);
+    $db->conn->delete($_TABLES['plugins'], array('pi_name' => $plugin['name']));
+
+    $db->conn->insert($_TABLES['plugins'],
+        array(
+            'pi_name' => $plugin['name'],
+            'pi_version' => $plugin['ver'],
+            'pi_gl_version' => $plugin['gl_ver'],
+            'pi_homepage' => $plugin['url'],
+            'pi_enabled' => 1
+            )
+    );
 
     // run any post install routines
     $postInstallFunction = 'plugin_postinstall_'.$plugin['name'];
@@ -494,36 +680,76 @@ function INSTALLER_uninstall($A)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     $reverse = array_reverse($A);
     $plugin = array();
     foreach ($reverse as $step) {
         if ($step['type'] == 'feature') {
-            $ft_name = DB_escapeString($step['feature']);
-            $ft_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$ft_name'");
+            $ft_id = $db->getItem($_TABLES['features'],'ft_id',array('ft_name' => $step['feature']));
 
             COM_errorLog("AutoInstall: Removing feature {$step['feature']}....");
-            DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id", 1);
-            DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $ft_id", 1);
+
+            try {
+                $db->conn->delete($_TABLES['access'],array('acc_ft_id'=>$ft_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+            try {
+                $db->conn->delete($_TABLES['features'],array('ft_id' => $ft_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
         } else if ($step['type'] == 'group') {
-            $grp_name = DB_escapeString($step['group']);
-            $grp_id = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '$grp_name'");
+            $grp_id = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => $step['group']));
 
             COM_errorLog("AutoInstall: Removing group {$step['group']}....");
-            DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = $grp_id", 1);
-            DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id OR ug_grp_id = $grp_id", 1);
-            DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id", 1);
+
+            try {
+                $db->conn->delete($_TABLES['access'],array('acc_grp_id' => $grp_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+            try {
+                $db->conn->delete($_TABLES['group_assignments'],array('ug_main_grp_id' => $grp_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+            try {
+                $db->conn->delete($_TABLES['group_assignments'],array('ug_grp_id' => $grp_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+            try {
+                $db->conn->delete($_TABLES['groups'],array('grp_id' => $grp_id),array(Database::INTEGER));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
+;
         } else if ($step['type'] == 'table') {
             COM_errorLog("AutoInstall: Dropping table {$step['table']}....");
-            DB_query("DROP TABLE {$step['table']}",1);
+            try {
+                $stmt = $db->conn->executeUpdate("DROP TABLE `{$step['table']}`");
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore the error
+            }
         } else if ($step['type'] == 'block') {
             COM_errorLog("AutoInstall: Removing block {$step['name']}....");
-            DB_query("DELETE FROM {$_TABLES['blocks']} WHERE name = '{$step['name']}'", 1);
+            try {
+                $db->conn->delete($_TABLES['blocks'],array('name' => $step['name']),array(Database::STRING));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                // ignore error
+            }
         } else if ($step['type'] == 'sql') {
             if (isset($step['rev_log'])) {
                 COM_errorLog("AutoInstall: ". $step['rev_log']);
             }
             if (isset($step['rev'])) {
-                DB_query($step['rev'],1);
+                try {
+                    $db->conn->query($step['rev']);
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    // ignore error
+                }
             }
         } else if (array_key_exists('type', $step)) {
             $function = 'INSTALLER_uninstall_'.$step['type'];
@@ -536,7 +762,12 @@ function INSTALLER_uninstall($A)
     if (array_key_exists('plugin', $A)) {
         $plugin = $A['plugin'];
         COM_errorLog("AutoInstall: Removing plugin {$plugin['name']} from plugins table", 1);
-        DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '{$plugin['name']}'", 1);
+
+        try {
+            $db->conn->delete($_TABLES['plugins'],array('pi_name' => $plugin['name']),array(Database::STRING));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            // ignore error
+        }
     }
 
     COM_errorLog("AutoInstall: Uninstall complete");
@@ -570,97 +801,32 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
     }
 
     if ($add) {
-        $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid > 1");
-        $num_users = DB_numRows($result);
+        $stmt = $db->conn->query("SELECT uid FROM `{$_TABLES['users']}` WHERE uid > 1");
+
+        try {
+            $num_users = $stmt->rowCount();
+        } catch (PDOException $e) {
+            $num_users = 0;
+        }
         for ($i = 0; $i < $num_users; $i += $_values_per_insert) {
             $u = array();
             for ($j = 0; $j < $_values_per_insert; $j++) {
-                list($uid) = DB_fetcharray($result);
-                $u[] = $uid;
+                $row = $stmt->fetch(Database::ASSOCIATIVE);
+                $u[] = $row['uid'];
                 if ($i + $j + 1 >= $num_users) {
                     break;
                 }
             }
             $v = "($grp_id," . implode("), ($grp_id,", $u) . ')';
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES " . $v);
+            $db->conn->query("INSERT INTO `{$_TABLES['group_assignments']}` (ug_main_grp_id, ug_uid) VALUES " . $v);
         }
     } else {
-        DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_main_grp_id = $grp_id) AND (ug_grp_id IS NULL)");
-    }
-}
-
-} //!defined('INSTALLER_VERSION')
-
-/**
-* Creates a unique temporary directory
-*
-* Creates a temp directory int he $_CONF['path_data] directory
-*
-* @return   bool              True on success, false on fail
-*
-*/
-function _io_mktmpdir() {
-    global $_CONF;
-
-    $base = $_CONF['path_data'];
-    $dir  = md5(uniqid(mt_rand(), true));
-    $tmpdir = $base.$dir;
-
-    if(fusion_io_mkdir_p($tmpdir)) {
-        return($dir);
-    } else {
-        return false;
-    }
-}
-
-/**
-* Creates a directory
-*
-* @parm     string  $target   Directory to create.
-* @return   bool              True on success, false on fail
-*
-*/
-function fusion_io_mkdir_p($target){
-    global $_CONF;
-
-    if (@is_dir($target)||empty($target)) return 1; // best case check first
-
-    if (@file_exists($target) && !@is_dir($target)) return 0;
-
-    if (fusion_io_mkdir_p(substr($target,0,strrpos($target,'/')))){
-        $ret = @mkdir($target,0755);
-        @chmod($target, 0755);
-        return $ret;
-    }
-    return 0;
-}
-
-
-/**
-* Deletes a directory (with recursive sub-directory support)
-*
-* @parm     string            Path of directory to remove
-* @return   bool              True on success, false on fail
-*
-*/
-function _pi_deleteDir($path) {
-    if (!is_string($path) || $path == "") return false;
-    if ( function_exists('set_time_limit') ) {
-        @set_time_limit( 30 );
-    }
-    if (@is_dir($path)) {
-        if (!$dh = @opendir($path)) return false;
-
-        while (false !== ($f = readdir($dh))) {
-            if ($f == '..' || $f == '.') continue;
-            _pi_deleteDir("$path/$f");
+        try {
+            $db->conn->executeUpdate("DELETE FROM `{$_TABLES['group_assignments']}` WHERE (ug_main_grp_id = ?) AND (ug_grp_id IS NULL)",array($grp_id),array(Database::INTEGER));
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            COM_errorLog("Error removing group assignments");
         }
-        closedir($dh);
-        return @rmdir($path);
-    } else {
-        return @unlink($path);
     }
-    return false;
 }
 
 
@@ -828,146 +994,6 @@ function _pi_characterDataHandler ($parser, $data) {
     }
 }
 
-
-/**
-* Copies srcdir to destdir (recursive)
-*
-* @param    string  $srcdir Source Directory
-* @param    string  $dstdir Destination Directory
-*
-* @return   string          comma delimited list success,fail,size,failedfiles
-*                           5,2,150000,\SOMEPATH\SOMEFILE.EXT|\SOMEPATH\SOMEOTHERFILE.EXT
-*
-*/
-function _pi_dir_copy($srcdir, $dstdir )
-{
-    $num = 0;
-    $fail = 0;
-    $sizetotal = 0;
-    $fifail = '';
-    $verbose = 0;
-    $ret ='0,0,0,';
-    $failedFiles = array();
-    $success = 1;
-
-
-    if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
-    if ($curdir = @opendir($srcdir)) {
-        while (false !== ($file = readdir($curdir))) {
-            if ($file != '.' && $file != '..') {
-                $srcfile = $srcdir . '/' . $file;
-                $dstfile = $dstdir . '/' . $file;
-                if (is_file($srcfile)) {
-                    if (@copy($srcfile, $dstfile)) {
-                        @touch($dstfile, filemtime($srcfile)); $num++;
-                        @chmod($dstfile, 0644);
-                        $sizetotal = ($sizetotal + filesize($dstfile));
-                    } else {
-                        COM_errorLog("PLG-INSTALL: File '$srcfile' could not be copied!");
-                        $fail++;
-                        $fifail = $fifail.$srcfile.'|';
-                        $success = 0;
-                    }
-                }
-                else if (@is_dir($srcfile)) {
-                    $ret = _pi_dir_copy($srcfile, $dstfile, $verbose);
-                    list($dcsuccess,$dcfailed,$dcsize,$dcfaillist) = explode(',',$ret);
-                    $success = $dcsuccess;
-                    $fail += $dcfailed;
-                    $sizetotal += $dcsize;
-                    $fifail .= $fifail.$dcfaillist;
-                }
-            }
-        }
-        closedir($curdir);
-    } else {
-        COM_errorLog("PLG-INSTALL: Unable to open temporary directory: " . $srcdir);
-        $ret ='0,1,0,Unable to open temp. directory';
-        return $ret;
-    }
-    $retval = $success . ',' . $fail . ',' . $sizetotal . ',' . $fifail;
-    return $retval;
-}
-
-
-/**
-* Copies srcfile to destdir
-*
-* @param    string  $srcdir Source Directory
-* @param    string  $dstdir Destination Directory
-*
-* @return   string          comma delimited list success,fail,size,failedfiles
-*                           5,2,150000,\SOMEPATH\SOMEFILE.EXT|\SOMEPATH\SOMEOTHERFILE.EXT
-*
-*/
-function _pi_file_copy($srcfile, $dstdir )
-{
-    if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
-    if (is_file($srcfile)) {
-        $dstfile = $dstdir . '/' . basename($srcfile);
-        if (@copy($srcfile, $dstfile)) {
-            @touch($dstfile, filemtime($srcfile));
-            @chmod($dstfile, 0644);
-        } else {
-            COM_errorLog("INSTALL: File '$srcfile' could not be copied!");
-            return false;
-        }
-    } else {
-        COM_errorLog("INSTALL: Unable to open temporary file: " . $srcfile);
-        return false;
-    }
-    return true;
-}
-
-function _pi_test_copy($srcdir, $dstdir)
-{
-    $num        = 0;
-    $fail       = 0;
-    $sizetotal  = 0;
-    $createdDst = 0;
-    $ret        = '';
-    $verbose    = 0;
-
-    $failedFiles = array();
-
-    if(!@is_dir($dstdir)) {
-        $rc = fusion_io_mkdir_p($dstdir);
-        if ($rc == false ) {
-            $failedFiles[] = $dstdir;
-            COM_errorLog("PLG-INSTALL: Error: Unable to create directory " . $dstdir);
-            return array(1,$failedFiles);
-        }
-        $createdDst = 1;
-    }
-
-    if ($curdir = @opendir($srcdir)) {
-        while (false !== ($file = readdir($curdir))) {
-            if ($file != '.' && $file != '..') {
-                $srcfile = $srcdir . '/' . $file;
-                $dstfile = $dstdir . '/' . $file;
-                if (is_file($srcfile)) {
-                    if ( !COM_isWritable($dstfile) ) {
-                        $failedFiles[] = $dstfile;
-                        COM_errorLog("PLG-INSTALL: Error: File '$dstfile' cannot be written");
-                        $fail++;
-                    }
-                } else if (@is_dir($srcfile)) {
-                    $res = explode(',',$ret);
-                    list($ret,$failed) = _pi_test_copy($srcfile, $dstfile, $verbose);
-                    $failedFiles = array_merge($failedFiles,$failed);
-                    if ( $ret != 0 ) $fail++;
-                }
-            }
-        }
-        closedir($curdir);
-    }
-    if ($createdDst == 1) {
-        @rmdir($dstdir);
-    }
-    return array($fail,$failedFiles);
-}
-
-
 function _pi_errorBox( $errMsg )
 {
     global $_CONF,$LANG32;
@@ -1000,11 +1026,18 @@ function _update_config($plugin, $configData)
     $c = config::get_instance();
 
     // remove stray items
-    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='".DB_escapeString($plugin)."'");
-    while ( $row = DB_fetchArray($result) ) {
+
+    $db = Database::getInstance();
+
+    $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['conf_values']}` WHERE group_name=?",array($plugin),array(Database::STRING));
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $item = $row['name'];
         if ( ($key = _searchForIdKey($item,$configData)) === NULL ) {
-            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='".DB_escapeString($plugin)."'");
+            try {
+                $db->conn->delete($_TABLES['conf_values'],array('name' => $item, 'group_name' => $plugin));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                return;
+            }
         } else {
             $configData[$key]['indb'] = 1;
         }
@@ -1036,58 +1069,72 @@ function _update_config($plugin, $configData)
 
 
 if ( !function_exists('_searchForId')) {
-function _searchForId($id, $array) {
-   foreach ($array as $key => $val) {
-       if ($val['name'] === $id) {
-           return $array[$key];
+    function _searchForId($id, $array) {
+       foreach ($array as $key => $val) {
+           if ($val['name'] === $id) {
+               return $array[$key];
+           }
        }
-   }
-   return null;
-}
+       return null;
+    }
 }
 if ( !function_exists('_searchForIdKey')) {
-function _searchForIdKey($id, $array) {
-   foreach ($array as $key => $val) {
-       if ($val['name'] === $id) {
-           return $key;
+    function _searchForIdKey($id, $array) {
+       foreach ($array as $key => $val) {
+           if ($val['name'] === $id) {
+               return $key;
+           }
        }
-   }
-   return null;
-}
+       return null;
+    }
 }
 if ( !function_exists('_addConfigItem')) {
-function _addConfigItem($data = array() )
-{
-    global $_TABLES;
+    function _addConfigItem($data = array() )
+    {
+        global $_TABLES;
 
-    $Qargs = array(
-                   $data['name'],
-                   $data['set'] ? serialize($data['default_value']) : 'unset',
-                   $data['type'],
-                   $data['subgroup'],
-                   $data['group'],
-                   $data['fieldset'],
-                   ($data['selection_array'] === null) ?
-                    -1 : $data['selection_array'],
-                   $data['sort'],
-                   $data['set'],
-                   serialize($data['default_value']));
-    $Qargs = array_map('DB_escapeString', $Qargs);
+        $Qargs = array(
+                       $data['name'],
+                       $data['set'] ? serialize($data['default_value']) : 'unset',
+                       $data['type'],
+                       $data['subgroup'],
+                       $data['group'],
+                       $data['fieldset'],
+                       ($data['selection_array'] === null) ? -1 : $data['selection_array'],
+                       $data['sort'],
+                       $data['set'],
+                       serialize($data['default_value']));
 
-    $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
-        "subgroup, group_name, selectionArray, sort_order,".
-        " fieldset, default_value) VALUES ("
-        ."'{$Qargs[0]}',"   // name
-        ."'{$Qargs[1]}',"   // value
-        ."'{$Qargs[2]}',"   // type
-        ."{$Qargs[3]},"     // subgroup
-        ."'{$Qargs[4]}',"   // groupname
-        ."{$Qargs[6]},"     // selection array
-        ."{$Qargs[7]},"     // sort order
-        ."{$Qargs[5]},"     // fieldset
-        ."'{$Qargs[9]}')";  // default value
-
-    DB_query($sql);
-}
+        try {
+            $db->conn->insert(
+                $_TABLES['conf_values'],
+                array(
+                    'name' => $Qargs[0],
+                    'value' => $Qargs[1],
+                    'type' => $Qargs[2],
+                    'subgroup' => $Qargs[3],
+                    'group_name' => $Qargs[4],
+                    'selectionArray' => $Qargs[6],
+                    'sort_order' => $Qargs[7],
+                    'fieldset' => $Qargs[5],
+                    'default_value' => $Qargs[9]
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING
+                )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            COM_errorLog("Error updating configuration");
+        }
+    }
 }
 ?>
