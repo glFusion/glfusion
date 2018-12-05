@@ -3693,6 +3693,11 @@ function PLG_remove($pi_name)
     global $_CONF;
 
     $p = array();
+
+    $filter = new \sanitizer();
+
+    $pi_name = $filter->sanitizeFilename($pi_name, false);
+
     $p['admin'] = $_CONF['path_admin'] . 'plugins/' . $pi_name;
     $p['public'] = $_CONF['path_html'] . $pi_name;
     $p['private'] =  $_CONF['path'] . 'plugins/' . $pi_name;
@@ -3700,7 +3705,7 @@ function PLG_remove($pi_name)
     foreach($p as $location => $path ) {
         if (is_dir($path)) {
             COM_errorLog("Removing {$location} files ...");
-            if (!COM_recursiveDelete($path)){
+            if (! \glFusion\FileSystem::deleteDir($path)) {
                 return false;
             }
         }
