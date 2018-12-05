@@ -6498,54 +6498,17 @@ function COM_decompress($file, $target)
     return false;
 }
 
+//@DEPRECIATED
 function COM_isWritable($path)
 {
-    if ($path{strlen($path)-1}=='/')
-        return COM_isWritable($path.uniqid(mt_rand()).'.tmp');
-
-    if (@file_exists($path)) {
-        if (!($f = @fopen($path, 'r+')))
-            return false;
-        @fclose($f);
-        return true;
-    }
-
-    if (!($f = @fopen($path, 'w')))
-        return false;
-    @fclose($f);
-    @unlink($path);
-    return true;
+    return \glFusion\FileSystem::isWritable($path);
 }
 
+//@DEPRECIATED
 function COM_recursiveDelete($path)
 {
-    if (!is_string($path) || $path == "") return false;
-    if ( function_exists('set_time_limit') ) {
-        @set_time_limit( 30 );
-    }
-    if (@is_dir($path)) {
-        if (!$dh = @opendir($path)) {
-            COM_errorLog("Error opening directory " . $path );
-            return false;
-        }
-        while (false !== ($f = readdir($dh))) {
-            if ($f == '..' || $f == '.') continue;
-            COM_recursiveDelete("$path/$f");
-        }
-        closedir($dh);
-        $rc = @rmdir($path);
-        if ( $rc == false ) {
-            COM_errorLog("Error removing path " . $path);
-        }
-        return $rc;
-    } else {
-        $rc = @unlink($path);
-        if ( $rc == false ) {
-            COM_errorLog("Error removing file " . $path);
-        }
-        return $rc;
-    }
-    return false;
+    return \glFusion\FileSystem::deleteDir($path);
+
 }
 
 function COM_buildOwnerList($fieldName,$owner_id=2)
