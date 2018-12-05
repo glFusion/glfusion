@@ -60,6 +60,8 @@ function processAutotagUpload()
     $upgrade = false;
     $errors = '';
 
+    $fs = new \glFusion\FileSystem();
+
     if (count($_FILES) > 0 && $_FILES['autotagfile']['error'] != UPLOAD_ERR_NO_FILE) {
         $upload = new upload();
 
@@ -99,12 +101,12 @@ function processAutotagUpload()
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 60 );
     }
-    if (!($tmp = _io_mktmpdir())) {
+    if (!($tmp = \glFusion\FileSystem::mkTmpDir())) {
         return _at_errorBox($LANG32[47]);
     }
 
     if ( !COM_decompress($Finalfilename,$_CONF['path_data'].$tmp) ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($LANG32[48]);
     }
     @unlink($Finalfilename);
@@ -116,29 +118,29 @@ function processAutotagUpload()
 
     if ( $rc == -1 ) {
         // no xml file found
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     if ( !isset($autotagData['id']) || !isset($autotagData['version']) ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $autotagData['glfusionversion'])) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     if ( !COM_checkVersion(phpversion (),$autotagData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$autotagData['phpversion']);
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[50],$autotagData['phpversion']));
     }
 
     if ( $errors != '' ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($errors);
     }
 
@@ -158,9 +160,11 @@ function processAutotagUpload()
     }
     // test copy to proper directories
     $autotagData['id'] = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$autotagData['id'] );
-    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$autotagData['id'].'/',
+
+    $rc = $fs->testCopy($_CONF['path_data'].$tmp.'/'.$autotagData['id'].'/',
                                       $_CONF['path_system'].'autotags/');
-    if ( $rc > 0 ) {
+    if ($rc === false) {
+        $failed = $fs->getErrorFiles();
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
@@ -169,7 +173,7 @@ function processAutotagUpload()
 
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($errorMessage);
     }
 
@@ -211,6 +215,8 @@ function post_uploadProcess() {
     $masterErrorCount   = 0;
     $masterErrorMsg     = '';
 
+    $fs = new \glFusion\FileSystem();
+
     $autotagData = array();
     $autotagData['id']               = COM_applyFilter($_POST['pi_name']);
     $autotagData['name']             = $autotagData['id'];
@@ -236,7 +242,7 @@ function post_uploadProcess() {
     // copy to proper directories
 
     if ( defined('DEMO_MODE') ) {
-        _pi_deleteDir($tmp);
+        \glFusion\FileSystem::deleteDir($tmp);
         echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php?msg=503');
         exit;
     }
@@ -246,20 +252,20 @@ function post_uploadProcess() {
 
     $autotagData['id'] = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$autotagData['id'] );
 
-    $rc = _pi_file_copy($tmp.'/'.$autotagData['id'].'.class.php', $_CONF['path_system'].'autotags/');
+    $rc = $fs->fileCopy($tmp.'/'.$autotagData['id'].'.class.php', $_CONF['path_system'].'autotags/');
     if ( $rc === false ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        _pi_deleteDir($tmp);
+        \glFusion\FileSystem::deleteDir($tmp);
         return _at_errorBox($errorMessage);
     }
     // copy template files, if any
     if ( isset($autotagData['template']) && is_array($autotagData['template']) ) {
         foreach ($autotagData['template'] AS $filename ) {
-            $rc = _pi_file_copy($tmp.'/'.$filename, $_CONF['path_system'].'autotags/');
+            $rc = $fs->fileCopy($tmp.'/'.$filename, $_CONF['path_system'].'autotags/');
             if ( $rc === false ) {
                 @unlink ($_CONF['path_system'].$autotagData['id'].'.class.php');
                 $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-                _pi_deleteDir($tmp);
+                \glFusion\FileSystem::deleteDir($tmp);
                 return _at_errorBox($errorMessage);
             }
         }
@@ -271,7 +277,7 @@ function post_uploadProcess() {
     $replacement = '';
     DB_query("REPLACE INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
 
-    _pi_deleteDir($tmp);
+    \glFusion\FileSystem::deleteDir($tmp);
 
     CACHE_clear();
     // show status (success or fail)
@@ -474,7 +480,7 @@ if ( isset($_POST['submit']) ) {
 
         $len = strlen($_CONF['path_data']);
         if ( strncmp($_CONF['path_data'],$tmpDir,$len-1) == 0 ) {
-            _pi_deleteDir($tmpDir);
+            \glFusion\FileSystem::deleteDir($tmpDir);
         } else {
             COM_errorLog("Install: Directory mismatch after cancel operation - Temp directory not deleted");
         }
