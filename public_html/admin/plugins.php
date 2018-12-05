@@ -1,49 +1,31 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | plugins.php                                                              |
-// |                                                                          |
-// | glFusion plugin administration page.                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion plugin administration page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Authors: Tony Bibbs        - tony AT tonybibbs DOT com
+*           Mark Limburg      - mlimburg AT users DOT sourceforge DOT net
+*           Jason Whittenburg - jwhitten AT securitygeeks DOT com
+*           Dirk Haun         - dirk AT haun-online DOT de
+*
+*/
 
 @ini_set('opcache.enable','0');
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+use \glFusion\Database;
+use \glFusion\FileSystem;
 
 // Number of plugins to list per page
 // We use 25 here instead of the 50 entries in other lists to leave room
@@ -269,11 +251,11 @@ function PLUGINS_loadPlugins(&$data_arr)
 {
     global $_CONF, $_TABLES, $glfPlugins;
 
-    $result = DB_query("SELECT pi_name,pi_version,pi_gl_version,pi_enabled,pi_homepage FROM {$_TABLES['plugins']} WHERE 1=1");
-    $rows = DB_numRows($result);
+    $db = Database::getInstance();
 
-    for ($i=0; $i<$rows; $i++) {
-        $P = DB_fetchArray($result);
+    $stmt = $db->conn->query("SELECT pi_name,pi_version,pi_gl_version,pi_enabled,pi_homepage FROM `{$_TABLES['plugins']}`");
+
+    while ($P = $stmt->fetch(Database::ASSOCIATIVE)) {
         $pluginData = PLUGINS_getPluginXML($_CONF['path'] . 'plugins/' . $P['pi_name']);
         // ok the plugin is in the plugins table, so it's installed
         $P['installed'] = 1;
@@ -301,15 +283,14 @@ function PLUGINS_loadPlugins(&$data_arr)
 */
 function PLUGINS_loadNewPlugins(&$data_arr)
 {
-    global $_CONF, $_TABLES, $LANG32, $glfIgnore;
+    global $_CONF, $_TABLES, $_PLUGINS, $_PLUGIN_INFO, $LANG32, $glfIgnore;
 
     $plugins_dir = $_CONF['path'] . 'plugins/';
     $fd = opendir($plugins_dir);
-
     while (($pi_name = @readdir ($fd)) == TRUE) {
         if ((!in_array($pi_name, $glfIgnore)) && is_dir($plugins_dir . $pi_name)) {
             clearstatcache ();
-            if (DB_count($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
+            if (!array_key_exists($pi_name,$_PLUGIN_INFO)) {
                 // plugin is not in the plugins table, check prereqs for installation
                 if (file_exists ($plugins_dir . $pi_name . '/functions.inc')) {
                     // functions.inc exists (essential)
@@ -695,6 +676,8 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
 {
     global $_TABLES, $_PLUGINS, $_PLUGIN_INFO, $_DB_table_prefix;
 
+    $db = Database::getInstance();
+
     $currentStatus = array();
     $pluginsToProcess = array();
 
@@ -706,8 +689,8 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
     }
 
     // get current status
-    $result = DB_query("SELECT * FROM {$_TABLES['plugins']}");
-    while ( ( $row = DB_fetchArray($result) ) != NULL ) {
+    $stmt = $db->conn->query("SELECT * FROM `{$_TABLES['plugins']}`");
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $currentStatus[$row['pi_name']] = $row['pi_enabled'];
     }
     foreach( $pluginarray AS $plugin => $junk ) {
@@ -728,14 +711,14 @@ function PLUGINS_toggleStatus($plugin_name_arr, $pluginarray)
             // disable plugin
             $rc = PLG_enableStateChange ($plugin, false);
             if ( $rc != 99 ) {
-                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".DB_escapeString($plugin)."'");
+                $db->conn->update($_TABLES['plugins'],array('pi_enabled' => 0),array('pi_name'=>$plugin));
                 $i = array_search($plugin,$_PLUGINS);
                 unset($_PLUGINS[$i]);
             }
             $_PLUGIN_INFO[$plugin]['pi_enabled'] = 0;
         } else {
-            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".DB_escapeString($plugin)."'");
-            $_PLUGIN_INFO[$plugin]['pi_version'] = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='".DB_escapeString($plugin)."'");
+            $db->conn->update($_TABLES['plugins'],array('pi_enabled' => 1),array('pi_name'=>$plugin));
+            $_PLUGIN_INFO[$plugin]['pi_version'] = $db->getItem($_TABLES['plugins'],'pi_version',array('pi_name' => $plugin));
             $_PLUGIN_INFO[$plugin]['pi_enabled'] = 1;
             $_PLUGINS[] = $plugin;
             PLG_enableStateChange ($plugin, true);
@@ -760,6 +743,10 @@ function PLUGINS_processUpload()
 
     $retval = '';
     $upgrade = false;
+
+    $fs = new FileSystem();
+
+    $db = Database::getInstance();
 
     if (count($_FILES) > 0 && $_FILES['pluginfile']['error'] != UPLOAD_ERR_NO_FILE) {
         $upload = new upload();
@@ -801,11 +788,13 @@ function PLUGINS_processUpload()
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 60 );
     }
-    if (!($tmp = _io_mktmpdir())) {
+
+    $tmp = $fs->mkTmpDir();
+    if ($tmp === false) {
         return PLUGINS_uploadError($LANG32[47]);
     }
     if ( !COM_decompress($Finalfilename,$_CONF['path_data'].$tmp) ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($LANG32[48]);
     }
     @unlink($Finalfilename);
@@ -817,24 +806,24 @@ function PLUGINS_processUpload()
 
     if ( $rc == -1 ) {
         // no xml file found
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($LANG32[40]);
     }
 
     if ( !isset($pluginData['id']) || !isset($pluginData['version']) ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($LANG32[40]);
     }
 
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $pluginData['glfusionversion'])) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError(sprintf($LANG32[49],$pluginData['glfusionversion']));
     }
 
     if ( !COM_checkVersion(phpversion (),$pluginData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$pluginData['phpversion']);
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError(sprintf($LANG32[50],$pluginData['phpversion']));
     }
 
@@ -862,28 +851,29 @@ function PLUGINS_processUpload()
     }
 
     if ( $errors != '' ) {
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($errors);
     }
     // check if plugin already exists
     // if it does, check that this is an upgrade
     // if not, error
     // else validate we really want to upgrade
-    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".DB_escapeString($pluginData['id'])."'");
-    if ( DB_numRows($result) > 0 ) {
-        $P = DB_fetchArray($result);
+
+    $P = $db->conn->fetchAssoc("SELECT * FROM `{$_TABLES['plugins']}` WHERE pi_name = ?", array($pluginData['id']));
+
+    if ($P !== false) {
         if ($P['pi_version'] == $pluginData['version'] ) {
-            _pi_deleteDir($_CONF['path_data'].$tmp);
+            $fs->deleteDir($_CONF['path_data'].$tmp);
             return PLUGINS_uploadError(sprintf($LANG32[52],$pluginData['id']));
         }
         // if we are here, it must be an upgrade or disabled plugin....
         $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
         if ( $rc < 1 ) {
-            _pi_deleteDir($_CONF['path_data'].$tmp);
+            $fs->deleteDir($_CONF['path_data'].$tmp);
             return PLUGINS_uploadError(sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$P['pi_version']));
         }
         if ( $P['pi_enabled'] != 1 ) {
-            _pi_deleteDir($_CONF['path_data'].$tmp);
+            $fs->deleteDir($_CONF['path_data'].$tmp);
             return PLUGINS_uploadError($LANG32[72]);
         }
 
@@ -912,21 +902,24 @@ function PLUGINS_processUpload()
     if ( $pluginTmpDir == '' ) {
         $permError = 1;
         $permErrorLisg .= 'Unable to locate temporary plugin directory';
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($errorMessage);
     }
 
     // test copy to proper directories
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
-    if ( $rc > 0 ) {
+    $rc = $fs->testCopy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
+    if ($rc === false) {
         $permError = 1;
+        $failed = $fs->getErrorFiles();
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
-    if ( $rc > 0 ) {
+
+    $rc = $fs->testCopy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
+    if ( $rc === false ) {
         $permError = 1;
+        $failed = $fs->getErrorFiles();
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
@@ -940,9 +933,10 @@ function PLUGINS_processUpload()
     }
     if ($public_dir_name == '' ) $public_dir_name = $pluginData['id'];
 
-    list($rc,$failed) = _pi_test_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
-    if ( $rc > 0 ) {
+    $rc = $fs->testCopy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
+    if ($rc === false) {
         $permError = 1;
+        $failed = $fs->getErrorFiles();
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
@@ -950,7 +944,7 @@ function PLUGINS_processUpload()
 
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($errorMessage);
     }
 
@@ -1025,6 +1019,8 @@ function PLUGINS_post_uploadProcess() {
         return _pi_errorBox($LANG32[74]);
     }
 
+    $fs = new FileSystem();
+
     clearstatcache();
 
     $permError = 0;
@@ -1033,7 +1029,7 @@ function PLUGINS_post_uploadProcess() {
     // copy to proper directories
 
     if ( defined('DEMO_MODE') ) {
-        _pi_deleteDir($tmp);
+        $fs->deleteDir($tmp);
         COM_setMessage(503);
         echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
         exit;
@@ -1057,16 +1053,14 @@ function PLUGINS_post_uploadProcess() {
     if ( $pluginTmpDir == '' ) {
         $permError = 1;
         $permErrorLisg .= 'Unable to locate temporary plugin directory';
-        _pi_deleteDir($_CONF['path_data'].$tmp);
+        $fs->deleteDir($_CONF['path_data'].$tmp);
         return PLUGINS_uploadError($errorMessage);
     }
 
-    $rc = _pi_dir_copy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
-    list($success,$failed,$size,$faillist) = explode(',',$rc);
-    if ( $failed > 0 ) {
+    $rc = $fs->dirCopy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);
+    if ($rc === false) {
+        $t = $fs->getErrorFiles();
         $permError++;
-        $t = array();
-        $t = explode('|',$faillist);
         if ( is_array($t) ) {
             foreach ($t AS $failedFile) {
                 $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
@@ -1077,19 +1071,17 @@ function PLUGINS_post_uploadProcess() {
         @set_time_limit( 30 );
     }
     if ( file_exists($pluginTmpDir.'admin/') ) {
-        $rc = _pi_dir_copy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
-        list($success,$failed,$size,$faillist) = explode(',',$rc);
-        if ( $failed > 0 ) {
+        $rc = $fs->dirCopy($pluginTmpDir.'admin/', $_CONF['path_admin'].'plugins/'.$pluginData['id']);
+        if ($rc === false) {
             $permError++;
-            $t = array();
-            $t = explode('|',$faillist);
+            $t = $fs->getErrorFiles();
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
                     $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
-        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/admin/');
+        $fs->deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/admin/');
     }
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
@@ -1105,20 +1097,17 @@ function PLUGINS_post_uploadProcess() {
 
     if ( file_exists($pluginTmpDir.'public_html/') ) {
 
-        $rc = _pi_dir_copy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
+        $rc = $fs->dirCopy($pluginTmpDir.'public_html/', $_CONF['path_html'].$public_dir_name);
 
-        list($success,$failed,$size,$faillist) = explode(',',$rc);
-        if ( $failed > 0 ) {
-            $permError++;
-            $t = array();
-            $t = explode('|',$faillist);
+        if ($rc === false) {
+            $t = $fs->getErrorFiles();
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
                     $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
-        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/public_html/');
+        $fs->deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/public_html/');
     }
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
@@ -1127,30 +1116,28 @@ function PLUGINS_post_uploadProcess() {
         // determine where to copy them, first check to see if layout was defined in xml
         if ( isset($pluginData['layout']) && $pluginData['layout'] != '') {
             $destinationDir = $_CONF['path_html'] . 'layout/' . $pluginData['layout'] .'/';
-            fusion_io_mkdir_p($destinationDir);
+            $fs->mkDir($destinationDir);
         } else {
             $destinationDir = $_CONF['path_html'] . 'layout/cms/'.$pluginData['id'].'/';
         }
-        $rc = _pi_dir_copy($pluginTmpDir.'themefiles/', $destinationDir);
-        list($success,$failed,$size,$faillist) = explode(',',$rc);
-        if ( $failed > 0 ) {
+        $rc = $fs->dirCopy($pluginTmpDir.'themefiles/', $destinationDir);
+        if ($rc === false) {
+            $t = $fs->getErrorFiles();
             $permError++;
-            $t = array();
-            $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
                     $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
-        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/themefiles/');
+        $fs->deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/themefiles/');
     }
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        _pi_deleteDir($tmp);
+        $fs->deleteDir($tmp);
         return PLUGINS_uploadError($errorMessage);
     }
 
@@ -1162,7 +1149,7 @@ function PLUGINS_post_uploadProcess() {
         }
     }
 
-    _pi_deleteDir($tmp);
+    $fs->deleteDir($tmp);
 
     if ( isset($pluginData['renamedist']) && is_array($pluginData['renamedist']) ) {
         foreach ($pluginData['renamedist'] AS $fileToRename) {
@@ -1395,13 +1382,16 @@ if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
 
 if ( isset($_POST['cancel']) ) {
     if ( isset($_POST['temp_dir']) ) {
+
+        $fs = new FileSystem();
+
         $tmpDir = COM_sanitizeFilename(COM_applyFilter($_POST['temp_dir']));
 
         $len = strlen($_CONF['path_data']);
 
         $tDir = $_CONF['path_data'] . $tmpDir;
         if ( is_dir($tDir)) {
-            _pi_deleteDir($tDir);
+            $fs->deleteDir($tDir);
         } else {
             COM_errorLog("PLG-Install: Directory mismatch after cancel operation - Temp directory not deleted");
         }
