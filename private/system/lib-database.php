@@ -117,7 +117,7 @@ function DB_query ($sql, $ignore_errors = 0)
                 $db->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
             }
         } else {
-            trigger_error($db->dbError($sql), E_USER_ERROR);
+            trigger_error(DB_error($sql), E_USER_ERROR);
         }
     }
 
@@ -272,7 +272,6 @@ function DB_count($table,$id='',$value='')
     } else {
         $sql .= $id_and_value;
     }
-
     $result = DB_query($sql);
 
     return ($result->fetchColumn());
