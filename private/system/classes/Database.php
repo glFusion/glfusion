@@ -19,6 +19,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\GlFusionCache;
+
 class Database
 {
     public const ASSOCIATIVE = \Doctrine\DBAL\FetchMode::ASSOCIATIVE;
@@ -167,8 +169,7 @@ class Database
             $connectionParams['driverOptions'] = [1002 => "SET NAMES '".$this->_character_set_database."'"];
         }
 
-        $cache = new \glFusion\glFusionCache();
-//        $cache = new \Doctrine\Common\Cache\PhpFileCache($_CONF['path'].'data/cache/');
+        $cache = new glFusionCache();
 
         $this->cacheHandle = $cache;
 
@@ -386,6 +387,38 @@ class Database
         if (is_callable($functionname)) {
             $this->_errorlog_fn = $functionname;
         }
+    }
+
+
+    // criteria will be an array (fieldname => value)
+    public function getItem($table, $column, $criteria = array())
+    {
+        global $_TABLES;
+
+        $whereItems = array();
+        $whereTypes = array();
+
+        $whereSQL = '';
+
+        $andCounter = 0;
+
+        foreach ($criteria AS $dbColumn => $dbValue) {
+            if ($andCounter > 0) {
+                $whereSQL .= " AND ";
+            }
+            $whereSQL .= $this->conn->quoteIdentifier($dbColumn) . ' = ?';
+
+            $andCounter++;
+
+            $whereItems[] = $dbValue;
+            $whereTypes[] = Database::STRING;
+        }
+        $sql = "SELECT " . $this->conn->quoteIdentifier($column) . " FROM `".$table."` WHERE " . $whereSQL;
+
+        $retval = $this->conn->fetchColumn($sql,$whereItems,0,$whereTypes);
+
+        return $retval;
+
     }
 
 
