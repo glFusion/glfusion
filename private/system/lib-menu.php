@@ -1,35 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-menu.php                                                             |
-// |                                                                          |
-// | glFusion menu library.                                                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Menu Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2018-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+use \glFusion\Database;
+use \glFusion\Cache;
 
 define('MENU_TOP_LEVEL',-1);
 define('MENU_HORIZONTAL_CASCADING',1);
@@ -65,12 +54,14 @@ function initMenu($menuname, $skipCache=false) {
 
     $menu = NULL;
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $key = 'menu_'.$menuname . '_' . $c->securityHash();
 
     if ( $skipCache == false ) {
         if ( $c->has($key) ) return unserialize($c->get($key));
     }
+
+    $db = Database::getInstance();
 
     $mbadmin = SEC_hasRights('menu.admin');
     $root    = SEC_inGroup('Root');
@@ -80,8 +71,13 @@ function initMenu($menuname, $skipCache=false) {
     } else {
         $uid = $_USER['uid'];
     }
-    $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE menu_active=1 AND menu_name='".DB_escapeString($menuname)."'",1);
-    $menuRow = DB_fetchArray($result);
+
+    try {
+        $menuRow = $db->conn->fetchAssoc("SELECT * FROM `{$_TABLES['menu']}`
+                        WHERE menu_active=1 AND menu_name=?", array($menuname),array(Database::STRING));
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        $menuRow = false;
+    }
     if ( $menuRow ) {
         $menu = new menu();
 
@@ -139,11 +135,13 @@ function assembleMenu($name, $skipCache=false) {
     }
     if ( $skipCache == false ) {
         $md = array();
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'menu_'.$menuName.'_'.$c->securityHash();
         if ($c->has($key)) {
             $md = unserialize($c->get($key));
-            return $md;
+            if (!is_object($md)) {
+                return $md;
+            }
         }
     }
     $menuObject = initMenu($menuName, $skipCache);
@@ -178,7 +176,7 @@ function getMenuTemplate($menutype, $menuname) {
             $template_file = 'menu_vertical_simple';
             break;
         default:
-            return $retval;
+            $template_file = 'menu_horizontal_cascading';
             break;
     }
     //see if custom template exists
@@ -204,7 +202,7 @@ function displayMenu( $menuName, $skipCache=false ) {
     $retval = '';
 
     if ( $skipCache == false ) {
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'menufile_'.$menuName.'__'.$c->securityHash(true,true);
 
         if ($c->has($key)) {
@@ -378,6 +376,9 @@ function getAdminMenu()
     $item_array = array();
 
     if ( !COM_isAnonUser() ) {
+
+        $db = Database::getInstance();
+
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count( $plugin_options );
 
@@ -387,13 +388,12 @@ function getAdminMenu()
 
             $topicsql = '';
             if ( SEC_isModerator() || SEC_hasRights( 'story.edit' ) ) {
-                $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
-                                     . COM_getPermSQL() );
-                $trows = DB_numRows( $tresult );
-                if ( $trows > 0 ) {
+
+                $sql = "SELECT tid FROM `{$_TABLES['topics']}`" . $db->getPermSQL();
+                $topicRecs = $db->conn->fetchAll($sql);
+                if (count($topicRecs) > 0) {
                     $tids = array();
-                    for( $i = 0; $i < $trows; $i++ ) {
-                        $T = DB_fetchArray( $tresult );
+                    foreach ($topicRecs AS $T) {
                         $tids[] = $T['tid'];
                     }
                     if ( sizeof( $tids ) > 0 ) {
@@ -405,11 +405,9 @@ function getAdminMenu()
             if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
                 if ( SEC_hasRights( 'story.moderate' )) {
                     if ( empty( $topicsql )) {
-                        $modnum += DB_count( $_TABLES['storysubmission'] );
+                        $modnum += $db->getItem($_TABLES['storysubmission'],'COUNT(*)',array());
                     } else {
-                        $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
-                        $S = DB_fetchArray( $sresult );
-                        $modnum += $S['count'];
+                        $modnum += $db->conn->fetchColumn("SELECT COUNT(*) AS count FROM `{$_TABLES['storysubmission']}` WHERE" . $topicsql,array(),0);
                     }
                 }
                 if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
@@ -417,14 +415,13 @@ function getAdminMenu()
                     if ( !empty( $topicsql )) {
                         $sql .= ' AND' . $topicsql;
                     }
-                    $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
-                    $A = DB_fetchArray( $result );
-                    $modnum += $A['count'];
+                    $modnum += $db->conn->fetchColumn($sql . $db->getPermSQL('AND',0,3),array(),0);
                 }
 
                 if ( $_CONF['usersubmission'] == 1 ) {
                     if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
-                        $modnum += DB_count( $_TABLES['users'], 'status', '2' );
+                        $modnum += $db->conn->fetchColumn("SELECT COUNT(*)
+                                FROM `{$_TABLES['users']}` WHERE status=2",array(),0);
                     }
                 }
             }
@@ -435,19 +432,20 @@ function getAdminMenu()
                 $url = $_CONF['site_admin_url'] . '/story.php';
                 $label = $LANG01[11];
                 if ( empty( $topicsql )) {
-                    $numstories = DB_count( $_TABLES['stories'] );
+                    $numstories = $db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['stories']}`",array(),0);
                 } else {
-                    $nresult = DB_query( "SELECT COUNT(*) AS count from {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
-                    $N = DB_fetchArray( $nresult );
-                    $numstories = $N['count'];
+                    $numstories = $db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['stories']}` WHERE" . $topicsql . $db->getPermSql( 'AND' ),array(),0);
                 }
 
                 $label .= ' (' . COM_numberFormat($numstories) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
             if ( SEC_hasRights( 'block.edit' )) {
-                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['blocks']}" . COM_getPermSql());
-                list( $count ) = DB_fetchArray( $result );
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) AS count FROM `{$_TABLES['blocks']}`" . $db->getPermSql(),
+                    array(),
+                    0
+                );
 
                 $url = $_CONF['site_admin_url'] . '/block.php';
                 $label = $LANG01[12] . ' (' . COM_numberFormat($count) . ')';
@@ -474,16 +472,24 @@ function getAdminMenu()
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
             if ( SEC_hasRights( 'topic.edit' )) {
-                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['topics']}" . COM_getPermSql());
-                list( $count ) = DB_fetchArray( $result );
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) AS count FROM `{$_TABLES['topics']}`" . $db->getPermSql(),
+                    array(),
+                    0
+                );
                 $url = $_CONF['site_admin_url'] . '/topic.php';
                 $label = $LANG01[13] . ' (' . COM_numberFormat($count) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 
             if ( SEC_hasRights( 'user.edit' )) {
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) FROM `{$_TABLES['users']}`",
+                    array(),
+                    0
+                );
                 $url = $_CONF['site_admin_url'] . '/user.php';
-                $label = $LANG01[17] . ' (' . COM_numberFormat(DB_count($_TABLES['users']) -1) . ')';
+                $label = $LANG01[17] . ' (' . COM_numberFormat($count -1) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 
@@ -494,11 +500,13 @@ function getAdminMenu()
                     $elementUsersGroups = SEC_getUserGroups ();
                     $grpFilter = 'WHERE (grp_id IN (' . implode (',', $elementUsersGroups) . '))';
                 }
-                $result = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['groups']} $grpFilter;" );
-                $A = DB_fetchArray( $result );
-
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) AS count FROM `{$_TABLES['groups']}` ". $grpFilter,
+                    array(),
+                    0
+                );
                 $url = $_CONF['site_admin_url'] . '/group.php';
-                $label = $LANG01[96] . ' (' . COM_numberFormat($A['count']) . ')';
+                $label = $LANG01[96] . ' (' . COM_numberFormat($count) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
             if ( SEC_hasRights( 'social.admin' )) {
@@ -521,18 +529,31 @@ function getAdminMenu()
 
             if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
                 $url = $_CONF['site_admin_url'] . '/syndication.php';
-                $label = $LANG01[38] . ' (' . COM_numberFormat(DB_count($_TABLES['syndication'])) . ')';
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) FROM `{$_TABLES['syndication']}`",
+                    array(),
+                    0);
+                $label = $LANG01[38] . ' (' . COM_numberFormat($count) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 
             if (( $_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] || $_CONF['ping_enabled'] ) && SEC_hasRights( 'story.ping' )) {
                 $url = $_CONF['site_admin_url'] . '/trackback.php';
-                $label = $LANG01[116] . ' (' . COM_numberFormat( DB_count( $_TABLES['pingservice'] )) . ')';
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) FROM `{$_TABLES['pingservice']}`",
+                    array(),
+                    0);
+                $label = $LANG01[116] . ' (' . COM_numberFormat( $count ) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
             if ( SEC_hasRights( 'plugin.edit' )) {
                 $url = $_CONF['site_admin_url'] . '/plugins.php';
-                $label = $LANG01[77] . ' (' . COM_numberFormat( DB_count( $_TABLES['plugins'] )) . ')';
+                $count = $db->conn->fetchColumn(
+                    "SELECT COUNT(*) FROM `{$_TABLES['plugins']}`",
+                    array(),
+                    0);
+
+                $label = $LANG01[77] . ' (' . COM_numberFormat($count) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
             if (SEC_inGroup('Root')) {
@@ -588,7 +609,7 @@ function getAdminMenu()
             }
             if (SEC_isModerator()) {
                 $url = $_CONF['site_admin_url'] . '/moderation.php';
-                $label = $LANG01[10] . ' (' . COM_numberFormat( $modnum ) . ')';
+                $label = $LANG01[10] . ' (' . COM_numberFormat($modnum) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 
@@ -610,6 +631,8 @@ function getTopicMenu()
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
            $LANG_AM, $LANG29, $_CONF, $_GROUPS;
 
+    $db = Database::getInstance();
+
     $item_array = array();
     $langsql = COM_getLangSQL( 'tid' );
     if ( empty( $langsql )) {
@@ -620,31 +643,34 @@ function getTopicMenu()
 
     $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
     if ( !COM_isAnonUser() ) {
-        $tids = DB_getItem( $_TABLES['userindex'], 'tids',
-                            "uid=".(int) $_USER['uid']);
+
+        $tids = $db->getItem($_TABLES['userindex'],'tids',array('uid'=>$_USER['uid']));
+
         if ( !empty( $tids )) {
             $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
-                 . "'))" . COM_getPermSQL( 'AND' );
+                 . "'))" . $db->getPermSQL( 'AND' );
         } else {
-            $sql .= COM_getPermSQL( $op );
+            $sql .= $db->getPermSQL( $op );
         }
     } else {
-        $sql .= COM_getPermSQL( $op );
+        $sql .= $db->getPermSQL( $op );
     }
     if ( $_CONF['sortmethod'] == 'alpha' ) {
         $sql .= ' ORDER BY topic ASC';
     } else {
         $sql .= ' ORDER BY sortnum';
     }
-    $result = DB_query( $sql );
+
+    $topicStmt = $db->conn->query($sql);
 
     if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['stories']} "
              . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'") '
-             . COM_getPermSQL( 'AND' )
+             . $db->getPermSQL( 'AND' )
              . ' GROUP BY tid';
-        $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount )) {
+        $storyCountStmt = $db->conn->query($sql);
+
+        while ($C = $storyCountStmt->fetch(Database::ASSOCIATIVE)) {
             $storycount[$C['tid']] = $C['count'];
         }
     }
@@ -652,13 +678,13 @@ function getTopicMenu()
     if ( $_CONF['showsubmissioncount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM {$_TABLES['storysubmission']} "
              . ' GROUP BY tid';
-        $rcount = DB_query( $sql );
-        while( $C = DB_fetchArray( $rcount )) {
+        $submissionCountStmt = $db->conn->query($sql);
+        while ($C = $submissionCountStmt->fetch(Database::ASSOCIATIVE)) {
             $submissioncount[$C['tid']] = $C['count'];
         }
     }
 
-    while( $A = DB_fetchArray( $result ) ) {
+    while ($A = $topicStmt->fetch(Database::ASSOCIATIVE)) {
         $topicname = $A['topic'];
         $url =  $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
         $label = $topicname;
@@ -732,17 +758,19 @@ function MB_changeActiveStatusElement ($element_arr)
     $menu_id = COM_applyFilter($_POST['menu'],true);
 
     // disable all elements
-    $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '0' WHERE menu_id=".(int) $menu_id;
-    DB_query($sql);
+
+    $db = Database::getInstance();
+
+    $db->conn->update($_TABLES['menu_elements'], array('element_active' => 0), array('menu_id' => $menu_id));
+
     if (isset($element_arr)) {
         foreach ($element_arr as $element => $side) {
             $element = COM_applyFilter($element, true);
             // the enable those in the array
-            $sql = "UPDATE {$_TABLES['menu_elements']} SET element_active = '1' WHERE id=".(int) $element;
-            DB_query($sql);
+            $db->conn->update($_TABLES['menu_elements'], array('element_active' => 1), array('id' => $element));
         }
     }
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
     CACHE_clearJS();
@@ -752,18 +780,20 @@ function MB_changeActiveStatusElement ($element_arr)
 function MB_changeActiveStatusMenu ($menu_arr)
 {
     global $_CONF, $_TABLES;
+
+    $db = Database::getInstance();
+
     // disable all menus
-    $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '0'";
-    DB_query($sql);
+    $db->conn->update($_TABLES['menu'], array('menu_active' => 0),array('menu_active'=>1));
+
     if (isset($menu_arr)) {
         foreach ($menu_arr AS $menu => $side) {
-            $menu = COM_applyFilter($menu, true);
+            $menu = filter_var($menu,FILTER_SANITIZE_NUMBER_INT);
             // the enable those in the array
-            $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '1' WHERE id=".(int) $menu;
-            DB_query($sql);
+            $db->conn->update($_TABLES['menu'], array('menu_active' => 1), array('id' => $menu));
         }
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    $c = Cache::getInstance()->deleteItemsByTag('menu');
 
     return;
 }
