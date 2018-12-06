@@ -82,7 +82,8 @@ function DBADMIN_list()
 
     $retval = '';
 
-    if (is_writable($_CONF['backup_path'])) {
+    if (\glFusion\FileSystem::isWritable($_CONF['backup_path'])) {
+//    if (is_writable($_CONF['backup_path'])) {
         $backups = array();
         $fd = opendir($_CONF['backup_path']);
         $index = 0;
