@@ -594,7 +594,7 @@ class config
 
         $data = $stmt->fetchAll();
 
-        if (!array_key_exists($group, $LANG_configselects)) {
+        if (!isset($LANG_configselects) || !array_key_exists($group, $LANG_configselects)) {
             $LANG_configselects[$group] = array();
         }
         if (!array_key_exists($group, $LANG_confignames)) {
