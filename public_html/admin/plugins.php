@@ -394,7 +394,7 @@ function PLUGINS_unInstall($pi_name)
     // if the plugin is disabled, load the functions.inc now
     if (!function_exists ('plugin_uninstall_' . $pi_name)) {
         if ( !file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-            COM_errorLog("Unable to locate the plugin directory for " . $pi_name." - cannot uninstall");
+            COM_errorLog("Unable to locate the plugin directory for " . $pi_name." - cannot perform standard uninstall.");
         } else {
             require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
         }
