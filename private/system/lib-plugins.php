@@ -1,41 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-plugins.php                                                          |
-// |                                                                          |
-// | This file implements plugin support in glFusion.                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2009 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Plugin Interface Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2009 by the following authors:
+*   Authors: Tony Bibbs       - tony AT tonybibbs DOT com
+*            Blaine Lang      - blaine AT portalparts DOT com
+*            Dirk Haun        - dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
+
+use glFusion\Database;
+use glFusion\Cache;
 
 /**
 * This is the plugin library for glFusion.  This is the API that plugins can
@@ -244,6 +231,9 @@ function PLG_uninstall ($type)
     if (empty ($type)) {
         return false;
     }
+
+    $db = Database::getInstance();
+
     $c = glFusion\Cache::getInstance();
     $c->deleteItemsByTag('atperm');
     $c->deleteItemsByTag('plugins');
@@ -261,35 +251,50 @@ function PLG_uninstall ($type)
         // removing tables
         for ($i=0; $i < count($remvars['tables']); $i++) {
             COM_errorLog ("Dropping table {$_TABLES[$remvars['tables'][$i]]}", 1);
-            DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
-            COM_errorLog ('...success', 1);
+            try {
+                $db->conn->query("DROP TABLE `{$_TABLES[$remvars['tables'][$i]]}`");
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                COM_errorLog("ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
+            }
+            COM_errorLog ('...completed', 1);
         }
 
         // removing variables
         for ($i = 0; $i < count($remvars['vars']); $i++) {
             COM_errorLog ("Removing variable {$remvars['vars'][$i]}", 1);
-            DB_delete($_TABLES['vars'], 'name', $remvars['vars'][$i]);
-            COM_errorLog ('...success', 1);
+            try {
+                $db->conn->delete($_TABLES['vars'], array('name' => $remvars['vars'][$i]));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                COM_errorLog("ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
+            }
+            COM_errorLog ('...completed', 1);
         }
 
         // removing groups
         for ($i = 0; $i < count($remvars['groups']); $i++) {
-            $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
-                                  "grp_name = '{$remvars['groups'][$i]}'");
-            if (!empty ($grp_id)) {
+            $grp_id = $db->getItem ($_TABLES['groups'], 'grp_id',array('grp_name' => $remvars['groups'][$i]),array(Database::INTEGER));
+            if (!empty ($grp_id) && $grp_id !== false) {
                 COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group", 1);
-                DB_delete($_TABLES['groups'], 'grp_id', $grp_id);
-                COM_errorLog ('...success', 1);
+                try {
+                    $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id));
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    COM_errorLog("ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
+                }
+                COM_errorLog ('...completed', 1);
                 COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group from all groups.", 1);
-                DB_delete($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
-                COM_errorLog ('...success', 1);
+                try {
+                    $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id));
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    COM_errorLog("ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
+                }
+                COM_errorLog ('...completed', 1);
             }
         }
 
         // removing features
         for ($i = 0; $i < count($remvars['features']); $i++) {
-            $access_id = DB_getItem ($_TABLES['features'], 'ft_id',
-                                    "ft_name = '{$remvars['features'][$i]}'");
+            $access_id = $db->getItem ($_TABLES['features'], 'ft_id',
+                                    array('ft_name' => $remvars['features'][$i]),array(Database::INTEGER));
             if (!empty ($access_id)) {
                 COM_errorLog ("Attempting to remove {$remvars['features'][$i]} rights from all groups" ,1);
                 DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
@@ -369,8 +374,7 @@ function PLG_uninstall ($type)
         COM_errorLog ("Finished uninstalling the $type plugin.", 1);
 
         return true;
-    } else {
-
+    } elseif (function_exists('plugin_uninstall_'.$type)) {
         $retval = PLG_callFunctionForOnePlugin ('plugin_uninstall_' . $type);
 
         if ($retval === true) {
@@ -382,6 +386,12 @@ function PLG_uninstall ($type)
             return true;
 
         }
+    } else {
+        // we got nothing - so let's just remove it from the plugin table
+        COM_errorLog("WARNING: Unable to locate plugin's source files. Plugin removed from Plugins Table. Plugin's database tables, group, feature and other data may still be installed.");
+        PLG_itemDeleted('*', $type);
+        DB_delete($_TABLES['plugins'], 'pi_name', $type);
+        return true;
     }
 
     return false;
