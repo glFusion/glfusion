@@ -415,7 +415,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01, $_IMAGE_TYPE, $MESSAGE;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     // retrieve the query
     if (isset($_GET['q'])) {
