@@ -1106,6 +1106,7 @@ if ( !function_exists('_addConfigItem')) {
                        serialize($data['default_value']));
 
         try {
+            $db = Database::getInstance();
             $db->conn->insert(
                 $_TABLES['conf_values'],
                 array(
