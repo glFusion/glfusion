@@ -23,7 +23,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use \glFusion\Database;
+use \glFusion\Database\Database;
 
 /**
 * Stub function for generation of checkbox

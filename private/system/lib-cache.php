@@ -17,6 +17,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+
 /* This should be the only glFusion-isms in the file. Didn't want to "infect" the class but it was necessary.
 * These options are global to all templates.
 */
@@ -149,7 +152,7 @@ function CACHE_remove_instance($iid)
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
     CACHE_clean_directories($path_cache, 'instance__'.$iid);
 */
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->delete($iid);
     $c->deleteItemsByTag($tag);
 }
@@ -176,7 +179,7 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
         return;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->set($iid,$data);
     return;
 }
@@ -219,7 +222,7 @@ function CACHE_check_instance($iid, $bypass_lang = false)
         return false;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $str = $c->get($iid);
     if ( $str !== null ) {
         return $str === FALSE ? false : $str;
@@ -247,7 +250,7 @@ function CACHE_get_instance_update($iid, $bypass_lang = false)
         return;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     return $c->getModificationDate($iid);
 }
 
@@ -351,7 +354,7 @@ function CACHE_sanitizeFilename($filename, $allow_dots = true)
 
 function CACHE_clear($plugin='')
 {
-    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
+    global $TEMPLATE_OPTIONS, $_CONF, $_USER, $_SYSTEM;
 
     if (!defined ('CONFIG_CACHE_FILE_NAME')) {
         define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
@@ -367,11 +370,11 @@ function CACHE_clear($plugin='')
 
     CACHE_clearCSS();
     CACHE_clearJS();
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->clear();
 
     if ( defined('DVLP_DEBUG') ) {
-        COM_errorLog("DEBUG: All Caches has been cleared");
+        Log::write('system',Log::DEBUG, "All Caches has been cleared", array('user' => $_USER['username'],'IP' => $_SERVER['REAL_ADDR']));
     }
 
 }

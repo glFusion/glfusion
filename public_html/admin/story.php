@@ -1,52 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | story.php                                                                |
-// |                                                                          |
-// | glFusion story administration page.                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
 /**
-* This is the glFusion story administration page.
+* glFusion CMS
 *
-* @author   Jason Whittenburg
-* @author   Tony Bibbs <tony AT tonybibbs DOT com>
+* glFusion story administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Authors: Tony Bibbs        - tony AT tonybibbs DOT com
+*           Mark Limburg      - mlimburg AT users DOT sourceforge DOT net
+*           Jason Whittenburg - jwhitten AT securitygeeks DOT com
+*           Dirk Haun         - dirk AT haun-online DOT de
 *
 */
 
-/**
-* glFusion common function library
-*/
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 USES_lib_story();
 
@@ -55,10 +31,10 @@ $_STORY_VERBOSE = false; // verbose logging option
 $display = '';
 
 if (!SEC_hasRights('story.edit')) {
+    Log::logAccessViolation('Story Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[31],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the story administration screen.");
     echo $display;
     exit;
 }
@@ -425,7 +401,7 @@ function STORY_global_save()
 
     $_POST['tid'] = '';
 
-    glFusion\Cache::getInstance()->deleteItemsByTag('story');
+    Cache::getInstance()->deleteItemsByTag('story');
 
     return STORY_list();
 }
@@ -659,12 +635,12 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
 
     if( ($result == STORY_PERMISSION_DENIED) || ($result == STORY_NO_ACCESS_PARAMS) ) {
         $display .= COM_showMessageText(sprintf($LANG24[42],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
-        COM_accessLog("User {$_USER['username']} tried to access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
+        Log::write('system',Log::ERROR,"User {$_USER['username']} tried to access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
     } elseif( ($result == STORY_EDIT_DENIED) || ($result == STORY_EXISTING_NO_EDIT_PERMISSION) ) {
         $display .= COM_showMessageText(sprintf($LANG24[41],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
         $display .= STORY_renderArticle ($story, 'p');
-        COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
+        Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
         if ( $action == 'moderate' ) {
@@ -694,7 +670,7 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     }
     if ( $allowedTopicList == '' ) {
         $display .= COM_showMessageText(sprintf($LANG24[42],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
-        COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. No allowed topics.");
+        Log::write('system',Log::ERROR,"User {$_USER['username']} tried to access story $sid. No allowed topics.");
         return $display;
     }
 
@@ -1315,7 +1291,7 @@ switch ($action) {
             $pageTitle = $LANG24[5];
             $pageBody .= STORY_edit($sid, $action);
         } else {
-            COM_errorLog('User ' . $_USER['username'] . ' attempted to clone a story, sid empty or null, sid=' . $sid);
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' attempted to clone a story, sid empty or null, sid=' . $sid);
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -1340,24 +1316,24 @@ switch ($action) {
 
     case 'deletestory':
         if (!isset($sid) || empty($sid)) {
-            COM_errorLog('User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' attempted to delete a story, sid empty or null, sid=' . $sid);
             echo COM_refresh($_CONF['site_admin_url'] . '/story.php');
         } elseif ($type == 'submission') {
             $tid = DB_getItem($_TABLES['storysubmission'], 'tid', "sid = '".DB_escapeString($sid)."'");
             if (SEC_hasTopicAccess($tid) < 3) {
-                COM_accessLog ('User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
+                Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' had insufficient rights to delete a story submission, sid=' . $sid);
                 echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
             } elseif (SEC_checkToken()) {
                 DB_delete ($_TABLES['storysubmission'], 'sid', DB_escapeString($sid),
                            $_CONF['site_admin_url'] . '/moderation.php');
             } else {
-                COM_accessLog ("User {$_USER['username']} tried to illegally delete a story submission, sid=$sid and failed CSRF checks.");
+                Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete a story submission, sid=$sid and failed CSRF checks.");
                 echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
             }
         } else if (SEC_checkToken()) {
             $display .= STORY_deleteStory($sid);
         } else {
-            COM_accessLog ("User {$_USER['username']} tried to a delete a story, sid=$sid and failed CSRF checks");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to a delete a story, sid=$sid and failed CSRF checks");
             $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

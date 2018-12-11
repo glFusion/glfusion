@@ -34,6 +34,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Cache\Cache;
+
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
@@ -332,7 +334,7 @@ function FF_lastx()
     $retval = '';
     $pageTitle = $LANG_GF01['LASTX'];
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $key = 'forum_lastx__'.$c->securityHash(true);
     $retval = $c->get($key);
     if ( $retval !== null ) {

@@ -13,7 +13,7 @@
 *
 */
 
-namespace glFusion;
+namespace glFusion\Cache;
 
 use \Doctrine\Common\Cache\Cache;
 
@@ -22,20 +22,20 @@ class glFusionCache implements Cache
     public function fetch($id)
     {
         // fetch $id from the cache
-        $c = \glFusion\Cache::getInstance();
+        $c = \glFusion\Cache\Cache::getInstance();
         return $c->get($id);
     }
 
     public function contains($id)
     {
         // check if $id exists in the cache
-        $c = \glFusion\Cache::getInstance();
+        $c = \glFusion\Cache\Cache::getInstance();
         return $c->has($id);
     }
 
     public function save($id, $data, $lifeTime = 0)
     {
-        $c = \glFusion\Cache::getInstance();
+        $c = \glFusion\Cache\Cache::getInstance();
         $tag = '';
         // parse out the first part of the ID upto the underscore and
         // use this as the tag.
@@ -49,7 +49,7 @@ class glFusionCache implements Cache
     public function delete($id)
     {
         // delete $id from the cache
-        $c = \glFusion\Cache::getInstance();
+        $c = \glFusion\Cache\Cache::getInstance();
         return $c->delete($id);
     }
 

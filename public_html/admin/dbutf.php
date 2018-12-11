@@ -1,22 +1,16 @@
 <?php
 /**
- * glFusion Database Administraiton - utf8 to utf8mb4 conversion
- *
- * Converts the database, tables, and columns in each table to the
- * utf8mb4_unicode_ci character set / collation.
- *
- * LICENSE: This program is free software; you can redistribute it
- *  and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * @category   glFusion CMS
- * @package    dbAdmin
- * @author     Mark R. Evans  mark AT glFusion DOT org
- * @copyright  2015-2016 - Mark R. Evans
- * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
- * @since      File available since Release 1.6.3
- */
+* glFusion CMS
+*
+* glFusion Database Administraiton - utf8 to utf8mb4 conversion
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
@@ -25,7 +19,7 @@ if (!SEC_inGroup('Root') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
-    COM_accessLog("User {$_USER['username']} tried to access the database administration system without proper permissions.");
+    Log::logAccessViolation('Database Administration');
     echo $display;
     exit;
 }
@@ -96,7 +90,7 @@ switch ($action) {
 
     default :
 
-        COM_errorLog("DBadmin: no action passed.");
+        Log::write('system',Log::ERROR,"DBadmin: no action passed.");
 
 }
 ?>

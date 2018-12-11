@@ -41,6 +41,8 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
+use \glFusion\Cache\Cache;
+
 USES_forum_functions();
 USES_forum_format();
 USES_forum_topic();
@@ -1229,7 +1231,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         COM_updateSpeedLimit('forum');
         PLG_itemSaved($savedPostID,'forum');
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $c->deleteItemsByTag('forumcb');
 
         if ( !COM_isAnonUser() ) {

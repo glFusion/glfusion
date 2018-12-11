@@ -28,7 +28,7 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-use \glFusion\Cache;
+use \glFusion\Cache\Cache;
 
 /**
 * The template class allows you to keep your HTML code in some external files

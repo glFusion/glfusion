@@ -19,7 +19,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use \glFusion\Database;
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 if (!defined('INSTALLER_VERSION')) {
     define('INSTALLER_VERSION','1');
@@ -31,7 +32,7 @@ function INSTALLER_install_feature($step, &$vars)
 
     $db = Database::getInstance();
 
-    COM_errorLog("AutoInstall: Creating feature {$step['feature']}...");
+    Log::write('system',Log::INFO,"AutoInstall: Creating feature {$step['feature']}...");
     $ft_name = $step['feature'];
     $ft_desc = $step['desc'];
 
@@ -44,7 +45,7 @@ function INSTALLER_install_feature($step, &$vars)
                             )
                 );
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Feature creation failed!");
+        Log::write('system',Log::ERROR,"AutoInstall: Feature creation failed!");
         return 1;
     }
 
@@ -67,7 +68,7 @@ function INSTALLER_install_group($step, &$vars)
 
     $db = Database::getInstance();
 
-    COM_errorLog("AutoInstall: Creating group {$step['group']}...");
+    Log::write('system',Log::INFO,"AutoInstall: Creating group {$step['group']}...");
     $grp_name = $step['group'];
     $grp_desc = $step['desc'];
     if (isset($step['admin']) && $step['admin'] == true) {
@@ -98,7 +99,7 @@ function INSTALLER_install_group($step, &$vars)
                             )
                  );
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Group creation failed!");
+        Log::write('system',Log::ERROR,"AutoInstall: Group creation failed!");
         return 1;
     }
 
@@ -118,7 +119,7 @@ function INSTALLER_install_group($step, &$vars)
                 array(Database::INTEGER,Database::INTEGER)
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
-            COM_errorLog("AutoInstall: Error inserting Group Assignment for Root");
+            Log::write('system',Log::ERROR,"AutoInstall: Error inserting Group Assignment for Root");
         }
 
         if ( isset($step['default']) && $step['default'] == true ) {
@@ -142,7 +143,7 @@ function INSTALLER_install_addgroup($step, &$vars)
 
     $db = Database::getInstance();
 
-    COM_errorLog("AutoInstall: Adding a group to another group...");
+    Log::write('system',Log::INFO,"AutoInstall: Adding a group to another group...");
     if (array_key_exists('parent_var',$step)) {
         $parent_grp = $vars[$step['parent_var']];
     } elseif (array_key_exists('parent_grp',$step)) {
@@ -162,11 +163,11 @@ function INSTALLER_install_addgroup($step, &$vars)
     $child_grp = intval($child_grp);
 
     if ($parent_grp == 0) {
-        COM_errorLog("AutoInstall: ERROR: Parent group not found");
+        Log::write('system',Log::ERROR,"AutoInstall: ERROR: Parent group not found");
         return 1;
     }
     if ($child_grp == 0) {
-        COM_errorLog("AutoInstall: ERROR: Child group not found");
+        Log::write('system',Log::ERROR,"AutoInstall: ERROR: Child group not found");
         return 1;
     }
 
@@ -183,7 +184,7 @@ function INSTALLER_install_addgroup($step, &$vars)
             )
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Failed to assign group!");
+        Log::write('system',Log::ERROR,"AutoInstall: Failed to assign group!");
         return 1;
     }
 
@@ -202,16 +203,16 @@ function INSTALLER_install_mapping($step, &$vars)
     $db = Database::getInstance();
 
     if (isset($step['log'])) {
-        COM_errorLog("AutoInstall: ".$step['log']);
+        Log::write('system',Log::INFO,"AutoInstall: ".$step['log']);
     } else {
-        COM_errorLog("AutoInstall: Mapping a feature to a group...");
+        Log::write('system',Log::INFO,"AutoInstall: Mapping a feature to a group...");
     }
     if (array_key_exists('findgroup', $step)) {
 
         $grp_id = $db->getItem($_TABLES['group'],'grp_id',array('grp_name' => $step['findgroup']));
 
         if ($grp_id === false) {
-            COM_errorLog("AutoInstall: Could not find existing '{$step['findgroup']}' group!");
+            Log::write('system',Log::ERROR,"AutoInstall: Could not find existing '{$step['findgroup']}' group!");
             return 1;
         }
     } else {
@@ -232,7 +233,7 @@ function INSTALLER_install_mapping($step, &$vars)
             )
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Mapping failed!");
+        Log::write('system',Log::ERROR,"AutoInstall: Mapping failed!");
         return 1;
     }
 
@@ -248,7 +249,7 @@ function INSTALLER_install_table($step, &$vars)
 {
     global $_DB_dbms, $_TABLES;
 
-    COM_errorLog("AutoInstall: Creating table {$step['table']}...");
+    Log::write('system',Log::INFO,"AutoInstall: Creating table {$step['table']}...");
 
     $db = Database::getInstance();
 
@@ -276,7 +277,7 @@ function INSTALLER_install_table($step, &$vars)
     try {
         $stmt = $db->conn->query($sql);
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Failed to create table {$step['table']}");
+        Log::write('system',Log::ERROR,"AutoInstall: Failed to create table {$step['table']}");
         return 1;
     }
 
@@ -308,7 +309,7 @@ function INSTALLER_extract_params($str, $delim)
 function INSTALLER_install_sql($step, &$vars)
 {
     if (isset($step['log'])) {
-        COM_errorLog("AutoInstall: ".$step['log']);
+        Log::write('system',Log::INFO,"AutoInstall: ".$step['log']);
     }
 
     $db = Database::getInstance();
@@ -325,7 +326,7 @@ function INSTALLER_install_sql($step, &$vars)
             try {
                 $stmt = $db->conn->query($sql);
             } catch(\Doctrine\DBAL\DBALException $e) {
-                COM_errorLog("AutoInstall: SQL failed! ".htmlspecialchars($step['sql']));
+                Log::write('system',Log::ERROR,"AutoInstall: SQL failed!", array($step['sql']));
                 return 1;
             }
        }
@@ -363,7 +364,7 @@ function INSTALLER_install_block($step, &$vars)
 
     $db = Database::getInstance();
 
-    COM_errorLog("AutoInstall: Creating block {$step['name']}...");
+    Log::write('system',Log::INFO,"AutoInstall: Creating block {$step['name']}...");
 
     $is_enabled     = isset($step['is_enabled']) ? intval($step['is_enabled']) : 1;
     $rdflimit       = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
@@ -425,7 +426,7 @@ function INSTALLER_install_block($step, &$vars)
             )
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
-        COM_errorLog("AutoInstall: Block creation failed!");
+        Log::write('system',Log::ERROR,"AutoInstall: Block creation failed!",array('Plugin::'.$type));
         return 1;
     }
     $bid = $db->conn->lastInsertId();
@@ -1092,6 +1093,8 @@ if ( !function_exists('_addConfigItem')) {
     function _addConfigItem($data = array() )
     {
         global $_TABLES;
+
+        $db = Database::getInstance();
 
         $Qargs = array(
                        $data['name'],

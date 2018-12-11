@@ -13,13 +13,13 @@
 *
 */
 
-namespace glFusion;
+namespace glFusion\Database;
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-use \glFusion\GlFusionCache;
+use \glFusion\Cache\GlFusionCache;
 
 class Database
 {
@@ -163,7 +163,6 @@ class Database
             'host'      => $this->_host,
             'driver'    => $this->internalDriverName,
             'charset'   => $this->_character_set_database,
-//            'collate'   => 'utf8mb4_unicode_ci'
         );
         if ($this->_charset === 'utf-8') {
             $connectionParams['driverOptions'] = [1002 => "SET NAMES '".$this->_character_set_database."'"];
@@ -257,18 +256,16 @@ class Database
     * @param        string      $dbname     Name of database
     * @param        string      $dbuser     User to make connection as
     * @param        string      $dbpass     Password for dbuser
-    * @param        string      $errorlogfn Name of the errorlog function
     * @param        string      $charset    character set of site
     * @param        string      $db_charset character of db
     */
-    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $errorlogfn = '', $charset = '', $db_charset = '' )
+    public function __construct($dbhost, $dbname, $dbuser, $dbpass, $charset = '', $db_charset = '' )
     {
         $this->_host = $dbhost;
         $this->_name = $dbname;
         $this->_user = $dbuser;
         $this->_pass = $dbpass;
         $this->_verbose = false;
-        $this->_errorlog_fn = $errorlogfn;
         $this->_charset = strtolower($charset);
         $this->_character_set_database = strtolower(str_replace("-","",$db_charset));
         $this->_mysql_version = 0;
@@ -301,7 +298,7 @@ class Database
         if (!isset($instance) ) {
             include $_CONF['path'].'db-config.php';
             if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
-            $instance = new Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
+            $instance = new Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass,
                      $_CONF['default_charset'], $_CONF['db_charset']);
         }
         return $instance;
@@ -658,19 +655,19 @@ class Database
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->andX(
                         $queryBuilder->expr()->eq($table.'owner_id',
-                          $queryBuilder->createNamedParameter($uid,\glFusion\Database::INTEGER)
+                          $queryBuilder->createNamedParameter($uid,Database::INTEGER)
                         ),
                         $queryBuilder->expr()->gte($table.'perm_owner',
-                          $queryBuilder->createNamedParameter($access,\glFusion\Database::INTEGER)
+                          $queryBuilder->createNamedParameter($access,Database::INTEGER)
                         )
                     ),
                     $queryBuilder->expr()->andX(
                         $queryBuilder->expr()->in($table.'group_id',
                           $queryBuilder->createNamedParameter($userGroups,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
                         ),
-                        $queryBuilder->expr()->gte($table.'perm_group',$access,\glFusion\Database::INTEGER)
+                        $queryBuilder->expr()->gte($table.'perm_group',$access,Database::INTEGER)
                     ),
-                    $queryBuilder->expr()->gte($table.'perm_members',$access,\glFusion\Database::INTEGER)
+                    $queryBuilder->expr()->gte($table.'perm_members',$access,Database::INTEGER)
                 )
             );
         } else {
@@ -680,9 +677,9 @@ class Database
                         $queryBuilder->expr()->in($table.'group_id',
                           $queryBuilder->createNamedParameter($userGroups,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
                         ),
-                        $queryBuilder->expr()->gte($table.'perm_group',$access,\glFusion\Database::INTEGER)
+                        $queryBuilder->expr()->gte($table.'perm_group',$access,Database::INTEGER)
                     ),
-                    $queryBuilder->expr()->gte($table.'perm_anon',$access,\glFusion\Database::INTEGER)
+                    $queryBuilder->expr()->gte($table.'perm_anon',$access,Database::INTEGER)
                 )
             );
         }
@@ -863,7 +860,7 @@ class Database
         }
 
         // retrieve all topics the user has access to
-        $db = \glFusion\Database::getInstance();
+        $db = Database::getInstance();
         $topicQB = $db->conn->createQueryBuilder();
         $topicQB->select('tid')
                 ->from($_TABLES['topics']);

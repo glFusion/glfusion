@@ -23,8 +23,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use \glFusion\Database;
-use \glFusion\Cache;
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 use \glFusion\Formatter;
 
 USES_lib_user();

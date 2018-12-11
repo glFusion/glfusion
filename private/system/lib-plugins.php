@@ -21,8 +21,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use glFusion\Database;
-use glFusion\Cache;
+use glFusion\Database\Database;
+use glFusion\Cache\Cache;
 
 /**
 * This is the plugin library for glFusion.  This is the API that plugins can
@@ -179,7 +179,7 @@ function PLG_callFunctionForOnePlugin($function, $args='')
 */
 function PLG_install($type)
 {
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('atperm');
     $c->deleteItemsByTag('plugins');
     $c->deleteItemsByTag('plugin_info');
@@ -196,7 +196,7 @@ function PLG_install($type)
 */
 function PLG_upgrade($type)
 {
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('atperm');
     $c->deleteItemsByTag('plugins');
     $c->deleteItemsByTag('plugin_info');
@@ -234,7 +234,7 @@ function PLG_uninstall ($type)
 
     $db = Database::getInstance();
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('atperm');
     $c->deleteItemsByTag('plugins');
     $c->deleteItemsByTag('plugin_info');
@@ -1915,7 +1915,7 @@ function PLG_autoTagPerms()
         return $autoTagUsage;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $key = 'atperm__'.$c->securityHash();
     $retval = $c->get($key);
 

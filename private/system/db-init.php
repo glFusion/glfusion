@@ -10,7 +10,6 @@
 *  Copyright (C) 2017-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
-*
 */
 
 if (!defined ('GVERSION')) {
@@ -22,6 +21,7 @@ require_once $_CONF['path'].'db-config.php';
 global $_TABLES, $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_table_prefix, $_DB_dbms;
 
 $_TABLES['access']              = $_DB_table_prefix . 'access';
+$_TABLES['admin_action']        = $_DB_table_prefix . 'admin_action';
 $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['autotag_perm']        = $_DB_table_prefix . 'autotag_perm';
 $_TABLES['autotag_usage']       = $_DB_table_prefix . 'autotag_usage';
@@ -73,7 +73,7 @@ $_TABLES['vars']                = $_DB_table_prefix . 'vars';
 $_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
 
 // force the initialization of the DB driver which forces the initial connection
-glFusion\Database::getInstance();
+glFusion\Database\Database::getInstance();
 
 $_DB_dbms = 'mysql';
 

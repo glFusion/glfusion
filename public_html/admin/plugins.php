@@ -24,8 +24,10 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-use \glFusion\Database;
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 use \glFusion\FileSystem;
+use \glFusion\Log\Log;
 
 // Number of plugins to list per page
 // We use 25 here instead of the 50 entries in other lists to leave room
@@ -41,7 +43,7 @@ if (!SEC_hasrights ('plugin.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[38],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to access the plugin administration screen.");
+    Log::write('system',Log::ERROR,"Invalid Access Attempt to Plugin Administration",array('IP' => $_SERVER['REAL_ADDR']));
     echo $display;
     exit;
 }
@@ -351,7 +353,7 @@ function PLUGINS_update($pi_name)
 
     if (strlen ($pi_name) == 0) {
         $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true,'error');
-        COM_errorLog ($LANG32[12]);
+        Log::write('system',Log::ERROR,$LANG32[12]);
         return $retval;
     }
 
@@ -387,14 +389,14 @@ function PLUGINS_unInstall($pi_name)
 
     if (strlen ($pi_name) == 0) {
         $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true,'error');
-        COM_errorLog ($LANG32[12]);
+        Log::write('system',Log::ERROR,$LANG32[12]);
         return $retval;
     }
 
     // if the plugin is disabled, load the functions.inc now
     if (!function_exists ('plugin_uninstall_' . $pi_name)) {
         if ( !file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-            COM_errorLog("Unable to locate the plugin directory for " . $pi_name." - cannot perform standard uninstall.");
+            Log::write('system',Log::WARNING,"Unable to locate the plugin directory for " . $pi_name." - cannot perform standard uninstall.");
         } else {
             require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
         }
@@ -441,19 +443,19 @@ function PLUGINS_remove($pi_name)
 
     if (strlen ($pi_name) == 0) {
         $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true,'error');
-        COM_errorLog ($LANG32[12]);
+        Log::write('system',Log::ERROR,$LANG32[12]);
         return $retval;
     }
 
-    COM_errorLog( "Removing the {$pi_name} plugin file structure");
+    Log::write('system',Log::INFO, "Removing the {$pi_name} plugin file structure");
 
     $msg = '';
     if (PLG_remove($pi_name)) {
-        COM_errorLog("Plugin removal was successful.");
+        Log::write('system',Log::INFO,"Plugin removal was successful.");
         $msg = 116;
         $retval .= COM_showMessage(116);
     } else {
-        COM_errorLog("Error removing the plugin file structure - the web server may not have sufficient permissions");
+        Log::write('system',Log::ERROR,"Error removing the plugin file structure - the web server may not have sufficient permissions");
         $msg = 91;
         $retval .= COM_showMessage(91);
     }
@@ -1175,10 +1177,10 @@ function PLUGINS_post_uploadProcess() {
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
                 if ( !file_exists($_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
+                    Log::write('system',Log::DEBUG,"Renaming " . $fileNameDist ." to " . $_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     $rc = @copy ($_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
+                        Log::write('system',Log::ERROR,"PLG-INSTALL: Unable to copy ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName." to ".$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                         $masterErrorCount++;
                         $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_admin'].'plugins/'.$pluginData['id'].$absoluteFileName,$_CONF['path_admin'].'plugins/'.$pluginData['id'].$pathTo.$fileName);
                     }
@@ -1205,10 +1207,10 @@ function PLUGINS_post_uploadProcess() {
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
                 if ( !file_exists($_CONF['path_html'].$public_dir_name.$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
+                    Log::write('system',Log::DEBUG,"PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].$pathTo.$fileName);
                     $rc = @copy ($_CONF['path_html'].$public_dir_name.$absoluteFileName,$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$public_dir_name.$absoluteFileName." to ".$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
+                        Log::write('system',Log::ERROR,"PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$public_dir_name.$absoluteFileName." to ".$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                         $masterErrorCount++;
                         $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].$public_dir_name.$absoluteFileName,$_CONF['path_html'].$public_dir_name.$pathTo.$fileName);
                     }
@@ -1231,10 +1233,10 @@ function PLUGINS_post_uploadProcess() {
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
                 if ( !file_exists($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    Log::write('system',Log::DEBUG,"PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     $rc = @copy ($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     if ( $rc === false ) {
-                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                        Log::write('system',Log::ERROR,"PLG-INSTALL: Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                         $masterErrorCount++;
                         $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     }
@@ -1308,7 +1310,7 @@ function PLUGINS_upload_update ($pi_name)
 
     if (strlen ($pi_name) == 0) {
         $retval .= COM_showMessageText($LANG32[12],$LANG32[13],true,'error');
-        COM_errorLog ($LANG32[12]);
+        Log::write('system',Log::ERROR,$LANG32[12]);
         return $retval;
     }
     $result = PLG_upgrade ($pi_name);
@@ -1323,7 +1325,7 @@ function PLUGINS_upload_update ($pi_name)
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('menu','plugin'));
+    $c = Cache::getInstance()->deleteItemsByTags(array('menu','plugin'));
     return $retval;
 }
 
@@ -1393,7 +1395,7 @@ if ( isset($_POST['cancel']) ) {
         if ( is_dir($tDir)) {
             $fs->deleteDir($tDir);
         } else {
-            COM_errorLog("PLG-Install: Directory mismatch after cancel operation - Temp directory not deleted");
+            Log::write('system',Log::WARNING,"PLG-Install: Directory mismatch after cancel operation - Temp directory not deleted");
         }
     }
     if ( isset($_POST['pi_name']) ) {

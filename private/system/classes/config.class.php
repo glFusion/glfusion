@@ -22,6 +22,8 @@ if (!defined ('CONFIG_CACHE_FILE_NAME')) {
     define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
 }
 
+use \glFusion\Database\Database;
+
 class config
 {
 
@@ -98,7 +100,7 @@ class config
     {
         global $_TABLES, $_CONF, $_SYSTEM;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         // Reads from a cache file if there is one
         if ( isset($_SYSTEM['no_cache_config']) && !$_SYSTEM['no_cache_config'] ) {
@@ -176,7 +178,7 @@ class config
     {
         global $_TABLES, $_VARS;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         if ($group == 'Core') {
             $fn = 'configmanager_' . $name . '_validate';
@@ -207,7 +209,7 @@ class config
         try {
             $db->conn->executeUpdate($sql,
                         array($value,$name,$group),
-                        array(\glFusion\Database::STRING,\glFusion\Database::STRING,\glFusion\Database::STRING)
+                        array(Database::STRING,Database::STRING,Database::STRING)
                         );
 
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -236,7 +238,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $escaped_val = serialize($value);
         $escaped_name = $name;
@@ -249,7 +251,7 @@ class config
         try {
             $db->conn->executeUpdate($sql,
                     array($escaped_val,$escaped_name,$escaped_grp),
-                    array(\glFusion\Database::STRING,\glFusion\Database::STRING,\glFusion\Database::STRING));
+                    array(\Database::STRING,Database::STRING,Database::STRING));
         } catch(\Doctrine\DBAL\DBALException $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
@@ -262,15 +264,15 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $sql = "SELECT value, default_value
                 FROM `{$_TABLES['conf_values']}`
                 WHERE name = ? AND group_name = ?";
 
         $stmt = $db->conn->prepare($sql);
-        $stmt->bindValue(1,$name,\glFusion\Database::STRING);
-        $stmt->bindValue(2,$group,\glFusion\Database::STRING);
+        $stmt->bindValue(1,$name,Database::STRING);
+        $stmt->bindValue(2,$group,Database::STRING);
 
         try {
             $result = $stmt->execute();
@@ -280,7 +282,7 @@ class config
             }
             return;
         }
-        $info = $stmt->fetch(\glFusion\Database::ASSOCIATIVE);
+        $info = $stmt->fetch(Database::ASSOCIATIVE);
         if ($info === false) {
             return;
         }
@@ -319,7 +321,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $default_value = $db->conn->fetchColumn("SELECT default_value FROM `{$_TABLES['conf_values']}`
                             WHERE name = ? AND group_name = ?", array($name,$group), 0);
@@ -385,7 +387,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
@@ -409,8 +411,8 @@ class config
                     $Qargs[4]
                 ),
                 array(
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::STRING
+                    Database::STRING,
+                    Database::STRING
                 )
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -426,15 +428,15 @@ class config
             $db->conn->executeUpdate($sql,
                 $Qargs,
                 array(
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::STRING,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
                 )
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -454,7 +456,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $Qargs = array($param_name,                                     // 0
                        $set ? serialize($default_value) : 'unset',      // 1
@@ -489,14 +491,14 @@ class config
                     $Qargs[0]
                 ),
                 array(
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::INTEGER,
-                    \glFusion\Database::STRING,
-                    \glFusion\Database::STRING
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING
                 )
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -516,7 +518,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
         try {
             $db->conn->delete($_TABLES['conf_values'],array('name' => $param_name,
                               'group_name' => $group));
@@ -543,7 +545,7 @@ class config
             return;
         }
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
         try {
             $db->conn->delete($_TABLES['conf_values'],array('group_name' => $group));
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -566,7 +568,7 @@ class config
     {
         global $_TABLES, $LANG_confignames, $LANG_configselects, $LANG_configSelect;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $q_string = "SELECT name, type, selectionArray, "
             . "fieldset, value, default_value FROM `{$_TABLES['conf_values']}`" .
@@ -581,8 +583,8 @@ class config
                             $subgroup
                         ),
                         array(
-                            \glFusion\Database::STRING,
-                            \glFusion\Database::INTEGER
+                            Database::STRING,
+                            Database::INTEGER
                         )
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
@@ -683,7 +685,7 @@ class config
     {
         global $_TABLES, $_PLUGIN_INFO;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $groups = array_keys($this->config_array);
         $num_groups = count($groups);
@@ -712,7 +714,7 @@ class config
     {
         global $_TABLES;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $q_string = "SELECT name,subgroup FROM {$_TABLES['conf_values']} WHERE "
                   . "type = 'subgroup' AND group_name = ? "
@@ -726,7 +728,7 @@ class config
             }
             $db->dbError($e->getMessage(),$sql);
         }
-        $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
         $retval = array();
         foreach($data AS $row) {
             $retval[$row['name']] = $row['subgroup'];
@@ -924,7 +926,7 @@ class config
     {
         global $_TABLES, $LANG_fs;
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         if (!array_key_exists($group, $LANG_fs)) {
             $LANG_fs[$group] = array();
@@ -1163,7 +1165,7 @@ class config
             return null;
         }
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         if ($group == 'Core') {
             /**
@@ -1504,7 +1506,7 @@ class config
         $listOfPlugins = 'Core,' . $listOfPlugins;
         $itemArray = explode(",",$listOfPlugins);
 
-        $db = glFusion\Database::getInstance();
+        $db = Database::getInstance();
 
         $confArray = array();
 
@@ -1525,7 +1527,7 @@ class config
                 $db->_errorlog("SQL Error: " . $e->getMessage());
                 continue;
             }
-            $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+            $data = $stmt->fetchAll(Database::ASSOCIATIVE);
             foreach($data AS $row) {
                 $groupname = $LANG_configsections[$group]['label'];
 

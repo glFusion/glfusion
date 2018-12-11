@@ -1,52 +1,37 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | moderation.php                                                           |
-// |                                                                          |
-// | glFusion main administration page.                                       |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion submission queue tools
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark Howard     mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         - tony AT tonybibbs DOT com
+*  Mark Limburg       - mlimburg AT users DOT sourceforge DOT net
+*  Jason Whittenburg  - jwhitten AT securitygeeks DOT com
+*  Dirk Haun          - dirk AT haun-online DOT de
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Log\Log;
+
 $display = '';
 if (!SEC_isModerator()) {
+    Log::logAccessViolation('Moderation Admin');
     COM_setMessage(200);
     $display = COM_refresh($_CONF['site_url']);
     echo $display;
     exit;
 }
-
-require_once 'auth.inc.php';
 
 USES_lib_admin();
 USES_lib_user();
@@ -228,18 +213,21 @@ function MODERATE_item($action='', $type='', $id='')
     $retval = '';
 
     if (empty($action)) {
+        Log::write('system',Log::ERROR,"Submissions Error: An attempt was made to moderate an item with a null action.");
         // null action
-        $retval .= COM_errorLog("Submissions Error: An attempt was made to moderate an item with a null action.");
+        $retval .= "Submissions Error: An attempt was made to moderate an item with a null action.";
         return $retval;
     }
     if (empty($type)) {
         // null item type
-        $retval .= COM_errorLog("Submissions Error: An attempt was made to moderate a null item type.");
+        Log::write('system',Log::ERROR,"Submissions Error: An attempt was made to moderate a null item type.");
+        $retval .= "Submissions Error: An attempt was made to moderate a null item type.";
         return $retval;
     }
     if (empty($id)) {
         // null item type
-        $retval .= COM_errorLog("Submissions Error: An attempt was made to moderate an item with a null id.");
+        Log::write('system',Log::ERROR,"Submissions Error: An attempt was made to moderate an item with a null id.");
+        $retval .= "Submissions Error: An attempt was made to moderate an item with a null id.";
         return $retval;
     }
 
@@ -370,7 +358,8 @@ function MODERATE_selectedItems($action = '', $type='')
         foreach($item as $selitem) {
             $id = COM_applyFilter($selitem);
             if (empty($id)) {
-                $retval .= COM_errorLog("Submissions error: a null item id was specified for action: $action, type: $type");
+                Log::write('system',Log::ERROR,"Submissions error: a null item id was specified for action: $action, type: $type");
+                $retval .= "Submissions error: a null item id was specified for action: $action, type: $type";
                 return $retval; // null id - make an early exit!
             }
             $retval .= MODERATE_item($action, $type, $id);
@@ -395,7 +384,7 @@ function MODERATE_itemList($type='', $token)
     $retval = '';
 
     if (empty($type)) {
-        COM_errorLog("Submissions Error: Attempted to generate a moderation list for a null item type.");
+        Log::write('system',Log::ERROR,"Submissions Error: Attempted to generate a moderation list for a null item type.");
     } else {
 
         switch ($type) {

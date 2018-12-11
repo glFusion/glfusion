@@ -1,37 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | prefeditor.php                                                           |
-// |                                                                          |
-// | glFusion user preference editor.                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2010-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion user preference editor
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2010-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // Set this to true to get various debug messages from this script
 $_USER_VERBOSE = false;
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Log\Log;
+
 USES_lib_user();
 USES_lib_admin();
 
@@ -39,10 +27,10 @@ $display = '';
 
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
+    Log::logAccessViolation('User Preference Editor');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to access the user administration screen.");
     echo $display;
     exit;
 }

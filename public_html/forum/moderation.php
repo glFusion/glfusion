@@ -36,6 +36,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Cache\Cache;
+
 if (!in_array('forum', $_PLUGINS)) {
     COM_404();
     exit;
@@ -119,7 +121,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
     } else {
         gf_updateLastPost($forum_id,$topicparent);
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('forumcb');
+    $c = Cache::getInstance()->deleteItemsByTag('forumcb');
 
     if ($topicparent == $topic_id ) {
         $link = $_CONF['site_url'].'/forum/index.php?forum='.$forum_id;
@@ -274,7 +276,7 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
             gf_updateLastPost($forum_id,$curpostpid);
             gf_updateLastPost($move_to_forum,$topicparent);
         }
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('forumcb');
+        $c = Cache::getInstance()->deleteItemsByTag('forumcb');
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= FF_statusMessage(sprintf($LANG_GF02['msg183'],$move_to_forum),$link,$LANG_GF02['msg183'],false,'',true);
     } else {  // Move complete topic
@@ -308,7 +310,7 @@ function moderator_movePost($topic_id,$topic_parent_id,$forum_id, $move_to_forum
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
         DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topic_id);
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('forumcb');
+        $c = Cache::getInstance()->deleteItemsByTag('forumcb');
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
@@ -414,7 +416,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
 
         // Remove any lastviewed records in the log so that the new updated topic indicator will appear
         DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int)$topic_id);
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('forumcb');
+        $c = Cache::getInstance()->deleteItemsByTag('forumcb');
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     } else {
@@ -464,7 +466,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         // Update the Forum and topic indexes
         gf_updateLastPost($forum_id,$curpostpid);
         gf_updateLastPost($move_to_forum, $move_to_topic);
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('forumcb');
+        $c = Cache::getInstance()->deleteItemsByTag('forumcb');
         $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }

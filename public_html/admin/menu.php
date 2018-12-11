@@ -1,35 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Menu Editor - glFusion CMS                                               |
-// +--------------------------------------------------------------------------+
-// | menu.php                                                                 |
-// |                                                                          |
-// | glFusion CMS Menu Administration                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Menu Editor / Administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once $_CONF['path_system'] . 'lib-menu.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 USES_lib_admin();
 $display = '';
@@ -42,7 +30,7 @@ if (!SEC_hasRights('menu.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} unauthorized user tried to access the menu editor screen.");
+    Log::logAccessViolation('Menu Administration');
     echo $display;
     exit;
 }
@@ -230,7 +218,7 @@ function MB_saveCloneMenu( ) {
             }
         }
     }
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
 
@@ -344,7 +332,7 @@ function MB_saveNewMenu( ) {
 
     $menu_id = DB_insertId();
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
     $randID = rand();
@@ -385,7 +373,7 @@ function MB_saveEditMenu( ) {
     $sqlDataValues = "'$menu_id','$menuname',$menutype,$menuactive,$menugroup";
     DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
     $randID = rand();
@@ -495,7 +483,7 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
     $pid = $menu->menu_elements[$mid]->pid;
 
     $menu->reorderMenu($pid);
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
 
     return;
@@ -778,7 +766,7 @@ function MB_saveNewMenuElement ( ) {
     $pid                = $E['pid'];
     $menu_id            = $E['menu_id'];
     $menu->reorderMenu($pid);
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
 }
 
@@ -1071,7 +1059,7 @@ function MB_changeActiveStatusMenuXX ($menu_arr)
             DB_query($sql);
         }
     }
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
 
     return;
@@ -1084,7 +1072,7 @@ function MB_deleteMenu($menu_id) {
 
     DB_query("DELETE FROM {$_TABLES['menu']} WHERE id=".(int) $menu_id);
     DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
 }
@@ -1107,7 +1095,7 @@ function MB_deleteChildElements( $id, $menu_id ){
     $sql = "DELETE FROM " . $_TABLES['menu_elements'] . " WHERE id=" . (int) $id;
     DB_query( $sql );
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
 }
 
@@ -1324,7 +1312,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'saveedit' :
             MB_saveEditMenuElement();
-            glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+            Cache::getInstance()->deleteItemsByTag('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
@@ -1332,7 +1320,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             // save the new or edited element
             $menu_id = COM_applyFilter($_POST['menu'],true);
             MB_saveNewMenuElement();
-            glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+            Cache::getInstance()->deleteItemsByTag('menu');
             echo COM_refresh($_CONF['site_admin_url'] . '/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;

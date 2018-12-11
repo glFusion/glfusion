@@ -29,6 +29,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Cache\Cache;
+
 /**
 * Language file Include
 */
@@ -1185,7 +1187,7 @@ function plugin_moderationapprove_mediagallery($id)
                 DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . DB_escapeString($media_filename) . "'" .
                          " WHERE album_id=" . (int) $row['album_id'] );
             }
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
+            $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
             // email the owner / uploader that the item has been approved.
 
             COM_clearSpeedlimit(600,'mgapprove');
@@ -1732,14 +1734,14 @@ function plugin_supportadblock_mediagallery()
 function plugin_itemsaved_mediagallery($id, $type, $old_id = '')
 {
     if ( $type != 'mediagallery' ) return;
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('mediagallery');
 }
 
 function plugin_itemdeleted_mediagallery($id, $type, $children = null)
 {
     if ( $type != 'mediagallery' ) return;
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('mediagallery');
 }
 
@@ -2001,7 +2003,7 @@ function MG_initAlbums($force=0) {
         return;
     }
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
 
     $dtKey = 'mediagallery_df';
     if ( $c->has($dtKey)) {

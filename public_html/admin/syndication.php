@@ -1,49 +1,35 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | syndication.php                                                          |
-// |                                                                          |
-// | glFusion content syndication administration                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2003-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// |          Michael Jervis    - mike AT fuckingbrit DOT com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
+/**
+* glFusion CMS
+*
+* glFusion content syndication administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2003-2008 by the following authors:
+*  Authors: Dirk Haun         - dirk AT haun-online DOT de
+*           Michael Jervis    - mike AT fuckingbrit DOT com
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 $display = '';
 
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('syndication.edit')) {
+    Log::logAccessViolation('Syndication Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[34],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the content syndication administration screen.");
     echo $display;
     exit;
 }
@@ -68,7 +54,7 @@ function FEED_toggleStatus($fid_arr, $feedarray)
                 DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = ".(int) $feed);
             }
         }
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+        $c = Cache::getInstance()->deleteItemsByTag('story');
     }
     return;
 }
@@ -653,7 +639,7 @@ function FEED_save($A)
         $A['fid'] = DB_insertId ();
     }
     SYND_updateFeed ($A['fid']);
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+    $c = Cache::getInstance()->deleteItemsByTag('story');
     COM_setMessage(58);
     return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
 }
@@ -676,7 +662,7 @@ function FEED_delete($fid)
             @unlink(SYND_getFeedPath($feedfile));
         }
         DB_delete($_TABLES['syndication'], 'fid', $fid);
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+        $c = Cache::getInstance()->deleteItemsByTag('story');
         COM_setMessage(59);
         return COM_refresh ($_CONF['site_admin_url']
                             . '/syndication.php');
@@ -739,7 +725,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $display .= FEED_save($_POST);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally edit feed $fid and failed CSRF checks.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit feed $fid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -748,7 +734,7 @@ switch ($action) {
         if (SEC_checkToken()) {
             $display .= FEED_delete($fid);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete feed $fid and failed CSRF checks.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete feed $fid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

@@ -11,6 +11,8 @@
 *   @filesource
 */
 
+use \glFusion\Cache\Cache;
+
 class Group
 {
     /**
@@ -109,8 +111,8 @@ class Group
         }
         // Then check the glFusion cache to save DB queries
         $cache_key = 'user_group_assigned_' . $uid;
-        if (\glFusion\Cache::getInstance()->has($cache_key)) {
-            return \glFusion\Cache::getInstance()->get($cache_key);
+        if (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
         }
 
         // Not found in cache? Perform the DB lookup
@@ -128,7 +130,7 @@ class Group
         }
         ksort($groups);
         $runonce[$uid] = $groups;
-        \glFusion\Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
+        Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
         return $runonce[$uid];
     }
 
@@ -166,8 +168,8 @@ class Group
         }
         // Then check the glFusion cache to save DB queries
         $cache_key = 'user_group_all_' . $uid;
-        if (\glFusion\Cache::getInstance()->has($cache_key)) {
-            return \glFusion\Cache::getInstance()->get($cache_key);
+        if (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
         }
 
         // Not in cache? First get directly-assigned memberships, then
@@ -217,7 +219,7 @@ class Group
         }
         ksort($groups);
         $runonce[$uid] = $groups;
-        \glFusion\Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
+        Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
         return $runonce[$uid];
     }
 

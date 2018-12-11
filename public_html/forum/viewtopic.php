@@ -41,6 +41,8 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
+use \glFusion\Database\Database;
+
 USES_forum_functions();
 USES_forum_format();
 USES_forum_topic();
@@ -69,12 +71,12 @@ if ( $showtopic == 0 ) {
     exit;
 }
 
-$db = glFusion\Database::getInstance();
+$db = Database::getInstance();
 
 // pull the topic record to validate it exists and find the parent ID
 $sql = "SELECT forum, pid, subject FROM `{$_TABLES['ff_topic']}` WHERE id = ?";
 $stmt = $db->conn->prepare($sql);
-$stmt->bindParam(1, $showtopic, glFusion\Database::INTEGER);
+$stmt->bindParam(1, $showtopic, Database::INTEGER);
 $stmt->execute();
 $row = $stmt->fetch();
 
@@ -105,7 +107,7 @@ $sql .= "LEFT JOIN `{$_TABLES['ff_categories']}` c on c.id=b.forum_cat ";
 $sql .= "WHERE a.id = ?";
 
 $stmt = $db->conn->prepare($sql);
-$stmt->bindParam(1, $showtopic, glFusion\Database::INTEGER);
+$stmt->bindParam(1, $showtopic, Database::INTEGER);
 $stmt->execute();
 $viewtopic = $stmt->fetch();
 
@@ -187,7 +189,7 @@ if (isset($_GET['lastpost']) && $_GET['lastpost']) {
 //@TODO - need to fix order
         $sql = "SELECT id FROM `{$_TABLES['ff_topic']}` WHERE pid= :topicid ORDER BY date " . $order;
         $stmt = $db->conn->prepare($sql);
-        $stmt->bindParam("topicid", $showtopic, glFusion\Database::INTEGER);
+        $stmt->bindParam("topicid", $showtopic, Database::INTEGER);
         $stmt->execute();
         $ids = array();
         while ($I = $stmt->fetch()) {
@@ -321,7 +323,7 @@ $queryBuilder = $db->conn->createQueryBuilder();
 $queryBuilder
     ->select('*')
     ->from($_TABLES['ff_topic'])
-    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER).' OR pid = '.$queryBuilder->createNamedParameter($showtopic,glFusion\Database::INTEGER))
+    ->where('id = '.$queryBuilder->createNamedParameter($showtopic,Database::INTEGER).' OR pid = '.$queryBuilder->createNamedParameter($showtopic,Database::INTEGER))
     ->orderBy('date', $order)
     ->setFirstResult($offset)
     ->setMaxResults($show);

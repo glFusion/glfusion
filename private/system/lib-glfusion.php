@@ -16,7 +16,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use \glFusion\Database;
+use \glFusion\Database\Database;
 
 function glfusion_UpgradeCheck() {
     global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
@@ -306,7 +306,7 @@ function _checkVersion()
     $http->debug=0;
     $http->html_debug=0;
     $http->user_agent = 'glFusion/' . GVERSION;
-    $url="http://www.glfusion.org/versions/index.php";
+    $url="https://www.glfusion.org/versions/index.php";
     $error=$http->GetRequestArguments($url,$arguments);
     $arguments["RequestMethod"]="POST";
     $arguments["PostValues"]=array(

@@ -1,41 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | database.php                                                             |
-// |                                                                          |
-// | glFusion database backup administration page.                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2011 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
-// |          Blaine Lang        - langmail AT sympatico DOT ca               |
-// |          Dirk Haun          - dirk AT haun-online DOT de                 |
-// |          Alexander Schmacks - Alexander.Schmacks AT gmx DOT de           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion database administration page.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2011 by the following authors:
+*  Tony Bibbs         - tony AT tonybibbs DOT com
+*  Blaine Lang        - langmail AT sympatico DOT ca
+*  Dirk Haun          - dirk AT haun-online DOT de
+*  Alexander Schmacks - Alexander.Schmacks AT gmx DOT de
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\FileSystem;
+use \glFusion\Log\Log;
 
 $display = '';
 $page    = '';
@@ -44,7 +31,7 @@ if (!SEC_inGroup('Root') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
-    COM_accessLog("User {$_USER['username']} tried to access the database administration system without proper permissions.");
+    Log::logAccessViolation('Database Administration');
     echo $display;
     exit;
 }
@@ -82,7 +69,7 @@ function DBADMIN_list()
 
     $retval = '';
 
-    if (\glFusion\FileSystem::isWritable($_CONF['backup_path'])) {
+    if (FileSystem::isWritable($_CONF['backup_path'])) {
 //    if (is_writable($_CONF['backup_path'])) {
         $backups = array();
         $fd = opendir($_CONF['backup_path']);
@@ -160,7 +147,7 @@ function DBADMIN_list()
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
         $retval .= sprintf($LANG_DB_ADMIN['no_access'],$_CONF['backup_path']);
-        COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
+        Log::write('system',Log::ERROR,$_CONF['backup_path'] . ' is not writable.');
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
 
@@ -182,7 +169,7 @@ function DBADMIN_backupAjax()
 
     $rc = $backup->initBackup();
     if ( $rc === false ) {
-        COM_errorLog("DBADMIN error - unable to initialize backup");
+        Log::write('system',Log::ERROR,"DBADMIN error - unable to initialize backup");
         $errorCode = 1;
         $retval['statusMessage'] = 'Unable to initialize backup - see error.log for details';
     }
@@ -366,7 +353,7 @@ function DBADMIN_backupPrompt()
         $retval .= COM_startBlock($LANG08[06], '',
                             COM_getBlockTemplate('_msg_block', 'header'));
         $retval .= sprintf($LANG_DB_ADMIN['no_access'],$_CONF['backup_path']);
-        COM_errorLog($_CONF['backup_path'] . ' is not writable.', 1);
+        Log::write('system',Log::ERROR,$_CONF['backup_path'] . ' is not writable.');
         $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
     return $retval;
@@ -668,7 +655,7 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
         $make_innodb = DB_query($sql, 1);
         if ($make_innodb === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
+            Log::write('system',Log::ERROR,'SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
         }
     }
 
@@ -755,7 +742,7 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
         $make_myisam = DB_query($sql, 1);
         if ($make_myisam === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
+            Log::write('system',Log::ERROR,'SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
         }
     }
 
@@ -899,7 +886,7 @@ function DBADMIN_dooptimize($startwith = '', $failures = 0)
         $optimize = DB_query($sql, 1);
         if ($optimize === false) {
             $failures++;
-            COM_errorLog('SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
+            Log::write('system',Log::ERROR,'SQL error for table "' . $table . '" (ignored): '.DB_error($sql));
 
             $startwith = $table;
             $url = $_CONF['site_admin_url']
@@ -929,7 +916,7 @@ function DBADMIN_alterEngine($table_name, $engine = 'MyISAM')
     $convert_engine = DB_query($sql, 1);
     if ($convert_engine === false) {
         $retval = false;
-        COM_errorLog('SQL error converting table "' . $table_name . '" to '.$engine.' (ignored): '.DB_error($sql));
+        Log::write('system',Log::ERROR,'SQL error converting table "' . $table_name . '" to '.$engine.' (ignored): '.DB_error($sql));
     }
     return $retval;
 }
@@ -974,7 +961,7 @@ function DBADMIN_ajaxOptimizeTable( $table )
     $I = DB_fetchArray($result);
     if (strcasecmp($I['Engine'], 'InnoDB') == 0) {
         $rc = true;
-        COM_errorLog("DBadmin: Skipping optimization for table '".$table."' because it is a InnoDB table");
+        Log::write('system',Log::INFO,"DBadmin: Skipping optimization for table '".$table."' because it is a InnoDB table");
     } else {
         $rc = DB_query("OPTIMIZE TABLE $table", 1);
     }
@@ -983,7 +970,7 @@ function DBADMIN_ajaxOptimizeTable( $table )
     if ( $rc == false ) {
         $retval['errorCode'] = 1;
         $retval['statusMessage'] = 'Failure: '.$table.' was not optimized.';
-        COM_errorLog("DBadmin: Error optimizing table " . $table);
+        Log::write('system',Log::INFO,"DBadmin: Error optimizing table " . $table);
     } else {
         $retval['errorCode'] = 0;
     }
@@ -1390,7 +1377,7 @@ switch ($action) {
                 $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', COM_applyFilter($delfile));
                 $file = str_replace('..', '', $file);
                 if (!@unlink($_CONF['backup_path'] . $file)) {
-                    COM_errorLog('Unable to remove backup file "' . $file . '"');
+                    Log::write('system',Log::ERROR,'Unable to remove backup file "' . $file . '"');
                 }
             }
         } else {
@@ -1474,7 +1461,7 @@ switch ($action) {
             $page .= DBADMIN_utf8mb4();
         } else {
             $page .= COM_showMessageText('Server does not support utf8mb4 - see error.log for details.','',true,'error');
-            COM_errorLog("UTF8MB4 Not Supported - MySQL PHP client is older than v5.0.9");
+            Log::write('system',Log::ERROR,"UTF8MB4 Not Supported - MySQL PHP client is older than v5.0.9");
             $page .= DBADMIN_list();
         }
         break;

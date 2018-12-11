@@ -19,6 +19,10 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+use \glFusion\Formatter;
+
 /**
  * Constants for stories:
  * Loading from database:
@@ -389,7 +393,7 @@ class Story
         global $_CONF;
         $this->mode = $mode;
 
-        $this->format = new glFusion\Formatter();
+        $this->format = new Formatter();
         $this->format->setNamespace('glfusion');
         $this->format->setAction('story');
         $this->format->setAllowedHTML($_CONF['htmlfilter_story']);
@@ -720,7 +724,7 @@ class Story
     {
         global $_TABLES, $_CONF;
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
 
         if (DB_getItem($_TABLES['topics'], 'tid', "archive_flag=1") == $this->_tid) {
             $this->_featured = 0;

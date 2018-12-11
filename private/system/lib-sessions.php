@@ -19,6 +19,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use glFusion\Database\Database;
+use glFusion\Cache\Cache;
+
 // ensure cookie domain is properly initialized
 
 if (empty ($_CONF['cookiedomain'])) {
@@ -70,7 +73,7 @@ function SESS_sessionCheck()
     unset($_USER);
     $userdata = array();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     // initialize the standard user record data
     $userdata['uid'] = 1;
@@ -138,7 +141,7 @@ function SESS_sessionCheck()
                     "SELECT md5_sess_id, start_time FROM `{$_TABLES['sessions']}` WHERE "
                     . "(remote_ip = ?) AND (start_time > ?) AND (uid = 1)",
                     array($request_ip,$mintime),
-                    array(\glFusion\Database::STRING,\glFusion\Database::INTEGER)
+                    array(Database::STRING,Database::INTEGER)
             );
 
             if ($row) {
@@ -176,7 +179,7 @@ function SESS_sessionCheck()
     if ( $gc_check == 0 ) {
         $expirytime = (int) (time() - $_CONF['session_cookie_timeout']);
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < ?)";
-        $db->conn->executeUpdate($deleteSQL,array($expirytime),array(\glFusion\Database::INTEGER));
+        $db->conn->executeUpdate($deleteSQL,array($expirytime),array(Database::INTEGER));
     }
 
     return $_USER;
@@ -197,7 +200,7 @@ function SESS_checkRememberMe()
 
     $userid = 0;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if (isset ($_COOKIE[$_CONF['cookie_name']])) {
         $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
@@ -253,7 +256,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
     $sessid = 0;
     $md5_sessid = _createID();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $currtime   = (string) (time());
     $expirytime = (string) (time() - $lifespan);
@@ -289,7 +292,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
 
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
         $stmt = $db->conn->prepare($deleteSQL);
-        $stmt->bindValue(1,$expirytime,\glFusion\Database::INTEGER);
+        $stmt->bindValue(1,$expirytime,Database::INTEGER);
         $stmt->execute();
 
 //        $db->conn->query($deleteSQL,array($expirytime),array(\glFusion\Database::INTEGER));
@@ -315,12 +318,12 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
                             $currtime,
                             $remote_ip),
                         array(
-                            \glFusion\Database::STRING,
-                            \glFusion\Database::STRING,
-                            \glFusion\Database::STRING,
-                            \glFusion\Database::INTEGER,
-                            \glFusion\Database::STRING,
-                            \glFusion\Database::STRING
+                            Database::STRING,
+                            Database::STRING,
+                            Database::STRING,
+                            Database::INTEGER,
+                            Database::STRING,
+                            Database::STRING
                         )
     );
 
@@ -329,7 +332,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
             $db->conn->executeUpdate(
                 "UPDATE `{$_TABLES['userinfo']}` SET lastlogin = UNIX_TIMESTAMP() WHERE uid = ?",
                 array($userid),
-                array(\glFusion\Database::INTEGER)
+                array(Database::INTEGER)
             );
         }
     } else {
@@ -358,7 +361,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
 
     $uid = 0;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $mintime = time() - $cookietime;
 
@@ -369,7 +372,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
     try {
         $row = $db->conn->fetchAssoc($sql,
             array($sessid, $mintime),
-            array(\glFusion\Database::STRING,\glFusion\Database::INTEGER)
+            array(Database::STRING,Database::INTEGER)
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {
@@ -437,12 +440,12 @@ function SESS_updateSessionTime($sessid)
 
     $newtime = (string) time();
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $result = $db->conn->executeUpdate(
         "UPDATE `{$_TABLES['sessions']}` SET start_time=? WHERE (md5_sess_id = ?)",
         array($newtime, $sessid),
-        array(\glFusion\Database::INTEGER,\glFusion\Database::STRING)
+        array(Database::INTEGER,Database::STRING)
     );
     return true;
 }
@@ -460,7 +463,7 @@ function SESS_endUserSession($userid)
 {
     global $_TABLES, $_CONF;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     if ( !defined('DEMO_MODE') ) {
         $sql = "DELETE FROM `{$_TABLES['sessions']}` WHERE uid = ?";
@@ -468,7 +471,7 @@ function SESS_endUserSession($userid)
             $db->conn->executeUpdate(
                 $sql,
                 array($userid),
-                array(\glFusion\Database::INTEGER)
+                array(Database::INTEGER)
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
             $db->dbError($e->getMessage(),$sql);
@@ -509,7 +512,7 @@ function SESS_getUserData($username)
 {
     global $_TABLES;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $sql = "SELECT *,format FROM `{$_TABLES['users']}`, `{$_TABLES['userprefs']}`, `{$_TABLES['dateformats']}` "
         . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
@@ -519,7 +522,7 @@ function SESS_getUserData($username)
         $myrow = $db->conn->fetchAssoc(
                 $sql,
                 array($username),
-                array(\glFusion\Database::STRING)
+                array(Database::STRING)
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
         $db->dbError($e->getMessage(),$sql);
@@ -544,7 +547,7 @@ function SESS_getUserDataFromId($userid)
 {
     global $_TABLES;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $sql = "SELECT *,format FROM `{$_TABLES['dateformats']}`,`{$_TABLES['users']}`,`{$_TABLES['userprefs']}`,`{$_TABLES['userinfo']}`,`{$_TABLES['userindex']}` "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
@@ -558,13 +561,13 @@ function SESS_getUserDataFromId($userid)
     try {
         $stmt = $db->conn->executeQuery($sql,
             array('userid'=>$userid),
-            array(\glFusion\Database::INTEGER),
+            array(Database::INTEGER),
             new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $cacheKey));
     } catch(\Doctrine\DBAL\DBALException $e) {
         $db->dbError($e->getMessage(),$sql);
     }
 
-    $data = $stmt->fetchAll(\glFusion\Database::ASSOCIATIVE);
+    $data = $stmt->fetchAll(Database::ASSOCIATIVE);
     $stmt->closeCursor();
     if (count($data) < 1) {
         return false;
@@ -591,7 +594,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
 
@@ -657,7 +660,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
         $db->conn->executeUpdate(
             $sql,
             array($request_ip, $_USER['uid']),
-            array(\glFusion\Database::STRING, \glFusion\Database::INTEGER)
+            array(Database::STRING, Database::INTEGER)
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {

@@ -37,6 +37,9 @@
 
 require_once 'lib-common.php';
 
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+
 USES_lib_user();
 USES_lib_social();
 
@@ -997,7 +1000,7 @@ function saveuser($A)
         COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
     }
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',"uid = " . (int) $_USER['uid']);
     if ($reqid != $A['uid']) {
@@ -1313,7 +1316,7 @@ function saveuser($A)
         PLG_profileExtrasSave ();
         PLG_profileSave();
 
-        $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
+        $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
 
         if ($_US_VERBOSE) {
             COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
@@ -1786,7 +1789,7 @@ function savepreferences($A)
             DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
         }
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('story','menu','userdata'));
+    $c = Cache::getInstance()->deleteItemsByTags(array('story','menu','userdata'));
 
     PLG_userInfoChanged ($_USER['uid']);
 }

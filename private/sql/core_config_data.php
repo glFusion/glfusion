@@ -138,6 +138,17 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+    array(
+    	'name' => 'log_level',
+    	'default_value' => '300',
+    	'type' => 'select',
+    	'subgroup' => 0,
+    	'fieldset' => 0,
+    	'selection_array' => 36,
+    	'sort' => 90,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
 
     // mail fieldset
 

@@ -39,6 +39,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+
 // load the language file(s), including custom strings if any
 
 $langfile = $_CONF['path'].'plugins/forum/language/'.$_CONF['language'].'.php';
@@ -1066,7 +1069,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
     if (($cb_enable && ($cb_where == $where)) || $where == CENTERBLOCK_FORCE) {
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'forumcb__'.$c->securityHash(true,true);
         if ( $c->has($key)) return $c->get($key);
 
@@ -1091,7 +1094,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $grouplist = implode(',',$groups);
 
-        $db = \glFusion\Database::getInstance();
+        $db = Database::getInstance();
         $queryBuilder = $db->conn->createQueryBuilder();
         $queryBuilder
             ->select(   'a.id',
@@ -1177,7 +1180,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     ->from($_TABLES['ff_topic'],'a')
                     ->where('id=?')
                     ->setMaxResults(1)
-                    ->setParameter(1, $A['last_reply_rec'],\glFusion\Database::INTEGER);
+                    ->setParameter(1, $A['last_reply_rec'],Database::INTEGER);
 
                 $stmt = $queryBuilder->execute();
                 $B = $stmt->fetch();

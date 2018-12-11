@@ -13,6 +13,9 @@
 */
 
 require_once 'lib-common.php';
+
+use \glFusion\Cache\Cache;
+
 session_write_close();  //close session
 
 // keep running after browser closes connection
@@ -44,7 +47,7 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
             DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
-            $c = glFusion\Cache::getInstance();
+            $c = Cache::getInstance();
             $c->deleteItemsByTag('story_'.$sid);
             $c->deleteItemsByTag('whatsnew');
             $c->deleteItemsByTag('menu');
@@ -52,7 +55,7 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_removeStory($sid);
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $c->deleteItemsByTags(array('story_'.$sid,'whatsnew','menu'));
     }
 }

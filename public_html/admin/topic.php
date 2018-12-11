@@ -1,49 +1,37 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | topic.php                                                                |
-// |                                                                          |
-// | glFusion topic administration page.                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion topic administration page.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Authors: Tony Bibbs        - tony AT tonybibbs DOT com
+*           Mark Limburg      - mlimburg AT users DOT sourceforge DOT net
+*           Jason Whittenburg - jwhitten AT securitygeeks DOT com
+*           Dirk Haun         - dirk AT haun-online DOT de
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+
 USES_lib_story();
 
 if (!SEC_hasRights('topic.edit')) {
+    Log::logAccessViolation('Topic Administration');
     $display = COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[32],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to access the topic administration screen.");
     echo $display;
     exit;
 }
@@ -305,7 +293,7 @@ switch ($action) {
                 $page = $T->Edit($_POST);
                 break;
             }
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+            $c = Cache::getInstance()->deleteItemsByTag('story');
             echo COM_refresh($_CONF['site_admin_url'] . '/topic.php');
         } else {
             $page = $T->Edit($_POST);

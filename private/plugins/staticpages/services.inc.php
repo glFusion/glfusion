@@ -39,6 +39,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Cache\Cache;
+
 // this must be kept in synch with the actual size of 'sp_id' in the db ...
 define('STATICPAGE_MAX_ID_LENGTH', 128);
 
@@ -388,11 +390,11 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             DB_change($_TABLES['comments'], 'sid', DB_escapeString($sp_id),
                       array('sid', 'type'),
                       array(DB_escapeString($sp_old_id), 'staticpages'));
-            $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_old_id),'staticpages'));
+            $c = Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_old_id),'staticpages'));
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }
-        $c = glFusion\Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_id),'staticpages','menu'));
+        $c = Cache::getInstance()->deleteItemsByTags(array('sp_'.md5($sp_id),'staticpages','menu'));
         PLG_itemSaved($sp_id,'staticpages');
         COM_setMsg( $LANG_STATIC['page_saved'], 'info' );
         $url = COM_buildURL($_CONF['site_url'] . '/page.php?page='
@@ -531,7 +533,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
         }
         $perms = SP_getPerms ();
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'sp__' . md5($args['sp_id']) . '_'.md5($perms) . '_' . $c->securityHash();
         $cacheCheck = $c->get($key);
         if ( $cacheCheck !== null ) {

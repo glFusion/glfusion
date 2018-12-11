@@ -1,45 +1,34 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | user.php                                                                 |
-// |                                                                          |
-// | glFusion user administration page.                                       |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2009 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion user administration page.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2009 by the following authors:
+*  Authors: Tony Bibbs        - tony AT tonybibbs DOT com
+*           Mark Limburg      - mlimburg AT users DOT sourceforge DOT net
+*           Jason Whittenburg - jwhitten AT securitygeeks DOT com
+*           Dirk Haun         - dirk AT haun-online DOT de
+*
+*/
 
 // Set this to true to get various debug messages from this script
 $_USER_VERBOSE = false;
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+use \glFusion\AdminAction;
+use \glFusion\Log\Log;
 
 USES_lib_user();
 USES_lib_social();
@@ -49,10 +38,10 @@ $display = '';
 
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
+    Log::logAccessViolation('User Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to access the user administration screen.");
     echo $display;
     exit;
 }
@@ -143,7 +132,7 @@ function USER_edit($uid = '', $msg = '')
             // the current admin user isn't Root but is trying to change
             // a root account.  Deny them and log it.
             $retval .= COM_showMessageText(sprintf($LANG_ACCESS['editrootmsg'],$_CONF['site_admin_url']), $LANG28[1], true,'error');
-            COM_accessLog("User {$_USER['username']} tried to edit a Root account with insufficient privileges.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit a Root account with insufficient privileges.");
             return $retval;
         }
         $curtime = COM_getUserDateTimeFormat($U['regdate']);
@@ -1499,10 +1488,10 @@ function USER_save($uid)
     $sql = '';
     $userChanged = false;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
-    if ($_USER_VERBOSE) COM_errorLog("**** entering USER_save()****",1);
-    if ($_USER_VERBOSE) COM_errorLog("group size at beginning = " . sizeof($groups),1);
+    if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"**** entering USER_save()****");
+    if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"group size at beginning = " . sizeof($groups));
 
     $uid            = COM_applyFilter($_POST['uid'],true);
     if ( $uid == 0 ) {
@@ -1716,7 +1705,7 @@ function USER_save($uid)
                 $newphoto = preg_replace ('/' . $curusername . '/', $username, $curphoto, 1);
                 $imgpath = $_CONF['path_images'] . 'userphotos/';
                 if (@rename ($imgpath . $curphoto,$imgpath . $newphoto) === false) {
-                    COM_errorLog ('Could not rename userphoto "'.$curphoto . '" to "' . $newphoto . '".');
+                    Log::write('system',Log::ERROR,'Could not rename userphoto "'.$curphoto . '" to "' . $newphoto . '".');
                 } else {
                     $curphoto = $newphoto;
                 }
@@ -1841,7 +1830,7 @@ function USER_save($uid)
             if (!SEC_inGroup ('Root')) {
                 $rootgrp = DB_getItem ($_TABLES['groups'], 'grp_id',"grp_name = 'Root'");
                 if (in_array ($rootgrp, $groups)) {
-                    COM_accessLog ("User {$_USER['username']} ({$_USER['uid']}) just tried to give Root permissions to user $username.");
+                    Log::write('system',Log::ERROR,"User {$_USER['username']} ({$_USER['uid']}) just tried to give Root permissions to user $username.");
                     echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
                     exit;
                 }
@@ -1857,7 +1846,7 @@ function USER_save($uid)
             }
 
             if ($_USER_VERBOSE) {
-                COM_errorLog("deleting all group_assignments for user $uid/$username",1);
+                Log::write('system',Log::DEBUG,"deleting all group_assignments for user $uid/$username");
             }
 
             // remove user from all groups that the User Admin is a member of
@@ -1881,8 +1870,8 @@ function USER_save($uid)
             foreach ($groups as $userGroup) {
                 if (in_array ($userGroup, $UserAdminGroups)) {
                     if ($_USER_VERBOSE) {
-                        COM_errorLog ("adding group_assignment " . $userGroup
-                                      . " for $username", 1);
+                        Log::write('system',Log::DEBUG,"adding group_assignment " . $userGroup
+                                      . " for $username");
                     }
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($userGroup, $uid)";
                     DB_query ($sql);
@@ -1934,15 +1923,16 @@ function USER_save($uid)
                 21
             );
         } else {
+            Log::write('system',Log::ERROR,'Error in USER_save() in '.$_CONF['site_admin_url'] . '/user.php');
             $retval .= COM_siteHeader ('menu', $LANG28[22]);
-            $retval .= COM_errorLog ('Error in USER_save() in '.$_CONF['site_admin_url'] . '/user.php');
+            $retval .= 'Error in USER_save() in '.$_CONF['site_admin_url'] . '/user.php';
             $retval .= COM_siteFooter ();
             echo $retval;
             exit;
         }
     } else {
         $retval = COM_siteHeader('menu', $LANG28[1]);
-        $retval .= COM_errorLog($LANG28[10]);
+        $retval .= $LANG28[10];
         if (DB_count($_TABLES['users'],'uid',$uid) > 0) {
             $retval .= USER_edit($uid);
         } else {
@@ -1952,9 +1942,9 @@ function USER_save($uid)
         echo $retval;
         exit;
     }
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'userdata','user_' . $uid));
+    Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'userdata','user_' . $uid));
 
-    if ($_USER_VERBOSE) COM_errorLog("***************leaving USER_save()*****************",1);
+    if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"***************leaving USER_save()*****************",1);
 
     return $retval;
 }
@@ -2200,7 +2190,7 @@ function USER_batchDeleteExec()
             }
         }
 
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+        $c = Cache::getInstance()->deleteItemsByTag('menu');
 
         COM_numberFormat($c); // just in case we have more than 999 ...
         $msg .= "{$LANG28[71]}: $c {$LANG28[102]}.<br/>\n";
@@ -2282,7 +2272,7 @@ function USER_sendReminders()
                     DB_query("UPDATE {$_TABLES['users']} SET num_reminders=num_reminders+1 WHERE uid=$uid");
                     $c++;
                 } else {
-                    COM_errorLog("Error attempting to send account reminder to user: $username ($uid)");
+                    Log::write('system',Log::ERROR,"Error attempting to send account reminder to user: $username ($uid)");
                 }
             }
         }
@@ -2366,7 +2356,7 @@ function USER_importExec()
 
         if ($verbose_import) {
             $retval .="<br/><b>Working on username=$u_name, fullname=$full_name, and email=$email</b><br/>\n";
-            COM_errorLog ("Working on username=$u_name, fullname=$full_name, and email=$email",1);
+            Log::write('system',Log::INFO,"Working on username=$u_name, fullname=$full_name, and email=$email");
         }
 
         // prepare for database
@@ -2390,32 +2380,32 @@ function USER_importExec()
 
                 if ($result && $verbose_import) {
                     $retval .= "<br/> Account for <b>$u_name</b> created successfully.<br/>\n";
-                    COM_errorLog("Account for $u_name created successfully",1);
+                    Log::write('system',Log::INFO,"Account for $u_name created successfully");
                 } else if ($result) {
                     $successes++;
                 } else {
                     // user creation failed
                     $retval .= "<br/>ERROR: There was a problem creating the account for <b>$u_name</b>.<br/>\n";
-                    COM_errorLog("ERROR: here was a problem creating the account for $u_name.",1);
+                    Log::write('system',Log::ERROR,"ERROR: here was a problem creating the account for $u_name.");
                 }
             } else {
                 if ($verbose_import) {
                     $retval .= "<br/><b>$u_name</b> or <b>$email</b> already exists, account not created.<br/>\n"; // user already exists
-                    COM_errorLog("$u_name,$email: username or email already exists, account not created",1);
+                    Log::write('system',Log::INFO,"$u_name,$email: username or email already exists, account not created");
                 }
                 $failures++;
             } // end if $ucount == 0 && ecount == 0
         } else {
             if ($verbose_import) {
                 $retval .= "<br/><b>$email</b> is not a valid email address, account not created<br/>\n"; // malformed email
-                COM_errorLog("$email is not a valid email address, account not created",1);
+                Log::write('system',Log::ERROR,"$email is not a valid email address, account not created");
             }
             $failures++;
         } // end if COM_isEmail($email)
     } // end foreach
 
     unlink ($filename);
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    $c = Cache::getInstance()->deleteItemsByTag('menu');
     $retval .= '<p>' . sprintf ($LANG28[32], $successes, $failures);
 
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
@@ -2462,8 +2452,11 @@ function USER_delete($uid)
     if (!USER_deleteAccount ($uid)) {
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
     }
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
+    Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
     COM_setMessage(22);
+
+    AdminAction::write('system','delete_user',sprintf("User ID %d has been deleted.",$uid));
+
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
 }
 
@@ -2625,19 +2618,19 @@ switch($action) {
             }
 
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally edit user ' . $uid . ' and failed CSRF checks.');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' tried to edit user ' . $uid . ' and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
 
     case 'delete':
          if (!isset ($uid) || empty ($uid) || ($uid <= 1)) {
-            COM_errorLog('User ' . $_USER['username'] . ' attempted to delete user, uid empty, null, or is <= 1');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' attempted to delete user, uid empty, null, or is <= 1');
             $display .= COM_refresh($_CONF['site_admin_url'] . '/user.php');
         } elseif (SEC_checkToken()) {
             $display .= USER_delete($uid);
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally delete user ' . $uid . ' and failed CSRF checks.');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' tried to delete user ' . $uid . ' and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -2675,7 +2668,7 @@ switch($action) {
         if (SEC_checkToken()) {
             $display .= USER_importExec();
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally import users and failed CSRF checks.');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' tried to import users and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -2702,7 +2695,7 @@ switch($action) {
                 . USER_batchAdmin()
                 . COM_siteFooter();
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally batch delete users and failed CSRF checks.');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' tried to batch delete users and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -2715,7 +2708,7 @@ switch($action) {
                 . USER_batchAdmin()
                 . COM_siteFooter();
         } else {
-            COM_accessLog('User ' . $_USER['username'] . ' tried to illegally send Site Login Reminders and failed CSRF checks.');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' tried to send Site Login Reminders and failed CSRF checks.');
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

@@ -17,7 +17,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use \glFusion\Database;
+use \glFusion\Database\Database;
 
 //@TODO Move this to online configuration
 
@@ -96,7 +96,7 @@ function AT_loadTags()
 {
     global $_TABLES, $_AM_CONF;
 
-    $db = glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     $A = array();
     $sql = "SELECT * FROM `{$_TABLES['autotags']}` WHERE is_enabled = 1";

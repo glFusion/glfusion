@@ -1,43 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | group.php                                                                |
-// |                                                                          |
-// | glFusion group administration page.                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark Howard            mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
+/**
+* glFusion CMS
+*
+* glFusion group administration page.
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark Howard     mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         - tony AT tonybibbs DOT com
+*  Mark Limburg       - mlimburg AT users DOT sourceforge DOT net
+*  Jason Whittenburg  - jwhitten AT securitygeeks DOT com
+*  Dirk Haun          - dirk AT haun-online DOT de
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 $display = '';
 
@@ -46,7 +33,7 @@ if (!SEC_hasRights ('group.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the group administration screen.");
+    Log::logAccessViolation('Group Administration');
     echo $display;
     exit;
 }
@@ -76,7 +63,7 @@ function GROUP_edit($grp_id = '')
         !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups)) {
         if (!SEC_inGroup ('Root') && (DB_getItem ($_TABLES['groups'],'grp_name', "grp_id = $grp_id") == 'Root')) {
             $eMsg = $LANG_ACCESS['canteditroot'];
-            COM_accessLog ("User {$_USER['username']} tried to edit the Root group with insufficient privileges.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit the Root group with insufficient privileges.");
         } else {
             $eMsg = $LANG_ACCESS['canteditgroup'];
         }
@@ -227,9 +214,7 @@ function GROUP_edit($grp_id = '')
                               $LANG_ACCESS['groupmsg']);
     $group_templates->set_var('hide_adminoption', '');
 
-    if ($VERBOSE) {
-        COM_errorLog("SELECTED: $selected");
-    }
+    Log::write('system',Log::DVLP_DEBUG,"SELECTED: ".$selected);
 
     if (empty($groupoptions)) {
         // make sure to list only those groups of which the Group Admin
@@ -402,7 +387,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
         if ($VERBOSE) {
             // this is for debugging purposes
             for ($i = 1; $i < count($grpftarray); $i++) {
-                COM_errorLog("element $i is feature " . key($grpftarray) . " and is " . current($grpftarray),1);
+                Log::write('system',Log::DEBUG,"element $i is feature " . key($grpftarray) . " and is " . current($grpftarray));
                 next($grpftarray);
             }
         }
@@ -476,12 +461,10 @@ function GROUP_applyDefault($grp_id, $add = true)
     */
     $_values_per_insert = 25;
 
-    if ($_GROUP_VERBOSE) {
-        if ($add) {
-            COM_errorLog("Adding group '$grp_id' to all user accounts");
-        } else {
-            COM_errorLog("Removing group '$grp_id' from all user accounts");
-        }
+    if ($add) {
+        Log::write('system',Log::DVLP_DEBUG,"Adding group '$grp_id' to all user accounts");
+    } else {
+        Log::write('system',Log::DVLP_DEBUG,"Removing group '$grp_id' from all user accounts");
     }
 
     if ($add) {
@@ -526,18 +509,16 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
     $retval = '';
     if (!empty ($grp_name) && !empty ($grp_descr)) {
         $GroupAdminGroups = SEC_getUserGroups ();
-        if (!empty ($grp_id) &&
-            ($grp_id > 0) &&
-            !in_array ($grp_id, $GroupAdminGroups) &&
-            !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $GroupAdminGroups)) {
-            COM_accessLog ("User {$_USER['username']} tried to edit group '$grp_name' ($grp_id) with insufficient privileges.");
 
+//@TODO - Look at SEC_groupIsRemoteUserAndHaveAccess - returns true now.
+        if (!empty ($grp_id) && ($grp_id > 0) && !in_array ($grp_id, $GroupAdminGroups) &&
+                  !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $GroupAdminGroups)) {
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit group '$grp_name' ($grp_id) with insufficient privileges.");
             return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
         }
 
         if ($grp_gl_core == 1 AND !is_array ($features)) {
-            COM_errorLog ("Sorry, no valid features were passed to this core group ($grp_id) and saving could cause problem...bailing.");
-
+            Log::write('system',Log::ERROR,"No valid features were passed to this core group ($grp_id) and saving could cause problem...bailing.");
             return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
         }
 
@@ -588,7 +569,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
 
         if (empty($grp_id) || ($grp_id < 1)) {
             // "this shouldn't happen"
-            COM_errorLog("Internal error: invalid group id");
+            Log::write('system',Log::ERROR,"Internal error: invalid group id");
             $retval .= COM_siteHeader('menu', $LANG_ACCESS['groupeditor']);
             $retval .= COM_showMessage(95);
             $retval .= COM_siteFooter();
@@ -623,16 +604,14 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
                 }
             }
         }
-        if ($VERBOSE) {
-            COM_errorLog('groups = ' . $groups);
-            COM_errorLog("deleting all group_assignments for group $grp_id/$grp_name",1);
-        }
+        Log::write('system',Log::DVLP_DEBUG,'GROUP SAVE: groups = ' . implode(',',$groups));
+        Log::write('system',Log::DVLP_DEBUG,"GROUP SAVE: deleting all group_assignments for group $grp_id/$grp_name");
 
         DB_delete($_TABLES['group_assignments'], 'ug_grp_id', $grp_id);
         if (! empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups)) {
-                    if ($VERBOSE) COM_errorLog("adding group_assignment $g for $grp_name",1);
+                    Log::write('system',Log::DVLP_DEBUG,"adding group_assignment $g for $grp_name");
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES (".intval($g).",$grp_id)";
                     DB_query($sql);
                 }
@@ -653,6 +632,8 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             }
         }
 
+AdminAction::write('system','group_save','Group '.$grp_name.'('.$grp_id.') saved');
+
         if ($grp_applydefault == 1) {
             GROUP_applyDefault($grp_id, $grp_applydefault_add);
         }
@@ -662,7 +643,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         } else {
             PLG_groupChanged ($grp_id, 'edit');
         }
-        glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
+        Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
         $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
@@ -1037,7 +1018,7 @@ function GROUP_editUsers($grp_id)
                 ($grp_name == 'Logged-in Users'))) {
         if (!SEC_inGroup('Root') && ($grp_name == 'Root')) {
             $eMsg = $LANG_ACCESS['canteditroot'];
-            COM_accessLog ("User {$_USER['username']} tried to edit the Root group with insufficient privileges.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit the Root group with insufficient privileges.");
         } else {
             $eMsg = $LANG_ACCESS['canteditgroup'];
         }
@@ -1169,7 +1150,7 @@ function GROUP_delete($grp_id)
     $grp_id = (int) $grp_id;
     $is_core = (int) DB_getItem($_TABLES['groups'], 'grp_gl_core', "grp_id = $grp_id");
     if ($is_core == 1 || !SEC_hasRights('group.delete')) {
-        COM_errorLog ("User {$_USER['username']} tried to delete a core group with insufficient privileges.");
+        Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete a core group with insufficient privileges.");
         return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
     }
 
@@ -1179,7 +1160,7 @@ function GROUP_delete($grp_id)
     DB_delete ($_TABLES['groups'], 'grp_id', $grp_id);
 
     PLG_groupChanged ($grp_id, 'delete');
-    glFusion\Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
+    Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
 
     COM_setMessage(50);
     $url = $_CONF['site_admin_url'] . '/group.php';
@@ -1229,7 +1210,7 @@ switch ($action) {
                                   $_POST['grp_descr'], $chk_grpadmin, $grp_gl_core,
                                   $grp_default, $grp_applydefault, $features, $groups);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally edit group $grp_id and failed CSRF checks.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit group $grp_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
             exit;
         }
@@ -1238,12 +1219,12 @@ switch ($action) {
 
     case 'delete':
         if (!isset ($grp_id) || empty ($grp_id) || ($grp_id == 0)) {
-            COM_errorLog('Attempted to delete group, grp_id empty or null, value =' . $grp_id);
+            Log::write('system',Log::ERROR,'Attempted to delete group, grp_id empty or null, value =' . $grp_id);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/group.php');
         } elseif (SEC_checkToken()) {
             $display .= GROUP_delete($grp_id);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally delete group $grp_id and failed CSRF checks.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete group $grp_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;
@@ -1253,7 +1234,7 @@ switch ($action) {
             $grp_members = $_POST['groupmembers'];
             $display .= GROUP_saveUsers($grp_id, $grp_members);
         } else {
-            COM_accessLog("User {$_USER['username']} tried to illegally manage the users in group $grp_id and failed CSRF checks.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to manage the users in group $grp_id and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
         break;

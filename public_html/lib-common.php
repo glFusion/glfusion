@@ -51,8 +51,9 @@ if (!defined ('OPENSSL_RAW_DATA')) {
 
 $_COM_VERBOSE = false;
 
-use \glFusion\Database;
-use \glFusion\Cache;
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
@@ -101,8 +102,9 @@ if ( function_exists('set_error_handler') ) {
   * Initialize the auto loader
   */
 
-require_once $_CONF['path_system'] . 'classes/Autoload.php';
+require_once $_CONF['path'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
+
 
 /**
   * Set debug console for development work
@@ -132,6 +134,33 @@ $_CONF = $config->get_config('Core');
 if ( $_CONF['cookiesecure']) {
     @ini_set('session.cookie_secure','1');
 }
+
+if (!isset($_CONF['log_level'])) {
+    $_CONF['log_level'] = Log::WARNING;
+}
+
+/*
+ * Initialize the system log
+ */
+Log::config('system',
+    array(  'type'  => 'file',
+            'path'  => $_CONF['path_log'],
+            'file'  => 'system.log',
+            'level' => $_CONF['log_level']
+         )
+);
+
+/*
+ * Initialize the 404 log
+ */
+Log::config('404',
+    array(  'type'=>'file',
+            'path'=>$_CONF['path_log'],
+            'file'=>'missing.log',
+            'level'=> Log::INFO,
+            'output' => "[%datetime%] %message% %context%\n",
+          )
+    );
 
 // Before we do anything else, check to ensure site is enabled
 
@@ -713,11 +742,10 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 {
     global $_BLOCK_TEMPLATE, $_COM_VERBOSE, $_CONF;
 
-    if ( $_COM_VERBOSE ) {
-        COM_errorLog( "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname], 1 );
-    }
-
     if ( !empty( $_BLOCK_TEMPLATE[$blockname] )) {
+
+        Log::write('system',Log::DVLP_DEBUG, "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname]);
+
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
         if ( $which == 'header' ) {
             if ( !empty( $templates[0] )  ) {
@@ -753,9 +781,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         }
     }
 
-    if ( $_COM_VERBOSE ) {
-        COM_errorLog( "Block template for the $which of $blockname is: $template", 1 );
-    }
+    Log::write('system',Log::DVLP_DEBUG, "Block template for the $which of $blockname is: $template");
 
     return $template;
 }
@@ -1748,15 +1774,11 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
     $stmt = $db->conn->query($sql);
 
     if ( !empty( $selected )) {
-        if ( $_COM_VERBOSE ) {
-            COM_errorLog( "exploding selected array: $selected in COM_checkList", 1 );
-        }
+        Log::write('system',Log::DVLP_DEBUG, "exploding selected array: $selected in COM_checkList", 1 );
 
         $S = explode( ' ', $selected );
     } else {
-        if ( $_COM_VERBOSE) {
-            COM_errorLog( 'selected string was empty COM_checkList', 1 );
-        }
+        Log::write('system',Log::DVLP_DEBUG, 'selected string was empty COM_checkList', 1 );
 
         $S = array();
     }
@@ -1893,6 +1915,9 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 function COM_errorLog( $logentry, $actionid = 1 )
 {
     global $_CONF, $LANG01;
+
+    Log::write('system',Log::INFO, $logentry);
+    return;
 
     $retval = '';
     if ( !isset($_CONF['timezone'])) $_CONF['timezone'] = 'America/Chicago';
@@ -2741,7 +2766,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     }
 
     if (!$mail->Send()) {
-        COM_errorLog("Email Error: " . $mail->ErrorInfo);
+        Log::write('system',Log::ERROR,$mail->ErrorInfo);
         return false;
     }
     return true;
@@ -2759,15 +2784,15 @@ function COM_emailNotification( $msgData = array() )
 
     // ensure we have something to send...
     if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
-        COM_errorLog("COM_emailNotification() - No message data provided");
+        Log::write('system',Log::ERROR,"COM_emailNotification() - No message data provided");
         return false; // no message defined
     }
     if ( empty($msgData['htmlmessage']) && empty($msgData['textmessage']) ) {
-        COM_errorLog("COM_emailNotification() - Empty message data provided");
+        Log::write('system',Log::ERROR,"COM_emailNotification() - Empty message data provided");
         return false; // no text in either...
     }
     if ( !isset($msgData['subject']) || empty($msgData['subject']) ) {
-        COM_errorLog("COM_emailNotification() - No subject provided");
+        Log::write('system',Log::ERROR,"COM_emailNotification() - No subject provided");
         return false; // must have a subject
     }
 
@@ -2862,7 +2887,7 @@ function COM_emailNotification( $msgData = array() )
             $queued++;
             if ( $queued >= $maxEmailsPerSend ) {
                 if (!$mail->Send()) {
-                    COM_errorLog("Email Error: " . $mail->ErrorInfo);
+                    Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                 }
                 $queued = 0;
                 $mail->ClearBCCs();
@@ -2871,7 +2896,7 @@ function COM_emailNotification( $msgData = array() )
     }
     if ( $queued > 0 ) {
         if ( !@$mail->Send() ) {
-            COM_errorLog("Email Error: " . $mail->ErrorInfo);
+            Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
             return false;
         }
     }
@@ -3358,7 +3383,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         );
     } else {
         $err = $feed->error();
-        COM_errorLog($err);
+        Log::write('system',Log::WARNING,$err);
         $db->conn->executeUpdate("UPDATE `{$_TABLES['blocks']}` SET content = ?, rdf_last_modified = NULL, rdf_etag = NULL WHERE bid =  ?",
             array(
                 1=>$err,
@@ -3441,7 +3466,7 @@ function COM_getPassword( $loginname )
 
     if ($paswd === false) {
         $tmp = $LANG01[32] . ": '" . $loginname . "'";
-        COM_errorLog( $tmp, 1 );
+        Log::write('system',Log::ERROR, $tmp);
         $passwd = '';
     }
     return $passwd;
@@ -5127,7 +5152,7 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 
     if ( $log_manipulation ) {
         if ( strcmp( $p, $parameter ) != 0 ) {
-            COM_errorLog( "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
+            Log::write('system',Log::WARNING, "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
         }
     }
 
@@ -5819,7 +5844,7 @@ function COM_getLanguageId($language = '')
 
         if ($lang_id === false) {
             // that looks like a misconfigured $_CONF['language_files'] array
-            COM_errorLog('Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
+            Log::write('system',Log::ERROR,'Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
 
             $lang_id = ''; // not much we can do here ...
         }
@@ -6197,7 +6222,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     }
 
     // if we do not throw the error back to an admin, still log it in the error.log
-    COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
+    Log::write('system',Log::WARNING,"$errno - $errstr @ $errfile line $errline", 1);
 
     // Does the theme implement an error message html file?
     if (!empty($_CONF['path_layout']) &&
@@ -6407,36 +6432,41 @@ function COM_404()
     $refUrl = '';
     $content = '';
 
+    $url = COM_sanitizeUrl(COM_getCurrentURL());
+
+    if (strpos($url,'custom_config.js') === true) {
+        return;
+    }
+
     header('HTTP/1.1 404 Not Found');
     header('Status: 404 Not Found');
 
-    $url = COM_sanitizeUrl(COM_getCurrentURL());
-
     if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
-        if (isset($_USER['uid']) && isset($_USER['username'])) {
-            $byUser = $_USER['username'] . '@' . $_SERVER['REMOTE_ADDR'];
-        } else {
-            $byUser = 'anon@' . $_SERVER['REMOTE_ADDR'];
+        if (!isset($_USER['uid']) || !isset($_USER['username'])) {
+            $_USER['username'] = 'anonymous';
         }
+        $byUser = '[' . $_SERVER['REMOTE_ADDR'] .']' . ' ['.$_USER['username'].']';
+
         if ( isset($_SERVER['HTTP_REFERER'])) {
             $refUrl = $_SERVER['HTTP_REFERER'];
         }
 
-        $dt = new \Date('now',$_CONF['timezone']);
-        $timestamp = $dt->format("d M Y H:i:s T",true);
+//        Log::write('404',Log::INFO,sprintf("URL: %s - Referer: %s",$url,$refUrl),array('IP'=>$_SERVER['REAL_ADDR']));
 
-        if (strpos($url,'custom_config.js') === false) {
-            $logEntry = "404 :: $byUser :: URL: $url";
+            $logEntry = "$byUser URL: [$url]";
             if (!empty($refUrl)) {
-                $logEntry .= " :: Referer: $refUrl";
+                $logEntry .= "\r\n\tReferer: [$refUrl]";
             }
+
+            Log::write('404',Log::INFO,$logEntry);
+/*
             $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
             $logfile = $_CONF['path_log'] . '404.log';
             if ($file = fopen($logfile, 'a')) {
                 fputs($file, "$timestamp - $logEntry \n");
                 fclose($file);
             }
-        }
+*/
     }
 
     $content = PLG_replaceTags("[staticpage_content:_404]",'glfusion','404');
@@ -6826,7 +6856,7 @@ function _css_out()
         foreach($files as $file) {
             $file_content = @file_get_contents($file);
             if ( $file_content === false ) {
-                COM_errorLog("ERROR: Unable to retrieve CSS file: " . $file);
+                Log::write('system',Log::WARNING,"Unable to retrieve CSS file: " . $file);
             } else {
                 $css .= $file_content;
             }
@@ -6871,12 +6901,12 @@ function writeFile_lck($filename, $tempfile, $data, $mutex='glfusion.lck')
                 unlink($tempfile);
             }
         } else {
-            COM_errorLog("ERROR: Unable to obtain exclusive lock on temp file: " . $tempfile);
+            Log::write('system',Log::WARNING,"Unable to obtain exclusive lock on temp file: " . $tempfile);
         }
         flock($fm,LOCK_UN); // Only unlock mutex when whole atomic action has completed.
         fclose($fm);
     } else {
-        COM_errorLog("ERROR: Unable to obtain exclusive lock on ".$mutex);
+        Log::write('system',Log::WARNING,"Unable to obtain exclusive lock on ".$mutex);
     }
     return $retval;
 }
@@ -6896,7 +6926,7 @@ function css_cacheok($cache,$files)
         foreach($files as $file){
             $mod_time = @filemtime($file);
             if ( $mod_time === false ) {
-//                COM_errorLog("ERROR: Unable to retrieve mod time for CSS file: " . $file);
+//                Log::write('system',Log::WARNING,"Unable to retrieve mod time for CSS file: " . $file);
             } else {
                 if ( $mod_time > $ctime ) {
                     return false;
@@ -7167,7 +7197,7 @@ function _js_out()
         foreach($files as $file) {
             $file_content = @file_get_contents($file);
             if ( $file_content === false ) {
-                COM_errorLog("ERROR: Unable to retrieve JS file: " . $file);
+                Log::write('system',Log::WARNING,"Unable to retrieve JS file: " . $file);
             } else {
                 $js .= $file_content;
             }

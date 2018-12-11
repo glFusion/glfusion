@@ -35,6 +35,8 @@
  * THE SOFTWARE.
  */
 
+use \glFusion\Log\Log;
+
 /**
  * String parser mode: Search for the next character
  * @see StringParser::_parserMode
@@ -543,7 +545,7 @@ class StringParser {
 		    // check to see how often we've looped and break out if too many times.
             $this->_looper++;
             if ( $this->_looper > 4000) {
-                COM_errorLog("BBCODE Parser:  Reached maximum loop check - aborting....");
+                Log::write('system',Log::ERROR,"BBCODE Parser:  Reached maximum loop check - aborting....");
                 return false;
             }
 			// make sure this is false!

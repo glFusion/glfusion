@@ -23,7 +23,7 @@ if (!@file_exists('siteconfig.php') ) {
     exit;
 }
 
-use glFusion\Database;
+use glFusion\Database\Database;
 
 require_once 'lib-common.php';
 USES_lib_story();

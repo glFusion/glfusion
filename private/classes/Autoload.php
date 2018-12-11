@@ -53,7 +53,6 @@ class Autoload
             $className = str_replace('glFusion\\', '', $className);
             $className = ucfirst($className);
             $path = __DIR__ . DIRECTORY_SEPARATOR . $className . '.php';
-
             if (file_exists($path)) {
                 /** @noinspection PhpIncludeInspection */
                 include $path;
@@ -63,15 +62,15 @@ class Autoload
                 }
             }
         } else {
-            $path = __DIR__ . DIRECTORY_SEPARATOR . strtolower($className) . '.class.php';
+            $path = __DIR__ . DIRECTORY_SEPARATOR . '../system/classes/'.strtolower($className) . '.class.php';
             if (file_exists($path)) {
                 /** @noinspection PhpIncludeInspection */
                 include $path;
             } else {
                 if ( stripos($className,'stringparser') === 0 ) {
-                    include __DIR__ . '/../../lib/bbcode/'.strtolower($className).'.class.php';
+                    include __DIR__ . DIRECTORY_SEPARATOR . '../lib/bbcode/'.strtolower($className).'.class.php';
                 } elseif (stripos($className, 'timerobject') === 0) {
-                    include __DIR__ . '/timer.class.php';
+                    include __DIR__ . DIRECTORY_SEPARATOR .'../system/classes/timer.class.php';
                 }
             }
         }
@@ -83,7 +82,7 @@ class Autoload
     public static function initialize()
     {
         if (!self::$initialized) {
-            require_once __DIR__ . '/../../vendor/autoload.php';
+            require_once __DIR__ . DIRECTORY_SEPARATOR . '../vendor/autoload.php';
             spl_autoload_register('glFusion\\Autoload::load', true, true);
             self::$initialized = true;
         }

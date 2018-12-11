@@ -36,6 +36,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 /**
 * This class will allow you to securely upload one or more files from a form
 * submitted via POST method.  Please read documentation as there are a number of
@@ -201,7 +203,7 @@ class upload
         $nwarnings = $nwarnings + 1;
         $this->_warnings[$nwarnings] = $warningText;
         if ($this->loggingEnabled()) {
-            $this->_logItem('Warning',$warningText);
+            Log::write('system',Log::WARNING,$warningText);
         }
     }
 
@@ -218,7 +220,7 @@ class upload
         $nerrors = $nerrors + 1;
         $this->_errors[$nerrors] = $errorText;
         if ($this->loggingEnabled()) {
-            $this->_logItem('Error',$errorText);
+            Log::write('system',Log::ERROR,$errorText);
         }
     }
 
@@ -235,7 +237,7 @@ class upload
         $nmsgs = $nmsgs + 1;
         $this->_debugMessages[$nmsgs] = $debugText;
         if ($this->loggingEnabled()) {
-            $this->_logItem('Debug',$debugText);
+            Log::write('system',Log::DEBUG,$debugText);
         }
     }
 
@@ -374,6 +376,7 @@ class upload
         }
 
         if ($this->_currentFile['size'] > $this->_maxFileSize) {
+            Log::write('system',Log::WARNING,"Uploaded file: ".$this->_currentFile['name']." exceeds max file size of " . $this->_maxFileSize);
             return false;
         } else {
             return true;

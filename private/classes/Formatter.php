@@ -1,31 +1,14 @@
 <?php
 /**
-*   glFusion Text, HTML, BBcode formatter
+* glFusion CMS
 *
-*   @author     Mark R. Evans <mark@lglfusion.org>
-*   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
-*   @package    glFusion
-*   @version    0.0.2
-*   @license    http://opensource.org/licenses/gpl-2.0.php
-*               GNU Public License v2 or later
+* glFusion Text, HTML, BBcode formatter
 *
-*   This class handles formatting text, html and bbcode for presentation
-*   Input can be directly from the user or from a DB and display it in the browser.
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
 *
-*   Text will be formatted based on $formatMode
-*   Auto tags are processed if enabled
-*   BBCodes are processed if enabled
-*   Smilies are processed if enabled and the Smiley Plugin is available
-*   Links (Urls, email, twitter) will be automatically parsed if enabled
-*   Code blocks are always processed
-*
-*   Content is censored if enabled
-*
-*   Additional codes and filters (pre and post processing) can be specified
-*
-*   parse() returns display ready text
-*
-*   Output is cached using glFusin\Cache class - TTL defaults to 10 minutes
+*  Copyright (C) 2017-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
 *
 */
 
@@ -34,6 +17,8 @@ namespace glFusion;
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Cache\Cache;
 
 // Magic url types
 define('MAGIC_URL_EMAIL', 1);
@@ -370,7 +355,7 @@ class Formatter {
 
         if ($cache) {
             $key = 'f_'.md5($str) .'_'. $this->getOptionsKey();
-            $c = \glFusion\Cache::getInstance();
+            $c = Cache::getInstance();
             if ($c->has($key)) {
                 $str = $c->get($key);
                 if ($this->parseAutoTags) {
@@ -401,6 +386,10 @@ class Formatter {
             $str = str_replace('</pre>','[/code]',$str);
         }
 
+        if ($this->parseAutoTags) {
+            $bbcode->addParser (array ('block', 'inline', 'listitem'), array($this,'_replaceTags'));
+        }
+
         if ($this->formatType != 'html') {
             $bbcode->addParser(array('block','inline','link','listitem'), array($this,'_nl2br'));
         }
@@ -422,6 +411,7 @@ class Formatter {
             $bbcode->addCode ('code', 'usecontent?', array($this,'_do_code'), array ('usecontent_param' => 'default'),
                               'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
         }
+
         if ($this->processBBCode) {
             if (!in_array('list',$this->bbcodeBlackList)) {
                 $bbcode->addParser ('list', array($this,'bbcode_stripcontents'));
@@ -508,9 +498,9 @@ class Formatter {
 
         unset($bbcode);
 
-        if ($this->parseAutoTags) {
-            $str = $this->_replaceTags($str);
-        }
+//        if ($this->parseAutoTags) {
+//            $str = $this->_replaceTags($str);
+//        }
         return $str;
     }
 

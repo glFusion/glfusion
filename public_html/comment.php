@@ -1,55 +1,31 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | comment.php                                                              |
-// |                                                                          |
-// | Let user comment on a story or plugin.                                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
-// |          Jared Wenerd      - wenerd87 AT gmail DOT com                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
 /**
-* This file is responsible for letting user enter a comment and saving the
-* comments to the DB.  All comment display stuff is in lib-common.php
+* glFusion CMS
 *
-* @author   Jason Whittenburg
-* @author   Tony Bibbs    <tonyAT tonybibbs DOT com>
-* @author   Vincent Furia <vinny01 AT users DOT sourceforge DOT net>
+* Comment Engine
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2010 by the following authors:
+*  Tony Bibbs        tony AT tonybibbs DOT com
+*  Mark Limburg      mlimburg AT users.sourceforge DOT net
+*  Jason Whittenburg jwhitten AT securitygeeks DOT com
+*  Dirk Haun         dirk AT haun-online DOT de
+*  Vincent Furia     vinny01 AT users.sourceforge DOT net
+*  Jared Wenerd      wenerd87 AT gmail DOT com
 *
 */
 
-/**
-* glFusion common function library
-*/
 require_once 'lib-common.php';
+
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 /**
  * glFusion comment function library
@@ -145,7 +121,7 @@ function handleDelete()
     }
 
     if (!($retval = PLG_commentDelete($type,$cid,$sid))) {
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
+        $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
     }
@@ -176,15 +152,27 @@ function handleView($view = true)
     }
 
     if ($cid == 0 || $cid == '') {
+        Log::write('system',Log::DVLP_DEBUG,'Comment CID was empty or zero, returning...');
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
     }
 
-    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = " . (int) $cid;
-    $A = DB_fetchArray( DB_query($sql) );
-    $sid   = $A['sid'];
-    $title = $A['title'];
-    $type  = $A['type'];
+    $db = Database::getInstance();
+
+    $cmtRecord = $db->conn->fetchAssoc("SELECT sid,title,type FROM `{$_TABLES['comments']}` WHERE cid = ?",
+                                array($cid),
+                                array(Database::INTEGER)
+         );
+
+    if ($cmtRecord === false) {
+        Log::write('system',Log::DVLP_DEBUG,'Comment ID: '.$cid.' was not found in DB - returning...');
+        echo COM_refresh($_CONF['site_url'] . '/index.php');
+        exit;
+    }
+
+    $sid   = $cmtRecord['sid'];
+    $title = $cmtRecord['title'];
+    $type  = $cmtRecord['type'];
 
     $format = $_CONF['comment_mode'];
     if( isset( $_REQUEST['format'] )) {
@@ -192,8 +180,7 @@ function handleView($view = true)
     }
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
-            $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
-                                  "uid = {$_USER['uid']}" );
+            $format = $db->getItem($_TABLES['usercomment'],'commentmode',array('uid'=>$_USER['uid']),array(Database::INTEGER));
         } else {
             $format = $_CONF['comment_mode'];
         }
@@ -209,6 +196,7 @@ function handleView($view = true)
     }
     if ( !($display = PLG_displayComment($type, $sid, $cid, $title,
                           $order, $format, $page, $view)) ) {
+        Log::write('system',Log::DVLP_DEBUG,'PLG_displayComment() returned NULL, refreshing to index page');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
     return COM_showMessageFromParameter() . $display;
@@ -398,6 +386,7 @@ function handleEditSubmit()
         $sql = "UPDATE {$_TABLES['comments']} SET comment = '$dbComment', title = '$dbTitle', postmode='".$dbPostmode."'"
                 . " WHERE cid=".$dbCid." AND sid='".$dbSid."'";
     }
+//@SAVE
     DB_query($sql);
 
     if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
@@ -415,12 +404,14 @@ function handleEditSubmit()
         PLG_itemSaved((int) $cid,'comment');
         $safecid = (int) $cid;
         $safeuid = (int) $uid;
+//@SAVE
         DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,'".$_CONF['_now']->toMySQL(true)."'");
     }
 
     if ( !$moderatorEdit) PLG_commentEditSave($type,$cid,$sid);
 
     if ( $moderatorEdit ) {
+//@REDIRECT
         echo COM_refresh($_CONF['site_admin_url'].'/moderation.php');
     }
 
@@ -659,6 +650,7 @@ if ( isset($_POST['cancel'] ) ) {
     // finished with button checks, now look at $_GET items...
     switch ( $mode ) {
         case 'view':
+Log::write('system',Log::DEBUG,'about to call handleView');
             $pageBody .= handleView(true);
             break;
 

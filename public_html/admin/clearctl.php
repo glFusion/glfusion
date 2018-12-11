@@ -39,6 +39,7 @@ if (!SEC_inGroup ('Root')) {
     exit;
 }
 
+
 /*
  * Main processing
  */

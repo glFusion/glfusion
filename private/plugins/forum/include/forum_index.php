@@ -39,6 +39,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+
 function forum_index()
 {
     global $_CONF, $_FF_CONF, $_TABLES, $_USER, $FF_userprefs, $LANG_GF01, $LANG_GF02, $LANG_GF91;
@@ -56,7 +59,7 @@ function forum_index()
     $forum_id   = isset($_REQUEST['forum_id']) ? COM_applyFilter($_REQUEST['forum_id'],true) : 0;
     $op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
-    $db = \glFusion\Database::getInstance();
+    $db = Database::getInstance();
 
     /*
      * Initialize vars
@@ -94,10 +97,10 @@ function forum_index()
                         )
                 ->from($_TABLES['ff_forums'])
                 ->where('forum_cat = :forum_cat')
-                ->setParameter('forum_cat',$category,\glFusion\Database::INTEGER);
+                ->setParameter('forum_cat',$category,Database::INTEGER);
             if ($forum_id !=0) {
                 $queryBuilder->andWhere('forum_id = :forum_id')
-                ->setParameter('forum_id',$forum_id,\glFusion\Database::INTEGER);
+                ->setParameter('forum_id',$forum_id,Database::INTEGER);
             }
             $stmt = $queryBuilder->execute();
 //            $catRecs = $stmt->fetchAll();
@@ -109,14 +112,14 @@ function forum_index()
                       ->delete($_TABLES['ff_log'])
                       ->where('uid = :user_id')
                       ->andwhere('forum = :forum_id')
-                      ->setParameter(':user_id', $_USER['uid'],\glFusion\Database::INTEGER)
-                      ->setParameter(':forum_id', $frecord['forum_id'],\glFusion\Database::INTEGER);
+                      ->setParameter(':user_id', $_USER['uid'],Database::INTEGER)
+                      ->setParameter(':forum_id', $frecord['forum_id'],Database::INTEGER);
                     $qb->execute();
 //                    DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE uid=".(int) $_USER['uid']." AND forum=".(int)$frecord['forum_id']."");
 
                     $sql = "SELECT id FROM {$_TABLES['ff_topic']} WHERE forum = :forum_id AND pid = 0";
                     $tsql = $db->conn->prepare($sql);
-                    $tsql->bindParam('forum_id',$frecord['forum_id'],\glFusion\Database::INTEGER);
+                    $tsql->bindParam('forum_id',$frecord['forum_id'],Database::INTEGER);
                     $tsql->execute();
 
 //                    $tsql = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum={$frecord['forum_id']} and pid=0");
@@ -378,12 +381,12 @@ function forum_index()
           ->orderby('cat_order','ASC');
         if ($dCat > 0) {
             $qb->where('id = ?')
-               ->setParameter(1,$dCat,\glFusion\Database::INTEGER);
+               ->setParameter(1,$dCat,Database::INTEGER);
             $birdSeedStart = '<a href="'.$_CONF['site_url'].'/forum/index.php">Forum Index</a> :: ';
         }
         $sql = $qb->getSQL();
 
-        $c = glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'forumindex__'.md5($sql).'_'.$c->securityHash(true,true);
         if ( COM_isAnonUser() && $c->has($key) ) {
             $pageBody = $c->get($key);
@@ -455,7 +458,7 @@ function forum_index()
                   ->from($_TABLES['ff_forums'],'f')
                   ->leftJoin('f',$_TABLES['ff_topic'],'t','f.last_post_rec=t.id')
                   ->where('forum_cat = ?')
-                  ->setParameter(1,$A['id'],\glFusion\Database::INTEGER)
+                  ->setParameter(1,$A['id'],Database::INTEGER)
                   ->andWhere(
                         $qb->expr()->in('grp_id', $groupAccessList )
                             )

@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | mysql_tableanddata.php                                                   |
-// |                                                                          |
-// | glFusion installation SQL                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* MySQL Database Schema
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2010 by the following authors:
+*    Tony Bibbs       tony AT tonybibbs DOT com
+*    Tom Willett      twillett AT users DOT sourceforge DOT net
+*    Blaine Lang      blaine AT portalparts DOT com
+*    Dirk Haun        dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -43,6 +27,19 @@ CREATE TABLE {$_TABLES['access']} (
   acc_ft_id mediumint(8) NOT NULL default '0',
   acc_grp_id mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (acc_ft_id,acc_grp_id)
+) ENGINE=MyISAM
+";
+
+$_SQL[] = "
+CREATE TABLE {$_TABLES['admin_action']} (
+  `id`          mediumint(8) auto_increment,
+  `datetime`    datetime  default NULL,
+  `module`      varchar(100) NOT NULL DEFAULT 'system',
+  `action`      varchar(100) NULL DEFAULT NULL,
+  `description` text,
+  `user`        varchar(48) default NULL,
+  `ip`          varchar(48) default NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM
 ";
 
@@ -94,7 +91,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   content text,
   allow_autotags tinyint(1) unsigned NOT NULL DEFAULT '0',
   rdfurl varchar(255) default NULL,
-  rdfupdated datetime NOT NULL default '1000-01-01 00:00:00.000000',
+  rdfupdated datetime NULL default NULL,
   rdf_last_modified varchar(40) default NULL,
   rdf_etag varchar(40) default NULL,
   rdflimit smallint(5) unsigned NOT NULL default '0',
@@ -128,7 +125,7 @@ $_SQL[] = "
 CREATE TABLE {$_TABLES['commentedits']} (
   cid int(10) NOT NULL,
   uid mediumint(8) NOT NULL,
-  time datetime NOT NULL,
+  time datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   PRIMARY KEY (cid)
 ) ENGINE=MyISAM
 ";

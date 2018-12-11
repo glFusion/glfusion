@@ -1555,6 +1555,31 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sql,1);
             }
 
+            $_SQL = array();
+            $_SQL[] = "
+                CREATE TABLE {$_TABLES['admin_access']} (
+                  `id`          mediumint(8) auto_increment,
+                  `datetime`    datetime  default NULL,
+                  `module`      varchar(100) NOT NULL DEFAULT 'system',
+                  `action`      varchar(100) NULL DEFAULT NULL,
+                  `description` text
+                  `user`        varchar(48) default NULL,
+                  `ip`          varchar(48) default NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=MyISAM
+                ";
+
+            if ($use_innodb) {
+                $statements = count($_SQL);
+                for ($i = 0; $i < $statements; $i++) {
+                    $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+                }
+            }
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
+
             $current_fusion_version = '2.0.0';
 
         default:

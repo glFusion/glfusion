@@ -1,34 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | autotag_upload.php                                                       |
-// |                                                                          |
-// | glFusion Automated autotag installer                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Automated autotag installer
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\FileSystem;
+use \glFusion\Log\Log;
 
 $display = '';
 
@@ -36,7 +24,7 @@ if (!SEC_hasrights ('autotag.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[38], $MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} attempted to access the autotag administration screen.");
+    Log::logAccessViolation('Autotag Upload Manager');
     echo $display;
     exit;
 }
@@ -60,7 +48,7 @@ function processAutotagUpload()
     $upgrade = false;
     $errors = '';
 
-    $fs = new \glFusion\FileSystem();
+    $fs = new FileSystem();
 
     if (count($_FILES) > 0 && $_FILES['autotagfile']['error'] != UPLOAD_ERR_NO_FILE) {
         $upload = new upload();
@@ -101,12 +89,12 @@ function processAutotagUpload()
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 60 );
     }
-    if (!($tmp = \glFusion\FileSystem::mkTmpDir())) {
+    if (!($tmp = FileSystem::mkTmpDir())) {
         return _at_errorBox($LANG32[47]);
     }
 
     if ( !COM_decompress($Finalfilename,$_CONF['path_data'].$tmp) ) {
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($LANG32[48]);
     }
     @unlink($Finalfilename);
@@ -118,29 +106,29 @@ function processAutotagUpload()
 
     if ( $rc == -1 ) {
         // no xml file found
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     if ( !isset($autotagData['id']) || !isset($autotagData['version']) ) {
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $autotagData['glfusionversion'])) {
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[49],$autotagData['glfusionversion']));
     }
 
     if ( !COM_checkVersion(phpversion (),$autotagData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$autotagData['phpversion']);
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox(sprintf($LANG32[50],$autotagData['phpversion']));
     }
 
     if ( $errors != '' ) {
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($errors);
     }
 
@@ -173,7 +161,7 @@ function processAutotagUpload()
 
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        \glFusion\FileSystem::deleteDir($_CONF['path_data'].$tmp);
+        FileSystem::deleteDir($_CONF['path_data'].$tmp);
         return _at_errorBox($errorMessage);
     }
 
@@ -215,7 +203,7 @@ function post_uploadProcess() {
     $masterErrorCount   = 0;
     $masterErrorMsg     = '';
 
-    $fs = new \glFusion\FileSystem();
+    $fs = new FileSystem();
 
     $autotagData = array();
     $autotagData['id']               = COM_applyFilter($_POST['pi_name']);
@@ -242,7 +230,7 @@ function post_uploadProcess() {
     // copy to proper directories
 
     if ( defined('DEMO_MODE') ) {
-        \glFusion\FileSystem::deleteDir($tmp);
+        FileSystem::deleteDir($tmp);
         echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php?msg=503');
         exit;
     }
@@ -255,7 +243,7 @@ function post_uploadProcess() {
     $rc = $fs->fileCopy($tmp.'/'.$autotagData['id'].'.class.php', $_CONF['path_system'].'autotags/');
     if ( $rc === false ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        \glFusion\FileSystem::deleteDir($tmp);
+        FileSystem::deleteDir($tmp);
         return _at_errorBox($errorMessage);
     }
     // copy template files, if any
@@ -265,7 +253,7 @@ function post_uploadProcess() {
             if ( $rc === false ) {
                 @unlink ($_CONF['path_system'].$autotagData['id'].'.class.php');
                 $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-                \glFusion\FileSystem::deleteDir($tmp);
+                FileSystem::deleteDir($tmp);
                 return _at_errorBox($errorMessage);
             }
         }
@@ -277,7 +265,7 @@ function post_uploadProcess() {
     $replacement = '';
     DB_query("REPLACE INTO {$_TABLES['autotags']} (tag,description,is_enabled,is_function,replacement) VALUES ('".$tag."','".$desc."',".$is_enabled.",".$is_function.",'')");
 
-    \glFusion\FileSystem::deleteDir($tmp);
+    FileSystem::deleteDir($tmp);
 
     CACHE_clear();
     // show status (success or fail)
@@ -480,9 +468,9 @@ if ( isset($_POST['submit']) ) {
 
         $len = strlen($_CONF['path_data']);
         if ( strncmp($_CONF['path_data'],$tmpDir,$len-1) == 0 ) {
-            \glFusion\FileSystem::deleteDir($tmpDir);
+            FileSystem::deleteDir($tmpDir);
         } else {
-            COM_errorLog("Install: Directory mismatch after cancel operation - Temp directory not deleted");
+            Log::write('system',Log::ERROR,"Install: Directory mismatch after cancel operation - Temp directory not deleted");
         }
     }
     if ( isset($_POST['pi_name']) ) {

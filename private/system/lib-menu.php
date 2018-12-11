@@ -17,8 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-use \glFusion\Database;
-use \glFusion\Cache;
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 
 define('MENU_TOP_LEVEL',-1);
 define('MENU_HORIZONTAL_CASCADING',1);

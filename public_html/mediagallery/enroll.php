@@ -29,6 +29,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Cache\Cache;
+
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
@@ -113,7 +115,7 @@ function MG_saveEnroll() {
         $sql = "INSERT INTO {$_TABLES['mg_userprefs']} (uid, active, display_rows, display_columns, mp3_player, playback_mode, tn_size, quota, member_gallery) VALUES (" . $uid . ",1,0,0,-1,-1,-1," . $_MG_CONF['member_quota'] . ",1)";
         DB_query($sql,1);
     }
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+    $c = Cache::getInstance()->deleteItemsByTag('menu');
     echo COM_refresh($_MG_CONF['site_url'] . '/album.php?aid=' . $aid);
     exit;
 }

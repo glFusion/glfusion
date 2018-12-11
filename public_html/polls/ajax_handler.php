@@ -36,6 +36,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Cache\Cache;
+
 if (!in_array('polls', $_PLUGINS)) {
     COM_404();
     die();
@@ -72,7 +74,7 @@ if ( $pid == '' || $aid == 0 ) {
         $retval['html'] = POLLS_showPoll('400', $pid, true, 2);
     }
 }
-$c = glFusion\Cache::getInstance()->deleteItemsByTag('story');
+$c = Cache::getInstance()->deleteItemsByTag('story');
 
 $return["json"] = json_encode($retval);
 echo json_encode($return);

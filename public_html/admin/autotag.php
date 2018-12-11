@@ -1,51 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | autotag.php                                                              |
-// |                                                                          |
-// | Autotag management console                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// | Based upon the fine work of:                                             |
-// |                                                                          |
-// | Joe Mucchiello         joe AT throwingdice DOT com                       |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
-// this is the autotag administrative interface
+/**
+* glFusion CMS
+*
+* Autotag management console
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2008-2009 by the following authors:
+*  Joe Mucchiello         joe AT throwingdice DOT com
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-
-// load functions not needed by core, but useful for admin or user access
-// this also has a basic autotag.user security feature check
-
 require_once $_CONF['path_system'].'lib-autotag.php';
 
-// ensure the current user has rights to administer autotags
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 if (!SEC_hasRights('autotag.admin')) {
-    COM_accessLog ("User {$_USER['username']} tried to access the Autotag Manager administration screen without the proper permissions.");
+    Log::logAccessViolation('Autotag Manager');
     $display = COM_siteHeader('menu')
         . COM_showMessageText($LANG_AM['access_denied_msg'],$LANG_AM['access_denied'],true,'error')
         . COM_siteFooter();
@@ -228,7 +207,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         // retain the current tag field values to allow name change
 
         $error = $LANG_AM['duplicate_tag'];
-        COM_errorLog($error);
+        Log::write('system',Log::ERROR,$error);
 
         $retval = COM_showMessageText($error,'',true,'error') . AT_edit($tag);
 
@@ -237,7 +216,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         // this is a reserved autotag, output error msg (screen+log) and reenter editor
         // zap the current tag field values, and start over
         $error = $LANG_AM['disallowed_tag'];
-        COM_errorLog($LANG_AM['disallowed_tag']);
+        Log::write('system',Log::ERROR,$LANG_AM['disallowed_tag']);
         $retval = COM_showMessageText($error,'',true,'error') . AT_edit('');
 
     } elseif (!empty($tag) && ($is_function == 1) && !@file_exists($_CONF['path_system'].'autotags/'.$tag.'.class.php' ) ) {
@@ -246,7 +225,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         // therefore we should warn the user to create the function first.
 
         $error = sprintf($LANG_AM['phpfn_missing'],$tag,$_CONF['path_system']).' '.$LANG_AM['phpfn_must_exist'];
-        COM_errorLog($error);
+        Log::write('system',Log::ERROR,$error);
         $retval = COM_showMessageText($error,'',true,'error');
         $retval .= AT_edit('');
 
@@ -277,7 +256,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
     } else {
         // failed validation - required field missing
         $error = $LANG_AM['no_tag_or_replacement'];
-        COM_errorLog($error);
+        Log::write('system',Log::ERROR,$error);
         $retval = COM_showMessageText($error,'',true,'error') . AT_edit($tag);
     }
 
@@ -889,7 +868,7 @@ function ATP_permSave()
                     DB_query($sqlUpdate);
                 }
             }
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('atperm');
+            $c = Cache::getInstance()->deleteItemsByTag('atperm');
             $retval .= COM_showMessageText($LANG_AM['perm_saved'],'',false,'info');
         }
     } else {

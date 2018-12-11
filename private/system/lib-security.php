@@ -39,7 +39,10 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Log\Log;
+
 if ( !isset($_SYSTEM['token_ttl']) ) $_SYSTEM['token_ttl'] = 1200;
+
 if (!defined ('TOKEN_TTL')) {
     define('TOKEN_TTL', $_SYSTEM['token_ttl']);
 }
@@ -127,28 +130,27 @@ function SEC_getUserGroups($uid='')
 function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 {
     global $_TABLES, $_CONF;
-    if(!isset($_CONF['remote_users_group_id']))
-    {
+
+    if (!isset($_CONF['remote_users_group_id'])) {
         $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name='Remote Users'");
-        if( $result )
-        {
+        if ($result) {
             $row = DB_fetchArray( $result );
             $_CONF['remote_users_group_id'] = $row['grp_id'];
         }
     }
-    if( $groupid == $_CONF['remote_users_group_id'] )
-    {
-        if( in_array( 1, $groups ) || // root
-            in_array( 9, $groups ) || // user admin
-            in_array( 11, $groups ) // Group admin
-          )
+    if ($groupid == $_CONF['remote_users_group_id']) {
+        if ( in_array( 1, $groups ) || // root
+             in_array( 9, $groups ) || // user admin
+             in_array( 11, $groups ) // Group admin
+           )
         {
             return true;
         } else {
             return false;
         }
     } else {
-        return false;
+//        return false;
+        return true;
     }
 }
 
@@ -363,7 +365,7 @@ function SEC_hasRights($features,$operator='AND')
                 // OR operator, return as soon as we find a true one
                 if (in_array($features[$i],$_RIGHTS)) {
                     if ($_SEC_VERBOSE) {
-                        COM_errorLog('SECURITY: user has access to ' . $features[$i],1);
+                        Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i],1);
                     }
                     return true;
                 }
@@ -371,7 +373,7 @@ function SEC_hasRights($features,$operator='AND')
                 // this is an "AND" operator, bail if we find a false one
                 if (!in_array($features[$i],$_RIGHTS)) {
                     if ($_SEC_VERBOSE) {
-                        COM_errorLog('SECURITY: user does not have access to ' . $features[$i],1);
+                        Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i],1);
                     }
                     return false;
                 }
@@ -380,12 +382,12 @@ function SEC_hasRights($features,$operator='AND')
 
         if ($operator == 'OR') {
             if ($_SEC_VERBOSE) {
-                COM_errorLog('SECURITY: user does not have access to ' . $features[$i],1);
+                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i],1);
             }
             return false;
         } else {
             if ($_SEC_VERBOSE) {
-                COM_errorLog('SECURITY: user has access to ' . $features[$i],1);
+                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i],1);
             }
             return true;
         }
@@ -393,9 +395,9 @@ function SEC_hasRights($features,$operator='AND')
         // Check the one value
         if ($_SEC_VERBOSE) {
             if (in_array($features,$_RIGHTS)) {
-                COM_errorLog('SECURITY: user has access to ' . $features,1);
+                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features,1);
             } else {
-                COM_errorLog('SECURITY: user does not have access to ' . $features,1);
+                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features,1);
             }
         }
         return in_array($features,$_RIGHTS);
@@ -476,7 +478,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
     $retval = '';
 
     if ($_SEC_VERBOSE) {
-        COM_errorLog("**********inside SEC_getUserPermissions(grp_id=$grp_id)**********",1);
+        Log::write('system',Log::DEBUG,"**********inside SEC_getUserPermissions(grp_id=$grp_id)**********",1);
     }
 
     // Get user ID if we don't already have it
@@ -509,7 +511,7 @@ function SEC_getUserPermissions($grp_id='',$uid='')
     for ($j = 1; $j <= $nrows; $j++) {
         $A = DB_fetchArray($result);
         if ($_SEC_VERBOSE) {
-            COM_errorLog('Adding right ' . $A['ft_name'] . ' in SEC_getUserPermissions',1);
+            Log::write('system',Log::DEBUG,'Adding right ' . $A['ft_name'] . ' in SEC_getUserPermissions',1);
         }
         $retval .= $A['ft_name'];
         if ($j < $nrows) {
@@ -540,7 +542,7 @@ function SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_ano
     global $_SEC_VERBOSE;
 
     if ($_SEC_VERBOSE) {
-        COM_errorLog('**** Inside SEC_getPermissionValues ****', 1);
+        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValues ****', 1);
     }
 
     if (is_array($perm_owner)) {
@@ -568,11 +570,11 @@ function SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_ano
     }
 
     if ($_SEC_VERBOSE) {
-        COM_errorlog('perm_owner = ' . $perm_owner, 1);
-        COM_errorlog('perm_group = ' . $perm_group, 1);
-        COM_errorlog('perm_member = ' . $perm_members, 1);
-        COM_errorlog('perm_anon = ' . $perm_anon, 1);
-        COM_errorLog('**** Leaving SEC_getPermissionValues ****', 1);
+        Log::write('system',Log::DEBUG,'perm_owner = ' . $perm_owner, 1);
+        Log::write('system',Log::DEBUG,'perm_group = ' . $perm_group, 1);
+        Log::write('system',Log::DEBUG,'perm_member = ' . $perm_members, 1);
+        Log::write('system',Log::DEBUG,'perm_anon = ' . $perm_anon, 1);
+        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValues ****', 1);
     }
 
     return array($perm_owner,$perm_group,$perm_members,$perm_anon);
@@ -596,14 +598,14 @@ function SEC_getPermissionValue($perm_x)
     global $_SEC_VERBOSE;
 
     if ($_SEC_VERBOSE) {
-        COM_errorLog('**** Inside SEC_getPermissionValue ***', 1);
+        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValue ***', 1);
     }
 
     $retval = 0;
 
     for ($i = 1; $i <= sizeof($perm_x); $i++) {
         if ($_SEC_VERBOSE) {
-            COM_errorLog("perm_x[$i] = " . current($perm_x), 1);
+            Log::write('system',Log::DEBUG,"perm_x[$i] = " . current($perm_x), 1);
         }
         $retval = $retval + current($perm_x);
         next($perm_x);
@@ -615,8 +617,8 @@ function SEC_getPermissionValue($perm_x)
     }
 
     if ($_SEC_VERBOSE) {
-        COM_errorLog("Got $retval permission value", 1);
-        COM_errorLog('**** Leaving SEC_getPermissionValue ***', 1);
+        Log::write('system',Log::DEBUG,"Got $retval permission value", 1);
+        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValue ***', 1);
     }
 
     return $retval;
@@ -1027,23 +1029,23 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
         if (!empty ($feat_id)) {
             // Before removing the feature itself, remove it from all groups
             if ($logging) {
-                COM_errorLog ("Attempting to remove '$feature_name' rights from all groups", 1);
+                Log::write('system','info',"Attempting to remove '$feature_name' rights from all groups", 1);
             }
             DB_delete ($_TABLES['access'], 'acc_ft_id', $feat_id);
             if ($logging) {
-                COM_errorLog ('...success', 1);
+                Log::write('system','info','...success', 1);
             }
 
             // now remove the feature itself
             if ($logging) {
-                COM_errorLog ("Attempting to remove the '$feature_name' feature", 1);
+                Log::write('system','info',"Attempting to remove the '$feature_name' feature", 1);
             }
             DB_delete ($_TABLES['features'], 'ft_id', $feat_id);
             if ($logging) {
-                COM_errorLog ('...success', 1);
+                Log::write('system','info','...success', 1);
             }
         } else if ($logging) {
-            COM_errorLog ("SEC_removeFeatureFromDB: Feature '$feature_name' not found.");
+            Log::write('system','info',"SEC_removeFeatureFromDB: Feature '$feature_name' not found.");
         }
     }
 }
@@ -1273,9 +1275,9 @@ function _sec_checkToken($ajax=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckToken: Token failed - no token found in database - " . $referCheck);
+                Log::write('system','info',"CheckToken: Token failed - no token found in database - " . $referCheck);
             } else {
-                COM_errorLog("CheckToken: Token failed - more than 1 token found in database");
+                Log::write('system','info',"CheckToken: Token failed - more than 1 token found in database");
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -1286,11 +1288,11 @@ function _sec_checkToken($ajax=0)
              *  the http referer is the url for which the token was created.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
-                COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
+                Log::write('system','info',"CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['urlfor'] != $referCheck) {
-                COM_errorLog("CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
-                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+                Log::write('system','info',"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
+                Log::write('system','info',"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1298,7 +1300,7 @@ function _sec_checkToken($ajax=0)
 
                 $return = false;
             } else if($tokendata['expired'] != 0) {
-                COM_errorLog("CheckToken: Token failed - token has expired.");
+                Log::write('system','info',"CheckToken: Token failed - token has expired.");
                 $return = false;
             } else {
                 $return = true; // Everything is AOK in only one condition...
@@ -1378,9 +1380,9 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = DB_numRows($tokens);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                COM_errorLog("CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
+                Log::write('system','info',"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
             } else {
-                COM_errorLog("CheckTokenGeneral: Token failed - more than one token found in the database");
+                Log::write('system','info',"CheckTokenGeneral: Token failed - more than one token found in the database");
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -1390,13 +1392,13 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
              *  token is not expired.
              */
             if( $uid != $tokendata['owner_id'] ) {
-                COM_errorLog("CheckTokenGeneral: Token failed - userid does not match token owner id");
+                Log::write('system','info',"CheckTokenGeneral: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
-                COM_errorLog("CheckTokenGeneral: Token failed - token action does not match referer action.");
-                COM_errorLog("Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
+                Log::write('system','info',"CheckTokenGeneral: Token failed - token action does not match referer action.");
+                Log::write('system','info',"Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1491,7 +1493,7 @@ function SEC_cleanupFiles($files)
             $orphan = $_CONF['path_data'] .'temp/'. $filename;
             if (file_exists($orphan)) {
                 if (! @unlink($orphan)) {
-                    COM_errorLog("SEC_cleanupFile: Unable to remove file $filename from 'data' directory");
+                    Log::write('system','info',"SEC_cleanupFile: Unable to remove file $filename from 'data' directory");
                 }
             }
         }

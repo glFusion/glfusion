@@ -15,6 +15,10 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+
 USES_lib_admin();
 
 $display = '';
@@ -23,7 +27,7 @@ if (!SEC_inGroup ('Root')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to access the hosting environment check screen");
+    Log::logAccessViolation('Environment Check');
     echo $display;
     exit;
 }
@@ -210,7 +214,7 @@ function _checkEnvironment()
 
 // Cache Driver
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $cDriver = strtolower($c->getDriverName());
 
     if ($cDriver != strtolower($_CONF['cache_driver'])) {

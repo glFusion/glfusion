@@ -11,12 +11,11 @@
 *   @filesource
 */
 
-namespace glFusion;
+namespace glFusion\Cache;
 
 use \Phpfastcache\CacheManager;
 use \Phpfastcache\Config\Config;
 use \Phpfastcache\Config\ConfigurationOption;
-
 
 use \Phpfastcache\Core\Item\ExtendedCacheItemInterface;
 use \Phpfastcache\Core\Pool\ExtendedCacheItemPoolInterface;
@@ -24,6 +23,8 @@ use \Phpfastcache\Exceptions\{
     PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException, PhpfastcacheRootException, PhpfastcacheSimpleCacheException
 };
 use \Phpfastcache\Helper\Psr\SimpleCache\CacheInterface;
+
+use \glFusion\Log\Log;
 
 /**
  * Class Cache
@@ -414,6 +415,12 @@ final class Cache
         $key = $this->validateKeyName($key);
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
+if (!$cacheItem->isHit()) {
+    Log::write('system',Log::DEBUG,'Cache Miss :: '.$key);
+}
+if ($cacheItem->isExpired()) {
+    Log::write('system',Log::DEBUG,'Cache Expired :: '.$key);
+}
             return $cacheItem->isHit() && !$cacheItem->isExpired();
         } catch (PhpfastcacheInvalidArgumentException $e) {
             throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
