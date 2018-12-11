@@ -51,6 +51,7 @@ class Autoload
         if (strpos($className, 'glFusion\\') === 0) {
             // New classes under \glFusion namespace
             $className = str_replace('glFusion\\', '', $className);
+            $className = str_replace('\\', '/', $className);
             $className = ucfirst($className);
             $path = __DIR__ . DIRECTORY_SEPARATOR . $className . '.php';
             if (file_exists($path)) {
