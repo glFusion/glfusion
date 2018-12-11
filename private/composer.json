@@ -15,6 +15,7 @@
         "phpFastCache/phpFastCache": "^7.0",
         "filp/whoops": "^2.2",
         "doctrine/dbal": "^2.8",
-        "eluceo/ical": "^0.14.0"
+        "eluceo/ical": "^0.14.0",
+        "monolog/monolog": "^1.24"
     }
 }

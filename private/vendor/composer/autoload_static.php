@@ -33,6 +33,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         ),
         'M' => 
         array (
+            'Monolog\\' => 8,
             'Misd\\Linkify\\' => 13,
         ),
         'H' => 
@@ -82,6 +83,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'PhpXmlRpc\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpxmlrpc/phpxmlrpc/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Misd\\Linkify\\' => 
         array (
