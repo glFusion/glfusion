@@ -1,36 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | blacklist.php                                                            |
-// |                                                                          |
-// | glFusion BB2 Ban administration.                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2016-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion BB2 Ban administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
+use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+
 if (!SEC_inGroup ('Bad Behavior2 Admin')) {
+    Log::logAccessViolation('BB2 Ban Admin');
     $display .= COM_siteHeader ('menu');
     $display .= COM_showMessageText($LANG20[6],$LANG20[1],true);
     $display .= COM_siteFooter ();
@@ -473,7 +463,7 @@ function BB2_process_blacklist($editsave = 0)
                 $sql = "INSERT INTO {$_TABLES['bad_behavior2_blacklist']} (item,type,reason,timestamp) VALUE ('".DB_escapeString($bl_item)."','".DB_escapeString($bl_type)."','".DB_escapeString($reason)."',".$timestamp.")";
             }
             DB_query($sql);
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+            $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
         }
     } else {
         $errors++;
@@ -502,7 +492,7 @@ function BB2_blacklist_delete()
             $id = COM_applyFilter($actionitem);
             DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE id=".(int) $id);
         }
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+        $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
         COM_setMsg( $LANG_BAD_BEHAVIOR['blacklist_success_delete'],'info' );
     }
     return;

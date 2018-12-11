@@ -32,6 +32,8 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
+use \glFusion\Cache\Cache;
+
 global $_DB_table_prefix;
 
 define('BB2_CWD', dirname(__FILE__));
@@ -52,8 +54,8 @@ $bb2_settings_defaults = array(
     'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
     'offsite_forms' => $_CONF['bb2_offsite_forms'],
     'secure_cookie' => $_CONF['cookiesecure'],
-    'reverse_proxy' => isset($_CONF['bb2_reverse_proxy']) ? $_CONF['bb2_reverse_proxy'] : 0,
-    'reverse_proxy_header' => isset($_CONF['bb2_reverse_proxy_header']) ? $_CONF['bb2_reverse_proxy_header'] : 'X-Forwarded-For',
+    'reverse_proxy' =>           isset($_CONF['bb2_reverse_proxy']) ? $_CONF['bb2_reverse_proxy'] : 0,
+    'reverse_proxy_header' =>    isset($_CONF['bb2_reverse_proxy_header']) ? $_CONF['bb2_reverse_proxy_header'] : 'X-Forwarded-For',
     'reverse_proxy_addresses' => isset($_CONF['bb2_reverse_proxy_addresses']) ? $_CONF['bb2_reverse_proxy_addresses'] : array(),
 );
 
@@ -129,7 +131,7 @@ function bb2_read_settings() {
     $_CONF['bb2_spambots_url'] =  array();
     $_CONF['bb2_spambot_referer'] = array();
 
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $key = 'bb2_bl_data';
     $retval = $c->get($key);
 
@@ -235,6 +237,9 @@ function bb2_read_settings() {
                  'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
                  'offsite_forms' => $_CONF['bb2_offsite_forms'],
                  'secure_cookie' => $_CONF['cookiesecure'],
+                 'reverse_proxy' => $bb2_settings_defaults['reverse_proxy'],
+                 'reverse_proxy_header' => $bb2_settings_defaults['reverse_proxy_header'],
+                 'reverse_proxy_addresses' => $bb2_settings_defaults['reverse_proxy_addresses'],
                  'is_installed'  => true
                  );
 }
@@ -292,7 +297,7 @@ function bb2_ban_remove($ip)
     $sql = "DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE item = '".DB_escapeString($ip)."'";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+        $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     }
     return true;
 }
@@ -336,7 +341,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
            (item,type,autoban,reason,timestamp) VALUE ('".DB_escapeString($ip)."','spambot_ip',".(int) $type.",'".DB_escapeString($reason)."', ".$timestamp.")";
     $result = DB_query($sql,1);
     if ( $result !== false ) {
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+        $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     }
     if ( $type != 0 && $type != 4 ) echo COM_refresh($_CONF['site_url']);
     return true;
@@ -350,7 +355,7 @@ function bb2_expireBans() {
     $settings = bb2_read_settings();
     $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
     $result = DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE autoban != 0 AND timestamp < " . $oldBans,1);
-    if ( $result !== false ) $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+    if ( $result !== false ) $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     return;
 }
 

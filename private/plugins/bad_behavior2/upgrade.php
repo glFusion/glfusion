@@ -34,6 +34,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Cache\Cache;
+
 function bad_behavior2_upgrade ()
 {
     global $_TABLES, $_CONF, $_BB2_CONF,$bb2_blacklist_cidrs;
@@ -168,7 +170,7 @@ function bad_behavior2_upgrade ()
             $c->add('bb2_reverse_proxy_header','X-Forwarded-For','text',8,1,0,130,TRUE,'Core');
             $c->add('bb2_reverse_proxy_addresses',array(),'*text',8,1,0,140,TRUE,'Core');
 
-            $c = glFusion\Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+            $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
 
         case '2.0.53' :
             $_SQL = array();
