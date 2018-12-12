@@ -816,7 +816,7 @@ function INST_checkEnvironment($dbconfig_path='')
         if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
             return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' .  __LINE__);
         }
-        require_once $_CONF['path_system'] . 'classes/Autoload.php';
+        require_once $_CONF['path'] . 'classes/Autoload.php';
         glFusion\Autoload::initialize();
 
         require_once $_CONF['path'].'system/db-init.php';
@@ -1178,7 +1178,7 @@ function INST_gotSiteInformation()
     }
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
-    require_once $_GLFUSION['dbconfig_path'] . 'system/classes/Autoload.php';
+    require_once $_GLFUSION['dbconfig_path'] . 'classes/Autoload.php';
     glFusion\Autoload::initialize();
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
@@ -1644,7 +1644,7 @@ function INST_installAndContentPlugins()
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
     }
 
-    require_once $_CONF['path_system'] . 'classes/Autoload.php';
+    require_once $_CONF['path'] . 'classes/Autoload.php';
     glFusion\Autoload::initialize();
 
     require_once $_CONF['path'].'system/db-init.php';
@@ -2542,7 +2542,7 @@ switch($mode) {
             if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
             }
-            require_once $_CONF['path_system'] . 'classes/Autoload.php';
+            require_once $_CONF['path'] . 'classes/Autoload.php';
             glFusion\Autoload::initialize();
             require_once $_CONF['path_system'].'db-init.php';
             $version = INST_identifyglFusionVersion();
@@ -2569,7 +2569,7 @@ switch($mode) {
             if ( !file_exists($_CONF['path_system'] . 'lib-database.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting', 'Error Code: ' . __LINE__);
             }
-            require_once $_CONF['path_system'] . 'classes/Autoload.php';
+            require_once $_CONF['path'] . 'classes/Autoload.php';
             glFusion\Autoload::initialize();
             require $_CONF['path_system'] . 'db-init.php';
 

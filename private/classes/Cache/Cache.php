@@ -415,12 +415,6 @@ final class Cache
         $key = $this->validateKeyName($key);
         try {
             $cacheItem = $this->internalCacheInstance->getItem($key);
-if (!$cacheItem->isHit()) {
-    Log::write('system',Log::DEBUG,'Cache Miss :: '.$key);
-}
-if ($cacheItem->isExpired()) {
-    Log::write('system',Log::DEBUG,'Cache Expired :: '.$key);
-}
             return $cacheItem->isHit() && !$cacheItem->isExpired();
         } catch (PhpfastcacheInvalidArgumentException $e) {
             throw new \Phpfastcache\Exceptions\PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);

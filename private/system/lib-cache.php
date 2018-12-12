@@ -374,9 +374,9 @@ function CACHE_clear($plugin='')
     $c->clear();
 
     if ( defined('DVLP_DEBUG') ) {
+        if (!isset($_USER['username'])) $_USER['username'] = 'undefined';
         Log::write('system',Log::DEBUG, "All Caches has been cleared", array('user' => $_USER['username'],'IP' => $_SERVER['REAL_ADDR']));
     }
-
 }
 
 
