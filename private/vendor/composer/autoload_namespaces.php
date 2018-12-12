@@ -9,5 +9,4 @@ return array(
     'SimplePie' => array($vendorDir . '/simplepie/simplepie/library'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'EmailAddressValidator' => array($vendorDir . '/aziraphale/email-address-validator'),
-    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
 );

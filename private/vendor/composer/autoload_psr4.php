@@ -18,6 +18,7 @@ return array(
     'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Html2Text\\' => array($vendorDir . '/html2text/html2text/src', $vendorDir . '/html2text/html2text/test'),
     'Eluceo\\iCal\\' => array($vendorDir . '/eluceo/ical/src'),
+    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib/Doctrine/DBAL'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/event-manager/lib/Doctrine/Common'),
 );

@@ -46,6 +46,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         ),
         'D' => 
         array (
+            'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
         ),
@@ -101,6 +102,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         array (
             0 => __DIR__ . '/..' . '/eluceo/ical/src',
         ),
+        'Doctrine\\DBAL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL',
+        ),
         'Doctrine\\Common\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
@@ -131,13 +136,6 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
             'EmailAddressValidator' => 
             array (
                 0 => __DIR__ . '/..' . '/aziraphale/email-address-validator',
-            ),
-        ),
-        'D' => 
-        array (
-            'Doctrine\\DBAL\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
             ),
         ),
     );
