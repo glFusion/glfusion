@@ -113,6 +113,10 @@ function filemgmt_upgrade()
             DB_query("UPDATE `{$_TABLES['filemgmt_history']}` SET `date` = '1970-01-01 00:00:00' WHERE CAST(`date` AS CHAR(20)) = '0000-00-00 00:00:00';",1);
             DB_query("ALTER TABLE `{$_TABLES['filemgmt_history']}` CHANGE COLUMN `date` `date` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';",1);
 
+        case '1.7.8' :
+            DB_query("ALTER TABLE `{$_TABLES['filemgmt_history']}` CHANGE COLUMN `remote_ip` `remote_ip` VARCHAR(48) NOT NULL DEFAULT '' ;",1);
+            DB_query("ALTER TABLE `{$_TABLES['filemgmt_brokenlinks']}` CHANGE COLUMN `ip` `ip` VARCHAR(48) NOT NULL DEFAULT '' ;",1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;

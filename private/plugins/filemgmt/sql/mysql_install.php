@@ -94,7 +94,7 @@ $_SQL['filemgmt_brokenlinks'] = "CREATE TABLE {$_TABLES['filemgmt_brokenlinks']}
   reportid int(5) NOT NULL auto_increment,
   lid int(11) NOT NULL default '0',
   sender int(11) NOT NULL default '0',
-  ip varchar(20) NOT NULL default '',
+  ip varchar(48) NOT NULL default '',
   PRIMARY KEY  (reportid),
   KEY lid (lid),
   KEY sender (sender),
@@ -126,7 +126,7 @@ $_SQL['filemgmt_votedata'] = "CREATE TABLE {$_TABLES['filemgmt_votedata']} (
 $_SQL['filemgmt_history'] = "CREATE TABLE {$_TABLES['filemgmt_history']} (
   uid mediumint(8) NOT NULL default '0',
   lid int(11) NOT NULL default '0',
-  remote_ip varchar(15) NOT NULL default '',
+  remote_ip varchar(48) NOT NULL default '',
   date datetime NOT NULL default '1970-01-01 00:00:00',
   KEY lid (lid),
   KEY uid (uid)
