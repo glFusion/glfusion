@@ -1,4 +1,5 @@
 <?php
+
 ###############################################################################
 # spanish_colombia_utf-8.php
 # This is the spanish (Colombia) language file for the glFusion Static Page plugin
@@ -23,7 +24,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
 
 global $LANG32;
@@ -114,23 +115,20 @@ $LANG_STATIC = array(
     'limit_results' => 'Limitar Resultados',
     'search' => 'Incluir en Búsquedas',
     'submit' => 'Enviar',
-    'delete_confirm' => 'Esta seguro que desea borrar esta Página?',
+    'delete_confirm' => '¿Desea borrar esta Página?',
     'allnhp_topics' => 'Todas las Secciones (Menos en la página de inicio)',
     'page_list' => 'Paginas',
     'instructions_edit' => 'Esta pantalla te permite crear/modificar/borrar una pagina. Las paginas pueden contener tanto código PHP como HTML.',
     'attributes' => 'Atributos',
     'preview_help' => 'Selecciona el botón <b>Visualizar</b> para refrescar la pantalla',
     'page_saved' => 'La Pagina ha sido correctametne guardada.',
-    'page_deleted' => 'Page has been successfully deleted.'
+    'page_deleted' => 'Page has been successfully deleted.',
 );
-###############################################################################
-# autotag descriptions
 
 $LANG_SP_AUTOTAG = array(
     'desc_staticpage' => 'Enlace: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]'
+    'desc_staticpage_content' => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
 );
-
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
@@ -160,7 +158,7 @@ $LANG_confignames['staticpages'] = array(
     'atom_max_items' => 'Max. Pages in Webservices Feed',
     'comment_code' => 'Comentarios',
     'include_search' => 'Incluir en Búsquedas',
-    'status_flag' => 'Modo predeterminado'
+    'status_flag' => 'Modo predeterminado',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
@@ -181,7 +179,7 @@ $LANG_configselects['staticpages'] = array(
     9 => array('Ir a la Página' => 'item', 'Lista de Páginas' => 'list', 'Página de Inicio' => 'home', 'Panel de Control' => 'admin'),
     12 => array('Sin acceso' => 0, 'Solo-Lectura' => 2, 'Lectura-Escritura' => 3),
     13 => array('Habilitada' => 1, 'Deshabilitada' => 0),
-    17 => array('Comentarios Habilitados' => 0, 'Comentarios Deshabilitados' => -1)
+    17 => array('Comentarios Habilitados' => 0, 'Comentarios Deshabilitados' => -1),
 );
 
 ?>

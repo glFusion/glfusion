@@ -28,10 +28,8 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
-
-###############################################################################
 
 $LANG_CP00 = array(
     'menulabel' => 'CAPTCHA',
@@ -79,7 +77,7 @@ $LANG_CP00 = array(
     'ayah_error' => 'Sorry, but we were not able to verify you as human. Please try again.',
     'captcha_math' => 'Escribe la respuesta',
     'captcha_prompt' => '¿Eres Humano?',
-    'recaptcha_entry_error' => 'The CAPTCHA verification failed. Please try again.'
+    'recaptcha_entry_error' => 'The CAPTCHA verification failed. Please try again.',
 );
 
 // Localization of the Admin Configuration UI
@@ -87,7 +85,6 @@ $LANG_configsections['captcha'] = array(
     'label' => 'CAPTCHA',
     'title' => 'CAPTCHA Configuración'
 );
-
 $LANG_confignames['captcha'] = array(
     'gfxDriver' => 'Controlador Gráfico',
     'gfxFormat' => 'Formato Gráfico',
@@ -109,21 +106,19 @@ $LANG_confignames['captcha'] = array(
     'enable_rating' => 'Enable Rating Plugin Support',
     'enable_links' => 'Habilitar en Enlaces',
     'enable_calendar' => 'Habilitar en Calendario',
-    'expire' => 'How Many Seconds a CAPTCHA Session is Valid',
+    'expire' => 'Cuantos Segundos una sesión CAPTCHA es Valida',
     'publickey' => 'reCAPTCHA Public Key - <a href="http://recaptcha.net/api/getkey?app=php">reCAPTCHA Signup</a>',
     'privatekey' => 'reCAPTCHA Private Key',
-    'recaptcha_theme' => 'reCAPTCHA Theme'
-);
+    'recaptcha_theme' => 'reCAPTCHA Theme',
 
+);
 $LANG_configsubgroups['captcha'] = array(
     'sg_main' => 'Configuration Settings'
 );
-
 $LANG_fs['captcha'] = array(
     'cp_public' => 'General',
-    'cp_integration' => 'Integración'
+    'cp_integration' => 'Integración',
 );
-
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['captcha'] = array(
     0 => array('Sí' => 1, 'No' => 0),
@@ -131,10 +126,10 @@ $LANG_configselects['captcha'] = array(
     2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Imágenes Estáticas' => 2, 'reCAPTCHA' => 3, 'Ecuación Matemática' => 6),
     4 => array('Predeterminada' => 'default', 'Sencilla' => 'simple'),
     5 => array('JPG' => 'jpg', 'PNG' => 'png'),
-    6 => array('clara' => 'light', 'oscura' => 'dark')
+    6 => array('clara' => 'light', 'oscura' => 'dark'),
 );
+
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update completed successfully.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
 $PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
-
 ?>

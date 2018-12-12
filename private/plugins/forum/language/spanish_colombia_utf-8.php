@@ -34,8 +34,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
 
 ###############################################################################
@@ -51,7 +52,7 @@ $LANG_GF00 = array(
     'searchresults' => 'Resultados de la búsqueda en el Foro %s',
     'access_denied' => 'Acceso denegado',
     'uploaderr' => 'Error al Cargar el Archivo',
-    'instructions' => 'Selecciona las opciones arriba para crear / modificar categorías y foros. Tambien puedes definir los moderadores, importar Noticias dentro de foros y administrar los ajustes de moderación de la comunidad.'
+    'instructions' => 'Selecciona las opciones arriba para crear / modificar categorías y foros. Tambien puedes definir los moderadores, importar Noticias dentro de foros y administrar los ajustes de moderación de la comunidad.',
 );
 
 $LANG_GF01 = array(
@@ -131,7 +132,7 @@ $LANG_GF01 = array(
     'HTMLMODE' => 'Modo de HTML:',
     'TopicPreview' => 'Previsualizar Mensaje',
     'moderator' => 'Moderador',
-    'admin' => 'Admin',
+    'admin' => 'Admin',                 /* stopped here */
     'DATEADDED' => 'Fecha de envío',
     'PREVTOPIC' => 'Tema anterior',
     'NEXTTOPIC' => 'Tema siguiente',
@@ -141,7 +142,7 @@ $LANG_GF01 = array(
     'RESYNC' => 'Sincronizar',
     'RESYNCCAT' => 'Sincronizar Categoría',
     'PROFILE' => 'Perfil',
-    'DELETECONFIRM' => '¿Estás seguro que deseas borrar este registro?',
+    'DELETECONFIRM' => '¿Deseas borrar este registro?',
     'website' => 'Sitio Web',
     'EDITICON' => 'Modificar',
     'QUOTEICON' => 'Citar',
@@ -224,20 +225,25 @@ $LANG_GF01 = array(
     't_help' => 'Usa [file]#[/file] para incluir una imagen adjunta en la publicación',
     'e_help' => 'List item: [*]texto',
     'smiley' => 'Smileys',
+
+    /* --- Community moderation tags --- */
     'grade' => '<br /><b>Group Comfort<br />Level:</b>',
     'grade_user' => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
     'rate_too_low' => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
     'signature' => 'Firma en el Foro',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Previsualicación',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
     'disable_bbcode' => 'Deshabilitar BBCode:',
     'disable_smilies' => 'Deshabilitar Smilies:',
     'disable_urlparse' => 'No analizar URLs:',
     'features' => 'O. Envío:',
+    /* --- rss feature --- */
     'rss_link' => 'Subscribe to this forum\'s RSS feed.',
     'all_read_success' => 'All topics have been marked as read',
     'formatted_code' => 'Formatted Code',
@@ -253,17 +259,32 @@ $LANG_GF01 = array(
     'badges' => 'Badges',
     'badge_css' => 'CSS Class',
     'badge_type' => 'Badge Type',
+    'incl_inherited' => 'Include Inherited Membership?',
     'add_rank' => 'Add Rank',
     'err_rank_zero' => 'Post count must be greater than zero.',
     'err_rank_key_exists' => 'A rank for this post count already exists.',
     'ranks' => 'Forum Ranks',
     'rank_updated' => 'Rank Updated',
+    /* --- Like system --- */
     'like' => 'Like',
     'unlike' => 'Unlike',
+    // In tooltips, add "%s" to include the user display name.
     'like_tooltip' => 'Like this post',
     'unlike_tooltip' => 'Unlike this post',
+    // "Liked X Times" in the user profile area.
+    // The span is required exactly as below.
+    // "%1$d" is replaced with the number of likes.
     'liked_times' => 'Likes: <span class="like_cnt_%2$d">%1$d</span>',
-    'likes_formats' => array('0' => '%1$s likes this.', '1' => 'Liked by %1$s.', '2' => '%1$s and %3$d others like this.'),
+    // Formats for the text string in each post. The key indicates the minimum
+    // number of likes to use that string.
+    // %1$s is the comma-separated string containing <key> likers
+    // %2$d is the total number of likes
+    // %3$d is the number of liker names not shown, used with "X others...."
+    'likes_formats' => array(
+        0 => '%1$s likes this.',        // single like
+        1 => 'Liked by %1$s.',          // multiple likes, up to threshold
+        2 => '%1$s and %3$d others like this.', // threshold and beyond
+    ),
     'unk_username' => 'unknown',
     'likes_received' => 'Likes Received',
     'likes_given' => 'Likes Given',
@@ -271,7 +292,16 @@ $LANG_GF01 = array(
     'no_likes_given' => 'No Likes Given',
     'liked' => 'Liked',
     'liked_thread' => 'post in thread',
-    'likes' => 'Likes'
+    'likes' => 'Likes',
+    'msg_item_updated' => 'Item has been updated',
+    'msg_item_nochange' => 'Item was not changed',
+    'sample_color' => 'Sample',
+    /*--- For the badge color picker --*/
+    'fg_color' => 'Foreground Color',
+    'bg_color' => 'Background Color',
+    'more' => 'More',
+    'less' => 'Less',
+    'choose' => 'Choose',
 );
 
 $LANG_GF02 = array(
@@ -319,7 +349,7 @@ $LANG_GF02 = array(
     'msg40' => '<br>Lo siento,pero ya has solicitado ser notificado para recibir respuestas sobre este tema.<br><br>',
     'msg41' => '<br>Gracias! Serás notificado de las respuestas sobre este tema %s.<br><br>',
     'msg42' => 'Gracias! Has borrado las notificaciones sobre este tema.',
-    'msg43' => '+Estás seguro que quieres borrar estas notificaciones?',
+    'msg43' => '¿Quieres borrar estas notificaciones?',
     'msg44' => '<p style="margin:0px; padding:5px;">No tienes notificaciones actualmente.</p>',
     'msg45' => 'Buscar el Foro',
     'msg46' => 'Puedes buscar en el Foro introduciendo las palabras claves:',
@@ -340,12 +370,12 @@ $LANG_GF02 = array(
     'msg61' => 'Tema permanente',
     'msg62' => 'Notificarme de respuestas',
     'msg63' => 'Ver Perfil',
-    'msg64' => 'Estás seguro que deseas borrar el tema %s titulado: %s ?',
+    'msg64' => '¿Deseas borrar el tema %s titulado: %s ?',
     'msg65' => '<br>Este tema tiene comentarios adjuntos,por lo que todos ellos también serán borrados.',
     'msg66' => 'Confirmar borrar la Publicación',
     'msg67' => 'Modificar Publicación del Foro',
     'msg68' => 'Nota: Ten cuidado cuando vetas a alguien,sólo los administradores pueden reincorporar a alguien.',
-    'msg69' => 'Seguro que quieres vetar la dirección IP: %s?',
+    'msg69' => '¿Quieres vetar la dirección IP: %s?',
     'msg70' => 'Confirmar vetar',
     'msg71' => 'No hay función seleccionada,elige un comentario y una función de moderador.<br>Nota: Debes ser moderador para usar estas funciones.',
     'msg72' => 'Si este mensaje está en línea no tienes el derecho a ejecutar esta función moderadora.',
@@ -423,7 +453,7 @@ $LANG_GF02 = array(
     'msg156' => 'Número total de comentarios',
     'msg157' => 'Últimos 10 comentarios',
     'msg158' => 'Últimos 10 comentarios por ',
-    'msg159' => '+Estás seguro que quieres BORRAR estos registros de Moderador seleccionados?',
+    'msg159' => '¿Quieres BORRAR estos registros de Moderador seleccionados?',
     'msg160' => 'Ver la última página del tema',
     'msg161' => 'Volver al listado de miembros',
     'msg162' => 'Para volver al índice del foro pulsa <a href="%s">aquí</a><br><p />Para volver automáticamente a ver tu comentario por defecto.<br>Si no deseas esperar,pulsa <a href="%s">aquí</a> ahora.',
@@ -488,7 +518,7 @@ $LANG_GF02 = array(
     'copy_to_clipboard' => 'Copy Post Permalink to Clipboard',
     'post_ctc' => 'Permalink Copied to Clipboard',
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
-    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>'
+    'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
 );
 
 $LANG_GF03 = array(
@@ -519,7 +549,7 @@ $LANG_GF03 = array(
     'select_topic' => 'Seleccionar Tema',
     'lock_topic' => 'Lock Topic',
     'unlock_topic' => 'Unlock Topic',
-    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>'
+    'locked_topic_msg' => 'Thread Status: <span style="font-weight:700;">Not open for further replies.</span>',
 );
 
 $LANG_GF04 = array(
@@ -548,6 +578,7 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Estadísticas',
     2 => 'Configuración',
@@ -560,9 +591,10 @@ $LANG_GF06 = array(
     9 => 'Importar',
     10 => 'Foro - Administración',
     11 => 'Badges',
-    12 => 'Ranks'
+    12 => 'Ranks',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Ver Foros',
     2 => 'Preferencias',
@@ -571,12 +603,14 @@ $LANG_GF07 = array(
     5 => 'Miembros'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Notificaciones por Tema',
     2 => 'Notifications por Seguimiento',
     3 => 'Excepciones por Tema'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Adjuntos',
     'maxattachments' => 'Máx %s permitido',
@@ -613,6 +647,7 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Promedio de visitas por:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
     'topicspp' => 'Temas por Pagina',
     'showiframe' => 'Mostrar Revisión de Temas',
@@ -634,6 +669,7 @@ $LANG_GF92 = array(
     'descending' => 'Descendente',
     'sb_latestposts' => 'Último Mensaje',
     'setsavemsg' => 'Ajustes guardados.',
+    /* not used */
     'gfsettings' => 'Opciones de GeekForum',
     'gensettings' => 'Opciones generales',
     'topicsettings' => 'Opciones de Temas',
@@ -732,9 +768,10 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Tiempo permitido (<i>min</i>) para que los miembros modifiquen sus mesajes'
+    'edit_timewindowdscp' => 'Tiempo permitido (<i>min</i>) para que los miembros modifiquen sus mesajes',
 );
 
+// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Listado de foros',
     'vieworder' => 'Ver orden',
@@ -796,7 +833,7 @@ $LANG_GF93 = array(
     'category_resynced' => 'All forums in the category have been resynced',
     'forum_resynced' => 'The Forum has been resynced',
     'forum_options' => 'Forum Options...',
-    'category_options' => 'Category Options...'
+    'category_options' => 'Category Options...',
 );
 
 $LANG_GF94 = array(
@@ -821,9 +858,9 @@ $LANG_GF94 = array(
     'modexists' => 'Moderador existente',
     'modexistsmsg' => 'Error: Lo siento,este moderador ya existe.',
     'transfer' => 'Transfiriendo al índice mod..',
-    'removemodnote1' => '+Quieres borrar el moderador %s de este foro %s?',
+    'removemodnote1' => '¿Quieres borrar el moderador %s de este foro %s?',
     'removemodnote2' => 'Una vez borrado,No podrán habilitarase para moderar ningén Foro.',
-    'removemodnote3' => 'Estás seguro que quieres borrar al moderador %s de todos los Foros?',
+    'removemodnote3' => '¿Quieres borrar al moderador %s de todos los Foros?',
     'removemodnote4' => 'Una vez borrados,NO podrán habilitarse para moderar ningén Foro.',
     'allforums' => 'Todos los Foros'
 );
@@ -833,7 +870,7 @@ $LANG_GF95 = array(
     'header2' => 'Discussion Board Messages for forum&nbsp;&raquo;&nbsp;%s',
     'notyet' => 'La característica no ha sido implementada aén',
     'delall' => 'Borrar todos',
-    'delallmsg' => 'Estás seguro de borrar todos los mensajes de: %s?',
+    'delallmsg' => '¿Borrar todos los mensajes de: %s?',
     'underforum' => '<b>Debajo del Foro: %s (ID #%s)',
     'moderate' => 'Moderar',
     'nomess' => 'No han habido mensajes comentados aún! '
@@ -846,7 +883,7 @@ $LANG_GF96 = array(
     'unban' => 'Re-admitir',
     'ipbanned' => 'Dirección IP vetada',
     'banip' => 'Confirmación para vetar IP',
-    'banipmsg' => '+Estás seguro de vetar la IP %s?',
+    'banipmsg' => '¿Vetar la IP %s?',
     'specip' => 'íPor favor especificar una dirección IP para vetar!',
     'ipunbanned' => 'Dirección IP re-admitir.'
 );
@@ -885,13 +922,14 @@ $LANG_GF98 = array(
     'user_voting_details' => 'User Voting Details for: ',
     'save_changes' => 'Save Changes',
     'view_rating' => 'View Rating',
-    'post_rating' => 'Post Rating'
+    'post_rating' => 'Post Rating',
 );
 
 $LANG_FF_AUTOTAG = array(
-    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]'
+    'desc_forum' => 'Link: to a Forum post.  link_text defaults to the post topic. usage: [forum:<i>post_id</i> {link_text}]',
 );
 
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Actualización de la Extensión Foro completa - sin errores';
 $PLG_forum_MESSAGE2 = 'Actualización de la Extensión Foro: No se pudo actualizar esta versión automáticamente. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Actualización de la Extensión Foro fallida - verifica el: error.log';
@@ -981,6 +1019,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Máx Tamaño para Adjuntos (<i>bytes</i>)',
     'enable_user_rating_system' => '¿Permitir Sistema de Calificaciones?',
     'enable_likes' => 'Enable Likes System',
+    'enable_likes_profile' => 'Display User\'s likes received and given on User Profile',
     'bbcode_signature' => 'Permitir Firmas BBcode',
     'use_wysiwyg_editor' => 'Permitir Editor HTML WYSIWYG',
     'bbcode_disabled' => 'Opción Predeterminada para BBCode deshabilitada',
@@ -992,7 +1031,8 @@ $LANG_confignames['forum'] = array(
     'geshi_overall_style' => 'GeSHi Overall Code Block Style',
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
-    'geshi_header_style' => 'GeSHi Header Block Style'
+    'geshi_header_style' => 'GeSHi Header Block Style',
+
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1008,7 +1048,6 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Adjuntos'
 );
 
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('Sí' => 1, 'No' => 0),
     1 => array('Sí' => true, 'No' => false),

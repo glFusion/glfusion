@@ -1,4 +1,5 @@
 <?php
+
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -170,7 +171,7 @@ $LANG01 = array(
     122 => 'Retroenlaces (%d)',
     123 => 'Todo código HTML es permitido',
     124 => 'Clic para borrar todos los elementos seleccionados',
-    125 => '¿Seguro deseas borrar todos los elementos seleccionados?',
+    125 => '¿Deseas borrar todos los elementos seleccionados?',
     126 => 'Selecciona o de-selecciona todos los elementos',
     127 => 'Permalink',
     128 => '',
@@ -199,7 +200,7 @@ $LANG01 = array(
     'blocks_footer_title' => 'Pie de Pagina',
     'source' => 'fuente',
     'env_check' => 'Environment Check',
-    'ok' => 'OK'
+    'ok' => 'OK',
 );
 
 ###############################################################################
@@ -230,7 +231,7 @@ $LANG03 = array(
     22 => 'Utiliza un título claro que describa el contenido de tu mensaje.',
     23 => 'Tu dirección de correo electrónico NO será divulgada.',
     24 => 'Usuario Anónimo',
-    25 => '¿Seguro quieres denunciar este mensaje al administrador del sitio?',
+    25 => '¿Quieres denunciar este mensaje al administrador del sitio?',
     26 => '%s ha denunciado el siguiente comentario abusivo:',
     27 => 'Denuncia de abuso',
     28 => 'Previsualizar Cambios',
@@ -256,14 +257,15 @@ $LANG03 = array(
     48 => 'Haz clic <a href="javascript:history.back()">aquí</a> para regresar',
     49 => 'Los comentarios están cerrados',
     50 => 'Se requiere iniciar sesión para comentar',
-    51 => 'Be the first to comment',
+    51 => 'Se el primero en comentar',
     52 => 'You comment has been successfully submitted. Once your comment is reviewed and approved by our moderators, it will be visible.',
     53 => 'A new comment has been submitted for review.',
     54 => 'Please view the <a href="%s">Moderation Queue</a> to approve or delete the submission.',
     55 => 'A New Comment has been Submitted',
     56 => 'Comment has been approved and is now visible.',
     57 => 'Silent Edit',
-    58 => 'No Title Available'
+    58 => 'No Title Available',
+
 );
 
 ###############################################################################
@@ -367,7 +369,7 @@ $LANG04 = array(
     95 => 'Pulsa abajo el botón "borrar la cuenta" para retirar tu cuenta de nuestra base de datos. Toma nota que cualquier noticia o comentario que hayas contribuído bajo esta cuenta <strong>no</strong> se borrará, sino que aparecerá como "Anónimo".',
     96 => 'Borra la cuenta',
     97 => 'Confirma el borrado de la Cuenta',
-    98 => '¿Seguro quieres borrar tu cuenta? Al hacerlo, no podrás acceder a este sitio otra vez (<i>a no ser que crees una cuenta nueva</i>). Si es así, haz clic en "borrar cuenta" de nuevo en el formulario.',
+    98 => '¿Quieres borrar tu cuenta? Al hacerlo, no podrás acceder a este sitio otra vez (<i>a no ser que crees una cuenta nueva</i>). Si es así, haz clic en "borrar cuenta" de nuevo en el formulario.',
     99 => 'Opciones de privacidad para',
     100 => 'Recibir Correos del Administrador',
     101 => 'Permite el correo de los Administradores del sitio',
@@ -481,7 +483,7 @@ $LANG04 = array(
     'google' => 'Google',
     'linkedin' => 'LinkedIn',
     'microsoft' => 'Microsoft',
-    'twitter' => 'Twitter'
+    'twitter' => 'Twitter',
 );
 
 ###############################################################################
@@ -496,7 +498,7 @@ $LANG_MYACCOUNT = array(
     'pe_layout' => 'Plantilla &amp; Idioma',
     'pe_content' => 'Contenido',
     'pe_privacy' => 'Privacidad',
-    'pe_subscriptions' => 'Suscripciones'
+    'pe_subscriptions' => 'Suscripciones',
 );
 
 ###############################################################################
@@ -511,7 +513,7 @@ $LANG05 = array(
     6 => 'Anterior',
     7 => 'Primero',
     8 => 'Ultimo',
-    9 => 'Cargar más Historias'
+    9 => 'Cargar más Historias',
 );
 
 ###############################################################################
@@ -556,7 +558,7 @@ $LANG08 = array(
     36 => 'You are receiving this message because you have subscribed to the %s Resumen Diario. To remove or change your preferences, please change your <strong>Resumen Diario</strong> preferences in the <a href="%s/usersettings.php?mode=edit">Mi Cuenta</a> - Content section.',
     37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Resumen Diario preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
     38 => 'sent you the following article...',
-    39 => 'Read Full Article'
+    39 => 'Read Full Article',
 );
 
 ###############################################################################
@@ -643,7 +645,7 @@ $LANG09 = array(
     78 => '1 mes',
     79 => '3 meses',
     80 => '6 meses',
-    81 => '1 año'
+    81 => '1 año',
 );
 
 ###############################################################################
@@ -757,7 +759,7 @@ $LANG12 = array(
 );
 
 ###############################################################################
-# lib-rating.php
+# rater.php
 
 $LANG13 = array(
     'vote' => 'voto',
@@ -770,7 +772,7 @@ $LANG13 = array(
     'uid_rated' => 'Your User ID has already rated this item.',
     'own_rated' => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote' => '¡Gracias por tu voto!',
-    'reset_rating' => 'Reiniciar Calificación'
+    'reset_rating' => 'Reiniciar Calificación',
 );
 
 ###############################################################################
@@ -789,7 +791,7 @@ $LANG20 = array(
     6 => 'Todo acceso a las partes administrativas queda registrado y revisado.<br>Esta página es para uso exclusivo del personal autorizado.',
     7 => 'Identificación',
     8 => 'Tiempo de Espera de Sesión Agotado - Autentícate de nuevo',
-    9 => 'Access to Administration Features requires re-authentication'
+    9 => 'Access to Administration Features requires re-authentication',
 );
 
 ###############################################################################
@@ -867,7 +869,7 @@ $LANG21 = array(
     69 => 'Are you sure you want to delete this block?',
     70 => 'Block name cannot be blank and cannot contain spaces or the following characters: < > \' " % & * / or backslash',
     71 => 'Esta pantalla te permite crear un Bloque o modificar uno existente que será mostrado ya sea en la barra de navegación izquierda o derecha.',
-    72 => 'Esta pantalla te permite modificar un Bloque del sistema de glFusion.'
+    72 => 'Esta pantalla te permite modificar un Bloque del sistema de glFusion.',
 );
 
 ###############################################################################
@@ -999,7 +1001,7 @@ $LANG24 = array(
     123 => 'Topic move <b>was not</b> executed due to source topic being set to ALL',
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
-    126 => 'Auto Play'
+    126 => 'Auto Play',
 );
 
 ###############################################################################
@@ -1064,7 +1066,7 @@ $LANG27 = array(
     56 => 'Press Cancel and then Edit this topic to view details including the total number of objects in the database that are associated with this topic.',
     57 => '<b>NOTA</b>: El ID no pueden contener espacios.',
     58 => 'First Position',
-    59 => 'Description'
+    59 => 'Description',
 );
 
 ###############################################################################
@@ -1161,7 +1163,7 @@ $LANG28 = array(
     88 => 'Grupo por defecto',
     89 => 'Selecciona para hacer este el grupo por defecto para nuevos usuarios',
     90 => 'Aplicar el cambio de "Grupo por defecto" para cuentas de usuario existentes',
-    91 => '¿Seguro deseas aplicar estas características a todos los usuarios?',
+    91 => '¿Deseas aplicar estas características a todos los usuarios?',
     92 => 'Preferencia',
     93 => 'Valor',
     94 => 'Seleccionado',
@@ -1174,14 +1176,14 @@ $LANG28 = array(
     101 => 'Grupo',
     102 => 'users',
     103 => 'Batch User Administration',
-    104 => '¿Seguro quieres borrar este Usuario?',
+    104 => '¿Quieres borrar este Usuario?',
     105 => 'Estado',
-    106 => 'Queued',
+    106 => 'en Cola',
     107 => 'Verificación',
     108 => 'Ver Perfil',
     109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then clic on the Username to view the User Profile to see details.',
     110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then clic on the Username to view the User Profile to see details.',
-    111 => 'Send eMail (Local)'
+    111 => 'Enviar E-mail (Local)'
 );
 
 ###############################################################################
@@ -1290,7 +1292,7 @@ $LANG32 = array(
     28 => 'Versión',
     29 => 'Ver. glFusion',
     30 => '¿Quiere borrar la Extensión?',
-    31 => '¿Seguro quieres borrar esta Extensión ? Al hacerlo borrarás todos los archivos, estructuras y datos asociados. Si es así, selecciona "Borrar" en el formulario.',
+    31 => '¿Quieres borrar esta Extensión ? Al hacerlo borrarás todos los archivos, estructuras y datos asociados. Si es así, selecciona "Borrar" en el formulario.',
     32 => '<p><b>Error, la etiqueta AutoLink no tiene el formato correcto</b></p>',
     33 => 'Versión del código',
     34 => 'Actualización',
@@ -1350,7 +1352,7 @@ $LANG32 = array(
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the archivos and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
     90 => 'Versión <b>%s</b> of the <b>%s</b> plugin is required, but versión <b>%s</b> is instalado. Please update the %s plugin.',
-    91 => 'Seleccionar'
+    91 => 'Seleccionar',
 );
 
 ###############################################################################
@@ -1409,7 +1411,7 @@ $LANG33 = array(
     55 => 'Articles',
     56 => 'Do you really want to delete this feed?',
     57 => 'Syndication List',
-    58 => 'To create / edit a feed, modify the fields below and save'
+    58 => 'To create / edit a feed, modify the fields below and save',
 );
 
 ###############################################################################
@@ -1422,7 +1424,7 @@ $LANG_LOGVIEW = array(
     'view' => 'Ver Archivo de Sucesos',
     'clear' => 'Limpiar Archivo de Sucesos',
     'log_file' => 'Archivo de Sucesos',
-    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
+    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.',
 );
 
 ###############################################################################
@@ -1448,8 +1450,9 @@ $LANG_SOCIAL = array(
     'site_username' => 'Site Username',
     'additional_html' => 'Additional HTML for block - displays after follow buttons',
     'saved_msg' => 'Social Integrations successfully saved.',
-    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.'
+    'overridden' => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
 );
+
 
 ###############################################################################
 # confirmation and error messages
@@ -1589,7 +1592,7 @@ $MESSAGE = array(
     521 => 'You have been successfully un-subscribed from the notification feed.',
     522 => 'Remote account has been successfully merged with existing local account',
     523 => 'Security Token has expired - please try again.',
-    600 => 'The Development Update has completed - Please validate if any plugins needs to be updated'
+    600 => 'The Development Update has completed - Please validate if any plugins needs to be updated',
 );
 
 ###############################################################################
@@ -1675,7 +1678,7 @@ $LANG_ACCESS = array(
     'confirm2' => 'Are you absolutely sure you want to delete this group?  This will affect any users or groups that are associated with this group!  Press Cancel and then Edit this group if you wish to view the details.',
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
-    'validation_failed' => 'Falló la Validación - Intenta de nuevo.'
+    'validation_failed' => 'Falló la Validación - Intenta de nuevo.',
 );
 
 ###############################################################################
@@ -1751,7 +1754,7 @@ $LANG_DB_ADMIN = array(
     'current_progress' => 'Current Progress',
     'overall_progress' => 'Overall Progress',
     'no_backups_found' => 'No Backup Files Found',
-    'error_msg' => 'The following errors were encountered'
+    'error_msg' => 'The following errors were encountered',
 );
 
 ###############################################################################
@@ -1782,11 +1785,11 @@ $LANG_TFA = array(
     'enroll_enter_code' => 'And enter the code the application gives you:',
     'general_error' => 'There was an error in processing your request. Please have the system administrator check the error.log for details.',
     'copy_success' => 'Two Factor Token copied to clipboard',
-    'copy_to_clipboard' => 'Copy to Clipboard'
+    'copy_to_clipboard' => 'Copy to Clipboard',
 );
 
 ###############################################################################
-# Password Rules
+# Password Complexity
 
 $LANG_PWD = array(
     'title' => 'Passwords must meet the follow rules',
@@ -1803,7 +1806,7 @@ $LANG_PWD = array(
     'error_no_letter' => 'Password must contain at least one letter',
     'error_no_cap' => 'Password must contain at least one upper case letter',
     'error_no_lower' => 'Password must contain at least one lower case letter',
-    'error_no_symbol' => 'Password must contain at least one special character'
+    'error_no_symbol' => 'Password must contain at least one special character',
 );
 
 ###############################################################################
@@ -1828,7 +1831,7 @@ $LANG_BUTTONS = array(
 $LANG_404 = array(
     1 => '404 - URL no encontrada',
     2 => '<div class="story-body">No puedes acceder a esta pagina por alguna de estas razones:<ul><li>Un marcador o favorito desactualizado</li><li>Un buscador que tiene un listado desactualizado del del sitio</li><li>Una dirección mal escrita</li><li>No te has autenticado</li></ul></div>',
-    3 => "<p>Intenta alguna de estas opciones:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Ir a la Pagina Inicial</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Buscar</a></li><li><a href=\"{$_CONF['site_url']}/users.php\">Ingresa con tu usuario</a></li></ul></p>"
+    3 => "<p>Intenta alguna de estas opciones:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Ir a la Pagina Inicial</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Buscar</a></li><li><a href=\"{$_CONF['site_url']}/users.php\">Ingresa con tu usuario</a></li></ul></p>",
 );
 
 ###############################################################################
@@ -1928,7 +1931,7 @@ $LANG_TRB = array(
     'delete_trackback' => 'To delete this Trackback clic: ',
     'edit_explain' => 'This screen allows you to create or edit a new trackback or ping service.',
     'ping_explain' => 'This screen allows you to send pingback requests for your stories.',
-    'trb_explain' => 'This screen allows you to send trackback requests.'
+    'trb_explain' => 'This screen allows you to send trackback requests.',
 );
 
 ###############################################################################
@@ -2014,7 +2017,7 @@ $LANG_WEEK = array(
     11 => 'Wed',
     12 => 'Thu',
     13 => 'Fri',
-    14 => 'Sat'
+    14 => 'Sat',
 );
 
 ###############################################################################
@@ -2068,7 +2071,7 @@ $LANG_ADMIN = array(
     'alt_topic' => 'Tema Alterno',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reiniciar',
-    'remaining_chars' => 'Remaining Characters '
+    'remaining_chars' => 'Remaining Characters ',
 );
 
 ###############################################################################
@@ -2124,7 +2127,7 @@ $LANG_featurecodes = array(
 $LANG_frontpagecodes = array(
     0 => 'Solo en el Tema',
     1 => 'Pagina Inicial',
-    2 => 'Show on Front Page Until'
+    2 => 'Show on Front Page Until',
 );
 
 $LANG_postmodes = array(
@@ -2192,17 +2195,17 @@ $LANG_BBCODE = array(
     'color_violet' => 'Violeta',
     'color_white' => 'Blanco',
     'color_black' => 'Negro',
-    'formatted_code' => 'Código Formateado'
+    'formatted_code' => 'Código Formateado',
 );
 
 # Localisation of the texts for the Admin file check
 ###############################################################################
-# filecheck.php
+# admin/filecheck.php - distribution integrity checker
 
 $LANG_FILECHECK = array(
     'filecheck' => 'Integridad de Archivos',
     'recheck' => 'Comprobar',
-    'confirm' => '¿Seguro deseas borrar los archivos seleccionados?',
+    'confirm' => '¿Deseas borrar los archivos seleccionados?',
     'scan' => 'Your site\'s archivo integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
     'results' => 'Your site\'s archivos and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing archivos and directories have been identified, and archivos that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional archivos and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these archivos!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
     'expiration1' => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
@@ -2226,7 +2229,7 @@ $LANG_FILECHECK = array(
 
 # Localisation of the texts for Menu Builder
 ###############################################################################
-# Menu Builder
+# admin/menu.php - menu builder
 
 $LANG_MB01 = array(
     'javascript_required' => 'Menu Builder requires that you have JavaScript habilitada.',
@@ -2314,7 +2317,7 @@ $LANG_MB01 = array(
     'return_to' => 'Regresar a ',
     'menu_name_error' => 'Menu name cannot be blank',
     'menu_name_space' => 'Menu name cannot contain spaces',
-    'menu_name_exists' => 'Menu name must be unique, there is already a menu by this name'
+    'menu_name_exists' => 'Menu name must be unique, there is already a menu by this name',
 );
 
 ###############################################################################
@@ -2324,7 +2327,7 @@ $LANG_MB_MENU_TYPES = array(
     1 => 'Horizontal - Cascading',
     2 => 'Horizontal - Simple',
     3 => 'Vertical - Cascading',
-    4 => 'Vertical - Simple'
+    4 => 'Vertical - Simple',
 );
 
 ###############################################################################
@@ -2339,7 +2342,7 @@ $LANG_MB_TYPES = array(
     6 => 'URL Externa',
     7 => 'Función de PHP',
     8 => 'Etiqueta',
-    9 => 'Tema'
+    9 => 'Tema',
 );
 
 ###############################################################################
@@ -2348,7 +2351,7 @@ $LANG_MB_TYPES = array(
 $LANG_MB_TARGET = array(
     1 => 'Parent Window',
     2 => 'New Window with navigation',
-    3 => 'New Window without navigation'
+    3 => 'New Window without navigation',
 );
 
 ###############################################################################
@@ -2360,7 +2363,7 @@ $LANG_MB_GLFUNCTION = array(
     2 => 'Directorio',
     3 => 'Preferencias',
     4 => 'Buscar',
-    5 => 'Estadísticas'
+    5 => 'Estadísticas',
 );
 
 ###############################################################################
@@ -2372,7 +2375,7 @@ $LANG_MB_GLTYPES = array(
     3 => 'Menú de Temas',
     4 => 'Menú de Paginas',
     5 => 'Menú de Extensiones',
-    6 => 'Menú de Encabezado'
+    6 => 'Menú de Encabezado',
 );
 
 ###############################################################################
@@ -2384,11 +2387,11 @@ $LANG_MB_ADMIN = array(
     3 => 'Para modificar la propiedades de la opción, haz clic en el icono bajo la columna: <b>Modificar</b>. Ordene los elementos moviéndolos hacia arriba o abajo empleando las flechas bajo la columna: <b>Orden</b>.',
     4 => 'Para crear una nueva opción, especifique its details and permisos below.',
     5 => 'Una vez un elemento es creado, usted puede regresar y modificar los detalles y permisos.',
-    6 => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.'
+    6 => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.',
 );
 
 ###############################################################################
-# logo.php
+# admin/logo.php - logo administration
 
 $LANG_LOGO = array(
     'logo_admin' => 'Logo',
@@ -2405,12 +2408,11 @@ $LANG_LOGO = array(
     'logo_help' => 'Uploaded graphic logo images are not resized, the standard size for glFusion logo is 100 pixels tall and should be less than 500 pixels wide.  You can upload larger images, but you will need to modify the site CSS in styles.css to ensure it displays properly.',
     'logo_saved' => 'Logo options successfully saved.',
     'invalid_type' => 'Invalid image type, only JPG, PNG, and GIF are allowed',
-    'invalid_size' => 'Uploaded logo larger than allowed size of '
+    'invalid_size' => 'Uploaded logo larger than allowed size of ',
 );
 
 ###############################################################################
-# autotag.php
-
+# admin/autotag.php - autotag administration
 $LANG_AM = array(
     'plugin' => 'autoetiqueta',
     'title' => 'Autoetiquetas',
@@ -2474,12 +2476,11 @@ $LANG_AM = array(
     'perm_saved' => 'Permissions have been saved',
     'perm_instructions' => 'Check the auto tags you will allow for the specified content area',
     'perm_header' => 'Auto Tag Permissions by Content Area',
-    'perm_editor' => 'Permission Editor'
+    'perm_editor' => 'Permission Editor',
 );
 
 ###############################################################################
-# envcheck.php
-
+# admin/envcheck.php - environment check
 $LANG_ENVCHK = array(
     'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
     'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
@@ -2562,12 +2563,11 @@ $LANG_ENVCHK = array(
     'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'xml_extension' => 'XML Extension',
     'zlib_extension' => 'zlib Extension',
-    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.'
+    'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.',
 );
 
 ###############################################################################
-# versioncheck.php
-
+# admin/vercheck.php - version checker
 $LANG_UPGRADE = array(
     'recheck' => 'Comprobar',
     'desc' => 'Asegúrate que tanto el software glFusion como las Extensiones estén al día. La comprobación solicita al sitio web glFusion.org  las ultimas versiones de todo el software y compara con las versiones instaladas.',
@@ -2590,12 +2590,11 @@ $LANG_UPGRADE = array(
     'installed_version' => 'Versión Instalada',
     'latest_version' => 'Última Versión',
     'notes' => 'Notas',
-    'phpeol' => 'La versión de PHP esta desactualizada'
+    'phpeol' => 'La versión de PHP esta desactualizada',
 );
 
 ###############################################################################
-# sfs.php
-
+# admin/sfs.php - stop forum spam checks
 $LANG_SFS = array(
     'title' => 'Stop Forum Spam (SFS) User Check',
     'instructions' => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
@@ -2616,9 +2615,8 @@ $LANG_SFS = array(
     'confirm_one_del' => 'Are you sure you want to DELETE all selected users?',
     'confirm_two_del' => 'Are you REALLY sure you want to DELETE all selected users?',
     'action_text_del' => 'Borrar Usuarios',
-    'no_data' => 'No user\'s were found in the user database.'
+    'no_data' => 'No user\'s were found in the user database.',
 );
-
 
 ###############################################################################
 # Localization of the Admin Configuration UI
@@ -2636,7 +2634,7 @@ $LANG_CONFIG = array(
     'disable' => 'Clic para deshabilitar esta opción',
     'enable' => 'Habilitar',
     'search' => 'Buscar Configuración',
-    'hash_ext_missing' => 'Missing Message Digest (Hash) Extension - Two Factor Authentication cannot be enabled.'
+    'hash_ext_missing' => 'Missing Message Digest (Hash) Extension - Two Factor Authentication cannot be enabled.',
 );
 
 $LANG_configsections['Core'] = array(
@@ -2936,7 +2934,7 @@ $LANG_confignames['Core'] = array(
     'pwd_req_lower' => 'Require lower case letter in password',
     'pwd_req_symbol' => 'Require special character in password',
     'story_sort_by' => 'Story List Sort Field',
-    'story_sort_dir' => 'Story List Sort Direction'
+    'story_sort_dir' => 'Story List Sort Direction',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2997,7 +2995,7 @@ $LANG_fs['Core'] = array(
     'fs_rating' => 'Calificaciones',
     'fs_spam_config' => 'Configuración',
     'fs_authentication' => 'Authentication',
-    'fs_pwd_complexity' => 'Password Rules'
+    'fs_pwd_complexity' => 'Password Rules',
 );
 
 $LANG_configselects['Core'] = array(
@@ -3036,7 +3034,7 @@ $LANG_configselects['Core'] = array(
     32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
     33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
     34 => array('HTML' => 0, 'Visual' => 1),
-    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user')
+    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user'),
 );
 
 ?>

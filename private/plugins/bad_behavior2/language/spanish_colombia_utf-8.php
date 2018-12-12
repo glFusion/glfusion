@@ -35,10 +35,8 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
-
-###############################################################################
 
 $LANG_BAD_BEHAVIOR = array(
     'added' => 'Added',
@@ -68,7 +66,7 @@ $LANG_BAD_BEHAVIOR = array(
     'date' => 'Fecha',
     'delete' => 'Borrar',
     'delete_bl_confirm_1' => 'Are you sure you want to remove the selected blacklist entries?',
-    'delete_confirm_1' => 'Seguro que deseas quitar la prohibición a estas IPs?',
+    'delete_confirm_1' => 'Deseas quitar la prohibición a estas IPs?',
     'delete_confirm_2' => '¿Estas REALMENTE seguro?',
     'delete_info' => 'Borrar IP Prohibida',
     'delete_wl_confirm_1' => 'Are you sure you want to remove the selected whitelist entries?',
@@ -79,6 +77,7 @@ $LANG_BAD_BEHAVIOR = array(
     'enter_ip' => 'IP',
     'enter_ip_info' => 'Escribe las IPs a prohibir en el sitio. Cada IP debería estar en una linea aparte.',
     'error' => 'Error',
+    'filter' => 'Filter Selection',
     'filter' => 'Filtro',
     'fsockopen_failed' => 'Failed to open socket. Could not perform self test.',
     'fsockopen_not_available' => 'Sorry, the PHP function <code>fsockopen</code> is not available. Can not perform self test.',
@@ -106,6 +105,7 @@ $LANG_BAD_BEHAVIOR = array(
     'note' => 'Notes',
     'page_title' => 'Bad Behavior2',
     'plugin_display_name' => 'Bad Behavior2',
+    'reason' => 'Info',
     'reason' => 'Razón',
     'results' => 'Bad Behavior2 - Resultados',
     'row_date' => 'Fecha',
@@ -162,7 +162,7 @@ $LANG_BAD_BEHAVIOR = array(
     'whitelist_new' => 'New Whitelist Entry',
     'whitelist_success_delete' => 'Whitelist item(s) successfully deleted',
     'whitelist_success_save' => 'Whitelist entry successfully saved',
-    'invalid_item_id' => 'Invalid Item ID - No record found'
+    'invalid_item_id' => 'Invalid Item ID - No record found',
 );
 
 $LANG_BB2_RESPONSE = array(
@@ -182,16 +182,19 @@ $LANG_BB2_RESPONSE = array(
     '582ec5e4' => 'Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
+    '70e45496' => 'User agent claimed to be CloudFlare, claim appears false',
     '71436a15' => 'User-Agent claimed to be Yahoo, claim appears to be false',
     '799165c2' => 'Rotating user-agents detected',
     '7a06532b' => 'Required header \'Accept-Encoding\' missing',
     '7ad04a8a' => 'Prohibited header \'Range\' present',
     '7d12528e' => 'Prohibited header \'Range\' or \'Content-Range\' in POST request',
     '939a6fbb' => 'Banned proxy server in use',
+    '96c0bd29' => 'URL pattern found on blacklist',
     '9c9e4979' => 'Prohibited header \'via\' present',
     'a0105122' => 'Header \'Expect\' prohibited; resend without Expect',
     'a1084bad' => 'User-Agent claimed to be MSIE, with invalid Windows version',
     'a52f0448' => 'Header \'Connection\' contains invalid values',
+    'b0924802' => 'Incorrect form of HTTP/1.0 Keep-Alive',
     'b40c8ddc' => 'POST more than two days after GET',
     'b7830251' => 'Prohibited header \'Proxy-Connection\' present',
     'b9cc1d86' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
@@ -210,11 +213,10 @@ $LANG_BB2_RESPONSE = array(
     'f9f3b8b1' => 'do=register BOT Attack',
     'f9f3b8b2' => '/RK=0/RS= BOT',
     '96c0bd30' => 'IP Prohibida',
-    '96c0bd40' => 'Banned by Blacklist entry'
+    '96c0bd40' => 'Banned by Blacklist entry',
 );
 
 $PLG_bad_behavior_MESSAGE1 = '¡Si ves este mensaje, Bad Behavior2 <b>NO</b> esta instalado correctamente! Por favor lee cuidadosamente las instrucciones de instalación nuevamente.';
 $PLG_bad_behavior_MESSAGE100 = 'La dirección IP ha sido desbloqueada.';
 $PLG_bad_behavior_MESSAGE101 = 'Ocurrió un problema al  desbloquear la dirección IP.';
-
 ?>

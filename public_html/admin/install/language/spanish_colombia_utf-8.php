@@ -36,16 +36,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
-}
-
 // +---------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'utf-8';
 
 // +---------------------------------------------------------------------------+
-// install.php
+// index.php
 
 $LANG_INSTALL = array(
     'adminuser' => 'Admin Username',
@@ -154,7 +150,7 @@ $LANG_INSTALL = array(
     'site_url' => 'URL del sitio',
     'site_url_error' => 'El URL del sitio no puede estar en blanco.',
     'siteconfig_exists' => 'Se ha encontrado un archivo siteconfig.php existente. Borra ese archivo antes de iniciar la instalación.',
-    'siteconfig_not_found' => 'No fue posible encontrar el archivo siteconfig.php, ¿Está seguro de que se trata de una actualización?',
+    'siteconfig_not_found' => 'No fue posible encontrar el archivo siteconfig.php, ¿Seguro se trata de una actualización?',
     'siteconfig_not_writable' => 'El archivo siteconfig.php no tiene permisos de escritura, o el directorio en donde siteconfig.php está almacenado no tiene permisos de escritura. Corrige este inconveniente antes de proceder.',
     'sitedata_help' => 'Selecciona el tipo de base de datos que utilizarás. Generalmente <strong>MySQL</strong>. También selecciona si deseas utilizar el conjunto de caracteres <strong>UTF-8</strong> (<i>este debería ser seleccionado para sitios multilenguaje.</i>)<br /><br /><br />Ingresa el nombre del servidor de la base de datos. No debería ser el mismo servidor web, en caso de duda verifica con tu proveedor de alojamiento.<br /><br />Ingresa el nombre de tu base de datos. <strong>La base de datos debe de existir.</strong> si no conoces el nombre de la base de datos, contacta a tu proveedor de alojamiento.<br /><br />Ingresa el nombre de usuario para conectarse a la base de datos. Si no conoces el nombre del usuario de la base de datos, contacta a tu proveedor de alojamiento.<br /><br /><br />Ingresa la contraseña para conectarse a la base de datos. Si no conoces la contraseña de la base de datos, contacta a tu proveedor de alojamiento.<br /><br />Ingresa un prefijo a ser utilizado en la tabla para las tablas de la base de datos. Esto es de utilidad para separar múltiples sitios o sistemas en la misma base de datos.<br /><br />Ingresa el nombre de tu sitio. Será mostrado en la cabecera el sitio. Por ejemplo, glFusion o Mark Marbles. No te preocupes, luego podrás cambiarlo.<br /><br />Ingresa el lema de tu sitio. Será mostrado en la cabecera de tu sitio debajo del nombre del sitio. Por ejemplo, sinergia - estabilidad - estilo. No te preocupes, luego podrás cambiarlo.<br /><br />Ingresa la dirección de correo electrónico principal de tu sitio. Esta es la dirección de correo electrónico por defecto para la cuenta del Administrador. No te preocupes, luego podrás cambiarla.<br /><br />Ingresa la dirección de correo electrónico de no réplica de tu sitio. Será utilizada para enviar automáticamente  nuevos usuarios, contraseñas, restablecimiento, y otras notificaciones por correo electrónico. No te preocupes, luego podrás cambiarlo. <br /><br />Confirma que ésta es la dirección web o URL utilizada para acceder a la página principal de tu sitio.<br /><br /><br />Confirma que ésta es la dirección web o URL utilizada para acceder a la sección de administración de tu sitio.',
     'sitedata_missing' => 'Los siguientes problemas fueron encontrados con la información que ha ingresado del sitio:',
@@ -210,7 +206,7 @@ $LANG_INSTALL = array(
     'upgrade_bullet_title' => 'Te recomendamos que hagas lo siguiente:',
     'cleanup' => 'Borra los Archivos Obsoletos',
     'obsolete_confirm' => 'Confirma la Limpieza de Archivos',
-    'remove_skip_warning' => '¿Seguro desear saltarte el borrado de los archivos obsoletos? Estos archivos ya no son necesarios y deben ser borrados por razones de seguridad. Si escoges saltarte el borrado automático, considera borrarlos manualmente.',
+    'remove_skip_warning' => '¿Seguro deseas saltarte el borrado de los archivos obsoletos? Estos archivos ya no son necesarios y deben ser borrados por razones de seguridad. Si escoges saltarte el borrado automático, considera borrarlos manualmente.',
     'removal_failure' => 'Fallas en el Borrado',
     'removal_fail_msg' => 'Necesitaras borrar manualmente los archivos a continuación. Mira la <a href="https://www.glfusion.org/wiki/doku.php?id=glfusion:upgrade:obsolete" target="_blank">Wiki de glFusion - Archivos Obsoletos</a> para una lista detallada de los archivos a borrar.',
     'removal_success' => 'Archivos Obsoletos Borrados',
@@ -224,33 +220,33 @@ $LANG_INSTALL = array(
     'skip' => 'Saltar',
     'no_utf8' => 'Has selecccionado usar UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Crea la base de datos con el UTF-8 collation apropiado. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
     'no_check_utf8' => 'No has seleccionado to use UTF-8 (que es lo recomendado), pero la base de datos no esta configurada con una UTF-8 collation. Selecciona la opción UTF-8 en la pantalla de instalación. Mira la <a href="https://www.glfusion.org/wiki/glfusion:installation:database" target="_blank">Guía de configuración de la Base de Datos</a> en la Documentación Wiki de glFusion para más información.',
-    'ext_installed' => 'Installed',
-    'ext_missing' => 'Missing',
-    'ext_required' => 'Required',
-    'ext_optional' => 'Optional',
-    'ext_required_desc' => 'must be installed in PHP',
-    'ext_optional_desc' => 'should be installed in PHP - Missing extension could impact some features of glFusion.',
+    'ext_installed' => 'Instalada',
+    'ext_missing' => 'Faltente',
+    'ext_required' => 'Requerida',
+    'ext_optional' => 'Opcional',
+    'ext_required_desc' => 'debería estar instalada en PHP',
+    'ext_optional_desc' => 'debería estar instalada en PHP - Extensiones faltantes pueden impactar algunas características de glFusion.',
     'ext_good' => 'properly installed.',
-    'ext_heading' => 'PHP Extensions',
-    'curl_extension' => 'Curl Extension',
-    'ctype_extension' => 'Ctype Extension',
-    'date_extension' => 'Date Extension',
-    'filter_extension' => 'Filter Extension',
-    'gd_extension' => 'GD Graphics Extension',
-    'gettext_extension' => 'Gettext Extension',
-    'hash_extension' => 'Message Digest (hash) Extension',
-    'json_extension' => 'Json Extension',
-    'mbstring_extension' => 'Multibyte (mbstring) Extension',
-    'mysqli_extension' => 'MySQLi Extension',
-    'mysql_extension' => 'MySQL Extension',
-    'openssl_extension' => 'OpenSSL Extension',
-    'session_extension' => 'Session Extension',
-    'xml_extension' => 'XML Extension',
-    'zlib_extension' => 'zlib Extension',
+    'ext_heading' => 'Extensiones PHP',
+    'curl_extension' => 'Extensión Curl',
+    'ctype_extension' => 'Extensión Ctype',
+    'date_extension' => 'Extensión Date',
+    'filter_extension' => 'Extensión Filter',
+    'gd_extension' => 'Extensión GD Graphics',
+    'gettext_extension' => 'Extensión Gettext',
+    'hash_extension' => 'Extensión Message Digest (hash)',
+    'json_extension' => 'Extensión Json',
+    'mbstring_extension' => 'Extensión Multibyte (mbstring)',
+    'mysqli_extension' => 'Extensión MySQLi',
+    'mysql_extension' => 'Extensión MySQL',
+    'openssl_extension' => 'Extensión OpenSSL',
+    'session_extension' => 'Extensión Session',
+    'xml_extension' => 'Extensión XML',
+    'zlib_extension' => 'Extensión zlib',
     'required_php_ext' => 'Required PHP Extensions',
     'all_ext_present' => 'All required and optional PHP extensions are properly installed.',
     'short_open_tags' => 'PHP\'s <b>short_open_tag</b> should be off.',
-    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.'
+    'max_execution_time' => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
 );
 
 // +---------------------------------------------------------------------------+
@@ -264,9 +260,9 @@ $LANG_SUCCESS = array(
     4 => ' glFusion exitosamente. Toma un minuto para leer la información mostrada a continuación.',
     5 => 'Para ingresar en tu nuevo sitio glFusion, emplea esta cuenta:',
     6 => 'Usuario:',
-    7 => 'Admin',
+    7 => 'Admin', // do not translate
     8 => 'Contraseña:',
-    9 => 'password',
+    9 => 'password', // do not translate
     10 => 'Advertencia de seguridad',
     11 => 'No olvides',
     12 => 'cosas',
@@ -284,14 +280,13 @@ $LANG_SUCCESS = array(
     24 => 'Remove Install Files',
     25 => 'What\'s New',
     26 => 'Check out the glFusion Wiki - <a href="https://www.glfusion.org/wiki/glfusion:upgrade:whatsnew" target="_blank">What\'s New Section</a> for important information about this version of glFusion.',
-    27 => 'Goto Your Site',
-    28 => 'Installation Files Removed',
-    29 => 'Error Removing Files',
+    27 => 'Ir a tu Sitio',
+    28 => 'Archivos de Instalación Borrados',
+    29 => 'Error al Borrar Archivos',
     30 => 'Error Removing Installations Files - Please remove them manually.',
-    31 => 'Please make a record of the password above - you must have it to log into your new site.',
-    32 => 'Did you make note of your password?',
-    33 => 'Continue to Site',
-    34 => 'Cancel'
+    31 => 'Registra la contraseña - deberás tenerla para ingresar en tu nuevo sitio.',
+    32 => '¿Tomaste nota de tu contraseña?',
+    33 => 'Continuar al Sitio',
+    34 => 'Cancelar',
 );
-
 ?>

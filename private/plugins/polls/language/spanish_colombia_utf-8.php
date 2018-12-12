@@ -1,4 +1,5 @@
 <?php
+
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -26,17 +27,10 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
 
 global $LANG32;
-
-###############################################################################
-# Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
-###############################################################################
 
 $LANG_POLLS = array(
     'polls' => 'Encuestas',
@@ -65,13 +59,13 @@ $LANG_POLLS = array(
     'start_poll' => 'Iniciar Encuesta',
     'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
     'login_required' => "<a href=\"{$_CONF['site_url']}/users.php\" rel=\"nofollow\">Login</a> required to vote",
-    'username' => 'Username',
-    'ipaddress' => 'IP Address',
+    'username' => 'Usuario',
+    'ipaddress' => 'Dirección IP',
     'date_voted' => 'Date Voted',
-    'description' => 'Description',
+    'description' => 'Descripción',
     'general' => 'General',
     'poll_questions' => 'Poll Questions',
-    'permissions' => 'Permissions'
+    'permissions' => 'Permissions',
 );
 
 ###############################################################################
@@ -120,16 +114,13 @@ $LANG25 = array(
     40 => 'Ver todas las respuestas a esta Encuesta',
     41 => '¿Realmente deseas borrar esta Encuesta?',
     42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
-    43 => 'Requiere Inicio de Sesión para Votar'
+    43 => 'Requiere Inicio de Sesión para Votar',
 );
-
-###############################################################################
-# autotag descriptions
 
 $LANG_PO_AUTOTAG = array(
     'desc_poll' => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
     'desc_poll_result' => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]'
+    'desc_poll_vote' => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]',
 );
 
 $PLG_polls_MESSAGE19 = 'Tu encuesta se guardó satisfactoriamente.';
@@ -138,6 +129,7 @@ $PLG_polls_MESSAGE20 = 'Tu encuesta se ha borrado satisfactoriamente.';
 // Messages for the plugin upgrade
 $PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
+
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
@@ -156,7 +148,7 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => '¿Borrar Encuestas con Propietario?',
     'aftersave' => 'Después de Guardar',
     'default_permissions' => 'Permisos por Defecto',
-    'displayblocks' => 'Mostrar Bloques'
+    'displayblocks' => 'Mostrar Bloques',
 );
 
 $LANG_configsubgroups['polls'] = array(

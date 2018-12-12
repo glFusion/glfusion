@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File: spanish_colombia_utf-8.php
  * This is the Spanish (Colombia) language file for the glFusion Spam-X plugin
@@ -8,11 +9,10 @@
  * Copyright (C) 2014 by : John Toro - john DOT toro AT newroute DOT net
  * Licensed under GNU General Public License
  *
- * $Id$
  */
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
 
 global $LANG32;
@@ -37,8 +37,8 @@ $LANG_SX00 = array(
     'impinst2c' => 'Después de pulsar sobre el botón de Enviar, pulsa sobre [atrás]en tu navegador para volver aquí.',
     'impinst3' => 'Se enviarán los siguientes valores: (puedes editarlos si están equivocados).',
     'availb' => 'Listas Negras Disponibles',
-    'clickv' => 'Cliquea para ver la Lista Negra',
-    'clicki' => 'Cliquea para Importar la Lista Negra',
+    'clickv' => 'Clic para ver la Lista Negra',
+    'clicki' => 'Clic para Importar la Lista Negra',
     'ok' => 'OK',
     'rsscreated' => 'Se creó la fuente RSS',
     'add1' => 'Se han Añadido ',
@@ -58,7 +58,7 @@ $LANG_SX00 = array(
     'exmod' => 'Módulos de Examen de Spam-X',
     'actmod' => 'Módulos Activos',
     'avmod' => 'Módulos Disponibles',
-    'coninst' => '<hr>Click sobre un Módulo Activo para borrarlo, cliquea sobre un módulo Disponible para añadirlo.<br>Los módulos se ejecutan en el orden en que han sido presentados.',
+    'coninst' => '<hr>Haz Clic sobre un Módulo Activo para borrarlo, haz clic sobre un módulo Disponible para añadirlo.<br>Los módulos se ejecutan en el orden en que han sido presentados.',
     'fsc' => 'Encontrado un comentario de Spam coincidente',
     'fsc1' => ' enviado por el usuario ',
     'fsc2' => ' desde el IP ',
@@ -115,6 +115,7 @@ $LANG_SX00 = array(
     'ipofurlblack' => 'Spam-X IP of URL Blacklist',
     'headerblack' => 'Spam-X HTTP Header Blacklist',
     'headers' => 'Request headers:',
+
     'stats_headline' => 'Spam-X Statistics',
     'stats_page_title' => 'Blacklist',
     'stats_entries' => 'Entries',
@@ -124,10 +125,12 @@ $LANG_SX00 = array(
     'stats_ipofurl' => 'Blocked by IP of URL',
     'stats_header' => 'HTTP headers',
     'stats_deleted' => 'Posts deleted as spam',
+
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV Whitelist',
     'instructions' => 'Spam-X allows you to define words, URLs, and other items that can be used to block spam posts on your site.',
     'invalid_email_or_ip' => 'Invalid e-mail address or IP address has been blocked',
+
     'filters' => 'Filters',
     'edit_filters' => 'Edit Filters',
     'scan_comments' => 'Scan Comments',
@@ -137,6 +140,7 @@ $LANG_SX00 = array(
     'type' => 'Type',
     'blocked' => 'Blocked',
     'no_blocked' => 'No spam has been blocked by this module',
+
     'filter' => 'Filter',
     'all' => 'All',
     'blacklist' => 'Blacklist',
@@ -164,16 +168,18 @@ $LANG_SX00 = array(
     'invalid_item_id' => 'Invalid ID',
     'edit_filter_entry' => 'Edit Filter',
     'spamx_filters' => 'Spam-X Filters',
-    'history' => 'Past 3 Months'
+    'history' => 'Past 3 Months',
 );
 
-// Define Messages that are shown when Spam-X module action is taken
+
+/* Define Messages that are shown when Spam-X module action is taken */
 $PLG_spamx_MESSAGE128 = 'Se ha detectado spam y se ha borrado el Comentario o el Mensaje.';
 $PLG_spamx_MESSAGE8 = 'Se ha detectado spam. Se ha enviado un correo al administrador.';
 
 // Messages for the plugin upgrade
 $PLG_spamx_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_spamx_MESSAGE3002 = $LANG32[9];
+
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['spamx'] = array(
@@ -201,7 +207,7 @@ $LANG_confignames['spamx'] = array(
     'sfs_enable' => 'Enable Stop Forum Spam',
     'slc_enable' => 'Enable Spam Link Counter',
     'action_delete' => 'Delete Identified Spam',
-    'action_mail' => 'Mail Admin when Spam Caught'
+    'action_mail' => 'Mail Admin when Spam Caught',
 );
 
 $LANG_configsubgroups['spamx'] = array(
@@ -213,10 +219,9 @@ $LANG_fs['spamx'] = array(
     'fs_sfs' => 'Foro',
     'fs_slc' => 'Spam Link Counter',
     'fs_akismet' => 'Akismet',
-    'fs_formcheck' => 'Form Check'
+    'fs_formcheck' => 'Form Check',
 );
 
-// Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['spamx'] = array(
     0 => array('Sí' => 1, 'No' => 0),
     1 => array('Sí' => true, 'No' => false)

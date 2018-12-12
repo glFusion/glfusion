@@ -1,4 +1,5 @@
 <?php
+
 ###############################################################################
 # spanish_colombia_utf-8.php
 #
@@ -24,20 +25,42 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
+# $Id$
 
 if (!defined ('GVERSION')) {
-    die ('This file cannot be used on its own.');
+    die ('This file can not be used on its own.');
 }
+
+/**
+ * This is the english language page for the glFusion links Plug-in!
+ *
+ * @package Links
+ * @subpackage Language
+ * @filesource
+ * @version 2.0
+ * @since GL 1.4.0
+ * @copyright Copyright &copy; 2005-2007
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @author Trinity Bays <trinity93 AT gmail DOT com>
+ * @author Tony Bibbs <tony AT tonybibbs DOT com>
+ * @author Tom Willett <twillett AT users DOT sourceforge DOT net>
+ *
+ */
 
 global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
+# $LANGXX[YY]:    $LANG - variable name
+#                 XX - file id number
+#                 YY - phrase id number
 ###############################################################################
 
+/**
+* the link plugin's lang array
+*
+* @global array $LANG_LINKS
+*/
 $LANG_LINKS = array(
     10 => 'Envíos',
     14 => 'Enlaces',
@@ -59,23 +82,31 @@ $LANG_LINKS = array(
     'error_header' => 'Link Submission Error',
     'verification_failed' => 'The URL specified does not appear to be a valid URL',
     'category_not_found' => 'The Category does not appear to be valid',
-    'no_links' => 'No links have been entered.'
+    'no_links' => 'No links have been entered.',
 );
 
 ###############################################################################
 # for stats
-
+/**
+* the link plugin's lang stats array
+*
+* @global array $LANG_LINKS_STATS
+*/
 $LANG_LINKS_STATS = array(
     'links' => 'Links (Clicks) in the System',
     'stats_headline' => 'Enlaces más visitados',
     'stats_page_title' => 'Enlaces',
     'stats_hits' => 'Accesos',
-    'stats_no_hits' => 'It appears that there are no links on this site or no one has ever clicked on one.'
+    'stats_no_hits' => 'It appears that there are no links on this site or no one has ever clicked on one.',
 );
 
 ###############################################################################
 # for the search
-
+/**
+* the link plugin's lang search array
+*
+* @global array $LANG_LINKS_SEARCH
+*/
 $LANG_LINKS_SEARCH = array(
     'results' => 'Link Results',
     'title' => 'Título',
@@ -86,7 +117,11 @@ $LANG_LINKS_SEARCH = array(
 
 ###############################################################################
 # for the submission form
-
+/**
+* the link plugin's lang submit form array
+*
+* @global array $LANG_LINKS_SUBMIT
+*/
 $LANG_LINKS_SUBMIT = array(
     1 => 'Enviar un Enlace',
     2 => 'Enlace',
@@ -99,7 +134,14 @@ $LANG_LINKS_SUBMIT = array(
     9 => 'URL',
     10 => 'Categoría',
     11 => 'Enlaces Enviados',
-    12 => 'Enviado por'
+    12 => 'Enviado por',
+);
+
+###############################################################################
+# autotag description
+
+$LANG_LI_AUTOTAG = array(
+    'desc_link'                 => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -112,6 +154,7 @@ $PLG_links_MESSAGE4 = "Thank-you for submitting a link to {$_CONF['site_name']}.
 $PLG_links_MESSAGE5 = 'You do not have sufficient access rights to view this categoría.';
 $PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this categoría.';
 $PLG_links_MESSAGE7 = 'Please enter a Categoría Name and Description.';
+
 $PLG_links_MESSAGE10 = 'Su Categoría ha sido guardado exitosamente.';
 $PLG_links_MESSAGE11 = 'You are not allowed to set the id of a categoría to "site" or "user" - these are reserved for internal use.';
 $PLG_links_MESSAGE12 = 'You are trying to make a parent categoría the child of it\'s own subcategory. This would create an orphan categoría, so please first move the child categoría or categories up to a higher level.';
@@ -126,8 +169,12 @@ $PLG_links_MESSAGE3001 = 'Plugin upgrade not supported.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
-# admin/plugins/links/index.php
-
+# admin/link.php
+/**
+* the link plugin's lang admin array
+*
+* @global array $LANG_LINKS_ADMIN
+*/
 $LANG_LINKS_ADMIN = array(
     1 => 'Editor de Enlaces',
     2 => 'ID',
@@ -179,13 +226,12 @@ $LANG_LINKS_ADMIN = array(
     60 => 'User %s tried illegally to edit categoría %s.',
     61 => 'Propietario',
     62 => 'Actualizado',
-    63 => '¿Seguro quieres borrar este enlace?',
-    64 => '¿Seguro quieres borrar esta categoría?',
+    63 => '¿Quieres borrar este enlace?',
+    64 => '¿Quieres borrar esta categoría?',
     65 => 'Moderar Enlace',
     66 => 'Esta pantalla te permite crear / modificar Enlaces.',
-    67 => 'Esta pantalla te permite crear / modificar una Categoría de Enlaces.'
+    67 => 'Esta pantalla te permite crear / modificar una Categoría de Enlaces.',
 );
-
 
 $LANG_LINKS_STATUS = array(
     100 => 'Continuar',
@@ -231,9 +277,6 @@ $LANG_LINKS_STATUS = array(
     999 => 'Connection Timed out'
 );
 
-$LANG_LI_AUTOTAG = array(
-    'desc_link' => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]'
-);
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
@@ -258,7 +301,7 @@ $LANG_confignames['links'] = array(
     'default_permissions' => 'Permisos Predeterminados',
     'target_blank' => 'Abrir Enlaces en una Ventana Nueva',
     'displayblocks' => 'Mostrar Bloques',
-    'submission' => 'Link Submission'
+    'submission' => 'Link Submission',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -278,7 +321,8 @@ $LANG_configselects['links'] = array(
     9 => array('Ir al sitio del Enlace' => 'item', 'Ir a la Lista' => 'list', 'Ir a la Lista Publica' => 'plugin', 'Ir al Inicio' => 'home', 'Ir a la Administración' => 'admin'),
     12 => array('Sin Acceso' => 0, 'Solo Lectura' => 2, 'Lectura-Escritura' => 3),
     13 => array('Izquierda' => 0, 'Derecha' => 1, 'Izquierda & Derecha' => 2, 'Ninguno' => 3),
-    14 => array('None' => 3, 'Logged-in Only' => 1, 'Anyone' => 2)
+    14 => array('None' => 0, 'Logged-in Only' => 1, 'Anyone' => 2, 'None' => 3)
+
 );
 
 ?>
