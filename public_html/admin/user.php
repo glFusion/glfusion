@@ -27,7 +27,7 @@ require_once 'auth.inc.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
-use \glFusion\AdminAction;
+use \glFusion\Admin\AdminAction;
 use \glFusion\Log\Log;
 
 USES_lib_user();
