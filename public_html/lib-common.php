@@ -156,7 +156,7 @@ Log::config('system',
 Log::config('404',
     array(  'type'=>'file',
             'path'=>$_CONF['path_log'],
-            'file'=>'missing.log',
+            'file'=>'404.log',
             'level'=> Log::INFO,
             'output' => "[%datetime%] %message% %context%\n",
           )
@@ -744,7 +744,9 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 
     if ( !empty( $_BLOCK_TEMPLATE[$blockname] )) {
 
-        Log::write('system',Log::DVLP_DEBUG, "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname]);
+        if ( $_COM_VERBOSE ) {
+            Log::write('system',Log::DEBUG, "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname]);
+        }
 
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
         if ( $which == 'header' ) {
@@ -781,7 +783,9 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         }
     }
 
-    Log::write('system',Log::DVLP_DEBUG, "Block template for the $which of $blockname is: $template");
+    if ( $_COM_VERBOSE ) {
+        Log::write('system',Log::DEBUG, "Block template for the $which of $blockname is: $template");
+    }
 
     return $template;
 }
@@ -1774,11 +1778,15 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
     $stmt = $db->conn->query($sql);
 
     if ( !empty( $selected )) {
-        Log::write('system',Log::DVLP_DEBUG, "exploding selected array: $selected in COM_checkList", 1 );
+        if ( $_COM_VERBOSE ) {
+            Log::write('system',Log::DEBUG, "exploding selected array: $selected in COM_checkList", 1 );
+        }
 
         $S = explode( ' ', $selected );
     } else {
-        Log::write('system',Log::DVLP_DEBUG, 'selected string was empty COM_checkList', 1 );
+        if ( $_COM_VERBOSE ) {
+            Log::write('system',Log::DEBUG, 'selected string was empty COM_checkList', 1 );
+        }
 
         $S = array();
     }

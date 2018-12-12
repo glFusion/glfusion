@@ -1,38 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// |lib-widgets.php                                                           |
-// |                                                                          |
-// | A place for widget functions, jquery based or otherwise                  |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric Warren            eakwarren AT gmail DOT com                        |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Common functions and startup code
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans    mark AT glfusion DOT org
+*   Eric Warren      eakwarren AT gmail DOT com
+*   Joe Mucchiello   jmucchiello AT yahoo DOT com
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /*
  * provides a generic interface to the widget library
@@ -182,6 +170,8 @@ function WIDGET_UIKITslider( $dataArray )
     $retval = '';
     $dotnav = '';
 
+    $db = Database::getInstance();
+
     $T = new Template($_CONF['path_layout'].'/widgets');
     if ( isset($dataArray['template'] ) ) {
         $templateFile = $dataArray['template'];
@@ -228,15 +218,17 @@ function WIDGET_UIKITslider( $dataArray )
     // static page mode
     if (isset($dataArray['pages']) && is_array($dataArray['pages']) ) {
         $page_ids = $dataArray['pages'];
+        $page_ids_list = implode(',',$page_ids);
 
-	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-	         . implode(', ', array_map(function($a) { return "'".htmlspecialchars($a)."'"; } , $page_ids))
-	         . ')' . COM_getPermSQL('AND');
+	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title
+	            FROM `{$_TABLES['staticpage']}`
+	            WHERE sp_id in (?)" . $db->getPermSQL('AND');
 
-	    $res = DB_query($sql);
-	    $pages = array();
-	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
-	        $content = SP_render_content($A['sp_content'], $A['sp_php']);
+        $stmt = $db->conn->executeQuery($sql,array($page_ids),array(Database::PARAM_STR_ARRAY));
+
+        $pData = $stmt->fetchAll(Database::ASSOCIATIVE);
+
+        foreach($pData AS $A) {
 	        $title = htmlspecialchars($A['sp_title']);
 	        $order = array_search($A['sp_id'],$page_ids); // find proper order
 	        $pages[$order] = array('sp_id' => $A['sp_id'],'content' => $content, 'title' => $title, 'index' => $order+1);
@@ -571,6 +563,8 @@ function WIDGET_tabslide( $dataArray )
     $retval = '';
     $templateFile = 'tab-slider.thtml';
 
+    $db = Database::getInstance();
+
     $id = rand(1,1000);
 
     // define the JS we need for this theme..
@@ -583,13 +577,17 @@ function WIDGET_tabslide( $dataArray )
 
 	if (!is_array($page_ids[0])) {
 	//we are in Static Pages Mode
-	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
-	         . implode(', ', array_map(function($a) { return "'".htmlspecialchars($a)."'"; } , $page_ids))
-	         . ')' . COM_getPermSQL('AND');
 
-	    $res = DB_query($sql);
+	    $sql = "SELECT sp_id, sp_content, sp_php, sp_title
+	                 FROM `{$_TABLES['staticpage']}`
+	                 WHERE sp_id in (?)" . $db->getPermSQL('AND');
+
+        $stmt = $db->conn->executeQuery($sql,array($page_ids),array(Database::PARAM_STR_ARRAY));
+
+        $pData = $stmt->fetchAll(Database::ASSOCIATIVE);
 	    $pages = array();
-	    for ($i = 0; $A = DB_fetchArray($res); ++$i) {
+
+        foreach ($pData AS $A) {
 	        $content = SP_render_content($A['sp_content'], $A['sp_php']);
 	        $title = htmlspecialchars($A['sp_title']);
 	        $order = array_search($A['sp_id'],$page_ids); // find proper order
@@ -706,8 +704,8 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
         }
         $etag = '';
         $update = date('Y-m-d H:i:s');
-        $last_modified = $update;
-        $last_modified = DB_escapeString($last_modified);
+//        $last_modified = $update;
+//        $last_modified = DB_escapeString($last_modified);
 
         for ( $i = 0; $i < $number_of_items; $i++ ) {
             $item = $feed->get_item($i);
@@ -772,7 +770,7 @@ EOT;
 
     } else {
         $err = $feed->error();
-        COM_errorLog($err);
+        Log::write('system',Log::ERROR,$err);
         $retval = $err;
     }
     return $retval;
@@ -855,7 +853,7 @@ EOJ;
 	        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
 	    }
 	}
-/* 	COM_errorLog(print_r($pages,true),1); */
+/* 	Log::write('system',Log::DEBUG,print_r($pages,true)); */
     if (count($pages) == 0) {
         return '';
     }
@@ -1171,13 +1169,7 @@ Class ul
                 }
             }
         }
-
-        //print_r($this->ul_array);
-        //print_r($this->li_array);
-        //print_r($this->counter);
-        //print_r($this->tree);
-		return $this->tree;
+	return $this->tree;
     }
 }
-
 ?>

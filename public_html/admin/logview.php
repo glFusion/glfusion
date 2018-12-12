@@ -9,7 +9,6 @@
 *
 *  Copyright (C) 2008-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
-*   Mark A. Howard  mark AT usable-web DOT com
 *
 *  Based on prior work Copyright (C) 2000-2008
 *
