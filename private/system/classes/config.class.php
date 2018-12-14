@@ -136,9 +136,10 @@ class config
                         },$row[1] );
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
-                        if (function_exists('COM_errorLog')) {
-                            COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
-                        }
+						$this->config_array[$row[2]][$row[0]] = null;
+//                        if (function_exists('COM_errorLog')) {
+//                           COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
+//                        }
                     } else {
                         $this->config_array[$row[2]][$row[0]] = $value;
                     }
@@ -1473,10 +1474,6 @@ class config
                 flock($fh, LOCK_UN);
             }
             fclose($fh);
-        } else {
-            if ( function_exists('COM_errorLog')) {
-                COM_errorLog('config::_writeIntoCache: cannot write into cache file: ' . $cache_file);
-            }
         }
     }
 
