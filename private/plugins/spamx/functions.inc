@@ -1,40 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Spam-X Plugin - glFusion CMS                                             |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// | This is the functions.inc for the glFusion Spam-X plugin                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004-2010 by the following authors:                        |
-// |                                                                          |
-// | Authors      Tom Willett     tomw AT pigstye DOT net                     |
-// |              Dirk Haun       dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* SpamX - SpamX Plugin for glFusion
+*
+* glFusion Interface functions.inc
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on the prior work
+*  Copyright (C) 2004-2010 by the following authors:
+*   Authors: Tom Willett     tomw AT pigstye DOT net
+*            Dirk Haun       dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
+
 /*
 * load the language file(s), including custom strings if any
 */
@@ -197,7 +187,7 @@ function plugin_upgrade_spamx()
         return spamx_upgrade();
     } else {
         // upgrades are done by the install script - return a generic error
-        COM_errorLog("Spamx plugin upgrade function not implemented");
+        Log::write('system',Log::INFO,"Spamx plugin upgrade function not implemented");
         return 3001;
     }
 }
@@ -334,14 +324,7 @@ function SPAMX_log ($logentry)
     global $_CONF, $_USER, $LANG01, $_SPX_CONF;
 
     if ((!isset ($_SPX_CONF['logging']) || ($_SPX_CONF['logging'] === true)) && !empty ($logentry)) {
-        $dt = new \Date('now',$_CONF['timezone']);
-        $timestamp = $dt->format("d M Y H:i:s T",true);
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
-        $logfile = $_CONF['path_log'] . 'spamx.log';
-        if (!$file = fopen ($logfile, 'a')) {
-            COM_errorLog ($LANG01[33] . $logfile . ' (' . $timestamp . ')', 1);
-        }
-        fputs ($file, "$timestamp - $logentry \n");
+        Log::write('system',Log::WARNING,$logentry);
     }
 }
 
