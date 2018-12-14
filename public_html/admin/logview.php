@@ -28,7 +28,7 @@ if ( isset($_GET['log']) ) {
 } else if ( isset( $_POST['log']) ) {
     $log = COM_sanitizeFilename(COM_applyFilter($_POST['log']),true);
 } else {
-    $log = 'error.log';
+    $log = 'system.log';
 }
 
 $pageBody = '';
