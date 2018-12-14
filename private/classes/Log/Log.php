@@ -19,6 +19,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Log\LineFormatterIP;
 use \glFusion\Log\LogException;
 use \glFusion\Log\LogHandle;
 
@@ -99,7 +100,7 @@ class Log
         }
 
         if (!isset($data['output'])) {
-            $data['output'] = "[%datetime%] %level_name%: %message% %context% %extra%\n";
+            $data['output'] = "[%datetime%] %ipaddress% %level_name%: %message% %context% %extra%\n";
         }
 
         $loggerTimeZone = new \DateTimeZone($_CONF['timezone']);
@@ -107,7 +108,7 @@ class Log
         $dateFormat = "Y-m-d H:i:s";
         $output = $data['output'];
 
-        $formatter = new LineFormatter($output, $dateFormat,false,true);
+        $formatter = new LineFormatterIP($output, $dateFormat,false,true);
 
         $stream = new StreamHandler($data['path'].$data['file'], $data['level']);
         $stream->setFormatter($formatter);
@@ -117,10 +118,25 @@ class Log
         self::$scopes[$scope] = new LogHandle();
         self::$scopes[$scope]->log = $log;
         self::$scopes[$scope]->level = $data['level'];
+        self::$scopes[$scope]->fileName = $data['file'];
 
-//        self::$scopes[$scope] = $log;
         self::$scopes[$scope]->log->pushHandler($stream);
         self::$scopes[$scope]->log->setTimezone($loggerTimeZone);
+    }
+
+    public static function getLogs()
+    {
+        return self::$scopes;
+    }
+
+    public static function close($scope)
+    {
+        self::$scopes[$scope]->log->close();
+    }
+
+    public static function reset($scope)
+    {
+        self::$scopes[$scope]->log->close();
     }
 
     public static function write($scope, $logLevel = self::INFO, $logEntry = '', $context = array(), $extra = array())

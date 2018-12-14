@@ -19,16 +19,50 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Log\Log;
+
 define('MAX_LOG_SIZE',262144); // 256kb
 
 USES_lib_admin();
+
+$availableLogs = array();
+$info = Log::getLogs();
+foreach($info AS $name => $item) {
+    $availableLogs[$name] = $item->fileName;
+}
+
+$files = array();
+if ($dir = @opendir($_CONF['path_log'])) {
+    while(($file = readdir($dir)) !== false) {
+        if (is_file($_CONF['path_log'] . $file) && $file != 'index.html' && !in_array($file,$availableLogs)) {
+            $availableLogs[$file] = $file;
+        }
+    }
+    closedir($dir);
+}
 
 if ( isset($_GET['log']) ) {
     $log = COM_sanitizeFilename(COM_applyFilter($_GET['log']),true);
 } else if ( isset( $_POST['log']) ) {
     $log = COM_sanitizeFilename(COM_applyFilter($_POST['log']),true);
 } else {
-    $log = 'system.log';
+    $log = 'system';
+}
+
+if ( isset($_POST['clearlog']) ) {
+    if (isset($info[$log])) {
+        Log::close($log);
+        @unlink($_CONF['path_log'] . $availableLogs[$log]);
+        clearstatcache();
+    } else {
+        // old school...
+        @unlink($_CONF['path_log'] . $availableLogs[$log]);
+        $timestamp = strftime( "%c" );
+        $fd = fopen( $_CONF['path_log'] . $availableLogs[$log], 'a' );
+        fputs( $fd, "$timestamp - Log File Cleared \n" );
+        fclose($fd);
+    }
+    $_POST['viewlog'] = 1;
 }
 
 $pageBody = '';
@@ -46,60 +80,41 @@ $pageBody .= ADMIN_createMenu( $menu_arr,
 $T = new Template($_CONF['path_layout'] . 'admin');
 $T->set_file('page', 'logview.thtml');
 
-$files = array();
-if ($dir = @opendir($_CONF['path_log'])) {
-    while(($file = readdir($dir)) !== false) {
-        if (is_file($_CONF['path_log'] . $file) && $file != 'index.html' ) {
-            array_push($files,$file);
-        }
-    }
-    closedir($dir);
-}
-sort($files);
-if (empty($log)) {
-    $log = $files[0];
-}
-
+// now build a list of registered logs
 $logOption = '';
 
-for ($i = 0; $i < count($files); $i++) {
-    $logOption .= '<option value="' . $files[$i] . '"';
-    if ($log == $files[$i]) {
+foreach($availableLogs AS $name => $file) {
+    $logOption .= '<option value="'.$name.'"';
+    if ($log == $name) {
         $logOption .= ' selected="selected"';
     }
-    $logOption .= '>' . $files[$i] . '</option>';
-    next($files);
+    $logOption .= '>'.$name.'</option>';
 }
 
-if ( isset($_POST['clearlog']) ) {
-    @unlink($_CONF['path_log'] . $log);
-    $timestamp = strftime( "%c" );
-    $fd = fopen( $_CONF['path_log'] . $log, 'a' );
-    fputs( $fd, "$timestamp - Log File Cleared \n" );
-    fclose($fd);
-    $_POST['viewlog'] = 1;
-}
-
-$fs = filesize ( $_CONF['path_log'] . $log );
-
-if ( $fs > MAX_LOG_SIZE ) {
-    if ( $fs > 1048576) {
-        $measure = 'mb';
-        $divider = 1024;
-    } else {
-        $measure = 'kb';
-        $divider = 1;
-    }
-    $T->set_var('lang_too_big',sprintf($LANG_LOGVIEW['too_large'], (($fs / 1024) / $divider),$measure));
-    $buffer = '';
-    $seekPosition = $fs - MAX_LOG_SIZE;
-    $fp = fopen($_CONF['path_log'] . $log, 'r');
-    fseek($fp, $seekPosition);
-    while(!feof($fp)) {
-        $buffer .= fread($fp, MAX_LOG_SIZE);
-    }
+if (!file_exists($_CONF['path_log'] . $availableLogs[$log])) {
+    $buffer = 'No data has been logged at this time.';
 } else {
-    $buffer = file_get_contents($_CONF['path_log'] . $log);
+    $fs = filesize ( $_CONF['path_log'] . $availableLogs[$log] );
+
+    if ( $fs > MAX_LOG_SIZE ) {
+        if ( $fs > 1048576) {
+            $measure = 'mb';
+            $divider = 1024;
+        } else {
+            $measure = 'kb';
+            $divider = 1;
+        }
+        $T->set_var('lang_too_big',sprintf($LANG_LOGVIEW['too_large'], (($fs / 1024) / $divider),$measure));
+        $buffer = '';
+        $seekPosition = $fs - MAX_LOG_SIZE;
+        $fp = fopen($_CONF['path_log'] . $log, 'r');
+        fseek($fp, $seekPosition);
+        while(!feof($fp)) {
+            $buffer .= fread($fp, MAX_LOG_SIZE);
+        }
+    } else {
+        $buffer = file_get_contents($_CONF['path_log'] . $availableLogs[$log]);
+    }
 }
 $T->set_var('log_data', @htmlentities($buffer,ENT_NOQUOTES,COM_getEncodingt()));
 

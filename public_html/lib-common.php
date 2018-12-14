@@ -158,7 +158,7 @@ Log::config('404',
             'path'=>$_CONF['path_log'],
             'file'=>'404.log',
             'level'=> Log::INFO,
-            'output' => "[%datetime%] %message% %context%\n",
+            'output' => "[%datetime%] %ipaddress% %message% %context%\n",
           )
     );
 
@@ -1926,64 +1926,6 @@ function COM_errorLog( $logentry, $actionid = 1 )
 
     Log::write('system',Log::INFO, $logentry);
     return;
-
-    $retval = '';
-    if ( !isset($_CONF['timezone'])) $_CONF['timezone'] = 'America/Chicago';
-    $dt = new \Date('now',$_CONF['timezone']);
-    $timestamp = $dt->format("d M Y H:i:s T",true);
-
-    if ( !empty( $logentry )) {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
-        $ipaddress = $_SERVER['REMOTE_ADDR'];
-        if (!isset($_CONF['path_layout']) &&
-                (($actionid == 2) || empty($actionid))) {
-            $actionid = 1;
-        }
-        if (!isset($_CONF['path_log']) && ($actionid != 2)) {
-            $actionid = 3;
-        }
-        switch( $actionid ) {
-            case 1:
-                $logfile = $_CONF['path_log'] . 'error.log';
-
-                if ( !$file = fopen( $logfile, 'a' )) {
-                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
-                } else {
-                    fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
-                }
-                break;
-
-           case 2:
-                $retval .= COM_showMessageText($logentry,'', true, 'error');
-                break;
-
-            case 3:
-                $retval = nl2br($logentry);
-                break;
-
-            default:
-                $logfile = $_CONF['path_log'] . 'error.log';
-
-                if ( !$file = fopen( $logfile, 'a' )) {
-                    $retval .= $LANG01[33] . ' ' . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
-                } else {
-                    fputs( $file, "$timestamp - $ipaddress: $logentry \n" );
-                    if ( class_exists('Template') ) {
-                        $retval .= COM_startBlock( $LANG01[34] . ' - ' . $timestamp,
-                                       '', COM_getBlockTemplate( '_msg_block',
-                                       'header' ))
-                                . nl2br( $logentry )
-                                . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                                      'footer' ));
-                    } else {
-                        $retval .= nl2br( $logentry );
-                    }
-                }
-                break;
-        }
-    }
-
-    return $retval;
 }
 
 /**
@@ -1998,33 +1940,10 @@ function COM_errorLog( $logentry, $actionid = 1 )
 
 function COM_accessLog( $logentry )
 {
-    global $_CONF, $_USER, $LANG01;
+    global $_CONF, $LANG01;
 
-    $retval = '';
-
-    if ( !empty( $logentry )) {
-        $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),
-                                 $logentry );
-
-        $dt = new \Date('now',$_CONF['timezone']);
-        $timestamp = $dt->format("d M Y H:i:s T",true);
-
-        $logfile = $_CONF['path_log'] . 'access.log';
-
-        if ( !$file = fopen( $logfile, 'a' )) {
-            return $LANG01[33] . $logfile . ' (' . $timestamp . ')<br/>' . PHP_EOL;
-        }
-
-        if ( isset( $_USER['uid'] )) {
-            $byuser = $_USER['uid'] . '@' . $_SERVER['REMOTE_ADDR'];
-        } else {
-            $byuser = 'anon@' . $_SERVER['REMOTE_ADDR'];
-        }
-
-        fputs( $file, "$timestamp ($byuser) - $logentry\n" );
-    }
-
-    return $retval;
+    Log::write('system',Log::WARNING, $logentry);
+    return;
 }
 
 /**
@@ -6446,36 +6365,26 @@ function COM_404()
         return;
     }
 
-    header('HTTP/1.1 404 Not Found');
-    header('Status: 404 Not Found');
-
     if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
         if (!isset($_USER['uid']) || !isset($_USER['username'])) {
             $_USER['username'] = 'anonymous';
         }
-        $byUser = '[' . $_SERVER['REMOTE_ADDR'] .']' . ' ['.$_USER['username'].']';
+        $byUser = '['.$_USER['username'].']';
 
         if ( isset($_SERVER['HTTP_REFERER'])) {
             $refUrl = $_SERVER['HTTP_REFERER'];
         }
 
-//        Log::write('404',Log::INFO,sprintf("URL: %s - Referer: %s",$url,$refUrl),array('IP'=>$_SERVER['REAL_ADDR']));
+        $logEntry = "$byUser URL: $url";
+        if (!empty($refUrl)) {
+            $logEntry .= "\r\n\tReferer: $refUrl";
+        }
 
-            $logEntry = "$byUser URL: [$url]";
-            if (!empty($refUrl)) {
-                $logEntry .= "\r\n\tReferer: [$refUrl]";
-            }
-
-            Log::write('404',Log::INFO,$logEntry);
-/*
-            $logEntry = str_replace(array('<?', '?>'), array('(@', '@)'), $logEntry);
-            $logfile = $_CONF['path_log'] . '404.log';
-            if ($file = fopen($logfile, 'a')) {
-                fputs($file, "$timestamp - $logEntry \n");
-                fclose($file);
-            }
-*/
+        Log::write('404',Log::INFO,$logEntry);
     }
+
+    header('HTTP/1.1 404 Not Found');
+    header('Status: 404 Not Found');
 
     $content = PLG_replaceTags("[staticpage_content:_404]",'glfusion','404');
     if ( $content == '' || $content == '[staticpage_content:_404]') {
