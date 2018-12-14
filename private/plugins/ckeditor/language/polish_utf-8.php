@@ -107,10 +107,10 @@ $LANG_fs['ckeditor'] = array(
 );
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configSelect['ckeditor'] = array(
-    0 => array(1=>'Włącz', 0=>'False'),
-    1 => array(true=>'Włącz', false=>'False'),
-    2 => array('grid'=>'grid', 'list' => 'lista'),
-    3 => array('default' => 'domyślnie', 'NAME_ASC'=>'Name (asc)', 'NAME_DESC'=>'Name (desc)', 'TYPE_ASC'=>'Type (asc)', 'TYPE_DESC'=>'Type (desc)', 'MODIFIED_ASC'=>'Modified (asc)', 'MODIFIED_DESC'=>'Modified (desc)'),
+    0 => array(1=>'Włącz', 0=>'Wyłącz'),
+    1 => array(true=>'Włącz', false=>'Wyłącz'),
+    2 => array('grid'=>'siatka', 'list' => 'lista'),
+    3 => array('default' => 'domyślnie', 'NAME_ASC'=>'Nazwa (asc)', 'NAME_DESC'=>'Nazwa (asc)', 'TYPE_ASC'=>'Typ (asc)', 'TYPE_DESC'=>'Typ (asc)', 'MODIFIED_ASC'=>'Zmodyfikowane (asc)', 'MODIFIED_DESC'=>'Zmodyfikowane (asc)'),
 );
 
 $PLG_ckeditor_MESSAGE1 = 'CKEditor aktualizacja wtyczki: aktualizacja zakończona powodzeniem.';

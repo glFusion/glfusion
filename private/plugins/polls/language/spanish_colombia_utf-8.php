@@ -49,7 +49,7 @@ $LANG_POLLS = array(
     'start_poll'        => 'Iniciar Encuesta',
     'deny_msg' => 'Access to this poll is denied.  Either the poll has been moved/removed or you do not have sufficient permissions.',
     'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
-    'username'          => 'Nombre',
+    'username'          => 'Usuario',
     'ipaddress'         => 'Dirección IP',
     'date_voted'        => 'Date Voted',
     'description'       => 'Descripción',

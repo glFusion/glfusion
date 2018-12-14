@@ -48,7 +48,7 @@ $LANG_POLLS = array(
     'pollhidden'        => 'Wyniki ankiety będą dostępne dopiero po zamknięciu ankiety.',
     'start_poll'        => 'Rozpocznij ankietę',
     'deny_msg' => 'Dostęp do tej ankiety jest zabroniony. Albo sonda została przeniesiona / usunięta, albo nie masz wystarczających uprawnień.',
-    'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
+    'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Logowanie</a> wymagane do głosowania',
     'username'          => 'Nazwa użytkownika',
     'ipaddress'         => 'Adres IP',
     'date_voted'        => 'Data głosowania',
@@ -85,7 +85,7 @@ $LANG25 = array(
     21 => 'Brak dostępu',
     22 => "Próbujesz uzyskać dostęp do ankiety, do której nie masz praw. Ta próba została zarejestrowana. Prosimy <a href=\"{$_CONF['site_admin_url']}/poll.php\">wróć do ekranu administracji ankietami</a>.",
     23 => 'Nowy sondaż',
-    24 => 'Admin Home',
+    24 => 'Administracja',
     25 => 'Tak',
     26 => 'Nie',
     27 => 'Edytuj',
@@ -108,9 +108,9 @@ $LANG25 = array(
 );
 
 $LANG_PO_AUTOTAG = array(
-    'desc_poll'                 => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
-    'desc_poll_result'          => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote'            => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]',
+    'desc_poll'                 => 'Link: do ankiety na stronie.  link_text domyślnie do ankiet tematu. użyj:  [poll:<i>poll_id</i> {link_text}] ',
+    'desc_poll_result'          => 'HTML: renderuje wyniki ankiety na stronie. użyj: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote'            => 'HTML: renderuje blok głosowania dla ankiety na stronie. użyj: [poll_vote:<i>poll_id</i>]',
 );
 
 $PLG_polls_MESSAGE19 = 'Twoja ankieta została pomyślnie zapisana.';
@@ -154,7 +154,7 @@ $LANG_configSelect['polls'] = array(
     0 => array(1=>'Tak', 0=>'Nie'),
     1 => array(true=>'Nie', false=>'Tak'),
     2 => array('submitorder'=>'Jako przesłany', 'voteorder'=>'Według głosów'),
-    9 => array('item'=>'Forward to Poll', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
+    9 => array('item'=>'Wróć do ankiety', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
     12 => array(0=>'Brak dostępu', 2=>'Tylko odczyt', 3=>'Odczyt i zapis'),
     13 => array(0=>'Lewe bloki', 1=>'Prawe bloki', 2=>'Lewe & Prawe bloki', 3=>'Zaden')
 );

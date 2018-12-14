@@ -381,7 +381,7 @@ define("_MD_IMGURLMAIN",'Imagen (Alto de la imagen será modificada a 50 px): ')
 define("_MD_PARENT","Categoría relacionada:");
 define("_MD_SAVE","Guardar cambios");
 define("_MD_CATDELETED","Categoría eliminada.");
-define("_MD_WARNING","Advertencia: ¿Está seguro que desea borrar esta categoría con todos sus archivos y comentarios?");
+define("_MD_WARNING","Advertencia: ¿Deseas borrar esta categoría con todos sus archivos y comentarios?");
 define("_MD_YES","Si");
 define("_MD_NO","No");
 define("_MD_NEWCATADDED","Nueva categoría agregada satisfactoriamente!");

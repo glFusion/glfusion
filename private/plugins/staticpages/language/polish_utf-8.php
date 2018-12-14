@@ -31,7 +31,7 @@ global $LANG32;
 
 $LANG_STATIC = array(
     'newpage' => 'Nowa strona',
-    'adminhome' => 'Admin Home',
+    'adminhome' => 'Administracja',
     'staticpages' => 'Strony',
     'staticpageeditor' => 'Edytor stron',
     'writtenby' => 'Autor',
@@ -40,7 +40,7 @@ $LANG_STATIC = array(
     'content' => 'Zawartość',
     'hits' => 'Odwiedzin',
     'staticpagelist' => 'Lista stron',
-    'url' => 'URL',
+    'url' => 'WWW',
     'edit' => 'Edytuj',
     'lastupdated' => 'Ostatnio zaktualizowano',
     'pageformat' => 'Format strony',
@@ -89,7 +89,7 @@ $LANG_STATIC = array(
     'position_nonews' => 'Tylko jeśli nie ma innych wiadomości',
     'head_centerblock' => 'Blok centralny',
     'centerblock_no' => 'Nie',
-    'centerblock_top' => 'Top',
+    'centerblock_top' => 'Góra',
     'centerblock_feat' => 'Feat. Story',
     'centerblock_bottom' => 'Dolny',
     'centerblock_entire' => 'Cała strona',
@@ -166,11 +166,11 @@ $LANG_fs['staticpages'] = array(
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configSelect['staticpages'] = array(
-    0 => array(1=>'Włącz', 0=>'False'),
-    1 => array(true=>'Włącz', false=>'False'),
-    2 => array('date'=>'Data', 'id'=>'Page ID', 'title'=>'Tytuł'),
-    3 => array('date'=>'Data', 'id'=>'Page ID', 'title'=>'Tytuł', 'label'=>'Etykieta'),
-    9 => array('item'=>'Forward to Page', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
+    0 => array(1=>'Włącz', 0=>'Wyłącz'),
+    1 => array(true=>'Włącz', false=>'Wyłącz'),
+    2 => array('date'=>'Data', 'id'=>'Strona ID', 'title'=>'Tytuł'),
+    3 => array('date'=>'Data', 'id'=>'Strona ID', 'title'=>'Tytuł', 'label'=>'Etykieta'),
+    9 => array('item'=>'Wróć do strony', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
     12 => array(0=>'Brak dostępu', 2=>'Tylko do odczytu', 3=>'Odczyt & Zapis'),
     13 => array(1=>'Włączone', 0=>'Wyłączony'),
     17 => array(0=>'Komentarze włączone', 1=>'Komentarze wyłączone'),

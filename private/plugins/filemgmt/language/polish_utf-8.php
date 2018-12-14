@@ -65,7 +65,7 @@ $LANG_FM02 = array(
 
 $LANG_FILEMGMT = array(
     'newpage' => "Nowa strona",
-    'adminhome' => "Admin Home",
+    'adminhome' => "Administracja",
     'plugin_name' => "Download",
     'searchlabel' => "Lista plików",
     'searchlabel_results' => "Wyniki listy plików",
@@ -176,8 +176,8 @@ $LANG_fs['filemgmt'] = array(
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
 $LANG_configSelect['filemgmt'] = array(
-    0 => array(1=>'Włącz', 0=>'False'),
-    1 => array(true=>'Włącz', false=>'False'),
+    0 => array(1=>'Włącz', 0=>'Wyłącz'),
+    1 => array(true=>'Włącz', false=>'Wyłacz'),
     2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
     3 => array(0=>'Lewe bloki', 1=>'Prawe Bloki', 2=>'Lewe i Prawe Bloki', 3=>'Brak')
 );

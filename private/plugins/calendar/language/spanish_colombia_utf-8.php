@@ -158,7 +158,7 @@ $LANG_CAL_ADMIN = array(
     28 => ' meses. Actualiza al periodo de tiempo deseado, y luego haz clic en el boton: "<b><i>Actualizar</i></b>". Selecciona uno o mas eventos de los resultados que se muestran, y luego haz clic en el icono: <img src="/layout//images/admin/delete.png" /> al final para borrarlos. Solo se borraran los eventos mostrados y seleccionados en esta pagina.',
     29 => '',
     30 => 'Actualizar',
-    31 => '¿Seguro deseas borrar permanentemente Todos los usuarios seleccionados?',
+    31 => '¿Deseas borrar permanentemente Todos los usuarios seleccionados?',
     32 => 'Listar todos',
     33 => 'No hay eventos seleccionado para ser borrados',
     34 => 'ID',
@@ -183,7 +183,7 @@ $LANG_CAL_MESSAGE = array(
     'removed' => 'El evento ha sido borrado exitosamente de tu calendario personal',
     'noprivate' => 'Lo siento, no están habilitados lo calendarios personales',
     'unauth' => 'Lo siento, no tienes acceso a la administración de eventos. Ten en cuenta que todos los intentos de acceso no autorizados se registran',
-    'delete_confirm' => '¿Seguro deseas borrar este evento?'
+    'delete_confirm' => '¿Deseas borrar este evento?'
 );
 
 $PLG_calendar_MESSAGE4 = "Gracias por enviar un evento a {$_CONF['site_name']}. Este ha sido remitido a nuestro personal para su aprobación. Si es aprobado, tu evento se vera aquí, en nuestra sección de <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendario</a>.";

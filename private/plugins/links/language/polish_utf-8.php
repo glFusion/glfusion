@@ -56,7 +56,7 @@ $LANG_LINKS = array(
     'error_header'  => 'Błąd przesyłania linku',
     'verification_failed' => 'Podany adres www nie jest prawidłowym adresem',
     'category_not_found' => 'Kategoria nie wydaje się być ważna',
-    'no_links'  => 'No links have been entered.',
+    'no_links'  => 'Nie wprowadzono żadnych linków.',
 );
 
 ###############################################################################
@@ -238,7 +238,7 @@ $LANG_LINKS_STATUS = array(
     411 => "Długość wymagana",
     412 => "Warunek nie powiódł się",
     413 => "Wymagana jednostka za duża",
-    414 => "Request-URI Too Long",
+    414 => "Żądany identyfikator www za długi",
     415 => "Nieobsługiwany typ multimediów",
     416 => "Żądany zakres nie jest satysfakcjonujący",
     417 => "Oczekiwanie nie powiodło się",
@@ -294,7 +294,7 @@ $LANG_configSelect['links'] = array(
     9 => array('item'=>'Przejdź do linków', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
     12 => array(0=>'Brak dostępu', 2=>'Odczyt', 3=>'Odczyt i zapis'),
     13 => array(0=>'Lewe bloki', 1=>'Prawe bloki', 2=>'Lewe i prawe bloki', 3=>'Żaden'),
-    14 => array(0=>'Brak', 1=>'Logged-in Only', 2=>'Anyone', 3=>'Brak')
+    14 => array(0=>'Brak', 1=>'Tylko zalogowani', 2=>'Każdy', 3=>'Brak')
 
 );
 

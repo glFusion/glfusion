@@ -52,7 +52,7 @@ $LANG_CAL_1 = array(
     19 => 'Zgłoszenia z kalendarza',
     20 => 'Tytuł',
     21 => 'Data rozpoczęcia',
-    22 => 'URL',
+    22 => 'WWW',
     23 => 'Twoje wydarzenia',
     24 => 'Wydarzenia w witrynie',
     25 => 'Brak nadchodzących wydarzeń',
@@ -112,7 +112,7 @@ $LANG_CAL_2 = array(
     31 => 'Dodaj',
     32 => 'Wydarzenie',
     33 => 'Data',
-    34 => 'Time',
+    34 => 'Czas',
     35 => 'Szybkie dodawanie',
     36 => 'Wyślij',
     37 => 'Niestety, funkcja kalendarza osobistego nie jest włączona na tej stronie',
@@ -232,7 +232,7 @@ $LANG_configSelect['calendar'] = array(
     0 => array(1=> 'Tak', 0 => 'Nie'),
     1 => array(true => 'Włącz', false => 'Tak'),
     6 => array(12 => '12', 24 => '24'),
-    9 => array('item'=>'Forward to Event', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Pokaz kalendarz', 'home'=>'Strona główna', 'admin'=>'Administracja'),
+    9 => array('item'=>'Przejdź do wydarzenia', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Pokaz kalendarz', 'home'=>'Strona główna', 'admin'=>'Administracja'),
     12 => array(0=>'Brak dostępu', 2=>'Tylko odczyt', 3=>'Odczyt i zapis'),
     13 => array(0=>'Lewe bloki', 1=>'Prawe bloki', 2=>'Lewe & Prawe bloki', 3=>'Żaden')
 );
