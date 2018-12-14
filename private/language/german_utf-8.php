@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
-*  Jason Whittenburg	jwhitten AT securitygeeks DOT com
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
 *
 */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -31,19 +31,28 @@ $LANG01 = array(
     2 => 'Mehr lesen',
     3 => 'Kommentar(e)',
     4 => 'Bearbeiten',
+    5 => 'Stimme',					// depreciated
+    6 => 'Ergebnisse',					// depreciated
+    8 => 'Stimmen',					// depreciated
+    9 => 'Admin Functions:',		// depreciated
     10 => 'Einsendungen',
     11 => 'Artikel Verwaltung',
     12 => 'Blöcke',
     13 => 'Kategorien',
     17 => 'Benutzer Verwaltung',
+    18 => 'SQL Query',				// depreciated
     19 => 'Abmelden',
+    20 => 'User Information:',		// depreciated
     21 => 'Benutzername',
+    22 => 'Benutzer-ID',				// depreciated
+    23 => 'Sicherheitsstufe',			// depreciated
     24 => 'Gast',
     25 => 'Antwort',
     26 => 'Die folgenden Kommentare geben Meinungen von Lesern wieder und entsprechen nicht notwendigerweise der Meinung der Seitenbetreiber. Die Betreiber behalten sich die Löschung von Kommentaren vor.',
     27 => 'Neuester Beitrag',
     28 => 'Löschen',
     29 => 'Keine Kommentare.',
+    30 => 'Older Stories',			// depreciated
     31 => 'Erlaubte HTML-Tags: ',
     32 => 'Fehler: Ungültiger Benutzername',
     33 => 'Fehler: Konnte nicht ins Logfile schreiben',
@@ -56,23 +65,45 @@ $LANG01 = array(
     41 => 'Gäste',
     42 => 'Verfasst von:',
     43 => 'Antworten',
+    44 => 'Übergeordnete Kategorie',					// depreciated
+    45 => 'MySQL Error Number',		// depreciated
+    46 => 'MySQL Error Message',	// depreciated
     47 => 'Mein Konto',
     48 => 'Konto Einstellungen',
+    49 => 'Einstellungen',			// depreciated
+    50 => 'Error with SQL statement',	// depreciated
     51 => 'Hilfe',
+    52 => 'Neu',					// depreciated
+    53 => 'Kommandozentrale',				// deprecated
+    54 => 'Could not open the file.',	// depreciated
+    55 => 'Error at',				// depreciated
+    56 => 'Stimme',					// depreciated
     57 => 'Passwort',
     58 => 'Anmelden',
     59 => "Als <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">neuer Benutzer</a> registrieren",
     60 => 'Kommentar schreiben',
     61 => 'Neues Konto anlegen',
     62 => 'Wörter',
+    63 => 'Comment Preferences',	// depreciated
     64 => 'Artikel an einen Freund senden',
     65 => 'Druckfähige Version anzeigen',
     67 => 'Willkommen bei ',
     68 => 'Startseite',
+    69 => 'Kontakt',				// depreciated
+    70 => 'Suchen',					// depreciated
     71 => 'Beitrag',
+    72 => 'Web Resources',			// depreciated
     75 => 'Erweiterte Suche',
+    76 => 'Seiten-Statistik',		// depreciated
     77 => 'Plugins',
+    79 => 'Was ist Neu',			// depreciated
+    80 => 'stories in last',		// depreciated
+    81 => 'story in last',			// depreciated
+    82 => 'Stunden',					// depreciated
     83 => 'Kommentare',
+    85 => 'last 48 hrs',			// depreciated
+    86 => 'Keine neuen Kommentare',		// depreciated
+    87 => 'last 2 wks',				// depreciated
     90 => 'Startseite',
     91 => 'Seite erzeugt in',
     92 => 'Sekunden',
@@ -80,21 +111,27 @@ $LANG01 = array(
     94 => "<a href=\"{$_CONF['site_url']}/page.php?page=terms-of-use\">Nutzungsbedingungen</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/page.php?page=privacy-policy\">Datenschutz-Bestimmungen</a>",
     95 => 'Durch',
     96 => 'Gruppen',
+    97 => 'Word List',				// depreciated
     98 => 'Plugins',
     99 => 'Artikel',
+    100 => 'No new stories',		// depreciated
     101 => 'Alle Marken und Urheberrechte auf dieser Seite befinden sich im Besitz der jeweiligen Eigentümer.',
     103 => 'Datenbank-Verwaltung',
     104 => 'von',
     105 => 'Mail an Benutzer',
     106 => 'Aufrufe:',
     107 => 'Aktualisierung verfügbar?',
+    108 => 'Cache löschen',			// depreciated
     109 => 'Beitrag melden',
     110 => 'Diesen Beitrag einem Admin melden',
     112 => 'Registrierte Benutzer',
     113 => 'Dokumentation',
     114 => 'Trackbacks',
+    115 => 'No new trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Verzeichnis',
+	// depreciated
+    118 => 'Please continue reading on the next page:',
     119 => "<a href=\"{$_CONF['site_url']}/users.php?mode=getpassword\" rel=\"nofollow\">Passwort vergessen?</a>",
     120 => 'Dauerhafter Link zu diesem Kommentar',
     121 => 'Kommentare (%d)',
@@ -104,8 +141,8 @@ $LANG01 = array(
     125 => 'Willst Du wirklich alle markierten Einträge löschen?',
     126 => 'Alle Einträge markieren oder abwählen',
     127 => 'Dauerhafter Link',
-
     129 => 'Konfiguration',
+    130 => 'Webservices',			// depreciated
     500 => 'Bitte nach der Installation oder der Aktualisierung das ../pfad/zu/glfusion/admin/install Verzeichnis löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
@@ -122,9 +159,9 @@ $LANG01 = array(
     'allowed_html'              => 'Erlaubte HTML-Tags:',
     'posted_in'                 => 'Kategorie:',
     'continue_reading'          => 'Weiterlesen',
-    'menu'                      => 'Menü',
-    'show_allowed_content'      => 'Erlaubte Inhalte anzeigen',
-    'blocks_left_title'         => 'Linke Seite',
+    'menu'                      => 'Menü',                  // depreciated
+    'show_allowed_content'      => 'Erlaubte Inhalte anzeigen',  // depreciated
+    'blocks_left_title'         => 'Linke Seite',             // depreciated
     'blocks_right_title'        => 'Rechte Seite',
     'blocks_footer_title'       => 'Fußzeile',
     'source'                    => 'Quelle',
@@ -138,9 +175,10 @@ $LANG01 = array(
 $LANG03 = array(
     1 => 'Kommentar schreiben',
     2 => 'Format',
-    3 => 'Abmelden',
-    4 => 'Konto erstellen',
+    3 => 'Abmelden',              // depreciated
+    4 => 'Konto erstellen',      // depreciated
     5 => 'Benutzername',
+    // depreciated
     6 => 'Um einen Kommentar zu schreiben, musst Du angemeldet sein. Wenn Du noch kein Konto hast, kannst Du das untenstehende Formular verwenden, um ein Konto zu erstellen.',
     7 => 'Dein letzter Kommentar war vor ',
     8 => " Sekunden. Zwischen zwei Kommentaren müssen aber mindestens {$_CONF['commentspeedlimit']} Sekunden vergangen sein.",
@@ -148,7 +186,7 @@ $LANG03 = array(
     10 => 'Beitrag melden',
     11 => 'Kommentar absenden',
     12 => 'Bitte die Felder Betreff und Kommentar ausfüllen, um einen Kommentar zu diesem Artikel abzugeben.',
-    13 => 'Deine Information',
+    13 => 'Deine Information',   // depreciated
     14 => 'Vorschau',
     15 => 'Diesen Beitrag melden',
     16 => 'Betreff',
@@ -167,15 +205,15 @@ $LANG03 = array(
     29 => 'Änderungen absenden',
     30 => 'Bearbeitet am',
     31 => 'von',
-    32 => 'Kommentar bearbeiten',
-    33 => 'Eingesendeten Kommentar bearbeiten',
-    34 => 'Vorschau der Änderungen',
-    35 => 'Änderungen in Warteschlange speichern',
-    36 => 'Benachrichtige mich bei Antworten',
-    37 => 'Neue Antwort auf Kommentar',
-    38 => 'Jemand hat auf deinen Kommentar geantwortet.',
-    39 => 'Du kannst die Kommentare unter folgender Adresse einsehen: ',
-    40 => 'Wenn Du keine weiteren Benachrichtigungen erhalten möchtest, besuche folgenden Link: ',
+    32 => 'Kommentar bearbeiten',              //depreciated
+    33 => 'Eingesendeten Kommentar bearbeiten',   //depreciated
+    34 => 'Vorschau der Änderungen',     // depreciated
+    35 => 'Änderungen in Warteschlange speichern',          // depreciated
+    36 => 'Benachrichtige mich bei Antworten',       // depreciated
+    37 => 'Neue Antwort auf Kommentar',              // depreciated
+    38 => 'Jemand hat auf deinen Kommentar geantwortet.',  // depreciated
+    39 => 'Du kannst die Kommentare unter folgender Adresse einsehen: ', // depreciated
+    40 => 'Wenn Du keine weiteren Benachrichtigungen erhalten möchtest, besuche folgenden Link: ', // depreciated
     41 => 'Einen Kommentar bearbeiten',
     42 => 'Benachrichtigung über neuen Kommentar',
     43 => 'Geschrieben von',
@@ -194,7 +232,6 @@ $LANG03 = array(
     56 => 'Kommentar wurde überprüft und veröffentlicht.',
     57 => 'Stilles bearbeiten',
     58 => 'Kein Titel verfügbar',
-
 );
 
 ###############################################################################
@@ -211,17 +248,18 @@ $LANG04 = array(
     8 => 'PGP-Key',
     9 => 'Speichern',
     10 => 'Die letzten 10 Kommentare von',
-    11 => 'Keine Kommentare',
-    12 => 'Benutzereinstellungen für',
-    13 => 'Nächtliche Zusammenfassung',
+    11 => 'Keine Kommentare',       // depreciated
+    12 => 'Benutzereinstellungen für',   // depreciated
+    13 => 'Nächtliche Zusammenfassung',   // depreciated
     14 => 'Dieses Passwort wurde mit einem Zufallsgenerator erzeugt. Es wird empfohlen, nach dem Anmelden, das Passwort unter "Mein Konto", sofort zu ändern.',
     15 => "Dein Konto für {$_CONF['site_name']} wurde erfolgreich angelegt. Um es benutzen zu können, melde Dich bitte mit den folgenden Informationen an. Diese E-Mail bitte aufheben.",
     16 => 'Deine Zugangsdaten',
-    17 => 'Konto existiert nicht',
+    17 => 'Konto existiert nicht', // depreciated
     18 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein',
     19 => 'Dieser Benutzername oder diese E-Mail Adresse existieren bereits.',
-    20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein',
+    20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein', // ddepriated
     21 => 'Fehler',
+    22 => "Register with %s!",		// depreciated
     23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
     24 => 'Dein Passwort wird Dir an die angegebene E-Mail Adresse gesendet.',
     25 => 'Passwort vergessen?',
@@ -262,12 +300,17 @@ $LANG04 = array(
     60 => 'Wie sollen Kommentare angezeigt werden?',
     61 => 'Neueste oder älteste zuerst?',
     62 => 'Standardwert: 100',
+	// depreciated
+    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
     64 => 'Kommentar-Einstellungen für',
     65 => "Anmeldung bei {$_CONF['site_name']}",
     66 => 'Bitte gib Deinen Benutzernamen und Dein Passwort ein.',
     67 => 'Mitglied seit',
     68 => 'Angemeldet für',
     69 => 'Wie lange soll das System Dich nach dem Anmelden erkennen?',
+    70 => "Customize the layout and content of %s",		// depreciated
+	// depreciated
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
     72 => 'Erscheinungsbild',
     73 => 'Sprache',
     74 => 'Das Aussehen dieser Seite ändern',
@@ -351,7 +394,7 @@ $LANG04 = array(
     157 => 'Löschen',
     158 => 'Zeitzone',
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
-    160 => 'Online',
+    160 => 'On-line',
     161 => 'Passwortstärke',
     162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \\ ) ',
     163 => 'Remote Benutzer',
@@ -705,7 +748,7 @@ $LANG21 = array(
     17 => 'Inhalt',
     18 => 'Bitte Block-Titel und Inhalt ausfüllen.',
     19 => 'Block-Manager',
-    21 => 'Block-Sicherheit',
+    21 => 'Block-Sicherheit', // depreciated
     23 => 'Reihenfolge',
     25 => '<ul><li>Um einen Block zu bearbeiten oder zu löschen, klicke unten auf das entsprechende Symbol.</li><li>Um einen neuen Block zu erstellen, klicke oben auf "Neu anlegen".</li><li>Um einen Block zu verschieben, klicke auf die Pfeile oder [R] und [L].</li></ul>',
     26 => 'Layout-Block',
@@ -746,7 +789,7 @@ $LANG21 = array(
     63 => 'Block-Titel nicht erlaubt',
     64 => 'Der Titel kann nicht leer sein und darf kein HTML enthalten!',
     65 => 'Reihenfolge',
-    66 => 'Autotags',
+    66 => 'Auto tags',
     67 => 'Ankreuzen, um Autotags zu erlauben',
     68 => 'Der News-Feed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.',
     69 => 'Diesen Block wirklich löschen?',
@@ -1108,6 +1151,8 @@ $LANG31 = array(
     14 => 'Benutzer-Einstellungen ignorieren',
     15 => 'Fehler beim Senden an: ',
     16 => 'E-Mail erfolgreich gesendet an: ',
+	// depreciated
+    17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'An',
     19 => '<ul><li>Hier kannst Du eine E-Mail an eine bestimmte Gruppe dieser Seite senden.</li><li>Wenn Du eine E-Mail an alle eingetragenen Benutzer senden willst, musst Du die Gruppe Logged-in Benutzer auswählen.</li><li>Wenn Du eine E-Mail an einen bestimmten Benutzer senden willst, kannst Du dies über die <a href="{$_CONF[\'site_admin_url\']}/user.php">Benutzer-Verwaltung</a> erledigen.</li></ul>',
     20 => "<successcount> Nachricht(en) erfolgreich versendet, bei <failcount> Nachricht(en) traten Fehler auf. Details können der folgenden Liste entnommen werden. Du kannst jetzt <a href=\"{$_CONF['site_admin_url']}/mail.php\">noch eine Nachricht senden</a> oder <a href=\"{$_CONF['site_admin_url']}/moderation.php\">zurück zum Admin-Menü gehen</a>.",
@@ -1213,7 +1258,7 @@ $LANG32 = array(
     84 => 'Kern-Plugin',
     85 => 'Autotag Hochladen',
     86 => 'Fehler im automatischen Autotag Installer',
-    87 => 'Autotag Installer',
+    87 => 'Auto tag Installer',
     88 => 'Bist Du sicher, dass Du dieses Plugin entfernen willst?',
     89 => 'Bist Du absolut sicher, dass Du dieses Plugin entfernen möchtest? Dies führt zum Löschen aller Dateien und Verzeichnisse, die sich auf dieses Plugin beziehen, und um dieses Plugin erneut zu installieren, müsst Du eine weitere Kopie hochladen.',
     90 => 'Version <b>%s</b> des <b>%s</b> Plugin wird benötigt, aber Version <b>%s</b> ist installiert. Bitte aktualisiere das %s Plugin.',
@@ -1468,6 +1513,9 @@ $LANG_ACCESS = array(
     'coregroup' => 'Kern-Gruppe',
     'yes' => 'Ja',
     'no' => 'Nein',
+// not used
+    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+//
     'groupmsg' => '<ul><li>Wenn Du DIESE-GRUPPE zu einer der folgenden Sicheren-Gruppen hinzufügst, bekommt DIESE-GRUPPE die gleichen Rechte wie die unten ausgewählte(n).</li><li>Wenn möglich, sollten Gruppenrechte durch Auswahl von Gruppen aus dieser Liste vergeben werden.</li><li>Werden nur einzelne Rechte benötigt, können diese auch aus der Liste der Rechte weiter unten ausgewählt werden.</li><li>Um DIESE-GRUPPE zu einer der folgenden Gruppen hinzuzufügen, brauchst Du nur unten die gewünschte(n) Gruppe(n) auswählen.</li></ul>',
     'groupeditmsg' => '<ul><li>Hier kannst Du eine neue Gruppe erstellen oder eine bestehende Gruppe bearbeiten.</li><li>Beachte, dass Du den Namen einer bereits existierenden Gruppe nicht ändern kannst.</li><li>Wenn Du eine neue Gruppe erstellst, musst Du mindestens den Gruppen-Namen und die Gruppen-Beschreibung eingeben.</li></ul>',
     'coregroupmsg' => "Diese Gruppe ist eine Kern-Gruppe von {$_CONF['site_name']}. Bitte sei vorsichtig mit dem Ändern der Kern-Gruppen. Das Folgende ist eine Liste der Gruppen, zu denen diese Gruppe gehört.",
@@ -1539,9 +1587,8 @@ $LANG_DB_ADMIN = array(
     'db_explanation'      => '<ul><li>Um ein neues Backup der Datenbank anzulegen, bitte oben auf "Sichern" klicken.</li><li>Ein Klick auf einen Dateinamen lädt das Backup herunter.',
     'backup_instructions' => '<ul><li>Um eine neue Sicherung der Datenbank zu erstellen, wähle unten die Schaltfläche "Sicherung anlegen". Dadurch werden alle aktuellen glFusion-Tabellen gesichert.</li><li>Du kannst eine Kopie Deiner Sicherung vom Hauptfenster der Datenbank-Verwaltung herunterladen.</li></ul>',
     'zero_size'           => 'Backup fehlgeschlagen: Datei ist 0 Bytes groß.',
-// not used
+	// depreciated
     'path_not_found'      => "{$_CONF['backup_path']} existiert nicht oder ist kein Verzeichnis.",
-//
     'no_access'           => "Fehler: Konnte nicht auf das Verzeichnis {$_CONF['backup_path']} zugreifen.",
     'backup_file'         => 'Datenbank-Sicherung',
     'size'                => 'Größe',
@@ -1655,19 +1702,6 @@ $LANG_PWD = array(
     'error_no_cap'     => 'Passwort muss mindestens einen Großbuchstaben enthalten',
     'error_no_lower'   => 'Passwort muss mindestens einen Kleinbuchstaben enthalten',
     'error_no_symbol'  => 'Passwort muss mindestens ein Sonderzeichen enthalten',
-);
-
-###############################################################################
-
-$LANG_BUTTONS = array(
-    1 => 'Startseite',
-    2 => 'Kontakt',
-    3 => 'Artikel einsenden',
-    7 => 'Statistik',
-    8 => 'Einstellungen',
-    9 => 'Suchen',
-    10 => 'Erweiterte Suche',
-    11 => 'Verzeichnis'
 );
 
 ###############################################################################
@@ -2007,19 +2041,19 @@ $LANG_BBCODE = array(
     'smiley_label'      => 'Smileys',
     'size_label'        => 'Schriftgröße',
     'color_label'       => 'Schriftfarbe',
-    'bold_help'         =>'Fettschrift: [b]text[/b]',
-    'italic_help'       =>'Schräg gestellt: [i]text[/i]',
-    'underline_help'    =>'Unterstrichen: [u]text[/u]',
-    'quote_help'        =>'Zitat: [quote]text[/quote]',
-    'code_help'         =>'Quelltext: [code]code[/code]',
-    'list_help'         =>'Liste: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Link einfügen: [url]http://url[/url] oder [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
+    'bold_help'         => 'Fettschrift: [b]text[/b]',
+    'italic_help'       => 'Schräg gestellt: [i]text[/i]',
+    'underline_help'    => 'Unterstrichen: [u]text[/u]',
+    'quote_help'        => 'Zitat: [quote]text[/quote]',
+    'code_help'         => 'Quelltext: [code]code[/code]',
+    'list_help'         => 'Liste: [list]text[/list]',
+    'olist_help'        => 'List: [list=]text[/list]',
+    'listitem_help'     => 'List item: [*]text[/*]',
+    'img_help'          => 'Insert image: [img]http://image_url[/img]',
+    'url_help'          => 'Link einfügen: [url]http://url[/url] oder [url=http://url]URL text[/url]',
+    'smiley_help'       => 'Open Smiley Window',
+    'size_help'         => 'Font size: [size=9]small text[/size]',
+    'color_help'        => 'Text Color: [color=red]red text[/color]',
     'size_tiny'         => 'Winzig',
     'size_small'        => 'Klein',
     'size_normal'       => 'Normal',
@@ -2041,35 +2075,6 @@ $LANG_BBCODE = array(
     'color_white'       => 'Weiß',
     'color_black'       => 'Schwarz',
     'formatted_code'    => 'Formatierter Code',
-);
-
-# Localisation of the texts for the Admin file check
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'Datei-Integritätsprüfung',
-    'recheck'           => 'Überprüfen der Datei-Integrität',
-    'confirm'           => 'Sollen die ausgewähleten Dateien wirklich gelöscht werden?',
-    'scan'              => 'Die Datei-Integrität dieser Webseite wird analysiert. Bitte habe etwas Geduld. Dieser Vorgang kann eine Weile dauern. Die Ausführungsgeschwindigkeit hängt von der Hosting-Umgebung ab. Wenn das Skript sich der maximalen PHP-Skript-Ausführungszeit von %s Sekunden nähert, wird das Scannen unterbrochen und eine Fehlermeldung angezeigt.',
-    'results'           => 'Die Dateien und Verzeichnisse dieser Webseite sind mit glFusion Version v%s verglichen worden. Die Ergebnisse sind unten dargestellt. Hinzugefügt oder fehlende Dateien und Verzeichnisse sind identifiziert worden. Dateien, die hinzugefügt wurden, können ausgewählt und gelöscht werden. Neu erkannte Verzeichnisse müssen gegenwärtig manuell entfert werden. <br /><br /> Zusätzliche erkannte Dateien/Verzeichnisse, die Du hinzugefügt hast, die mit Plugins oder anderen Skripts in Verbindung gebracht werden sind kritisch für den Betrieb dieser Webseite. <b>Das bedeutet: Du solltest diese Dateien nicht einfach löschen!&nbsp;&nbsp;<span style="color:red">Bitte benutze dieses Tool unbedingt mit Vorsicht!</span></b>',
-    'expiration1'       => 'HINWEIS: Der Scan wurde abgebrochen, weil die PHP Ausführungszeit überschritten wurde. Dieses Analyseskript ist CPU- und Transfer-intensiv und kann durch eine Reihe von Faktoren in Ihrer Web-Hosting-Umgebung beeinflusst werden. Bitte beachte folgenden Empfehlungen zur Behebung dieses Problems:<br />',
-    'expiration2'       => '<ol><li>Erhöhe den Wert der \'max_execution_time\' in der Datei php.ini. Derzeit sind %s Sekunden eingestellt.</li><li>Überprüfe Deine Website manuell und entferne alle nicht benötigten Dateien und Verzeichnisse.</li></ol>',
-    'abort'             => 'Scan abbrechen',
-    'aborted'           => 'Der Scan wurde abgebrochen.',
-    'where'             => 'Wo',
-    'type'              => 'Typ',
-    'delta'             => 'Änderung:',
-    'location'          => 'Ort',
-    'path'              => 'Pfad',
-    'file'              => 'Datei',
-    'dir'               => 'Verzeichnis',
-    'plugin'            => 'Plugin',
-    'added'             => 'Hinzugefügt',
-    'missing'           => 'Fehlt',
-    'removed'           => '%s %s gelöscht. Die Datei-Integrität Deiner Seite wurde nochmal geprüft mit folgendem Ergebniss.',
-    'working'           => 'Datei-Integritätsprüfung: Bitte warten, ...<br />',
-    'elapsed'           => 'Scan beendet nach %s Sekunden.'
 );
 
 # Localisation of the texts for Menu Builder
@@ -2260,8 +2265,8 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'Autotag',
-    'title'                     => 'Autotag Manager',
-    'menulabel'                 => 'Autotags',
+    'title'                     => 'Auto tag Manager',
+    'menulabel'                 => 'Auto tags',
     'public_title'              => 'Autotag Übersicht',
     'tag'                       => 'Tag-Name',
     'type'                      => 'Typ',
@@ -2293,11 +2298,11 @@ $LANG_AM = array (
     'html_allowed'              => '(HTML:erlaubt)',
     'instructions'              => '<ul><li>Um einen Autotag zu ändern oder zu löschen, klicke auf das entsprechende Symbol.</li><li>Um einen neuen Autotag zu erstellen, klicke oben auf "Neu Anlegen".</li><li>Wenn es PHP-basierte Autotags gibt, die nicht bearbeitet oder aktiviert werden können, liegt es daran, dass Du entweder keinen Zugriff auf die Funktion autotag.PHP hast und/oder PHP Autotags sind in der Konfiguration deaktiviert.</li></ul>',
     'public_instructions'       => '<ul><li>Die vollständige Liste der derzeit verfügbaren und aktivierten Autotags werden hier angezeigt.</li><li>Für jeden Autotag wird das dazugehörige glFusion-Modul sowie Typ und Beschreibung angezeigt.</li><li>Anwendungsbeispiele werden mit den <i>erforderlichen</i> und {optionalen} Parametern bereitgestellt.</li><li>Wenn mehrere Optionen verfügbar sind, wird ein Link zur glFusion.org-Wiki-Dokumentation bereitgestellt.</li></ul>',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
+    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
+                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
     'autotagpermmsg'            => 'Wähle aus, welche Funktionen (Operationen) für den Autotag verwendet werden sollen.',
-    'autotag'                   => 'Autotag',
+    'autotag'                   => 'Auto tag',
     'desc_showblock'            => 'HTML: erzeugt einen beliebigen Block. Anwendung: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: zu einem Artiekl der Seite. (Voreinstellung link_text = Artikel Titel) Anwendung: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: zeigt die Einleitung eine Artikels. Anwendung: [story_introtext:<i>story_id</i>]',
@@ -2394,7 +2399,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'EIN',
     'open_basedir'              => 'Wenn <b>open_basedir</b>-Beschränkungen aktiviert sind, kann dies zu Rechteproblemen während der Installation führen. Das Dateiprüfsystem unten sollte mögliche Probleme aufzeigen.',
     'openssl_extension'         => 'OpenSSL-Erweiterung',
-    'php_req_version'           => 'glFusion benötigt PHP-Version 5.3.0 oder höher.',
+    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
     'php_settings'              => 'PHP-Einstellungen',
     'php_version'               => 'PHP-Version',
     'php_warning'               => 'Wenn einer der unten angeführten Einträge <span class="no">rot</span> markiert ist, kann dies zu Problemen mit Deinem glFusion-Auftritt führen.<br />Bei Problemen halte bitte Rücksprache mit Deinem Hoster um gegebenenfalls die PHP-Einstellungen zu ändern.',
@@ -2799,10 +2804,10 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Artikel-Verwaltung',
+    'log_level' => 'Log Level',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2816,7 +2821,6 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Vermischtes &amp; Rechte',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
-
 );
 
 $LANG_fs['Core'] = array(
@@ -2872,7 +2876,7 @@ $LANG_fs['Core'] = array(
 
 $LANG_configSelect['Core'] = array(
     0 => array(1 => 'Ja', 0 => 'Nein'),
-    1 => array('true' => 'Ja', 'false' => 'Nein'),
+    1 => array(true => 'Ja', false => 'Nein'),
     2 => array(0 => 'Zurückweisen', 1 => 'Nur letzten behalten', 2 => 'Mehrfache Posts erlauben'),
     3 => array(0 => 'Trackbacks erlaubt', 1 => 'Trackbacks deaktiviert'),
     4 => array(0 => 'Nichts prüfen', 1 => 'Seiten URL prüfen', 2 => 'Volle URL prüfen', 3 => 'Seiten URL und volle URL prüfen', 4 => 'Trackback IP mit Seiten IP vergleichen', 5 => 'IP und Seiten URL prüfen', 6 => 'IP und volle URL prüfen', 7 => 'IP, volle URL, und Seiten URL prüfen'),
@@ -2907,5 +2911,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Datum', 'title'=>'Titel', 'uid'=>'Autor', 'hits'=>'Angezeigt', 'sid'=>'Artikel-ID'),
     34 => array(0=>'HTML', 1=>'Visuell'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Neue Benutzer'),
+    36 => array( '50' => 'DVLP_DEBUG',
+                '100' => 'DEBUG',
+                '200' => 'INFO',
+                '250' => 'NOTICE',
+                '300' => 'WARNING',
+                '400' => 'ERROR',
+                '500' => 'CRITICAL',
+                '550' => 'ALERT',
+                '600' => 'EMERGENCY'
+               ),
 );
 ?>

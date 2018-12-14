@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
-*  Jason Whittenburg	jwhitten AT securitygeeks DOT com
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
 *
 */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -31,19 +31,28 @@ $LANG01 = array(
     2 => 'lue lisää',
     3 => 'kommentti(a)',
     4 => 'Muokkaa',
+    5 => 'Vote',					// depreciated
+    6 => 'Tulokset',					// depreciated
+    8 => '&auml;&auml;nt&auml;',					// depreciated
+    9 => 'Admin Functions:',		// depreciated
     10 => 'Lähetettyjä',
     11 => 'Artikkelit',
     12 => 'Lohkoja',
     13 => 'Aiheita',
     17 => 'Käyttäjiä',
+    18 => 'SQL Query',				// depreciated
     19 => 'Kirjaudu ulos',
+    20 => 'User Information:',		// depreciated
     21 => 'Käyttäjä tunnus',
+    22 => 'K&auml;ytt&auml;j&auml;n ID',				// depreciated
+    23 => 'Turvallisuustaso',			// depreciated
     24 => 'Tuntematon',
     25 => 'Vastaa',
     26 => 'Oheiset kommentit ovat kirjoittajiensa omaisuutta. Sivusto ei ole vastuussa kirjoittajien sanomisista.',
     27 => 'Uusin kirjoitus',
     28 => 'Poista',
     29 => 'Ei käyttäjän lähettämiä kommentteja',
+    30 => 'Older Stories',			// depreciated
     31 => 'Sallitut HTML tagit:',
     32 => 'Virhe, virheellinen käyttäjänimi',
     33 => 'Virhe, logiin ei voi kirjoittaa',
@@ -56,23 +65,45 @@ $LANG01 = array(
     41 => 'Vieraita sivustolla',
     42 => 'Tekijä:',
     43 => 'Vastaa tähän',
+    44 => 'Isäntä',					// depreciated
+    45 => 'MySQL Error Number',		// depreciated
+    46 => 'MySQL Error Message',	// depreciated
     47 => 'Käyttäjän toiminnot',
     48 => 'Omat tiedot',
+    49 => 'Asetukset',			// depreciated
+    50 => 'Error with SQL statement',	// depreciated
     51 => 'apua',
+    52 => 'New',					// depreciated
+    53 => 'Yll&auml;pidon sivu',				// deprecated
+    54 => 'Could not open the file.',	// depreciated
+    55 => 'Error at',				// depreciated
+    56 => 'Vote',					// depreciated
     57 => 'Salasana',
     58 => 'Kirjaudu',
     59 => "Ei tunnusta vielä? Kirjaudu <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">uutena käyttäjänä</a>",
     60 => 'Lähetä kommentti',
     61 => 'Luo uusi käyttäjätili',
     62 => 'sanaa',
+    63 => 'Comment Preferences',	// depreciated
     64 => 'Lähetä artikkeli sähköpostitse ystävälle',
     65 => 'Näytä tulostettava versio',
     67 => 'Tervetuloa sivustolle',
     68 => 'etusivu',
+    69 => 'Yhteystiedot',				// depreciated
+    70 => 'Etsi',					// depreciated
     71 => 'lähetä artikkeli',
+    72 => 'Web Resources',			// depreciated
     75 => 'laajennettu etsintä',
+    76 => 'Sivuston tilastot',		// depreciated
     77 => 'Laajennukset',
+    79 => 'What\'s New',			// depreciated
+    80 => 'stories in last',		// depreciated
+    81 => 'story in last',			// depreciated
+    82 => 'tuntia',					// depreciated
     83 => 'KOMMENTIT',
+    85 => 'last 48 hrs',			// depreciated
+    86 => 'No new comments',		// depreciated
+    87 => 'last 2 wks',				// depreciated
     90 => 'Etusivu',
     91 => 'Sivu luotu ',
     92 => 'sekunnissa',
@@ -80,21 +111,27 @@ $LANG01 = array(
     94 => "Kaikki tuotemerkit ja copyright merkit tällä sivulla omistaa niiden kullekkin kuuluva omistaja.",
     95 => 'by',
     96 => 'Ryhmiä',
+    97 => 'Word List',				// depreciated
     98 => 'Laajennuksia',
     99 => 'ARTIKKELIT',
+    100 => 'No new stories',		// depreciated
     101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     103 => 'Tietokannan varmuuskopiointi',
     104 => 'lähetti',
     105 => 'Sähköpostia käyttäjille',
     106 => 'Lukukerrat',
     107 => 'GL versiotesti',
+    108 => 'Tyhjennä ulkoasun välimuisti',			// depreciated
     109 => 'Raportoi väärinkäyttö',
     110 => 'Raportoi tämä viesti ylläpidolle',
     112 => 'Rekisteröityneet käyttäjät',
     113 => 'Documentaatio',
     114 => 'PALUUVIITTEET',
+    115 => 'No new trackbacks',		// depreciated
     116 => 'Paluuviite',
     117 => 'Hakemisto',
+	// depreciated
+    118 => 'Please continue reading on the next page:',
     119 => "Hukannut <a href=\"%s/users.php?mode=getpassword\" rel=\"nofollow\">salasanan</a>?",
     120 => 'Permanent link to this comment',
     121 => '(%d) Kommenttia',
@@ -104,8 +141,8 @@ $LANG01 = array(
     125 => 'Oletko varma että haluat poistaa kaikki valitut?',
     126 => 'Valitse kaikki tai poista valinta',
     127 => 'Pysyvä linkki',
-
     129 => 'Asetukset',
+    130 => 'Webservices',			// depreciated
     500 => 'Poista admin/install/ hakemisto!',
     501 => 'Root Debug on käytössä',
     502 => 'No fail SQL on päällä',
@@ -122,9 +159,9 @@ $LANG01 = array(
     'allowed_html'              => 'Allowed HTML:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
-    'menu'                      => 'Menu',
-    'show_allowed_content'      => 'Show Allowed Content',
-    'blocks_left_title'         => 'Left Side',
+    'menu'                      => 'Menu',                  // depreciated
+    'show_allowed_content'      => 'Show Allowed Content',  // depreciated
+    'blocks_left_title'         => 'Left Side',             // depreciated
     'blocks_right_title'        => 'Right Side',
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
@@ -138,9 +175,10 @@ $LANG01 = array(
 $LANG03 = array(
     1 => 'Lähetä kommentti',
     2 => 'Viestin muoto',
-    3 => 'Kirjaudu ulos',
-    4 => 'Luo käyttäjätili',
+    3 => 'Kirjaudu ulos',              // depreciated
+    4 => 'Luo käyttäjätili',      // depreciated
     5 => 'Käyttäjänimi',
+    // depreciated
     6 => 'Sivustolle voi lähettää kommentteja vain rekisteröityneet käyttäjät. Jos sinulla ei ole käyttäjätiliä sivustolla, voit tehdä tilin käyttämällä alla olevaa lomaketta.',
     7 => 'Viimeisin kommenttisi kirjoitettiin ',
     8 => " sekuntia sitten. Sivusto vaatii vähintään %d sekuntia kommenttien välillä",
@@ -148,7 +186,7 @@ $LANG03 = array(
     10 => 'Lähetä raportti',
     11 => 'Lähetä kommentti',
     12 => 'Täytä otsikko ja kommentti -kentät, ne ovat pakollisia kommenttia lähetettäessä.',
-    13 => 'Omat tietosi',
+    13 => 'Omat tietosi',   // depreciated
     14 => 'Esikatselu',
     15 => 'Raportoi tämä viesti',
     16 => 'Otsikko',
@@ -167,15 +205,15 @@ $LANG03 = array(
     29 => 'Tallenna muutokset',
     30 => 'Muokattu',
     31 => 'muokkasi',
-    32 => 'Muokkaa kommenttia',
-    33 => 'Muokkaa kommentin lähettämistä',
-    34 => 'Esikatsele lähetyksen muutokset',
-    35 => 'Tallenna muutokset jonoon',
-    36 => 'Ilmoita minulle uusista vastauksista',
-    37 => 'Uusi vastaus kommenttiin',
-    38 => 'Joku on vastannut kommenttiisi.',
-    39 => 'Voit katsoa kommentin aiheeen seuraavassa osoitteessa: ',
-    40 => 'Jos et halua enää ilmoituksia vastauksista, vieraile tässä linkissä: ',
+    32 => 'Muokkaa kommenttia',              //depreciated
+    33 => 'Muokkaa kommentin lähettämistä',   //depreciated
+    34 => 'Esikatsele lähetyksen muutokset',     // depreciated
+    35 => 'Tallenna muutokset jonoon',          // depreciated
+    36 => 'Ilmoita minulle uusista vastauksista',       // depreciated
+    37 => 'Uusi vastaus kommenttiin',              // depreciated
+    38 => 'Joku on vastannut kommenttiisi.',  // depreciated
+    39 => 'Voit katsoa kommentin aiheeen seuraavassa osoitteessa: ', // depreciated
+    40 => 'Jos et halua enää ilmoituksia vastauksista, vieraile tässä linkissä: ', // depreciated
     41 => 'Muokkaa kommenttia',
     42 => 'New Comment Notification',
     43 => 'Lähetti',
@@ -194,7 +232,6 @@ $LANG03 = array(
     56 => 'Comment has been approved and is now visible.',
     57 => 'Piilo Muokkaus',
     58 => 'No Title Available',
-
 );
 
 ###############################################################################
@@ -211,17 +248,18 @@ $LANG04 = array(
     8 => 'PGP avain',
     9 => 'Tallenna tiedot',
     10 => 'Viimeiset 10 kommenttiä käyttäjältä',
-    11 => 'Ei käyttäjän lähettämiä kommentteja',
-    12 => 'Asetukset käyttäjälle',
-    13 => 'Lähetä päivittäinen yhteenveto sähköpostitse',
+    11 => 'Ei käyttäjän lähettämiä kommentteja',       // depreciated
+    12 => 'Asetukset käyttäjälle',   // depreciated
+    13 => 'Lähetä päivittäinen yhteenveto sähköpostitse',   // depreciated
     14 => 'Tämä salasana on satunnaisgeneraattorin tuottama. On suositeltavaa vaihtaa salasana toiseen välittömästi. Vaihtaaksesi salasanan, kirjaudu sivustolle ja valitse Omat tiedot käyttäjän toiminnoista.',
     15 => "%s käyttäjätili on luotu. Käyttääksesi tiliä, kirjaudu sisään allaolevin tiedoin. Säästä tämä sähköposti tulevaa käyttöä varten.",
     16 => 'Omat tiedot',
-    17 => 'Tiliä ei ole olemassa',
+    17 => 'Tiliä ei ole olemassa', // depreciated
     18 => 'Sähköposti-osoite ei ole tunnu olevan oikeanmuotoinen osoite',
     19 => 'Syötetty käyttäjänimi tai sähköposti ovat jo käytössä',
-    20 => 'Sähköposti-osoite ei ole oikea sähköposti-osoite',
+    20 => 'Sähköposti-osoite ei ole oikea sähköposti-osoite', // ddepriated
     21 => 'Virhe',
+    22 => "Register with %s!",		// depreciated
     23 => "Luomalla sivustolle %s käyttäjätilin voit itse lähettää artikkeleita tai kommentteja. Ilman tiliä voit lähettää viestejä vierailijana jos se on sallittu. Huomaa että sähköpostiosoitettasi ei <b><i>koskaan</i></b> näytetä julkisesti sivustolla.",
     24 => 'Salasanasi lähetetään antamaasi sähköpostiosoitteeseen.',
     25 => 'Unohditko salasanasi?',
@@ -262,12 +300,17 @@ $LANG04 = array(
     60 => 'Miten haluat kommenttisi näytettävän?',
     61 => 'Uusimmat vai vanhimmat ensin?',
     62 => 'Oletus on 100',
+	// depreciated
+    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
     64 => 'Kommenttien astukset käyttäjälle',
     65 => "Yritä kirjautua uudestaan",
     66 => 'Kirjoitit sisäänkirjautuessa jotain väärin. Yritä kirjautua uudelleen. Oletko <a href="%s/users.php?mode=new" rel="nofollow">uusi käyttäjä</a>?',
     67 => 'Liittynyt',
     68 => 'Säilytä tiedot',
     69 => 'Kuinka kauan sivuston tulee muistaa tietosi kirjautumisen jälkeen?',
+    70 => "Customize the layout and content of %s",		// depreciated
+	// depreciated
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
     72 => 'Teema',
     73 => 'Kieli',
     74 => 'Vaihda sivuston ulkoasua!',
@@ -376,7 +419,7 @@ $LANG04 = array(
     182 => 'Kuvaus',
     183 => 'Notification Subscriptions',
     184 => 'New Post Notification',
-    185 => 'There is a local account with the same email address as your Remote email. Would you like to merge these accounts?',
+    185 => 'There is a local account with the same email address as your remote email. Would you like to merge these accounts?',
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
     188 => 'Merge',
@@ -390,9 +433,9 @@ $LANG04 = array(
     196 => 'Already Have an Account?',
     197 => 'Connect for Easy Access!',
     198 => 'Social Memberships',
-    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    199 => 'Enter your user name for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
-    201 => 'K&auml;ytt&auml;j&auml; tunnus',
+    201 => 'Käyttäjä tunnus',
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
@@ -705,7 +748,7 @@ $LANG21 = array(
     17 => 'Lohkon sisältö',
     18 => 'Täytä lohkon otsikko, turvallisuus taso sekä sisältö -kentät',
     19 => 'Lohkojen hallinta',
-    21 => 'Lohkon turvataso',
+    21 => 'Lohkon turvataso', // depreciated
     23 => 'Lajittelujärjestys',
     25 => 'Jos haluat muokata tai poistaa lohkon, klikkaa haluamaasi lohkoa alta. Luodaksesi uuden lohkon, klikkaa Luo Uusi yläpuolelta.',
     26 => 'Ulkoasu lohko',
@@ -1108,6 +1151,8 @@ $LANG31 = array(
     14 => 'Ohita käyttäjien asetukset',
     15 => 'Virhe lähetettäessä: ',
     16 => 'Lähetykset tehty onnistuneesti: ',
+	// depreciated
+    17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'Vastaanottaja',
     19 => 'HUOMAA: jos haluat lähettää viestin sivuston kaikille jäsenille, valitse kirjautuneet käyttäjät -ryhmä pudotusvalikosta.',
     20 => "Onnistuneesti lähetetty <successcount> viestiä ja epäonnistuttu <failcount> viestin lähetyksessä. Tarvittaessa kaikkien viestilähetyksien tiedot löytyvät alta. Muuten voit lähettää <a href=\"%s/mail.php\">seuraavan viestin</a> tai <a href=\"%s/moderation.php\">siirtyä takaisin hallinnon sivulle</a>.",
@@ -1211,9 +1256,9 @@ $LANG32 = array(
     82 => 'Vaatii',
     83 => 'Info',
     84 => 'Pakattuna',
-    85 => 'Upload Autotag',
-    86 => 'Automated Autotag Installer Error',
-    87 => 'Autotag Installer',
+    85 => 'Upload Auto tag',
+    86 => 'Automated Auto tag Installer Error',
+    87 => 'Auto tag Installer',
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
     90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
@@ -1298,7 +1343,7 @@ $LANG_SOCIAL = array(
     'social_share'          => 'Share Services',
     'share_instructions'    => 'You can configure which social sharing buttons are enabled',
     'follow_instructions'   => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'membership_instructions' => 'You can enter the <b>User name(s)</b> for the social sites associated to your website.',
     'social_follow'         => 'Follow Services',
     'site_memberships'      => 'Site Social Memberships',
     'id'                    => 'ID',
@@ -1310,7 +1355,7 @@ $LANG_SOCIAL = array(
     'follow_me'             => 'Follow Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
-    'site_username'         => 'Site Username',
+    'site_username'         => 'Site User name',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
     'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
@@ -1408,7 +1453,7 @@ $MESSAGE = array(
     100 => 'Lisäosa tiedosto jonka latasit ei ole GZip tai Zip pakattu.',
     110 => 'Unable to retrieve OAuth authentication URL.',
     111 => 'OAuth authentication error.',
-    112 => 'OAuth certification has been cancelled.',
+    112 => 'OAuth certification has been canceled.',
     113 => 'Your account has been created successfully. {site_url}',
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
@@ -1468,6 +1513,9 @@ $LANG_ACCESS = array(
     'coregroup' => 'Ydin ryhmä',
     'yes' => 'Kyllä',
     'no' => 'Ei',
+// not used
+    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+//
     'groupmsg' => 'Turvallisuus ryhmät sivustolla ovat hierarkiset. Muokkaamalla tätä ryhmää tai jotain alla olevista ryhmistä antaa tälle ryhmälle samat oikeudet kuin muille alla oleville ryhmille. Milloin se on mahdollista, suosittelemme käyttämään allaolevia ryhmiä oikeuksie jakamiseen tälle ryhmälle. Jos tarvitset muokattuja oikeuksia, voit valita oikeudet sivuston eri toimintoihin alta löytyvästä \'Oikeudet\'-kohdasta. Lisätäksesi tämän ryhmän johonkin allaolevista ryhmistä, merkitse rasti ryhmän tai ryhmien viereen.',
     'groupeditmsg' => 'Käytä tätä paneelia luodaksesi uuden ryhmän tai muokataksesi jo olemassa olevaa.  Huomaa että et voi vaihtaa ryhmän nimeä joka on jo olemassa parhaillaan.<br />Jos luot uuden ryhmän, sinun täytyy antaa vähintään Ryhmän Nimi ja Kuvaus Ryhmästä.',
     'coregroupmsg' => "Tämä ryhmä on ydinryhmä sivustolla %s.  Tästä johtuen ryhmää ei voi muokata. Alla on lista vain luku-muodossa ryhmistä joihin tämä ryhmä kuuluu.",
@@ -1539,9 +1587,8 @@ $LANG_DB_ADMIN = array(
     'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
     'zero_size'           => 'Backup Failed: File size was 0 bytes',
-// not used
-    'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
-//
+	// depreciated
+    'path_not_found'      => "%s does not exist or is not a directory",
     'no_access'           => "ERROR: Directory %s is not accessible.",
     'backup_file'         => 'Backup file',
     'size'                => 'Size',
@@ -1655,19 +1702,6 @@ $LANG_PWD = array(
     'error_no_cap'     => 'Password must contain at least one upper case letter',
     'error_no_lower'   => 'Password must contain at least one lower case letter',
     'error_no_symbol'  => 'Password must contain at least one special character',
-);
-
-###############################################################################
-
-$LANG_BUTTONS = array(
-    1 => 'Etusivu',
-    2 => 'Yhteystiedot',
-    3 => 'Julkaise',
-    7 => 'Sivuston tilastot',
-    8 => 'Mukauta',
-    9 => 'Etsi',
-    10 => 'laajennettu haku',
-    11 => 'Hakemisto'
 );
 
 ###############################################################################
@@ -1912,7 +1946,7 @@ $LANG_ADMIN = array(
     'block_list' => 'Block List',
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
-    'custom_autotag' => 'Custom Autotags',
+    'custom_autotag' => 'Custom Auto tags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Tyhjenn&auml;',
@@ -2007,19 +2041,19 @@ $LANG_BBCODE = array(
     'smiley_label'      => 'Hymiöt',
     'size_label'        => 'Fontin koko',
     'color_label'       => 'Fontin väri',
-    'bold_help'         =>'Lihavoitu: [b]teksti[/b]',
-    'italic_help'       =>'Kursivoitu: [i]teksti[/i]',
-    'underline_help'    =>'Alleviivaus: [u]teksti[/u]',
-    'quote_help'        =>'Lainaus teksti: [quote]teksti[/quote]',
-    'code_help'         =>'Koodin lisääminen: [code]koodi[/code]',
-    'list_help'         =>'Lista: [list]teksti[/list]',
-    'olist_help'        =>'Lista: [list=]teksti[/list]',
-    'listitem_help'     =>'Listan kohde: [*]teksti[/*]',
-    'img_help'          =>'Lisää kuva: [img]http://kuva_url[/img]',
-    'url_help'          =>'Lisää URL: [url]http://url[/url] tai [url=http://url]URL teksti[/url]',
-    'smiley_help'       =>'Avaa hymiö ikkuna',
-    'size_help'         =>'Fontin koko: [size=9]pieni teksti[/size]',
-    'color_help'        =>'Tekstin väri: [color=red]punainen teksti[/color]',
+    'bold_help'         => 'Lihavoitu: [b]teksti[/b]',
+    'italic_help'       => 'Kursivoitu: [i]teksti[/i]',
+    'underline_help'    => 'Alleviivaus: [u]teksti[/u]',
+    'quote_help'        => 'Lainaus teksti: [quote]teksti[/quote]',
+    'code_help'         => 'Koodin lisääminen: [code]koodi[/code]',
+    'list_help'         => 'Lista: [list]teksti[/list]',
+    'olist_help'        => 'Lista: [list=]teksti[/list]',
+    'listitem_help'     => 'Listan kohde: [*]teksti[/*]',
+    'img_help'          => 'Lisää kuva: [img]http://kuva_url[/img]',
+    'url_help'          => 'Lisää URL: [url]http://url[/url] tai [url=http://url]URL teksti[/url]',
+    'smiley_help'       => 'Avaa hymiö ikkuna',
+    'size_help'         => 'Fontin koko: [size=9]pieni teksti[/size]',
+    'color_help'        => 'Tekstin väri: [color=red]punainen teksti[/color]',
     'size_tiny'         => 'Todella pieni',
     'size_small'        => 'Pieni',
     'size_normal'       => 'Normaali',
@@ -2041,35 +2075,6 @@ $LANG_BBCODE = array(
     'color_white'       => 'Valkea',
     'color_black'       => 'Musta',
     'formatted_code'    => 'Formatted Code',
-);
-
-# Localisation of the texts for the Admin file check
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'Tiedoston Eheys Tarkistus',
-    'recheck'           => 'Tarkista eheys uudestaan',
-    'confirm'           => 'Oletko varma että haluat poistaa valitut kohteet?',
-    'scan'              => 'Sivustosi tiedosto eheyttä tarkistetaan.  Ole kärsivällinen, tämä saattaa kestää kauan. Suoritusnopeus riippuu palveluympäristöstä.  Jos tämä scripti on saavuttamassa maksimia PHP scriptin suoritusaikaa %s sekunnissa, scannaus keskeytetään ja näytetään virheilmoitus.',
-    'results'           => 'Sivustosi tiedostot ja hakemistot on verrattu glFusion v%s jakeluun, ja tulokset näkyy alla.  Lisätyt tai puuttuvat tiedostot ja hakemistot on tunnistettu, ja tiedostot jotka on valittu on ehkä valittu poistettavaksi.  Hakemistot jotka on lisätty, tunnistetaan, mutta nämä täytyy poistaa manuaalisesti.<br /><br />Lisä/Ylimääräiset tiedostot ja/tai hakemistot jotka tunnistettu saattavat liittyä lisäosaan tai muuhun scriptiin jonka olet asentanut, tai ovat muuten välttämättömiä sivustosi toiminnalle, <b>tämä ei tarkoita että yksinkertaisesti poistaisit tiedostot!  <span style="color:red">Käytä tätä työkalua harkiten!</span></b>',
-    'expiration1'       => 'HUOM: Scannaus keskeytettiin koska jäljellä oleva aika lähestyi sivustosi PHP max suoritus aika rajoitusta.  Tämä analyysi scripti käyttää tehokkasti CPU ja I/O:ta, ja siihen voi vaikuttaa useat asiat palveluympäristössäsi.  harkitse seuraavia suosituksia ongelmien ratkaisemiseen:<br />',
-    'expiration2'       => '<ol><li>Yritä nostaa \'max_execution_time\' aikaa php.ini tiedostossa.  Aika on asetettu nyt %s sekuntiin.</li><li>Manuaalisesti tutki sivustosi ja poista kaikki tarpeettomat tiedostot ja hakemistot.</li></ol>',
-    'abort'             => 'Keskeytä Scannaus',
-    'aborted'           => 'Scannaus keskeytettiin.',
-    'where'             => 'Juuri',
-    'type'              => 'Tyyppi',
-    'delta'             => 'Muuta:',
-    'location'          => 'Sijainti',
-    'path'              => 'Polku',
-    'file'              => 'Tiedosto',
-    'dir'               => 'Dir',
-    'plugin'            => 'lisäosa',
-    'added'             => 'lisätty',
-    'missing'           => 'puuttuu',
-    'removed'           => '%s %s poistettu.  Sivustosi Tiedosto Eheys on tarkistettu uudelleen, tulokset näkyy alla.',
-    'working'           => 'Scannataan ...<br />',
-    'elapsed'           => 'Scannaus suoritettiin %s sekunnissa.'
 );
 
 # Localisation of the texts for Menu Builder
@@ -2260,9 +2265,9 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'autotag',
-    'title'                     => 'Autotag Manager',
+    'title'                     => 'Auto tag Manager',
     'menulabel'                 => 'Autotagit',
-    'public_title'              => 'Autotag List',
+    'public_title'              => 'Auto tag List',
     'tag'                       => 'Tag',
     'type'                      => 'Type',
     'module'                    => 'Module',
@@ -2272,18 +2277,18 @@ $LANG_AM = array (
     'click_to_enable'           => 'Click to enable.',
     'click_to_disable'          => 'Click to disable.',
     'function'                  => 'PHPfn?',
-    'autotag_editor'            => 'Autotag Editor',
-    'autotag_list'              => 'Autotag List',
+    'autotag_editor'            => 'Auto tag Editor',
+    'autotag_list'              => 'Auto tag List',
     'edit'                      => 'Muokkaa',
     'save'                      => 'Tallenna',
     'delete'                    => 'Poista',
     'cancel'                    => 'Peruuta',
-    'confirm'                   => 'Are you sure you want to delete this Autotag?',
+    'confirm'                   => 'Are you sure you want to delete this Auto tag?',
     'access_denied'             => 'P&auml;&auml;sy kielletty',
-    'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'access_denied_msg'         => 'You are trying access one of the Auto tag Manager administration pages.  Please note that all attempts to access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
-    'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'php_msg_norights'          => '<br>NOTE: PHP Auto tags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Auto tags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled'          => 'PHP Auto tags have been disabled.<br>To enable, you must set the \'Allow PHP in Auto tags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
     'no_tag_or_replacement'     => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
@@ -2291,13 +2296,13 @@ $LANG_AM = array (
     'phpfn_must_exist'          => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
     'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
     'html_allowed'              => '(HTML:OK)',
-    'instructions'              => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
-    'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
+    'instructions'              => 'To modify or delete an Auto tag, click on that tag\'s edit icon below. To create a new Auto tag, click on "Create New" above. <p>If there are PHP function-based Auto tags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Auto tags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions'       => 'The complete list of Auto tags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
+                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
-    'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag'                   => 'Autotag',
+    'autotagpermmsg'            => 'Select which features (operations) you want to allow the auto tag to be used.',
+    'autotag'                   => 'Auto tag',
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
@@ -2394,7 +2399,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'On',
     'open_basedir'              => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'openssl_extension'         => 'OpenSSL Extension',
-    'php_req_version'           => 'glFusion requires PHP version 7.0.0 or newer.',
+    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Version',
     'php_warning'               => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -2448,13 +2453,13 @@ $LANG_UPGRADE = array(
 # admin/sfs.php - stop forum spam checks
 $LANG_SFS = array(
     'title'             => 'Stop Forum Spam (SFS) User Check',
-    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'instructions'      => 'All users have had their user name, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
     'no_record_found'   => 'No Record Found',
     'sfs_email_match'   => 'Email Match in SFS',
     'sfs_ip_match'      => 'IP match in SFS',
-    'sfs_username_match' => 'Username match in SFS',
+    'sfs_username_match' => 'User name match in SFS',
     'uid'               => 'UID',
-    'username'          => 'K&auml;ytt&auml;j&auml; tunnus',
+    'username'          => 'Käyttäjä tunnus',
     'remote_ip'         => 'Remote IP',
     'email'             => 'Sähköposti-osoite',
     'sfs_status'        => 'SFS Status',
@@ -2749,7 +2754,7 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
-    'min_username_length' => 'Minimum Username Length',
+    'min_username_length' => 'Minimum User name Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
     'bb2_ban_log' => 'Log Automatic Ban Actions',
@@ -2799,10 +2804,10 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Lista artikkeleista',
+    'log_level' => 'Log Level',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2816,7 +2821,6 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Sekalaista',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
-
 );
 
 $LANG_fs['Core'] = array(
@@ -2872,7 +2876,7 @@ $LANG_fs['Core'] = array(
 
 $LANG_configSelect['Core'] = array(
     0 => array(1 => 'True', 0 => 'False'),
-    1 => array('true' => 'True', 'false' => 'False'),
+    1 => array(true => 'True', false => 'False'),
     2 => array(0 => 'Reject', 1 => 'Only Keep Latest', 2 => 'Allow Multiple Posts'),
     3 => array(0 => 'Paluuviite Käytössä', 1 => 'Paluuviite Ei käytössä'),
     4 => array(0 => 'Don\'t Check Anything', 1 => 'Check against Site URL', 2 => 'Check full URL', 3 => 'Check against Site URL and full URL', 4 => 'Check IP against Site IP', 5 => 'Check IP and Site URL', 6 => 'Check IP and Full URL', 7 => 'Check IP, Full URL, and Site URL'),
@@ -2907,5 +2911,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Päivämäärä', 'title'=>'Otsikko', 'uid'=>'Lähetti', 'hits'=>'Lukukertoja', 'sid'=>'Jutun ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Uudet käyttäjät'),
+    36 => array( '50' => 'DVLP_DEBUG',
+                '100' => 'DEBUG',
+                '200' => 'INFO',
+                '250' => 'NOTICE',
+                '300' => 'WARNING',
+                '400' => 'ERROR',
+                '500' => 'CRITICAL',
+                '550' => 'ALERT',
+                '600' => 'EMERGENCY'
+               ),
 );
 ?>

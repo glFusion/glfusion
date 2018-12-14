@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
-*  Jason Whittenburg	jwhitten AT securitygeeks DOT com
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
 *
 */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -31,19 +31,28 @@ $LANG01 = array(
     2 => 'Lire la Suite',
     3 => 'Commentaires',
     4 => 'Modifier',
+    5 => 'Votez',					// depreciated
+    6 => 'Results',					// depreciated
+    8 => 'votes',					// depreciated
+    9 => 'Admin Functions:',		// depreciated
     10 => 'Soumissions',
     11 => 'Histoires',
     12 => 'Blocs',
     13 => 'Sujets',
     17 => 'Utilisateurs',
+    18 => 'SQL Query',				// depreciated
     19 => 'Déconnexion',
+    20 => 'User Information:',		// depreciated
     21 => 'Nom d`utilisateur',
+    22 => 'ID utilisateur',				// depreciated
+    23 => 'Niveau de Sécurité',			// depreciated
     24 => 'Anonyme',
     25 => 'Répondre',
     26 => 'Les commentaires suivants sont la propriété de qui que ce soit à leur auteurs. Ce site n`est pas responsable de ce qu`ils disent.',
     27 => 'Poste le plus récent',
     28 => 'Effacer',
     29 => 'Aucun Commentaire.',
+    30 => 'Older Stories',			// depreciated
     31 => 'Autorisés Auto-clefs:',
     32 => 'Erreur, nom d`utilisateur invalide',
     33 => 'Erreur, n`a pas pu écrire dans le fichier journal',
@@ -56,45 +65,73 @@ $LANG01 = array(
     41 => 'Invité Utilisateurs',
     42 => 'Rédigé par:',
     43 => 'Répondre à cette',
+    44 => 'Mère',					// depreciated
+    45 => 'MySQL Error Number',		// depreciated
+    46 => 'MySQL Error Message',	// depreciated
     47 => 'Espace Membres',
     48 => 'Paramètres du Compte',
+    49 => 'Préférences',			// depreciated
+    50 => 'Error with SQL statement',	// depreciated
     51 => 'Aider',
+    52 => 'Nouveau',					// depreciated
+    53 => 'Accueil Admin',				// deprecated
+    54 => 'Could not open the file.',	// depreciated
+    55 => 'Error at',				// depreciated
+    56 => 'Votez',					// depreciated
     57 => 'Mot de Passe',
     58 => 'Connexion',
     59 => "Inscrivez-vous en tant que <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">Nouvel Utilisateur</a>",
     60 => 'Poster un commentaire',
     61 => 'Créer un Nouveau Compte',
     62 => 'paroles',
+    63 => 'Comment Preferences',	// depreciated
     64 => 'Envoyer cet article à un ami',
     65 => 'Voir Version imprimable',
     67 => 'Bienvenue à ',
     68 => 'Maison',
+    69 => 'Contacter',				// depreciated
+    70 => 'Search',					// depreciated
     71 => 'Contribuer',
+    72 => 'Web Resources',			// depreciated
     75 => 'Recherche Avancée',
+    76 => 'Statistiques du Site',		// depreciated
     77 => 'Plugins',
+    79 => 'What\'s New',			// depreciated
+    80 => 'stories in last',		// depreciated
+    81 => 'story in last',			// depreciated
+    82 => 'heures',					// depreciated
     83 => 'Commentaires',
+    85 => 'last 48 hrs',			// depreciated
+    86 => 'Pas de nouveaux commentaires',		// depreciated
+    87 => 'last 2 wks',				// depreciated
     90 => 'Maison',
     91 => 'Page générée en',
     92 => 'secondes',
-    93 => 'Copyright',
+    93 => 'Droit d’auteur',
     94 => "<a href=\"%s/terms.php\">Conditions d'Utilisation</a>  •  <a href=\"%s/privpol.php\">Politique de Confidentialité</a>",
     95 => 'par',
     96 => 'Groupes',
+    97 => 'Word List',				// depreciated
     98 => 'Plugins',
     99 => 'Histoires',
-    101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
+    100 => 'No new stories',		// depreciated
+    101 => 'Toutes les marques déposées et droits d’auteur sur cette page sont la propriété de leurs propriétaires respectifs.',
     103 => 'DB Sauvegardes',
     104 => 'par',
     105 => 'Utilisateurs de Messagerie',
     106 => 'Vues:',
     107 => 'Améliorez Vérifier',
+    108 => 'Vider le Cache',			// depreciated
     109 => 'Signaler un abus',
     110 => 'Signaler ce message à l`administrateur du site',
     112 => 'Utilisateurs Enregistrés',
     113 => 'Documentation',
     114 => 'Trackbacks',
+    115 => 'No new trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Annuaire',
+	// depreciated
+    118 => 'Please continue reading on the next page:',
     119 => "Vous avez perdu votre <a href=\"%s/users.php?mode=getpassword\" rel=\"nofollow\">mot de passe</a>?",
     120 => 'Lien permanent vers ce commentaire',
     121 => 'Commentaires (%d)',
@@ -104,8 +141,8 @@ $LANG01 = array(
     125 => 'Etes-vous sûr de vouloir supprimer l`élément sélectionné de?',
     126 => 'Sélectionner ou désélectionner tous les articles',
     127 => 'Permalink',
-
     129 => 'Configuration',
+    130 => 'Webservices',			// depreciated
     500 => 'S`il vous plaît n`oubliez pas de retirer le dossier admin / install / après l`installation ou la mise à niveau de votre site!',
     501 => 'Profitez de débogage est activé',
     502 => 'Pas sûr SQL est activé',
@@ -122,14 +159,14 @@ $LANG01 = array(
     'allowed_html'              => 'HTML Autorisé:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
-    'menu'                      => 'Menu',
-    'show_allowed_content'      => 'Show Allowed Content',
-    'blocks_left_title'         => 'Left Side',
+    'menu'                      => 'Menu',                  // depreciated
+    'show_allowed_content'      => 'Show Allowed Content',  // depreciated
+    'blocks_left_title'         => 'Left Side',             // depreciated
     'blocks_right_title'        => 'Right Side',
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
-    'env_check'                 => 'Environment Check',
-    'ok'                        => 'OK',
+    'env_check'                 => 'Vérification de l’environnement',
+    'ok'                        => 'Bien',
 );
 
 ###############################################################################
@@ -138,9 +175,10 @@ $LANG01 = array(
 $LANG03 = array(
     1 => 'Poster un Commentaire',
     2 => 'Mode de Poste',
-    3 => 'Déconnexion',
-    4 => 'Créer un Compte',
+    3 => 'Déconnexion',              // depreciated
+    4 => 'Créer un Compte',      // depreciated
     5 => 'Nom d`Utilisateur',
+    // depreciated
     6 => 'Ce site vous oblige à être connecté pour poster un commentaire, s`il vous plaît vous connecter Si vous n`avez pas un compte, vous pouvez utiliser le formulaire ci-dessous pour en créer un.',
     7 => 'Votre commentaire a été ',
     8 => " Il ya secondes. Ce site nécessite au moins %d secondes entre commentaires",
@@ -148,7 +186,7 @@ $LANG03 = array(
     10 => 'Envoyer un Rapport',
     11 => 'Envoyer un Commentaire',
     12 => 'S`il vous plaît remplir le Titre et Commentaire champs, où ils sont nécessaires pour votre présentation d`un commentaire.',
-    13 => 'Votre Information',
+    13 => 'Votre Information',   // depreciated
     14 => 'Avant-Première',
     15 => 'Signaler ce Message',
     16 => 'Titre',
@@ -167,15 +205,15 @@ $LANG03 = array(
     29 => 'Soumettre les Modifications',
     30 => 'Modifié le',
     31 => 'par',
-    32 => 'Modification d`un Commentaire',
-    33 => 'Modification d`un Commentaire Soumission',
-    34 => 'Aperçu Soumission Changements',
-    35 => 'Enregistrer les modifications de la file d`attente',
-    36 => 'Avertissez-moi des nouvelles réponses',
-    37 => 'Commentaire Répondre',
-    38 => 'Quelqu`un a répondu à votre commentaire.',
-    39 => 'Vous pouvez consulter le fil de commentaires à l`adresse suivante: ',
-    40 => 'Si vous souhaitez recevoir plus d`autres notifications de réponses, visitez le lien suivant: ',
+    32 => 'Modification d`un Commentaire',              //depreciated
+    33 => 'Modification d`un Commentaire Soumission',   //depreciated
+    34 => 'Aperçu Soumission Changements',     // depreciated
+    35 => 'Enregistrer les modifications de la file d`attente',          // depreciated
+    36 => 'Avertissez-moi des nouvelles réponses',       // depreciated
+    37 => 'Commentaire Répondre',              // depreciated
+    38 => 'Quelqu`un a répondu à votre commentaire.',  // depreciated
+    39 => 'Vous pouvez consulter le fil de commentaires à l`adresse suivante: ', // depreciated
+    40 => 'Si vous souhaitez recevoir plus d`autres notifications de réponses, visitez le lien suivant: ', // depreciated
     41 => 'Modifier un Commentaire',
     42 => 'Commentaire Notification',
     43 => 'Publié Par',
@@ -194,7 +232,6 @@ $LANG03 = array(
     56 => 'Comment has been approved and is now visible.',
     57 => 'Silencieux Modifier',
     58 => 'No Title Available',
-
 );
 
 ###############################################################################
@@ -211,17 +248,18 @@ $LANG04 = array(
     8 => 'PGP Clé',
     9 => 'Enregistrer les Informations',
     10 => '10 Derniers Commentaires',
-    11 => 'Commentaires Pas de l`Utilisateur',
-    12 => 'Préférences de l`Utilisateur pour',
-    13 => 'eMail Nuit Digest',
+    11 => 'Commentaires Pas de l`Utilisateur',       // depreciated
+    12 => 'Préférences de l`Utilisateur pour',   // depreciated
+    13 => 'eMail Nuit Digest',   // depreciated
     14 => 'Ce mot de passe est généré par un générateur aléatoire. Il est recommandé de changer immédiatement ce mot de passe. Pour changer votre mot de passe, connectez-vous, puis cliquez sur Paramètres du compte dans le menu Mon compte.',
     15 => "Votre %s compte a été créé avec succès. Pour pouvoir l`utiliser, vous devez ouvrir une session en utilisant les informations ci-dessous. S`il vous plaît sauver ce mail pour référence ultérieure.",
     16 => 'Informations du Compte',
-    17 => 'N`Existe Pas Compte',
+    17 => 'N`Existe Pas Compte', // depreciated
     18 => 'L`adresse e-mail fournie ne semble pas être une adresse e-mail valide',
     19 => 'L`adresse de nom d`utilisateur ou courriel fournie existe déjà',
-    20 => 'L`adresse e-mail fournie ne semble pas être une adresse e-mail valide',
+    20 => 'L`adresse e-mail fournie ne semble pas être une adresse e-mail valide', // ddepriated
     21 => 'Erreur',
+    22 => "Register with %s!",		// depreciated
     23 => "Inscrivez-vous %s adhésion. <br /> Votre adresse email ne sera jamais nobody </i> </b> d'être affichée publiquement sur ​​ce site.",
     24 => 'Votre mot de passe sera envoyé à l`adresse e-mail que vous entrez.',
     25 => 'Vous avez oublié votre mot de passe?',
@@ -262,12 +300,17 @@ $LANG04 = array(
     60 => 'Comment aimez-vous vos commentaires affichés?',
     61 => 'Date ou plus anciens?',
     62 => 'La valeur par défaut est 100',
+	// depreciated
+    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
     64 => 'Commentaire Préférences pour',
     65 => "Connexion à %s",
     66 => 'S`il vous plaît, entrez votre nom d`Utilisateur et mot de passe ci-dessous.',
     67 => 'Membre Depuis',
     68 => 'Se Souvenir de Moi Pour',
     69 => 'Combien de temps devrions-nous vous rappeler après la connexion?',
+    70 => "Customize the layout and content of %s",		// depreciated
+	// depreciated
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
     72 => 'Thème',
     73 => 'Langue',
     74 => 'Changer ce que ce site ressemble!',
@@ -362,7 +405,7 @@ $LANG04 = array(
     168 => 'Bienvenue à ',
     169 => 'Demander un nouveau courriel d`activation',
     170 => 'S`il vous plaît garder ce eMail pour vos dossiers. Les informations de votre compte est la suivante:',
-    171 => 'Site URL',
+    171 => 'URL du site',
     172 => 'S`il vous plaît visitez le lien suivant pour activer votre compte (le lien d`activation n`est valable que pour %d heures):',
     173 => 'Votre mot de passe a été stocké en toute sécurité dans notre base de données et ne peut pas être récupéré. Dans le cas où il est oublié, vous pourrez le réinitialiser en utilisant l`adresse e-mail associée à votre compte.',
     174 => 'Merci de vous inscrire.',
@@ -380,7 +423,7 @@ $LANG04 = array(
     186 => 'Si vous ne souhaitez pas fusionner les comptes, s`il vous plaît sélectionner le bouton Annuler ci-dessous.',
     187 => 'Entrez le mot de passe pour le compte local et cliquez sur le bouton Fusionner.',
     188 => 'Fusionner',
-    189 => 'Forgot Password',
+    189 => 'Mot de passe oublié',
     190 => 'You have exceeded the allowed number of attempts to enter the password for merging accounts',
     191 => 'Local Account Password',
     192 => 'Merge Remote Account with Existing Local Account',
@@ -390,9 +433,9 @@ $LANG04 = array(
     196 => 'Already Have an Account?',
     197 => 'Connect for Easy Access!',
     198 => 'Social Memberships',
-    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    199 => 'Enter your user name for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
-    201 => 'Username',
+    201 => 'Nom d`utilisateur',
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
@@ -705,7 +748,7 @@ $LANG21 = array(
     17 => 'Bloquer Contenu',
     18 => 'S`il vous plaît remplir le bloc champs Titre et contenu',
     19 => 'Gestionnaire de Blocs',
-    21 => 'Bloquer SecLev',
+    21 => 'Bloquer SecLev', // depreciated
     23 => 'Ordre Bloc',
     25 => 'Pour modifier ou supprimer un bloc, cliquez sur l`icône d`action ci-dessous. Pour créer un nouveau bloc, cliquez sur "Créer un nouveau" ci-dessus. Pour déplacer un bloc, cliquez sur les flèches ou [R] et [L] boîtes.',
     26 => 'Mise en Bloc',
@@ -746,7 +789,7 @@ $LANG21 = array(
     63 => 'Mauvais Bloc Titre',
     64 => 'Your Title must not be empty and cannot contain HTML!',
     65 => 'Ordre',
-    66 => 'Autotags',
+    66 => 'Auto tags',
     67 => 'Vérifiez pour permettre autotags',
     68 => 'L`alimentation de ce bloc portail est trop long pour être affiché. S`il vous plaît fixer un nombre maximal d`articles à importer pour le bloc dans l`écran de configuration du bloc, ou un maximum global dans la configuration glFusion.',
     69 => 'Etes-vous sûr de vouloir supprimer ce bloc?',
@@ -1108,6 +1151,8 @@ $LANG31 = array(
     14 => 'Remplacer les paramètres de confidentialité e-mail?',
     15 => 'Erreur lors de l`envoi à: ',
     16 => 'Réussir envoyé des messages à: ',
+	// depreciated
+    17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'À:',
     19 => 'Utilisez ce panneau pour envoyer un courriel à un groupe d`utilisateurs sur ce site. Si vous souhaitez envoyer un message à tous les utilisateurs, sélectionnez le groupe Utilisateurs enregistré à partir de la liste déroulante Groupe champ. Pour envoyer un message à un utilisateur spécifique, sélectionnez l`utilisateur dans le panneau Liste de l`utilisateur, le lien est ci-dessus.',
     20 => "Envoyé avec succès <successcount> messages et en vain envoyé <failcount> messages. Si vous en avez besoin, les détails de chaque message tentatives est ci-dessous. Sinon, vous pouvez <a href=\"%s/mail.php\">Envoyer un autre message </a> ou vous pouvez <a href=\"%s/index.php\">revenir à la page d`administration</a>.",
@@ -1298,7 +1343,7 @@ $LANG_SOCIAL = array(
     'social_share'          => 'Share Services',
     'share_instructions'    => 'You can configure which social sharing buttons are enabled',
     'follow_instructions'   => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'membership_instructions' => 'You can enter the <b>User name(s)</b> for the social sites associated to your website.',
     'social_follow'         => 'Follow Services',
     'site_memberships'      => 'Site Social Memberships',
     'id'                    => 'ID',
@@ -1310,7 +1355,7 @@ $LANG_SOCIAL = array(
     'follow_me'             => 'Follow Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
-    'site_username'         => 'Site Username',
+    'site_username'         => 'Site User name',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
     'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
@@ -1468,6 +1513,9 @@ $LANG_ACCESS = array(
     'coregroup' => 'Noyau',
     'yes' => 'Oui',
     'no' => 'Aucun',
+// not used
+    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+//
     'groupmsg' => 'Groupes de sécurité sur ce site sont hiérarchiques. En ajoutant ce groupe à l`un des groupes ci-dessous vous allez donner à ce groupe les mêmes droits que ces groupes ont. Lorsque cela est possible, il est recommandé d`utiliser les groupes ci-dessous pour donner des droits à un groupe. Si vous avez besoin de ce groupe d`avoir des droits de douane, alors vous pouvez sélectionner les droits à diverses fonctionnalités du site dans la section ci-dessous intitulée \'droits\'. Pour ajouter ce groupe à l`un de ceux ci-dessous vous suffit de cocher la case à côté du groupe (s) que vous souhaitez.',
     'groupeditmsg' => 'Utilisez ce panneau pour créer un nouveau groupe ou modifier un groupe existant. Notez que vous pouvez actuellement pas changer le nom d`un groupe qui existe déjà. <br /> Si vous créez un nouveau groupe, vous devez saisir au minimum le nom du groupe et Description du groupe.',
     'coregroupmsg' => "Ce groupe est un noyau %s Groupe. S'il vous plaît être des groupes de base d'édition très prudent. Voici une liste des groupes de ce groupe appartient.",
@@ -1539,9 +1587,8 @@ $LANG_DB_ADMIN = array(
     'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
     'zero_size'           => 'Backup Failed: File size was 0 bytes',
-// not used
-    'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
-//
+	// depreciated
+    'path_not_found'      => "%s does not exist or is not a directory",
     'no_access'           => "ERROR: Directory %s is not accessible.",
     'backup_file'         => 'Backup file',
     'size'                => 'Superficie',
@@ -1581,7 +1628,7 @@ $LANG_DB_ADMIN = array(
     'latest_backup'       => 'Latest Backup',
     'tables_to_backup'    => 'Tables to Backup',
     'include'             => 'Comprendre',
-    'exclude'             => 'Exclude',
+    'exclude'             => 'Exclure',
     'options'             => 'Options',
     'struct_only'         => 'Only Backup Table Structure (no data)',
     'max_files'           => 'Maximum Backup Files to Keep',
@@ -1655,19 +1702,6 @@ $LANG_PWD = array(
     'error_no_cap'     => 'Password must contain at least one upper case letter',
     'error_no_lower'   => 'Password must contain at least one lower case letter',
     'error_no_symbol'  => 'Password must contain at least one special character',
-);
-
-###############################################################################
-
-$LANG_BUTTONS = array(
-    1 => 'Maison',
-    2 => 'Contacter',
-    3 => 'Contribuer Histoire',
-    7 => 'Statistiques du Site',
-    8 => 'Mon Compte',
-    9 => 'Recherche',
-    10 => 'Recherche Avancée',
-    11 => 'Annuaire'
 );
 
 ###############################################################################
@@ -2007,19 +2041,19 @@ $LANG_BBCODE = array(
     'smiley_label'      => 'Smileys',
     'size_label'        => 'Taille de la police',
     'color_label'       => 'Couleur de police',
-    'bold_help'         =>'Le texte en gras: [b]text[/b]',
-    'italic_help'       =>'Le texte en italique: [i]text[/i]',
-    'underline_help'    =>'Souligner le texte: [u]text[/u]',
-    'quote_help'        =>'Texte de soumission: [quote]text[/quote]',
-    'code_help'         =>'Affichage de code: [code]code[/code]',
-    'list_help'         =>'Liste: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Insérez URL: [url]http://url[/url] ou [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
+    'bold_help'         => 'Le texte en gras: [b]text[/b]',
+    'italic_help'       => 'Le texte en italique: [i]text[/i]',
+    'underline_help'    => 'Souligner le texte: [u]text[/u]',
+    'quote_help'        => 'Texte de soumission: [quote]text[/quote]',
+    'code_help'         => 'Affichage de code: [code]code[/code]',
+    'list_help'         => 'Liste: [list]text[/list]',
+    'olist_help'        => 'List: [list=]text[/list]',
+    'listitem_help'     => 'List item: [*]text[/*]',
+    'img_help'          => 'Insert image: [img]http://image_url[/img]',
+    'url_help'          => 'Insérez URL: [url]http://url[/url] ou [url=http://url]URL text[/url]',
+    'smiley_help'       => 'Open Smiley Window',
+    'size_help'         => 'Font size: [size=9]small text[/size]',
+    'color_help'        => 'Text Color: [color=red]red text[/color]',
     'size_tiny'         => 'Minuscule',
     'size_small'        => 'Petit',
     'size_normal'       => 'Normal',
@@ -2041,35 +2075,6 @@ $LANG_BBCODE = array(
     'color_white'       => 'Blanc',
     'color_black'       => 'Noir',
     'formatted_code'    => 'Formatted Code',
-);
-
-# Localisation of the texts for the Admin file check
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'File Integrity Check',
-    'recheck'           => 'Recheck File Integrity',
-    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort'             => 'Abort Scan',
-    'aborted'           => 'The scan was aborted.',
-    'where'             => 'Où',
-    'type'              => 'Type',
-    'delta'             => 'Change',
-    'location'          => 'Endroit',
-    'path'              => 'Le Chemin',
-    'file'              => 'file',
-    'dir'               => 'directory',
-    'plugin'            => 'plugin',
-    'added'             => 'added',
-    'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
-    'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
 # Localisation of the texts for Menu Builder
@@ -2260,9 +2265,9 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'autotag',
-    'title'                     => 'Autotag Manager',
-    'menulabel'                 => 'Autotags',
-    'public_title'              => 'Autotag List',
+    'title'                     => 'Auto tag Manager',
+    'menulabel'                 => 'Auto tags',
+    'public_title'              => 'Auto tag List',
     'tag'                       => 'Tag',
     'type'                      => 'Type',
     'module'                    => 'Module',
@@ -2272,18 +2277,18 @@ $LANG_AM = array (
     'click_to_enable'           => 'Click to enable.',
     'click_to_disable'          => 'Click to disable.',
     'function'                  => 'PHPfn?',
-    'autotag_editor'            => 'Autotag Editor',
-    'autotag_list'              => 'Autotag List',
+    'autotag_editor'            => 'Auto tag Editor',
+    'autotag_list'              => 'Auto tag List',
     'edit'                      => 'Modifier',
     'save'                      => 'Sauver',
     'delete'                    => 'Delete',
     'cancel'                    => 'Cancel',
-    'confirm'                   => 'Are you sure you want to delete this Autotag?',
+    'confirm'                   => 'Are you sure you want to delete this Auto tag?',
     'access_denied'             => 'Accès refusé',
-    'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'access_denied_msg'         => 'You are trying access one of the Auto tag Manager administration pages.  Please note that all attempts to access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
-    'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'php_msg_norights'          => '<br>NOTE: PHP Auto tags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Auto tags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled'          => 'PHP Auto tags have been disabled.<br>To enable, you must set the \'Allow PHP in Auto tags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
     'no_tag_or_replacement'     => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
@@ -2291,13 +2296,13 @@ $LANG_AM = array (
     'phpfn_must_exist'          => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
     'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
     'html_allowed'              => '(HTML:OK)',
-    'instructions'              => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
-    'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
+    'instructions'              => 'To modify or delete an Auto tag, click on that tag\'s edit icon below. To create a new Auto tag, click on "Create New" above. <p>If there are PHP function-based Auto tags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Auto tags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions'       => 'The complete list of Auto tags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
+                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
-    'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag'                   => 'Autotag',
+    'autotagpermmsg'            => 'Select which features (operations) you want to allow the auto tag to be used.',
+    'autotag'                   => 'Auto tag',
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
@@ -2394,7 +2399,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'On',
     'open_basedir'              => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'openssl_extension'         => 'OpenSSL Extension',
-    'php_req_version'           => 'glFusion requires PHP version 7.0.0 or newer.',
+    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Version',
     'php_warning'               => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -2448,13 +2453,13 @@ $LANG_UPGRADE = array(
 # admin/sfs.php - stop forum spam checks
 $LANG_SFS = array(
     'title'             => 'Stop Forum Spam (SFS) User Check',
-    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'instructions'      => 'All users have had their user name, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
     'no_record_found'   => 'No Record Found',
     'sfs_email_match'   => 'Email Match in SFS',
     'sfs_ip_match'      => 'IP match in SFS',
-    'sfs_username_match' => 'Username match in SFS',
+    'sfs_username_match' => 'User name match in SFS',
     'uid'               => 'UID',
-    'username'          => 'Username',
+    'username'          => 'Nom d`utilisateur',
     'remote_ip'         => 'Remote IP',
     'email'             => 'Adresse eMail',
     'sfs_status'        => 'SFS Status',
@@ -2749,7 +2754,7 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
-    'min_username_length' => 'Minimum Username Length',
+    'min_username_length' => 'Minimum User name Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
     'bb2_ban_log' => 'Log Automatic Ban Actions',
@@ -2799,10 +2804,10 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'L`Administration de l`Histoire',
+    'log_level' => 'Log Level',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2816,7 +2821,6 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Miscellaneous',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
-
 );
 
 $LANG_fs['Core'] = array(
@@ -2872,7 +2876,7 @@ $LANG_fs['Core'] = array(
 
 $LANG_configSelect['Core'] = array(
     0 => array(1 => 'True', 0 => 'False'),
-    1 => array('true' => 'True', 'false' => 'False'),
+    1 => array(true => 'True', false => 'False'),
     2 => array(0 => 'Reject', 1 => 'Only Keep Latest', 2 => 'Allow Multiple Posts'),
     3 => array(0 => 'Trackback Enabled', 1 => 'Trackback Disabled'),
     4 => array(0 => 'Don\'t Check Anything', 1 => 'Check against Site URL', 2 => 'Check full URL', 3 => 'Check against Site URL and full URL', 4 => 'Check IP against Site IP', 5 => 'Check IP and Site URL', 6 => 'Check IP and Full URL', 7 => 'Check IP, Full URL, and Site URL'),
@@ -2907,5 +2911,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Date', 'title'=>'Titre', 'uid'=>'Auteur', 'hits'=>'Hits', 'sid'=>'Histoire ID'),
     34 => array(0=>'HTML', 1=>'Visuel'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Nouveaux Utilisateurs'),
+    36 => array( '50' => 'DVLP_DEBUG',
+                '100' => 'DEBUG',
+                '200' => 'INFO',
+                '250' => 'NOTICE',
+                '300' => 'WARNING',
+                '400' => 'ERROR',
+                '500' => 'CRITICAL',
+                '550' => 'ALERT',
+                '600' => 'EMERGENCY'
+               ),
 );
 ?>

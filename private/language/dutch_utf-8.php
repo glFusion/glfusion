@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
-*  Jason Whittenburg	jwhitten AT securitygeeks DOT com
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
 *
 */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -31,19 +31,28 @@ $LANG01 = array(
     2 => 'Lees verder',
     3 => 'Reacties',
     4 => 'Wijzigen',
+    5 => 'Stem',					// depreciated
+    6 => 'Resultaten',					// depreciated
+    8 => 'stemmen',					// depreciated
+    9 => 'Admin Functions:',		// depreciated
     10 => 'Ter beoordeling',
     11 => 'Artikelen',
     12 => 'Blokken',
     13 => 'Rubrieken',
     17 => 'Gebruikers',
+    18 => 'SQL Query',				// depreciated
     19 => 'Afmelden',
+    20 => 'User Information:',		// depreciated
     21 => 'Gebruikersnaam',
+    22 => 'Gebruiker ID',				// depreciated
+    23 => 'Toegangsniveau',			// depreciated
     24 => 'Anoniem',
     25 => 'Reageer',
     26 => 'Reacties zijn voor verantwoording van degene die ze heeft geplaatst. Dit portaal is niet verantwoordelijk voor de inhoud.',
     27 => 'Laatste Inzendingen',
     28 => 'Verwijderen',
     29 => 'Geen reacties.',
+    30 => 'Older Stories',			// depreciated
     31 => 'Toegestane HTML Tags:',
     32 => 'Fout: ongeldige gebruikersnaam',
     33 => 'Fout: kan niet naar logbestand schrijven',
@@ -56,23 +65,45 @@ $LANG01 = array(
     41 => 'Gast(en)',
     42 => 'Geschreven door:',
     43 => 'Hierop reageren',
+    44 => 'Bovenliggende categorie:',					// depreciated
+    45 => 'MySQL Error Number',		// depreciated
+    46 => 'MySQL Error Message',	// depreciated
     47 => 'Mijn Profiel',
     48 => 'Profielgegevens',
+    49 => 'Voorkeuren',			// depreciated
+    50 => 'Error with SQL statement',	// depreciated
     51 => 'Help',
+    52 => 'Nieuw',					// depreciated
+    53 => 'Beheerpagina',				// deprecated
+    54 => 'Could not open the file.',	// depreciated
+    55 => 'Error at',				// depreciated
+    56 => 'Stem',					// depreciated
     57 => 'Wachtwoord',
     58 => 'Aanmelden',
     59 => "Heeft u nog geen profiel? <br> Meld u dan <strong>nu</strong> aan als <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">nieuwe gebruiker</a>",
     60 => 'Reageer',
     61 => 'Aanmelden nieuwe Gebruiker',
     62 => 'woorden',
+    63 => 'Comment Preferences',	// depreciated
     64 => 'Email artikel naar vriend(in)',
     65 => 'Afdrukversie',
     67 => 'Welkom bij ',
     68 => 'Startpagina',
+    69 => 'Contact',				// depreciated
+    70 => 'Zoek',					// depreciated
     71 => 'Uw bijdrage',
+    72 => 'Web Resources',			// depreciated
     75 => 'Uitgebreid Zoeken',
+    76 => 'Website statistieken',		// depreciated
     77 => 'Plugins',
+    79 => 'What\'s New',			// depreciated
+    80 => 'stories in last',		// depreciated
+    81 => 'story in last',			// depreciated
+    82 => 'uren',					// depreciated
     83 => 'REACTIES',
+    85 => 'last 48 hrs',			// depreciated
+    86 => 'Er zijn geen nieuwe reacties',		// depreciated
+    87 => 'last 2 wks',				// depreciated
     90 => 'Startpagina',
     91 => 'Deze pagina is aangemaakt in',
     92 => 'seconden',
@@ -80,21 +111,27 @@ $LANG01 = array(
     94 => "<a href=\"%s/page.php?page=terms-of-use\">Terms of Use</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"%s/page.php?page=privacy-policy\">Privacy Policy</a>",
     95 => 'Mogelijk gemaakt door ',
     96 => 'Groepen',
+    97 => 'Word List',				// depreciated
     98 => 'Plugins',
     99 => 'ARTIKELEN',
+    100 => 'No new stories',		// depreciated
     101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     103 => 'Database Administration',
     104 => 'door',
     105 => 'Email gebruikers',
     106 => 'Opgevraagd',
     107 => 'GL Versie Test',
+    108 => 'Template Cache Leegmaken',			// depreciated
     109 => 'Rapporteer misbruik',
     110 => 'Rapporteer dit bericht aan de sitebeheerder',
     112 => 'Geregistreerde gebruikers',
     113 => 'Documentatie',
     114 => 'TRACKBACKS',
+    115 => 'No new trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Folder',
+	// depreciated
+    118 => 'Please continue reading on the next page:',
     119 => "<a href=\"%s/users.php?mode=getpassword\" rel=\"nofollow\">Wachtwoord</a> vergeten?",
     120 => 'Permalink naar deze reactie',
     121 => 'Reacties (%d)',
@@ -104,27 +141,27 @@ $LANG01 = array(
     125 => 'Weet u zeker dat u alle gecontroleerde items wilt verwijderen?',
     126 => 'Selecteer of de-selecteer alle items',
     127 => 'Permalink',
-
     129 => 'Instellingen Website',
+    130 => 'Webservices',			// depreciated
     500 => 'Verwijder A.U.B. de admin/install/ folder!',
     501 => 'Root Debug is Ingeschakeld',
     502 => 'No fail SQL is Ingeschakeld',
     503 => 'Onderhoudsmode - Aanmelden Gebruikers Uitgeschakeld',
-    504 => 'The database version is: %s<br />The glFusion script version is: %s<br />Please run the <a href="%s">installation script</a> to upgrade the database!',
-    505 => 'Your database version is: %s<br />The glFusion script version is: %s<br />Please check the integrity of your site!',
+    504 => 'The database version is: %s<br>The glFusion script version is: %s<br>Please run the <a href="%s">installation script</a> to upgrade the database!',
+    505 => 'Your database version is: %s<br>The glFusion script version is: %s<br>Please check the integrity of your site!',
     'ctl'                       => 'Template Cache Leegmaken',
     'logview'                   => 'Bekijk Log',
     'autotag_perms'             => 'Autotag Permissions',
     'subscribe'                 => 'Toevoegen aan Favoriet',
     'unsubscribe'               => 'Unsubscribe',
-    'view_online'               => 'Click <a href="%s">here</a> to view online',
+    'view_online'               => 'Click <a href="%s">here</a> to view on-line',
     'no_new_items'              => 'No New Items',
     'allowed_html'              => 'Allowed HTML:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
-    'menu'                      => 'Menu',
-    'show_allowed_content'      => 'Show Allowed Content',
-    'blocks_left_title'         => 'Left Side',
+    'menu'                      => 'Menu',                  // depreciated
+    'show_allowed_content'      => 'Show Allowed Content',  // depreciated
+    'blocks_left_title'         => 'Left Side',             // depreciated
     'blocks_right_title'        => 'Right Side',
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
@@ -138,9 +175,10 @@ $LANG01 = array(
 $LANG03 = array(
     1 => 'Verstuur een reactie',
     2 => 'Opmaak',
-    3 => 'Afmelden',
-    4 => 'Maak een profiel aan',
+    3 => 'Afmelden',              // depreciated
+    4 => 'Maak een profiel aan',      // depreciated
     5 => 'Gebruikersnaam',
+    // depreciated
     6 => 'Het portaal vereist dat u bent ingelogd om een reactie te versturen: log a.u.b. in. Indien u geen profiel heeft, kunt u het onderstaande formulier gebruiken om u aan te melden.',
     7 => 'Uw laatste reactie was ',
     8 => " seconden geleden. Een beveiliging vereist tenminste %d seconden tussen reacties",
@@ -148,7 +186,7 @@ $LANG03 = array(
     10 => 'Verstuur rapport',
     11 => 'Verstuur reactie',
     12 => 'Vul a.u.b. de velden bij \'Titel\' en \'Reactie\' in. Deze zijn noodzakelijk voor het versturen van een reactie.',
-    13 => 'Uw informatie',
+    13 => 'Uw informatie',   // depreciated
     14 => 'Voorbeeld Bekijken',
     15 => 'Rapporteer dit bericht',
     16 => 'Titel',
@@ -167,15 +205,15 @@ $LANG03 = array(
     29 => 'Bewaar Wijzigingen',
     30 => 'Bijgewerkt op',
     31 => 'door',
-    32 => 'Wijzig een Reactie',
-    33 => 'Wijzig een ingezonden Reactie',
-    34 => 'Bekijk een Voorbeeld van Ingezonden wijzigingen',
-    35 => 'Sla op en verplaatst naar wachtlijst',
-    36 => 'Herinner me indien er nieuwe reacties zijn',
-    37 => 'Nieuw antwoord op uw reactie',
-    38 => 'Iemand heeft gereageerd op uw reactie.',
-    39 => 'U kunt de reactie-thread bekijken op het volgende adres: ',
-    40 => 'Als u geen berichtgevingen meer wilt ontvangen van reacties, volg dan deze link: ',
+    32 => 'Wijzig een Reactie',              //depreciated
+    33 => 'Wijzig een ingezonden Reactie',   //depreciated
+    34 => 'Bekijk een Voorbeeld van Ingezonden wijzigingen',     // depreciated
+    35 => 'Sla op en verplaatst naar wachtlijst',          // depreciated
+    36 => 'Herinner me indien er nieuwe reacties zijn',       // depreciated
+    37 => 'Nieuw antwoord op uw reactie',              // depreciated
+    38 => 'Iemand heeft gereageerd op uw reactie.',  // depreciated
+    39 => 'U kunt de reactie-thread bekijken op het volgende adres: ', // depreciated
+    40 => 'Als u geen berichtgevingen meer wilt ontvangen van reacties, volg dan deze link: ', // depreciated
     41 => 'Wijzig een Reactie',
     42 => 'New Comment Notification',
     43 => 'Geplaatst door',
@@ -194,7 +232,6 @@ $LANG03 = array(
     56 => 'Comment has been approved and is now visible.',
     57 => 'Ongemerkt Wijzigen',
     58 => 'No Title Available',
-
 );
 
 ###############################################################################
@@ -211,17 +248,18 @@ $LANG04 = array(
     8 => 'PGP Code',
     9 => 'Opslaan',
     10 => 'Laatste 10 reacties van gebruiker',
-    11 => 'Geen reacties',
-    12 => 'Voorkeuren voor',
-    13 => 'Email \'s nachts verwerken',
+    11 => 'Geen reacties',       // depreciated
+    12 => 'Voorkeuren voor',   // depreciated
+    13 => 'Email \'s nachts verwerken',   // depreciated
     14 => 'Dit wachtwoord is gegenereerd door een randomizer. Het wordt aanbevolen om dit wachtwoord meteen te wijzigen. Om het wachtwoord te wijzigen, log in en klik op \'profielgegevens\' van het \'Gebruikersmenu\'.',
     15 => "Uw %s profiel is aangemaakt. Om er gebruik van te maken, dient u in te loggen met gebruik van de onderstaande informatie. Bewaar dit bericht a.u.b. voor gebruik in de toekomst.",
     16 => 'Uw Profielgegevens',
-    17 => 'Profiel bestaat niet',
+    17 => 'Profiel bestaat niet', // depreciated
     18 => 'Het emailadres lijkt geen bestaand adres of maakt deel uit van een ongewenst domein',
     19 => 'De gebruikersnaam of het emailadres is al in gebruik',
-    20 => 'Het emailadres lijkt geen juist emailadres',
+    20 => 'Het emailadres lijkt geen juist emailadres', // ddepriated
     21 => 'Fout aangetroffen',
+    22 => "Register with %s!",		// depreciated
     23 => "Door het aanvragen van een profiel profiteert u van alle voordelen die %s met zich meebrengt en geeft u de mogelijkheid reacties en artikelen onder uw eigen naam te plaatsen. Indien u niet registreert, is dit alleen anoniem mogelijk. Let op, uw email adres zal <strong><i>nooit</i></strong> publiekelijk worden weergegeven op het portaal.",
     24 => 'Uw wachtwoord wordt verstuurd naar het emailadres dat u invoert.',
     25 => 'Wachtwoord vergeten?',
@@ -262,12 +300,17 @@ $LANG04 = array(
     60 => 'Hoe wilt u dat reacties worden weergegeven?',
     61 => 'Nieuwste of oudste eerst?',
     62 => 'Standaard is 100',
+	// depreciated
+    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
     64 => 'Voorkeurinstellingen voor Reacties van',
     65 => "Aanmelden bij %s",
     66 => 'Als u zich nog niet heeft aangemeld of een tikfout heeft gemaakt probeer het hieronder dan opnieuw.',
     67 => 'Aangemeld sinds',
     68 => 'Mijn gegevens onthouden',
     69 => 'Hoe lang mogen we u onthouden nadat u bent aangemeld?',
+    70 => "Customize the layout and content of %s",		// depreciated
+	// depreciated
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
     72 => 'Skin',
     73 => 'Taal',
     74 => 'Pas de website aan uw wensen aan!',
@@ -353,9 +396,9 @@ $LANG04 = array(
     159 => 'Dit is een automatisch gegenereerd bericht. Reageer a.u.b. niet op dit emailbericht.',
     160 => 'Aangemeld',
     161 => 'Wachtwoord Sterkte',
-    162 => 'The username must by at least %s characters, cannot contain invalid characters ( < > " % & * / \\ ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " % & * / \\ ) or emoji characters',
     163 => 'Remote User',
-    164 => 'Remote Username',
+    164 => 'Remote User name',
     165 => 'Remote Service',
     166 => 'Remote User Info',
     167 => 'An activation email will be sent to your email address.',
@@ -366,9 +409,9 @@ $LANG04 = array(
     172 => 'Please visit the following link in order to activate your account (the activation link is only valid for %d hours):',
     173 => 'Your password has been securely stored in our database and cannot be retrieved. In the event that it is forgotten, you will be able to reset it using the email address associated with your account.',
     174 => 'Thank you for registering.',
-    175 => 'To request a new activation token, please enter your username and password below and a new activation email will be sent to you.',
+    175 => 'To request a new activation token, please enter your user name and password below and a new activation email will be sent to you.',
     176 => 'Confirm Password',
-    177 => 'Your account is currently awaiting verification.<br />You will not be able to login until your account has been verified by following the link in the activation email.',
+    177 => 'Your account is currently awaiting verification.<br>You will not be able to login until your account has been verified by following the link in the activation email.',
     178 => 'Resynchronize Remote Account',
     179 => 'Verwijderen',
     180 => 'Type',
@@ -376,7 +419,7 @@ $LANG04 = array(
     182 => 'Description',
     183 => 'Notification Subscriptions',
     184 => 'New Post Notification',
-    185 => 'There is a local account with the same email address as your Remote email. Would you like to merge these accounts?',
+    185 => 'There is a local account with the same email address as your remote email. Would you like to merge these accounts?',
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
     188 => 'Merge',
@@ -390,7 +433,7 @@ $LANG04 = array(
     196 => 'Already Have an Account?',
     197 => 'Connect for Easy Access!',
     198 => 'Social Memberships',
-    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    199 => 'Enter your user name for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
     201 => 'Gebruikersnaam',
     202 => 'Follow Me',
@@ -705,7 +748,7 @@ $LANG21 = array(
     17 => 'Blok Inhoud',
     18 => 'Vult u a.u.b. de velden in bij \'Blok Titel\' en \'Inhoud\'',
     19 => 'Blok Manager',
-    21 => 'Beveiliginsniveau',
+    21 => 'Beveiliginsniveau', // depreciated
     23 => 'Blok Volgorde',
     25 => 'Om een blok te wijzigen of te verwijderen, klikt u op dat blok hieronder. Om een nieuw blok aan te maken klikt u op \'nieuw blok\' hierboven.',
     26 => 'Opmaak Blok',
@@ -746,7 +789,7 @@ $LANG21 = array(
     63 => 'Slechte blokken titel',
     64 => 'Uw titel mag niet leeg zijn en mag geen HTML bevatten!',
     65 => 'Sortering',
-    66 => 'Autotags',
+    66 => 'Auto tags',
     67 => 'Vink aan om autotags toe te staan',
     68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
     69 => 'Are you sure you want to delete this Block?',
@@ -796,8 +839,8 @@ $LANG24 = array(
     37 => 'Meer door..',
     38 => 'Meer van..',
     39 => 'Emails',
-    41 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  You may view the article in read-only below. Please <a href=\"%s/story.php\">go back to the story administration screen</a> when you are done.",
-    42 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  Please <a href=\"%s/story.php\">go back to the story administration screen</a>.",
+    41 => "You are trying to access a story that you don't have rights to. This attempt has been logged.  You may view the article in read-only below. Please <a href=\"%s/story.php\">go back to the story administration screen</a> when you are done.",
+    42 => "You are trying to access a story that you don't have rights to. This attempt has been logged.  Please <a href=\"%s/story.php\">go back to the story administration screen</a>.",
     46 => '<strong>Let OP:</strong> indien de datum in de toekomst ligt, wordt het Artikel pas op die datum gepubliceerd. Dat houdt tevens in dat het artikel niet in de RDF headline feed opgenomen wordt en dat de zoek funktie het buiten beschouwing laat. Er zijn dan ook geen statistieken.',
     47 => 'Beelden',
     48 => 'beeld',
@@ -1047,8 +1090,8 @@ $LANG28 = array(
     106 => 'Queued',
     107 => 'Verification',
     108 => 'View Profile',
-    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
-    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the User name to view the User Profile to see details.',
+    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the User name to view the User Profile to see details.',
     111 => 'Send email (Local)'
 );
 
@@ -1108,6 +1151,8 @@ $LANG31 = array(
     14 => 'Instellingen van de gebruiker negeren',
     15 => 'Probleem tijdens verzending naar: ',
     16 => 'Bericht met succes gezonden naar: ',
+	// depreciated
+    17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'Aan',
     19 => 'Let Op: Indien u een bericht wilt sturen aan alle portaal leden, kies dan de \'Logged-in\' groep.',
     20 => "Successfully sent %d messages and unsuccessfully sent %d messages.  If you need them, the details of each message attempts is below.  Otherwise you can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
@@ -1211,9 +1256,9 @@ $LANG32 = array(
     82 => 'Requires',
     83 => 'Info',
     84 => 'Bundled',
-    85 => 'Upload Autotag',
-    86 => 'Automated Autotag Installer Error',
-    87 => 'Autotag Installer',
+    85 => 'Upload Auto tag',
+    86 => 'Automated Auto tag Installer Error',
+    87 => 'Auto tag Installer',
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
     90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
@@ -1298,7 +1343,7 @@ $LANG_SOCIAL = array(
     'social_share'          => 'Share Services',
     'share_instructions'    => 'You can configure which social sharing buttons are enabled',
     'follow_instructions'   => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'membership_instructions' => 'You can enter the <b>User name(s)</b> for the social sites associated to your website.',
     'social_follow'         => 'Follow Services',
     'site_memberships'      => 'Site Social Memberships',
     'id'                    => 'ID',
@@ -1310,7 +1355,7 @@ $LANG_SOCIAL = array(
     'follow_me'             => 'Follow Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
-    'site_username'         => 'Site Username',
+    'site_username'         => 'Site User name',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
     'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
@@ -1408,7 +1453,7 @@ $MESSAGE = array(
     100 => 'Het plugin bestand dat u heeft ge-upload was geen GZip of Zip bestand.',
     110 => 'Unable to retrieve OAuth authentication URL.',
     111 => 'OAuth authentication error.',
-    112 => 'OAuth certification has been cancelled.',
+    112 => 'OAuth certification has been canceled.',
     113 => 'Your account has been created successfully. {site_url}',
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
@@ -1422,13 +1467,13 @@ $MESSAGE = array(
     503 => 'Plugin installatie is uitgeschakeld in demo mode.',
     504 => 'Please enter a password for the user account.',
     505 => 'Please enter an email for the user account.',
-    506 => 'Username cannot be blank.',
+    506 => 'User name cannot be blank.',
     507 => 'Email cannot be blank.',
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    512 => 'Username contains invalid characters " < > / \\ $ % * are not allowed',
-    513 => 'Remote username cannot be blank.',
+    512 => 'User name contains invalid characters " < > / \\ $ % * are not allowed',
+    513 => 'Remote user name cannot be blank.',
     514 => 'Remote service cannot be empty.',
     515 => 'Thank you, your account has now been activated.',
     516 => 'Your activation token has expired.',
@@ -1468,9 +1513,12 @@ $LANG_ACCESS = array(
     'coregroup' => 'Kerngroep',
     'yes' => 'Ja',
     'no' => 'Nee',
+// not used
+    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+//
     'groupmsg' => '\'Security Groups\' werken hierarchisch. Door het toevoegen aan andere groep(en), wordt deze groep dezelfde rechten toegekend. Het wordt aanbevolen, waar mogelijk, deze faciliteit te gebruiken. Indien u deze groep een speciale samenstelling wilt geven, kunt u de individuele rechten daarvoor in het gedeelte hieronder (extra) aanvinken, onder het hoofd \'Rechten\'. Om rechten van een andere groep aan deze groep toe te voegen, kunt u volstaan met het aanvinken van deze andere groep(en).',
-    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br />If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
-    'coregroupmsg' => "This group is a core {$_CONF['site_name']} Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
+    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br>If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
+    'coregroupmsg' => "This group is a core Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
     'rightsdescr' => 'Een groepsrecht voor een bepaalde faciliteit (zie hieronder) kan direct toegekend worden *OF* aan een andere groep waaraan deze groep eerder is toegevoegd. Wat u hieronder kunt zien aan het ontbreken van een vink-mogelijkheid, zijn de rechten van een andere groep, waaraan deze groep eerder is toegevoegd (en daarmee deze rechten verkreeg). De rechten die u kunt vinken kunt u direct toekennen aan - of afmelden voor - deze groep.',
     'lock' => 'Beveiligd',
     'members' => 'Leden',
@@ -1539,9 +1587,8 @@ $LANG_DB_ADMIN = array(
     'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
     'zero_size'           => 'Backup Failed: File size was 0 bytes',
-// not used
-    'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
-//
+	// depreciated
+    'path_not_found'      => "%s does not exist or is not a directory",
     'no_access'           => "ERROR: Directory %s is not accessible.",
     'backup_file'         => 'Backup file',
     'size'                => 'Size',
@@ -1655,19 +1702,6 @@ $LANG_PWD = array(
     'error_no_cap'     => 'Password must contain at least one upper case letter',
     'error_no_lower'   => 'Password must contain at least one lower case letter',
     'error_no_symbol'  => 'Password must contain at least one special character',
-);
-
-###############################################################################
-
-$LANG_BUTTONS = array(
-    1 => 'Startpagina',
-    2 => 'Contact',
-    3 => 'Publiceren',
-    7 => 'Website Statistieken',
-    8 => 'Persoonlijk',
-    9 => 'Zoek',
-    10 => 'Uitgebreid Zoeken',
-    11 => 'Folder'
 );
 
 ###############################################################################
@@ -1912,7 +1946,7 @@ $LANG_ADMIN = array(
     'block_list' => 'Block List',
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
-    'custom_autotag' => 'Custom Autotags',
+    'custom_autotag' => 'Custom Auto tags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Herstel',
@@ -2007,19 +2041,19 @@ $LANG_BBCODE = array(
     'smiley_label'      => 'Smileys',
     'size_label'        => 'Tekst Grootte',
     'color_label'       => 'Tekst Kleur',
-    'bold_help'         =>'Vetgedrukte tekst: [b]tekst[/b]',
-    'italic_help'       =>'Schuingedrukte tekst: [i]tekst[/i]',
-    'underline_help'    =>'Onderstreepte tekst: [u]tekst[/u]',
-    'quote_help'        =>'Tekst in Quote\'s: [quote]tekst[/quote]',
-    'code_help'         =>'Toon code: [code]code[/code]',
-    'list_help'         =>'List: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Voeg URL in: [url]http://url[/url] or [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
+    'bold_help'         => 'Vetgedrukte tekst: [b]tekst[/b]',
+    'italic_help'       => 'Schuingedrukte tekst: [i]tekst[/i]',
+    'underline_help'    => 'Onderstreepte tekst: [u]tekst[/u]',
+    'quote_help'        => 'Tekst in Quote\'s: [quote]tekst[/quote]',
+    'code_help'         => 'Toon code: [code]code[/code]',
+    'list_help'         => 'List: [list]text[/list]',
+    'olist_help'        => 'List: [list=]text[/list]',
+    'listitem_help'     => 'List item: [*]text[/*]',
+    'img_help'          => 'Insert image: [img]http://image_url[/img]',
+    'url_help'          => 'Voeg URL in: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help'       => 'Open Smiley Window',
+    'size_help'         => 'Font size: [size=9]small text[/size]',
+    'color_help'        => 'Text Color: [color=red]red text[/color]',
     'size_tiny'         => 'Mini',
     'size_small'        => 'Klein',
     'size_normal'       => 'Normaal',
@@ -2041,35 +2075,6 @@ $LANG_BBCODE = array(
     'color_white'       => 'Wit',
     'color_black'       => 'Zwart',
     'formatted_code'    => 'Formatted Code',
-);
-
-# Localisation of the texts for the Admin file check
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'File Integrity Check',
-    'recheck'           => 'Recheck File Integrity',
-    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort'             => 'Abort Scan',
-    'aborted'           => 'The scan was aborted.',
-    'where'             => 'Root',
-    'type'              => 'Type',
-    'delta'             => 'Change',
-    'location'          => 'Lokatie',
-    'path'              => 'Pad',
-    'file'              => 'file',
-    'dir'               => 'directory',
-    'plugin'            => 'plugin',
-    'added'             => 'added',
-    'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
-    'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
 # Localisation of the texts for Menu Builder
@@ -2260,9 +2265,9 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'autotag',
-    'title'                     => 'Autotag Manager',
-    'menulabel'                 => 'Autotags',
-    'public_title'              => 'Autotag List',
+    'title'                     => 'Auto tag Manager',
+    'menulabel'                 => 'Auto tags',
+    'public_title'              => 'Auto tag List',
     'tag'                       => 'Tag',
     'type'                      => 'Type',
     'module'                    => 'Module',
@@ -2272,18 +2277,18 @@ $LANG_AM = array (
     'click_to_enable'           => 'Click to enable.',
     'click_to_disable'          => 'Click to disable.',
     'function'                  => 'PHPfn?',
-    'autotag_editor'            => 'Autotag Editor',
-    'autotag_list'              => 'Autotag List',
+    'autotag_editor'            => 'Auto tag Editor',
+    'autotag_list'              => 'Auto tag List',
     'edit'                      => 'Wijzigen',
     'save'                      => 'Bewaar',
     'delete'                    => 'Verwijderen',
     'cancel'                    => 'Annuleren',
-    'confirm'                   => 'Are you sure you want to delete this Autotag?',
+    'confirm'                   => 'Are you sure you want to delete this Auto tag?',
     'access_denied'             => 'Geen toegang',
-    'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'access_denied_msg'         => 'You are trying access one of the Auto tag Manager administration pages.  Please note that all attempts to access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
-    'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'php_msg_norights'          => '<br>NOTE: PHP Auto tags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Auto tags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled'          => 'PHP Auto tags have been disabled.<br>To enable, you must set the \'Allow PHP in Auto tags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
     'no_tag_or_replacement'     => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
@@ -2291,13 +2296,13 @@ $LANG_AM = array (
     'phpfn_must_exist'          => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
     'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
     'html_allowed'              => '(HTML:OK)',
-    'instructions'              => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
-    'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
+    'instructions'              => 'To modify or delete an Auto tag, click on that tag\'s edit icon below. To create a new Auto tag, click on "Create New" above. <p>If there are PHP function-based Auto tags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Auto tags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions'       => 'The complete list of Auto tags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
+                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
-    'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag'                   => 'Autotag',
+    'autotagpermmsg'            => 'Select which features (operations) you want to allow the auto tag to be used.',
+    'autotag'                   => 'Auto tag',
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
@@ -2394,7 +2399,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'Aan',
     'open_basedir'              => 'Als <strong>open_basedir</strong> restricties zijn toegepast op je site, kan dit permissie (rechten) problemen veroorzaken gedurende de installatie. De Bestandsysteem Controle (Check) verderop geeft mogelijke issues aan.',
     'openssl_extension'         => 'OpenSSL Extension',
-    'php_req_version'           => 'glFusion vereist PHP versie 5.3.3 of nieuwer.',
+    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Versie',
     'php_warning'               => 'Indien ',
@@ -2448,11 +2453,11 @@ $LANG_UPGRADE = array(
 # admin/sfs.php - stop forum spam checks
 $LANG_SFS = array(
     'title'             => 'Stop Forum Spam (SFS) User Check',
-    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'instructions'      => 'All users have had their user name, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
     'no_record_found'   => 'No Record Found',
     'sfs_email_match'   => 'Email Match in SFS',
     'sfs_ip_match'      => 'IP match in SFS',
-    'sfs_username_match' => 'Username match in SFS',
+    'sfs_username_match' => 'User name match in SFS',
     'uid'               => 'UID',
     'username'          => 'Gebruikersnaam',
     'remote_ip'         => 'Remote IP',
@@ -2749,7 +2754,7 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
-    'min_username_length' => 'Minimum Username Length',
+    'min_username_length' => 'Minimum User name Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
     'bb2_ban_log' => 'Log Automatic Ban Actions',
@@ -2799,10 +2804,10 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Artikel Overzicht',
+    'log_level' => 'Log Level',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2816,7 +2821,6 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Overig',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
-
 );
 
 $LANG_fs['Core'] = array(
@@ -2872,7 +2876,7 @@ $LANG_fs['Core'] = array(
 
 $LANG_configSelect['Core'] = array(
     0 => array(1 => 'Ja', 0 => 'Nee'),
-    1 => array('true' => 'Ja', 'false' => 'Nee'),
+    1 => array(true => 'Ja', false => 'Nee'),
     2 => array(0 => 'Afwijzen', 1 => 'Bewaar alleen Laatste', 2 => 'Meerdere Posts Toestaan'),
     3 => array(0 => 'Trackback Ingeschakeld', 1 => 'Trackback niet toegestaan'),
     4 => array(0 => 'Niets controleren', 1 => 'Controleer URL website', 2 => 'Controleer Volledige URL', 3 => 'Controleer website URL en Volledige URL', 4 => 'Controleer IP met IP website', 5 => 'Controleer IP en URL website', 6 => 'Controleer IP en volledige URL', 7 => 'Controleer IP, Volledige URL en URL wbsite'),
@@ -2907,5 +2911,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Datum', 'title'=>'Titel', 'uid'=>'Auteur', 'hits'=>'Treffers', 'sid'=>'Story ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Nieuwe Gebruiker'),
+    36 => array( '50' => 'DVLP_DEBUG',
+                '100' => 'DEBUG',
+                '200' => 'INFO',
+                '250' => 'NOTICE',
+                '300' => 'WARNING',
+                '400' => 'ERROR',
+                '500' => 'CRITICAL',
+                '550' => 'ALERT',
+                '600' => 'EMERGENCY'
+               ),
 );
 ?>

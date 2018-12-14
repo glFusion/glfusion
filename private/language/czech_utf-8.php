@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
-*  Jason Whittenburg	jwhitten AT securitygeeks DOT com
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
 *
 */
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file cannot be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -31,19 +31,28 @@ $LANG01 = array(
     2 => 'Číst celé',
     3 => 'komentářů',
     4 => 'Editovat',
+    5 => 'Hlasování',					// depreciated
+    6 => 'Výsledky',					// depreciated
+    8 => 'hlasů',					// depreciated
+    9 => 'Admin Functions:',		// depreciated
     10 => 'Příspěvky',
     11 => 'Články',
     12 => 'Bloky',
     13 => 'Sekce',
     17 => 'Uživatelé',
+    18 => 'SQL Query',				// depreciated
     19 => '<b>Odhlásit</b>',
+    20 => 'User Information:',		// depreciated
     21 => 'Uživatel',
+    22 => 'User ID',				// depreciated
+    23 => 'Úroveň práv',			// depreciated
     24 => 'Anonymní host',
     25 => 'Odpověď',
     26 => ' Následující komentáře jsou názorem jejich vkladatele. <br>správce webu neručí za to co je zde napsáno.',
     27 => 'Naposledy přidáno',
     28 => 'Smazat',
     29 => 'Nejsou žádné komentáře.',
+    30 => 'Older Stories',			// depreciated
     31 => 'Povolené autotagy:',
     32 => 'Chyba, neplatné uživatelské jméno',
     33 => 'Chyba, nepovolený zápis do log souboru',
@@ -56,23 +65,45 @@ $LANG01 = array(
     41 => 'Hosté',
     42 => 'Publikováno:',
     43 => 'Odpovědět na toto',
+    44 => 'Parent',					// depreciated
+    45 => 'MySQL Error Number',		// depreciated
+    46 => 'MySQL Error Message',	// depreciated
     47 => 'Uživatelské menu',
     48 => 'Informace o účtu',
+    49 => 'Preference',			// depreciated
+    50 => 'Error with SQL statement',	// depreciated
     51 => 'help',
+    52 => 'Nový',					// depreciated
+    53 => 'Admin Home',				// deprecated
+    54 => 'Could not open the file.',	// depreciated
+    55 => 'Error at',				// depreciated
+    56 => 'Hlasování',					// depreciated
     57 => 'Heslo',
     58 => 'Přihlásit',
     59 => "Nemáte zatím účet?  Přihlašte se jako <a href=\"%s/users.php?mode=new\" rel=\"nofollow\"><b>Nový uživatel</b></a>",
     60 => 'Okomentovat',
     61 => 'Nový uživatel',
     62 => 'slov',
+    63 => 'Comment Preferences',	// depreciated
     64 => 'Poslat článek emailem',
     65 => 'Verze pro tiskárnu',
     67 => 'Vítá vás ',
     68 => 'Hlavní strana',
+    69 => 'Kontakt',				// depreciated
+    70 => 'Vyhledat',					// depreciated
     71 => 'Příspěvky',
+    72 => 'Web Resources',			// depreciated
     75 => 'Rozšířené hledání',
+    76 => 'Celková statistika stránek',		// depreciated
     77 => 'Pluginy',
+    79 => 'What\'s New',			// depreciated
+    80 => 'stories in last',		// depreciated
+    81 => 'story in last',			// depreciated
+    82 => 'hodin',					// depreciated
     83 => 'KOMENTÁŘE',
+    85 => 'last 48 hrs',			// depreciated
+    86 => 'Nejsou nové komentáře',		// depreciated
+    87 => 'last 2 wks',				// depreciated
     90 => 'Hlavní strana',
     91 => 'Stránka vytvořena za',
     92 => 'sekund ',
@@ -80,21 +111,27 @@ $LANG01 = array(
     94 => "Všechna práva a ochranné známky na těchto stránkách patří jejich vlastníkům.",
     95 => 'Používáme',
     96 => 'Skupiny',
+    97 => 'Word List',				// depreciated
     98 => 'Pluginy',
     99 => 'ČLÁNKY',
+    100 => 'No new stories',		// depreciated
     101 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     103 => 'DB zálohy',
     104 => '-',
     105 => 'Emailový démon',
     106 => 'Zhlédnuto',
     107 => 'Test Verze GLF',
+    108 => 'Clear Cache',			// depreciated
     109 => 'Report abuse',
     110 => 'Report this post to the site admin',
     112 => 'Reg. uživ.',
     113 => 'Dokumentace',
     114 => 'TRACKBACKS',
+    115 => 'No new trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Adresář',
+	// depreciated
+    118 => 'Please continue reading on the next page:',
     119 => "Neznám své <a href=\"%s/users.php?mode=getpassword\" rel=\"nofollow\">heslo</a>?",
     120 => 'Stálý odkaz na tento komentář ',
     121 => 'Komentářů (%d)',
@@ -104,8 +141,8 @@ $LANG01 = array(
     125 => 'Chceš OPRAVDU vymazat VŠECHNY vybrané položky?',
     126 => 'Výběr (nebo jeho zrušení) všech položek',
     127 => 'Stálý odkaz',
-
     129 => 'Konfigurace',
+    130 => 'Webservices',			// depreciated
     500 => 'Prosím nezapomeň osdtrait adresář admin/install/ po instalaci nebo po upgradu!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
@@ -117,14 +154,14 @@ $LANG01 = array(
     'autotag_perms'             => 'Autotag Permissions',
     'subscribe'                 => 'Odebírej',
     'unsubscribe'               => 'Unsubscribe',
-    'view_online'               => 'Click <a href="%s">here</a> to view online',
+    'view_online'               => 'Click <a href="%s">here</a> to view on-line',
     'no_new_items'              => 'No New Items',
     'allowed_html'              => 'Allowed HTML:',
     'posted_in'                 => 'Posted in',
     'continue_reading'          => 'Continue Reading',
-    'menu'                      => 'Menu',
-    'show_allowed_content'      => 'Show Allowed Content',
-    'blocks_left_title'         => 'Left Side',
+    'menu'                      => 'Menu',                  // depreciated
+    'show_allowed_content'      => 'Show Allowed Content',  // depreciated
+    'blocks_left_title'         => 'Left Side',             // depreciated
     'blocks_right_title'        => 'Right Side',
     'blocks_footer_title'       => 'Footer',
     'source'                    => 'Source',
@@ -138,9 +175,10 @@ $LANG01 = array(
 $LANG03 = array(
     1 => 'Vložit komentář',
     2 => 'Typ komentáře',
-    3 => 'Odhlásit',
-    4 => 'Vytvořit účet',
+    3 => 'Odhlásit',              // depreciated
+    4 => 'Vytvořit účet',      // depreciated
     5 => 'Uživatel',
+    // depreciated
     6 => 'Tato stránka vyžaduje přihlášení pro vložení komentáře, prosím přihlašte se.  Pokud nemáte účet - můžete si ho vytvořit.',
     7 => 'Váš poslední komentář vložen před ',
     8 => " sekundami.  Tato stránka vyžaduje prodlevu %s sekund mezi komentáři.",
@@ -148,7 +186,7 @@ $LANG03 = array(
     10 => 'Pošli oznámení',
     11 => 'Vložit komentář',
     12 => 'Prosím vyplňte Titulek a Komentář, jinak nelze vložit.',
-    13 => 'Vaše info',
+    13 => 'Vaše info',   // depreciated
     14 => 'Náhled',
     15 => 'Oznam příspěvek jako nevhodný',
     16 => 'Titulek',
@@ -167,15 +205,15 @@ $LANG03 = array(
     29 => 'Pošli změny',
     30 => 'Edited on',
     31 => 'Publikoval:',
-    32 => 'Edituj komentář',
-    33 => 'Editování odpovědi na komentář',
-    34 => 'Náhled',
-    35 => 'Uložit změny',
-    36 => 'Uvědom mě o nových odpovědích',
-    37 => 'Nová odpověď na komentář',
-    38 => 'Někdo odpověděl na tvůj komentář.',
-    39 => 'Můžeš si prohlédnout celé vlákno komentáře na následující adrese: ',
-    40 => 'Pokud nechceš dostávat oznámení o dalších odpovědích podívej se na tento odkaz: ',
+    32 => 'Edituj komentář',              //depreciated
+    33 => 'Editování odpovědi na komentář',   //depreciated
+    34 => 'Náhled',     // depreciated
+    35 => 'Uložit změny',          // depreciated
+    36 => 'Uvědom mě o nových odpovědích',       // depreciated
+    37 => 'Nová odpověď na komentář',              // depreciated
+    38 => 'Někdo odpověděl na tvůj komentář.',  // depreciated
+    39 => 'Můžeš si prohlédnout celé vlákno komentáře na následující adrese: ', // depreciated
+    40 => 'Pokud nechceš dostávat oznámení o dalších odpovědích podívej se na tento odkaz: ', // depreciated
     41 => 'Edituj komentář',
     42 => 'New Comment Notification',
     43 => 'Poslal',
@@ -194,7 +232,6 @@ $LANG03 = array(
     56 => 'Comment has been approved and is now visible.',
     57 => 'Silent Edit',
     58 => 'No Title Available',
-
 );
 
 ###############################################################################
@@ -211,17 +248,18 @@ $LANG04 = array(
     8 => 'PGP klíč',
     9 => 'Uložit změny',
     10 => 'Posledních 10 komentářů uživatele',
-    11 => 'Bez komentářů uživatele',
-    12 => 'Uživatelské nastavení:',
-    13 => 'Posílat na konci každého dne výtah z weblogu emailem',
+    11 => 'Bez komentářů uživatele',       // depreciated
+    12 => 'Uživatelské nastavení:',   // depreciated
+    13 => 'Posílat na konci každého dne výtah z weblogu emailem',   // depreciated
     14 => 'Toto heslo bylo náhodně vygenerováno systémem. Doporučuje se změnit co nejdříve. Pro změnu hesla se přihlašte a změnte si ho poté v menu Informace o účtu v Uživatelském rozhraní.',
     15 => "Váš %s účet byl vytvořen. Můžete se přihlásit, níže jsou Vaše přihlašovací data. Prosím uschovejt si tento email pro budoucí reference.",
     16 => 'Informace o účtu',
-    17 => 'Účet neexistuje',
+    17 => 'Účet neexistuje', // depreciated
     18 => 'Email se zdá být v nesprávném formátu',
     19 => 'Uživatel nebo email již existuje',
-    20 => 'Email se zdá být v nesprávném formátu',
+    20 => 'Email se zdá být v nesprávném formátu', // ddepriated
     21 => 'Chyba',
+    22 => "Register with %s!",		// depreciated
     23 => "Členství registrováno na %s.<br />Vaše eMailová adresa <b><i>nikdy nebude</i></b> na těchto stránkách veřejně zobrazena.",
     24 => 'Vaše heslo bude posláno na vámi zadanou emailovou adresu.',
     25 => 'Zapomenuté heslo?',
@@ -262,12 +300,17 @@ $LANG04 = array(
     60 => 'Jak chcete zobrazovat komentáře?',
     61 => 'Nejnovější nebo nejstarší nejdříve?',
     62 => 'Systémové nastavení - 100',
+	// depreciated
+    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
     64 => 'Nastavení komentářů pro',
     65 => "Zkuste se přihlásit znovu",
     66 => 'Spletl jste se v zadání.  Prosím zkuste to znovu. Nebo jste  <a href="%s/users.php?mode=new" rel="nofollow"><b>nový uživatel</b></a>?',
     67 => 'Uživatelem od',
     68 => 'Pamatovat si mne',
     69 => 'Jak dlouho si Vás systém bude pamatovat.',
+    70 => "Customize the layout and content of %s",		// depreciated
+	// depreciated
+    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
     72 => 'Grafické téma',
     73 => 'Jazyk',
     74 => 'Vyberte jak má weblog vypadat',
@@ -301,7 +344,7 @@ $LANG04 = array(
     102 => 'Email od uživatelů',
     103 => 'Povol email od ostatních uživatelů',
     104 => 'Zobraz online stav',
-    105 => 'Show up in Who\'s Online block',
+    105 => 'Show up in Who\'s On-line block',
     106 => 'Umístění',
     107 => 'Shown in your public profile',
     108 => 'Potvrď nové heslo',
@@ -351,11 +394,11 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Časové pásmo',
     159 => 'Tento email byl generován automaticky. Prosím, neodpovídej na něj.',
-    160 => 'Online',
+    160 => 'On-line',
     161 => 'Síla hesla',
     162 => 'Uživatelské jméno nesmí obsahovat znaky ( < > " % & * / \\ )',
     163 => 'Remote User',
-    164 => 'Remote Username',
+    164 => 'Remote User name',
     165 => 'Remote Service',
     166 => 'Remote User Info',
     167 => 'Na Vaši eMailovou adresu bude odeslán aktivační eMail.',
@@ -376,7 +419,7 @@ $LANG04 = array(
     182 => 'Popis',
     183 => 'Notification Subscriptions',
     184 => 'New Post Notification',
-    185 => 'There is a local account with the same email address as your Remote email. Would you like to merge these accounts?',
+    185 => 'There is a local account with the same email address as your remote email. Would you like to merge these accounts?',
     186 => 'If you do not wish to merge the accounts, please select the Cancel button below.',
     187 => 'Enter the password above for the local account and hit the Merge button.',
     188 => 'Merge',
@@ -390,9 +433,9 @@ $LANG04 = array(
     196 => 'Already Have an Account?',
     197 => 'Connect for Easy Access!',
     198 => 'Social Memberships',
-    199 => 'Enter your username for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
+    199 => 'Enter your user name for the social networks that you belong to and want to have links in your profile page to your homepage on the social site.',
     200 => 'Social Service',
-    201 => 'Username',
+    201 => 'Uživatel',
     202 => 'Follow Me',
     203 => 'Activate Account',
     204 => 'Disconnect Remote Account',
@@ -705,7 +748,7 @@ $LANG21 = array(
     17 => 'Obsah bloku',
     18 => 'Prosím vyplňte Titulek bloku, Úroveň práv a Obsah',
     19 => 'Manažer bloků',
-    21 => 'Úroveň práv bloku',
+    21 => 'Úroveň práv bloku', // depreciated
     23 => 'Pořadí bloku',
     25 => 'Pro smazání a editaci bloku, klepněte na blok níže.  Pro vytvoření nového bloku klepněte na "Přidat" výše.',
     26 => 'Vzhled bloku',
@@ -1047,8 +1090,8 @@ $LANG28 = array(
     106 => 'Čeká',
     107 => 'Ověřování',
     108 => 'View Profile',
-    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
-    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the Username to view the User Profile to see details.',
+    109 => 'Are you absolutely sure you want to delete this User?  Deleting this User will delete some of the content that has been created by this User, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the User name to view the User Profile to see details.',
+    110 => 'Are you absolutely sure you want to delete ALL selected Users?  Deleting these Users will delete some of the content that has been created by these Users, and the remainder will be assigned to the Anonymous User or Site Administrator!  Press Cancel and then click on the User name to view the User Profile to see details.',
     111 => 'Send eMail (Local)'
 );
 
@@ -1108,6 +1151,8 @@ $LANG31 = array(
     14 => 'Přepsat uživ. nastavení soukromí',
     15 => 'Chyba při zasílání: ',
     16 => 'Zasláno: ',
+	// depreciated
+    17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'Pro',
     19 => 'Použijte tento panel pro poslání mailu skupině uživatelů těchto stránek.  Pokud chcete poslat zprávu všem uživatelům, vyberte skupinu Logged-in z roletového menu.  Pro poslání zprávy určitému uživateli, vyber tohoto uživatele ze seznamu (odkaz je výše).',
     20 => "Odesláno <successcount> zpráv a nezasláno <failcount> zpráv.  Detaily jsou níže u každého pokusu o zaslání zvlášť.  Můžete se pokusit znovu <a href=\"%s/mail.php\">zaslat zprávu</a> nebo <a href=\"%s/moderation.php\">se vrátit na stránku administrace</a>.",
@@ -1167,11 +1212,11 @@ $LANG32 = array(
     38 => 'Update',
     39 => 'Unable to open temporary upload directory.',
     40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer. You will need to manually install this plugin.',
-    41 => 'Permission error on file: %s<br />',
+    41 => 'Permission error on file: %s<br>',
     42 => 'File / Directory Permission Errors',
-    43 => 'glFusion could not copy all the files to the proper directories due to permission errors. The plugin installation has been aborted.<br />Below is a list of all permission errors encountered.<br /><br />',
+    43 => 'glFusion could not copy all the files to the proper directories due to permission errors. The plugin installation has been aborted.<br>Below is a list of all permission errors encountered.<br><br>',
     44 => 'Please correct the permission errors above and try the upload again.',
-    45 => 'Unable to copy %s to the %s directory.<br />',
+    45 => 'Unable to copy %s to the %s directory.<br>',
     46 => 'Unable to locate the uploaded plugin.',
     47 => 'Unable to create temporary work directory.',
     48 => 'Unable to decompress the uploaded plugin.',
@@ -1201,7 +1246,7 @@ $LANG32 = array(
     72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
     73 => 'Automated Plugin Installer',
     74 => 'Unable to locate the XML description file.',
-    75 => 'Unable to copy %s to %s<br />',
+    75 => 'Unable to copy %s to %s<br>',
     76 => 'Are you sure you want to uninstall (unplug) this Plugin?',
     77 => 'Are you sure you want to update this Plugin?',
     78 => 'Control',
@@ -1211,9 +1256,9 @@ $LANG32 = array(
     82 => 'Requires',
     83 => 'Info',
     84 => 'Bundled',
-    85 => 'Upload Autotag',
-    86 => 'Automated Autotag Installer Error',
-    87 => 'Autotag Installer',
+    85 => 'Upload Auto tag',
+    86 => 'Automated Auto tag Installer Error',
+    87 => 'Auto tag Installer',
     88 => 'Are you sure you want to remove this plugin?',
     89 => 'Are you absolutely sure you want to remove this plugin?  This will result in the deletion of all of the files and directories relating to this plugin, and to re-install this plugin, you will have to upload another copy.',
     90 => 'Version <b>%s</b> of the <b>%s</b> plugin is required, but version <b>%s</b> is installed. Please update the %s plugin.',
@@ -1298,7 +1343,7 @@ $LANG_SOCIAL = array(
     'social_share'          => 'Share Services',
     'share_instructions'    => 'You can configure which social sharing buttons are enabled',
     'follow_instructions'   => 'You can configure which social follow me services are enabled',
-    'membership_instructions' => 'You can enter the <b>Username(s)</b> for the social sites associated to your website.',
+    'membership_instructions' => 'You can enter the <b>User name(s)</b> for the social sites associated to your website.',
     'social_follow'         => 'Follow Services',
     'site_memberships'      => 'Site Social Memberships',
     'id'                    => 'ID',
@@ -1310,7 +1355,7 @@ $LANG_SOCIAL = array(
     'follow_me'             => 'Follow Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
-    'site_username'         => 'Site Username',
+    'site_username'         => 'Site User name',
     'additional_html'       => 'Additional HTML for block - displays after follow buttons',
     'saved_msg'             => 'Social Integrations successfully saved.',
     'overridden'            => 'glFusion\'s Social Sharing has been disabled. Social Sharing is handled by the %s plugin.',
@@ -1408,7 +1453,7 @@ $MESSAGE = array(
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
     110 => 'Unable to retrieve OAuth authentication URL.',
     111 => 'OAuth authentication error.',
-    112 => 'OAuth certification has been cancelled.',
+    112 => 'OAuth certification has been canceled.',
     113 => 'Your account has been created successfully. {site_url}',
     114 => 'Warning: Resynchronization with your remote OAuth account has failed but your other account information has been successfully saved.',
     115 => 'Warning: The remote OAuth authentication service has been disabled.',
@@ -1422,13 +1467,13 @@ $MESSAGE = array(
     503 => 'Plugin installation is disabled in demo mode.',
     504 => 'Please enter a password for the user account.',
     505 => 'Please enter an eMail for the user account.',
-    506 => 'Username cannot be blank.',
+    506 => 'User name cannot be blank.',
     507 => 'eMail cannot be blank.',
     508 => 'eMail address does not match the confirmation eMail address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    512 => 'Username contains invalid characters " < > / \\ $ % * are not allowed',
-    513 => 'Remote username cannot be blank.',
+    512 => 'User name contains invalid characters " < > / \\ $ % * are not allowed',
+    513 => 'Remote user name cannot be blank.',
     514 => 'Remote service cannot be empty.',
     515 => 'Thank you, your account has now been activated.',
     516 => 'Your activation token has expired.',
@@ -1468,9 +1513,12 @@ $LANG_ACCESS = array(
     'coregroup' => 'Hlavní skupina',
     'yes' => 'Ano',
     'no' => 'Ne',
+// not used
+    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+//
     'groupmsg' => 'Security Groups on this site are hierarchical.  By adding this group to any of the groups below you will giving this group the same rights that those groups have.  Where possible it is encouraged you use the groups below to give rights to a group.  If you need this group to have custom rights then you can select the rights to various site features in the section below called \'Rights\'.  To add this group to any of the ones below simply check the box next to the group(s) that you want.',
-    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br />If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
-    'coregroupmsg' => "This group is a core {$_CONF['site_name']} Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
+    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br>If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
+    'coregroupmsg' => "This group is a core Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
     'rightsdescr' => 'A group\'s access to a certain right below can be given directly to the group OR to a different group that this group is a part of.  The ones you see below with a disabled checkbox are the rights that have been given to this group because it belongs to another group with that right.  The rights with checkboxes below are rights that can be given directly to this group.',
     'lock' => 'Uzamčeno',
     'members' => 'Uživatelé',
@@ -1539,9 +1587,8 @@ $LANG_DB_ADMIN = array(
     'db_explanation'      => 'To create a new backup of your site\'s database, select the "Backup Database" option above. To download a backup, click on the filename from the list below.',
     'backup_instructions' => 'To create a new backup of your site database, select the "Do Backup" button below. This will backup all current glFusion tables. You can download a copy of the backup from the main Database Administration Screen.',
     'zero_size'           => 'Backup Failed: File size was 0 bytes',
-// not used
-    'path_not_found'      => "{$_CONF['backup_path']} does not exist or is not a directory",
-//
+	// depreciated
+    'path_not_found'      => "%s does not exist or is not a directory",
     'no_access'           => "ERROR: Directory %s is not accessible.",
     'backup_file'         => 'Backup file',
     'size'                => 'Size',
@@ -1655,19 +1702,6 @@ $LANG_PWD = array(
     'error_no_cap'     => 'Password must contain at least one upper case letter',
     'error_no_lower'   => 'Password must contain at least one lower case letter',
     'error_no_symbol'  => 'Password must contain at least one special character',
-);
-
-###############################################################################
-
-$LANG_BUTTONS = array(
-    1 => 'Hlavní strana',
-    2 => 'Kontakt',
-    3 => 'Publikovat',
-    7 => 'Statistika',
-    8 => 'Vlastní nastavení',
-    9 => 'Hledání',
-    10 => 'rozšířené hledání',
-    11 => 'Adresář'
 );
 
 ###############################################################################
@@ -1912,7 +1946,7 @@ $LANG_ADMIN = array(
     'block_list' => 'Block List',
     'topic_list' => 'Topic List',
     'tb_list' => 'Trackback List',
-    'custom_autotag' => 'Custom Autotags',
+    'custom_autotag' => 'Custom Auto tags',
     'alt_topic' => 'Alternate Topic',
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reset',
@@ -2007,19 +2041,19 @@ $LANG_BBCODE = array(
     'smiley_label'      => 'Smajlíci',
     'size_label'        => 'Font Size',
     'color_label'       => 'Font Color',
-    'bold_help'         =>'Bold text: [b]text[/b]',
-    'italic_help'       =>'Italic text: [i]text[/i]',
-    'underline_help'    =>'Underline text: [u]text[/u]',
-    'quote_help'        =>'Quote text: [quote]text[/quote]',
-    'code_help'         =>'Code display: [code]code[/code]',
-    'list_help'         =>'List: [list]text[/list]',
-    'olist_help'        =>'List: [list=]text[/list]',
-    'listitem_help'     =>'List item: [*]text[/*]',
-    'img_help'          =>'Insert image: [img]http://image_url[/img]',
-    'url_help'          =>'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
-    'smiley_help'       =>'Open Smiley Window',
-    'size_help'         =>'Font size: [size=9]small text[/size]',
-    'color_help'        =>'Text Color: [color=red]red text[/color]',
+    'bold_help'         => 'Bold text: [b]text[/b]',
+    'italic_help'       => 'Italic text: [i]text[/i]',
+    'underline_help'    => 'Underline text: [u]text[/u]',
+    'quote_help'        => 'Quote text: [quote]text[/quote]',
+    'code_help'         => 'Code display: [code]code[/code]',
+    'list_help'         => 'List: [list]text[/list]',
+    'olist_help'        => 'List: [list=]text[/list]',
+    'listitem_help'     => 'List item: [*]text[/*]',
+    'img_help'          => 'Insert image: [img]http://image_url[/img]',
+    'url_help'          => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help'       => 'Open Smiley Window',
+    'size_help'         => 'Font size: [size=9]small text[/size]',
+    'color_help'        => 'Text Color: [color=red]red text[/color]',
     'size_tiny'         => 'Tiny',
     'size_small'        => 'Small',
     'size_normal'       => 'Normal',
@@ -2041,35 +2075,6 @@ $LANG_BBCODE = array(
     'color_white'       => 'White',
     'color_black'       => 'Black',
     'formatted_code'    => 'Formatted Code',
-);
-
-# Localisation of the texts for the Admin file check
-###############################################################################
-# admin/filecheck.php - distribution integrity checker
-
-$LANG_FILECHECK = array(
-    'filecheck'         => 'File Integrity Check',
-    'recheck'           => 'Recheck File Integrity',
-    'confirm'           => 'Are you sure you want to deleted the selected file(s)?',
-    'scan'              => 'Your site\'s file integrity is being analyzed.  Please be patient, this process may take awhile to complete, and execution speed depends upon the hosting environment.  If this script approaches the maximum PHP script execution time of %s seconds, scanning will be interrupted and an error message will be displayed.',
-    'results'           => 'Your site\'s files and directories have been compared to the glFusion v%s distribution, and the results are shown below.  Added or missing files and directories have been identified, and files that have been added may be selected for deletion.  Directories that have been added will be detected, but presently these must be removed manually.<br /><br />Additional files and/or directories that are detected may be associated with plugins or other scripts that you have added, or are otherwise critical to your site\'s operation, and therefore <b>this DOES NOT mean you should simply delete these files!&nbsp;&nbsp;<span style="color:red">Please use this tool with caution!</span></b>',
-    'expiration1'       => 'NOTE: The scan was aborted because the elapsed time it was approaching your site\'s PHP maximum execution time limit.  This analysis script is CPU and I/O-intensive, and can be affected by a number of factors in your web hosting environment.  Please consider one or more of the following recommendations resolve this problem:<br />',
-    'expiration2'       => '<ol><li>Try increasing the value of \'max_execution_time\' in your php.ini file.  It is currently set to %s seconds.</li><li>Manually inspect your site and remove any unneeded files and directories.</li></ol>',
-    'abort'             => 'Abort Scan',
-    'aborted'           => 'The scan was aborted.',
-    'where'             => 'Kde',
-    'type'              => 'Type',
-    'delta'             => 'Change',
-    'location'          => 'Umístění',
-    'path'              => 'Cesta',
-    'file'              => 'file',
-    'dir'               => 'directory',
-    'plugin'            => 'plugin',
-    'added'             => 'added',
-    'missing'           => 'missing',
-    'removed'           => '%s %s deleted.  Your site\'s File Integrity will now be rechecked ....',
-    'working'           => 'Scanning, please wait ...<br />',
-    'elapsed'           => 'The scan completed in %s sec.<br /><br />'
 );
 
 # Localisation of the texts for Menu Builder
@@ -2260,9 +2265,9 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'autotag',
-    'title'                     => 'Autotag Manager',
+    'title'                     => 'Auto tag Manager',
     'menulabel'                 => 'Autotagy',
-    'public_title'              => 'Autotag List',
+    'public_title'              => 'Auto tag List',
     'tag'                       => 'Tag',
     'type'                      => 'Type',
     'module'                    => 'Module',
@@ -2272,18 +2277,18 @@ $LANG_AM = array (
     'click_to_enable'           => 'Click to enable.',
     'click_to_disable'          => 'Click to disable.',
     'function'                  => 'PHPfn?',
-    'autotag_editor'            => 'Autotag Editor',
-    'autotag_list'              => 'Autotag List',
+    'autotag_editor'            => 'Auto tag Editor',
+    'autotag_list'              => 'Auto tag List',
     'edit'                      => 'Edit',
     'save'                      => 'Ulož',
     'delete'                    => 'Delete',
     'cancel'                    => 'Cancel',
-    'confirm'                   => 'Are you sure you want to delete this Autotag?',
+    'confirm'                   => 'Are you sure you want to delete this Auto tag?',
     'access_denied'             => 'Přístup odepřen',
-    'access_denied_msg'         => 'You are illegally trying access one of the Autotag Manager administration pages.  Please note that all attempts to illegally access this page are logged',
+    'access_denied_msg'         => 'You are trying access one of the Auto tag Manager administration pages.  Please note that all attempts to access this page are logged',
     'php_msg_enabled'           => 'If checked, the PHP class <b>{tag}.class.php</b> will be called to expand the tag. The <b>Replacement</b> text will be ignored.',
-    'php_msg_norights'          => '<br />NOTE: PHP Autotags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Autotags and/or enable or disable existing PHP Autotags.',
-    'php_msg_disabled'          => 'PHP Autotags have been disabled.<br />To enable, you must set the \'Allow PHP in Autotags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
+    'php_msg_norights'          => '<br>NOTE: PHP Auto tags are enabled, however the current user has not been assigned the \'autotag.PHP\' feature, and therefore cannot create new PHP Auto tags and/or enable or disable existing PHP Autotags.',
+    'php_msg_disabled'          => 'PHP Auto tags have been disabled.<br>To enable, you must set the \'Allow PHP in Auto tags\' setting to \'True\' in the Autotag Manager plugin configuration panel.',
     'disallowed_tag'            => 'The tag you have chosen is restricted and not available for use. Choose another tag.',
     'duplicate_tag'             => 'The tag you have chosen is already in use. Please choose another tag name or edit the existing tag.',
     'no_tag_or_replacement'     => 'You must at least fill in the <b>Tag</b> and <b>Replacement</b> fields.',
@@ -2291,13 +2296,13 @@ $LANG_AM = array (
     'phpfn_must_exist'          => 'You must create this class and place it in system/autotag/ directory before defining the associated PHP-based Autotag.',
     'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
     'html_allowed'              => '(HTML:OK)',
-    'instructions'              => 'To modify or delete an Autotag, click on that tag\'s edit icon below. To create a new Autotag, click on "Create New" above. <p>If there are PHP function-based Autotags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Autotags are disabled in the Autotag Manager plugin configuration panel.</p>',
-    'public_instructions'       => 'The complete list of Autotags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
-    'replace_explain'           => 'Autotags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Autotags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
+    'instructions'              => 'To modify or delete an Auto tag, click on that tag\'s edit icon below. To create a new Auto tag, click on "Create New" above. <p>If there are PHP function-based Auto tags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Auto tags are disabled in the Autotag Manager plugin configuration panel.</p>',
+    'public_instructions'       => 'The complete list of Auto tags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
+    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
+                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
                                 .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
-    'autotagpermmsg'            => 'Select which features (operations) you want to allow the autotag to be used.',
-    'autotag'                   => 'Autotag',
+    'autotagpermmsg'            => 'Select which features (operations) you want to allow the auto tag to be used.',
+    'autotag'                   => 'Auto tag',
     'desc_showblock'            => 'HTML: renders a block. usage: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: to a story on this site; link_text defaults to story title.  usage: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: renders story content, up to and including only introduction text.  usage: [story_introtext:<i>story_id</i>]',
@@ -2394,7 +2399,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'On',
     'open_basedir'              => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'openssl_extension'         => 'OpenSSL Extension',
-    'php_req_version'           => 'glFusion requires PHP version 7.0.0 or newer.',
+    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Version',
     'php_warning'               => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
@@ -2448,13 +2453,13 @@ $LANG_UPGRADE = array(
 # admin/sfs.php - stop forum spam checks
 $LANG_SFS = array(
     'title'             => 'Stop Forum Spam (SFS) User Check',
-    'instructions'      => 'All users have had their username, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
+    'instructions'      => 'All users have had their user name, email address, and source IP address checked in the Stop Forum Spam database.  You may select any user\'s that were found in the SFS database and ban them from further use of your site.',
     'no_record_found'   => 'No Record Found',
     'sfs_email_match'   => 'Email Match in SFS',
     'sfs_ip_match'      => 'IP match in SFS',
-    'sfs_username_match' => 'Username match in SFS',
+    'sfs_username_match' => 'User name match in SFS',
     'uid'               => 'UID',
-    'username'          => 'Username',
+    'username'          => 'Uživatel',
     'remote_ip'         => 'Remote IP',
     'email'             => 'Emailová adresa',
     'sfs_status'        => 'SFS Status',
@@ -2514,7 +2519,7 @@ $LANG_confignames['Core'] = array(
     'allow_user_themes' => 'Allow User Themes',
     'allow_user_language' => 'Allow User Language',
     'allow_user_photo' => 'Allow User Photo',
-    'allow_username_change' => 'Allow Username Changes',
+    'allow_username_change' => 'Allow User name Changes',
     'allow_account_delete' => 'Allow Account Deletion',
     'hide_author_exclusion' => 'Allow Hide Author',
     'show_fullname' => 'Show Fullname',
@@ -2749,7 +2754,7 @@ $LANG_confignames['Core'] = array(
     'htmlfilter_comment' => 'HTML allowed in comments',
     'htmlfilter_story' => 'HTML allowed in stories',
     'htmlfilter_root' => 'Additional HTML allowed for Root users',
-    'min_username_length' => 'Minimum Username Length',
+    'min_username_length' => 'Minimum User name Length',
     'bb2_enabled' => 'Bad Behavior2 Enabled',
     'bb2_ban_enabled' => 'Enable Automatic Banning',
     'bb2_ban_log' => 'Log Automatic Ban Actions',
@@ -2799,10 +2804,10 @@ $LANG_confignames['Core'] = array(
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
     'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
-
 // embedded field sets
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Administrace článků',
+    'log_level' => 'Log Level',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2816,7 +2821,6 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Miscellaneous',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
-
 );
 
 $LANG_fs['Core'] = array(
@@ -2872,7 +2876,7 @@ $LANG_fs['Core'] = array(
 
 $LANG_configSelect['Core'] = array(
     0 => array(1 => 'True', 0 => 'False'),
-    1 => array('true' => 'True', 'false' => 'False'),
+    1 => array(true => 'True', false => 'False'),
     2 => array(0 => 'Reject', 1 => 'Only Keep Latest', 2 => 'Allow Multiple Posts'),
     3 => array(0 => 'Trackback Enabled', 1 => 'Trackback Disabled'),
     4 => array(0 => 'Don\'t Check Anything', 1 => 'Check against Site URL', 2 => 'Check full URL', 3 => 'Check against Site URL and full URL', 4 => 'Check IP against Site IP', 5 => 'Check IP and Site URL', 6 => 'Check IP and Full URL', 7 => 'Check IP, Full URL, and Site URL'),
@@ -2907,5 +2911,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Datum', 'title'=>'Titulek', 'uid'=>'Autor', 'hits'=>'Kliknutí', 'sid'=>'ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Noví uživatelé'),
+    36 => array( '50' => 'DVLP_DEBUG',
+                '100' => 'DEBUG',
+                '200' => 'INFO',
+                '250' => 'NOTICE',
+                '300' => 'WARNING',
+                '400' => 'ERROR',
+                '500' => 'CRITICAL',
+                '550' => 'ALERT',
+                '600' => 'EMERGENCY'
+               ),
 );
 ?>
