@@ -106,6 +106,10 @@ require_once $_CONF['path'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
 
 
+if (version_compare(GVERSION,'2.0.0','>=')) {
+    class_alias('\glFusion\Cache\Cache', '\glfusion\Cache');
+}
+
 /**
   * Set debug console for development work
   */
