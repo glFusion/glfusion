@@ -567,7 +567,7 @@ class config
      */
     function _get_extended($subgroup, $group)
     {
-        global $_TABLES, $LANG_confignames, $LANG_configselects, $LANG_configSelect;
+        global $_TABLES, $_VARS, $LANG_confignames, $LANG_configselects, $LANG_configSelect;
 
         $db = Database::getInstance();
 
@@ -639,6 +639,14 @@ class config
                       (($cur[4] == 'unset') ?
                        'unset' : @unserialize($cur[4])),
                       'reset' => $cur[5]);
+
+            if ($cur[0] == 'mail_smtp_password') {
+                if ( function_exists('COM_decrypt')) {
+                    $res[$cur[3]][$cur[0]]['value'] = COM_decrypt($res[$cur[3]][$cur[0]]['value'],$_VARS['guid']);
+                } elseif ( function_exists('INST_decrypt')) {
+                    $res[$cur[3]][$cur[0]]['value'] = INST_decrypt($res[$cur[3]][$cur[0]]['value'],$_VARS['guid']);
+                }
+            }
         }
 
         return $res;
