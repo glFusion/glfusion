@@ -126,6 +126,24 @@ if ( defined('DVLP_DEBUG')) {
   */
 require_once $_CONF['path'].'system/db-init.php';
 
+$db = Database::getInstance();
+
+try {
+    $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['vars']}`",
+        array(),
+        array()
+    );
+} catch(\Doctrine\DBAL\DBALException $e) {
+    $db->dbError($e->getMessage(),$sql);
+}
+$data = $stmt->fetchAll(Database::ASSOCIATIVE);
+$stmt->closeCursor();
+if (count($data) < 1) {
+    $data = array();
+}
+foreach($data AS $row) {
+    $_VARS[$row['name']] = $row['value'];
+}
 
 /**
   * Load configuration
@@ -235,26 +253,6 @@ $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-$db = Database::getInstance();
-
-try {
-    $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['vars']}`",
-        array(),
-        array(),
-        new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'glfusion_vars'));
-} catch(\Doctrine\DBAL\DBALException $e) {
-    $db->dbError($e->getMessage(),$sql);
-}
-$data = $stmt->fetchAll(Database::ASSOCIATIVE);
-$stmt->closeCursor();
-if (count($data) < 1) {
-    $data = array();
-}
-foreach($data AS $row) {
-    $_VARS[$row['name']] = $row['value'];
-}
-
-if ( isset($_VARS['guid'])) $_CONF['mail_smtp_password'] = COM_decrypt($_CONF['mail_smtp_password'],$_VARS['guid']);
 // set default UI styles
 $uiStyles = array(
     'full_content' => array('left_class' => '',

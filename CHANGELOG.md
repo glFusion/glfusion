@@ -14,6 +14,7 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Configuration 'passwd' fields will now be encrypted in the DB
   - glFusion will now remove a plugin entry from the Plugins table if the plugin's files are no longer available and it is selected for uninstall
   - glFusion now requires a UTF-8 configuration
   - Translation now handled on the glFusion CMS Crowdin site

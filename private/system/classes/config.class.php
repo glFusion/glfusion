@@ -98,7 +98,7 @@ class config
      */
     function &initConfig()
     {
-        global $_TABLES, $_CONF, $_SYSTEM;
+        global $_TABLES, $_CONF, $_SYSTEM, $_VARS;
 
         $db = Database::getInstance();
 
@@ -116,7 +116,7 @@ class config
 
         $false_str = serialize(false);
 
-        $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']}
+        $sql = "SELECT name, value, group_name, type FROM {$_TABLES['conf_values']}
                 WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
 
         try {
@@ -137,10 +137,14 @@ class config
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
 						$this->config_array[$row[2]][$row[0]] = null;
-//                        if (function_exists('COM_errorLog')) {
-//                           COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
-//                        }
                     } else {
+                        if ($row[3] == "passwd") {
+                            if ( function_exists('COM_decrypt')) {
+                                $value = COM_decrypt($value,$_VARS['guid']);
+                            } elseif ( function_exists('INST_decrypt')) {
+                                $value = INST_decrypt($value,$_VARS['guid']);
+                            }
+                        }
                         $this->config_array[$row[2]][$row[0]] = $value;
                     }
                 }
@@ -189,15 +193,15 @@ class config
         if (function_exists($fn)) {
             $value = $fn($value);
         }
-
-        if ($name == 'mail_smtp_password') {
+        // get the type
+        $type = $db->getItem($_TABLES['conf_values'],'type',array('name'=>$name,'group'=>$group));
+        if ( $type === 'passwd') {
             if ( function_exists('COM_encrypt')) {
                 $value = COM_encrypt($value,$_VARS['guid']);
             } elseif ( function_exists('INST_encrypt')) {
                 $value = INST_encrypt($value,$_VARS['guid']);
             }
         }
-
         if (in_array($name,$this->consumer_keys)) {
             $svalue = strval($value);
             $value = serialize($svalue);
@@ -370,6 +374,7 @@ class config
      *    variable is an array of arrays of text.
      *    The base variable types are:
      *    'text'    textbox displayed     string  value stored
+     *    'passwd'
      *    'select'  selectbox displayed   string  value stored
      *    'hidden'  no display            string  value stored
      *
@@ -386,9 +391,17 @@ class config
     function add($param_name, $default_value, $type, $subgroup, $fieldset,
          $selection_array=null, $sort=0, $set=true, $group='Core')
     {
-        global $_TABLES;
+        global $_TABLES, $_VARS;
 
         $db = Database::getInstance();
+
+        if ( $type === 'passwd') {
+            if ( function_exists('COM_encrypt')) {
+                $default_value = COM_encrypt($default_value,$_VARS['guid']);
+            } elseif ( function_exists('INST_encrypt')) {
+                $default_value = INST_encrypt($default_value,$_VARS['guid']);
+            }
+        }
 
         $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
@@ -640,7 +653,7 @@ class config
                        'unset' : @unserialize($cur[4])),
                       'reset' => $cur[5]);
 
-            if ($cur[0] == 'mail_smtp_password') {
+            if ($cur[1] == 'passwd') {
                 if ( function_exists('COM_decrypt')) {
                     $res[$cur[3]][$cur[0]]['value'] = COM_decrypt($res[$cur[3]][$cur[0]]['value'],$_VARS['guid']);
                 } elseif ( function_exists('INST_decrypt')) {
