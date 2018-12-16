@@ -194,7 +194,7 @@ class config
             $value = $fn($value);
         }
         // get the type
-        $type = $db->getItem($_TABLES['conf_values'],'type',array('name'=>$name,'group'=>$group));
+        $type = $db->getItem($_TABLES['conf_values'],'type',array('name'=>$name,'group_name'=>$group));
         if ( $type === 'passwd') {
             if ( function_exists('COM_encrypt')) {
                 $value = COM_encrypt($value,$_VARS['guid']);
