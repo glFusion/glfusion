@@ -63,7 +63,7 @@ function USER_deleteAccount($uid)
                              );
                 if ($userCount <= 1) {
                     // make sure there's at least 1 Root user left
-                    Log::write('system',Log::ERROR,"You can't delete the last user from the Root group.");
+                    Log::write('system',Log::ERROR,"You cannot delete the last user from the Root group.");
                     return false;
                 }
             }
@@ -93,41 +93,97 @@ function USER_deleteAccount($uid)
     }
 
     // remove from all security groups
-    $db->conn->delete($_TABLES['group_assignments'],array('ug_uid'=>$uid));
+    $db->conn->delete($_TABLES['group_assignments'],array('ug_uid'=>$uid),array(Database::INTEGER));
 
     // remove user information and preferences
-    $db->conn->delete($_TABLES['userprefs'], array('uid'=> $uid));
-    $db->conn->delete($_TABLES['userindex'], array('uid' => $uid));
-    $db->conn->delete($_TABLES['usercomment'], array('uid' => $uid));
-    $db->conn->delete($_TABLES['userinfo'], array('uid' => $uid));
-    $db->conn->delete($_TABLES['social_follow_user'], array('uid' => $uid));
-    $db->conn->delete($_TABLES['tfa_backup_codes'], array('uid' => $uid));
+    $db->conn->delete($_TABLES['userprefs'],
+                        array('uid'=> $uid),
+                        array(Database::INTEGER)
+                     );
+    $db->conn->delete($_TABLES['userindex'],
+                        array('uid' => $uid),
+                        array(Database::INTEGER)
+                     );
+    $db->conn->delete($_TABLES['usercomment'],
+                        array('uid' => $uid),
+                        array(Database::INTEGER)
+                      );
+    $db->conn->delete($_TABLES['userinfo'],
+                        array('uid' => $uid),
+                        array(Database::INTEGER)
+                     );
+    $db->conn->delete($_TABLES['social_follow_user'],
+                        array('uid' => $uid),
+                        array(Database::INTEGER)
+                     );
+    $db->conn->delete($_TABLES['tfa_backup_codes'],
+                        array('uid' => $uid),
+                        array(Database::INTEGER)
+                     );
 
     // anonymize comments
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['comments']}` SET name = 'Anonymous' WHERE uid = ?",array($uid),array(Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['comments']}` SET ipaddress = '' WHERE uid = ?",array($uid),array(Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['comments']}` SET uid = 1 WHERE uid = ?",array($uid),array(Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['commentedits']}` SET uid = 1 WHERE uid = ?",array($uid),array(Database::INTEGER));
+    $db->conn->update($_TABLES['comments'],
+                      array('name' => 'Anonymous'),
+                      array('uid' => $uid),
+                      array(Database::STRING, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['comments'],
+                      array('ipaddress' => ''),
+                      array('uid' => $uid),
+                      array(Database::STRING, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['comments'],
+                      array('uid' => 1),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['commentedits'],
+                      array('uid' => 1),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
 
-    // avoid having orphand stories/comments by making them anonymous posts
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET uid = 1 WHERE uid = ?",array($uid),array(Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET owner_id = 1 WHERE owner_id = ?",array($uid),array(Database::INTEGER));
+    // anonymize stories
+    $db->conn->update($_TABLES['stories'],
+                      array('uid' => 1),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['stories'],
+                      array('owner_id' => 1),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
 
     // ratings
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['rating_votes']}` SET ip_address = '' WHERE uid = ?",array($uid),array(Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['rating_votes']}` SET uid = 1 WHERE uid = ?",array($uid),array(Database::INTEGER));
+    $db->conn->update($_TABLES['rating_votes'],
+                      array('ip_address' => ''),
+                      array('uid' => $uid),
+                      array(Database::STRING, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['rating_votes'],
+                      array('uid' => 1),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
 
     // delete story submissions
-    $db->conn->delete($_TABLES['storysubmission'], array('uid' => $uid));
+    $db->conn->delete($_TABLES['storysubmission'],
+                      array('uid' => $uid),
+                      array(Database::INTEGER)
+    );
 
     // delete user photo, if enabled & exists
     if ($_CONF['allow_user_photo'] == 1) {
-        $photo = $db->getItem($_TABLES['users'],'photo',array('uid'=>$uid));
+        $photo = $db->getItem($_TABLES['users'],'photo',array('uid' => $uid));
         USER_deletePhoto ($photo, false);
     }
 
     // delete subscriptions
-    $db->conn->delete($_TABLES['subscriptions'],array('uid' => $uid));
+    $db->conn->delete($_TABLES['subscriptions'],
+                      array('uid' => $uid),
+                      array(Database::INTEGER)
+    );
 
     // in case the user owned any objects that require Admin access, assign
     // them to the Root user with the lowest uid
@@ -143,12 +199,22 @@ function USER_deleteAccount($uid)
     if ( $rootuser === false || $rootuser == '' || $rootuser < 2 ) {
         $rootuser = 2;
     }
+    $db->conn->update($_TABLES['blocks'],
+                      array('owner-id' => $rootuser),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
+    $db->conn->update($_TABLES['topics'],
+                      array('owner-id' => $rootuser),
+                      array('uid' => $uid),
+                      array(Database::INTEGER, Database::INTEGER)
+    );
 
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['blocks']}` SET owner_id = ? WHERE owner_id = ?",array($rootuser,$uid),array(Database::INTEGER,Database::INTEGER));
-    $db->conn->executeUpdate("UPDATE `{$_TABLES['topics']}` SET owner_id = ? WHERE owner_id = ?",array($rootuser,$uid),array(Database::INTEGER,Database::INTEGER));
-
-    // now delete the user itself
-    $db->conn->delete($_TABLES['users'], array('uid' => $uid));
+    // now delete the user
+    $db->conn->delete($_TABLES['users'],
+                      array('uid' => $uid),
+                      array(Database::INTEGER)
+    );
 
     return true;
 }
@@ -176,8 +242,10 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 
     $uid = (int) $uid;
 
-    $storedPassword = DB_getItem($_TABLES['users'],'passwd','uid='.$uid);
-    $userStatus     = DB_getItem($_TABLES['users'],'status','uid='.$uid);
+    $db = Database::getInstance();
+
+    $storedPassword = $db->getItem($_TABLES['users'],'passwd',array('uid' => $uid),array(Database::INTEGER));
+    $userStatus     = $db->getItem($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER));
     if ( $passwd == '' && substr($storedPassword,0,4) == '$H$9' ) {
         // no need to update password
     } else {
@@ -185,10 +253,10 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
             $passwd = SEC_generateStrongPassword(12,'lud');
         }
         $passwd2 = SEC_encryptPassword($passwd);
-        DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
+        $db->conn->update($_TABLES['users'],array('passwd' => $passwd2),array('uid' => $uid));
     }
 
-    $remoteservice = DB_getItem($_TABLES['users'],'remoteservice','uid='.$uid);
+    $remoteservice = $db->getItem($_TABLES['users'],'remoteservice',array('uid' => $uid));
     if ( $remoteservice != '' && $remoteservice != null ) {
         $remoteuser = 1;
     }
@@ -267,12 +335,6 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
     $to = COM_formatEmailAddress('',$useremail);
 
-//    $msgData['from']['name'] = $_CONF['site_name'];
-//    $msgData['from']['email'] = $_CONF['noreply_mail'];
-//    $msgData['to']['email'] = $useremail;
-//    $msgData['to']['name'] = $username;
-//    return COM_emailNotification($msgData);
-
     return COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, true, 0,'', $msgData['textmessage'] );
 
 }
@@ -281,9 +343,11 @@ function USER_createActivationToken($uid,$username)
 {
     global $_CONF, $_TABLES;
 
+    $db = Database::getInstance();
+
     $token = md5($uid.$username.uniqid (mt_rand (), 1));
 
-    DB_query("UPDATE {$_TABLES['users']} SET act_token='".DB_escapeString($token)."', act_time='".$_CONF['_now']->toMySQL(true)."' WHERE uid=".$uid);
+    $db->conn->update($_TABLES['users'],array('act_token'=>$token, 'act_time'=>$_CONF['_now']->toMySQL(true)),array('uid'=>$uid));
 
     return $token;
 }
@@ -358,28 +422,35 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 
     $dt = new Date('now',$_USER['tzid']);
 
+    $db = Database::getInstance();
+
+    $fields = array();
+    $values = array();
+    $types  = array();
+
     $queueUser = false;
-    $username = DB_escapeString ($username);
-    $email = DB_escapeString ($email);
 
     $regdate = $dt->toMySQL(true);
-    $fields = 'username,email,regdate,cookietimeout';
-    $values = "'$username','$email','$regdate','{$_CONF['default_perm_cookie_timeout']}'";
+
+    $fields = array('username'  => $username,
+                    'email'     => $email,
+                    'regdate'   => $regdate,
+                    'cookietimeout' => $_CONF['default_perm_cookie_timeout']
+              );
+    $types  = array(Database::STRING,Database::STRING,Database::STRING,Database::STRING);
 
     if (!empty ($passwd)) {
-        $passwd = DB_escapeString ($passwd);
-        $fields .= ',passwd';
-        $values .= ",'$passwd'";
+        $fields['passwd'] = $passwd;
+        $types[] = Database::STRING;
     }
     if (!empty ($fullname)) {
-        $fullname = DB_escapeString (strip_tags($fullname));
-        $fields .= ',fullname';
-        $values .= ",'$fullname'";
+        $fields['fullname'] = $fullname;
+        $types[] = Database::STRING;
     }
     if (!empty ($homepage)) {
-        $homepage = DB_escapeString ($homepage);
-        $fields .= ',homepage';
-        $values .= ",'$homepage'";
+
+        $fields['homepage'] = $homepage;
+        $types[] = Database::STRING;
     }
     $account_type = LOCAL_USER;
 
@@ -392,71 +463,149 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         }
 
         if ($queueUser) {
-            $fields .= ',status';
-            $values .= ',' . USER_ACCOUNT_AWAITING_APPROVAL;
+            $fields['status'] = USER_ACCOUNT_AWAITING_APPROVAL;
+            $types[] = Database::INTEGER;
         }
     } else {
         if (($_CONF['registration_type'] == 1 ) && (empty($remoteusername) || empty($service))) {
-            $fields .= ',status';
-            $values .= ',' . USER_ACCOUNT_AWAITING_VERIFICATION;
+            $fields['status'] = USER_ACCOUNT_AWAITING_VERIFICATION;
+            $types[] = Database::INTEGER;
         }
     }
 
     if (!empty($remoteusername)) {
-        $fields .= ',remoteusername';
-        $values .= ",'".DB_escapeString($remoteusername)."'";
+
+        $fields['remoteusername'] = $remoteusername;
+        $types[] = Database::STRING;
         $account_type = REMOTE_USER;
     }
     if (!empty($service)) {
-        $fields .= ',remoteservice';
-        $values .= ",'".DB_escapeString($service)."'";
+        $fields['remoteservice'] = $service;
+        $types[] = Database::STRING;
     }
 
-    $fields .= ',account_type';
-    $values .= ','.$account_type;
+    $fields['account_type'] = $account_type;
+    $types[] = Database::INTEGER;
 
-    $sql = "INSERT INTO {$_TABLES['users']} (".$fields.") VALUES (".$values.")";
-    $result = DB_query ($sql);
-    $dbError = DB_error($sql);
-    if ($dbError != '' ) {
-        COM_errorLog("Error inserting user into USERS table : " . $dbError);
+// our first attempt...
+    $db->conn->beginTransaction();
+    try {
+
+        $db->conn->beginTransaction();
+        try {
+            $db->conn->insert($_TABLES['users'],$fields,$types);
+            $db->conn->commit();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
+            $db->conn->rollBack();
+            return null;
+        }
+
+        // Get the uid of the user, possibly given a service:
+        if ($remoteusername != '') {
+            $uid = $db->getItem($_TABLES['users'],'uid',array('remoteusername' => $remoteusername,'remoteservice' => $service));
+        } else {
+            $uid = $db->conn->fetchColumn(
+                "SELECT uid FROM `{$_TABLES['users']}` WHERE username=? AND remoteservice IS NULL",
+                array($username),
+                0,
+                array(Database::STRING)
+            );
+        }
+        if ( $uid === false  ) {
+            Log::write('system',Log::ERROR,"Error: Unable to retrieve uid after creating user");
+            $db->conn->rollBack();
+            return NULL;
+        }
+
+        // Add user to Logged-in group (i.e. members) and the All Users group
+        $loggedInUsersGrp = $db->getItem ($_TABLES['groups'], 'grp_id',
+                                        array('grp_name' => 'Logged-in Users'));
+
+        $all_grp = $db->getItem ($_TABLES['groups'], 'grp_id',
+                                        array('grp_name'=>'All Users'));
+
+        $db->conn->beginTransaction();
+        try {
+            $db->conn->insert($_TABLES['group_assignments'],
+                              array(
+                                'ug_main_grp_id' => $loggedInUsersGrp,
+                                'ug_uid' => $uid
+                               ),
+                               array(
+                                Database::INTEGER,
+                                Database::INTEGER
+                               )
+            );
+
+            $db->conn->insert($_TABLES['group_assignments'],
+                              array(
+                                'ug_main_grp_id' => $all_grp,
+                                'ug_uid' => $uid
+                              ),
+                              array(
+                                Database::INTEGER,
+                                Database::INTEGER
+                              )
+            );
+            $db->conn->commit();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->conn->rollBack();
+            return null;
+        }
+
+        // any default groups?
+        $stmt = $db->conn->query("SELECT grp_id FROM `{$_TABLES['groups']}` WHERE grp_default=1");
+        $grpDefaults = $stmt->fetchAll(Database::ASSOCIATIVE);
+        foreach ($grpDefaults AS $row) {
+            $db->conn->insert($_TABLES['group_assignments'],
+                                array(
+                                    'ug_main_grp_id' => $row['grp_id'],
+                                    'ug_uid'=> $uid
+                                ),
+                                array(
+                                    Database::INTEGER,
+                                    Database::INTEGER
+                                )
+            );
+        }
+        $db->conn->insert($_TABLES['userprefs'],
+                            array(
+                                'uid' => $uid,
+                                'tzid' => $_CONF['timezone']
+                            ),
+                            array(
+                                Database::INTEGER,
+                                Database::STRING
+                            )
+        );
+        $etids = '';
+        if ($_CONF['emailstoriesperdefault'] == 1) {
+            $etids = '-';
+        }
+
+        $db->conn->insert($_TABLES['userindex'],
+                            array('uid' => $uid,'etids' => $etids),
+                            array(Database::INTEGER, Database::STRING)
+        );
+
+        $db->conn->insert($_TABLES['usercomment'],
+                            array('uid' => $uid,'commentmode' => $_CONF['comment_mode'], 'commentlimit' => $_CONF['comment_limit']),
+                            array(Database::INTEGER, Database::STRING, Database::INTEGER)
+        );
+
+        $db->conn->insert($_TABLES['userinfo'],
+            array('uid' => $uid),
+            array(Database::INTEGER)
+        );
+
+        $db->conn->commit();
+
+    } catch (\Exception $e) {
+        $db->conn->rollBack();
+        Log::write('system',Log::ERROR,'There was an error in creating the user - Database transaction rolledback');
         return NULL;
     }
-    // Get the uid of the user, possibly given a service:
-    if ($remoteusername != '') {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".DB_escapeString($remoteusername)."' AND remoteservice='".DB_escapeString($service)."'");
-    } else {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
-    }
-    if ( $uid == NULL ) {
-        COM_errorLog("Error: Unable to retrieve uid after creating user");
-        return NULL;
-    }
-
-    // Add user to Logged-in group (i.e. members) and the All Users group
-    $normal_grp = DB_getItem ($_TABLES['groups'], 'grp_id',
-                              "grp_name='Logged-in Users'");
-    $all_grp = DB_getItem ($_TABLES['groups'], 'grp_id',
-                           "grp_name='All Users'");
-    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($normal_grp, $uid)");
-    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($all_grp, $uid)");
-
-    // any default groups?
-    $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_default = 1");
-    $num_groups = DB_numRows($result);
-    for ($i = 0; $i < $num_groups; $i++) {
-        list($def_grp) = DB_fetchArray($result);
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($def_grp, $uid)");
-    }
-    DB_query ("INSERT INTO {$_TABLES['userprefs']} (uid,tzid) VALUES ($uid,'{$_CONF['timezone']}')");
-    if ($_CONF['emailstoriesperdefault'] == 1) {
-        DB_query ("INSERT INTO {$_TABLES['userindex']} (uid,etids) VALUES ($uid,'')");
-    } else {
-        DB_query ("INSERT INTO {$_TABLES['userindex']} (uid,etids) VALUES ($uid, '-')");
-    }
-
-    DB_query ("INSERT INTO {$_TABLES['usercomment']} (uid,commentmode,commentlimit) VALUES ($uid,'{$_CONF['comment_mode']}','{$_CONF['comment_limit']}')");
-    DB_query ("INSERT INTO {$_TABLES['userinfo']} (uid) VALUES ($uid)");
 
     // call custom registration function and plugins
     if ($_CONF['custom_registration'] && (function_exists ('CUSTOM_userCreate'))) {
@@ -540,6 +689,8 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 
     if ($_CONF['allow_user_photo'] == 1) {
 
+        $db = Database::getInstance();
+
         if (($width == 0) && !empty ($_CONF['force_photo_width'])) {
             $width = $_CONF['force_photo_width'];
         }
@@ -557,8 +708,16 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         }
         if ((empty ($photo) || ($photo == '(none)')) ||
                 (empty ($email) && $_CONF['use_gravatar'])) {
-            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = $uid");
-            list($newemail, $newphoto) = DB_fetchArray ($result);
+
+            $photoRec = $db->conn->fetchAssoc("SELECT email,photo FROM
+                        `{$_TABLES['users']}`
+                        WHERE uid = ?",
+                        array($uid),
+                        array(Database::INTEGER)
+            );
+            $newemail = $photoRec['email'];
+            $photo = $photoRec['newphoto'];
+
             if (empty ($photo) || ($photo == '(none)')) {
                 $photo = $newphoto;
             }
@@ -645,14 +804,16 @@ function USER_deletePhoto ($photo, $abortonerror = true)
         if (file_exists ($filetodelete)) {
             if (!@unlink ($filetodelete)) {
                 if ($abortonerror) {
+                    Log::write('system',Log::ERROR,'Unable to remove the user\'s photo file: '.$photo);
+
                     $display = COM_siteHeader ('menu', $LANG04[21])
-                             . COM_errorLog ("Unable to remove file $photo")
+                             . "Unable to remove file $photo"
                              . COM_siteFooter ();
                     echo $display;
                     exit;
                 } else {
                     // just log the problem, but don't abort
-                    COM_errorLog ("Unable to remove file $photo");
+                    Log::write('system',Log::ERROR,'Unable to remove the user\'s photo file: '.$photo);
                 }
             }
         }
@@ -675,6 +836,8 @@ function USER_addGroup ($groupid, $uid = '')
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $db = Database::getInstance();
+
      // set $uid if $uid is empty
     if (empty ($uid)) {
         // bail for anonymous users
@@ -693,7 +856,17 @@ function USER_addGroup ($groupid, $uid = '')
     if (($groupid < 1) || SEC_inGroup ($groupid, $uid)) {
         return false;
     } else {
-        DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$groupid', $uid)");
+        $db->conn->insert($_TABLES['group_assignments'],
+                        array(
+                            'ug_main_grp_id' => $groupid,
+                            'ug_uid' => $uid
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+        );
+
         return true;
     }
 }
@@ -714,6 +887,8 @@ function  USER_delGroup ($groupid, $uid = '')
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $db = Database::getInstance();
+
     // set $uid if $uid is empty
     if (empty ($uid)) {
         // bail for anonymous users
@@ -730,7 +905,7 @@ function  USER_delGroup ($groupid, $uid = '')
     $groupid = (int) $groupid;
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
-        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = $uid");
+        $db->conn->delete($_TABLES['group_assignments'],array('ug_main_grp_id'=>$groupid,'ug_uid'=>$uid),array(Database::INTEGER,Database::INTEGER));
         return true;
     } else {
         return false;
@@ -793,9 +968,8 @@ function USER_uniqueUsername($username)
 
     $try = $username;
     do {
-        $try = DB_escapeString($try);
-        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".$try."'");
-        if (!empty($uid)) {
+        $uid = $db->getItem($_TABLES['users'],array('username'=> $try));
+        if (!empty($uid) && $uid !== false) {
             $r = rand(2, 9999);
             if (strlen($username) > 12) {
                 $try = sprintf('%s%d', substr($username, 0, 12), $r);
@@ -876,16 +1050,23 @@ function USER_getChildGroups($groupid)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
+Log::debug("in USER_getChildGroups");
+
     $to_check = array();
     array_push($to_check, $groupid);
     $groups = array();
     while (sizeof($to_check) > 0) {
         $thisgroup = array_pop($to_check);
         if ($thisgroup > 0) {
-            $result = DB_query("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$thisgroup'");
-            $numGroups = DB_numRows($result);
-            for ($i = 0; $i < $numGroups; $i++) {
-                $A = DB_fetchArray($result);
+            $stmt = $db->conn->executeQuery(
+                "SELECT ug_grp_id FROM `{$_TABLES['group_assignments']}` WHERE ug_main_grp_id = ?",
+                array($thisgroup),
+                array(Database::INTEGER)
+            );
+
+            while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
                 if (!in_array($A['ug_grp_id'], $groups)) {
                     if (!in_array($A['ug_grp_id'], $to_check)) {
                         array_push($to_check, $A['ug_grp_id']);
@@ -939,19 +1120,15 @@ function USER_buildTopicList ()
 
     $topics = '';
 
-    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}");
-    $numrows = DB_numRows ($result);
-    for ($i = 1; $i <= $numrows; $i++) {
-        $A = DB_fetchArray ($result);
+    $db = Database::getInstance();
+
+    $stmt = $db->conn->query("SELECT tid FROM `{$_TABLES['topics']}`");
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         if (SEC_hasTopicAccess ($A['tid'])) {
-            if ($i > 1) {
-                $topics .= ' ';
-            }
-            $topics .= $A['tid'];
+            $topics .= $A['tid'] . ' ';
         }
     }
-
-    return $topics;
+    return (rtrim($topics));
 }
 
 function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
@@ -960,29 +1137,33 @@ function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
 
     $retval = '';
 
-    $sql = "SELECT * FROM {$_TABLES['users']} WHERE uid = " . (int) $localUID;
-    $result = DB_query($sql);
-    $numRows = DB_numRows($result);
-    if ( $numRows > 0 ) {
-        // we have the potential to merge
-        $row = DB_fetchArray($result);
-        $T = new Template($_CONF['path_layout'].'/users/');
-        $T->set_file('merge','mergeacct.thtml');
-        $T->set_var(array(
-            'localuid'       => $row['uid'],
-            'local_username' => $row['username'],
-            'remoteuid'      => $remoteUID,
-            'sec_token'      => CSRF_TOKEN,
-            'token'          => SEC_createToken(),
-        ));
-        $T->parse( 'page', 'merge' );
-        if ( $msg != '' ) {
-            $retval .= COM_showMessageText($msg,'',false,'info');
-        }
-        $retval .= $T->finish( $T->get_var( 'page' ));
-    } else {
+    $db = Database::getInstance();
+
+    $row = $db->conn->fetchAssoc(
+        "SELECT * FROM `{$_TABLES['users']}` WHERE uid = ?",
+        array($localUID),
+        array(Database::INTEGER)
+    );
+    // if no user is found
+    if ($row === null || $row === false) {
         echo COM_refresh($_CONF['site_url'].'/index.php');
     }
+
+    $T = new Template($_CONF['path_layout'].'/users/');
+    $T->set_file('merge','mergeacct.thtml');
+    $T->set_var(array(
+        'localuid'       => $row['uid'],
+        'local_username' => $row['username'],
+        'remoteuid'      => $remoteUID,
+        'sec_token'      => CSRF_TOKEN,
+        'token'          => SEC_createToken(),
+    ));
+    $T->parse( 'page', 'merge' );
+    if ( $msg != '' ) {
+        $retval .= COM_showMessageText($msg,'',false,'info');
+    }
+    $retval .= $T->finish( $T->get_var( 'page' ));
+
     echo COM_siteHeader();
     echo $retval;
     echo COM_siteFooter();
@@ -1002,16 +1183,39 @@ function USER_unmergeAccounts()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER;
 
+    $db = Database::getInstance();
+
     $retval = false;
 
-    $localUID  = COM_applyFilter($_POST['localuid'],true);
+    $localUID = (int) filter_input(INPUT_POST, 'localuid', FILTER_SANITIZE_NUMBER_INT);
     $localpwd  = $_POST['passwd'];
-    $localResult  = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".(int) $localUID);
-    if ( DB_numRows($localResult) == 1 ) {
-        $localRow = DB_fetchArray($localResult);
-        if ( SEC_check_hash($localpwd, $localRow['passwd']) ) {
-            $sql = "UPDATE {$_TABLES['users']} SET account_type=".LOCAL_USER.", remoteusername='', remoteservice=NULL WHERE uid=".(int) $localUID;
-            DB_query($sql);
+
+    $localUserInfo = $db->conn->fetchAssoc(
+            "SELECT * FROM `{$_TABLES['users']} WHERE uid=?",
+            array($localUID),
+            array(Database::INTEGER)
+    );
+
+    if ($localUserInfo !== false && $localUserInfo !== null) {
+        if ( SEC_check_hash($localpwd, $localUserInfo['passwd']) ) {
+
+            $db->conn->update(
+                    $_TABLES['users'],
+                    array(
+                        'account_type' => LOCAL_USER,
+                        'remoteusername' => '',
+                        'remoteservice' => null
+                    ),
+                    array(
+                        'uid' => $localUID
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::STRING,
+                        Database::STRING,
+                        Database::INTEGER
+                    )
+            );
             $retval = true;
         }
     }
@@ -1033,37 +1237,58 @@ function USER_mergeAccounts()
 
     $retval = '';
 
-    $remoteUID = COM_applyFilter($_POST['remoteuid'],true);
-    $localUID  = COM_applyFilter($_POST['localuid'],true);
-    $localpwd  = $_POST['localp'];
-    $localResult  = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".(int) $localUID);
-    $localRow     = DB_fetchArray($localResult);
+    $db = Database::getInstance();
 
-    if ( SEC_check_hash($localpwd, $localRow['passwd']) ) {
+    $remoteUID = (int) filter_input(INPUT_POST, 'remoteuid', FILTER_SANITIZE_NUMBER_INT);
+    $localUID  = (int) filter_input(INPUT_POST, 'localuid', FILTER_SANITIZE_NUMBER_INT);
+    $localpwd  = $_POST['localp'];
+
+    $userData = $db->conn->fetchAssoc(
+            "SELECT * FROM `{$_TABLES['users']}` WHERE uid=?",
+            array($localUID),
+            array(Database::INTEGER)
+    );
+    if ($userData === false || $userData === null) {
+        Log::write('system',Log::WARNING,"ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
+        echo COM_refresh($_CONF['site_url'].'/index.php');
+    }
+    if (SEC_check_hash($localpwd, $userData['passwd'])) {
         // password is valid
-//        $sql = "SELECT * FROM {$_TABLES['users']} WHERE remoteusername <> '' and email='".DB_escapeString($localRow['email'])."'";
-        $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".REMOTE_USER." AND email='".DB_escapeString($localRow['email'])."' AND uid = ".(int) $remoteUID;
-        $result = DB_query($sql);
-        $numRows = DB_numRows($result);
-        if ( $numRows == 1 ) {
-            $remoteRow = DB_fetchArray($result);
-            if ( $remoteUID == $remoteRow['uid'] ) {
-                $remoteUID = (int) $remoteRow['uid'];
-                $remoteService = substr($remoteRow['remoteservice'],6);
-            } else {
-                COM_errorLog("ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
-                echo COM_refresh($_CONF['site_url'].'/index.php');
-            }
-        } else {
-            COM_errorLog("ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to more or less that 1 row returned");
+        $remoteUserData = $db->conn->fetchAssoc(
+            "SELECT * FROM `{$_TABLES['users']}` WHERE account_type = ? AND email=? AND uid = ?",
+            array(
+                REMOTE_USER,
+                $userData['email'],
+                $remoteUID
+            ),
+            array(Database::INTEGER,Database::STRING,Database::INTEGER)
+        );
+        if ($remoteUserData === false || $remoteUserData === null) {
+            Log::write('system',Log::ERROR,"Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
             echo COM_refresh($_CONF['site_url'].'/index.php');
         }
-        $sql = "UPDATE {$_TABLES['users']} SET remoteusername='".
-               DB_escapeString($remoteRow['remoteusername']) . "'," .
-               "remoteservice='".DB_escapeString($remoteRow['remoteservice'])."', ".
-               "account_type=3 ".
-               " WHERE uid=".(int)$localUID;
-        DB_query($sql);
+        if ($remoteUID != $remoteUserData['uid']) {
+            Log::write('system',Log::ERROR,"Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
+            echo COM_refresh($_CONF['site_url'].'/index.php');
+        }
+        $remoteUID = (int) $remoteUserData['uid'];
+        $remoteService = substr($remoteUserData['remoteservice'],6);
+
+        $db->conn->update($_TABLES['users'],
+                array(
+                    'remoteusername' => $remoteUserData['remoteusername'],
+                    'remoteservice' => $remoteUserData['remoteservice'],
+                    'account_type'  => 3
+                ),
+                array(
+                    'uid' => $localUID
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER
+                )
+        );
 
         $_USER['uid'] = $localRow['uid'];
         $local_login = true;
@@ -1101,36 +1326,49 @@ function USER_mergeAccounts()
         }
 
         // remove from all security groups
-        DB_delete ($_TABLES['group_assignments'], 'ug_uid', $remoteUID);
+        $db->conn->delete($_TABLES['group_assignments'],array('ug_uid'=>$remoteUID),array(Database::INTEGER));
 
         // remove user information and preferences
-        DB_delete ($_TABLES['userprefs'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['userindex'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['usercomment'], 'uid', $remoteUID);
-        DB_delete ($_TABLES['userinfo'], 'uid', $remoteUID);
+        $db->conn->delete($_TABLES['userprefs'], array('uid' => $remoteUID),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['userindex'], array('uid' => $remoteUID),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['usercomment'], array('uid' => $remoteUID),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['userinfo'], array('uid' => $remoteUID),array(Database::INTEGER));
 
         // delete user photo, if enabled & exists
         if ($_CONF['allow_user_photo'] == 1) {
-            $photo = DB_getItem ($_TABLES['users'], 'photo', "uid = $remoteUID");
+            $photo = $db->getItem ($_TABLES['users'], 'photo', array('uid' => $remoteUID),array(Database::INTEGER));
             USER_deletePhoto ($photo, false);
         }
 
         // delete subscriptions
-        DB_delete($_TABLES['subscriptions'],'uid',$remoteUID);
+        $db->conn->delete($_TABLES['subscriptions'],array('uid' => $remoteUID),array(Database::INTEGER));
 
         // in case the user owned any objects that require Admin access, assign
         // them to the Root user with the lowest uid
-        $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name = 'Root'");
-        $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$rootgroup' ORDER BY ug_uid LIMIT 1");
-        $A = DB_fetchArray ($result);
-        $rootuser = $A['ug_uid'];
+        $rootgroup = $db->getItem ($_TABLES['groups'], 'grp_id', array('grp_name' => 'Root'));
+
+        $row = $db->conn->fetchAssoc(
+            "SELECT DISTINCT ug_uid FROM `{$_TABLES['group_assignments']}` WHERE ug_main_grp_id = ? ORDER BY ug_uid LIMIT 1",
+            array($rootgroup),
+            array(Database::INTEGER)
+        );
+        $rootuser = $row['ug_uid'];
+
         if ( $rootuser == '' || $rootuser < 2 ) {
             $rootuser = 2;
         }
-        DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $remoteUID");
-        DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $remoteUID");
+        $db->conn->update($_TABLES['blocks'],
+                    array('owner_id' => $rootuser),
+                    array('owner_id' => $remoteUID),
+                    array(Database::INTEGER,Database::INTEGER)
+        );
+        $db->conn->update($_TABLES['topics'],
+                    array('owner_id' => $rootuser),
+                    array('owner_id' => $remoteUID),
+                    array(Database::INTEGER,Database::INTEGER)
+        );
         // now delete the user itself
-        DB_delete ($_TABLES['users'], 'uid', $remoteUID);
+        $db->conn->delete($_TABLES['users'], array('uid' => $remoteUID),array(Database::INTEGER));
     } else {
         // invalid password - let's try one more time
         // need to set speed limit and give them 3 tries
