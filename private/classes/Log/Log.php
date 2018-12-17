@@ -10,7 +10,6 @@
 *  Copyright (C) 2017-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
-*
 */
 
 namespace glFusion\Log;
@@ -190,6 +189,11 @@ class Log
     public static function logAccessViolation($type = '')
     {
         self::write('system',Log::ERROR, "User attempted to access area without proper permissions", array('Type' => $type,'IP' => $_SERVER['REAL_ADDR']));
+    }
+
+    public static function debug($msg)
+    {
+        self::write('system',Log::DEBUG,$msg);
     }
 
 }
