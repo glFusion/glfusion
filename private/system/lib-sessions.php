@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 
 use glFusion\Database\Database;
 use glFusion\Cache\Cache;
+use glFusion\Log\Log;
 
 // ensure cookie domain is properly initialized
 
@@ -212,10 +213,13 @@ function SESS_checkRememberMe()
             if ($userid > 1) {
                 $ipmatch = false;
                 $remote_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
+                $rip = $db->getItem($_TABLES['users'],'remote_ip',array('uid'=>$userid),array(Database::INTEGER));
+/*
                 $rip = $db->conn->fetchColumn(
                     "SELECT remote_ip FROM `{$_TABLES['users']}` WHERE uid=?",
                     array($userid),0
                 );
+*/
                 if ($rip) {
                     $cookie_token = isset($_COOKIE[$_CONF['cookie_password']]) ? COM_applyFilter($_COOKIE[$_CONF['cookie_password']]) : '';
                     $ipmatch = _ipCheck( $rip, $remote_ip );
@@ -270,12 +274,12 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
             try {
                 $stmt = $db->conn->delete($_TABLES['sessions'],array('md5_sess_id' => $oldsessionid));
             } catch(\Doctrine\DBAL\DBALException $e) {
-                throw($e);
+//                throw($e);
                 try {
-                    $db->conn->query("REPAIR TABLE {$_TABLES['sessions']}");
-                    COM_errorLog("***** REPAIR SESSIONS TABLE #2 *****");
+                    $db->conn->query("REPAIR TABLE `{$_TABLES['sessions']}`");
+                    Log::write('system',Log::ERROR,"Attempting to repair the glFusion Sessions Table");
                 } catch(\Doctrine\DBAL\DBALException $e) {
-                    COM_errorLog("ERROR: Unable to write to sessions table");
+                    Log::write('system',Log::ERROR,"Unable to write to the glFusion Sessions Table");
                 }
             }
     		if (session_id()) {
@@ -289,8 +293,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
     }
 
     if ( $userid > 1 ) {
-
-        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
+        $deleteSQL = "DELETE FROM `{$_TABLES['sessions']}` WHERE (start_time < ?)";
         $stmt = $db->conn->prepare($deleteSQL);
         $stmt->bindValue(1,$expirytime,Database::INTEGER);
         $stmt->execute();
@@ -307,32 +310,30 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
 //        }
 
     }
-    $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, browser,md5_sess_id, uid, start_time, remote_ip)
-            VALUES (?, ?, ?, ?,?, ?)";
-
-    $result = $db->conn->executeUpdate($sql,
-                        array($sessid,
-                            $browser,
-                            $md5_sessid,
-                            $userid,
-                            $currtime,
-                            $remote_ip),
-                        array(
-                            Database::STRING,
-                            Database::STRING,
-                            Database::STRING,
-                            Database::INTEGER,
-                            Database::STRING,
-                            Database::STRING
-                        )
+    $result = $db->conn->insert($_TABLES['sessions'],
+                    array(
+                        'sess_id' => $sessid,
+                        'browser' => $browser,
+                        'md5_sess_id' => $md5_sessid,
+                        'uid'   => $userid,
+                        'start_time' => $currtime,
+                        'remote_ip' => $remote_ip
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING,
+                        Database::STRING,
+                        Database::INTEGER,
+                        Database::STRING,
+                        Database::STRING
+                    )
     );
-
     if ($result) {
         if ($userid > 1 && $_CONF['lastlogin'] == true) {
-            $db->conn->executeUpdate(
-                "UPDATE `{$_TABLES['userinfo']}` SET lastlogin = UNIX_TIMESTAMP() WHERE uid = ?",
-                array($userid),
-                array(Database::INTEGER)
+            $db->conn->update($_TABLES['userinfo'],
+                        array('lastlogin' => $_CONF['_now']->toUnix(true)),
+                        array('uid' => $userid),
+                        array(Database::INTEGER)
             );
         }
     } else {
@@ -368,7 +369,6 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
     $sql = "SELECT uid,start_time,remote_ip,browser FROM `{$_TABLES['sessions']}` WHERE "
         . "(md5_sess_id = ?) AND (start_time > ?)";
 
-// maybe just use fetchAssoc
     try {
         $row = $db->conn->fetchAssoc($sql,
             array($sessid, $mintime),
@@ -378,7 +378,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
-        $db->executeQuery("REPAIR TABLE `{$_TABLES['sessions']}`");
+        $db->conn->executeQuery("REPAIR TABLE `{$_TABLES['sessions']}`");
     }
 
     if ( !$row ) {
@@ -442,11 +442,12 @@ function SESS_updateSessionTime($sessid)
 
     $db = Database::getInstance();
 
-    $result = $db->conn->executeUpdate(
-        "UPDATE `{$_TABLES['sessions']}` SET start_time=? WHERE (md5_sess_id = ?)",
-        array($newtime, $sessid),
-        array(Database::INTEGER,Database::STRING)
+    $db->conn->update($_TABLES['sessions'],
+                array('start_time' => $newtime),
+                array('md5_sess_id' => $sessid),
+                array(Database::INTEGER,Database::STRING)
     );
+
     return true;
 }
 
@@ -466,14 +467,9 @@ function SESS_endUserSession($userid)
     $db = Database::getInstance();
 
     if ( !defined('DEMO_MODE') ) {
-        $sql = "DELETE FROM `{$_TABLES['sessions']}` WHERE uid = ?";
         try {
-            $db->conn->executeUpdate(
-                $sql,
-                array($userid),
-                array(Database::INTEGER)
-            );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+            $db->conn->delete($_TABLES['sessions'],array('uid' => $userid),array(Database::INTEGER));
+    } catch(\Doctrine\DBAL\DBALException $e) {
             $db->dbError($e->getMessage(),$sql);
         }
 		if (session_id()) {
@@ -529,7 +525,7 @@ function SESS_getUserData($username)
     }
 
     if ($myrow === false ) {
-        COM_errorLog("ERROR: SESS_getUserData() query failed.");
+        Log::write('system',Log::ERROR,"Error executing the SESS_getUserData() request");
     }
     return($myrow);
 }
@@ -655,12 +651,11 @@ function SESS_completeLogin($uid, $authenticated = 1)
                        $_CONF['cookiesecure'],true);
     }
 
-    $sql = "UPDATE `{$_TABLES['users']}` set remote_ip=? WHERE uid=?";
     try {
-        $db->conn->executeUpdate(
-            $sql,
-            array($request_ip, $_USER['uid']),
-            array(Database::STRING, Database::INTEGER)
+        $db->conn->update($_TABLES['users'],
+                            array('remote_ip' => $request_ip),
+                            array('uid' => $_USER['uid']),
+                            array(Database::STRING, Database::INTEGER)
         );
     } catch(\Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {
