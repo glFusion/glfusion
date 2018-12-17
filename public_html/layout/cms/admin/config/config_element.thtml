@@ -29,7 +29,8 @@
 		{unset_link}
 	</td>
 	<td>
-		<input type="password" class="opt" style="width:80%;" name="{name}" value="{value}">
+		<input type="password" class="opt password" style="width:80%;" name="{name}" value="{value}">
+		<i class="uk-icon uk-icon-eye" style="cursor: pointer;" onclick="toggler(this)"></i>
 {!if delete}
 		<button class="uk-button uk-button-danger del-link" onclick="glfremove(this);return false;" value="x">x</button>
 {!endif}

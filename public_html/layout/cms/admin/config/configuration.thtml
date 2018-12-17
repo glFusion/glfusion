@@ -1,6 +1,7 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/configmanager.js"></script>
 <script src="{site_url}/javascript/addons/autocomplete/jquery.autocomplete.min.js"></script>
+
 <div id="configuration">
 	<form id="config" class="uk-form" method="post" action="configuration.php" name="group">
 		<input type="hidden" value="{open_group}" name="conf_group">
@@ -129,7 +130,20 @@
 				});
 			}
 		});
+
+		$('togglepw').onclick = function(){
+			alert('we clicked it');
+		  var x = document.getElementsByClassName('passwd');
+		  if (x.type === "password") {
+		    x.type = "text";
+		  } else {
+		    x.type = "password";
+		  }
+		};
+
+
 	});
+
 	var acdata = {autocomplete_data};
 	$('#autocomplete').devbridgeAutocomplete({
     lookup: acdata,
@@ -159,5 +173,15 @@
 			$('#formsubgroup').submit();
     }
 	});
+	function toggler(e) {
+		var myClass = $(e).attr("class");
+		if (myClass == 'uk-icon uk-icon-eye') {
+			$(".password").prop("type", "text");
+			$(e).prop('class','uk-icon uk-icon-eye-slash');
+		} else {
+			$(".password").prop("type", "password");
+			$(e).prop('class','uk-icon uk-icon-eye');
+		}
+	}
 </script>
 {# end {templatelocation} #}
