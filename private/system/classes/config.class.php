@@ -1107,7 +1107,7 @@ class config
                 $selectionArray = array_flip($selectionArray);
             } else if (is_array($selectionArray)) {
                 // leave sorting to the function otherwise
-                uksort($selectionArray, 'strcasecmp');
+//                uksort($selectionArray, 'strcasecmp');
             }
             if (! is_array($selectionArray)) {
                 return $t->finish($t->parse('output', 'text-element'));
@@ -1306,7 +1306,7 @@ class config
             }
         }
 
-        uksort($link_array, 'strcasecmp');
+//        uksort($link_array, 'strcasecmp');
         if ( is_array($link_array) ) {
             foreach ($link_array as $link) {
                 $retval .= $link;
