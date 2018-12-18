@@ -716,7 +716,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
                         array(Database::INTEGER)
             );
             $newemail = $photoRec['email'];
-            $photo = $photoRec['newphoto'];
+            $newphoto = $photoRec['photo'];
 
             if (empty ($photo) || ($photo == '(none)')) {
                 $photo = $newphoto;
