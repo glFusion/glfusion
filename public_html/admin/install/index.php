@@ -300,7 +300,7 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['no_check_utf8']);
             break;
         case DB_TOO_OLD :
-            $T->set_var('text',$LANG_INSTALL['db_too_old']);
+            $T->set_var('text',sprintf($LANG_INSTALL['db_too_old'],SUPPORTED_MYSQL_VER));
             break;
         case NO_MIGRATE_GLFUSION :
             $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
@@ -744,7 +744,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
     $T->set_var('recommended','7.1+');
-    $T->set_var('notes',$LANG_INSTALL['php_req_version']);
+    $T->set_var('notes',sprintf($LANG_INSTALL['php_req_version'],SUPPORTED_PHP_VER));
     $T->parse('env','envs',true);
 
     $st = ini_get('short_open_tag');
