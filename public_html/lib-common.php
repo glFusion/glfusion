@@ -1926,7 +1926,7 @@ function COM_errorLog( $logentry, $actionid = 1 )
 {
     global $_CONF, $LANG01;
 
-    Log::write('system',Log::INFO, $logentry);
+    Log::write('system',Log::ERROR, $logentry);
     return;
 }
 
