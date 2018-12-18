@@ -807,6 +807,10 @@ function USER_createuser($info = array())
     // based on if it is a local user or a oauth user
     //
 
+    $mergeAccount = 0;
+    $remoteUID = '';
+    $localUID = '';
+
     if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
         if ( $_CONF['registration_type'] == 1 && !empty($data['passwd']) ) {
             $encryptedPasswd = SEC_encryptPassword($data['passwd']);
@@ -862,9 +866,6 @@ function USER_createuser($info = array())
                 DB_query($sql,1);
             }
         }
-        $mergeAccount = 0;
-        $remoteUID = '';
-        $localUID = '';
 
         // check and see if we need to merge the account
         if ( isset($data['email']) && $data['email'] != '' ) {
