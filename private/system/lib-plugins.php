@@ -77,6 +77,14 @@ function PLG_callFunctionForAllPlugins($function_name, $args='')
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_' . $function_name . '_' . $pi_name;
         if (function_exists($function)) {
+            // Just pass $args through to the target function if it is:
+            // a) not an array of args, just a single string, number, etc.
+            // b) a normal zero-biased indexed array
+            // c) does not contain an index of "1", e.g. an associative array
+            if (!is_array($args) || isset($args[0]) || !isset($args[1])) {
+                return $function($args);
+            }
+
             switch (count($args)) {
             case 0:
                 $function();
