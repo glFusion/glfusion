@@ -337,8 +337,11 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
         $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
     }
 
+    if ($mode != 'noquote' ) {
+        $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
+    }
+
     if ( ! ($status & DISABLE_SMILIES ) ) {
-//        $bbcode->addFilter(STRINGPARSER_FILTER_PRE, '_ff_replacesmilie');      // calls replacesmilie on all text blocks
         $bbcode->addParser (array ('block', 'inline', 'listitem'), '_ff_replacesmilie');
     }
 
@@ -385,12 +388,10 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
         $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
         $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
     }
-    if ($mode != 'noquote' ) {
-        $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
-    }
+
     $bbcode->setRootParagraphHandling (true);
 
-    if ($_FF_CONF['use_censor']) { // and $mode == 'preview') {
+    if ($_FF_CONF['use_censor']) {
         $str = COM_checkWords($str);
     }
     $str = $bbcode->parse ($str);
