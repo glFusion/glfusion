@@ -229,6 +229,9 @@ function bb2_read_settings() {
                  'httpbl_maxage' => $_CONF['bb2_httpbl_maxage'],
                  'offsite_forms' => $_CONF['bb2_offsite_forms'],
                  'secure_cookie' => $_CONF['cookiesecure'],
+                 'reverse_proxy' => $bb2_settings_defaults['reverse_proxy'],
+                 'reverse_proxy_header' => $bb2_settings_defaults['reverse_proxy_header'],
+                 'reverse_proxy_addresses' => $bb2_settings_defaults['reverse_proxy_addresses'],
                  'is_installed'  => true
                  );
 }
