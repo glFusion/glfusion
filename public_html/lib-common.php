@@ -1274,7 +1274,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     }
     $theme->set_var( 'copyright_notice', $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] . '&nbsp;&nbsp;&bull;&nbsp;&nbsp;'
-            . $LANG01[94] );
+            . sprintf($LANG01[94],$_CONF['site_url'],$_CONF['site_url']) );
     $theme->set_var( 'copyright_msg', $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] );
     $theme->set_var( 'current_year', $year );
@@ -2154,12 +2154,12 @@ function COM_userMenu( $help='', $title='', $position='' )
         $login->set_file( 'form', 'loginform.thtml' );
         $login->set_var( 'lang_username', $LANG01[21] );
         $login->set_var( 'lang_password', $LANG01[57] );
-        $login->set_var( 'lang_forgetpassword', $LANG01[119] );
+        $login->set_var( 'lang_forgetpassword', sprintf($LANG01[119],$_CONF['site_url']) );
         $login->set_var( 'lang_login', $LANG01[58] );
         if ( $_CONF['disable_new_user_registration'] == 1 ) {
             $login->set_var( 'lang_signup', '' );
         } else {
-            $login->set_var( 'lang_signup', $LANG01[59] );
+            $login->set_var( 'lang_signup', sprintf($LANG01[59],$_CONF['site_url']) );
         }
         PLG_templateSetVars('loginform', $login);
 
