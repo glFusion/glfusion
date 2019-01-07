@@ -113,22 +113,35 @@ final class Cache
 
             case 'memcached' :
                 $servers = array();
+                if ($_CONF['cache_memcached_socket'] != '') {
+                    $servers['path'] = $_CONF['cache_memcached_socket'];
+                } else {
+                    $servers['host'] = $_CONF['cache_host'];
+                    $servers['port'] = (int) $_CONF['cache_port'];
+                }
+
                 if ($_CONF['cache_memcached_username'] != '') {
                     $servers['saslUsername'] = $_CONF['cache_memcached_username'];
                 }
                 if ($_CONF['cache_memcached_password'] != '') {
                     $servers['saslPassword'] = $_CONF['cache_memcached_password'];
                 }
-                $servers['host'] = $_CONF['cache_host'];
-                $servers['port'] = (int) $_CONF['cache_port'];
 
                 try {
-                    $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
-                        'host' =>$_CONF['cache_host'],
-                        'port' => (int) $_CONF['cache_port'],
-                        'servers' => array($servers),
-                        'itemDetailedDate' => true
-                    ]));
+                    if ($_CONF['cache_memcached_socket'] != '') {
+                        $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
+                            'path' => $_CONF['cache_memcached_socket'],
+                            'servers' => array($servers),
+                            'itemDetailedDate' => true
+                        ]));
+                    } else {
+                        $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
+                            'host' =>$_CONF['cache_host'],
+                            'port' => (int) $_CONF['cache_port'],
+                            'servers' => array($servers),
+                            'itemDetailedDate' => true
+                        ]));
+                    }
                 } catch (\Phpfastcache\Exceptions\PhpfastcacheDriverException $e) {
                     $success = false;
                 }
