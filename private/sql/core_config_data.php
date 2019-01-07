@@ -3937,13 +3937,24 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'cache_memcached_username',
+    	'name' => 'cache_memcached_socket',
     	'default_value' => '',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 100,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_memcached_username',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 110,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3955,7 +3966,7 @@ $coreConfigData = array(
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
-    	'sort' => 110,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
