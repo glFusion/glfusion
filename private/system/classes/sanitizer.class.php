@@ -1,33 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | sanitizer.cass.php                                                       |
-// |                                                                          |
-// | glFusion HTML / Text Filter                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2014-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
-//namespace glFusion;
+/**
+* glFusion CMS
+*
+* glFusion Sanitization
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2014-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -80,7 +63,7 @@ class sanitizer
     }
 
 
-    public static function getInstance(  )
+    public static function getInstance()
     {
         static $instance;
 
@@ -105,7 +88,7 @@ class sanitizer
     public function setPostmode ( $mode )
     {
         $mode = strtolower($mode);
-        if ( in_array($mode,array('text','html'))) {
+        if (in_array($mode,array('text','html'))) {
             $this->_postmode = $mode;
         } else {
             $this->_postmode = 'text';
@@ -133,7 +116,7 @@ class sanitizer
         $root         = array();
         $itemElements = explode(',',$elements);
         $elementArray = array_merge($elementArray,$itemElements);
-        if ( SEC_inGroup('Root') ) {
+        if (SEC_inGroup('Root')) {
             $root    = explode(',',$_CONF['htmlfilter_root']);
             $elementArray = array_merge($elementArray,$root);
         }
@@ -141,8 +124,6 @@ class sanitizer
         $fullelementlist = implode(',',$filterArray);
         return $fullelementlist;
     }
-
-
 
     /**
      * Define allowed HTML elements
@@ -179,6 +160,7 @@ class sanitizer
         $this->operation = $operation;
     }
 
+// this does not belong here. The filter should not being doing tag replacements
     public function setReplaceTags( $option )
     {
         if ( $option ) {
@@ -188,16 +170,16 @@ class sanitizer
         }
     }
 
-    public function setCensorData( $option )
+    public function setCensorData($option)
     {
-        if ( $option ) {
+        if ($option) {
             $this->_censorData = true;
         } else {
             $this->_censorData = false;
         }
     }
 
-    public function setFilterMethod( $method )
+    public function setFilterMethod($method)
     {
         if ( strtolower($method) == 'htmlawed' ) {
             $this->filterMethod = 'htmlawed';
@@ -222,20 +204,20 @@ class sanitizer
      * @access  public
      *
      */
-    public function filterData( $str )
+    public function filterData($str)
     {
-        if ($this->_postmode == 'html' ) {
+        if ($this->_postmode == 'html') {
             return $this->filterHTML($str);
         } else {
             return $this->filterText($str);
         }
     }
 
-    public function filterHTML( $str )
+    public function filterHTML($str)
     {
         global $_CONF;
 
-        if ( $this->_postmode == 'html' ) {
+        if ($this->_postmode == 'html') {
             if ( $this->filterMethod == 'htmlawed' ) {
                 return $this->_cleanHTMLawed($str);
             } else {
@@ -245,7 +227,7 @@ class sanitizer
         return $str;
     }
 
-    public function filterText( $str )
+    public function filterText($str)
     {
         global $_CONF;
 
@@ -278,6 +260,7 @@ class sanitizer
      * @access  public
      *
      */
+
     public function editableText($str)
     {
         if ( $this->_postmode == 'html' ) {
@@ -291,6 +274,7 @@ class sanitizer
      * prepares text for display
      * does not filter malicious HTML - assumed this has been done elsewhere
      */
+
     public function displayText( $str )
     {
         $sp = new StringParser_BBCode ();
@@ -320,6 +304,7 @@ class sanitizer
     /*
      * replace glFusion autotags with final form data
      */
+// we do not need this to be doing tag replacement
     public function _replaceTags($text) {
         return PLG_replaceTags($text,$this->namespace,$this->operation);
     }
@@ -536,7 +521,7 @@ class sanitizer
         return preg_replace_callback('/<(\d+)>/', function ($match) use (&$links) { return $links[$match[1] - 1]; }, $value);
     }
 
-    public function sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
+    public static function sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
     {
         global $_CONF;
 
@@ -609,7 +594,7 @@ class sanitizer
     * @param    boolean $new_id true = create a new ID in case we end up with an empty string
     * @return   string          the sanitized ID
     */
-    public function sanitizeID( $id, $new_id = true )
+    public static function sanitizeID( $id, $new_id = true )
     {
         $id = str_replace( ' ', '', $id );
         $id = str_replace( array( '/', '\\', ':', '+' ), '-', $id );
@@ -621,6 +606,8 @@ class sanitizer
         return trim($id);
     }
 
+// we need to remove this - don't need here - we should do it elsewhere.
+// retire this call completely
     public function prepareForDB($data) {
         if (is_array($data)) {
             # loop through array and apply the filters
@@ -687,7 +674,7 @@ class sanitizer
         return $retval;
     }
 
-    public function sanitizeUsername($username)
+    public static function sanitizeUsername($username)
     {
         $str = (string) preg_replace( '/[\x00-\x1F\x7F<>"%&*\/\\\\]/', '', $username );
         $str = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "", $str);
@@ -733,6 +720,8 @@ class sanitizer
 
 }
 
+// used by HTML filter
+// need to make this part of the class as an internal function
 function glfusion_style_check( $element, $attribute_array = 0 ) {
 
     // Only some elements can have 'style' and its value should not look fishy
