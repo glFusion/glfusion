@@ -40,10 +40,12 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
+use \glFusion\Log\Log;
+
 USES_lib_image();
 
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
-    COM_errorLog("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
+    Log::write('system',Log::ERROR,"Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
     exit();
 } else {
@@ -77,7 +79,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     list($testaccess_cnt) = DB_fetchArray( DB_query($sql));
 
     if ($testaccess_cnt == 0 OR DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 0) {
-        COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, File ID:{$lid}");
+        Log::write('system',Log::ERROR,"filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, File ID:{$lid}");
         echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     } else {
@@ -92,7 +94,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         }
         $allowed_protocols = array('http','https','ftp');
         $found_it = false;
-        COM_accessLog("Visit.php => Download File:{$url}, User ID is:{$uid}");
+        Log::write('system',Log::INFO, "Download File:{$url}, User ID is:{$uid}");
         $pos = utf8_strpos( $url, ':' );
         if( $pos === false ) {
             if ( $_FM_CONF['outside_webroot'] == 1 ) {
@@ -106,66 +108,38 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                         if(ini_get('zlib.output_compression')) {
                             ini_set('zlib.output_compression', 'Off');
                         }
-                        ob_end_flush();
-                        header('Pragma: public'); 	// required
-                        header('Expires: 0');		// no cache
-                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                        header('Last-Modified: '.gmdate ('D, d M Y H:i:s', @filemtime ($fullurl)).' GMT');
-                        header('Cache-Control: private',false);
-                        header('Content-Type: application/force-download');
+                        header('Content-Description: File Transfer');
+                        header('Content-Type: application/octet-stream');
                         header('Content-Disposition: attachment; filename="'.basename($fullurl).'"');
-                        header('Content-Transfer-Encoding: binary');
-                        if (!$_CONF['cookiesecure']) {
-                            header('Pragma: no-cache');
-                        }
-                        header('Content-Length: '. @filesize($fullurl) );	// provide file size
-                        header('Connection: close');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate');
+                        header('Pragma: public');
+                        header('Content-Length: ' . filesize($fullurl));
                         ob_clean();
-                        ob_end_flush();
                         flush();
-                        fpassthru($fd);
-                        flush();
-                        die();
+                        readfile($fullurl);
+                        exit;
                     } else {
-                        COM_errorLog("FileMgmt: Error - Unable to download selected file: ". urldecode($url));
+                        Log::write('system',Log::ERROR,"FileMgmt: Error - Unable to download selected file: ". urldecode($url));
                     }
                 }
             } else {
                 $fullurl = $filemgmt_FileStore . rawurldecode($url);
                 $fullurl = $fullurl;
-/*
-                $mimeInfo = IMG_getMediaMetaData( $fullurl );
-                if ( !isset($mimeInfo['mime_type']) || $mimeInfo['mime_type'] == '' ) {
-                    $mt = 'application/force-download';
-                } else {
-                  $mt = $mimeInfo['mime_type'];
-                }
-*/
                 if(ini_get('zlib.output_compression')) {
                     @ini_set('zlib.output_compression', 'Off');
                 }
-
-                ob_end_flush();
-                header('Pragma: public'); 	// required
-                header('Expires: 0');		// no cache
-                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                header('Last-Modified: '.gmdate ('D, d M Y H:i:s', @filemtime ($fullurl)).' GMT');
-                header('Cache-Control: private',false);
-//                header('Content-Type: ' . $mt);
-                header('Content-Type: application/force-download');
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
                 header('Content-Disposition: attachment; filename="'.basename($fullurl).'"');
-                header('Content-Transfer-Encoding: binary');
-                if (!$_CONF['cookiesecure']) {
-                    header('Pragma: no-cache');
-                }
-                header('Content-Length: '. @filesize($fullurl) );	// provide file size
-                header('Connection: close');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($fullurl));
                 ob_clean();
-                ob_end_flush();
                 flush();
-                @readfile($fullurl);
-                flush();
-                die();
+                readfile($fullurl);
+                exit;
             }
         } else {
             $protocol = utf8_substr( $url, 0, $pos + 1 );
