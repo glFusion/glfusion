@@ -20,6 +20,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Cache\Cache;
 
+
 // Magic url types
 define('MAGIC_URL_EMAIL', 1);
 define('MAGIC_URL_FULL', 2);
@@ -29,7 +30,8 @@ define('MAGIC_URL_WWW', 4);
 define ('FILTER_PRE', 1);
 define ('FILTER_POST', 2);
 
-class Formatter {
+class Formatter
+{
 
     /*
      * var formatType
@@ -404,7 +406,7 @@ class Formatter {
         }
 
         if ($this->parseUrls) {
-            $bbcode->addParser (array('block','inline','listitem'), array ($this->filter, 'linkify'));
+            $bbcode->addParser (array('block','inline','listitem'), array ($this, 'linkify'));
         }
 
         if (!in_array('code',$this->bbcodeBlackList)) {
@@ -776,4 +778,80 @@ class Formatter {
         }
         return $str;
     }
+
+    /**
+     * Turn all URLs in clickable links.
+     *
+     * @param string $value
+     * @param array  $protocols  http/https, ftp, mail, twitter
+     * @param array  $attributes
+     * @param string $mode       normal or all
+     * @return string
+     */
+    public function linkify($value, $protocols = array('http', 'mail','twitter'), array $attributes = array())
+    {
+        global $_CONF;
+
+        $linkify = new \Misd\Linkify\Linkify(array('callback' => function($url, $caption, $isEmail) {
+                global $_CONF;
+                if ( !$isEmail && isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true && stristr($url,$_CONF['site_url']) === false ) {
+                    // external
+                    $target = ' target="_blank" rel="noopener noreferrer" ';
+                } else {
+                    $target = '';
+                }
+                $returnLink = '';
+                $url = \sanitizer::sanitizeUrl($url);
+                if ( $isEmail ) {
+                    $returnLink = '<a href="mailto:'.$caption.'">'.$caption.'</a>';
+                } else {
+                    $returnLink =     '<a href="'.$url.'" ' . $target .'>'.$caption.'</a>';
+                }
+                return $returnLink;
+                return '<a href="'.$url.'" ' . $target .'>'.$caption.'</a>';
+        }));
+
+        $value = $linkify->process($value);
+
+        // Link attributes
+        $attr = '';
+        foreach ($attributes as $key => $val) {
+            $attr = ' ' . $key . '="' . htmlentities($val) . '"';
+        }
+
+        $links = array();
+
+        // Extract existing links and tags
+        $value = preg_replace_callback('~(<a .*?>.*?</a>|<.*?>)~i', function ($match) use (&$links) { return '<' . array_push($links, $match[1]) . '>'; }, $value);
+
+        // Extract text links for each protocol
+        foreach ((array)$protocols as $protocol) {
+            switch ($protocol) {
+                case 'http':
+                case 'https':
+                    break;
+                case 'mail':
+                    break;
+                case 'twitter':
+                    $value = preg_replace_callback('~(?<!\w)[@](\w++)~',
+                    function ($match) use (&$links, $attr) {
+                        global $_CONF;
+                        if ( isset($_CONF['open_ext_url_new_window']) && $_CONF['open_ext_url_new_window'] == true ) {
+                            // external
+                            $target = ' target="_blank" rel="noopener noreferrer" ';
+                        } else {
+                            $target = '';
+                        }
+                        return '<' . array_push($links, "<a $attr href=\"https://twitter.com/" . ($match[0][0] == '@' ? '' : 'search/%23') . $match[1]  . "\" rel=\"nofollow\"".$target.">{$match[0]}</a>") . '>';
+                    }, $value);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Insert all link
+        return preg_replace_callback('/<(\d+)>/', function ($match) use (&$links) { return $links[$match[1] - 1]; }, $value);
+    }
+
 }
