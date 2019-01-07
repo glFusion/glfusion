@@ -6151,7 +6151,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     }
 
     // if we do not throw the error back to an admin, still log it in the error.log
-    Log::write('system',Log::WARNING,"$errno - $errstr @ $errfile line $errline", 1);
+    Log::write('system',Log::WARNING,"$errno - $errstr @ $errfile line $errline");
 
     // Does the theme implement an error message html file?
     if (!empty($_CONF['path_layout']) &&
@@ -6361,7 +6361,13 @@ function COM_404()
     $refUrl = '';
     $content = '';
 
-    $url = COM_sanitizeUrl(COM_getCurrentURL());
+    if (!empty($_SERVER['REQUEST_URI'])) {
+    	$url = $_SERVER['REQUEST_URI'];
+    } else {
+        $url = COM_getCurrentURL();
+    }
+	$url = COM_sanitizeUrl($url);
+
 
     if (strpos($url,'custom_config.js') === true) {
         return;
@@ -6652,17 +6658,15 @@ function CMT_updateCommentcodes()
             }
         }
     }
-    $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
+    $sql = "UPDATE `{$_TABLES['stories']}` SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
     try {
-        $stmt = $db->conn->executeUpdate($sql);
+        $rowCount = $db->conn->executeUpdate($sql);
     } catch(\Doctrine\DBAL\DBALException $e) {
-        $stmt = false;
+        $rowCount = 0;
     }
     if ( $cleared == 0 ) {
-        if ( $stmt ) {
-            if ( $stmt->rowCount() > 0 ) {
-                $c = Cache::getInstance()->deleteItemsByTag('story');
-            }
+        if ( $rowCount > 0 ) {
+            $c = Cache::getInstance()->deleteItemsByTag('story');
         }
     }
 }
