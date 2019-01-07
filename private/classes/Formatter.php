@@ -388,10 +388,6 @@ class Formatter
             $str = str_replace('</pre>','[/code]',$str);
         }
 
-//        if ($this->parseAutoTags) {
-//            $bbcode->addParser (array ('block', 'inline', 'listitem'), array($this,'_replaceTags'));
-//        }
-
         if ($this->formatType != 'html') {
             $bbcode->addParser(array('block','inline','link','listitem'), array($this,'_nl2br'));
         }
@@ -487,7 +483,9 @@ class Formatter
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
         }
 
-//        $bbcode->setRootParagraphHandling (true);
+        if ($this->parseAutoTags) {
+            $bbcode->addParser (array ('block', 'inline', 'list','listitem'), array($this,'_replaceTags'));
+        }
 
         if ($this->censor) {
             $str = $this->filter->censor($str);
@@ -500,9 +498,9 @@ class Formatter
 
         unset($bbcode);
 
-        if ($this->parseAutoTags) {
-            $str = $this->_replaceTags($str);
-        }
+//        if ($this->parseAutoTags) {
+//            $str = $this->_replaceTags($str);
+//        }
         return $str;
     }
 
