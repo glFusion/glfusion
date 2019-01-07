@@ -1283,7 +1283,7 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
     $current = trim(implode( ',', $eids ));
 
     if ($_SYND_DEBUG) {
-        Log::write('system',Log::DEBUG,"Update check for events: comparing new list ($current) with old list ($update_info)");
+        Log::write('system',Log::DEBUG,"Update check for events: comparing new list ($current) with old list ($update_data)");
     }
 
     $rc = ( $current != $update_data ) ? false : true;
