@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -180,7 +180,9 @@ class Formatter
      */
     public function setType($mode = 'text')
     {
-        if (!in_array(strtolower($mode),array('text','html'))) $mode = 'text';
+        if (!in_array(strtolower($mode),array('text','html'))) {
+            $mode = 'text';
+        }
         $this->formatType = strtolower($mode);
     }
 
@@ -361,7 +363,7 @@ class Formatter
             if ($c->has($key)) {
                 $str = $c->get($key);
                 if ($this->parseAutoTags) {
-                    $str = $this->_replaceTags($str);
+                    $str = $this->parseTags($str);
                 }
                 return $str;
             }
@@ -483,24 +485,38 @@ class Formatter
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
         }
 
-        if ($this->parseAutoTags) {
-            $bbcode->addParser (array ('block', 'inline', 'list','listitem'), array($this,'_replaceTags'));
-        }
-
         if ($this->censor) {
             $str = $this->filter->censor($str);
         }
 
         $str = $bbcode->parse ($str);
+        unset($bbcode);
+
         if ($cache) {
+            // cache version does not have auto tags expanded
             $c->set($key,$str,array($this->namespace,$this->namespace.'_'.$this->action),$cacheTTL);
         }
 
+        if ($this->parseAutoTags) {
+            $str = $this->parseTags($str);
+        }
+
+        return $str;
+    }
+
+    public function parseTags($str)
+    {
+        global $_CONF;
+
+        $bbcode = new \StringParser_BBCode();
+        $bbcode->setGlobalCaseSensitive (false);
+
+        $bbcode->addParser (array ('block', 'inline', 'list','listitem'), array($this,'_replaceTags'));
+
+        $str = $bbcode->parse ($str);
+
         unset($bbcode);
 
-//        if ($this->parseAutoTags) {
-//            $str = $this->_replaceTags($str);
-//        }
         return $str;
     }
 
