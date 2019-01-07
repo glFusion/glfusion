@@ -798,8 +798,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_permissions', $LANG_ACCESS['permissions']);
     $story_templates->set_var('lang_perm_key', $LANG_ACCESS['permissionskey']);
     $story_templates->set_var('permissions_editor', SEC_getPermissionsHTML(
-    $story->EditElements('perm_owner'),$story->EditElements('perm_group'),
-    $story->EditElements('perm_members'),$story->EditElements('perm_anon')));
+        $story->EditElements('perm_owner'),$story->EditElements('perm_group'),
+        $story->EditElements('perm_members'),$story->EditElements('perm_anon')));
     $story_templates->set_var('permissions_msg', $LANG_ACCESS['permmsg']);
     $curtime = COM_getUserDateTimeFormat($story->EditElements('date'));
     $story_templates->set_var('lang_date', $LANG24[15]);
