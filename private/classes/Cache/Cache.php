@@ -97,7 +97,7 @@ final class Cache
                     $servers['saslPassword'] = $_CONF['cache_memcached_password'];
                 }
                 $servers['host'] = $_CONF['cache_host'];
-                $servers['port'] = $_CONF['cache_port'];
+                $servers['port'] = (int) $_CONF['cache_port'];
 
                 try {
                     $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
