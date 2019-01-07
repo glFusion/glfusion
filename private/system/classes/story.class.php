@@ -1819,6 +1819,10 @@ class Story
                 $return = $this->_displayEscape($this->_title);
                 break;
 
+            case 'subtitle':
+                $return = $this->_displayEscape($filter->htmlspecialchars($this->_subtitle));
+                break;
+
             case 'shortdate':
 				$dtObject = new Date($this->_date,$_USER['tzid']);
                 $return = $dtObject->format($_CONF['shortdate'],true);
@@ -1899,6 +1903,11 @@ class Story
                 break;
 
             case 'expire':
+                if (isset($this->_expire) && $this->_expire != 0) {
+                    $dtExpire = new Date($this->_expire,$_USER['tzid']);
+                } else {
+                    $dtExpire = new Date($this->_date + (7*86400),$_USER['tzid']);
+                }
                 $return = $dtExpire->toUnix();
                 break;
 
