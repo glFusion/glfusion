@@ -1,32 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | fusionrescue.php                                                         |
-// |                                                                          |
-// | Safely edit glFusion configuration                                       |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS
+*
+* glFusion Configuration Editor
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2018 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
@@ -35,25 +19,23 @@ define('GVERSION','2.0.0');
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
 require_once '../../siteconfig.php';
+
 $_SYSTEM['no_fail_sql'] = true;
 
 if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
 
+use \glFusion\Database\Database;
+
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
 
-require_once $_CONF['path_system'] . 'classes/Autoload.php';
+require_once $_CONF['path'] . 'classes/Autoload.php';
 glFusion\Autoload::initialize();
-
 
 $_DB_dbms = 'mysql';
 if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
-$_DB = new glFusion\Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
-                     $_CONF['default_charset'], $_CONF['db_charset']);
 
-
-
-require_once $_CONF['path_system'].'lib-database.php';
+require_once $_CONF['path'].'system/db-init.php';
 
 $self = basename(__FILE__);
 
@@ -247,10 +229,9 @@ function getConfigSetting($name)
 {
     global $_CONF, $_TABLES, $_DB_name;
 
-    $setting = DB_getItem($_TABLES['conf_values'], 'value', "name = '".DB_escapeString($name)."' AND group_name='Core'");
-
+    $db = Database::getInstance();
+    $setting = $db->getItem($_TABLES['conf_values'],'value',array('name' => $name,'group_name'=>'Core'));
     return @unserialize($setting);
-
 }
 
 
@@ -259,19 +240,24 @@ function rescue_innodbStatus()
     global $_CONF, $_TABLES, $_DB_name;
 
     $retval = false;
+    $numTables = 0;
+    $i = 0;
 
-    $engine = DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'");
+    $numTables = count($_TABLES);
+
+    $db = Database::getInstance();
+    $engine = $db->getItem($_TABLES['vars'],'value',array('name'=>'database_engine'));
+
     if (!empty($engine) && ($engine == 'InnoDB')) {
         // need to look at all the tables
-        $result = DB_query("SHOW TABLES");
-        $numTables = DB_numRows($result);
-        for ($i = 0; $i < $numTables; $i++) {
-            $A = DB_fetchArray($result, true);
+        $stmt = $db->conn->query("SHOW TABLES");
+        $tableRecs = $stmt->fetchAll(Database::NUMERIC);
+        foreach ($tableRecs AS $A) {
             $table = $A[0];
             if (in_array($table, $_TABLES)) {
-                $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
-                $B = DB_fetchArray($result2);
-                if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
+                $i++;
+                $engineData = $db->conn->fetchAssoc("SHOW TABLE STATUS FROM `{$_DB_name}` LIKE ?",array($table));
+                if (strcasecmp($engineData['Engine'], 'InnoDB') != 0) {
                     break; // found a non-InnoDB table
                 }
             }
@@ -407,11 +393,11 @@ function rescue_header( $authenticated ) {
             </li>
             <li><a href="fusionrescue.php?mode=plugins">Plugins</a></li>
         ';
-        if ( !rescue_innodbStatus() ) {
+//        if ( !rescue_innodbStatus() ) {
             $retval .= '
                 <li><a href="fusionrescue.php?mode=repair">Repair Database</a></li>
             ';
-        }
+//        }
         $retval .= '<li><a href="fusionrescue.php?mode=resetpassword">Reset Password</a></li>';
 
         if ( getConfigSetting('enable_twofactor') == true ) {
@@ -469,13 +455,18 @@ function processPlugins() {
     $plugins = array();
     $retval  = '';
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = DB_query($sql);
-    if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
+    $db = Database::getInstance();
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "plugins ORDER BY pi_name";
-    $result = DB_query($sql);
-    while ($plugins[] = DB_fetchArray($result) ) { }
+    // validate the glFusion database
+
+    $sql = "SELECT * FROM `" . $_DB_table_prefix . "conf_values` WHERE name='allow_embed_object' OR name='use_safe_html'";
+    $record = $db->conn->fetchAssoc($sql);
+    if ($record === false || $record === NULL) {
+        die('Invalid glFusion Database');
+    }
+
+    $stmt = $db->conn->executeQuery("SELECT * FROM `".$_DB_table_prefix."plugins` ORDER by pi_name");
+    $plugins = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     $retval .= '
         <ul class="uk-breadcrumb">
@@ -514,17 +505,21 @@ function savePlugins(  ) {
 
     $retval = '';
 
-    $sql = "UPDATE " . $_DB_table_prefix . "plugins SET pi_enabled=0";
+    $db = Database::getInstance();
 
-    $result = DB_query($sql);
+    $table = $_DB_table_prefix . 'plugins';
+
+    $sql = "UPDATE `{$table}` SET pi_enabled=0";
+
+    $db->conn->query($sql);
 
     $enabled = array();
     $enabled = $_POST['enabled'];
 
     $changed = 0;
     foreach ($enabled as $plugin => $value) {
-        $sql = "UPDATE " . $_DB_table_prefix . "plugins SET pi_enabled=1 WHERE pi_name='".DB_escapeString($plugin)."'";
-        DB_query($sql);
+        $sql = "UPDATE `{$table}` SET pi_enabled=1 WHERE pi_name=?";
+        $db->conn->executeQuery($sql,array($plugin));
     }
     $retval = 'Plugins have been updated';
     return $retval;
@@ -535,6 +530,8 @@ function repairDatabase() {
 
     $retval = array();
 
+    $db = Database::getInstance();
+
     $maxtime = @ini_get('max_execution_time');
     if (empty($maxtime)) {
         // unlimited or not allowed to query - assume 30 second default
@@ -542,13 +539,12 @@ function repairDatabase() {
     }
     $maxtime -= 5;
 
-    DB_displayError(true);
+    $stmt = $db->conn->query("SHOW TABLES");
+    $tableRecs = $stmt->fetchAll(Database::NUMERIC);
 
-    $result = DB_query("SHOW TABLES");
-    $numTables = DB_numRows($result);
-    for ($i = 0; $i < $numTables; $i++) {
-        $A = DB_fetchArray($result, true);
+    foreach($tableRecs AS $A) {
         $table = $A[0];
+
         if (in_array($table, $_TABLES)) {
             if (! empty($startwith)) {
                 if ($table == $startwith) {
@@ -560,10 +556,10 @@ function repairDatabase() {
                     continue; // skip
                 }
             }
-
-            $repair = DB_query("REPAIR TABLE " . $table, 1);
-            if ($repair === false) {
-                $retval[] = 'Repair failed for ' . $able;
+            try {
+                $stmt = $db->conn->executeQuery("REPAIR TABLE `{$table}`");
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                $retval[] = "Repair failed for " . $table;
             }
         }
     }
@@ -584,18 +580,13 @@ function getNewPaths( $group = 'Core') {
 
     $retval = '';
 
-    if ( $group == 'Core' ) {
-        $where = "group_name='".$group."' AND ";
-    } else {
-        $where = '';
-    }
+    $db = Database::getInstance();
 
-    $group = DB_escapeString($group);
+    // validate the glFusion database
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
-    $result = DB_query($sql,1);
-
-    if ( $result === false ) {
+    $sql = "SELECT * FROM `" . $_DB_table_prefix . "conf_values` WHERE name='allow_embed_object' OR name='use_safe_html'";
+    $record = $db->conn->fetchAssoc($sql);
+    if ($record === false || $record === NULL) {
         $retval = rescue_header(0);
         $retval .= '<div class="uk-alert uk-alert-danger">
                     fusionrecue is unable to retrieve the glFusion configuration data from the database.<br>
@@ -608,10 +599,11 @@ function getNewPaths( $group = 'Core') {
         exit;
     }
 
-    if ( DB_numRows($result) < 1 ) die('Invalid glFusion Database');
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
-    $result = DB_query($sql,1) or die('Cannot execute query');
-    while ($row = DB_fetchArray($result) ) {
+    $sql = "SELECT * FROM `" . $_DB_table_prefix . "conf_values` WHERE group_name=? AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
+
+    $stmt = $db->conn->executeQuery($sql,array($group));
+
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = $row['value'];
             $configDetail[$row['name']]['type'] = $row['type'];
@@ -771,11 +763,12 @@ function saveNewPaths( $group='Core' ) {
 
     $retval = array();
 
-    $sql = "SELECT * FROM " . $_DB_table_prefix . "conf_values WHERE group_name='".DB_escapeString($group)."' AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
+    $db = Database::getInstance();
 
-    $result = DB_query($sql);
+    $sql = "SELECT * FROM `".$_DB_table_prefix."conf_values` WHERE group_name=? AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
+    $stmt = $db->conn->executeQuery($sql,array($group));
 
-    while ($row = DB_fetchArray($result) ) {
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE) ) {
         if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = @unserialize($row['value']);
             $default[$row['name']] = $row['default_value'];
@@ -790,9 +783,18 @@ function saveNewPaths( $group='Core' ) {
     foreach ($cfgvalues as $option => $value) {
         if ( isset($reset[$option]) && $reset[$option] == 1 ) {
             $sql = "UPDATE " . $_DB_table_prefix . "conf_values SET value='" . $default[$option] . "' WHERE name='" . $option . "' AND group_name='".$group."'";
-            DB_query($sql);
-            $retval[] = 'Resetting ' . $option;
-            $changed++;
+            $sql = "UPDATE `" . $_DB_table_prefix . "conf_values`
+                    SET value=? WHERE name=? AND group_name=?";
+            try {
+                $stmt = $db->conn->executeUpdate($sql,array($default[$option],$option,$group));
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                $retval[] = 'Error Resetting ' . $option;
+                $stmt = false;
+            }
+            if ($stmt !== false) {
+                $retval[] = 'Resetting ' . $option;
+                $changed++;
+            }
         } else {
             $sVal = validateInput($value);
             if ( $config[$option] != $sVal && $option != 'user_login_method' && $option != 'event_types' && $option != 'default_permissions' && $option != 'grouptags') {
@@ -800,10 +802,25 @@ function saveNewPaths( $group='Core' ) {
                 if (function_exists($fn)) {
                     $sVal = $fn($sVal);
                 }
-                $sql = "UPDATE " . $_DB_table_prefix . "conf_values SET value='" . serialize($sVal) . "' WHERE name='" . $option . "' AND group_name='".$group."'";
-                DB_query($sql);
-                $retval[] = 'Saving ' . $option;
-                $changed++;
+                $sql = "UPDATE `" . $_DB_table_prefix . "conf_values`
+                        SET value=? WHERE name=? AND group_name=?";
+                try {
+                    $stmt = $db->conn->executeUpdate(
+                                $sql,
+                                array(
+                                    serialize($sVal),
+                                    $option,
+                                    $group
+                                )
+                    );
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    $retval[] = 'Error saving ' . $option;
+                    $stmt = false;
+                }
+                if ($stmt !== false) {
+                    $retval[] = 'Saving ' . $option;
+                    $changed++;
+                }
             }
         }
     }
@@ -876,6 +893,8 @@ function resetPassword()
 {
     global $rescueFields, $_DB_table_prefix;
 
+    $db = Database::getInstance();
+
     // check if passwd and passwd2 match
 
     $passwd = '';
@@ -899,14 +918,38 @@ function resetPassword()
     $username = $_POST['username'];
     $email    = $_POST['email'];
 
-    $result = DB_query ("SELECT uid,email,passwd,status FROM ".$_DB_table_prefix . "users" . "
-                WHERE username = '".DB_escapeString($username)."'
-                AND email = '". DB_escapeString($email)."' AND (account_type & ".LOCAL_USER.")");
-    $nrows = DB_numRows ($result);
-    if ($nrows == 1) {
-        $U = DB_fetchArray ($result);
+    $stmt = $db->conn->executeQuery(
+            "SELECT uid,email,passwd,status FROM `".$_DB_table_prefix."users`
+                WHERE username = ?
+                AND email = ? AND (account_type & ?)",
+            array(
+                $username,
+                $email,
+                LOCAL_USER
+            ),
+            array(
+                Database::STRING,
+                Database::STRING,
+                Database::INTEGER
+            )
+    );
+    $userRecs = $stmt->fetchAll(Database::ASSOCIATIVE);
+
+    if (count($userRecs) === 1) {
+        $U = $userRecs[0];
+
         $encrypted_password = SEC_hash($passwd);
-        DB_change ($_DB_table_prefix . "users" , 'passwd', "$encrypted_password",'uid', (int) $U['uid']);
+        $stmt = $db->conn->executeUpdate(
+            "UPDATE `".$_DB_table_prefix."users` SET passwd = ? WHERE uid=?",
+            array(
+                $encrypted_password,
+                $U['uid']
+            ),
+            array(
+                Database::STRING,
+                Database::INTEGER
+            )
+        );
     } else {
         return requestNewPassword('Username or email incorrect - requires both');
     }
@@ -960,6 +1003,8 @@ function resetMFA()
 {
     global $rescueFields, $_DB_table_prefix;
 
+    $db = Database::getInstance();
+
     $username = '';
 
     if ( !isset($_POST['username']) ) {
@@ -968,13 +1013,18 @@ function resetMFA()
 
     $username = $_POST['username'];
 
-    $result = DB_query ("SELECT uid,email,passwd,status FROM ".$_DB_table_prefix . "users" . "
-                WHERE username = '".DB_escapeString($username)."'");
+    $userRec = $db->conn->fetchAssoc(
+            "SELECT uid,email,passwd,status FROM `".$_DB_table_prefix."users`
+                WHERE username = ?",
+            array($username)
+    );
 
-    $nrows = DB_numRows ($result);
-    if ($nrows == 1) {
-        $U = DB_fetchArray ($result);
-        DB_change ($_DB_table_prefix . "users" , 'tfa_enabled', "0",'uid', (int) $U['uid']);
+    if ($userRec !== false && $userRec !== NULL) {
+        $db->conn->executeUpdate(
+            "UPDATE `".$_DB_table_prefix."users` SET tfa_enabled=0 WHERE uid=?",
+            array($userRec['uid']),
+            array(Database::INTEGER)
+        );
     } else {
         return requestDisableMFA('Username was not found');
     }
