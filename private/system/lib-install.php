@@ -209,7 +209,7 @@ function INSTALLER_install_mapping($step, &$vars)
     }
     if (array_key_exists('findgroup', $step)) {
 
-        $grp_id = $db->getItem($_TABLES['group'],'grp_id',array('grp_name' => $step['findgroup']));
+        $grp_id = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => $step['findgroup']));
 
         if ($grp_id === false) {
             Log::write('system',Log::ERROR,"AutoInstall: Could not find existing '{$step['findgroup']}' group!");
