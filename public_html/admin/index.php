@@ -118,6 +118,10 @@ function commandcontrol()
                           $_CONF['pingback_enabled'] || $_CONF['ping_enabled'])
                          && SEC_hasRights('story.ping'));
     $cc_arr = array(
+                  array('condition' => SEC_inGroup('Root'),
+                        'url' => $_CONF['site_admin_url'] . '/actions.php',
+                        'lang' => 'Admin Actions', 'image' => '/images/icons/actions.'),
+
                   array('condition' => SEC_hasRights('story.edit'),
                         'url' => $_CONF['site_admin_url'] . '/story.php',
                         'lang' => $LANG01[11], 'image' => '/images/icons/story.'),

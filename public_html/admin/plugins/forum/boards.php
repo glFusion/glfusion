@@ -323,7 +323,7 @@ function board_add_category_save()
         DB_query("INSERT INTO {$_TABLES['ff_categories']} (cat_order,cat_name,cat_dscp) VALUES (".(int) $catorder.",'$name','$dscp')");
         $retval = true;
         $statusText[] = $LANG_GF93['catadded'];
-
+        \glFusion\Admin\AdminAction::write('forum','create_category','Created Category '.$name);
     }
     return array($retval, $statusText);
 }
@@ -365,6 +365,9 @@ function board_edit_category_save($id)
         DB_query("UPDATE {$_TABLES['ff_categories']} SET cat_order=".(int) $catorder.",cat_name='$name',cat_dscp='$dscp' WHERE id=".(int) $id);
         $retval = true;
         $statusText[] = $LANG_GF93['catedited'];
+
+        \glFusion\Admin\AdminAction::write('forum','edit_category','Edited Category '.$name);
+
     }
     return array($retval, $statusText);
 }
@@ -423,6 +426,8 @@ function board_delete_category_confirmed($id)
     DB_query("DELETE FROM {$_TABLES['ff_forums']} WHERE forum_cat=".(int) $id);
     $retval = true;
     $statusMessage[] = $LANG_GF93['catdeleted'];
+
+    \glFusion\Admin\AdminAction::write('forum','delete_category','Deleted Category '.$id);
 
     return array($retval, $statusMessage);
 }
@@ -631,6 +636,9 @@ function board_add_forum_save()
         reorderForums($category);
         $retval = true;
         $statusText[] = $LANG_GF93['forumadded'];
+
+        \glFusion\Admin\AdminAction::write('forum','add_forum','Created Forum '.$name);
+
     }
     return array($retval, $statusText);
 }
@@ -683,6 +691,8 @@ function board_delete_forum_confirmed($id)
 
     $retval = true;
     $statusMessage[] = $LANG_GF93['forumdeleted'];
+
+    \glFusion\Admin\AdminAction::write('forum','delete_forum','Deleted Forum '.$id);
 
     return array($retval, $statusMessage);
 }
@@ -866,6 +876,9 @@ function board_edit_forum_save($id)
         reorderForums($category);
         $retval = true;
         $statusText[] = $LANG_GF93['forumedited'];
+
+        \glFusion\Admin\AdminAction::write('forum','edit_forum','Edited Forum '.$name);
+
     }
     return array($retval, $statusText);
 }

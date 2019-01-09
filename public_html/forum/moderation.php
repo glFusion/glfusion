@@ -122,7 +122,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
         gf_updateLastPost($forum_id,$topicparent);
     }
     $c = Cache::getInstance()->deleteItemsByTag('forumcb');
-
+    \glFusion\Admin\AdminAction::write('forum','delete_post','Deleted Topic ID: ' . $topic_id);
     if ($topicparent == $topic_id ) {
         $link = $_CONF['site_url'].'/forum/index.php?forum='.$forum_id;
         $retval .= FF_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum_id,true);
@@ -470,6 +470,9 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         $link = $_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id";
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
+
+\glFusion\Admin\AdminAction::write('forum','merge_post','Merge Topic ID: ' . $topic_id . ' to forum: ' . $move_to_forum . ' topic id ' . $move_to_topic);
+
     return $retval;
 }
 
@@ -857,6 +860,7 @@ if ($forum_id == 0) {
             $hostip = isset($_POST['hostip']) ? COM_applyFilter($_POST['hostip']) : '';
 
             $pageBody .= moderator_banIP($topic_id,$topic_parent_id,$forum_id, $hostip);
+\glFusion\Admin\AdminAction::write('forum','ban_ip','Banned IP: '.$hostip);
             break;
 
         case 'locktopic' :
@@ -868,6 +872,7 @@ if ($forum_id == 0) {
             }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=1 WHERE id=".(int) $topic_id;
             DB_query($sql);
+\glFusion\Admin\AdminAction::write('forum','lock_topic','Lock Topic: '.$topic_id);
             echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
             break;
         case 'unlocktopic' :
@@ -879,6 +884,7 @@ if ($forum_id == 0) {
             }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=0 WHERE id=".(int) $topic_id;
             DB_query($sql);
+\glFusion\Admin\AdminAction::write('forum','unlock_topic','Unlock Topic: '.$topic_id);
             echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
             break;
 

@@ -741,35 +741,44 @@ function forum_chkUsercanAccess($secure=false) {
 
 
 function forum_xchsmilies($message,$reverse=false) {
-
+    global $_CONF;
     $search = array(":D", ":)", ":(", "8O", ":?", "B)", ":cool:", ":lol:", ":x", ":P" ,":oops:", ":o",":cry:",
         ":evil:", ":twisted:", ":roll:", ";)", ":wink:", ":!:", ":question:", ":idea:", ":arrow:", ":|",
         ":mrgreen:",":mrt:",":love:",":cat:");
     $replace = array(
-    '<img style="vertical-align:middle;" src="images/smilies/biggrin.gif" alt="Big Grin"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/smile.gif" alt="Smile"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/frown.gif" alt="Frown"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/eek.gif" alt="Eek!"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/confused.gif" alt="Confused"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/cool.gif" alt="Cool"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/cool.gif" alt="Cool"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/lol.gif" alt="Laughing Out Loud"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/mad.gif" alt="Angry"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/razz.gif" alt="Razz"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/redface.gif" alt="Oops!"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/surprised.gif" alt="Surprised!"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/cry.gif" alt="Cry"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/evil.gif" alt="Evil"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/twisted.gif" alt="Twisted Evil"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/rolleyes.gif" alt="Rolling Eyes"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/wink.gif" alt="Wink"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/wink.gif" alt="Wink"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/exclaim.gif" alt="Exclaimation"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/question.gif" alt="Question"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/idea.gif" alt="Idea"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/arrow.gif" alt="Arrow"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/neutral.gif" alt="Neutral"/>',
-    '<img style="vertical-align:middle;" src="images/smilies/mrgreen.gif" alt="Mr. Green"/>');
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/biggrin.gif" alt="Big Grin"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/smile.gif" alt="Smile"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/frown.gif" alt="Frown"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/eek.gif" alt="Eek!"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/confused.gif" alt="Confused"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/cool.gif" alt="Cool"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/cool.gif" alt="Cool"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/lol.gif" alt="Laughing Out Loud"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/mad.gif" alt="Angry"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/razz.gif" alt="Razz"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/redface.gif" alt="Oops!"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/surprised.gif" alt="Surprised!"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/cry.gif" alt="Cry"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/evil.gif" alt="Evil"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/twisted.gif" alt="Twisted Evil"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/rolleyes.gif" alt="Rolling Eyes"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/wink.gif" alt="Wink"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/wink.gif" alt="Wink"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/exclaim.gif" alt="Exclaimation"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/question.gif" alt="Question"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/idea.gif" alt="Idea"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/arrow.gif" alt="Arrow"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/neutral.gif" alt="Neutral"/>',
+    '<img style="vertical-align:middle;" src="'.$_CONF['site_url'].'/forum/'.'images/smilies/mrgreen.gif" alt="Mr. Green"/>');
+
+    preg_match_all("/\[\w+:[^\]]*\]/", $message, $matches);
+    $counter = 0;
+    $queue = array();
+    foreach($matches[0] AS $match) {
+        $message = str_replace($match,"##".$counter."##",$message);
+        $queue[$counter] = $match;
+        $counter++;
+    }
 
     if (!$reverse) {
         $message = str_replace($search, $replace, $message);
@@ -784,6 +793,9 @@ function forum_xchsmilies($message,$reverse=false) {
 */
     } else {
         $message = str_replace($replace, $search, $message);
+    }
+    foreach($queue AS $counter => $rpl) {
+        $message = str_replace("##".$counter."##",$rpl, $message);
     }
     return $message;
 }

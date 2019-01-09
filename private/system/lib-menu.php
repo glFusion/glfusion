@@ -428,6 +428,12 @@ function getAdminMenu()
             // now handle submissions for plugins
             $modnum += PLG_getSubmissionCount();
 
+            if (SEC_inGroup('Root')) {
+                $url = $_CONF['site_admin_url'].'/actions.php';
+                $label = 'Admin Actions';
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
             if ( SEC_hasRights( 'story.edit' )) {
                 $url = $_CONF['site_admin_url'] . '/story.php';
                 $label = $LANG01[11];

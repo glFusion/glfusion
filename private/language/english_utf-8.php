@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -2492,6 +2492,22 @@ $LANG_CONFIG = array(
     'search' => 'Search Configuration',
     'hash_ext_missing' => 'Missing Hash Message Digest Extension - Two Factor Authentication cannot be enabled.',
 );
+
+###############################################################################
+# Localization of the Admin Configuration UI
+
+$LANG_ACTIONS = array(
+    'label' => 'Actions',
+    'date'  => 'Date',
+    'module'    => 'Module',
+    'action'    => 'Action',
+    'description' => 'Description',
+    'user'      => 'User',
+    'no_data'   => 'No actions have been logged',
+    'help_text' => 'Admin actions lists all administrative / moderator actions performed on your site.',
+);
+
+
 
 $LANG_configsections['Core'] = array(
     'label' => 'glFusion',

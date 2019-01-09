@@ -972,6 +972,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         $editAllowed = false;
         if (forum_modPermission($forumData['forum'],$_USER['uid'],'mod_edit')) {
             $editAllowed = true;
+\glFusion\Admin\AdminAction::write('forum','edit_topic','Edit Topic: '.$editid . ' :: '.$postData['subject']);
         } else {
             if ($_FF_CONF['allowed_editwindow'] > 0) {
                 $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $editid);
