@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2018 by the following authors:
+*  Copyright (C) 2014-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -41,13 +41,14 @@ class sanitizer
     var $allowedElements = 'p,b,a,i,strong,em';   // default allowed HTML elements - very restrictive
     var $schemas         = 'http:,https:,ftp:';   // default schemas
     var $encoding        = 'utf-8'; // character encoding
+    var $_censorData     = true;    // do we or don't we censor data
+    var $filterMethod    = 'htmlpurifier'; // or htmlawed
+    var $query = '';
+
+// depreciated
     var $namespace       = '';      // who is calling.. used for replacetags...
     var $operation       = '';      // operations being performed - i.e.; story, media_description
     var $replaceTags     = true;    // do we or don't we replace auto tags
-    var $_censorData     = true;    // do we or don't we censor data
-    var $filterMethod    = 'htmlpurifier'; // or htmlawed
-
-    var $query = '';
 
     public function __construct( )
     {
@@ -149,6 +150,7 @@ class sanitizer
      * @access  public
      *
      */
+//depreciated
     public function setNamespace( $namespace, $operation )
     {
         $this->namespace = $namespace;
@@ -160,7 +162,7 @@ class sanitizer
         $this->operation = $operation;
     }
 
-// this does not belong here. The filter should not being doing tag replacements
+// depreciated
     public function setReplaceTags( $option )
     {
         if ( $option ) {
@@ -274,7 +276,7 @@ class sanitizer
      * prepares text for display
      * does not filter malicious HTML - assumed this has been done elsewhere
      */
-
+// depreciated
     public function displayText( $str )
     {
         $sp = new StringParser_BBCode ();
@@ -304,7 +306,7 @@ class sanitizer
     /*
      * replace glFusion autotags with final form data
      */
-// we do not need this to be doing tag replacement
+// depreciated
     public function _replaceTags($text) {
         return PLG_replaceTags($text,$this->namespace,$this->operation);
     }
@@ -317,14 +319,20 @@ class sanitizer
     /*
      * Filter HTML input to remove malicious or un-wanted HTML tags
      */
-    public function _cleanHTML( $str )
+    public function _cleanHTML($str)
     {
         global $_CONF,$_SYSTEM;
 
-        if ( !isset($_CONF['debug_html_filter']) ) $_CONF['debug_html_filter'] = false;
+        if (!isset($_CONF['debug_html_filter'])) {
+            $_CONF['debug_html_filter'] = false;
+        }
 
-        if ( isset( $_CONF['skip_html_filter_for_root'] ) && ( $_CONF['skip_html_filter_for_root'] == 1 ) && SEC_inGroup( 'Root' )) {
-            if ( $_CONF['debug_html_filter'] == true ) COM_errorLog("HTMLFILTER: Skipped for root user");
+        if (isset($_CONF['skip_html_filter_for_root']) &&
+                 ($_CONF['skip_html_filter_for_root'] == 1) &&
+                 SEC_inGroup('Root')) {
+            if ($_CONF['debug_html_filter'] == true) {
+                COM_errorLog("HTMLFILTER: Skipped for root user");
+            }
             return $str;
         }
         $configArray = explode(',',$this->allowedElements);
@@ -343,12 +351,14 @@ class sanitizer
         $config->set('Output.FlashCompat',true);
         $config->set('Cache.SerializerPath',$_CONF['path_data'].'htmlpurifier');
 
-        if ( $_CONF['debug_html_filter'] == true ) $config->set('Core.CollectErrors',true);
+        if ($_CONF['debug_html_filter'] == true) {
+            $config->set('Core.CollectErrors',true);
+        }
         $purifier = new HTMLPurifier($config);
 
         $clean_html = $purifier->purify($str);
 
-        if (  $_CONF['debug_html_filter'] == true  ) {
+        if ($_CONF['debug_html_filter'] == true) {
             $e = $purifier->context->get('ErrorCollector');
             $errArray = $e->getRaw();
             if (is_array($errArray)) {
@@ -455,6 +465,7 @@ class sanitizer
      * @param string $mode       normal or all
      * @return string
      */
+// depreciated
     public function linkify($value, $protocols = array('http', 'mail','twitter'), array $attributes = array())
     {
         global $_CONF;
@@ -606,8 +617,7 @@ class sanitizer
         return trim($id);
     }
 
-// we need to remove this - don't need here - we should do it elsewhere.
-// retire this call completely
+// depreciated
     public function prepareForDB($data) {
         if (is_array($data)) {
             # loop through array and apply the filters
@@ -713,15 +723,13 @@ class sanitizer
         $codeblock = '<pre>' . @htmlspecialchars($content,ENT_NOQUOTES, $this->encoding) . '</pre>';
         return $codeblock;
     }
-
+//depreciate
     function highlightQuery($str){
         return COM_highlightQuery( $str, $this->query);
     }
 
 }
 
-// used by HTML filter
-// need to make this part of the class as an internal function
 function glfusion_style_check( $element, $attribute_array = 0 ) {
 
     // Only some elements can have 'style' and its value should not look fishy
