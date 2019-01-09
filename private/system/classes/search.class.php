@@ -765,9 +765,7 @@ class Search {
         $dt = new Date('now',$_USER['tzid']);
 
         $filter = \sanitizer::getInstance();
-        $filter->setReplaceTags(false);
         $filter->setCensorData(true);
-        $filter->setPostmode('html');
 
         if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];
@@ -809,7 +807,7 @@ class Search {
 
             $filter->setPostmode('text');
             $title = COM_getTextContent($row['title']);
-            $row['title'] = $filter->displayText($title);
+            $row['title'] = $filter->htmlspecialchars($filter->censor($title));
             $row['title'] = str_replace('$', '&#36;', $row['title']);
             if ($row['title'] == '') $row['title'] = 'No title available';
             $row['title'] = COM_createLink($row['title'], $row['url']);
