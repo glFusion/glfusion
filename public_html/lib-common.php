@@ -3131,10 +3131,8 @@ function COM_formatBlock( $A, $noboxes = false )
                     $retval .= $blkfooter;
                }
             } else {
-                // show error message
-                $retval .= $blkheader;
-                $retval .= sprintf( $LANG21[31], $function );
-                $retval .= $blkfooter;
+                // Return nothing, just hide the block if its function is missing.
+                return '';
             }
         }
     }
