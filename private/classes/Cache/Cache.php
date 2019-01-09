@@ -1,17 +1,22 @@
 <?php
 /**
-*   glFusion phpFastCache Interface
+* glFusion CMS
 *
-*   @author     Mark R. Evans <mark@lglfusion.org>
-*   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
-*   @package    glFusion
-*   @version    0.0.2
-*   @license    http://opensource.org/licenses/gpl-2.0.php
-*               GNU Public License v2 or later
-*   @filesource
+* glFusion phpFastCache Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2017-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
 */
 
 namespace glFusion\Cache;
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 use \Phpfastcache\CacheManager;
 use \Phpfastcache\Config\Config;
@@ -23,7 +28,6 @@ use \Phpfastcache\Exceptions\{
     PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException, PhpfastcacheRootException, PhpfastcacheSimpleCacheException
 };
 use \Phpfastcache\Helper\Psr\SimpleCache\CacheInterface;
-
 use \glFusion\Log\Log;
 
 /**
@@ -153,8 +157,8 @@ final class Cache
                 } else {
                     $configInfo['host'] = $_CONF['cache_host'];
                     $configInfo['port'] = (int) $_CONF['cache_port'];
-                    $configInfo['database'] = (int) $_CONF['cache_redis_database'];
                 }
+                $configInfo['database'] = (int) $_CONF['cache_redis_database'];
                 if ($_CONF['cache_redis_password'] != '') {
                     $configInfo['password'] = $_CONF['cache_redis_password'];
                 }
@@ -205,7 +209,6 @@ final class Cache
                 break;
         }
 
-
         if ($success == false) {
             // fallback to files
             CacheManager::setDefaultConfig(new Config([
@@ -213,7 +216,6 @@ final class Cache
               "itemDetailedDate" => true
             ]));
             $this->internalCacheInstance = CacheManager::getInstance('files');
-//            $_CONF['cache_driver'] = 'files';
         }
     }
 
@@ -581,21 +583,3 @@ final class Cache
     }
 
 }
-
-/* notes
-
-# test memcache
-$memcache = new Memcache;
-$memcache->connect('localhost', 11211) or die ("Could not connect");
-$version = $memcache->getVersion();
-echo "Server's version: ".$version."<br/>\n";
-exit;
-
-# test memcacheD
-$memcache = new Memcached;
-$memcache->addServer("127.0.0.1", 11211);
-$version = $memcache->getVersion();
-echo "Server's version: ".$version['127.0.0.1:11211']."<br/>\n";
-
-
-*/
