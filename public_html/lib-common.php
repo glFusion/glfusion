@@ -6360,12 +6360,18 @@ function COM_404()
     $content = '';
 
     if (!empty($_SERVER['REQUEST_URI'])) {
-    	$url = $_SERVER['REQUEST_URI'];
+        $url = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+        $url .= $_SERVER["SERVER_NAME"];
+
+        if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443") {
+            $url .= ":".$_SERVER["SERVER_PORT"];
+        }
+
+        $url .= $_SERVER["REQUEST_URI"];
     } else {
         $url = COM_getCurrentURL();
     }
 	$url = COM_sanitizeUrl($url);
-
 
     if (strpos($url,'custom_config.js') === true) {
         return;
@@ -6377,7 +6383,7 @@ function COM_404()
         }
         $byUser = '['.$_USER['username'].']';
 
-        if ( isset($_SERVER['HTTP_REFERER'])) {
+        if (isset($_SERVER['HTTP_REFERER'])) {
             $refUrl = $_SERVER['HTTP_REFERER'];
         }
 
@@ -6393,7 +6399,7 @@ function COM_404()
     header('Status: 404 Not Found');
 
     $content = PLG_replaceTags("[staticpage_content:_404]",'glfusion','404');
-    if ( $content == '' || $content == '[staticpage_content:_404]') {
+    if ($content == '' || $content == '[staticpage_content:_404]') {
         $content = COM_startBlock ($LANG_404[1]);
         $content .= '<p><b>' . $url . '</b></p>';
         $content .= $LANG_404[2];
