@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -866,7 +866,6 @@ $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTM
 # - social sharing sites
 #
 $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1);";
-$_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1);";
 $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('li', 'linkedin', 'LinkedIn', 'linkedin', 'http://www.linkedin.com', 1);";
 $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('lj', 'livejournal', 'Live Journal', 'pencil', 'http://www.livejournal.com', 1);";
 $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('mr', 'mail-ru', 'Mail.ru', 'at', 'http://mail-ru.com', 1);";
@@ -880,7 +879,6 @@ $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `en
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(2, 'http://facebook.com/%%u', 1, 'facebook', 'facebook', 'Facebook');";
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(3, 'http://pinterest.com/%%u', 1, 'pinterest-p', 'pinterest', 'Pinterest');";
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(4, 'http://youtube.com/%%u', 1, 'youtube', 'youtube', 'Youtube');";
-$_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(5, 'http://plus.google.com/+%%u', 1, 'google-plus', 'google-plus', 'Google+');";
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(6, 'http://linkedin.com/in/%%u', 1, 'linkedin', 'linkedin', 'LinkedIn');";
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(7, 'http://linkedin.com/company/%%u', 1, 'linkedin-square', 'linkedin-co', 'LinkedIn (Company)');";
 $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(8, 'http://github.com/%%u', 1, 'github', 'github', 'GitHub');";
