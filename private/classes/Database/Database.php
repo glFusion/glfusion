@@ -807,6 +807,36 @@ class Database
     }
 
     /**
+    * Common function used to build group access SQL
+    * Field ID can include a table identifier, e.g. 'tbl.fldname'
+    *
+    * @param   string  $clause    Optional parm 'WHERE' - default is 'AND'
+    * @param   string  $field     Optional field name, default is 'grp_access'
+    * @return  string  $groupsql  Formatted SQL string to be appended in calling script SQL statement
+    */
+    public function getAccessSQL($clause = 'AND', $field = 'grp_access')
+    {
+        global $_GROUPS;
+
+        if (empty ($_GROUPS)) {
+            $_GROUPS = SEC_getUserGroups();
+        }
+        $groupsql = '';
+        if (count($_GROUPS) == 1) {
+            $groupsql .= " $clause $field = '" . intval(current($_GROUPS)) ."'";
+        } else {
+            $group_arr = array_map(
+                    function($group) { return (int) intval($group); },
+                    array_values($_GROUPS)
+            );
+            $groupsql .= " $clause $field IN (" . implode(', ',$group_arr) .")";
+        }
+
+        return $groupsql;
+    }
+
+
+    /**
     * Adds appropriate WHERE statements to QueryBuilder object
     *
     * Creates part of an SQL expression that can be used to only request stories
