@@ -39,6 +39,8 @@ if (array_key_exists('form_submit', $_POST) && SEC_checkToken()) {
     if (! array_key_exists('form_reset', $_POST)) {
         $result = $config->updateConfig($_POST, $conf_group);
         CACHE_clear();
+        $c = \glFusion\Cache\Cache::getInstance();
+        $c->deleteItemsByTags(array('menu'));
     }
     $sub_group = array_key_exists('sub_group', $_POST) ? COM_applyFilter($_POST['sub_group']) : null;
     $activeTab = array_key_exists('activetab',$_POST) ? COM_applyFilter($_POST['activetab']) : '';

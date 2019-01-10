@@ -1181,7 +1181,7 @@ class config
      */
     function updateConfig($change_array, $group)
     {
-        global $_TABLES;
+        global $_CONF, $_TABLES;
 
         if (!SEC_inGroup('Root')) {
             return null;
@@ -1220,6 +1220,9 @@ class config
                     if ($change_array[$param_name] != $param_value) {
                         $this->set($param_name, $change_array[$param_name], $group);
                         $success_array[$group][$param_name] = true;
+                        if ($group == 'Core') {
+                            $_CONF[$param_name] = $change_array[$param_name];
+                        }
                     }
                 }
             }
