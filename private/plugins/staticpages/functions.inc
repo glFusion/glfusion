@@ -1244,6 +1244,9 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         }
     } else {
         $where = " WHERE sp_id = '" . DB_escapeString($id) . "'";
+        if ( $buildingSearchIndex ) {
+            $where .= " AND sp_search = 1 ";
+        }
         $permOp = 'AND';
     }
     if ($uid > 0) {
