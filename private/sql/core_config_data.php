@@ -3361,6 +3361,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'enable_admin_actions',
+    	'default_value' => 1,
+    	'type' => 'select',
+    	'subgroup' => 7,
+    	'fieldset' => 3,
+    	'selection_array' => 0,
+    	'sort' => 50,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_daily_digest',
     	'default_value' => NULL,
     	'type' => 'fieldset',

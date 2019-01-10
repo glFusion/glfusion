@@ -428,7 +428,7 @@ function getAdminMenu()
             // now handle submissions for plugins
             $modnum += PLG_getSubmissionCount();
 
-            if (SEC_inGroup('Root')) {
+            if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1 && SEC_inGroup('Root')) {
                 $url = $_CONF['site_admin_url'].'/actions.php';
                 $label = 'Admin Actions';
                 $item_array[] = array('label' => $label, 'url' => $url);

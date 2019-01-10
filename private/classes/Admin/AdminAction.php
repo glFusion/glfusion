@@ -61,23 +61,25 @@ class AdminAction
     {
         global $_CONF, $_USER, $_TABLES;
 
-        self::initialize();
+        if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1) {
+            self::initialize();
 
-        try {
-            self::$dbHandle->conn->insert(
-                        $_TABLES['admin_action'],
-                        array(
-                            'datetime'  => $_CONF['_now']->toMySQL(true),
-                            'module'    => $module,
-                            'action'    => $action,
-                            'description' => $desc,
-                            'user'      => (empty($_USER['username']) ? 'system' : $_USER['username']),
-                            'ip'        => $_SERVER['REAL_ADDR']
-                        )
-            );
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            Log::write('system',Log::ERROR,'10001 :: Failure writing administrative action to the admin_action database table.');
-            Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
+            try {
+                self::$dbHandle->conn->insert(
+                            $_TABLES['admin_action'],
+                            array(
+                                'datetime'  => $_CONF['_now']->toMySQL(true),
+                                'module'    => $module,
+                                'action'    => $action,
+                                'description' => $desc,
+                                'user'      => (empty($_USER['username']) ? 'system' : $_USER['username']),
+                                'ip'        => $_SERVER['REAL_ADDR']
+                            )
+                );
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                Log::write('system',Log::ERROR,'10001 :: Failure writing administrative action to the admin_action database table.');
+                Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
+            }
         }
     }
 }

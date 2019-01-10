@@ -4,6 +4,7 @@
 
 ### Added
   - Admin / Moderator actions are now logged and available for viewing in Command & Control
+     - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
   - {site_name} is now a default template var
   - Allow { and } to be escaped in templates by using {{ and }} so {{x}} will become {x}
   - Integrate Whoops debug console for development

@@ -316,18 +316,32 @@ function bb2_ban($ip,$type = 1,$reason = '') {
         switch ( $type ) {
             case 0 :
                 COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
+                if (version_compare(GVERSION,'2.0.0','ge')) {
+                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Manual Ban of IP: ' . $ip);
+                }
                 break;
             case 2 :
                 COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
+                if (version_compare(GVERSION,'2.0.0','ge')) {
+                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Automatic CAPTCHA Ban of IP: ' . $ip);
+                }
+
                 break;
             case 3 :
                 COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
+                if (version_compare(GVERSION,'2.0.0','ge')) {
+                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Automatic TOKEN Ban of IP: ' . $ip);
+                }
+
                 break;
             case 4 :
                 COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
+                if (version_compare(GVERSION,'2.0.0','ge')) {
+                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban',$LANG_BAD_BEHAVIOR['automatic_hp'] . ' ' . $ip);
+                }
                 break;
             default :
                 COM_errorLog("Banning " . $ip . " for type " . $type );

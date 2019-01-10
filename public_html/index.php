@@ -61,6 +61,8 @@ $topic = Topic::currentID();
 $page = (int) filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT);
 if ($page == 0) {
     $page = 1;
+} elseif ($page < 0) {
+    COM_404();
 }
 
 $cronCheck = _cronSchedule();

@@ -118,10 +118,6 @@ function commandcontrol()
                           $_CONF['pingback_enabled'] || $_CONF['ping_enabled'])
                          && SEC_hasRights('story.ping'));
     $cc_arr = array(
-                  array('condition' => SEC_inGroup('Root'),
-                        'url' => $_CONF['site_admin_url'] . '/actions.php',
-                        'lang' => 'Admin Actions', 'image' => '/images/icons/actions.'),
-
                   array('condition' => SEC_hasRights('story.edit'),
                         'url' => $_CONF['site_admin_url'] . '/story.php',
                         'lang' => $LANG01[11], 'image' => '/images/icons/story.'),
@@ -175,6 +171,13 @@ function commandcontrol()
                         'lang' => $LANG_SOCIAL['label'], 'image' => '/images/icons/social.'),
 
     );
+    if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1 && SEC_inGroup('Root')) {
+        $cc_arr[] = array('condition' => SEC_inGroup('Root'),
+                          'url' => $_CONF['site_admin_url'] . '/actions.php',
+                          'lang' => 'Admin Actions', 'image' => '/images/icons/actions.'
+                         );
+    }
+
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
 
     for ($i = 0; $i < count ($cc_arr); $i++) {

@@ -135,7 +135,11 @@ function actions_admin_menu($action = '')
 $page = '';
 $display = '';
 
-$page = listActions();
+if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1 && SEC_inGroup('Root')) {
+    $page = listActions();
+} else {
+    $page = '<div class="uk-panel uk-panel-box"><h2>Admin Actions are currently disabled in the configuration</h2></div>';
+}
 
 $display  = COM_siteHeader ('menu', $LANG_ACTIONS['label']);
 $display .= actions_admin_menu();
