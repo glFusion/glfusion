@@ -2816,6 +2816,7 @@ $LANG_confignames['Core'] = array(
     'cache_redis_database' => 'Redis Database Index',
     'cache_memcached_username' => 'SASL Username for Memcached',
     'cache_memcached_password' => 'SASL Password for Memcached',
+    'cache_memcached_socket' => 'Path / Filename to Memcache(d) Socket',
     'cache_redis_info' => 'Redis Driver Attributes',
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
@@ -2824,6 +2825,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Story Administration',
     'log_level' => 'Log Level',
+    'enable_admin_actions' => 'Enable Admin Logging',
 );
 
 $LANG_configsubgroups['Core'] = array(
