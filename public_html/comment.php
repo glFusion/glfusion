@@ -395,6 +395,10 @@ function handleEditSubmit()
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
+    if ($moderatorEdit || $adminedit) {
+        \glFusion\Admin\AdminAction::write('comment','mod_edit','Edited comment id: ' . $cid . ' :: ' . $title);
+    }
+
     $silentEdit = false;
     if ( isset($_POST['silent_edit']) && SEC_hasRights('comment.moderate') ) {
         $silentEdit = true;
