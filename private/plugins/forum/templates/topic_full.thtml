@@ -25,6 +25,7 @@
 	<script src="{site_url}/forum/javascript/ajax_like.js"></script>
 {!endif}
 {!endif}
+{!if !iframe}
 	<script>
 		$(document).ready(function(){
 			$("#subscribe-link").click(function(e){
@@ -64,6 +65,7 @@
 			});
 		});
 	</script>
+{!endif}
 	<style>
 		.uk-nav-dropdown > li > button:hover {
 		  width:100%;
