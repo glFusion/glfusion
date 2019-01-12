@@ -4,6 +4,11 @@
 	var editor_type = 'forumeditor';
 	var lang_timer  = "{lang_timeout}";
 	var lastActivity = 0;
+	var modifiedForm = 0;
+{!if preview_post}
+	modifiedForm = 1;
+{!endif}
+
 </script>
 {!if show_htmleditor}
 {wysiwyg}
@@ -84,6 +89,7 @@
 				<form  class="uk-form uk-form-horizontal" id="forumpost" name="forumpost" action="{form_action}" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="forum" value="{forum_id}">
 					<input type="hidden" name="id" value="{hidden_id}">
+					<input type="hidden" name="mod" id="mod" value="{mod}">
 {!if hidden_modedit}
 					<input type="hidden" name="modedit" value="{hidden_modedit}">
 {!endif}
@@ -311,9 +317,9 @@
 						</div>
 					</div>
 					<div class="uk-form-row">
-						<button class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
-						<button class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
-						<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
+						<button onclick="actionClick('preview');return false;" class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
+						<button onclick="actionClick('save_button');return false;" class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
+						<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9">{$LANG_GF01[CANCEL]}</button>
 					</div>
 				</form>
 			</div>
@@ -424,6 +430,36 @@
 	</div>
 </div>
 <script>
+
+	function actionClick( $action ) {
+		if ( $action == 'cancel' ) {
+			UIkit.modal.confirm("{$LANG24[124]}", function(){
+				$('#forumpost').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+				modifiedForm = 0;
+				$('#forumpost').trigger('submit', [ { $action: true } ]);
+			}, function(){});
+		} else {
+			modifiedForm = 0;
+			$('#forumpost').append("<input type='hidden' name='" + $action + "' value='clicked' />");
+			$('#forumpost').trigger('submit', [ { $action: true } ]);
+		}
+	}
+	$(document).ready(function() {
+		modifiedForm = $('#mod').val();
+		$(':input').change(function(){
+			modifiedForm = 1;
+			$('#mod').val(1);
+		});
+		window.onbeforeunload = confirmExit;
+		function confirmExit(){
+			if (modifiedForm == 1) {
+				return 'unsaved';
+			}
+		}
+		$('.button').click(function(){
+			modifiedForm = 0;
+		});
+	});
 $("#forumpost").validate();
 $(document).ready(function() {
 	lastActivity = new Date().getTime();
