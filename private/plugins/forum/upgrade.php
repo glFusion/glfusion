@@ -287,6 +287,9 @@ function forum_upgrade() {
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_warning)."' WHERE fb_data='uk-badge-warning'",1);
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_default)."' WHERE fb_data=''",1);
 
+        case '3.4.1' :
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
+
         default :
             forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);

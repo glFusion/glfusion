@@ -2,7 +2,7 @@
     <id>forum</id>
     <name>Forum</name>
     <description>Collaboration System</description>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <glfusionversion>1.7.7</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>

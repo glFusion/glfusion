@@ -17,6 +17,7 @@
   - Set defaults / values for all datetime fields properly
 
 ### Fixed
+  - Missing lastedited field in Forum Plugin fresh installation
   - Set proper HTTP header when BB2 plugin rejects request
   - Forum did not properly pull the user's photo
   - BB2 Plugin's proxy setting did not work properly

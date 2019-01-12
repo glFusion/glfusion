@@ -83,6 +83,7 @@ $_SQL['ff_topic'] = "CREATE TABLE {$_TABLES['ff_topic']} (
   name varchar(50) default NULL,
   date varchar(12) default NULL,
   lastupdated varchar(12) default NULL,
+  lastedited VARCHAR(12) NULL DEFAULT NULL,
   last_reply_rec mediumint(8) NOT NULL default '0',
   email varchar(50) default NULL,
   website varchar(100) NOT NULL default '',
