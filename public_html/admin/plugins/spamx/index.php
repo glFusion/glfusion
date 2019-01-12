@@ -1,34 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Spam-X Plugin - glFusion CMS                                             |
-// +--------------------------------------------------------------------------+
-// | dashboard.php                                                            |
-// |                                                                          |
-// | Spam-X Dashbaord                                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2016-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Spam-X Dashboard
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2019 by the following authors:
+*   Mark R. Evans    mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 // Only let admin users access this page
 if (!SEC_hasRights ('spamx.admin')) {
@@ -45,14 +33,31 @@ if (!SEC_hasRights ('spamx.admin')) {
 function spamx_purge_stats()
 {
     global $_CONF, $_TABLES;
-    COM_errorLog("Spam-x: Purging Spam-X stats");
+    Log::write('system',Log::INFO,"Spam-x: Purging Spam-X stats");
     $mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
     $dt = new \Date($mo3,$_CONF['timezone']);
     $maxAge = $dt->toMySQL();
     $now = time();
     $sql = "DELETE FROM {$_TABLES['spamx_stats']} WHERE blockdate < '".$maxAge."'";
-    DB_query($sql,1);
-    DB_query("REPLACE INTO {$_TABLES['vars']} (name,value) VALUES ('spamxstats','".$now."');",1);
+    try {
+        $stmt = $db->conn->executeUpdate(
+            "DELETE FROM `{$_TABLES['spamx_stats']}` WHERE blockdate < ?",
+            array($maxAge),
+            array(Database::STRING)
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error purging older Spam-X statistics');
+    }
+
+    try {
+        $db->conn->executeQuery(
+                "REPLACE INTO `{$_TABLES['vars']}` (name,value) VALUES ('spamxstats',?)",
+                array($now),
+                array(Database::STRING)
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error updating Spam-X statistics purge date.');
+    }
 }
 
 /**
@@ -116,9 +121,13 @@ $mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
 $dt = new \Date($mo3,$_CONF['timezone']);
 $maxAge = $dt->toMySQL();
 
-$sql = "SELECT *,COUNT(*) AS count from {$_TABLES['spamx_stats']} WHERE blockdate > '".$maxAge."' GROUP BY module, type";
-$result = DB_query($sql);
-while ( ( $row = DB_fetchArray($result)) != NULL ) {
+$stmt = $db->conn->executeQuery(
+            "SELECT *,COUNT(*) AS count from `{$_TABLES['spamx_stats']}` WHERE blockdate > ? GROUP BY module, type",
+            array($maxAge),
+            array(Database::STRING)
+);
+
+while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
     $stats[$row['module']][$row['type']] = $row['count'];
 }
 
