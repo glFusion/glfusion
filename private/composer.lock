@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "065ff60542abe7dacfa6e77aa1875b45",
+    "content-hash": "92d627c3f237152c170c7684c868f4bb",
     "packages": [
         {
             "name": "aziraphale/email-address-validator",
@@ -727,7 +727,7 @@
         },
         {
             "name": "phpclasses/oauth-api",
-            "version": "1.0.103",
+            "version": "1.0.104",
             "dist": {
                 "type": "zip",
                 "url": "https://www.phpclasses.org/install/package/oauth-api.zip",
