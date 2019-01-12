@@ -33,6 +33,9 @@ if (!SEC_hasRights ('spamx.admin')) {
 function spamx_purge_stats()
 {
     global $_CONF, $_TABLES;
+
+    $db = Database::getInstance();
+
     Log::write('system',Log::INFO,"Spam-x: Purging Spam-X stats");
     $mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
     $dt = new \Date($mo3,$_CONF['timezone']);
@@ -120,6 +123,8 @@ $stats = array(
 $mo3 = date("m-1-Y",strtotime("-3 Months")) . 'T00:00:00';
 $dt = new \Date($mo3,$_CONF['timezone']);
 $maxAge = $dt->toMySQL();
+
+$db = Database::getInstance();
 
 $stmt = $db->conn->executeQuery(
             "SELECT *,COUNT(*) AS count from `{$_TABLES['spamx_stats']}` WHERE blockdate > ? GROUP BY module, type",
