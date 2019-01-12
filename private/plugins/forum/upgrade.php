@@ -276,7 +276,6 @@ function forum_upgrade() {
             $c->del('ff_rank_settings', 'forum');
 
         case '3.4.0' :
-            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
             DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
             // Change badge css designators to actual color strings
             $bg_success = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#82bb42";}';
@@ -287,6 +286,9 @@ function forum_upgrade() {
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_danger)."' WHERE fb_data='uk-badge-danger'",1);
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_warning)."' WHERE fb_data='uk-badge-warning'",1);
             DB_query("UPDATE {$_TABLES['ff_badges']} SET fb_data='".DB_escapeString($bg_default)."' WHERE fb_data=''",1);
+
+        case '3.4.1' :
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
 
         default :
             forum_update_config();

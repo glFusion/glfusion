@@ -1540,13 +1540,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
 
             $_SQL = array();
+
             $_SQL[] = "
-                CREATE TABLE {$_TABLES['admin_access']} (
+                CREATE TABLE `{$_TABLES['admin_action']}` (
                   `id`          mediumint(8) auto_increment,
                   `datetime`    datetime  default NULL,
                   `module`      varchar(100) NOT NULL DEFAULT 'system',
                   `action`      varchar(100) NULL DEFAULT NULL,
-                  `description` text
+                  `description` text,
                   `user`        varchar(48) default NULL,
                   `ip`          varchar(48) default NULL,
                   PRIMARY KEY (`id`)
