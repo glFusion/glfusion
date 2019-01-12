@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | deleted.php                                                              |
-// |                                                                          |
-// | glFusion Installation                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Deleted files from previous releases
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
@@ -37,6 +22,7 @@ $obsoletePrivateDir = array(
     'plugins/captcha/images/static/',
     'plugins/commentfeeds/',
     'vendor/geshi/',
+    'vendor/phpmailer/.github/',
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',
@@ -91,6 +77,9 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+// 2.0.0
+    'system/classes/Cache.php',
+    'system/classes/Autoload.php',
 // 1.7.0
     'system/classes/filter.class.php',
     'system/classes/output.class.php',
