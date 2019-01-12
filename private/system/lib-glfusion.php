@@ -587,6 +587,10 @@ function _doSiteConfigUpgrade() {
         'endphp'                      => '?>',
     ));
 
+    if (defined('DVLP_DEBUG')) {
+        $T->set_var('develop_debug',"define('DVLP_DEBUG',true);");
+    }
+
     if ( $_CONF['path'] .'system/' == $_CONF['path_system']) {
         $T->set_var('path_system', "\$_CONF['path'] . 'system/'");
     } else {

@@ -12,6 +12,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+{develop_debug}
+
+
 global $_CONF, $_SYSTEM;
 $_CONF = array();
 $_SYSTEM = array();
