@@ -1565,6 +1565,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sql,1);
             }
 
+            DB_query("DELETE FROM `{$_TABLES['plugins']}` WHERE pi_name='commentfeeds'",1);
+
             $current_fusion_version = '2.0.0';
 
         default:
