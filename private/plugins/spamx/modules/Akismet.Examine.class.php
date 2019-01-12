@@ -3,7 +3,7 @@
 * File: Akismet.class.php
 * Akismet Examine Class
 *
-* Copyright (C) 2017 by the following authors:
+* Copyright (C) 2017=2019 by the following authors:
 * Author        Mark R. Evans   mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -19,6 +19,8 @@ if (!defined ('GVERSION')) {
 // Include Base Classes
 require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'BaseCommand.class.php';
 require_once $_CONF['path'] . 'plugins/spamx/modules/Akismet.class.php';
+
+use \glFusion\Log\Log;
 
 /**
  * Sends posts to Akismet for examination
@@ -73,10 +75,18 @@ class Akismet extends BaseCommand
 
             if ($retval == true) {
                 $spamType = isset($data['type']) ? $data['type'] : ' unknown ';
+                Log::write('system',Log::INFO,"Akismet: spam detected on " . $spamType);
+                Log::write('system',Log::INFO,
+                            $LANG_SX00['foundspam'] . 'Akismet'.
+                            $LANG_SX00['foundspam2'] . $_USER['uid'] .
+                            $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']
+                );
+/*
                 SPAMX_log ("Akismet: spam detected on " . $spamType);
                 SPAMX_log ($LANG_SX00['foundspam'] . 'Akismet'.
                            $LANG_SX00['foundspam2'] . $_USER['uid'] .
                            $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
+*/
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],4);
                 }

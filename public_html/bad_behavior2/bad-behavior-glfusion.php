@@ -32,7 +32,10 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 global $_DB_table_prefix;
 
@@ -315,36 +318,23 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     if ( isset($_CONF['bb2_ban_log']) && $_CONF['bb2_ban_log'] == 1 ) {
         switch ( $type ) {
             case 0 :
-                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
-                if (version_compare(GVERSION,'2.0.0','ge')) {
-                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Manual Ban of IP: ' . $ip);
-                }
+                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
+                AdminAction::write('bad_behavior2','ban','Manual Ban of IP: ' . $ip);
                 break;
             case 2 :
-                COM_errorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
+                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha'];
                 $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
-                if (version_compare(GVERSION,'2.0.0','ge')) {
-                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Automatic CAPTCHA Ban of IP: ' . $ip);
-                }
-
                 break;
             case 3 :
-                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
+                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_token']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_token'];
-                if (version_compare(GVERSION,'2.0.0','ge')) {
-                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban','Automatic TOKEN Ban of IP: ' . $ip);
-                }
-
                 break;
             case 4 :
-                COM_ErrorLog("Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
+                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_hp']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_hp'];
-                if (version_compare(GVERSION,'2.0.0','ge')) {
-                    \glFusion\Admin\AdminAction::write('bad_behavior2','ban',$LANG_BAD_BEHAVIOR['automatic_hp'] . ' ' . $ip);
-                }
                 break;
             default :
-                COM_errorLog("Banning " . $ip . " for type " . $type );
+                Log::write('system',Log::INFO,"Banning " . $ip . " for type " . $type );
                 break;
         }
     }
@@ -357,19 +347,27 @@ function bb2_ban($ip,$type = 1,$reason = '') {
     if ( $result !== false ) {
         $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
     }
-    if ( $type != 0 && $type != 4 ) echo COM_refresh($_CONF['site_url']);
+    if ( $type != 0 && $type != 4 ) {
+        echo COM_refresh($_CONF['site_url']);
+    }
     return true;
 }
 
 
 function bb2_expireBans() {
     global $_CONF, $_TABLES;
-    if ( !isset($_CONF['bb2_ban_timeout']) ) $_CONF['bb2_ban_timeout'] = 24;
-    if ($_CONF['bb2_ban_timeout'] == 0 ) return;
+    if ( !isset($_CONF['bb2_ban_timeout']) ) {
+        $_CONF['bb2_ban_timeout'] = 24;
+    }
+    if ($_CONF['bb2_ban_timeout'] == 0 ) {
+        return;
+    }
     $settings = bb2_read_settings();
     $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
     $result = DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE autoban != 0 AND timestamp < " . $oldBans,1);
-    if ( $result !== false ) $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+    if ( $result !== false ) {
+        $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+    }
     return;
 }
 

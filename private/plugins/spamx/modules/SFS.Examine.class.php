@@ -1,10 +1,9 @@
 <?php
-
 /**
 * File: SFS.Examine.class.php
 * This is the Stop Forum Spam Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2011-2018 by the following authors:
+* Copyright (C) 2011-2019 by the following authors:
 * Author        Mark R. Evans       mark AT glfusion DOT org
 *
 * Licensed under the GNU General Public License
@@ -22,6 +21,8 @@ if (!defined ('GVERSION')) {
 */
 require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'BaseCommand.class.php';
 require_once $_CONF['path'] . 'plugins/spamx/modules/' . 'SFSbase.class.php';
+
+use \glFusion\Log\Log;
 
 /**
 * Sends IP to SFS (stopforumspam.org) for examination
@@ -58,9 +59,10 @@ class SFS extends BaseCommand {
         $sfs = new SFSbase();
         if ($sfs->CheckForSpam ($comment,$data)) {
             $ans = 1;
-            SPAMX_log ($LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
-                       $LANG_SX00['foundspam2'] . $uid .
-                       $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
+            Log::write('system',Log::INFO,
+                        $LANG_SX00['foundspam'] . 'Stop Forum Spam (SFS)'.
+                        $LANG_SX00['foundspam2'] . $uid .
+                        $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
             SESS_setVar('spamx_msg','Failed Stop Forum Spam IP / username check');
             if ( function_exists('bb2_ban') ) {
                 bb2_ban($_SERVER['REAL_ADDR'],4);
