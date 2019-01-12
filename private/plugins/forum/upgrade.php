@@ -276,6 +276,7 @@ function forum_upgrade() {
             $c->del('ff_rank_settings', 'forum');
 
         case '3.4.0' :
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
             DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
             // Change badge css designators to actual color strings
             $bg_success = 'a:2:{s:7:"fgcolor";s:7:"#ffffff";s:7:"bgcolor";s:7:"#82bb42";}';

@@ -860,7 +860,7 @@ if ($forum_id == 0) {
             $hostip = isset($_POST['hostip']) ? COM_applyFilter($_POST['hostip']) : '';
 
             $pageBody .= moderator_banIP($topic_id,$topic_parent_id,$forum_id, $hostip);
-\glFusion\Admin\AdminAction::write('forum','ban_ip','Banned IP: '.$hostip);
+            \glFusion\Admin\AdminAction::write('forum','ban_ip','Banned IP: '.$hostip);
             break;
 
         case 'locktopic' :
@@ -872,7 +872,7 @@ if ($forum_id == 0) {
             }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=1 WHERE id=".(int) $topic_id;
             DB_query($sql);
-\glFusion\Admin\AdminAction::write('forum','lock_topic','Lock Topic: '.$topic_id);
+            \glFusion\Admin\AdminAction::write('forum','lock_topic','Lock Topic: '.$topic_id);
             echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
             break;
         case 'unlocktopic' :
@@ -884,10 +884,9 @@ if ($forum_id == 0) {
             }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET locked=0 WHERE id=".(int) $topic_id;
             DB_query($sql);
-\glFusion\Admin\AdminAction::write('forum','unlock_topic','Unlock Topic: '.$topic_id);
+            \glFusion\Admin\AdminAction::write('forum','unlock_topic','Unlock Topic: '.$topic_id);
             echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
             break;
-
 
         default :
             $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);

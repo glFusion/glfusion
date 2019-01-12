@@ -2125,36 +2125,40 @@ function glfusion_200()
     $sql = "ALTER TABLE `{$_TABLES['blocks']}` CHANGE COLUMN `rdfupdated` `rdfupdated` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';";
     DB_query($sql,1);
 --- */
-    // forum badge update
-    DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
-    // Change badge css designators to actual color strings
-    $b_groups =\Forum\Badge::getAll();
-    foreach ($b_groups as $grp) {
-        foreach ($grp as $badge) {
-            if ($badge->fb_type == 'css') {
-                switch ($badge->fb_data) {
 
-                case 'uk-badge-success':
-                    $badge->fb_bgcolor = '#82bb42';
-                    break;
-                case 'uk-badge-danger':
-                    $badge->fb_bgcolor = '#d32c46;';
-                    break;
-                case 'uk-badge-warning':
-                    $badge->fb_bgcolor = '#d32c46;';
-                    break;
-                default:
-                    $fc = substr($badge->fb_data,0,1);
-                    if ( $fc != 'a' ) {
-                        $badge->fb_bgcolor = '#009dd8';
+    if (in_array('forum',$_PLUGINS)) {
+
+        // forum badge update
+        DB_query("ALTER TABLE {$_TABLES['ff_badges']} ADD `fb_inherited` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `fb_enabled`;",1);
+        // Change badge css designators to actual color strings
+        $b_groups =\Forum\Badge::getAll();
+        foreach ($b_groups as $grp) {
+            foreach ($grp as $badge) {
+                if ($badge->fb_type == 'css') {
+                    switch ($badge->fb_data) {
+
+                    case 'uk-badge-success':
+                        $badge->fb_bgcolor = '#82bb42';
+                        break;
+                    case 'uk-badge-danger':
+                        $badge->fb_bgcolor = '#d32c46;';
+                        break;
+                    case 'uk-badge-warning':
+                        $badge->fb_bgcolor = '#d32c46;';
+                        break;
+                    default:
+                        $fc = substr($badge->fb_data,0,1);
+                        if ( $fc != 'a' ) {
+                            $badge->fb_bgcolor = '#009dd8';
+                        }
+                        break;
                     }
-                    break;
+                    $badge->Save();
                 }
-                $badge->Save();
             }
         }
+        DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
     }
-
     // core items
     if (!isset($_VARS['last_maint_run'])) {
         DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);
