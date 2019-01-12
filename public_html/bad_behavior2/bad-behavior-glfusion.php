@@ -322,7 +322,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
                 AdminAction::write('bad_behavior2','ban','Manual Ban of IP: ' . $ip);
                 break;
             case 2 :
-                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha'];
+                Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);
                 $reason = $LANG_BAD_BEHAVIOR['automatic_captcha'];
                 break;
             case 3 :
