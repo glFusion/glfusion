@@ -945,7 +945,7 @@ class Connection implements DriverConnection
         $data = $resultCache->fetch($cacheKey);
 
         if ($data !== false && $data !== NULL) {
-			// is the real key part of this row pointers map or is the cache only pointing to other cache keys?
+            // is the real key part of this row pointers map or is the cache only pointing to other cache keys?
             if (isset($data[$realKey])) {
                 $stmt = new ArrayStatement($data[$realKey]);
             } elseif (array_key_exists($realKey, $data)) {
