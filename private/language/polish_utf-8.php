@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -2335,6 +2335,22 @@ $LANG_AM = array (
 );
 
 ###############################################################################
+# Administrative Actions
+$LANG_ADM_ACTIONS = array(
+    'enabled'               => 'Włączone',
+    'disabled'              => 'Wyłączony',
+    'plugin_state'          => 'Toggled Plugin State for %s to %s',
+    'plugin_uninstall'      => 'Uninstalled Plugin %s',
+    'config_change'         => 'Changed config setting: %s::%s from: %s to %s',
+    'manual_ban'            => 'Manual Ban of IP: %s',
+    'group_updated'         => 'Group %s (%s) saved',
+    'comment_edit'          => 'Edited comment id: %s :: %s',
+    'comment_delete'        => 'Deleted comment for %s::%s',
+    'delete_user'           => 'User ID %d has been deleted.',
+);
+
+
+###############################################################################
 # admin/envcheck.php - environment check
 $LANG_ENVCHK = array(
     'bypass_note'               => 'Ponieważ wykryto albo tryb bezpieczny, albo ograniczenia open_basedir, sprawdzanie bibliotek graficznych zostało pominięte.',
@@ -2495,6 +2511,22 @@ $LANG_CONFIG = array(
     'search' => 'Szukaj',
     'hash_ext_missing' => 'Missing Hash Message Digest Extension - Two Factor Authentication cannot be enabled.',
 );
+
+###############################################################################
+# Localization of the Admin Configuration UI
+
+$LANG_ACTIONS = array(
+    'label' => 'Działania',
+    'date'  => 'Data',
+    'module'    => 'Moduł',
+    'action'    => 'Akcje',
+    'description' => 'Opis',
+    'user'      => 'Użytkownik',
+    'no_data'   => 'No actions have been logged',
+    'help_text' => 'Admin actions lists all administrative / moderator actions performed on your site.',
+);
+
+
 
 $LANG_configsections['Core'] = array(
     'label' => 'glFusion',
@@ -2803,6 +2835,7 @@ $LANG_confignames['Core'] = array(
     'cache_redis_database' => 'Redis Database Index',
     'cache_memcached_username' => 'SASL Username for Memcached',
     'cache_memcached_password' => 'SASL Password for Memcached',
+    'cache_memcached_socket' => 'Path / Filename to Memcache(d) Socket',
     'cache_redis_info' => 'Redis Driver Attributes',
     'cache_memcached_info' => 'Memcached Driver Attributes',
     'default_story_editor' => 'Default Story Editor',
@@ -2811,6 +2844,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_display' => 'Story Display',
     'fset_story_administration' => 'Artykuły',
     'log_level' => 'Log Level',
+    'enable_admin_actions' => 'Enable Admin Logging',
 );
 
 $LANG_configsubgroups['Core'] = array(

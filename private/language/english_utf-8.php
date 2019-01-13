@@ -2332,6 +2332,22 @@ $LANG_AM = array (
 );
 
 ###############################################################################
+# Administrative Actions
+$LANG_ADM_ACTIONS = array(
+    'enabled'               => 'Enabled',
+    'disabled'              => 'Disabled',
+    'plugin_state'          => 'Toggled Plugin State for %s to %s',
+    'plugin_uninstall'      => 'Uninstalled Plugin %s',
+    'config_change'         => 'Changed config setting: %s::%s from: %s to %s',
+    'manual_ban'            => 'Manual Ban of IP: %s',
+    'group_updated'         => 'Group %s (%s) saved',
+    'comment_edit'          => 'Edited comment id: %s :: %s',
+    'comment_delete'        => 'Deleted comment for %s::%s',
+    'delete_user'           => 'User ID %d has been deleted.',
+);
+
+
+###############################################################################
 # admin/envcheck.php - environment check
 $LANG_ENVCHK = array(
     'bypass_note'               => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
