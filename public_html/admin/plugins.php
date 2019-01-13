@@ -40,10 +40,10 @@ $page    = '';
 $pageTitle = '';
 
 if (!SEC_hasrights ('plugin.edit')) {
+    Log::logAccessViolation('Plugin Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[38],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
-    Log::write('system',Log::ERROR,"Invalid Access Attempt to Plugin Administration",array('IP' => $_SERVER['REAL_ADDR']));
     echo $display;
     exit;
 }

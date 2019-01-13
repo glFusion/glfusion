@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2018 by the following authors:
+*  Copyright (C) 2009-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -504,7 +504,7 @@ function GROUP_applyDefault($grp_id, $add = true)
 */
 function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $grp_default, $grp_applydefault, $features, $groups)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_ADM_ACTIONS,$VERBOSE;
 
     $retval = '';
     if (!empty ($grp_name) && !empty ($grp_descr)) {
@@ -632,7 +632,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             }
         }
 
-AdminAction::write('system','group_save','Group '.$grp_name.'('.$grp_id.') saved');
+        AdminAction::write('system','group_save',sprintf($LANG_ADM_ACTIONS['group_updated'],$grp_name,$grp_id));
 
         if ($grp_applydefault == 1) {
             GROUP_applyDefault($grp_id, $grp_applydefault_add);

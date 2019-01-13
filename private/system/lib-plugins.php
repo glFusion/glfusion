@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -23,6 +23,7 @@ if (!defined ('GVERSION')) {
 
 use glFusion\Database\Database;
 use glFusion\Cache\Cache;
+use glFusion\Log\Log;
 
 /**
 * This is the plugin library for glFusion.  This is the API that plugins can
@@ -242,7 +243,7 @@ function PLG_chkVersion($type)
 */
 function PLG_uninstall ($type)
 {
-    global $_CONF, $_PLUGINS, $_TABLES;
+    global $_CONF, $_PLUGINS, $_TABLES, $LANG_ADM_ACTIONS;
 
     if (empty ($type)) {
         return false;
@@ -256,7 +257,7 @@ function PLG_uninstall ($type)
     $c->deleteItemsByTag('plugin_info');
 
     if (function_exists('plugin_autouninstall_' . $type)) {
-        COM_errorLog ("Auto-uninstalling plugin $type:", 1);
+        Log::write('system',Log::INFO, "Auto-uninstalling plugin $type:");
         $function = 'plugin_autouninstall_' . $type;
         $remvars = $function();
 
@@ -266,44 +267,44 @@ function PLG_uninstall ($type)
 
         // removing tables
         for ($i=0; $i < count($remvars['tables']); $i++) {
-            COM_errorLog ("Dropping table {$_TABLES[$remvars['tables'][$i]]}", 1);
+            Log::write('system',Log::INFO,"Dropping table {$_TABLES[$remvars['tables'][$i]]}");
             try {
                 $db->conn->query("DROP TABLE `{$_TABLES[$remvars['tables'][$i]]}`");
             } catch(\Doctrine\DBAL\DBALException $e) {
-                COM_errorLog("ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
+                Log::write('system',Log::ERROR,"ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
             }
-            COM_errorLog ('...completed', 1);
+            Log::write('system',Log::INFO,'...completed');
         }
 
         // removing variables
         for ($i = 0; $i < count($remvars['vars']); $i++) {
-            COM_errorLog ("Removing variable {$remvars['vars'][$i]}", 1);
+            Log::write('system',Log::INFO,"Removing variable {$remvars['vars'][$i]}");
             try {
                 $db->conn->delete($_TABLES['vars'], array('name' => $remvars['vars'][$i]));
             } catch(\Doctrine\DBAL\DBALException $e) {
-                COM_errorLog("ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
+                Log::write('system',Log::ERROR,"ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
             }
-            COM_errorLog ('...completed', 1);
+            Log::write('system',Log::INFO,'...completed');
         }
 
         // removing groups
         for ($i = 0; $i < count($remvars['groups']); $i++) {
             $grp_id = $db->getItem ($_TABLES['groups'], 'grp_id',array('grp_name' => $remvars['groups'][$i]),array(Database::INTEGER));
             if (!empty ($grp_id) && $grp_id !== false) {
-                COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group", 1);
+                Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group");
                 try {
                     $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id));
                 } catch(\Doctrine\DBAL\DBALException $e) {
-                    COM_errorLog("ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
+                    Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
                 }
-                COM_errorLog ('...completed', 1);
-                COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group from all groups.", 1);
+                Log::write('system',Log::INFO,'...completed');
+                Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group from all groups.");
                 try {
                     $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id));
                 } catch(\Doctrine\DBAL\DBALException $e) {
-                    COM_errorLog("ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
+                    Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
                 }
-                COM_errorLog ('...completed', 1);
+                Log::write('system',Log::INFO,'...completed');
             }
         }
 
@@ -312,12 +313,12 @@ function PLG_uninstall ($type)
             $access_id = $db->getItem ($_TABLES['features'], 'ft_id',
                                     array('ft_name' => $remvars['features'][$i]),array(Database::INTEGER));
             if (!empty ($access_id)) {
-                COM_errorLog ("Attempting to remove {$remvars['features'][$i]} rights from all groups" ,1);
+                Log::write('system',Log::INFO,"Attempting to remove {$remvars['features'][$i]} rights from all groups");
                 DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
-                COM_errorLog ('...success', 1);
-                COM_errorLog ("Attempting to remove the {$remvars['features'][$i]} feature", 1);
+                Log::write('system',Log::INFO,'...success');
+                Log::write('system',Log::INFO,"Attempting to remove the {$remvars['features'][$i]} feature");
                 DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
-                COM_errorLog ('...success', 1);
+                Log::write('system',Log::INFO,'...success');
             }
         }
 
@@ -326,30 +327,30 @@ function PLG_uninstall ($type)
         $result = DB_query( $sql );
         $nrows = DB_numRows( $result );
         if ( $nrows > 0 ) {
-            COM_errorLog ('removing feed files', 1);
-            COM_errorLog ($nrows. ' files stored in table.', 1);
+            Log::write('system',Log::INFO,'removing feed files');
+            Log::write('system',Log::INFO,$nrows. ' files stored in table.');
             for ( $i = 0; $i < $nrows; $i++ ) {
                 $fcount = $i + 1;
                 $A = DB_fetchArray( $result );
                 $fullpath = SYND_getFeedPath( $A[0] );
                 if ( file_exists( $fullpath ) ) {
                     unlink ($fullpath);
-                    COM_errorLog ("removed file $fcount of $nrows: $fullpath", 1);
+                    Log::write('system',Log::INFO,"removed file $fcount of $nrows: $fullpath");
                 } else {
-                    COM_errorLog ("cannot remove file $fcount of $nrows, it does not exist! ($fullpath)", 1);
+                    Log::write('system',Log::ERROR,"cannot remove file $fcount of $nrows, it does not exist! ($fullpath)");
                 }
             }
-            COM_errorLog ('...success', 1);
+            Log::write('system',Log::INFO,'...success');
             // Remove Links Feeds from syndiaction table
-            COM_errorLog ('removing links feeds from table', 1);
+            Log::write('system',Log::INFO,'removing links feeds from table');
             DB_delete($_TABLES['syndication'], 'type', $type);
-            COM_errorLog ('...success', 1);
+            Log::write('system',Log::INFO,'...success');
         }
 
         // remove comments for this plugin
-        COM_errorLog ("Attempting to remove comments for $type", 1);
+        Log::write('system',Log::INFO,"Attempting to remove comments for $type");
         DB_delete($_TABLES['comments'], 'type', $type);
-        COM_errorLog ('...success', 1);
+        Log::write('system',Log::INFO,'...success');
 
         // uninstall php-blocks
         for ($i=0; $i <  count($remvars['php_blocks']); $i++) {
@@ -362,32 +363,34 @@ function PLG_uninstall ($type)
 
         // remove config table data for this plugin
 
-        COM_errorLog ("Attempting to remove config table records for group_name: $type", 1);
+        Log::write('system',Log::INFO,"Attempting to remove config table records for group_name: $type");
 
         $c = config::get_instance();
         if ($c->group_exists($type)) {
             $c->delGroup($type);
         }
-        COM_errorLog ('...success', 1);
+        Log::write('system',Log::INFO,'...success');
 
         // remove any rating data for the plugin
 
-        COM_errorLog ("Attempting to remove rating table records for type: $type", 1);
+        Log::write('system',Log::INFO,"Attempting to remove rating table records for type: $type");
 
         DB_query("DELETE FROM {$_TABLES['rating']} WHERE type='".$type."'");
         DB_query("DELETE FROM {$_TABLES['rating_votes']} WHERE type='".$type."'");
 
-        COM_errorLog ('...success', 1);
+        Log::write('system',Log::INFO,'...success');
 
         // tell other plugins we are removing all content
         PLG_itemDeleted('*', $type);
 
         // uninstall the plugin
-        COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
+        Log::write('system',Log::INFO,"Attempting to unregister the $type plugin from glFusion");
         DB_delete($_TABLES['plugins'], 'pi_name', $type);
-        COM_errorLog ('...success',1);
+        Log::write('system',Log::INFO,'...success');
 
-        COM_errorLog ("Finished uninstalling the $type plugin.", 1);
+        Log::write('system',Log::INFO,"Finished uninstalling the $type plugin.");
+
+        \glFusion\Admin\AdminAction::write('system','plugin_uninstall',sprintf($LANG_ADM_ACTIONS['plugin_uninstall'],$type));
 
         return true;
     } elseif (function_exists('plugin_uninstall_'.$type)) {
@@ -398,15 +401,15 @@ function PLG_uninstall ($type)
             if ($plg !== false) {
                 unset ($_PLUGINS[$plg]);
             }
-
+            \glFusion\Admin\AdminAction::write('system','plugin_uninstall',sprintf($LANG_ADM_ACTIONS['plugin_uninstall'],$type));
             return true;
-
         }
     } else {
         // we got nothing - so let's just remove it from the plugin table
-        COM_errorLog("WARNING: Unable to locate plugin's source files. Plugin removed from Plugins Table. Plugin's database tables, group, feature and other data may still be installed.");
+        Log::write('system',Log::WARNING,"WARNING: Unable to locate plugin's source files. Plugin removed from Plugins Table. Plugin's database tables, group, feature and other data may still be installed.");
         PLG_itemDeleted('*', $type);
         DB_delete($_TABLES['plugins'], 'pi_name', $type);
+        \glFusion\Admin\AdminAction::write('system','plugin_uninstall',sprintf($LANG_ADM_ACTIONS['plugin_uninstall'],$type));
         return true;
     }
 
@@ -424,9 +427,13 @@ function PLG_uninstall ($type)
 */
 function PLG_enableStateChange ($type, $enable)
 {
-   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $_DB_table_prefix;
+   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $LANG_ADM_ACTIONS, $_DB_table_prefix;
 
     $args[1] = $enable;
+
+    $logState = $enable == 1 ? $LANG_ADM_ACTIONS['enabled'] : $LANG_ADM_ACTIONS['disabled'];
+
+    \glFusion\Admin\AdminAction::write('system','plugin_state',sprintf($LANG_ADM_ACTIONS['plugin_state'],$type,$logState));
 
     // IF we are enabling the plugin
     // THEN we must include its functions.inc so we have access to the function
@@ -1984,7 +1991,7 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
     static $recursionCount = 0;
 
     if ( $recursionCount > 5 ) {
-        COM_errorLog("AutoTag infinite recursion detected on " . $namespace . " " . $operation);
+        Log::write('system',Log::WARNING,"AutoTag infinite recursion detected on " . $namespace . " " . $operation);
         return $content;
     }
 
@@ -2893,7 +2900,7 @@ function PLG_itemDisplay($id, $type)
             $result = $function($id, $type);
             if ($result[0] == false) {
                 // plugin reported a problem - do not add and continue
-                COM_errorLog($result[1], 1);
+                Log::write('system',Log::ERROR,$result[1]);
             } else {
                 array_shift($result);
                 $result_arr = array_merge($result_arr,$result);
@@ -2906,7 +2913,7 @@ function PLG_itemDisplay($id, $type)
         $result = $function ($id, $type);
         if ($result[0] == false) {
             // plugin reported a problem - do not add and continue
-            COM_errorLog( $result[1], 1);
+            Log::write('system',Log::ERROR,$result[1]);
         } else {
             array_shift($result);
             $result_arr = array_merge($result_arr,$result);
@@ -3660,7 +3667,7 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
             $subject = $LANG04[184];
         }
     } else {
-        COM_errorLog("PLG_sendSubscriptionNotification() - No plugin_subscription_email_format_ defined");
+        Log::write('system',Log::WARNING,"PLG_sendSubscriptionNotification() - No plugin_subscription_email_format_ defined");
         return false;
     }
 
@@ -3730,7 +3737,7 @@ function PLG_remove($pi_name)
 
     foreach($p as $location => $path ) {
         if (is_dir($path)) {
-            COM_errorLog("Removing {$location} files ...");
+            Log::write('system',Log::INFO,"Removing {$location} files ...");
             if (! \glFusion\FileSystem::deleteDir($path)) {
                 return false;
             }

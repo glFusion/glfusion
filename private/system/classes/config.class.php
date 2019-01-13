@@ -1181,7 +1181,7 @@ class config
      */
     function updateConfig($change_array, $group)
     {
-        global $_CONF, $_TABLES;
+        global $_CONF, $_TABLES, $LANG_ADM_ACTIONS;
 
         if (!SEC_inGroup('Root')) {
             return null;
@@ -1220,7 +1220,7 @@ class config
                     if ($change_array[$param_name] != $param_value) {
                         $this->set($param_name, $change_array[$param_name], $group);
                         $success_array[$group][$param_name] = true;
-                        \glFusion\Admin\AdminAction::write('system','config','Changed config setting: '.$group.'::'.$param_name . " from: ". $param_value . " to " . $change_array[$param_name]);
+                        \glFusion\Admin\AdminAction::write('system','config',sprintf($LANG_ADM_ACTIONS['config_change'],$group,$param_name,$param_value,$change_array[$param_name]));
                         if ($group == 'Core') {
                             $_CONF[$param_name] = $change_array[$param_name];
                         }

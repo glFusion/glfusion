@@ -1,32 +1,20 @@
 <?php
-/*
-Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005-2014 Michael Hampton
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-As a special exemption, you may link this program with any of the
-programs listed below, regardless of the license terms of those
-programs, and distribute the resulting program, without including the
-source code for such programs: ExpressionEngine
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-Please report any problems to badbots AT ioerror DOT us
+/**
+* glFusion CMS
+*
+* Bad Behavior - detects and blocks unwanted Web accesses
+*   glFusion Interface for Bad Behavior
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+* Copyright (C) 2005-2019 Michael Hampton
+*
+*  Modifiecations for glFusion Integration
+*  Copyright (C) 2017-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
 */
-
-###############################################################################
-###############################################################################
 
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
@@ -70,8 +58,6 @@ function bb2_db_date() {
     $dt = new \Date('now',$_CONF['timezone']);
     $timestamp = $dt->format("Y-m-d H:i:s",true);
     return $timestamp;
-
-    return date("Y-m-d H:i:s");
 }
 
 // Return affected rows from most recent query.
@@ -306,8 +292,9 @@ function bb2_ban_remove($ip)
 }
 
 
-function bb2_ban($ip,$type = 1,$reason = '') {
-    global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR;
+function bb2_ban($ip,$type = 1,$reason = '')
+{
+    global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR, $LANG_ADM_ACTION;
 
     if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
@@ -319,7 +306,7 @@ function bb2_ban($ip,$type = 1,$reason = '') {
         switch ( $type ) {
             case 0 :
                 Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['manually_added']);
-                AdminAction::write('bad_behavior2','ban','Manual Ban of IP: ' . $ip);
+                AdminAction::write('bad_behavior2','ban',sprintf($LANG_ADM_ACTIONS['manual_ban'],$ip));
                 break;
             case 2 :
                 Log::write('system',Log::INFO,"Banning " . $ip . " " . $LANG_BAD_BEHAVIOR['automatic_captcha']);

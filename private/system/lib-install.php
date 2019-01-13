@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2018 by the following authors:
+*  Copyright (C) 2010-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2010 by the following authors:
@@ -470,7 +470,7 @@ function INSTALLER_install_createvar($step, &$vars)
         $itemType = array(Database::INTEGER);
 
     } else {
-        COM_errorLog("AutoInstall: Don't know what var to create");
+        Log::write('system',Log::ERROR,"AutoInstall: Don't know what var to create");
         return 1;
     }
 //    $sql = "SELECT " . $col . " FROM `".$table."` WHERE " . $where;
@@ -487,7 +487,7 @@ function INSTALLER_install_mkdir($step, &$vars)
     if (array_key_exists('dirs', $step)) {
         $dirs = (is_array($step['dirs'])) ? $step['dirs'] : array($step['dirs']);
         foreach ($dirs as $path) {
-            COM_errorlog("AutoInstall: Creating directory $path");
+            Log::write('system',Log::INFO,'Autoinstall: Creating directory: ' . $path);
             $ret = @mkdir($path);
             file_put_contents($path . '/index.html', '');
         }
@@ -500,7 +500,7 @@ function INSTALLER_fail_rmdir($step)
     if (array_key_exists('dirs', $step)) {
         $dirs = (is_array($step['dirs'])) ? $step['dirs'] : array($step['dirs']);
         foreach ($dirs as $path) {
-            COM_errorlog("AutoInstall: UNDO removing directory $path");
+            Log::write('system',Log::INFO,'AutoInstall: UNDO removing directory '. $path);
             @rmdir($path);
         }
     }
@@ -514,7 +514,7 @@ function INSTALLER_fail($pluginName,$rev)
 
     foreach ($A AS $action) {
         if (!empty($action['sql'])) {
-            COM_errorLog("Autoinstall: UNDO: ". $action['sql'][0]);
+            Log::write('system',Log::INFO,"Autoinstall: UNDO: ". $action['sql'][0]);
             try {
                 $db->conn->executeUpdate($action['sql'][0],$action['sql'][1],$action['sql'][2]);
             } catch(\Doctrine\DBAL\DBALException $e) {
@@ -523,7 +523,7 @@ function INSTALLER_fail($pluginName,$rev)
         } elseif (!empty($action['type'])) {
             $function = 'INSTALLER_fail_'.$action['type'];
             if (function_exists($function)) {
-                COM_errorlog("AutoInstall: UNDO calling $function");
+                Log::write('system',Log::INFO,"AutoInstall: UNDO calling $function");
                 $function($action);
             }
         }
@@ -537,25 +537,25 @@ function INSTALLER_install($A)
 
     $db = Database::getInstance();
 
-    COM_errorLog("AutoInstall: **** Start Installation ****");
+    Log::write('system',Log::INFO,"AutoInstall: **** Start Installation ****");
 
     if (!function_exists('INSTALLER_install_feature')) {
         print "broken";exit;
     }
 
     if (!isset($A['plugin'])) {
-        COM_errorLog("AutoInstall: Missing plugin description!");
-        COM_errorLog("AutoInstall: **** END Installation ****");
+        Log::write('system',Log::ERROR,"AutoInstall: Missing plugin description!");
+        Log::write('ssytem',Log::INFO, "AutoInstall: **** END Installation ****");
         return 1;
     }
     if ( !isset($A['plugin']['name'])) {
-        COM_errorLog("AutoInstall: Missing plugin name!");
-        COM_errorLog("AutoInstall: **** END Installation ****");
+        Log::write('system',Log::ERROR,"AutoInstall: Missing plugin name!");
+        Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
         return 1;
     }
     if (!COM_checkVersion(GVERSION, $A['plugin']['gl_ver'])) {
-        COM_errorLog("AutoInstall: Plugin requires glFusion v".$A['plugin']['gl_ver']." or greater");
-        COM_errorLog("AutoInstall: **** END Installation ****");
+        Log::write('system',Log::ERROR,"AutoInstall: Plugin requires glFusion v".$A['plugin']['gl_ver']." or greater");
+        Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
         return 1;
     }
 
@@ -566,7 +566,7 @@ function INSTALLER_install($A)
 
     $xml = new pluginXML;
     if ( $xml->parseXMLFile($_CONF['path'].'plugins/'.$pluginName.'/plugin.xml') == -1 ) {
-        COM_errorLog("AutoInstall: Unable to locate plugin.xml");
+        Log::write('system',Log::ERROR,"AutoInstall: Unable to locate plugin.xml");
     } else {
         $pluginData = $xml->getPluginData();
         $errors = 0;
@@ -579,22 +579,22 @@ function INSTALLER_install($A)
                     $required_ver = '';
                 }
                 if (!isset($_PLUGIN_INFO[$reqPlugin]) || $_PLUGIN_INFO[$reqPlugin]['pi_enabled'] == 0 ) {
-                    COM_errorLog("AutoInstall: Plugin requires " . $reqPlugin . " be installed and enabled");
+                    Log::write('system',Log::ERROR,"AutoInstall: Plugin requires " . $reqPlugin . " be installed and enabled");
                     // required plugin not installed
                     $errors++;
                 } elseif (!empty($required_ver)) {
                     $installed_ver = $_PLUGIN_INFO[$reqPlugin]['pi_version'];
                     if (!COM_checkVersion($installed_ver, $required_ver)) {
                         // required plugin installed, but wrong version
-                        COM_errorLog("AutoInstall: Plugin requires " . $reqPlugin . " v".$required_ver." or greater");
+                        Log::write('system',Log::ERROR,"AutoInstall: Plugin requires " . $reqPlugin . " v".$required_ver." or greater");
                         $errors++;
                     }
                 }
             }
         }
         if ( $errors ) {
-            COM_errorLog("AutoInstall: Plugin install failed prerequisite check");
-            COM_errorLog("AutoInstall: **** END Installation ****");
+            Log::write('system',Log::ERROR,"AutoInstall: Plugin install failed prerequisite check");
+            Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
             return 1;
         }
     }
@@ -605,9 +605,9 @@ function INSTALLER_install($A)
         if ($meta === 'installer') { // must use === when since 0 == 'anystring' is true
         } elseif ($meta === 'plugin') {
             if (!isset($step['name'])) {
-                COM_errorLog("AutoInstall: Missing plugin name!");
+                Log::write('system',Log::ERROR,"AutoInstall: Missing plugin name!");
                 INSTALLER_fail($pluginName,$reverse);
-                COM_errorLog("AutoInstall: **** END Installation ****");
+                Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
                 return 1;
             }
         } else {
@@ -616,16 +616,16 @@ function INSTALLER_install($A)
                 $result = $function($step, $vars);
                 if (is_numeric($result)) {
                     INSTALLER_fail($pluginName,$reverse);
-                    COM_errorLog("AutoInstall: **** END Installation ****");
+                    Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
                     return $result;
                 } else if (!empty($result)) {
                     $reverse[] = $result;
                 }
             } else {
                 $dump = print_r($step,true);
-                COM_errorLog('Can\'t process step: ' . $function .PHP_EOL.$dump);
+                Log::write('system',Log::ERROR,'Can\'t process step: ' . $function .PHP_EOL.$dump);
                 INSTALLER_fail($pluginName,$reverse);
-                COM_errorLog("AutoInstall: **** END Installation ****");
+                Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
                 return 1;
             }
         }
@@ -637,17 +637,17 @@ function INSTALLER_install($A)
     // Load the online configuration records
     if (function_exists($cfgFunction)) {
         if (!$cfgFunction()) {
-            COM_errorLog("AutoInstall: Failed to load the default configuration");
+            Log::write('system',Log::ERROR,"AutoInstall: Failed to load the default configuration");
             INSTALLER_fail($pluginName,$reverse);
-            COM_errorLog("AutoInstall: **** END Installation ****");
+            Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
             return 1;
         }
     } else {
-        COM_errorLog("AutoInstall: No default config found: ".$cfgFunction);
+        Log::write('system',Log::INFO,"AutoInstall: No default config found: ".$cfgFunction);
     }
 
     // Finally, register the plugin with glFusion
-    COM_errorLog ("AutoInstall: Registering {$plugin['display']} plugin with glFusion", 1);
+    Log::write('system',Log::INFO,"AutoInstall: Registering {$plugin['display']} plugin with glFusion");
 
     // silently delete an existing entry
 
@@ -666,13 +666,13 @@ function INSTALLER_install($A)
     // run any post install routines
     $postInstallFunction = 'plugin_postinstall_'.$plugin['name'];
     if ( function_exists($postInstallFunction) ) {
-        COM_errorLog("AutoInstall: Running post installation routine.");
+        Log::write('system',Log::INFO,"AutoInstall: Running post installation routine.");
         $postInstallFunction();
     } else {
-        COM_errorLog("AutoInstall: No post installation routine found.");
+        Log::write('system',Log::INFO,"AutoInstall: No post installation routine found.");
     }
 
-    COM_errorLog("AutoInstall: **** END Installation ****");
+    Log::write('system',Log::INFO,"AutoInstall: **** END Installation ****");
     CACHE_clear();
     return 0;
 }
@@ -689,7 +689,7 @@ function INSTALLER_uninstall($A)
         if ($step['type'] == 'feature') {
             $ft_id = $db->getItem($_TABLES['features'],'ft_id',array('ft_name' => $step['feature']));
 
-            COM_errorLog("AutoInstall: Removing feature {$step['feature']}....");
+            Log::write('system',Log::INFO,"AutoInstall: Removing feature {$step['feature']}....");
 
             try {
                 $db->conn->delete($_TABLES['access'],array('acc_ft_id'=>$ft_id),array(Database::INTEGER));
@@ -704,7 +704,7 @@ function INSTALLER_uninstall($A)
         } else if ($step['type'] == 'group') {
             $grp_id = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => $step['group']));
 
-            COM_errorLog("AutoInstall: Removing group {$step['group']}....");
+            Log::write('system',Log::INFO,"AutoInstall: Removing group {$step['group']}....");
 
             try {
                 $db->conn->delete($_TABLES['access'],array('acc_grp_id' => $grp_id),array(Database::INTEGER));
@@ -728,14 +728,14 @@ function INSTALLER_uninstall($A)
             }
 ;
         } else if ($step['type'] == 'table') {
-            COM_errorLog("AutoInstall: Dropping table {$step['table']}....");
+            Log::write('system',Log::INFO,"AutoInstall: Dropping table {$step['table']}....");
             try {
                 $stmt = $db->conn->executeUpdate("DROP TABLE `{$step['table']}`");
             } catch(\Doctrine\DBAL\DBALException $e) {
                 // ignore the error
             }
         } else if ($step['type'] == 'block') {
-            COM_errorLog("AutoInstall: Removing block {$step['name']}....");
+            Log::write('system',Log::INFO,"AutoInstall: Removing block {$step['name']}....");
             try {
                 $db->conn->delete($_TABLES['blocks'],array('name' => $step['name']),array(Database::STRING));
             } catch(\Doctrine\DBAL\DBALException $e) {
@@ -743,7 +743,7 @@ function INSTALLER_uninstall($A)
             }
         } else if ($step['type'] == 'sql') {
             if (isset($step['rev_log'])) {
-                COM_errorLog("AutoInstall: ". $step['rev_log']);
+                Log::write('system',Log::INFO,"AutoInstall: ". $step['rev_log']);
             }
             if (isset($step['rev'])) {
                 try {
@@ -762,7 +762,7 @@ function INSTALLER_uninstall($A)
 
     if (array_key_exists('plugin', $A)) {
         $plugin = $A['plugin'];
-        COM_errorLog("AutoInstall: Removing plugin {$plugin['name']} from plugins table", 1);
+        Log::write('system',Log::INFO,"AutoInstall: Removing plugin {$plugin['name']} from plugins table");
 
         try {
             $db->conn->delete($_TABLES['plugins'],array('pi_name' => $plugin['name']),array(Database::STRING));
@@ -771,7 +771,7 @@ function INSTALLER_uninstall($A)
         }
     }
 
-    COM_errorLog("AutoInstall: Uninstall complete");
+    Log::write('system',Log::INFO,"AutoInstall: Uninstall complete");
     return true;
 }
 
@@ -795,9 +795,9 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
 
     if ($_GROUP_VERBOSE) {
         if ($add) {
-            COM_errorLog("Adding group '$grp_id' to all user accounts");
+            Log::write('system',Log::INFO,"Adding group '$grp_id' to all user accounts");
         } else {
-            COM_errorLog("Removing group '$grp_id' from all user accounts");
+            Log::write('system',Log::INFO,"Removing group '$grp_id' from all user accounts");
         }
     }
 
@@ -825,7 +825,7 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
         try {
             $db->conn->executeUpdate("DELETE FROM `{$_TABLES['group_assignments']}` WHERE (ug_main_grp_id = ?) AND (ug_grp_id IS NULL)",array($grp_id),array(Database::INTEGER));
         } catch(\Doctrine\DBAL\DBALException $e) {
-            COM_errorLog("Error removing group assignments");
+            Log::write('system',Log::ERROR,"Error removing group assignments");
         }
     }
 }
@@ -1136,7 +1136,7 @@ if ( !function_exists('_addConfigItem')) {
                 )
             );
         } catch(\Doctrine\DBAL\DBALException $e) {
-            COM_errorLog("Error updating configuration");
+            Log::write('system',Log::ERROR,"Error updating configuration");
         }
     }
 }

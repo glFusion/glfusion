@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -2447,7 +2447,7 @@ function USER_import()
 */
 function USER_delete($uid)
 {
-    global $_CONF;
+    global $_CONF, $LANG_ADM_ACTIONS;
 
     if (!USER_deleteAccount ($uid)) {
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
@@ -2455,7 +2455,7 @@ function USER_delete($uid)
     Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
     COM_setMessage(22);
 
-    AdminAction::write('system','delete_user',sprintf("User ID %d has been deleted.",$uid));
+    AdminAction::write('system','delete_user',sprintf($LANG_ADM_ACTIONS['delete_user'],$uid));
 
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
 }

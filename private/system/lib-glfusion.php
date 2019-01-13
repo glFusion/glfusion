@@ -17,6 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 function glfusion_UpgradeCheck() {
     global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
@@ -606,12 +607,12 @@ function _doSiteConfigUpgrade() {
         if (fwrite($siteconfig_file, $siteconfig_data)) {
             fclose ($siteconfig_file);
             $retval = true;
-            COM_errorLog("UPGRADE: Successfully updated siteconfig.php with latest options.");
+            Log::write('system',Log::INFO,"UPGRADE: Successfully updated siteconfig.php with latest options.");
         } else {
-            COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
+            Log::write('system',Log::ERROR,"UPGRADE: Unable to update siteconfig.php due to permissions.");
         }
     } else {
-        COM_errorLog("UPGRADE: Unable to update siteconfig.php due to permissions.");
+        Log::write('system',Log::ERROR,"UPGRADE: Unable to update siteconfig.php due to permissions.");
     }
     CACHE_clear();
     return $retval;

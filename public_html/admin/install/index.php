@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
@@ -2240,7 +2240,7 @@ function INST_doFileCleanUp()
                                 $failure .= '<li>FILE: '.$_CONF['path_layout'].$item['file'].'</li>';
                             }
                         } else {
-                            COM_errorLog("UPGRADE: Keeping modified template file: " . $item['file']);
+                            \glFusion\Log\Log::write('system',Log::INFO,"UPGRADE: Keeping modified template file: " . $item['file']);
                         }
                     }
                 }

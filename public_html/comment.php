@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -104,7 +104,7 @@ function handleSubmit()
  */
 function handleDelete()
 {
-    global $_CONF, $_TABLES, $_USER, $_PLUGINS;
+    global $_CONF, $_TABLES, $_USER, $_PLUGINS, $LANG_ADM_ACTIONS;
 
     $retval = '';
     $cid     = 0;
@@ -122,6 +122,7 @@ function handleDelete()
 
     if (!($retval = PLG_commentDelete($type,$cid,$sid))) {
         $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
+        \glFusion\Admin\AdminAction::write('comment','mod_edit',sprintf($LANG_ADM_ACTIONS['comment_delete'],$sid,$type));
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
     }
@@ -242,7 +243,7 @@ function handleEdit($mod = false, $admin = false) {
             }
         }
         if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
-            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            Log::write('system',Log::WARNING,"handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing/bad values.');
             echo COM_refresh($_CONF['site_url'] . '/index.php');
             exit;
@@ -253,7 +254,7 @@ function handleEdit($mod = false, $admin = false) {
         if ( DB_numRows($result) == 1 ) {
             $A = DB_fetchArray ($result);
         } else {
-            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            Log::write('system',Log::WARNING,"handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment that doesn\'t exist as described.');
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
@@ -266,7 +267,7 @@ function handleEdit($mod = false, $admin = false) {
             $type = $A['type'];
             $pid = $A['pid'];
         } else {
-            COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            Log::write('system',Log::WARNING,"handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment that doesn\'t exist.');
             return COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         }
@@ -317,7 +318,7 @@ function handleEdit($mod = false, $admin = false) {
  */
 function handleEditSubmit()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $_PLUGINS;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG_ADM_ACTIONS, $_PLUGINS;
 
     $modedit = false;
     $adminedit = false;
@@ -350,14 +351,14 @@ function handleEditSubmit()
 
     if ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
         //check permissions
-        COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,"handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment without proper permission.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
     //check for bad input
     if (empty ($sid) || empty($title) || empty ($comment) || !is_numeric ($cid) || $cid < 1 ) {
-        COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,"handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
@@ -390,13 +391,13 @@ function handleEditSubmit()
     DB_query($sql);
 
     if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
-        COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
         . 'to edit to a non-existent comment or the cid/sid did not match');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
     if ($moderatorEdit || $adminedit) {
-        \glFusion\Admin\AdminAction::write('comment','mod_edit','Edited comment id: ' . $cid . ' :: ' . $title);
+        \glFusion\Admin\AdminAction::write('comment','mod_edit',sprintf($LANG_ADM_ACTIONS['comment_edit'],$cid,$title));
     }
 
     $silentEdit = false;
@@ -654,7 +655,6 @@ if ( isset($_POST['cancel'] ) ) {
     // finished with button checks, now look at $_GET items...
     switch ( $mode ) {
         case 'view':
-Log::write('system',Log::DEBUG,'about to call handleView');
             $pageBody .= handleView(true);
             break;
 
