@@ -1,40 +1,27 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-syndication.php                                                      |
-// |                                                                          |
-// | glFusion syndication library.                                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2017-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2003-2010 by the following authors:                        |
-// |                                                                          |
-// | Authors: Dirk Haun        - dirk AT haun-online DOT de                   |
-// |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion syndication library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2017-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2003-2010 by the following authors:
+*   Dirk Haun          dirk AT haun-online DOT de
+*   Michael Jervis     mike AT fuckingbrit DOT co
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 // set to true to enable debug output in error.log
 $_SYND_DEBUG = false;
@@ -59,63 +46,70 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    $where = '';
-    if( !empty( $limit ))
-    {
-        if( substr( $limit, -1 ) == 'h' ) // last xx hours
-        {
-            $limitsql = '';
-            $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
-        }
-        else
-        {
-            $limitsql = ' LIMIT ' . $limit;
-        }
+    $db = Database::getInstance();
+
+    $sids = array ();
+
+    $topiclist = array();
+    $sql = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',1);
+    $stmt = $db->conn->executeQuery($sql);
+    while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $topiclist[] = $T['tid'];
     }
-    else
-    {
+
+    $inTopics = implode(',',
+                array_map(
+                    function($t) { $db = Database::getInstance(); return $db->conn->quote($t); },
+                    $topiclist
+                ));
+
+    $where = '';
+    $limitsql = '';
+    $hours = 0;
+    $bindHours = false;
+
+    if (!empty($limit)) {
+        if (substr($limit, -1) == 'h') { // last xx hours
+            $hours = (int) substr( $limit, 0, -1 );
+            $where = " AND date >= DATE_SUB(:date,INTERVAL :hours HOUR)";
+            $bindHours = true;
+        } else {
+            $limitsql = ' LIMIT ' . (int) $limit;
+        }
+    } else {
         $limitsql = ' LIMIT 10';
     }
 
-    // get list of topics that anonymous users have access to
-    $tresult = DB_query( "SELECT tid FROM {$_TABLES['topics']}"
-                         . COM_getPermSQL( 'WHERE', 1 ));
-    $tnumrows = DB_numRows( $tresult );
-    $topiclist = array();
-    for( $i = 0; $i < $tnumrows; $i++ )
-    {
-        $T = DB_fetchArray( $tresult );
-        $topiclist[] = $T['tid'];
-    }
-    if( count( $topiclist ) > 0 )
-    {
-        $tlist = "'" . implode( "','", $topiclist ) . "'";
-        $where .= " AND (tid IN ($tlist) OR alternate_tid IN ($tlist))";
+    // if there are topics....
+    if (count( $topiclist ) > 0) {
+        $where .= " AND (tid IN (".$inTopics.") OR alternate_tid IN (".$inTopics."))";
     }
     if ($frontpage_only) {
-        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(true).'" ) ) ';
+        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= :date ) ) ';
     }
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
-    $nrows = DB_numRows( $result );
 
-    $sids = array ();
-    for( $i = 0; $i < $nrows; $i++ )
-    {
-        $A = DB_fetchArray( $result );
+    $sql = "SELECT sid FROM `{$_TABLES['stories']}`
+            WHERE draft_flag = 0 AND date <= :date ".
+            $where . " AND perm_anon > 0 ORDER BY date DESC, sid ASC " . $limitsql;
 
-        if( $A['sid'] == $updated_id )
-        {
+    $stmt = $db->conn->prepare($sql);
+    $stmt->bindValue('date',$_CONF['_now']->toMySQL(true));
+    if ($bindHours) {
+        $stmt->bindValue('hours',$hours);
+    }
+    $stmt->execute();
+
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+        if ($A['sid'] == $updated_id) {
             // no need to look any further - this feed has to be updated
             return false;
         }
-
         $sids[] = $A['sid'];
     }
     $current = implode( ',', $sids );
 
     if ($_SYND_DEBUG) {
-        COM_errorLog ("Update check for all stories: comparing new list ($current) with old list ($update_info)", 1);
+        Log::write('system',Log::DEBUG,"Update check for all stories: comparing new list ($current) with old list ($update_info)");
     }
 
     $rc = ( $current != $update_info ) ? false : true;
@@ -139,44 +133,49 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
     $where = '';
-    if( !empty( $limit ))
-    {
-        if( substr( $limit, -1 ) == 'h' ) // last xx hours
-        {
+    $bindHours = false;
+
+    $db = Database::getInstance();
+
+    if (!empty( $limit)) {
+        if (substr( $limit, -1 ) == 'h') { // last xx hours
             $limitsql = '';
-            $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
+            $hours = (int) substr( $limit, 0, -1 );
+            $where = " AND date >= DATE_SUB(:date,INTERVAL :hours HOUR)";
+            $bindHours = true;
+        } else {
+            $limitsql = ' LIMIT ' . (int) $limit;
+            $hours = 0;
         }
-        else
-        {
-            $limitsql = ' LIMIT ' . $limit;
-        }
-    }
-    else
-    {
+    } else {
         $limitsql = ' LIMIT 10';
     }
 
-    $result = DB_query( "SELECT sid FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' AND (tid = '$tid' OR alternate_tid = '$tid') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
-    $nrows = DB_numRows( $result );
+    $sql = "SELECT sid FROM `{$_TABLES['stories']}`
+                WHERE draft_flag = 0 AND date <= :date
+                AND (tid = :tid OR alternate_tid = :tid) AND perm_anon > 0 "
+                . $where .
+                " ORDER BY `date` DESC " . $limitsql;
 
-    $sids = array ();
-    for( $i = 0; $i < $nrows; $i++ )
-    {
-        $A = DB_fetchArray( $result );
+    $stmt = $db->conn->prepare($sql);
+    $stmt->bindValue("date", $_CONF['_now']->toMySQL(true));
+    if ($bindHours) {
+        $stmt->bindValue("hours", $hours);
+    }
+    $stmt->bindValue("tid",$tid);
+    $stmt->execute();
 
-        if( $A['sid'] == $updated_id )
-        {
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+        if ($A['sid'] == $updated_id) {
             // no need to look any further - this feed has to be updated
             return false;
         }
-
         $sids[] = $A['sid'];
     }
     $current = implode( ',', $sids );
 
     if ($_SYND_DEBUG) {
-        COM_errorLog ("Update check for topic $tid: comparing new list ($current) with old list ($update_info)", 1);
+        Log::write('system',Log::DEBUG,"Update check for topic $tid: comparing new list ($current) with old list ($update_info)");
     }
     $rc = ( $current != $update_info ) ? false : true;
     return $rc;
@@ -197,20 +196,20 @@ function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = ''
     $is_current = true;
 
     switch($topic) {
-    case '::all':
-        $is_current = SYND_feedUpdateCheckAll(false, $update_data, $limit,
-                            $updated_topic, $updated_id);
-        break;
+        case '::all':
+            $is_current = SYND_feedUpdateCheckAll(false, $update_data, $limit,
+                                $updated_topic, $updated_id);
+            break;
 
-    case '::frontpage':
-        $is_current = SYND_feedUpdateCheckAll(true, $update_data, $limit,
-                            $updated_topic, $updated_id);
-        break;
+        case '::frontpage':
+            $is_current = SYND_feedUpdateCheckAll(true, $update_data, $limit,
+                                $updated_topic, $updated_id);
+            break;
 
-    default:
-        $is_current = SYND_feedUpdateCheckTopic($topic, $update_data,
-                            $limit, $updated_topic, $updated_id);
-        break;
+        default:
+            $is_current = SYND_feedUpdateCheckTopic($topic, $update_data,
+                                $limit, $updated_topic, $updated_id);
+            break;
     }
 
     return $is_current;
@@ -232,29 +231,36 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
     $content = array ();
     $sids = array();
+    $bindHours = false;
 
-    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".DB_escapeString($tid)."'") >= 2) {
-        $where = '';
+    $db = Database::getInstance();
+
+    $permAnon = (int) $db->getItem($_TABLES['topics'],'perm_anon',array('tid'=> $tid));
+
+    if ($permAnon >= 2) {
         if( !empty( $limit )) {
-            if( substr( $limit, -1 ) == 'h' ) { // last xx hours
+            if (substr( $limit, -1 ) == 'h') { // last xx hours
                 $limitsql = '';
-                $hours = substr( $limit, 0, -1 );
-                $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
             } else {
-                $limitsql = ' LIMIT ' . $limit;
+                $limitsql = ' LIMIT ' . (int) $limit;
             }
         } else {
             $limitsql = ' LIMIT 10';
         }
 
-        $topic = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".DB_escapeString($tid)."'" );
+        $topic = $db->getItem($_TABLES['topics'],'topic',array('tid'=>$tid),array(Database::STRING));
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' AND (tid = '".DB_escapeString($tid)."' OR alternate_tid = '".DB_escapeString($tid)."') AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $sql = "SELECT sid,uid,title,introtext,bodytext,postmode,
+                    UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author
+                FROM `{$_TABLES['stories']}`
+                WHERE draft_flag = 0 AND
+                    date <= ?
+                    AND (tid = ? OR alternate_tid = ?)
+                    AND perm_anon > 0 ORDER BY date DESC $limitsql";
 
-        $nrows = DB_numRows( $result );
+        $stmt = $db->conn->executeQuery($sql,array($_CONF['_now']->toMySQL(true),$tid,$tid));
 
-        for( $i = 1; $i <= $nrows; $i++ ) {
-            $row = DB_fetchArray( $result );
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             $sids[] = $row['sid'];
 
             $storytitle = $row['title'];
@@ -337,6 +343,8 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 {
     global $_TABLES, $_CONF, $LANG01;
 
+    $db = Database::getInstance();
+
     $where = '';
     if( !empty( $limit )) {
         if( substr( $limit, -1 ) == 'h' ) { // last xx hours
@@ -352,16 +360,16 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 
     // get list of topics that anonymous users have access to
     $topics = array();
-    $tresult = DB_query( "SELECT tid,topic FROM {$_TABLES['topics']}"
-                         . COM_getPermSQL( 'WHERE', 1 ));
-    $tnumrows = DB_numRows( $tresult );
+
     $tlist = '';
-    for( $i = 1; $i <= $tnumrows; $i++ ) {
-        $T = DB_fetchArray( $tresult );
-        $tlist .= "'" . $T['tid'] . "'";
-        if( $i < $tnumrows ) {
+    $commaCheck = 0;
+    $stmt = $db->conn->executeQuery("SELECT tid,topic FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',1));
+    while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
+        if ($commaCheck > 0) {
             $tlist .= ',';
         }
+        $commaCheck++;
+        $tlist .= $db->conn->quote($T['tid']) ;
         $topics[$T['tid']] = $T['topic'];
     }
     if( !empty( $tlist )) {
@@ -370,16 +378,13 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
     if ($frontpage_only) {
         $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(true).'" ) ) ';
     }
-    $result = DB_query( "SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql" );
 
     $content = array();
     $sids = array();
-    $nrows = DB_numRows( $result );
 
-    for( $i = 1; $i <= $nrows; $i++ ) {
-        $row = DB_fetchArray( $result );
+    $stmt = $db->conn->executeQuery("SELECT sid,tid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode,attribution_author FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql");
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $sids[] = $row['sid'];
-
         $storytitle = $row['title'];
         $fulltext   = $row['introtext']."\n".$row['bodytext'];
         $fulltext   = STORY_renderImages($row['sid'],$fulltext);
@@ -452,10 +457,10 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".DB_escapeString($fid)."'");
-    $A = DB_fetchArray( $result );
+    $db = Database::getInstance();
 
-    if ( $A['is_enabled'] == 1 ) {
+    $A = $db->conn->fetchAssoc("SELECT * FROM {$_TABLES['syndication']} WHERE fid = ?",array($fid),array(Database::STRING));
+    if ( $A !== false && $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
         if ($A['format'] == 'ICS-1.0') {
@@ -467,7 +472,6 @@ function SYND_updateFeed( $fid )
             $rss->descriptionTruncSize = $A['content_length'];
         }
         $rss->descriptionHtmlSyndicated = false;
-//        $rss->encoding = $A['charset'];
         $rss->language = $A['language'];
         $rss->title = $A['title'];
         $rss->description = $A['description'];
@@ -542,16 +546,26 @@ function SYND_updateFeed( $fid )
             $data = "'" . $data . "'";
         }
         if ($_SYND_DEBUG) {
-            COM_errorLog ("update_info for feed $fid is $data", 1);
+            Log::write('system',Log::DEBUG,"update_info for feed $fid is $data");
         }
 
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = $data WHERE fid = '".DB_escapeString($fid)."'");
+        $db->conn->executeUpdate(
+                "UPDATE {$_TABLES['syndication']} SET updated = ?, update_info = ? WHERE fid = ?",
+                array(
+                    $_CONF['_now']->toMySQL(true),
+                    $data,
+                    $fid
+                ),
+                array(Database::STRING,Database::STRING,Database::STRING)
+        );
     }
 }
 
 function SYND_updateFeediCal( $A )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
+
+    $db = Database::getInstance();
 
     $fid = $A['fid'];
 
@@ -652,7 +666,7 @@ function SYND_updateFeediCal( $A )
                                             $rrule->setCount($var);
                                             break;
                                         default :
-                                            COM_errorLog("SYND: RRULE unknown: " . $type);
+                                            Log::write('system',Log::ERROR,"SYND: RRULE unknown: " . $type);
                                             break;
                                     }
                                 }
@@ -670,17 +684,24 @@ function SYND_updateFeediCal( $A )
         $feedData = $vCalendar->render();
         $handle = fopen(SYND_getFeedPath( $filename ), "w");
         if ($handle === false) {
-            COM_errorLog("Error: Unable to open " . SYND_getFeedPath( $filename ) . " for writing");
+            Log:;write('system',Log::ERROR,"Error: Unable to open " . SYND_getFeedPath( $filename ) . " for writing");
             return;
         }
         fwrite($handle,$feedData);
         fclose($handle);
 
         if ($_SYND_DEBUG) {
-            COM_errorLog ("update_info for feed $fid is $data", 1);
+            Log::write('system',Log::DEBUG,"update_info for feed $fid is $data");
         }
-
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = '".$_CONF['_now']->toMySQL(true)."', update_info = '".DB_escapeString($data)."' WHERE fid = '".DB_escapeString($fid)."'");
+        $db->conn->executeUpdate(
+                "UPDATE {$_TABLES['syndication']} SET updated = ?, update_info = ? WHERE fid = ?",
+                array(
+                    $_CONF['_now']->toMySQL(true),
+                    $data,
+                    $fid
+                ),
+                array(Database::STRING,Database::STRING,Database::STRING)
+        );
     }
 }
 
