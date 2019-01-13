@@ -148,6 +148,8 @@ class Log
             return;
         }
 
+        $logEntry = preg_replace('!\s+!', ' ', $logEntry);
+
         switch ($logLevel) {
             case self::DEBUG :
             case self::DVLP_DEBUG :

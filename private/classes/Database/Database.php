@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *
@@ -134,6 +134,7 @@ class Database
     {
         $function = $this->_errorlog_fn;
         if (function_exists($function)) {
+            $msgL = preg_replace('!\s+!', ' ', $msg);
             $function($msg);
         }
     }
@@ -445,7 +446,10 @@ class Database
             if ($ignore_errors) {
                 $result = false;
                 if (defined ('DVLP_DEBUG') || $this->_verbose) {
-                    $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                    $err = $e->getMessage();
+                    $output = preg_replace('!\s+!', ' ', $err);
+                    $prettySQL = preg_replace('!\s+!', ' ', $sql);
+                    $this->_errorlog("SQL Error: " . $err . PHP_EOL. $prettySQL);
                 }
             } else {
                 trigger_error($this->dbError($sql), E_USER_ERROR);
@@ -475,6 +479,7 @@ class Database
 
         $fn = '';
         $btr = debug_backtrace();
+        $sql = preg_replace('!\s+!', ' ', $sql);
 
         if (! empty($btr)) {
             for ($i = 0; $i < 100; $i++) {
