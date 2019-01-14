@@ -1220,7 +1220,11 @@ class config
                     if ($change_array[$param_name] != $param_value) {
                         $this->set($param_name, $change_array[$param_name], $group);
                         $success_array[$group][$param_name] = true;
-                        \glFusion\Admin\AdminAction::write('system','config',sprintf($LANG_ADM_ACTIONS['config_change'],$group,$param_name,$param_value,$change_array[$param_name]));
+                        if (!is_array($change_array[$param_name])) {
+                            \glFusion\Admin\AdminAction::write('system','config',sprintf($LANG_ADM_ACTIONS['config_change'],$group,$param_name,$param_value,$change_array[$param_name]));
+                        } else {
+                            \glFusion\Admin\AdminAction::write('system','config',sprintf($LANG_ADM_ACTIONS['config_change'],$group,$param_name,'',$param_name));
+                        }
                         if ($group == 'Core') {
                             $_CONF[$param_name] = $change_array[$param_name];
                         }
