@@ -1,44 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-security.php                                                         |
-// |                                                                          |
-// | glFusion security library.                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2009 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net    |
-// |          Vincent Furia    - vmf AT abtech DOT org                        |
-// |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
-// |          Dirk Haun          - dirk AT haun-online DOT de                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Security Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2009 by the following authors:
+*   Tony Bibbs         tony AT tonybibbs DOT com
+*   Mark Limburg       mlimburg AT users DOT sourceforge DOT net
+*   Vincent Furia      vmf AT abtech DOT org
+*   Dirk Haun          dirk AT haun-online DOT de
+*   Michael Jervis     mike AT fuckingbrit DOT co
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 
 if ( !isset($_SYSTEM['token_ttl']) ) $_SYSTEM['token_ttl'] = 1200;
@@ -131,12 +116,10 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 {
     global $_TABLES, $_CONF;
 
+    $db = Database::getInstance();
+
     if (!isset($_CONF['remote_users_group_id'])) {
-        $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name='Remote Users'");
-        if ($result) {
-            $row = DB_fetchArray( $result );
-            $_CONF['remote_users_group_id'] = $row['grp_id'];
-        }
+        $_CONF['remote_users_group_id'] = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => 'Remote Users'));
     }
     if ($groupid == $_CONF['remote_users_group_id']) {
         if ( in_array( 1, $groups ) || // root
@@ -149,7 +132,6 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
             return false;
         }
     } else {
-//        return false;
         return true;
     }
 }
@@ -224,11 +206,13 @@ function SEC_isRemoteUser($uid)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     static $remotecheck = array();
 
     if ( !isset($remotecheck[$uid])) {
         $remoteuserstatus[$uid] = 0;
-        $remoteuserstatus = DB_getItem($_TABLES['users'],'account_type','uid='.(int) $uid);
+        $remoteuserstatus = $db->getItem($_TABLES['users'],'account_type',array('uid' => (int) $uid));
         if ( $remoteuserstatus & REMOTE_USER ) {
             $remotecheck[$uid] = 1;
         }
@@ -251,11 +235,13 @@ function SEC_isLocalUser($uid)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     static $localcheck = array();
 
     if ( !isset($localcheck[$uid])) {
         $localusercheck[$uid] = 0;
-        $localuserstatus = DB_getItem($_TABLES['users'],'account_type','uid='.(int) $uid);
+        $localuserstatus = $db->getItem($_TABLES['users'],'account_type',array('uid' => (int) $uid));
         if ( $localuserstatus & LOCAL_USER ) {
             $localcheck[$uid] = 1;
         }
@@ -283,8 +269,13 @@ function SEC_hasTopicAccess($tid)
         return 0;
     }
 
-    $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '".DB_escapeString($tid)."'");
-    $A = DB_fetchArray($result);
+    $db = Database::getInstance();
+
+    $A = $db->conn->fetchAssoc(
+            "SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM `{$_TABLES['topics']}` WHERE tid = ?",
+            array($tid),
+            array(Database::STRING)
+    );
 
     return SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 }
@@ -365,7 +356,7 @@ function SEC_hasRights($features,$operator='AND')
                 // OR operator, return as soon as we find a true one
                 if (in_array($features[$i],$_RIGHTS)) {
                     if ($_SEC_VERBOSE) {
-                        Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i],1);
+                        Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i]);
                     }
                     return true;
                 }
@@ -373,7 +364,7 @@ function SEC_hasRights($features,$operator='AND')
                 // this is an "AND" operator, bail if we find a false one
                 if (!in_array($features[$i],$_RIGHTS)) {
                     if ($_SEC_VERBOSE) {
-                        Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i],1);
+                        Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i]);
                     }
                     return false;
                 }
@@ -382,12 +373,12 @@ function SEC_hasRights($features,$operator='AND')
 
         if ($operator == 'OR') {
             if ($_SEC_VERBOSE) {
-                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i],1);
+                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features[$i]);
             }
             return false;
         } else {
             if ($_SEC_VERBOSE) {
-                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i],1);
+                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features[$i]);
             }
             return true;
         }
@@ -395,9 +386,9 @@ function SEC_hasRights($features,$operator='AND')
         // Check the one value
         if ($_SEC_VERBOSE) {
             if (in_array($features,$_RIGHTS)) {
-                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features,1);
+                Log::write('system',Log::DEBUG,'SECURITY: user has access to ' . $features);
             } else {
-                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features,1);
+                Log::write('system',Log::DEBUG,'SECURITY: user does not have access to ' . $features);
             }
         }
         return in_array($features,$_RIGHTS);
@@ -477,8 +468,10 @@ function SEC_getUserPermissions($grp_id='',$uid='')
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     if ($_SEC_VERBOSE) {
-        Log::write('system',Log::DEBUG,"**********inside SEC_getUserPermissions(grp_id=$grp_id)**********",1);
+        Log::write('system',Log::DEBUG,"**********inside SEC_getUserPermissions(grp_id=$grp_id)**********");
     }
 
     // Get user ID if we don't already have it
@@ -501,21 +494,25 @@ function SEC_getUserPermissions($grp_id='',$uid='')
 
     if ( is_array($groups) && count($groups) > 0 ) {
         $glist = join(',', $groups);
-        $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES["access"]},{$_TABLES["features"]} "
-                         . "WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
+        $groups = explode(',',$glist);
 
-        $nrows = DB_numrows($result);
-    } else  {
-        $nrows = 0;
-    }
-    for ($j = 1; $j <= $nrows; $j++) {
-        $A = DB_fetchArray($result);
-        if ($_SEC_VERBOSE) {
-            Log::write('system',Log::DEBUG,'Adding right ' . $A['ft_name'] . ' in SEC_getUserPermissions',1);
-        }
-        $retval .= $A['ft_name'];
-        if ($j < $nrows) {
-            $retval .= ',';
+        $stmt = $db->conn->executeQuery(
+            "SELECT DISTINCT ft_name FROM `{$_TABLES['access']}`,`{$_TABLES['features']}`
+                WHERE `acc_ft_id`=`ft_id` AND `acc_grp_id` IN (?)",
+            array($groups),
+            array(Database::PARAM_STR_ARRAY)
+        );
+
+        $commaControl = 0;
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if ($_SEC_VERBOSE) {
+                Log::write('system',Log::DEBUG,'Adding right ' . $A['ft_name'] . ' in SEC_getUserPermissions');
+            }
+            if ($commaControl > 0) {
+                $retval .= ',';
+            }
+            $retval .= $A['ft_name'];
+            $commaControl++;
         }
     }
 
@@ -542,7 +539,7 @@ function SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_ano
     global $_SEC_VERBOSE;
 
     if ($_SEC_VERBOSE) {
-        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValues ****', 1);
+        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValues ****');
     }
 
     if (is_array($perm_owner)) {
@@ -570,11 +567,11 @@ function SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_ano
     }
 
     if ($_SEC_VERBOSE) {
-        Log::write('system',Log::DEBUG,'perm_owner = ' . $perm_owner, 1);
-        Log::write('system',Log::DEBUG,'perm_group = ' . $perm_group, 1);
-        Log::write('system',Log::DEBUG,'perm_member = ' . $perm_members, 1);
-        Log::write('system',Log::DEBUG,'perm_anon = ' . $perm_anon, 1);
-        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValues ****', 1);
+        Log::write('system',Log::DEBUG,'perm_owner = ' . $perm_owner);
+        Log::write('system',Log::DEBUG,'perm_group = ' . $perm_group);
+        Log::write('system',Log::DEBUG,'perm_member = ' . $perm_members);
+        Log::write('system',Log::DEBUG,'perm_anon = ' . $perm_anon);
+        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValues ****');
     }
 
     return array($perm_owner,$perm_group,$perm_members,$perm_anon);
@@ -598,14 +595,14 @@ function SEC_getPermissionValue($perm_x)
     global $_SEC_VERBOSE;
 
     if ($_SEC_VERBOSE) {
-        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValue ***', 1);
+        Log::write('system',Log::DEBUG,'**** Inside SEC_getPermissionValue ***');
     }
 
     $retval = 0;
 
     for ($i = 1; $i <= sizeof($perm_x); $i++) {
         if ($_SEC_VERBOSE) {
-            Log::write('system',Log::DEBUG,"perm_x[$i] = " . current($perm_x), 1);
+            Log::write('system',Log::DEBUG,"perm_x[$i] = " . current($perm_x));
         }
         $retval = $retval + current($perm_x);
         next($perm_x);
@@ -617,8 +614,8 @@ function SEC_getPermissionValue($perm_x)
     }
 
     if ($_SEC_VERBOSE) {
-        Log::write('system',Log::DEBUG,"Got $retval permission value", 1);
-        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValue ***', 1);
+        Log::write('system',Log::DEBUG,"Got $retval permission value");
+        Log::write('system',Log::DEBUG,'**** Leaving SEC_getPermissionValue ***');
     }
 
     return $retval;
@@ -654,6 +651,8 @@ function SEC_getGroupList ($basegroup)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     $to_check = array ();
     array_push ($to_check, $basegroup);
 
@@ -662,17 +661,21 @@ function SEC_getGroupList ($basegroup)
     while (sizeof ($to_check) > 0) {
         $thisgroup = array_pop ($to_check);
         if ($thisgroup > 0) {
-            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
-            $numGroups = DB_numRows ($result);
-            for ($i = 0; $i < $numGroups; $i++) {
-                $A = DB_fetchArray ($result);
+
+            $stmt = $db->conn->executeQuery(
+                        "SELECT ug_grp_id FROM `{$_TABLES['group_assignments']}`
+                            WHERE ug_main_grp_id = ?",
+                        array($thisgroup),
+                        array(Database::INTEGER)
+            );
+            while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
                 if (!in_array ($A['ug_grp_id'], $checked)) {
                     if (!in_array ($A['ug_grp_id'], $to_check)) {
                         array_push ($to_check, $A['ug_grp_id']);
                     }
                 }
             }
-            $checked[] = $thisgroup;
+            $checked[] = (int) $thisgroup;
         }
     }
     return $checked;
@@ -730,21 +733,26 @@ function SEC_authenticate($username, $password, &$uid)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $LANG01;
 
-    $escaped_name = DB_escapeString(trim($username));
+    $db = Database::getInstance();
+
     $password = trim(str_replace(array("\015", "\012"), '', $password));
 
-    $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND (account_type & ".LOCAL_USER.")");
-    $tmp    = DB_error();
-    $nrows  = DB_numRows($result);
-
-    if ( $nrows == 0 ) {
-        $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE email='$escaped_name' AND (account_type & ".LOCAL_USER.")");
-        $tmp    = DB_error();
-        $nrows  = DB_numRows($result);
+    $U = $db->conn->fetchAssoc(
+            "SELECT status, passwd, email, uid FROM `{$_TABLES['users']}`
+                 WHERE username=? AND (account_type & ?)",
+            array($username,LOCAL_USER),
+            array(Database::STRING,Database::INTEGER)
+    );
+    if ($U === false || $U === NULL) {
+        $U = $db->conn->fetchAssoc(
+                "SELECT status, passwd, email, uid FROM `{$_TABLES['users']}`
+                    WHERE email=? AND (account_type & ?)".
+                array($username,LOCAL_USER),
+                array(Database::STRING,Database::INTEGER)
+        );
     }
 
-    if (($tmp == 0) && ($nrows == 1)) {
-        $U = DB_fetchArray($result);
+    if ($U !== false && $U !== NULL) {
         $uid = $U['uid'];
         if ($U['status'] == USER_ACCOUNT_DISABLED) {
             // banned, jump to here to save an md5 calc.
@@ -757,15 +765,18 @@ function SEC_authenticate($username, $password, &$uid)
             return USER_ACCOUNT_AWAITING_VERIFICATION;
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_ACTIVATION) {
             // Awaiting user activation, activate:
-            DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE,
-                      'username', $escaped_name);
+            $stmt = $db->conn->update(
+                        $_TABLES['users'],
+                        array('status' => USER_ACCOUNT_ACTIVE),
+                        array('username' => $username),
+                        array(Database::INTEGER,Database::STRING)
+            );
             return USER_ACCOUNT_ACTIVE;
         } else {
             return $U['status']; // just return their status
         }
     } else {
         $tmp = $LANG01[32] . ": '" . $username;
-//        COM_errorLog($tmp, 1);
         return -1;
     }
 }
@@ -783,8 +794,10 @@ function SEC_checkUserStatus($userid)
 {
     global $_CONF, $_TABLES;
 
+    $db = Database::getInstance();
+
     // Check user status
-    $status = DB_getItem($_TABLES['users'], 'status', "uid=".(int) $userid);
+    $status = $db->getItem($_TABLES['users'], 'status', array('uid' => (int) $userid),array(Database::INTEGER));
 
     // only do redirects if we aren't on users.php in a valid mode (logout or
     // default)
@@ -798,17 +811,22 @@ function SEC_checkUserStatus($userid)
         }
     }
     if ($status == USER_ACCOUNT_AWAITING_ACTIVATION) {
-        DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE, 'uid', (int) $userid);
+        $db->conn->update(
+                $_TABLES['users'],
+                array('status' => USER_ACCOUNT_ACTIVE),
+                array('uid' => $userid),
+                array(Database::INTEGER, Database::INTEGER)
+        );
     } elseif ($status == USER_ACCOUNT_AWAITING_APPROVAL) {
         // If we aren't on users.php with a default action then go to it
         if ($redirect) {
-            COM_accessLog("SECURITY: Attempted Cookie Session login from user awaiting approval $userid.");
+            Log::write('system',Log::WARNING,"SECURITY: Attempted Cookie Session login from user awaiting approval $userid.");
             echo COM_refresh($_CONF['site_url'] . '/users.php?msg=70');
             exit;
         }
     } elseif ($status == USER_ACCOUNT_DISABLED) {
         if ($redirect) {
-            COM_accessLog("SECURITY: Attempted Cookie Session login from banned user $userid.");
+            Log::write('system',Log::WARNING,"SECURITY: Attempted Cookie Session login from banned user $userid.");
             echo COM_refresh($_CONF['site_url'] . '/users.php?msg=69');
             exit;
         }
@@ -817,7 +835,7 @@ function SEC_checkUserStatus($userid)
 }
 
 /**
-  * Check to see if we can authenticate this user with a remote server
+  * Check to see if we can authenticate this user with a remote server (i.e.; ldap)
   *
   * A user has not managed to login localy, but has an @ in their user
   * name and we have enabled distributed authentication. Firstly, try to
@@ -837,14 +855,26 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
 {
     global $_CONF, $_TABLES;
 
+    $db = Database::getInstance();
+    $filter = new \sanitizer();
+
     /* First try a local cached login */
-    $remoteusername = DB_escapeString($loginname);
-    $remoteservice = DB_escapeString($service);
-    $result = DB_query("SELECT passwd, status, uid FROM {$_TABLES['users']} WHERE remoteusername='$remoteusername' AND remoteservice='$remoteservice'");
-    $tmp = DB_error();
-    $nrows = DB_numRows($result);
-    if (($tmp == 0) && ($nrows == 1)) {
-        $U = DB_fetchArray($result);
+    $remoteusername = $loginname;
+    $remoteservice = $service;
+    $U = $db->conn->fetchAssoc(
+            "SELECT passwd, status, uid FROM `{$_TABLES['users']}`
+                WHERE remoteusername=? AND remoteservice=?",
+                array(
+                    $loginname,
+                    $service
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING
+                )
+    );
+
+    if ($U !== false && $U !== NULL) {
         $uid = $U['uid'];
         $mypass = $U['passwd']; // also used to see if the user existed later.
         if ($mypass == SEC_encryptPassword($passwd)) {
@@ -853,7 +883,7 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
         }
     }
 
-    $service = COM_sanitizeFilename($service);
+    $service = $filter->sanitizeFilename($service,false);
     $servicefile = $_CONF['path_system'] . 'classes/authentication/' . $service
                  . '.auth.class.php';
     if (file_exists($servicefile)) {
@@ -866,8 +896,8 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
                 // no such user, create them
 
                 // Check to see if their remoteusername is unique locally
-                $checkName = DB_getItem($_TABLES['users'], 'username',
-                                        "username='$remoteusername'");
+                $checkName = $db->getItem($_TABLES['users'], 'username',
+                                        array('username' => $loginname));
                 if (!empty($checkName)) {
                     // no, call custom function.
                     if (function_exists('CUSTOM_uniqueRemoteUsername')) {
@@ -876,20 +906,69 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
                     }
                 }
                 USER_createAccount($loginname, $authmodule->email, SEC_encryptPassword($passwd), $authmodule->fullname, $authmodule->homepage, $remoteusername, $remoteservice);
-                $uid = DB_getItem($_TABLES['users'], 'uid', "remoteusername = '$remoteusername' AND remoteservice='$remoteservice'");
+                $uid = $db->getItem($_TABLES['users'], 'uid',
+                            array('remoteusername' => $loginname, 'remoteservice' => $service));
                 // Store full remote account name:
-                DB_query("UPDATE {$_TABLES['users']} SET remoteusername='$remoteusername', remoteservice='$remoteservice', status=3 WHERE uid=$uid");
+
+                $db->conn->update(
+                        $_TABLES['users'],
+                        array(
+                            'remoteusername' => $loginname,
+                            'remoteservice'  => $service,
+                            'status'        => USER_ACCOUNT_ACTIVE
+                        ),
+                        array(
+                            'uid' => $uid,
+                        ),
+                        array(
+                            Database::STRING,
+                            Database::STRING,
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                );
                 // Add to remote users:
-                $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id',
-                                         "grp_name='Remote Users'");
-                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
-                return 3; // Remote auth precludes usersubmission,
-                          // and integrates user activation, see?
+                $remote_grp = $db->getItem($_TABLES['groups'], 'grp_id',
+                                         array('grp_name' => 'Remote Users'));
+
+                $db->conn->insert(
+                        $_TABLES['group_assignments'],
+                        array(
+                            'ug_main_grp_id' => $remote_grp,
+                            'ug_uid'    => $uid
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                );
+                return USER_ACCOUNT_ACTIVE; // Remote auth precludes usersubmission,
+                                              // and integrates user activation, see?
             } else {
                 // user existed, update local password:
-                DB_change($_TABLES['users'], 'passwd', DB_escapeString(SEC_encryptPassword($passwd)), array('remoteusername','remoteservice'), array(DB_escapeString($remoteusername),DB_escapeString($remoteservice)));
+                $db->conn->update(
+                        $_TABLES['users'],
+                        array('passwd' => SEC_encryptPassword($passwd)),
+                        array(
+                            'remoteusername' => $remoteusername,
+                            'remoteservice' => $remoteservice
+                        ),
+                        array(
+                            Database::STRING,       // passwd
+                            Database::STRING,       // remote username
+                            Database::STRING,       // remoteservice
+                        )
+                );
                 // and return their status
-                return DB_getItem($_TABLES['users'], 'status', "remoteusername='$remoteusername' AND remoteservice='$remoteservice'");
+                $retStatus = $db->getItem(
+                                $_TABLES['users'],
+                                'status',
+                                array(
+                                    'remoteusername' => $remoteusername,
+                                    'remoteservice' => $remoteservice
+                                )
+                );
+                return $retStatus;
             }
         } else {
             return -1;
@@ -940,9 +1019,25 @@ function SEC_addUserToGroup($uid, $gname)
 
     $uid = (int) $uid;
 
-    $remote_grp = (int) DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". DB_escapeString($gname) ."'");
-    if ( $remote_grp != 0 ) {
-        DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
+    $db = Database::getInstance();
+
+    $remote_grp = (int) $db->getItem (
+                            $_TABLES['groups'],
+                            'grp_id',
+                            array('grp_name' => $gname)
+                        );
+    if ( $remote_grp !== false && $remote_grp !== NULL && $remote_grp !== 0 ) {
+        $db->conn->insert(
+                $_TABLES['group_assignments'],
+                array(
+                    'ug_main_grp_id' => $remote_grp,
+                    'ug_uid' => $uid
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+        );
         return true;
     }
     return false;
@@ -1023,26 +1118,41 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     if (!empty ($feature_name)) {
-        $feat_id = DB_getItem ($_TABLES['features'], 'ft_id',
-                               "ft_name = '".DB_escapeString($feature_name)."'");
-        if (!empty ($feat_id)) {
+        $feat_id = $db->getItem(
+                        $_TABLES['features'],
+                        'ft_id',
+                        array('ft_name' => $feature_name),
+                        array(Database::STRING)
+        );
+
+        if ($feat_id !== false && $feat_id !== NULL) {
             // Before removing the feature itself, remove it from all groups
             if ($logging) {
-                Log::write('system','info',"Attempting to remove '$feature_name' rights from all groups", 1);
+                Log::write('system','info',"Attempting to remove '$feature_name' rights from all groups");
             }
-            DB_delete ($_TABLES['access'], 'acc_ft_id', $feat_id);
+            $db->conn->delete(
+                $_TABLES['access'],
+                array('acc_ft_id' => $feat_id),
+                array(Database::INTEGER)
+            );
             if ($logging) {
-                Log::write('system','info','...success', 1);
+                Log::write('system','info','...success');
             }
 
             // now remove the feature itself
             if ($logging) {
-                Log::write('system','info',"Attempting to remove the '$feature_name' feature", 1);
+                Log::write('system','info',"Attempting to remove the '$feature_name' feature");
             }
-            DB_delete ($_TABLES['features'], 'ft_id', $feat_id);
+            $db->conn->delete(
+                $_TABLES['features'],
+                array('ftp_id' => $feat_id),
+                array(Database::INTEGER)
+            );
             if ($logging) {
-                Log::write('system','info','...success', 1);
+                Log::write('system','info','...success');
             }
         } else if ($logging) {
             Log::write('system','info',"SEC_removeFeatureFromDB: Feature '$feature_name' not found.");
@@ -1067,6 +1177,8 @@ function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 
     $groupdd = '';
 
+    $db = Database::getInstance();
+
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
 
@@ -1083,8 +1195,12 @@ function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
         $groupdd .= '</select>' . LB;
     } else {
         // They can't set the group then
-        $groupdd .= DB_getItem ($_TABLES['groups'], 'grp_name',
-                                "grp_id = '".DB_escapeString($group_id)."'")
+        $groupdd .= $db->getItem (
+                        $_TABLES['groups'],
+                        'grp_name',
+                        array('grp_id' => $group_id),
+                        array(Database::STRING)
+                    )
                  . '<input type="hidden" name="' . $var_name . '" value="' . $group_id
                  . '"/>';
     }
@@ -1121,7 +1237,7 @@ function SEC_encryptPassword($password)
   */
 function SEC_createToken($ttl = TOKEN_TTL)
 {
-    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES;
 
     static $_tokenKey;
 
@@ -1134,6 +1250,8 @@ function SEC_createToken($ttl = TOKEN_TTL)
         return $tokenKey;
     }
 
+    $db = Database::getInstance();
+
     $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
@@ -1144,24 +1262,51 @@ function SEC_createToken($ttl = TOKEN_TTL)
 
     /* Generate the token */
     $token = md5($uid.$pageURL.uniqid (mt_rand (), 1));
-    $pageURL = DB_escapeString($pageURL);
 
     /* Destroy exired tokens: */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."')"
-           . " AND (ttl > 0)";
 
-    DB_query($sql);
+    $stmt = $db->conn->executeUpdate(
+                "DELETE FROM `{$_TABLES['tokens']}`
+                  WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < ?)
+                  AND (ttl > 0)",
+                array($_CONF['_now']->toMySQL(true)),
+                array(Database::STRING)
+    );
 
     /* Destroy tokens for this user/url combination */
     if ( !COM_isAnonUser()) {
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$uid} AND urlfor='".DB_escapeString($pageURL)."'";
-        DB_query($sql);
+        $db->conn->delete(
+                $_TABLES['tokens'],
+                array(
+                    'owner_id' => $uid,
+                    'urlfor' => $pageURL
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::STRING
+                )
+        );
     }
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
-    $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', '".$_CONF['_now']->toMySQL(true)."', {$uid}, '".$pageURL."', '".(int) $ttl."')";
-    DB_query($sql);
+
+    $db->conn->insert(
+            $_TABLES['tokens'],
+            array(
+                'token' => $token,
+                'created' => $_CONF['_now']->toMySQL(true),
+                'owner_id' => $uid,
+                'urlfor' => $pageURL,
+                'ttl' => $ttl
+            ),
+            array(
+                Database::STRING,
+                Database::STRING,
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER
+            )
+    );
 
     $tokenKey = $token;
 
@@ -1251,10 +1396,12 @@ function SEC_checkToken()
   */
 function _sec_checkToken($ajax=0)
 {
-    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES;
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
+
+    $db = Database::getInstance();
 
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REAL_ADDR'];
@@ -1269,10 +1416,23 @@ function _sec_checkToken($ajax=0)
     }
 
     if (trim($token) != '') {
-        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."') AND ttl > 0) as expired, owner_id, urlfor FROM "
-           . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
-        $tokens = DB_query($sql);
-        $numberOfTokens = DB_numRows($tokens);
+        $stmt = $db->conn->executeQuery(
+                    "SELECT
+                    ((DATE_ADD(created, INTERVAL ttl SECOND) < ?) AND ttl > 0) as expired,
+                    owner_id, urlfor FROM `{$_TABLES['tokens']}`
+                    WHERE token=?",
+                    array(
+                        $_CONF['_now']->toMySQL(true),
+                        $token,
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING
+                    )
+        );
+
+        $tokenRows = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
                 Log::write('system','info',"CheckToken: Token failed - no token found in database - " . $referCheck);
@@ -1281,7 +1441,7 @@ function _sec_checkToken($ajax=0)
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
-            $tokendata = DB_fetchArray($tokens);
+            $tokendata = $tokenRows[0];
             /* Check that:
              *  token's user is the current user.
              *  token is not expired.
@@ -1307,8 +1467,15 @@ function _sec_checkToken($ajax=0)
             }
             if ( $ajax == 0 ) {
                 // It's a one time token. So eat it.
-                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
-                DB_query($sql);
+                $db->conn->delete(
+                        $_TABLES['tokens'],
+                        array(
+                            'token' => $token
+                        ),
+                        array(
+                            Database::STRING
+                        )
+                );
             }
         }
     } else {
@@ -1330,31 +1497,65 @@ function _sec_checkToken($ajax=0)
   */
 function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
 {
-    global $_CONF, $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_USER, $_TABLES;
 
     if ( !isset($_USER['uid'] ) || $_USER['uid'] == '' ) {
         $_USER['uid'] = 1;
     }
 
+    $db = Database::getInstance();
+
     /* Generate the token */
     $token = md5($_USER['uid'].$_USER['uid'].uniqid (mt_rand (), 1));
 
-    /* Destroy exired tokens: */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."')"
-       . " AND (ttl > 0)";
-
-    DB_query($sql);
+    $db->conn->executeUpdate(
+            "DELETE FROM `{$_TABLES['tokens']}`
+              WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < ?)
+               AND (ttl > 0)",
+            array(
+                $_CONF['_now']->toMySQL(true)
+            ),
+            array(
+                Database::STRING
+            )
+    );
 
     /* Destroy tokens for this user/url combination */
     if ( !defined('DEMO_MODE') ) {
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".DB_escapeString($action)."'";
-        DB_query($sql);
+        $db->conn->delete(
+            $_TABLES['tokens'],
+            array(
+                'owner_id' => $_USER['uid'],
+                'urlfor' => $action
+            ),
+            array(
+                Database::INTEGER,
+                Database::STRING
+            )
+        );
     }
 
-    $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', '".$_CONF['_now']->toMySQL(true)."', {$_USER['uid']}, '".DB_escapeString($action)."', '$ttl')";
-    DB_query($sql);
-
+    try {
+        $db->conn->insert(
+                $_TABLES['tokens'],
+                array(
+                    'token' => $token,
+                    'created' => $_CONF['_now']->toMySQL(true),
+                    'owner_id' => $_USER['uid'],
+                    'urlfor' => $action,
+                    'ttl' => $ttl
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER
+                )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
+    }
     /* And return the token to the user */
     return $token;
 }
@@ -1363,7 +1564,9 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
 
 function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 {
-    global $_CONF, $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_USER, $_TABLES;
+
+    $db = Database::getInstance();
 
     $return = false; // Default to fail.
 
@@ -1373,11 +1576,23 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 
     if(trim($token) != '') {
         $token = COM_applyFilter($token);
-        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < '".$_CONF['_now']->toMySQL(true)."') AND ttl > 0) as expired, owner_id, urlfor FROM "
-           . "{$_TABLES['tokens']} WHERE token='".DB_escapeString($token)."'";
 
-        $tokens = DB_Query($sql);
-        $numberOfTokens = DB_numRows($tokens);
+        $stmt = $db->conn->executeQuery(
+                    "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < ?)
+                        AND ttl > 0) as expired, owner_id, urlfor
+                     FROM `{$_TABLES['tokens']}`
+                       WHERE token=?",
+                    array(
+                        $_CONF['_now']->toMySQL(true),
+                        $token
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING
+                    )
+        );
+        $tokenRows = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
                 Log::write('system','info',"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
@@ -1386,7 +1601,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
-            $tokendata = DB_fetchArray($tokens);
+            $tokendata = $tokenRows[0];
             /* Check that:
              *  token's user is the current user.
              *  token is not expired.
