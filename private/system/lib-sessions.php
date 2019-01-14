@@ -297,18 +297,6 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
         $stmt = $db->conn->prepare($deleteSQL);
         $stmt->bindValue(1,$expirytime,Database::INTEGER);
         $stmt->execute();
-
-//        $db->conn->query($deleteSQL,array($expirytime),array(\glFusion\Database::INTEGER));
-//        $delresult = DB_query($deleteSQL,1);
-//        if ( DB_error() ) {
-//            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
-//            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
-//            $delresult = DB_query($deleteSQL,1);
-//        }
-//        if (!$delresult) {
-//            die("Delete failed in new_session()");
-//        }
-
     }
     $result = $db->conn->insert($_TABLES['sessions'],
                     array(
