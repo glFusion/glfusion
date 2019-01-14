@@ -200,13 +200,13 @@ function USER_deleteAccount($uid)
         $rootuser = 2;
     }
     $db->conn->update($_TABLES['blocks'],
-                      array('owner-id' => $rootuser),
-                      array('uid' => $uid),
+                      array('owner_id' => $rootuser),
+                      array('owner_id' => $uid),
                       array(Database::INTEGER, Database::INTEGER)
     );
     $db->conn->update($_TABLES['topics'],
-                      array('owner-id' => $rootuser),
-                      array('uid' => $uid),
+                      array('owner_id' => $rootuser),
+                      array('owner_id' => $uid),
                       array(Database::INTEGER, Database::INTEGER)
     );
 
