@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -104,6 +104,7 @@ function _checkEnvironment()
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
     $classCounter++;
+
     $st = ini_get('short_open_tag');
     $T->set_var('item','short_open_tag');
     $T->set_var('status',$st == 1 ? $LANG_ENVCHK['on'] : $LANG_ENVCHK['off']);
@@ -205,6 +206,19 @@ function _checkEnvironment()
         $T->parse('env','envs',true);
         $classCounter++;
     }
+
+    // instance Caching
+    $instance_caching = $_SYSTEM['disable_instance_caching'] ? false : true;
+    $T->set_var(array(
+        'item'      => 'instance_caching',
+        'status'    => $_SYSTEM['disable_instance_caching'] ? $LANG_ENVCHK['disabled'] : $LANG_ENVCHK['enabled'],
+        'class'     => $instance_caching ? 'tm-pass' : 'tm-fail',
+        'recommended' => $LANG_ENVCHK['enabled'],
+        'notes'     => $LANG_ENVCHK['instance_cache'],
+        'rowclass'  => ($classCounter % 2)+1
+    ));
+    $T->parse('env','envs',true);
+    $classCounter++;
 
     $mysql_version = DB_getVersion();
     $T->set_var('mysql', $LANG_ENVCHK['database_version']);
@@ -472,6 +486,7 @@ function _checkEnvironment()
                         $_CONF['path_log'].'404.log',
                         $_CONF['path_data'].'cache/',
                         $_CONF['path_data'].'layout_cache/',
+                        $_CONF['path_data'].'cache/',
                         $_CONF['path_data'].'temp/',
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
