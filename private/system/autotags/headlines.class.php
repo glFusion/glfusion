@@ -1,16 +1,23 @@
 <?php
 /**
- * @package    glFusion CMS
- *
- * @copyright   Copyright (C) 2014-2018 by the following authors
- *              Mark R. Evans          mark AT glfusion DOT org
- *
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
- */
+* glFusion CMS
+*
+* glFusion Headlines Auto tag
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2014-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Article\ArticleDisplay;
 
 class autotag_headlines extends BaseAutotag {
 
@@ -161,21 +168,45 @@ class autotag_headlines extends BaseAutotag {
             return $c->get($key);
         }
 
-        $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
+        // not cached - need to build it
 
-        $sql = " (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)";
+        $db = Database::getInstance();
+
+        $archivetid = $db->getItem($_TABLES['topics'], 'tid', array('archive_flag' => 1));
+
+        $params = [];
+        $types  = [];
+
+        $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate,
+                 UNIX_TIMESTAMP(s.expire) as expireunix,u.uid, u.username, u.fullname,
+                 u.photo, u.email, t.topic, t.imageurl
+                FROM `{$_TABLES['stories']}` AS s,
+                     `{$_TABLES['users']}` AS u,
+                     `{$_TABLES['topics']}` AS t
+                WHERE (s.uid = u.uid) AND (s.tid = t.tid)
+                   AND (date <= ?) AND (draft_flag = 0)";
+
+        $params[] = $_CONF['_now']->toMySQL(true);
+        $types[] = Database::STRING;
+
         if (empty ($topic)) {
-            $sql .= COM_getLangSQL ('tid', 'AND', 's');
+            $sql .= $db->getLangSQL ('tid', 'AND', 's');
         }
         // if a topic was provided only select those stories.
         if (!empty($topic)) {
             if ($include_alt != 2) {
-                $sql .= " AND (s.tid = '".DB_escapeString($topic)."' ";
+                $sql .= " AND (s.tid = ? ";
+                $params[] = $topic;
+                $types[]  = Database::STRING;
             }
             if ($include_alt == 1) {
-                $sql .= " OR s.alternate_tid = '".DB_escapeString($topic)."') ";
+                $sql .= " OR s.alternate_tid = ?) ";
+                $params[] = $topic;
+                $types[]  = Database::STRING;
             } else if ($include_alt == 2) {
-                $sql .= " AND (s.alternate_tid = '".DB_escapeString($topic)."') ";
+                $sql .= " AND (s.alternate_tid = ?) ";
+                $params[] = $topic;
+                $types[]  = Database::STRING;
             } else {
                 $sql .= ') ';
             }
@@ -187,7 +218,9 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ( $frontpage == 1 ) {
-            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= '".$_CONF['_now']->toMySQL(true)."' ) ) ";
+            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= ? ) ) ";
+            $params[] = $_CONF['_now']->toMySQL(true);
+            $types[] = Databse::STRING;
         }
 
         if ( $storyimage != 2 ) {
@@ -199,43 +232,34 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ($topic != $archivetid) {
-            $sql .= " AND s.tid != '{$archivetid}' ";
+            $sql .= " AND s.tid != ? ";
+            $params[] = $archivetid;
+            $types[] = Database::STRING;
         }
 
-        $sql .= COM_getPermSQL ('AND', 0, 2, 's');
+        $sql .= $db->getPermSQL ('AND', 0, 2, 's');
 
-        $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
+        $sql .= $db->getTopicSQL ('AND', 0, 's') . ' ';
 
-        $userfields = 'u.uid, u.username, u.fullname';
-        if ($_CONF['allow_user_photo'] == 1) {
-            $userfields .= ', u.photo';
-            if ($_CONF['use_gravatar']) {
-                $userfields .= ', u.email';
-            }
-        }
+        $sql .= " ORDER BY ";
 
         $sort_order = $sortby.' ' .$orderby.' ';
 
         if ( $sortby == 'featured' ) {
-            $featuredOrderBy = 'featured ' . $orderby . ', ';
-            $sort_order = 'date ' . $orderby.' ';
-        } else {
-            $featuredOrderBy = ' ';
+            $sql .= 'featured ' . $orderby . ', ';
+            $sql .= 'date ' . $orderby.' ';
         }
-
-        $headlinesSQL = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-                 . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-                 . $userfields . ", t.topic, t.imageurl "
-                 . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-                 . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                 . $sql . "ORDER BY " . $featuredOrderBy . $sort_order;
 
         if ($display > 0 ) {
-            $headlinesSQL .= " LIMIT ".$display;
+            $sql .= " LIMIT ". (int) $display;
         }
 
-        $result  = DB_query ($headlinesSQL);
-        $storyRecords = DB_fetchAll($result);
+        $stmt = $db->conn->executeQuery(
+                    $sql,
+                    $params,
+                    $types
+        );
+        $storyRecords = $stmt->fetchAll(Database::ASSOCIATIVE);
         $numRows = @count($storyRecords);
 
         if ( $numRows < $cols ) {
@@ -263,12 +287,14 @@ class autotag_headlines extends BaseAutotag {
                     $author = $A['username'];
                 }
 
-                $story = new Story();
-                $story->loadFromArray($A);
-                $A['introtext'] = $story->displayElements('introtext');
-                $A['bodytext']  = $story->displayElements('bodytext');
-                $title = $story->displayElements('title');
-                $subtitle = $story->displayElements('subtitle');
+                $story = new ArticleDisplay();
+                if ($story->retrieveArticleFromVars($A) != $story::STORY_LOADED_OK) {
+                    continue;
+                }
+                $A['introtext'] = $story->getDisplayItem('introtext');
+                $A['bodytext']  = $story->getDisplayItem('bodytext');
+                $title = $story->getDisplayItem('title');
+                $subtitle = $story->getDisplayItem('subtitle');
 
                 if ( $A['story_image'] != '' ) {
                     $story_image = $_CONF['site_url'].$A['story_image'];

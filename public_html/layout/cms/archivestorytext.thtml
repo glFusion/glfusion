@@ -14,8 +14,22 @@
 {!else}
 		<article class="uk-article tm-article uk-margin-large-bottom" itemscope itemtype="https://schema.org/CreativeWork">
 {!endif}
-			<header>
-				<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove" itemprop="headline">{story_title_link}</h1>
+		<header>
+			<h1 class="uk-article-title tm-article-title uk-margin-bottom-remove" itemprop="headline">
+
+{# if the story_url is set - wrap title in the <a href></a> #}
+
+	{!if story_url}
+			<a itemprop="itemid" href="{story_url}">
+	{!endif}
+				{story_title}
+	{!if story_url}
+			</a>
+	{!endif}
+			</h1>
+
+{# sub title #}
+
 {!if story_subtitle}
 	{!if story_url}
 				<a itemprop="itemid" href="{story_url}">
@@ -31,7 +45,7 @@
 {# begin story image / video #}
 {!!if {story_display} == 'article' !!}
 	{!if story_video}
-				<video class="uk-responsive-width uk-margin-bottom" controls="controls" preload="auto"
+				<video class="uk-responsive-width uk-margin-bottom" controls preload="auto"
 		{!if story_image}
 					poster="{story_image}"
 		{!endif}
@@ -82,12 +96,19 @@
 						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{attribution_author}</span></span></li>
 	{!else}
 						<li>
-							{lang_by} {start_contributedby_anchortag}<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{contributedby_author}</span></span>{end_contributedby_anchortag}
+							{lang_by}
+								{!if contributedby_url}<a href="{contributedby_url}" rel="nofollow">{!endif}
+								<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+									<span itemprop="name">
+										{contributedby_author}
+									</span>
+								</span>
+							  {!if contributedby_url}</a>{!endif}
 						</li>
 	{!endif}
 {!endif}
 {!if story_date}
-						<li itemprop="datePublished">{story_date}</li>
+						<li itemprop="datePublished" content="{iso8601_date}">{story_date}</li>
 {!endif}
 {!if lang_views}
 						<li>{lang_views} {story_hits}</li>
@@ -101,13 +122,16 @@
 {!if comments_url}
 						<li><a class="uk-text" href="{comments_url}#comments" {comments_url_extra}>{comments_count}</a></li>
 {!endif}
+{!if trackback_url}
+						<li><a class="uk-text" href="{trackback_url}">{trackback_text}</a></li>
+{!endif}
 					</ul>
 					<ul class="uk-article-meta uk-align-right uk-margin-remove tm-article-meta">
 {!if email_story_url}
 						<li><a href="{email_story_url}" class="tm-meta-icon uk-icon-small uk-icon-hover uk-icon-envelope" rel="nofollow"></a></li>
 {!endif}
 {!if print_story_url}
-						<li><a href="{print_story_url}" target="_blank" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print" rel="nofollow"></a></li>
+						<li><a href="{print_story_url}" target="_blank" rel="nofollow" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-print"></a></li>
 {!endif}
 {!if edit_url}
 						<li><a href="{edit_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-edit"></a></li>
@@ -118,7 +142,7 @@
 
 						{plugin_icon_vars}
 
-{!if feed_icon}
+{!if feed_url}
 						<li><a href="{feed_url}" class="tm-meta-icon uk-icon-hover uk-icon-small uk-icon-rss"></a></li>
 {!endif}
 					</ul>
@@ -132,11 +156,11 @@
 				<div class="uk-clearfix"></div>
 
 {!if story_topic_image_url}
-				<a href="{topic_url}">
+				<a href="{story_topic_url}">
 					<img class="uk-float-right" src="{story_topic_image_url}" alt="{story_topic_name}" height="48" width="48">
 				</a>
 {!endif}
-				<div itemprop="description">
+				<div itemprop="description" class="uk-margin-remove tm-story-text">
 					{story_introtext_only}
 {!if adblock_content}
 					<div class="uk-panel uk-text-center">
@@ -186,21 +210,14 @@
 					</header>
 				</article>
 	{!endif}
-
 {!endif}
-
 				<div class="uk-clearfix"></div>
-
 {!if rating_bar}
 				{rating_bar}
 {!endif}
-
 				<div class="tm-article-footer">
 {!if page_selector}
 					<p>{page_selector}</p>
-{!endif}
-{!if trackbacks_count}
-					{trackbacks_with_count}
 {!endif}
 {!if plugin_footer_vars}
 					<div>{plugin_footer_vars}</div>

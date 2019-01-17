@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2018 by the following authors:
+*  Copyright (C) 2018-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -173,11 +173,6 @@ if ($maxstories == 0) {
 $limit = (int) $maxstories;
 if ($limit < 1) {
     $limit = 1;
-}
-
-$ratedIds = array();
-if ( $_CONF['rating_enabled'] != 0 ) {
-    $ratedIds = RATING_getRatedIds('article');
 }
 
 // Check session to determine if any pending messages need to be displayed
@@ -368,31 +363,35 @@ if ($stmt) {
     $stmt->closeCursor();
 }
 $nrows = 0;
-foreach($storyRecs AS $A) {
+
+foreach($storyRecs AS $storyData) {
     $nrows++;
-    $story = new Story();
-    $story->loadFromArray($A);
-    if ($articleCounter == 0) {
-        // processing the first story
-        if ( $_CONF['showfirstasfeatured'] == 1 ) {
-            $story->_featured = 1;
-        }
-        if ($story->DisplayElements('featured') == 1) {
-            if ($centerBlock) {
-                $pageBody .= STORY_renderArticle ($story, 'y');
-                $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+    $story = new \glFusion\Article\ArticleDisplay();
+
+    if ( $story->retrieveArticleFromVars($storyData) == $story::STORY_LOADED_OK) {
+        if ($articleCounter == 0) {
+            // processing the first story
+            if ( $_CONF['showfirstasfeatured'] == 1 ) {
+                $story->set('featured',1);
+            }
+            if ($story->get('featured') == 1) {
+                if ($centerBlock) {
+                    $pageBody .= $story->getDisplayArticle('y');
+                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+                }
+            } else {
+                if ($centerBlock) {
+                    $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
+                }
+                $pageBody .= $story->getDisplayArticle('y');
             }
         } else {
-            if ($centerBlock) {
-                $pageBody .= PLG_showCenterblock (CENTERBLOCK_AFTER_FEATURED, $page, $topic);
-            }
-            $pageBody .= STORY_renderArticle ($story, 'y');
+            $pageBody .= $story->getDisplayArticle('y');
         }
-    } else {
-        $pageBody .= STORY_renderArticle ($story, 'y');
-    }
+        unset($story);
 
-    $articleCounter++;
+        $articleCounter++;
+    }
 }
 
 if ($nrows > 0) {
