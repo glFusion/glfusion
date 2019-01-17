@@ -468,6 +468,8 @@ class Article
      */
     public function get($varname)
     {
+        global $_CONF, $_USER;
+
         switch ($varname) {
             case 'sid' :
             case 'story_id' :
