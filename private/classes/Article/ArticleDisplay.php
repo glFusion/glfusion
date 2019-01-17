@@ -377,7 +377,7 @@ class ArticleDisplay extends Article
      * @param  string  $tpl - Template to use
      * @return string  fully formatted story ready for display
      */
-    public function getDisplayArticle($displayType = 'n', $tpl='article-standard.thtml')
+    public function getDisplayArticle($displayType = 'n', $tpl='')
     {
         global $_CONF, $_SYSTEM, $_TABLES, $_USER,
                 $LANG01, $LANG05, $LANG11, $LANG_TRB, $_IMAGE_TYPE, $_GROUPS;
@@ -510,6 +510,7 @@ class ArticleDisplay extends Article
         }
 
 # - Ratings
+
         if ($_CONF['rating_enabled'] != 0 && $displayType != 'p') {
             $this->template->set_var(
                 'rating_bar',
@@ -563,6 +564,7 @@ class ArticleDisplay extends Article
          ));
 
 ## basic stuff like SID, article permalink, title
+
         $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='.urlencode($this->sid));
 
         $this->template->set_var(array(
@@ -573,6 +575,7 @@ class ArticleDisplay extends Article
         ));
 
 # - Finally set the actual story contents
+
         if (($displayType == 'n' ) || ( $displayType == 'p')) {  // full article view or preview
             if (empty($bodytext)) {
                 $this->template->set_var( 'story_introtext', $introtext,false,true );
@@ -595,6 +598,7 @@ class ArticleDisplay extends Article
 
         #
         # - Instance Caching..
+        #    All content generated below is cached
         #
 
         $hash = CACHE_security_hash();
@@ -603,6 +607,7 @@ class ArticleDisplay extends Article
         if ($displayType == 'p' || !$this->template->check_instance($instance_id,$article_filevar)) {
 
 ## - contributed info
+
             if ($_CONF['contributedbyline'] == 1) {
                 $this->template->set_var(array(
                     'lang_contributed_by'   => $LANG01[1],
@@ -645,6 +650,7 @@ class ArticleDisplay extends Article
             $this->template->set_var('lang_source',$LANG01['source']);
 
 ## - story image / video
+
             $story_image = $this->getDisplayItem('story_image_url');
             $story_video = $this->getDisplayItem('story_video_url');
             $sv_autoplay = $this->get('story_video_autoplay');
@@ -674,6 +680,12 @@ class ArticleDisplay extends Article
                     'email_story_url'   => $this->getDisplayItem('email_story_url'),
                     'edit_url'          => $this->getDisplayItem('edit_url'),
                 ));
+            }
+
+            // index view and bodytext
+            if ($displayType == 'y' && $this->hasBody()) {
+                $this->template->set_var('readmore_url',$articleUrl);
+                $this->template->set_var('lang_continue_reading',$LANG01['continue_reading']);
             }
 
 # - create an instance cache - unless preview
@@ -856,6 +868,19 @@ class ArticleDisplay extends Article
             }
         }
         return $retval;
+    }
+
+    /**
+     * hasBody - check if story has bodytext
+     *
+     * @return bool  true if bodytext, false if not
+     */
+    private function hasBody()
+    {
+        if (!empty($this->bodytext)) {
+            return true;
+        }
+        return false;
     }
 
 }
