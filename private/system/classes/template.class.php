@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 207-2018 by the following authors:
+*  Copyright (C) 207-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Caching and logic processing developed by:
@@ -29,6 +29,7 @@ if (!defined('GVERSION')) {
 }
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 /**
 * The template class allows you to keep your HTML code in some external files
@@ -604,6 +605,7 @@ class Template
             }
             return "";
         }
+
         ob_start();
         eval('?>'.$templateCode.'<?php ');
         $str = ob_get_contents();
@@ -1006,7 +1008,7 @@ class Template
         }
 
         if ($this->halt_on_error == "log") {
-            COM_errorLog($msg);
+            Log::write('system',Log::ERROR,$msg);
         }
 
         return false;
@@ -1100,14 +1102,14 @@ class Template
             foreach ($mods as $mod) {
                 switch ($mod[0]) {
                     case 'u':
-                    $ret = urlencode($ret);
-                    break;
+                        $ret = urlencode($ret);
+                        break;
                     case 's':
-                    $ret = htmlspecialchars($ret);
-                    break;
+                        $ret = htmlspecialchars($ret);
+                        break;
                     case 't':
-                    $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
-                    break;
+                        $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
+                        break;
                 }
             }
             return $ret;
@@ -1466,7 +1468,6 @@ class Template
                 $tmplt = preg_replace('!\{#.*?#\}(\n)?!sm', '', $tmplt);
             }
         }
-
         $tmplt = $this->replace_extended($tmplt);
         $tmplt = $this->replace_lang($tmplt);
         $tmplt = $this->replace_vars($tmplt);
@@ -1520,13 +1521,15 @@ class Template
     {
         global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
-        if ( (isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true) || (isset($_CONF['cache_driver']) && $_CONF['cache_driver'] == 'Devnull') ) {
+        if ((isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true)
+              || (isset($_CONF['cache_driver']) && $_CONF['cache_driver'] == 'Devnull')) {
             return;
         }
 
         $old_unknowns = $this->unknowns;
         $this->unknowns = 'PHP';
         $tmplt = $this->parse($iid, $filevar);
+
         $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
         $iid = str_replace('-','_',$iid);
         $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
@@ -1534,6 +1537,7 @@ class Template
         . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
 
         $tmplt = $this->compile_template_code($tmplt,true);
+
         $c = Cache::getInstance();
         $c->set($iid,$tmplt,array('story','story_'.$this->varvals['story_id']));
         $this->instance[$filevar] = $tmplt;
@@ -1577,7 +1581,6 @@ class Template
 
         $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
         $iid = str_replace('-','_',$iid);
-
         $c = Cache::getInstance();
         $rc = $c->has($iid);
         if ($rc === true) {
@@ -1663,27 +1666,19 @@ class Template
         $phpfile = $this->cache_create_filename($filename);
 
         $template_fstat = @filemtime($filename);
-        $key = md5($phpfile);
 
         if ($this->memCache) {
             $c = Cache::getInstance();
-
             $cache_fstat = $c->getModificationDate($phpfile);
             if ($template_fstat > $cache_fstat) {
                 $str = @file_get_contents($filename);
                 // cache_write will compile the template prior to creating the cache file
                 $tmplt= $this->cache_write($phpfile, $str);
-                // save compiled template to internal cache
-                $internalCache[$key] = $tmplt;
             } else {
-                if (isset($internalCache[$key])) {
-                    $tmplt = $internalCache[$key];
-                } else {
-                    $tmplt = $c->get($phpfile);
-                    $internalCache[$key] = $tmplt;
-                }
+                $tmplt = $c->get($phpfile);
             }
         } else {
+            $key = md5($phpfile);
             set_error_handler(self::$emptyErrorHandler);
             $data = include($phpfile);
             restore_error_handler();
