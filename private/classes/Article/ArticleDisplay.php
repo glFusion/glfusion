@@ -769,6 +769,20 @@ class ArticleDisplay extends Article
 
 
     /**
+     * hasBody - check if story has bodytext
+     *
+     * @return bool  true if bodytext, false if not
+     */
+    public function hasBody()
+    {
+        if (!empty($this->bodytext)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * getRatingBar - return HTML for rating bar based on user
      *
      * @return string  Rating bar or blank if not enabled
@@ -869,18 +883,4 @@ class ArticleDisplay extends Article
         }
         return $retval;
     }
-
-    /**
-     * hasBody - check if story has bodytext
-     *
-     * @return bool  true if bodytext, false if not
-     */
-    private function hasBody()
-    {
-        if (!empty($this->bodytext)) {
-            return true;
-        }
-        return false;
-    }
-
 }
