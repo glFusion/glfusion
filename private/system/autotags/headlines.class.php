@@ -255,7 +255,7 @@ class autotag_headlines extends BaseAutotag {
         }
 
         if ( $frontpage == 1 ) {
-            $queryBuilder->andWhere('frontpage = 1 OR (frontpage =2 AND frontpage_date >= '.
+            $queryBuilder->andWhere('frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '.
               $queryBuilder->createNamedParameter($_CONF['_now']->toMySQL(true),Database::STRING) . ')'
             );
         }
