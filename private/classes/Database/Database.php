@@ -905,10 +905,16 @@ class Database
 
         if (count($tids) > 0) {
             $queryBuilder->$method(
-                $queryBuilder->expr()->in($table.
-                  'tid',
-                   $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
-                   )
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->in($table.
+                      'tid',
+                       $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+                       ),
+                    $queryBuilder->expr()->in($table.
+                      'alternate_tid',
+                       $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+                       )
+                )
             );
         }
         return;
