@@ -93,18 +93,18 @@
 				<ul class="uk-article-meta tm-article-meta uk-align-left uk-margin-remove">
 {!if lang_by}
 	{!if attribution_author}
-					<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{attribution_author}</span></span></li>
+						<li>{lang_by} <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{attribution_author}</span></span></li>
 	{!else}
-					<li>
-						{lang_by}
-						{!if contributedby_url}<a href="{contributedby_url}" rel="nofollow">{!endif}
-							<span itemprop="author" itemscope itemtype="http://schema.org/Person">
-								<span itemprop="name">
-									{contributedby_author}
+						<li>
+							{lang_by}
+								{!if contributedby_url}<a href="{contributedby_url}" rel="nofollow">{!endif}
+								<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+									<span itemprop="name">
+										{contributedby_author}
+									</span>
 								</span>
-							</span>
-						{!if contributedby_url}</a>{!endif}
-					</li>
+							  {!if contributedby_url}</a>{!endif}
+						</li>
 	{!endif}
 {!endif}
 {!if story_date}
