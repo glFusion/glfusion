@@ -604,7 +604,7 @@ class ArticleDisplay extends Article
         $hash = CACHE_security_hash();
         $instance_id = 'story_'.$this->get('sid').'_'.$displayType.'_'.$article_filevar.'_'.$templateHash.'_'.$hash.'_'.$_USER['theme'];
 
-        if ($displayType == 'p' || !$this->template->check_instance($instance_id,$article_filevar)) {
+        if ($displayType == 'p' || !$this->template->check_instance($instance_id,'article')) {
 
 ## - contributed info
 
@@ -691,7 +691,7 @@ class ArticleDisplay extends Article
 # - create an instance cache - unless preview
 
             if ($displayType != 'p') {
-                $this->template->create_instance($instance_id,$article_filevar);
+                $this->template->create_instance($instance_id,'article');
             }
 
         }
