@@ -174,92 +174,120 @@ class autotag_headlines extends BaseAutotag {
 
         $archivetid = $db->getItem($_TABLES['topics'], 'tid', array('archive_flag' => 1));
 
-        $params = [];
-        $types  = [];
+        $queryBuilder = $db->conn->createQueryBuilder();
+        $queryBuilder
+            ->select(   's.*',
+                        'UNIX_TIMESTAMP(s.date) AS unixdate',
+                        'UNIX_TIMESTAMP(s.expire) as expireunix',
+                        'UNIX_TIMESTAMP(s.frontpage_date) as frontpage_date_unix',
+                        'u.uid',
+                        'u.username',
+                        'u.fullname',
+                        't.topic',
+                        't.imageurl'
+                    )
+            ->from($_TABLES['stories'],'s')
+            ->leftJoin('s',$_TABLES['users'],'u','s.uid=u.uid')
+            ->leftJoin('s',$_TABLES['topics'],'t','s.tid=t.tid')
+            ->where('date <= NOW()')
+            ->andWhere('draft_flag = 0')
+            ->orderBy($sortby, $orderby);
 
-        $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate,
-                 UNIX_TIMESTAMP(s.expire) as expireunix,u.uid, u.username, u.fullname,
-                 u.photo, u.email, t.topic, t.imageurl
-                FROM `{$_TABLES['stories']}` AS s,
-                     `{$_TABLES['users']}` AS u,
-                     `{$_TABLES['topics']}` AS t
-                WHERE (s.uid = u.uid) AND (s.tid = t.tid)
-                   AND (date <= ?) AND (draft_flag = 0)";
-
-        $params[] = $_CONF['_now']->toMySQL(true);
-        $types[] = Database::STRING;
-
-        if (empty ($topic)) {
-            $sql .= $db->getLangSQL ('tid', 'AND', 's');
+        if (empty($topic)) {
+            $sql = $db->getLangSQL ('tid', '', 's');
+            if (!empty($sql)) {
+                $queryBuilder->andWhere($sql);
+            }
         }
+
         // if a topic was provided only select those stories.
         if (!empty($topic)) {
-            if ($include_alt != 2) {
-                $sql .= " AND (s.tid = ? ";
-                $params[] = $topic;
-                $types[]  = Database::STRING;
-            }
-            if ($include_alt == 1) {
-                $sql .= " OR s.alternate_tid = ?) ";
-                $params[] = $topic;
-                $types[]  = Database::STRING;
-            } else if ($include_alt == 2) {
-                $sql .= " AND (s.alternate_tid = ?) ";
-                $params[] = $topic;
-                $types[]  = Database::STRING;
-            } else {
-                $sql .= ') ';
-            }
-        }
-        if ( $featured == 1) {
-            $sql .= " AND s.featured = 1 ";
-        } else if ( $featured == 2 ) {
-            $sql .= " AND s.featured = 0 ";
-        }
-
-        if ( $frontpage == 1 ) {
-            $sql .= " AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= ? ) ) ";
-            $params[] = $_CONF['_now']->toMySQL(true);
-            $types[] = Databse::STRING;
-        }
-
-        if ( $storyimage != 2 ) {
-            if ( $storyimage == 0 ) {
-                $sql .= " AND story_image = '' ";
-            } else {
-                $sql .= " AND story_image != '' ";
+            switch ($include_alt) {
+                case 1 :
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->eq('s.tid',
+                              $queryBuilder->createNamedParameter($topic,Database::STRING)
+                            ),
+                            $queryBuilder->expr()->eq('s.alternate_tid',
+                              $queryBuilder->createNamedParameter($topic,Database::STRING)
+                            )
+                        )
+                    );
+                    break;
+                case 2 :
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->andX(
+                            $queryBuilder->expr()->eq('s.tid',
+                              $queryBuilder->createNamedParameter($topic,Database::STRING)
+                            ),
+                            $queryBuilder->expr()->eq('s.alternate_tid',
+                              $queryBuilder->createNamedParameter($topic,Database::STRING)
+                            )
+                        )
+                    );
+                    break;
+                default :
+                case 0 :
+                    $queryBuilder->andWhere(
+                        $queryBuilder->expr()->eq('s.tid',
+                          $queryBuilder->createNamedParameter($topic,Database::STRING)
+                        )
+                    );
+                    break;
             }
         }
 
         if ($topic != $archivetid) {
-            $sql .= " AND s.tid != ? ";
-            $params[] = $archivetid;
-            $types[] = Database::STRING;
+            $queryBuilder->andWhere('s.tid != ' .
+              $queryBuilder->createNamedParameter($archivetid,Database::STRING)
+            );
         }
 
-        $sql .= $db->getPermSQL ('AND', 0, 2, 's');
-
-        $sql .= $db->getTopicSQL ('AND', 0, 's') . ' ';
-
-        $sql .= " ORDER BY ";
-
-        $sort_order = $sortby.' ' .$orderby.' ';
-
-        if ( $sortby == 'featured' ) {
-            $sql .= 'featured ' . $orderby . ', ';
-            $sql .= 'date ' . $orderby.' ';
+        if ( $featured == 1) {
+            $queryBuilder->andWhere('s.featured = 1');
+        } else if ( $featured == 2 ) {
+            $queryBuilder->andWhere('s.featured = 0');
         }
+
+        if ( $frontpage == 1 ) {
+            $queryBuilder->andWhere('frontpage = 1 OR (frontpage =2 AND frontpage_date >= '.
+              $queryBuilder->createNamedParameter($_CONF['_now']->toMySQL(true),Database::STRING) . ')'
+            );
+        }
+
+        if ( $storyimage != 2 ) {
+            if ( $storyimage == 0 ) {
+                $queryBuilder->andWhere('story_image = "")');
+            } else {
+                $queryBuilder->andWhere('story_image != "")');
+            }
+        }
+
+        $db->qbGetPermSQL($queryBuilder,'',0,SEC_ACCESS_RO,'s');
+
+        $db->qbGetTopicSQL($queryBuilder,'AND',0,'s');
 
         if ($display > 0 ) {
-            $sql .= " LIMIT ". (int) $display;
+            $queryBuilder->setMaxResults($display);
         }
 
-        $stmt = $db->conn->executeQuery(
-                    $sql,
-                    $params,
-                    $types
-        );
-        $storyRecords = $stmt->fetchAll(Database::ASSOCIATIVE);
+        //print $queryBuilder->getSQL();exit;
+
+        try {
+            $stmt = $queryBuilder->execute();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            $stmt = false;
+        }
+
+        $storyRecords = array();
+        if ($stmt) {
+            $storyRecords = $stmt->fetchAll();
+            $stmt->closeCursor();
+        }
         $numRows = @count($storyRecords);
 
         if ( $numRows < $cols ) {
@@ -281,32 +309,33 @@ class autotag_headlines extends BaseAutotag {
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
 
-                if ( $A['attribution_author'] != '' ){
-                    $author = $A['attribution_author'];
-                } else {
-                    $author = $A['username'];
-                }
-
                 $story = new ArticleDisplay();
                 if ($story->retrieveArticleFromVars($A) != $story::STORY_LOADED_OK) {
                     continue;
                 }
+
+                if ($story->get('attribution_author') != '' ) {
+                    $author = $story->getDisplayItem('attribution_author');
+                } else {
+                    $author = $story->getDisplayItem('author_fullname');
+                }
+
                 $A['introtext'] = $story->getDisplayItem('introtext');
                 $A['bodytext']  = $story->getDisplayItem('bodytext');
                 $title = $story->getDisplayItem('title');
                 $subtitle = $story->getDisplayItem('subtitle');
 
-                if ( $A['story_image'] != '' ) {
-                    $story_image = $_CONF['site_url'].$A['story_image'];
+                if ($story->get('story_image') != '') {
+                    $story_image = $_CONF['site_url'].$story->getDisplayItem('story_image_url');
                 } else {
                     $story_image = '';
                 }
 
-                if ( !empty($A['bodytext']) ) {
+                if ( $story->hasBody() ) {
                     $readMore = true;
 
                     // adds the read more link
-                    $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
+                    $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.urlencode($story->get('sid'))));
                     $T->set_var('lang_readmore',$LANG01['continue_reading']);
                 }
 
@@ -315,17 +344,23 @@ class autotag_headlines extends BaseAutotag {
 
                     if ( $readMore == false && utf8_strlen($A['introtext']) != utf8_strlen($truncatedArticle) ) {
                         // adds the read more link
-                        $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.$A['sid']));
+                        $T->set_var('readmore_url',COM_buildUrl($_CONF['site_url'].'/article.php?story='.urlencode($story->get('sid'))));
                         $T->set_var('lang_readmore',$LANG01['continue_reading']);
                     }
                     $A['introtext'] = $truncatedArticle;
                 }
 
-                $topicurl = $_CONF['site_url'] . '/index.php?topic=' . $A['tid'];
+                $topicurl = $_CONF['site_url'] . '/index.php?topic=' . urlencode($story->get('sid'));
                 $dt->setTimestamp($A['unixdate']);
 
-                if ( $A['commentcode'] >= 0 ) {
-                    $cmtLinkArray = CMT_getCommentLinkWithCount('article', $A['sid'], $_CONF['site_url'].'/article.php?story=' . $A['sid'],$A['comments'],1);
+                if ( $story->get('commentcode') >= 0 ) {
+                    $cmtLinkArray = CMT_getCommentLinkWithCount(
+                                        'article',
+                                        $A['sid'],
+                                        $_CONF['site_url'].'/article.php?story=' . urlencode($story->get('sid')),
+                                        $story->get('comments'),
+                                        1
+                                   );
 
                     $T->set_var(array(
                         'lang_comments'     => '',
@@ -341,27 +376,27 @@ class autotag_headlines extends BaseAutotag {
                 }
 
                 $T->set_var(array(
-                    'attribution_name'  => $A['attribution_name'],
-                    'attribution_url'   => $A['attribution_url'],
+                    'attribution_name'  => $story->getDisplayItem('attribution_name'),
+                    'attribution_url'   => $story->getDisplayItem('attribution_url'),
                     'author'            => $author,
-                    'author_id'         => $A['uid'],
+                    'author_id'         => $story->get('uid'),
                     'date'              => $dt->format($dt->getUserFormat(),true),
                     'date_only'         => $dt->format($_CONF['dateonly'],true),
                     'lang_by'           => $LANG01[1],
                     'lang_posted_in'    => $LANG01['posted_in'],
                     'meta'              => ($meta ? TRUE : ''),
                     'short_date'        => $dt->format($_CONF['shortdate'],true),
-                    'sid'               => $A['sid'],
+                    'sid'               => $story->get('sid'),
                     'story_image'       => $story_image,
                     'story_topic_url'   => $topicurl,
                     'subtitle'          => $subtitle,
                     'text'              => $A['introtext'],
-                    'tid'               => $A['tid'],
+                    'tid'               => $story->getDisplayItem('tid'),
                     'time'              => $dt->format('Y-m-d',true).'T'.$dt->format('H:i:s',true),
                     'title'             => $title,
                     'titlelink'         => ($titleLink ? TRUE : ''),
-                    'topic'             => $A['topic'],
-                    'url'               => COM_buildUrl($_CONF['site_url'] . '/article.php?story='.$A['sid']),
+                    'topic'             => $story->getDisplayItem('topic'),
+                    'url'               => COM_buildUrl($_CONF['site_url'] . '/article.php?story='.urlencode($story->get('sid'))),
                 ));
                 $T->parse('hl','headlines',true);
                 unset($story);
