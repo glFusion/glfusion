@@ -193,6 +193,10 @@ class autotag_headlines extends BaseAutotag {
             ->andWhere('draft_flag = 0')
             ->orderBy($sortby, $orderby);
 
+        if ($sortby == 'featured') {
+            $queryBuilder->addOrderBy('date', 'DESC');
+        }
+
         if (empty($topic)) {
             $sql = $db->getLangSQL ('tid', '', 's');
             if (!empty($sql)) {
