@@ -1564,6 +1564,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+//modify stories table to support new approach
+            $sql = "ALTER TABLE `{$_TABLES['stories']}`
+                        ADD COLUMN `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+        	            DROP PRIMARY KEY,
+        	            ADD UNIQUE INDEX `stories_sid` (`sid`),
+        	            ADD PRIMARY KEY (`id`);";
+
+            DB_query($sql,1);
 
             DB_query("DELETE FROM `{$_TABLES['plugins']}` WHERE pi_name='commentfeeds'",1);
 

@@ -25,8 +25,6 @@ require_once 'auth.inc.php';
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 
-USES_lib_story();
-
 if (!SEC_hasRights('topic.edit')) {
     Log::logAccessViolation('Topic Administration');
     $display = COM_siteHeader ('menu', $MESSAGE[30]);

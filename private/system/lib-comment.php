@@ -804,9 +804,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
  * $cmtCount - if local, the comment count for the item
  * $url - unique url (canonical) for the item
  * $urlRewrite - if the item supports URL rewrite
- *
- *
- *
  */
 
 function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewrite = 0 ) {
@@ -814,7 +811,10 @@ function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewr
 
     $retval = '';
 
-    if ( !isset($_CONF['comment_engine']) ) $_CONF['comment_engine'] = 'internal';
+    if (!isset($_CONF['comment_engine'])) {
+        $_CONF['comment_engine'] = 'internal';
+    }
+
     switch ( $_CONF['comment_engine'] ) {
         case 'disqus' :
             if ( $urlRewrite ) {
@@ -2290,208 +2290,6 @@ function CMT_preview( $data )
     return $retval;
 }
 
-
-/**
- * article: saves a comment
- *
- * @param   string  $title  comment title
- * @param   string  $comment comment text
- * @param   string  $id     Item id to which $cid belongs
- * @param   int     $pid    comment parent
- * @param   string  $postmode 'html' or 'text'
- * @return  mixed   false for failure, HTML string (redirect?) for success
- */
-function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
-{
-    global $_CONF, $_TABLES, $LANG03, $_USER;
-
-    $retval = '';
-
-    $db = Database::getInstance();
-
-    $sql = "SELECT commentcode FROM `{$_TABLES['stories']}` WHERE sid=? AND (draft_flag = 0) AND (date <= ?) " . $db->getPermSQL('AND');
-
-    $commentcode = $db->conn->fetchColumn($sql,
-                                          array($id,$_CONF['_now']->toMySQL(true)),
-                                          0,
-                                          array(Database::STRING,Database::STRING)
-    );
-
-    if (!isset($commentcode) || ($commentcode != 0)) {
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    }
-
-    $ret = CMT_saveComment($title, $comment, $id, $pid, 'article', $postmode);
-    if ($ret > 0) { // failure
-        $msg = '';
-        if ( SESS_isSet('glfusion.commentpresave.error') ) {
-            $msg = COM_showMessageText(SESS_getVar('glfusion.commentpresave.error'),'',1,'error');
-            SESS_unSet('glfusion.commentpresave.error');
-        } else {
-            if ( empty($comment) ) {
-                $msg = COM_showMessageText($LANG03[12],'',1,'error');
-            }
-        }
-        $retval .= $msg . CMT_commentForm ($title,$comment,$id,$pid,'article',$LANG03[14],$postmode);
-
-    } else { // success
-        $comments = CMT_getCount('article',$id);
-
-        try {
-            $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET comments=? WHERE sid=?",
-                                     array($comments,$id),
-                                     array(Database::INTEGER, Database::STRING)
-            );
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            $db->error($e->getMessage());
-        }
-        COM_olderStuff(); // update comment count in Older Stories block
-        $retval = COM_refresh(COM_buildUrl($_CONF['site_url']
-                              . "/article.php?story=$id#comments"));
-    }
-
-    return $retval;
-}
-
-
-/**
- * article: delete a comment
- *
- * @param   int     $cid    Comment to be deleted
- * @param   string  $id     Item id to which $cid belongs
- * @return  mixed   false for failure, HTML string (redirect?) for success
- */
-function plugin_deletecomment_article($cid, $id)
-{
-    global $_CONF, $_TABLES, $_USER;
-
-    $retval = '';
-
-    $db = Database::getInstance();
-
-    $has_editPermissions = SEC_hasRights ('story.edit');
-
-    $sql = "SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon
-            FROM `{$_TABLES['stories']}` WHERE sid = ?";
-
-    $commentRow = $db->conn->fetchAssoc($sql,array($id),array(Database::STRING));
-
-    if ($commentRow === null || $commentRow === false) {
-        return $retval;
-    }
-
-    if ($has_editPermissions && SEC_hasAccess ($commentRow['owner_id'],
-            $commentRow['group_id'], $commentRow['perm_owner'], $commentRow['perm_group'],
-            $commentRow['perm_members'], $commentRow['perm_anon']) == 3) {
-
-        CMT_deleteComment($cid, $id, 'article');
-
-        $commentCount = $db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid = ? AND queued = 0",
-                            array($id),
-                            0,
-                            array(Database::STRING)
-        );
-
-        $db->conn->executeUpdate("UPDATE `{$_TABLES['stories']}` SET comments=? WHERE sid=?",
-                            array($commentCount,$id),
-                            array(Database::INTEGER, Database::STRING)
-        );
-
-        $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
-        $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
-                 . "/article.php?story=$id") . '#comments');
-    } else {
-        COM_errorLog ("User {$_USER['username']} "
-                    . "did not have permissions to delete comment $cid from $id");
-        $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
-    }
-
-    return $retval;
-}
-
-
-/**
- * article: display comment(s)
- *
- * @param   string  $id     Unique idenifier for item comment belongs to
- * @param   int     $cid    Comment id to display (possibly including sub-comments)
- * @param   string  $title  Page/comment title
- * @param   string  $order  'ASC' or 'DESC' or blank
- * @param   string  $format 'threaded', 'nested', or 'flat'
- * @param   int     $page   Page number of comments to display
- * @param   boolean $view   True to view comment (by cid), false to display (by $pid)
- * @return  mixed   results of calling the plugin_displaycomment_ function
-*/
-function plugin_displaycomment_article($id, $cid, $title, $order, $format, $page, $view)
-{
-    global $_CONF, $_TABLES, $LANG_ACCESS;
-
-    USES_lib_story();
-
-    $db = Database::getInstance();
-
-    $retval = '';
-    // display story
-
-    $sql   = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-             . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-             . "u.uid, u.username, u.fullname, t.topic, t.imageurl "
-             . "FROM `{$_TABLES['stories']}` AS s LEFT JOIN `{$_TABLES['users']}` AS u ON s.uid=u.uid "
-             . "LEFT JOIN {$_TABLES['topics']} AS t on s.tid=t.tid "
-             . "WHERE (sid = ?) "
-             . 'AND (draft_flag = 0) AND (date <= ?)' . $db->getPermSQL('AND',0,2, 's')
-             . $db->getTopicSQL('AND',0,'t') . ' GROUP BY sid,owner_id, group_id, perm_owner, s.perm_group,s.perm_members, s.perm_anon ';
-
-
-    $A = $db->conn->fetchAssoc($sql,
-                               array($id,$_CONF['_now']->toMySQL(true)),
-                               array(Database::STRING,Database::STRING)
-            );
-
-    if ($A === null || $A === false) {
-        return $retval;
-    }
-
-    $story = new Story();
-    $story->loadFromArray($A);
-    $retval .= STORY_renderArticle ($story, 'n');
-
-    $sql = 'SELECT COUNT(*) AS count, commentcode, uid, owner_id, group_id, perm_owner, perm_group, '
-         . "perm_members, perm_anon FROM {$_TABLES['stories']} "
-         . "WHERE (sid = ?) "
-         . 'AND (draft_flag = 0) AND (date <= ?)' . $db->getPermSQL('AND')
-         . $db->getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
-
-    $B = $db->conn->fetchAssoc($sql,
-                            array($id,$_CONF['_now']->toMySQL(true)),
-                            array(Database::STRING,Database::STRING)
-            );
-
-    $allowed = $B['count'];
-
-    if ( $allowed == 1 ) {
-        $delete_option = ( SEC_hasRights( 'story.edit' ) &&
-            ( SEC_hasAccess( $B['owner_id'], $B['group_id'],
-                $B['perm_owner'], $B['perm_group'], $B['perm_members'],
-                $B['perm_anon'] ) == 3 ) );
-        $retval .= CMT_userComments ($id, $title, 'article', $order,
-                        $format, $cid, $page, $view, $delete_option,
-                        $B['commentcode'],$B['uid']);
-
-    } else {
-        return false;
-    }
-    return $retval;
-}
-function plugin_getcommenturlid_article( )
-{
-    global $_CONF;
-    $retval = array();
-    $retval[] = $_CONF['site_url'] . '/article.php';
-    $retval[] = 'story';
-    $retval[] = 'page=';
-    return $retval;
-}
 
 /**
 * Return information for a comment

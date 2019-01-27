@@ -41,7 +41,6 @@ if (!SEC_hasRights ('story.ping')) {
 
 require_once $_CONF['path_system'] . 'lib-trackback.php';
 require_once $_CONF['path_system'] . 'lib-pingback.php';
-USES_lib_story();
 
 /**
 * Display trackback comment submission form.
@@ -455,11 +454,8 @@ function TRACKBACK_prepAutoDetect($type, $id, $text)
 */
 function TRACKBACK_getItemInfo($type, $id, $what)
 {
-    if ($type == 'article') {
-        return STORY_getItemInfo($id, $what);
-    } else {
-        return PLG_getItemInfo($type, $id, $what);
-    }
+    return PLG_getItemInfo($type, $id, $what);
+
 }
 
 /**

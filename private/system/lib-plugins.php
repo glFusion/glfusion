@@ -314,52 +314,89 @@ function PLG_uninstall ($type)
                                     array('ft_name' => $remvars['features'][$i]),array(Database::INTEGER));
             if (!empty ($access_id)) {
                 Log::write('system',Log::INFO,"Attempting to remove {$remvars['features'][$i]} rights from all groups");
-                DB_delete($_TABLES['access'], 'acc_ft_id', $access_id);
+                $db->conn->delete(
+                        $_TABLES['access'],
+                        array('acc_ft_id' => $access_id),
+                        array(Database::INTEGER)
+                );
                 Log::write('system',Log::INFO,'...success');
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['features'][$i]} feature");
-                DB_delete($_TABLES['features'], 'ft_name', $remvars['features'][$i]);
+
+                $db->conn->delete(
+                        $_TABLES['features'],
+                        array('ft_name' => $remvars['features'][$i]),
+                        array(Database::STRING)
+                );
                 Log::write('system',Log::INFO,'...success');
             }
         }
 
         // uninstall feeds
-        $sql = "SELECT filename FROM {$_TABLES['syndication']} WHERE type = '$type';";
-        $result = DB_query( $sql );
-        $nrows = DB_numRows( $result );
-        if ( $nrows > 0 ) {
+        $stmt = $db->conn->executeQuery(
+                    "SELECT filename FROM `{$_TABLES['syndication']}` WHERE type = ?",
+                    array($type),
+                    array(Database::STRING)
+        );
+        if ($stmt !== false && $stmt !==NULL) {
             Log::write('system',Log::INFO,'removing feed files');
-            Log::write('system',Log::INFO,$nrows. ' files stored in table.');
-            for ( $i = 0; $i < $nrows; $i++ ) {
-                $fcount = $i + 1;
-                $A = DB_fetchArray( $result );
+            while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
                 $fullpath = SYND_getFeedPath( $A[0] );
                 if ( file_exists( $fullpath ) ) {
                     unlink ($fullpath);
-                    Log::write('system',Log::INFO,"removed file $fcount of $nrows: $fullpath");
+                    Log::write('system',Log::INFO,"Removed Feed File: $fullpath");
                 } else {
-                    Log::write('system',Log::ERROR,"cannot remove file $fcount of $nrows, it does not exist! ($fullpath)");
+                    Log::write('system',Log::ERROR,"Error removing feed file: $fullpath");
                 }
             }
             Log::write('system',Log::INFO,'...success');
             // Remove Links Feeds from syndiaction table
             Log::write('system',Log::INFO,'removing links feeds from table');
-            DB_delete($_TABLES['syndication'], 'type', $type);
+            $db->conn->delete(
+                $_TABLES['syndication'],
+                array('type' => $type),
+                array(Database::STRING)
+            );
             Log::write('system',Log::INFO,'...success');
         }
 
         // remove comments for this plugin
         Log::write('system',Log::INFO,"Attempting to remove comments for $type");
-        DB_delete($_TABLES['comments'], 'type', $type);
+        $db->conn->delete(
+            $_TABLES['comments'],
+            array('type' => $type),
+            array(Database::STRING)
+        );
         Log::write('system',Log::INFO,'...success');
 
         // uninstall php-blocks
         for ($i=0; $i <  count($remvars['php_blocks']); $i++) {
-			DB_query("DELETE FROM {$_TABLES['blocks']} WHERE type='phpblock' AND phpblockfn LIKE '".$remvars['php_blocks'][$i]."%'");
+            $db->conn->delete(
+                $_TABLES['blocks'],
+                array(
+                    'type' => 'phpblock',
+                    'phpblockfn' => $remvars['php_blocks'][$i]
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING
+                )
+            );
         }
 
         // remove autotag permissions
-        DB_query("DELETE {$_TABLES['autotag_perm']}.*, {$_TABLES['autotag_usage']}.* FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON {$_TABLES['autotag_perm']}.autotag_id={$_TABLES['autotag_usage']}.autotag_id WHERE {$_TABLES['autotag_perm']}.autotag_namespace='".$type."'");
-        DB_delete($_TABLES['autotag_usage'],'usage_namespace',$type);
+        $db->conn->executeUpdate(
+                "DELETE `{$_TABLES['autotag_perm']}`.*, `{$_TABLES['autotag_usage']}`.*
+                  FROM `{$_TABLES['autotag_perm']}` JOIN `{$_TABLES['autotag_usage']}`
+                    ON {$_TABLES['autotag_perm']}.autotag_id={$_TABLES['autotag_usage']}.autotag_id
+                    WHERE {$_TABLES['autotag_perm']}.autotag_namespace=?",
+                array($type),
+                array(Database::STRING)
+        );
+        $db->conn->delete(
+            $_TABLES['autotag_usage'],
+            array('usage_namespace' => $type),
+            array(Database::STRING)
+        );
 
         // remove config table data for this plugin
 
@@ -375,8 +412,16 @@ function PLG_uninstall ($type)
 
         Log::write('system',Log::INFO,"Attempting to remove rating table records for type: $type");
 
-        DB_query("DELETE FROM {$_TABLES['rating']} WHERE type='".$type."'");
-        DB_query("DELETE FROM {$_TABLES['rating_votes']} WHERE type='".$type."'");
+        $db->conn->delete(
+            $_TABLES['rating'],
+            array('type' => $type),
+            array(Database::STRING)
+        );
+        $db->conn->delete(
+            $_TABLES['rating_votes'],
+            array('type' => $type),
+            array(Database::STRING)
+        );
 
         Log::write('system',Log::INFO,'...success');
 
@@ -385,7 +430,11 @@ function PLG_uninstall ($type)
 
         // uninstall the plugin
         Log::write('system',Log::INFO,"Attempting to unregister the $type plugin from glFusion");
-        DB_delete($_TABLES['plugins'], 'pi_name', $type);
+        $db->conn->delete(
+            $_TABLES['plugins'],
+            array('pi_name' => $type),
+            array(Database::STRING)
+        );
         Log::write('system',Log::INFO,'...success');
 
         Log::write('system',Log::INFO,"Finished uninstalling the $type plugin.");
@@ -408,7 +457,11 @@ function PLG_uninstall ($type)
         // we got nothing - so let's just remove it from the plugin table
         Log::write('system',Log::WARNING,"WARNING: Unable to locate plugin's source files. Plugin removed from Plugins Table. Plugin's database tables, group, feature and other data may still be installed.");
         PLG_itemDeleted('*', $type);
-        DB_delete($_TABLES['plugins'], 'pi_name', $type);
+        $db->conn->delete(
+            $_TABLES['plugins'],
+            array('pi_name' => $type),
+            array(Database::STRING)
+        );
         \glFusion\Admin\AdminAction::write('system','plugin_uninstall',sprintf($LANG_ADM_ACTIONS['plugin_uninstall'],$type));
         return true;
     }
@@ -427,7 +480,7 @@ function PLG_uninstall ($type)
 */
 function PLG_enableStateChange ($type, $enable)
 {
-   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $LANG_ADM_ACTIONS, $_DB_table_prefix;
+   global $_CONF, $_SYSTEM, $_TABLES, $_PLUGIN_INFO, $_USER, $LANG_ADM_ACTIONS;
 
     $args[1] = $enable;
 
@@ -459,12 +512,9 @@ function PLG_isModerator()
 {
     global $_PLUGINS;
 
-    // needed until story moves to a plugin
-    if (plugin_ismoderator_story()) {
-        return true;
-    }
+    $pluginTypes = array_merge(array('article'), $_PLUGINS);
 
-    foreach ($_PLUGINS as $pi_name) {
+    foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_ismoderator_' . $pi_name;
         if (function_exists($function)) {
             if ( $function() == true ) {
@@ -722,9 +772,9 @@ function PLG_commentApproved( $cid, $type, $sid )
 {
     global $_PLUGINS, $_TABLES;
 
-    if ( $type == 'article') {
-        plugin_commentapproved_story($cid,$type,$sid);
-    } elseif ( in_array($type,$_PLUGINS) ) {
+    $pluginTypes = array_merge(array('article'), $_PLUGINS);
+
+    if ( in_array($type,$pluginTypes) ) {
         $function = 'plugin_commentapproved_' . $type;
         if (function_exists ($function)) {
             $function ($cid,$type,$sid);
@@ -973,6 +1023,7 @@ function PLG_getSubmissionCount()
     global $_PLUGINS;
 
     $num = 0;
+
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_submissioncount_' . $pi_name;
         if (function_exists($function)) {
@@ -1235,7 +1286,7 @@ function PLG_showModerationList($token)
     // needed until story becomes a plugin
     // also ensures that story moderation is always first
     // here is where it might be handy to control plugin order ...
-    $retval = MODERATE_itemList('story', $token);
+    $retval = MODERATE_itemList('article', $token);
     $retval .= MODERATE_itemList('comment',$token);
 
     foreach ($_PLUGINS as $pi_name) {
@@ -1298,6 +1349,7 @@ function PLG_getModerationValues($type)
 * @return       string      HTML for submit form for plugin
 *
 */
+//@TODO - To be retired
 function PLG_showSubmitForm($type)
 {
     return PLG_callFunctionForOnePlugin('plugin_submit_' . $type);
@@ -1383,14 +1435,47 @@ function PLG_moveUser($originalUID, $destinationUID)
 {
     global $_PLUGINS, $_TABLES;
 
-    // comments...
-    $sql = "UPDATE {$_TABLES['comments']} SET uid=".(int)$destinationUID." WHERE uid=".(int)$originalUID;
-    DB_query($sql,1);
-    // ratings
-    $sql = "UPDATE {$_TABLES['rating_votes']} SET uid=".(int)$destinationUID." WHERE uid=".(int)$originalUID;
-    DB_query($sql,1);
+    $db = Database::getInstance();
 
-    foreach ($_PLUGINS as $pi_name) {
+    // comments...
+    try {
+        $db->conn->executeUpdate(
+            "UPDATE `{$_TABLES['comments']}` SET uid=?
+                WHERE uid=?",
+            array(
+                $destinationUID,
+                $originalUID
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER
+            )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error moving user comments: ' . $e->getMessage());
+    }
+
+    // ratings
+    try {
+        $db->conn->executeUpdate(
+            "UPDATE `{$_TABLES['rating_votes']}` SET uid=?
+                WHERE uid=?",
+            array(
+                $destinationUID,
+                $originalUID
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER
+            )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error moving user rating votes: ' . $e->getMessage());
+    }
+
+    $pluginTypes = array_merge(array('article'), $_PLUGINS);
+
+    foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_user_move_' . $pi_name;
         if (function_exists ($function)) {
             $function($originalUID, $destinationUID);
@@ -1841,7 +1926,8 @@ function PLG_collectTags($namespace='',$operation='')
     //                        'tag'   => 'module'
     $autolinkModules = array();
 
-    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion', 'menu' => 'glfusion');
+//    $coreTags = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion', 'menu' => 'glfusion');
+    $coreTags = array ('showblock' => 'glfusion', 'menu' => 'glfusion');
     foreach ($coreTags as $tag => $pi_name) {
         $permCheck = $tag.$postFix;
         if ( empty($postFix) || !isset($autoTagPerms[$permCheck]) || $autoTagPerms[$permCheck] == 1 ) {
@@ -1849,7 +1935,9 @@ function PLG_collectTags($namespace='',$operation='')
         }
     }
 
-    foreach ($_PLUGINS as $pi_name) {
+    $pluginTypes = array_merge(array('article'), $_PLUGINS);
+
+    foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
         if (function_exists($function)) {
             $autotag = $function ('tagname');
@@ -1900,14 +1988,16 @@ function PLG_collectAutotagUsage()
 
     $autolinkModules = array(
         array('namespace' => 'glfusion', 'usage'    => 'comment'),
-        array('namespace' => 'glfusion', 'usage'    => 'story'),
+//        array('namespace' => 'glfusion', 'usage'    => 'story'),
         array('namespace' => 'glfusion', 'usage'    => 'contact_user'),
         array('namespace' => 'glfusion', 'usage'    => 'mail_story'),
         array('namespace' => 'glfusion', 'usage'    => 'block'),
         array('namespace' => 'glfusion', 'usage'    => 'about_user'),
     );
 
-    foreach ($_PLUGINS as $pi_name) {
+    $pluginTypes = array_merge(array('article'), $_PLUGINS);
+
+    foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
         if (function_exists($function)) {
             $autotag = $function ('tagusage');
@@ -1948,14 +2038,18 @@ function PLG_autoTagPerms()
         return $retval;
     }
 
+    $db = Database::getInstance();
+
     $autoTagArray = array();
     $tags = array();
 
-    $sql = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON {$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id";
+    $stmt = $db->conn->query(
+            "SELECT * FROM `{$_TABLES['autotag_perm']}`
+              JOIN `{$_TABLES['autotag_usage']}`
+              ON {$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id"
+            );
 
-    $result = DB_query($sql);
-
-    while ($row = DB_fetchArray($result) ) {
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $uniqueID = $row['autotag_name'].'.'.$row['usage_namespace'].'.'.$row['usage_operation'];
         $autoTagArray[$uniqueID] = $row['autotag_allowed'];
     }
@@ -1994,6 +2088,8 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
         Log::write('system',Log::WARNING,"AutoTag infinite recursion detected on " . $namespace . " " . $operation);
         return $content;
     }
+
+    $db = Database::getInstance();
 
     $autolinkModules = PLG_collectTags ();
     $autoTagUsage    = PLG_autoTagPerms();
@@ -2078,79 +2174,23 @@ function PLG_replaceTags($content,$namespace='',$operation='', $plugin = '')
             $permCheck = $autotag['tag'].$postFix;
             if ( empty($postFix) || !isset($autoTagUsage[$permCheck]) || $autoTagUsage[$permCheck] == 1 ) {
                 $function = 'plugin_autotags_' . $autotag['module'];
-                if (($autotag['module'] == 'glfusion') AND
-                        (empty ($plugin) OR ($plugin == 'glfusion'))) {
+
+                if (($autotag['module'] == 'glfusion') AND (empty ($plugin) OR ($plugin == 'glfusion'))) {
                     $url = '';
                     $linktext = $autotag['parm2'];
-                    if ($autotag['tag'] == 'story') {
-                        $parm1_parts = explode('#', $autotag['parm1']);
-                        $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
-                        $url = COM_buildUrl ($_CONF['site_url']
-                             . '/article.php?story=' . $autotag['parm1']);
-                        if (empty ($linktext)) {
-                             $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '".DB_escapeString($parm1_parts[0])."'");
-                        }
-                    }
-                    if (!empty ($url)) {
-                        $filelink = COM_createLink($linktext, $url);
-                        $content = str_replace ($autotag['tagstr'], $filelink,
-                                                $content);
-                    }
-                    if ( $autotag['tag'] == 'story_introtext' ) {
-                        $url = '';
-                        $linktext = '';
-                        USES_lib_story();
-                        if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-                            $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
-                            $U = DB_fetchArray($result);
-                        } else {
-                            $U['maxstories'] = 0;
-                            $U['aids'] = '';
-                            $U['tids'] = '';
-                        }
 
-                        $sql = " (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)";
-
-                        if (empty ($topic)) {
-                            $sql .= COM_getLangSQL ('tid', 'AND', 's');
-                        }
-
-                        $sql .= COM_getPermSQL ('AND', 0, 2, 's');
-
-                        if (!empty($U['aids'])) {
-                            $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
-                        }
-
-                        if (!empty($U['tids'])) {
-                            $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
-                        }
-
-                        $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
-
-                        $userfields = 'u.uid, u.username, u.fullname';
-
-                        $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-                                 . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-                                 . $userfields . ", t.topic, t.imageurl "
-                                 . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-                                 . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                                 . $sql;
-
-                        $result = DB_query ($msql);
-                        $nrows = DB_numRows ($result);
-                        if ( $A = DB_fetchArray( $result ) ) {
-                            $story = new Story();
-                            $story->loadFromArray($A);
-                            $linktext = STORY_renderArticle ($story, 'y');
-                        }
-                        $content = str_replace($autotag['tagstr'],$linktext,$content);
-                    }
                     if ( $autotag['tag'] == 'showblock' ) {
                         $blockName = COM_applyBasicFilter($autotag['parm1']);
-                        $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".DB_escapeString($blockName)."'" . COM_getPermSQL( 'AND' ));
-                        if ( DB_numRows($result) > 0 ) {
+
+                        $B = $db->conn->fetchAssoc(
+                            "SELECT * FROM `{$_TABLES['blocks']}`
+                                WHERE name = ?" . $db->getPermSQL('AND'),
+                            array($blockName),
+                            array(Database::STRING)
+                        );
+
+                        if ($B !== false && $B !== null) {
                             $skip = 0;
-                            $B = DB_fetchArray($result);
                             $template = '';
                             $side     = '';
                             $px = explode (' ', trim ($autotag['parm2']));
@@ -2229,7 +2269,6 @@ function PLG_supportingFeeds()
 
     $plugins = array();
 
-    USES_lib_story();
     USES_lib_comment();
 
     $pluginTypes = array_merge(array('article', 'comment'), $_PLUGINS);
@@ -2317,7 +2356,7 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
             $content = $function($feed, $link, $update_data, $feedType, $feedVersion);
         }
     } else {
-        $pluginTypes = array_merge(array('comment'), $_PLUGINS);
+        $pluginTypes = array_merge(array('article','comment'), $_PLUGINS);
         USES_lib_comment();
         if (in_array ($plugin, $pluginTypes)) {
             $function = 'plugin_getfeedcontent_' . $plugin;
@@ -2698,18 +2737,13 @@ function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
 {
     global $_CONF;
 
-    if ($type == 'article') {
-        USES_lib_story();
-        return STORY_getItemInfo($id, $what, $uid, $options);
-    } else {
-        $args[1] = $id;
-        $args[2] = $what;
-        $args[3] = $uid;
-        $args[4] = $options;
+    $args[1] = $id;
+    $args[2] = $what;
+    $args[3] = $uid;
+    $args[4] = $options;
 
-        $function = 'plugin_getiteminfo_' . $type;
-        return PLG_callFunctionForOnePlugin($function, $args);
-    }
+    $function = 'plugin_getiteminfo_' . $type;
+    return PLG_callFunctionForOnePlugin($function, $args);
 }
 
 /**
@@ -3034,11 +3068,6 @@ function PLG_invokeService($type, $action, $args, &$output, &$svc_msg)
 
     $retval = PLG_RET_ERROR;
 
-    if ($type == 'story') {
-        // ensure we can see the service_XXX_story functions
-        require_once $_CONF['path_system'] . 'lib-story.php';
-    }
-
     $output  = '';
     $svc_msg = '';
 
@@ -3064,11 +3093,6 @@ function PLG_invokeService($type, $action, $args, &$output, &$svc_msg)
 function PLG_wsEnabled($type)
 {
     global $_CONF;
-
-    if ($type == 'story') {
-        // ensure we can see the service_XXX_story functions
-        require_once $_CONF['path_system'] . 'lib-story.php';
-    }
 
     $function = 'plugin_wsEnabled_' . $type;
     if (function_exists($function)) {
@@ -3195,9 +3219,24 @@ function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
 
     $retval = true;
 
+    $db = Database::getInstance();
+
     if ( $plugin == 'article' ) {
-        $sql = "UPDATE {$_TABLES['stories']} SET rating = '".DB_escapeString($new_rating). "', votes=".(int) $added . " WHERE sid='".DB_escapeString($id_sent)."'";
-        DB_query($sql);
+        $db->conn->update(
+            $_TABLES['stories'],
+            array(
+                'rating' => $new_rating,
+                'votes'  => $added
+            ),
+            array(
+                array('sid' => $id_sent)
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::STRING
+            )
+        );
     } else {
         $args[1] = $id_sent;
         $args[2] = $new_rating;
@@ -3216,41 +3255,11 @@ function PLG_canUserRate( $type, $item_id, $uid )
 
     $retval = false;
 
-    if ( $type == 'article' ) {
-        // check to see if we own it...
-        // check to see if we have permission to vote
-        // check to see if we have already voted (Handled by library)...
+    $args[1] = $item_id;
+    $args[2] = $uid;
+    $function = 'plugin_canuserrate_' . $type;
 
-        if ( $_CONF['rating_enabled'] != 0 ) {
-            if ( $_CONF['rating_enabled'] == 2 ) {
-                $retval = true;
-            } else if ( !COM_isAnonUser() ) {
-                $retval = true;
-            } else {
-                $retval = false;
-            }
-        }
-
-        if ( $retval == true ) {
-            $perm_sql = COM_getPermSQL( 'AND', $uid, 2);
-            $sql = "SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid='".$item_id."' " . $perm_sql;
-            $result = DB_query($sql);
-            if ( DB_numRows($result) > 0 ) {
-                list ($owner_id, $group_id,$perm_owner,$perm_group,$perm_members,$perm_anon) = DB_fetchArray($result);
-                if ( $owner_id != $uid ) {
-                    $retval = true;
-                }
-            } else {
-                $retval = false;
-            }
-        }
-    } else {
-        $args[1] = $item_id;
-        $args[2] = $uid;
-        $function = 'plugin_canuserrate_' . $type;
-
-        $retval = PLG_callFunctionForOnePlugin($function,$args);
-    }
+    $retval = PLG_callFunctionForOnePlugin($function,$args);
 
     return $retval;
 }
@@ -3272,249 +3281,6 @@ function PLG_templatePath($plugin, $path = '')
     return $layout_path;
 }
 
-/**
- * START STORY PLUGIN STUB SECTION
- *
- * These functions will ultimately move into a story plugin
- *
- */
-
-
-/**
- * Return true since this component supports webservices
- *
- * @return  bool	True, if webservices are supported
- */
-function plugin_wsEnabled_story()
-{
-    return true;
-}
-
-/**
-*
-* Checks that the current user has the rights to moderate a story
-* returns true if this is the case, false otherwise
-*
-* @return        boolean       Returns true if moderator
-*
-*/
-function plugin_ismoderator_story()
-{
-    return SEC_hasRights('story.moderate');
-}
-
-/**
-*
-* Checks that the current user has the rights to moderate a comment
-* returns true if this is the case, false otherwise
-*
-* @return        boolean       Returns true if moderator
-*
-*/
-function plugin_ismoderator_comment()
-{
-    return SEC_hasRights('comment.moderate');
-}
-
-/**
-* Returns SQL & Language texts to moderation.php
-*
-* @return   mixed   Plugin object or void if not allowed
-*
-*/
-function plugin_itemlist_story()
-{
-    global $_TABLES, $LANG29;
-
-    if (plugin_ismoderator_story()) {
-        $plugin = new Plugin();
-        $plugin->submissionlabel = $LANG29[35];
-        $plugin->submissionhelpfile = 'ccstorysubmission.html';
-        $plugin->getsubmissionssql = "SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid"
-                                    . " FROM {$_TABLES['storysubmission']}"
-                                    . COM_getTopicSQL ('WHERE')
-                                    . " ORDER BY date ASC";
-        $plugin->addSubmissionHeading($LANG29[10]);
-        $plugin->addSubmissionHeading($LANG29[14]);
-        $plugin->addSubmissionHeading($LANG29[15]);
-        $plugin->addSubmissionHeading($LANG29[46]);
-
-        return $plugin;
-    }
-}
-
-/**
-* returns list of moderation values
-*
-* The array returned contains (in order): the key field name, main plugin
-* table, moderation fields (comma seperated), and plugin submission table
-*
-* @return       array        Returns array of useful moderation values
-*
-*/
-function plugin_moderationvalues_story()
-{
-    global $_TABLES;
-
-    return array (
-        'sid',
-        $_TABLES['stories'],
-        'sid,uid,tid,title,introtext,date,postmode',
-        $_TABLES['storysubmission']
-    );
-}
-
-/**
-* Counts the number of stories that are submitted
-*
-* @return   int     number of stories in submission queue
-*
-*/
-function plugin_submissioncount_story()
-{
-    global $_TABLES;
-
-    return (plugin_ismoderator_story) ? DB_count ($_TABLES['storysubmission']) : 0;
-}
-
-/**
-* Handles a comment submission approval for a story
-*
-* @return   none
-*
-*/
-function plugin_commentapproved_story($cid,$type,$sid)
-{
-    global $_PLUGINS, $_TABLES;
-    $comments = DB_count($_TABLES['comments'], array('type', 'sid','queued'), array('article', $sid,0));
-    DB_change($_TABLES['stories'], 'comments', $comments, 'sid', $sid);
-    COM_olderStuff(); // update comment count in Older Stories block
-}
-
-function plugin_user_move_story($origUID, $destUID)
-{
-    global $_TABLES;
-
-    $sql = "UPDATE {$_TABLS['stories']} SET uid=".(int)$destUID." WHERE uid=".(int)$origUID;
-    DB_query($sql,1);
-    $sql = "UPDATE {$_TABLES['stories']} SET owner_id=".(int) $destUID." WHERE owner_id=".(int) $origUID;
-    DB_query($sql,1);
-    $sql = "UPDATE {$_TABLES['storysubmission']} SET uid=".(int) $destUID." WHERE uid=".(int)$origUID;
-    DB_query($sql,1);
-}
-
-function plugin_privacy_export_story($uid,$email='',$username='',$ip='')
-{
-    global $_CONF, $_TABLES;
-
-    $retval = '';
-
-    $exportFields = array('sid','date','title','tid');
-
-    $sql = "SELECT * FROM {$_TABLES['stories']} WHERE uid = ". (int) $uid . " OR owner_id = ".(int) $uid . " ORDER BY date ASC";
-
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
-
-    $retval .= "<stories>\n";
-
-    foreach($rows AS $row) {
-        $retval .= "<story>\n";
-        foreach($row AS $item => $value) {
-            if ( in_array($item,$exportFields) && $item != '0') {
-                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
-            }
-        }
-        $retval .= "</story>\n";
-    }
-    $retval .= "</stories>\n";
-
-    if ( function_exists('tidy_repair_string')) {
-        $retval = tidy_repair_string($retval, array('input-xml' => 1));
-    }
-
-    return $retval;
-
-}
-
-function plugin_privacy_export_rating($uid,$email='',$username='',$ip='')
-{
-    global $_CONF, $_TABLES, $_USER;
-
-    $retval = '';
-
-    $exportFields = array('type','item_id','rating','uid','ip_address','ratingdate');
-
-    $sql = "SELECT * FROM {$_TABLES['rating_votes']} WHERE uid = ". (int) $uid;
-    if ( $ip != '' ) {
-        $sql .= " OR ip_address = '" . DB_escapeString($ip)."'";
-    }
-    $sql .= " ORDER BY ratingdate ASC";
-
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
-
-    $retval .= "<ratings>\n";
-
-    foreach($rows AS $row) {
-        $retval .= "<rating>\n";
-        foreach($row AS $item => $value) {
-            if ( in_array($item,$exportFields) && $item != '0') {
-
-                if ( $item == 'ratingdate' ) {
-                    $dt = new Date($value,$_USER['tzid']);
-                    $value = $dt->format($dt->getUserFormat(),true);
-                }
-
-                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
-            }
-        }
-        $retval .= "</rating>\n";
-    }
-    $retval .= "</ratings>\n";
-
-    if ( function_exists('tidy_repair_string')) {
-        $retval = tidy_repair_string($retval, array('input-xml' => 1));
-    }
-
-    return $retval;
-
-}
-
-function plugin_privacy_export_social($uid,$email='',$username='',$ip='')
-{
-    global $_CONF, $_TABLES, $_USER;
-
-    $retval = '';
-
-    $exportFields = array('social_service','ss_username','rating','uid','ip_address','ratingdate');
-
-    $sql = "SELECT *, ss.display_name AS social_service FROM {$_TABLES['social_follow_user']} AS su LEFT JOIN {$_TABLES['social_follow_services']} AS ss ON su.ssid=ss.ssid WHERE uid = ". (int) $uid;
-
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
-
-    $retval .= "<socialservices>\n";
-
-    foreach($rows AS $row) {
-        $retval .= "<service>\n";
-        foreach($row AS $item => $value) {
-            if ( in_array($item,$exportFields) && $item != '0') {
-
-                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
-            }
-        }
-        $retval .= "</service>\n";
-    }
-    $retval .= "</socialservices>\n";
-
-    if ( function_exists('tidy_repair_string')) {
-        $retval = tidy_repair_string($retval, array('input-xml' => 1));
-    }
-
-    return $retval;
-}
-
 
 /**
 * Subscribe user to notification feed for an item
@@ -3534,6 +3300,8 @@ function PLG_subscribe($type,$category,$id,$uid = 0,$cat_desc='',$id_desc='')
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $db = Database::getInstance();
+
     $dt = new Date('now',$_USER['tzid']);
     if ( $uid == 0 ) {
         if ( !COM_isAnonUser() ) {
@@ -3543,21 +3311,46 @@ function PLG_subscribe($type,$category,$id,$uid = 0,$cat_desc='',$id_desc='')
         }
     }
     // check to ensure we don't have a subscription yet...
-    $wid = (int) DB_getItem($_TABLES['subscriptions'],'sub_id','category="'.DB_escapeString($category).'" AND uid='.$uid.' AND id="'.DB_escapeString($id).'"');
-    if ($wid > 0 ) {
+    $wid = $db->getItem(
+        $_TABLES['subscriptions'],
+        'sub_id',
+        array(
+            'category'  => $category,
+            'uid'       => $uid,
+            'id'        => $id
+        ),
+        array(
+            Database::STRING,
+            Database::INTEGER,
+            Database::STRING
+        )
+    );
+
+    if ($wid > 0) {
         return false;
     }
-    $sql="INSERT INTO {$_TABLES['subscriptions']} ".
-         "(type,uid,category,id,date_added,category_desc,id_desc) VALUES " .
-         "('".DB_escapeString($type)."',".
-         (int)$uid.",'".
-         DB_escapeString($category)."','".
-         DB_escapeString($id)."','".
-         $dt->toMySQL(true)."','".
-         DB_escapeString($cat_desc)."','".
-         DB_escapeString($id_desc)."')";
 
-    DB_query($sql);
+    $db->conn->insert(
+        $_TABLES['subscriptions'],
+        array(
+            'type'  => $type,
+            'uid'   => $uid,
+            'category' => $category,
+            'id'    => $id,
+            'date_added' => $dt->toMySQL(true),
+            'category_desc' => $cat_desc,
+            'id_desc' => $id_desc
+        ),
+        array(
+            Database::STRING,
+            Database::INTEGER,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING
+        )
+    );
 
     return true;
 }
@@ -3964,7 +3757,7 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
 
     $output = '';
 
-    $internalContent = array('social');
+    $internalContent = array('social','article');
 
     $contentTypes = array_merge($internalContent, $_PLUGINS);
 
@@ -3976,4 +3769,99 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
     }
     return $output;
 }
+
+/*
+ * Plugin APIs Stubs
+ */
+function plugin_privacy_export_rating($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('type','item_id','rating','uid','ip_address','ratingdate');
+
+    $sql = "SELECT * FROM {$_TABLES['rating_votes']} WHERE uid = ". (int) $uid;
+    if ( $ip != '' ) {
+        $sql .= " OR ip_address = '" . DB_escapeString($ip)."'";
+    }
+    $sql .= " ORDER BY ratingdate ASC";
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<ratings>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<rating>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                if ( $item == 'ratingdate' ) {
+                    $dt = new Date($value,$_USER['tzid']);
+                    $value = $dt->format($dt->getUserFormat(),true);
+                }
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</rating>\n";
+    }
+    $retval .= "</ratings>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, array('input-xml' => 1));
+    }
+
+    return $retval;
+
+}
+
+function plugin_privacy_export_social($uid,$email='',$username='',$ip='')
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $retval = '';
+
+    $exportFields = array('social_service','ss_username','rating','uid','ip_address','ratingdate');
+
+    $sql = "SELECT *, ss.display_name AS social_service FROM {$_TABLES['social_follow_user']} AS su LEFT JOIN {$_TABLES['social_follow_services']} AS ss ON su.ssid=ss.ssid WHERE uid = ". (int) $uid;
+
+    $result = DB_query($sql);
+    $rows = DB_fetchAll($result);
+
+    $retval .= "<socialservices>\n";
+
+    foreach($rows AS $row) {
+        $retval .= "<service>\n";
+        foreach($row AS $item => $value) {
+            if ( in_array($item,$exportFields) && $item != '0') {
+
+                $retval .= '<'.$item.'>'.addSlashes(htmlentities($value)).'</'.$item.">\n";
+            }
+        }
+        $retval .= "</service>\n";
+    }
+    $retval .= "</socialservices>\n";
+
+    if ( function_exists('tidy_repair_string')) {
+        $retval = tidy_repair_string($retval, array('input-xml' => 1));
+    }
+
+    return $retval;
+}
+
+/**
+*
+* Checks that the current user has the rights to moderate a comment
+* returns true if this is the case, false otherwise
+*
+* @return        boolean       Returns true if moderator
+*
+*/
+function plugin_ismoderator_comment()
+{
+    return SEC_hasRights('comment.moderate');
+}
+
 ?>

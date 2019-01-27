@@ -21,9 +21,8 @@
 require_once 'lib-common.php';
 
 use \glFusion\Database\Database;
-use \glFusion\Article\ArticleDisplay;
+use \glFusion\Article\Article;
 
-USES_lib_story();
 USES_lib_social();
 
 if ($_CONF['trackback_enabled']) {
@@ -73,7 +72,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
 }
 
-$story = new ArticleDisplay();
+$story = new Article();
 if ( $story->retrieveArticleFromDB($sid) != $story::STORY_LOADED_OK ) {
     COM_404();
 }

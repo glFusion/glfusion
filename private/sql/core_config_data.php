@@ -2224,17 +2224,17 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-    array(
-    	'name' => 'listdraftstories',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 6,
-    	'selection_array' => 0,
-    	'sort' => 30,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
+//    array(
+//    	'name' => 'listdraftstories',
+//    	'default_value' => 0,
+//    	'type' => 'select',
+//    	'subgroup' => 4,
+//    	'fieldset' => 6,
+//    	'selection_array' => 0,
+//    	'sort' => 30,
+//    	'set' => TRUE,
+//    	'group' => 'Core'
+//    ),
     array(
     	'name' => 'postmode',
     	'default_value' => 'html',

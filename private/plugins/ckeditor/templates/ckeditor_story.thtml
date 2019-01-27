@@ -35,15 +35,6 @@
 
 		return instance;
 	}
-{!if default_visual_editor}
-	window.onload = function() {
-		introtext = loadEditor('introtext',400);
-		activityCheckIntro();
-		bodytext  = loadEditor('bodytext',500 );
-		activityCheckBody();
-
-	};
-{!endif}
 	function won (id) {
 		if (id == 'introtext') {
 			introtext = loadEditor(id,400);

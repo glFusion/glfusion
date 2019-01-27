@@ -186,6 +186,11 @@ class Formatter
         $this->formatType = strtolower($mode);
     }
 
+    public function getType()
+    {
+        return $this->formatType;
+    }
+
     /**
      * Enables Geshi formatting of code blocks - keep for compatibility
      * @param $mode - true or false
@@ -246,6 +251,11 @@ class Formatter
         $this->parseAutoTags = (bool) $allow;
     }
 
+    public function getParseAutoTags()
+    {
+        return $this->parseAutoTags;
+    }
+
     /**
      * Enables Censoring of content
      * @param $allow - true or false
@@ -277,6 +287,16 @@ class Formatter
     }
 
     /**
+     * Returns current namespace
+     * @return string current namespace
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+
+    /**
      * Sets action (used by auto tag replacement)
      * @param $action - current action (i.e.; comment, post, etc.)
      * @return none
@@ -285,6 +305,12 @@ class Formatter
     {
         $this->action = $action;
     }
+
+    public function getAction()
+    {
+        return $this->action;
+    }
+
 
     /**
      * Sets query string
@@ -305,6 +331,14 @@ class Formatter
      {
         $this->convertPre = (bool) $convert;
      }
+
+     public function setOptions(ARRAY $options)
+     {
+        foreach($options AS $option => $val) {
+            $this->{$option} = $val;
+        }
+     }
+
 
 	/**
 	 * Add a code

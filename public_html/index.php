@@ -26,7 +26,8 @@ if (!@file_exists('siteconfig.php') ) {
 use glFusion\Database\Database;
 
 require_once 'lib-common.php';
-USES_lib_story();
+//USES_lib_story();
+USES_lib_comment();
 
 $newstories = false;
 $displayall = false;
@@ -213,7 +214,7 @@ $queryBuilder
     ->from($_TABLES['stories'],'s')
     ->leftJoin('s',$_TABLES['users'],'u','s.uid=u.uid')
     ->leftJoin('s',$_TABLES['topics'],'t','s.tid=t.tid')
-    ->where('date <= NOW()')
+    ->where('date <= \'' . $_CONF['_now']->toMySQL(false).'\'')
     ->andWhere('draft_flag = 0')
     ->orderBy('featured', 'DESC');
 
@@ -242,7 +243,7 @@ if (!empty($topic)) {
             $queryBuilder->expr()->eq('frontpage',1),
             $queryBuilder->expr()->andX(
                 $queryBuilder->expr()->eq('frontpage',2),
-                $queryBuilder->expr()->gte('frontpage_date','NOW()')
+                $queryBuilder->expr()->gte('frontpage_date',$_CONF['_now']->toUnix())
             )
         )
     );
@@ -366,7 +367,7 @@ $nrows = 0;
 
 foreach($storyRecs AS $storyData) {
     $nrows++;
-    $story = new \glFusion\Article\ArticleDisplay();
+    $story = new \glFusion\Article\Article();
 
     if ( $story->retrieveArticleFromVars($storyData) == $story::STORY_LOADED_OK) {
         if ($articleCounter == 0) {

@@ -103,6 +103,8 @@ function commandcontrol()
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE, $_DB_dbms;
 
+    USES_lib_comment();
+
     $retval = '';
 
     $admin_templates = new Template($_CONF['path_layout'] . 'admin/moderation');

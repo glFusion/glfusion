@@ -1,0 +1,672 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/resetrating.js"></script>
+<script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js"></script>
+<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
+<script src="{site_url}/javascript/addons/datetime/datetimepicker.js"></script>
+
+<div class="tm-admin">
+	{wysiwyg}
+
+{!if error_message}
+	<div class="uk-alert uk-alert-danger" data-uk-alert>
+		<a class="uk-alert-close uk-close"></a>
+		{error_message}
+	</div>
+{!endif}
+
+	<form class="uk-form uk-form-horizontal" id="frmstory" name="frmstory" action="{form_action}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{id}">
+		<input type="hidden" name="postmode" value="{postmode}">
+		<input type="hidden" name="modified" id="modified" value="{modified}">
+		<input type="hidden" name="moderate" id="moderate" value="{moderate}">
+		<input type="hidden" name="original_sid" id="original_sid" value="{original_sid}">
+	 	<input type="hidden" name="advanced_editor_mode" id="advanced_editor_mode" value="{advanced_editor_mode}">
+		<input type="hidden" id="{security_token_name}" name="{security_token_name}" value="{security_token}">
+
+		<ul class="uk-tab" data-uk-tab="{connect:'#story-form'}">
+			<li><a href="#">{$LANG24[80]}</a></li>
+			<li><a href="#">{$LANG24[81]}</a></li>
+			<li><a href="#">{$LANG24[82]}</a></li>
+			<li><a href="#">{$LANG24[83]}</a></li>
+			<li><a href="#">{$LANG24[84]}</a></li>
+			<li  {!if show_preview} class="uk-active" {!endif}><a href="#">{$LANG24[79]}</a></li>
+		</ul>
+
+		{# top part - will always show #}
+
+		<div id="story_id" class="uk-panel uk-panel-box uk-margin">
+			<div class="uk-grid ">
+				<div class="uk-width-medium-2-3">
+					<strong>{lang_title}</strong>&nbsp;
+					<input class="uk-width-1-1 required" id="title" type="text" maxlength="128" name="title" value="{title}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="title-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
+				</div>
+				<div class="uk-width-medium-1-3">
+					<strong>{lang_sid}</strong>&nbsp;
+					<input id="sid" class="uk-width-1-1 required alphanumeric" maxlength="128" type="text" name="sid" value="{sid}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="sid-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
+				</div>
+				<div class="uk-width-2-3">
+					<strong>{$LANG24[98]}</strong>&nbsp;
+					<input class="uk-width-1-1"  maxlength="128" id="subtitle" type="text" name="subtitle" value="{subtitle}">
+					<div class="uk-form-help-block uk-margin-small-left">
+						<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="subtitle-count" class="uk-text-muted uk-text-small"></span></span>
+					</div>
+				</div>
+
+				<div class="uk-width-medium-1-3">
+					<div style="padding-bottom:5px;"><strong>{$LANG24[34]}</strong></div>
+					<input class="onoff" type="checkbox" name="draft_flag" {draft_checked} />
+				</div>
+
+			</div>
+		</div>
+		{# end of header #}
+
+		<ul id="story-form" class="uk-switcher uk-margin">
+
+			{# start of editor panel #}
+			<li>
+				<div id="text_editor">
+
+					<div id="textbox">
+						<span class="uk-text-large">{lang_introtext}</span>
+{!if wysiwyg}
+						<div class="uk-margin-small">
+							<button id="visual1" type="button" class="uk-button {!if default_visual_editor} uk-button-success {!endif}" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('1');">{visual_editor}</button>
+							<button id="std1" type="button" class="uk-button {!if !default_visual_editor} uk-button-success {!endif}" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('0');">{html_editor}</button>
+						</div>
+{!endif}
+						<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{introtext}</textarea>
+					</div>
+
+					<span class="uk-text-large">{lang_bodytext}</span>
+{!if wysiwyg}
+					<div class="uk-margin-small">
+						<button id="visual2" type="button" class="uk-button {!if default_visual_editor} uk-button-success {!endif}" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('1');">{visual_editor}</button>
+						<button id="std2" type="button" class="uk-button {!if !default_visual_editor} uk-button-success {!endif}" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('0');">{html_editor}</button>
+					</div>
+{!endif}
+					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="30" style="width:100%;">{bodytext}</textarea>
+				</div>
+				<div class="uk-form-row uk-margin-small">
+					<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
+						{$LANG01[show_allowed_content]}
+					</button>
+					<div id="allowed_html" class="uk-hidden">{lang_allowed_html}</div>
+				</div>
+			</li>
+
+			{# publish options panel #}
+			<li>
+				<div id="se_publish" class="uk-panel uk-panel-box uk-margin">
+					<fieldset>
+						<legend>{lang_publishoptions}</legend>
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="topic">{lang_topic}</label>
+							<div class="uk-form-controls">
+								<select name="tid">
+									{topic_select}
+								</select>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="topic">{lang_alt_topic}</label>
+							<div class="uk-form-controls">
+								<select name="alternate_tid">
+									{alternate_tid_select}
+								</select>
+							</div>
+						</div>
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="show_topic_icon">{lang_show_topic_icon}</label>
+							<div class="uk-form-controls">
+								<input type="checkbox" name="show_topic_icon" {show_topic_icon_checked}>
+							</div>
+						</div>
+
+{!if featured_select}
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="featured">{$LANG24[32]}</label>
+							<div class="uk-form-controls uk-width-medium">
+								<select id="featured" name="featured">
+									{featured_select}
+								</select>
+							</div>
+						</div>
+{!else}
+						{featured_options}
+{!endif}
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="frontpage">{$LANG24[93]}</label>
+							<div class="uk-form-controls">
+								<div class="uk-margin-small-bottom">
+									<input type="radio" name="frontpage" value="1" {onfrontpage_checked}>&nbsp;{$LANG_frontpagecodes[1]}
+								</div>
+								<div class="uk-margin-small-bottom">
+									<input type="radio" name="frontpage" value="0" {topiconly_checked}>&nbsp;{$LANG_frontpagecodes[0]}
+								</div>
+								<div>
+									<input type="radio" name="frontpage" value="2" {frontpageuntil_checked}>&nbsp;{$LANG_frontpagecodes[2]}:&nbsp;
+									<input type="text" class="uk-form-width-medium popupcal" id="frontpage_date" name="frontpage_date" value="{frontpage_date}"> (yyyy-mm-dd hh:mm)
+								</div>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="commentcode">{$LANG01[83]}</label>
+							<div class="uk-form-controls">
+								<select id="commentcode" name="commentcode">
+									{comment_options}
+								</select>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="trackbackcode">{$LANG01[116]}</label>
+							<div class="uk-form-controls">
+								<select id="trackbackcode" name="trackbackcode">
+									{trackback_options}
+								</select>
+							</div>
+						</div>
+{!if rating}
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="reset_rating">{$LANG13[rating]}</label>
+							<div class="uk-form-controls">
+								<span id="rating">
+									{rating} / 5 ({votes} {$LANG13[votes]})&nbsp;
+									<a class="uk-button uk-button-success" onclick="ajax_resetrating('article','{story_id}');return false;">
+										{$LANG13[reset_rating]}
+									</a>
+								</span>
+							</div>
+						</div>
+{!endif}
+					</fieldset>
+
+					<fieldset class="uk-margin-top">
+						<legend>{lang_publishdate}</legend>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="publish_month">{lang_date}</label>
+							<div class="uk-form-controls">
+								<input type="text" class="uk-form-width-medium popupcal" id="date" name="date" value="{date}"> (yyyy-mm-dd hh:mm)
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="cmt_close_flag">{lang_cmt_disable}</label>
+							<div class="uk-form-controls">
+								<input type="checkbox" id="cmt_close_flag" name="cmt_close_flag" value="1" {comment_expire_checked} onclick="enablecmtclose(this);" >
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="cmt_close_flag"></label>
+							<div class="uk-form-controls">
+								<input type="text" class="uk-form-width-medium popupcal" id="comment_expire" name="comment_expire" value="{comment_expire}"> (yyyy-mm-dd hh:mm)
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset class="uk-margin-top">
+						<legend>{lang_attribution}</legend>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="attribution_url">{lang_attribution_url}</label>
+							<div class="uk-form-controls">
+								<input class="uk-form-width-large" type="text" maxlength="255" id="attribution_url" name="attribution_url" value="{attribution_url}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_url-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="attribution_name">{lang_attribution_name}</label>
+							<div class="uk-form-controls">
+								<input class="uk-form-width-large" type="text" maxlength="255" id="attribution_name" name="attribution_name" value="{attribution_name}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_name-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="uk-form-row">
+							<label class="uk-form-label" for="attribution_author">{lang_attribution_author}</label>
+							<div class="uk-form-controls">
+								<input class="uk-form-width-large" type="text" id="attribution_author" maxlength="255" name="attribution_author" value="{attribution_author}">
+								<div class="uk-form-help-block uk-margin-small-left">
+									<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="attribution_author-count" class="uk-text-muted uk-text-small"></span></span>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+
+				</div>
+			</li>
+			{# image panel #}
+			<li>
+				<div id="se_images" class="uk-panel uk-panel-box uk-margin">
+
+					<div class="uk-grid">
+						<div class="uk-width-medium-1-2">
+							<fieldset>
+								<legend>{lang_images}</legend>
+
+<ul class="uk-list">
+
+
+	<!-- BEGIN article_images -->
+<li>
+	<div class="uk-grid">
+		<div class="uk-width-1-3 uk-text-align-center">
+								<a href="{ai_image_url}" data-uk-lightbox title="">
+									<img src="{ai_image_url}" class="uk-thumbnail uk-thumbnail-mini">
+								</a>
+		</div>
+		<div class="uk-width-2-3 uk-text-align-left">
+								{counter})  {ai_filename}<br><br>
+								<input type="checkbox" name="delete[{ai_img_num}]">  {lang_delete}
+		</div>
+	</div>
+	<br>
+</li>
+	<!-- END article_images -->
+
+	<!-- BEGIN article_images_input -->
+<li>								{counter}) <input type="file" dir="ltr" name="file[]"><br>  </li>
+	<!-- END article_images_input -->
+
+</ul>
+								{$LANG24[51]}
+
+{!if allow_user_scaling}
+								{$LANG24[27]}
+{!endif}
+
+								{$LANG24[28]}
+
+							</fieldset>
+						</div>
+
+						<div class="uk-width-medium-1-2">
+							{# begin story image support #}
+							<fieldset>
+								<legend>{$LANG24[95]}</legend>
+							</fieldset>
+							<a href="javascript:openStoryImage()">
+{!if story_image}
+								<img class="uk-thumbnail" src="{story_image}" id="story_image_img">
+{!else}
+								<img class="uk-thumbnail" src="{site_url}/images/placeholder.png" id="story_image_img">
+{!endif}
+							</a>
+							<div class="uk-clearfix"></div>
+							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryImage();return false;" value="{$LANG24[96]}">{$LANG24[96]}</button>
+							<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryImage();return false;" value="{$LANG24[97]}">{$LANG24[97]}</button>
+							<input type="hidden" value="{story_image_url}" id="story_image" name="story_image">
+							<div id="storyImage" style="display: none;">
+								<iframe src="{site_url}/ckeditor/plugins/fileman/index.html?integration=custom&type=files&txtFieldId=story_image" style="width:100%;height:100%" frameborder="0">
+								</iframe>
+							</div>
+							{# end of story image #}
+
+							{# story video support #}
+							<fieldset>
+								<legend>{$LANG24[125]}</legend>
+							</fieldset>
+{!if story_video}
+							<div id="story_video_img">
+								<video class="uk-responsive-width" controls="controls" preload="auto">
+									<source type="video/mp4" src="{story_video}" />
+										<!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+										<object width="320" height="240" type="application/x-shockwave-flash" data="{player_url}flashmediaelement.swf">
+											<param name="movie" value="{player_url}flashmediaelement.swf" />
+											<param name="flashvars" value="controls=true&file={movie}" />
+											<!-- Image as a last resort -->
+											<img src="{story_video}" width="320" height="160" title="No video playback capabilities" />
+										</object>
+									</video>
+								</div>
+{!else}
+								<div id="story_video_img">
+									<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">
+								</div>
+{!endif}
+								<div class="uk-clearfix"></div>
+								<button class="uk-button uk-button-primary uk-margin" onclick="openStoryVideo();return false;" value="{$LANG24[96]}">Set Video</button>
+								<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryVideo();return false;" value="{$LANG24[97]}">Remove Video</button>
+
+								<input class="uk-margin-large-left" type="checkbox" name="sv_autoplay" id="sv_autoplay" value="1" {sv_autoplay_checked} ><span class=".uk-form-help-inline"> {$LANG24[126]}</span>
+
+								<input type="hidden" value="{story_video_url}" id="story_video" name="story_video">
+								<div id="storyVideo" style="display: none;">
+									<iframe src="{site_url}/ckeditor/plugins/fileman/video.html?integration=custom&type=files&txtFieldId=story_video" style="width:100%;height:100%" frameborder="0"></iframe>
+								</div>
+								{# end story video support #}
+							</div>
+						</div>
+					</div>
+				</li>
+
+				{# archive panel #}
+				<li>
+					<div id="se_archive" class="uk-panel uk-panel-box uk-margin">
+						<fieldset>
+							<legend>{lang_archivetitle}</legend>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="archiveflag">{lang_enabled}</label>
+								<div class="uk-form-controls">
+									<input type="checkbox" id="archiveflag" name="archiveflag" value="1" {expire_checked} onclick="enablearchive(this);" >
+								</div>
+							</div>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="statuscode">{lang_optionarchive}</label>
+								<div class="uk-form-controls">
+									<input type="radio" name="statuscode" id="storycode10" value="10" {statuscode_auto_archive_checked} >
+								</div>
+							</div>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="statuscode11">{lang_optiondelete}</label>
+								<div class="uk-form-controls">
+									<input type="radio" name="statuscode" id="storycode11" value="11" {statuscode_auto_delete_checked} >
+								</div>
+							</div>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="expire_month">{lang_date}</label>
+								<div class="uk-form-controls">
+									<input type="text" class="uk-form-width-medium popupcal" id="expire" name="expire" value="{expire}"> (yyyy-mm-dd hh:mm)
+
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</li>
+
+				{# permission panel #}
+				<li>
+					<div id="se_perms" class="uk-panel uk-panel-box uk-margin">
+						<fieldset>
+							<legend>{lang_permissions}</legend>
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="uid">{lang_author}</label>
+								<div class="uk-form-controls">
+									<select id="uid" name="uid">
+										{story_author_select}
+									</select>
+								</div>
+							</div>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="owner_id">{lang_owner}</label>
+								<div class="uk-form-controls">
+									{owner_dropdown}
+								</div>
+							</div>
+
+							<div class="uk-form-row">
+								<label class="uk-form-label" for="group_id">{lang_group}</label>
+								<div class="uk-form-controls">
+									{group_dropdown}
+								</div>
+							</div>
+							<p class="uk-text-bold">{lang_permissions}:</p>
+							{permissions_editor}
+							<p>{permissions_msg}</p>
+						</fieldset>
+					</div>
+				</li>
+
+				<li>
+					<div id="preview">
+						<div class="uk-alert uk-alert-warning" data-uk-alert>
+							<a href="#" class="uk-alert-close uk-close"></a>
+							Select the <span class="uk-text-bold">Preview</span> button below to refresh the preview display.
+						</div>
+						<div class="uk-panel uk-panel-box uk-margin">
+							{preview_content}
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			{# begin save side bar hidden on small devices #}
+			<div class="uk-margin-right-small uk-hidden-small tm-admin-save" data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:900}">
+				<ul>
+					<li>
+						<button onclick="actionClick('save');" class="uk-button uk-button-success tm-admin-save-button-width" type="submit" value="{lang_save}" name="save" data-uk-tooltip="{pos:'left'}" title="{lang_save}"><i class="uk-icon-save"></i></button>
+					</li>
+					<li>
+						<button onclick="actionClick('previewstory');" class="uk-button uk-button-primary cancel tm-admin-save-button-width" type="submit" value="{lang_preview}" name="previewstory" data-uk-tooltip="{pos:'left'}" title="{lang_preview}"><i class="uk-icon-eye"></i></button>
+					</li>
+					<li>
+						<button onclick="actionClick('cancel');return false;" class="cancel button uk-button tm-admin-save-button-width" type="submit" value="{lang_cancel}" name="cancel" data-uk-tooltip="{pos:'left'}" title="{lang_cancel}"><i class="uk-icon-undo"></i></button>
+					</li>
+				</ul>
+			</div>
+			{# end save side bar #}
+
+			{# submission options #}
+
+			<div id="se_bottom" class="uk-margin-large">
+				<div class="uk-grid">
+					<div class="uk-width-small-3-4">
+						<button onclick="actionClick('save');" class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save">{lang_save}</button>
+						<button onclick="actionClick('previewstory');" class="uk-button uk-button-primary button cancel" type="submit" value="{lang_preview}" name="previewstory">{lang_preview}</button>
+						<button onclick="actionClick('cancel');return false;" class="cancel uk-button" type="submit" value="{lang_cancel}" name="cancel">{lang_cancel}</button>
+					</div>
+					<div class="uk-width-small-1-4 uk-text-right">
+{!if delete_option}
+						<button class="uk-button uk-button-danger" type="submit" onclick="return confirm('{lang_delete_confirm}');" name="deletestory" value="Delete">{lang_delete}</button>
+{!endif}
+					</div>
+				</div>
+				{submission_option}
+			</div>
+		</form>
+	</div>
+
+<script>
+	var editor_type = 'storyeditor';
+	var lang_timer  = "{lang_timeout}";
+	var modifiedForm = 0;
+{!if !show_preview}
+	modifiedForm = 1;
+{!endif}
+
+    // enable / disable the archive attributes
+	function enablearchive(obj) {
+		var f = obj.form;               // all elements have their parent form in "form"
+		var disable = obj.checked;      // Disable when checked
+		if (f.elements["archiveflag"].checked==true && f.elements["storycode11"].checked==false) {
+			f.elements["storycode10"].checked=true;
+		}
+		f.elements["storycode10"].disabled=!disable;
+		f.elements["storycode11"].disabled=!disable;
+		f.elements["expire"].disabled=!disable;
+	}
+
+    // enable / disable comment code
+	function enablecmtclose(obj) {
+		var f = obj.form;           // all elements have their parent form in "form"
+		var disable = obj.checked;  // Disable when checked
+		f.elements["comment_expire"].disabled=!disable;
+	}
+
+    // submit handler
+	function actionClick( $action ) {
+		if ( $action == 'cancel' ) {
+			UIkit.modal.confirm("{$LANG24[124]}", function(){
+				$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
+				$('#frmstory').trigger('submit', [ { $action: true } ]);
+			}, function(){modifiedForm = $('#modified').val();});
+
+		} else {
+			modifiedForm = 0;
+			$('#frmstory').append("<input type='hidden' name='" + $action + "' value='clicked'>");
+			$('#frmstory').trigger('submit', [ { $action: true } ]);
+		}
+	}
+
+  // story image and story video handlers
+
+	function openStoryImage(){
+		$('#storyImage').dialog({modal:true, width:875,height:600});
+	}
+	function closeStoryImage(){
+		$('#storyImage').dialog('close');
+	}
+	function removeStoryImage() {
+		$(document).find('#story_image_img').attr('src', '{site_url}/images/placeholder.png');
+		$(document).find('#story_image').attr('value', '');
+	}
+	function openStoryVideo(){
+		$('#storyVideo').dialog({modal:true, width:875,height:600});
+	}
+	function closeStoryVideo(){
+		$('#storyVideo').dialog('close');
+		$('video,audio').mediaelementplayer({
+			defaultVideoWidth: 480,
+			defaultVideoHeight: 270,
+			videoWidth: -1,
+			videoHeight: -1,
+			audioWidth: 400,
+			audioHeight: 30,
+			startVolume: 0.8,
+			loop: false,
+			enableAutosize: true,
+			features: ['playpause','progress','current','duration','tracks','volume','fullscreen'],
+			alwaysShowControls: false,
+			iPadUseNativeControls: false,
+			iPhoneUseNativeControls: false,
+			AndroidUseNativeControls: false,
+			alwaysShowHours: false,
+			showTimecodeFrameCount: false,
+			framesPerSecond: 25,
+			enableKeyboard: true,
+			pauseOtherPlayers: true,
+			pluginPath: glfusionSiteUrl + '/javascript/addons/mediaplayer/',
+			keyActions: []
+		});
+	}
+	function removeStoryVideo() {
+		$(document).find('#story_video_img').html('<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">');
+		$(document).find('#story_video').attr('value', '');
+	}
+
+    // field character counters
+
+	$(function(){
+		$("#title").characterCounter({
+			limit: '128',
+			counterSelector: '#title-count'
+		});
+		$("#sid").characterCounter({
+			limit: '128',
+			counterSelector: '#sid-count'
+		});
+		$("#subtitle").characterCounter({
+			limit: '128',
+			counterSelector: '#subtitle-count'
+		});
+		$("#attribution_url").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_url-count'
+		});
+		$("#attribution_name").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_name-count'
+		});
+		$("#attribution_author").characterCounter({
+			limit: '255',
+			counterSelector: '#attribution_author-count'
+		});
+	});
+
+	// validate form
+	$("#frmstory").validate();
+
+{!if default_visual_editor}
+console.log("loading advanced editor");
+	window.onload = function() {
+		introtext = loadEditor('introtext',400);
+		activityCheckIntro();
+		bodytext  = loadEditor('bodytext',500 );
+		activityCheckBody();
+
+	};
+{!endif}
+
+$(document).ready(function() {
+    // if any input field has changed - set the #modified field to 1
+	modifiedForm = $('#modified').val();
+	$(':input').change(function(){
+		modifiedForm = 1;
+		$('#modified').val(1);
+	});
+
+	// call confirmExit() before unloading window
+	window.onbeforeunload = confirmExit;
+
+	// confirmExit function - validate we are OK to leave
+	function confirmExit(){
+		if (modifiedForm == 1) {
+			return 'unsaved';
+		}
+	}
+
+	// anytime a button is clicked - set modifiedForm to 0 - what does this do???
+	$('.button').click(function(){
+		modifiedForm = 0;
+	});
+
+    // front page radio bugtton
+	var radios = document.querySelectorAll('input[type=radio][name="frontpage"]');
+
+    // change Handler for radio buttons
+	function changeHandler(event) {
+		if (this.value == 2) {
+			$('#frontpage_date').prop('disabled',false);
+		} else {
+			$('#frontpage_date').prop('disabled',true);
+		}
+	}
+
+	// anytime a radio button is clicked - call changeHandler??
+	Array.prototype.forEach.call(radios, function(radio) {
+		radio.addEventListener('change', changeHandler);
+	});
+
+    // initialize the archive / comment close / front page fields
+	if ($("#archiveflag").prop('checked') != true){
+		$('#storycode10').prop('disabled',true);
+		$('#storycode11').prop('disabled',true);
+		$('#expire').prop('disabled',true);
+	}
+	if ($("#cmt_close_flag").prop('checked') != true){
+		$('#comment_expire').prop('disabled',true);
+	}
+	var fp = $("input[name='frontpage']:checked").val();
+	if (fp != 2) {
+		$('#frontpage_date').prop('disabled',true);
+	}
+
+
+});
+
+</script>
+<script src="{site_url}/javascript/activitytimer.js"></script>
+{# end {templatelocation} #}

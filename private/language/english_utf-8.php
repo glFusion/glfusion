@@ -2344,6 +2344,11 @@ $LANG_ADM_ACTIONS = array(
     'comment_edit'          => 'Edited comment id: %s :: %s',
     'comment_delete'        => 'Deleted comment for %s::%s',
     'delete_user'           => 'User ID %d has been deleted.',
+    'article_save'          => 'Edited / Saved article: %s - %s',
+    'article_delete_sys'    => 'System automatically deleted article: %s',
+    'article_delete'        => 'Deleted article: %s',
+    'article_global'        => 'Article Global Change: %s',
+    'article_approved'      => 'Article %s has been approved',
 );
 
 

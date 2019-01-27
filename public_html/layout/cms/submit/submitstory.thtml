@@ -2,72 +2,92 @@
 {!if show_htmleditor}
 {wysiwyg}
 {!endif}
+
 <form class="uk-form id="frmstory" name="frmstory" action="{site_url}/submit.php" method="post">
 	<input type="hidden" name="postmode" value="{postmode}">
+	<input type="hidden" name="advanced_editor_mode" id="advanced_editor_mode" value="{advanced_editor_mode}">
+
 	<input type="hidden" name="type" value="story">
 	<input type="hidden" name="uid" value="{story_uid}">
 	<input type="hidden" name="sid" value="{story_sid}">
 	<input type="hidden" name="date" value="{story_date}">
-
-	<div class="uk-form-row">
-		<label class="uk-form-label">{lang_username}</label>
-		<div class="uk-form-controls">
-			{story_username} [ <a href="{status_url}" rel="nofollow">{lang_loginout}</a>{separator}{create_account} ]
-		</div>
-	</div>
+	<input type="hidden" id="sectoken" name="{security_token_name}" value="{security_token}">
 	{spamx}
-	<div id="story_id" class="uk-panel uk-panel-box uk-margin">
-		<div class="uk-grid ">
-			<div class="uk-width-medium-2-3">
-				<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="title" type="text" name="title" value="{story_title}">
-			</div>
-			<div class="uk-width-medium-1-3">
-				<strong>{lang_topic}</strong><br>
-				<select name="tid">
-					{story_topic_options}
-				</select>
+
+	<ul class="uk-tab" data-uk-tab="{connect:'#story-form'}">
+		<li><a href="#">{$LANG24[80]}</a></li>
+		<li  {!if show_preview} class="uk-active" {!endif}><a href="#">{$LANG24[79]}</a></li>
+	</ul>
+
+	<div class="uk-form-row uk-margin-top">
+		<div id="story_id" class="uk-panel uk-panel-box uk-margin">
+			<div class="uk-grid ">
+				<div class="uk-width-medium-2-3">
+					<strong>{lang_title}</strong>&nbsp;<input class="uk-width-1-1" id="title" type="text" name="title" value="{story_title}">
+				</div>
+				<div class="uk-width-medium-1-3">
+					<strong>{lang_topic}</strong><br>
+					<select name="tid">
+						{story_topic_options}
+					</select>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id="text_editor">
-
-		<div id="textbox">
-			<div class="uk-text-medium uk-text-bold uk-margin">{lang_introtext}</div>
+		<ul id="story-form" class="uk-switcher uk-margin">
+			<li>
+				<div id="text_editor uk-margin-top">
+					<div id="textbox">
+						<div class="uk-text-medium uk-text-bold uk-margin">{lang_introtext}</div>
 {!if wysiwyg}
-			<div class="uk-margin-small">
-				<button id="visual1" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');">{visual_editor}</button>
-				<button id="std1" type="button" class="uk-button" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success')">{html_editor}</button>
-			</div>
+						<div class="uk-margin-small">
+							<button id="visual1" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('introtext');$('#std1').attr('class','uk-button');$('#visual1').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('1');">{visual_editor}</button>
+							<button id="std1" type="button" class="uk-button" value="{html_editor}"  onclick="woff('introtext');$('#visual1').attr('class','uk-button');$('#std1').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('0');">{html_editor}</button>
+						</div>
 {!endif}
-			<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{story_introtext}</textarea>
-		</div>
+						<textarea class="uk-form-width-large" id="introtext" name="introtext" rows="24" style="width:100%;">{story_introtext}</textarea>
+					</div>
 
-		<div class="uk-text-medium uk-text-bold uk-margin">{lang_bodytext}</div>
+					<div class="uk-text-medium uk-text-bold uk-margin">{lang_bodytext}</div>
 {!if wysiwyg}
-		<div class="uk-margin-small">
-			<button id="visual2" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');">{visual_editor}</button>
-			<button id="std2" type="button" class="uk-button" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success')">{html_editor}</button>
-		</div>
+					<div class="uk-margin-small">
+						<button id="visual2" type="button" class="uk-button uk-button-success" value="{visual_editor}" onclick="won('bodytext');$('#std2').attr('class','uk-button');$('#visual2').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('1');">{visual_editor}</button>
+						<button id="std2" type="button" class="uk-button" value="{html_editor}"  onclick="woff('bodytext');$('#visual2').attr('class','uk-button');$('#std2').attr('class','uk-button uk-button-success');$('#advanced_editor_mode').val('0');">{html_editor}</button>
+					</div>
 {!endif}
-		<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="24" style="width:100%;">{story_bodytext}</textarea>
-	</div>
+					<textarea id="bodytext" class="uk-form-width-large" name="bodytext" rows="24" style="width:100%;">{story_bodytext}</textarea>
+				</div>
 
+				<div class="uk-form-row uk-margin">
+					<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
+						Show Allowed Content
+					</button>
+					<div id="allowed_html" class="uk-hidden">{allowed_html}</div>
+				</div>
+			</li>
 
-	<div class="uk-form-row uk-margin">
-			<button type="button" class="uk-button uk-button-mini uk-button-primary" data-uk-toggle="{target:'#allowed_html'}">
-				Show Allowed Content
-			</button>
-			<div id="allowed_html" class="uk-hidden">{allowed_html}</div>
-	</div>
+			<li>
+				<div id="preview">
+					<div class="uk-alert uk-alert-warning" data-uk-alert>
+						<a href="#" class="uk-alert-close uk-close"></a>
+						Select the <span class="uk-text-bold">Preview</span> button below to refresh the preview display.
+					</div>
+					<div class="uk-panel uk-panel-box uk-margin">
+						{preview_content}
+					</div>
+				</div>
 
-	{captcha}
+			</li>
+		</ul>
 
-	<div class="uk-clearfix uk-margin"></div>
+		{captcha}
 
-	<button class="uk-button uk-button-primary" type="submit" name="mode" value="{lang_preview}">{lang_preview}</button>
+		<div class="uk-clearfix uk-margin"></div>
+
+		<button class="uk-button uk-button-primary" type="submit" name="preview" value="{lang_preview}">{lang_preview}</button>
 {!if save_button}
-	<button class="uk-button uk-button-success" type="submit" name="mode" value="{$LANG12[8]}">{$LANG12[8]}</button>
+		<button class="uk-button uk-button-success" type="submit" name="save" value="{$LANG12[8]}">{$LANG12[8]}</button>
 {!endif}
-</form>
-{# end {templatelocation} #}
+		<button class="cancel uk-button" type="submit" value="cancel" name="cancel">{$LANG_ADMIN[cancel]}</button>
+	</form>
+	{# end {templatelocation} #}

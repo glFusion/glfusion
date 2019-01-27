@@ -1092,6 +1092,18 @@ function glfusion_200()
         }
         DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
     }
+
+    // modify story table
+
+    $sql = "ALTER TABLE `{$_TABLES['stories']}`
+                ADD COLUMN `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+	            DROP PRIMARY KEY,
+	            ADD UNIQUE INDEX `stories_sid` (`sid`),
+	            ADD PRIMARY KEY (`id`);";
+
+    DB_query($sql,1);
+
+
     // core items
     if (!isset($_VARS['last_maint_run'])) {
         DB_query("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ",1);

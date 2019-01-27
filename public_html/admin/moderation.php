@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -22,7 +22,11 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
+use \glFusion\Article\Article;
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
+use \glFusion\Admin\AdminAction;
 
 $display = '';
 if (!SEC_isModerator()) {
@@ -35,7 +39,7 @@ if (!SEC_isModerator()) {
 
 USES_lib_admin();
 USES_lib_user();
-USES_lib_story();
+USES_lib_comment();
 
 /**
 * Returns the number of user submissions
@@ -61,16 +65,6 @@ function MODERATE_ismoderator_user()
     return (SEC_hasRights('user.edit') AND SEC_hasRights('user.delete'));
 }
 
-/**
-* Returns the number of story submissions
-*
-* Similar to plugin_submissioncount_{plugin} for object type = draftstory
-*
-*/
-function MODERATE_submissioncount_draftstory() {
-    global $_TABLES;
-    return DB_count($_TABLES['stories'],'draft_flag',1);
-}
 
 /**
  * Returns formatted field values for the moderation lists
@@ -93,8 +87,8 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $field = $fieldname;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
-    $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
-    $field = ($type == 'story' && $fieldname == 3) ? 'tid' : $field;
+    $field = ($type == 'article' && $fieldname == 2) ? 'day' : $field;
+    $field = ($type == 'article' && $fieldname == 3) ? 'tid' : $field;
     $field = ($type == 'user' && $fieldname == 3) ? 'email' : $field;
     $field = ($type <> 'user' && $fieldname == 4) ? 'uid' : $field;
     $field = ($type == 'user' && $fieldname == 4) ? 'day' : $field;
@@ -201,16 +195,18 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 * This will actually perform moderation (approve or delete) one or more items
 *
 * @param    string  $action     Action to perform ('delete' or 'approve')
-* @param    string  $type       Type of item ('user', 'draftstory', 'story', etc.)
+* @param    string  $type       Type of item ('user', 'article', etc.)
 * @param    string  $id         ID of item to approve or delete
 * @return   string              HTML for "command and control" page
 *
 */
 function MODERATE_item($action='', $type='', $id='')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $MESSAGE, $LANG_ADM_ACTIONS;
 
     $retval = '';
+
+    $db = Database::getInstance();
 
     if (empty($action)) {
         Log::write('system',Log::ERROR,"Submissions Error: An attempt was made to moderate an item with a null action.");
@@ -246,14 +242,13 @@ function MODERATE_item($action='', $type='', $id='')
                     }
                     break;
 
-                case 'story':
+                case 'article':
                     // story (needs to move to a plugin)
-                    DB_delete($submissiontable,"$key",$id);
-                    break;
-
-                case 'draftstory':
-                    // draft story
-                    STORY_deleteStory($id);
+                    $db->conn->delete(
+                        $submissiontable,
+                        array($key => $id),
+                        array(Database::STRING)
+                    );
                     break;
 
                 default:
@@ -270,37 +265,65 @@ function MODERATE_item($action='', $type='', $id='')
 
             switch ($type) {
 
-                case 'story':
+                case 'article':
                     // story (needs to move to a plugin)
                     $result = DB_query("SELECT * FROM $submissiontable WHERE $key = '$id'");
                     $A = DB_fetchArray($result);
-                    $A['related'] = DB_escapeString(implode("\n", STORY_extractLinks($A['introtext'])));
-                    $A['owner_id'] = $A['uid'];
-                    $A['title'] = DB_escapeString($A['title']);
-                    $A['introtext'] = DB_escapeString($A['introtext']);
-                    $A['bodytext'] = DB_escapeString( $A['bodytext'] );
-                    $result = DB_query("SELECT group_id,perm_owner,perm_group,perm_members,perm_anon,archive_flag FROM {$_TABLES['topics']} WHERE tid = '{$A['tid']}'");
-                    $T = DB_fetchArray($result);
-                    if ($T['archive_flag'] == 1) {
-                        $frontpage = 0;
-                    } else if (isset ($_CONF['frontpage'])) {
-                        $frontpage = $_CONF['frontpage'];
-                    } else {
-                        $frontpage = 1;
-                    }
-                    DB_save ($table,'sid,uid,tid,title,introtext,bodytext,related,date,show_topic_icon,commentcode,trackbackcode,postmode,frontpage,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
-                    "'{$A['sid']}',{$A['uid']},'{$A['tid']}','{$A['title']}','{$A['introtext']}','{$A['bodytext']}','{$A['related']}','{$A['date']}','{$_CONF['show_topic_icon']}','{$_CONF['comment_code']}','{$_CONF['trackback_code']}','{$A['postmode']}',$frontpage,{$A['owner_id']},{$T['group_id']},{$T['perm_owner']},{$T['perm_group']},{$T['perm_members']},{$T['perm_anon']}");
-                    DB_delete($submissiontable,"$key",$id);
-                    PLG_itemSaved($A['sid'], 'article');
-                    COM_rdfUpToDateCheck();
-                    COM_olderStuff();
-                    break;
 
-                case 'draftstory':
-                    // draft story
-                    DB_query("UPDATE $table SET draft_flag = 0 WHERE $key = '$id'");
-                    COM_rdfUpToDateCheck();
-                    COM_olderStuff();
+                    /* Permissions */
+                    if (!isset($A['perm_owner'])) {
+                        $A['perm_owner'] = $_CONF['default_permissions_story'][0];
+                    } else {
+                        $A['perm_owner'] = COM_applyBasicFilter($A['perm_owner'], true);
+                    }
+                    if (!isset($A['perm_group'])) {
+                        $A['perm_group'] = $_CONF['default_permissions_story'][1];
+                    } else {
+                        $A['perm_group'] = COM_applyBasicFilter($A['perm_group'], true);
+                    }
+                    if (!isset($A['perm_members'])) {
+                        $A['perm_members'] = $_CONF['default_permissions_story'][2];
+                    } else {
+                        $A['perm_members'] = COM_applyBasicFilter($A['perm_members'], true);
+                    }
+                    if (!isset($A['perm_anon'])) {
+                        $A['perm_anon'] = $_CONF['default_permissions_story'][3];
+                    } else {
+                        $A['perm_anon'] = COM_applyBasicFilter($A['perm_anon'], true);
+                    }
+                    if (!isset($A['draft_flag'])) {
+                        $A['draft_flag'] = $_CONF['draft_flag'];
+                    }
+
+                    if (empty($A['frontpage'])) {
+                        $A['frontpage'] = $_CONF['frontpage'];
+                    }
+
+                    if (empty($A['show_topic_icon'])) {
+                        $A['show_topic_icon'] = $_CONF['show_topic_icon'];
+                    }
+                    $A['owner_id'] = $A['uid'];
+
+                    $article = new Article();
+                    $article->retrieveArticleFromVars($A);
+                    $rc = $article->save();
+                    if ($rc === true) {
+                        AdminAction::write('system','article_submission', sprintf($LANG_ADM_ACTIONS['article_approved'],$article->get('sid')));
+                        DB_delete($submissiontable,"$key",$id);
+                        PLG_itemSaved($A['sid'], 'article');
+                        $c = Cache::getInstance()->deleteItemsByTags(array('whatsnew','menu'));
+                        COM_rdfUpToDateCheck();
+                        COM_olderStuff();
+                    } else {
+                        $errors = $article->getErrors();
+                        $errorMessage = '';
+                        foreach ($errors AS $error) {
+                            $errorMessage .= $error . '<br>';
+                        }
+                        COM_setMsg($errorMessage,'error',true);
+                        echo COM_refresh($_CONF['site_admin_url'].'/moderation.php');
+                    }
+
                     break;
 
                 case 'user':
@@ -343,7 +366,7 @@ function MODERATE_item($action='', $type='', $id='')
 * This will actually perform moderation (approve or delete) one or more items
 *
 * @param    string  $action     Action to perform ('delete' or 'approve')
-* @param    string  $type       Type of item ('user', 'draftstory', 'story', etc.)
+* @param    string  $type       Type of item ('user','article', etc.)
 * @return   string              HTML for "command and control" page
 *
 */
@@ -453,74 +476,11 @@ function MODERATE_itemList($type='', $token)
                 }
                 break;
 
-            case 'draftstory': // draft story ----------------------------------
-
-                $result = DB_query ("SELECT sid AS id,title,UNIX_TIMESTAMP(date) AS day,tid,uid FROM {$_TABLES['stories']} WHERE (draft_flag = 1)" . COM_getTopicSQL ('AND') . COM_getPermSQL ('AND', 0, 3) . " ORDER BY date ASC");
-                $nrows = DB_numRows($result);
-
-                if ($nrows > 0) {
-                    $data_arr = array();
-                    for ($i = 0; $i < $nrows; $i++) {
-                        $A = DB_fetchArray($result);
-                        $A['edit'] = $_CONF['site_admin_url']
-                                    . '/story.php?draft=x&amp;sid='
-                                    . $A['id'];
-                        $A['title'] = $A['title'];
-                        $A['tid'] = $A['tid'];
-                        $A['_type_'] = 'draftstory';
-                        $A['_key_'] = 'sid';
-                        $data_arr[$i] = $A;
-                    }
-
-                    $header_arr = array(
-                        array('text' => $LANG_ADMIN['edit'], 'field' => 0, 'align' => 'center', 'width' => '25px'),
-                        array('text' => $LANG29[10], 'field' => 'title'),
-                        array('text' => $LANG29[14], 'field' => 'day', 'align' => 'center', 'width' => '15%'),
-                        array('text' => $LANG29[15], 'field' => 'tid', 'width' => '20%'),
-                        array('text' => $LANG29[46], 'field' => 'uid', 'width' => '15%', 'nowrap' => true),
-                        array('text' => $LANG29[1], 'field' => 'approve', 'align' => 'center', 'width' => '35px'),
-                        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'align' => 'center', 'width' => '35px')
-                        );
-
-                    $text_arr = array('has_menu'  => false,
-                                      'title'     => $LANG29[35] . ' (' . $LANG24[34] . ')',
-                                      'help_url'  => '',
-                                      'no_data'   => $LANG29[39],
-                                      'form_url'  => "{$_CONF['site_admin_url']}/moderation.php");
-
-                    $actions = '<input name="approve" type="image" src="'
-                        . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
-                        . '" style="vertical-align:bottom;" title="' . $LANG29[44]
-                        . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-                        . '/>&nbsp;' . $LANG29[1];
-                        $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-                    $actions .= '<input name="delbutton" type="image" src="'
-                        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
-                        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-                        . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-                        . '/>&nbsp;' . $LANG_ADMIN['delete'];
-
-                    $options = array('chkselect' => true,
-                                     'chkfield' => 'id',
-                                     'chkname' => 'selitem',
-                                     'chkminimum' => 0,
-                                     'chkall' => true,
-                                     'chkactions' => $actions,
-                                     );
-
-                    $form_arr['bottom'] = '<input type="hidden" name="type" value="draftstory"/>' . LB
-                            . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"/>' . LB
-                            . '<input type="hidden" name="count" value="' . $nrows . '"/>';
-
-                    $retval .= ADMIN_simpleList('MODERATE_getListField', $header_arr,
-                                              $text_arr, $data_arr, $options, $form_arr, $token);
-                }
-                break; // draftstory
 
             default: // plugin -------------------------------------------------
-
                 $function = 'plugin_itemlist_' . $type;
                 if (function_exists ($function)) {
+
                     $plugin = new Plugin();
                     $plugin = $function($token);
                     // if the plugin returns a string, it wants to control it's own
@@ -541,7 +501,7 @@ function MODERATE_itemList($type='', $token)
                 }
 
                 // this needs to be removed when story moves into a plugin
-                if ($type == 'story') {
+                if ($type == 'article') {
                     $isplugin = false;
                 }
 
@@ -587,7 +547,7 @@ function MODERATE_itemList($type='', $token)
                                         . '&amp;' . $key . '=' . $A[0];
                         } else {
                             $A['edit'] = $_CONF['site_admin_url']
-                                        . '/' .  $type . '.php?moderate=x'
+                                        . '/' .  'story' . '.php?moderate=x'
                                         . '&amp;' . $key . '=' . $A[0];
                         }
                         $A['_type_'] = $type;   // type of item
@@ -681,12 +641,6 @@ function MODERATE_submissions()
                 (MODERATE_submissioncount_user() > 0) &&
                 ($_CONF['usersubmission'] == 1)
                 ) ? MODERATE_itemList('user', $token) : '';
-
-    // draft story submissions
-    $pageContent .= (plugin_ismoderator_story() &&
-                (MODERATE_submissioncount_draftstory() > 0) &&
-                 ($_CONF['listdraftstories'] == 1)
-                 ) ? MODERATE_itemList('draftstory', $token) : '';
 
     // story & plugin submissions
     $pageContent .= PLG_showModerationList($token);

@@ -791,6 +791,7 @@ if ( isset($_POST['cancel'] ) ) {
 
 // get current comments - including the actual post (article or item from plugin)
                         $currentComments = PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0);
+
                         if ( $currentComments != false ) {
                             $outputHandle = outputHandler::getInstance();
                             $outputHandle->addMeta('name','robots','noindex');

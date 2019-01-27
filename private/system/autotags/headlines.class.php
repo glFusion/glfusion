@@ -32,7 +32,7 @@ class autotag_headlines extends BaseAutotag {
     {
         global $_CONF, $_TABLES, $_USER, $LANG01;
 
-        USES_lib_comments();
+        USES_lib_comment();
 
         $retval = '';
         $skip = 0;
@@ -162,7 +162,7 @@ class autotag_headlines extends BaseAutotag {
             $storyimage = 2;
         }
 
-        $c = glFusion\Cache::getInstance();
+        $c = \glFusion\Cache::getInstance();
         $key = 'headlines__'.$uniqueID.'_'.$c->securityHash(true,true);
         if ( $c->has($key) ) {
             return $c->get($key);

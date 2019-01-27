@@ -14,9 +14,12 @@
 
 require_once 'lib-common.php';
 
-use \glFusion\Cache\Cache;
-
 session_write_close();  //close session
+
+use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
+use \glFusion\Article\Article;
+use \glFusion\Log\Log;
 
 // keep running after browser closes connection
 @ignore_user_abort(true);
@@ -28,33 +31,72 @@ if(!$defer){
     sendGIF(); // send gif
 }
 
+Log::write('system',Log::DEBUG,"Starting CRON");
+
 // Catch any possible output (e.g. errors)
 ob_start();
 COM_rdfUpToDateCheck();
 CMT_updateCommentcodes();
 
-// Scan for any stories that have expired and should be archived or deleted
-$asql = "SELECT sid,tid,title,expire,statuscode FROM {$_TABLES['stories']} ";
-$asql .= 'WHERE (expire <= NOW()) AND (statuscode = ' . STORY_DELETE_ON_EXPIRE;
+$archivetid = \Topic::archiveID();
+
+$db = Database::getInstance();
+
+$params = [];
+$types  = [];
+$sql = "SELECT id,sid,tid,title,expire,statuscode FROM `{$_TABLES['stories']}`
+         WHERE (expire <= NOW()) AND (statuscode = ?";
+
+$params[] = Article::STORY_DELETE_ON_EXPIRE;
+$types[]  = Database::INTEGER;
+
 if (empty ($archivetid)) {
-    $asql .= ')';
+    $sql .= ")";
 } else {
-    $asql .= ' OR statuscode = ' . STORY_ARCHIVE_ON_EXPIRE . ") AND tid != '".DB_escapeString($archivetid)."'";
+    $sql .= " OR statuscode = ?) AND tid != ?";
+    $params[] = Article::STORY_ARCHIVE_ON_EXPIRE;
+    $params[] = $archivetid;
+    $types[]  = Database::INTEGER;
+    $types[]  = Database::STRING;
 }
-$expiresql = DB_query ($asql);
-while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray ($expiresql)) {
-    if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
+
+$stmt = $db->conn->executeQuery($sql,$params,$types);
+
+while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+    if ($row['statuscode'] == Article::STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
-            COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '".DB_escapeString($archivetid)."', frontpage = '0', featured = '0' WHERE sid='".DB_escapeString($sid)."'");
+            Log::write('system',Log::INFO, sprintf("Archive Story: %s, Topic: %s, Title: %s, Expired: %s",
+                                    $row['sid'],
+                                    $archivetid,
+                                    $row['title'],
+                                    $row['expire']));
+
+            $db->conn->update(
+                $_TABLES['stories'],
+                array('tid' => $archivetid, 'frontpage' => 0, 'featured' => 0),
+                array('id'  => $row['id']),
+                array(
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING
+                )
+            );
+
             $c = Cache::getInstance();
-            $c->deleteItemsByTag('story_'.$sid);
+            $c->deleteItemsByTag('story_'.$row['sid']);
             $c->deleteItemsByTag('whatsnew');
             $c->deleteItemsByTag('menu');
         }
-    } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
-        COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
-        STORY_removeStory($sid);
+    } else if ($row['statuscode'] == Article::STORY_DELETE_ON_EXPIRE) {
+        $token = SEC_createTokenGeneral('cron_'.md5($row['sid']),300);
+        Log::write('system',Log::INFO, sprintf("Delete Story and comments: %s, Topic: %s, Title: %s, Expired: %s",
+                                                    $row['sid'],
+                                                    $row['tid'],
+                                                    $row['title'],
+                                                    $row['expire'])
+        );
+        Article::delete($sid,true,$token);
         $c = Cache::getInstance();
         $c->deleteItemsByTags(array('story_'.$sid,'whatsnew','menu'));
     }
@@ -62,11 +104,13 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
 
 if ( $_CONF['cron_schedule_interval'] > 0  ) {
     if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
-        DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'" );
+        Log::write('system',Log::DEBUG,'Updating last_scheduled_run date / time');
+        $db->conn->query("UPDATE `{$_TABLES['vars']}` SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'");
         PLG_runScheduledTask();
     }
 }
-DB_query( "UPDATE {$_TABLES['vars']} SET value=UNIX_TIMESTAMP() WHERE name='last_maint_run'" );
+Log::write('system',Log::DEBUG,'Updating last_maint_run date / time');
+$db->conn->query( "UPDATE `{$_TABLES['vars']}` SET value=UNIX_TIMESTAMP() WHERE name='last_maint_run'" );
 ob_end_clean();
 if ($defer) sendGIF();
 

@@ -1147,8 +1147,9 @@ class upload
                     if (!empty($this->_currentFile['name'])) {
                         // Verify file meets size limitations
                         if (!$this->_fileSizeOk()) {
-                            $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
-                            $this->_currentFile['localerror'][] = $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit';
+//@TODO - Translate
+                            $this->_addError('File, ' . $this->_currentFile['name'] . ', is larger than the ' . COM_numberFormat($this->_maxFileSize,0) . ' byte limit');
+                            $this->_currentFile['localerror'][] = $this->_currentFile['name'] . ', is larger than the ' . COM_numberFormat($this->_maxFileSize,0) . ' byte limit';
                         }
 
                         // If all systems check, do the upload

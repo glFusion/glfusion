@@ -29,7 +29,6 @@ $_SYND_DEBUG = false;
 if ($_CONF['trackback_enabled']) {
     USES_lib_trackback();
 }
-USES_lib_story();
 
 /**
 * Check if a feed for all stories needs to be updated.
@@ -494,24 +493,7 @@ function SYND_updateFeed( $fid )
         $rss->syndicationURL = SYND_getFeedUrl( $filename );
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
-        if ($A['type'] == 'article') {
-            if ($A['topic'] == '::all') {
-                $content = SYND_getFeedContentAll(false, $A['limits'],
-                                $link, $data, $A['content_length'],
-                                $format[0], $format[1], $fid);
-            } elseif ($A['topic'] == '::frontpage') {
-                $content = SYND_getFeedContentAll(true, $A['limits'],
-                                $link, $data, $A['content_length'],
-                                $format[0], $format[1], $fid);
-            } else { // feed for a single topic only
-                $content = SYND_getFeedContentPerTopic($A['topic'],
-                                $A['limits'], $link, $data,
-                                $A['content_length'], $format[0],
-                                $format[1], $fid);
-            }
-        } else {
-            $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
-        }
+        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
 
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {

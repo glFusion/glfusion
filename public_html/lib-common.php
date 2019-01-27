@@ -366,10 +366,15 @@ require_once $_CONF['path_system'].'lib-syndication.php';
 require_once $_CONF['path_system'].'lib-glfusion.php';
 
 /**
+* Include lib-article which provides plugin APIs for stories
+*
+*/
+require_once $_CONF['path_system'].'lib-article.php';
+
+/**
 * Include plugin class.
 *
 */
-
 require_once $_CONF['path_system'].'lib-plugins.php';
 
 /**
@@ -3440,8 +3445,8 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     if (empty($username)) {
         $userData = $db->conn->fetchAssoc(
                "SELECT username, fullname, remoteusername, remoteservice
-               FROM `{$_TABLES['users']}`
-               WHERE uid=?",
+                 FROM `{$_TABLES['users']}`
+                 WHERE uid=?",
                array($uid),
                array(Database::INTEGER)
         );
@@ -3470,6 +3475,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     }
 
     $cache[$uid] = $ret;
+
     return $ret;
 }
 
@@ -3512,204 +3518,7 @@ function COM_emailUserTopics()
         return;
     }
 
-    $db = Database::getInstance();
-
-    $storytext = '';
-    $storytext_text = '';
-
-    USES_lib_story();
-
-    $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
-
-    $authors = array();
-
-    // Get users who want stories emailed to them
-    $usersql = "SELECT username,email,etids,{$_TABLES['users']}.uid AS uuid, status "
-        . "FROM {$_TABLES['users']}, {$_TABLES['userindex']} "
-        . "WHERE {$_TABLES['users']}.uid > 1
-           AND {$_TABLES['userindex']}.uid = {$_TABLES['users']}.uid
-           AND status = ".USER_ACCOUNT_ACTIVE."
-           AND (etids <> '-' OR etids IS NULL)
-           ORDER BY {$_TABLES['users']}.uid";
-
-
-    try {
-        $stmt = $db->conn->executeQuery($usersql);
-    } catch(\Doctrine\DBAL\DBALException $e) {
-        if (defined('DVLP_DEBUG')) {
-            throw($e);
-        }
-        return;
-    }
-
-    if ( !isset($_VARS['lastemailedstories']) ) {
-        $_VARS['lastemailedstories'] = 0;
-    }
-    $lastrun = $_VARS['lastemailedstories'];
-    if (empty($lastrun)) {
-        $lastrun = '1970-01-01 00:00:00';
-    }
-
-    while($U = $stmt->fetch(Database::ASSOCIATIVE)) {
-
-        $topicSQL = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',$U['uuid']);
-
-        // pull topic info
-        $topicStmt = $db->conn->executeQuery($topicSQL);
-        $topicData = $topicStmt->fetchAll(Database::ASSOCIATIVE);
-        if (count($topicData) == 0) {
-            continue;
-        }
-        $TIDS = array();
-        foreach($topicData AS $T) {
-            $TIDS[] = $T['tid'];
-        }
-
-        if ( !empty( $U['etids'] )) {
-            $ETIDS = explode( ' ', $U['etids'] );
-            $TIDS = array_intersect( $TIDS, $ETIDS );
-        }
-
-        $storySQL = "SELECT sid,uid,date AS day,title,introtext,bodytext
-                     FROM `{$_TABLES['stories']}`
-                        WHERE draft_flag = 0
-                        AND date <= ".$db->conn->quote($_CONF['_now']->toMySQL(true))."
-                        AND date >= ".$db->conn->quote($lastrun);
-
-
-        $tidsArray = array_map(function($tid) {
-          $db = Database::getInstance();
-          return $db->conn->quote($tid);
-        }, $TIDS);
-
-        if ( sizeof( $TIDS ) > 0) {
-            $storySQL .= " AND (tid IN (" . implode( ",", $tidsArray ) . "))";
-        }
-
-        $storySQL .= $db->getPermSQL( 'AND', $U['uuid'] );
-        $storySQL .= ' ORDER BY featured DESC, date DESC';
-
-        // run the story select
-
-        $storyStmt = $db->conn->executeQuery($storySQL,array(),array());
-        $storyData = $storyStmt->fetchAll(Database::ASSOCIATIVE);
-
-        if ( count($storyData) == 0 ) {
-            // If no new stories where pulled for this user, continue with next
-            continue;
-        }
-
-        $T = new Template($_CONF['path_layout']);
-        $T->set_file(array('message'     => 'digest.thtml',
-                           'story'       => 'digest_story.thtml'));
-
-        $TT = new Template($_CONF['path_layout']);
-        $TT->set_file(array('message'     => 'digest_text.thtml',
-                           'story'        => 'digest_story_text.thtml'));
-
-        $T->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
-        $TT->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
-
-        $T->set_var('site_name',$_CONF['site_name']);
-        $TT->set_var('site_name',$_CONF['site_name']);
-
-        $T->set_var('title', sprintf($LANG08[29],$_CONF['site_name']));
-        $TT->set_var('title', sprintf($LANG08[29],$_CONF['site_name']));
-
-        $T->set_var('remove_msg',sprintf($LANG08[36],$_CONF['site_name'],$_CONF['site_url']));
-        $TT->set_var('remove_msg',sprintf($LANG08[37],$_CONF['site_name'],$_CONF['site_url']));
-
-        foreach($storyData AS $S) {
-            $story = new Story();
-            $args = array ( 'sid' => $S['sid'],'mode' => 'view');
-            $output = STORY_LOADED_OK;
-            $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
-            if ($result == PLG_RET_OK) {
-                /* loadFromArray cannot be used, since it overwrites the timestamp */
-                reset($story->_dbFields);
-
-                while (list($fieldname,$save) = each($story->_dbFields)) {
-                    $varname = '_' . $fieldname;
-
-                    if (array_key_exists($fieldname, $output)) {
-                        $story->{$varname} = $output[$fieldname];
-                    }
-                }
-               $story->_username = $output['username'];
-               $story->_fullname = $output['fullname'];
-            }
-            $story_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story=' . $S['sid'] );
-            $title     = COM_undoSpecialChars(  $S['title'] );
-            if ( $_CONF['contributedbyline'] == 1 ) {
-                if ( empty( $authors[$S['uid']] )) {
-                    $storyauthor = COM_getDisplayName ($S['uid']);
-                    $authors[$S['uid']] = $storyauthor;
-                } else {
-                    $storyauthor = $authors[$S['uid']];
-                }
-            }
-
-            $dt = new Date($S['day'], $_USER['tzid']);
-            $story_date = $dt->format($_CONF['date'], true);
-
-            if ( $_CONF['emailstorieslength'] > 0 ) {
-                $storytext = $story->DisplayElements('introtext');
-                $html2txt = new Html2Text\Html2Text($storytext);
-                $storytext_text = trim($html2txt->get_text());
-
-                if ( $_CONF['emailstorieslength'] > 1 ) {
-                    $storytext = COM_truncateHTML( $storytext,$_CONF['emailstorieslength'], '...' );
-                    $storytext_text = COM_truncate( $storytext,$_CONF['emailstorieslength'], '...' );
-                }
-            } else {
-                $storytext = '';
-                $storytext_text = '';
-            }
-            $T->set_var ('story_introtext',$storytext);
-            $TT->set_var ('story_introtext',$storytext_text);
-
-            $T->set_var(array(
-                'story_url'     => $story_url,
-                'story_title'   => $title,
-                'story_author'  => $storyauthor,
-                'story_date'    => $story_date,
-                'story_text'    => $storytext,
-            ));
-            $T->parse('digest_stories', 'story', true);
-
-            $TT->set_var(array(
-                'story_url'     => $story_url,
-                'story_title'   => $title,
-                'story_author'  => $storyauthor,
-                'story_date'    => $story_date,
-                'story_text'    => $storytext_text,
-            ));
-            $TT->parse('digest_stories', 'story', true);
-        }
-
-        $T->parse('digest', 'message', true);
-        $TT->parse('digest', 'message', true);
-
-        $mailtext = $T->finish($T->get_var('digest'));
-        $mailtext_text = $TT->finish($TT->get_var('digest'));
-
-        $mailfrom = $_CONF['noreply_mail'];
-        $mailtext .= PHP_EOL . PHP_EOL . $LANG04[159];
-        $mailtext_text .= PHP_EOL . PHP_EOL . $LANG04[159];
-
-        $to = array();
-        $from = array();
-        $from = COM_formatEmailAddress('',$mailfrom);
-        $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
-        COM_mail ($to, $subject, $mailtext, $from,1,0,'',$mailtext_text);
-
-    }
-
-    $db->conn->executeUpdate(
-        "UPDATE `{$_TABLES['vars']}` SET value = ? WHERE name = 'lastemailedstories'",
-        array($_CONF['_now']->toMySQL(true)),
-        array(Database::STRING)
-    );
+    return ARTICLE_emailUserTopics();
 }
 
 
@@ -5589,6 +5398,7 @@ function COM_displayMessageAndAbort( $msg, $plugin = '', $http_status = 200, $ht
 * @return   string              Full URL
 *
 */
+// $_THEME_URL is not set anywhere???
 function COM_getTopicImageUrl( $imageurl )
 {
     global $_CONF, $_THEME_URL;
@@ -7473,9 +7283,13 @@ function USES_lib_pingback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-pingback.php';
 }
+function USES_lib_article() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-article.php';
+}
 function USES_lib_story() {
     global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-story.php';
+    COM_handleError(1,'Error: lib-story.php has been depreciated in glFusion v2');
 }
 function USES_lib_trackback() {
     global $_CONF;

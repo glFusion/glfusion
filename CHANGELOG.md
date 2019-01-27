@@ -16,6 +16,7 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Completely rewritten story handler - including submission and presentation
   - Configuration 'passwd' fields will now be encrypted in the DB
   - glFusion will now remove a plugin entry from the Plugins table if the plugin's files are no longer available and it is selected for uninstall
   - glFusion now requires a UTF-8 configuration
@@ -35,6 +36,9 @@
   - Non-UTF-8 language support
 
 ### Removed
+  - Remove the submission related Plugin APIs - except the Moderation Queue APIs
+      PLG_showSubmitForm()
+  - Configuration Option to show draft stories in moderation queue
   - Removed GeShi code formatter
   - Removed comment feeds plugin - functionality integrated into core
   - CAPTCHA Plugin: removed static images and ImageMagick support
