@@ -107,7 +107,7 @@ if (!file_exists($_CONF['path_log'] . $availableLogs[$log])) {
         $T->set_var('lang_too_big',sprintf($LANG_LOGVIEW['too_large'], (($fs / 1024) / $divider),$measure));
         $buffer = '';
         $seekPosition = $fs - MAX_LOG_SIZE;
-        $fp = fopen($_CONF['path_log'] . $log, 'r');
+        $fp = fopen($_CONF['path_log'] . $availableLogs[$log], 'r');
         fseek($fp, $seekPosition);
         while(!feof($fp)) {
             $buffer .= fread($fp, MAX_LOG_SIZE);
