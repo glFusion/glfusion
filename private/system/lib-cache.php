@@ -30,6 +30,7 @@ $TEMPLATE_OPTIONS = array(
         $_CONF['path'],
         '/'                                                 // this entry must always exist and must always be last
     ),
+// incl_phpself_header is depreciated
     'incl_phpself_header' => true,                          // set this to true if your template cache exists within your web server's docroot.
     'cache_by_language' => true,                            // create cache directories for each language. Takes extra space but moves all $LANG variable text directly into the cached file
     'default_vars' => array(                                // list of vars found in all templates.
