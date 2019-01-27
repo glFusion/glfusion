@@ -1531,7 +1531,7 @@ class Template
         $tmplt = $this->parse($iid, $filevar);
 
         $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-        $iid = str_replace('-','_',$iid);
+//        $iid = str_replace('-','_',$iid);
         $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
         . $tmplt
         . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
@@ -1539,6 +1539,7 @@ class Template
         $tmplt = $this->compile_template_code($tmplt,true);
 
         $c = Cache::getInstance();
+
         $c->set($iid,$tmplt,array('story','story_'.$this->varvals['story_id']));
         $this->instance[$filevar] = $tmplt;
 
@@ -1576,17 +1577,19 @@ class Template
         global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
         if ( (isset($_SYSTEM['disable_instance_caching']) && $_SYSTEM['disable_instance_caching'] == true) || (isset($_CONF['cache_driver']) && $_CONF['cache_driver'] == 'Devnull') ) {
-            return;
+            return false;
         }
 
         $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-        $iid = str_replace('-','_',$iid);
+//        $iid = str_replace('-','_',$iid);
         $c = Cache::getInstance();
         $rc = $c->has($iid);
         if ($rc === true) {
             $this->instance[$filevar] = $c->get($iid);
+//Log::write('system',Log::DVLP_DEBUG,"Instance Cache HIT on " . $iid);
             return true;
         }
+//Log::write('system',Log::DVLP_DEBUG,"Instance Cache MISS on " . $iid);
         return false;
     }
 
