@@ -313,7 +313,7 @@
 							<div class="uk-clearfix"></div>
 							<button class="uk-button uk-button-primary uk-margin" onclick="openStoryImage();return false;" value="{$LANG24[96]}">{$LANG24[96]}</button>
 							<button class="uk-button uk-button-danger uk-margin" onclick="removeStoryImage();return false;" value="{$LANG24[97]}">{$LANG24[97]}</button>
-							<input type="hidden" value="{story_image_url}" id="story_image" name="story_image">
+							<input type="hidden" value="{story_image}" id="story_image" name="story_image">
 							<div id="storyImage" style="display: none;">
 								<iframe src="{site_url}/ckeditor/plugins/fileman/index.html?integration=custom&type=files&txtFieldId=story_image" style="width:100%;height:100%" frameborder="0">
 								</iframe>
@@ -348,7 +348,7 @@
 
 								<input class="uk-margin-large-left" type="checkbox" name="sv_autoplay" id="sv_autoplay" value="1" {sv_autoplay_checked} ><span class=".uk-form-help-inline"> {$LANG24[126]}</span>
 
-								<input type="hidden" value="{story_video_url}" id="story_video" name="story_video">
+								<input type="hidden" value="{story_video}" id="story_video" name="story_video">
 								<div id="storyVideo" style="display: none;">
 									<iframe src="{site_url}/ckeditor/plugins/fileman/video.html?integration=custom&type=files&txtFieldId=story_video" style="width:100%;height:100%" frameborder="0"></iframe>
 								</div>
