@@ -26,7 +26,6 @@ if (!@file_exists('siteconfig.php') ) {
 use glFusion\Database\Database;
 
 require_once 'lib-common.php';
-//USES_lib_story();
 USES_lib_comment();
 
 $newstories = false;
