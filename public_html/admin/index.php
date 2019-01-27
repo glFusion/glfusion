@@ -221,15 +221,6 @@ function commandcontrol()
                 $modnum += $S['count'];
             }
         }
-        if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
-            $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
-            if ( !empty( $topicsql )) {
-                $sql .= ' AND' . $topicsql;
-            }
-            $result = DB_query( $sql . COM_getPermSQL( 'AND', 0, 3 ));
-            $A = DB_fetchArray( $result );
-            $modnum += $A['count'];
-        }
 
         if ( $_CONF['usersubmission'] == 1 ) {
             if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {

@@ -1225,7 +1225,7 @@ function _updateConfig() {
         $item = $row['name'];
         if ( ($key = _searchForIdKey($item,$coreConfigData)) === NULL ) {
             $db->conn->delete(
-                $_TABLES['conf_values'].
+                $_TABLES['conf_values'],
                 array('name' => $item, 'group_name' => 'Core'),
                 array(Database::STRING, Database::STRING)
             );

@@ -410,13 +410,6 @@ function getAdminMenu()
                         $modnum += $db->conn->fetchColumn("SELECT COUNT(*) AS count FROM `{$_TABLES['storysubmission']}` WHERE" . $topicsql,array(),0);
                     }
                 }
-                if (( $_CONF['listdraftstories'] == 1 ) && SEC_hasRights( 'story.edit' )) {
-                    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (draft_flag = 1)";
-                    if ( !empty( $topicsql )) {
-                        $sql .= ' AND' . $topicsql;
-                    }
-                    $modnum += $db->conn->fetchColumn($sql . $db->getPermSQL('AND',0,3),array(),0);
-                }
 
                 if ( $_CONF['usersubmission'] == 1 ) {
                     if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
