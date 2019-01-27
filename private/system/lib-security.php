@@ -1131,7 +1131,7 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
         if ($feat_id !== false && $feat_id !== NULL) {
             // Before removing the feature itself, remove it from all groups
             if ($logging) {
-                Log::write('system','info',"Attempting to remove '$feature_name' rights from all groups");
+                Log::write('system',Log::DEBUG,"Attempting to remove '$feature_name' rights from all groups");
             }
             $db->conn->delete(
                 $_TABLES['access'],
@@ -1139,12 +1139,12 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
                 array(Database::INTEGER)
             );
             if ($logging) {
-                Log::write('system','info','...success');
+                Log::write('system',Log::DEBUG,'...success');
             }
 
             // now remove the feature itself
             if ($logging) {
-                Log::write('system','info',"Attempting to remove the '$feature_name' feature");
+                Log::write('system',Log::DEBUG,"Attempting to remove the '$feature_name' feature");
             }
             $db->conn->delete(
                 $_TABLES['features'],
@@ -1152,10 +1152,10 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
                 array(Database::INTEGER)
             );
             if ($logging) {
-                Log::write('system','info','...success');
+                Log::write('system',Log::DEBUG,'...success');
             }
         } else if ($logging) {
-            Log::write('system','info',"SEC_removeFeatureFromDB: Feature '$feature_name' not found.");
+            Log::write('system',Log::WARNING,"SEC_removeFeatureFromDB: Feature '$feature_name' not found.");
         }
     }
 }
@@ -1408,13 +1408,17 @@ function _sec_checkToken($ajax=0)
     } else {
         $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     }
+    /*
+     * We cannot use filter_input here because it will pull the orignal
+     * $_GET vars passed by the server, not a modified version value that
+     * could potentially be updated by auth.inc.php
+     */
 
     if (array_key_exists(CSRF_TOKEN, $_GET)) {
-        $token = filter_input(INPUT_GET,CSRF_TOKEN,FILTER_SANITIZE_STRING);
+        $token = COM_applyFilter($_GET[CSRF_TOKEN]);
     } else if(array_key_exists(CSRF_TOKEN, $_POST)) {
-        $token = filter_input(INPUT_POST,CSRF_TOKEN,FILTER_SANITIZE_STRING);
+        $token = COM_applyFilter($_POST[CSRF_TOKEN]);
     }
-
     if (trim($token) != '') {
         $stmt = $db->conn->executeQuery(
                     "SELECT
@@ -1435,9 +1439,9 @@ function _sec_checkToken($ajax=0)
         $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                Log::write('system','info',"CheckToken: Token failed - no token found in database - " . $referCheck);
+                Log::write('system',Log::WARNING,"CheckToken: Token failed - no token found in database - " . $referCheck);
             } else {
-                Log::write('system','info',"CheckToken: Token failed - more than 1 token found in database");
+                Log::write('system',Log::WARNING,"CheckToken: Token failed - more than 1 token found in database");
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -1448,11 +1452,11 @@ function _sec_checkToken($ajax=0)
              *  the http referer is the url for which the token was created.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
-                Log::write('system','info',"CheckToken: Token failed - userid does not match token owner id");
+                Log::write('system',Log::WARNING,"CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['urlfor'] != $referCheck) {
-                Log::write('system','info',"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
-                Log::write('system','info',"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+                Log::write('system',Log::WARNING,"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
+                Log::write('system',Log::WARNING,"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1460,7 +1464,7 @@ function _sec_checkToken($ajax=0)
 
                 $return = false;
             } else if($tokendata['expired'] != 0) {
-                Log::write('system','info',"CheckToken: Token failed - token has expired.");
+                Log::write('system',Log::WARNING,"CheckToken: Token failed - token has expired.");
                 $return = false;
             } else {
                 $return = true; // Everything is AOK in only one condition...
@@ -1595,9 +1599,9 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                Log::write('system','info',"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
             } else {
-                Log::write('system','info',"CheckTokenGeneral: Token failed - more than one token found in the database");
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database");
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -1607,13 +1611,13 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
              *  token is not expired.
              */
             if( $uid != $tokendata['owner_id'] ) {
-                Log::write('system','info',"CheckTokenGeneral: Token failed - userid does not match token owner id");
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
-                Log::write('system','info',"CheckTokenGeneral: Token failed - token action does not match referer action.");
-                Log::write('system','info',"Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - token action does not match referer action.");
+                Log::write('system',Log::WARNING,"Token Action: " . $tokendata['urlfor'] . " - ACTION: " . $action);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1708,7 +1712,7 @@ function SEC_cleanupFiles($files)
             $orphan = $_CONF['path_data'] .'temp/'. $filename;
             if (file_exists($orphan)) {
                 if (! @unlink($orphan)) {
-                    Log::write('system','info',"SEC_cleanupFile: Unable to remove file $filename from 'data' directory");
+                    Log::write('system',Log::WARNING,"SEC_cleanupFile: Unable to remove file $filename from 'data' directory");
                 }
             }
         }
