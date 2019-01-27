@@ -326,7 +326,7 @@ function displayMenuChildren( $type, $elements, $template_file ) {
 function getUserMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG29, $_CONF, $_DB_dbms,$_GROUPS;
+           $LANG_AM, $LANG29, $_CONF, $_GROUPS;
 
     $item_array = array();
     if ( !COM_isAnonUser() ) {
@@ -371,7 +371,7 @@ function getUserMenu()
 function getAdminMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG_SOCIAL, $LANG29, $_CONF,$_DB_dbms,$_GROUPS, $config;
+           $LANG_AM, $LANG_SOCIAL, $LANG29, $_CONF,$_GROUPS, $config;
 
     $item_array = array();
 
