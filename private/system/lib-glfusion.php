@@ -17,6 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 
 function glfusion_UpgradeCheck() {
@@ -617,4 +618,5 @@ function _doSiteConfigUpgrade() {
     CACHE_clear();
     return $retval;
 }
+
 ?>
