@@ -130,7 +130,7 @@ class autotag_newimage extends BaseAutotag {
             if ( $caption ) {
                 $retval .= '<div class="over uk-hidden-small">'.$image['caption'].'</div>';
             }
-            $retval .= '<a href="'.$image['url'].'"  data-uk-lightbox>';
+            $retval .= '<a href="'.$image['url'].'"  data-uk-lightbox="{group:\'newimages\'}">';
             $retval .= '<img class="uk-thumbnail" src="'.$image['url'].'">';
             $retval .= '</a>';
             $retval .= '</div>';
