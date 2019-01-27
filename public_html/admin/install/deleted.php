@@ -80,6 +80,8 @@ $obsoletePrivateFiles = array(
 // 2.0.0
     'system/classes/Cache.php',
     'system/classes/Autoload.php',
+    'system/lib-story.php',
+    'system/classes/story.class.php',
 // 1.7.0
     'system/classes/filter.class.php',
     'system/classes/output.class.php',
