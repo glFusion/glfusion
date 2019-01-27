@@ -1045,7 +1045,7 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 {
     global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
 
-    USES_lib_comments();
+    USES_lib_comment();
 
     $filterS = new sanitizer();
     $filterS->setPostmode('text');
@@ -1414,6 +1414,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
 {
     global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE,
            $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
+
+    USES_lib_comments();
 
     $filter = new sanitizer();
     $filter->setPostmode('text');
