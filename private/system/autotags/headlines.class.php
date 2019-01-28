@@ -17,7 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
-use \glFusion\Article\ArticleDisplay;
+use \glFusion\Article\Article;
 
 class autotag_headlines extends BaseAutotag {
 
@@ -313,7 +313,7 @@ class autotag_headlines extends BaseAutotag {
                 $T->unset_var('readmore_url');
                 $T->unset_var('lang_readmore');
 
-                $story = new ArticleDisplay();
+                $story = new Article();
                 if ($story->retrieveArticleFromVars($A) != $story::STORY_LOADED_OK) {
                     continue;
                 }
