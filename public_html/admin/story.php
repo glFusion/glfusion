@@ -61,7 +61,6 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case "access":
         case "edit":
-        case "edit_adv":
             if ( SEC_inGroup('Story Admin') ) {
                 $access = $LANG_ACCESS['edit'];
             } else {
@@ -81,7 +80,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($fieldname == 'access') {
                 $retval = $access;
             } else if ($access == $LANG_ACCESS['edit']) {
-                if ($fieldname == 'edit_adv' || $fieldname == 'edit') {
+                if ($fieldname == 'edit') {
                     $retval = COM_createLink($icon_arr['edit'],
                         "{$_CONF['site_admin_url']}/story.php?edit=x&amp;sid={$A['sid']}");
                 }
@@ -89,7 +88,6 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "copy":
-        case "copy_adv":
             if ( SEC_inGroup('Story Admin') ) {
                 $access = $LANG_ACCESS['copy'];
             } else {
@@ -839,7 +837,7 @@ switch ($action) {
 
     case 'clone' :
         if (!isset($_GET['sid'])) {
-            COM_setMsg('Invalid Story ID','error',true);
+            COM_setMsg($LANG24[42],'error',true);
             $pageBody = STORY_list();
         } else {
             $sid = (string) filter_input(INPUT_GET,'sid',FILTER_SANITIZE_STRING);
@@ -861,7 +859,7 @@ switch ($action) {
                 $pageBody = STORY_edit($article, 'new');
             } else {
                 $action = 'list';
-                COM_setMsg('Invalid SID or permission issue');
+                COM_setMsg($LANG24[42],'error',true);
                 $pageBody = STORY_list();
             }
         }
