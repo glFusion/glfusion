@@ -29,8 +29,6 @@ if (!SEC_hasRights('social.admin')) {
     exit;
 }
 
-USES_lib_social();
-
 /**
 * Get List Field for social services
 *

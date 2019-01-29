@@ -27,11 +27,11 @@ require_once 'auth.inc.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Social\Social;
 use \glFusion\Admin\AdminAction;
 use \glFusion\Log\Log;
 
 USES_lib_user();
-USES_lib_social();
 USES_lib_admin();
 
 $display = '';
@@ -622,7 +622,7 @@ function USER_userinfoPanel($U, $newuser = 0)
         'lang_social_username'      => $LANG04[201],
     ));
 
-    $follow_me = SOC_followMeProfile( $uid );
+    $follow_me = Social::followMeProfile( $uid );
     if ( is_array($follow_me) && count($follow_me) > 0 ) {
         $userform->set_block('user','social_links','sl');
         $userform->set_var('social_followme_enabled',true);
@@ -1536,7 +1536,7 @@ function USER_save($uid)
     $remoteusername = (isset($_POST['remoteusername'])) ? strip_tags(trim($_POST['remoteusername'] ) ): '';
     $remoteservice  = (isset($_POST['remoteservice'])) ? COM_applyFilter($_POST['remoteservice']) : '';
 
-    $social_services = SOC_followMeProfile( $uid );
+    $social_services = Social::followMeProfile( $uid );
     foreach ( $social_services AS $service ) {
         $service_input = $service['service'].'_username';
         $_POST[$service_input] = strip_tags($_POST[$service_input]);

@@ -7306,12 +7306,10 @@ function USES_lib_widgets() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-widgets.php';
 }
-function USES_lib_social() {
-    global $_CONF;
-    require_once $_CONF['path_system'].'lib-social.php';
-}
+
 
 // legacy support
+function USES_lib_social() { }
 function USES_class_navbar() { }
 function USES_class_date() { }
 function USES_class_search() { }
