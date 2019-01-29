@@ -2,10 +2,14 @@
 /**
 * glFusion CMS
 *
+* glFusion AJAX controller
+*
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2016 by Mark R. Evans - mark AT glfusion DOT org
+*  Copyright (C) 2014-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
 */
 
 require_once '../lib-common.php';
@@ -43,6 +47,9 @@ if (is_ajax()) {
             case 'sfmtoggle' :
                 sfm_toggle();
                 break;
+            case 'articlepreview' :
+                articlePreview();
+                break;
         }
     } else {
         die();
@@ -54,6 +61,24 @@ if (is_ajax()) {
  */
 function is_ajax() {
     return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function articlePreview()
+{
+    global $_CONF, $_TABLES;
+
+    $article = new \glFusion\Article\Article();
+
+    if ($article->retrieveArticleFromVars($_POST) != \glFusion\Article\Article::STORY_LOADED_OK) {
+        $retval['errorCode'] = 1;
+        $retval['preview'] = 'Error loading preview - please use the Preview Button';
+    } else {
+        $retval['preview'] = $article->getDisplayArticle('p');
+        $retval['errorCode'] = 0;
+    }
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+
 }
 
 /**

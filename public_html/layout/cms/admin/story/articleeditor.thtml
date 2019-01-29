@@ -24,13 +24,13 @@
 	 	<input type="hidden" name="advanced_editor_mode" id="advanced_editor_mode" value="{advanced_editor_mode}">
 		<input type="hidden" id="{security_token_name}" name="{security_token_name}" value="{security_token}">
 
-		<ul class="uk-tab" data-uk-tab="{connect:'#story-form'}">
-			<li><a href="#">{$LANG24[80]}</a></li>
-			<li><a href="#">{$LANG24[81]}</a></li>
-			<li><a href="#">{$LANG24[82]}</a></li>
-			<li><a href="#">{$LANG24[83]}</a></li>
-			<li><a href="#">{$LANG24[84]}</a></li>
-			<li  {!if show_preview} class="uk-active" {!endif}><a href="#">{$LANG24[79]}</a></li>
+		<ul id="tabs" class="uk-tab" data-uk-tab="{connect:'#story-form'}">
+			<li id="tab-editor"><a href="#">{$LANG24[80]}</a></li>
+			<li id="tab-options"><a href="#">{$LANG24[81]}</a></li>
+			<li id="tab-images"><a href="#">{$LANG24[82]}</a></li>
+			<li id="tab-archive"><a href="#">{$LANG24[83]}</a></li>
+			<li id="tab-perms"><a href="#">{$LANG24[84]}</a></li>
+			<li id="tab-preview" {!if show_preview} class="uk-active" {!endif}><a href="#"">{$LANG24[79]}</a></li>
 		</ul>
 
 		{# top part - will always show #}
@@ -432,14 +432,16 @@
 
 				<li>
 					<div id="preview">
-						<div class="uk-alert uk-alert-warning" data-uk-alert>
+						<div id="previewwarning" class="uk-alert uk-alert-warning" data-uk-alert>
 							<a href="#" class="uk-alert-close uk-close"></a>
 							Select the <span class="uk-text-bold">Preview</span> button below to refresh the preview display.
 						</div>
-						<div class="uk-panel uk-panel-box uk-margin">
+
+						<div id="previewcontent" class="uk-panel uk-panel-box uk-margin">
 							{preview_content}
 						</div>
 					</div>
+
 				</li>
 			</ul>
 
@@ -486,6 +488,56 @@
 {!if !show_preview}
 	modifiedForm = 1;
 {!endif}
+
+$(function () {
+  $('#tabs').on('change.uk.tab', function(e, active, previous) {
+  	if (active.context.id == 'tab-preview') {
+  		buildPreview();
+  	} else {
+  		$("#story_id").show();
+  	}
+  });
+});
+
+var buildPreview = function() {
+	$("#story_id").hide();
+	$("#previewwarning").hide();
+	$("#previewcontent").html('<div class="uk-text-center"><i class="uk-icon uk-icon-circle-o-notch uk-icon-spin uk-icon-large"></i></div>');
+
+	if ( typeof introtext != 'undefined') {
+    var intro = introtext.getData();
+  } else {
+  	  	var intro = $('#introtext').val();
+  }
+	if ( typeof bodytext != 'undefined') {
+    var body 	= bodytext.getData()
+  } else {
+  	var body = $('#bodytext').val();
+  }
+  var dataS = {
+      "action" : "articlepreview",
+      "introtext" : intro,
+      "bodytext"  : body
+  };
+  data = $("form").serialize() + "&" + $.param(dataS);
+  $.ajax({
+      type: "POST",
+      dataType: "json",
+      url: site_admin_url + "/ajax_controller.php",
+      data: data,
+      success: function(data) {
+          var result = $.parseJSON(data["json"]);
+
+          try {
+              $("#previewcontent").html(result.preview);
+          } catch(err) {
+              alert(result.statusMessage);
+          }
+      }
+  });
+  return false;
+};
+
 
     // enable / disable the archive attributes
 	function enablearchive(obj) {
