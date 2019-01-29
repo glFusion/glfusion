@@ -3079,6 +3079,12 @@ class Article
             $T->set_var('preview_content',$this->getDisplayArticle('p'));
         }
 
+// if an existing story - allow delete
+        if ($this->id !== 0) {
+            $T->set_var ('delete_option',true);
+            $T->set_var('lang_delete_confirm',$MESSAGE[76]);
+        }
+
 // Let plugins hook into the editor
 
         PLG_templateSetVars('storyeditor',$T);
