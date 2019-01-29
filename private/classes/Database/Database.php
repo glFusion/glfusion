@@ -438,26 +438,6 @@ class Database
         return $this->driverName . ' / '. $this->internalDriverName;
     }
 
-    public function dbExecuteUpdateXX($sql,$params,$types)
-    {
-        try {
-            $result = $this->conn->executeUpdate($sql,$params,$types);
-        } catch (PDOException $e) {
-            if ($ignore_errors) {
-                $result = false;
-                if (defined ('DVLP_DEBUG') || $this->_verbose) {
-                    $err = $e->getMessage();
-                    $output = preg_replace('!\s+!', ' ', $err);
-                    $prettySQL = preg_replace('!\s+!', ' ', $sql);
-                    $this->_errorlog("SQL Error: " . $err . PHP_EOL. $prettySQL);
-                }
-            } else {
-                trigger_error($this->dbError($sql), E_USER_ERROR);
-            }
-        }
-
-    }
-
     public function getFilter()
     {
         return $this->_filter;

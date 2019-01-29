@@ -15,6 +15,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Social\Social;
 use \glFusion\Log\Log;
 
 // ensure the current user has rights to administer social integration
@@ -389,7 +390,7 @@ function SI_get_site()
 
     $T->set_block('page','social_links','sl');
 
-    $follow_me = SOC_followMeProfile( -1 );
+    $follow_me = Social::followMeProfile( -1 );
     if ( is_array($follow_me) && count($follow_me) > 0 ) {
         foreach ( $follow_me AS $service ) {
             $T->set_var(array(
@@ -437,7 +438,7 @@ function SI_save_site()
 
     // run through the POST vars to see which ones are set.
 
-    $social_services = SOC_followMeProfile( $uid );
+    $social_services = Social::followMeProfile( $uid );
     foreach ( $social_services AS $service ) {
         $service_input = $service['service'].'_username';
         if ( isset( $_POST['$service_input'])) {

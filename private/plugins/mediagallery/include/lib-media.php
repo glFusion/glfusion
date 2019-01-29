@@ -2218,7 +2218,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         }
     }
 
-    $social_icons = SOC_getShareIcons($ptitle,'',$permalink,$shareImage,'mediagallery');
+    $social_icons = \glFusion\Social\Social::getShareIcons($ptitle,'',$permalink,$shareImage,'mediagallery');
     $T->set_var('social_share',$social_icons);
 
     $getid3link = '';

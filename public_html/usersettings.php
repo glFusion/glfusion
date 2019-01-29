@@ -351,7 +351,7 @@ function edituser()
 
     PLG_profileVariablesEdit ($_USER['uid'], $preferences);
 
-    $follow_me = SOC_followMeProfile( $_USER['uid'] );
+    $follow_me = \glFusion\Social\Social::_followMeProfile( $_USER['uid'] );
     if ( is_array($follow_me) && count($follow_me) > 0 ) {
         $preferences->set_block('profile','social_links','sl');
         $preferences->set_var('social_followme_enabled',true);
@@ -1139,7 +1139,7 @@ function saveuser($A)
     $A['pgpkey'] = strip_tags ($A['pgpkey']);
 
     // filter / check social integrations here
-    $social_services = SOC_followMeProfile( $_USER['uid'] );
+    $social_services = \glFusion\Social\Social::followMeProfile( $_USER['uid'] );
     foreach ( $social_services AS $service ) {
         $service_input = $service['service'].'_username';
         if ( isset( $A['$service_input'])) {

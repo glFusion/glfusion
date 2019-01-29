@@ -22,6 +22,7 @@ require_once 'lib-common.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Article\Article;
+use \glFusion\Social\Social;
 
 USES_lib_social();
 
@@ -346,7 +347,7 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         }
     }
 
-    $social_icons = SOC_getShareIcons($pagetitle,htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()),$permalink,'','article');
+    $social_icons = Social::getShareIcons($pagetitle,htmlspecialchars($metaDesc,ENT_QUOTES,COM_getEncodingt()),$permalink,'','article');
 
     $story_template->set_var('social_share',$social_icons);
 

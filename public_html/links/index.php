@@ -330,7 +330,7 @@ function links_list($message)
     }
 
     if ( $_LI_CONF['linksperpage'] == 'x' ) {
-        $social_icons = SOC_getShareIcons();
+        $social_icons = \glFusion\Social\Social::getShareIcons();
         $linklist->set_var('social_share',$social_icons);
     }
 

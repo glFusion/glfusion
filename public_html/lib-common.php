@@ -2978,7 +2978,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
 *
 */
 
-function COM_showBlocks( $side, $topic='', $name='all' )
+function COM_showBlocks($side, $topic='', $name='all')
 {
     global $_CONF, $_TABLES, $_USER, $LANG21, $topic, $page;
 
@@ -3111,7 +3111,7 @@ function COM_formatBlock( $A, $noboxes = false )
         $retval .= COM_showBlock( $A['name'], $A['help'], $A['title'], $position );
     }
 
-    if ( $A['type'] == 'phpblock' && !$noboxes ) {
+    if ($A['type'] == 'phpblock' && !$noboxes) {
         if ( !( $A['name'] == 'whosonline_block' AND $db->conn->fetchColumn("SELECT is_enabled FROM `{$_TABLES['blocks']}` WHERE name='whosonline_block'",array(),0) == 0 )) {
             $function = $A['phpblockfn'];
             $matches = array();
@@ -3119,11 +3119,7 @@ function COM_formatBlock( $A, $noboxes = false )
                 $function = $matches[1];
                 $args = $matches[2];
             }
-            $blkheader = COM_startBlock( $A['title'], $A['help'],
-                    COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] );
-            $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
-                    'footer', $position ));
-
+// we want to allow the function to adjust the $A item
             if ( function_exists( $function )) {
                if (isset($args)) {
                     $fretval = $function($A, $args);
@@ -3131,6 +3127,10 @@ function COM_formatBlock( $A, $noboxes = false )
                     $fretval = $function();
                }
                if ( !empty( $fretval )) {
+           $blkheader = COM_startBlock( $A['title'], $A['help'],
+                    COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] );
+            $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
+                    'footer', $position ));
                     $retval .= $blkheader;
                     $retval .= $fretval;
                     $retval .= $blkfooter;
@@ -3139,6 +3139,11 @@ function COM_formatBlock( $A, $noboxes = false )
                 // Return nothing, just hide the block if its function is missing.
                 return '';
             }
+
+
+
+
+
         }
     }
 
@@ -6981,9 +6986,7 @@ function phpblock_social()
 {
     global $_CONF;
 
-    USES_lib_social();
-
-    return SOC_getFollowMeIcons( -1, 'follow_site.thtml' );
+    return \glFusion\Social\Social::getFollowMeIcons( -1, 'follow_site.thtml' );
 }
 
 

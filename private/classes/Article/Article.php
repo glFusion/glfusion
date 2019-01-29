@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Formatter;
+use \glFusion\Social\Social;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
 
@@ -2410,7 +2411,7 @@ class Article
                 if ($this->attribution_author == '') {
                     $this->template->set_var(array(
                         'author_about'  => $this->getDisplayItem('about'),
-                        'follow_me'     => SOC_getFollowMeIcons( $this->get('uid'))
+                        'follow_me'     => Social::getFollowMeIcons( $this->get('uid'))
                     ));
                 }
             }
