@@ -2737,6 +2737,10 @@ function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
 {
     global $_CONF;
 
+    if ($type == 'comment') {
+        USES_lib_comment();
+    }
+
     $args[1] = $id;
     $args[2] = $what;
     $args[3] = $uid;
@@ -3379,8 +3383,25 @@ function PLG_unsubscribe($type,$category,$id,$uid = 0)
             return false;
         }
     }
-    $sql="DELETE FROM {$_TABLES['subscriptions']} WHERE uid=" . (int) $uid ." AND category='".DB_escapeString($category)."' AND id='".DB_escapeString($id)."' AND type='".DB_escapeString($type)."'";
-    DB_query($sql);
+
+    $db = Database::getInstance();
+
+    $db->conn->delete(
+        $_TABLES['subscriptions'],
+        array(
+            'uid' => $uid,
+            'category' => $category,
+            'id' => $id,
+            'type' => $type
+        ),
+        array(
+            Database::INTEGER,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+        )
+    );
+
     return true;
 }
 
@@ -3406,8 +3427,27 @@ function PLG_isSubscribed( $type, $category, $id, $uid = 0 )
             return false;
         }
     }
-    $count = DB_count($_TABLES['subscriptions'],array('uid','id','type','category'),array($uid,DB_escapeString($id),DB_escapeString($type),DB_escapeString($category)));
-    if ( $count > 0 ) {
+
+    $db = Database::getInstance();
+
+    $count = $db->conn->fetchColumn(
+            "SELECT COUNT(*) FROM `{$_TABLES['subscriptions']}`
+                WHERE uid=? AND id=? and type=? and category=?",
+            array(
+                $uid,
+                $id,
+                $type,
+                $category
+            ),
+            0,
+            array(
+                Database::INTEGER,
+                Database::STRING,
+                Database::STRING,
+                Database::STRING,
+            )
+    );
+    if ( $count !== false && $count > 0 ) {
         return true;
     }
     return false;
