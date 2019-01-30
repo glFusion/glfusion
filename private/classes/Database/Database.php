@@ -165,7 +165,7 @@ class Database
             'driver'    => $this->internalDriverName,
             'charset'   => $this->_character_set_database,
         );
-        if ($this->_charset === 'utf-8') {
+        if ($this->_charset === 'utf-8' && extension_loaded('pdo_mysql')) {
             $connectionParams['driverOptions'] = [1002 => "SET NAMES '".$this->_character_set_database."'"];
         }
 
