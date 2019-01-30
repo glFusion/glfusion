@@ -3125,4 +3125,14 @@ class Article
         $this->errors[] = $errorMessage;
     }
 
+    public function isViewable()
+    {
+        global $_CONF;
+
+        if ($this->draft_flag == 1 || $this->date > $_CONF['_now']->toMySQL(false) || $this->getAccess() == 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

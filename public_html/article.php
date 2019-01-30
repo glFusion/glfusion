@@ -74,7 +74,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
 }
 
 $story = new Article();
-if ( $story->retrieveArticleFromDB($sid) != $story::STORY_LOADED_OK ) {
+if ( $story->retrieveArticleFromDB($sid) != $story::STORY_LOADED_OK || $story->isViewable() == false) {
     COM_404();
 }
 

@@ -114,8 +114,12 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case "title":
             $A['title'] = str_replace('$', '&#36;', $A['title']);
-            $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='.urlencode($A['sid']));
-            $retval = COM_createLink($A['title'], $article_url);
+            if ($A['draft_flag'] == 0 && $A['date'] < $_CONF['_now']->toMySQL(false)) {
+                $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='.urlencode($A['sid']));
+                $retval = COM_createLink($A['title'], $article_url);
+            } else {
+                $retval = $A['title'];
+            }
             break;
 
         case 'tid':

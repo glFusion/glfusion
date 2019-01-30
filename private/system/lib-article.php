@@ -90,7 +90,7 @@ function plugin_autotags_article( $op, $content = '', $autotag = '')
                 $U['tids'] = '';
             }
 
-            $sql = " (date <= '".$_CONF['_now']->toMySQL(true)."') AND (draft_flag = 0)";
+            $sql = " (date <= '".$_CONF['_now']->toMySQL(false)."') AND (draft_flag = 0)";
 
             if (empty ($topic)) {
                 $sql .= COM_getLangSQL ('tid', 'AND', 's');
@@ -153,7 +153,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
     $sql = "SELECT commentcode FROM `{$_TABLES['stories']}` WHERE sid=? AND (draft_flag = 0) AND (date <= ?) " . $db->getPermSQL('AND');
 
     $commentcode = $db->conn->fetchColumn($sql,
-                                          array($id,$_CONF['_now']->toMySQL(true)),
+                                          array($id,$_CONF['_now']->toMySQL(false)),
                                           0,
                                           array(Database::STRING,Database::STRING)
     );
@@ -373,7 +373,7 @@ function ARTICLE_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $conten
                     AND (tid = ? OR alternate_tid = ?)
                     AND perm_anon > 0 ORDER BY date DESC $limitsql";
 
-        $stmt = $db->conn->executeQuery($sql,array($_CONF['_now']->toMySQL(true),$tid,$tid));
+        $stmt = $db->conn->executeQuery($sql,array($_CONF['_now']->toMySQL(false),$tid,$tid));
 
         while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             $sids[] = $row['sid'];
@@ -457,7 +457,7 @@ function ARTICLE_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $c
         if( substr( $limit, -1 ) == 'h' ) { // last xx hours
             $limitsql = '';
             $hours = substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(true)."',INTERVAL $hours HOUR)";
+            $where = " AND date >= DATE_SUB('".$_CONF['_now']->toMySQL(false)."',INTERVAL $hours HOUR)";
         } else {
             $limitsql = ' LIMIT ' . $limit;
         }
@@ -483,7 +483,7 @@ function ARTICLE_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $c
         $where .= " AND (tid IN ($tlist))";
     }
     if ($frontpage_only) {
-        $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(true).'" ) ) ';
+        $where .= ' AND ( frontpage = 1 OR ( frontpage = 2 AND frontpage_date >= "'.$_CONF['_now']->toMySQL(false).'" ) ) ';
     }
 
     $content = array();
@@ -491,7 +491,7 @@ function ARTICLE_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $c
 
     $stmt = $db->conn->executeQuery(
         "SELECT * FROM `{$_TABLES['stories']}`
-          WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(true)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql");
+          WHERE draft_flag = 0 AND date <= '".$_CONF['_now']->toMySQL(false)."' $where AND perm_anon > 0 ORDER BY date DESC, sid ASC $limitsql");
 
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $sids[] = $row['sid'];
@@ -625,7 +625,7 @@ function ARTICLE_emailUserTopics()
         $storySQL = "SELECT *
                      FROM `{$_TABLES['stories']}`
                         WHERE draft_flag = 0
-                        AND date <= ".$db->conn->quote($_CONF['_now']->toMySQL(true))."
+                        AND date <= ".$db->conn->quote($_CONF['_now']->toMySQL(false))."
                         AND date >= ".$db->conn->quote($lastrun);
 
 
@@ -740,7 +740,7 @@ function ARTICLE_emailUserTopics()
 
     $db->conn->executeUpdate(
         "UPDATE `{$_TABLES['vars']}` SET value = ? WHERE name = 'lastemailedstories'",
-        array($_CONF['_now']->toMySQL(true)),
+        array($_CONF['_now']->toMySQL(false)),
         array(Database::STRING)
     );
 }
@@ -835,7 +835,7 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
     } else {
         $where = " WHERE (sid = '" . DB_escapeString($id) . "') AND";
     }
-    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(true).'")';
+    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(false).'")';
     if ($uid > 0) {
         $permSql = COM_getPermSql('AND', $uid)
                  . COM_getTopicSql('AND', $uid);
