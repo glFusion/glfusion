@@ -168,7 +168,7 @@
 			{plugin_body_vars}
 {!endif}
 
-			<div class="uk-clearfix"></div>
+			<div class="uk-clearfix uk-margin"></div>
 
 {!if readmore_url}
 			<a class="uk-button uk-button-primary" href="{readmore_url}">{lang_continue_reading}</a>
