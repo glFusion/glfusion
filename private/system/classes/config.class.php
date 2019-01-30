@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2018 by the following authors:
+*  Copyright (C) 2018-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
@@ -291,26 +291,37 @@ class config
         if ($info === false) {
             return;
         }
+        $params = array();
+        $types  = [];
+
         $value = $info['value'];
         $default_value = $info['default_value'];
 
         $sql = "UPDATE `{$_TABLES['conf_values']}` ";
         if ($value == 'unset') {
-            $sql .= " SET value = :defval, default_value = :u_defval";
+            $sql .= " SET value = ?, default_value = ?";
+            $params[] = $default_value;
+            $params[] = $default_value;
+            $types[] = Database::STRING;
+            $types[] = Database::STRING;
         } else {
-            $sql .= " SET value = :defval";
+            $sql .= " SET value = ?";
+            $params[] = $default_value;
+            $types[] = Database::STRING;
         }
-        $sql .= " WHERE name = :name AND group_name = :group_name";
+        $sql .= " WHERE name = ? AND group_name = ?";
+        $params[] = $name;
+        $params[] = $group;
+        $types[] = Database::STRING;
+        $types[] = Database::STRING;
 
-        $stmt = $db->conn->prepare($sql);
-        $stmt->bindValue("defval", $default_value);
-        if ($value == 'unset') {
-            $stmt->bindValue("u_defval", 'unset:'.$default_value);
-        }
-        $stmt->bindValue("name", $name);
-        $stmt->bindValue("group_name", $group);
+
         try {
-            $stmt->execute();
+            $stmt = $db->conn->executeQuery(
+                        $sql,
+                        $params,
+                        $types
+            );
         } catch(\Doctrine\DBAL\DBALException $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);

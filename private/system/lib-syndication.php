@@ -49,6 +49,9 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
 
     $sids = array ();
 
+    $params = array();
+    $types  = array();
+
     $topiclist = array();
     $sql = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',1);
     $stmt = $db->conn->executeQuery($sql);
@@ -65,13 +68,15 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
     $where = '';
     $limitsql = '';
     $hours = 0;
-    $bindHours = false;
 
     if (!empty($limit)) {
         if (substr($limit, -1) == 'h') { // last xx hours
             $hours = (int) substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB(:date,INTERVAL :hours HOUR)";
-            $bindHours = true;
+            $where = " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
+            $params[] = $_CONF['_now']->toMySQL(true);
+            $params[] = $hours;
+            $types[]  = Database::STRING;
+            $types[]  = Database::INTEGER;
         } else {
             $limitsql = ' LIMIT ' . (int) $limit;
         }
@@ -84,19 +89,23 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
         $where .= " AND (tid IN (".$inTopics.") OR alternate_tid IN (".$inTopics."))";
     }
     if ($frontpage_only) {
-        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= :date ) ) ';
+        $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= ? ) ) ';
+        $params[] = $_CONF['_now']->toMySQL(true);
+        $types[]  = Database::STRING;
     }
 
     $sql = "SELECT sid FROM `{$_TABLES['stories']}`
-            WHERE draft_flag = 0 AND date <= :date ".
+            WHERE draft_flag = 0 AND date <= ? ".
             $where . " AND perm_anon > 0 ORDER BY date DESC, sid ASC " . $limitsql;
 
-    $stmt = $db->conn->prepare($sql);
-    $stmt->bindValue('date',$_CONF['_now']->toMySQL(true));
-    if ($bindHours) {
-        $stmt->bindValue('hours',$hours);
-    }
-    $stmt->execute();
+    $params[] = $_CONF['_now']->toMySQL(true);
+    $types[]  = Database::STRING;
+
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
 
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ($A['sid'] == $updated_id) {
@@ -132,16 +141,31 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
     $where = '';
-    $bindHours = false;
 
     $db = Database::getInstance();
+    $params = array();
+    $types  = array();
+
+    $sql = "SELECT sid FROM `{$_TABLES['stories']}`
+                WHERE draft_flag = 0 AND date <= ?
+                AND (tid = ? OR alternate_tid = ?) AND perm_anon > 0 ";
+
+    $params[] = $_CONF['_now']->toMySQL(true);
+    $params[] = $tid;
+    $params[] = $tid;
+    $types[]  = Database::STRING;
+    $types[]  = Database::STRING;
+    $types[]  = Database::STRING;
 
     if (!empty( $limit)) {
         if (substr( $limit, -1 ) == 'h') { // last xx hours
             $limitsql = '';
             $hours = (int) substr( $limit, 0, -1 );
-            $where = " AND date >= DATE_SUB(:date,INTERVAL :hours HOUR)";
-            $bindHours = true;
+            $where = " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
+            $params[] = $_CONF['_now']->toMySQL(true);
+            $params[] = $hours;
+            $types[]  = Database::STRING;
+            $types[]  = Database::INTEGER;
         } else {
             $limitsql = ' LIMIT ' . (int) $limit;
             $hours = 0;
@@ -150,19 +174,13 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
         $limitsql = ' LIMIT 10';
     }
 
-    $sql = "SELECT sid FROM `{$_TABLES['stories']}`
-                WHERE draft_flag = 0 AND date <= :date
-                AND (tid = :tid OR alternate_tid = :tid) AND perm_anon > 0 "
-                . $where .
-                " ORDER BY `date` DESC " . $limitsql;
+    $sql .= $where . " ORDER BY `date` DESC " . $limitsql;
 
-    $stmt = $db->conn->prepare($sql);
-    $stmt->bindValue("date", $_CONF['_now']->toMySQL(true));
-    if ($bindHours) {
-        $stmt->bindValue("hours", $hours);
-    }
-    $stmt->bindValue("tid",$tid);
-    $stmt->execute();
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
 
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ($A['sid'] == $updated_id) {
@@ -230,7 +248,6 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 
     $content = array ();
     $sids = array();
-    $bindHours = false;
 
     $db = Database::getInstance();
 
