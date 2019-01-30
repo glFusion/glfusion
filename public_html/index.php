@@ -23,9 +23,10 @@ if (!@file_exists('siteconfig.php') ) {
     exit;
 }
 
+require_once 'lib-common.php';
+
 use glFusion\Database\Database;
 
-require_once 'lib-common.php';
 USES_lib_comment();
 
 $newstories = false;
@@ -57,6 +58,12 @@ $pageBody .= glfusion_UpgradeCheck();
 $pageBody .= glfusion_SecurityCheck();
 
 $topic = Topic::currentID();
+if (isset($_GET['topic'])) {
+    $requestedTopic = filter_input(INPUT_GET,'topic',FILTER_SANITIZE_STRING);
+    if (strtolower($requestedTopic) != strtolower($topic)) {
+        COM_404();
+    }
+}
 
 $page = (int) filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT);
 if ($page == 0) {
