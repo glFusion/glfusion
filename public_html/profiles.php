@@ -852,7 +852,8 @@ switch ($what) {
                      . contactform ($uid, $subject)
                      . COM_siteFooter ();
         } else {
-            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
+            COM_404();
+//            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
         break;
 }
