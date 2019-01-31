@@ -746,7 +746,7 @@ function SEC_authenticate($username, $password, &$uid)
     if ($U === false || $U === NULL) {
         $U = $db->conn->fetchAssoc(
                 "SELECT status, passwd, email, uid FROM `{$_TABLES['users']}`
-                    WHERE email=? AND (account_type & ?)".
+                    WHERE email=? AND (account_type & ?)",
                 array($username,LOCAL_USER),
                 array(Database::STRING,Database::INTEGER)
         );
