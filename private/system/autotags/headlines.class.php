@@ -354,7 +354,7 @@ class autotag_headlines extends BaseAutotag {
                     $A['introtext'] = $truncatedArticle;
                 }
 
-                $topicurl = $_CONF['site_url'] . '/index.php?topic=' . urlencode($story->get('sid'));
+                $topicurl = $_CONF['site_url'] . '/index.php?topic=' . urlencode($story->get('tid'));
                 $dt->setTimestamp($A['unixdate']);
 
                 if ( $story->get('commentcode') >= 0 ) {
