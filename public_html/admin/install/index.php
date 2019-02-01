@@ -1403,7 +1403,7 @@ function INST_gotSiteInformation()
 
         }
 
-        while ( ( $A = $res->fetch(\glFusion\Database::ASSOCIATIVE) ) !== false ) {
+        while ( ( $A = $res->fetch(\Doctrine\DBAL\FetchMode::ASSOCIATIVE) ) !== false ) {
             if (strcasecmp($A['Engine'], 'InnoDB') == 0) {
                 if ((strcasecmp($A['Support'], 'yes') == 0) ||
                     (strcasecmp($A['Support'], 'default') == 0)) {
@@ -1422,7 +1422,7 @@ function INST_gotSiteInformation()
     } catch(\Doctrine\DBAL\DBALException | PDOException $e) {
         // ignore error
     }
-    $collation = @$collationResult->fetch(\glFusion\Database::ASSOCIATIVE);
+    $collation = @$collationResult->fetch(\Doctrine\DBAL\FetchMode::ASSOCIATIVE);
     $collation_database = $collation["@@collation_database"];
     $character_set = $collation["@@character_set_database"];
     $_GLFUSION['db_charset'] = $character_set;
