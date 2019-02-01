@@ -256,7 +256,7 @@ class config
         try {
             $db->conn->executeUpdate($sql,
                     array($escaped_val,$escaped_name,$escaped_grp),
-                    array(\Database::STRING,Database::STRING,Database::STRING));
+                    array(Database::STRING,Database::STRING,Database::STRING));
         } catch(\Doctrine\DBAL\DBALException $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
