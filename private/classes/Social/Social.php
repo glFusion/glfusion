@@ -210,10 +210,11 @@ class Social
                 array($uid),
                 array(Database::INTEGER)
         );
-        while ($stmt->fetch(Database::ASSOCIATIVE)) {
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             $id = $row['ssid'];
             $userServicesArray[$id] = $row;
         }
+
         foreach ($socialServicesArray AS $id => $data) {
             if ( isset($userServicesArray[$id]) ) {
                 $socialServicesArray[$id]['ss_username'] = $userServicesArray[$id]['ss_username'];
