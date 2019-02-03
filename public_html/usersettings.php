@@ -39,9 +39,9 @@ require_once 'lib-common.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Social\Social;
 
 USES_lib_user();
-USES_lib_social();
 
 // Set this to true to have this script generate various debug messages in
 // error.log
@@ -351,7 +351,7 @@ function edituser()
 
     PLG_profileVariablesEdit ($_USER['uid'], $preferences);
 
-    $follow_me = \glFusion\Social\Social::_followMeProfile( $_USER['uid'] );
+    $follow_me = Social::followMeProfile( $_USER['uid'] );
     if ( is_array($follow_me) && count($follow_me) > 0 ) {
         $preferences->set_block('profile','social_links','sl');
         $preferences->set_var('social_followme_enabled',true);
@@ -1139,7 +1139,7 @@ function saveuser($A)
     $A['pgpkey'] = strip_tags ($A['pgpkey']);
 
     // filter / check social integrations here
-    $social_services = \glFusion\Social\Social::followMeProfile( $_USER['uid'] );
+    $social_services = Social::followMeProfile( $_USER['uid'] );
     foreach ( $social_services AS $service ) {
         $service_input = $service['service'].'_username';
         if ( isset( $A['$service_input'])) {
@@ -1478,7 +1478,7 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('lang_bio', $LANG04[7]);
     $user_templates->set_var ('user_bio', PLG_replaceTags(nl2br ($A['about']),'glfusion','about_user'));
 
-    $user_templates->set_var('follow_me',SOC_getFollowMeIcons( $user, 'follow_user_profile.thtml' ));
+    $user_templates->set_var('follow_me',Social::getFollowMeIcons( $user, 'follow_user_profile.thtml' ));
 
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
     $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
