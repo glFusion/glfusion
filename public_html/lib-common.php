@@ -6381,9 +6381,11 @@ function COM_getStyleCacheLocation()
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_layout'].$_CONF['css_cache_filename'].'.css';
         $cacheURL  = $_CONF['layout_url'].'/'.$_CONF['css_cache_filename'].'.css';
+        $cacheURL .= '?ts=' . @filemtime($cacheFile);
     } else {
         $cacheFile = $_CONF['path'].'data/layout_cache/'.$_CONF['css_cache_filename'].$_USER['theme'].'.css';
         $cacheURL  = $_CONF['layout_url'].'/css.php?t='.$_USER['theme'];
+        $cacheURL .= '&ts=' . @filemtime($cacheFile);
     }
 
     if ( !isset($themeAPI) || $themeAPI < 3) {
@@ -6407,9 +6409,11 @@ function COM_getJSCacheLocation()
     if ( isset($_SYSTEM['use_direct_style_js']) && $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_layout'].'/'.$_CONF['js_cache_filename'].'.js';
         $cacheURL  = $_CONF['layout_url'].'/'.$_CONF['js_cache_filename'].'.js';
+        $cacheURL .= '?ts=' . @filemtime($cacheFile);
     } else {
         $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].'_'.$_USER['theme'].'.js';
         $cacheURL  = $_CONF['layout_url'].'/js.php?t='.$_USER['theme'];
+        $cacheURL .= '&ts=' . @filemtime($cacheFile);
     }
     if ( !isset($themeAPI) || $themeAPI < 3) {
         if ( !file_exists($_CONF['path_layout'].'js.php')) {
