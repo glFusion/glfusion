@@ -76,61 +76,18 @@ function plugin_autotags_article( $op, $content = '', $autotag = '')
         if ( $autotag['tag'] == 'story_introtext' ) {
             $url = '';
             $linktext = '';
-            if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-                $U = $db->conn->fetchAssoc(
-                    "SELECT maxstories,tids,aids
-                      FROM `{$_TABLES['userindex']}`
-                      WHERE uid = ?",
-                    array($_USER['uid']),
-                    array(Database::INTEGER)
-                );
-            } else {
-                $U['maxstories'] = 0;
-                $U['aids'] = '';
-                $U['tids'] = '';
+
+            $article = new Article();
+            if ($article->retrieveArticleFromDB($autotag['parm1']) == Article::STORY_LOADED_OK) {
+                if ($article->isViewable() && $article->getAccess() > 0) {
+                    $linktext = $article->getDisplayArticle('y');
+                    $content = str_replace($autotag['tagstr'],$linktext,$content);
+                }
             }
-
-            $sql = " (date <= '".$_CONF['_now']->toMySQL(false)."') AND (draft_flag = 0)";
-
-            if (empty ($topic)) {
-                $sql .= COM_getLangSQL ('tid', 'AND', 's');
-            }
-
-            $sql .= COM_getPermSQL ('AND', 0, 2, 's');
-
-            if (!empty($U['aids'])) {
-                $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
-            }
-
-            if (!empty($U['tids'])) {
-                $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
-            }
-
-            $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
-
-            $userfields = 'u.uid, u.username, u.fullname';
-
-            $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-                     . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-                     . $userfields . ", t.topic, t.imageurl "
-                     . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-                     . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
-                     . $sql;
-
-            $result = DB_query ($msql);
-            $nrows = DB_numRows ($result);
-            if ( $A = DB_fetchArray( $result ) ) {
-                $story = new Article();
-                $story->retrieveDataFromVars($A);
-                $linktext = $story->getDisplayArticle('y');
-            }
-            $content = str_replace($autotag['tagstr'],$linktext,$content);
         }
     }
     return $content;
 }
-
-// comment apis for stories - lib-comment
 
 /**
  * article: saves a comment
@@ -749,6 +706,8 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $LANG09;
 
+    $db = Database::getInstance();
+
     $buildingSearchIndex = false;
 
     $properties = explode(',', $what);
@@ -821,6 +780,9 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
 
     $fields = array_unique($fields);
 
+    $params = array();
+    $types  = array();
+
     if (count($fields) == 0) {
         $retval = array();
         return NULL;
@@ -833,26 +795,42 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
             $where = ' WHERE';
         }
     } else {
-        $where = " WHERE (sid = '" . DB_escapeString($id) . "') AND";
+        $where = " WHERE (sid = ?) AND";
+        $params[] = $id;
+        $types[]  = Database::STRING;
+
     }
-    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(false).'")';
+    $where .= ' (date <= ?)';
+
+    $params[] = $_CONF['_now']->toMySQL(false);
+    $types[]  = Database::STRING;
+
     if ($uid > 0) {
-        $permSql = COM_getPermSql('AND', $uid)
-                 . COM_getTopicSql('AND', $uid);
+        $permSql = $db->getPermSql('AND', $uid)
+                 . $db->getTopicSql('AND', $uid);
     } else {
-        $permSql = COM_getPermSql('AND') . COM_getTopicSql('AND');
+        $permSql = $db->getPermSql('AND') . $db->getTopicSql('AND');
     }
-    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['stories']}" . $where . $permSql;
+    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS unixdate FROM `{$_TABLES['stories']}`" . $where . $permSql;
     if ($id != '*') {
         $sql .= ' LIMIT 1';
     }
 
-    $result = DB_query($sql);
-    $numRows = DB_numRows($result);
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
 
     $retval = array();
-    for ($i = 0; $i < $numRows; $i++) {
-        $A = DB_fetchArray($result);
+
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+
+        $article = new Article();
+        $article->retrieveArticleFromVars($A);
+        if (!$article->isViewable() || $article->getAccess() < 2) {
+            continue;
+        }
 
         $props = array();
         foreach ($properties as $p) {
@@ -864,26 +842,25 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
                     $props['date-created'] = $A['unixdate'];
                     break;
                 case 'description':
-                    $props[$p] = trim(PLG_replaceTags($A['introtext'] . ' ' . $A['bodytext'],'glfusion','story'));
+                    $props[$p] = trim($article->getDisplayItem('introtext') . $article->getDisplayItem('bodytext'));
                     break;
                 case 'raw-description':
                 case 'searchidx' :
-                    $props[$p] = trim($A['introtext'] . ' ' . $A['bodytext']);
+                    $props[$p] = trim($article->get('introtext') . $article->get('bodytext'));
                     break;
                 case 'excerpt':
-                    $excerpt = $A['introtext'];
-                    $props['excerpt'] = trim(PLG_replaceTags($excerpt,'glfusion','story'));
+                    $props['excerpt'] = trim($article->getDisplayItem('introtext'));
                     break;
                 case 'feed':
-                    $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
-                                           "topic = '::all'");
+                    $feedfile = $db->getItem($_TABLES['syndication'], 'filename',
+                                           array('topic'=> '::all'));
                     if (empty($feedfile)) {
-                        $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
-                                               "topic = '::frontpage'");
+                        $feedfile = $db->getItem($_TABLES['syndication'], 'filename',
+                                                array('topic'=> '::frontpage'));
                     }
                     if (empty($feedfile)) {
-                        $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
-                                               "topic = '{$A['tid']}'");
+                        $feedfile = $db->getItem($_TABLES['syndication'], 'filename',
+                                               array('topic' => $A['tid']));
                     }
                     if (empty($feedfile)) {
                         $props['feed'] = '';
@@ -895,8 +872,10 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
                     $props['id'] = $A['sid'];
                     break;
                 case 'title':
-                    $props['title'] = $A['title'];
-                    if ( $buildingSearchIndex ) $props['title'] .= ' ' . $A['subtitle'];
+                    $props['title'] = $article->getDisplayItem('title');
+                    if ($buildingSearchIndex) {
+                        $props['title'] .= ' ' . $article->getDisplayItem('subtitle') ;
+                    }
                     break;
                 case 'url':
                     if (empty($A['sid'])) {
@@ -920,7 +899,7 @@ function plugin_getiteminfo_article($id, $what, $uid = 0, $options = array())
                     break;
                 case 'author_name' :
                     if ( $A['attribution_author'] != "" ) {
-                        $props['author_name'] = $A['attribution_author'];
+                        $props['author_name'] = $article->getDisplayItem('attribution_author');
                     } else {
                         $props['author_name'] = COM_getDisplayName($A['uid']);
                     }
