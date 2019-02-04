@@ -294,7 +294,7 @@ function bb2_ban_remove($ip)
 
 function bb2_ban($ip,$type = 1,$reason = '')
 {
-    global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR, $LANG_ADM_ACTION;
+    global $_CONF,$_TABLES, $LANG_BAD_BEHAVIOR, $LANG_ADM_ACTIONS;
 
     if ( $type != 0 && (!isset($_CONF['bb2_ban_enabled']) || $_CONF['bb2_ban_enabled'] != 1 )) {
         return;
