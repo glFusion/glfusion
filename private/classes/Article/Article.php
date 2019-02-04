@@ -296,9 +296,9 @@ class Article
      * all associated items such as comments, etc.
      * Static to allow calling from cron
      *
-     * @param   string  $sid   the story ID
-     * @param   bool    $batch Denotes if system processing such as cron.php
-     *                         this releives some permission checks
+     * @param   string  $sid    the story ID
+     * @param   bool    $system Denotes if system processing such as cron.php
+     *                          this relaxes some permission checks
      *
      */
     public static function delete($sid, $system = false, $token = '')
@@ -923,7 +923,8 @@ class Article
         }
 
         $currentImageCount = $db->conn->fetchColumn(
-                                "SELECT MAX(ai_img_num) FROM `{$_TABLES['article_images']}` WHERE ai_sid = ?",
+                                "SELECT MAX(ai_img_num) FROM `{$_TABLES['article_images']}`
+                                    WHERE ai_sid = ?",
                                 array($this->sid),
                                 0,
                                 array(Database::STRING)
