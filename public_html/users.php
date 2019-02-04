@@ -70,23 +70,23 @@ function userprofile()
     if ( isset($_GET['uid']) ) {
         $user = COM_applyFilter ($_GET['uid'], true);
         if (!is_numeric ($user) || ($user < 2)) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php');
+            COM_404();
         }
     } else if ( isset($_GET['username']) ) {
         $username = $_GET['username'];
         if ( !USER_validateUsername($username,1) ) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php');
+            COM_404();
         }
         if ( empty($username) || $username == '' ) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php');
+            COM_404();
         }
         $username = DB_escapeString ($username);
         $user = DB_getItem ($_TABLES['users'], 'uid', "username = '$username'");
         if ($user < 2) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php');
+            COM_404();
         }
     } else {
-        echo COM_refresh ($_CONF['site_url'] . '/index.php');
+        COM_404();
     }
     $msg = 0;
     if (isset ($_GET['msg'])) {
@@ -99,7 +99,7 @@ function userprofile()
     $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".(int) $user);
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
-        echo COM_refresh ($_CONF['site_url'] . '/index.php');
+        COM_404();
     }
     $A = DB_fetchArray ($result);
 
@@ -656,7 +656,8 @@ function USER_createuser($info = array())
     // if new user registration is disabled - abort
     if ($_CONF['disable_new_user_registration']) {
         COM_setMsg($LANG04[122],'error');
-        echo COM_refresh($_CONF['site_url']);
+        COM_404();
+//        echo COM_refresh($_CONF['site_url']);
     }
     // do not want re-auth option
 
@@ -955,7 +956,9 @@ function USER_registrationForm($info = array(), $messages = array())
     $retval = '';
 
     // if user is already logged in - take them to their profile page
-    if ( !COM_isAnonUser() ) echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
+    if ( !COM_isAnonUser() ) {
+        echo COM_refresh($_CONF['site_url'].'/users.php?mode=profile&uid='.$_USER['uid']);
+    }
 
     // if new user registration is disabled - abort
     if ($_CONF['disable_new_user_registration']) {
@@ -1252,7 +1255,8 @@ function _userNewpwd()
         }
     } else {
         // this request doesn't make sense - ignore it
-        echo COM_refresh ($_CONF['site_url']);
+        COM_404();
+//        echo COM_refresh ($_CONF['site_url']);
     }
     return $retval;
 }
@@ -1292,7 +1296,8 @@ function _userSetnewpwd()
             }
         } else {
             // this request doesn't make sense - ignore it
-            echo COM_refresh ($_CONF['site_url']);
+            COM_404();
+//            echo COM_refresh ($_CONF['site_url']);
         }
     }
     return $retval;
@@ -1385,7 +1390,8 @@ function _userVerify()
         }
     } else {
         // this request doesn't make sense - ignore it
-        echo COM_refresh ($_CONF['site_url']);
+        COM_404();
+//        echo COM_refresh ($_CONF['site_url']);
     }
     return $retval;
 }
