@@ -2643,7 +2643,7 @@ class Article
         }
          return RATING_ratingBar(
                     'article',
-                    $this->sid,
+                    $this->get('sid'),
                     $this->get('votes'),
                     $this->get('rating'),
                     $voted,
