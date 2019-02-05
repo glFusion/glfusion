@@ -3226,7 +3226,7 @@ function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
                 'votes'  => $added
             ),
             array(
-                array('sid' => $id_sent)
+                'sid' => $id_sent
             ),
             array(
                 Database::INTEGER,
