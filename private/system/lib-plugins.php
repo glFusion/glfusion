@@ -25,13 +25,6 @@ use glFusion\Database\Database;
 use glFusion\Cache\Cache;
 use glFusion\Log\Log;
 
-/**
-* This is the plugin library for glFusion.  This is the API that plugins can
-* implement to get tight integration with glFusion.
-* See each function for more details.
-*
-*/
-
 global $autoTagUsage;
 
 /**
@@ -3504,21 +3497,36 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
         return false;
     }
 
-    if ( $track_id == 0 ) {
-        $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email,id FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid" .
-                  " WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE.
-                  " AND category='".DB_escapeString($category)."'".
-                  " AND type='".DB_escapeString($type)."'";
-    } else {
-        $sql    = "SELECT {$_TABLES['subscriptions']}.uid,email,id FROM {$_TABLES['subscriptions']} LEFT JOIN {$_TABLES['users']} ON {$_TABLES['subscriptions']}.uid={$_TABLES['users']}.uid" .
-                  " WHERE {$_TABLES['users']}.status=".USER_ACCOUNT_ACTIVE.
-                  " AND category='".DB_escapeString($category)."'".
-                  " AND id='".DB_escapeString($track_id)."'".
-                  " AND type='".DB_escapeString($type)."'";
-    }
+    $db = Database::getInstance();
 
-    $result = DB_query($sql);
-    $nrows  = DB_numRows($result);
+    if ( $track_id == 0 ) {
+        $sql    = "SELECT s.uid,email,id
+                    FROM `{$_TABLES['subscriptions']}` AS s
+                      LEFT JOIN `{$_TABLES['users']}` AS u ON s.uid=u.uid
+                   WHERE u.status=?
+                         AND category=?
+                         AND type=?";
+
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindValue(1,USER_ACCOUNT_ACTIVE,Database::INTEGER);
+        $stmt->bindValue(2,$category,Database::STRING);
+        $stmt->bindValue(3,$type,Database::STRING);
+
+    } else {
+        $sql    = "SELECT s.uid,email,id
+                    FROM `{$_TABLES['subscriptions']}` AS s
+                      LEFT JOIN `{$_TABLES['users']}` AS u ON s.uid=u.uid
+                   WHERE u.status=?
+                         AND category=?
+                         AND id=?
+                         AND type=?";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindValue(1,USER_ACCOUNT_ACTIVE,Database::INTEGER);
+        $stmt->bindValue(2,$category,Database::STRING);
+        $stmt->bindValue(3,$track_id,Database::INTEGER);
+        $stmt->bindValue(4,$type,Database::STRING);
+    }
+    $stmt->execute();
 
     $messageData = array();
     $messageData['subject'] = $subject;
@@ -3531,7 +3539,7 @@ function PLG_sendSubscriptionNotification($type,$category,$track_id,$post_id,$po
 
     $to = array();
 
-    while (($S = DB_fetchArray($result)) != NULL ) {
+    while($S = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $S['uid'] == $post_uid ) {  // skip author
             continue;
         }
@@ -3819,16 +3827,22 @@ function plugin_privacy_export_rating($uid,$email='',$username='',$ip='')
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $exportFields = array('type','item_id','rating','uid','ip_address','ratingdate');
 
-    $sql = "SELECT * FROM {$_TABLES['rating_votes']} WHERE uid = ". (int) $uid;
-    if ( $ip != '' ) {
-        $sql .= " OR ip_address = '" . DB_escapeString($ip)."'";
+    $sql = "SELECT * FROM `{$_TABLES['rating_votes']}` WHERE uid = ?";
+    if (!empty($ip)) {
+        $sql .= " OR ip_address = ?";
     }
     $sql .= " ORDER BY ratingdate ASC";
-
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
+    $stmt = $db->conn->prepare($sql);
+    $stmt->bindValue(1,$uid,Database::INTEGER);
+    if (!empty($ip)) {
+        $stmt->bindValue(2,$ip,Database::STRING);
+    }
+    $stmt->execute();
+    $rows = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     $retval .= "<ratings>\n";
 
@@ -3865,10 +3879,20 @@ function plugin_privacy_export_social($uid,$email='',$username='',$ip='')
 
     $exportFields = array('social_service','ss_username','rating','uid','ip_address','ratingdate');
 
-    $sql = "SELECT *, ss.display_name AS social_service FROM {$_TABLES['social_follow_user']} AS su LEFT JOIN {$_TABLES['social_follow_services']} AS ss ON su.ssid=ss.ssid WHERE uid = ". (int) $uid;
+    $db = Database::getInstance();
 
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
+    $sql = "SELECT *, ss.display_name AS social_service
+             FROM `{$_TABLES['social_follow_user']}` AS su
+             LEFT JOIN `{$_TABLES['social_follow_services']}` AS ss
+             ON su.ssid=ss.ssid
+             WHERE uid = ?";
+
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                array($uid),
+                array(Database::INTEGER)
+    );
+    $rows = $stmt->fetchAll(Database::ASSOCIATIVE);
 
     $retval .= "<socialservices>\n";
 
