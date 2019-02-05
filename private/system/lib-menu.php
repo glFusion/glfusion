@@ -10,7 +10,6 @@
 *  Copyright (C) 2018-2018 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
-*
 */
 
 if (!defined ('GVERSION')) {

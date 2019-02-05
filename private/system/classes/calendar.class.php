@@ -1,46 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | calendar.class.php                                                       |
-// |                                                                          |
-// | glFusion calendar library.                                               |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony@tonybibbs.com                           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Calendar Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: Tony Bibbs       - tony AT tonybibbs DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-/**
-* This file contains the two classes used to help support the calendar pages.
-* Please note that our calendar code is in shambles and is hard to understand.
-* Not so much this file as /calendar/index.php and calendar/event.php.
-* Those files along with this class need to be reworked to be easier
-* to maintain and support rich calendaring features
-*
-* @author   Tony Bibbs  <tony@tonybibbs.com>
-*/
 
 /**
 * This class represents the logical structure of a calendar day and is used by

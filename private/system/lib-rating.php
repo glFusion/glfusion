@@ -1,49 +1,42 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-rating.php                                                           |
-// |                                                                          |
-// | Rating Interface                                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on prior work by:                                                  |
-// | Copyright (C) 2006,2007, 2008 by the following authors:                  |
-// | Authors:                                                                 |
-// | Ryan Masuga, masugadesign.com  - ryan@masugadesign.com                   |
-// | Masuga Design                                                            |
-// |http://masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar  |
-// | Komodo Media (http://komodomedia.com)                                    |
-// | Climax Designs (http://slim.climaxdesigns.com/)                          |
-// | Ben Nolan (http://bennolan.com/behaviour/) for Behavio(u)r!              |
-// |                                                                          |
-// | Homepage for this script:                                                |
-// |http://www.masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/
-// +--------------------------------------------------------------------------+
-// | This (Unobtusive) AJAX Rating Bar script is licensed under the           |
-// | Creative Commons Attribution 3.0 License                                 |
-// |  http://creativecommons.org/licenses/by/3.0/                             |
-// |                                                                          |
-// | What that means is: Use these files however you want, but don't          |
-// | redistribute without the proper credits, please. I'd appreciate hearing  |
-// | from you if you're using this script.                                    |
-// |                                                                          |
-// | Suggestions or improvements welcome - they only serve to make the script |
-// | better.                                                                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Licensed under a Creative Commons Attribution 3.0 License.               |
-// | http://creativecommons.org/licenses/by/3.0/                              |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Rating Interface
+*
+* @license Creative Commons Attribution 3.0 License.
+*     http://creativecommons.org/licenses/by/3.0/                              |
+*
+*  Copyright (C) 2008-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on original work Copyright (C) 2006,2007,2008 by the following authors:
+*   Ryan Masuga, masugadesign.com  - ryan@masugadesign.com
+*   Masuga Design
+*      http://masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar
+*   Komodo Media (http://komodomedia.com)
+*   Climax Designs (http://slim.climaxdesigns.com/)
+*   Ben Nolan (http://bennolan.com/behaviour/) for Behavio(u)r!
+*
+*  Homepage for this script:
+*  http://www.masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/
+*
+*  This (Unobtusive) AJAX Rating Bar script is licensed under the
+*  Creative Commons Attribution 3.0 License
+*    http://creativecommons.org/licenses/by/3.0/
+*
+*  What that means is: Use these files however you want, but don't
+*  redistribute without the proper credits, please. I'd appreciate hearing
+*  from you if you're using this script.
+*
+*/
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /*
  * We will check when they rate the item if they have already

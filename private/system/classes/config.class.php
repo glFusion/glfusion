@@ -11,7 +11,7 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
-*  Aaron Blankstein  - kantai AT gmail DOT com
+*   Aaron Blankstein  - kantai AT gmail DOT com
 */
 
 if (!defined ('GVERSION')) {

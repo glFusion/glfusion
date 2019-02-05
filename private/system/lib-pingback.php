@@ -1,39 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-pingback.php                                                         |
-// |                                                                          |
-// | Functions needed to handle pingbacks.                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2005-2008 by the following authors:                        |
-// |                                                                          |
-// | Author: Dirk Haun - dirk AT haun-online DOT de                           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Pingback Support
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2005-2008 by the following authors:
+*   Authors: Dirk Haun - dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 /**
  * Get the Pingback URL for a given URL
@@ -60,10 +46,10 @@ function PNB_getPingbackUrl($url)
         if ( isset($headers['x-pingback'])) {
             $retval = $headers['x-pingback'];
         } else {
-            COM_errorLog("Pingback (HEAD): unable to locate x-pingback header");
+            Log::write('system',Log::WARNING,"Pingback (HEAD): unable to locate x-pingback header");
         }
     } else {
-        COM_errorLog('Pingback (HEAD): ' . $error);
+        Log::write('system',Log::ERROR,'Pingback (HEAD): ' . $error);
         return false;
     }
 
@@ -84,15 +70,15 @@ function PNB_getPingbackUrl($url)
             if ( $http->response_status == 200 ) {
                 $error = $http->ReadWholeReplyBody($body);
                 if ( $error != "" && strlen($body) ===0 ) {
-                    COM_errorLog("Pingback (GET): unable to retrieve response body");
+                    Log::write('system',Log::WARNING,"Pingback (GET): unable to retrieve response body");
                     return false;
                 }
             } else {
-                COM_errorLog("Pingback (GET): Got HTTP response code ".$http->response_status." when requesting ".$url);
+                Log::write('system',Log::ERROR,"Pingback (GET): Got HTTP response code ".$http->response_status." when requesting ".$url);
                 return false;
             }
         } else {
-            COM_errorLog("Pingback (GET): " . $error . " when requesting ".$url);
+            Log::write('system',Log::ERROR,"Pingback (GET): " . $error . " when requesting ".$url);
             return false;
         }
 

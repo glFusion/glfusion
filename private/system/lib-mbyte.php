@@ -1,35 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-mbyte.php                                                            |
-// |                                                                          |
-// | function collection to handle mutli-byte related issues                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Oliver Spiesshofer - oliver AT spiesshofer DOT com              |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Multibyte Library
+*  NOTE: This library is depreciated - please use the utf8_ APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: JOliver Spiesshofer - oliver AT spiesshofer DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
-    die('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
 
 // This function is supposed to display only language files in selection drop-
@@ -227,29 +212,4 @@ function MBYTE_mail($to, $subj, $mess, $header = NULL, $param = NULL)
     }
     return $result;
 }
-
-
-/**
-mb_decode_mimeheader -- Decode string in MIME header field
-mb_decode_numericentity --  Decode HTML numeric string reference to character
-mb_encode_mimeheader -- Encode string for MIME header
-mb_encode_numericentity --  Encode character to HTML numeric string reference
-mb_ereg_match --  Regular expression match for multibyte string
-mb_ereg_search_getpos --  Returns start point for next regular expression match
-mb_ereg_search_getregs --  Retrieve the result from the last multibyte regular expression match
-mb_ereg_search_init --  Setup string and regular expression for multibyte regular expression match
-mb_ereg_search_pos --  Return position and length of matched part of multibyte regular expression for predefined multibyte string
-mb_ereg_search_regs --  Returns the matched part of multibyte regular expression
-mb_ereg_search_setpos --  Set start point of next regular expression match
-mb_ereg_search --  Multibyte regular expression match for predefined multibyte string
-mb_parse_str --  Parse GET/POST/COOKIE data and set global variable
-mb_split -- Split multibyte string using regular expression
-mb_strcut -- Get part of string
-mb_strimwidth -- Get truncated string with specified width
-mb_strrpos --  Find position of last occurrence of a string in a string
-mb_strwidth -- Return width of string
-mb_substitute_character -- Set/Get substitution character
-mb_substr_count -- Count the number of substring occurrences
-*/
-
 ?>
