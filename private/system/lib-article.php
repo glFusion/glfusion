@@ -1121,6 +1121,8 @@ function plugin_canuserrate_article($item_id, $uid)
 
     $db = Database::getInstance();
 
+    $retval = false;
+
     // check to see if we own it...
     // check to see if we have permission to vote
     // check to see if we have already voted (Handled by library)...
@@ -1152,6 +1154,7 @@ function plugin_canuserrate_article($item_id, $uid)
             $retval = false;
         }
     }
+    return $retval;
 }
 
 ?>
