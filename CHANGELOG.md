@@ -3,6 +3,7 @@
 ## v1.7.7 (Unreleased)
 
 ### Added
+  - Add timestamp to CSS and JS files to facilitate cache refresh when updated
   - headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
   - Forum plugin - admin can now change the forum category when editing a forum
 
@@ -17,7 +18,10 @@
   - Set defaults / values for all datetime fields properly
 
 ### Fixed
+  - Ensure getItemInfo_comment is available
+  - Rating check for previous ratings did not return proper value
   - Missing lastedited field in Forum Plugin fresh installation
+  - Invalid topic reference on index.php now return 404 error
   - Set proper HTTP header when BB2 plugin rejects request
   - Forum did not properly pull the user's photo
   - BB2 Plugin's proxy setting did not work properly
