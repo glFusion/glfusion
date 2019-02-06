@@ -83,8 +83,14 @@ $T = new Template($_CONF['path_layout']);
 $T->set_file('page','index.thtml');
 
 if ( !empty($topic) ) {
+
+    $topicName = DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($topic)."'");
+    if ($topicName == NULL) {
+        COM_404();
+    }
+
     $T->set_var('breadcrumbs',true);
-    $T->set_var('topic',DB_getItem($_TABLES['topics'],'topic',"tid='".DB_escapeString($topic)."'"));
+    $T->set_var('topic',$topicName);
 }
 
 
