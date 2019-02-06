@@ -92,7 +92,7 @@ if ( $canRate ) {
         $new_rating = $current_rating;
     }
 } else {
-    list($rating_id, $current_rating, $cout) = RATING_getRating( $plugin, $id_sent );
+    list($rating_id, $current_rating, $count) = RATING_getRating( $plugin, $id_sent );
     $added = $count;
     $new_rating = $current_rating;
     $status = 3;
