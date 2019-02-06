@@ -2647,6 +2647,9 @@ function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
         USES_lib_story();
         return STORY_getItemInfo($id, $what, $uid, $options);
     } else {
+        if ($type == 'comment') {
+            USES_lib_comment();
+        }
         $args[1] = $id;
         $args[2] = $what;
         $args[3] = $uid;
