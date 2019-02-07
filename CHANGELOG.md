@@ -16,6 +16,8 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Story Editor - display thumbnail of attached images
+  - Referencing a non-existent topic on the index page now results in a 404 error
   - Completely rewritten story handler - including submission and presentation
   - Configuration 'passwd' fields will now be encrypted in the DB
   - glFusion will now remove a plugin entry from the Plugins table if the plugin's files are no longer available and it is selected for uninstall
@@ -54,17 +56,29 @@
 ## v1.7.7 (Unreleased)
 
 ### Added
+  - Add timestamp to CSS and JS files to facilitate cache refresh when updated
   - headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
   - Forum plugin - admin can now change the forum category when editing a forum
 
 ### Changed
+  - Modified the download method used by FileMgmt to ensure local buffers are properly flushed
+  - Change Google+ icon on Oauth button to just the Google icon
   - Updated Polish translations for the installer, by glFusion Poland
-  - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hold in the editor)
+  - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hole in the editor)
   - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
   - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
   - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
+  - Set defaults / values for all datetime fields properly
 
 ### Fixed
+  - Ensure getItemInfo_comment is available
+  - Rating check for previous ratings did not return proper value
+  - Missing lastedited field in Forum Plugin fresh installation
+  - Invalid topic reference on index.php now return 404 error
+  - Set proper HTTP header when BB2 plugin rejects request
+  - Forum did not properly pull the user's photo
+  - BB2 Plugin's proxy setting did not work properly
+  - Non-smiley formatting were sometimes replaced during the smiley parsing resulting in incorrect formatting
   - Forum boards admin - apostrophe's were double escaped causing the backslash to be stored as part of the forum name
   - Custom Autotag editor would remove custom replacement text due to a JavaScript error
   - Calendar upcoming event block would use the previous date as header in some instances

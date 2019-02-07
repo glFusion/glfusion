@@ -24,8 +24,6 @@ use \glFusion\Database\Database;
 use \glFusion\Article\Article;
 use \glFusion\Social\Social;
 
-USES_lib_social();
-
 if ($_CONF['trackback_enabled']) {
     USES_lib_trackback();
 }

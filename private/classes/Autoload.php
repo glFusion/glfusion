@@ -1,19 +1,16 @@
 <?php
 /**
- * glFusion Autoloader
- *
- * LICENSE: This program is free software; you can redistribute it
- *  and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * @category   glFusion CMS
- * @package    glFusion
- * @maintainer Mark R. Evans  mark AT glFusion DOT org
- * @copyright  2016-2017 - Mark R. Evans
- * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
- * @since      File available since Release 1.7.0
- */
+* glFusion CMS
+*
+* glFusion Class Autoloader
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 namespace glFusion;
 

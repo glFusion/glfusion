@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -21,6 +21,9 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
+
 USES_lib_user();
 
 /* --- Main Processing Loop --- */
@@ -30,6 +33,8 @@ $uid        = '';
 $status     = '';
 $token      = '';
 $message    = '';
+
+$db = Database::getInstance();
 
 if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
@@ -65,12 +70,16 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
             /* Distributed Authentication */
             $service = $_POST['service'];
             // safety check to ensure this user is really a known remote user
-            $sql = "SELECT uid
-                    FROM {$_TABLES['users']}
-                    WHERE remoteusername='". DB_escapeString($loginname)."'
-                    AND remoteservice='". DB_escapeString($service)."'";
-            $result = DB_query($sql);
-            if ( DB_numRows($result) != 1 ) {
+
+            $safetyCheckUid = $db->conn->fetchColumn(
+                    "SELECT uid
+                        FROM `{$_TABLES['users']}`
+                        WHERE remoteusername=? AND remoteservice=?",
+                    array($loginname,$service),
+                    0,
+                    array(Database::STRING,Database::STRING)
+            );
+            if ($safetyCheckUid === false || $safetyCheckUid === null) {
                 $status = -1;
             } else {
                 $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
@@ -132,7 +141,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     if ( $currentUID != $_USER['uid'] ) {
         // remove tokens for previous user
         if ( $currentUID > 1 ) {
-            DB_delete($_TABLES['tokens'],'owner_id',(int)$currentUID);
+            $db->conn->delete($_TABLES['tokens'],array('owner_id' => $currentUID),array(Database::INTEGER));
         }
         echo COM_refresh($destination);
         exit;
@@ -338,7 +347,23 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
     } else {
         // re-init the token...
         if ( $token != '' ) {
-            DB_query("UPDATE {$_TABLES['tokens']} SET created='".$_CONF['_now']->toMySQL(true)."' WHERE token='".DB_escapeString($token)."'");
+            try {
+                $db->conn->update(
+                    $_TABLES['tokens'],
+                    array(
+                        'created' => $_CONF['_now']->toMySQL(true)
+                    ),
+                    array(
+                        'token'=> $token
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING
+                    )
+                );
+            } catch(\Doctrine\DBAL\DBALException $e) {
+                Log::write('system',Log::WARNING,'Unable to update CSRF token in re-authentication');
+            }
         }
     }
 }

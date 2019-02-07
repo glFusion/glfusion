@@ -160,10 +160,11 @@ function handleView($view = true)
 
     $db = Database::getInstance();
 
-    $cmtRecord = $db->conn->fetchAssoc("SELECT sid,title,type FROM `{$_TABLES['comments']}` WHERE cid = ?",
-                                array($cid),
-                                array(Database::INTEGER)
-         );
+    $cmtRecord = $db->conn->fetchAssoc(
+            "SELECT sid,title,type FROM `{$_TABLES['comments']}` WHERE cid = ?",
+            array($cid),
+            array(Database::INTEGER)
+    );
 
     if ($cmtRecord === false) {
         Log::write('system',Log::DVLP_DEBUG,'Comment ID: '.$cid.' was not found in DB - returning...');

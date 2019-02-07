@@ -2298,7 +2298,7 @@ class Article
 
 # - Ratings
 
-        if ($_CONF['rating_enabled'] != 0 && $displayType != 'p') {
+        if ($_CONF['rating_enabled'] != 0 && $displayType != 'p' && $displayType != 'y') {
             $this->template->set_var(
                 'rating_bar',
                 $this->getDisplayItem('rating_bar'),

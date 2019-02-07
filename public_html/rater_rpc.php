@@ -60,9 +60,13 @@ if ($size == 'sm') {
     $rating_unitwidth = 30;
 }
 
-if ( $plugin == '' ) die('no type specified');
+if ( $plugin == '' ) {
+    die('no type specified');
+}
 
-if ($vote_sent > $units) die("Sorry, vote appears to be invalid."); // kill the script because normal users will never see this.
+if ($vote_sent > $units) {
+    die("Sorry, vote appears to be invalid."); // kill the script because normal users will never see this.
+}
 
 $canRate = PLG_canUserRate( $plugin, $id_sent, $uid );
 

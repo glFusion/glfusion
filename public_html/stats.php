@@ -1,34 +1,19 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | stats.php                                                                |
-// |                                                                          |
-// | glFusion system statistics page.                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion System Statistics Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony@tonybibbs.com
+*  Mark Limburg      mlimburg@users.sourceforge.net
+*  Jason Whittenburg jwhitten@securitygeeks.com
+*  Dirk Haun         dirk@haun-online.de
+*
+*/
 
 require_once 'lib-common.php';
 USES_lib_admin();
@@ -39,11 +24,11 @@ if ( !SEC_hasRights('stats.view') ) {
     COM_404();
 }
 
+$page = '';
+
 // MAIN
 
 $dt = new Date('now',$_USER['tzid']);
-
-$display .= COM_siteHeader ('menu', $LANG10[1]);
 
 // Overall Site Statistics
 
@@ -99,7 +84,7 @@ if (count ($plg_stats) > 0) {
     }
 }
 
-$display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+$page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 // Detailed story statistics
 
@@ -125,11 +110,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    $display .= COM_startBlock($LANG10[7]);
-    $display .= $LANG10[10];
-    $display .= COM_endBlock();
+    $page .= COM_startBlock($LANG10[7]);
+    $page .= $LANG10[10];
+    $page .= COM_endBlock();
 }
 
 // Top Ten Commented Stories
@@ -153,12 +138,12 @@ if ($nrows > 0) {
         $A['comments'] = COM_NumberFormat ($A['comments']);
         $data_arr[$i] = $A;
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
 } else {
-    $display .= COM_startBlock($LANG10[11],'',COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= $LANG10[13];
-    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $page .= COM_startBlock($LANG10[11],'',COM_getBlockTemplate('_admin_block', 'header'));
+    $page .= $LANG10[13];
+    $page .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Top Ten Trackback Comments
@@ -183,12 +168,12 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
             $A['count'] = COM_NumberFormat ($A['count']);
             $data_arr[$i] = $A;
         }
-        $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+        $page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
     } else {
-        $display .= COM_startBlock ($LANG10[25],'',COM_getBlockTemplate('_admin_block', 'header'));
-        $display .= $LANG10[26];
-        $display .= COM_endBlock (COM_getBlockTemplate('_admin_block', 'footer'));
+        $page .= COM_startBlock ($LANG10[25],'',COM_getBlockTemplate('_admin_block', 'header'));
+        $page .= $LANG10[26];
+        $page .= COM_endBlock (COM_getBlockTemplate('_admin_block', 'footer'));
     }
 }
 
@@ -215,11 +200,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    $display .= COM_startBlock($LANG10[22],'',COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= $LANG10[24];
-    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $page .= COM_startBlock($LANG10[22],'',COM_getBlockTemplate('_admin_block', 'header'));
+    $page .= $LANG10[24];
+    $page .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Last 10 Logins
@@ -254,17 +239,17 @@ if ($nrows > 0) {
         }
         $data_arr[$i] = $A;
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $page .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 } else {
-    $display .= COM_startBlock($LANG10[6],'',COM_getBlockTemplate('_admin_block', 'header'));
-    $display .= $LANG10[28];
-    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    $page .= COM_startBlock($LANG10[6],'',COM_getBlockTemplate('_admin_block', 'header'));
+    $page .= $LANG10[28];
+    $pge .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 }
 
 // Now show stats for any plugins that want to be included
-$display .= PLG_getPluginStats(2);
-$display .= COM_siteFooter();
+$page .= PLG_getPluginStats(2);
 
-echo $display;
-
+echo COM_siteHeader ('menu', $LANG10[1]);
+echo $page;
+echo COM_siteFooter();
 ?>

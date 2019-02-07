@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2018 by the following authors:
+*  Copyright (C) 2009-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -20,6 +20,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once $_CONF['path_system'].'lib-autotag.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 
@@ -141,12 +142,28 @@ function AT_edit($tag, $action = '')
 
     $editOrNew = false;
 
+    $db = Database::getInstance();
+
     if (!empty($tag) && $action == 'edit') {
         // edit an existing autotag
-        $query = DB_query("SELECT * FROM {$_TABLES['autotags']} WHERE tag = '".DB_escapeString($tag)."'");
-        $A = DB_fetchArray($query);
-        $A['old_tag'] = $A['tag'];
-        $editOrNew = true;
+
+        $A = $db->conn->fetchAssoc(
+                "SELECT * FROM `{$_TABLES['autotags']}` WHERE tag = ?",
+                array($tag),
+                array(Database::STRING)
+        );
+
+        if ($A === false && $A === null) {
+            $A['tag'] = '';
+            $A['old_tag'] = '';
+            $A['is_enabled'] = '0';
+            $A['description'] = '';
+            $A['replacement'] = '';
+            $A['is_function'] = 0;
+        } else {
+            $A['old_tag'] = $A['tag'];
+            $editOrNew = true;
+        }
     } elseif ($action == 'edit') {
         // create a new autotag
         $A['tag'] = '';
@@ -171,13 +188,21 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
 
     $retval = '';
 
-    $old_tag = COM_applyFilter($old_tag);
+    $db = Database::getInstance();
+
+    $old_tag = filter_var($old_tag,FILTER_SANITIZE_STRING); // COM_applyFilter($old_tag);
 
     // Check for unique tag ID
     $duplicate_tag = false;
     $delete_old_tag = false;
 
-    if (DB_count($_TABLES['autotags'], 'tag', DB_escapeString($tag)) > 0) {
+    $atCount = (int) $db->conn->fetchColumn(
+            "SELECT COUNT(*) FROM `{$_TABLES['autotags']}` WHERE tag=?",
+            array($tag),
+            0,
+            array(Database::STRING)
+    );
+    if ($atCount > 0) {
         if ($tag != $old_tag) {
             $duplicate_tag = true; // whoops, this tag is already in use
         }
@@ -238,21 +263,37 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
         } else {
             $is_enabled = 0;
         }
-        $tag = DB_escapeString($tag);
-        $description = DB_escapeString($description);
-        $replacement = DB_escapeString($replacement);
 
-        DB_save($_TABLES['autotags'],
-            'tag,description,is_enabled,is_function,replacement',
-            "'$tag','$description',$is_enabled,$is_function,'$replacement'"
+        $db->conn->executeQuery(
+                "REPLACE INTO `{$_TABLES['autotags']}`
+                  (tag,description,is_enabled,is_function,replacement)
+                  VALUES (?,?,?,?,?)",
+                array(
+                    $tag,
+                    $description,
+                    $is_enabled,
+                    $is_function,
+                    $replacement
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING
+                )
         );
 
         // delete old tag if necessary
         if ($delete_old_tag && !empty($old_tag)) {
-            DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($old_tag));
+            $db->conn->delete(
+                $_TABLES['autotags'],
+                array('tag' => $old_tag),
+                array(Database::STRING)
+            );
         }
         // refresh to ourself
-        echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php'.'?list=x');
+        echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php?list=x');
     } else {
         // failed validation - required field missing
         $error = $LANG_AM['no_tag_or_replacement'];
@@ -535,6 +576,8 @@ function AT_toggleStatus($enabledtags, $tagarray)
 {
     global $_AUTOTAGS, $_TABLES, $AM_CONF;
 
+    $db = Database::getInstance();
+
     $sizeofenabledtags = sizeof($enabledtags);
     $sizeoftagarray = sizeof($tagarray);
 
@@ -542,9 +585,19 @@ function AT_toggleStatus($enabledtags, $tagarray)
         foreach ($tagarray as $tag => $junk) {
             $tag = COM_applyFilter($tag);
             if (isset($enabledtags[$tag])) {
-                DB_query("UPDATE {$_TABLES['autotags']} set is_enabled = '1' WHERE tag='".DB_escapeString($tag)."'");
+                $db->conn->update(
+                    $_TABLES['autotags'],
+                    array('is_enabled' => 1),
+                    array('tag' => $tag),
+                    array(Database::INTEGER,Database::STRING)
+                );
             } else {
-                DB_query("UPDATE {$_TABLES['autotags']} set is_enabled = '0' WHERE tag='".DB_escapeString($tag)."'");
+                $db->conn->update(
+                    $_TABLES['autotags'],
+                    array('is_enabled' => 0),
+                    array('tag' => $tag),
+                    array(Database::INTEGER,Database::STRING)
+                );
             }
         }
     }
@@ -564,6 +617,8 @@ function ATP_edit($autotag_id = '')
            $LANG28, $VERBOSE;
 
     USES_lib_admin();
+
+    $db = Database::getInstance();
 
     $retval   = '';
     $form_url = '';
@@ -600,7 +655,6 @@ function ATP_edit($autotag_id = '')
                       'title'     => $LANG_AM['autotag'].':&nbsp;'.$autotag_id,
                       'help_url'  => '',
                       'no_data'   => 'No data to display',
-//                      'form_url'  => $_CONF['site_admin_url'].'/autotag.php?pedit=x&amp;autotag_id='.$autotag_id,
     );
 
     $defsort_arr = array('field' => 'usage_namespace', 'direction' => 'asc');
@@ -611,15 +665,20 @@ function ATP_edit($autotag_id = '')
 
     $tagUsage = PLG_collectAutotagUsage();
 
-    $sql  = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON ";
-    $sql .= "{$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id ";
-    $sql .= "WHERE {$_TABLES['autotag_perm']}.autotag_id = '".DB_escapeString($autotag_id)."' ORDER BY usage_namespace ASC";
+    $sql  = "SELECT * FROM `{$_TABLES['autotag_perm']}` AS atp JOIN `{$_TABLES['autotag_usage']}` AS atu
+              ON atp.autotag_id = atu.autotag_id
+            WHERE atp.autotag_id = ?
+            ORDER BY usage_namespace ASC";
 
-    $result = DB_query($sql);
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                array($autotag_id),
+                array(Database::STRING)
+    );
 
     $autoTagPerms = array();
 
-    while ($row = DB_fetchArray($result) ) {
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $autoTagPerms[] = $row['autotag_name'].'.'.$row['usage_namespace'].'.'.$row['usage_operation'];
         $autotagPermissions[] = $row;
     }
@@ -672,6 +731,8 @@ function ATP_save($autotag_id, $perms)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE;
 
+    $db = Database::getInstance();
+
     $tagUsage = PLG_collectAutotagUsage();
     $autoTags = PLG_collectTags();
 
@@ -698,20 +759,56 @@ function ATP_save($autotag_id, $perms)
     }
 
     // remove all the old entries for this autotag
-    $sql = "DELETE FROM {$_TABLES['autotag_usage']} WHERE autotag_id='".DB_escapeString($autotag_id)."'";
-    DB_query($sql);
+    $db->conn->delete(
+            $_TABLES['autotag_usage'],
+            array(
+                'autotag_id'    => $autotag_id
+            ),
+            array(
+                Database::STRING
+            )
+    );
     // check to see if we exist in the main table
-    $sql = "SELECT * FROM {$_TABLES['autotag_perm']} WHERE autotag_id='".DB_escapeString($autotag_id)."'";
-    $result = DB_query($sql);
-    if ( DB_numRows($result) < 1 ) {
-        $sql = "INSERT INTO {$_TABLES['autotag_perm']} (autotag_id,autotag_namespace,autotag_name) VALUES ";
-        $sql .= "('".DB_escapeString($autotag_id)."','".DB_escapeString($autoTags[$autotag_id])."','".DB_escapeString($autotag_id)."')";
-        DB_query($sql);
+
+    $atpCount = (int) $db->conn->fetchColumn(
+        "SELECT COUNT(*) FROM `{$_TABLES['autotag_perm']}` WHERE autotag_id=?",
+        array($autotag_id),
+        0,
+        array(Database::STRING)
+    );
+
+    if ($atpCount === 0) {
+        $db->conn->insert(
+            $_TABLES['autotag_perm'],
+            array(
+                'autotag_id'        => $autotag_id,
+                'autotag_namespace' => $autoTags[$autotag_id],
+                'autotag_name'      => $autotag_id
+            ),
+            array(
+                Database::STRING,
+                Database::STRING,
+                Database::STRING
+            )
+        );
     }
 
     foreach($final AS $key ) {
-        $sql = "INSERT INTO {$_TABLES['autotag_usage']} (autotag_id,autotag_allowed,usage_namespace,usage_operation) VALUES ('".DB_escapeString($key['autotag_name'])."',".(int) $key['usage_allowed'].",'".DB_escapeString($key['usage_namespace'])."','".DB_escapeString($key['usage_operation'])."')";
-        DB_query($sql);
+        $db->conn->insert(
+            $_TABLES['autotag_usage'],
+            array(
+                'autotag_id'        => $key['autotag_name'],
+                'autotag_allowed'   => $key['usage_allowed'],
+                'usage_namespace'   => $key['usage_namespace'],
+                'usage_operation'   => $key['usage_operation']
+            ),
+            array(
+                Database::STRING,
+                Database::INTEGER,
+                Database::STRING,
+                Database::STRING
+            )
+        );
     }
     CACHE_clear();
     $url = $_CONF['site_admin_url'] . '/autotag.php?msg=36';
@@ -731,6 +828,8 @@ function ATP_permEdit()
            $LANG28, $VERBOSE;
 
     USES_lib_admin();
+
+    $db = Database::getInstance();
 
     $tagUsage = PLG_collectAutotagUsage();
     asort($tagUsage);
@@ -753,7 +852,6 @@ function ATP_permEdit()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/autotag.php', 'text' => $LANG_AM['public_title']),
         array('url' => $_CONF['site_admin_url'] . '/autotag.php?list=x','text' => $LANG_ADMIN['custom_autotag']),
-//        array('url' => $_CONF['site_admin_url'] . '/autotag.php' . '?edit=x', 'text' => $lang_create_edit),
         array('url' => $_CONF['site_admin_url'] . '/autotag.php?perm=x', 'text' => $LANG_AM['perm_editor'],'active' => true),
         array('url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home']),
     );
@@ -786,12 +884,19 @@ function ATP_permEdit()
 
     // now build our data array for this specific item
 
-    $sql  = "SELECT * FROM {$_TABLES['autotag_perm']} JOIN {$_TABLES['autotag_usage']} ON ";
-    $sql .= "{$_TABLES['autotag_perm']}.autotag_id = {$_TABLES['autotag_usage']}.autotag_id ";
-    $sql .= "WHERE usage_namespace='".DB_escapeString($sqlSet[0])."' AND usage_operation='".DB_escapeString($sqlSet[1])."' ORDER BY usage_namespace ASC";
+    $sql  = "SELECT * FROM `{$_TABLES['autotag_perm']}` AS atp
+               JOIN `{$_TABLES['autotag_usage']}` AS atu
+               ON atp.autotag_id = atu.autotag_id
+             WHERE usage_namespace=?
+               AND usage_operation=?
+             ORDER BY usage_namespace ASC";
 
-    $result = DB_query($sql);
-    while ($row = DB_fetchArray($result) ) {
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                array($sqlSet[0],$sqlSet[1]),
+                array(Database::STRING,Database::STRING)
+    );
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $identifier = $row['autotag_namespace'].'.'.$row['autotag_name'].'.'.$permission;
         $autotagPermissions[$identifier] = $row['autotag_allowed'];
     }
@@ -837,6 +942,8 @@ function ATP_permSave()
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $autoTags = PLG_collectTags();
 
     if ( isset($_POST['namespace'] ) && isset($_POST['usage'] ) ) {
@@ -850,22 +957,44 @@ function ATP_permSave()
 
             // remove all entries for this usage type first,
             // then we insert in the new ones
-            $sql = "DELETE FROM {$_TABLES['autotag_usage']} WHERE usage_namespace='".
-                    DB_escapeString($usage_namespace)."'";
-            $sql .= " AND usage_operation='".DB_escapeString($usage_operation)."'";
-            DB_query($sql);
-
+            $db->conn->delete(
+                    $_TABLES['autotag_usage'],
+                    array(
+                        'usage_namespace' => $usage_namespace,
+                        'usage_operation' => $usage_operation
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING
+                    )
+            );
             foreach ($autoTags AS $tag => $namespace) {
                 $postIdentifier = $namespace.'_'.$tag;
                 if ( !isset($_POST[$postIdentifier])) {
 
-                    $sqlPermTable = "REPLACE INTO {$_TABLES['autotag_perm']} (autotag_id,autotag_namespace,autotag_name) VALUES ";
-                    $sqlPermTable .= "('".DB_escapeString($tag)."','".DB_escapeString($namespace)."','".DB_escapeString($tag)."')";
-                    DB_query($sqlPermTable,1);
+                    $db->conn->executeQuery(
+                            "REPLACE INTO `{$_TABLES['autotag_perm']}`
+                             (autotag_id,autotag_namespace,autotag_name)
+                             VALUES (?, ?, ?)",
+                            array($tag,$namespace,$tag),
+                            array(Database::STRING,Database::STRING,Database::STRING)
+                    );
 
-                    $sqlUpdate = "INSERT INTO {$_TABLES['autotag_usage']} (autotag_id,autotag_allowed,usage_namespace,usage_operation) VALUES (";
-                    $sqlUpdate .= "'".DB_escapeString($tag)."',0,'".DB_escapeString($usage_namespace)."','".DB_escapeString($usage_operation)."')";
-                    DB_query($sqlUpdate);
+                    $db->conn->insert(
+                        $_TABLES['autotag_usage'],
+                        array(
+                            'autotag_id'        => $tag,
+                            'autotag_allowed'   => 0,
+                            'usage_namespace'   => $usage_namespace,
+                            'usage_operation'   => $usage_operation
+                        ),
+                        array(
+                            Database::STRING,
+                            Database::INTEGER,
+                            Database::STRING,
+                            Database::STRING
+                        )
+                    );
                 }
             }
             $c = Cache::getInstance()->deleteItemsByTag('atperm');
@@ -940,6 +1069,8 @@ if (isset($_POST['autotag_id'])) {
     $autotag_id = COM_applyFilter($_GET['autotag_id']);
 }
 
+$db = Database::getInstance();
+
 switch ($action) {
 
     case 'edit':
@@ -995,9 +1126,15 @@ switch ($action) {
     case 'delete':
         if (SEC_checkToken()) {
             $filename = $tag . '.class.php';
-            DB_delete($_TABLES['autotags'], 'tag', DB_escapeString($tag), $_CONF['site_admin_url'] . '/autotag.php');
+
+            $db->conn->delete(
+                $_TABLES['autotags'],
+                array('tag' => $tag),
+                array(Database::STRING)
+            );
             // need to check and see if it is a PHP function
             @unlink($_CONF['path_system'].'autotags/' . $filename);
+            echo COM_refresh($_CONF['site_admin_url'] . '/autotag.php');
             exit;
         } else {
             COM_accessLog('User ' . $_USER['username'] . ' did not have permissions to delete autotag ' . $tag . ' - operation failed CSRF checks.');
