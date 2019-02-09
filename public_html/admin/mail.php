@@ -7,19 +7,19 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2018 by the following authors:
+*  Copyright (C) 2010-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
 *  Based on prior work Copyright (C) 2001-2008 by the following authors:
 *  Authors: Tony Bibbs        - tony AT tonybibbs DOT com
 *           Dirk Haun         - dirk AT haun-online DOT de
-*
 */
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 
 $display = '';
@@ -50,6 +50,8 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     if ( isset($_POST['postmode'] ) ) {
         $postmode = COM_applyFilter($_POST['postmode']);
         if ( $postmode != 'html' || $postmode != 'plaintext' ) {
@@ -58,7 +60,6 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
     } else {
         $postmode = $_CONF['postmode'];
     }
-
 
     $mail_templates = new Template ($_CONF['path_layout'] . 'admin/mail');
     $mail_templates->set_file('form','mailform.thtml');
@@ -103,20 +104,27 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
         $to_user = '';
         $lang_warning = $LANG31[29];
         $warning = '';
+
         // get the user data, and check the privacy settings
-        $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = ". (int) $uid);
-        $nrows = DB_numRows($result);
-        if ($nrows > 0) {
-            $A = DB_fetchArray($result);
-            $username = ($_CONF['show_fullname']) ? $A['fullname'] : $A['username'];
-            $to_user = $username . ' (' . $A['email'] . ')';
-            $emailfromadmin = DB_getItem( $_TABLES['userprefs'], 'emailfromadmin', "uid = " . (int) $uid);
-            $warning = ($emailfromadmin == 1) ? '' : $LANG31[30];
+        $stmt = $db->conn->executeQuery(
+                    "SELECT u.username, u.fullname, u.email, up.emailfromadmin
+                      FROM `{$_TABLES['users']}` AS u LEFT JOIN `{$_TABLES['userprefs']}` AS up ON u.uid=up.uid
+                      WHERE u.uid = ?",
+                    array($uid),
+                    array(Database::INTEGER)
+        );
+        if ($stmt !== false && $stmt !== null) {
+            $record = $stmt->fetch(Database::ASSOCIATIVE);
+            $username = ($_CONF['show_fullname']) ? $record['fullname'] : $record['username'];
+            $to_user = $username . ' (' . $record['email'] . ')';
+            $warning = ($record['emailfromadmin'] == 1) ? '' : $LANG31[30];
         }
-        $mail_templates->set_var ('to_user', $to_user);
-        $mail_templates->set_var ('to_uid', $uid);
-        $mail_templates->set_var ('lang_warning', $lang_warning);
-        $mail_templates->set_var ('warning', $warning);
+        $mail_templates->set_var(array(
+            'to_user'       => $to_user,
+            'to_uid'        => $uid,
+            'lang_warning'  => $lang_warning,
+            'warning'       => $warning
+        ));
     } else {
         // we're sending e-Mail to a group of users
         $mail_templates->set_var ('lang_instructions', $LANG31[19]);
@@ -124,11 +132,9 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
         $mail_templates->set_var ('lang_selectgroup', $LANG31[25]);
         // build group options select, allow for possibility grp_id has been supplied
         $group_options = '';
-        $result = DB_query("SELECT grp_id, grp_name FROM {$_TABLES['groups']} WHERE grp_name <> 'All Users'");
-        $nrows = DB_numRows ($result);
-        $groups = array ();
-        for ($i = 0; $i < $nrows; $i++) {
-            $A = DB_fetchArray ($result);
+
+        $stmt = $db->conn->query("SELECT grp_id, grp_name FROM `{$_TABLES['groups']}` WHERE grp_name <> 'All Users'");
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
             $groups[$A['grp_id']] = ucwords ($A['grp_name']);
         }
         asort ($groups);
@@ -194,6 +200,8 @@ function MAIL_sendMessages($vars)
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $html = 0;
     $message = $vars['message'];
     if ( $vars['postmode'] == 'html' ) {
@@ -226,84 +234,80 @@ function MAIL_sendMessages($vars)
         $priority = 0;
     }
     $toUsers = array();
-    if ( $usermode ) {
+    if ($usermode) {
 
-        $result = DB_query("SELECT email,username FROM {$_TABLES['users']} WHERE uid=".(int) COM_applyFilter($vars['to_uid'],true));
-        if ( DB_numRows($result) > 0 ) {
-            list($email,$username) = DB_fetchArray($result);
-            $toUsers[] = COM_formatEmailAddress ( $username, $email );
+        $record = $db->conn->fetchAssoc(
+                    "SELECT email,username FROM `{$_TABLES['users']}`
+                     WHERE uid=?",
+                    array( (int) $vars['to_uid']),
+                    array(Database::INTEGER)
+        );
+        if ($record !== false && $record !== null) {
+            $toUsers[] = COM_formatEmailAddress ($record['username'],$record['email']);
         }
     } else {
         $groupList = implode (',', USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true)));
 
+
+        $groupArray = USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true));
+
         // and now mail it
         if (isset ($vars['overstyr'])) {
-            $sql = "SELECT DISTINCT username,fullname,email FROM {$_TABLES['users']},{$_TABLES['group_assignments']} WHERE uid > 1";
-            $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
-            $sql .= " AND {$_TABLES['users']}.uid = ug_uid AND ug_main_grp_id IN ({$groupList})";
+
+
+            $sql = "SELECT DISTINCT username, fullname, email
+                    FROM `{$_TABLES['users']}` AS u,`{$_TABLES['group_assignments']}` AS ga
+                    WHERE uid > 1 AND u.status = 3
+                      AND ((u.email is not null) AND (u.email != ''))
+                      AND u.uid = ga.ug_uid
+                      AND ga.ug_main_grp_id IN (?)";
+
+            $stmt = $db->conn->prepare($sql);
+            $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
         } else {
-            $sql = "SELECT DISTINCT username,fullname,email,emailfromadmin FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['group_assignments']} WHERE {$_TABLES['users']}.uid > 1";
-            $sql .= " AND {$_TABLES['users']}.status = 3 AND ((email is not null) and (email != ''))";
-            $sql .= " AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND emailfromadmin = 1";
-            $sql .= " AND ug_uid = {$_TABLES['users']}.uid AND ug_main_grp_id IN ({$groupList})";
+
+            $sql = "SELECT DISTINCT username, fullname, email, emailfromadmin
+                    FROM `{$_TABLES['users']}` AS u,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['group_assignments']}` AS ga
+                    WHERE u.uid > 1 AND u.status = 3 AND ((u.email is not null) and (u.email != ''))
+                      AND u.uid = up.uid AND up.emailfromadmin = 1
+                      AND ug_uid = u.uid AND ga.ug_main_grp_id IN (?)";
+            $stmt = $db->conn->prepare($sql);
+            $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
         }
 
-        $result = DB_query ($sql);
-        $nrows = DB_numRows ($result);
-        for ($i = 0; $i < $nrows; $i++) {
-            $A = DB_fetchArray ($result);
-            if (empty ($A['fullname'])) {
-                $toUsers[] = COM_formatEmailAddress ($A['username'], $A['email']);
+        $stmt->execute();
+        while ($record = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if (empty ($record['fullname'])) {
+                $toUsers[] = array('email' => $record['email'], 'name' => $record['username']);
             } else {
-                $toUsers[] = COM_formatEmailAddress ($A['fullname'], $A['email']);
+                $toUsers[] = array('email' => $record['email'], 'name' => $record['fullname']);
             }
         }
     }
 
-    $from = array();
-    $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
     $subject = $vars['subject'];
 
     // Loop through and send the messages!
     $successes = array ();
     $failures = array ();
 
-    foreach ($toUsers AS $to ) {
-        if ( defined('DEMO_MODE') ) {
-            $successes[] = htmlspecialchars ($to[0]);
-        } else {
-            if (!COM_mail ($to, $subject, $message, $from, $html, $priority)) {
-                $failures[] = htmlspecialchars ($to[0]);
-            } else {
-                $successes[] = htmlspecialchars ($to[0]);
-            }
-        }
+    $msgData['subject'] = htmlspecialchars($subject);
+    if ($html) {
+        $msgData['htmlmessage'] = $message;
+    } else {
+        $msgData['textmessage'] = $message;
     }
+    $msgData['to'] = $toUsers;
+
+    $msgData['from']['email'] = $vars['fraepost'];
+    $msgData['from']['name'] = $vars['fra'];
+
+    $ret = COM_emailNotification( $msgData );
 
     $retval .= COM_startBlock ($LANG31[1]);
 
-    $failcount = count ($failures);
-    $successcount = count ($successes);
-    $retval .= sprintf ($LANG31[20], $successcount,$failcount,$_CONF['site_admin_url'],$_CONF['site_admin_url']);
-
-    $retval .= '<h2>' . $LANG31[21] . '</h2>';
-    for ($i = 0; $i < count ($failures); $i++) {
-        $retval .= current ($failures) . '<br/>';
-        next ($failures);
-    }
-    if (count ($failures) == 0) {
-        $retval .= $LANG31[23];
-    }
-
-    $retval .= '<h2>' . $LANG31[22] . '</h2>';
-    for ($i = 0; $i < count ($successes); $i++) {
-        $retval .= current ($successes) . '<br/>';
-        next ($successes);
-    }
-    if (count ($successes) == 0) {
-        $retval .= $LANG31[24];
-    }
-
+    $successcount = count ($toUsers);
+    $retval .= sprintf ($LANG31[20], $successcount,$_CONF['site_admin_url'],$_CONF['site_admin_url']);
     $retval .= COM_endBlock ();
 
     return $retval;

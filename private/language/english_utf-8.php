@@ -1155,7 +1155,7 @@ $LANG31 = array(
     17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'To',
     19 => 'Use this panel to send email to a group of users on this site.  If you wish to send a message to all users, select the Logged-in Users group from the Group drop down field.  To send a message to a specific user, select the user from the User List panel, the link is above.',
-    20 => "Successfully sent %d messages and unsuccessfully sent %d messages.  If you need them, the details of each message attempts is below.  Otherwise you can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
+    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
     21 => 'Failures',
     22 => 'Successes',
     23 => 'No failures',
@@ -2952,15 +2952,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Date', 'title'=>'Title', 'uid'=>'Author', 'hits'=>'Hits', 'sid'=>'Story ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'New Users'),
-    36 => array( '50' => 'DVLP_DEBUG',
-                '100' => 'DEBUG',
+    36 => array('100' => 'DEBUG',
                 '200' => 'INFO',
                 '250' => 'NOTICE',
                 '300' => 'WARNING',
                 '400' => 'ERROR',
                 '500' => 'CRITICAL',
                 '550' => 'ALERT',
-                '600' => 'EMERGENCY'
+                '600' => 'EMERGENCY',
+                '525' => 'DVLP_DEBUG',
                ),
 );
 ?>

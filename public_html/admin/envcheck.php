@@ -16,6 +16,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 
@@ -40,6 +41,8 @@ function _checkEnvironment()
 
     $retval = '';
     $permError = 0;
+
+    $db = Database::getInstance();
 
     $required_extensions = array(
         array('extension' => 'ctype',   'fail' => 1),
@@ -220,7 +223,7 @@ function _checkEnvironment()
     $T->parse('env','envs',true);
     $classCounter++;
 
-    $mysql_version = DB_getVersion();
+    $mysql_version = $db->_mysql_version; // DB_getVersion();
     $T->set_var('mysql', $LANG_ENVCHK['database_version']);
     $T->set_var('mysql_version',$mysql_version);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -438,23 +441,29 @@ function _checkEnvironment()
         $classCounter++;
     }
 
-    $dbInfo['db_driver'] = DB_getDriverName();
-    $dbInfo['db_version'] = DB_getVersion();
-    $result = DB_query("SELECT @@character_set_database, @@collation_database;",1);
-    if ( $result ) {
-        $row = DB_fetchArray($result);
-        $dbInfo['db_collation'] = $row["@@collation_database"];
-        $dbInfo['db_charset'] = $row["@@character_set_database"];
-    } else {
+    $dbInfo['db_driver'] = $db->dbGetDriverName();
+    $dbInfo['db_version'] = $db->_mysql_version;
+
+    try {
+        $stmt = $db->conn->query("SELECT @@character_set_database, @@collation_database;");
+    } catch(\Doctrine\DBAL\DBALException $e) {
         $dbInfo['db_collation'] = $LANG_ENVCHK['unknown'];
         $dbInfo['db_charset']   = $LANG_ENVCHK['unknown'];
     }
-    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_engine'");
-    if ( DB_numRows($result) > 0 ) {
-        $row = DB_fetchArray($result);
-        $dbInfo['db_engine'] = $row['value'];
-    } else {
-        $dbInfo['db_engine'] = 'MyISAM';
+    $dbInfo['db_collation'] = $LANG_ENVCHK['unknown'];
+    $dbInfo['db_charset']   = $LANG_ENVCHK['unknown'];
+    if ($stmt !== false && $stmt !== null) {
+        $row = $stmt->fetch(Database::ASSOCIATIVE);
+        if ($row !== false && $row !== null) {
+            $dbInfo['db_collation'] = $row["@@collation_database"];
+            $dbInfo['db_charset'] = $row["@@character_set_database"];
+        }
+    }
+
+    $dbInfo['db_engine'] = 'MyISAM';
+    $dbType = $db->getItem($_TABLES['vars'],'value',array('name' => 'database_engine'));
+    if ($dbType !== null && $dbType !== false) {
+        $dbInfo['db_engine'] = $dbType;
     }
     foreach ($dbInfo AS $name => $value ) {
         $T->set_var($name,$value);

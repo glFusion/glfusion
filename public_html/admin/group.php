@@ -22,6 +22,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
@@ -51,17 +52,19 @@ function GROUP_edit($grp_id = '')
            $LANG28, $VERBOSE, $_IMAGE_TYPE;
 
     USES_lib_admin();
+
+    $db = Database::getInstance();
+
     $editMode = false;
 
     $retval = '';
     $form_url = '';
 
     $thisUsersGroups = SEC_getUserGroups();
-    if (!SEC_ingroup(1) && !empty ($grp_id) &&
-        ($grp_id > 0) &&
-        !in_array ($grp_id, $thisUsersGroups) &&
-        !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups)) {
-        if (!SEC_inGroup ('Root') && (DB_getItem ($_TABLES['groups'],'grp_name', "grp_id = $grp_id") == 'Root')) {
+    if (!SEC_ingroup(1) && !empty ($grp_id) && ($grp_id > 0) && !in_array ($grp_id, $thisUsersGroups) &&
+    !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $thisUsersGroups)) {
+        $grpName = $db->getItem($_TABLES['groups'],'grp_name',array('grp_id' => $grp_id),array(Database::INTEGER));
+        if (!SEC_inGroup ('Root') && $grpName == 'Root') {
             $eMsg = $LANG_ACCESS['canteditroot'];
             Log::write('system',Log::ERROR,"User {$_USER['username']} tried to edit the Root group with insufficient privileges.");
         } else {
@@ -74,27 +77,32 @@ function GROUP_edit($grp_id = '')
     $retval .= COM_startBlock ($LANG_ACCESS['groupeditor'], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
-
-
-
     $group_templates = new Template($_CONF['path_layout'] . 'admin/group');
     $group_templates->set_file('editor','groupeditor.thtml');
 
+    $A['grp_gl_core'] = 0;
+    $A['grp_default'] = 0;
+    $A['grp_name'] = '';
+
     if (!empty ($grp_id) && $grp_id != 0 ) {
         $editMode = true;
-        $result = DB_query("SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default FROM {$_TABLES['groups']} WHERE grp_id = ".(int)$grp_id);
-        $A = DB_fetchArray ($result);
-        if ($A['grp_gl_core'] > 0) {
-            $group_templates->set_var ('chk_adminuse', 'checked="checked"');
+
+        $row = $db->conn->fetchAssoc(
+                "SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default
+                  FROM `{$_TABLES['groups']}`
+                  WHERE grp_id = ?",
+                array($grp_id),
+                array(Database::INTEGER)
+        );
+        if ($row !== false && $row !== null) {
+            $A = $row;
+            if ($A['grp_gl_core'] > 0) {
+                $group_templates->set_var ('chk_adminuse', 'checked="checked"');
+            }
+            if ($A['grp_default'] != 0) {
+                $group_templates->set_var('chk_defaultuse', 'checked="checked"');
+            }
         }
-        if ($A['grp_default'] != 0) {
-            $group_templates->set_var('chk_defaultuse', 'checked="checked"');
-        }
-    } else {
-        // new group, so it's obviously not a core group
-        $A['grp_gl_core'] = 0;
-        $A['grp_default'] = 0;
-        $A['grp_name'] = '';
     }
 
     if ( $A['grp_name'] == 'Non-Logged-in Users' || $A['grp_name'] == 'Logged-in Users' || $A['grp_name'] == 'All Users' || $A['grp_name'] == 'Root' ) {
@@ -123,20 +131,21 @@ function GROUP_edit($grp_id = '')
         $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
     );
 
-    $group_templates->set_var('site_url', $_CONF['site_url']);
-    $group_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $group_templates->set_var('layout_url', $_CONF['layout_url']);
-    $group_templates->set_var('lang_save', $LANG_ADMIN['save']);
-    $group_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
-    $group_templates->set_var('lang_admingroup',$LANG28[49]);
-    $group_templates->set_var('lang_admingrp_msg', $LANG28[50]);
-    $group_templates->set_var('lang_defaultgroup', $LANG28[88]);
-    $group_templates->set_var('lang_defaultgrp_msg', $LANG28[89]);
-    $group_templates->set_var('lang_applydefault_msg', $LANG28[90]);
-    $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
-    $group_templates->set_var('lang_description', $LANG_ACCESS['description']);
-    $group_templates->set_var('lang_securitygroups',$LANG_ACCESS['securitygroups']);
-    $group_templates->set_var('lang_rights', $LANG_ACCESS['rights']);
+    $group_templates->set_var(array(
+        'site_url'              => $_CONF['site_url'],
+        'layout_url'            => $_CONF['layout_url'],
+        'lang_save'             => $LANG_ADMIN['save'],
+        'lang_cancel'           => $LANG_ADMIN['cancel'],
+        'lang_admingroup'       => $LANG28[49],
+        'lang_admingrp_msg'     => $LANG28[50],
+        'lang_defaultgroup'     => $LANG28[88],
+        'lang_defaultgrp_msg'   => $LANG28[89],
+        'lang_applydefault_msg' => $LANG28[90],
+        'lang_groupname'        => $LANG_ACCESS['groupname'],
+        'lang_description'      => $LANG_ACCESS['description'],
+        'lang_securitygroups'   => $LANG_ACCESS['securitygroups'],
+        'lang_rights'           => $LANG_ACCESS['rights']
+    ));
 
     $showall = (isset($_GET['chk_showall'])) ? COM_applyFilter ($_GET['chk_showall'], true) : 0;
     $group_templates->set_var('show_all', $showall);
@@ -196,22 +205,35 @@ function GROUP_edit($grp_id = '')
 
     $selected = '';
     if (!empty($grp_id)) {
-        $tmp = DB_query("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_grp_id = $grp_id");
-        $num_groups = DB_numRows($tmp);
-        for ($x = 0; $x < $num_groups; $x++) {
-            $G = DB_fetchArray($tmp);
-            if ($x > 0) {
+
+        $num_groups = 0;
+        $grpAssignments = array();
+        $loopCounter = 0;
+
+        $stmt = $db->conn->executeQuery(
+            "SELECT ug_main_grp_id FROM `{$_TABLES['group_assignments']}` WHERE ug_grp_id = ?",
+            array($grp_id),
+            array(Database::INTEGER)
+        );
+
+        if ($stmt !== false && $stmt !== null) {
+            $grpAssignments = $stmt->fetchAll(Database::ASSOCIATIVE);
+            $num_groups = count($grpAssignments);
+        }
+
+        foreach($grpAssignments AS $G) {
+            if ($loopCounter > 0) {
                 $selected .= ' ' . $G['ug_main_grp_id'];
             } else {
                 $selected .= $G['ug_main_grp_id'];
             }
+            $loopCounter++;
         }
     }
 
     $groupoptions = '';
 
-    $group_templates->set_var('lang_securitygroupmsg',
-                              $LANG_ACCESS['groupmsg']);
+    $group_templates->set_var('lang_securitygroupmsg',$LANG_ACCESS['groupmsg']);
     $group_templates->set_var('hide_adminoption', '');
 
     Log::write('system',Log::DVLP_DEBUG,"SELECTED: ".$selected);
@@ -222,15 +244,14 @@ function GROUP_edit($grp_id = '')
         $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
 
         $header_arr = array(
-//                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'disabled-checkbox' : 'checkbox'), 'sort' => false, 'align' => 'center'),
-                        array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
-                        array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-                        array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+                    array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
+                    array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                    array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
         );
 
         $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
-        $form_url = $_CONF['site_admin_url'].'/group.php?edit=x&amp;grp_id=' . $grp_id;
+        $form_url = $_CONF['site_admin_url'].'/group.php?edit=x&amp;grp_id=' . urlencode($grp_id);
 
         $text_arr = array('has_menu' => false,
                           'has_extras' => false,
@@ -242,7 +263,7 @@ function GROUP_edit($grp_id = '')
         if (! empty($grp_id)) {
             $xsql = " AND (grp_id <> $grp_id)";
         }
-        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM `{$_TABLES['groups']}` WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -265,6 +286,7 @@ function GROUP_edit($grp_id = '')
 
     $group_templates->set_var('rights_options',
                               GROUP_displayRights($grp_id, $A['grp_gl_core']));
+
     $group_templates->set_var('gltoken_name', CSRF_TOKEN);
     $group_templates->set_var('gltoken', SEC_createToken());
     $group_templates->parse('output','editor');
@@ -287,41 +309,48 @@ function GROUP_getIndirectFeatures($grp_id)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
+print "Inside getIndirectFeatures";
     $checked = array ();
     $tocheck = array ($grp_id);
 
     do {
         $grp = array_pop ($tocheck);
 
-        $result = DB_query ("SELECT ug_main_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_grp_id = $grp AND ug_uid IS NULL");
-        $numrows = DB_numRows ($result);
-
         $checked[] = $grp;
 
-        for ($j = 0; $j < $numrows; $j++) {
-            $A = DB_fetchArray ($result);
-            if (!in_array ($A['ug_main_grp_id'], $checked) &&
-                !in_array ($A['ug_main_grp_id'], $tocheck)) {
+        $stmt = $db->conn->executeQuery(
+                    "SELECT ug_main_grp_id
+                      FROM `{$_TABLES['group_assignments']}`
+                     WHERE ug_grp_id = ? AND ug_uid IS NULL",
+                    array($grp),
+                    array(Database::INTEGER)
+        );
+
+        while($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if (!in_array ($A['ug_main_grp_id'], $checked) && !in_array ($A['ug_main_grp_id'], $tocheck)) {
                 $tocheck[] = $A['ug_main_grp_id'];
             }
         }
-    }
-    while (count($tocheck) > 0);
 
-    // get features for all groups in $checked
-    $glist = join (',', $checked);
-    $result = DB_query("SELECT DISTINCT ft_name FROM {$_TABLES['access']},{$_TABLES['features']} WHERE ft_id = acc_ft_id AND acc_grp_id IN ($glist)");
-    $nrows = DB_numRows ($result);
+    } while (count($tocheck) > 0);
 
+    $loopCounter = 0;
+    $stmt = $db->conn->executeQuery(
+                "SELECT DISTINCT ft_name FROM `{$_TABLES['access']}`,`{$_TABLES['features']}`
+                 WHERE ft_id = acc_ft_id AND acc_grp_id IN (?)",
+                array($checked),
+                array(Database::PARAM_INT_ARRAY)
+    );
     $retval = '';
-    for ($j = 1; $j <= $nrows; $j++) {
-        $A = DB_fetchArray ($result);
-        $retval .= $A['ft_name'];
-        if ($j < $nrows) {
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+        if ($loopCounter > 0) {
             $retval .= ',';
         }
+        $loopCounter++;
+        $retval .= $A['ft_name'];
     }
-
     return $retval;
 }
 
@@ -339,30 +368,12 @@ function GROUP_displayRights($grp_id = '', $core = 0)
 {
     global $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE;
 
-    // $VERBOSE = true;
-    // this gets a bit complicated so bear with the comments
-
-    // get a list of all the features that the current user (i.e. Group Admin)
-    // has access to, so we only include these features in the list below
-    if (!SEC_inGroup('Root')) {
-        $GroupAdminFeatures = SEC_getUserPermissions ();
-        $availableFeatures = explode (',', $GroupAdminFeatures);
-        $GroupAdminFeatures = "'" . implode ("','", $availableFeatures) . "'";
-        $ftWhere = ' WHERE ft_name IN (' . $GroupAdminFeatures . ')';
-    } else {
-        $ftWhere = '';
-    }
-
-    // now query for all available features
-    $features = DB_query ("SELECT ft_id,ft_name,ft_descr FROM {$_TABLES['features']}{$ftWhere} ORDER BY ft_name");
-    $nfeatures = DB_numRows($features);
+    $db = Database::getInstance();
 
     $grpftarray = array ();
     if (!empty($grp_id)) {
-        // now get all the feature this group gets directly
-         $directfeatures = DB_query("SELECT acc_ft_id,ft_name FROM {$_TABLES['access']},{$_TABLES['features']} WHERE ft_id = acc_ft_id AND acc_grp_id = $grp_id",1);
 
-        // now in many cases the features will be given to this user indirectly
+        // In many cases the features will be given to this user indirectly
         // via membership to another group.  These are not editable and must,
         // instead, be removed from that group directly
         $indirectfeatures = GROUP_getIndirectFeatures($grp_id);
@@ -374,11 +385,18 @@ function GROUP_displayRights($grp_id = '', $core = 0)
             next($indirectfeatures);
         }
 
+        // now get all the feature this group gets directly
+        $stmt = $db->conn->executeQuery(
+                    "SELECT acc_ft_id,ft_name
+                    FROM `{$_TABLES['access']}`,`{$_TABLES['features']}`
+                    WHERE ft_id = acc_ft_id AND acc_grp_id = ?",
+                    array($grp_id),
+                    array(Database::INTEGER)
+        );
+
         // Build an arrray of direct features
         $grpftarray1 = array ();
-        $ndirect = DB_numRows($directfeatures);
-        for ($i = 0; $i < $ndirect; $i++) {
-            $A = DB_fetchArray($directfeatures);
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
             $grpftarray1[$A['ft_name']] = 'direct';
         }
 
@@ -393,13 +411,34 @@ function GROUP_displayRights($grp_id = '', $core = 0)
         }
     }
 
-    // OK, now loop through and print all the features giving edit rights
+    if (!SEC_inGroup('Root')) {
+        $GroupAdminFeatures = SEC_getUserPermissions();
+        $availableFeatures = explode (',', $GroupAdminFeatures);
+
+        $stmt = $db->conn->executeQuery(
+            "SELECT ft_id, ft_name, ft_descr
+             FROM `{$_TABLES['features']}`
+             WHERE ft_name IN (?)
+             ORDER BY ft_name",
+            array($availableFeatures),
+            array(Database::PARAM_STR_ARRAY)
+        );
+    } else {
+        $stmt = $db->conn->executeQuery(
+            "SELECT ft_id, ft_name, ft_descr
+             FROM `{$_TABLES['features']}`
+             ORDER BY ft_name",
+            array(),
+            array()
+        );
+    }
+
+    // Loop through and print all the features giving edit rights
     // to only the ones that are direct features
     $ftcount = 0;
     $retval = '<tr>';
-    for ($i = 0; $i < $nfeatures; $i++) {
-        $A = DB_fetchArray($features);
 
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) ) {
             if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                 $retval .= '</tr>' . LB . '<tr>';
@@ -455,6 +494,8 @@ function GROUP_applyDefault($grp_id, $add = true)
 {
     global $_TABLES, $_GROUP_VERBOSE;
 
+    $db = Database::getInstance();
+
     /**
     * In the "add" case, we have to insert one record for each user. Pack this
     * many values into one INSERT statement to save some time and bandwidth.
@@ -468,22 +509,33 @@ function GROUP_applyDefault($grp_id, $add = true)
     }
 
     if ($add) {
-        $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid > 1");
-        $num_users = DB_numRows($result);
-        for ($i = 0; $i < $num_users; $i += $_values_per_insert) {
-            $u = array();
-            for ($j = 0; $j < $_values_per_insert; $j++) {
-                list($uid) = DB_fetchArray($result);
-                $u[] = $uid;
-                if ($i + $j + 1 >= $num_users) {
-                    break;
-                }
-            }
-            $v = "($grp_id," . implode("), ($grp_id,", $u) . ')';
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES " . $v);
+
+        $insertCounter = 0;
+
+        $stmt = $db->conn->query(
+            "SELECT uid FROM `{$_TABLES['users']}` WHERE uid > 1"
+        );
+
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+            $db->conn->insert(
+                    $_TABLES['group_assignments'],
+                    array(
+                        'ug_main_grp_id' => $grp_id,
+                        'ug_uid' => $row['uid']
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
+            );
         }
     } else {
-        DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_main_grp_id = $grp_id) AND (ug_grp_id IS NULL)");
+        $db->conn->executeQuery(
+            "DELETE FROM `{$_TABLES['group_assignments']}`
+             WHERE (ug_main_grp_id = ?) AND (ug_grp_id IS NULL)",
+            array($grp_id),
+            array(Database::INTEGER)
+        );
     }
 }
 
@@ -507,6 +559,9 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_ADM_ACTIONS,$VERBOSE;
 
     $retval = '';
+
+    $db = Database::getInstance();
+
     if (!empty ($grp_name) && !empty ($grp_descr)) {
         $GroupAdminGroups = SEC_getUserGroups ();
 
@@ -522,9 +577,8 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
         }
 
-        // group names have to be unique, so check if this one exists already
-        $g_id = DB_getItem ($_TABLES['groups'], 'grp_id',
-                            "grp_name = '$grp_name'");
+        $g_id = (int) $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => $grp_name));
+
         if ($g_id > 0) {
             if (empty ($grp_id) || ($grp_id != $g_id)) {
                 // there already is a group with that name - complain
@@ -537,22 +591,37 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             }
         }
 
-        $grp_descr = $grp_descr;
-        $grp_descr = DB_escapeString ($grp_descr);
-
         $grp_applydefault_add = true;
+
         if (empty($grp_id)) {
-            DB_save($_TABLES['groups'],
-                    'grp_name,grp_descr,grp_gl_core,grp_default',
-                    "'$grp_name','$grp_descr',$grp_gl_core,$grp_default");
-            $grp_id = DB_getItem($_TABLES['groups'], 'grp_id',
-                                 "grp_name = '$grp_name'");
+
+            $db->conn->executeUpdate(
+                "REPLACE INTO `{$_TABLES['groups']}`
+                  (grp_name,grp_descr,grp_gl_core,grp_default)
+                  VALUES (?,?,?,?)",
+                array(
+                    $grp_name,
+                    $grp_descr,
+                    $grp_gl_core,
+                    $grp_default
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+            );
+
+            $grp_id = $db->getItem($_TABLES['groups'],'grp_id', array('grp_name' => $grp_name));
+
             $new_group = true;
         } else {
             if ($grp_applydefault == 1) {
                 // check if $grp_default changed
-                $old_default = DB_getItem($_TABLES['groups'], 'grp_default',
-                                          "grp_id = $grp_id");
+
+                $old_default = $db->getItem($_TABLES['groups'],'grp_default',array('grp_id' => $grp_id));
+
                 if ($old_default == $grp_default) {
                     // no change required
                     $grp_applydefault = 0;
@@ -561,9 +630,26 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
                 }
             }
 
-            DB_save($_TABLES['groups'],
-                    'grp_id,grp_name,grp_descr,grp_gl_core,grp_default',
-                    "$grp_id,'$grp_name','$grp_descr',$grp_gl_core,$grp_default");
+            $db->conn->executeUpdate(
+                "REPLACE INTO `{$_TABLES['groups']}`
+                  (grp_id,grp_name,grp_descr,grp_gl_core,grp_default)
+                  VALUES (?,?,?,?,?)",
+                array(
+                    $grp_id,
+                    $grp_name,
+                    $grp_descr,
+                    $grp_gl_core,
+                    $grp_default
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+            );
+
             $new_group = false;
         }
 
@@ -580,19 +666,46 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         // Use the field grp_gl_core to indicate if this is non-core GL Group is an Admin related group
         if (($grp_gl_core != 1) AND ($grp_id > 1)) {
             if ($grp_admin == 1) {
-                DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=2 WHERE grp_id=$grp_id");
+                $db->conn->update(
+                    $_TABLES['groups'],
+                    array('grp_gl_core' => 2),
+                    array('grp_id' => $grp_id),
+                    array(Database::INTEGER)
+                );
             } else {
-                DB_query("UPDATE {$_TABLES['groups']} SET grp_gl_core=0 WHERE grp_id=$grp_id");
+                $db->conn->update(
+                    $_TABLES['groups'],
+                    array('grp_gl_core' => 0),
+                    array('grp_id' => $grp_id),
+                    array(Database::INTEGER)
+                );
             }
         }
 
         // now save the features
-        DB_delete($_TABLES['access'], 'acc_grp_id', $grp_id);
+
+        $db->conn->delete(
+                $_TABLES['access'],
+                array('acc_grp_id' => $grp_id),
+                array(Database::INTEGER)
+        );
+
         $num_features = count($features);
         if (SEC_inGroup('Root')) {
             foreach ($features as $f) {
                 $f = intval($f);
-                DB_query ("INSERT INTO {$_TABLES['access']} (acc_ft_id,acc_grp_id) VALUES ($f,$grp_id)");
+
+                $db->conn->insert(
+                    $_TABLES['access'],
+                    array(
+                        'acc_ft_id' => $f,
+                        'acc_grp_id' => $grp_id
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
+                );
             }
         } else {
             $GroupAdminFeatures = SEC_getUserPermissions();
@@ -600,35 +713,92 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             foreach ($features as $f) {
                 if (in_array($f, $availableFeatures)) {
                     $f = intval($f);
-                    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id,acc_grp_id) VALUES ($f,$grp_id)");
+                    $db->conn->insert(
+                        $_TABLES['access'],
+                        array(
+                            'acc_ft_id' => $f,
+                            'acc_grp_id' => $grp_id
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                    );
                 }
             }
         }
         Log::write('system',Log::DVLP_DEBUG,'GROUP SAVE: groups = ' . implode(',',$groups));
         Log::write('system',Log::DVLP_DEBUG,"GROUP SAVE: deleting all group_assignments for group $grp_id/$grp_name");
 
-        DB_delete($_TABLES['group_assignments'], 'ug_grp_id', $grp_id);
+        $db->conn->delete(
+            $_TABLES['group_assignments'],
+            array('ug_grp_id' => $grp_id),
+            array(Database::INTEGER)
+        );
+
         if (! empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups)) {
                     Log::write('system',Log::DVLP_DEBUG,"adding group_assignment $g for $grp_name");
-                    $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES (".intval($g).",$grp_id)";
-                    DB_query($sql);
+
+                    $db->conn->insert(
+                        $_TABLES['group_assignments'],
+                        array(
+                            'ug_main_grp_id' => $g,
+                            'ug_grp_id' => $grp_id
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                    );
                 }
             }
         }
 
         // Make sure Root group belongs to any new group
-        if (DB_getItem ($_TABLES['group_assignments'], 'COUNT(*)',
-                "ug_main_grp_id = $grp_id AND ug_grp_id = 1") == 0) {
-            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)");
+
+        $ngCount = $db->getCount(
+                        $_TABLES['group_assignments'],
+                        array('ug_main_grp_id','ug_grp_id'),
+                        array($grp_id,1),
+                        array(Database::INTEGER,Database::INTEGER)
+        );
+
+        if ($ngCount == 0) {
+            $db->conn->insert(
+                $_TABLES['group_assignments'],
+                array(
+                    'ug_main_grp_id' => $grp_id,
+                    'ug_grp_id'     => 1
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+            );
         }
 
         // make sure this Group Admin belongs to the new group
         if (!SEC_inGroup ('Root')) {
-            if (DB_count ($_TABLES['group_assignments'], 'ug_uid',
-            "(ug_uid = {$_USER['uid']}) AND (ug_main_grp_id = $grp_id)") == 0) {
-                DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($grp_id,{$_USER['uid']})");
+            $gaCount = $db->getCount(
+                            $_TABLES['group_assignments'],
+                            array('ug_uid','ug_main_grp_id'),
+                            array($_USER['uid'],$grp_id),
+                            array(Database::INTEGER,Database::INTEGER)
+            );
+            if ($gaCount == 0) {
+                $db->conn->insert(
+                    $_TABLES['group_assignments'],
+                    array(
+                        'ug_main_grp_id' => $grp_id,
+                        'ug_grp_id'     => $_USER['uid']
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
+                );
             }
         }
 
@@ -669,6 +839,8 @@ function GROUP_getGroupList($basegroup)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     $to_check = array ();
     array_push ($to_check, $basegroup);
 
@@ -677,16 +849,21 @@ function GROUP_getGroupList($basegroup)
     while (count($to_check) > 0) {
         $thisgroup = array_pop ($to_check);
         if ($thisgroup > 0) {
-            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
-            $numGroups = DB_numRows ($result);
-            for ($i = 0; $i < $numGroups; $i++) {
-                $A = DB_fetchArray ($result);
+            $stmt = $db->conn->executeQuery(
+                    "SELECT ug_grp_id FROM `{$_TABLES['group_assignments']}`
+                      WHERE ug_main_grp_id = ?",
+                    array($thisgroup),
+                    array(Database::INTEGER)
+            );
+
+            while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
                 if (!in_array ($A['ug_grp_id'], $checked)) {
                     if (!in_array ($A['ug_grp_id'], $to_check)) {
                         array_push ($to_check, $A['ug_grp_id']);
                     }
                 }
             }
+
             $checked[] = $thisgroup;
         }
     }
@@ -915,14 +1092,14 @@ function GROUP_list($show_all_groups = false)
         $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked">&nbsp;';
         $query_arr = array(
             'table' => 'groups',
-            'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE 1=1",
+            'sql' => "SELECT * FROM `{$_TABLES['groups']}` WHERE 1=1",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     } else {
         $filter .= '<label for="chk_showall">&nbsp;<input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . '>&nbsp;';
         $query_arr = array(
             'table' => 'groups',
-            'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users','Non-Logged-in Users'))",
+            'sql' => "SELECT * FROM `{$_TABLES['groups']}` WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users','Non-Logged-in Users'))",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     }
@@ -957,36 +1134,58 @@ function GROUP_selectUsers($group_id, $allusers = false)
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     // Get a list of users in the Root Group and the selected group
-    $sql  = "SELECT DISTINCT uid FROM {$_TABLES['users']} LEFT JOIN {$_TABLES['group_assignments']} ";
-    $sql .= "ON {$_TABLES['group_assignments']}.ug_uid = uid WHERE uid > 1 AND ";
-    $sql .= "({$_TABLES['group_assignments']}.ug_main_grp_id = 1 OR {$_TABLES['group_assignments']}.ug_main_grp_id = $group_id)";
-    $result = DB_query ($sql);
+
+    $sql  = "SELECT DISTINCT uid FROM `{$_TABLES['users']}` AS u
+             LEFT JOIN `{$_TABLES['group_assignments']}` AS ga ON ga.ug_uid = uid
+             WHERE u.uid > 1 AND (ga.ug_main_grp_id = 1 OR ga.ug_main_grp_id = ?)";
+
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                array($group_id),
+                array(Database::INTEGER)
+    );
     $filteredusers = array();
-    while ($A = DB_fetchArray($result)) {
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $filteredusers[] = $A['uid'];
     }
 
+    $params = array();
+    $types  = array();
+
     $groups = GROUP_getGroupList ($group_id);
-    $grouplist = '(' . implode (',', $groups) . ')';
-    $sql = "SELECT DISTINCT uid,username FROM {$_TABLES['users']} LEFT JOIN {$_TABLES['group_assignments']} ";
-    $sql .= "ON {$_TABLES['group_assignments']}.ug_uid = uid WHERE uid > 1 AND ";
-    $sql .= "{$_TABLES['group_assignments']}.ug_main_grp_id ";
+
+    $sql = "SELECT DISTINCT uid,username FROM `{$_TABLES['users']}` AS u
+            LEFT JOIN `{$_TABLES['group_assignments']}` AS ga
+            ON ga.ug_uid = u.uid
+            WHERE u.uid > 1 AND ga.ug_main_grp_id ";
+
     if ($allusers) {
-        $sql .= 'NOT ';
+        $sql .= ' NOT ';
     }
-    $sql .= "IN {$grouplist} ";
-    // Filter out the users that will be in the selected group
+
+    $sql .= "IN (?)";
+    $params[] = $groups;
+    $types[]  = Database::PARAM_INT_ARRAY;
+
     if ($allusers) {
-        $filteredusers = implode(',',$filteredusers);
-        $sql .= " AND uid NOT IN ($filteredusers) ";
+        $sql .= " AND uid NOT IN (?) ";
+        $params[] = $filteredusers;
+        $types[] = Database::PARAM_INT_ARRAY;
     }
+
     $sql .= "ORDER BY username";
-    $result = DB_query ($sql);
-    $numUsers = DB_numRows ($result);
-    for ($i = 0; $i < $numUsers; $i++) {
-        list($uid, $username) = DB_fetchArray ($result);
-        $retval .= '<option value="' . $uid . '">' . $username . '</option>';
+
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
+
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $retval .= '<option value="' . $row['uid'] . '">' . $row['username'] . '</option>';
     }
 
     return $retval;
@@ -1006,9 +1205,12 @@ function GROUP_editUsers($grp_id)
 
     USES_lib_admin();
 
+    $db = Database::getInstance();
+
     $retval = '';
     $thisUsersGroups = SEC_getUserGroups();
-    $grp_name = DB_getItem($_TABLES['groups'], 'grp_name', "grp_id = '$grp_id'");
+
+    $grp_name = $db->getItem($_TABLES['groups'], 'grp_name', array('grp_id' => $grp_id),array(Database::INTEGER));
 
     if ((!SEC_inGroup(1) && !empty($grp_id) && ($grp_id > 0) &&
                 !in_array($grp_id, $thisUsersGroups) &&
@@ -1048,26 +1250,29 @@ function GROUP_editUsers($grp_id)
 
     $groupmembers = new Template($_CONF['path_layout'] . 'admin/group');
     $groupmembers->set_file(array('groupmembers'=>'groupmembers.thtml'));
-    $groupmembers->set_var('site_url', $_CONF['site_url']);
-    $groupmembers->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $groupmembers->set_var('group_listing_url', $form_url);
-    $groupmembers->set_var('layout_url', $_CONF['layout_url']);
-    $groupmembers->set_var('phpself', $form_url);
-    $groupmembers->set_var('lang_adminhome', $LANG_ACCESS['adminhome']);
-    $groupmembers->set_var('lang_instructions', $LANG_ACCESS['editgroupmsg']);
-    $groupmembers->set_var('LANG_sitemembers',$LANG_ACCESS['availmembers']);
-    $groupmembers->set_var('LANG_grpmembers',$LANG_ACCESS['groupmembers']);
-    $groupmembers->set_var('sitemembers', GROUP_selectUsers($grp_id,true) );
-    $groupmembers->set_var('group_list', GROUP_selectUsers($grp_id) );
-    $groupmembers->set_var('LANG_add',$LANG_ACCESS['add']);
-    $groupmembers->set_var('LANG_remove',$LANG_ACCESS['remove']);
-    $groupmembers->set_var('lang_save', $LANG_ADMIN['save']);
-    $groupmembers->set_var('lang_cancel', $LANG_ADMIN['cancel']);
-    $groupmembers->set_var('lang_grouplist', $LANG28[38]);
-    $groupmembers->set_var('show_all', $showall);
-    $groupmembers->set_var('group_id',$grp_id);
-    $groupmembers->set_var('gltoken_name', CSRF_TOKEN);
-    $groupmembers->set_var('gltoken', SEC_createToken());
+
+    $groupmembers->set_var(array(
+        'site_url'              => $_CONF['site_url'],
+        'site_admin_url'        => $_CONF['site_admin_url'],
+        'group_listing_url'     => $form_url,
+        'layout_url'            => $_CONF['layout_url'],
+        'phpself'               => $form_url,
+        'lang_adminhome'        => $LANG_ACCESS['adminhome'],
+        'lang_instructions'     => $LANG_ACCESS['editgroupmsg'],
+        'LANG_sitemembers'      => $LANG_ACCESS['availmembers'],
+        'LANG_grpmembers'       => $LANG_ACCESS['groupmembers'],
+        'sitemembers'           => GROUP_selectUsers($grp_id,true),
+        'group_list'            => GROUP_selectUsers($grp_id),
+        'LANG_add'              => $LANG_ACCESS['add'],
+        'LANG_remove'           => $LANG_ACCESS['remove'],
+        'lang_save'             => $LANG_ADMIN['save'],
+        'lang_cancel'           => $LANG_ADMIN['cancel'],
+        'lang_grouplist'        => $LANG28[38],
+        'show_all'              => $showall,
+        'group_id'              => $grp_id,
+        'gltoken_name'          => CSRF_TOKEN,
+        'gltoken'               => SEC_createToken()
+    ));
     $groupmembers->parse('output', 'groupmembers');
     $retval .= $groupmembers->finish($groupmembers->get_var('output'));
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
@@ -1089,6 +1294,8 @@ function GROUP_saveUsers($grp_id, $grp_members)
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $updateUsers = explode("|", $grp_members);
     $updateCount = count($updateUsers);
     if ($updateCount > 0) {
@@ -1096,37 +1303,69 @@ function GROUP_saveUsers($grp_id, $grp_members)
         // Retrieve all existing users in group so we can determine if changes
         // are needed
         $activeUsers = array();
-        $query = DB_query("SELECT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id");
-        if (DB_numRows($query) > 0) {
-            while ($A = DB_fetchArray($query, false)) {
-                array_push($activeUsers, $A['ug_uid']);
-            }
+
+        $stmt = $db->conn->executeQuery(
+                    "SELECT ug_uid FROM `{$_TABLES['group_assignments']}` WHERE ug_main_grp_id = ?",
+                    array($grp_id),
+                    array(Database::INTEGER)
+        );
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+            array_push($activeUsers, $A['ug_uid']);
+        }
+        if (count($activeUsers) > 0) {
             $deleteGroupUsers = array_diff($activeUsers, $updateUsers);
             $addGroupUsers = array_diff($updateUsers, $activeUsers);
             if (is_array($deleteGroupUsers) AND count($deleteGroupUsers) > 0) {
                 foreach ($deleteGroupUsers as $uid) {
-                    $uid = COM_applyFilter($uid, true);
-                    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id AND ug_uid = $uid");
+                    $uid = filter_var($uid, FILTER_SANITIZE_NUMBER_INT);
+
+                    $db->conn->delete(
+                        $_TABLES['group_assignments'],
+                        array(
+                            'ug_main_grp_id'=> $grp_id,
+                            'ug_uid'        => $uid
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                    );
                 }
             }
             if (is_array($addGroupUsers) AND count($addGroupUsers) > 0) {
                 foreach ($addGroupUsers as $uid) {
-                    $uid = COM_applyFilter($uid, true);
-                    DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$grp_id', $uid)");
+                    $uid = filter_var($uid, FILTER_SANITIZE_NUMBER_INT);
+                    $db->conn->insert(
+                        $_TABLES['group_assignments'],
+                        array(
+                            'ug_main_grp_id' => $grp_id,
+                            'ug_uid'         => $uid
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::INTEGER
+                        )
+                    );
                 }
             }
-
         } else {
-
             // No active users which should never occur as Root users
             // are always members
             for ($i = 0; $i < $updateCount; $i++) {
-                $updateUsers[$i] = COM_applyFilter($updateUsers[$i], true);
-                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$grp_id', '$updateUsers[$i]')");
+                $updateUsers[$i] = filter_var($updateUsers[$i], FILTER_SANITIZE_NUMBER_INT);
+                $db->conn->insert(
+                    $_TABLES['group_assignments'],
+                    array(
+                        'ug_main_grp_id' => $grp_id,
+                        'ug_uid'         => $updateUsers[$i]
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
+                );
             }
-
         }
-
     }
     COM_setMessage(49);
     $url = $_CONF['site_admin_url'] . '/group.php';
@@ -1147,17 +1386,18 @@ function GROUP_delete($grp_id)
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $db = Database::getInstance();
+
     $grp_id = (int) $grp_id;
-    $is_core = (int) DB_getItem($_TABLES['groups'], 'grp_gl_core', "grp_id = $grp_id");
+    $is_core = (int) $db->getItem($_TABLES['groups'], 'grp_gl_core', array('grp_id' => $grp_id),array(Database::INTEGER));
     if ($is_core == 1 || !SEC_hasRights('group.delete')) {
         Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete a core group with insufficient privileges.");
         return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
     }
-
-    DB_delete ($_TABLES['access'], 'acc_grp_id', $grp_id);
-    DB_delete ($_TABLES['group_assignments'], 'ug_grp_id', $grp_id);
-    DB_delete ($_TABLES['group_assignments'], 'ug_main_grp_id', $grp_id);
-    DB_delete ($_TABLES['groups'], 'grp_id', $grp_id);
+    $db->conn->delete($_TABLES['access'], array('acc_grp_id' => $grp_id),array(Database::INTEGER));
+    $db->conn->delete($_TABLES['group_assignments'], array('ug_grp_id' => $grp_id),array(Database::INTEGER));
+    $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id),array(Database::INTEGER));
+    $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id),array(Database::INTEGER));
 
     PLG_groupChanged ($grp_id, 'delete');
     Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
@@ -1171,13 +1411,18 @@ function GROUP_delete($grp_id)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('edit','save','delete','savegroup','editusers');
+
+$expected = array('edit','save','delete','savegroup','editusers','cancel');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
     } elseif (isset($_GET[$provided])) {
 	$action = $provided;
     }
+}
+
+if (isset($_POST['cancel'])) {
+    echo COM_refresh($_CONF['site_admin_url'].'/group.php');
 }
 
 $grp_id = 0;

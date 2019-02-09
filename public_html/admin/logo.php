@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -15,6 +15,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 
 USES_lib_admin();
@@ -78,6 +79,8 @@ function _saveLogo() {
     // 3 = no file available
     // 4 = invalid size
 
+    $db = Database::getInstance();
+
     $retval = 1;
 
     $logo   = isset($_POST['usegraphic']) ? COM_applyFilter($_POST['usegraphic'],true) : 0;
@@ -127,14 +130,24 @@ function _saveLogo() {
     $_LOGO['display_site_slogan'] = $slogan;
     $_LOGO['logo_name'] = $logo_name;
 
-    $logo = DB_escapeString($logo);
-    $slogan = DB_escapeString($slogan);
-    $logo_name = DB_escapeString($logo_name);
-
-    DB_save($_TABLES['logo'],"config_name,config_value","'use_graphic_logo','$logo'");
-    DB_save($_TABLES['logo'],"config_name,config_value","'display_site_slogan','$slogan'");
-    DB_save($_TABLES['logo'],"config_name,config_value","'logo_name','$logo_name'");
-
+    $db->conn->executeQuery(
+            "REPLACE INTO `{$_TABLES['logo']}` (config_name,config_value)
+             VALUES (?,?)",
+            array('use_graphic_logo',$logo),
+            array(Database::STRING, Database::STRING)
+    );
+    $db->conn->executeQuery(
+            "REPLACE INTO `{$_TABLES['logo']}` (config_name,config_value)
+             VALUES (?,?)",
+            array('display_site_slogan',$slogan),
+            array(Database::STRING, Database::STRING)
+    );
+    $db->conn->executeQuery(
+            "REPLACE INTO `{$_TABLES['logo']}` (config_name,config_value)
+             VALUES (?,?)",
+            array('logo_name',$logo_name),
+            array(Database::STRING, Database::STRING)
+    );
 
     return $retval;
 }

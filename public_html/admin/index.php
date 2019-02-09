@@ -1,39 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | This is the admin index page that does nothing more that login you in.   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Joe Mucchiello         joe AT throwingdice DOT com                       |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Admin Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Jason Whittenburg    jwhitten AT securitygeeks DOT com
+*  Based on prior work Copyright (C) 2008-2010 by the following authors:
+*  Joe Mucchiello       joe AT throwingdice DOT com
+*
+*/
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Database\Database;
 
 // MAIN
 if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {
@@ -49,19 +36,19 @@ function _checkUpgrades()
 
     $retval = '';
 
-    $lastrun = DB_getItem( $_TABLES['vars'], 'value', "name = 'updatecheck'" );
+    $db = Database::getInstance();
+
+    $lastrun = $db->getItem( $_TABLES['vars'], 'value', array('name' => 'updatecheck'));
     if ( $lastrun + $_CONF['update_check_interval'] <= time() ) {
         // run version check
         list($upToDate,$pluginsUpToDate,$pluginData) = _checkVersion();
         if ( $upToDate == 0 || $pluginsUpToDate == 0 ) {
             $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . sprintf($LANG_UPGRADE['updates_available'],$_CONF['site_admin_url']) . '</span></p>';
         }
-        DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('updatecheck',UNIX_TIMESTAMP())");
+        $db->conn->query("REPLACE INTO `{$_TABLES['vars']}` (name, value) VALUES ('updatecheck',UNIX_TIMESTAMP())");
     }
     return $retval;
 }
-
-
 
 /**
 * Renders an entry (icon) for the "Command and Control" center
@@ -101,9 +88,11 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '', $count
 */
 function commandcontrol()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE, $_DB_dbms;
+    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE;
 
     USES_lib_comment();
+
+    $db = Database::getInstance();
 
     $retval = '';
 
@@ -213,18 +202,12 @@ function commandcontrol()
 
     if ( SEC_hasRights( 'story.edit,story.moderate', 'OR' ) || (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))) {
         if ( SEC_hasRights( 'story.moderate' )) {
-            if ( empty( $topicsql )) {
-                $modnum += DB_count( $_TABLES['storysubmission'] );
-            } else {
-                $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
-                $S = DB_fetchArray( $sresult );
-                $modnum += $S['count'];
-            }
+            $modnum = $db->getCount($_TABLES['storysubmission']);
         }
 
         if ( $_CONF['usersubmission'] == 1 ) {
             if ( SEC_hasRights( 'user.edit' ) && SEC_hasRights( 'user.delete' )) {
-                $modnum += DB_count( $_TABLES['users'], 'status', '2' );
+                $modnum += $db->getCount($_TABLES['users'], 'status', 2, Database::INTEGER);
             }
         }
     }
@@ -319,7 +302,9 @@ function security_check_reminder()
         return $retval;
     }
 
-    $done = DB_getItem ($_TABLES['vars'], 'value', "name = 'security_check'");
+    $db = Database::getInstance();
+
+    $done = $db->getItem ($_TABLES['vars'], 'value', array('name' => 'security_check'));
     if ($done != 1) {
         $retval .= COM_showMessage(92,'','',false,'error');
     }
