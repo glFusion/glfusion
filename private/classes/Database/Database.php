@@ -419,6 +419,72 @@ class Database
 
     }
 
+    /**
+    * Returns count of rows matching column / value pairs
+    *
+    * $column and $value must match - either both a string or array
+    * and the number of elements in the array must be the same
+    *
+    * @param    string      $table  Table to count
+    * @param    mixed       $column Column or array of columns to query
+    * @param    mixed       $value  Values or array of values to query
+    * @params   mixed       $type   Data type or array of data types
+    */
+    public function getCount($table, $column = '', $value = '', $type = '')
+    {
+        global $_TABLES;
+
+        $params = array();
+        $types  = array();
+
+        $sql = "SELECT COUNT(*) FROM `$table`";
+
+        if (is_array($column) || is_array($value)) {
+            $num_ids = count($column);
+
+            if (is_array($column) && is_array($value) && ($num_ids === count($value))) {
+                $sql .= ' WHERE ';
+
+                for ($i = 1; $i <= $num_ids; $i ++) {
+                    $sql .= $this->conn->quoteIdentifier(current($column)) . ' = ? ';
+                    $params[] = current($value);
+
+                    if (empty(current($type))) {
+                        $type[] = Database::STRING;
+                    } else {
+                        $type[] = current($type);
+                    }
+
+                    if ($i !== $num_ids) {
+                        $sql .= " AND ";
+                    }
+                    next($column);
+                    next($value);
+                    next($type);
+                }
+            } else {
+                // error, they both have to be arrays and of the same size
+                return false;
+            }
+        } else {
+            // just regular string values, build sql
+            if (!empty($column) && (isset($value) || ($value != ''))) {
+                $sql .= " WHERE ".$this->conn->quoteIdentifier($column)." = ?";
+                $params[] = $value;
+                if (!is_array($type)) {
+                    $types[] = $type;
+                } else {
+                    $types[] = Database::STRING;
+                }
+            }
+        }
+
+        $retval = $this->conn->fetchColumn($sql,$params,0,$types);
+        if ($retval === false) {
+            return false;
+        }
+        return (int) $retval;
+    }
 
     /**
      * @return     string     the version of the database application
