@@ -21,8 +21,10 @@
 
 require_once 'lib-common.php';
 
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
+
 USES_lib_user();
-USES_lib_social();
 
 if ( !isset($_SYSTEM['verification_token_ttl']) ) {
     $_SYSTEM['verification_token_ttl'] = 86400;
@@ -44,7 +46,10 @@ function userprofile()
 // @param    int     $msg    Message to display (if != 0)
 // @param    string  $plugin optional plugin name for message
 
+    $db = Database::getInstance();
+
     $retval = '';
+
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
         $retval .= SEC_loginRequiredForm();
@@ -64,8 +69,14 @@ function userprofile()
         if ( empty($username) || $username == '' ) {
             COM_404();
         }
-        $username = DB_escapeString ($username);
-        $user = DB_getItem ($_TABLES['users'], 'uid', "username = '$username'");
+
+        $user = (int) $db->getItem(
+                        $_TABLES['users'],
+                        'uid',
+                        array('username'=>$username),
+                        array(Database::STRING)
+                      );
+
         if ($user < 2) {
             COM_404();
         }
@@ -77,15 +88,21 @@ function userprofile()
         $msg = COM_applyFilter ($_GET['msg'], true);
     }
     $plugin = '';
+
     if (($msg > 0) && isset($_GET['plugin'])) {
         $plugin = COM_applyFilter($_GET['plugin']);
     }
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".(int) $user);
-    $nrows = DB_numRows ($result);
-    if ($nrows == 0) { // no such user
+
+    $A = $db->conn->fetchAssoc(
+                "SELECT u.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline
+                 FROM `{$_TABLES['userinfo']}` AS ui,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['users']}` AS u
+                 WHERE ui.uid = u.uid AND ui.uid = up.uid AND u.uid = ?",
+                array($user),
+                array(Database::INTEGER)
+    );
+    if ($A === false || $A === null) {
         COM_404();
     }
-    $A = DB_fetchArray ($result);
 
     if ($A['status'] == USER_ACCOUNT_DISABLED && !SEC_hasRights ('user.edit')) {
         COM_displayMessageAndAbort (30, '', 403, 'Forbidden');
@@ -181,7 +198,7 @@ function userprofile()
     }
 
     if ($A['showonline']) {
-        if ( DB_count($_TABLES['sessions'],'uid',(int) $user)) {
+        if ( $db->getCount($_TABLES['sessions'],'uid',$user,Database::INTEGER)) {
             $user_templates->set_var ('online', 'online');
         }
     }
@@ -227,31 +244,47 @@ function userprofile()
     }
     $user_templates->set_var ('headline_postingstats', $LANG04[83] . ' ' . $display_name);
 
-    $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}" . COM_getPermSQL ());
-    $nrows = DB_numRows ($result);
     $tids = array ();
-    for ($i = 0; $i < $nrows; $i++) {
-        $T = DB_fetchArray ($result);
+    $stmt = $db->conn->query(
+                "SELECT tid FROM `{$_TABLES['topics']}`" . $db->getPermSQL(),
+    );
+    while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
         $tids[] = $T['tid'];
     }
     $topics = "'" . implode ("','", $tids) . "'";
 
     // list of last 10 stories by this user
-    if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".(int) $user."') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."') AND (tid IN ($topics))" . COM_getPermSQL ('AND');
-        $sql .= " ORDER BY unixdate DESC LIMIT 10";
-        $result = DB_query ($sql);
-        $nrows = DB_numRows ($result);
+    if (count($tids) > 0) {
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate
+                 FROM `{$_TABLES['stories']}` WHERE (uid = ?)
+                       AND (draft_flag = 0)
+                       AND (date <= ?)
+                       AND (tid IN (?))" . $db->getPermSQL('AND') .
+                " ORDER BY unixdate DESC LIMIT 10";
+
+        $stmt = $db->conn->executeQuery(
+                    $sql,
+                    array(
+                        $user,
+                        $_CONF['_now']->toMySQL(true),
+                        $tids
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::STRING,
+                        Database::PARAM_STR_ARRAY
+                    )
+        );
+        $last10Stories = $stmt->fetchAll(Database::ASSOCIATIVE);
     } else {
-        $nrows = 0;
+        $last10Stories = array();
     }
-    if ($nrows > 0) {
-        for ($i = 0; $i < $nrows; $i++) {
-            $C = DB_fetchArray ($result);
+    $i = 0;
+    if (count($last10Stories) > 0) {
+        foreach($last10Stories AS $C) {
             $user_templates->set_var ('cssid', ($i % 2) + 1);
             $user_templates->set_var ('row_number', ($i + 1) . '.');
-            $articleUrl = COM_buildUrl ($_CONF['site_url']
-                                        . '/article.php?story=' . $C['sid']);
+            $articleUrl = COM_buildUrl ($_CONF['site_url'].'/article.php?story=' . $C['sid']);
             $user_templates->set_var ('article_url', $articleUrl);
             $C['title'] = str_replace ('$', '&#36;', $C['title']);
             $user_templates->set_var ('story_title',
@@ -263,35 +296,44 @@ function userprofile()
             $storytime = COM_getUserDateTimeFormat ($C['unixdate']);
             $user_templates->set_var ('story_date', $storytime[0]);
             $user_templates->parse ('story_row', 'strow', true);
+            $i++;
         }
     } else {
-        $user_templates->set_var ('story_row',
-                                  '<tr><td>' . $LANG01[37] . '</td></tr>');
+        $user_templates->set_var ('story_row','<tr><td>' . $LANG01[37] . '</td></tr>');
     }
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
         $commentCounter = 0;
-        $sql = "SELECT * FROM {$_TABLES['comments']} WHERE uid = " . (int) $user . " AND queued=0 ORDER BY date DESC";
-        $result = DB_query($sql);
 
-        while ( ( $row = DB_fetchArray($result) ) ) {
-            if ( $commentCounter >= 10 ) break;
-                $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
-                if ( is_array($itemInfo) || $itemInfo == '' ) continue;
-                $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
-                $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
-                $row['title'] = html_entity_decode(str_replace ('$', '&#36;', $row['title']));
-                $comment_url = $_CONF['site_url'] .
-                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
-                $user_templates->set_var ('comment_title',
-                    COM_createLink(
-                        $row['title'],
-                        $comment_url,
-                        array ('class'=>''))
-                );
-                $commenttime = COM_getUserDateTimeFormat ($row['date']);
-                $user_templates->set_var ('comment_date', $commenttime[0]);
-                $user_templates->parse ('comment_row', 'row', true);
-                $commentCounter++;
+        $stmt = $db->conn->executeQuery(
+                    "SELECT * FROM `{$_TABLES['comments']}`
+                     WHERE uid = ? AND queued=0 ORDER BY date DESC",
+                    array($user),
+                    array(Database::INTEGER)
+        );
+
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if ( $commentCounter >= 10 ) {
+                break;
+            }
+            $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
+            if ( is_array($itemInfo) || $itemInfo == '' ) {
+                continue;
+            }
+            $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
+            $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
+            $row['title'] = html_entity_decode(str_replace ('$', '&#36;', $row['title']));
+            $comment_url = $_CONF['site_url'] .
+                    '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
+            $user_templates->set_var ('comment_title',
+                COM_createLink(
+                    $row['title'],
+                    $comment_url,
+                    array ('class'=>''))
+            );
+            $commenttime = COM_getUserDateTimeFormat ($row['date']);
+            $user_templates->set_var ('comment_date', $commenttime[0]);
+            $user_templates->parse ('comment_row', 'row', true);
+            $commentCounter++;
         }
         if ( $commentCounter == 0 ) {
             $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
@@ -300,20 +342,30 @@ function userprofile()
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".(int) $user.") AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getPermSQL ('AND');
-    $result = DB_query($sql);
-    $N = DB_fetchArray ($result);
-    $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
+
+    $storyCount = (int) $db->conn->fetchColumn(
+                    "SELECT COUNT(*) AS count
+                     FROM `{$_TABLES['stories']}`
+                     WHERE (uid = ?) AND (draft_flag = 0) AND (date <= ?)" . $db->getPermSQL('AND'),
+                    array($user,$_CONF['_now']->toMySQL(true)),
+                    0,
+                    array(Database::INTEGER,Database::STRING)
+    );
+    $user_templates->set_var ('number_stories', COM_numberFormat($storyCount));
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
         $user_templates->set_var ('lang_number_comments', $LANG04[85]);
 
-        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (queued = 0 AND uid = ".(int) $user.")";
-        if (!empty ($sidList)) {
-            $sql .= " AND (sid in ($sidList))";
-        }
-        $result = DB_query ($sql);
-        $N = DB_fetchArray ($result);
-        $user_templates->set_var ('number_comments', COM_numberFormat($N['count']));
+        $sql = "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
+                WHERE (queued = 0 AND uid = ?)";
+
+        $commentCount = (int) $db->conn->fetchColumn(
+                    "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
+                     WHERE (queued = 0 AND uid = ?)",
+                    array($user),
+                    0,
+                    array(Database::INTEGER)
+        );
+        $user_templates->set_var ('number_comments', COM_numberFormat($commentCount));
     }
     $user_templates->set_var ('lang_all_postings_by',
                               $LANG04[86] . ' ' . $display_name);
@@ -363,12 +415,17 @@ function emailpassword ($username, $passwd = '', $msg = 0)
 
     $retval = '';
 
-    $username = DB_escapeString ($username);
+    $db = Database::getInstance();
+
     // don't retrieve any remote users!
-    $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
-    $nrows = DB_numRows ($result);
-    if ($nrows == 1) {
-        $A = DB_fetchArray ($result);
+    $A = $db->conn->fetchAssoc(
+            "SELECT uid,email,status FROM `{$_TABLES['users']}`
+             WHERE username = ? AND (account_type & ".LOCAL_USER.")",
+            array($username),
+            array(Database::STRING)
+    );
+
+    if ($A !== false && $A !== null) {
         if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
             echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
@@ -405,19 +462,30 @@ function requestpassword ($username, $msg = 0)
 {
     global $_CONF, $_TABLES, $LANG04;
 
+    $db = Database::getInstance();
+
     $retval = '';
 
     // no remote users!
-    $username = DB_escapeString($username);
-    $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '".$username."' AND (account_type & ".LOCAL_USER.")");
-    $nrows = DB_numRows ($result);
-    if ($nrows == 1) {
-        $A = DB_fetchArray ($result);
+    $A = $db->conn->fetchAssoc(
+            "SELECT uid,email,passwd,status FROM `{$_TABLES['users']}`
+             WHERE username = ? AND (account_type & ".LOCAL_USER.")",
+            array($username),
+            array(Database::STRING)
+    );
+
+    if ($A !== false && $A !== null) {
         if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
             echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-        DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int) $A['uid']);
+
+        $db->conn->update(
+                $_TABLES['users'],
+                array('pwrequestid' => $reqid),
+                array('uid' => $A['uid']),
+                array(Database::STRING, Database::INTEGER)
+        );
 
         $T = new Template($_CONF['path_layout'].'email/');
         $T->set_file(array(
@@ -491,11 +559,13 @@ function newpasswordform ($uid, $requestid)
 {
     global $_CONF, $_TABLES, $LANG04;
 
+    $db = Database::getInstance();
+
     $pwform = new Template ($_CONF['path_layout'] . 'users');
     $pwform->set_file ('newpw','newpassword.thtml');
     $pwform->set_var (array(
             'user_id'       => $uid,
-            'user_name'     => DB_getItem ($_TABLES['users'], 'username',"uid = ".(int)$uid),
+            'user_name'     => $db->getItem ($_TABLES['users'], 'username',array('uid' => $uid),array(Database::INTEGER)),
             'request_id'    => $requestid,
             'password_help' => SEC_showPasswordHelp(),
             'lang_explain'  => $LANG04[90],
@@ -523,16 +593,23 @@ function requesttoken ($uid, $msg = 0)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
 
+    $db = Database::getInstance();
+
     if ( !isset($_SYSTEM['verification_token_ttl']) ) {
         $_SYSTEM['verification_token_ttl'] = 86400;
     }
 
     $retval = '';
     $uid = (int) $uid;
-    $result = DB_query ("SELECT uid,username,email,passwd,status FROM {$_TABLES['users']} WHERE uid = ".(int)$uid." AND (account_type & ".LOCAL_USER.")");
-    $nrows = DB_numRows ($result);
-    if ($nrows == 1) {
-        $A = DB_fetchArray ($result);
+
+    $A = $db->conn->fetchAssoc(
+                "SELECT uid,username,email,passwd,status
+                 FROM `{$_TABLES['users']}`
+                 WHERE uid = ? AND (account_type & ".LOCAL_USER.")",
+                array($uid),
+                array(Database::INTEGER)
+    );
+    if ($A !== false && $A !== null) {
         if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
             echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
@@ -633,6 +710,8 @@ function USER_createuser($info = array())
     $validationErrors = 0;
     $errorMessages = array();
 
+    $db = Database::getInstance();
+
     if (!isset ($_CONF['disallow_domains'])) {
         $_CONF['disallow_domains'] = '';
     }
@@ -641,7 +720,6 @@ function USER_createuser($info = array())
     if ($_CONF['disable_new_user_registration']) {
         COM_setMsg($LANG04[122],'error');
         COM_404();
-//        echo COM_refresh($_CONF['site_url']);
     }
     // do not want re-auth option
 
@@ -669,8 +747,8 @@ function USER_createuser($info = array())
 
     $data['username']   = isset($info['username']) ? $info['username'] : '';
 
-    $data['email']      = isset($info['email']) ? COM_applyFilter ($info['email']) : '';
-    $data['email_conf'] = isset($info['email_conf']) ? COM_applyFilter ($info['email_conf']) : '';
+    $data['email']      = isset($info['email']) ? filter_var($info['email'],FILTER_SANITIZE_EMAIL) : '';
+    $data['email_conf'] = isset($info['email_conf']) ? filter_var($info['email_conf'],FILTER_SANITIZE_EMAIL) : '';
 
     $data['passwd']      = isset($info['passwd']) ? COM_applyFilter ($info['passwd']) : '';
     $data['passwd_conf'] = isset($info['passwd_conf']) ? COM_applyFilter ($info['passwd_conf']) : '';
@@ -680,7 +758,7 @@ function USER_createuser($info = array())
     $data['oauth_provider'] = isset($info['oauth_provider']) ? $info['oauth_provider'] : '';
     $data['oauth_service']  = isset($info['oauth_service']) ? $info['oauth_service'] : '';
     $data['oauth_username'] = isset($info['oauth_username']) ? $info['oauth_username'] : '';
-    $data['oauth_email']    = isset($info['oauth_email']) ? COM_applyFilter($info['oauth_email']) : '';
+    $data['oauth_email']    = isset($info['oauth_email']) ? filter_var($info['oauth_email'],FILTER_SANITIZE_EMAIL) : '';
 
     // data cleanup and validations
 
@@ -716,14 +794,14 @@ function USER_createuser($info = array())
 
     $ucount = $ecount = 0;
 
-    $ucount = DB_count($_TABLES['users'], 'username',DB_escapeString ($data['username']));
+    $ucount = $db->getCount($_TABLES['users'], 'username',$data['username'],Database::STRING);
     if ( $ucount != 0 ) {
         $validationErrors++;
         $errorMessages[] = $LANG04[19];
     }
 
     if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
-        $ecount = DB_count($_TABLES['users'], 'email', DB_escapeString ($data['email']));
+        $ecount = $db->getCount($_TABLES['users'], 'email', $data['email'], Database::STRING);
         if ( $ecount != 0 ) {
             $validationErrors++;
             $errorMessages[] = $LANG04[19];
@@ -805,7 +883,7 @@ function USER_createuser($info = array())
         $uid = USER_createAccount ($data['username'], $data['email'], $encryptedPasswd, $data['fullname']);
 
         if ($_CONF['usersubmission'] == 1) {
-            if (DB_getItem ($_TABLES['users'],'status',"uid=".(int) $uid) == USER_ACCOUNT_AWAITING_APPROVAL) {
+            if ((int) $db->getItem ($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER)) == USER_ACCOUNT_AWAITING_APPROVAL) {
                echo COM_refresh ($_CONF['site_url'].'/index.php?msg=48');
             } else {
                 $retval = emailpassword ($data['username'], $data['passwd'], 1);
@@ -825,7 +903,7 @@ function USER_createuser($info = array())
         $uid = USER_createAccount($data['username'], $data['email'], '', $data['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
 //@TODO should probably display an error
         if ( $uid == NULL ) {
-            COM_errorLog("USER_createAccount() failed to return valid UID");
+            Log::write('system',Log::ERROR,"USER_createAccount() failed to return valid UID");
             echo COM_refresh($_CONF['site_url']);
         }
 
@@ -838,27 +916,60 @@ function USER_createuser($info = array())
             $oauth->_DBupdate_userinfo($uid, $userinfo);
         }
 
-        $status = DB_getItem($_TABLES['users'],'status','uid='.(int)$uid);
-        $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = 'Remote Users'");
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($remote_grp, $uid)");
+        $status = $db->getItem($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER));
+        $remote_grp = $db->getItem($_TABLES['groups'], 'grp_id', array('grp_name' => 'Remote Users'), array(Database::STRING));
+
+        $db->conn->insert(
+                $_TABLES['group_assignments'],
+                array(
+                    'ug_main_grp_id' => $remote_grp,
+                    'ug_uid' => $uid
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+        );
 
         if ( isset($users['socialuser']) ) {
-            $social_result = DB_query("SELECT * FROM {$_TABLES['social_follow_services']} WHERE service_name='".DB_escapeString($users['socialservice'])."' AND enabled=1");
-            if (DB_numRows($social_result) > 0 ) {
-                $social_row = DB_fetchArray($social_result);
-                $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
-                $sql .= " VALUES (" . (int) $social_row['ssid'] . ",".$uid.",'".$users['socialuser']."');";
-                DB_query($sql,1);
+            $social_row = $db->conn->fetchAssoc(
+                            "SELECT * FROM `{$_TABLES['social_follow_services']}`
+                             WHERE service_name=? AND enabled=1",
+                            array($users['socialservice']),
+                            array(Database::STRING)
+            );
+            if ($social_row !== false && $social_row !== null) {
+                $sql  = "REPLACE INTO `{$_TABLES['social_follow_user']}` (ssid,uid,ss_username)
+                         VALUES (?, ?, ?)";
+                try {
+                    $db->conn->executeUpdate(
+                            $sql,
+                            array(
+                                $social_row['ssid'],
+                                $uid,
+                                $users['socialuser']
+                            ),
+                            array(
+                                Database::STRING,
+                                Database::INTEGER,
+                                Database::STRING
+                            )
+                    );
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    // ignore error
+                }
             }
         }
 
         // check and see if we need to merge the account
-        if ( isset($data['email']) && $data['email'] != '' ) {
-            $sql = "SELECT * FROM {$_TABLES['users']} WHERE account_type = ".LOCAL_USER." AND email='".DB_escapeString($data['email'])."' AND uid > 1";
-            $result = DB_query($sql);
-            $numRows = DB_numRows($result);
-            if ( $numRows == 1 ) {
-                $row = DB_fetchArray($result);
+        if (isset($data['email']) && $data['email'] != '') {
+            $row = $db->conn->fetchAssoc(
+                        "SELECT * FROM `{$_TABLES['users']}`
+                         WHERE account_type = ".LOCAL_USER." AND email=? AND uid > 1",
+                        array($data['email']),
+                        array(Database::STRING)
+            );
+            if ($row !== false && $row !== null) {
                 $remoteUID = $uid;
                 $localUID  = $row['uid'];
                 $mergeAccount = 1;
@@ -867,12 +978,14 @@ function USER_createuser($info = array())
     }
 
     if ($_CONF['usersubmission'] == 1) {
-        if (DB_getItem ($_TABLES['users'], 'status', "uid = ".(int) $uid) == USER_ACCOUNT_AWAITING_APPROVAL) {
+        if ((int) ($db->getItem ($_TABLES['users'], 'status', array('uid' =>  $uid),Database::INTEGER)) == USER_ACCOUNT_AWAITING_APPROVAL) {
             echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
     }
 
-    if ( $uid != null ) SESS_completeLogin($uid,0);
+    if ( $uid != null ) {
+        SESS_completeLogin($uid,0);
+    }
 
     if ( $mergeAccount ) {
         USER_mergeAccountScreen($remoteUID, $localUID);
@@ -1164,8 +1277,18 @@ function userLogout()
 {
     global $_CONF, $_TABLES, $_USER, $_COOKIE;
 
-   if (!empty ($_USER['uid']) AND $_USER['uid'] > 1) {
-        DB_query("UPDATE {$_TABLES['users']} set remote_ip='' WHERE uid=".$_USER['uid'],1);
+    $db = Database::getInstance();
+
+    if (!empty ($_USER['uid']) AND $_USER['uid'] > 1) {
+        try {
+            $db->conn->update(
+                        $_TABLES['users'],
+                        array('remote_ip' => ''),
+                        array('uid' => $_USER['uid'])
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            // ignore any errors
+        }
         SESS_endUserSession ($_USER['uid']);
         PLG_logoutUser ($_USER['uid']);
     }
@@ -1180,12 +1303,16 @@ function userLogout()
                    $_CONF['cookiesecure'],true);
     if ( isset($_COOKIE['token'])) {
         $token = $_COOKIE['token'];
-        DB_delete($_TABLES['tokens'],'token',DB_escapeString($token));
+        $db->conn->delete(
+                    $_TABLES['tokens'],
+                    array('token' => $token),
+                    array(Database::STRING)
+        );
         SEC_setCookie ('token', '', time() - 10000,
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
                        $_CONF['cookiesecure'],true);
     }
-    DB_delete($_TABLES['tokens'],'owner_id',(int) $_USER['uid']);
+    $db->conn->delete($_TABLES['tokens'],array('owner_id' => $_USER['uid']),array(Database::INTEGER));
     echo COM_refresh($_CONF['site_url'] . '/index.php?msg=8');
 }
 
@@ -1223,14 +1350,14 @@ function _userNewpwd()
 
     $retval = '';
 
-    $uid    = COM_applyFilter ($_GET['uid'], true);
-    $reqid  = COM_sanitizeID(COM_applyFilter ($_GET['rid']));
+    $db = Database::getInstance();
+
+    $uid    = (int) filter_input(INPUT_GET,'uid',FILTER_SANITIZE_NUMBER_INT);
+    $requid = COM_sanitizeID(filter_input(INPUT_GET,'rid',FILTER_SANITIZE_STRING));
 
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
-        $uid = (int) $uid;
-        $safereqid = DB_escapeString($reqid);
-        $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
-                           array ($uid, $safereqid));
+        $valid = $db->getCount ($_TABLES['users'], array ('uid', 'pwrequestid'),
+                           array ($uid, $reqid),array(Database::INTEGER,Database::STRING));
         if ($valid == 1) {
             $retval .= newpasswordform ($uid, $reqid);
         } else { // request invalid or expired
@@ -1240,7 +1367,6 @@ function _userNewpwd()
     } else {
         // this request doesn't make sense - ignore it
         COM_404();
-//        echo COM_refresh ($_CONF['site_url']);
     }
     return $retval;
 }
@@ -1249,29 +1375,51 @@ function _userSetnewpwd()
 {
     global $_CONF, $_TABLES, $_USER, $LANG04;
 
+    $db = Database::getInstance();
+
     $retval = '';
-    if ( (empty ($_POST['passwd'])) || ($_POST['passwd'] != $_POST['passwd_conf']) ) {
-        echo COM_refresh ($_CONF['site_url']
-                 . '/users.php?mode=newpwd&amp;uid=' . COM_applyFilter($_POST['uid'],true)
-                 . '&amp;rid=' . COM_applyFilter($_POST['rid']));
+    if ((empty($_POST['passwd'])) || ($_POST['passwd'] != $_POST['passwd_conf'])) {
+        $uid = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
+        $reqid = COM_sanitizeID(filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING));
+        echo COM_refresh ($_CONF['site_url'].'/users.php?mode=newpwd&amp;uid='.$uid.'&amp;rid='.$reqid);
     } else {
-        $uid = COM_applyFilter ($_POST['uid'], true);
-        $reqid = COM_sanitizeID(COM_applyFilter ($_POST['rid']));
-        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
-            $uid = (int) $uid;
-            $safereqid = DB_escapeString($reqid);
-            $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),array ($uid, $safereqid));
+        $uid    = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
+        $reqid  = COM_sanitizeID(filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING));
+
+        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen($reqid) == 16)) {
+
+            $valid = $db->getCount(
+                            $_TABLES['users'],
+                            array('uid','pwrequestid'),
+                            array($uid,$reqid),
+                            array(Database::INTEGER,Database::STRING)
+                     );
             if ($valid == 1) {
                 $err = SEC_checkPwdComplexity($_POST['passwd']);
-                if ( count($err) > 0 ) {
+                if (count($err) > 0) {
                     $msg = implode('<br>',$err);
                     $retval .= COM_showMessageText($msg,'',true,'error');
                     $retval .= newpasswordform($uid,$reqid);
                 } else {
                     $passwd = SEC_encryptPassword($_POST['passwd']);
-                    DB_change ($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", $uid);
-                    DB_delete ($_TABLES['sessions'], 'uid', $uid);
-                    DB_change ($_TABLES['users'], 'pwrequestid', "NULL",'uid', $uid);
+
+                    $db->conn->update(
+                            $_TABLES['users'],
+                            array('passwd' => $passwd),
+                            array('uid',$uid),
+                            array(Database::STRING, Database::INTEGER)
+                    );
+                    $db->conn->delete(
+                            $_TABLES['sessions'],
+                            array('uid' => $uid),
+                            array(Database::INTEGER)
+                    );
+                    $db->conn->update(
+                            $_TABLES['users'],
+                            array('pwrequestid' => NULL),
+                            array('uid' => $uid),
+                            array(Database::STRING)
+                    );
                     echo COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
                 }
             } else { // request invalid or expired
@@ -1281,7 +1429,6 @@ function _userSetnewpwd()
         } else {
             // this request doesn't make sense - ignore it
             COM_404();
-//            echo COM_refresh ($_CONF['site_url']);
         }
     }
     return $retval;
@@ -1292,6 +1439,8 @@ function _userEmailpassword()
     global $_CONF, $_TABLES, $_USER, $LANG04, $LANG12;
 
     $retval = '';
+
+    $db = Database::getInstance();
 
     if ($_CONF['passwordspeedlimit'] == 0) {
         $_CONF['passwordspeedlimit'] = 300; // 5 minutes
@@ -1311,8 +1460,16 @@ function _userEmailpassword()
         $username = $_POST['username'];
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
-            $username = DB_getItem ($_TABLES['users'], 'username',
-                                    "email = '".DB_escapeString($email)."' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
+            $username = $db->conn->fetchColumn(
+                            "SELECT username FROM `{$_TABLES['users']}`
+                             WHERE email = ? AND ((remoteservice IS NULL) OR (remoteservice = ''))",
+                            array($email),
+                            0,
+                            array(Database::STRING)
+            );
+            if ($username === false || $username === null) {
+                $username = '';
+            }
         }
         if (!empty ($username)) {
             $retval .= requestpassword ($username, 55);
@@ -1329,18 +1486,29 @@ function _userVerify()
 
     $retval = '';
 
-    $uid    = (int) COM_applyFilter ($_GET['u'], true);
-    $vid    = COM_applyFilter ($_GET['vid']);
+    $db = Database::getInstance();
 
-    if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
-            !empty ($vid) && (strlen ($vid) == 32)) {
-        $uid = (int) $uid;
-        $safevid = DB_escapeString($vid);
-        $result = DB_query("SELECT UNIX_TIMESTAMP(act_time) AS act_time FROM {$_TABLES['users']} WHERE uid=".$uid." AND act_token='".$safevid."' AND status=".USER_ACCOUNT_AWAITING_VERIFICATION);
-        if ( DB_numRows($result) != 1 ) {
+    $uid = (int) filter_input(INPUT_GET,'u',FILTER_SANITIZE_NUMBER_INT);
+    $vid = filter_input(INPUT_GET,'vid',FILTER_SANITIZE_STRING);
+
+    if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($vid) && (strlen ($vid) == 32)) {
+        $U = $db->conn->fetchAssoc(
+                "SELECT UNIX_TIMESTAMP(act_time) AS act_time FROM `{$_TABLES['users']}`
+                 WHERE uid=? AND act_token=? AND status=?",
+                array(
+                    $uid,
+                    $vid,
+                    USER_ACCOUNT_AWAITING_VERIFICATION
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER
+                )
+        );
+        if ($U === false || $U === null) {
             $valid = 0;
         } else {
-            $U = DB_fetchArray($result);
             if ( $U['act_time'] != '' && $U['act_time'] > (time() - $_SYSTEM['verification_token_ttl']) ) {
                 $valid = 1;
             } else {
@@ -1348,13 +1516,30 @@ function _userVerify()
             }
         }
         if ($valid == 1) {
-            DB_query("UPDATE {$_TABLES['users']} SET status=".USER_ACCOUNT_AWAITING_ACTIVATION.",act_time='1000-01-01 00:00:00' WHERE uid=".$uid);
+            $db->conn->update(
+                    $_TABLES['users'],
+                    array(
+                        'status' => USER_ACCOUNT_AWAITING_ACTIVATION,
+                        'act_time' => null
+                    ),
+                    array(
+                        'uid' => $uid
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::STRING,
+                        Database::INTEGER
+                    )
+            );
             $retval .= COM_showMessage (515,'','',0,'success');
             $retval .= SEC_loginForm();
         } else { // request invalid or expired
-            $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid=".$uid);
-            if ( DB_numRows($result) == 1 ) {
-                $U = DB_fetchArray($result);
+            $U = $db->conn->fetchAssoc(
+                    "SELECT * FROM `{$_TABLES['users']}` WHERE uid=?",
+                    array($uid),
+                    array(Database::INTEGER)
+            );
+            if ($U !== false && $U !== null) {
                 switch ($U['status']) {
                     case USER_ACCOUNT_AWAITING_ACTIVATION :
                     case USER_ACCOUNT_ACTIVE :
@@ -1369,13 +1554,12 @@ function _userVerify()
                         echo COM_refresh($_CONF['site_url']);
                 }
             } else {
-                echo COM_refresh ($_CONF['site_url']);
+                COM_404();
             }
         }
     } else {
         // this request doesn't make sense - ignore it
         COM_404();
-//        echo COM_refresh ($_CONF['site_url']);
     }
     return $retval;
 }
@@ -1386,7 +1570,9 @@ function _userGetnewtoken()
 
     $retval = '';
 
-   $uid = 0;
+    $db = Database::getInstance();
+
+    $uid = 0;
     if ($_CONF['passwordspeedlimit'] == 0) {
         $_CONF['passwordspeedlimit'] = 300; // 5 minutes
     }
@@ -1400,9 +1586,14 @@ function _userGetnewtoken()
         if (!empty ($username) && !empty ($passwd) && USER_validateUsername($username,1)) {
             $encryptedPassword = '';
             $uid = 0;
-            $result = DB_query("SELECT uid,passwd FROM {$_TABLES['users']} WHERE username='".DB_escapeString($username)."'");
-            if ( DB_numRows($result)  > 0 ) {
-                $row = DB_fetchArray($result);
+
+            $row = $db->conn->fetchAssoc(
+                        "SELECT uid,passwd FROM `{$_TABLES['users']}`
+                         WHERE username=?",
+                        array($username),
+                        array(Database::STRING)
+            );
+            if ($row !== false && $row !== null) {
                 $encryptedPassword = $row['passwd'];
                 $uid = $row['uid'];
             }
@@ -1461,6 +1652,8 @@ $pageBody = '';
 if ( isset($_POST['cancel']) ) {
     echo COM_refresh($_CONF['site_url'].'/index.php');
 }
+
+$db = Database::getInstance();
 
 switch ($mode) {
     case 'logout':
@@ -1547,7 +1740,7 @@ switch ($mode) {
                     }
                 }
             } else {
-                COM_errorLog("ERROR: Username and Password were posted, but local authentication is disabled - check configuration settings");
+                Log::write('system',Log::ERROR,"ERROR: Username and Password were posted, but local authentication is disabled - check configuration settings");
                 $status = -2;
             }
 
@@ -1573,7 +1766,7 @@ switch ($mode) {
             $active_service = (count($modules) == 0) ? false : in_array(COM_applyFilter($_GET['oauth_login']), $modules);
             if (!$active_service) {
                 $status = -1;
-                COM_errorLog("OAuth login failed - there was no consumer available for the service:" . COM_applyFilter($_GET['oauth_login']));
+                Log::write('system',Log::ERROR,"OAuth login failed - there was no consumer available for the service:" . COM_applyFilter($_GET['oauth_login']));
             } else {
                 $query = array_merge($_GET, $_POST);
                 $service = COM_applyFilter($query['oauth_login']);
@@ -1588,14 +1781,14 @@ switch ($mode) {
                 $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
 
                 $consumer->setRedirectURL($callback_url);
-                $oauth_userinfo = $consumer->authenticate_user();
+                $oauth_userinfo = $consumer->authenticateUser();
                 if ( $oauth_userinfo === false ) {
                     COM_updateSpeedlimit('login');
-                    COM_errorLog("OAuth Error: " . $consumer->error);
+                    Log::write('system',Log::ERROR,"OAuth Error: " . $consumer->error);
                     COM_setMsg($MESSAGE[111],'error');
                 } else {
-                    if ( $consumer->doFinalLogin($oauth_userinfo) == NULL ) {
-                        COM_errorLog("Oauth: Error creating new user in OAuth authentication");
+                    if ($consumer->doFinalLogin($oauth_userinfo,$status,$uid) === null) {
+                        Log::write('system',Log::ERROR,"Oauth: Error creating new user in OAuth authentication");
                         COM_setMsg($MESSAGE[111],'error');
                     }
                     $_SERVER['HTTP_REFERER'] = SESS_getVar('oauth_redirect');
@@ -1612,11 +1805,14 @@ switch ($mode) {
             } else {
                 $authenticated = 1;
             }
-            $uid = (int) $_POST['uid'];
-            $sql = "SELECT status,account_type FROM {$_TABLES['users']} WHERE uid=".(int) $uid;
-            $result = DB_query($sql);
-            if ( DB_numRows($result) == 1 ) {
-                $row = DB_fetchArray($result);
+            $uid = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
+
+            $row = $db->conn->fetchAssoc(
+                    "SELECT status,account_type FROM `{$_TABLES['users']}` WHERE uid=?",
+                    array($uid),
+                    array(Database::INTEGER)
+            );
+            if ($row !== false && $row !== null) {
                 $status = $row['status'];
                 $local_login = $row['account_type'] & LOCAL_USER;
             } else {

@@ -24,6 +24,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
 
 /**
 * Delete a user account
@@ -1191,7 +1192,7 @@ function USER_unmergeAccounts()
     $localpwd  = $_POST['passwd'];
 
     $localUserInfo = $db->conn->fetchAssoc(
-            "SELECT * FROM `{$_TABLES['users']} WHERE uid=?",
+            "SELECT * FROM `{$_TABLES['users']}` WHERE uid=?",
             array($localUID),
             array(Database::INTEGER)
     );
@@ -1290,8 +1291,11 @@ function USER_mergeAccounts()
                 )
         );
 
-        $_USER['uid'] = $localRow['uid'];
+        $_USER['uid'] = $userData['uid'];
         $local_login = true;
+
+        $cacheKey = (string) 'userdata_'.(int)$_USER['uid'];
+        Cache::getInstance()->delete($cacheKey);
 
         SESS_completeLogin($localUID);
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );

@@ -175,6 +175,7 @@ function edituser()
 
      if ( $A['account_type'] & REMOTE_USER ) {
         if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) { // OAuth only supports re-synch at the moment
+
             $pos = strpos($_USER['remoteservice'],'.');
             $remoteService = ucfirst(substr($_USER['remoteservice'],$pos+1));
 
@@ -1286,7 +1287,7 @@ function saveuser($A)
                         $consumer = new OAuthConsumer($service);
                         $callback_url = $_CONF['site_url'];
                         $consumer->setRedirectURL($callback_url);
-                        $user = $consumer->authenticate_user();
+                        $user = $consumer->authenticateUser();
                         $consumer->resyncUserData($user);
                     }
                 }
